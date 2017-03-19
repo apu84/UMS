@@ -9,14 +9,12 @@ import java.util.List;
 /**
  * Created by My Pc on 3/23/2016.
  */
-public class SemesterWithdrawalDaoDecorator
-    extends
-    ContentDaoDecorator<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager>
-    implements SemesterWithDrawalManager {
+public class SemesterWithdrawalDaoDecorator extends
+    ContentDaoDecorator<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager> implements
+    SemesterWithDrawalManager {
 
   @Override
-  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
-      int semester) {
+  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year, int semester) {
     return getManager().getStudentsRecord(studentId, semesterId, year, semester);
   }
 

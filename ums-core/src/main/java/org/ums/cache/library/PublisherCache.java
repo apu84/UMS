@@ -12,8 +12,7 @@ import org.ums.manager.library.PublisherManager;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class PublisherCache extends
-    ContentCache<Publisher, MutablePublisher, Integer, PublisherManager> implements
+public class PublisherCache extends ContentCache<Publisher, MutablePublisher, Integer, PublisherManager> implements
     PublisherManager {
 
   CacheManager<Publisher, Integer> mCacheManager;

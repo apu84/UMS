@@ -24,9 +24,8 @@ public class MutableStudentResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response update(final @PathParam("object-id") String pObjectId,
-      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject) throws Exception {
+  public Response update(final @PathParam("object-id") String pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 

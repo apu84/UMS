@@ -6,8 +6,7 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.RoleManager;
 import org.ums.util.CacheUtil;
 
-public class RoleCache extends ContentCache<Role, MutableRole, Integer, RoleManager> implements
-    RoleManager {
+public class RoleCache extends ContentCache<Role, MutableRole, Integer, RoleManager> implements RoleManager {
   private CacheManager<Role, Integer> mCacheManager;
 
   public RoleCache(final CacheManager<Role, Integer> pCacheManager) {

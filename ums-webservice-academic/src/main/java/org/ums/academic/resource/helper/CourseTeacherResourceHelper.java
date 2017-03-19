@@ -17,8 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class CourseTeacherResourceHelper
-    extends
+public class CourseTeacherResourceHelper extends
     AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Long, CourseTeacherManager> {
   @Autowired
   @Qualifier("courseTeacherManager")

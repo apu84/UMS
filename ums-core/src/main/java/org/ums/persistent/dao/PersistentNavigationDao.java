@@ -23,10 +23,9 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
   String INSERT_ALL =
       "INSERT INTO MAIN_NAVIGATION (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU, ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED) "
           + "VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, " + getLastModifiedSql() + ")";
-  String UPDATE_ALL =
-      "UPDATE MAIN_NAVIGATION SET MENU_TITLE = ?, PERMISSION = ?, LOCATION = ?, PARENT_MENU = ?, "
-          + "ICON_IMG_CLASS=?, ICON_COLOR_CLASS=?,  VIEW_ORDER = ?, STATUS = ?, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
+  String UPDATE_ALL = "UPDATE MAIN_NAVIGATION SET MENU_TITLE = ?, PERMISSION = ?, LOCATION = ?, PARENT_MENU = ?, "
+      + "ICON_IMG_CLASS=?, ICON_COLOR_CLASS=?,  VIEW_ORDER = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql()
+      + " ";
 
   String DELETE_ALL = "DELETE FROM MAIN_NAVIGATION ";
 
@@ -70,13 +69,11 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
   @Override
   public List<Navigation> getByPermissions(Set<String> pPermissions) {
     if(pPermissions.size() > 0) {
-      String query =
-          SELECT_ALL
-              + "WHERE PERMISSION IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
+      String query = SELECT_ALL + "WHERE PERMISSION IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
       NamedParameterJdbcTemplate namedParameterJdbcTemplate =
           new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
-      return namedParameterJdbcTemplate.query(query,
-          Collections.singletonMap("permissions", pPermissions), new NavigationMapper());
+      return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissions),
+          new NavigationMapper());
     }
     else {
       return Lists.newArrayList();
@@ -85,13 +82,11 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
 
   @Override
   public List<Navigation> getByPermissionsId(Set<Integer> pPermissionIds) {
-    String query =
-        SELECT_ALL
-            + "WHERE NAVIGATION_ID IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
+    String query = SELECT_ALL + "WHERE NAVIGATION_ID IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
     NamedParameterJdbcTemplate namedParameterJdbcTemplate =
         new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
-    return namedParameterJdbcTemplate.query(query,
-        Collections.singletonMap("permissions", pPermissionIds), new NavigationMapper());
+    return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissionIds),
+        new NavigationMapper());
   }
 
   class NavigationMapper implements RowMapper<Navigation> {

@@ -6,10 +6,9 @@ import org.ums.response.type.GenericResponse;
 import java.util.Map;
 
 public interface EnrollmentService {
-  GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
-      final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester);
+  GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType, final Integer pNewSemesterId,
+      final Integer pProgramId, final Integer pToYear, final Integer pToAcademicSemester);
 
-  GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
-      final Integer pNewSemesterId, final Integer pProgramId);
+  GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType, final Integer pNewSemesterId,
+      final Integer pProgramId);
 }

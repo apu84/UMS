@@ -6,21 +6,19 @@ import org.ums.manager.SemesterEnrollmentManager;
 
 import java.util.List;
 
-public class SemesterEnrollmentDaoDecorator
-    extends
-    ContentDaoDecorator<SemesterEnrollment, MutableSemesterEnrollment, Long, SemesterEnrollmentManager>
-    implements SemesterEnrollmentManager {
+public class SemesterEnrollmentDaoDecorator extends
+    ContentDaoDecorator<SemesterEnrollment, MutableSemesterEnrollment, Long, SemesterEnrollmentManager> implements
+    SemesterEnrollmentManager {
   @Override
-  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType,
-      Integer pProgramId, Integer pSemesterId) {
+  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
+      Integer pSemesterId) {
     return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId);
   }
 
   @Override
-  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
-      Integer pSemesterId, Integer pYear, Integer pAcademicSemester) {
-    return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear,
-        pAcademicSemester);
+  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pAcademicSemester) {
+    return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear, pAcademicSemester);
   }
 
   @Override

@@ -12,8 +12,7 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Mar-17.
  */
-public class ItemCache extends ContentCache<Item, MutableItem, Long, ItemManager> implements
-    ItemManager {
+public class ItemCache extends ContentCache<Item, MutableItem, Long, ItemManager> implements ItemManager {
 
   CacheManager<Item, Long> mCacheManager;
 

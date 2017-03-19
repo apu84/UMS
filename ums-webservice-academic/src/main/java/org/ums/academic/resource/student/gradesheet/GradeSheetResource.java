@@ -20,8 +20,7 @@ public class GradeSheetResource extends Resource {
 
   @GET
   @Path("/semester" + PATH_PARAM_OBJECT_ID)
-  public JsonObject getBySyllabus(final @Context Request pRequest,
-      final @PathParam("object-id") Integer pSemesterId) {
+  public JsonObject getBySyllabus(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     return mGradeSheetResourceHelper.getResults(studentId, pSemesterId, mUriInfo);
   }

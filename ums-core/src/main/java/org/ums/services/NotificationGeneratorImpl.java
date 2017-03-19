@@ -18,8 +18,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator {
   private DateFormat dateFormat;
   private IdGenerator mIdGenerator;
 
-  public NotificationGeneratorImpl(NotificationManager pNotificationManager,
-      IdGenerator pIdeIdGenerator) {
+  public NotificationGeneratorImpl(NotificationManager pNotificationManager, IdGenerator pIdeIdGenerator) {
     mNotificationManager = pNotificationManager;
     dateFormat = new SimpleDateFormat("YYYYMMDDHHmmss");
     mIdGenerator = pIdeIdGenerator;

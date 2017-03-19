@@ -10,8 +10,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 24-Jan-17.
  */
 public class PaymentInfoDaoDecorator extends
-    ContentDaoDecorator<PaymentInfo, MutablePaymentInfo, Integer, PaymentInfoManager> implements
-    PaymentInfoManager {
+    ContentDaoDecorator<PaymentInfo, MutablePaymentInfo, Integer, PaymentInfoManager> implements PaymentInfoManager {
 
   @Override
   public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {

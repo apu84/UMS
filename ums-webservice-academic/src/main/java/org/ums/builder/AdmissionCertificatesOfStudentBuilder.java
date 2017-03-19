@@ -14,8 +14,8 @@ public class AdmissionCertificatesOfStudentBuilder implements
     Builder<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent> {
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionCertificatesOfStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionCertificatesOfStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
 
     pBuilder.add("name", pReadOnly.getCertificateName());
     pBuilder.add("id", pReadOnly.getCertificateId());
@@ -23,20 +23,18 @@ public class AdmissionCertificatesOfStudentBuilder implements
   }
 
   @Override
-  public void build(MutableAdmissionCertificatesOfStudent pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionCertificatesOfStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setReceiptId(pJsonObject.getString("receiptId"));
     pMutable.setCertificateId(pJsonObject.getInt("id"));
   }
 
-  public void customCertificateBuilder(MutableAdmissionCertificatesOfStudent pMutable,
-      JsonObject pJsonObject, int j, LocalCache pLocalCache) {
+  public void customCertificateBuilder(MutableAdmissionCertificatesOfStudent pMutable, JsonObject pJsonObject, int j,
+      LocalCache pLocalCache) {
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setReceiptId(pJsonObject.getString("receiptId"));
-    pMutable.setCertificateId(pJsonObject.getJsonArray("certificateIds").getJsonObject(j)
-        .getInt("id"));
+    pMutable.setCertificateId(pJsonObject.getJsonArray("certificateIds").getJsonObject(j).getInt("id"));
   }
 }

@@ -19,16 +19,16 @@ public class FileContentPermission extends BaseFileContentPermission {
   private MessageResource mMessageResource;
 
   public FileContentPermission(final UserManager pUserManager,
-      final BearerAccessTokenManager pBearerAccessTokenManager,
-      final UMSConfiguration pUMSConfiguration, final MessageResource pMessageResource) {
+      final BearerAccessTokenManager pBearerAccessTokenManager, final UMSConfiguration pUMSConfiguration,
+      final MessageResource pMessageResource) {
     super(pBearerAccessTokenManager, pUserManager, pMessageResource);
     mUMSConfiguration = pUMSConfiguration;
     mMessageResource = pMessageResource;
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain,
+      String... pRootPath) {
     if(isValidToken(pToken)) {
       return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
     }
@@ -38,8 +38,7 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     if(isValidToken(pToken)) {
       return super.download(pPath, pToken, pDomain, pRootPath);
     }
@@ -49,8 +48,8 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain,
+      String... pRootPath) {
     Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
     if(!checkIfAllowed(uploadPath)) {
       return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
@@ -59,8 +58,8 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath) {
     // Check if there is permission to create folder
     Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)).getParent();
     if(!checkIfAllowed(parentPath)) {
@@ -83,8 +82,8 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     if(!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
@@ -100,8 +99,7 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
     Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     if(!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.move.not.allowed"));
@@ -119,8 +117,7 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
     Path parentPath = getQualifiedPath(pDomain, buildPath(pOldPath, pRootPath));
     if(!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
@@ -129,22 +126,20 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain,
-      String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     Object folderList = super.list(pPath, pAdditionalParams, pDomain, pRootPath);
     return addOwnerToken(folderList);
   }
 
   @Override
-  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-      Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
-    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain,
-        pRootPath);
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate,
+      Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     return super.compress(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 

@@ -11,9 +11,8 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 24-Jan-17.
  */
-public class PaymentInfoCache extends
-    ContentCache<PaymentInfo, MutablePaymentInfo, Integer, PaymentInfoManager> implements
-    PaymentInfoManager {
+public class PaymentInfoCache extends ContentCache<PaymentInfo, MutablePaymentInfo, Integer, PaymentInfoManager>
+    implements PaymentInfoManager {
 
   private CacheManager<PaymentInfo, Integer> mCacheManager;
 

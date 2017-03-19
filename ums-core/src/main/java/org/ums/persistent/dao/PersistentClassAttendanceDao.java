@@ -29,8 +29,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   String ATTENDANCE_QUERY = "Select Course_Id,Class_Date,Serial,Student_Id,Attendance From  "
       + "(Select Course_id,Id,to_char(Class_Date,'DDMMYYYY') class_date,serial,Teacher_Id  "
       + "From MST_CLASS_ATTENDANCE Where Semester_Id=? And Course_id=? And Section=? )tmp1  "
-      + "Left Outer Join DTL_CLASS_ATTENDANCE "
-      + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
+      + "Left Outer Join DTL_CLASS_ATTENDANCE " + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
 
   String ATTENDANCE_DATE_QUERY =
       "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,EMPLOYEE_NAME,SHORT_NAME  "
@@ -48,14 +47,11 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
           + "Select Students.Student_Id From DTL_CLASS_ATTENDANCE,MST_CLASS_ATTENDANCE,Students Where  MST_CLASS_ATTENDANCE.id=DTL_CLASS_ATTENDANCE.ATTENDANCE_ID "
           + "And Students.Student_Id=DTL_CLASS_ATTENDANCE.Student_Id "
           + "And MST_CLASS_ATTENDANCE.Semester_Id=? and Course_id=? %s"
-          + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id "
-          + ")tmp2 Order by Student_Id  ";
+          + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id " + ")tmp2 Order by Student_Id  ";
 
-  String ATTENDANCE_STUDENTS_ENROLLED = "Select * From ( "
-      + "Select Students.Student_Id,Full_Name From ( "
+  String ATTENDANCE_STUDENTS_ENROLLED = "Select * From ( " + "Select Students.Student_Id,Full_Name From ( "
       + "Select distinct Students.Student_Id from UG_Registration_Result,Students Where  "
-      + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type= "
-      + ExamType.SEMESTER_FINAL.getId()
+      + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type= " + ExamType.SEMESTER_FINAL.getId()
       + "And Students.student_id=UG_Registration_Result.student_id %s "
       + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id )tmp2 " + "Order by Student_Id ";
 
@@ -68,13 +64,12 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   @Override
   public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection) {
     String query = ATTENDANCE_DATE_QUERY;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
-        new AttendanceDateRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection}, new AttendanceDateRowMapper());
   }
 
   @Override
-  public List<ClassAttendanceDto> getStudentList(int pSemesterId, String pCourseId,
-      CourseType courseType, String pSection, String pStudentCategory) {
+  public List<ClassAttendanceDto> getStudentList(int pSemesterId, String pCourseId, CourseType courseType,
+      String pSection, String pStudentCategory) {
     String query = "";
     if(pStudentCategory.equals("Enrolled"))
       query = ATTENDANCE_STUDENTS_ENROLLED;
@@ -90,20 +85,18 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
     else if(pStudentCategory.equals("All")) {
       if(courseType == CourseType.THEORY)
         query =
-            String.format(query, " And Theory_Section='" + pSection + "' ", " And Theory_Section='"
-                + pSection + "' ");
+            String.format(query, " And Theory_Section='" + pSection + "' ", " And Theory_Section='" + pSection + "' ");
       else if(courseType == CourseType.SESSIONAL)
         query =
-            String.format(query, " And Sessional_Section=" + pSection + "' ",
-                " And Sessional_Section=" + pSection + "' ");
+            String.format(query, " And Sessional_Section=" + pSection + "' ", " And Sessional_Section=" + pSection
+                + "' ");
     }
 
     if(pStudentCategory.equals("Enrolled"))
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
-          new AttendanceStudentRowMapper());
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, new AttendanceStudentRowMapper());
     else if(pStudentCategory.equals("All"))
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSemesterId,
-          pCourseId}, new AttendanceStudentRowMapper());
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSemesterId, pCourseId},
+          new AttendanceStudentRowMapper());
     else
       return null;
   }
@@ -111,25 +104,22 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   @Override
   public Map getAttendance(int pSemesterId, String pCourseId, String pSection) {
     String query = ATTENDANCE_QUERY;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
-        new AttendanceRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection}, new AttendanceRowMapper());
   }
 
   @Override
   public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId) {
-    String query =
-        "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
+    String query = "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
     return mJdbcTemplate.update(query, pClassDate, pSerial, pAttendanceId);
   }
 
   @Override
-  public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId,
-      String pSection, String pClassDate, Integer pSerial, String pTeacherId) {
+  public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId, String pSection,
+      String pClassDate, Integer pSerial, String pTeacherId) {
     String query =
         "Insert InTo MST_CLASS_ATTENDANCE(ID,SEMESTER_ID,COURSE_ID,SECTION,CLASS_DATE,SERIAL,TEACHER_ID) "
             + "Values(?,?,?,?,To_Date(?, 'DD Mon, YY'),?,?) ";
-    return mJdbcTemplate.update(query, pId, pSemesterId, pCourseId, pSection, pClassDate, pSerial,
-        pTeacherId);
+    return mJdbcTemplate.update(query, pId, pSemesterId, pCourseId, pSection, pClassDate, pSerial, pTeacherId);
   }
 
   @Override
@@ -147,10 +137,8 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
             + "         ? as Attendance "
             + "   from dual "
             + ")dt2 on (DTL_CLASS_ATTENDANCE.Attendance_Id = dt2.Attendance_Id And DTL_CLASS_ATTENDANCE.Student_Id = dt2.Student_Id) "
-            + "when matched then  "
-            + "update set DTL_CLASS_ATTENDANCE.Attendance =  dt2.Attendance "
-            + "when not matched then "
-            + "Insert values (dt2.Attendance_Id,dt2.Student_Id, dt2.Attendance)";
+            + "when matched then  " + "update set DTL_CLASS_ATTENDANCE.Attendance =  dt2.Attendance "
+            + "when not matched then " + "Insert values (dt2.Attendance_Id,dt2.Student_Id, dt2.Attendance)";
 
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
       @Override
@@ -183,8 +171,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   @Override
   public String getAttendanceId() {
     String query = "Select SQN_CLASS_ATTENDANCE.NextVal From Dual";
-    String attendanceId =
-        (String) mJdbcTemplate.queryForObject(query, new Object[] {}, String.class);
+    String attendanceId = (String) mJdbcTemplate.queryForObject(query, new Object[] {}, String.class);
     return attendanceId;
   }
 

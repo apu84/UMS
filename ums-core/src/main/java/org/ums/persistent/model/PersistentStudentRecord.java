@@ -20,8 +20,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sStudentRecordManager =
-        applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
+    sStudentRecordManager = applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
@@ -154,8 +153,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

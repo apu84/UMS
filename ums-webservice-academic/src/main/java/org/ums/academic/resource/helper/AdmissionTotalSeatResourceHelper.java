@@ -28,8 +28,7 @@ import java.util.List;
 public class AdmissionTotalSeatResourceHelper extends
     ResourceHelper<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer> {
 
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(AdmissionTotalSeatResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(AdmissionTotalSeatResourceHelper.class);
 
   @Autowired
   AdmissionTotalSeatManager mAdmissionTotalSeatManager;
@@ -72,8 +71,8 @@ public class AdmissionTotalSeatResourceHelper extends
     return saveTotalSeatPlanData(pJsonObject, buildType);
   }
 
-  public JsonObject getAdmissionTotalSeat(final int pSemesterId, final ProgramType pProgramType,
-      QuotaType pQuotaType, final UriInfo pUriInfo) {
+  public JsonObject getAdmissionTotalSeat(final int pSemesterId, final ProgramType pProgramType, QuotaType pQuotaType,
+      final UriInfo pUriInfo) {
 
     List<AdmissionTotalSeat> seats;
 

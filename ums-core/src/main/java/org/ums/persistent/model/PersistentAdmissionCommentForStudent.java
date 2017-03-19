@@ -13,8 +13,7 @@ public class PersistentAdmissionCommentForStudent implements MutableAdmissionCom
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    applicationContext.getBean("admissionStudentsCertificateCommentManager",
-        AdmissionCommentForStudentManager.class);
+    applicationContext.getBean("admissionStudentsCertificateCommentManager", AdmissionCommentForStudentManager.class);
   }
 
   private int mRowId;
@@ -28,8 +27,7 @@ public class PersistentAdmissionCommentForStudent implements MutableAdmissionCom
 
   }
 
-  public PersistentAdmissionCommentForStudent(
-      PersistentAdmissionCommentForStudent pAdmissionStudentsCertificateComment) {
+  public PersistentAdmissionCommentForStudent(PersistentAdmissionCommentForStudent pAdmissionStudentsCertificateComment) {
 
     mRowId = pAdmissionStudentsCertificateComment.getRowId();
     mSemesterId = pAdmissionStudentsCertificateComment.getSemesterId();

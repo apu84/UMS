@@ -13,8 +13,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class UserBuilder implements Builder<User, MutableUser> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, User pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, User pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("departmentName", pReadOnly.getDepartment().getShortName());

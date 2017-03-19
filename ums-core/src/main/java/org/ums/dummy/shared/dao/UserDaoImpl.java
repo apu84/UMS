@@ -44,8 +44,8 @@ public class UserDaoImpl implements UserDao {
         "update dummy_user set first_name = ?, last_name = ?, user_name = ?, gender = ?, employment_status = ? "
             + "where user_id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    jdbcTemplate.update(query, user.getFirstName(), user.getLastName(), user.getUserName(),
-        user.getGender(), user.getEmploymentStatus(), user.getUserId());
+    jdbcTemplate.update(query, user.getFirstName(), user.getLastName(), user.getUserName(), user.getGender(),
+        user.getEmploymentStatus(), user.getUserId());
   }
 
   public void remove(User user) {
@@ -59,8 +59,8 @@ public class UserDaoImpl implements UserDao {
         "insert into dummy_user(user_name, first_name, last_name, gender, employment_status) "
             + "values (?, ?, ?, ?, ?)";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    jdbcTemplate.update(query, user.getUserName(), user.getFirstName(), user.getLastName(),
-        user.getGender(), user.getEmploymentStatus());
+    jdbcTemplate.update(query, user.getUserName(), user.getFirstName(), user.getLastName(), user.getGender(),
+        user.getEmploymentStatus());
   }
 
   class UserRowMapper implements RowMapper<User> {

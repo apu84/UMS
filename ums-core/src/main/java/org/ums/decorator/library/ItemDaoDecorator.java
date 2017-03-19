@@ -14,8 +14,7 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Mar-17.
  */
-public class ItemDaoDecorator extends ContentDaoDecorator<Item, MutableItem, Long, ItemManager>
-    implements ItemManager {
+public class ItemDaoDecorator extends ContentDaoDecorator<Item, MutableItem, Long, ItemManager> implements ItemManager {
   public List<Item> getByMfn(final Long pMfn) {
     return getManager().getByMfn(pMfn);
   }

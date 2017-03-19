@@ -21,8 +21,7 @@ public class PersistentResultPublish implements MutableResultPublish {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sResultPublishManager =
-        applicationContext.getBean("resultPublishManager", ResultPublishManager.class);
+    sResultPublishManager = applicationContext.getBean("resultPublishManager", ResultPublishManager.class);
   }
 
   private Long mId;
@@ -96,8 +95,7 @@ public class PersistentResultPublish implements MutableResultPublish {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

@@ -89,8 +89,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
 
   }
 
-  public void build(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableStudent pMutableStudent, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     /*
      * Validator validator = new StudentValidator(); validator.validate(pJsonObject);
@@ -99,10 +98,9 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));
     if(pJsonObject.getJsonObject("programSelector") != null) {
-      pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString(
-          "departmentId"));
-      pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getJsonObject("programSelector")
-          .getString("programId")));
+      pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString("departmentId"));
+      pMutableStudent.setProgramId(Integer
+          .parseInt(pJsonObject.getJsonObject("programSelector").getString("programId")));
     }
     else {
 

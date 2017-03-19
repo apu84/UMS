@@ -23,8 +23,8 @@ public class NotificationResource extends Resource {
   @Path("/{num-of-latest-notification}")
   public JsonObject getAdditionalRolePermissions(final @Context Request pRequest,
       final @PathParam("num-of-latest-notification") Integer pNum) {
-    return mNotificationResourceHelper.getNotifications(SecurityUtils.getSubject().getPrincipal()
-        .toString(), pNum, mUriInfo);
+    return mNotificationResourceHelper.getNotifications(SecurityUtils.getSubject().getPrincipal().toString(), pNum,
+        mUriInfo);
   }
 
   @POST

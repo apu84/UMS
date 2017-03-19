@@ -15,8 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by Monjur-E-Morshed on 06-Dec-16.
  */
 public class PersistentFacultyDao extends FacultyDaoDecorator {
-  static String SELECT_ALL =
-      "select f.ID,f.LONG_NAME, f.SHORT_NAME, f.LAST_MODIFIED  from MST_FACULTY f";
+  static String SELECT_ALL = "select f.ID,f.LONG_NAME, f.SHORT_NAME, f.LAST_MODIFIED  from MST_FACULTY f";
 
   private JdbcTemplate mJdbcTemplate;
 

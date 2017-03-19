@@ -51,8 +51,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   }
 
-  public PersistentSemesterWithdrawal(
-      final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal) {
+  public PersistentSemesterWithdrawal(final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal) {
     mId = pPersistentSemesterWithdrawal.getId();
 
     mSemester = pPersistentSemesterWithdrawal.getSemester();
@@ -172,8 +171,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

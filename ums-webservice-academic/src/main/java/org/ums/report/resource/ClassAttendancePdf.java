@@ -32,18 +32,15 @@ public class ClassAttendancePdf extends Resource {
   @GET
   @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
   @Produces("application/pdf")
-  public StreamingOutput createAttendanceSheetReport(
-      final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("course-id") String pCourseId,
-      final @PathParam("section-id") String pSection,
+  public StreamingOutput createAttendanceSheetReport(final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("course-id") String pCourseId, final @PathParam("section-id") String pSection,
       final @PathParam("student-category") String pStudentCategory) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         String a = servletContext.getRealPath("");
         try {
-          mResourceHelper.getAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection,
-              pStudentCategory);
+          mResourceHelper.getAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection, pStudentCategory);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

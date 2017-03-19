@@ -12,8 +12,7 @@ import org.ums.enums.library.*;
 import java.io.Serializable;
 import java.util.List;
 
-public interface Record extends Serializable, EditType<MutableRecord>, LastModifier,
-    Identifier<Long> {
+public interface Record extends Serializable, EditType<MutableRecord>, LastModifier, Identifier<Long> {
 
   Long getMfn();
 

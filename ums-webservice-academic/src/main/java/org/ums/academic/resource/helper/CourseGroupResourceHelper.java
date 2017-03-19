@@ -13,8 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class CourseGroupResourceHelper extends
-    ResourceHelper<CourseGroup, MutableCourseGroup, Integer> {
+public class CourseGroupResourceHelper extends ResourceHelper<CourseGroup, MutableCourseGroup, Integer> {
   @Autowired
   private CourseGroupManager mManager;
 

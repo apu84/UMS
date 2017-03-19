@@ -27,8 +27,7 @@ public class StudentProfile extends Resource {
 
   @PUT
   public Response updateProfile(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     String studentId = "";
     Subject subject = SecurityUtils.getSubject();
     if(subject != null) {

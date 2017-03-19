@@ -67,8 +67,7 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
     SecurityUtils.setSecurityManager(mSecurityManager);
     Subject subject = SecurityUtils.getSubject();
     UsernamePasswordToken token =
-        new UsernamePasswordToken(mUMSConfiguration.getBackendUser(),
-            mUMSConfiguration.getBackendUserPassword());
+        new UsernamePasswordToken(mUMSConfiguration.getBackendUser(), mUMSConfiguration.getBackendUserPassword());
 
     try {
       // Authenticate the subject

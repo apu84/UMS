@@ -26,8 +26,7 @@ public class PersistentCountryDao extends CountryDaoDecorator {
   @Override
   public Country get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentCountryDao.CountryRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentCountryDao.CountryRowMapper());
   }
 
   @Override

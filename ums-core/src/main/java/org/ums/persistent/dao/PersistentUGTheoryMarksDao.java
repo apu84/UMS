@@ -36,9 +36,8 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(UGTheoryMarks theoryMarks : pTheoryMarkses) {
       params.add(new Object[] {mIdGenerator.getNumericId(), theoryMarks.getStudent().getId(),
-          theoryMarks.getSemester().getId(), theoryMarks.getCourse().getId(),
-          theoryMarks.getGradeLetter(), theoryMarks.getExamType().getId(),
-          theoryMarks.getType().getId()});
+          theoryMarks.getSemester().getId(), theoryMarks.getCourse().getId(), theoryMarks.getGradeLetter(),
+          theoryMarks.getExamType().getId(), theoryMarks.getType().getId()});
     }
 
     return params;

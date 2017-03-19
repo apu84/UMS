@@ -30,8 +30,7 @@ import java.util.List;
  */
 
 @Component
-public class StudentRecordResourceHelper extends
-    ResourceHelper<StudentRecord, MutableStudentRecord, Long> {
+public class StudentRecordResourceHelper extends ResourceHelper<StudentRecord, MutableStudentRecord, Long> {
 
   @Autowired
   private StudentRecordManager mManager;
@@ -64,22 +63,19 @@ public class StudentRecordResourceHelper extends
    * @throws Exception
    */
 
-  public JsonObject getStudentRecord(String pStudentId, Integer pSemesterId, Integer pYear,
-      Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
+  public JsonObject getStudentRecord(String pStudentId, Integer pSemesterId, Integer pYear, Integer pSemester,
+      final Request pRequest, final UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     Semester studentsSemester = mSemesterManager.get(student.getSemesterId());
-    Semester activeSemester =
-        mSemesterManager.getActiveSemester(studentsSemester.getProgramTypeId());
+    Semester activeSemester = mSemesterManager.getActiveSemester(studentsSemester.getProgramTypeId());
 
     List<StudentRecord> studentRecords;
     int stId = studentsSemester.getId();
     int aId = activeSemester.getId();
 
     if(stId == aId) {
-      studentRecords =
-          getContentManager().getStudentRecords(studentId, studentsSemester.getId(), pYear,
-              pSemester);
+      studentRecords = getContentManager().getStudentRecords(studentId, studentsSemester.getId(), pYear, pSemester);
     }
     else {
       studentRecords = new ArrayList<>();

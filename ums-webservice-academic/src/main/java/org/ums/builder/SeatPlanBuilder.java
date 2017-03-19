@@ -16,8 +16,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class SeatPlanBuilder implements Builder<SeatPlan, MutableSeatPlan> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SeatPlan pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SeatPlan pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("roomId", pReadOnly.getClassRoom().getId());
     pBuilder.add("rowNo", pReadOnly.getRowNo());

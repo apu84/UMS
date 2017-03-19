@@ -19,8 +19,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sSeatPlanPublishManager =
-        applicationContext.getBean("seatPlanPublishManager", SeatPlanPublishManager.class);
+    sSeatPlanPublishManager = applicationContext.getBean("seatPlanPublishManager", SeatPlanPublishManager.class);
   }
 
   private Integer mId;
@@ -107,8 +106,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

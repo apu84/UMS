@@ -8,8 +8,7 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class UserCache extends ContentCache<User, MutableUser, String, UserManager> implements
-    UserManager {
+public class UserCache extends ContentCache<User, MutableUser, String, UserManager> implements UserManager {
   private CacheManager<User, String> mCacheManager;
 
   public UserCache(final CacheManager<User, String> pCacheManager) {

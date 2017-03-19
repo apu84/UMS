@@ -36,9 +36,8 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
     List<Object[]> params = new ArrayList<>();
     for(UGSessionalMarks sessionalMarks : pSessionalMarks) {
       params.add(new Object[] {mIdGenerator.getNumericId(), sessionalMarks.getStudent().getId(),
-          sessionalMarks.getSemester().getId(), sessionalMarks.getCourse().getId(),
-          sessionalMarks.getGradeLetter(), sessionalMarks.getExamType().getId(),
-          sessionalMarks.getType().getId()});
+          sessionalMarks.getSemester().getId(), sessionalMarks.getCourse().getId(), sessionalMarks.getGradeLetter(),
+          sessionalMarks.getExamType().getId(), sessionalMarks.getType().getId()});
     }
 
     return params;
@@ -52,9 +51,8 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
   private List<Object[]> getDeleteParamList(List<MutableUGSessionalMarks> pSessionalMarkses) {
     List<Object[]> params = new ArrayList<>();
     for(UGSessionalMarks sessionalMarks : pSessionalMarkses) {
-      params.add(new Object[] {sessionalMarks.getStudent().getId(),
-          sessionalMarks.getSemester().getId(), sessionalMarks.getExamType().getId(),
-          sessionalMarks.getType().getId()});
+      params.add(new Object[] {sessionalMarks.getStudent().getId(), sessionalMarks.getSemester().getId(),
+          sessionalMarks.getExamType().getId(), sessionalMarks.getType().getId()});
     }
 
     return params;

@@ -30,8 +30,7 @@ import org.ums.manager.PermissionManager;
 import java.util.*;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(BearerTokenAuthenticatingRealm.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
 
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
@@ -113,8 +112,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     }
 
     if(tokenIsInvalid(token, dbToken)) {
-      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: "
-          + token.getCredentials());
+      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: " + token.getCredentials());
       throw new AuthenticationException("Access denied. Invalid access token");
     }
 
@@ -151,8 +149,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
 
   // TODO: Move this method to a common place so both the realm can use same authorization base
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
-      throws AuthorizationException {
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     // null usernames are invalid
     if(principals == null) {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
@@ -163,8 +160,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
       User user = mUserManager.get(bearerAccessToken.getUserId());
       info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-      List<Permission> rolePermissions =
-          mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
 
       Set<String> permissions = new HashSet<>();
 

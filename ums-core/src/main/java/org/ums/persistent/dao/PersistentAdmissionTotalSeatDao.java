@@ -36,27 +36,22 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
   }
 
   @Override
-  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
-      QuotaType pQuotaType) {
-    String query =
-        SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=? and quota=? order by program_id";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(),
-        pQuotaType.getId()}, new AdmissionTotalSeatRowMapper());
+  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType, QuotaType pQuotaType) {
+    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=? and quota=? order by program_id";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(), pQuotaType.getId()},
+        new AdmissionTotalSeatRowMapper());
   }
 
   @Override
   public List<Integer> create(List<MutableAdmissionTotalSeat> pMutableList) {
-    int[] updates =
-        mJdbcTemplate.batchUpdate(INSERT_ONE, getAdmissionTotalSeatParams(pMutableList));
+    int[] updates = mJdbcTemplate.batchUpdate(INSERT_ONE, getAdmissionTotalSeatParams(pMutableList));
     return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override
   public int update(List<MutableAdmissionTotalSeat> pMutableList) {
     String query =
-        "UPDATE ADMISSION_TOTAL_SEAT "
-            + "SET TOTAL_SEAT = ?, last_modified ="
-            + getLastModifiedSql()
+        "UPDATE ADMISSION_TOTAL_SEAT " + "SET TOTAL_SEAT = ?, last_modified =" + getLastModifiedSql()
             + " WHERE PROGRAM_TYPE = ? AND PROGRAM_ID = ? and quota=? AND SEMESTER_ID IN (SELECT SEMESTER_ID "
             + "                                                              FROM MST_SEMESTER "
             + "                                                              WHERE SEMESTER_ID = ? AND STATUS = 2)";
@@ -68,8 +63,8 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
     List<Object[]> params = new ArrayList<>();
 
     for(AdmissionTotalSeat seat : pSeats) {
-      params.add(new Object[] {seat.getSemester().getId(), seat.getProgram().getId(),
-          seat.getProgramType().getValue(), seat.getQuotaType().getId(), seat.getTotalSeat()});
+      params.add(new Object[] {seat.getSemester().getId(), seat.getProgram().getId(), seat.getProgramType().getValue(),
+          seat.getQuotaType().getId(), seat.getTotalSeat()});
     }
     return params;
   }
@@ -79,8 +74,8 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
     List<Object[]> params = new ArrayList<>();
 
     for(AdmissionTotalSeat seat : pSeats) {
-      params.add(new Object[] {seat.getTotalSeat(), seat.getProgramType().getValue(),
-          seat.getProgram().getId(), seat.getQuotaType().getId(), seat.getSemester().getId()});
+      params.add(new Object[] {seat.getTotalSeat(), seat.getProgramType().getValue(), seat.getProgram().getId(),
+          seat.getQuotaType().getId(), seat.getSemester().getId()});
     }
     return params;
   }

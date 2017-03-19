@@ -13,8 +13,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class EnrollmentFromToBuilder implements Builder<EnrollmentFromTo, MutableEnrollmentFromTo> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, EnrollmentFromTo pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, EnrollmentFromTo pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("year", pReadOnly.getToYear());
     pBuilder.add("semester", pReadOnly.getToSemester());

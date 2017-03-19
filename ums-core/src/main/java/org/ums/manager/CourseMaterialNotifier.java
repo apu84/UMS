@@ -27,8 +27,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
   private static final String SEMESTER_ID = "semesterId";
   private static final String COURSE_ID = "courseId";
 
-  public CourseMaterialNotifier(UserManager pUserManager,
-      NotificationGenerator pNotificationGenerator,
+  public CourseMaterialNotifier(UserManager pUserManager, NotificationGenerator pNotificationGenerator,
       UGRegistrationResultManager pUGRegistrationResultManager, UMSConfiguration pUMSConfiguration,
       MessageResource pMessageResource, CourseTeacherManager pCourseTeacherManager,
       BearerAccessTokenManager pBearerAccessTokenManager) {
@@ -39,10 +38,9 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath) {
-    Map<String, Object> folder =
-        super.createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath) {
+    Map<String, Object> folder = super.createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
     Notifier notifier = new Notifier() {
       @Override
       public List<String> consumers() {
@@ -53,8 +51,8 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
           String semesterId = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
           String courseId = getUserDefinedProperty(COURSE_ID, targetDirectory);
           List<UGRegistrationResult> studentList =
-              mUGRegistrationResultManager.getByCourseSemester(Integer.parseInt(semesterId),
-                  courseId, CourseRegType.REGULAR);
+              mUGRegistrationResultManager.getByCourseSemester(Integer.parseInt(semesterId), courseId,
+                  CourseRegType.REGULAR);
 
           for(UGRegistrationResult registrationResult : studentList) {
             users.add(registrationResult.getStudentId());
@@ -71,16 +69,15 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String notificationType() {
-        return new StringBuilder(Notification.Type.COURSE_MATERIAL.getValue()).append("_")
-            .append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
+        return new StringBuilder(Notification.Type.COURSE_MATERIAL.getValue()).append("_").append(pRootPath[0])
+            .append("_").append(pRootPath[1]).toString();
       }
 
       @Override
       public String payload() {
         try {
           User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-          return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath,
-              pRootPath[1]);
+          return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath, pRootPath[1]);
         } catch(Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }
@@ -96,12 +93,10 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
   }
 
   @Override
-  public Map<String, Object> createAssignmentFolder(final String pNewPath, final Date pStartDate,
-      final Date pEndDate, final Map<String, String> pAdditionalParams, final Domain pDomain,
-      final String... pRootPath) {
+  public Map<String, Object> createAssignmentFolder(final String pNewPath, final Date pStartDate, final Date pEndDate,
+      final Map<String, String> pAdditionalParams, final Domain pDomain, final String... pRootPath) {
     Map<String, Object> assignmentFolderResponse =
-        super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain,
-            pRootPath);
+        super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
     final Path targetDirectory = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     final String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
     final String courseId = getUserDefinedProperty(COURSE_ID, targetDirectory);
@@ -111,16 +106,13 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
       @Override
       public List<String> consumers() {
         List<String> users = new ArrayList<>();
-        if(StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseId)
-            || StringUtils.isEmpty(owner)) {
-          throw new RuntimeException(
-              "Can not find required semesterId or courseId or owner of the file");
+        if(StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseId) || StringUtils.isEmpty(owner)) {
+          throw new RuntimeException("Can not find required semesterId or courseId or owner of the file");
         }
 
         Integer semesterId = Integer.parseInt(semesterIdString);
         List<UGRegistrationResult> studentList =
-            mUGRegistrationResultManager.getByCourseSemester(semesterId, courseId,
-                CourseRegType.REGULAR);
+            mUGRegistrationResultManager.getByCourseSemester(semesterId, courseId, CourseRegType.REGULAR);
         List<String> sections = permittedSections(owner, semesterId, courseId);
 
         for(UGRegistrationResult registrationResult : studentList) {
@@ -139,17 +131,16 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String notificationType() {
-        return new StringBuilder(Notification.Type.COURSE_ASSIGNMENT.getValue()).append("_")
-            .append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
+        return new StringBuilder(Notification.Type.COURSE_ASSIGNMENT.getValue()).append("_").append(pRootPath[0])
+            .append("_").append(pRootPath[1]).toString();
       }
 
       @Override
       public String payload() {
         try {
           User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-          return mMessageResource.getMessage("assignment.directory.created", user.getName(),
-              pNewPath, pRootPath[1], getUserDefinedProperty(START_DATE, targetDirectory),
-              getUserDefinedProperty(END_DATE, targetDirectory));
+          return mMessageResource.getMessage("assignment.directory.created", user.getName(), pNewPath, pRootPath[1],
+              getUserDefinedProperty(START_DATE, targetDirectory), getUserDefinedProperty(END_DATE, targetDirectory));
         } catch(Exception e) {
           mLogger.error("Exception while looking building payload for assignment: ", e);
         }

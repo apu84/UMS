@@ -43,8 +43,8 @@ public class LoginService {
   @Autowired
   private String dummyEmail;
 
-  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId,
-      final String pEmailAddress, final String pRecoverBy) {
+  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId, final String pEmailAddress,
+      final String pRecoverBy) {
     String token = UUID.randomUUID().toString();
     Date now = new Date();
     Date tokenInvalidDate = null;
@@ -56,8 +56,7 @@ public class LoginService {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("user.not.exists"));
     }
-    else if(pRecoverBy.equals("byEmailAddress")
-        && (!mEmployeeManager.existenceByEmail(pEmailAddress))) {
+    else if(pRecoverBy.equals("byEmailAddress") && (!mEmployeeManager.existenceByEmail(pEmailAddress))) {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("email.not.exists"));
     }
@@ -98,8 +97,7 @@ public class LoginService {
     // if(StringUtils.isBlank(user.getPasswordResetToken())
     // || (tokenInvalidDate != null && now.after(tokenInvalidDate))
     // || user.getPasswordTokenGenerateDateTime() == null) {
-    mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""),
-        user.getId());
+    mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""), user.getId());
     user = mUserManager.get(user.getId());
     // }
 
@@ -113,8 +111,8 @@ public class LoginService {
 
   }
 
-  public GenericResponse<Map> resetPassword(final String pUserId, final String pResetToken,
-      final String pNewPassword, final String pConfirmNewPassword) {
+  public GenericResponse<Map> resetPassword(final String pUserId, final String pResetToken, final String pNewPassword,
+      final String pConfirmNewPassword) {
     Date tokenInvalidDate = null;
     Date now = new Date();
 

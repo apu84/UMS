@@ -33,8 +33,7 @@ public class DepartmentResource extends Resource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

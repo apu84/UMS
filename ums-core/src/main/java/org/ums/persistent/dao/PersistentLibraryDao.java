@@ -31,8 +31,7 @@ public class PersistentLibraryDao extends LibraryDaoDecorator {
 
   public List<Library> getAllTheLibraryBooks(String pBook) {
     String query = SELECT_ALL + " WHERE BOOK_NAME=?";
-    return mJdbcTemplate.query(query, new Object[] {pBook},
-        new PersistentLibraryDao.RoleRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pBook}, new PersistentLibraryDao.RoleRowMapper());
   }
 
   public int deleteByBookNameAndAuthorName(String pBookName, String pAuthorName) {

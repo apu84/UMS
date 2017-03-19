@@ -17,8 +17,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 @Component
-public class ProgramTypeResourceHelper extends
-    ResourceHelper<ProgramType, MutableProgramType, Integer> {
+public class ProgramTypeResourceHelper extends ResourceHelper<ProgramType, MutableProgramType, Integer> {
   @Autowired
   private ProgramTypeManager mManager;
 
@@ -42,8 +41,8 @@ public class ProgramTypeResourceHelper extends
     mutableProgramType.create();
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(ProgramTypeResource.class)
-            .path(ProgramTypeResource.class, "get").build(mutableProgramType.getId());
+        pUriInfo.getBaseUriBuilder().path(ProgramTypeResource.class).path(ProgramTypeResource.class, "get")
+            .build(mutableProgramType.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 

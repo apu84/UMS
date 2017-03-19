@@ -34,8 +34,7 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
   }
 
   @Override
-  public void build(final MutableSupplier pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableSupplier pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     if(pJsonObject.containsKey("id"))
       pMutable.setId(Long.valueOf(pJsonObject.getJsonNumber("id").toString()));

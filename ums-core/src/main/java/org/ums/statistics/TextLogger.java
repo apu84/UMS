@@ -20,8 +20,7 @@ public class TextLogger implements QueryLogger {
   @Async
   public void log(String pQuery, Object[] pQueryParams, String pUserName, long pExecutionTime) {
     mLoggerEntries.add(String.format("SQL: %s ; Username: %s ; ET: %s ; ETS: %s ;",
-        LoggerUtils.buildQuery(pQuery, pQueryParams), pUserName, pExecutionTime,
-        (new Date()).toString()));
+        LoggerUtils.buildQuery(pQuery, pQueryParams), pUserName, pExecutionTime, (new Date()).toString()));
   }
 
   @Override
@@ -29,8 +28,7 @@ public class TextLogger implements QueryLogger {
   public void log(String pQuery, List<Object[]> pQueryParams, String pUserName, long pExecutionTime) {
     for(Object[] queryParams : pQueryParams) {
       mLoggerEntries.add(String.format("SQL: %s ; Username: %s ; ET: %s ; ETS: %s ;",
-          LoggerUtils.buildQuery(pQuery, queryParams), pUserName, pExecutionTime,
-          (new Date()).toString()));
+          LoggerUtils.buildQuery(pQuery, queryParams), pUserName, pExecutionTime, (new Date()).toString()));
     }
 
   }
@@ -38,8 +36,8 @@ public class TextLogger implements QueryLogger {
   @Override
   @Async
   public void log(String pQuery, String pUserName, long pExecutionTime) {
-    mLoggerEntries.add(String.format("SQL: %s ; Username: %s ; ET: %s ; ETS: %s ;", pQuery,
-        pUserName, pExecutionTime, (new Date()).toString()));
+    mLoggerEntries.add(String.format("SQL: %s ; Username: %s ; ET: %s ; ETS: %s ;", pQuery, pUserName, pExecutionTime,
+        (new Date()).toString()));
   }
 
   @Override

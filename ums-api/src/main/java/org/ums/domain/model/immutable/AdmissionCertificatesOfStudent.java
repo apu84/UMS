@@ -7,8 +7,8 @@ import org.ums.domain.model.mutable.MutableAdmissionCertificatesOfStudent;
 
 import java.io.Serializable;
 
-public interface AdmissionCertificatesOfStudent extends Serializable,
-    EditType<MutableAdmissionCertificatesOfStudent>, Identifier<Integer>, LastModifier {
+public interface AdmissionCertificatesOfStudent extends Serializable, EditType<MutableAdmissionCertificatesOfStudent>,
+    Identifier<Integer>, LastModifier {
 
   int getRowId();
 

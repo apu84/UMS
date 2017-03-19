@@ -8,8 +8,7 @@ import java.util.List;
 /**
  * Created by My Pc on 8/2/2016.
  */
-public interface SeatPlanPublishManager extends
-    ContentManager<SeatPlanPublish, MutableSeatPlanPublish, Integer> {
+public interface SeatPlanPublishManager extends ContentManager<SeatPlanPublish, MutableSeatPlanPublish, Integer> {
   List<SeatPlanPublish> getBySemester(Integer pSemesterId);
 
   Integer checkBySemester(Integer pSemesterId);

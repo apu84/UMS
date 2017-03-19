@@ -56,8 +56,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   @Override
   public Employee getByEmail(String pEmailAddress) {
     String query = SELECT_ALL + " WHERE EMAIL_ADDRESS = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pEmailAddress},
-        new EmployeeRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmailAddress}, new EmployeeRowMapper());
   }
 
   @Override
@@ -69,13 +68,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   @Override
   public int update(MutableEmployee pMutable) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID=? ";
-    return mJdbcTemplate.update(query, pMutable.getEmployeeName(), pMutable.getShortName(),
-        pMutable.getDesignation(), pMutable.getEmploymentType(), pMutable.getDepartment().getId(),
-        pMutable.getFatherName(), pMutable.getMotherName(), pMutable.getBirthDate(),
-        pMutable.getGender(), pMutable.getBloodGroup(), pMutable.getPresentAddress(),
-        pMutable.getPermanentAddress(), pMutable.getMobileNumber(), pMutable.getPhoneNumber(),
-        pMutable.getEmailAddress(), pMutable.getJoiningDate(), pMutable.getJobPermanentDate(),
-        pMutable.getStatus(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getEmployeeName(), pMutable.getShortName(), pMutable.getDesignation(),
+        pMutable.getEmploymentType(), pMutable.getDepartment().getId(), pMutable.getFatherName(),
+        pMutable.getMotherName(), pMutable.getBirthDate(), pMutable.getGender(), pMutable.getBloodGroup(),
+        pMutable.getPresentAddress(), pMutable.getPermanentAddress(), pMutable.getMobileNumber(),
+        pMutable.getPhoneNumber(), pMutable.getEmailAddress(), pMutable.getJoiningDate(),
+        pMutable.getJobPermanentDate(), pMutable.getStatus(), pMutable.getId());
   }
 
   @Override
@@ -99,13 +97,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
   @Override
   public String create(MutableEmployee pMutable) {
-    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getEmployeeName(), pMutable
-        .getShortName(), pMutable.getDesignation(), pMutable.getEmploymentType(), pMutable
-        .getDepartment().getId(), pMutable.getFatherName(), pMutable.getMotherName(), pMutable
-        .getBirthDate(), pMutable.getGender(), pMutable.getBloodGroup(), pMutable
-        .getPresentAddress(), pMutable.getPermanentAddress(), pMutable.getMobileNumber(), pMutable
-        .getPhoneNumber(), pMutable.getEmailAddress(), pMutable.getJoiningDate(), pMutable
-        .getJobPermanentDate(), pMutable.getStatus());
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getEmployeeName(), pMutable.getShortName(),
+        pMutable.getDesignation(), pMutable.getEmploymentType(), pMutable.getDepartment().getId(),
+        pMutable.getFatherName(), pMutable.getMotherName(), pMutable.getBirthDate(), pMutable.getGender(),
+        pMutable.getBloodGroup(), pMutable.getPresentAddress(), pMutable.getPermanentAddress(),
+        pMutable.getMobileNumber(), pMutable.getPhoneNumber(), pMutable.getEmailAddress(), pMutable.getJoiningDate(),
+        pMutable.getJobPermanentDate(), pMutable.getStatus());
     return pMutable.getId();
   }
 

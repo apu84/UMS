@@ -7,12 +7,11 @@ import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
 
 public class BearerAccessTokenCache extends
-    ContentCache<BearerAccessToken, MutableBearerAccessToken, String, BearerAccessTokenManager>
-    implements BearerAccessTokenManager {
+    ContentCache<BearerAccessToken, MutableBearerAccessToken, String, BearerAccessTokenManager> implements
+    BearerAccessTokenManager {
   private CacheManager<BearerAccessToken, String> mCacheManager;
 
-  public BearerAccessTokenCache(
-      final CacheManager<BearerAccessToken, String> pBearerAccessTokenCacheManager) {
+  public BearerAccessTokenCache(final CacheManager<BearerAccessToken, String> pBearerAccessTokenCacheManager) {
     mCacheManager = pBearerAccessTokenCacheManager;
   }
 

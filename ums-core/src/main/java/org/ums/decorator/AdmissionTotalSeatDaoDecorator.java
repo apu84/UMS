@@ -11,14 +11,12 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 03-Jan-17.
  */
-public class AdmissionTotalSeatDaoDecorator
-    extends
-    ContentDaoDecorator<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer, AdmissionTotalSeatManager>
-    implements AdmissionTotalSeatManager {
+public class AdmissionTotalSeatDaoDecorator extends
+    ContentDaoDecorator<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer, AdmissionTotalSeatManager> implements
+    AdmissionTotalSeatManager {
 
   @Override
-  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
-      QuotaType pQuotaType) {
+  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType, QuotaType pQuotaType) {
     return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
   }
 }

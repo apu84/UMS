@@ -23,8 +23,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sSeatPlanGroupManager =
-        applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
+    sSeatPlanGroupManager = applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
   }
 
   private int mId;
@@ -177,8 +176,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
 
   }
 

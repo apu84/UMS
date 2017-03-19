@@ -11,8 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>,
-    LastModifier {
+public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>, LastModifier {
   Status getStatus();
 
   String getProgressDescription();

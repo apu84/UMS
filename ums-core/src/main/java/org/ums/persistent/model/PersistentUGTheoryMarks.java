@@ -6,14 +6,12 @@ import org.ums.domain.model.mutable.MutableUGBaseRegistration;
 import org.ums.domain.model.mutable.MutableUGTheoryMarks;
 import org.ums.manager.UGTheoryMarksManager;
 
-public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implements
-    MutableUGTheoryMarks {
+public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implements MutableUGTheoryMarks {
   private static UGTheoryMarksManager sTheoryMarksManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sTheoryMarksManager =
-        applicationContext.getBean("theoryMarksManager", UGTheoryMarksManager.class);
+    sTheoryMarksManager = applicationContext.getBean("theoryMarksManager", UGTheoryMarksManager.class);
   }
 
   public PersistentUGTheoryMarks() {}

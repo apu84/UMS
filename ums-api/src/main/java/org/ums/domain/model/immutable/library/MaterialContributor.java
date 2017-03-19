@@ -11,8 +11,8 @@ import java.io.Serializable;
 /**
  * Represents Contributor Table
  */
-public interface MaterialContributor extends Serializable, LastModifier,
-    EditType<MutableMaterialContributor>, Identifier<Integer> {
+public interface MaterialContributor extends Serializable, LastModifier, EditType<MutableMaterialContributor>,
+    Identifier<Integer> {
 
   String getMfn();
 

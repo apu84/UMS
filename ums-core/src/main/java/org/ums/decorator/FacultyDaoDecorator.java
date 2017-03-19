@@ -7,7 +7,7 @@ import org.ums.manager.FacultyManager;
 /**
  * Created by Monjur-E-Morshed on 06-Dec-16.
  */
-public class FacultyDaoDecorator extends
-    ContentDaoDecorator<Faculty, MutableFaculty, Integer, FacultyManager> implements FacultyManager {
+public class FacultyDaoDecorator extends ContentDaoDecorator<Faculty, MutableFaculty, Integer, FacultyManager>
+    implements FacultyManager {
 
 }

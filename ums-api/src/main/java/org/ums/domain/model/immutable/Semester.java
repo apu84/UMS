@@ -11,8 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier,
-    Identifier<Integer> {
+public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier, Identifier<Integer> {
 
   String getName();
 

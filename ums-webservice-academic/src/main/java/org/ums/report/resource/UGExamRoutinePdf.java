@@ -32,8 +32,7 @@ public class UGExamRoutinePdf extends Resource {
   @GET
   @Path("/semester/{semester-id}/examType/{exam-type}")
   @Produces("application/pdf")
-  public StreamingOutput createAttendanceSheetReport(
-      final @PathParam("semester-id") int pSemesterId,
+  public StreamingOutput createAttendanceSheetReport(final @PathParam("semester-id") int pSemesterId,
       final @PathParam("exam-type") Integer examType) {
     return new StreamingOutput() {
       @Override

@@ -44,25 +44,21 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
 
   private JdbcTemplate mJdbcTemplate;
 
-  public PersistentSemesterSyllabusMapDao(final JdbcTemplate pJdbcTemplate,
-      final SyllabusManager pSyllabusManager) {
+  public PersistentSemesterSyllabusMapDao(final JdbcTemplate pJdbcTemplate, final SyllabusManager pSyllabusManager) {
     mJdbcTemplate = pJdbcTemplate;
     mSyllabusManager = pSyllabusManager;
   }
 
   @Override
-  public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pSemesterId,
-      final Integer pProgramId) {
+  public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pSemesterId, final Integer pProgramId) {
     String query = SELECT_BY_SEMESTER_PROGRAM;
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId},
-        new SemesterSyllabusRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId}, new SemesterSyllabusRowMapper());
   }
 
   @Override
   public SemesterSyllabusMap get(final Integer pMapId) {
     String query = SELECT_SINGLE;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pMapId},
-        new SemesterSyllabusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pMapId}, new SemesterSyllabusRowMapper());
   }
 
   @Override
@@ -76,23 +72,20 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
     String query =
         "insert into SEMESTER_SYLLABUS_MAP(mapping_id, program_id, year, semester, semester_id, syllabus_id)"
             + " select SQN_SSMAP_ID.nextVal, program_id, year, semester, ? , syllabus_id from SEMESTER_SYLLABUS_MAP t1 where semester_id = ? and program_id = ?";
-    mJdbcTemplate.update(query, pSemesterSyllabusMapDto.getAcademicSemester().getId(),
-        pSemesterSyllabusMapDto.getCopySemester().getId(), pSemesterSyllabusMapDto.getProgram()
-            .getId());
+    mJdbcTemplate.update(query, pSemesterSyllabusMapDto.getAcademicSemester().getId(), pSemesterSyllabusMapDto
+        .getCopySemester().getId(), pSemesterSyllabusMapDto.getProgram().getId());
   }
 
   @Override
   public List<Syllabus> getSyllabusForSemester(Integer pProgramId, Integer pSemesterId) {
-    return mJdbcTemplate.query(SELECT_SYLLABUS, new Object[] {pProgramId, pSemesterId},
-        new SyllabusRowMapper());
+    return mJdbcTemplate.query(SELECT_SYLLABUS, new Object[] {pProgramId, pSemesterId}, new SyllabusRowMapper());
   }
 
   @Override
-  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear,
-      Integer pSemester) {
+  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
     String query = SELECT_SYLLABUS + " AND YEAR = ? AND SEMESTER = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pProgramId, pSemesterId, pYear,
-        pSemester}, new SyllabusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pProgramId, pSemesterId, pYear, pSemester},
+        new SyllabusRowMapper());
   }
 
   class SemesterSyllabusRowMapper implements RowMapper<SemesterSyllabusMap> {

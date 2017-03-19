@@ -122,8 +122,8 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     mutableClassRoom.create();
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableClassRoom.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableClassRoom.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 

@@ -8,8 +8,7 @@ import org.ums.domain.model.mutable.MutablePermission;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface Permission extends Serializable, EditType<MutablePermission>, LastModifier,
-    Identifier<Long> {
+public interface Permission extends Serializable, EditType<MutablePermission>, LastModifier, Identifier<Long> {
   Role getRole();
 
   Integer getRoleId();

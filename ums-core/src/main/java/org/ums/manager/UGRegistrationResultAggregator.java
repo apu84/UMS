@@ -19,8 +19,7 @@ import org.ums.services.academic.ProcessResult;
 import org.ums.util.UmsUtils;
 
 public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecorator {
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(UGRegistrationResultAggregator.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(UGRegistrationResultAggregator.class);
   private static final Integer UPDATE_NOTIFICATION_AFTER = 20;
 
   private EquivalentCourseManager mEquivalentCourseManager;
@@ -114,8 +113,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     @Override
     public int compare(final UGRegistrationResult pResult1, final UGRegistrationResult pResult2) {
       try {
-        int dateDiff =
-            pResult1.getSemester().getStartDate().compareTo(pResult2.getSemester().getStartDate());
+        int dateDiff = pResult1.getSemester().getStartDate().compareTo(pResult2.getSemester().getStartDate());
         if(dateDiff != 0) {
           return dateDiff;
         }
@@ -188,8 +186,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return list;
   }
 
-  private boolean hasTakenInFollowingSemesters(UGRegistrationResult pResult,
-      List<UGRegistrationResult> pResults) {
+  private boolean hasTakenInFollowingSemesters(UGRegistrationResult pResult, List<UGRegistrationResult> pResults) {
     for(UGRegistrationResult result : pResults) {
       if(result.getCourseId().equalsIgnoreCase(pResult.getCourseId())
           && pResult.getSemester().getStartDate().before(result.getSemester().getStartDate())) {

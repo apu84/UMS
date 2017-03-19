@@ -30,8 +30,8 @@ public class PublisherResource extends MutableSupplierResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") Integer pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") Integer pObjectId)
+      throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

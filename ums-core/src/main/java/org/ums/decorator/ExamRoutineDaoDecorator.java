@@ -8,8 +8,7 @@ import org.ums.manager.ExamRoutineManager;
 import java.util.List;
 
 public class ExamRoutineDaoDecorator extends
-    ContentDaoDecorator<ExamRoutine, MutableExamRoutine, Object, ExamRoutineManager> implements
-    ExamRoutineManager {
+    ContentDaoDecorator<ExamRoutine, MutableExamRoutine, Object, ExamRoutineManager> implements ExamRoutineManager {
   @Override
   public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) {
     return getManager().getExamRoutine(semesterId, examTypeId);
@@ -31,8 +30,7 @@ public class ExamRoutineDaoDecorator extends
   }
 
   @Override
-  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamType(Integer pSemesterId,
-      Integer pExamType) {
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamType(Integer pSemesterId, Integer pExamType) {
     return getManager().getExamRoutineBySemesterAndExamType(pSemesterId, pExamType);
   }
 
@@ -44,8 +42,8 @@ public class ExamRoutineDaoDecorator extends
   @Override
   public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(
       Integer pSemesterId, Integer pExamType) {
-    return getManager().getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(
-        pSemesterId, pExamType);
+    return getManager().getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(pSemesterId,
+        pExamType);
   }
 
   @Override

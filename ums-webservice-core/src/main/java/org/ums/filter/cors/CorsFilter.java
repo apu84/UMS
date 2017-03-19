@@ -10,8 +10,8 @@ import java.io.IOException;
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
   @Override
-  public void filter(final ContainerRequestContext requestContext,
-      final ContainerResponseContext responseContext) throws IOException {
+  public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext)
+      throws IOException {
 
     final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
 

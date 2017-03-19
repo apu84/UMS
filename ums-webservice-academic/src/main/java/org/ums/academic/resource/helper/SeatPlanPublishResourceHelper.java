@@ -23,8 +23,7 @@ import java.util.List;
  * Created by My Pc on 8/4/2016.
  */
 @Component
-public class SeatPlanPublishResourceHelper extends
-    ResourceHelper<SeatPlanPublish, MutableSeatPlanPublish, Integer> {
+public class SeatPlanPublishResourceHelper extends ResourceHelper<SeatPlanPublish, MutableSeatPlanPublish, Integer> {
 
   @Autowired
   private SeatPlanPublishManager mManager;
@@ -101,8 +100,7 @@ public class SeatPlanPublishResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getBySemester(Integer pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getBySemester(Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
     Integer record = getContentManager().checkBySemester(pSemesterId);
     List<SeatPlanPublish> publishs = new ArrayList<>();
     if(record > 0) {

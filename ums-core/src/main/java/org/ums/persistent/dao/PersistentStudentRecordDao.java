@@ -23,9 +23,9 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String INSERT_ALL =
       "INSERT INTO STUDENT_RECORD(ID, STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
           + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, "
-      + "YEAR = ?," + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?,"
-      + "RESULT = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, " + "YEAR = ?,"
+      + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?," + "RESULT = ?," + "LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM STUDENT_RECORD ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -69,51 +69,47 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
     String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? ORDER BY YEAR, SEMESTER";
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId},
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId}, new StudentRecordRowMapper());
+  }
+
+  @Override
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pYear, pAcademicSemester},
         new StudentRecordRowMapper());
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
-    String query =
-        SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pYear,
-        pAcademicSemester}, new StudentRecordRowMapper());
-  }
-
-  @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      StudentRecord.Type pType) {
-    String query =
-        SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND REGISTRATION_TYPE = ?";
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, StudentRecord.Type pType) {
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND REGISTRATION_TYPE = ?";
     return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pType.getValue()},
         new StudentRecordRowMapper());
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester, StudentRecord.Type pType) {
     String query =
         SELECT_ALL
             + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND REGISTRATION_TYPE = ?";
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pYear,
-        pAcademicSemester, pType.getValue()}, new StudentRecordRowMapper());
+    return mJdbcTemplate.query(query,
+        new Object[] {pProgramId, pSemesterId, pYear, pAcademicSemester, pType.getValue()},
+        new StudentRecordRowMapper());
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
     String query = SELECT_ALL + " where  STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=? AND SEMESTER=?";
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pYear,
-        pAcademicSemester}, new StudentRecordRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pYear, pAcademicSemester},
+        new StudentRecordRowMapper());
   }
 
   @Override
   public StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId) {
     String query = SELECT_ALL + " where  STUDENT_ID=? AND SEMESTER_ID=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId},
-        new StudentRecordRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId}, new StudentRecordRowMapper());
   }
 
   @Override
@@ -135,8 +131,8 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
     for(StudentRecord studentRecord : pStudentRecords) {
       params.add(new Object[] {studentRecord.getStudentId(), studentRecord.getSemester().getId(),
           studentRecord.getYear(), studentRecord.getAcademicSemester(), studentRecord.getCGPA(),
-          studentRecord.getGPA(), studentRecord.getType().getValue(),
-          studentRecord.getStatus().getValue(), studentRecord.getId()});
+          studentRecord.getGPA(), studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),
+          studentRecord.getId()});
     }
 
     return params;
@@ -146,9 +142,9 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(StudentRecord studentRecord : pStudentRecords) {
       params.add(new Object[] {mIdGenerator.getNumericId(), studentRecord.getStudent().getId(),
-          studentRecord.getSemester().getId(), studentRecord.getProgram().getId(),
-          studentRecord.getYear(), studentRecord.getAcademicSemester(),
-          studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),});
+          studentRecord.getSemester().getId(), studentRecord.getProgram().getId(), studentRecord.getYear(),
+          studentRecord.getAcademicSemester(), studentRecord.getType().getValue(),
+          studentRecord.getStatus().getValue(),});
     }
 
     return params;

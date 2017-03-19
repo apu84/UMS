@@ -33,8 +33,7 @@ public class StudentHomeProcessor extends AbstractUserHomeProcessor {
 
     Map<String, String> yearSemester = new HashMap<>();
     yearSemester.put("key", "Year/ Semester");
-    yearSemester
-        .put("value", student.getCurrentYear() + "/" + student.getCurrentAcademicSemester());
+    yearSemester.put("value", student.getCurrentYear() + "/" + student.getCurrentAcademicSemester());
     profileContent.add(yearSemester);
 
     Map<String, String> currentEnrolledSemester = new HashMap<>();

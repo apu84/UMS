@@ -116,10 +116,8 @@ public class UMSContext {
 
   @Bean
   AdmissionTotalSeatManager admissionTotalSeatManager() {
-    AdmissionTotalSeatCache admissionTotalSeatCache =
-        new AdmissionTotalSeatCache(mCacheFactory.getCacheManager());
-    admissionTotalSeatCache.setManager(new PersistentAdmissionTotalSeatDao(mTemplateFactory
-        .getJdbcTemplate()));
+    AdmissionTotalSeatCache admissionTotalSeatCache = new AdmissionTotalSeatCache(mCacheFactory.getCacheManager());
+    admissionTotalSeatCache.setManager(new PersistentAdmissionTotalSeatDao(mTemplateFactory.getJdbcTemplate()));
     return admissionTotalSeatCache;
   }
 
@@ -140,26 +138,21 @@ public class UMSContext {
   @Bean
   ClassRoomManager classRoomManager() {
     ClassRoomCache classRoomCache = new ClassRoomCache(mCacheFactory.getCacheManager());
-    classRoomCache.setManager(new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    classRoomCache.setManager(new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return classRoomCache;
   }
 
   @Bean
   AdmissionStudentManager admissionStudentManager() {
-    AdmissionStudentCache admissionStudentCache =
-        new AdmissionStudentCache(mCacheFactory.getCacheManager());
-    admissionStudentCache.setManager(new PersistentAdmissionStudentDao(mTemplateFactory
-        .getJdbcTemplate()));
+    AdmissionStudentCache admissionStudentCache = new AdmissionStudentCache(mCacheFactory.getCacheManager());
+    admissionStudentCache.setManager(new PersistentAdmissionStudentDao(mTemplateFactory.getJdbcTemplate()));
     return admissionStudentCache;
   }
 
   @Bean
   AdmissionMeritListManager admissionMeritListManager() {
-    AdmissionMeritListCache admissionMeritListCache =
-        new AdmissionMeritListCache(mCacheFactory.getCacheManager());
-    admissionMeritListCache.setManager(new PersistentAdmissionMeritListDao(mTemplateFactory
-        .getJdbcTemplate()));
+    AdmissionMeritListCache admissionMeritListCache = new AdmissionMeritListCache(mCacheFactory.getCacheManager());
+    admissionMeritListCache.setManager(new PersistentAdmissionMeritListDao(mTemplateFactory.getJdbcTemplate()));
     return admissionMeritListCache;
   }
 
@@ -167,8 +160,8 @@ public class UMSContext {
   AdmissionAllTypesOfCertificateManager admissionStudentCertificateManager() {
     AdmissionAllTypesOfCertificateCache admissionStudentCertificateCache =
         new AdmissionAllTypesOfCertificateCache(mCacheFactory.getCacheManager());
-    admissionStudentCertificateCache.setManager(new PersistentAdmissionAllTypesOfCertificateDao(
-        mTemplateFactory.getJdbcTemplate()));
+    admissionStudentCertificateCache.setManager(new PersistentAdmissionAllTypesOfCertificateDao(mTemplateFactory
+        .getJdbcTemplate()));
     return admissionStudentCertificateCache;
   }
 
@@ -176,9 +169,8 @@ public class UMSContext {
   AdmissionCertificatesOfStudentManager admissionStudentsCertificateHistoryManager() {
     AdmissionCertificatesOfStudentCache admissionStudentsCertificateHistoryCache =
         new AdmissionCertificatesOfStudentCache(mCacheFactory.getCacheManager());
-    admissionStudentsCertificateHistoryCache
-        .setManager(new PersistentAdmissionCertificatesOfStudentDao(mTemplateFactory
-            .getJdbcTemplate()));
+    admissionStudentsCertificateHistoryCache.setManager(new PersistentAdmissionCertificatesOfStudentDao(
+        mTemplateFactory.getJdbcTemplate()));
     return admissionStudentsCertificateHistoryCache;
   }
 
@@ -186,8 +178,8 @@ public class UMSContext {
   AdmissionCommentForStudentManager admissionStudentsCertificateCommentManager() {
     AdmissionCommentForStudentCache admissionStudentsCertificateCommentCache =
         new AdmissionCommentForStudentCache(mCacheFactory.getCacheManager());
-    admissionStudentsCertificateCommentCache
-        .setManager(new PersistentAdmissionCommentForStudentDao(mTemplateFactory.getJdbcTemplate()));
+    admissionStudentsCertificateCommentCache.setManager(new PersistentAdmissionCommentForStudentDao(mTemplateFactory
+        .getJdbcTemplate()));
     return admissionStudentsCertificateCommentCache;
   }
 
@@ -202,8 +194,7 @@ public class UMSContext {
   @Lazy
   EmployeeManager employeeManager() {
     EmployeeTransaction employeeTransaction = new EmployeeTransaction();
-    PersistentEmployeeDao persistentEmployeeDao =
-        new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate());
+    PersistentEmployeeDao persistentEmployeeDao = new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate());
     employeeTransaction.setManager(persistentEmployeeDao);
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(employeeTransaction);
@@ -212,10 +203,9 @@ public class UMSContext {
 
   @Bean
   SemesterWithDrawalManager semesterWithdrawalManager() {
-    SemesterWithdrawalCache semesterWithdrawalCache =
-        new SemesterWithdrawalCache(mCacheFactory.getCacheManager());
-    semesterWithdrawalCache.setManager(new PersistentSemesterWithdrawalDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    SemesterWithdrawalCache semesterWithdrawalCache = new SemesterWithdrawalCache(mCacheFactory.getCacheManager());
+    semesterWithdrawalCache.setManager(new PersistentSemesterWithdrawalDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return semesterWithdrawalCache;
   }
 
@@ -223,17 +213,15 @@ public class UMSContext {
   SemesterWithdrawalLogManager semesterWithdrawalLogManager() {
     SemesterWithdrawalLogCache semesterWithdrawalLogCache =
         new SemesterWithdrawalLogCache(mCacheFactory.getCacheManager());
-    semesterWithdrawalLogCache.setManager(new PersistentSemesterWithdrawalLogDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    semesterWithdrawalLogCache.setManager(new PersistentSemesterWithdrawalLogDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return semesterWithdrawalLogCache;
   }
 
   @Bean
   SeatPlanPublishManager seatPlanPublishManager() {
-    SeatPlanPublishCache seatPlanPublishCache =
-        new SeatPlanPublishCache(mCacheFactory.getCacheManager());
-    seatPlanPublishCache.setManager(new PersistentSeatPlanPublishDao(mTemplateFactory
-        .getJdbcTemplate()));
+    SeatPlanPublishCache seatPlanPublishCache = new SeatPlanPublishCache(mCacheFactory.getCacheManager());
+    seatPlanPublishCache.setManager(new PersistentSeatPlanPublishDao(mTemplateFactory.getJdbcTemplate()));
     return seatPlanPublishCache;
   }
 
@@ -254,26 +242,22 @@ public class UMSContext {
   @Bean
   SeatPlanManager seatPlanManager() {
     SeatPlanCache seatPlanCache = new SeatPlanCache(mCacheFactory.getCacheManager());
-    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return seatPlanCache;
   }
 
   @Bean
   ApplicationCCIManager applicationCCIManager() {
-    ApplicationCCICache applicationCCICache =
-        new ApplicationCCICache(mCacheFactory.getCacheManager());
-    applicationCCICache.setManager(new PersistentApplicationCCIDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    ApplicationCCICache applicationCCICache = new ApplicationCCICache(mCacheFactory.getCacheManager());
+    applicationCCICache.setManager(new PersistentApplicationCCIDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return applicationCCICache;
   }
 
   @Bean
   SemesterSyllabusMapManager semesterSyllabusMapManager() {
-    SemesterSyllabusMapCache semesterSyllabusMapCache =
-        new SemesterSyllabusMapCache(mCacheFactory.getCacheManager());
-    semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(
-        mDataSource), syllabusManager()));
+    SemesterSyllabusMapCache semesterSyllabusMapCache = new SemesterSyllabusMapCache(mCacheFactory.getCacheManager());
+    semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource),
+        syllabusManager()));
     return semesterSyllabusMapCache;
   }
 
@@ -342,8 +326,7 @@ public class UMSContext {
   UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
     userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
-    UserPropertyResolver userPropertyResolver =
-        new UserPropertyResolver(employeeManager(), studentManager());
+    UserPropertyResolver userPropertyResolver = new UserPropertyResolver(employeeManager(), studentManager());
     userPropertyResolver.setManager(userCache);
     return userPropertyResolver;
   }
@@ -358,24 +341,21 @@ public class UMSContext {
   @Bean
   AppSettingManager appSettingManager() {
     AppSettingCache appSettingCache = new AppSettingCache(mCacheFactory.getCacheManager());
-    appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return appSettingCache;
   }
 
   @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
-    courseTeacherCache.setManager(new PersistentCourseTeacherDao(
-        mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return courseTeacherCache;
   }
 
   @Bean
   ExaminerManager examinerManager() {
     ExaminerCache examinerCache = new ExaminerCache(mCacheFactory.getCacheManager());
-    examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return examinerCache;
   }
 
@@ -389,16 +369,14 @@ public class UMSContext {
   @Bean
   PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
-    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return permissionCache;
   }
 
   @Bean
   SeatPlanGroupManager seatPlanGroupManager() {
     SeatPlanGroupCache seatPlanGroupCache = new SeatPlanGroupCache(mCacheFactory.getCacheManager());
-    seatPlanGroupCache
-        .setManager(new PersistentSeatPlanGroupDao(mTemplateFactory.getJdbcTemplate()));
+    seatPlanGroupCache.setManager(new PersistentSeatPlanGroupDao(mTemplateFactory.getJdbcTemplate()));
     return seatPlanGroupCache;
   }
 
@@ -407,8 +385,7 @@ public class UMSContext {
     NavigationByPermissionResolver navigationByPermissionResolver =
         new NavigationByPermissionResolver(mAuthenticationRealm);
     NavigationCache navigationCache = new NavigationCache(mCacheFactory.getCacheManager());
-    navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     navigationByPermissionResolver.setManager(navigationCache);
     return navigationByPermissionResolver;
   }
@@ -417,34 +394,31 @@ public class UMSContext {
   AdditionalRolePermissionsManager additionalRolePermissionsManager() {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
-    additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return additionalRolePermissionsCache;
   }
 
   @Bean
   StudentRecordManager studentRecordManager() {
     StudentRecordCache studentRecordCache = new StudentRecordCache(mCacheFactory.getCacheManager());
-    studentRecordCache.setManager(new PersistentStudentRecordDao(
-        mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    studentRecordCache.setManager(new PersistentStudentRecordDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return studentRecordCache;
   }
 
   @Bean
   SemesterEnrollmentManager semesterEnrollmentManager() {
-    SemesterEnrollmentCache semesterEnrollmentCache =
-        new SemesterEnrollmentCache(mCacheFactory.getCacheManager());
-    semesterEnrollmentCache.setManager(new PersistentSemesterEnrollmentDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    SemesterEnrollmentCache semesterEnrollmentCache = new SemesterEnrollmentCache(mCacheFactory.getCacheManager());
+    semesterEnrollmentCache.setManager(new PersistentSemesterEnrollmentDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return semesterEnrollmentCache;
   }
 
   @Bean
   EnrollmentFromToManager enrollmentFromToManager() {
-    EnrollmentFromToCache enrollmentFromToCache =
-        new EnrollmentFromToCache(mCacheFactory.getCacheManager());
-    enrollmentFromToCache.setManager(new PersistentEnrollmentFromToDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+    EnrollmentFromToCache enrollmentFromToCache = new EnrollmentFromToCache(mCacheFactory.getCacheManager());
+    enrollmentFromToCache
+        .setManager(new PersistentEnrollmentFromToDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return enrollmentFromToCache;
   }
 
@@ -494,8 +468,7 @@ public class UMSContext {
 
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {
-    BearerAccessTokenCache bearerAccessTokenCache =
-        new BearerAccessTokenCache(mCacheFactory.getCacheManager());
+    BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
     bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
     return bearerAccessTokenCache;
   }
@@ -518,12 +491,10 @@ public class UMSContext {
   @Bean
   UGRegistrationResultManager registrationResultManager() {
     UGRegistrationResultAggregator resultAggregator =
-        new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager(),
-            semesterManager());
-    UGRegistrationResultCache registrationResultCache =
-        new UGRegistrationResultCache(mCacheFactory.getCacheManager());
-    registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
-        .getJdbcTemplate(), mIdGenerator));
+        new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager(), semesterManager());
+    UGRegistrationResultCache registrationResultCache = new UGRegistrationResultCache(mCacheFactory.getCacheManager());
+    registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     resultAggregator.setManager(registrationResultCache);
     return resultAggregator;
   }
@@ -552,12 +523,10 @@ public class UMSContext {
   @Lazy
   BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
     FileContentPermission fileContentPermission =
-        new FileContentPermission(userManager(), bearerAccessTokenManager(), mUMSConfiguration,
-            mMessageResource);
+        new FileContentPermission(userManager(), bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
     CourseMaterialNotifier notifier =
-        new CourseMaterialNotifier(userManager(), notificationGenerator(),
-            registrationResultManager(), mUMSConfiguration, mMessageResource,
-            courseTeacherManager(), bearerAccessTokenManager());
+        new CourseMaterialNotifier(userManager(), notificationGenerator(), registrationResultManager(),
+            mUMSConfiguration, mMessageResource, courseTeacherManager(), bearerAccessTokenManager());
     fileContentPermission.setManager(notifier);
     notifier.setManager(mBinaryContentManager);
     return fileContentPermission;
@@ -567,9 +536,8 @@ public class UMSContext {
   @Lazy
   BinaryContentManager<byte[]> courseMaterialFileManagerForStudent() {
     StudentFileContentPermission fileContentPermission =
-        new StudentFileContentPermission(userManager(), bearerAccessTokenManager(),
-            mUMSConfiguration, mMessageResource, studentManager(), registrationResultManager(),
-            courseTeacherManager());
+        new StudentFileContentPermission(userManager(), bearerAccessTokenManager(), mUMSConfiguration,
+            mMessageResource, studentManager(), registrationResultManager(), courseTeacherManager());
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
   }
@@ -577,9 +545,8 @@ public class UMSContext {
   @Bean
   @Lazy
   NotificationManager notificationManager() {
-    return mUMSConfiguration.isEnableObjectDb() ? new PersistentObjectNotificationDao(
-        mMongoOperations) : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator);
+    return mUMSConfiguration.isEnableObjectDb() ? new PersistentObjectNotificationDao(mMongoOperations)
+        : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
@@ -590,21 +557,17 @@ public class UMSContext {
 
   @Bean
   EquivalentCourseManager equivalentCourseManager() {
-    EquivalentCourseCache equivalentCourseCache =
-        new EquivalentCourseCache(mCacheFactory.getCacheManager());
-    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    EquivalentCourseCache equivalentCourseCache = new EquivalentCourseCache(mCacheFactory.getCacheManager());
+    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return equivalentCourseCache;
   }
 
   @Bean
   MarksSubmissionStatusManager marksSubmissionStatusManager() {
-    MarksSubmissionStatusCache cache =
-        new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
+    MarksSubmissionStatusCache cache = new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
     MarksSubmissionStatusAggregator aggregator = new MarksSubmissionStatusAggregator();
     cache.setManager(aggregator);
-    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return cache;
   }
 
@@ -618,8 +581,7 @@ public class UMSContext {
     ResultPublishValidator validator = new ResultPublishValidator(marksSubmissionStatusManager());
     ResultPublishImpl resultPublish = new ResultPublishImpl();
     validator.setManager(resultPublish);
-    resultPublish
-        .setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    resultPublish.setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return validator;
   }
 
@@ -643,9 +605,9 @@ public class UMSContext {
   }
 
   @Bean
-  FeeManager feeManager() {
-    FeeCache feeCache = new FeeCache(mCacheFactory.getCacheManager());
-    feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+  UGFeeManager feeManager() {
+    UGFeeCache feeCache = new UGFeeCache(mCacheFactory.getCacheManager());
+    feeCache.setManager(new PersistentUGFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return feeCache;
   }
 
@@ -678,8 +640,7 @@ public class UMSContext {
   @Bean
   SupplierManager supplierManager() {
     SupplierCache supplierCache = new SupplierCache(mCacheFactory.getCacheManager());
-    supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate(),
-        mIdGenerator));
+    supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return supplierCache;
   }
 
@@ -693,16 +654,14 @@ public class UMSContext {
   @Bean
   RecordManager recordManager() {
     RecordCache recordCache = new RecordCache(mCacheFactory.getCacheManager());
-    recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(),
-        mIdGenerator));
+    recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return recordCache;
   }
 
   @Bean
   ItemManager itemManager() {
     ItemCache itemCache = new ItemCache(mCacheFactory.getCacheManager());
-    itemCache
-        .setManager(new PersistentItemDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    itemCache.setManager(new PersistentItemDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return itemCache;
   }
 
@@ -728,19 +687,18 @@ public class UMSContext {
 
   @Bean
   ConsumeIndex consumeIndex() {
-    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), mEnvironment,
-        entityResolverFactory(), lockManager());
+    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), mEnvironment, entityResolverFactory(),
+        lockManager());
   }
 
   @Bean
   CacheWarmerManager cacheWarmerManager() {
-    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
-        departmentManager(), roleManager(), permissionManager(), bearerAccessTokenManager(),
-        additionalRolePermissionsManager(), navigationManager(), employeeManager(),
-        programTypeManager(), programManager(), semesterManager(), syllabusManager(),
-        courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
-        examinerManager(), studentManager(), studentRecordManager(), classRoomManager(),
-        courseManager(), marksSubmissionStatusManager(), userManager());
+    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration, departmentManager(),
+        roleManager(), permissionManager(), bearerAccessTokenManager(), additionalRolePermissionsManager(),
+        navigationManager(), employeeManager(), programTypeManager(), programManager(), semesterManager(),
+        syllabusManager(), courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
+        examinerManager(), studentManager(), studentRecordManager(), classRoomManager(), courseManager(),
+        marksSubmissionStatusManager(), userManager());
   }
 
   @Bean

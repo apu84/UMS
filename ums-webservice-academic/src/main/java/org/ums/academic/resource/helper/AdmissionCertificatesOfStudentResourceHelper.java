@@ -26,8 +26,7 @@ import java.util.List;
 public class AdmissionCertificatesOfStudentResourceHelper extends
     ResourceHelper<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer> {
 
-  private static final Logger mLoger = LoggerFactory
-      .getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
+  private static final Logger mLoger = LoggerFactory.getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
 
   @Autowired
   AdmissionCertificatesOfStudentManager mManager;
@@ -38,16 +37,14 @@ public class AdmissionCertificatesOfStudentResourceHelper extends
   @Autowired
   UndertakenFormGenerator mUndertakenFormGenerator;
 
-  public JsonObject getStudentsSavedCertificates(final int pSemesterId, final String pReceiptId,
-      final UriInfo pUriInfo) {
+  public JsonObject getStudentsSavedCertificates(final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
     List<AdmissionCertificatesOfStudent> pStudentsCertificate =
         getContentManager().getStudentsSavedCertificateLists(pSemesterId, pReceiptId);
     return jsonCreator(pStudentsCertificate, pUriInfo);
 
   }
 
-  private JsonObject jsonCreator(List<AdmissionCertificatesOfStudent> pStudentsCertificateHistory,
-      UriInfo pUriInfo) {
+  private JsonObject jsonCreator(List<AdmissionCertificatesOfStudent> pStudentsCertificateHistory, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -63,11 +60,10 @@ public class AdmissionCertificatesOfStudentResourceHelper extends
   }
 
   // TODO remove ir
-  public void getUndertakenForm(final ProgramType pProgramType, final int pSemesterId,
-      final String pReceiptId, final OutputStream pOutputStream, final Request pRequest,
-      final UriInfo pUriInfo) throws IOException, DocumentException {
-    mUndertakenFormGenerator.createUndertakenForm(pProgramType, pSemesterId, pReceiptId,
-        pOutputStream);
+  public void getUndertakenForm(final ProgramType pProgramType, final int pSemesterId, final String pReceiptId,
+      final OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo) throws IOException,
+      DocumentException {
+    mUndertakenFormGenerator.createUndertakenForm(pProgramType, pSemesterId, pReceiptId, pOutputStream);
 
   }
 

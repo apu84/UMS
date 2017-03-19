@@ -35,8 +35,7 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
   private ProgramManager mProgramManager;
 
   @Override
-  public void createABlankTaletalkDataFormatFile(OutputStream pOutputStream, int pSemesterId)
-      throws Exception {
+  public void createABlankTaletalkDataFormatFile(OutputStream pOutputStream, int pSemesterId) throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     Workbook wb = new HSSFWorkbook();
 
@@ -70,8 +69,7 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
   }
 
   @Override
-  public void createABlankMeritListUploadFormatFile(OutputStream pOutputStream, int pSemesterId)
-      throws Exception {
+  public void createABlankMeritListUploadFormatFile(OutputStream pOutputStream, int pSemesterId) throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     Workbook wb = new HSSFWorkbook();
 
@@ -101,13 +99,12 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
   }
 
   @Override
-  public void createMeritListXlsFile(int pSemesterId, ProgramType pProgramType,
-      QuotaType pQuotaType, String pUnit, OutputStream pOutputStream) throws Exception {
+  public void createMeritListXlsFile(int pSemesterId, ProgramType pProgramType, QuotaType pQuotaType, String pUnit,
+      OutputStream pOutputStream) throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     Workbook wb = new HSSFWorkbook();
 
-    Sheet sheet =
-        wb.createSheet("Admission Merit List " + mSemesterManager.get(pSemesterId).getName());
+    Sheet sheet = wb.createSheet("Admission Merit List " + mSemesterManager.get(pSemesterId).getName());
     Row row = sheet.createRow((short) 0);
     row.createCell(0).setCellValue("Merit Sl No.");
     row.createCell(1).setCellValue("Receipt Id");

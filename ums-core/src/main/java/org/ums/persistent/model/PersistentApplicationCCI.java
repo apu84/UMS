@@ -28,8 +28,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
-    sApplicationCCIManager =
-        applicationContext.getBean("applicationCCIManager", ApplicationCCIManager.class);
+    sApplicationCCIManager = applicationContext.getBean("applicationCCIManager", ApplicationCCIManager.class);
   }
 
   private Long mId;
@@ -229,8 +228,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 5/4/2016.
  */
-public interface SubGroup extends Serializable, LastModifier, EditType<MutableSubGroup>,
-    Identifier<Integer> {
+public interface SubGroup extends Serializable, LastModifier, EditType<MutableSubGroup>, Identifier<Integer> {
   Semester getSemester();
 
   SeatPlanGroup getGroup();

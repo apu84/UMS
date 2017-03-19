@@ -55,29 +55,26 @@ public class ClassAttendanceResourceHelper {
     return mBuilder;
   }
 
-  public List<ClassAttendanceDto> getDateList(final Integer pSemesterId, final String pCourseId,
-      final String pSection) {
+  public List<ClassAttendanceDto> getDateList(final Integer pSemesterId, final String pCourseId, final String pSection) {
     return getContentManager().getDateList(pSemesterId, pCourseId, pSection);
   }
 
   public List<ClassAttendanceDto> getStudentList(final Integer pSemesterId, final String pCourseId,
       final String pSection, String pStudentCategory) {
     Course course = mCourseManager.get(pCourseId);
-    return getContentManager().getStudentList(pSemesterId, pCourseId, course.getCourseType(),
-        pSection, pStudentCategory);
+    return getContentManager().getStudentList(pSemesterId, pCourseId, course.getCourseType(), pSection,
+        pStudentCategory);
   }
 
-  public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId,
-      final String pSection) {
+  public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId, final String pSection) {
     return getContentManager().getAttendance(pSemesterId, pCourseId, pSection);
   }
 
-  public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId,
-      final String pSection, final String pStudentCategory) {
+  public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId, final String pSection,
+      final String pStudentCategory) {
 
     List<ClassAttendanceDto> dateList = getDateList(pSemesterId, pCourseId, pSection);
-    List<ClassAttendanceDto> studentList =
-        getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
+    List<ClassAttendanceDto> studentList = getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
     Map<String, String> attendanceList = getAttendanceMap(pSemesterId, pCourseId, pSection);
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -106,8 +103,8 @@ public class ClassAttendanceResourceHelper {
       if(employeeId.equals(date.getTeacherId()))
         jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(), "I");
       else
-        jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(),
-            "T-" + date.getTeacherShortName());
+        jsonObjectBuilder
+            .add("date" + date.getClassDateFormat1() + date.getSerial(), "T-" + date.getTeacherShortName());
     }
     // asfasdfasdfasdf a dsf asdf
     jsonArrayBuilder.add(jsonObjectBuilder);
@@ -122,8 +119,7 @@ public class ClassAttendanceResourceHelper {
         // }
         index = index + 1;
 
-        String key =
-            date.getClassDateFormat1() + "" + date.getSerial() + "" + student.getStudentId();
+        String key = date.getClassDateFormat1() + "" + date.getSerial() + "" + student.getStudentId();
         if(attendanceList.containsKey(key))
           jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(),
               attendanceList.get(key).equals("1") ? "Y" : "N");
@@ -138,22 +134,17 @@ public class ClassAttendanceResourceHelper {
     objectBuilder.add("attendance", jsonArray);
 
     jsonObjectBuilder = factory.createObjectBuilder();
-    jsonObjectBuilder.add("data", "sId").add("title", "Student Id").add("readOnly", true)
-        .add("date", "").add("serial", 0);
+    jsonObjectBuilder.add("data", "sId").add("title", "Student Id").add("readOnly", true).add("date", "")
+        .add("serial", 0);
     jsonArrayBuilder.add(jsonObjectBuilder);
-    jsonObjectBuilder.add("data", "sName").add("title", "Student Name").add("readOnly", true)
-        .add("date", "").add("serial", 0);
+    jsonObjectBuilder.add("data", "sName").add("title", "Student Name").add("readOnly", true).add("date", "")
+        .add("serial", 0);
     jsonArrayBuilder.add(jsonObjectBuilder);
 
     for(ClassAttendanceDto date : dateList) {
-      jsonObjectBuilder
-          .add("data", "date" + date.getClassDateFormat1() + date.getSerial())
-          .add("id", date.getId())
-          .add(
-              "title",
-              date.getClassDate() + "&nbsp;<span class=\"badge badge-info\">" + date.getSerial()
-                  + "</span>").add("readOnly", true).add("date", date.getClassDate())
-          .add("serial", date.getSerial());
+      jsonObjectBuilder.add("data", "date" + date.getClassDateFormat1() + date.getSerial()).add("id", date.getId())
+          .add("title", date.getClassDate() + "&nbsp;<span class=\"badge badge-info\">" + date.getSerial() + "</span>")
+          .add("readOnly", true).add("date", date.getClassDate()).add("serial", date.getSerial());
       jsonArrayBuilder.add(jsonObjectBuilder);
     }
     jsonArray = jsonArrayBuilder.build();
@@ -174,8 +165,7 @@ public class ClassAttendanceResourceHelper {
     Integer serial = pJsonObject.getInt("serial");
 
     String attendanceId = getContentManager().getAttendanceId();
-    getContentManager().insertAttendanceMaster(attendanceId, semester, course, section, classDate,
-        serial, "41");
+    getContentManager().insertAttendanceMaster(attendanceId, semester, course, section, classDate, serial, "41");
     getContentManager().upsertAttendanceDtl(attendanceId, attendanceList);
 
     Response.ResponseBuilder builder = Response.created(null);
@@ -210,10 +200,8 @@ public class ClassAttendanceResourceHelper {
     return Response.noContent().build();
   }
 
-  public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId,
-      final String pCourseId, final String pSection, final String pStudentCategory)
-      throws DocumentException, IOException {
-    mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection,
-        pStudentCategory);
+  public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId, final String pCourseId,
+      final String pSection, final String pStudentCategory) throws DocumentException, IOException {
+    mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection, pStudentCategory);
   }
 }

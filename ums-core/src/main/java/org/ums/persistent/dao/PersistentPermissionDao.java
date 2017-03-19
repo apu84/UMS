@@ -23,8 +23,8 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   String INSERT_ALL =
       "INSERT INTO PERMISSIONS (PERMISSION_ID, ROLE_ID, PERMISSIONS, LAST_MODIFIED) VALUES (?, ?, ?, ? "
           + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE PERMISSIONS SET ROLE_ID = ?, PERMISSIONS = ?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " WHERE PERMISSION_ID = ? ";
+  String UPDATE_ALL = "UPDATE PERMISSIONS SET ROLE_ID = ?, PERMISSIONS = ?, LAST_MODIFIED = " + getLastModifiedSql()
+      + " WHERE PERMISSION_ID = ? ";
   String DELETE_ALL = "DELETE FROM PERMISSIONS ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -55,8 +55,8 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   @Override
   public int update(MutablePermission pMutable) {
     String query = UPDATE_ALL + "WHERE PERMISSION_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getRole().getId(), Joiner.on(PERMISSION_SEPARATOR)
-        .join(pMutable.getPermissions()));
+    return mJdbcTemplate.update(query, pMutable.getRole().getId(),
+        Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
   }
 
   @Override
@@ -68,8 +68,8 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   @Override
   public Long create(MutablePermission pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getRole().getId(), Joiner
-        .on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getRole().getId(),
+        Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
     return id;
   }
 

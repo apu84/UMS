@@ -19,8 +19,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class SubGroupBuilder implements Builder<SubGroup, MutableSubGroup> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SubGroup pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SubGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("groupNo", pReadOnly.getGroup().getGroupNo());

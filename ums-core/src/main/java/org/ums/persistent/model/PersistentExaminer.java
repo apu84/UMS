@@ -56,8 +56,7 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
 
   @Override
   public Teacher getPreparer() {
-    return mPreparer == null ? sTeacherManager.get(mPreparerId) : sTeacherManager
-        .validate(mPreparer);
+    return mPreparer == null ? sTeacherManager.get(mPreparerId) : sTeacherManager.validate(mPreparer);
   }
 
   @Override
@@ -67,8 +66,7 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
 
   @Override
   public Teacher getScrutinizer() {
-    return mScrutinizer == null ? sTeacherManager.get(mScrutinizerId) : sTeacherManager
-        .validate(mScrutinizer);
+    return mScrutinizer == null ? sTeacherManager.get(mScrutinizerId) : sTeacherManager.validate(mScrutinizer);
   }
 
   @Override

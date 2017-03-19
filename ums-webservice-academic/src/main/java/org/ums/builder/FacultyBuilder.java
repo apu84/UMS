@@ -16,8 +16,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class FacultyBuilder implements Builder<Faculty, MutableFaculty> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Faculty pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Faculty pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("longName", pReadOnly.getLongName());
     pBuilder.add("shortName", pReadOnly.getShortName());

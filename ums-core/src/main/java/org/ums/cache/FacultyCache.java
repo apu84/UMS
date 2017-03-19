@@ -9,8 +9,8 @@ import org.ums.util.CacheUtil;
 /**
  * Created by Monjur-E-Morshed on 06-Dec-16.
  */
-public class FacultyCache extends ContentCache<Faculty, MutableFaculty, Integer, FacultyManager>
-    implements FacultyManager {
+public class FacultyCache extends ContentCache<Faculty, MutableFaculty, Integer, FacultyManager> implements
+    FacultyManager {
 
   private CacheManager<Faculty, Integer> mCacheManager;
 

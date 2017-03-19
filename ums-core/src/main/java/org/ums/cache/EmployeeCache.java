@@ -7,8 +7,8 @@ import org.ums.manager.EmployeeManager;
 
 import java.util.List;
 
-public class EmployeeCache extends ContentCache<Employee, MutableEmployee, String, EmployeeManager>
-    implements EmployeeManager {
+public class EmployeeCache extends ContentCache<Employee, MutableEmployee, String, EmployeeManager> implements
+    EmployeeManager {
 
   private CacheManager<Employee, String> mCacheManager;
 

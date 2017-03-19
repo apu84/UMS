@@ -46,8 +46,7 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
           + "             where tmp1.exam_date = tmp2.exam_date )      "
           + "             order by group_name      "
           + "             )tmp3, students,(select distinct(STUDENT_ID) from UG_REGISTRATION_RESULT) ugRegistrationResult "
-          + "             where "
-          + "             STUDENTS.STUDENT_ID = ugRegistrationResult.STUDENT_ID and "
+          + "             where " + "             STUDENTS.STUDENT_ID = ugRegistrationResult.STUDENT_ID and "
           + "             tmp3.program_id =  students.program_id "
           + "             and tmp3.course_year =  students.CURR_YEAR "
           + "             and tmp3.course_semester =  students.CURR_SEMESTER "
@@ -66,17 +65,14 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   @Override
   public List<SeatPlanGroup> getGroupBySemester(int pSemesterId, int pExamType) {
     String query = SELECT_ALL_FROM_EXAM_ROUTINE;
-    return mJdbcTemplate.query(query,
-        new Object[] {pExamType, pSemesterId, pExamType, pSemesterId},
+    return mJdbcTemplate.query(query, new Object[] {pExamType, pSemesterId, pExamType, pSemesterId},
         new SeatPlanGroupRowmapperTemp());
   }
 
   @Override
   public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
-    String query =
-        SELECT_ALL + " WHERE SEMESTER_ID=? AND TYPE=? order by group_no,program_id,year,semester";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
-        new SeatPlanGroupRowmapper());
+    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND TYPE=? order by group_no,program_id,year,semester";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType}, new SeatPlanGroupRowmapper());
   }
 
   @Override
@@ -88,10 +84,8 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   @Override
   public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
     String query =
-        SELECT_ALL
-            + " WHERE SEMESTER_ID=? AND GROUP_NO=? AND TYPE=? ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pGroupNo, pType},
-        new SeatPlanGroupRowmapper());
+        SELECT_ALL + " WHERE SEMESTER_ID=? AND GROUP_NO=? AND TYPE=? ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pGroupNo, pType}, new SeatPlanGroupRowmapper());
   }
 
   @Override
@@ -177,8 +171,8 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
             + "    ORDER BY exam_routine.exam_group, EXAM_ROUTINE.PROGRAM_ID, MST_COURSE.YEAR, MST_COURSE.SEMESTER) e "
             + "WHERE r.SEMESTER_ID = e.semester_id AND r.PROGRAM_ID = e.PROGRAM_ID AND r.year = e.YEAR AND r.semester = e.semester "
             + "ORDER BY e.group_no, e.PROGRAM_ID, e.YEAR, e.SEMESTER";
-    return mJdbcTemplate.update(query, new Object[] {pSemesterid, pExamType, pSemesterid,
-        pExamType, pSemesterid, pExamType});
+    return mJdbcTemplate.update(query, new Object[] {pSemesterid, pExamType, pSemesterid, pExamType, pSemesterid,
+        pExamType});
   }
 
   @Override
@@ -195,9 +189,8 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   @Override
   public Integer create(MutableSeatPlanGroup pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(),
-        pMutable.getGroupNo(), pMutable.getExamType());
+    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
+        pMutable.getAcademicYear(), pMutable.getAcademicSemester(), pMutable.getGroupNo(), pMutable.getExamType());
   }
 
   @Override
@@ -211,10 +204,9 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
     for(SeatPlanGroup seatPlanGroup : pSeatPlanGroups) {
       params.add(new Object[] {
           // seatPlanGroup.getId(),
-          seatPlanGroup.getSemester().getId(), seatPlanGroup.getProgram().getId(),
-          seatPlanGroup.getAcademicYear(), seatPlanGroup.getAcademicSemester(),
-          seatPlanGroup.getGroupNo(), seatPlanGroup.getExamType(), seatPlanGroup.getProgramName(),
-          seatPlanGroup.getTotalStudentNumber(),});
+          seatPlanGroup.getSemester().getId(), seatPlanGroup.getProgram().getId(), seatPlanGroup.getAcademicYear(),
+          seatPlanGroup.getAcademicSemester(), seatPlanGroup.getGroupNo(), seatPlanGroup.getExamType(),
+          seatPlanGroup.getProgramName(), seatPlanGroup.getTotalStudentNumber(),});
     }
 
     return params;

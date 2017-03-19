@@ -35,14 +35,12 @@ public class SpStudentResource extends MutableSpStudentResource {
   public JsonObject getByProgramYearSemesterStatus(final @Context Request pRequest,
       final @PathParam("programId") int programId, final @PathParam("year") int year,
       final @PathParam("semester") int semester, final @PathParam("status") int status) {
-    return mHelper.getStudentByProgramYearSemesterStatus(programId, year, semester, status,
-        pRequest, mUriInfo);
+    return mHelper.getStudentByProgramYearSemesterStatus(programId, year, semester, status, pRequest, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

@@ -22,8 +22,7 @@ import java.util.List;
 public class AdmissionAllTypesOfCertificateResourceHelper extends
     ResourceHelper<AdmissionAllTypesOfCertificate, MutableAdmissionAllTypesOfCertificate, Integer> {
 
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(AdmissionAllTypesOfCertificateResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(AdmissionAllTypesOfCertificateResourceHelper.class);
 
   @Autowired
   @Qualifier("fileContentManager")
@@ -41,8 +40,7 @@ public class AdmissionAllTypesOfCertificateResourceHelper extends
     return jsonCreator(pAdmissionAllTypesOfCertificates, pUriInfo);
   }
 
-  private JsonObject jsonCreator(
-      List<AdmissionAllTypesOfCertificate> pAdmissionAllTypesOfCertificates, UriInfo pUriInfo) {
+  private JsonObject jsonCreator(List<AdmissionAllTypesOfCertificate> pAdmissionAllTypesOfCertificates, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

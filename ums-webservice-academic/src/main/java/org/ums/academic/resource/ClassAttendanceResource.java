@@ -28,10 +28,8 @@ public class ClassAttendanceResource extends MutableClassAttendanceResource {
 
   @GET
   @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
-  public JsonObject getAttendance(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId,
-      final @PathParam("section-id") String pSection,
+  public JsonObject getAttendance(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("course-id") String pCourseId, final @PathParam("section-id") String pSection,
       final @PathParam("student-category") String pStudentCategory) {
     return mResourceHelper.getClassAttendance(pSemesterId, pCourseId, pSection, pStudentCategory);
 

@@ -6,8 +6,8 @@ import org.ums.manager.UserManager;
 
 import java.util.List;
 
-public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager>
-    implements UserManager {
+public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager> implements
+    UserManager {
 
   public User getByEmployeeId(final String pEmployeeId) {
     return getManager().getByEmployeeId(pEmployeeId);

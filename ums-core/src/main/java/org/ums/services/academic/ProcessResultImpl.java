@@ -157,8 +157,7 @@ public class ProcessResultImpl implements ProcessResult {
   @Override
   public TaskStatusResponse status(int pProgramId, int pSemesterId) {
     String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
-    String processCGPA =
-        mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
+    String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     String processGrades = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GRADES);
 
     if(mTaskStatusManager.exists(publishResult)) {

@@ -43,11 +43,10 @@ public class UGExamRoutineGenerator {
 
   Font footerInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
   Font footerInfoFontBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-  Font footerInfoFontBoldUnderline = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD
-      | Font.UNDERLINE);
+  Font footerInfoFontBoldUnderline = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD | Font.UNDERLINE);
 
-  public void createExamRoutineReport(OutputStream pOutputStream, final Integer pSemesterId,
-      final Integer pExamType) throws IOException, DocumentException {
+  public void createExamRoutineReport(OutputStream pOutputStream, final Integer pSemesterId, final Integer pExamType)
+      throws IOException, DocumentException {
 
     List<ExamRoutineDto> examList = mExamRoutineManager.getExamRoutine(pSemesterId, pExamType);
 
@@ -82,8 +81,7 @@ public class UGExamRoutineGenerator {
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     rHeader.addCell(cell);
 
-    UGExamRoutineGenerator.UGExamRoutineFooter event =
-        new UGExamRoutineGenerator.UGExamRoutineFooter(rHeader);
+    UGExamRoutineGenerator.UGExamRoutineFooter event = new UGExamRoutineGenerator.UGExamRoutineFooter(rHeader);
     writer.setPageEvent(event);
     document.open();
 
@@ -119,9 +117,8 @@ public class UGExamRoutineGenerator {
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph =
-        new Paragraph("(Schedule of Semester Final Examinations of "
-            + mSemesterManager.get(pSemesterId).getName() + ")", FontFactory.getFont(
-            FontFactory.TIMES_BOLD, 11));
+        new Paragraph("(Schedule of Semester Final Examinations of " + mSemesterManager.get(pSemesterId).getName()
+            + ")", FontFactory.getFont(FontFactory.TIMES_BOLD, 11));
     paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     headerTable.addCell(cell);
@@ -132,13 +129,10 @@ public class UGExamRoutineGenerator {
             "It is hereby notified for information of all concerned that the Semester Final Examinations of "
                 + semesterName
                 + " for the Undergraduate students of Ahasanullah University of Science and Technology (AUST) will be held from   "
-                + UmsUtils.formatDate(examList.get(0).getExamDate(), "dd/MM/yyyy",
-                    "EEEE d MMMM yyyy")
+                + UmsUtils.formatDate(examList.get(0).getExamDate(), "dd/MM/yyyy", "EEEE d MMMM yyyy")
                 + " to "
-                + UmsUtils.formatDate(examList.get(examList.size() - 1).getExamDate(),
-                    "dd/MM/yyyy", "EEEE d MMMM yyyy")
-                + " in accordance with the following schedule.", FontFactory.getFont(
-                FontFactory.TIMES, 10));
+                + UmsUtils.formatDate(examList.get(examList.size() - 1).getExamDate(), "dd/MM/yyyy", "EEEE d MMMM yyyy")
+                + " in accordance with the following schedule.", FontFactory.getFont(FontFactory.TIMES, 10));
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     cell.addElement(paragraph);
     headerTable.addCell(cell);
@@ -148,8 +142,8 @@ public class UGExamRoutineGenerator {
     // Create Table object, Here 6 specify the no. of columns
     PdfPTable pdfPTable = new PdfPTable(6);
     pdfPTable.setWidthPercentage(100);
-    pdfPTable.setWidths(new float[] {new Float(1.6), new Float(1.1), new Float(1.1), new Float(1),
-        new Float(1.5), new Float(4)});
+    pdfPTable.setWidths(new float[] {new Float(1.6), new Float(1.1), new Float(1.1), new Float(1), new Float(1.5),
+        new Float(4)});
 
     // Create cells
     PdfPCell pdfPCell1 = new PdfPCell(new Paragraph("Date & Time", tableCaptionFont));
@@ -195,8 +189,7 @@ public class UGExamRoutineGenerator {
 
       if(routineDto.getExamDate().equalsIgnoreCase(previousExamDate) || previousExamDate.equals("")) {
         dateInfo = routineDto;
-        if(routineDto.getProgramName().equalsIgnoreCase(previousProgram)
-            || previousProgram.equals("")) {
+        if(routineDto.getProgramName().equalsIgnoreCase(previousProgram) || previousProgram.equals("")) {
           courseList.add(routineDto);
 
         }
@@ -239,17 +232,16 @@ public class UGExamRoutineGenerator {
     cell.setColspan(2);
     paragraph = new Paragraph("The examinations will ", footerInfoFont);
     chunk =
-        ReportUtils.getChunk("will start from 9:30 a.m and continue up to 12:30 p.m. ",
-            footerInfoFontBold, ReportUtils.LR1S);
+        ReportUtils.getChunk("will start from 9:30 a.m and continue up to 12:30 p.m. ", footerInfoFontBold,
+            ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk(
-            "everyday. Concerned examinees are asked to take their respective seats",
-            footerInfoFont, ReportUtils.LR1S);
+        ReportUtils.getChunk("everyday. Concerned examinees are asked to take their respective seats", footerInfoFont,
+            ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("at least 15 (fifteen) minutes earlier than the scheduled time.",
-            footerInfoFontBold, ReportUtils.LR1S);
+        ReportUtils.getChunk("at least 15 (fifteen) minutes earlier than the scheduled time.", footerInfoFontBold,
+            ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
         ReportUtils
@@ -258,10 +250,9 @@ public class UGExamRoutineGenerator {
                 footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils
-            .getChunk(
-                "identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
-                footerInfoFontBold, ReportUtils.LR1S);
+        ReportUtils.getChunk(
+            "identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
+            footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk = ReportUtils.getChunk("in the examination halls.\n", footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
@@ -315,8 +306,7 @@ public class UGExamRoutineGenerator {
     pdfPCell.setBorder(0);
     copyToTable.addCell(pdfPCell);
 
-    pdfPCell =
-        new PdfPCell(new Paragraph("1. Heads of the Department/ School/ Offices, AUST", tableFont));
+    pdfPCell = new PdfPCell(new Paragraph("1. Heads of the Department/ School/ Offices, AUST", tableFont));
     pdfPCell.setFixedHeight(25);
     pdfPCell.setBorder(0);
     copyToTable.addCell(pdfPCell);
@@ -351,12 +341,11 @@ public class UGExamRoutineGenerator {
     baos.writeTo(pOutputStream);
   }
 
-  private void drawRow(ExamRoutineDto dateInfo, Map<String, List<ExamRoutineDto>> mapList,
-      PdfPTable pdfPTable) {
+  private void drawRow(ExamRoutineDto dateInfo, Map<String, List<ExamRoutineDto>> mapList, PdfPTable pdfPTable) {
     String dateTime = dateInfo.getExamTime().replaceAll("to", "\nto\n");
     PdfPCell pdfPCell =
-        new PdfPCell(new Paragraph(UmsUtils.formatDate(dateInfo.getExamDate(), "dd/MM/yyyy",
-            "d MMMM yyyy (EEEE)") + "\n\nFrom\n " + dateTime, tableFont));
+        new PdfPCell(new Paragraph(UmsUtils.formatDate(dateInfo.getExamDate(), "dd/MM/yyyy", "d MMMM yyyy (EEEE)")
+            + "\n\nFrom\n " + dateTime, tableFont));
     pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setRowspan(getTotalRowCount(mapList));
@@ -448,8 +437,7 @@ public class UGExamRoutineGenerator {
       PdfContentByte cb = writer.getDirectContent();
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), ffont);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(),
-          document.bottom() - 30, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(), document.bottom() - 30, 0);
     }
 
   }

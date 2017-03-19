@@ -33,26 +33,20 @@ public class ClassAttendanceXls extends Resource {
 
   @GET
   @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
-  public StreamingOutput get(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId,
-      final @PathParam("section-id") String pSection,
+  public StreamingOutput get(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("course-id") String pCourseId, final @PathParam("section-id") String pSection,
       final @PathParam("student-category") String pStudentCategory) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream a =
-              ClassAttendanceXls.class
-                  .getResourceAsStream("/report/xls/template/ClassAttendance.xls");
+          InputStream a = ClassAttendanceXls.class.getResourceAsStream("/report/xls/template/ClassAttendance.xls");
           List<ClassAttendanceDto> dataList = new ArrayList<>();
           List<String> headerList = new ArrayList<>();
 
-          List<ClassAttendanceDto> dateList =
-              mResourceHelper.getDateList(pSemesterId, pCourseId, pSection);
+          List<ClassAttendanceDto> dateList = mResourceHelper.getDateList(pSemesterId, pCourseId, pSection);
           List<ClassAttendanceDto> studentList =
               mResourceHelper.getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
-          Map<String, String> attendanceMap =
-              mResourceHelper.getAttendanceMap(pSemesterId, pCourseId, pSection);
+          Map<String, String> attendanceMap = mResourceHelper.getAttendanceMap(pSemesterId, pCourseId, pSection);
 
           headerList.add("Student Id");
           headerList.add("Student Name");

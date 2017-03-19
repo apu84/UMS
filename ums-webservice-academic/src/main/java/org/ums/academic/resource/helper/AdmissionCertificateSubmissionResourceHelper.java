@@ -36,8 +36,7 @@ import java.util.List;
 public class AdmissionCertificateSubmissionResourceHelper extends
     ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
 
-  private static final Logger mLoger = LoggerFactory
-      .getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
+  private static final Logger mLoger = LoggerFactory.getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
 
   @Autowired
   AdmissionStudentManager mManager;
@@ -70,24 +69,19 @@ public class AdmissionCertificateSubmissionResourceHelper extends
     if(entries.getJsonObject(0).getString("comment").equals("")) {
     }
     else {
-      MutableAdmissionCommentForStudent mutableAdmissionCommentForStudent =
-          new PersistentAdmissionCommentForStudent();
-      mAdmissionCommentForStudentBuilder.build(mutableAdmissionCommentForStudent, jsonObject,
-          localCache);
+      MutableAdmissionCommentForStudent mutableAdmissionCommentForStudent = new PersistentAdmissionCommentForStudent();
+      mAdmissionCommentForStudentBuilder.build(mutableAdmissionCommentForStudent, jsonObject, localCache);
       mAdmissionCommentForStudentManager.saveComment(mutableAdmissionCommentForStudent);
     }
 
     if(entries.getJsonObject(0).getJsonArray("certificateIds") != null) {
       List<MutableAdmissionCertificatesOfStudent> studentsCertificates = new ArrayList<>();
       for(int i = 0; i < entries.getJsonObject(0).getJsonArray("certificateIds").size(); i++) {
-        MutableAdmissionCertificatesOfStudent studentsCertificate =
-            new PersistentAdmissionCertificatesOfStudent();
-        mAdmissionCertificatesOfStudentBuilder.customCertificateBuilder(studentsCertificate,
-            jsonObject, i, localCache);
+        MutableAdmissionCertificatesOfStudent studentsCertificate = new PersistentAdmissionCertificatesOfStudent();
+        mAdmissionCertificatesOfStudentBuilder.customCertificateBuilder(studentsCertificate, jsonObject, i, localCache);
         studentsCertificates.add(studentsCertificate);
       }
-      mAdmissionCertificatesOfStudentManager
-          .saveAdmissionStudentsCertificates(studentsCertificates);
+      mAdmissionCertificatesOfStudentManager.saveAdmissionStudentsCertificates(studentsCertificates);
     }
 
     Response.ResponseBuilder builder = Response.created(null);

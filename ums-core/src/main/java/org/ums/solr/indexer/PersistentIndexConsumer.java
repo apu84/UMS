@@ -13,8 +13,7 @@ class PersistentIndexConsumer implements MutableIndexConsumer {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sIndexConsumerManager =
-        applicationContext.getBean("indexConsumerManager", IndexConsumerManager.class);
+    sIndexConsumerManager = applicationContext.getBean("indexConsumerManager", IndexConsumerManager.class);
   }
 
   private Long mId;

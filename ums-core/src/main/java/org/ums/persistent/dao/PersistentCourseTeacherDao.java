@@ -13,12 +13,10 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
-public class PersistentCourseTeacherDao extends
-    AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long> implements
-    CourseTeacherManager {
+public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long>
+    implements CourseTeacherManager {
 
-  String SELECT_ALL =
-      "SELECT SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID FROM COURSE_TEACHER ";
+  String SELECT_ALL = "SELECT SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID FROM COURSE_TEACHER ";
   String UPDATE_ALL =
       "UPDATE COURSE_TEACHER SET SEMESTER_ID = ?, TEACHER_ID = ?, COURSE_ID = ?, SECTION = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
@@ -27,20 +25,17 @@ public class PersistentCourseTeacherDao extends
       "INSERT INTO COURSE_TEACHER(ID, SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES"
           + "(?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
 
-  private String SELECT_BY_SEMESTER_PROGRAM = "SELECT t3.*,\n" + "       t4.teacher_id,\n"
-      + "       t4.section,\n" + "       t4.last_modified,\n" + "       t4.id\n"
-      + "  FROM    (  SELECT DISTINCT t1.SEMESTER_ID,\n" + "                    T2.COURSE_ID\n"
+  private String SELECT_BY_SEMESTER_PROGRAM = "SELECT t3.*,\n" + "       t4.teacher_id,\n" + "       t4.section,\n"
+      + "       t4.last_modified,\n" + "       t4.id\n" + "  FROM    (  SELECT DISTINCT t1.SEMESTER_ID,\n"
+      + "                    T2.COURSE_ID\n"
       + "               FROM semester_syllabus_map t1, mst_course t2 ,COURSE_SYLLABUS_MAP t3\n"
-      + "              WHERE     t1.program_id = ?\n"
-      + "                    AND t1.semester_id = ?\n"
-      + "                    AND t1.syllabus_id = t3.syllabus_id\n"
-      + "                    AND t1.year = t2.year\n"
+      + "              WHERE     t1.program_id = ?\n" + "                    AND t1.semester_id = ?\n"
+      + "                    AND t1.syllabus_id = t3.syllabus_id\n" + "                    AND t1.year = t2.year\n"
       + "                    AND(T1.SEMESTER = t2.SEMESTER or t2.SEMESTER IS NULL)\n"
       + "                    AND T2.COURSE_ID=T3.COURSE_ID\n" + "%s" + "%s"
-      + "                    AND t1.syllabus_id = t3.syllabus_id\n"
-      + "                    AND t2.OFFER_BY = ? " + "           ORDER BY t3.syllabus_id,\n"
-      + "                    t2.year,\n" + "                    t2.semester) t3\n"
-      + "       LEFT JOIN\n" + "          course_teacher t4\n"
+      + "                    AND t1.syllabus_id = t3.syllabus_id\n" + "                    AND t2.OFFER_BY = ? "
+      + "           ORDER BY t3.syllabus_id,\n" + "                    t2.year,\n"
+      + "                    t2.semester) t3\n" + "       LEFT JOIN\n" + "          course_teacher t4\n"
       + "       ON t3.course_id = t4.course_id  and t3.semester_id = t4.semester_id " + "%s"
       + "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
 
@@ -73,16 +68,15 @@ public class PersistentCourseTeacherDao extends
   @Override
   public Long create(MutableCourseTeacher pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getTeacher()
-        .getId(), pMutable.getCourse().getId(), pMutable.getSection());
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getTeacher().getId(), pMutable
+        .getCourse().getId(), pMutable.getSection());
     return id;
   }
 
   @Override
   public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId) {
     String query = SELECT_ALL + " where semester_id=? and course_id=?";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
-        new CourseTeacherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, new CourseTeacherRowMapper());
   }
 
   @Override
@@ -94,8 +88,8 @@ public class PersistentCourseTeacherDao extends
   @Override
   public int update(MutableCourseTeacher pMutable) {
     String query = UPDATE_ALL + " WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getTeacher()
-        .getId(), pMutable.getCourse().getId(), pMutable.getSection(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getTeacher().getId(), pMutable
+        .getCourse().getId(), pMutable.getSection(), pMutable.getId());
   }
 
   @Override
@@ -105,11 +99,9 @@ public class PersistentCourseTeacherDao extends
   }
 
   @Override
-  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId,
-      String pTeacherId) {
+  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND TEACHER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pTeacherId},
-        getRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pTeacherId}, getRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

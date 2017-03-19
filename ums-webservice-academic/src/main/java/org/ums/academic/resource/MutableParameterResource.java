@@ -24,10 +24,8 @@ public class MutableParameterResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateRoutine(final @PathParam("object-id") String pObjectId,
-      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject) throws Exception {
-    return mParameterResourceHelper.put(Long.parseLong(pObjectId), pRequest, pIfMatchHeader,
-        pJsonObject);
+  public Response updateRoutine(final @PathParam("object-id") String pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+    return mParameterResourceHelper.put(Long.parseLong(pObjectId), pRequest, pIfMatchHeader, pJsonObject);
   }
 }

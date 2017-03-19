@@ -12,44 +12,39 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public interface AdmissionStudentManager extends
-    ContentManager<AdmissionStudent, MutableAdmissionStudent, String> {
+public interface AdmissionStudentManager extends ContentManager<AdmissionStudent, MutableAdmissionStudent, String> {
 
   List<AdmissionStudent> getTaletalkData(final int pSemesterId, ProgramType pProgramType);
 
-  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
-      String unit, ProgramType pProgramType);
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType, String unit,
+      ProgramType pProgramType);
 
-  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
-      int fromMeritSerialNumber, int toMeritSerialNumber);
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType, int fromMeritSerialNumber,
+      int toMeritSerialNumber);
 
   int saveTaletalkData(final List<MutableAdmissionStudent> students);
 
   int getDataSize(final int pSemesterId, ProgramType pProgramType);
 
-  List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
-      String pUnit, ProgramType pProgramType);
+  List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType, String pUnit,
+      ProgramType pProgramType);
 
   List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus);
 
-  int updateStudentsAllocatedProgram(final AdmissionStudent pAdmissionStudent,
-      final MigrationStatus pMigrationStatus);
+  int updateStudentsAllocatedProgram(final AdmissionStudent pAdmissionStudent, final MigrationStatus pMigrationStatus);
 
-  AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType,
-      String pReceiptId);
+  AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType, String pReceiptId);
 
-  AdmissionStudent getAdmissionStudent(final int pSemesterId, QuotaType pQuotaType,
-      int pMeritSerialNo);
+  AdmissionStudent getAdmissionStudent(final int pSemesterId, QuotaType pQuotaType, int pMeritSerialNo);
 
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 
-  int updateDepartmentSelection(final MutableAdmissionStudent pStudent,
-      DepartmentSelectionType pDepartmentSelectionType);
+  int updateDepartmentSelection(final MutableAdmissionStudent pStudent, DepartmentSelectionType pDepartmentSelectionType);
 
   int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents);
 
-  AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
-      final ProgramType pProgramType, final String pUnit, final String pQuota, int pMeritSerialNo);
+  AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId, final ProgramType pProgramType,
+      final String pUnit, final String pQuota, int pMeritSerialNo);
 
   // kawsurilu
 

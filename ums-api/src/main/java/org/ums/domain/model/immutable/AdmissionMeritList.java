@@ -11,8 +11,8 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 10-Dec-16.
  */
-public interface AdmissionMeritList extends Serializable, LastModifier,
-    EditType<MutableAdmissionMeritList>, Identifier<Integer> {
+public interface AdmissionMeritList extends Serializable, LastModifier, EditType<MutableAdmissionMeritList>,
+    Identifier<Integer> {
   Semester getSemester();
 
   int getMeritListSerialNo();

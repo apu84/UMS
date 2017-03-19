@@ -23,16 +23,14 @@ public class MutableParameterSettingResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateParameterSetting(final @PathParam("object-id") Long pObjectId,
-      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject) throws Exception {
+  public Response updateParameterSetting(final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteParameterSetting(final @PathParam("object-id") Long pObjectId)
-      throws Exception {
+  public Response deleteParameterSetting(final @PathParam("object-id") Long pObjectId) throws Exception {
     return mResourceHelper.delete(pObjectId);
   }
 }

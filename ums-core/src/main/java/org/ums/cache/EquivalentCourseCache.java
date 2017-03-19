@@ -7,8 +7,8 @@ import org.ums.manager.EquivalentCourseManager;
 import org.ums.util.CacheUtil;
 
 public class EquivalentCourseCache extends
-    ContentCache<EquivalentCourse, MutableEquivalentCourse, Long, EquivalentCourseManager>
-    implements EquivalentCourseManager {
+    ContentCache<EquivalentCourse, MutableEquivalentCourse, Long, EquivalentCourseManager> implements
+    EquivalentCourseManager {
 
   private CacheManager<EquivalentCourse, Long> mCacheManager;
 

@@ -39,8 +39,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
   public void createUndertakenForm(ProgramType pProgramType, int pSemesterId, String pReceiptId,
       OutputStream pOutputStream) throws IOException, DocumentException {
 
-    Semester semester =
-        mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
+    Semester semester = mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
 
     AdmissionStudent admissionStudent =
         mAdmissionStudentManager.getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
@@ -73,12 +72,10 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
       undertakenDeadline = getUndertakenDeadline;
     }
 
-    List<AdmissionAllTypesOfCertificate> certificates =
-        mAdmissionAllTypesOfCertificateManager.getCertificates(quota);
+    List<AdmissionAllTypesOfCertificate> certificates = mAdmissionAllTypesOfCertificateManager.getCertificates(quota);
 
     List<AdmissionCertificatesOfStudent> savedCertificates =
-        mAdmissionCertificatesOfStudentManager.getStudentsSavedCertificateLists(pSemesterId,
-            pReceiptId);
+        mAdmissionCertificatesOfStudentManager.getStudentsSavedCertificateLists(pSemesterId, pReceiptId);
 
     Document document = new Document();
     document.addTitle("UnderTaking Form");
@@ -187,8 +184,8 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
       for(int i = 0; i < certificates.size(); i++) {
         for(int j = 0; j < savedCertificates.size(); j++) {
           if(certificates.get(i).getCertificateId() == savedCertificates.get(j).getCertificateId()
-              && (certificates.get(i).getCertificateTitle().startsWith("HSC") || certificates
-                  .get(i).getCertificateTitle().startsWith("A-Level"))) {
+              && (certificates.get(i).getCertificateTitle().startsWith("HSC") || certificates.get(i)
+                  .getCertificateTitle().startsWith("A-Level"))) {
             createCheckbox(bodyText2, 0, certificates.get(i).getCertificateTitle());
             emptyLine(bodyText2, 1);
             break;
@@ -217,8 +214,8 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
       for(int i = 0; i < certificates.size(); i++) {
         for(int j = 0; j < savedCertificates.size(); j++) {
           if(certificates.get(i).getCertificateId() == savedCertificates.get(j).getCertificateId()
-              && (certificates.get(i).getCertificateTitle().startsWith("SSC") || certificates
-                  .get(i).getCertificateTitle().startsWith("O-Level"))) {
+              && (certificates.get(i).getCertificateTitle().startsWith("SSC") || certificates.get(i)
+                  .getCertificateTitle().startsWith("O-Level"))) {
             createCheckbox(bodyText2, 0, certificates.get(i).getCertificateTitle());
             emptyLine(bodyText2, 1);
             break;

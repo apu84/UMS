@@ -58,17 +58,16 @@ public class AdmissionMeritListResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getMeritList(final int pSemesterId, final int pFacultyId,
-      int pAdmissionGroupId, final UriInfo pUriInfo) {
+  public JsonObject getMeritList(final int pSemesterId, final int pFacultyId, int pAdmissionGroupId,
+      final UriInfo pUriInfo) {
     List<AdmissionMeritList> admissionMeritLists =
-        getContentManager().getMeritList(mSemesterManager.get(pSemesterId),
-            mFacultyManager.get(pFacultyId), QuotaType.get(pAdmissionGroupId));
+        getContentManager().getMeritList(mSemesterManager.get(pSemesterId), mFacultyManager.get(pFacultyId),
+            QuotaType.get(pAdmissionGroupId));
 
     return buildAdmissionMeritList(admissionMeritLists, pUriInfo);
   }
 
-  private JsonObject buildAdmissionMeritList(final List<AdmissionMeritList> pMeritLists,
-      final UriInfo pUriInfo) {
+  private JsonObject buildAdmissionMeritList(final List<AdmissionMeritList> pMeritLists, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

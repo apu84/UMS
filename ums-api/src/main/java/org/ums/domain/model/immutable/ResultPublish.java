@@ -8,8 +8,7 @@ import org.ums.domain.model.mutable.MutableResultPublish;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface ResultPublish extends Serializable, LastModifier, Identifier<Long>,
-    EditType<MutableResultPublish> {
+public interface ResultPublish extends Serializable, LastModifier, Identifier<Long>, EditType<MutableResultPublish> {
   Integer getSemesterId();
 
   Semester getSemester();

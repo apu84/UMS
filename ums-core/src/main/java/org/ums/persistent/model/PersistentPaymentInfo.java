@@ -22,11 +22,9 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sAdmissionStudentManager =
-        applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
+    sAdmissionStudentManager = applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sPaymentInfoManager =
-        applicationContext.getBean("paymentInfoManager", PaymentInfoManager.class);
+    sPaymentInfoManager = applicationContext.getBean("paymentInfoManager", PaymentInfoManager.class);
   }
 
   private int mId;
@@ -131,8 +129,7 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

@@ -30,8 +30,7 @@ public class AdmissionXls {
   @GET
   @Path("/taletalkData/semester/{semester-id}")
   @Produces("application/vnd.ms-excel")
-  public StreamingOutput getTaletalkXlsFormat(final @Context Request pRequest,
-      @PathParam("semester-id") int pSemesterId) {
+  public StreamingOutput getTaletalkXlsFormat(final @Context Request pRequest, @PathParam("semester-id") int pSemesterId) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {

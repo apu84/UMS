@@ -11,8 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier,
-    Identifier<Long> {
+public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier, Identifier<Long> {
   String getProducerId();
 
   String getConsumerId();

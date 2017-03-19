@@ -11,8 +11,8 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 28-Dec-16.
  */
-public interface AdmissionDeadline extends Serializable, EditType<MutableAdmissionDeadline>,
-    Identifier<Integer>, LastModifier {
+public interface AdmissionDeadline extends Serializable, EditType<MutableAdmissionDeadline>, Identifier<Integer>,
+    LastModifier {
 
   Semester getSemester();
 

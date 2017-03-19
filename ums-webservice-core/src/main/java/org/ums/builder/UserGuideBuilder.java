@@ -16,8 +16,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class UserGuideBuilder implements Builder<UserGuide, MutableUserGuide> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, UserGuide pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, UserGuide pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("guideId", pReadOnly.getGuideId());
     pBuilder.add("navigationId", pReadOnly.getNavigationId());
     pBuilder.add("manualTitle", pReadOnly.getManualTitle());

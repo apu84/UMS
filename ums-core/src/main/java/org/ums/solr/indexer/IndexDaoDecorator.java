@@ -8,8 +8,8 @@ import org.ums.solr.indexer.manager.IndexManager;
 import org.ums.solr.indexer.model.Index;
 import org.ums.solr.indexer.model.MutableIndex;
 
-public class IndexDaoDecorator extends ContentDaoDecorator<Index, MutableIndex, Long, IndexManager>
-    implements IndexManager {
+public class IndexDaoDecorator extends ContentDaoDecorator<Index, MutableIndex, Long, IndexManager> implements
+    IndexManager {
   @Override
   public List<Index> after(Date pDate) {
     return getManager().after(pDate);

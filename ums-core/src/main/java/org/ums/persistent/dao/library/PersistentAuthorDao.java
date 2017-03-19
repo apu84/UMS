@@ -34,8 +34,7 @@ public class PersistentAuthorDao extends AuthorDaoDecorator {
   @Override
   public Author get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentAuthorDao.AuthorRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAuthorDao.AuthorRowMapper());
   }
 
   @Override

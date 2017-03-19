@@ -16,6 +16,5 @@ import java.io.OutputStream;
 @Path("academic/admission/student")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class AdmissionCertificateSubmissionResource extends
-    MutableAdmissionCertificateSubmissionResource {
+public class AdmissionCertificateSubmissionResource extends MutableAdmissionCertificateSubmissionResource {
 }

@@ -36,11 +36,9 @@ import java.util.stream.Collectors;
  * Created by Monjur-E-Morshed on 17-Dec-16.
  */
 @Component
-public class AdmissionStudentResourceHelper extends
-    ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
+public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
 
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(AdmissionStudentResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(AdmissionStudentResourceHelper.class);
 
   @Autowired
   AdmissionStudentManager mManager;
@@ -63,8 +61,8 @@ public class AdmissionStudentResourceHelper extends
   }
 
   @Transactional
-  public Response postTaletalkData(JsonObject pJsonObject, final int pSemesterId,
-      final ProgramType pProgramType, UriInfo pUriInfo) throws Exception {
+  public Response postTaletalkData(JsonObject pJsonObject, final int pSemesterId, final ProgramType pProgramType,
+      UriInfo pUriInfo) throws Exception {
 
     int dataSize = getContentManager().getDataSize(pSemesterId, pProgramType);
     if(dataSize == 0) {
@@ -159,22 +157,19 @@ public class AdmissionStudentResourceHelper extends
     getContentManager().updateDepartmentSelection(student, pDepartmentSelectionType);
     AdmissionStudent nextStudent =
         getContentManager().getNextStudentForDepartmentSelection(student.getSemester().getId(),
-            student.getProgramType(), student.getUnit(), student.getQuota(),
-            student.getMeritSerialNo());
+            student.getProgramType(), student.getUnit(), student.getQuota(), student.getMeritSerialNo());
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonObjectBuilder jsonObjectForNext = Json.createObjectBuilder();
-    getBuilder().admissionStudentBuilder(jsonObjectForNext, nextStudent, pUriInfo, localCache,
-        "meritList");
+    getBuilder().admissionStudentBuilder(jsonObjectForNext, nextStudent, pUriInfo, localCache, "meritList");
     children.add(jsonObjectForNext);
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType,
-      final UriInfo pUriInfo) {
+  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType, final UriInfo pUriInfo) {
     List<AdmissionStudent> students;
     try {
       students = getContentManager().getTaletalkData(pSemesterId, pProgramType);
@@ -243,11 +238,10 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId,
-      final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
+  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId, final ProgramType pProgramType,
+      final String pReceiptId, final UriInfo pUriInfo) {
 
-    AdmissionStudent student =
-        getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+    AdmissionStudent student = getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
     return getAdmissionStudentJson(pUriInfo, student);
   }
 
@@ -267,19 +261,16 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getAdmissionStudentByMeritSerialNo(final int pSemesterId,
-      final QuotaType pQuotaType, final int pMeritSerialNo, final UriInfo pUriInfo) {
-    AdmissionStudent student =
-        getContentManager().getAdmissionStudent(pSemesterId, pQuotaType, pMeritSerialNo);
+  public JsonObject getAdmissionStudentByMeritSerialNo(final int pSemesterId, final QuotaType pQuotaType,
+      final int pMeritSerialNo, final UriInfo pUriInfo) {
+    AdmissionStudent student = getContentManager().getAdmissionStudent(pSemesterId, pQuotaType, pMeritSerialNo);
     return getAdmissionStudentJson(pUriInfo, student);
   }
 
-  public JsonObject getAdmissionStudentsByMeritRange(final int pSemesterId,
-      final QuotaType pQuotaType, final int fromMeritSerialNo, final int toMeritSerialNo,
-      final UriInfo pUriInfo) {
+  public JsonObject getAdmissionStudentsByMeritRange(final int pSemesterId, final QuotaType pQuotaType,
+      final int fromMeritSerialNo, final int toMeritSerialNo, final UriInfo pUriInfo) {
     List<AdmissionStudent> students =
-        getContentManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNo,
-            toMeritSerialNo);
+        getContentManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNo, toMeritSerialNo);
     return jsonCreator(students, "meritList", pUriInfo);
   }
 
@@ -308,11 +299,9 @@ public class AdmissionStudentResourceHelper extends
   // kawsurilu
   // don't need meritType
 
-  public JsonObject getCandidatesList(final ProgramType pProgramType, final int pSemesterId,
-      final UriInfo pUriInfo) {
+  public JsonObject getCandidatesList(final ProgramType pProgramType, final int pSemesterId, final UriInfo pUriInfo) {
     System.out.println();
-    List<AdmissionStudent> student =
-        getContentManager().getAllCandidates(pProgramType, pSemesterId);
+    List<AdmissionStudent> student = getContentManager().getAllCandidates(pProgramType, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -335,20 +324,17 @@ public class AdmissionStudentResourceHelper extends
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,
       final QuotaType pQuotaType, String pUnit, final UriInfo pUriInfo) {
-    List<AdmissionStudent> students =
-        getContentManager().getMeritList(pSemesterId, pQuotaType, pUnit, pProgramType);
+    List<AdmissionStudent> students = getContentManager().getMeritList(pSemesterId, pQuotaType, pUnit, pProgramType);
     return jsonCreator(students, "meritList", pUriInfo);
   }
 
-  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType,
-      final QuotaType pQuotaType, final String pUnit, final UriInfo pUriInfo) {
-    List<AdmissionStudent> students =
-        getContentManager().getTaletalkData(pSemesterId, pQuotaType, pUnit, pProgramType);
+  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType, final QuotaType pQuotaType,
+      final String pUnit, final UriInfo pUriInfo) {
+    List<AdmissionStudent> students = getContentManager().getTaletalkData(pSemesterId, pQuotaType, pUnit, pProgramType);
     return jsonCreator(students, "taletalkData", pUriInfo);
   }
 
-  public List<AdmissionStudent> getTaletalkData(final int pSemesterId,
-      final ProgramType pProgramType) {
+  public List<AdmissionStudent> getTaletalkData(final int pSemesterId, final ProgramType pProgramType) {
     List<AdmissionStudent> students = new ArrayList<>();
     // students = getContentManager().getTaletalkData(pSemesterId, pProgramType);
     try {
@@ -361,13 +347,11 @@ public class AdmissionStudentResourceHelper extends
     return students;
   }
 
-  public void getTaletalkDataXlesFormat(final OutputStream pOutputStream, int pSemesterId)
-      throws Exception {
+  public void getTaletalkDataXlesFormat(final OutputStream pOutputStream, int pSemesterId) throws Exception {
     mGenerator.createABlankTaletalkDataFormatFile(pOutputStream, pSemesterId);
   }
 
-  public void getMeritLisXlesFormat(final OutputStream pOutputStream, int pSemesterId)
-      throws Exception {
+  public void getMeritLisXlesFormat(final OutputStream pOutputStream, int pSemesterId) throws Exception {
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
   }
 

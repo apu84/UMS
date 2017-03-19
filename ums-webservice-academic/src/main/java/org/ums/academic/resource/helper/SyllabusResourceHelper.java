@@ -45,8 +45,8 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     mutableSyllabus.create();
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SyllabusResource.class)
-            .path(SyllabusResource.class, "get").build(mutableSyllabus.getId());
+        pUriInfo.getBaseUriBuilder().path(SyllabusResource.class).path(SyllabusResource.class, "get")
+            .build(mutableSyllabus.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 

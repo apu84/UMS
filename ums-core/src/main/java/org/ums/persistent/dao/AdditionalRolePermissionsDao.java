@@ -27,8 +27,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
       "SELECT ID, USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY FROM ADDITIONAL_ROLE_PERMISSIONS ";
   String UPDATE_ALL =
       "UPDATE ADDITIONAL_ROLE_PERMISSIONS SET USER_ID = ?, ROLE_ID = ?, PERMISSIONS = ?, VALID_FROM = ?,"
-          + "VALID_TO = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql()
-          + ", ASSIGNED_BY = ? ";
+          + "VALID_TO = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + ", ASSIGNED_BY = ? ";
   String INSERT_ALL =
       "INSERT INTO ADDITIONAL_ROLE_PERMISSIONS (ID, USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY) VALUES ("
           + "?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ", ?) ";
@@ -37,36 +36,29 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate,
-      final IdGenerator pIdGenerator) {
+  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }
 
   @Override
   public List<AdditionalRolePermissions> getPermissionsByUser(String pUserId) {
-    String query =
-        SELECT_ALL
-            + "WHERE USER_ID = ? AND STATUS = 1 AND VALID_FROM <= SYSDATE AND VALID_TO > SYSDATE";
+    String query = SELECT_ALL + "WHERE USER_ID = ? AND STATUS = 1 AND VALID_FROM <= SYSDATE AND VALID_TO > SYSDATE";
     return mJdbcTemplate.query(query, new Object[] {pUserId}, new RolePermissionsMapper());
   }
 
   @Override
-  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId,
-      String pAssignedBy) {
+  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId, String pAssignedBy) {
     String query = SELECT_ALL + "WHERE USER_ID = ? AND ASSIGNED_BY = ? AND STATUS = 1 ";
-    return mJdbcTemplate.query(query, new Object[] {pUserId, pAssignedBy},
-        new RolePermissionsMapper());
+    return mJdbcTemplate.query(query, new Object[] {pUserId, pAssignedBy}, new RolePermissionsMapper());
   }
 
   @Override
   public Long create(MutableAdditionalRolePermissions pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getUser().getId(), pMutable.getRole() == null ? 0
-        : pMutable.getRole().getId(),
-        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
-        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable
-            .getAssignedBy().getId());
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getUser().getId(), pMutable.getRole() == null ? 0 : pMutable
+        .getRole().getId(), Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
+        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable.getAssignedBy().getId());
     return id;
   }
 
@@ -81,8 +73,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getUser().getId(), pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
-        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0,
-        pMutable.getId());
+        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable.getId());
   }
 
   @Override
@@ -103,20 +94,18 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy,
-      Date pFromDate, Date pToDate) {
+  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
     String query = DELETE_ALL + "WHERE ASSIGNED_BY = ? AND USER_ID = ?";
     mJdbcTemplate.update(query, pAssignedBy.getId(), pUserId);
 
     return mJdbcTemplate.update(INSERT_ALL, pUserId, 0,
-        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions), pFromDate,
-        pToDate, 1, pAssignedBy.getId());
+        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions), pFromDate, pToDate, 1,
+        pAssignedBy.getId());
   }
 
   @Override
   public int addRole(String pUserId, Role pRole, User pAssignedBy, Date pFromDate, Date pToDate) {
-    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", pFromDate, pToDate, 1,
-        pAssignedBy.getId());
+    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", pFromDate, pToDate, 1, pAssignedBy.getId());
   }
 
   class RolePermissionsMapper implements RowMapper<AdditionalRolePermissions> {
@@ -131,8 +120,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
       String permissions = rs.getString("PERMISSIONS");
       if(!StringUtils.isEmpty(permissions)) {
-        rolePermissions.setPermission(Sets.newHashSet(permissions
-            .split(PersistentPermissionDao.PERMISSION_SEPARATOR)));
+        rolePermissions.setPermission(Sets.newHashSet(permissions.split(PersistentPermissionDao.PERMISSION_SEPARATOR)));
       }
       rolePermissions.setAssignedByUserId(rs.getString("ASSIGNED_BY"));
       rolePermissions.setValidFrom(rs.getDate("VALID_FROM"));

@@ -32,8 +32,7 @@ public class SolrIndexer extends Resource {
   }
 
   private void indexDocuments() {
-    SimpleConverter<User, EmployeeDocument> converter =
-        new SimpleConverter<>(User.class, EmployeeDocument.class);
+    SimpleConverter<User, EmployeeDocument> converter = new SimpleConverter<>(User.class, EmployeeDocument.class);
     mUserRepository.deleteAll();
     mUserRepository.save(converter.convert(mUserManager.getAll()));
   }

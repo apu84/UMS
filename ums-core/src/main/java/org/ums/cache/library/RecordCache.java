@@ -12,8 +12,7 @@ import org.ums.manager.library.RecordManager;
 /**
  * Created by Ifti on 19-Feb-17.
  */
-public class RecordCache extends ContentCache<Record, MutableRecord, Long, RecordManager> implements
-    RecordManager {
+public class RecordCache extends ContentCache<Record, MutableRecord, Long, RecordManager> implements RecordManager {
 
   CacheManager<Record, Long> mCacheManager;
 

@@ -5,6 +5,5 @@ import org.ums.domain.model.immutable.Department;
 import org.ums.manager.DepartmentManager;
 
 public class DepartmentDaoDecorator extends
-    ContentDaoDecorator<Department, MutableDepartment, String, DepartmentManager> implements
-    DepartmentManager {
+    ContentDaoDecorator<Department, MutableDepartment, String, DepartmentManager> implements DepartmentManager {
 }

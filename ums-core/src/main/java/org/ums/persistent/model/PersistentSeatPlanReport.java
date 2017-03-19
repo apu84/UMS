@@ -18,8 +18,7 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSeatPlanReportManager =
-        applicationContext.getBean("seatPlanReportManager", SeatPlanReportManager.class);
+    sSeatPlanReportManager = applicationContext.getBean("seatPlanReportManager", SeatPlanReportManager.class);
   }
 
   private String mRoomNo;

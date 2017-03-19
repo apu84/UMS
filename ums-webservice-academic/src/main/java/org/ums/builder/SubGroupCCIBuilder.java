@@ -17,8 +17,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class SubGroupCCIBuilder implements Builder<SubGroupCCI, MutableSubGroupCCI> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemesterId() != null)

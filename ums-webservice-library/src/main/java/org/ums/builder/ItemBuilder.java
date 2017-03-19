@@ -50,8 +50,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
   }
 
   @Override
-  public void build(final MutableItem pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableItem pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     // pMutable.setId(pJsonObject.get("title"));
     pMutable.setMfn(Long.valueOf(pJsonObject.getString("mfnNo")));

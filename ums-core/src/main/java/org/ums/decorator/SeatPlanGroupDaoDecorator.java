@@ -10,8 +10,8 @@ import java.util.List;
  * Created by My Pc on 4/20/2016.
  */
 public class SeatPlanGroupDaoDecorator extends
-    ContentDaoDecorator<SeatPlanGroup, MutableSeatPlanGroup, Integer, SeatPlanGroupManager>
-    implements SeatPlanGroupManager {
+    ContentDaoDecorator<SeatPlanGroup, MutableSeatPlanGroup, Integer, SeatPlanGroupManager> implements
+    SeatPlanGroupManager {
   @Override
   public List<SeatPlanGroup> getGroupBySemester(int pSemesterId, int pExamType) {
     return getManager().getGroupBySemester(pSemesterId, pExamType);

@@ -16,8 +16,7 @@ public class PersistentContributor implements MutableContributor {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sContributorManager =
-        applicationContext.getBean("contributorManager", ContributorManager.class);
+    sContributorManager = applicationContext.getBean("contributorManager", ContributorManager.class);
   }
 
   public PersistentContributor() {}

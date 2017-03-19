@@ -189,8 +189,7 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public Role getPrimaryRole() {
-    return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager
-        .validate(mPrimaryRole);
+    return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager.validate(mPrimaryRole);
   }
 
   @Override
@@ -235,8 +234,8 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public Department getDepartment() {
-    return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager
-        .get(mDepartmentId)) : sDepartmentManager.validate(mDepartment);
+    return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager.get(mDepartmentId))
+        : sDepartmentManager.validate(mDepartment);
   }
 
   @Override

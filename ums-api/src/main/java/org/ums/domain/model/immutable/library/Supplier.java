@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public interface Supplier extends Serializable, LastModifier, EditType<MutableSupplier>,
-    Identifier<Long> {
+public interface Supplier extends Serializable, LastModifier, EditType<MutableSupplier>, Identifier<Long> {
 
   String getName();
 

@@ -8,8 +8,7 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface Employee extends Serializable, LastModifier, EditType<MutableEmployee>,
-    Identifier<String> {
+public interface Employee extends Serializable, LastModifier, EditType<MutableEmployee>, Identifier<String> {
   String getEmployeeName();
 
   int getDesignation();

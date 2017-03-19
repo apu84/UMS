@@ -5,6 +5,5 @@ import org.ums.domain.model.immutable.ProgramType;
 import org.ums.manager.ProgramTypeManager;
 
 public class ProgramTypeDaoDecorator extends
-    ContentDaoDecorator<ProgramType, MutableProgramType, Integer, ProgramTypeManager> implements
-    ProgramTypeManager {
+    ContentDaoDecorator<ProgramType, MutableProgramType, Integer, ProgramTypeManager> implements ProgramTypeManager {
 }

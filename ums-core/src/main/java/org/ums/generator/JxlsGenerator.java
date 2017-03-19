@@ -12,8 +12,7 @@ import org.jxls.util.JxlsHelper;
 
 public class JxlsGenerator implements XlsGenerator {
   @Override
-  public void build(List collection, OutputStream pOutputStream, InputStream pTemplateLocation)
-      throws IOException {
+  public void build(List collection, OutputStream pOutputStream, InputStream pTemplateLocation) throws IOException {
     Context context = new Context();
     context.putVar("collection", collection);
     JxlsHelper.getInstance().processTemplate(pTemplateLocation, pOutputStream, context);
@@ -21,8 +20,8 @@ public class JxlsGenerator implements XlsGenerator {
   }
 
   @Override
-  public void build(Map<String, Collection> map, OutputStream pOutputStream,
-      InputStream pTemplateLocation) throws IOException {
+  public void build(Map<String, Collection> map, OutputStream pOutputStream, InputStream pTemplateLocation)
+      throws IOException {
     Context context = new Context();
     for(Map.Entry<String, Collection> entry : map.entrySet()) {
       context.putVar(entry.getKey(), entry.getValue());

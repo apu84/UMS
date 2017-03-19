@@ -23,10 +23,8 @@ public class PersistentSemesterWiseCrHrDao {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public SemesterWiseCrHrDto getCrHrInfoByYearSemester(String pSyllabusId, Integer pYear,
-      Integer pSemester) {
-    String query =
-        "Select * From SEMESTER_WISE_CRHR Where Syllabus_Id=? and Year=? and Semester=? ";
+  public SemesterWiseCrHrDto getCrHrInfoByYearSemester(String pSyllabusId, Integer pYear, Integer pSemester) {
+    String query = "Select * From SEMESTER_WISE_CRHR Where Syllabus_Id=? and Year=? and Semester=? ";
 
     return mJdbcTemplate.queryForObject(query, new Object[] {pSyllabusId, pYear, pSemester},
         new SemesterWiseCrHrRowMapper());

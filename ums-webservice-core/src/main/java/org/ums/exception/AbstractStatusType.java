@@ -3,8 +3,7 @@ package org.ums.exception;
 import javax.ws.rs.core.Response;
 
 public class AbstractStatusType implements Response.StatusType {
-  public AbstractStatusType(final Response.Status.Family family, final int statusCode,
-      final String reasonPhrase) {
+  public AbstractStatusType(final Response.Status.Family family, final int statusCode, final String reasonPhrase) {
     super();
 
     this.family = family;

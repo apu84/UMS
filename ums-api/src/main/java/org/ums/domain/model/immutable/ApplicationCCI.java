@@ -11,8 +11,7 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 7/11/2016.
  */
-public interface ApplicationCCI extends Serializable, LastModifier,
-    EditType<MutableApplicationCCI>, Identifier<Long> {
+public interface ApplicationCCI extends Serializable, LastModifier, EditType<MutableApplicationCCI>, Identifier<Long> {
   Semester getSemester();
 
   Integer getSemesterId();

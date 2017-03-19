@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class SupplierCache extends ContentCache<Supplier, MutableSupplier, Long, SupplierManager>
-    implements SupplierManager {
+public class SupplierCache extends ContentCache<Supplier, MutableSupplier, Long, SupplierManager> implements
+    SupplierManager {
 
   CacheManager<Supplier, Long> mCacheManager;
 
@@ -22,8 +22,7 @@ public class SupplierCache extends ContentCache<Supplier, MutableSupplier, Long,
   }
 
   @Override
-  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder) {
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder) {
     return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
   }
 

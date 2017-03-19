@@ -13,15 +13,13 @@ import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.persistent.model.PersistentTaskStatus;
 
 public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
-  String SELECT_ALL =
-      "SELECT TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED FROM TASK_STATUS ";
+  String SELECT_ALL = "SELECT TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED FROM TASK_STATUS ";
   String UPDATE_ALL =
       "UPDATE TASK_STATUS SET STATUS = ?, PROGRESS_DESC = ?, TASK_COMPLETION_DATE = SYSDATE, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM TASK_STATUS ";
-  String INSERT_ALL =
-      "INSERT INTO TASK_STATUS(TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
+  String INSERT_ALL = "INSERT INTO TASK_STATUS(TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED) "
+      + "VALUES(?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String MAX_SERIAL = "SELECT MAX(SERIAL) FROM TASK_STATUS WHERE TASK_ID = ?";
   String EXISTS = "SELECT COUNT(TASK_ID) EXIST FROM TASK_STATUS ";
 
@@ -40,9 +38,9 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   @Override
   public int update(MutableTaskStatus pMutable) {
     String query = UPDATE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
-    return mJdbcTemplate.update(query, pMutable.getStatus().getId(), StringUtils.isEmpty(pMutable
-        .getProgressDescription()) ? "" : pMutable.getProgressDescription(), pMutable.getId(),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getStatus().getId(),
+        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription(),
+        pMutable.getId(), pMutable.getId());
   }
 
   @Override
@@ -53,8 +51,8 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
 
   @Override
   public String create(MutableTaskStatus pMutable) {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getStatus().getId(), StringUtils
-        .isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription());
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getStatus().getId(),
+        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription());
     return pMutable.getId();
   }
 
@@ -71,8 +69,8 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
         MutableTaskStatus taskStatus = new PersistentTaskStatus();
         taskStatus.setId(rs.getString("TASK_ID"));
         taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
-        taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
-            : rs.getString("PROGRESS_DESC"));
+        taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? "" : rs
+            .getString("PROGRESS_DESC"));
         taskStatus.setTaskCompletionDate(rs.getObject("TASK_COMPLETION_DATE") == null ? null : rs
             .getDate("TASK_COMPLETION_DATE"));
         taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));

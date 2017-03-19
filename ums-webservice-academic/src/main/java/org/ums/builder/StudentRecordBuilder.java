@@ -16,8 +16,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class StudentRecordBuilder implements Builder<StudentRecord, MutableStudentRecord> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, StudentRecord pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, StudentRecord pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getId() != null) {
       pBuilder.add("id", pReadOnly.getId());
     }

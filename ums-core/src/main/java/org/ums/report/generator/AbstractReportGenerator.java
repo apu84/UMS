@@ -98,8 +98,7 @@ public abstract class AbstractReportGenerator {
    * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
    *         generating the report
    */
-  public void generateReport(final OutputType outputType, File outputFile, String reportQuery)
-      throws Exception {
+  public void generateReport(final OutputType outputType, File outputFile, String reportQuery) throws Exception {
     if(outputFile == null) {
       throw new IllegalArgumentException("The output file was not specified");
     }
@@ -131,8 +130,8 @@ public abstract class AbstractReportGenerator {
    * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
    *         generating the report
    */
-  public void generateReport(final OutputType outputType, OutputStream outputStream,
-      String reportQuery) throws Exception {
+  public void generateReport(final OutputType outputType, OutputStream outputStream, String reportQuery)
+      throws Exception {
     if(outputStream == null) {
       throw new IllegalArgumentException("The output stream was not specified");
     }
@@ -157,8 +156,8 @@ public abstract class AbstractReportGenerator {
     prepareReport(outputType, outputStream, report);
   }
 
-  private void prepareReport(final OutputType outputType, OutputStream outputStream,
-      final MasterReport report) throws Exception {
+  private void prepareReport(final OutputType outputType, OutputStream outputStream, final MasterReport report)
+      throws Exception {
     // Prepare to generate the report
     AbstractReportProcessor reportProcessor = null;
     try {
@@ -166,16 +165,14 @@ public abstract class AbstractReportGenerator {
       switch(outputType) {
         case PDF: {
           final PdfOutputProcessor outputProcessor =
-              new PdfOutputProcessor(report.getConfiguration(), outputStream,
-                  report.getResourceManager());
+              new PdfOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
           reportProcessor = new PageableReportProcessor(report, outputProcessor);
           break;
         }
 
         case EXCEL: {
           final FlowExcelOutputProcessor target =
-              new FlowExcelOutputProcessor(report.getConfiguration(), outputStream,
-                  report.getResourceManager());
+              new FlowExcelOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
           reportProcessor = new FlowReportProcessor(report, target);
           break;
         }
@@ -183,11 +180,9 @@ public abstract class AbstractReportGenerator {
         case HTML: {
           final StreamRepository targetRepository = new StreamRepository(outputStream);
           final ContentLocation targetRoot = targetRepository.getRoot();
-          final HtmlOutputProcessor outputProcessor =
-              new StreamHtmlOutputProcessor(report.getConfiguration());
+          final HtmlOutputProcessor outputProcessor = new StreamHtmlOutputProcessor(report.getConfiguration());
           final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
-          printer.setContentWriter(targetRoot,
-              new DefaultNameGenerator(targetRoot, "index", "html"));
+          printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
           printer.setDataWriter(null, null);
           printer.setUrlRewriter(new FileSystemURLRewriter());
           outputProcessor.setPrinter(printer);

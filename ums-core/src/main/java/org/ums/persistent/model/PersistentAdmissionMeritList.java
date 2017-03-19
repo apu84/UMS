@@ -41,8 +41,7 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
 
   public PersistentAdmissionMeritList() {}
 
-  public PersistentAdmissionMeritList(
-      final PersistentAdmissionMeritList pPersistentAdmissionMeritList) {
+  public PersistentAdmissionMeritList(final PersistentAdmissionMeritList pPersistentAdmissionMeritList) {
     mId = pPersistentAdmissionMeritList.getId();
     mSemester = pPersistentAdmissionMeritList.getSemester();
     mSemesterId = pPersistentAdmissionMeritList.getSemesterId();
@@ -114,8 +113,7 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

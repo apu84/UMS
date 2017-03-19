@@ -46,8 +46,8 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
     mutableSemester.create();
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableSemester.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableSemester.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 

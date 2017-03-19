@@ -9,15 +9,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
-  String SELECT_ALL =
-      "SELECT ID, FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
-  String UPDATE_ALL =
-      "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, TYPE = ?, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
+  String SELECT_ALL = "SELECT ID, FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
+  String UPDATE_ALL = "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, TYPE = ?, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM FEE_CATEGORY ";
-  String INSERT_ALL =
-      "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
-          + getLastModifiedSql() + ") ";
+  String INSERT_ALL = "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
+      + getLastModifiedSql() + ") ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -51,8 +48,8 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
 
   @Override
   public String create(MutableFeeCategory pMutable) {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getFeeId(), pMutable.getName(),
-        pMutable.getDescription(), pMutable.getType().getValue(), pMutable.getId());
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getFeeId(), pMutable.getName(), pMutable.getDescription(), pMutable
+        .getType().getValue(), pMutable.getId());
     return pMutable.getId();
   }
 

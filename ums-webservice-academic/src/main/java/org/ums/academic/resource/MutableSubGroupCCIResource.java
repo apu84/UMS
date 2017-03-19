@@ -25,16 +25,14 @@ public class MutableSubGroupCCIResource extends Resource {
 
   @PUT
   public Response updateSubGroup(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     return mHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @POST
   @Path("/put/semester/{semester-id}/examDate/{exam-date}")
   public Response save(final @PathParam("semester-id") String pSemesterId,
-      final @PathParam("exam-date") String pExamDate, final @Context Request pRequest,
-      final JsonObject pJsonObject) {
+      final @PathParam("exam-date") String pExamDate, final @Context Request pRequest, final JsonObject pJsonObject) {
 
     return mHelper.saveData(Integer.parseInt(pSemesterId), pExamDate, pJsonObject, mUriInfo);
   }
@@ -43,8 +41,8 @@ public class MutableSubGroupCCIResource extends Resource {
   @Path("/put/semester/{semesterId}/examDate/{examdate}")
   public Response saveAllSubGroupInfo(
 
-  final @PathParam("semesterId") Integer pSemesterId,
-      final @PathParam("examdate") String pExamDate, final JsonObject pJsonObject) {
+  final @PathParam("semesterId") Integer pSemesterId, final @PathParam("examdate") String pExamDate,
+      final JsonObject pJsonObject) {
     return mHelper.saveData(pSemesterId, pExamDate, pJsonObject, mUriInfo);
   }
 

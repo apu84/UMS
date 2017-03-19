@@ -9,9 +9,8 @@ import java.util.List;
 /**
  * Created by My Pc on 5/4/2016.
  */
-public class SubGroupDaoDecorator extends
-    ContentDaoDecorator<SubGroup, MutableSubGroup, Integer, SubGroupManager> implements
-    SubGroupManager {
+public class SubGroupDaoDecorator extends ContentDaoDecorator<SubGroup, MutableSubGroup, Integer, SubGroupManager>
+    implements SubGroupManager {
   @Override
   public List<SubGroup> getByGroupNo(int pGroupNo) {
     return getManager().getByGroupNo(pGroupNo);
@@ -33,8 +32,7 @@ public class SubGroupDaoDecorator extends
   }
 
   @Override
-  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo,
-      int pSubGroupNo) {
+  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
     return getManager().getSubGroupMembers(pSemesterId, pExamTYpe, pGroupNo, pSubGroupNo);
   }
 
@@ -44,9 +42,7 @@ public class SubGroupDaoDecorator extends
   }
 
   @Override
-  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo,
-      int pType) {
-    return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId,
-        pGroupNo, pType);
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
   }
 }

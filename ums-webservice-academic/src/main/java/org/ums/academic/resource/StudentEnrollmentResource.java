@@ -42,11 +42,10 @@ public class StudentEnrollmentResource extends Resource {
 
   @GET
   @Path("/program/{program-id}/semester/{semester-id}")
-  public JsonObject getSemesterList(final @Context Request pRequest,
-      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId) {
+  public JsonObject getSemesterList(final @Context Request pRequest, final @PathParam("program-id") int pProgramId,
+      final @PathParam("semester-id") int pSemesterId) {
 
-    List<EnrollmentFromTo> enrollmentFromToList =
-        mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
+    List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     List<SemesterEnrollment> semesterEnrollmentList =
         mSemesterEnrollmentManager.getEnrollmentStatus(pProgramId, pSemesterId);
 
@@ -58,14 +57,11 @@ public class StudentEnrollmentResource extends Resource {
       JsonObjectBuilder jsonObjectBuilder = toJson(enrollmentFromTo, mUriInfo, localCache);
       if(semesterEnrollmentList != null) {
         for(SemesterEnrollment semesterEnrollment : semesterEnrollmentList) {
-          if(semesterEnrollment.getProgram().getId().intValue() == enrollmentFromTo.getProgram()
-              .getId().intValue()
+          if(semesterEnrollment.getProgram().getId().intValue() == enrollmentFromTo.getProgram().getId().intValue()
               && semesterEnrollment.getYear().intValue() == enrollmentFromTo.getToYear().intValue()
-              && semesterEnrollment.getAcademicSemester().intValue() == enrollmentFromTo
-                  .getToSemester().intValue()) {
+              && semesterEnrollment.getAcademicSemester().intValue() == enrollmentFromTo.getToSemester().intValue()) {
             jsonObjectBuilder.add("type", semesterEnrollment.getType().getValue());
-            jsonObjectBuilder.add("enrollmentDate",
-                mDateFormat.format(semesterEnrollment.getEnrollmentDate()));
+            jsonObjectBuilder.add("enrollmentDate", mDateFormat.format(semesterEnrollment.getEnrollmentDate()));
           }
         }
       }
@@ -80,8 +76,7 @@ public class StudentEnrollmentResource extends Resource {
   @POST
   @Path("/enroll/{enrollment-type}/program/{program-id}/semester/{semester-id}")
   public GenericResponse<Map> enrollSemester(final @Context Request pRequest,
-      final @PathParam("enrollment-type") int pEnrollmentType,
-      final @PathParam("program-id") int pProgramId,
+      final @PathParam("enrollment-type") int pEnrollmentType, final @PathParam("program-id") int pProgramId,
       final @PathParam("semester-id") int pSemesterId, final JsonObject pJsonObject) {
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;
@@ -98,13 +93,12 @@ public class StudentEnrollmentResource extends Resource {
           int semester = status.getInt("semester");
 
           genericResponse =
-              mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType),
-                  pSemesterId, pProgramId, year, semester);
+              mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType), pSemesterId, pProgramId,
+                  year, semester);
 
           // join the responses for all year, semesters
           if(previousResponse != null) {
-            genericResponse.setMessage(genericResponse.getMessage() + "\n"
-                + previousResponse.getMessage());
+            genericResponse.setMessage(genericResponse.getMessage() + "\n" + previousResponse.getMessage());
           }
 
           previousResponse = genericResponse;
@@ -116,8 +110,7 @@ public class StudentEnrollmentResource extends Resource {
       }
     }
     else {
-      return mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType),
-          pSemesterId, pProgramId);
+      return mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType), pSemesterId, pProgramId);
     }
     return genericResponse;
   }

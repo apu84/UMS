@@ -71,17 +71,14 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              immutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
-                  referenceName));
+              immutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
             }
 
-            immutable.addMethod().setName(String.format("get%s", referenceName))
-                .setReturnType(referenceName);
+            immutable.addMethod().setName(String.format("get%s", referenceName)).setReturnType(referenceName);
 
-            if(fieldValue.containsKey("type")
-                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
               immutable.addMethod().setName(String.format("get%sId", referenceName))
-                  .setReturnType(String.class);
+                  .setReturnType(getReferenceIdReturnType(referenceObject));
             }
           }
         }
@@ -93,8 +90,7 @@ public class BasicGenerator {
 
   private void generateMutable(String pImmutable, String pMutable, JSONArray pFields) {
     JavaInterfaceSource mutable = Roaster.create(JavaInterfaceSource.class);
-    mutable.setPackage("org.ums.domain.model.mutable").setName(
-        String.format("Mutable%s", pImmutable));
+    mutable.setPackage("org.ums.domain.model.mutable").setName(String.format("Mutable%s", pImmutable));
     mutable.addImport("org.ums.domain.model.common.Editable");
     mutable.addImport("org.ums.domain.model.common.MutableIdentifier");
     mutable.addImport("org.ums.domain.model.mutable.MutableLastModifier");
@@ -103,10 +99,8 @@ public class BasicGenerator {
       mutable.addImport("java.util.Date");
     }
 
-    mutable.addInterface(pImmutable)
-        .addInterface(String.format("Editable<%s>", getIdType(pFields)))
-        .addInterface(String.format("MutableIdentifier<%s>", getIdType(pFields)))
-        .addInterface("MutableLastModifier");
+    mutable.addInterface(pImmutable).addInterface(String.format("Editable<%s>", getIdType(pFields)))
+        .addInterface(String.format("MutableIdentifier<%s>", getIdType(pFields))).addInterface("MutableLastModifier");
 
     for(int i = 0; i < pFields.size(); i++) {
       JSONObject field = (JSONObject) pFields.get(i);
@@ -115,12 +109,8 @@ public class BasicGenerator {
         String fieldName = (String) fieldNameObject;
 
         if(field.get(fieldName) instanceof String) {
-          mutable
-              .addMethod()
-              .setName(String.format("set%s", WordUtils.capitalize(fieldName)))
-              .setReturnTypeVoid()
-              .addParameter(field.get(fieldName).toString(),
-                  String.format("p%s", WordUtils.capitalize(fieldName)));
+          mutable.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName))).setReturnTypeVoid()
+              .addParameter(field.get(fieldName).toString(), String.format("p%s", WordUtils.capitalize(fieldName)));
         }
         else {
           JSONObject fieldValue = (JSONObject) field.get(fieldName);
@@ -129,18 +119,15 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              mutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
-                  referenceName));
+              mutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
             }
 
             mutable.addMethod().setName(String.format("set%s", referenceName)).setReturnTypeVoid()
                 .addParameter(referenceName, String.format("p%s", referenceName));
 
-            if(fieldValue.containsKey("type")
-                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
-              mutable.addMethod().setName(String.format("set%sId", referenceName))
-                  .setReturnTypeVoid()
-                  .addParameter(String.class, String.format("p%sId", referenceName));;
+            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+              mutable.addMethod().setName(String.format("set%sId", referenceName)).setReturnTypeVoid()
+                  .addParameter(getReferenceIdReturnType(referenceObject), String.format("p%sId", referenceName));
             }
           }
         }
@@ -191,8 +178,7 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              model.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
-                  referenceName));
+              model.addImport(String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
             }
 
             if(referenceObject.containsKey("manager")) {
@@ -206,12 +192,11 @@ public class BasicGenerator {
               }
 
               if(managerObject.containsKey("package")) {
-                model.addImport(String.format("%s.%s", managerObject.get("package").toString(),
-                    referenceManagerName));
+                model.addImport(String.format("%s.%s", managerObject.get("package").toString(), referenceManagerName));
               }
 
-              model.addField().setName(String.format("s%s", managerName))
-                  .setType(referenceManagerName).setPrivate().setStatic(true);
+              model.addField().setName(String.format("s%s", referenceManagerName)).setType(referenceManagerName)
+                  .setPrivate().setStatic(true);
 
             }
           }
@@ -219,8 +204,7 @@ public class BasicGenerator {
       }
     }
 
-    model.addField().setName(String.format("s%s", managerName)).setType(managerName).setPrivate()
-        .setStatic(true);
+    model.addField().setName(String.format("s%s", managerName)).setType(managerName).setPrivate().setStatic(true);
 
     for(int i = 0; i < pFields.size(); i++) {
       JSONObject field = (JSONObject) pFields.get(i);
@@ -233,15 +217,13 @@ public class BasicGenerator {
               .setType(field.get(fieldName).toString()).setPrivate();
 
           MethodSource getMethodSource =
-              model.addMethod()
-                  .setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
+              model.addMethod().setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
                   .setName(String.format("get%s", WordUtils.capitalize(fieldName)))
                   .setReturnType(field.get(fieldName).toString()).setPublic();
           getMethodSource.addAnnotation().setName("Override");
 
           MethodSource setMethodSource =
-              model.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName)))
-                  .setPublic();
+              model.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName))).setPublic();
           setMethodSource.addParameter(field.get(fieldName).toString(),
               String.format("p%s", WordUtils.capitalize(fieldName)));
           setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(fieldName),
@@ -255,50 +237,42 @@ public class BasicGenerator {
             JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
             String referenceManager = String.format("s%sManager", referenceName);
-            model.addField().setName(String.format("m%s", referenceName)).setType(referenceName)
-                .setPrivate();
+            model.addField().setName(String.format("m%s", referenceName)).setType(referenceName).setPrivate();
 
             MethodSource getMethodSource =
-                model.addMethod().setName(String.format("get%s", referenceName))
-                    .setReturnType(referenceName).setPublic();
+                model.addMethod().setName(String.format("get%s", referenceName)).setReturnType(referenceName)
+                    .setPublic();
             getMethodSource.addAnnotation().setName("Override");
 
-            if(fieldValue.containsKey("type")
-                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
-              getMethodSource.setBody(String.format(
-                  "return m%s == null? %s.get(m%sId): %s.validate(m%s);", referenceName,
-                  referenceManager, referenceName, referenceManager, referenceName));
+            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+              getMethodSource.setBody(String.format("return m%s == null? %s.get(m%sId): %s.validate(m%s);",
+                  referenceName, referenceManager, referenceName, referenceManager, referenceName));
             }
             else {
               getMethodSource.setBody(String.format("return m%s;", referenceName));
             }
 
-            MethodSource setMethodSource =
-                model.addMethod().setName(String.format("set%s", referenceName)).setPublic();
+            MethodSource setMethodSource = model.addMethod().setName(String.format("set%s", referenceName)).setPublic();
             setMethodSource.addParameter(referenceName, String.format("p%s", referenceName));
             setMethodSource.setBody(String.format("this.m%s = p%s;", referenceName, referenceName));
             setMethodSource.addAnnotation().setName("Override");
 
-            if(fieldValue.containsKey("type")
-                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
               model.addField().setName(String.format("m%sId", WordUtils.capitalize(fieldName)))
-                  .setType("String").setPrivate();
+                  .setType(getReferenceIdReturnType((JSONObject) fieldValue.get("reference"))).setPrivate();
 
               getMethodSource =
-                  model.addMethod()
-                      .setBody(String.format("return m%sId;", WordUtils.capitalize(fieldName)))
+                  model.addMethod().setBody(String.format("return m%sId;", WordUtils.capitalize(fieldName)))
                       .setName(String.format("get%sId", WordUtils.capitalize(fieldName)))
-                      .setReturnType("String").setPublic();
+                      .setReturnType(getReferenceIdReturnType((JSONObject) fieldValue.get("reference"))).setPublic();
               getMethodSource.addAnnotation().setName("Override");
 
               setMethodSource =
-                  model.addMethod()
-                      .setName(String.format("set%sId", WordUtils.capitalize(fieldName)))
-                      .setPublic();
-              setMethodSource.addParameter("String",
+                  model.addMethod().setName(String.format("set%sId", WordUtils.capitalize(fieldName))).setPublic();
+              setMethodSource.addParameter(getReferenceIdReturnType((JSONObject) fieldValue.get("reference")),
                   String.format("p%sId", WordUtils.capitalize(fieldName)));
-              setMethodSource.setBody(String.format("this.m%sId = p%s;",
-                  WordUtils.capitalize(fieldName), WordUtils.capitalize(fieldName)));
+              setMethodSource.setBody(String.format("this.m%sId = p%sId;", WordUtils.capitalize(fieldName),
+                  WordUtils.capitalize(fieldName)));
               setMethodSource.addAnnotation().setName("Override");
             }
           }
@@ -307,19 +281,17 @@ public class BasicGenerator {
                 .setType(fieldValue.get("type").toString()).setPrivate();
 
             MethodSource getMethodSource =
-                model.addMethod()
-                    .setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
+                model.addMethod().setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
                     .setName(String.format("get%s", WordUtils.capitalize(fieldName)))
                     .setReturnType(fieldValue.get("type").toString()).setPublic();
             getMethodSource.addAnnotation().setName("Override");
 
             MethodSource setMethodSource =
-                model.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName)))
-                    .setPublic();
+                model.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName))).setPublic();
             setMethodSource.addParameter(fieldValue.get("type").toString(),
                 String.format("p%s", WordUtils.capitalize(fieldName)));
-            setMethodSource.setBody(String.format("this.m%s = p%s;",
-                WordUtils.capitalize(fieldName), WordUtils.capitalize(fieldName)));
+            setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(fieldName),
+                WordUtils.capitalize(fieldName)));
             setMethodSource.addAnnotation().setName("Override");
           }
         }
@@ -327,20 +299,16 @@ public class BasicGenerator {
     }
     String modelManagerInstance = String.format("s%s", managerName);
     String lastModified = "lastModified";
-    model.addField().setName(String.format("m%s", WordUtils.capitalize(lastModified)))
-        .setType("String").setPrivate();
+    model.addField().setName(String.format("m%s", WordUtils.capitalize(lastModified))).setType("String").setPrivate();
 
     MethodSource getMethodSource =
         model.addMethod().setBody(String.format("return m%s;", WordUtils.capitalize(lastModified)))
-            .setName(String.format("get%s", WordUtils.capitalize(lastModified)))
-            .setReturnType("String").setPublic();
+            .setName(String.format("get%s", WordUtils.capitalize(lastModified))).setReturnType("String").setPublic();
     getMethodSource.addAnnotation().setName("Override");
 
     MethodSource setMethodSource =
-        model.addMethod().setName(String.format("set%s", WordUtils.capitalize(lastModified)))
-            .setPublic();
-    setMethodSource
-        .addParameter("String", String.format("p%s", WordUtils.capitalize(lastModified)));
+        model.addMethod().setName(String.format("set%s", WordUtils.capitalize(lastModified))).setPublic();
+    setMethodSource.addParameter("String", String.format("p%s", WordUtils.capitalize(lastModified)));
     setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(lastModified),
         WordUtils.capitalize(lastModified)));
     setMethodSource.addAnnotation().setName("Override");
@@ -379,8 +347,7 @@ public class BasicGenerator {
     methodSource.setBody(getConstructorBody(pFields, String.format("p%s", pImmutable)));
     methodSource.setPublic();
 
-    model.addMethod().setStatic(true).setName("staticBlock")
-        .setBody(generateStaticBlock(model, pFields, managerName));
+    model.addMethod().setStatic(true).setName("staticBlock").setBody(generateStaticBlock(model, pFields, managerName));
     print(model.toString().replace("void staticBlock()", ""));
   }
 
@@ -391,8 +358,8 @@ public class BasicGenerator {
     decorator.addImport("org.ums.decorator.ContentDaoDecorator");
     decorator.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
     decorator.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
-    decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, %s, %sManager>", pImmutable,
-        pMutable, idType, pImmutable));
+    decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, %s, %sManager>", pImmutable, pMutable, idType,
+        pImmutable));
     decorator.addInterface(String.format("%sManager", pImmutable));
 
     print(decorator.toString());
@@ -407,25 +374,22 @@ public class BasicGenerator {
         String fieldName = (String) fieldNameObject;
 
         if(field.get(fieldName) instanceof String) {
-          builder.append(String.format("set%s(%s.get%s());\r\n", WordUtils.capitalize(fieldName),
-              pImmutable, WordUtils.capitalize(fieldName)));
+          builder.append(String.format("set%s(%s.get%s());\r\n", WordUtils.capitalize(fieldName), pImmutable,
+              WordUtils.capitalize(fieldName)));
         }
         else {
           JSONObject fieldValue = (JSONObject) field.get(fieldName);
           if(fieldValue.containsKey("idType")) {
-            builder.append(String.format("set%s(%s.get%s());\r\n", WordUtils.capitalize(fieldName),
-                pImmutable, WordUtils.capitalize(fieldName)));
+            builder.append(String.format("set%s(%s.get%s());\r\n", WordUtils.capitalize(fieldName), pImmutable,
+                WordUtils.capitalize(fieldName)));
           }
           else {
             JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
-            builder.append(String.format("set%s(%s.get%s());\r\n", referenceName, pImmutable,
-                referenceName));
+            builder.append(String.format("set%s(%s.get%s());\r\n", referenceName, pImmutable, referenceName));
 
-            if(fieldValue.containsKey("type")
-                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
-              builder.append(String.format("set%sId(%s.get%sId());\r\n", referenceName, pImmutable,
-                  referenceName));
+            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+              builder.append(String.format("set%sId(%s.get%sId());\r\n", referenceName, pImmutable, referenceName));
             }
           }
         }
@@ -449,14 +413,12 @@ public class BasicGenerator {
         if(!(field.get(fieldName) instanceof String)) {
           JSONObject fieldValue = (JSONObject) field.get(fieldName);
 
-          if(fieldValue.containsKey("type")
-              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+          if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
             JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              model.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
-                  referenceName));
+              model.addImport(String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
             }
 
             if(referenceObject.containsKey("manager")) {
@@ -468,8 +430,7 @@ public class BasicGenerator {
               else {
                 managerName = String.format("%sManager", referenceName);
               }
-              builder.append(String.format(
-                  "s%s = applicationContext.getBean(\"%s\", %s.class);\r\n", managerName,
+              builder.append(String.format("s%s = applicationContext.getBean(\"%s\", %s.class);\r\n", managerName,
                   WordUtils.uncapitalize(managerName), managerName));
 
             }
@@ -478,9 +439,17 @@ public class BasicGenerator {
         }
       }
     }
-    builder.append(String.format("s%s = applicationContext.getBean(\"%s\", %s.class);",
-        modelManager, WordUtils.uncapitalize(modelManager), modelManager));
+    builder.append(String.format("s%s = applicationContext.getBean(\"%s\", %s.class);", modelManager,
+        WordUtils.uncapitalize(modelManager), modelManager));
     return builder.toString();
+  }
+
+  private String getReferenceIdReturnType(JSONObject referenceObject) {
+    if(referenceObject.containsKey("id")) {
+      JSONObject idObject = (JSONObject) referenceObject.get("id");
+      return idObject.get("type").toString();
+    }
+    return "String";
   }
 
   private File getTemplate() {

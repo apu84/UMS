@@ -13,9 +13,8 @@ import java.util.List;
 /**
  * Created by Ifti on 17-Dec-16.
  */
-public class UserGuideDaoDecorator extends
-    ContentDaoDecorator<UserGuide, MutableUserGuide, Integer, UserGuideManager> implements
-    UserGuideManager {
+public class UserGuideDaoDecorator extends ContentDaoDecorator<UserGuide, MutableUserGuide, Integer, UserGuideManager>
+    implements UserGuideManager {
   @Override
   public List<UserGuide> getUserGuideList(Integer pRoleId, String pUserId) {
     return getManager().getUserGuideList(pRoleId, pUserId);

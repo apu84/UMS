@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
  * Created by Monjur-E-Morshed on 25-Jan-17.
  */
 @Component
-public class PaymentInfoResourceHelper extends
-    ResourceHelper<PaymentInfo, MutablePaymentInfo, Integer> {
+public class PaymentInfoResourceHelper extends ResourceHelper<PaymentInfo, MutablePaymentInfo, Integer> {
 
   @Autowired
   private PaymentInfoManager mManager;
@@ -64,8 +63,7 @@ public class PaymentInfoResourceHelper extends
     semesterIdStr = semesterIdStr.substring(0, 2);
     AdmissionStudent admissionStudent =
         mAdmissionStudentManager.getAdmissionStudent(paymentInfos.getSemester().getId(),
-            org.ums.enums.ProgramType.get(Integer.parseInt(semesterIdStr)),
-            paymentInfos.getReferenceId());
+            org.ums.enums.ProgramType.get(Integer.parseInt(semesterIdStr)), paymentInfos.getReferenceId());
     String studentId = generateStudentId(admissionStudent, paymentInfos.getPaymentType());
 
     updateAdmissionStudent(admissionStudent, studentId, paymentInfos.getPaymentType());
@@ -149,8 +147,7 @@ public class PaymentInfoResourceHelper extends
     mStudentManager.create(student);
   }
 
-  public JsonObject getAdmissionPaymentInfo(final String pReceiptId, final int pSemesterId,
-      final UriInfo mUriInfo) {
+  public JsonObject getAdmissionPaymentInfo(final String pReceiptId, final int pSemesterId, final UriInfo mUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -158,8 +155,7 @@ public class PaymentInfoResourceHelper extends
       List<PaymentInfo> paymentInfos = getContentManager().getPaymentInfo(pReceiptId, pSemesterId);
       for(PaymentInfo paymentInfo : paymentInfos) {
         JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-        getBuilder()
-            .build(jsonObject, paymentInfo, mUriInfo, localCache, PaymentType.ADMISSION_FEE);
+        getBuilder().build(jsonObject, paymentInfo, mUriInfo, localCache, PaymentType.ADMISSION_FEE);
         children.add(jsonObject);
       }
     } catch(EmptyResultDataAccessException e) {
@@ -197,8 +193,7 @@ public class PaymentInfoResourceHelper extends
       deptId = program.getDepartment().getId();
     }
     studentId = studentId + deptId;
-    int totalEnrolledStudent =
-        mStudentManager.getSize(pAdmissionStudent.getSemester().getId(), program.getId());
+    int totalEnrolledStudent = mStudentManager.getSize(pAdmissionStudent.getSemester().getId(), program.getId());
     String studentNumberStr = String.valueOf(totalEnrolledStudent + 1);
 
     if(studentNumberStr.length() == 1) {

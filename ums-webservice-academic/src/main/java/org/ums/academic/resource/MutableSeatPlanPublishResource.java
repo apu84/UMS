@@ -18,15 +18,13 @@ public class MutableSeatPlanPublishResource extends Resource {
 
   @POST
   @Path("/semester/{semester-id}")
-  public Response createBySemester(@PathParam("semester-id") Integer pSemesterId,
-      JsonObject pJsonObject) {
+  public Response createBySemester(@PathParam("semester-id") Integer pSemesterId, JsonObject pJsonObject) {
     return mHelper.createBySemester(pSemesterId, pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path("/semester/{semester-id}")
-  public Response updateBySemester(@PathParam("semester-id") Integer pSemesterId,
-      JsonObject pJsonObject) {
+  public Response updateBySemester(@PathParam("semester-id") Integer pSemesterId, JsonObject pJsonObject) {
     return mHelper.updateBySemester(pSemesterId, pJsonObject, mUriInfo);
   }
 

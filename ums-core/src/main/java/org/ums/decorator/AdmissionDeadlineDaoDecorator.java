@@ -7,9 +7,8 @@ import org.ums.manager.AdmissionDeadlineManager;
 /**
  * Created by Monjur-E-Morshed on 29-Dec-16.
  */
-public class AdmissionDeadlineDaoDecorator
-    extends
-    ContentDaoDecorator<AdmissionDeadline, MutableAdmissionDeadline, Integer, AdmissionDeadlineManager>
-    implements AdmissionDeadlineManager {
+public class AdmissionDeadlineDaoDecorator extends
+    ContentDaoDecorator<AdmissionDeadline, MutableAdmissionDeadline, Integer, AdmissionDeadlineManager> implements
+    AdmissionDeadlineManager {
 
 }

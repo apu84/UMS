@@ -17,8 +17,7 @@ public class NotificationBuilder implements Builder<Notification, MutableNotific
   protected static DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Notification pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Notification pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("payload", pReadOnly.getPayload());
     if(pReadOnly.getProducedOn() != null) {

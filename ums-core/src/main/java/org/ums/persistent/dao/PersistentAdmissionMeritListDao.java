@@ -25,8 +25,8 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
       "select a.ID, a.SEMESTER_ID, a.MERIT_SL_NO, a.RECEIPT_ID, a.ADMISSION_ROLL, a.CANDIDATE_NAME, a.ADMISSION_GROUP, a.FACULTY_ID, a.LAST_MODIFIED from ADMISSION_MERIT_LIST a";
   String INSERT_ONE = "Insert into DB_IUMS.ADMISSION_MERIT_LIST "
       + "   ( SEMESTER_ID, MERIT_SL_NO, RECEIPT_ID, ADMISSION_ROLL,  "
-      + "    CANDIDATE_NAME, ADMISSION_GROUP, FACULTY_ID, LAST_MODIFIED) " + " Values "
-      + "   ( ?, ?, ?, ?,  " + "    ?, ?, ?, " + getLastModifiedSql() + ")";
+      + "    CANDIDATE_NAME, ADMISSION_GROUP, FACULTY_ID, LAST_MODIFIED) " + " Values " + "   ( ?, ?, ?, ?,  "
+      + "    ?, ?, ?, " + getLastModifiedSql() + ")";
   String UPDATE_ONE =
       "update ADMISSION_MERIT_LIST SET SEMESTER_ID=?, MERIT_SL_NO=?, RECEIPT_ID=?,ADMISSION_ROLL=?, CANDIDATE_NAME=?, ADMISSION_GROUP=?, FACULTY_ID=?, LAST_MODIFIED=?"
           + getLastModifiedSql() + " WHERE ID=?";
@@ -45,8 +45,7 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
   }
 
   @Override
-  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
-      QuotaType pAdmissionGroup) {
+  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty, QuotaType pAdmissionGroup) {
     return super.getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 

@@ -20,8 +20,7 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 11-Dec-16.
  */
 @Component
-public class AdmissionMeritListBuilder implements
-    Builder<AdmissionMeritList, MutableAdmissionMeritList> {
+public class AdmissionMeritListBuilder implements Builder<AdmissionMeritList, MutableAdmissionMeritList> {
 
   @Autowired
   SemesterManager mSemesterManager;
@@ -30,8 +29,7 @@ public class AdmissionMeritListBuilder implements
   FacultyManager mFacultyManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionMeritList pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionMeritList pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("semesterName", pReadOnly.getSemester().getName());
@@ -47,8 +45,7 @@ public class AdmissionMeritListBuilder implements
   }
 
   @Override
-  public void build(MutableAdmissionMeritList pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionMeritList pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Semester semester = mSemesterManager.get(pJsonObject.getInt("semesterId"));
     pMutable.setSemester(semester);
 

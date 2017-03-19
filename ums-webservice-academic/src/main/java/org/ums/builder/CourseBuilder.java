@@ -81,8 +81,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
   }
 
   @Override
-  public void build(final MutableCourse pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableCourse pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     // pMutable.setId(pJsonObject.getString("courseId"));
     String couseIdMiddle =
@@ -93,10 +92,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pMutable.setNo(pJsonObject.getString("courseNumber"));
     pMutable.setTitle(pJsonObject.getString("courseTitle"));
     pMutable.setCrHr(Float.parseFloat(pJsonObject.getString("creditHour")));
-    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject
-        .getString("courseTypeId"))]);
-    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject
-        .getString("courseCategoryId"))]);
+    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject.getString("courseTypeId"))]);
+    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject.getString("courseCategoryId"))]);
     pMutable.setYear(Integer.parseInt(pJsonObject.getString("academicYearId")));
     pMutable.setSemester(Integer.parseInt(pJsonObject.getString("academicSemesterId")));
 
@@ -111,8 +108,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pMutable.setSyllabusId(pJsonObject.getString("syllabusId"));
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
     Integer groupId =
-        StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL : Integer
-            .parseInt(pJsonObject.getString("optionalGroupId"));
+        StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL : Integer.parseInt(pJsonObject
+            .getString("optionalGroupId"));
     pMutable.setCourseGroupId(groupId);
 
     // Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it

@@ -17,8 +17,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 30-Jan-17.
  */
-public interface Author extends Serializable, LastModifier, EditType<MutableAuthor>,
-    Identifier<Integer> {
+public interface Author extends Serializable, LastModifier, EditType<MutableAuthor>, Identifier<Integer> {
 
   String getFirstName();
 

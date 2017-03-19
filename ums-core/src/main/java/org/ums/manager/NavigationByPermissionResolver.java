@@ -33,8 +33,7 @@ public class NavigationByPermissionResolver extends NavigationDaoDecorator {
 
           for(Navigation navigation : navigationList) {
             String navigationPermissionString = navigation.getPermission();
-            Permission navigationPermission =
-                permissionResolver.resolvePermission(navigationPermissionString);
+            Permission navigationPermission = permissionResolver.resolvePermission(navigationPermissionString);
             if(permission.implies(navigationPermission)) {
               permittedNavigation.add(navigation);
             }

@@ -26,8 +26,8 @@ public class PersistentOptionalCourseApplicationDao {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public List<OptionalCourseApplicationStatDto> getApplicationStatistics(int pSemesterId,
-      int pProgramId, int pYear, int pSemester) {
+  public List<OptionalCourseApplicationStatDto> getApplicationStatistics(int pSemesterId, int pProgramId, int pYear,
+      int pSemester) {
     String query =
         "Select COURSE_NO,COURSE_TITLE,TOTAL_APPLIED From OPT_COURSE_OFFER,MST_COURSE "
             + "Where OPT_COURSE_OFFER.course_id=MST_COURSE.COURSE_ID ";
@@ -47,8 +47,8 @@ public class PersistentOptionalCourseApplicationDao {
     return 1;
   }
 
-  public void batchInsertApplicationCourse(int pSemesterId, int pProgramId, int pYear,
-      int pSemester, final List<Course> pCourseList) {
+  public void batchInsertApplicationCourse(int pSemesterId, int pProgramId, int pYear, int pSemester,
+      final List<Course> pCourseList) {
     String sql =
         "Insert into OPT_COURSE_OFFER(SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, COURSE_ID, CALL_FOR_APPLICATION, APPROVED, TOTAL_APPLIED) "
             + " Values(?, ?, ?, ?, ?,'Y', 'N', 0) ";
@@ -126,17 +126,15 @@ public class PersistentOptionalCourseApplicationDao {
 
     if(!pStatus.equalsIgnoreCase("all")) {
       query +=
-          " and  Status in   " + "( " + "select regexp_substr(?,'[^,]+', 1, level) " + "from dual "
-              + "connect by " + "regexp_substr(?, '[^,]+', 1, level) " + "is not null " + ") "
-              + "Order by Applied_On Desc ";
+          " and  Status in   " + "( " + "select regexp_substr(?,'[^,]+', 1, level) " + "from dual " + "connect by "
+              + "regexp_substr(?, '[^,]+', 1, level) " + "is not null " + ") " + "Order by Applied_On Desc ";
       objectArray = new Object[] {pSemesterId, pCourseId, pStatus, pStatus};
     }
 
     return mJdbcTemplate.query(query, objectArray, new OptStudentRowMapper());
   }
 
-  public List<OptCourseStudentDto> getNonAssignedSectionStudentList(int pSemesterId,
-      int pProgramId, String pCourseId) {
+  public List<OptCourseStudentDto> getNonAssignedSectionStudentList(int pSemesterId, int pProgramId, String pCourseId) {
     String query =
         "Select * From ( "
             + "Select app_status.student_id,students.full_name From OPT_COURSE_APPLICATION_STATUS app_status,STUDENTS,OPT_COURSE_APPLICATION opt_course "
@@ -150,19 +148,16 @@ public class PersistentOptionalCourseApplicationDao {
             + "Where tmp1.student_id not in "
             + "(WITH DATA AS "
             + "      ( SELECT STUDENT_LIST str FROM OPT_COURSE_SECTION_INFO WHERE SEMESTER_ID='11012017' AND PROGRAM_ID='110500' AND COURSE_ID='"
-            + pCourseId + "' " + "      ) "
-            + "    SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str " + "    FROM DATA "
-            + "    CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0 " + ") ";
+            + pCourseId + "' " + "      ) " + "    SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str "
+            + "    FROM DATA " + "    CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0 " + ") ";
 
     return mJdbcTemplate.query(query, new Object[] {}, new OptNonAssignSectionStudentMapper());
   }
 
-  public List<OptSectionDto> getOptionalSectionListWithStudents(int pSemesterId, int pProgramId,
-      String pCourseId) {
+  public List<OptSectionDto> getOptionalSectionListWithStudents(int pSemesterId, int pProgramId, String pCourseId) {
     String query =
-        "Select * from OPT_COURSE_SECTION_INFO " + "Where Semester_Id=11012017 "
-            + "And Program_id=110500 " + "And Course_Id='" + pCourseId + "' "
-            + " Order by Section_Name ";
+        "Select * from OPT_COURSE_SECTION_INFO " + "Where Semester_Id=11012017 " + "And Program_id=110500 "
+            + "And Course_Id='" + pCourseId + "' " + " Order by Section_Name ";
 
     return mJdbcTemplate.query(query, new Object[] {}, new OptSectionMapper());
   }
@@ -173,29 +168,24 @@ public class PersistentOptionalCourseApplicationDao {
     return mJdbcTemplate.update(query, pSemesterId, pProgramId, pCourseId, pSectionName);
   }
 
-  public int mergeSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName,
-      String pStudentList) {
+  public int mergeSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName, String pStudentList) {
     String query =
         " merge into OPT_COURSE_SECTION_INFO tbl1 "
             + "    using "
             + "      (select ? SEMESTER_ID, ? PROGRAM_ID, ? COURSE_ID,?  SECTION_NAME "
             + "       from dual) tbl2 "
             + "    on (tbl1.SEMESTER_ID = tbl2.SEMESTER_ID And tbl1.PROGRAM_ID = tbl2.PROGRAM_ID And tbl1.COURSE_ID = tbl2.COURSE_ID And tbl1.SECTION_NAME = tbl2.SECTION_NAME)  "
-            + "    when matched then " + "      update set tbl1.STUDENT_LIST =? "
-            + "    when not matched then "
+            + "    when matched then " + "      update set tbl1.STUDENT_LIST =? " + "    when not matched then "
             + "     insert (SEMESTER_ID, PROGRAM_ID, COURSE_ID, SECTION_NAME, STUDENT_LIST) "
             + "     values (?,?,?,?,?) ";
 
-    return mJdbcTemplate.update(query, pSemesterId, pProgramId, pCourseId, pSectionName,
-        pStudentList, pSemesterId, pProgramId, pCourseId, pSectionName, pStudentList);
+    return mJdbcTemplate.update(query, pSemesterId, pProgramId, pCourseId, pSectionName, pStudentList, pSemesterId,
+        pProgramId, pCourseId, pSectionName, pStudentList);
   }
 
   public OptCourseApplicationStatus getApplicationStatus(String pStudentId, int pSemesterId) {
-    String query =
-        "Select status From OPT_COURSE_APPLICATION_STATUS Where Student_Id=? and Semester_Id=?";
-    Integer statusId =
-        this.mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId},
-            Integer.class);
+    String query = "Select status From OPT_COURSE_APPLICATION_STATUS Where Student_Id=? and Semester_Id=?";
+    Integer statusId = this.mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId}, Integer.class);
 
     return OptCourseApplicationStatus.values()[statusId];
   }
@@ -204,23 +194,19 @@ public class PersistentOptionalCourseApplicationDao {
 
     String query =
         "Select course.course_id,course.course_no,course.course_title,applied_on,status From OPT_COURSE_APPLICATION,MST_COURSE course "
-            + "Where course.course_id=OPT_COURSE_APPLICATION.course_id "
-            + "And Student_Id=? and Semester_Id=? ";
+            + "Where course.course_id=OPT_COURSE_APPLICATION.course_id " + "And Student_Id=? and Semester_Id=? ";
 
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
-        new OptStudentCourseRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new OptStudentCourseRowMapper());
   }
 
-  public int updateCourseStatus(int pSemesterId, String pCourseId, final List<String> pStudentList,
-      int pNewStatus) {
+  public int updateCourseStatus(int pSemesterId, String pCourseId, final List<String> pStudentList, int pNewStatus) {
     batchStatusUpdateForOptionalCourse(pSemesterId, pCourseId, pStudentList, pNewStatus);
     return 1;
   }
 
-  public void batchStatusUpdateForOptionalCourse(int pSemesterId, String pCourseId,
-      final List<String> pStudentList, int pNewStatus) {
-    String sql =
-        "Update OPT_COURSE_APPLICATION Set Status=? Where Student_Id=? and Semester_Id=? and Course_Id=? ";
+  public void batchStatusUpdateForOptionalCourse(int pSemesterId, String pCourseId, final List<String> pStudentList,
+      int pNewStatus) {
+    String sql = "Update OPT_COURSE_APPLICATION Set Status=? Where Student_Id=? and Semester_Id=? and Course_Id=? ";
 
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -240,18 +226,16 @@ public class PersistentOptionalCourseApplicationDao {
     });
   }
 
-  public int updateCourseStatusForDependentCourse(int pSemesterId, String pCourseId,
-      final List<String> pStudentList, int pNewStatus) {
-    batchStatusUpdateForOptionalCourseForDependentCourse(pSemesterId, pCourseId, pStudentList,
-        pNewStatus);
+  public int updateCourseStatusForDependentCourse(int pSemesterId, String pCourseId, final List<String> pStudentList,
+      int pNewStatus) {
+    batchStatusUpdateForOptionalCourseForDependentCourse(pSemesterId, pCourseId, pStudentList, pNewStatus);
     return 1;
   }
 
-  public void batchStatusUpdateForOptionalCourseForDependentCourse(int pSemesterId,
-      String pCourseId, final List<String> pStudentList, int pNewStatus) {
+  public void batchStatusUpdateForOptionalCourseForDependentCourse(int pSemesterId, String pCourseId,
+      final List<String> pStudentList, int pNewStatus) {
     String sql =
-        "Update OPT_COURSE_APPLICATION Set Status=? Where  "
-            + "(Student_Id,Semester_Id,Course_Id) in  " + "( "
+        "Update OPT_COURSE_APPLICATION Set Status=? Where  " + "(Student_Id,Semester_Id,Course_Id) in  " + "( "
             + "Select Student_Id,Semester_Id,Dependent_Course_Id From OPT_COURSE_APPLICATION "
             + "Where Student_Id=? and Semester_Id=? and Course_Id=? " + ") ";
 
@@ -273,14 +257,12 @@ public class PersistentOptionalCourseApplicationDao {
     });
   }
 
-  public int deleteCourseAppliedByTeacher(int pSemesterId, String pCourseId,
-      final List<String> pStudentList) {
+  public int deleteCourseAppliedByTeacher(int pSemesterId, String pCourseId, final List<String> pStudentList) {
     batchDeleteCourseAppliedByTeacher(pSemesterId, pCourseId, pStudentList);
     return 1;
   }
 
-  public void batchDeleteCourseAppliedByTeacher(int pSemesterId, String pCourseId,
-      final List<String> pStudentList) {
+  public void batchDeleteCourseAppliedByTeacher(int pSemesterId, String pCourseId, final List<String> pStudentList) {
     String sql =
         " Delete OPT_COURSE_APPLICATION Where Student_Id=? and Semester_Id=? and Course_Id=? and APPLICATION_TYPE=1";
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -307,8 +289,8 @@ public class PersistentOptionalCourseApplicationDao {
     return 1;
   }
 
-  public void batchInsertShiftApplication(int pSemesterId, String pCourseId,
-      String pDependentCourseId, final List<String> pStudentList) {
+  public void batchInsertShiftApplication(int pSemesterId, String pCourseId, String pDependentCourseId,
+      final List<String> pStudentList) {
     String sql =
         "Insert Into OPT_COURSE_APPLICATION(STUDENT_ID, SEMESTER_ID, COURSE_ID, APPLIED_ON, STATUS, APPLICATION_TYPE, DEPENDENT_COURSE_ID) "
             + "Values(?,?,?,sysdate,1,1,?) ";
@@ -342,16 +324,13 @@ public class PersistentOptionalCourseApplicationDao {
     return 1;
   }
 
-  public void batchMergeStudentApplication(String pStudentId, int pSemester,
-      final List<String> pCourseList) {
+  public void batchMergeStudentApplication(String pStudentId, int pSemester, final List<String> pCourseList) {
     String sql =
         "merge into OPT_COURSE_APPLICATION application1 "
             + "    using  "
             + "      (select ? STUDENT_ID,? SEMESTER_ID,? COURSE_ID from dual) application2  "
             + "    on (application1.STUDENT_ID = application2.STUDENT_ID And application1.SEMESTER_ID = application2.SEMESTER_ID And application1.COURSE_ID = application2.COURSE_ID)  "
-            + "    when matched then  "
-            + "      update set APPLIED_ON=Sysdate "
-            + "  when not matched then  "
+            + "    when matched then  " + "      update set APPLIED_ON=Sysdate " + "  when not matched then  "
             + "     insert(STUDENT_ID, SEMESTER_ID, COURSE_ID, APPLIED_ON, STATUS,APPLICATION_TYPE)  "
             + "     values (?,?,?,SYSDATE,0,0)  ";
 
@@ -376,10 +355,8 @@ public class PersistentOptionalCourseApplicationDao {
     });
   }
 
-  public int updateStatus(String pStudentId, Integer pSemesterId,
-      final OptCourseApplicationStatus status) {
-    String query =
-        "Update OPT_COURSE_APPLICATION_STATUS Set Status=? Where Student_id=? and Semester_Id=?";
+  public int updateStatus(String pStudentId, Integer pSemesterId, final OptCourseApplicationStatus status) {
+    String query = "Update OPT_COURSE_APPLICATION_STATUS Set Status=? Where Student_id=? and Semester_Id=?";
     return mJdbcTemplate.update(query, status.getId(), pStudentId, pSemesterId);
   }
 
@@ -411,8 +388,7 @@ public class PersistentOptionalCourseApplicationDao {
       OptionalCourseApplicationStatDto stat = new OptionalCourseApplicationStatDto();
       stat.setCourseNumber(resultSet.getString("COURSE_NO"));
       stat.setTotalApplied(resultSet.getInt("TOTAL_APPLIED"));
-      AtomicReference<OptionalCourseApplicationStatDto> atomicReference =
-          new AtomicReference<>(stat);
+      AtomicReference<OptionalCourseApplicationStatDto> atomicReference = new AtomicReference<>(stat);
       return atomicReference.get();
     }
   }
@@ -428,8 +404,7 @@ public class PersistentOptionalCourseApplicationDao {
       student.setStatusLabel(OptCourseCourseStatus.values()[resultSet.getInt("STATUS")].getLabel());
 
       student.setApplicationTypeId(resultSet.getInt("APPLICATION_TYPE"));
-      student.setApplicationTypeLabel(OptApplicationType.values()[resultSet
-          .getInt("APPLICATION_TYPE")].getLabel());
+      student.setApplicationTypeLabel(OptApplicationType.values()[resultSet.getInt("APPLICATION_TYPE")].getLabel());
 
       AtomicReference<OptCourseStudentDto> atomicReference = new AtomicReference<>(student);
       return atomicReference.get();

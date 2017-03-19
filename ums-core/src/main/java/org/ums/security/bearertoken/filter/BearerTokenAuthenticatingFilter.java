@@ -75,8 +75,7 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
-      throws Exception {
+  protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
     boolean authHasToken = hasAuthorizationToken(request);
     boolean isLogin = isLoginRequest(request, response);
     if(authHasToken || isLogin) {
@@ -89,16 +88,15 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
-      ServletRequest request, ServletResponse response) {
+  protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request,
+      ServletResponse response) {
     boolean isLogin = isLoginRequest(request, response);
     try {
       if(isLogin) {
         HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
       }
       else {
-        HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED,
-            Messages.Status.EXPIRED_TOKEN.toString());
+        HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED, Messages.Status.EXPIRED_TOKEN.toString());
       }
     } catch(IOException ie) {
       throw new UncheckedIOException(ie);
@@ -107,8 +105,7 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue)
-      throws Exception {
+  public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
     return isLoginRequest(request, response) && hasAuthorizationToken(request)
         || super.onPreHandle(request, response, mappedValue);
   }
@@ -178,11 +175,10 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
-      Object mappedValue) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
     return !(!isLoginRequest(request, response) && isPermissive(mappedValue) && hasAuthorizationToken(request))
-        && (super.isAccessAllowed(request, response, mappedValue) || (!isLoginRequest(request,
-            response) && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
+        && (super.isAccessAllowed(request, response, mappedValue) || (!isLoginRequest(request, response)
+            && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
   }
 
 }

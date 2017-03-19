@@ -11,7 +11,7 @@ import org.ums.manager.library.SubjectManager;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public class SubjectDaoDecorator extends
-    ContentDaoDecorator<Subject, MutableSubject, Integer, SubjectManager> implements SubjectManager {
+public class SubjectDaoDecorator extends ContentDaoDecorator<Subject, MutableSubject, Integer, SubjectManager>
+    implements SubjectManager {
 
 }

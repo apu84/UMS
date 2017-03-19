@@ -8,8 +8,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SubGroupCache extends
-    ContentCache<SubGroup, MutableSubGroup, Integer, SubGroupManager> implements SubGroupManager {
+public class SubGroupCache extends ContentCache<SubGroup, MutableSubGroup, Integer, SubGroupManager> implements
+    SubGroupManager {
 
   CacheManager<SubGroup, Integer> mCacheManager;
 
@@ -43,8 +43,7 @@ public class SubGroupCache extends
   }
 
   @Override
-  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo,
-      int pSubGroupNo) {
+  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
     return getManager().getSubGroupMembers(pSemesterId, pExamTYpe, pGroupNo, pSubGroupNo);
   }
 
@@ -54,9 +53,7 @@ public class SubGroupCache extends
   }
 
   @Override
-  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo,
-      int pType) {
-    return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId,
-        pGroupNo, pType);
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
   }
 }

@@ -47,8 +47,8 @@ public class SemesterWithdrawalResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getStudentRecord(final int semesterId, final int year,
-      final int academicSemester, Request pRequest, final UriInfo pUriInfo) {
+  public JsonObject getStudentRecord(final int semesterId, final int year, final int academicSemester,
+      Request pRequest, final UriInfo pUriInfo) {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     SemesterWithdrawal semesterWithdrawal =
         getContentManager().getStudentsRecord(mStudentId, semesterId, year, academicSemester);
@@ -62,8 +62,7 @@ public class SemesterWithdrawalResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getRoutineByDeptForEmployee(final String deptId, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getRoutineByDeptForEmployee(final String deptId, final Request pRequest, final UriInfo pUriInfo) {
     List<SemesterWithdrawal> semesterWithdrawals = getContentManager().getByDeptForEmployee(deptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

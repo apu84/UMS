@@ -42,8 +42,8 @@ public abstract class AbstractResultGenerator {
     mCurrentDepartment = pStudentRecord.getStudent().getDepartment();
   }
 
-  public void createPdf(Integer pProgramId, Integer pSemesterId, OutputStream pOutputStream)
-      throws IOException, DocumentException {
+  public void createPdf(Integer pProgramId, Integer pSemesterId, OutputStream pOutputStream) throws IOException,
+      DocumentException {
     java.util.List<StudentRecord> studentRecordList = getStudentList(pProgramId, pSemesterId);
     if(studentRecordList.size() > 0) {
       initialize(studentRecordList.get(0));
@@ -178,8 +178,7 @@ public abstract class AbstractResultGenerator {
       PdfContentByte cb = writer.getDirectContent();
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), pageNoFont);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(),
-          document.bottom() - 2, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(), document.bottom() - 2, 0);
     }
   }
 }

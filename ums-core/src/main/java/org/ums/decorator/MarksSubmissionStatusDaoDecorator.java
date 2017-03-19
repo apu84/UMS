@@ -7,8 +7,7 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.ExamType;
 import org.ums.manager.MarksSubmissionStatusManager;
 
-public class MarksSubmissionStatusDaoDecorator
-    extends
+public class MarksSubmissionStatusDaoDecorator extends
     ContentDaoDecorator<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long, MarksSubmissionStatusManager>
     implements MarksSubmissionStatusManager {
   @Override

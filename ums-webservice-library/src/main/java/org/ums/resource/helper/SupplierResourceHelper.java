@@ -55,15 +55,15 @@ public class SupplierResourceHelper extends ResourceHelper<Supplier, MutableSupp
     mutableSupplier.create();
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableSupplier.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableSupplier.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder, final UriInfo pUriInfo) {
+  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder,
+      final UriInfo pUriInfo) {
     List<Supplier> suppliers = getContentManager().getAllForPagination(pItemPerPage, pPage, pOrder);
     int total = getContentManager().getTotalForPagination();
 

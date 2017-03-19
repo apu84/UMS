@@ -51,7 +51,8 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, " + " sysdate, sysdate, ?, " + getLastModifiedSql() + ")";
+          + " ?, ?, ?, ?, ?, ?, ?, "
+          + " sysdate, sysdate, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
@@ -64,47 +65,41 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public Record get(final Long pId) {
     String query = SELECT_ALL + " Where MFN = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentRecordDao.RecordRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentRecordDao.RecordRowMapper());
   }
 
   @Override
   public int update(final MutableRecord pRecord) {
     String query = UPDATE_ONE + "   Where MFN= ? ";
-    return mJdbcTemplate.update(query, pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
-        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord
-        .getSerialSpecial(), pRecord.getLibraryLacks(), pRecord.getChangedTitle(), pRecord
-        .getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord.getCorpSubBody(),
-        pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
-        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord
-            .getCallNo(), pRecord.getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(),
-        pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(),
-        pRecord.getImprint().getDateOfPublication(), pRecord.getImprint().getCopyRightDate(),
-        pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
-            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord
-            .getKeyWords(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(),
-        pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
+    return mJdbcTemplate.update(query, pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord.getSubTitle(),
+        pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(), pRecord
+            .getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
+        pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
+            .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
+        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
+            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher().getId(),
+        pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
+            .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
+            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
+            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getNoteJsonString(), pRecord
+            .getLastUpdatedBy(), pRecord.getMfn());
   }
 
   @Override
   public Long create(final MutableRecord pRecord) {
     Long id = mIdGenerator.getNumericId();
     pRecord.setMfn(id);
-    mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord
-        .getTitle(), pRecord.getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord
-        .getVolumeNo(), pRecord.getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord
-        .getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(), pRecord
-        .getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(),
-        pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
-            .getTranslateTitleEdition(), pRecord.getFrequency() == null ? Types.NULL : pRecord
-            .getFrequency().getId(), pRecord.getCallNo(), pRecord.getClassNo(), pRecord
-            .getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher().getId(),
-        pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(),
-        pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord
-            .getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord
-            .getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(),
-        pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
+    mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
+        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
+        pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
+        pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
+            .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
+        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
+            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher().getId(),
+        pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
+            .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
+            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
+            .getDocumentalist(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
             .getNoteJsonString(), pRecord.getLastUpdatedBy());
 
     return id;

@@ -28,8 +28,7 @@ public class PersistentMaterialContributor implements MutableMaterialContributor
 
   public PersistentMaterialContributor() {}
 
-  public PersistentMaterialContributor(
-      final PersistentMaterialContributor pPersistentMaterialContributor) {
+  public PersistentMaterialContributor(final PersistentMaterialContributor pPersistentMaterialContributor) {
     mId = pPersistentMaterialContributor.getId();
     mMfn = pPersistentMaterialContributor.getMfn();
     mRole = pPersistentMaterialContributor.getContributorRole();

@@ -29,14 +29,12 @@ public class UserGuideResource extends Resource {
 
   @GET
   public JsonObject getUserGuides(final @Context Request pRequest) {
-    return mUserGuideResourceHelper.getUserGuides(SecurityUtils.getSubject().getPrincipal()
-        .toString(), mUriInfo);
+    return mUserGuideResourceHelper.getUserGuides(SecurityUtils.getSubject().getPrincipal().toString(), mUriInfo);
   }
 
   @GET
   @Path("/html/{navigationId}")
-  public JsonObject getUserGuide(final @Context Request pRequest,
-      final @PathParam("navigationId") Integer pNavigationId) {
+  public JsonObject getUserGuide(final @Context Request pRequest, final @PathParam("navigationId") Integer pNavigationId) {
     return mUserGuideResourceHelper.getUserGuide(pNavigationId);
   }
 

@@ -10,6 +10,5 @@ public interface AdmissionCommentForStudentManager extends
 
   List<AdmissionCommentForStudent> getComments(final int pSemesterId, final String pReceiptId);
 
-  int saveComment(
-      final MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment);
+  int saveComment(final MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment);
 }

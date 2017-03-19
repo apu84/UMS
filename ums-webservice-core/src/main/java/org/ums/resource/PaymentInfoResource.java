@@ -19,8 +19,7 @@ public class PaymentInfoResource extends MutablePaymentInfoResource {
   @GET
   @Path("/semester/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getAdmissionPaymentInfo(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("receipt-id") String pReceiptId) {
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("receipt-id") String pReceiptId) {
     return mHelper.getAdmissionPaymentInfo(pReceiptId, pSemesterId, mUriInfo);
   }
 }

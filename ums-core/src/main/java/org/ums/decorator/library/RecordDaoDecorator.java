@@ -8,7 +8,7 @@ import org.ums.manager.library.RecordManager;
 /**
  * Created by Ifti on 18-Feb-17.
  */
-public class RecordDaoDecorator extends
-    ContentDaoDecorator<Record, MutableRecord, Long, RecordManager> implements RecordManager {
+public class RecordDaoDecorator extends ContentDaoDecorator<Record, MutableRecord, Long, RecordManager> implements
+    RecordManager {
 
 }

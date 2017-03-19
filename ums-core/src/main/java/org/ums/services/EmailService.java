@@ -39,8 +39,7 @@ public class EmailService {
     this.user = user;
   }
 
-  public void sendEmail(final String toEmailAddresses, final String fromEmailAddress,
-      final String subject) {
+  public void sendEmail(final String toEmailAddresses, final String fromEmailAddress, final String subject) {
     sendEmail(toEmailAddresses, fromEmailAddress, subject, null, null);
   }
 
@@ -49,8 +48,8 @@ public class EmailService {
     sendEmail(toEmailAddresses, fromEmailAddress, subject, attachmentPath, attachmentName);
   }
 
-  private void sendEmail(final String toEmailAddresses, final String fromEmailAddress,
-      final String subject, final String attachmentPath, final String attachmentName) {
+  private void sendEmail(final String toEmailAddresses, final String fromEmailAddress, final String subject,
+      final String attachmentPath, final String attachmentName) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {
         MimeMessageHelper message = null;
@@ -67,8 +66,7 @@ public class EmailService {
           ResetPasswordEmailDto others = new ResetPasswordEmailDto();
           others.setUmsRootUrl("http://172.16.25.254/ums-web/login");
           others.setUmsForgotPasswordUrl("http://172.16.25.254/ums-web/login/?forgot-password.ums");
-          String abc =
-              "http://172.16.25.254/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
+          String abc = "http://172.16.25.254/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
           abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());
           abc = abc.replace("$$USER_ID$$", user.getId());
 
@@ -80,8 +78,8 @@ public class EmailService {
           model.put("others", others);
 
           String body =
-              VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-                  "html-templates/password-reset-email.vm", "UTF-8", model);
+              VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "html-templates/password-reset-email.vm",
+                  "UTF-8", model);
           message.setText(body, true);
           if(!StringUtils.isBlank(attachmentPath)) {
             FileSystemResource file = new FileSystemResource(attachmentPath);

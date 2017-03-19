@@ -14,14 +14,11 @@ import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentResultPublish;
 
 public class ResultPublishDao extends ResultPublishDaoDecorator {
-  String SELECT_ALL =
-      "SELECT ID, PROGRAM_ID, SEMESTER_ID, PUBLISH_DATE, LAST_MODIFIED FROM RESULT_PUBLISH ";
-  String INSERT_ALL =
-      "INSERT INTO RESULT_PUBLISH(ID, PROGRAM_ID, SEMESTER_ID, PUBLISH_DATE, LAST_MODIFIED) VALUES "
-          + "(?, ?, ?, SYSDATE, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL =
-      "UPDATE RESULT_PUBLISH SET PROGRAM_ID = ?, SEMESTER_ID = ?, PUBLISH_DATE = SYSDATE, "
-          + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL = "SELECT ID, PROGRAM_ID, SEMESTER_ID, PUBLISH_DATE, LAST_MODIFIED FROM RESULT_PUBLISH ";
+  String INSERT_ALL = "INSERT INTO RESULT_PUBLISH(ID, PROGRAM_ID, SEMESTER_ID, PUBLISH_DATE, LAST_MODIFIED) VALUES "
+      + "(?, ?, ?, SYSDATE, " + getLastModifiedSql() + ") ";
+  String UPDATE_ALL = "UPDATE RESULT_PUBLISH SET PROGRAM_ID = ?, SEMESTER_ID = ?, PUBLISH_DATE = SYSDATE, "
+      + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM RESULT_PUBLISH ";
 
   String EXIST = "SELECT COUNT(ID) FROM RESULT_PUBLISH ";
@@ -48,8 +45,7 @@ public class ResultPublishDao extends ResultPublishDaoDecorator {
   @Override
   public int update(MutableResultPublish pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getProgramId(), pMutable.getSemesterId(),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getProgramId(), pMutable.getSemesterId(), pMutable.getId());
   }
 
   @Override

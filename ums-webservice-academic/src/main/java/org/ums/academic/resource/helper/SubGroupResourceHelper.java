@@ -46,8 +46,8 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubG
     getBuilder().build(mutableSubGroup, pJsonObject, localCache);
     mutableSubGroup.create();
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SubGroupResource.class)
-            .path(SubGroupResource.class, "get").build(mutableSubGroup.getId());
+        pUriInfo.getBaseUriBuilder().path(SubGroupResource.class).path(SubGroupResource.class, "get")
+            .build(mutableSubGroup.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -66,10 +66,9 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubG
     return object.build();
   }
 
-  public JsonObject getBySemesterAndGroupNO(final int pSemesterId, final int pGroupNo,
-      final int pType, final Request pRequest, final UriInfo pUriInfo) {
-    List<SubGroup> subGroups =
-        getContentManager().getBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
+  public JsonObject getBySemesterAndGroupNO(final int pSemesterId, final int pGroupNo, final int pType,
+      final Request pRequest, final UriInfo pUriInfo) {
+    List<SubGroup> subGroups = getContentManager().getBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -81,14 +80,12 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubG
     return object.build();
   }
 
-  public Response deleteBySemesterAndGroup(final int pSemesterId, final int pGroupNo,
-      final int pType) {
+  public Response deleteBySemesterAndGroup(final int pSemesterId, final int pGroupNo, final int pType) {
     int delete = getContentManager().deleteBySemesterGroupAndType(pSemesterId, pGroupNo, pType);
     return Response.noContent().build();
   }
 
-  public Response save(final int pSemesterId, final int pGroupNo, final int pType,
-      final JsonObject pJsonObject) {
+  public Response save(final int pSemesterId, final int pGroupNo, final int pType, final JsonObject pJsonObject) {
 
     int checkIfSubGroupExist = mManager.checkBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
 

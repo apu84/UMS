@@ -21,11 +21,9 @@ public class AdmissionTotalSeatResource extends MutableAdmissionTotalSeatResourc
 
   @GET
   @Path("/semester/{semester-id}/programType/{program-type}/quota/{quota-type}")
-  public JsonObject getTotalSeatInfo(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("program-type") int pProgramTyoe,
-      final @PathParam("quota-type") int pQuotaType) {
-    return mHelper.getAdmissionTotalSeat(pSemesterId, ProgramType.get(pProgramTyoe),
-        QuotaType.get(pQuotaType), mUriInfo);
+  public JsonObject getTotalSeatInfo(final @Context Request pRequest, final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("program-type") int pProgramTyoe, final @PathParam("quota-type") int pQuotaType) {
+    return mHelper.getAdmissionTotalSeat(pSemesterId, ProgramType.get(pProgramTyoe), QuotaType.get(pQuotaType),
+        mUriInfo);
   }
 }

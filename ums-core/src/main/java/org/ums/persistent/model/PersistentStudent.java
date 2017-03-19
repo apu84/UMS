@@ -185,8 +185,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Department getDepartment() {
-    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
-        .validate(mDepartment);
+    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mDepartment);
   }
 
   @Override
@@ -206,8 +205,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

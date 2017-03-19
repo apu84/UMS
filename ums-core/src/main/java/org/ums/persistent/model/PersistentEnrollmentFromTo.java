@@ -14,8 +14,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sEnrollmentFromToManager =
-        applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
+    sEnrollmentFromToManager = applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
   }
 
   private Long mId;

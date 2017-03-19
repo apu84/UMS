@@ -30,8 +30,7 @@ public class ResultList extends Resource {
   @GET
   @Produces({"application/pdf"})
   @Path("/pdf/program/{program-id}/semester/{semester-id}")
-  public StreamingOutput get(final @Context Request pRequest,
-      final @PathParam("program-id") Integer pProgramId,
+  public StreamingOutput get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
       final @PathParam("semester-id") Integer pSemesterId) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {

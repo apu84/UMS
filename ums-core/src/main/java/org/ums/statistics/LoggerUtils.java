@@ -10,10 +10,8 @@ public class LoggerUtils {
       for(Object param : pQueryParams) {
 
         pQuery =
-            pQuery.replaceFirst(
-                "\\?",
-                isString(param) ? "'" + escapeSpecialRegexChars(param.toString()) + "'" : param
-                    .toString());
+            pQuery.replaceFirst("\\?",
+                isString(param) ? "'" + escapeSpecialRegexChars(param.toString()) + "'" : param.toString());
       }
     }
 

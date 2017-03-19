@@ -33,8 +33,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup, MutableSeatP
   SpStudentManager mSpStudentManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("groupId", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());

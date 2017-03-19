@@ -16,13 +16,11 @@ import javax.ws.rs.core.UriInfo;
 public class CountryBuilder implements Builder<Country, MutableCountry> {
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Country pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Country pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("code", pReadOnly.getCode());
     pBuilder.add("name", pReadOnly.getName());
-    pBuilder.add("lastModified",
-        pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
+    pBuilder.add("lastModified", pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
   }
 
   @Override

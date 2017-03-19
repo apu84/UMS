@@ -53,8 +53,7 @@ public class UserGuideResourceHelper extends ResourceHelper<UserGuide, MutableUs
 
   public JsonObject getUserGuides(String pUserId, final UriInfo pUriInfo) {
     List<UserGuide> userGuideList =
-        mUserGuideManager.getUserGuideList(mUserManager.get(pUserId).getPrimaryRole().getId(),
-            pUserId);
+        mUserGuideManager.getUserGuideList(mUserManager.get(pUserId).getPrimaryRole().getId(), pUserId);
     return buildJsonResponse(userGuideList, pUriInfo);
   }
 

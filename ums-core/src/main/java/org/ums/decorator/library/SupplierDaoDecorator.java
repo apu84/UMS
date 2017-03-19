@@ -14,13 +14,11 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class SupplierDaoDecorator extends
-    ContentDaoDecorator<Supplier, MutableSupplier, Long, SupplierManager> implements
-    SupplierManager {
+public class SupplierDaoDecorator extends ContentDaoDecorator<Supplier, MutableSupplier, Long, SupplierManager>
+    implements SupplierManager {
 
   @Override
-  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder) {
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder) {
     return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
   }
 

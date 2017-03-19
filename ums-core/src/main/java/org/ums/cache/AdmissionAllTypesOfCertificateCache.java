@@ -14,8 +14,7 @@ public class AdmissionAllTypesOfCertificateCache
 
   private CacheManager<AdmissionAllTypesOfCertificate, Integer> mCacheManager;
 
-  public AdmissionAllTypesOfCertificateCache(
-      final CacheManager<AdmissionAllTypesOfCertificate, Integer> pCacheManager) {
+  public AdmissionAllTypesOfCertificateCache(final CacheManager<AdmissionAllTypesOfCertificate, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 

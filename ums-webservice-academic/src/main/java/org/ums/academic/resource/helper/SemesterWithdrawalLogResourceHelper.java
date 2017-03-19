@@ -45,10 +45,9 @@ public class SemesterWithdrawalLogResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid,
-      final Request pRequest, final UriInfo pUriInfo) {
-    SemesterWithdrawalLog mLog =
-        getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
+  public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid, final Request pRequest,
+      final UriInfo pUriInfo) {
+    SemesterWithdrawalLog mLog = getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

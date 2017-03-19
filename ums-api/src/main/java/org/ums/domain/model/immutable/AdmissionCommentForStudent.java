@@ -7,8 +7,8 @@ import org.ums.domain.model.mutable.MutableAdmissionCommentForStudent;
 
 import java.io.Serializable;
 
-public interface AdmissionCommentForStudent extends Serializable,
-    EditType<MutableAdmissionCommentForStudent>, Identifier<Integer>, LastModifier {
+public interface AdmissionCommentForStudent extends Serializable, EditType<MutableAdmissionCommentForStudent>,
+    Identifier<Integer>, LastModifier {
 
   int getRowId();
 

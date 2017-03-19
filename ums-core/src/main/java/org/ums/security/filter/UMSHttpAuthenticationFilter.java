@@ -18,8 +18,7 @@ public class UMSHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
 
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
-      Object mappedValue) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
     HttpServletRequest httpRequest = WebUtils.toHttp(request);
     String httpMethod = httpRequest.getMethod();
     // TODO: Make this list of unauthenticated resource configurable

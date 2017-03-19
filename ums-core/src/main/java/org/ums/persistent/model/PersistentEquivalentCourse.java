@@ -14,8 +14,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sEquivalentCourseManager =
-        applicationContext.getBean("equivalentManager", EquivalentCourseManager.class);
+    sEquivalentCourseManager = applicationContext.getBean("equivalentManager", EquivalentCourseManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
   }
 
@@ -92,8 +91,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
 
   @Override
   public Course getOldCourse() {
-    return mOldCourse == null ? sCourseManager.get(mOldCourseId) : sCourseManager
-        .validate(mOldCourse);
+    return mOldCourse == null ? sCourseManager.get(mOldCourseId) : sCourseManager.validate(mOldCourse);
   }
 
   @Override
@@ -108,8 +106,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
 
   @Override
   public Course getNewCourse() {
-    return mNewCourse == null ? sCourseManager.get(mNewCourseId) : sCourseManager
-        .validate(mNewCourse);
+    return mNewCourse == null ? sCourseManager.get(mNewCourseId) : sCourseManager.validate(mNewCourse);
   }
 
   @Override

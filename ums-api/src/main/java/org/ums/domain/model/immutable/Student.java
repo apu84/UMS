@@ -12,8 +12,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Student extends Serializable, EditType<MutableStudent>, Identifier<String>,
-    LastModifier {
+public interface Student extends Serializable, EditType<MutableStudent>, Identifier<String>, LastModifier {
   User getUser();
 
   String getFullName();

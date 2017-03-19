@@ -18,8 +18,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   private DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getEmployeeName());
     pBuilder.add("designation", pReadOnly.getDesignation());
@@ -34,17 +33,15 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("permanentAddress", pReadOnly.getPermanentAddress());
     pBuilder.add("mobileNumber", pReadOnly.getMobileNumber());
     pBuilder.add("phoneNumber", pReadOnly.getPhoneNumber());
-    pBuilder.add("emailAddress",
-        pReadOnly.getEmailAddress() == null ? "-" : pReadOnly.getEmailAddress());
+    pBuilder.add("emailAddress", pReadOnly.getEmailAddress() == null ? "-" : pReadOnly.getEmailAddress());
     pBuilder.add("joiningDate", mDateFormat.format(pReadOnly.getJoiningDate()));
-    pBuilder.add(
-        "jobPermanentDate",
-        pReadOnly.getJobPermanentDate() == null ? "-" : mDateFormat.format(pReadOnly
-            .getJobPermanentDate()));
+    pBuilder.add("jobPermanentDate",
+        pReadOnly.getJobPermanentDate() == null ? "-" : mDateFormat.format(pReadOnly.getJobPermanentDate()));
     pBuilder.add("status", pReadOnly.getStatus());
     pBuilder.add("shortName", pReadOnly.getShortName());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw")
-        .path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString())
+            .build().toString());
   }
 
   @Override

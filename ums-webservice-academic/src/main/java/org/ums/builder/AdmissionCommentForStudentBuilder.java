@@ -19,8 +19,8 @@ public class AdmissionCommentForStudentBuilder implements
   private DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionCommentForStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionCommentForStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
 
     if(pReadOnly.getComment() == null || pReadOnly.getComment() == "")
       pBuilder.add("comment", "No Previous Comments");
@@ -31,8 +31,7 @@ public class AdmissionCommentForStudentBuilder implements
   }
 
   @Override
-  public void build(MutableAdmissionCommentForStudent pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionCommentForStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setReceiptId(pJsonObject.getString("receiptId"));

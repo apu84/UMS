@@ -15,8 +15,7 @@ public class AdmissionCommentForStudentCache
 
   private CacheManager<AdmissionCommentForStudent, Integer> mCacheManager;
 
-  public AdmissionCommentForStudentCache(
-      CacheManager<AdmissionCommentForStudent, Integer> pCacheManager) {
+  public AdmissionCommentForStudentCache(CacheManager<AdmissionCommentForStudent, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -26,8 +25,7 @@ public class AdmissionCommentForStudentCache
   }
 
   @Override
-  public int saveComment(
-      MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
+  public int saveComment(MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
     return getManager().saveComment(pMutableAdmissionStudentsCertificateComment);
   }
 

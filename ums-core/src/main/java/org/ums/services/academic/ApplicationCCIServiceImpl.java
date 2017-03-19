@@ -37,13 +37,11 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
   ParameterSettingManager mParameterSettingManager;
 
   @Override
-  public List<PersistentApplicationCCI> validateForAnomalies(
-      List<PersistentApplicationCCI> pApplicationCCIs, List<UGRegistrationResult> results,
-      Student pStudent) {
+  public List<PersistentApplicationCCI> validateForAnomalies(List<PersistentApplicationCCI> pApplicationCCIs,
+      List<UGRegistrationResult> results, Student pStudent) {
     Date date = new Date();
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId("application_cci",
-            pStudent.getSemesterId());
+        mParameterSettingManager.getByParameterAndSemesterId("application_cci", pStudent.getSemesterId());
     Timestamp currentTimestamp = new Timestamp(date.getTime());
     DateFormat startDateFormatter;
     startDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -130,8 +128,7 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
 
       for(PersistentApplicationCCI iteratorApp : pApplicationCCIs) {
         if(examDateWithApplicationMap.get(iteratorApp.getExamDate()).size() > 2) {
-          List<PersistentApplicationCCI> appListInMap =
-              examDateWithApplicationMap.get(iteratorApp.getExamDate());
+          List<PersistentApplicationCCI> appListInMap = examDateWithApplicationMap.get(iteratorApp.getExamDate());
           for(PersistentApplicationCCI iteratorAppListofTheMap : appListInMap) {
 
             boolean foundOccuranceInAppList = false;

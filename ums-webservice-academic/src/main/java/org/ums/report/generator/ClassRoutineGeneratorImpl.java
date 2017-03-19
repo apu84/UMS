@@ -63,8 +63,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   }
 
   @Override
-  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws IOException,
-      DocumentException {
+  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws IOException, DocumentException {
 
   }
 

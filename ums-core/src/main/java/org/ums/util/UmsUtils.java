@@ -82,8 +82,7 @@ public class UmsUtils {
    * @param second new Second
    * @return Modified Date-Time info for the given inputDate
    */
-  public static Date updateTimeInfoOfDate(Date inputDate, int hour, int minute, int second,
-      int milliSecond) {
+  public static Date updateTimeInfoOfDate(Date inputDate, int hour, int minute, int second, int milliSecond) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(inputDate);
     calendar.set(Calendar.HOUR_OF_DAY, hour);

@@ -35,8 +35,7 @@ public class PersistentMaterialContributorDao extends MaterialContributorDaoDeco
   @Override
   public List<MaterialContributor> getAll() {
     String query = SELECT_ALL;
-    return mJdbcTemplate.query(query,
-        new PersistentMaterialContributorDao.MaterialContributorRowMapper());
+    return mJdbcTemplate.query(query, new PersistentMaterialContributorDao.MaterialContributorRowMapper());
   }
 
   class MaterialContributorRowMapper implements RowMapper<MaterialContributor> {

@@ -23,8 +23,7 @@ public class MutableAdmissionStudentResource extends Resource {
   @Path("/taletalkData/semester/{semester-id}/programType/{program-type}")
   public Response saveTaletalkData(@PathParam("semester-id") int pSemesterId,
       @PathParam("program-type") int pProgramType, final JsonObject pJsonObject) throws Exception {
-    return mHelper.postTaletalkData(pJsonObject, pSemesterId, ProgramType.get(pProgramType),
-        mUriInfo);
+    return mHelper.postTaletalkData(pJsonObject, pSemesterId, ProgramType.get(pProgramType), mUriInfo);
   }
 
   @PUT
@@ -41,8 +40,7 @@ public class MutableAdmissionStudentResource extends Resource {
 
   @PUT
   @Path("/departmentSelectionStatus/{department-selection-status}")
-  public JsonObject saveAndGetNextStudent(
-      @PathParam("department-selection-status") int pDepartmentSelectionStatus,
+  public JsonObject saveAndGetNextStudent(@PathParam("department-selection-status") int pDepartmentSelectionStatus,
       final JsonObject pJsonObject, final @Context Request pRequest) throws Exception {
     return mHelper.saveDepartmentSelectionInfoAndRetrieveNextStudent(pJsonObject,
         DepartmentSelectionType.get(pDepartmentSelectionStatus), mUriInfo);

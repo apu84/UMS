@@ -20,9 +20,9 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   private String INSERT_ALL =
       "INSERT INTO SEMESTER_ENROLLMENT(ID, SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED) VALUES"
           + "(?, ?, ?, ?, ?, SYSDATE, ?, " + getLastModifiedSql() + ") ";
-  private String UPDATE_ALL = "UPDATE SEMESTER_ENROLLMENT SET " + "SEMESTER_ID = ?,"
-      + "PROGRAM_ID = ?," + "STUDENT_YEAR = ?," + "STUDENT_SEMESTER = ?," + "ENROLL_DATE = ?,"
-      + "ENROLL_TYPE = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  private String UPDATE_ALL = "UPDATE SEMESTER_ENROLLMENT SET " + "SEMESTER_ID = ?," + "PROGRAM_ID = ?,"
+      + "STUDENT_YEAR = ?," + "STUDENT_SEMESTER = ?," + "ENROLL_DATE = ?," + "ENROLL_TYPE = ?," + "LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   private String DELETE_ALL = "DELETE FROM SEMESTER_ENROLLMENT ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -36,8 +36,7 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   @Override
   public SemesterEnrollment get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new SemesterEnrollmentRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SemesterEnrollmentRowMapper());
   }
 
   @Override
@@ -48,8 +47,8 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   @Override
   public int update(MutableSemesterEnrollment pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getEnrollmentDate(),
+    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
+        pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getEnrollmentDate(),
         pMutable.getType().getValue(), pMutable.getId());
   }
 
@@ -62,21 +61,19 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   @Override
   public Long create(MutableSemesterEnrollment pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate
-        .update(INSERT_ALL, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
-            pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getType().getValue());
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
+        pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getType().getValue());
     return id;
   }
 
   @Override
-  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType,
-      Integer pProgramId, Integer pSemesterId) {
+  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
+      Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE %s AND PROGRAM_ID = ? AND SEMESTER_ID = ?";
     if(pType == SemesterEnrollment.Type.TEMPORARY) {
       query = String.format(query, "(ENROLL_TYPE = ? OR ENROLL_TYPE = ?)");
       return mJdbcTemplate.query(query, new Object[] {SemesterEnrollment.Type.TEMPORARY.getValue(),
-          SemesterEnrollment.Type.PERMANENT.getValue(), pProgramId, pSemesterId},
-          new SemesterEnrollmentRowMapper());
+          SemesterEnrollment.Type.PERMANENT.getValue(), pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
     }
     else {
       query = String.format(query, "ENROLL_TYPE = ?");
@@ -86,17 +83,16 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   }
 
   @Override
-  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
-      Integer pSemesterId, Integer pYear, Integer pAcademicSemester) {
+  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pAcademicSemester) {
     SemesterEnrollment semesterEnrollment;
     String query =
-        SELECT_ALL
-            + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ? AND STUDENT_YEAR = ? "
+        SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ? AND STUDENT_YEAR = ? "
             + "AND STUDENT_SEMESTER = ?";
     try {
       semesterEnrollment =
-          mJdbcTemplate.queryForObject(query, new Object[] {pType.getValue(), pProgramId,
-              pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
+          mJdbcTemplate.queryForObject(query, new Object[] {pType.getValue(), pProgramId, pSemesterId, pYear,
+              pAcademicSemester}, new SemesterEnrollmentRowMapper());
     } catch(EmptyResultDataAccessException em) {
       semesterEnrollment = null;
     }
@@ -106,8 +102,7 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   @Override
   public List<SemesterEnrollment> getEnrollmentStatus(Integer pProgramId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE PROGRAM_ID = ? AND SEMESTER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId},
-        new SemesterEnrollmentRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
   }
 
   class SemesterEnrollmentRowMapper implements RowMapper<SemesterEnrollment> {

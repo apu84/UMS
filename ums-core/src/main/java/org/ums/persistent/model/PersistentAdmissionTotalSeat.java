@@ -40,8 +40,7 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
 
   public PersistentAdmissionTotalSeat() {}
 
-  public PersistentAdmissionTotalSeat(
-      final PersistentAdmissionTotalSeat pPersistentAdmissionTotalSeat) {
+  public PersistentAdmissionTotalSeat(final PersistentAdmissionTotalSeat pPersistentAdmissionTotalSeat) {
     mId = pPersistentAdmissionTotalSeat.getId();
     mSemester = pPersistentAdmissionTotalSeat.getSemester();
     mSemesterId = pPersistentAdmissionTotalSeat.getSemesterId();
@@ -125,8 +124,7 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

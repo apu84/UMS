@@ -12,14 +12,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public class AdditionalRolePermissionsCache
-    extends
+public class AdditionalRolePermissionsCache extends
     ContentCache<AdditionalRolePermissions, MutableAdditionalRolePermissions, Long, AdditionalRolePermissionsManager>
     implements AdditionalRolePermissionsManager {
   private CacheManager<AdditionalRolePermissions, Long> mCacheManager;
 
-  public AdditionalRolePermissionsCache(
-      final CacheManager<AdditionalRolePermissions, Long> pCacheManager) {
+  public AdditionalRolePermissionsCache(final CacheManager<AdditionalRolePermissions, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -34,8 +32,7 @@ public class AdditionalRolePermissionsCache
   }
 
   @Override
-  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId,
-      String pAssignedBy) {
+  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId, String pAssignedBy) {
     return getManager().getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
   }
 
@@ -45,8 +42,7 @@ public class AdditionalRolePermissionsCache
   }
 
   @Override
-  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy,
-      Date pFromDate, Date pToDate) {
+  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
     return getManager().addPermissions(pUserId, pPermissions, pAssignedBy, pFromDate, pToDate);
   }
 

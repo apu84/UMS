@@ -11,9 +11,8 @@ import java.util.List;
 /**
  * Created by My Pc on 7/23/2016.
  */
-public class SubGroupCCICache extends
-    ContentCache<SubGroupCCI, MutableSubGroupCCI, Integer, SubGroupCCIManager> implements
-    SubGroupCCIManager {
+public class SubGroupCCICache extends ContentCache<SubGroupCCI, MutableSubGroupCCI, Integer, SubGroupCCIManager>
+    implements SubGroupCCIManager {
 
   CacheManager<SubGroupCCI, Integer> mCacheManager;
 

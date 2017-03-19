@@ -29,8 +29,7 @@ public class PersistentPublisherDao extends PublisherDaoDecorator {
   @Override
   public Publisher get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentPublisherDao.PublisherRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentPublisherDao.PublisherRowMapper());
   }
 
   @Override

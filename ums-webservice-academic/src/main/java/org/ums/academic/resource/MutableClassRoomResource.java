@@ -22,10 +22,8 @@ public class MutableClassRoomResource extends Resource {
 
   @PUT
   public Response updateSemester(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
-    return mResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest,
-        pIfMatchHeader, pJsonObject);
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE

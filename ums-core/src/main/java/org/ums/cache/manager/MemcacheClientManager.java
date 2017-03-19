@@ -20,8 +20,7 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
 
   private MemcachedClient mObjectCache;
 
-  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort)
-      throws IOException {
+  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort) throws IOException {
     Validate.notNull(pObjectCacheUrl);
     Validate.notNull(pObjectCachePort);
     mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));

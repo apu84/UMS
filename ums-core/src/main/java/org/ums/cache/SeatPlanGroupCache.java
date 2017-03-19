@@ -12,8 +12,7 @@ import java.util.List;
  * Created by Munna on 4/20/2016.
  */
 public class SeatPlanGroupCache extends
-    ContentCache<SeatPlanGroup, MutableSeatPlanGroup, Integer, SeatPlanGroupManager> implements
-    SeatPlanGroupManager {
+    ContentCache<SeatPlanGroup, MutableSeatPlanGroup, Integer, SeatPlanGroupManager> implements SeatPlanGroupManager {
 
   CacheManager<SeatPlanGroup, Integer> mCacheManager;
 

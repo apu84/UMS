@@ -15,15 +15,15 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ParameterSettingBuilder implements Builder<ParameterSetting, MutableParameterSetting> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("parameterId", pReadOnly.getParameter().getId());
     pBuilder.add("startDate", pReadOnly.getStartDate());
     pBuilder.add("endDate", pReadOnly.getEndDate());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("parameterSetting")
-        .path(String.valueOf(pReadOnly.getId())).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("parameterSetting").path(String.valueOf(pReadOnly.getId()))
+            .build().toString());
   }
 
   @Override

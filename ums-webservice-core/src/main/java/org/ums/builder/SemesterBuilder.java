@@ -40,8 +40,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
         .path(String.valueOf(pSemester.getId())).build().toString());
   }
 
-  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject, final LocalCache pLocalCache) {
     int id = Integer.parseInt(pJsonObject.getString("id"));
     String name = pJsonObject.getString("name");
     String startDate = pJsonObject.getString("startDate");
