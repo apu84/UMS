@@ -10,8 +10,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
  * Created by Ifti on 30-Jan-17.
  */
 
-public interface MutableAuthor extends Author, Editable<Integer>, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableAuthor extends Author, Editable<Integer>, MutableLastModifier, MutableIdentifier<Integer> {
   void setFirstName(final String pFirstName);
 
   void setMiddleName(final String pMiddleName);

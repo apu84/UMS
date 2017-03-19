@@ -9,8 +9,7 @@ import org.ums.domain.model.immutable.SpStudent;
 /**
  * Created by My Pc on 4/27/2016.
  */
-public interface MutableSpStudent extends SpStudent, Editable<String>, MutableLastModifier,
-    MutableIdentifier<String> {
+public interface MutableSpStudent extends SpStudent, Editable<String>, MutableLastModifier, MutableIdentifier<String> {
   void setProgram(final Program pProgram);
 
   void setSemester(final Semester pSemester);

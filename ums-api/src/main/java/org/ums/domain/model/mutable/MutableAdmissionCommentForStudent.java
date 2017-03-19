@@ -4,8 +4,8 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.AdmissionCommentForStudent;
 
-public interface MutableAdmissionCommentForStudent extends AdmissionCommentForStudent,
-    Editable<Integer>, MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableAdmissionCommentForStudent extends AdmissionCommentForStudent, Editable<Integer>,
+    MutableIdentifier<Integer>, MutableLastModifier {
 
   void setSemesterId(final int pSemesterId);
 

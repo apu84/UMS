@@ -1,14 +1,12 @@
 package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Editable;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.*;
 
 import java.util.Date;
 
-public interface MutableStudent extends Student, Editable<String>, MutableIdentifier<String>,
-    MutableLastModifier {
+public interface MutableStudent extends Student, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
   void setUser(final User pUser);
 
   void setFullName(final String pFullName);

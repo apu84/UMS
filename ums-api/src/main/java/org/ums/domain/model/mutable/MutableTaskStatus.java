@@ -6,8 +6,7 @@ import org.ums.domain.model.immutable.TaskStatus;
 
 import java.util.Date;
 
-public interface MutableTaskStatus extends TaskStatus, Editable<String>, MutableIdentifier<String>,
-    MutableLastModifier {
+public interface MutableTaskStatus extends TaskStatus, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
   void setStatus(Status pStatus);
 
   void setProgressDescription(String pProgressDescription);

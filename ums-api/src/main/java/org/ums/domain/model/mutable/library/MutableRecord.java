@@ -17,8 +17,7 @@ import java.util.List;
 /**
  * Created by Ifti on 16-Feb-17.
  */
-public interface MutableRecord extends Record, Editable<Long>, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableRecord extends Record, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
   void setMfn(Long pMfn);
 

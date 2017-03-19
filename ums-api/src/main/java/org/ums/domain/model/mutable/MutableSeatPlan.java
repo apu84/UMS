@@ -1,15 +1,16 @@
 package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Editable;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.SeatPlan;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
 
 /**
  * Created by My Pc on 5/8/2016.
  */
-public interface MutableSeatPlan extends SeatPlan, Editable<Long>, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableSeatPlan extends SeatPlan, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
   void setClassRoom(final ClassRoom pClassRoom);
 
   void setStudentId(final String pStudentId);

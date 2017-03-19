@@ -6,8 +6,8 @@ import org.ums.domain.model.immutable.BearerAccessToken;
 
 import java.util.Date;
 
-public interface MutableBearerAccessToken extends Editable<String>, BearerAccessToken,
-    MutableIdentifier<String>, MutableLastModifier {
+public interface MutableBearerAccessToken extends Editable<String>, BearerAccessToken, MutableIdentifier<String>,
+    MutableLastModifier {
   void setUserId(final String pUserId);
 
   void setLastAccessedTime(final Date pDate);

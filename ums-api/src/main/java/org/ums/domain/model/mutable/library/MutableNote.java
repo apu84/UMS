@@ -8,8 +8,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public interface MutableNote extends Note, Editable<Integer>, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableNote extends Note, Editable<Integer>, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setMfn(String pMfn);
 

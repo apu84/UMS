@@ -9,8 +9,8 @@ import org.ums.enums.ExamType;
 /**
  * Created by My Pc on 8/2/2016.
  */
-public interface MutableSeatPlanPublish extends SeatPlanPublish, Editable<Integer>,
-    MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableSeatPlanPublish extends SeatPlanPublish, Editable<Integer>, MutableLastModifier,
+    MutableIdentifier<Integer> {
   void setSemester(Semester pSemester);
 
   void setSemesterId(Integer pSemesterId);

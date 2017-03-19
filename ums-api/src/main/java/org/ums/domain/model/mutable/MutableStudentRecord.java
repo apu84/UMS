@@ -7,8 +7,8 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 
-public interface MutableStudentRecord extends StudentRecord, Editable<Long>,
-    MutableIdentifier<Long>, MutableLastModifier {
+public interface MutableStudentRecord extends StudentRecord, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
   void setStudentId(final String pStudentId);
 
   void setStudent(final Student pStudent);

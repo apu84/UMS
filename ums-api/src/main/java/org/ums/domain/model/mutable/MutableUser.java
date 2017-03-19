@@ -9,8 +9,7 @@ import org.ums.domain.model.immutable.User;
 import java.util.Date;
 import java.util.List;
 
-public interface MutableUser extends User, Editable<String>, MutableIdentifier<String>,
-    MutableLastModifier {
+public interface MutableUser extends User, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
   void setPassword(final char[] pPassword);
 
   void setEmployeeId(final String pEmployeeId);

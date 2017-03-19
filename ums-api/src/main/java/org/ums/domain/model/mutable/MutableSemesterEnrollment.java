@@ -1,7 +1,6 @@
 package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Editable;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
@@ -9,8 +8,8 @@ import org.ums.domain.model.immutable.SemesterEnrollment;
 
 import java.util.Date;
 
-public interface MutableSemesterEnrollment extends SemesterEnrollment, Editable<Long>,
-    MutableIdentifier<Long>, MutableLastModifier {
+public interface MutableSemesterEnrollment extends SemesterEnrollment, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
   void setSemesterId(final Integer pSemesterId);
 
   void setSemester(final Semester pSemester);

@@ -10,8 +10,7 @@ import org.ums.enums.library.ItemStatus;
 /**
  * Created by Ifti on 04-Mar-17.
  */
-public interface MutableItem extends Item, Editable<Long>, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
   void setMfn(Long pMfn);
 

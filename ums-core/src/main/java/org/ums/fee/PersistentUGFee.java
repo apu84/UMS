@@ -3,27 +3,21 @@ package org.ums.fee;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Faculty;
-import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.FacultyManager;
-import org.ums.manager.ProgramTypeManager;
 import org.ums.manager.SemesterManager;
 
-public class PersistentFee implements MutableFee {
-  private static FeeManager sFeeManager;
+public class PersistentUGFee implements MutableUGFee {
+  private static UGFeeManager sUGFeeManager;
   private static FeeCategoryManager sFeeCategoryManager;
   private static SemesterManager sSemesterManager;
-  private static ProgramTypeManager sProgramTypeManager;
   private static FacultyManager sFacultyManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sFeeManager = applicationContext.getBean("feeManager", FeeManager.class);
-    sFeeCategoryManager =
-        applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
+    sUGFeeManager = applicationContext.getBean("feeManager", UGFeeManager.class);
+    sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sProgramTypeManager =
-        applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
     sFacultyManager = applicationContext.getBean("facultyManager", FacultyManager.class);
   }
 
@@ -34,15 +28,12 @@ public class PersistentFee implements MutableFee {
   private Semester mSemester;
   private Integer mFacultyId;
   private Faculty mFaculty;
-  private Integer mProgramTypeId;
-  private ProgramType mProgramType;
-  private Fee.ProgramCategory mProgramCategory;
   private Double mAmount;
   private String mLastModified;
 
-  PersistentFee() {}
+  PersistentUGFee() {}
 
-  PersistentFee(final PersistentFee pPersistentFee) {
+  PersistentUGFee(final PersistentUGFee pPersistentFee) {
     setId(pPersistentFee.getId());
     setFeeCategoryId(pPersistentFee.getFeeCategoryId());
     setFeeCategory(pPersistentFee.getFeeCategory());
@@ -50,25 +41,22 @@ public class PersistentFee implements MutableFee {
     setSemester(pPersistentFee.getSemester());
     setFacultyId(pPersistentFee.getFacultyId());
     setFaculty(pPersistentFee.getFaculty());
-    setProgramTypeId(pPersistentFee.getProgramTypeId());
-    setProgramType(pPersistentFee.getProgramType());
-    setProgramCategory(pPersistentFee.getProgramCategory());
     setAmount(pPersistentFee.getAmount());
   }
 
   @Override
   public Long create() {
-    return sFeeManager.create(this);
+    return sUGFeeManager.create(this);
   }
 
   @Override
   public void update() {
-    sFeeManager.update(this);
+    sUGFeeManager.update(this);
   }
 
   @Override
-  public MutableFee edit() {
-    return new PersistentFee(this);
+  public MutableUGFee edit() {
+    return new PersistentUGFee(this);
   }
 
   @Override
@@ -93,7 +81,7 @@ public class PersistentFee implements MutableFee {
 
   @Override
   public void delete() {
-    sFeeManager.delete(this);
+    sUGFeeManager.delete(this);
   }
 
   @Override
@@ -118,8 +106,7 @@ public class PersistentFee implements MutableFee {
 
   @Override
   public FeeCategory getFeeCategory() {
-    return mFeeCategory == null ? sFeeCategoryManager.get(mFeeCategoryId) : sFeeCategoryManager
-        .validate(mFeeCategory);
+    return mFeeCategory == null ? sFeeCategoryManager.get(mFeeCategoryId) : sFeeCategoryManager.validate(mFeeCategory);
   }
 
   @Override
@@ -139,8 +126,7 @@ public class PersistentFee implements MutableFee {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
@@ -156,37 +142,6 @@ public class PersistentFee implements MutableFee {
   @Override
   public Faculty getFaculty() {
     return mFaculty == null ? sFacultyManager.get(mFacultyId) : sFacultyManager.validate(mFaculty);
-  }
-
-  @Override
-  public void setProgramTypeId(Integer pProgramTypeId) {
-    mProgramTypeId = pProgramTypeId;
-  }
-
-  @Override
-  public Integer getProgramTypeId() {
-    return mProgramTypeId;
-  }
-
-  @Override
-  public ProgramType getProgramType() {
-    return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : sProgramTypeManager
-        .validate(mProgramType);
-  }
-
-  @Override
-  public void setProgramType(ProgramType pProgramType) {
-    mProgramType = pProgramType;
-  }
-
-  @Override
-  public ProgramCategory getProgramCategory() {
-    return mProgramCategory;
-  }
-
-  @Override
-  public void setProgramCategory(ProgramCategory pProgramCategory) {
-    mProgramCategory = pProgramCategory;
   }
 
   @Override
