@@ -321,6 +321,42 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return pQuery;
   }
 
+  @Override
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, QuotaType pQuotaType,
+      int pMeritSerialNo) {
+    String quota = getQuotaForDb(pQuotaType);
+    String query = SELECT_ONE + " WHERE  SEMESTER_ID=? AND QUOTA=? AND MERIT_SL_NO=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, quota, pMeritSerialNo},
+        new AdmissionStudentRowMapper());
+  }
+
+  private String getQuotaForDb(QuotaType pQuotaType) {
+    String quota = "";
+    if(pQuotaType == QuotaType.GENERAL) {
+      quota = "GL";
+    }
+    else if(pQuotaType == QuotaType.FREEDOM_FIGHTER) {
+      quota = "FF";
+    }
+    else if(pQuotaType == QuotaType.REMOTE_AREA) {
+      quota = "RA";
+    }
+    else {
+      quota = "GCE";
+    }
+    return quota;
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType,
+      int fromMeritSerialNumber, int toMeritSerialNumber) {
+    String quota = getQuotaForDb(pQuotaType);
+    String query =
+        SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
+        toMeritSerialNumber}, new AdmissionStudentRowMapper());
+  }
+
   // kawsurilu
 
   public int setVerificationStatusAndUndertakenDate(MutableAdmissionStudent pStudent) {
