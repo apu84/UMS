@@ -78,6 +78,25 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   @GET
+  @Path("/semester/{semester-id}/quota/{quota-type}/meritSerialNo/{merit-sl-no}")
+  public JsonObject getStudentByMeritSerialNo(@PathParam("semester-id") int pSemesterId,
+      @PathParam("quota-type") int pQuotaType, @PathParam("merit-sl-no") int pMeritSerialNo,
+      final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentByMeritSerialNo(pSemesterId, QuotaType.get(pQuotaType),
+        pMeritSerialNo, mUriInfo);
+  }
+
+  @GET
+  @Path("/semester/{semester-id}/quota/{quota-type}/fromMeritSerialNumber/{from-merit-sl-no}/toMeritSerialNumber/{to-merit-sl-no}")
+  public JsonObject getStudentsByRange(@PathParam("semester-id") int pSemesterId,
+      @PathParam("quota-type") int pQuotaType,
+      @PathParam("from-merit-sl-no") int pFromMeritSerialNo,
+      @PathParam("to-merit-sl-no") int pToMeritSerialNo, final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentsByMeritRange(pSemesterId, QuotaType.get(pQuotaType),
+        pFromMeritSerialNo, pToMeritSerialNo, mUriInfo);
+  }
+
+  @GET
   @Path("/migrationList/semester/{semester-id}")
   public JsonObject getMigrationList(@PathParam("semester-id") int pSemesterId,
       final @Context Request pRequest) {

@@ -67,8 +67,46 @@ module ums{
       return defer.promise;
     }
 
+
+    public fetchAdmissionStudentByMeritSerialNo(semesterId:number, quotaType:number, meritSerialNo:number):ng.IPromise<any>{
+      var url="academic/admission/semester/"+semesterId+"/quota/"+quotaType+"/meritSerialNo/"+meritSerialNo;
+      var defer = this.$q.defer();
+
+      if(meritSerialNo!=0){
+        this.httpClient.get(url, this.appConstants.mimeTypeJson,
+            (json:any, etag:string)=>{
+              var admissionStudent:any = json.entries;
+              console.log(admissionStudent);
+              defer.resolve(admissionStudent[0]);
+            },
+            (response:ng.IHttpPromiseCallbackArg<any>)=>{
+              console.error(response);
+            });
+      }
+
+
+      return defer.promise;
+    }
+
     public fetchTaletalkDataWithMeritType(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
       var url="academic/admission/taletalkData/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+
+      return defer.promise;
+    }
+
+    public fetchStudentsByMeritRange(semesterId:number, quotaType:number, fromMeritSerialNumber: number, toMeritSerialNumber:number):ng.IPromise<any>{
+      var url="academic/admission/semester/"+semesterId+"/quota/"+quotaType+"/fromMeritSerialNumber/"+fromMeritSerialNumber+"/toMeritSerialNumber/"+toMeritSerialNumber;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,

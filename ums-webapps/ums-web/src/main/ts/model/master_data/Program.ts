@@ -8,5 +8,6 @@ module ums{
     shortName:string;
     longName:string;
     programType:number;
+    name:string;
   }
 }
