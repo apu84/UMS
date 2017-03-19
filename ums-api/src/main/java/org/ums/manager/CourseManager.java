@@ -6,38 +6,38 @@ import org.ums.domain.model.mutable.MutableCourse;
 import java.util.List;
 
 public interface CourseManager extends ContentManager<Course, MutableCourse, String> {
-  public List<Course> getBySyllabus(final String pSyllabusId);
+  List<Course> getBySyllabus(final String pSyllabusId);
 
-  public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+  List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
       final String pOrder);
 
-  public List<Course> getBySemesterProgram(final String pSemesterId, final String pProgramId);
+  List<Course> getBySemesterProgram(final String pSemesterId, final String pProgramId);
 
-  public List<Course> getByYearSemester(final String pSemesterId, final String pProgramId,
-      final int year, final int semester);
+  List<Course> getByYearSemester(final String pSemesterId, final String pProgramId, final int year,
+      final int semester);
 
-  public List<Course> getOptionalCourseList(final String pSyllabusId, final Integer pYear,
+  List<Course> getOptionalCourseList(final String pSyllabusId, final Integer pYear,
       final Integer pSemester);
 
-  public List<Course> getOfferedCourseList(final Integer pSemesterId, final Integer pProgramId,
+  List<Course> getOfferedCourseList(final Integer pSemesterId, final Integer pProgramId,
       final Integer pYear, final Integer pSemester);
 
-  public List<Course> getCallForApplicationCourseList(final Integer pSemesterId,
-      final Integer pProgramId, final Integer pYear, final Integer pSemester);
-
-  public List<Course> getApprovedCourseList(final Integer pSemesterId, final Integer pProgramId,
+  List<Course> getCallForApplicationCourseList(final Integer pSemesterId, final Integer pProgramId,
       final Integer pYear, final Integer pSemester);
 
-  public List<Course> getApprovedCallForApplicationCourseList(final Integer pSemesterId,
+  List<Course> getApprovedCourseList(final Integer pSemesterId, final Integer pProgramId,
+      final Integer pYear, final Integer pSemester);
+
+  List<Course> getApprovedCallForApplicationCourseList(final Integer pSemesterId,
       final Integer pProgramId, final Integer pYear, final Integer pSemester);
 
-  public List<Course> getMandatoryCourses(final String pSyllabusId, final Integer pYear,
+  List<Course> getMandatoryCourses(final String pSyllabusId, final Integer pYear,
       final Integer pSemester);
 
-  public List<Course> getMandatoryTheoryCourses(final String pSyllabusId, final Integer pYear,
+  List<Course> getMandatoryTheoryCourses(final String pSyllabusId, final Integer pYear,
       final Integer pSemester);
 
-  public List<Course> getMandatorySesssionalCourses(final String pSyllabusId, final Integer pYear,
+  List<Course> getMandatorySesssionalCourses(final String pSyllabusId, final Integer pYear,
       final Integer pSemester);
 
   Course getByCourseNo(final String pCourseName, final String pSyllabusId);

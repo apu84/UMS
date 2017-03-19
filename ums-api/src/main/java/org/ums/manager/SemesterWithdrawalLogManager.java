@@ -8,5 +8,5 @@ import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
  */
 public interface SemesterWithdrawalLogManager extends
     ContentManager<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Long> {
-  public SemesterWithdrawalLog getBySemesterWithdrawalId(int pSemesterWithdrawalId);
+  SemesterWithdrawalLog getBySemesterWithdrawalId(int pSemesterWithdrawalId);
 }

@@ -8,18 +8,17 @@ import java.util.List;
 
 public interface SemesterWithDrawalManager extends
     ContentManager<SemesterWithdrawal, MutableSemesterWithdrawal, Long> {
-  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
-      int semester);
+  SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year, int semester);
 
-  public List<SemesterWithdrawal> getByDeptForEmployee(String deptId);
+  List<SemesterWithdrawal> getByDeptForEmployee(String deptId);
 
-  public List<SemesterWithdrawal> getSemesterWithdrawalForHead(String teacherId);
+  List<SemesterWithdrawal> getSemesterWithdrawalForHead(String teacherId);
 
-  public List<SemesterWithdrawal> getSemesterWithdrawalForAAO(String employeeId);
+  List<SemesterWithdrawal> getSemesterWithdrawalForAAO(String employeeId);
 
-  public List<SemesterWithdrawal> getSemesterWithdrawalForVC(String employeeId);
+  List<SemesterWithdrawal> getSemesterWithdrawalForVC(String employeeId);
 
-  public List<SemesterWithdrawal> getSemesterWithdrawalForRegistrar(String employeeId);
+  List<SemesterWithdrawal> getSemesterWithdrawalForRegistrar(String employeeId);
 
-  public List<SemesterWithdrawal> getSemesterWithdrawalForDeputyRegistrar(String employeeId);
+  List<SemesterWithdrawal> getSemesterWithdrawalForDeputyRegistrar(String employeeId);
 }

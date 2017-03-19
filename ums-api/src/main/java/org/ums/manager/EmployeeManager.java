@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String> {
 
-  public boolean existenceByEmail(final String pEmailAddress);
+  boolean existenceByEmail(final String pEmailAddress);
 
-  public Employee getByEmail(final String pEmailAddress);
+  Employee getByEmail(final String pEmailAddress);
 
-  public List<Employee> getByDesignation(final String pDesignationId);
+  List<Employee> getByDesignation(final String pDesignationId);
 
-  public List<Employee> getActiveTeachersOfDept(String deptId);
+  List<Employee> getActiveTeachersOfDept(String deptId);
 }

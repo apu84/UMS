@@ -9,5 +9,5 @@ import java.util.List;
  * Created by Ifti on 28-Dec-15.
  */
 public interface SyllabusManager extends ContentManager<Syllabus, MutableSyllabus, String> {
-  public List<Syllabus> getSyllabusList(final Integer pProgramId);
+  List<Syllabus> getSyllabusList(final Integer pProgramId);
 }

@@ -15,66 +15,66 @@ import java.util.Map;
  * Created by ikh on 4/30/2016.
  */
 public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamGrade, Object> {
-  public List<GradeChartDataDto> getChartData(int semesterId, String courseId, ExamType examType,
+  List<GradeChartDataDto> getChartData(int semesterId, String courseId, ExamType examType,
       CourseType courseType);
 
-  public List<StudentGradeDto> getAllGrades(int semesterId, String courseId, ExamType examType,
+  List<StudentGradeDto> getAllGrades(int semesterId, String courseId, ExamType examType,
       CourseType courseType);
 
-  public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId, String courseId,
+  MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId, String courseId,
       ExamType examType);
 
-  public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId,
-      Integer pExamType, Integer pProgramId, Integer year, Integer semester, String teacherId,
-      String deptId, String userRole, Integer status);
+  List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId, Integer pExamType,
+      Integer pProgramId, Integer year, Integer semester, String teacherId, String deptId,
+      String userRole, Integer status);
 
-  public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> gradeList);
+  boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> gradeList);
 
-  public boolean insertGradeLog(String userId, String userRole, MarksSubmissionStatus actualStatus,
+  boolean insertGradeLog(String userId, String userRole, MarksSubmissionStatus actualStatus,
       CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> gradeList);
 
-  public int insertMarksSubmissionStatusLog(String userId, String userRole,
+  int insertMarksSubmissionStatusLog(String userId, String userRole,
       MarksSubmissionStatus actualStatus, CourseMarksSubmissionStatus status);
 
-  public boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus,
+  boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList);
 
-  public boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
+  boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList);
 
-  public boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
+  boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList);
 
-  public int approveRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus);
+  int approveRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus);
 
-  public int rejectRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus);
+  int rejectRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus);
 
-  public List<String> getRoleForTeacher(String pTeacherId, int pSemesterId, String pCourseId);
+  List<String> getRoleForTeacher(String pTeacherId, int pSemesterId, String pCourseId);
 
-  public List<String> getRoleForHead(String pUserId);
+  List<String> getRoleForHead(String pUserId);
 
-  public List<String> getRoleForCoE(String pUserId);
+  List<String> getRoleForCoE(String pUserId);
 
-  public List<String> getRoleForVC(String pUserId);
+  List<String> getRoleForVC(String pUserId);
 
-  public int checkSize(Integer pSemesterId, ExamType pExamType, String pExamDate);
+  int checkSize(Integer pSemesterId, ExamType pExamType, String pExamDate);
 
-  public int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate);
+  int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate);
 
-  public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
+  List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
       ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType);
 
-  public int getTotalStudentCount(MarksSubmissionStatus actualStatus);
+  int getTotalStudentCount(MarksSubmissionStatus actualStatus);
 
-  public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId,
-      String pCourseId, Integer pExamType);
+  List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,
+      Integer pExamType);
 
-  public List<MarksLogDto> getMarksLogs(Integer pSemesterId, String pCourseId, ExamType pExamType,
+  List<MarksLogDto> getMarksLogs(Integer pSemesterId, String pCourseId, ExamType pExamType,
       String pStudentId, CourseType pCourseType);
 
-  public Map getUserRoleList(Integer pSemesterId, String pCourseId);
+  Map getUserRoleList(Integer pSemesterId, String pCourseId);
 
-  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer getMarksSubmissionStat,
+  List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer getMarksSubmissionStat,
       Integer pSemesterId, String pDeptId, Integer pExamType, String pStatus) throws Exception;
 
 }

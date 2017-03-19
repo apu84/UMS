@@ -7,24 +7,23 @@ import org.ums.enums.StudentStatus;
 import java.util.List;
 
 public interface StudentManager extends ContentManager<Student, MutableStudent, String> {
-  public List<Student> getStudentListFromStudentsString(final String pStudents);
+  List<Student> getStudentListFromStudentsString(final String pStudents);
 
-  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
-      int pSemesterId);
+  List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId);
 
-  public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate);
+  List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate);
 
-  public List<Student> getActiveStudents();
+  List<Student> getActiveStudents();
 
-  public List<Student> getRegisteredStudents(int pSemesterId, int pExamType);
+  List<Student> getRegisteredStudents(int pSemesterId, int pExamType);
 
-  public List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType);
+  List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType);
 
-  public int updateStudentsAdviser(List<MutableStudent> pStudents);
+  int updateStudentsAdviser(List<MutableStudent> pStudents);
 
-  public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId);
+  int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId);
 
-  public List<Student> getActiveStudentsByAdviser(String pTeacherId);
+  List<Student> getActiveStudentsByAdviser(String pTeacherId);
 
-  public int getSize(final int pSemesterId, final int pProgramId);
+  int getSize(final int pSemesterId, final int pProgramId);
 }

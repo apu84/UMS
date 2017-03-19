@@ -12,12 +12,12 @@ import java.util.List;
  */
 public interface SemesterSyllabusMapManager extends
     ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
-  public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,
+  List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,
       final Integer pSemesterId);
 
-  public SemesterSyllabusMap get(final Integer pMapId);
+  SemesterSyllabusMap get(final Integer pMapId);
 
-  public void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto);
+  void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto);
 
   List<Syllabus> getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId);
 

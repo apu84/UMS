@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface ParameterSettingManager extends
     ContentManager<ParameterSetting, MutableParameterSetting, Long> {
-  public List<ParameterSetting> getBySemester(int semesterId);
+  List<ParameterSetting> getBySemester(int semesterId);
 
-  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId);
+  ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId);
 
-  public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId);
+  ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId);
 }
