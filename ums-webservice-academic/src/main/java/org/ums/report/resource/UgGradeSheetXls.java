@@ -16,6 +16,9 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,15 +41,26 @@ public class UgGradeSheetXls extends Resource {
       final @PathParam("course-id") String pCourseId, final @PathParam("exam-type") Integer pExamTypeId,
       final @PathParam("course-type") Integer pCourseType, final @PathParam("role") String pRequestedRole,
       final @PathParam("total-part") String pTotalPart) {
+    NumberFormat nf = new DecimalFormat("##.#");
     List<StudentGradeDto> gradeList =
         mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId), CourseType.get(pCourseType));
+    List<StudentGradeDto> modifiedGradeList = new ArrayList<>();
+    for(StudentGradeDto gradeDto : gradeList) {
+      if(gradeDto.getPartAAddiInfo() == null) {
+        gradeDto.setPartAAddiInfo(String.valueOf(nf.format(gradeDto.getPartA())));
+      }
+      else if(gradeDto.getPartBAddiInfo() == null) {
+        gradeDto.setPartBAddiInfo(String.valueOf(nf.format(gradeDto.getPartB())));
+      }
+      modifiedGradeList.add(gradeDto);
+    }
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
           InputStream a =
               UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"
                   + CourseType.get(pCourseType).getLabel() + "_" + pTotalPart + "Part.xls");
-          xlsGenerator.build(gradeList, output, a);
+          xlsGenerator.build(modifiedGradeList, output, a);
         } catch(Exception e) {
           throw new WebApplicationException(e);
         }
