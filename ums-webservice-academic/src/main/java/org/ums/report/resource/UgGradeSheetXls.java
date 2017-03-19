@@ -34,16 +34,12 @@ public class UgGradeSheetXls extends Resource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}/role/{role}/totalpart/{total-part}")
-  public StreamingOutput get(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId,
-      final @PathParam("exam-type") Integer pExamTypeId,
-      final @PathParam("course-type") Integer pCourseType,
-      final @PathParam("role") String pRequestedRole,
+  public StreamingOutput get(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("course-id") String pCourseId, final @PathParam("exam-type") Integer pExamTypeId,
+      final @PathParam("course-type") Integer pCourseType, final @PathParam("role") String pRequestedRole,
       final @PathParam("total-part") String pTotalPart) {
     List<StudentGradeDto> gradeList =
-        mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
-            CourseType.get(pCourseType));
+        mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId), CourseType.get(pCourseType));
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {

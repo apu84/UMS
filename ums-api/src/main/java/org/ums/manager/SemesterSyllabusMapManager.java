@@ -12,8 +12,7 @@ import java.util.List;
  */
 public interface SemesterSyllabusMapManager extends
     ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
-  List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,
-      final Integer pSemesterId);
+  List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId, final Integer pSemesterId);
 
   SemesterSyllabusMap get(final Integer pMapId);
 
@@ -21,6 +20,6 @@ public interface SemesterSyllabusMapManager extends
 
   List<Syllabus> getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId);
 
-  Syllabus getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId,
-      final Integer pYear, final Integer pSemester);
+  Syllabus getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+      final Integer pSemester);
 }

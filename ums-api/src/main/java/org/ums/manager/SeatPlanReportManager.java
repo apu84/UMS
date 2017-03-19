@@ -10,16 +10,13 @@ import java.util.List;
 /**
  * Created by My Pc on 20-Aug-16.
  */
-public interface SeatPlanReportManager extends
-    ContentManager<SeatPlanReport, MutableSeatPlanReport, Object> {
-  List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId, Integer pExamType,
-      String pExamDate);
+public interface SeatPlanReportManager extends ContentManager<SeatPlanReport, MutableSeatPlanReport, Object> {
+  List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId, Integer pExamType, String pExamDate);
 
-  List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType,
-      String pExamDate);
+  List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType, String pExamDate);
 
-  List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
-      String pExamDate, int pRoomId);
+  List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType, String pExamDate,
+      int pRoomId);
 
   List<SeatPlanReport> getSeatPlanDataForSittingArrangement(int pSemesterId, ExamType pExamType);
 

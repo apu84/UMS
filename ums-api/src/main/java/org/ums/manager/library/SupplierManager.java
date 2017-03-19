@@ -13,8 +13,7 @@ import java.util.List;
  * Created by Ifti on 04-Feb-17.
  */
 public interface SupplierManager extends ContentManager<Supplier, MutableSupplier, Long> {
-  List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder);
+  List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder);
 
   int getTotalForPagination();
 }

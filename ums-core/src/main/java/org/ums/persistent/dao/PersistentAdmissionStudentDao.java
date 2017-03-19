@@ -300,8 +300,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   }
 
   @Override
-  public AdmissionStudent getAdmissionStudent(int pSemesterId, QuotaType pQuotaType,
-      int pMeritSerialNo) {
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, QuotaType pQuotaType, int pMeritSerialNo) {
     String quota = getQuotaForDb(pQuotaType);
     String query = SELECT_ONE + " WHERE  SEMESTER_ID=? AND QUOTA=? AND MERIT_SL_NO=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, quota, pMeritSerialNo},
@@ -326,13 +325,12 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType,
-      int fromMeritSerialNumber, int toMeritSerialNumber) {
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, int fromMeritSerialNumber,
+      int toMeritSerialNumber) {
     String quota = getQuotaForDb(pQuotaType);
-    String query =
-        SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=?";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
-        toMeritSerialNumber}, new AdmissionStudentRowMapper());
+    String query = SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber, toMeritSerialNumber},
+        new AdmissionStudentRowMapper());
   }
 
   // kawsurilu

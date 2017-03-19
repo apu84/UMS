@@ -6,8 +6,7 @@ import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
 import javax.ws.rs.core.Context;
 import java.util.List;
 
-public interface SemesterWithDrawalManager extends
-    ContentManager<SemesterWithdrawal, MutableSemesterWithdrawal, Long> {
+public interface SemesterWithDrawalManager extends ContentManager<SemesterWithdrawal, MutableSemesterWithdrawal, Long> {
   SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year, int semester);
 
   List<SemesterWithdrawal> getByDeptForEmployee(String deptId);

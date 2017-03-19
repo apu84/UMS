@@ -640,8 +640,7 @@ public class UMSContext {
   @Bean
   SupplierManager supplierManager() {
     SupplierCache supplierCache = new SupplierCache(mCacheFactory.getCacheManager());
-    supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate(),
-        mIdGenerator));
+    supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return supplierCache;
   }
 

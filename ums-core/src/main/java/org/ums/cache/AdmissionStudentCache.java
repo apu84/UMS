@@ -125,15 +125,13 @@ public class AdmissionStudentCache extends
   }
 
   @Override
-  public AdmissionStudent getAdmissionStudent(int pSemesterId, QuotaType pQuotaType,
-      int pMeritSerialNo) {
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, QuotaType pQuotaType, int pMeritSerialNo) {
     return getManager().getAdmissionStudent(pSemesterId, pQuotaType, pMeritSerialNo);
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType,
-      int fromMeritSerialNumber, int toMeritSerialNumber) {
-    return getManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNumber,
-        toMeritSerialNumber);
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, int fromMeritSerialNumber,
+      int toMeritSerialNumber) {
+    return getManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNumber, toMeritSerialNumber);
   }
 }

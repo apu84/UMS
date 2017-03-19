@@ -19,8 +19,8 @@ public interface AdmissionStudentManager extends ContentManager<AdmissionStudent
   List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType, String unit,
       ProgramType pProgramType);
 
-  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
-      int fromMeritSerialNumber, int toMeritSerialNumber);
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType, int fromMeritSerialNumber,
+      int toMeritSerialNumber);
 
   int saveTaletalkData(final List<MutableAdmissionStudent> students);
 
@@ -35,8 +35,7 @@ public interface AdmissionStudentManager extends ContentManager<AdmissionStudent
 
   AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType, String pReceiptId);
 
-  AdmissionStudent getAdmissionStudent(final int pSemesterId, QuotaType pQuotaType,
-      int pMeritSerialNo);
+  AdmissionStudent getAdmissionStudent(final int pSemesterId, QuotaType pQuotaType, int pMeritSerialNo);
 
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 

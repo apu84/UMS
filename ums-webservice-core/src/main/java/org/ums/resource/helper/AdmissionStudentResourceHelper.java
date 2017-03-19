@@ -36,11 +36,9 @@ import java.util.stream.Collectors;
  * Created by Monjur-E-Morshed on 17-Dec-16.
  */
 @Component
-public class AdmissionStudentResourceHelper extends
-    ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
+public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
 
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(AdmissionStudentResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(AdmissionStudentResourceHelper.class);
 
   @Autowired
   AdmissionStudentManager mManager;
@@ -263,19 +261,16 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getAdmissionStudentByMeritSerialNo(final int pSemesterId,
-      final QuotaType pQuotaType, final int pMeritSerialNo, final UriInfo pUriInfo) {
-    AdmissionStudent student =
-        getContentManager().getAdmissionStudent(pSemesterId, pQuotaType, pMeritSerialNo);
+  public JsonObject getAdmissionStudentByMeritSerialNo(final int pSemesterId, final QuotaType pQuotaType,
+      final int pMeritSerialNo, final UriInfo pUriInfo) {
+    AdmissionStudent student = getContentManager().getAdmissionStudent(pSemesterId, pQuotaType, pMeritSerialNo);
     return getAdmissionStudentJson(pUriInfo, student);
   }
 
-  public JsonObject getAdmissionStudentsByMeritRange(final int pSemesterId,
-      final QuotaType pQuotaType, final int fromMeritSerialNo, final int toMeritSerialNo,
-      final UriInfo pUriInfo) {
+  public JsonObject getAdmissionStudentsByMeritRange(final int pSemesterId, final QuotaType pQuotaType,
+      final int fromMeritSerialNo, final int toMeritSerialNo, final UriInfo pUriInfo) {
     List<AdmissionStudent> students =
-        getContentManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNo,
-            toMeritSerialNo);
+        getContentManager().getTaletalkData(pSemesterId, pQuotaType, fromMeritSerialNo, toMeritSerialNo);
     return jsonCreator(students, "meritList", pUriInfo);
   }
 

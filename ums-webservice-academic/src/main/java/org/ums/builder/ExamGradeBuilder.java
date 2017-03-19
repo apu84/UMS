@@ -33,8 +33,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
 
     pBuilder.add("id", pReadOnly.getId());
 
@@ -67,17 +66,14 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pReadOnly.getLastSubmissionDatePrep() != null) {
-      pBuilder.add("lastSubmissionDatePrep",
-          mDateFormat.format(pReadOnly.getLastSubmissionDatePrep()));
+      pBuilder.add("lastSubmissionDatePrep", mDateFormat.format(pReadOnly.getLastSubmissionDatePrep()));
     }
 
     if(pReadOnly.getLastSubmissionDateScr() != null)
-      pBuilder.add("lastSubmissionDateScr",
-          mDateFormat.format(pReadOnly.getLastSubmissionDateScr()));
+      pBuilder.add("lastSubmissionDateScr", mDateFormat.format(pReadOnly.getLastSubmissionDateScr()));
 
     if(pReadOnly.getLastSubmissionDateHead() != null)
-      pBuilder.add("lastSubmissionDateHead",
-          mDateFormat.format(pReadOnly.getLastSubmissionDateHead()));
+      pBuilder.add("lastSubmissionDateHead", mDateFormat.format(pReadOnly.getLastSubmissionDateHead()));
 
   }
 
@@ -88,23 +84,20 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pJsonObject.getString("lastSubmissionDatePrep") != null) {
-      Date date =
-          mDateFormat.parse(pJsonObject.getString("lastSubmissionDatePrep").replace("-", "/"));
+      Date date = mDateFormat.parse(pJsonObject.getString("lastSubmissionDatePrep").replace("-", "/"));
       // Set date to last hour and last minute of the dayatch
       Calendar calendar = getCalendar(date);
       pMutable.setLastSubmissionDatePrep(calendar.getTime());
     }
 
     if(pJsonObject.getString("lastSubmissionDateScr") != null) {
-      Date date =
-          mDateFormat.parse(pJsonObject.getString("lastSubmissionDateScr").replace("-", "/"));
+      Date date = mDateFormat.parse(pJsonObject.getString("lastSubmissionDateScr").replace("-", "/"));
       Calendar calendar = getCalendar(date);
       pMutable.setLastSubmissionDateScr(calendar.getTime());
     }
 
     if(pJsonObject.getString("lastSubmissionDateHead") != null) {
-      Date date =
-          mDateFormat.parse(pJsonObject.getString("lastSubmissionDateHead").replace("-", "/"));
+      Date date = mDateFormat.parse(pJsonObject.getString("lastSubmissionDateHead").replace("-", "/"));
       Calendar calendar = getCalendar(date);
       pMutable.setLastSubmissionDateHead(calendar.getTime());
     }
@@ -147,24 +140,26 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
       StudentGradeDto grade = new StudentGradeDto();
       grade.setStudentId(jsonObject.getString("studentId"));
       if(courseInfo.getInt("course_typeId") == 1) { // For only theory courses
-        grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz")
-            .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("quiz")));
-        grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject
-            .getString("classPerformance").equalsIgnoreCase("")) ? -1 : Double
-            .parseDouble(jsonObject.getString("classPerformance")));
-        grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA")
-            .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partA")));
+        grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1
+            : Double.parseDouble(jsonObject.getString("quiz")));
+        grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString(
+            "classPerformance").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject
+            .getString("classPerformance")));
+        grade
+            .setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1
+                : Double.parseDouble(jsonObject.getString("partA")));
         grade.setPartAAddiInfo(jsonObject.getString("partAAddiInfo"));
         if(courseInfo.getInt("total_part") == 2) {
-          grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB")
-              .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partB")));
+          grade
+              .setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1
+                  : Double.parseDouble(jsonObject.getString("partB")));
           grade.setPartBAddiInfo(jsonObject.getString("partBAddiInfo"));
         }
       }
-      grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total")
-          .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("total")));
-      grade.setGradeLetter((jsonObject.getString("gradeLetter") == null || jsonObject.getString(
-          "gradeLetter").equalsIgnoreCase("")) ? "" : jsonObject.getString("gradeLetter"));
+      grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1
+          : Double.parseDouble(jsonObject.getString("total")));
+      grade.setGradeLetter((jsonObject.getString("gradeLetter") == null || jsonObject.getString("gradeLetter")
+          .equalsIgnoreCase("")) ? "" : jsonObject.getString("gradeLetter"));
       grade.setStatusId(jsonObject.getInt("statusId"));
       grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("statusId")]);
 
@@ -245,8 +240,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     return recheckApproveList;
   }
 
-  private StudentMarksSubmissionStatus getMarksSubmissionStatus(String actor, String action,
-      String gradeType) {
+  private StudentMarksSubmissionStatus getMarksSubmissionStatus(String actor, String action, String gradeType) {
     if(actor.equals("scrutinizer")) {
       if(action.equals("save") && gradeType.equals("approve"))
         return StudentMarksSubmissionStatus.SCRUTINIZE;
@@ -287,14 +281,11 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
   private String getPrevMarksSubmissionStatus(String actor) {
     if(actor.equals("scrutinizer"))
-      return StudentMarksSubmissionStatus.SUBMITTED.getId() + ","
-          + StudentMarksSubmissionStatus.SCRUTINIZE.getId();
+      return StudentMarksSubmissionStatus.SUBMITTED.getId() + "," + StudentMarksSubmissionStatus.SCRUTINIZE.getId();
     if(actor.equals("head"))
-      return StudentMarksSubmissionStatus.SCRUTINIZED.getId() + ","
-          + StudentMarksSubmissionStatus.APPROVE.getId();
+      return StudentMarksSubmissionStatus.SCRUTINIZED.getId() + "," + StudentMarksSubmissionStatus.APPROVE.getId();
     if(actor.equals("coe"))
-      return StudentMarksSubmissionStatus.APPROVED.getId() + ","
-          + StudentMarksSubmissionStatus.ACCEPT.getId();
+      return StudentMarksSubmissionStatus.APPROVED.getId() + "," + StudentMarksSubmissionStatus.ACCEPT.getId();
     if(actor.equals("vc"))
       return StudentMarksSubmissionStatus.ACCEPTED.getId() + "";
     return null;

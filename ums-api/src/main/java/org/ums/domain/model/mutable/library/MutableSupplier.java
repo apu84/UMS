@@ -9,8 +9,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
  * Created by Ifti on 04-Feb-17.
  */
 
-public interface MutableSupplier extends Supplier, Mutable, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableSupplier extends Supplier, Mutable, MutableLastModifier, MutableIdentifier<Long> {
   void setName(final String pName);
 
   void setEmail(final String pEmail);

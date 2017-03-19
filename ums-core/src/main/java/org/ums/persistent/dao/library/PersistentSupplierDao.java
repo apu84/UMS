@@ -34,8 +34,7 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
   @Override
   public Supplier get(final Long pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentSupplierDao.SupplierRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentSupplierDao.SupplierRowMapper());
   }
 
   @Override
@@ -45,13 +44,12 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
   }
 
   @Override
-  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder) {
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder) {
     int startIndex = pItemPerPage * pPage - pItemPerPage + 1;
     int endIndex = startIndex + pItemPerPage;
     String query =
-        "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL + " " + pOrder
-            + ")tmp1 ) tmp2" + " WHERE ind >=? and ind<=?  ";
+        "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL + " " + pOrder + ")tmp1 ) tmp2"
+            + " WHERE ind >=? and ind<=?  ";
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex},
         new PersistentSupplierDao.SupplierRowMapper());
   }
@@ -70,8 +68,7 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
             + "VALUES(?, ?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
 
     mJdbcTemplate.update(INSERT_ONE, pSupplier.getId(), pSupplier.getName(), pSupplier.getEmail(),
-        pSupplier.getContactNumber(), pSupplier.getContactNumber(), pSupplier.getAddress(),
-        pSupplier.getNote());
+        pSupplier.getContactNumber(), pSupplier.getContactNumber(), pSupplier.getAddress(), pSupplier.getNote());
 
     return pSupplier.getId();
   }
