@@ -47,19 +47,21 @@ public class UgGradeSheetXls extends Resource {
     List<StudentGradeDto> modifiedGradeList = new ArrayList<>();
     for(StudentGradeDto gradeDto : gradeList) {
       if(gradeDto.getPartAAddiInfo() == null) {
-        gradeDto.setPartAAddiInfo(String.valueOf(nf.format(gradeDto.getPartA())));
+        gradeDto.setPartAAddiInfo(String.valueOf(gradeDto.getPartA() == null ? "" : nf.format(gradeDto.getPartA())));
       }
       else if(gradeDto.getPartBAddiInfo() == null) {
-        gradeDto.setPartBAddiInfo(String.valueOf(nf.format(gradeDto.getPartB())));
+        gradeDto.setPartBAddiInfo(String.valueOf(gradeDto.getPartB() == null ? "" : nf.format(gradeDto.getPartB())));
       }
       modifiedGradeList.add(gradeDto);
     }
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream a =
-              UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"
-                  + CourseType.get(pCourseType).getLabel() + "_" + pTotalPart + "Part.xls");
+          String fileName = CourseType.get(pCourseType).getLabel();
+          if(CourseType.get(pCourseType) == CourseType.THEORY) {
+            fileName = CourseType.get(pCourseType).getLabel() + "_" + pTotalPart + "Part";
+          }
+          InputStream a = UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/" + fileName + ".xls");
           xlsGenerator.build(modifiedGradeList, output, a);
         } catch(Exception e) {
           throw new WebApplicationException(e);

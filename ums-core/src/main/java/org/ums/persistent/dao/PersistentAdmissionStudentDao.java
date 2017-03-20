@@ -328,7 +328,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, int fromMeritSerialNumber,
       int toMeritSerialNumber) {
     String quota = getQuotaForDb(pQuotaType);
-    String query = SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=?";
+    /*
+     * String query = SELECT_ONE +
+     * " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=?"; return
+     * mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
+     * toMeritSerialNumber}, new AdmissionStudentRowMapper());
+     */
+    String query =
+        SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber, toMeritSerialNumber},
         new AdmissionStudentRowMapper());
   }

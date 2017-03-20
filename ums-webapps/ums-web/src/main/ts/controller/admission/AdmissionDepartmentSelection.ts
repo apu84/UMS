@@ -62,6 +62,11 @@ module ums{
     showSheetLikeView:Function;
     showWindowedView:Function;
     submitMeritRange:Function;
+    assignFromMeritSerialNumber:Function;
+    assignToMeritSerialNumber:Function;
+    assignSelectedProgram:Function;
+    assignWaitingProgram:Function;
+    saveStudent:Function;
   }
 
   interface  IProgramType{
@@ -126,6 +131,11 @@ module ums{
       $scope.showWindowedView = this.showWindowedView.bind(this);
       $scope.showSheetLikeView = this.showSheetLikeView.bind(this);
       $scope.submitMeritRange = this.submitMeritRange.bind(this);
+      $scope.assignFromMeritSerialNumber = this.assignfromMeritSerialNumber.bind(this);
+      $scope.assignToMeritSerialNumber = this.assignToMeritSerialNumber.bind(this);
+      $scope.saveStudent = this.saveStudent.bind(this);
+      $scope.assignSelectedProgram = this.assignSelectedProgram.bind(this);
+      $scope.assignWaitingProgram = this.assignWaitingProgram.bind(this);
       $scope.receiptId="";
 
       this.getFaculties();
@@ -145,15 +155,36 @@ module ums{
       this.$scope.showSheetStyle=false;
     }
 
+
+
+
+    private assignfromMeritSerialNumber(fromMeritSerialNumber:number){
+      this.$scope.fromMeritSerialNumber = fromMeritSerialNumber;
+    }
+
+    private assignToMeritSerialNumber(toMeritSerialNumber:number){
+      this.$scope.toMeritSerialNumber = toMeritSerialNumber;
+    }
+
     private submitMeritRange(){
       console.log(this.$scope.fromMeritSerialNumber);
       console.log(this.$scope.toMeritSerialNumber);
-      if(this.$scope.fromMeritSerialNumber==null || this.$scope.toMeritSerialNumber==null){
+      if(this.$scope.fromMeritSerialNumber!=null || this.$scope.toMeritSerialNumber!=null){
         this.admissionStudentService.fetchStudentsByMeritRange(this.$scope.semester.id, +this.$scope.meritType.id, this.$scope.fromMeritSerialNumber, this.$scope.toMeritSerialNumber).then(students=>{
           this.$scope.admissionStudents=[];
+          console.log("Students...");
+          console.log(students);
           for(var i=0;i<students.length;i++){
-            students[i].selectedProgram=this.$scope.programMap[students[i].programIdByMerit];
-            students[i].waitingProgram = this.$scope.programMap[students[i].programIdByTransfer];
+            if( students[i].programIdByMerit!=null)
+              students[i].selectedProgram=this.$scope.programMap[students[i].programIdByMerit];
+            else{
+              students[i].slectedProgram = this.$scope.programs[0];
+            }
+            if(students[i].programIdByTransfer!=null)
+              students[i].waitingProgram = this.$scope.programMap[students[i].programIdByTransfer];
+            else{
+              students[i].waitingProgram = this.$scope.programs[0];
+            }
             this.$scope.admissionStudents.push(students[i]);
           }
         });
@@ -354,7 +385,9 @@ module ums{
 
     }
 
-    private assignSelectedAndWaitingProgram() {
+    private assignSelectedAndWaitingProgram():IPromise<any> {
+
+      var defer=this.$q.defer();
 
       if (this.$scope.selectedStudent.programIdByMerit != null) {
         this.$scope.selectedStudent.selectedProgram = this.$scope.programMap[this.$scope.selectedStudent.programIdByMerit];
@@ -367,6 +400,8 @@ module ums{
       } else {
         this.$scope.selectedStudent.waitingProgram = this.$scope.programs[0];
       }
+      defer.resolve(this.$scope.selectedStudent);
+      return defer.promise;
 
     }
 
@@ -448,8 +483,10 @@ module ums{
     }
 
 
-    private checkForSameSelectedPrograms(){
+    private checkForSameSelectedPrograms(student:AdmissionStudent){
+      this.$scope.selectedStudent = student;
       console.log("checking selected programs");
+      console.log(student);
       console.log(this.$scope.selectedStudent.selectedProgram.shortName);
       if(this.$scope.selectedStudent.selectedProgram.id!=0 &&
           this.$scope.selectedStudent.waitingProgram.id!=0 ){
@@ -503,8 +540,28 @@ module ums{
 
     }
 
+    private assignSelectedProgram(student:AdmissionStudent, programId:number){
+      this.$scope.selectedProgram = this.$scope.programMap[programId];
+    }
+
+    private assignWaitingProgram(student:AdmissionStudent, programId:number){
+      this.$scope.waitingProgram = this.$scope.programMap[programId];
+    }
+
+    private saveStudent(student:AdmissionStudent){
+      console.log("students in save");
+      console.log(student);
+      this.$scope.selectedStudent = student;
+      this.$scope.selectedStudent.selectedProgram = this.$scope.selectedProgram;
+      if(this.$scope.waitingProgram!=null){
+        this.$scope.selectedStudent.waitingProgram = this.$scope.waitingProgram;
+      }
+      this.$scope.selectedStudent.deadline = this.$scope.deadLine;
+      this.saveOnly();
+    }
+
     private saveOnly(){
-      if(this.$scope.selectedProgram.id!=0 && this.$scope.deadLine=="" || this.$scope.deadLine==null){
+      if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.deadLine=="" || this.$scope.deadLine==null){
         this.notify.error("Deadline is not selected");
       }
       else{
@@ -514,6 +571,8 @@ module ums{
             this.searchByMeritSerialNo(this.$scope.meritSerialNo);
             this.getStatistics();
             this.$scope.showSearch=false;
+            this.$scope.selectedProgram = <Program>{};
+            this.$scope.waitingProgram = <Program>{};
             this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
           });
         });
@@ -541,17 +600,17 @@ module ums{
         if(students.selectedProgram.id!=0){
           item['programIdByMerit'] = students.selectedProgram.id;
         }
-        if(students.waitingProgram.id!=0){
+        if(students.waitingProgram.id!=0 || students.waitingProgram.id!=null){
           item['programIdByTransfer'] = students.waitingProgram.id;
         }
-        if(this.$scope.selectedStudent.selectedProgram.id!=0 || this.$scope.selectedStudent.waitingProgram.id!=0){
+        if(this.$scope.selectedStudent.selectedProgram.id!=0 || this.$scope.selectedStudent.waitingProgram.id!=0 ){
           item['presentStatus']=Utils.PRESENT;
 
-          if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.selectedStudent.waitingProgram.id==0){
+          if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.selectedStudent.waitingProgram.id==0 ){
             item['departmentSelectionType']=Utils.MERIT_PROGRAM_SELECTED;
             this.$scope.departmentSelectionStatus = Utils.MERIT_PROGRAM_SELECTED;
           }
-          else if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.selectedStudent.waitingProgram.id!=0){
+          else if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.selectedStudent.waitingProgram.id!=0 ){
             item['departmentSelectionType'] = Utils.MERIT_WAITING_PROGRAMS_SELECTED;
             this.$scope.departmentSelectionStatus = Utils.MERIT_WAITING_PROGRAMS_SELECTED
           }else{

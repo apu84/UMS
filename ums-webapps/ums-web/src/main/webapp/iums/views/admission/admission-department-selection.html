@@ -18,6 +18,11 @@
        height: 450px;
    }
 
+    #header-fixed{
+        position:fixed;
+        top:15px;
+    }
+
 </style>
 <div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
@@ -197,7 +202,7 @@
                                                 data-ng-options="program.shortName for program in programs track by program.id"
                                                 data-ng-model="selectedStudent.selectedProgram"
                                                 id="selectedProgram"
-                                                data-ng-change="checkForSameSelectedPrograms()" autofocus
+                                                data-ng-change="checkForSameSelectedPrograms(selectedStudent)" autofocus
                                         >
                                         </select>
                                     </div>
@@ -213,7 +218,7 @@
                                                 data-ng-options="program.shortName for program in programs track by program.id"
                                                 data-ng-model="selectedStudent.waitingProgram"
                                                 id="waitingProgram"
-                                                data-ng-change="checkForSameSelectedPrograms()"
+                                                data-ng-change="checkForSameSelectedPrograms(selectedStudent)"
                                         >
                                         </select>
                                     </div>
@@ -315,9 +320,15 @@
                     </div>
                     <div data-ng-if="showSheetStyle">
                         <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6">
-                                Merit Range: From <input type="text" data-ng-model="fromMeritSerialNumber"> to <input type="text" data-ng-model="toMeritSerialNumber"> <button class="btn btn-success" data-ng-click="submitMeritRange()">Submit</button>
+                            <div class="col-md-2" align="right" class="form-control">Admission Deadline</div>
+                            <div class="col-md-2" align="left">
+                                <div class="input-icon right" >
+                                    <i class="fa fa-calendar"></i>
+                                    <input  type="text"  data-ng-model="deadLine" data-ng-change="assignDeadline(deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                Merit Range: From <input type="text" data-ng-model="fromMeritSerialNumber" data-ng-change="assignFromMeritSerialNumber(fromMeritSerialNumber)"> to <input type="text" data-ng-model="toMeritSerialNumber" data-ng-change="assignToMeritSerialNumber(toMeritSerialNumber)"> <button class="btn btn-success" data-ng-click="submitMeritRange()">Submit</button>
                             </div>
                             <div class="col-md-3"></div>
                         </div>
@@ -326,7 +337,7 @@
                             <div class="col-md-8" class="grid" style="overflow: auto">
                                 <div style="height: 500px;">
                                     <table class="table table-striped table-bordered " >
-                                        <thead>
+                                        <thead style="position: static;">
                                         <tr>
                                             <th>Merit Sl No.</th>
                                             <th>Receipt Id</th>
@@ -334,6 +345,7 @@
                                             <th>Selected Program</th>
                                             <th>Waiting Program</th>
                                             <th>Deadline</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -346,7 +358,7 @@
                                                     name="waitingProgram"
                                                     data-ng-options="program.shortName for program in programs track by program.id"
                                                     data-ng-model="s.selectedProgram"
-                                                    data-ng-change="checkForSameSelectedPrograms()"
+                                                    data-ng-change="assignSelectedProgram(s, s.selectedProgram.id)"
                                             ></select>
                                             </td>
                                             <td><select
@@ -354,10 +366,11 @@
                                                     name="waitingProgram"
                                                     data-ng-options="program.shortName for program in programs track by program.id"
                                                     data-ng-model="s.waitingProgram"
-                                                    data-ng-change="checkForSameSelectedPrograms()"
+                                                    data-ng-change="assignWaitingProgram(s, s.waitingProgram.id)"
                                             ></select>
                                             </td>
                                             <td>{{s.deadline}}</td>
+                                            <td><button class="btn btn-success" data-ng-click="saveStudent(s)">Save</button></td>
                                         </tr>
                                         </tbody>
                                     </table>
