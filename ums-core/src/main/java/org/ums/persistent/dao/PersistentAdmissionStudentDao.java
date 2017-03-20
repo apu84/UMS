@@ -344,10 +344,10 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber, toMeritSerialNumber},
         new AdmissionStudentRowMapper());
-        SELECT_ONE
+        /*SELECT_ONE
             + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
-        toMeritSerialNumber}, new AdmissionStudentRowMapper());
+        toMeritSerialNumber}, new AdmissionStudentRowMapper());*/
   }
 
   // kawsurilu
