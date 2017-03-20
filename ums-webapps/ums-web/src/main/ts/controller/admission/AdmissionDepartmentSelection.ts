@@ -5,8 +5,12 @@
 module ums{
   import IPromise = ng.IPromise;
 
+
+
   interface IAdmissionDepartmentSelection extends ng.IScope{
     deadLine:string;
+    datePickerOptions:any;
+    dateFormat:string;
     semesters:Array<Semester>;
     semester:Semester;
     programTypes:Array<IProgramType>;
@@ -21,6 +25,7 @@ module ums{
     meritSerialNo:string;
     receiptIdMap:any;
     meritMap:any;
+
     selectedStudent:AdmissionStudent;
     statistics:Array<AdmissionStudent>;
     statisticsMap:any;
@@ -96,6 +101,7 @@ module ums{
                 private $timeout: ng.ITimeoutService) {
 
       $scope.gridOpts = {};
+      //$scope.datePickerOptions = <DatepickerOptions>{};
       $scope.showModal=true;
       $scope.fromMeritSerialNumber=0;
       $scope.toMeritSerialNumber=0;
@@ -111,6 +117,9 @@ module ums{
       $scope.focusMeritProgramSelection=false;
       $scope.focusWaitingProgramSelection=false;
       $scope.showSheetStyle=false;
+
+
+
 
 
       $scope.getSemesters= this.getSemesters.bind(this);
@@ -148,6 +157,7 @@ module ums{
     private showSheetLikeView(){
       this.$scope.showSheetStyle=true;
       this.getStatistics();
+      this.addDate();
 
     }
 
@@ -195,9 +205,7 @@ module ums{
 
 
     private focusOnSearchBar(){
-      /*this.$scope.focusSearch=true;
-      this.$scope.focusMeritProgramSelection=false;
-      this.$scope.focusWaitingProgramSelection=false;*/
+
       this.$timeout(()=>{
         $("#searchBar").focus();
         $("#meritSerialNumberLabel").css("color","blue");
@@ -552,9 +560,13 @@ module ums{
       console.log("students in save");
       console.log(student);
       this.$scope.selectedStudent = student;
-      this.$scope.selectedStudent.selectedProgram = this.$scope.selectedProgram;
+      if(this.$scope.selectedProgram!=null){
+        this.$scope.selectedStudent.selectedProgram = this.$scope.selectedProgram;
+      }
       if(this.$scope.waitingProgram!=null){
         this.$scope.selectedStudent.waitingProgram = this.$scope.waitingProgram;
+      }else{
+        this.$scope.selectedStudent.waitingProgram = this.$scope.programs[0];
       }
       this.$scope.selectedStudent.deadline = this.$scope.deadLine;
       this.saveOnly();
