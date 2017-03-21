@@ -45,47 +45,35 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "                 FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA , unit,      "
           + "                 LAST_MODIFIED from admission_students where SEMESTER_ID=? and program_type=? order by to_number(RECEIPT_ID)";
 
-  String INSERT_ONE_TALETALK_DATA =
-      "INSERT INTO admission_students (semester_id, "
-          + "                                receipt_id, "
-          + "                                pin, "
-          + "                                hsc_board,hsc_roll, "
-          + "                                hsc_regno, "
-          + "                                hsc_year, "
-          + "                                hsc_group, "
-          + "                                ssc_board, "
-          + "                                ssc_roll, "
-          + "                                ssc_year, "
-          + "                                ssc_group, "
-          + "                                gender, "
-          + "                                date_of_birth, "
-          + "                                student_name, "
-          + "                                father_name, "
-          + "                                mother_name, "
-          + "                                ssc_gpa, "
-          + "                                hsc_gpa, "
-          + "                                quota, "
-          + "                                unit, program_type,last_Modified) "
-          + "                                values(?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/YY'),?,?,?,?,?,?,?,?,"
-          + getLastModifiedSql() + ")";
+  String INSERT_ONE_TALETALK_DATA = "INSERT INTO admission_students (semester_id, "
+      + "                                receipt_id, " + "                                pin, "
+      + "                                hsc_board,hsc_roll, " + "                                hsc_regno, "
+      + "                                hsc_year, " + "                                hsc_group, "
+      + "                                ssc_board, " + "                                ssc_roll, "
+      + "                                ssc_year, " + "                                ssc_group, "
+      + "                                gender, " + "                                date_of_birth, "
+      + "                                student_name, " + "                                father_name, "
+      + "                                mother_name, " + "                                ssc_gpa, "
+      + "                                hsc_gpa, " + "                                quota, "
+      + "                                unit, program_type,last_Modified) "
+      + "                                values(?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/YY'),?,?,?,?,?,?,?,?,"
+      + getLastModifiedSql() + ")";
 
   String INSERT_ONE = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
       + "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-      + " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-      + "  SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH,  "
+      + " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  " + "  SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH,  "
       + " STUDENT_NAME, FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA,  "
       + " QUOTA,UNIT, ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID,  "
-      + " MIGRATION_STATUS, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,?,  "
-      + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
-      + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
+      + " MIGRATION_STATUS, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,?,  " + "      ?, ?, ?, ?, ?,  "
+      + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  " + "   ?, ?, ?, ?, ?,  " + "   ?, "
+      + getLastModifiedSql() + ")";
 
-  String GET_ONE =
-      "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-          + "    SSC_YEAR, SSC_GROUP, GENDER, to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth, STUDENT_NAME,  "
-          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
-          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
-          + "    LAST_MODIFIED, UNIT from admission_students ";
+  String GET_ONE = "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+      + "    SSC_YEAR, SSC_GROUP, GENDER, to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth, STUDENT_NAME,  "
+      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+      + "    LAST_MODIFIED, UNIT from admission_students ";
 
   String GET_BY_STUDENTID = "SELECT RECEIPT_ID FROM ADMISSION_STUDENTS ";
 
@@ -344,10 +332,12 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         SELECT_ONE + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber, toMeritSerialNumber},
         new AdmissionStudentRowMapper());
-        /*SELECT_ONE
-            + " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
-        toMeritSerialNumber}, new AdmissionStudentRowMapper());*/
+    /*
+     * SELECT_ONE +
+     * " where SEMESTER_ID=? and QUOTA=? and MERIT_SL_NO>=? and MERIT_SL_NO<=? order by merit_sl_no"
+     * ; return mJdbcTemplate.query(query, new Object[] {pSemesterId, quota, fromMeritSerialNumber,
+     * toMeritSerialNumber}, new AdmissionStudentRowMapper());
+     */
   }
 
   // kawsurilu
