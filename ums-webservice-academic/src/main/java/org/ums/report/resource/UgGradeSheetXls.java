@@ -49,7 +49,7 @@ public class UgGradeSheetXls extends Resource {
       if(gradeDto.getPartAAddiInfo() == null) {
         gradeDto.setPartAAddiInfo(String.valueOf(gradeDto.getPartA() == null ? "" : nf.format(gradeDto.getPartA())));
       }
-      else if(gradeDto.getPartBAddiInfo() == null) {
+      if(gradeDto.getPartBAddiInfo() == null) {
         gradeDto.setPartBAddiInfo(String.valueOf(gradeDto.getPartB() == null ? "" : nf.format(gradeDto.getPartB())));
       }
       modifiedGradeList.add(gradeDto);
