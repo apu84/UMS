@@ -57,4 +57,9 @@ public class UGRegistrationResultDaoDecorator extends
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
     return getManager().getResults(pProgramId, pSemesterId);
   }
+
+  @Override
+  public List<UGRegistrationResult> getCCI(int pSemesterId, String pExamDate) {
+    return getManager().getCCI(pSemesterId, pExamDate);
+  }
 }

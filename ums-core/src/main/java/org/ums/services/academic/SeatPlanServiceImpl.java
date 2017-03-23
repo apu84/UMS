@@ -9,6 +9,7 @@ import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
+import org.ums.enums.CourseRegType;
 import org.ums.manager.*;
 import org.ums.persistent.model.*;
 import org.ums.response.type.GenericMessageResponse;
@@ -55,6 +56,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   @Autowired
   ApplicationCCIManager mApplicationCCIManager;
+
+  @Autowired
+  UGRegistrationResultManager mUGRegistrationResultManager;
 
   @Autowired
   ProgramManager mProgramManager;
@@ -281,6 +285,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
         // *********end of new Algorithm ******************
 
+        Map<Student, String> studentsUsed = new HashMap<>();
+
         for(int roomColumn = 0; roomColumn < room.getTotalColumn(); roomColumn++) {
           for(int roomRow = 0; roomRow < room.getTotalRow(); roomRow++) {
             boolean columnBreak = false;
@@ -291,6 +297,14 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                   if(subGroupWithStudents.get(subGroup) != null) {
                     List<Student> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
                     Student student = studentsOfTheSubGroup.get(0);
+                    if(studentsUsed.get(student) == null) {
+                      studentsUsed.put(student, "used");
+
+                    }else{
+                      studentsOfTheSubGroup.remove(0);
+                      break;
+                    }
+
                     roomStructure[roomRow][roomColumn] = student.getId();
                     MutableSeatPlan seatPlan = new PersistentSeatPlan();
                     PersistentClassRoom classRoom = new PersistentClassRoom();
@@ -627,12 +641,29 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   Map<String, List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate) {
     Map<String, List<Student>> studentMap = new HashMap<>();
-    List<ApplicationCCI> applicationCCIs = mApplicationCCIManager.getBySemesterAndExamDate(pSemester, pExamDate);
-    for(ApplicationCCI app : applicationCCIs) {
-      List<Student> students =
-          mStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(), pSemester);
-      studentMap.put(app.getCourseId(), students);
+    List<UGRegistrationResult>  ugRegistrationResults = mUGRegistrationResultManager.getCCI(pSemester, pExamDate) ;
+    Map<String, List<UGRegistrationResult>> courseIdMapUgRegistratoionResult =  ugRegistrationResults
+        .stream()
+        .collect(Collectors.groupingBy(a-> a.getCourse().getId()));
+
+    Map<String, Integer> studentIdMapUgRegistrationResult = new HashMap<>();
+    int counter=0;
+    for(UGRegistrationResult ug: ugRegistrationResults){
+      studentIdMapUgRegistrationResult.put(ug.getStudent().getId(), ug.getType().getId());
     }
+
+
+    for(Map.Entry<String, List<UGRegistrationResult>> entry: courseIdMapUgRegistratoionResult.entrySet()){
+      List<UGRegistrationResult> ugRegistrationResultList = entry.getValue();
+      List<Student> students = new ArrayList<>();
+      for(UGRegistrationResult ugResult: ugRegistrationResultList){
+        PersistentStudent student = (PersistentStudent) ugResult.getStudent();
+        student.setApplicationType(studentIdMapUgRegistrationResult.get(student.getId()));
+        students.add(student);
+      }
+      studentMap.put(entry.getKey(), students);
+    }
+
 
     return studentMap;
   }

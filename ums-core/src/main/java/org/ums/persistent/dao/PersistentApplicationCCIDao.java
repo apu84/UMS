@@ -106,21 +106,9 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     /*
      * Date date = (Date) formatter.parse(pExamDate); String examDate = date.toString();
      */
-    String query =
-        "select e.exam_date,course.course_no,course.course_id,course.course_title,course.total_student,course.year,course.semester from ( "
-            + "select c.course_no,c.course_id,c.course_title,c.year,c.semester,a.semester_id,count(a.student_id) total_student  "
-            + "from application_cci a, mst_course c  "
-            + "where a.semester_id=?  "
-            + "and a.course_id = c.course_id group by c.course_no,c.course_id,c.course_title,c.year,c.semester,a.semester_id) course,exam_routine e where e.course_id = course.course_id and "
-            + "e.exam_date = to_date(?,'MM-DD-YYYY') and e.exam_type=2 and e.semester = course.semester_id order by course.course_no";
+    String query = SELECT_ALL + " AND SEMESTER_ID=? AND EXAM_DATE=TO_DATE(?,'MM-DD-YYYY')";
 
-    String query2 =
-        "select s.student_id,p.program_short_name,s.year,s.semester,application_type,s.program_id from sp_student s,mst_program p,(  "
-            + "select course_no,student_id,application_type from exam_routine r,mst_course c,  "
-            + "(select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a    "
-            + "where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a  "
-            + "where a.student_id=s.student_id and s.program_id=p.program_id;";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new ApplicationCCIRowMapperForSeatPlan());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new ApplicationCCIRowMapper());
   }
 
   @Override

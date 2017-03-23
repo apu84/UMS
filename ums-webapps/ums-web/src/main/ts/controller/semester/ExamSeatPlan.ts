@@ -20,6 +20,7 @@ module ums{
     selectedSubGroupNo:string;
     subGroupTotalStudentNumber:any;
     selectedGroupTotalStudent:number;
+    cciTotalStudent:number;
     previousIterationNumber:number;
     tempIdList:Array<number>;
     mergeIdList:any;
@@ -384,8 +385,7 @@ module ums{
             this.$scope.previousIterationNumber=subGroupNo;
           }
         }
-        console.log("*******");
-        console.log(this.$scope.iterationNumbers);
+
       }
       if(this.$scope.subGroupWithDeptMap==null){
         this.$scope.subGroupWithDeptMap={};
@@ -413,7 +413,7 @@ module ums{
           currentScope.showStatistics();
         }
       }
-      console.log(this.$scope.sortableOptionsIfSubGroupNotFound);
+
       this.$scope.hideSelection=false;
       this.showStatistics();
 
@@ -443,8 +443,8 @@ module ums{
         }
       }
 
-      console.log("00000000000000000");
-      console.log(this.$scope.mouseClickedObjectStore);
+
+
       this.$scope.mouseClickedObject.studentNumber+=studentNumber;
       this.$scope.mouseClickedObject.backgroundColor="#EA8A8A";
       this.$scope.mouseClickedObjectStore=[];
@@ -457,10 +457,7 @@ module ums{
 
     private splitActionUpdate(object:any,splitNumecir:number){
       var splitNumber:number=+splitNumecir;
-      console.log("%%%%%%%%%%%%%%");
-      console.log("in the split action");
-      console.log(object);
-      console.log(splitNumber);
+
       if(splitNumber>object.studentNumber ){
         this.$window.alert("Split number must be smaller than the current student number!");
       }
@@ -472,9 +469,7 @@ module ums{
       }
       else{
         var currentStudentNumber:number = angular.copy(object.studentNumber);
-        console.log(currentStudentNumber);
-        console.log(splitNumber);
-        //this.$scope.splitNumber=splitNumber;
+
         object.studentNumber = +splitNumber;
         object.showSubPortion=false;
         object.backgroundColor="#EA8A8A";
@@ -488,14 +483,12 @@ module ums{
         for(var x=0;x<temporaryListHolder.length;x++){
           this.$scope.tempGroupList.push(temporaryListHolder[x]);
         }
-        console.log("================");
-        console.log(object);
+
 
         this.showStatistics();
       }
       this.$scope.customeMenu=false;
-      console.log("this is custom menu******");
-      console.log(this.$scope.customeMenu);
+
 
     }
 
@@ -503,13 +496,10 @@ module ums{
       for(var i=1;i<=this.$scope.iterationNumbers.length;i++){
         this.$scope.subGroupTotalStudentNumber[i]=0;
         for(var j=0;j<this.$scope.subGroupWithDeptMap[i].length;j++){
-          console.log(this.$scope.subGroupWithDeptMap[i][j].studentNumber);
           this.$scope.subGroupTotalStudentNumber[i]+= this.$scope.subGroupWithDeptMap[i][j].studentNumber;
         }
       }
 
-      console.log("in stats");
-      console.log(this.$scope.subGroupTotalStudentNumber);
     }
 
 
@@ -525,7 +515,6 @@ module ums{
         this.$scope.mouseClickedObject={};
 
         this.$scope.mouseClickedObject=object;
-        console.log("exam type:"+ this.$scope.examType);
         if(this.$scope.mouseClickedObjectStore.length==0){
 
           this.$scope.mouseClickedObjectStore.push(object);
@@ -537,7 +526,6 @@ module ums{
           for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
             if(this.$scope.cciSelected){
               if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId ){
-                console.log('found mismatch');
                 foundMisMatch=true;
                 break;
               }
@@ -549,7 +537,6 @@ module ums{
               }
             }else{
               if(this.$scope.mouseClickedObjectStore[i].id!=object.id || this.$scope.mouseClickedObjectStore[i]==object){
-                console.log('found mismatch');
                 foundMisMatch=true;
                 break;
               }
@@ -559,13 +546,9 @@ module ums{
           if(foundMisMatch){
             for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
               this.$scope.mouseClickedObjectStore[i].backgroundColor="#EA8A8A";
-              console.log("deleted object");
-              console.log(this.$scope.mouseClickedObjectStore[i]);
             }
-            console.log("-------before deletion----");
-            console.log(this.$scope.mouseClickedObjectStore);
+
             this.$scope.mouseClickedObjectStore=[];
-            console.log("--------after deletion----");
             this.$scope.mouseClickedObjectStore.push(object);
           }else{
             if(doNothing==false){
@@ -578,9 +561,7 @@ module ums{
 
         }
 
-        console.log(this.$scope.mouseClickedObjectStore);
         object.backgroundColor="red";
-        console.log(object);
       }else{
         this.$scope.customeMenu=true;
       }
@@ -592,7 +573,6 @@ module ums{
     }
 
     private viewCCI(examDate:string){
-      console.log('in the view cci');
       this.$scope.examDate=examDate;
       this.$scope.cciSelected=true;
       this.$scope.editSubGroup=true;
@@ -611,7 +591,6 @@ module ums{
     }
 
     private splitOut():void{
-      console.log("From split out");
 
       if(this.$scope.mouseClickedObject!=null){
         this.$scope.mouseClickedObject.showSubPortion=true;
@@ -644,11 +623,9 @@ module ums{
           this.$scope.showGroupSelection = true;
           this.$scope.getGroups();
           $("#groupPanel").slideDown("slow");
-          console.log("into type 1");
         }
         else{
           this.$scope.cciSelected=true;
-          console.log("into type 2");
           this.getExamRoutineCCIInfo().then((examRoutineArr:Array<IExamRoutineCCI>)=>{
             this.$scope.examRoutineCCIArr=[];
             var weekday:any={};
@@ -661,12 +638,9 @@ module ums{
             weekday[6] = "Saturday";
             var d= new Date();
             for(var i=0;i<examRoutineArr.length;i++){
-              console.log(examRoutineArr[i].examDate);
               var examRoutine:any={};
               examRoutine.examDate=examRoutineArr[i].examDate;
-              console.log(new Date(examRoutineArr[i].examDate));
               var d = new Date(examRoutineArr[i].examDate);
-              console.log(d.getDay());
               examRoutine.weekDay = weekday[new Date(examRoutineArr[i].examDate).getDay()];
               examRoutine.totalStudent = examRoutineArr[i].totalStudent;
               this.$scope.examRoutineCCIArr.push(examRoutine);
@@ -677,9 +651,7 @@ module ums{
 
             this.$scope.loadingVisibility=false;
 
-            console.log("Loadng visibility");
-            console.log(this.$scope.loadingVisibility);
-            console.log(this.$scope.examRoutineCCIArr);
+
 
           });
 
@@ -733,16 +705,13 @@ module ums{
     private splitCourseStudent(menuNumber:number):void{
 
       //var currentScope = this;
-      console.log("Split id:");
-      console.log(this.$scope.splitId);
-      console.log(this.$scope.tempGroupList);
+
       if(menuNumber==1){
 
         if(this.$scope.subGroupFound){
           for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
             if(this.$scope.tempGroupListAll[i].id==this.$scope.splitId){
               this.$scope.tempGroupListAll[i].showSubPortion=true;
-              console.log("a match found");
               break;
             }
           }
@@ -751,7 +720,6 @@ module ums{
           for(var i=0;i<this.$scope.tempGroupList.length;i++){
             if(this.$scope.tempGroupList[i].id==this.$scope.splitId){
               this.$scope.tempGroupList[i].showSubPortion=true;
-              console.log("a match found");
               break;
             }
           }
@@ -844,6 +812,7 @@ module ums{
       this.$scope.iterationNumbers=[];
 
       if(group==4){
+        console.log("IN cci group section");
         this.$scope.groupNoForSeatPlanViewing = group;
         this.$scope.tempIdList=[];
         this.$scope.subGroupWithDeptMap={};
@@ -853,6 +822,7 @@ module ums{
       }
       else{
 
+        console.log("IN group section");
         //************************************************************
         this.$scope.groupNoForSeatPlanViewing = group;
         this.$scope.tempIdList=[];
@@ -918,8 +888,7 @@ module ums{
       this.getSubGroupInfo().then((subGroupArr:Array<ISeatPlanGroup>)=>{
 
         this.$scope.classBodyBackgroundColor="#FDEEF4";   //Inactive Color
-        console.log("saved data");
-        console.log(subGroupArr);
+
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
           this.$scope.hideSelection=true;
 
@@ -966,11 +935,9 @@ module ums{
 
           this.$scope.editSubGroup=true;
           this.$scope.deleteAndCreateNewSubGroup=true;
-          console.log("##################################");
-          console.log(this.$scope.subGroupWithDeptMap);
+
           //this.$scope.sortableOptionsIfSubGroupNotFound.
           this.showStatistics();
-          console.log(this.$scope.tempGroupList);
           this.$scope.saveSubGroupInfo=false;
 
         }
@@ -1128,7 +1095,6 @@ module ums{
 
 
     private createNewSubGroup():void{
-      console.log("in the create");
       this.$scope.confirmation=true;
 
 
@@ -1144,7 +1110,6 @@ module ums{
     }
 
     private deleteAndRecreate(){
-      console.log("in the delete and recreate");
       this.$scope.confirmation=false;
       if(this.$scope.cciSelected){
         this.deleteExistingSubGroupCCI();
@@ -1170,7 +1135,6 @@ module ums{
     }
 
     private cancelRecreation(){
-      console.log(" cancel the recreation process");
       this.$scope.confirmation=false;
 
 
@@ -1229,7 +1193,6 @@ module ums{
 
       }
       var emptySubgroupFound:boolean=false;
-      console.log(this.$scope.subGroupWithDeptMap);
       for(var i=1;i<=this.$scope.iterationNumbers.length;i++){
         if(this.$scope.subGroupWithDeptMap[i].length==0){
           emptySubgroupFound=true;
@@ -1237,11 +1200,9 @@ module ums{
         }
       }
       if(emptySubgroupFound){
-        console.log("empty sub group found");
           this.$window.alert("Sub group must not be empty");
       }
       else{
-        console.log("Everything ok!!!");
         this.saveSubGroupIntoDb(json).then((message:string)=>{
           this.$scope.mouseClickedObjectStore=[];
           $.notific8(message);
@@ -1428,21 +1389,21 @@ module ums{
 
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      var subGroupDb:Array<ISeatPlanGroup>;
-      console.log("condition of cciSelected");
-      console.log(this.$scope.cciSelected);
+      var subGroupDb:Array<ISeatPlanGroup>=[];
+
       if(this.$scope.cciSelected){
         this.httpClient.get('/ums-webservice-academic/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
             (json:any,etag:string)=>{
               this.$scope.selectedGroupTotalStudent=0;
               subGroupDb = json.entries;
+
               for(var i=0;i<subGroupDb.length;i++){
                 subGroupDb[i].backgroundColor="#EA8A8A";
                 subGroupDb[i].showSubPortion=false;
                 this.$scope.selectedGroupTotalStudent+=subGroupDb[i].studentNumber;
+
               }
-              console.log("******");
-              console.log(this.$scope.selectedGroupTotalStudent);
+
 
               defer.resolve(subGroupDb);
             },
@@ -1454,8 +1415,7 @@ module ums{
         this.httpClient.get('/ums-webservice-academic/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
             (json:any, etag:string) => {
               subGroupDb = json.entries;
-              console.log("#######################");
-              console.log(subGroupDb);
+
               for(var i=0;i<subGroupDb.length;i++){
                 subGroupDb[i].backgroundColor="#EA8A8A";
                 subGroupDb[i].showSubPortion=false;
@@ -1517,7 +1477,6 @@ module ums{
           (json:any, etag:string) => {
             examRoutineArr = json.entries;
             defer.resolve(examRoutineArr);
-            console.log(examRoutineArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -1533,7 +1492,6 @@ module ums{
       this.$scope.examDate = examDate;
       var defer = this.$q.defer();
       //this.$scope.selectedGroupTotalStudent=0;
-      console.log(examDate);
       this.$scope.tempGroupList=[];
       var applicationArr:Array<ISeatPlanGroup>=[];
       this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
@@ -1542,13 +1500,18 @@ module ums{
             this.$scope.subGroupSelected=true;
             this.$scope.selectedGroupTotalStudent=0;
             for(var i=0;i<applicationArr.length;i++){
-              this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
               applicationArr[i].showSubPortion=false;
               applicationArr[i].id=i+1;
               applicationArr[i].backgroundColor="#EA8A8A";
-              this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
+
+              this.$scope.selectedGroupTotalStudent=this.$scope.selectedGroupTotalStudent+applicationArr[i].studentNumber;
               this.$scope.tempGroupList.push(applicationArr[i]);
             }
+
+            console.log("sub group total student");
+            console.log(this.$scope.selectedGroupTotalStudent);
+            this.$scope.cciTotalStudent = angular.copy(this.$scope.selectedGroupTotalStudent);
+
             defer.resolve(this.$scope.tempGroupList);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -1644,8 +1607,6 @@ module ums{
     private convertToJsonForSubGroup(){
       var completeJson={};
       var jsonObj=[];
-      console.log("temp group list all ---->")
-      console.log(this.$scope.tempGroupList);
       if(this.$scope.tempGroupList.length>0){
         for(var i=0;i<this.$scope.tempGroupList.length;i++){
           var item={};
@@ -1690,8 +1651,7 @@ module ums{
       completeJson["groupNo"] = this.$scope.selectedGroupNo;
       completeJson["examType"] = this.$scope.examType;
       completeJson["entries"] = jsonObj;
-      console.log("------------------------------------->");
-      console.log(completeJson);
+
       return completeJson;
     }
 

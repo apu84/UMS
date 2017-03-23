@@ -77,6 +77,25 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
+  public List<UGRegistrationResult> getCCI(int pSemesterId, String pExamDate) {
+    String query =
+        "SELECT "
+            + "  UG_REGISTRATION_RESULT.ID, "
+            + "  UG_REGISTRATION_RESULT.STUDENT_ID, "
+            + "  UG_REGISTRATION_RESULT.SEMESTER_ID, "
+            + "  UG_REGISTRATION_RESULT.COURSE_ID, "
+            + "  UG_REGISTRATION_RESULT.GRADE_LETTER, "
+            + "  UG_REGISTRATION_RESULT.EXAM_TYPE, "
+            + "  UG_REGISTRATION_RESULT.REG_TYPE, "
+            + "  UG_REGISTRATION_RESULT.LAST_MODIFIED "
+            + "FROM UG_REGISTRATION_RESULT, EXAM_ROUTINE "
+            + "WHERE UG_REGISTRATION_RESULT.SEMESTER_ID = ? AND ug_registration_result.exam_type=2 and  EXAM_ROUTINE.SEMESTER = UG_REGISTRATION_RESULT.SEMESTER_ID AND exam_routine.exam_type=ug_registration_result.exam_type and "
+            + "      EXAM_ROUTINE.EXAM_DATE = TO_DATE(?, 'MM-DD-YYYY') AND UG_REGISTRATION_RESULT.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate},
+        new UGRegistrationResultRowMapperWithoutResult());
+  }
+
+  @Override
   public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId, String pStudentId) {
     String query = SELECT_ALL_CCI;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pSemesterId, pStudentId, pStudentId,

@@ -237,7 +237,7 @@
                                 <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge badge-black">{{group.studentNumber}}</span> </li>
                             </ul>
                             <div style="text-align: center;padding: 10px;">
-                                <font style="font-weight: bold;font-size: 22px;"> Total Student : {{groupNo.totalStudentNumber}}</font>
+                                <font style="font-weight: bold;font-size: 22px;" data-ng-if="groupNo.totalStudent!=0"> Total Student : {{groupNo.totalStudentNumber}}</font>
                             </div>
                         </div>
                     </div>
@@ -302,7 +302,7 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="alert alert-success">
-                    <strong>Total Students: </strong> <font style="font-weight: bold;font-size: 14px;">{{selectedGroupTotalStudent}}</font>
+                    <strong>Total Students: </strong> <font style="font-weight: bold;font-size: 14px;">{{cciTotalStudent}}</font>
                 </div>
 
 

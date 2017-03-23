@@ -71,6 +71,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   @Autowired
   private SeatPlanReportManager mSeatPlanReportManager;
 
+  @Autowired
+  private UGRegistrationResultManager mUGRegistrationResultManager;
+
   public static final String DEST = "seat_plan_report.pdf";
 
   @Override
@@ -106,6 +109,16 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     else {
       seatPlans = mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId, groupNo, type);
 
+    }
+    List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
+    Map<String, Course> studentCourseMap = new HashMap<>();
+    Map<String, CourseRegType> studentCourseRegType = new HashMap<>();
+    if(groupNo == 0) {
+      ugRegistrationResults = mUGRegistrationResultManager.getCCI(pSemesterId, examDate);
+      for(UGRegistrationResult ug : ugRegistrationResults) {
+        studentCourseMap.put(ug.getStudentId(), ug.getCourse());
+        studentCourseRegType.put(ug.getStudentId(), ug.getType());
+      }
     }
     java.util.List<Student> students;
     java.util.List<Long> roomsOfTheSeatPlan = new ArrayList<>();
@@ -257,10 +270,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 String dept;
                 String deptName;
                 if(groupNo == 0) {
+                  int year = studentCourseMap.get(student.getId()).getYear();
+                  int semester = studentCourseMap.get(student.getId()).getSemester();
                   dept =
-                      student.getProgramShortName() + " " + student.getCurrentYear() + "/"
-                          + student.getCurrentAcademicSemester();
-                  deptName = student.getProgramShortName();
+                      student.getProgram().getShortName().replace("B.Sc in ", "") + " "
+                          + studentCourseMap.get(student.getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId()).getSemester();
+                  deptName = student.getProgram().getShortName().replace("B.Sc in ", "");
                 }
                 else {
                   program = student.getProgram();
@@ -270,15 +286,26 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                   deptName = program.getShortName().replace("B.Sc in ", "");
 
                 }
-                String yearSemester = student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
+                String yearSemester = "";
+                if(groupNo == 0) {
+                  yearSemester =
+                      studentCourseMap.get(student.getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId()).getSemester();
+                }
+                else {
+                  yearSemester = student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
+                }
                 if(deptList.size() == 0) {
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
                   if(groupNo == 0) {
-                    if(student.getApplicationType() == 3) {
+                    if(studentCourseRegType.get(student.getId()).getId() == 3) {
                       studentList.add(student.getId() + "(C)");
                     }
-                    else if(student.getApplicationType() == 5) {
+                    else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                      studentList.add(student.getId() + "(SC)");
+                    }
+                    else if(studentCourseRegType.get(student.getId()).getId() == 5) {
                       studentList.add(student.getId() + "(I)");
 
                     }
@@ -301,10 +328,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     if(deptOfTheList.equals(dept)) {
                       java.util.List<String> studentList = deptStudentListMap.get(dept);
                       if(groupNo == 0) {
-                        if(student.getApplicationType() == 3) {
+                        if(studentCourseRegType.get(student.getId()).getId() == 3) {
                           studentList.add(student.getId() + "(C)");
                         }
-                        else if(student.getApplicationType() == 5) {
+                        else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                          studentList.add(student.getId() + "(SC)");
+                        }
+                        else if(studentCourseRegType.get(student.getId()).getId() == 5) {
                           studentList.add(student.getId() + "(I)");
 
                         }
@@ -326,10 +356,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     deptList.add(dept);
                     java.util.List<String> studentList = new ArrayList<>();
                     if(groupNo == 0) {
-                      if(student.getApplicationType() == 3) {
+                      if(studentCourseRegType.get(student.getId()).getId() == 3) {
                         studentList.add(student.getId() + "(C)");
                       }
-                      else if(student.getApplicationType() == 5) {
+                      else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                        studentList.add(student.getId() + "(SC)");
+                      }
+                      else if(studentCourseRegType.get(student.getId()).getId() == 5) {
                         studentList.add(student.getId() + "(I)");
 
                       }
@@ -528,9 +561,19 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
                 PdfPCell lowerCell = new PdfPCell();
 
-                String upperPart =
-                    program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear() + "/"
-                        + student.getCurrentAcademicSemester();
+                String upperPart = "";
+                if(groupNo == 0) {
+                  upperPart =
+                      program.getShortName().replace("B.Sc in ", "") + " "
+                          + studentCourseMap.get(student.getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId()).getSemester();
+                }
+                else {
+                  upperPart =
+                      program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear() + "/"
+                          + student.getCurrentAcademicSemester();
+                }
+
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setPaddingTop(-5f);
@@ -572,9 +615,20 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 upperCell.setColspan(10);
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
-                String upperPart =
-                    program2.getShortName().replace("B.Sc in ", "") + " " + student2.getCurrentYear() + "/"
-                        + student2.getCurrentAcademicSemester();
+                String upperPart = "";
+                if(groupNo == 0) {
+                  upperPart =
+                      program2.getShortName().replace("B.Sc in ", "") + " "
+                          + studentCourseMap.get(student2.getId()).getYear() + "/"
+                          + studentCourseMap.get(student2.getId()).getSemester();
+                }
+                else {
+                  upperPart =
+                      program2.getShortName().replace("B.Sc in ", "") + " "
+                          + studentCourseMap.get(student2.getId()).getYear() + "/"
+                          + studentCourseMap.get(student2.getId()).getSemester();
+                }
+
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setPaddingTop(-5f);
