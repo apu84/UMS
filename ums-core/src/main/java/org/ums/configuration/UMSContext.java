@@ -104,9 +104,6 @@ public class UMSContext {
   @Lazy
   EmployeeRepository mEmployeeRepository;
 
-  @Autowired
-  Environment mEnvironment;
-
   @Bean
   LibraryManager libraryManager() {
     LibraryCache libraryCache = new LibraryCache(mCacheFactory.getCacheManager());
@@ -687,8 +684,7 @@ public class UMSContext {
 
   @Bean
   ConsumeIndex consumeIndex() {
-    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), mEnvironment, entityResolverFactory(),
-        lockManager());
+    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager());
   }
 
   @Bean

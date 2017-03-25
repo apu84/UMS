@@ -28,15 +28,13 @@ public class ConsumeIndexJobImpl implements ConsumeIndex {
 
   private IndexManager mIndexManager;
   private IndexConsumerManager mIndexConsumerManager;
-  private Environment environment;
   private LockManager mLockManager;
   private EntityResolverFactory mEntityResolverFactory;
 
   public ConsumeIndexJobImpl(IndexManager pIndexManager, IndexConsumerManager pIndexConsumerManager,
-      Environment pEnvironment, EntityResolverFactory pEntityResolverFactory, LockManager pLockManager) {
+      EntityResolverFactory pEntityResolverFactory, LockManager pLockManager) {
     mIndexManager = pIndexManager;
     mIndexConsumerManager = pIndexConsumerManager;
-    environment = pEnvironment;
     mEntityResolverFactory = pEntityResolverFactory;
     mLockManager = pLockManager;
   }

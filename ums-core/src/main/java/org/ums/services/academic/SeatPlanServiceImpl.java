@@ -300,7 +300,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     if(studentsUsed.get(student) == null) {
                       studentsUsed.put(student, "used");
 
-                    }else{
+                    }
+                    else {
                       studentsOfTheSubGroup.remove(0);
                       break;
                     }
