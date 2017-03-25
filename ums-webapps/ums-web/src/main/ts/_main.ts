@@ -167,9 +167,6 @@
 /// <reference path='controller/student/StudentProfile.ts'/>
 
 
-/// <reference path='controller/registrar-office/employee-information-management/employeeInformation.ts'/>
-/// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
-
 
 
 /// <reference path='dummy/DummyController.ts'/>

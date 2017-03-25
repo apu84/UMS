@@ -190,7 +190,7 @@ module ums{
     testData: Function;
   }
 
-  class employeeInformation {
+  class EmployeeInformation {
 
     public static $inject = ['appConstants', '$scope', '$q', 'notify', '$window', '$sce'];
 
@@ -691,5 +691,5 @@ module ums{
     }
   }
 
-  UMS.controller("employeeInformation",employeeInformation);
+  UMS.controller("EmployeeInformation",EmployeeInformation);
 }
