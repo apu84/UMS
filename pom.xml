@@ -72,7 +72,8 @@
     <module>ums-webservice-academic</module>
     <module>ums-webservice-bank</module>
     <module>ums-webservice-library</module>
-      <module>codegenerator</module>
+    <module>ums-webservice-registrar</module>
+    <module>codegenerator</module>
       <!-- <module>ums-web-templates</module>-->
   </modules>
 

@@ -168,6 +168,7 @@
 
 
 /// <reference path='controller/registrar-office/employee-information-management/employeeInformation.ts'/>
+/// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
 
 
 
