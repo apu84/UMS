@@ -1,0 +1,22 @@
+{
+  "name": "ums-registrar-web",
+  "version": "1.0.0",
+  "description": "UMS Web",
+  "repository": "http://swlabs.co",
+  "dest": "target/ums-registrar-web-trunk-SNAPSHOT/",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-concurrent": "*",
+    "grunt-sync": "*",
+    "grunt-ts": "~5.2.0",
+    "load-grunt-tasks": "*",
+    "grunt-este-watch": "*",
+    "typescript": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "@types/ckeditor": "0.0.37"
+  }
+}
