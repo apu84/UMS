@@ -19,6 +19,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.tab.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/ckeditor.d.ts'/>
+
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 
 
