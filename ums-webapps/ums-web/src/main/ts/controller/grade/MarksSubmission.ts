@@ -564,12 +564,14 @@ module ums {
       var rows = data.split("\n");
       var regType: number;
       var rowError = false;
+      var partAMarks = 0;
       var partBMarks = 0;
+      var partBForGradeValidation ="";
       var total = 0;
       var totalInExcel:string = "";
       var gradeInExcel = "";
       for (var y = 0; y < rows.length; y++) {
-        partBMarks = 0;
+        var partAMarks = 0; partBMarks = 0;
         total = 0;
 
         if (rows[y] == "") continue;
@@ -587,10 +589,17 @@ module ums {
           this.setFieldValue("quiz_" + studentId, row[2]);
           this.setFieldValue("class_perf_" + studentId, row[3]);
           this.setFieldValue("part_a_" + studentId, row[4]);
+          //ToDo: Need to check whether is it a positive number or not
+          if( !isNaN(row[4]) ){
+            partAMarks = row[4];
+          }
 
           if (this.$scope.data.total_part == 2) {
             this.setFieldValue("part_b_" + studentId, row[5]);
-            partBMarks = row[5];
+            if( !isNaN(row[5]) ){
+              partBMarks = row[5];
+            }
+            partBForGradeValidation = row[5];
             totalInExcel =  row[6];
             gradeInExcel =  row[7];
           } else if (this.$scope.data.total_part == 1) {
@@ -598,9 +607,10 @@ module ums {
             gradeInExcel =  row[6];
           }
 
+
           if (totalInExcel == "") {
             try {
-              total = Number(row[2]) + Number(row[3]) + Number(row[4]) + Number(partBMarks);
+              total = Number(row[2]) + Number(row[3]) + Number(partAMarks) + Number(partBMarks);
               total = Math.round(total);
               this.setFieldValue("total_" + studentId, total);
             } catch (Exception) {
@@ -617,7 +627,7 @@ module ums {
             this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(total, regType));
 
 
-          this.validateGrade(false, studentId, row[2], row[3], row[4], partBMarks+'', total+'', $("#grade_letter_" + studentId).val(), regType);
+          this.validateGrade(false, studentId, row[2], row[3], row[4], partBForGradeValidation, total+'', $("#grade_letter_" + studentId).val(), regType);
         }
         else {
           this.setFieldValue("total_" + studentId, row[2]);
