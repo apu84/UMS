@@ -10,8 +10,10 @@ import org.ums.domain.model.dto.SeatPlanReportDto;
 import org.ums.domain.model.immutable.*;
 import org.ums.enums.*;
 import org.ums.enums.ProgramType;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 import org.ums.services.academic.SeatPlanService;
+import org.ums.util.UmsUtils;
 
 import javax.ws.rs.WebApplicationException;
 import java.io.*;
@@ -387,25 +389,25 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           float summaryFontSize = 10.0f;
           if(deptList.size() < 6) {
             fontSize = 11.0f;
-            summaryFontSize=11.0f;
+            summaryFontSize = 11.0f;
           }
-          else if(deptList.size() >= 6 && deptList.size()<9) {
+          else if(deptList.size() >= 6 && deptList.size() < 9) {
             fontSize = 10.0f;
-            summaryFontSize=10.0f;
+            summaryFontSize = 10.0f;
 
           }
           else if(deptList.size() == 9) {
             fontSize = 10.0f;
-            summaryFontSize=10.0f;
+            summaryFontSize = 10.0f;
           }
           else {
             if(room.getCapacity() <= 40) {
               fontSize = 9.0f;
-              summaryFontSize=9.0f;
+              summaryFontSize = 9.0f;
             }
             else {
               fontSize = 8.5f;
-              summaryFontSize=9.0f;
+              summaryFontSize = 9.0f;
 
             }
           }
@@ -1353,6 +1355,19 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       int currSemesterOfStudent = seatPlanReportDto.getCurrentSemester();
       int counter = 0;
       int studentCounter = 0;
+
+      List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
+      Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
+      if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
+        ugRegistrationResults =
+            mUGRegistrationResultManager
+                .getCCI(pSemesterId, UmsUtils.formatDate(pExamDate, "mm-dd-yyyy", "dd-mm-yyyy"));
+        for(int i = 0; i < ugRegistrationResults.size(); i++) {
+          studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId(),
+              ugRegistrationResults.get(i));
+        }
+      }
+
       while(true) {
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
 
@@ -1364,14 +1379,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
               && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 20
               && seatPlanReports.size() != 0) {
             PdfPCell innerCellOne = new PdfPCell();
-            if(seatPlanInner.getStudentType().equals("RA")) {
-              innerCellOne.addElement(new Paragraph(seatPlanInner.getStudentId(), FontFactory
-                  .getFont(FontFactory.TIMES_BOLD)));
-            }
-            else {
-              innerCellOne.addElement(new Paragraph(seatPlanInner.getStudentId(), FontFactory
-                  .getFont(FontFactory.TIMES)));
-            }
+            /*
+             * if(seatPlanInner.getStudentType().equals("RA")) { innerCellOne.addElement(new
+             * Paragraph(seatPlanInner.getStudentId(), FontFactory
+             * .getFont(FontFactory.TIMES_BOLD))); } else { innerCellOne.addElement(new
+             * Paragraph(seatPlanInner.getStudentId(), FontFactory .getFont(FontFactory.TIMES))); }
+             */
+            Chunk studentId = new Chunk();
+            studentId = getStudentTypeChunk(pExamType, studentIdUgRegistrationResultMap, studentId, seatPlanInner);
+            innerCellOne.addElement(studentId);
             innerCellOne.setPaddingTop(-4);
             PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
             innerCellOne.setPaddingBottom(4f);
@@ -1528,11 +1544,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
       String examDate = seatPlan.getExamDate();
 
-      Paragraph dueDateOfSubmission = new Paragraph("DUE DATE OF SUBMISSION :", duetFont);
+      /*Due date of submission is not required any more as it is done via IUMS.*/
+
+      /*Paragraph dueDateOfSubmission = new Paragraph("DUE DATE OF SUBMISSION :", duetFont);
       dueDateOfSubmission.setAlignment(Element.ALIGN_CENTER);
       PdfPCell dueDateCell = new PdfPCell();
       dueDateCell.addElement(dueDateOfSubmission);
-      document.add(dueDateOfSubmission);
+      document.add(dueDateOfSubmission);*/
 
       Paragraph universityName =
           new Paragraph("AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY", universityNameFont);
@@ -1558,7 +1576,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       }
       else {
         examName =
-            new Chunk("TOP SHEET (CARRY/CLEARANCE/IMPROVEMENT EXAMINATION " + semester.getName()
+            new Chunk("TOP SHEET (Carry/Clearance/Improvement Examination, " + semester.getName()
                 + ")");
       }
 
@@ -1634,6 +1652,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       courseTitleCell.addElement(courseTitlePhrase);
       document.add(courseTitlePhrase);
 
+      Phrase notePhrase = getStudentTypeNotePhrase(pExamType, lightFont, boldFont);
+      Paragraph noteParagraph = new Paragraph();
+      noteParagraph.add(notePhrase);
+      document.add(noteParagraph);
+      Paragraph spaceP = new Paragraph(" ");
+      document.add(spaceP);
+
       /* main data table starting */
       float[] dataTableWidth = new float[] {8f, 2f, 2f};
       PdfPTable dataTable = new PdfPTable(dataTableWidth);
@@ -1663,6 +1688,16 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       int rowCounter = 0;
       int studentCounter = 0;
 
+
+      List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
+      Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
+      if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()){
+        ugRegistrationResults= mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(examDate,"mm-dd-yyyy","dd-mm-yyyy"));
+        for(int i=0;i<ugRegistrationResults.size();i++){
+          studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId(), ugRegistrationResults.get(i));
+        }
+      }
+
       while(true) {
         if(seatPlans.size() != 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
@@ -1681,17 +1716,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                    */
                   if(seatPlans.size() != 1) {
                     if(seatPlanReportDto.getCourseNo().equals(seatPlans.get(1).getCourseNo())) {
-                      if(seatPlanInnerReport.getStudentType().equals("RA")) {
-                        studentId =
-                            new Chunk(seatPlanInnerReport.getStudentId(),
-                                FontFactory.getFont(FontFactory.TIMES_BOLD));
+                      studentId = getStudentTypeChunk(pExamType, studentIdUgRegistrationResultMap, studentId, seatPlanInnerReport);
 
-                      }
-                      else {
-                        studentId =
-                            new Chunk(seatPlanInnerReport.getStudentId(),
-                                FontFactory.getFont(FontFactory.TIMES));
-                      }
 
                       studentIdParagraph.add(studentId);
                       studentId = new Chunk(", ");
@@ -1700,17 +1726,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
                     }
                     else {
-                      if(seatPlanInnerReport.getStudentType().equals("RA")) {
-                        studentId =
-                            new Chunk(seatPlanInnerReport.getStudentId(),
-                                FontFactory.getFont(FontFactory.TIMES_BOLD));
+                      studentId = getStudentTypeChunk(pExamType, studentIdUgRegistrationResultMap, studentId, seatPlanInnerReport);
 
-                      }
-                      else {
-                        studentId =
-                            new Chunk(seatPlanInnerReport.getStudentId(),
-                                FontFactory.getFont(FontFactory.TIMES));
-                      }
 
                       studentIdParagraph.add(studentId);
                       studentId = new Chunk(" ");
@@ -1719,17 +1736,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     }
                   }
                   else {
-                    if(seatPlanInnerReport.getStudentType().equals("RA")) {
-                      studentId =
-                          new Chunk(seatPlanInnerReport.getStudentId(),
-                              FontFactory.getFont(FontFactory.TIMES_BOLD));
+                    studentId = getStudentTypeChunk(pExamType, studentIdUgRegistrationResultMap, studentId, seatPlanInnerReport);
 
-                    }
-                    else {
-                      studentId =
-                          new Chunk(seatPlanInnerReport.getStudentId(),
-                              FontFactory.getFont(FontFactory.TIMES));
-                    }
 
                     studentIdParagraph.add(studentId);
                     studentId = new Chunk(" ");
@@ -1892,6 +1900,56 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+  private Chunk getStudentTypeChunk(Integer pExamType,
+      Map<String, UGRegistrationResult> pStudentIdUgRegistrationResultMap, Chunk pStudentId,
+      SeatPlanReportDto pSeatPlanInnerReport) {
+    if(pExamType == ExamType.SEMESTER_FINAL.getId()) {
+      if(pSeatPlanInnerReport.getStudentType().equals("RA")) {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
+
+      }
+      else {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
+      }
+    }
+    else {
+      if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.CARRY) {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
+      }
+      else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.IMPROVEMENT) {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_ITALIC));
+      }
+      else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.SPECIAL_CARRY) {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLDITALIC));
+      }
+      else {
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
+      }
+    }
+    return pStudentId;
+  }
+
+  private Phrase getStudentTypeNotePhrase(Integer pExamType, Font pLightFont, Font pBoldFont) {
+    Paragraph noteParagraph = new Paragraph(" Font Style: ", pLightFont);
+    Phrase notePhrase = new Phrase();
+    notePhrase.add(noteParagraph);
+    if(pExamType == ExamType.SEMESTER_FINAL.getId()) {
+      noteParagraph = new Paragraph("Regular ", pLightFont);
+      notePhrase.add(noteParagraph);
+      noteParagraph = new Paragraph("Re-admission", pBoldFont);
+      notePhrase.add(noteParagraph);
+    }
+    else {
+      noteParagraph = new Paragraph("Clearance ", pLightFont);
+      notePhrase.add(noteParagraph);
+      noteParagraph = new Paragraph("Carryover ", pBoldFont);
+      notePhrase.add(noteParagraph);
+      noteParagraph = new Paragraph("Improvement ", FontFactory.getFont(FontFactory.TIMES_ITALIC));
+      notePhrase.add(noteParagraph);
+    }
+    return notePhrase;
   }
 
   @Override
