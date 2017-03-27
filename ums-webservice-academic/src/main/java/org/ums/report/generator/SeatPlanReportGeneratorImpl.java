@@ -387,21 +387,25 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           float summaryFontSize = 10.0f;
           if(deptList.size() < 6) {
             fontSize = 11.0f;
+            summaryFontSize=11.0f;
           }
-          else if(deptList.size() == 6) {
-            fontSize = 11.0f;
+          else if(deptList.size() >= 6 && deptList.size()<9) {
+            fontSize = 10.0f;
+            summaryFontSize=10.0f;
 
           }
           else if(deptList.size() == 9) {
-            fontSize = 11.0f;
-            // summaryFontSize=9.0f;
+            fontSize = 10.0f;
+            summaryFontSize=10.0f;
           }
           else {
             if(room.getCapacity() <= 40) {
-              fontSize = 11.0f;
+              fontSize = 9.0f;
+              summaryFontSize=9.0f;
             }
             else {
-              fontSize = 11.0f;
+              fontSize = 8.5f;
+              summaryFontSize=9.0f;
 
             }
           }
