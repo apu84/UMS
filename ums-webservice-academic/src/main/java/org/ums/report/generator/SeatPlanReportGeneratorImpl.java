@@ -2,6 +2,7 @@ package org.ums.report.generator;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import javafx.scene.layout.Background;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.builder.SeatPlanBuilder;
@@ -1919,10 +1920,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
       }
       else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.IMPROVEMENT) {
-        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_ITALIC));
+        pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
+        pStudentId.setBackground(BaseColor.LIGHT_GRAY);
       }
       else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.SPECIAL_CARRY) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLDITALIC));
+        pStudentId.setBackground(BaseColor.LIGHT_GRAY);
       }
       else {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
@@ -1946,8 +1949,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       notePhrase.add(noteParagraph);
       noteParagraph = new Paragraph("Carryover ", pBoldFont);
       notePhrase.add(noteParagraph);
-      noteParagraph = new Paragraph("Improvement ", FontFactory.getFont(FontFactory.TIMES_ITALIC));
-      notePhrase.add(noteParagraph);
+      Chunk noteChunk = new Chunk("Improvement ", FontFactory.getFont(FontFactory.TIMES));
+      noteChunk.setBackground(BaseColor.LIGHT_GRAY);
+      notePhrase.add(noteChunk);
+      noteChunk = new Chunk("Special Carry ", FontFactory.getFont(FontFactory.TIMES_BOLDITALIC));
+      noteChunk.setBackground(BaseColor.GREEN);
+      notePhrase.add(noteChunk);
     }
     return notePhrase;
   }

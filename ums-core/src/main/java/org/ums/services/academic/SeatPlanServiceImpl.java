@@ -297,14 +297,6 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                   if(subGroupWithStudents.get(subGroup) != null) {
                     List<Student> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
                     Student student = studentsOfTheSubGroup.get(0);
-                    if(studentsUsed.get(student) == null) {
-                      studentsUsed.put(student, "used");
-
-                    }
-                    else {
-                      studentsOfTheSubGroup.remove(0);
-                      break;
-                    }
 
                     roomStructure[roomRow][roomColumn] = student.getId();
                     MutableSeatPlan seatPlan = new PersistentSeatPlan();
