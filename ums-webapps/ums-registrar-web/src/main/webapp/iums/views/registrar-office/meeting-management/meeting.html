@@ -1,19 +1,22 @@
 <style>
-    fieldset {
-        border: 1px dashed grey;
-        width: auto;
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-
     .white-space-pre{
         white-space:pre-wrap;
+    }
+     ul.nav.nav-tabs.ul-edit {
+         border-bottom: 1px white !important;
+     }
+    ul.nav.nav-tabs.ul-edit li a {
+        background: lightgrey;
+        padding: 5px 10px;
+    }
+    ul.nav.nav-tabs.ul-edit li.active a {
+        background: grey;
     }
 </style>
 
 <div class="row">
     <div class="col-md-12">
-        <ul class="nav nav-tabs nav-justified" role="tablist">
+        <ul class="nav nav-tabs ul-edit nav-justified" role="tablist">
             <li class="active"><a data-ng-click="changeNav(1)" data-toggle="tab">Schedule & Members</a></li>
             <li><a data-ng-click="changeNav(2)" data-toggle="tab">Agenda & Resolution</a></li>
             <li><a data-ng-click="changeNav(3)" data-toggle="tab">Search</a></li>

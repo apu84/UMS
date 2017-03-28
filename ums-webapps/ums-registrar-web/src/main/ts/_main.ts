@@ -81,8 +81,8 @@
 /// <reference path='data.ts'/>
 
 
-/// <reference path='./controller/registrar-office/employee-information-management/EmployeeInformation.ts'/>
-/// <reference path='../../../../ums-registrar-web/src/main/ts/controller/registrar-office/meeting-management/Meeting.ts'/>
+/// <reference path='controller/registrar-office/employee-information-management/EmployeeInformation.ts'/>
+/// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
 
 
 
