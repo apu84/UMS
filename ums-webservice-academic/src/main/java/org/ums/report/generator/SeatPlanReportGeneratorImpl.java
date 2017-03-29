@@ -1187,8 +1187,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     int routineCounter = 0;
 
     long startTime = System.currentTimeMillis();
+    Map<String, String> studentsUsageMap = new HashMap<>();
+
     while(true) {
-      SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
+      SeatPlanReportDto seatPlanReportDto = getUnusedStudents(seatPlanReports, studentsUsageMap);
+      studentsUsageMap.put(seatPlanReportDto.getStudentId(),"used");
 
       routineCounter += 1;
       PdfPTable table = new PdfPTable(2);
@@ -1692,6 +1695,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
       List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
       Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
+      Map<String, String> studentsUsageMap = new HashMap<>();
+
       if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()){
         ugRegistrationResults= mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(examDate,"mm-dd-yyyy","dd-mm-yyyy"));
         for(int i=0;i<ugRegistrationResults.size();i++){
@@ -1702,6 +1707,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       while(true) {
         if(seatPlans.size() != 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
+          if(seatPlanReportDto.getCourseNo().equals("BBA 213")){
+            boolean found=true;
+          }
           if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlanReportDto.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanReportDto.getCurrentSemester()==seatPlan.getCurrentSemester()
               && seatPlans.size() != 0) {
             Chunk studentId = new Chunk("");
@@ -1709,7 +1717,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
             for(int i = 0; i < 6; i++) {
               if(seatPlans.size() != 0) {
-                SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
+                SeatPlanReportDto seatPlanInnerReport = getUnusedStudents(seatPlans, studentsUsageMap);
+                studentsUsageMap.put(seatPlanInnerReport.getStudentId(),"used");
                 if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo() ) && seatPlanInnerReport.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanInnerReport.getCurrentSemester()==seatPlan.getCurrentSemester()
                     && seatPlans.size() != 0) {
                   /*
@@ -1894,6 +1903,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         break;
       }
       else {
+        studentsUsageMap = new HashMap<>();
         document.newPage();
       }
 
@@ -1901,6 +1911,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+  private SeatPlanReportDto getUnusedStudents(List<SeatPlanReportDto> pSeatPlans, Map<String, String> pStudentsUsageMap) {
+    SeatPlanReportDto seatPlanInnerReport = pSeatPlans.get(0);
+    if(pStudentsUsageMap.get(seatPlanInnerReport.getStudentId()) != null) {
+      pSeatPlans.remove(0);
+      while(true) {
+        if(pStudentsUsageMap.containsKey(pSeatPlans.get(0))) {
+          pSeatPlans.remove(0);
+        }
+        else {
+          seatPlanInnerReport = pSeatPlans.get(0);
+          break;
+        }
+      }
+    }
+    return seatPlanInnerReport;
   }
 
   private Chunk getStudentTypeChunk(Integer pExamType,
