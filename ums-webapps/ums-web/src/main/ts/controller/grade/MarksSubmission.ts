@@ -380,6 +380,7 @@ module ums {
 
     private fetchGradeSubmissionTable(): void {
 
+      console.log( this.$scope.inputParams);
       var status = 0;
       if (this.$scope.userRole != "T") {
         status = this.$scope.inputParams.status;
@@ -388,11 +389,20 @@ module ums {
       var deptId =this.$scope.inputParams.dept_id+'';
       var programId = 99;
 
+      console.log( deptId);
+      console.log( this.$scope.inputParams.dept_id);
+
+
+      console.log( this.$scope.inputParams);
+
+
       if(deptId == "" || deptId == null || deptId == 'NaN') {
         deptId = "NA";
       }
       else {
-        deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
+        if(this.$scope.inputParams.dept_id!="AS") {
+          deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
+        }
         programId  =  this.$scope.inputParams.program_id;
       }
 
