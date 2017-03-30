@@ -402,8 +402,9 @@ module ums {
       else {
         if(this.$scope.inputParams.dept_id!="AS") {
           deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
+          programId  =  this.$scope.inputParams.program_id;
         }
-        programId  =  this.$scope.inputParams.program_id;
+
       }
 
       this.httpClient.get("academic/gradeSubmission/semester/" + this.$scope.inputParams.semester_id +
