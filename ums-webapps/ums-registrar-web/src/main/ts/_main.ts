@@ -85,5 +85,8 @@
 /// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
 
 
+/// <reference path='service/EmployeeInformationService.ts'/>
+
+
 
 

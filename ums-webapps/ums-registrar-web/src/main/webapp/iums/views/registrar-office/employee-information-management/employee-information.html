@@ -4,7 +4,7 @@
     }
     ul.nav.nav-tabs.ul-edit li a {
         background: lightgrey;
-        padding: 5px 10px;
+        padding: 7px 10px;
     }
     ul.nav.nav-tabs.ul-edit li.active a {
         background: grey;
@@ -15,29 +15,29 @@
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs ul-edit nav-justified" role="tablist">
-            <li class="active"><a data-ng-click="changeNav(1)" data-toggle="tab">Personal</a></li>
-            <li><a data-ng-click="changeNav(2)" data-toggle="tab">Academic</a></li>
-            <li><a data-ng-click="changeNav(3)" data-toggle="tab">Publication</a></li>
-            <li><a data-ng-click="changeNav(4)" data-toggle="tab">Training</a></li>
-            <li><a data-ng-click="changeNav(5)" data-toggle="tab">Honor/Award</a></li>
-            <li><a data-ng-click="changeNav(6)" data-toggle="tab">Experience</a></li>
+            <li class="active"><a data-ng-click="changeNav(1)" title="Personal Tab" data-toggle="tab">Personal</a></li>
+            <li><a data-ng-click="changeNav(2)" title="Academic Tab" data-toggle="tab">Academic</a></li>
+            <li><a data-ng-click="changeNav(3)" title="Publication Tab" data-toggle="tab">Publication</a></li>
+            <li><a data-ng-click="changeNav(4)" title="Training Tab" data-toggle="tab">Training</a></li>
+            <li><a data-ng-click="changeNav(5)" title="Honor/Award Tab" data-toggle="tab">Honor/Award</a></li>
+            <li><a data-ng-click="changeNav(6)" title="Experience Tab" data-toggle="tab">Experience</a></li>
         </ul>
         <div class="tab-content">
-            <form action="#">
+            <form>
                 <div data-ng-show="personal">
                     <h5><b>General</b></h5>
                     <div class="row">
                         <div class="col-md-6">
                             <div>
-                                <label class="col-md-3 control-label">First Name<span class='require'>*</span></label>
-                                <div class="col-md-9"  data-ng-show="showInputFirstNameDiv">
-                                    <input data-ng-model="firstName"
+                                <label class="col-md-3 control-label">Name<span class='require'>*</span></label>
+                                <div class="col-md-9"  data-ng-show="showInputNameDiv">
+                                    <input data-ng-model="name"
                                            type="text"
-                                           placeholder="First Name"
+                                           placeholder="Name"
                                            class="form-control"/>
                                 </div>
-                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelFirstNameDiv">
-                                    <label>{{firstName}}</label>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelNameDiv">
+                                    <label>{{name}}</label>
                                 </div>
                             </div>
                         </div>
@@ -61,16 +61,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div>
-                                <label class="col-md-3 control-label">Last Name<span class='require'>*</span></label>
-                                <div class="col-md-9" data-ng-show="showInputLastNameDiv">
-                                    <input data-ng-model="lastName"
-                                           type="text"
-                                           placeholder="Last Name"
-                                           class="form-control"/>
+                                <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputGenderDiv">
+                                    <select data-ng-model="gender" class="form-control">
+                                        <option value="" disabled>Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelLastNameDiv">
-                                    <label> {{lastName}} </label>
-                                </div>
+                            </div>
+                            <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelGenderDiv">
+                                <label> {{gender}} </label>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -93,17 +94,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div>
-                                <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
-                                <div class="col-md-9" data-ng-show="showInputGenderDiv">
-                                    <select data-ng-model="gender" class="form-control">
-                                        <option value="" disabled>Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
+                                <label class="col-md-3 control-label">Blood Group</label>
+
+                                <div class="col-md-9" data-ng-show="showInputBloodGroupDiv">
+                                    <input data-ng-model="bloodGroup"
+                                           type="text"
+                                           placeholder="Blood Group"
+                                           class="form-control"/>
                                 </div>
-                            </div>
-                            <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelGenderDiv">
-                                <label> {{gender}} </label>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelBloodGroupDiv">
+                                    <label> {{bloodGroup}} </label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -262,7 +263,6 @@
                 </div>
 
 
-
                 <div data-ng-show="academic">
                     <div class="row">
                         <div class="col-md-2">
@@ -272,7 +272,7 @@
                             <label class="control-label">Institution<span class='require'>*</span></label>
                         </div>
                         <div class="col-md-2">
-                            <label class="control-label">Cgpa/Gpa/Division<span class='require'>*</span></label>
+                            <label class="control-label">Cgpa/Gpa<span class='require'>*</span></label>
                         </div>
                         <div class="col-md-2">
                             <label class="control-label">Passing Year<span class='require'>*</span></label>
@@ -297,7 +297,7 @@
                                 <label> {{academic.academicInstitution}} </label>
                             </div>
                             <div class="col-md-2" data-ng-show="showInputPhdCGpaDiv">
-                                <input type="text" data-ng-model="academic.academicCgpa" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                <input type="text" data-ng-model="academic.academicCgpa" class="form-control" placeholder="Cgpa/Gpa">
                             </div>
                             <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdCGpaDiv">
                                 <label> {{academic.academicCgpa}} </label>
@@ -309,7 +309,7 @@
                                 <label> {{academic.academicPassingYear}} </label>
                             </div>
                             <div class="col-md-1">
-                                <span>[ <i ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;" data-ng-hide="data.readOnlyMode"></i> ]</span>
+                                <span>[ <i title="Remove Row" data-ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</span>
                             </div>
                         </div>
                         <br />
@@ -317,7 +317,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            [ <a ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                            [ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                         </div>
                     </div>
                 </div>
@@ -410,7 +410,7 @@
                             </div>
                             <div class="row">
                                 <div class='col-md-6'>
-                                    [ <i ng-click="deleteRow('publication' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;" data-ng-hide="data.readOnlyMode"></i> ]
+                                    [ <i title="Remove Row" data-ng-click="deleteRow('publication' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                                 </div>
                             </div>
                             <br />
@@ -419,7 +419,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            [ <a ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                            [ <a title="Add New Row" data-ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                         </div>
                     </div>
                 </div>
@@ -470,7 +470,7 @@
                                     <label> {{training.trainingYear}} </label>
                                 </div>
                                 <div class="col-md-1">
-                                    <span>[ <i ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;" data-ng-hide="data.readOnlyMode"></i> ]</span>
+                                    <span>[ <i title="Remove Row" data-ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</span>
                                 </div>
                             </div>
                             <br/>
@@ -478,7 +478,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                [ <a ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                                [ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                             </div>
                         </div>
                     </div>
@@ -553,14 +553,14 @@
 
                         <div class="row">
                             <div class='col-md-6'>
-                                [ <i ng-click="deleteRow('award' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;" data-ng-hide="data.readOnlyMode"></i> ]
+                                [ <i title="Remove Row" data-ng-click="deleteRow('award' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                             </div>
                         </div>
                         <br />
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            [ <a ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                            [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                         </div>
                     </div>
                 </div>
@@ -648,14 +648,14 @@
                                     <label> {{experience.experienceToYear}} </label>
                                 </div>
                                 <div class='col-md-1'>
-                                    [ <i ng-click="deleteRow('experience' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;" data-ng-hide="data.readOnlyMode"></i> ]
+                                    [ <i title="Remove Row" data-ng-click="deleteRow('experience' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                                 </div>
                             </div>
                             <br />
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                [ <a ng-click="addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                                [ <a title="Add New Row" data-ng-click="addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                             </div>
                         </div>
                     </div>
@@ -663,11 +663,10 @@
             </form>
 
 
-
             <div class="text-right pal">
-                <button type="submit" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                <button type="submit" class="btn" data-ng-click="cancel()">Cancel</button>
-                <button type="submit" class="btn btn-success" data-ng-click="submit()">Submit</button>
+                <button type="submit" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                <button type="submit" title="Cancel" class="btn" data-ng-click="cancel()">Cancel</button>
+                <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submit()">Submit</button>
             </div>
         </div>
     </div>
