@@ -42,7 +42,8 @@
                 <div>Statistics<span class="subtitle"></span></div>
             </div>
             <div class="panel-body shadowPanel" style="min-height: 490px;text-align: center;">
-                <table class="table table-hover table-bordered table-advanced tablesorter" data-ng-show="statRecords.length>0">
+                <div data-spinner="" data-ng-if="statLoading"></div>
+                <table class="table table-hover table-bordered table-advanced tablesorter" data-ng-show="statRecords.length>0 && showStatTable">
                     <thead>
                     <tr>
                         <th rowspan="2" style="text-align: center;vertical-align: middle;">Dept.</th>
@@ -54,11 +55,11 @@
                     <tr>
 
                         <th style="text-align: center;width: 130px;">Total</th>
-                        <th style="text-align: center;width: 100px;">Accepted</th>
+                        <th style="text-align: center;width: 130px;">{{status}}</th>
                         <th style="text-align: center;width: 130px;">Total</th>
-                        <th style="text-align: center;width: 130px;">Accepted</th>
+                        <th style="text-align: center;width: 130px;">{{status}}</th>
                         <th style="text-align: center;width: 130px;">Total</th>
-                        <th style="text-align: center;width: 130px;">Accepted</th>
+                        <th style="text-align: center;width: 130px;">{{status}}</th>
                     </tr>
                     </thead>
                     <tbody>
