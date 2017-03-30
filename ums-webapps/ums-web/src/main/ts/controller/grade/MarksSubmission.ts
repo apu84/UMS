@@ -388,9 +388,7 @@ module ums {
       var deptId ="";
       var programId = 99;
 
-      console.log(this.$scope.inputParams.dept_id);
-
-      if(this.$scope.inputParams.dept_id == "" || this.$scope.inputParams.dept_id == null || this.$scope.inputParams.dept_id == undefined) {
+      if(this.$scope.inputParams.dept_id == "" || this.$scope.inputParams.dept_id == "NaN" || this.$scope.inputParams.dept_id == null || this.$scope.inputParams.dept_id == undefined) {
         deptId = "NA";
       }
       else {
