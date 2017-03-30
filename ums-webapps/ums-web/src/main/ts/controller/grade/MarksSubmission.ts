@@ -385,10 +385,10 @@ module ums {
         status = this.$scope.inputParams.status;
       }
 
-      var deptId ="";
+      var deptId =this.$scope.inputParams.dept_id+'';
       var programId = 99;
 
-      if(this.$scope.inputParams.dept_id == "" || this.$scope.inputParams.dept_id == "NaN" || this.$scope.inputParams.dept_id == null || this.$scope.inputParams.dept_id == undefined) {
+      if(deptId == "" || deptId == null || deptId == 'NaN') {
         deptId = "NA";
       }
       else {
