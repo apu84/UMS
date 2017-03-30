@@ -30,6 +30,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
+
+
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/ChangePassword.ts'/>
@@ -56,6 +58,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Notification.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ConfirmationDIalog.ts'/>
 
+
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/Unauthorized.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ValidationExceptions.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ServerExceptions.ts'/>
@@ -75,14 +78,17 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 
 /// <reference path='data.ts'/>
 
-/// <reference path='controller/RecordInfo.ts'/>
+/// <reference path='controller/Cataloging.ts'/>
 /// <reference path='controller/PatronHome.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>
 
-
-
-
+/// <reference path='../../../../ums-library-web/src/main/ts/service/SupplierService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/service/CatalogingService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/directive/TablePaginatorWrapper.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/directive/NavigationButton.ts'/>

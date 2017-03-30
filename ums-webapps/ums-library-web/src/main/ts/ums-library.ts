@@ -60,7 +60,7 @@ module ums {
         })
         .state('cataloging.record', {
           url: "/record",
-          controller: 'RecordInfo',
+          controller: 'Cataloging',
           templateUrl: 'views/admin/cataloging/catalog.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

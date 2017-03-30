@@ -3,141 +3,161 @@
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
+            <data-table-paginator-wrapper dataservice="supplierService"  datanotify="notifyService"
+                                          ipp="10"
+                                          tableprefix="supplier">
             <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true"
-                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
                 <h4 id="modal-default-label" class="modal-title">Suppliers</h4></div>
             <div class="modal-body" style="padding: 0px;min-height: 480px;">
                 <div class="panel">
-                    <div class="panel-heading">
-                        <p class="alignLeft" id="pageTitle_supplier" style="float: left;">Serach Supplier</p>
+                    <div class="panel-heading"> <!--start of panel-heading -->
+                        <p class="alignLeft" id="pageTitle_supplier" style="float: left;">Search Supplier</p>
                         <p class="alignRight" style="float: right">
-                            <a href="javascript:;" class="btn btn-xs btn-default singleAnchor"
-                               onclick="showSearchPanel('supplier')" style="background-color: black;">
-                                <i class="fa fa fa-search" style="color: white;" aria-hidden="true"></i>
+                            <a href="javascript:;" class="btn btn-xs btn-default singleAnchor" data-ng-click="showSearchPanel()" style="background-color: black;">
+                                <i class="fa fa fa-search" style="color: white;"></i>
                             </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default bulkAnchor"
-                               onclick="showEntryPanel('supplier')" style="background-color: #ffffff;">
+                            <a href="javascript:;" class="btn btn-xs btn-default bulkAnchor" data-ng-click="showRecordPanelForNewEntry()" style="background-color: #ffffff;">
                                 <i class="fa fa-plus" style="color: black;" aria-hidden="true"></i>
                             </a>
                         </p>
                         <span class="subtitle"></span>
-                    </div>
+                    </div><!-- end of panel-heading -->
+
                     <div class="panel-body" style="padding: 0px;">
-                        <div style="vertical-align: top;position: relative;clear: both; height: ">
-                        <div id="searchPanel_supplier" style="float: left;padding-top: 10px;padding-left: 10px;width: 99%;position: absolute;">
-                            <fieldset id="add_multiple_copies_span">
-                                <ul>
-                                    <li style="list-style-type: none;margin-top:10px; ">
-                                        <label style="width:105px;text-align: right;"><b>Search by name:</b> </label>
-                                        <select name="operator" id="marclistanywhere" style="width:100px;" >
-                                            <option value="contains">contains</option>
-                                            <option value="start">starts with</option>
-                                            <option value="is">is exactly</option>
-                                        </select>
-                                        <input id="value_any" style="width:56%;" type="text" name="value_any" value="" class="ui-autocomplete-input" autocomplete="off">
-                                        <div id="yvaluecontainermarclist"></div>
-                                    </li>
-                                    <li  style="list-style-type: none;margin-top:10px; ">
-                                        <label for="orderby" style="width:105px;text-align: right;"><b>Sort by:</b> </label>
-                                        <select name="orderby" id="orderby" style="width:100px;" >
-                                            <option value="HeadingAsc">Heading A-Z</option>
-                                            <option value="HeadingDsc">Heading Z-A</option>
-                                            <option value="">None</option>
-                                        </select>
-                                    </li></ul>
-                            </fieldset>
+                        <div style="vertical-align: top;position: relative;clear: both; ">
+                            <div id="searchPanel_supplier" style="float: left;padding-top: 10px;padding-left: 10px;width: 99%;position: absolute;">
+                                <fieldset id="add_multiple_copies_span">
+                                    <ul>
+                                        <li style="list-style-type: none;margin-top:10px; ">
+                                            <label style="width:105px;text-align: right;"><b>Search by name:</b> </label>
+                                            <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = 'name'" />
+                                            <select name="operator" style="width:100px;" data-ng-model="filterlist[0].operator" data-ng-init="filterlist[0].operator = 'cn'">
+                                                <option value="cn">contains</option>
+                                                <option value="start">starts with</option>
+                                                <option value="is">is exactly</option>
+                                            </select>
+                                            <input style="width:56%;" type="text" autocomplete="off" data-ng-model="filterlist[0].fieldValue" data-ng-init="filterlist[0].fieldValue = ''">
+                                        </li>
 
-                            <div class="btn pull-right">
-                                <button type="button" class="btn btn-dark btn-success"  value="search_supplier" onclick=" showResultPanel('supplier')">Search</button>
-                            </div>
-                        </div>
-                        <div id="listPanel_supplier" style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
-                            <!-- Start of supplier list -->
-                            <div class="row">
-                                <div class="col-md-12" >
-                                    <data-table-paginator-wrapper datafetcher="getSupplierData()"  ipp="10">
-                                    <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
-                                        <thead>
-                                        <tr>
-                                            <th class="header" column-sorter="sort('name')">Supplier Name</th>
-                                        </tr>
-                                        </tr></thead>
-                                        <tbody>
-                                        <tr dir-paginate="course in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" >
-                                            <td>{{ course.name }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                        <div class="pull-right" style="margin-top:-30px;">
-                                                <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChanged(newPageNumber)"
-                                                             template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
-                                        </div>
-                                </data-table-paginator-wrapper>
-                            </div>
-                            <!-- End of supplier list -->
-                        </div>
-                        </div>
-                        <div id="entryPanel_supplier" style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
-                            <form action="" class="form-horizontal"  data-onvalidate="saveSupplier" data-validate=""  id="supplierForm">
-                                <div class="form-body pal">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="input-icon"><i class="fa fa-user"></i><input
-                                                        id="inputFirstName" type="text" placeholder="Name"  class="form-control required" data-ng-model="supplier.name"/></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="input-icon"><i class="fa fa-envelope"></i><input
-                                                        id="inputEmail" type="text" placeholder="E-mail"  class="form-control" data-ng-model="supplier.email"/></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="input-icon"><i class="fa fa-user-circle"></i><input
-                                                        id="contactPerson" type="text" placeholder="Contact Person"
-                                                        class="form-control" data-ng-model="supplier.contactPerson"/></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="input-icon"><i class="fa fa-phone"></i><input
-                                                        id="phone" type="text" placeholder="Phone"
-                                                        class="form-control" data-ng-model="supplier.contactNumber"/></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr/>
+                                        <!--
+                                        <li  style="list-style-type: none;margin-top:10px; ">
+                                            <label for="orderby" style="width:105px;text-align: right;"><b>Sort by:</b> </label>
+                                            <select name="orderby" id="orderby" style="width:100px;" >
+                                                <option value="HeadingAsc">Heading A-Z</option>
+                                                <option value="HeadingDsc">Heading Z-A</option>
+                                                <option value="">None</option>
+                                            </select>
+                                        </li>
+                                        -->
 
-                                    <div class="form-group"><textarea rows="4" placeholder="Additional info"
-                                                                      class="form-control" data-ng-model="supplier.note"></textarea></div>
+                                    </ul>
+                                </fieldset>
 
-                                    <div class="form-group"><input id="inputAddress" type="text"
-                                                                   placeholder="Address Information" class="form-control" data-ng-model="supplier.address"/>
-                                    </div>
-
-                                    <button type="button" class="btn btn-dark btn-success" style="display: none;" id="bbcd"></button>
+                                <div class="btn pull-right" style="padding: 0px;margin-right: 2.5%;">
+                                    <button class="btn btn-default" value="search_supplier" data-ng-click="search();">Search</button>
                                 </div>
+                            </div>
+                            <div id="listPanel_supplier" style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
+                                <!-- Start of supplier list -->
+                                <div class="row">
+                                    <div class="col-md-12" >
 
-                            </form>
+                                            <button data-ng-click="pageChanged(1)" id="btnReloadSupplier" data-ng-show="false"></button>
+                                            <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                                                <thead>
+                                                <tr>
+                                                    <th class="header" column-sorter="sort('name')">Supplier Name</th>
+                                                </tr>
+                                                </tr></thead>
+                                                <tbody>
+                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total"
+                                                    data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
+
+
+                                                    <td style="text-align: left;">{{ record.name }}
+                                                    <div style="float: right;display: none;" id="actionPanel{{$index}}">
+                                                        <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>
+                                                        <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="editRecord(record.id)"></i>
+                                                    </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="pull-right" style="margin-top:-30px;">
+                                                <dir-pagination-controls boundary-links="true"
+                                                                         on-page-change="pageChanged(newPageNumber)"
+                                                                         template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+                                            </div>
+
+                                    </div>
+                                    <!-- End of supplier list -->
+                                </div>
+                            </div>
+
+
+                                <div id="entryPanel_supplier" style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
+                                <form action="" class="form-horizontal"  data-onvalidate="saveRecord" data-validate=""  id="supplierForm">
+                                    <div class="form-body pal">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-icon"><i class="fa fa-user"></i><input
+                                                            id="inputFirstName" type="text" placeholder="Name"  class="form-control required" data-ng-model="record.name" ng-disabled="data.readOnlyMode"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-icon"><i class="fa fa-envelope"></i><input
+                                                            id="inputEmail" type="text" placeholder="E-mail"  class="form-control" data-ng-model="record.email" ng-disabled="data.readOnlyMode"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-icon"><i class="fa fa-user-circle"></i><input
+                                                            id="contactPerson" type="text" placeholder="Contact Person"
+                                                            class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-icon"><i class="fa fa-phone"></i><input
+                                                            id="phone" type="text" placeholder="Phone"
+                                                            class="form-control" data-ng-model="record.contactNumber" ng-disabled="data.readOnlyMode"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+
+                                        <div class="form-group"><textarea rows="4" placeholder="Additional info"
+                                                                          class="form-control" data-ng-model="record.note" ng-disabled="data.readOnlyMode"></textarea></div>
+
+                                        <div class="form-group"><input id="inputAddress" type="text"
+                                                                       placeholder="Address Information" class="form-control" data-ng-model="record.address" ng-disabled="data.readOnlyMode"/>
+                                        </div>
+
+                                        <button type="button" class="btn btn-dark btn-success" id="btn_addSupplier" data-ng-show="false"></button>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
-                        </div>
-                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer" style="margin-top: 10px;" id="footer_supplier">
+                <button type="button" class="btn btn-dark btn-success"  value="add_supplier" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
+                <button type="button" class="btn btn-danger btn-success"  value="delete_supplier" data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete</button>
+                <button type="button" class="btn btn-success btn-success"  value="add_supplier" onclick="$('#btn_addSupplier').click();" data-ng-show="data.showSave">Save</button>
                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-                <button type="button" class="btn btn-dark btn-success"  value="add_supplier" onclick="$('#bbcd').click();">Add Supplier</button>
             </div>
-        </div>
+            </data-table-paginator-wrapper>
+        </div> <!-- End of modal-content -->
     </div>
 </div>

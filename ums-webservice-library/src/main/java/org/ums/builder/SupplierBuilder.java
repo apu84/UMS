@@ -24,7 +24,7 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Supplier pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("address", UmsUtils.nullConversion(pReadOnly.getAddress()));
     pBuilder.add("contactPerson", UmsUtils.nullConversion(pReadOnly.getContactPerson()));

@@ -107,30 +107,26 @@
         text-align: left;
     }
 </style>
+
 <div>
-    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
+    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span id="headerTitle"></span></p>
     <p class="alignRight">
-
-        <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
-           data-ng-click="showBookUI()" style="background-color: black;">
-            <i class="fa fa-book bookIcon" style="color: white;" aria-hidden="true"></i>
-        </a>
-        <a href="javascript:;" class="btn btn-xs btn-default recordAnchor"
-           data-ng-click="showAccessionUI()" style="background-color: #ffffff;">
-            <i class="fa fa-files-o recordIcon" style="color: black;" aria-hidden="true"></i>
-        </a>
-
+        <a data-ng-click="fillSampleData()">Sample</a>
+        <navigation-button icons="fa fa-book bookIcon,fa fa-files-o recordIcon"
+                           ids="recordNav,itemNav"
+                           callbacks="callbackList">
+        </navigation-button>
     </p>
 </div>
 
 <hr style="clear: both;"/>
 
-<div class="form-body pal" style="margin-top: -25px;" data-ng-show="bookInfo"
-     data-ng-include="'views/admin/cataloging/catalog-item.html'">
+<div class="form-body pal" style="margin-top: -25px;" id ="container_recordNav"
+     data-ng-include="'views/admin/cataloging/catalog-record.html'">
 </div>
 
-<div style="margin-top: -25px;" data-ng-show="accessionInfo"
-     data-ng-include="'views/admin/cataloging/catalog-record.html'">
+<div style="margin-top: -25px;display: none;" id="container_itemNav"
+     data-ng-include="'views/admin/cataloging/catalog-item.html'">
 </div>
 
 <div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
@@ -150,17 +146,12 @@
 //        $("#footer_"+panelType).show();
 
     }
-    function showResultPanel(panelType){
-        $("#searchPanel_"+panelType).hide('slide', {direction: 'left'}, 400);
-        $("#listPanel_"+panelType).show('slide', {direction: 'right'}, 400);
-        $("#entryPanel_"+panelType).hide('slide', {direction: 'right'});
-    }
+
     function showEntryPanel(panelType){
         $("#searchPanel_"+panelType).hide('slide', {direction: 'left'}, 400);
         $("#listPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
         $("#entryPanel_"+panelType).show('slide', {direction: 'right'}, 400);
         $("#pageTitle_"+panelType).html("New "+panelType);
-
 //        $("#footer_"+panelType).hide();
     }
 
