@@ -385,10 +385,23 @@ module ums {
         status = this.$scope.inputParams.status;
       }
 
+      var deptId ="";
+      var programId = 99;
+
+      console.log(this.$scope.inputParams.dept_id);
+
+      if(this.$scope.inputParams.dept_id == "" || this.$scope.inputParams.dept_id == null || this.$scope.inputParams.dept_id == undefined) {
+        deptId = "NA";
+      }
+      else {
+        deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
+        programId  =  this.$scope.inputParams.program_id;
+      }
+
       this.httpClient.get("academic/gradeSubmission/semester/" + this.$scope.inputParams.semester_id +
           "/examtype/" + this.$scope.inputParams.exam_typeId +
-          "/dept/" + this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0') +
-          "/program/" + this.$scope.inputParams.program_id +
+          "/dept/" +deptId+
+          "/program/" + programId +
           "/yearsemester/" + this.$scope.inputParams.year_semester +
           "/role/" + this.$scope.userRole +
           "/status/" + status,
@@ -1537,8 +1550,15 @@ module ums {
       var resultPrograms: any = $.grep(programJson, function (e: any) {
         return e.deptId == controllerScope.inputParams.dept_id;
       });
-      this.$scope.data.programs = resultPrograms[0].programs;
-      this.$scope.inputParams.program_id = resultPrograms[0].programs[0].id;
+
+      if(resultPrograms[0] == undefined) {
+        this.$scope.data.programs = null;
+        this.$scope.inputParams.program_id = null;
+      }  else {
+        this.$scope.data.programs = resultPrograms[0].programs;
+        this.$scope.inputParams.program_id = resultPrograms[0].programs[0].id;
+      }
+
     }
 
 

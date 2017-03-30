@@ -1191,7 +1191,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     while(true) {
       SeatPlanReportDto seatPlanReportDto = getUnusedStudents(seatPlanReports, studentsUsageMap);
-      studentsUsageMap.put(seatPlanReportDto.getStudentId(),"used");
+      studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
 
       routineCounter += 1;
       PdfPTable table = new PdfPTable(2);
