@@ -95,8 +95,11 @@ module ums {
     static SEARCH_ROW: string="#A2D9CE";
 
 
-
-
+    /**
+     * Dropdown(SelectBox) Default Selected Value
+     */
+    static NUMBER_SELECT: number = 101101;
+    static STRING_SELECT: string = "";
 
 
 
