@@ -1,0 +1,810 @@
+<style>
+    ul.nav.nav-tabs.ul-edit {
+        border-bottom: 1px white !important;
+    }
+    ul.nav.nav-tabs.ul-edit li a {
+        background: lightgrey;
+        padding: 7px 10px;
+    }
+    ul.nav.nav-tabs.ul-edit li.active a {
+        background: grey;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs ul-edit nav-justified" role="tablist">
+            <li class="active"><a data-ng-click="changeNav(1)" title="Personal Tab" data-toggle="tab">Personal</a></li>
+            <li><a data-ng-click="changeNav(2)" title="Job Tab" data-toggle="tab">Job</a></li>
+            <li><a data-ng-click="changeNav(3)" title="Academic Tab" data-toggle="tab">Academic</a></li>
+            <li><a data-ng-click="changeNav(4)" title="Publication Tab" data-toggle="tab">Publication</a></li>
+            <li><a data-ng-click="changeNav(5)" title="Training Tab" data-toggle="tab">Training</a></li>
+            <li><a data-ng-click="changeNav(6)" title="Honor/Award Tab" data-toggle="tab">Honor/Award</a></li>
+            <li><a data-ng-click="changeNav(7)" title="Experience Tab" data-toggle="tab">Experience</a></li>
+        </ul>
+        <div class="tab-content">
+            <form>
+                <div data-ng-show="personal">
+                    <h5><b>General</b></h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Name<span class='require'>*</span></label>
+                                <div class="col-md-9"  data-ng-show="showInputNameDiv">
+                                    <input data-ng-model="name"
+                                           type="text"
+                                           placeholder="Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelNameDiv">
+                                    <label>{{name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Father's Name<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputFatherNameDiv">
+                                    <input data-ng-model="fatherName"
+                                           type="text"
+                                           placeholder="Father's Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelFatherNameDiv">
+                                    <label> {{fatherName}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputGenderDiv">
+                                    <select data-ng-model="gender" class="form-control">
+                                        <option value="" disabled>Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelGenderDiv">
+                                <label> {{gender}} </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Mother's Name<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputMotherNameDiv">
+                                    <input data-ng-model="motherName"
+                                           type="text"
+                                           placeholder="Mother's Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelMotherNameDiv">
+                                    <label> {{motherName}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Blood Group</label>
+
+                                <div class="col-md-9" data-ng-show="showInputBloodGroupDiv">
+                                    <input data-ng-model="bloodGroup"
+                                           type="text"
+                                           placeholder="Blood Group"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelBloodGroupDiv">
+                                    <label> {{bloodGroup}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Date of Birth<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputBirthdayDiv">
+                                    <input data-ng-model="birthday"
+                                           type="text"
+                                           placeholder="dd/mm/yyyy"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelBirthdayDiv">
+                                    <label> {{birthday}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Marital Status<span class='require'>*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputMaritalStatusDiv">
+                                    <select data-ng-model="maritalStatus" class="form-control">
+                                        <option value="" disabled>Select Marital Status</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Divorced">Divorced</option>
+                                        <option value="Widowed">Widowed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelMaritalStatusDiv">
+                                    <label> {{maritalStatus}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Spouse's Name</label>
+
+                                <div class="col-md-9" data-ng-show="showInputSpouseNameDiv">
+                                    <input data-ng-model="spouseName"
+                                           type="text"
+                                           placeholder="Spouse's Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelSpouseNameDiv">
+                                    <label> {{spouseName}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">National Id Card No.<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputNationalIdNoDiv">
+                                    <input data-ng-model="nationalIdNo"
+                                           type="text"
+                                           placeholder="National Id Card Number"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelNationalIdNoDiv">
+                                    <label> {{nationalIdNo}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Spouse's National Id Card No.</label>
+                                <div class="col-md-9" data-ng-show="showSpouseInputNationalIdNoDiv">
+                                    <input data-ng-model="spouseNationalIdNo"
+                                           type="text"
+                                           placeholder="Spouse's National Id Card Number"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelSpouseNationalIdNoDiv">
+                                    <label> {{spouseNationalIdNo}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+
+                    <h5><b>Contact:</b></h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Email<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputEmailDiv">
+                                    <div class="input-icon">
+                                        <i class="fa fa-envelope"></i>
+                                        <input data-ng-model="email"
+                                               type="text"
+                                               placeholder="Email Address"
+                                               class="form-control"/></div>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmailDiv">
+                                    <label> {{email}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Phone<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputPhoneDiv">
+                                    <input data-ng-model="phone"
+                                           type="text"
+                                           placeholder="Phone"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPhoneDiv">
+                                    <label> {{phone}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div><label class="col-md-3 control-label">Present Address<span class='require'>*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputPresentAddressDiv">
+                                    <input data-ng-model="presentAddress"
+                                           type="text"
+                                           placeholder="Present Address"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPresentAddressDiv">
+                                    <label> {{presentAddress}} </label></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Permanent Address<span class='require'>*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputPermanentAddressDiv">
+                                    <input data-ng-model="permanentAddress"
+                                           type="text"
+                                           placeholder="Permanent Address"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPermanentAddressDiv">
+                                    <label> {{permanentAddress}} </label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+
+                <div data-ng-show="job">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Employee Id<span class='require'>*</span></label>
+                                <div class="col-md-9"  data-ng-show="showInputEmployeeIdDiv">
+                                    <input data-ng-model="employeeId"
+                                           type="text"
+                                           placeholder="Employee Id"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeIdDiv">
+                                    <label>{{employeeId}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Designation<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputEmployeeDesignationDiv">
+                                    <input data-ng-model="employeeDesignation"
+                                           type="text"
+                                           placeholder="Designation"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeDesignationDiv">
+                                    <label> {{employeeDesignation}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Employment Type<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmploymentTypeDiv">
+                                    <input data-ng-model="employeeEmploymentType"
+                                           type="text"
+                                           placeholder="Employment Type"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmploymentTypeDiv">
+                                    <label> {{employeeEmploymentType}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Department/Office</label>
+                                <div class="col-md-9" data-ng-show="showSpouseInputEmployeeDepartmentDiv">
+                                    <input data-ng-model="employeeDepartment"
+                                           type="text"
+                                           placeholder="Department/Office"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeDepartmentDiv">
+                                    <label> {{employeeDepartment}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Joining Date<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmployeeJoiningDateDiv">
+                                    <input data-ng-model="employeeJoiningDate"
+                                           type="text"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="datepicker-default form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeJoiningDateDiv">
+                                    <label> {{employeeJoiningDate}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Job Permanent Date</label>
+                                <div class="col-md-9" data-ng-show="showInputEmployeeJobPermanentDateDiv">
+                                    <input data-ng-model="employeeJobPermanentDate"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="datepicker-default form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeJobPermanentDateDiv">
+                                    <label> {{employeeJobPermanentDate}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Extension Number<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmployeeExtensionDiv">
+                                    <input data-ng-model="employeeExtensionNumber"
+                                           type="text"
+                                           placeholder="Extension Number"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeExtensionDiv">
+                                    <label> {{employeeExtensionNumber}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Short Name</label>
+                                <div class="col-md-9" data-ng-show="showSpouseInputEmployeeShortNameDiv">
+                                    <input data-ng-model="employeeShortName"
+                                           type="text"
+                                           placeholder="Short Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeShortNameDiv">
+                                    <label> {{employeeShortName}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+
+                <div data-ng-show="academic">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label">Degree<span class='require'>*</span></label>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Institution<span class='require'>*</span></label>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Cgpa/Gpa<span class='require'>*</span></label>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Passing Year<span class='require'>*</span></label>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label"></label>
+                        </div>
+                    </div>
+                    <div  data-ng-repeat="academic in entry.academic track by $index">
+                        <div class="row">
+                            <div class="col-md-2" data-ng-show="showInputPhdSelectedDiv">
+                                <select class="form-control" data-ng-model="academic.academicDegreeName" data-ng-options="degreeName.name for degreeName in degreeNames">
+                                </select>
+                            </div>
+                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdSelectedDiv">
+                                <label> {{academic.academicDegreeName.name}} </label>
+                            </div>
+                            <div class="col-md-5" data-ng-show="showInputPhdInstitutionDiv">
+                                <input type="text" data-ng-model="academic.academicInstitution" class="form-control" placeholder="Institution">
+                            </div>
+                            <div class="col-md-5"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdInstitutionDiv">
+                                <label> {{academic.academicInstitution}} </label>
+                            </div>
+                            <div class="col-md-2" data-ng-show="showInputPhdCGpaDiv">
+                                <input type="text" data-ng-model="academic.academicCgpa" class="form-control" placeholder="Cgpa/Gpa">
+                            </div>
+                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdCGpaDiv">
+                                <label> {{academic.academicCgpa}} </label>
+                            </div>
+                            <div class="col-md-2" data-ng-show="showInputPhdPassingYearDiv">
+                                <input type="text" data-ng-model="academic.academicPassingYear" class="form-control" placeholder="Passing Year">
+                            </div>
+                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdPassingYearDiv">
+                                <label> {{academic.academicPassingYear}} </label>
+                            </div>
+                            <div class="col-md-1">
+                                <span>[ <i title="Remove Row" data-ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</span>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            [ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div data-ng-show="publication">
+                    <div>
+                        <div data-ng-repeat="publication in entry.publication track by $index">
+                            <h5><b>{{$index + 1}}.</b></h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <label class="col-md-3 control-label">Publication Title</label>
+                                        <div class="col-md-9" data-ng-show="showInputPublicationTitleDiv">
+                                            <input data-ng-model="publication.publicationTitle"
+                                                   type="text"
+                                                   placeholder="Publication Title"
+                                                   class="form-control"/>
+                                        </div>
+                                        <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPublicationTitleDiv">
+                                            <label> {{publication.publicationTitle}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <label class="col-md-3 control-label">Publication Type</label>
+                                        <div class="col-md-9" data-ng-show="showInputPublicationTypeDiv">
+                                            <input data-ng-model="publication.publicationType"
+                                                   type="text"
+                                                   placeholder="Publication Type"
+                                                   class="form-control"/>
+                                        </div>
+                                        <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPublicationTypeDiv">
+                                            <label> {{publication.publicationType}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <label class="col-md-3 control-label">Publication Year</label>
+                                        <div class="col-md-9" data-ng-show="showInputPublicationYearDiv">
+                                            <input data-ng-model="publication.publicationYear"
+                                                   type="text"
+                                                   placeholder="Publication Year"
+                                                   class="form-control"/>
+                                        </div>
+                                        <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPublicationYearDiv">
+                                            <label> {{publication.publicationYear}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <label class="col-md-3 control-label">Publication Place</label>
+                                        <div class="col-md-9" data-ng-show="showInputPublicationPlaceDiv">
+                                            <input data-ng-model="publication.publicationPlace"
+                                                   type="text"
+                                                   placeholder="Publication Place"
+                                                   class="form-control"/>
+                                        </div>
+                                        <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPublicationPlaceDiv">
+                                            <label> {{publication.publicationPlace}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <label class="col-md-3 control-label">Web Reference</label>
+                                        <div class="col-md-9" data-ng-show="showInputWebReferenceDiv">
+                                            <input data-ng-model="publication.publicationWebReference"
+                                                   type="text"
+                                                   placeholder="Web Reference"
+                                                   class="form-control"/>
+                                        </div>
+                                        <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelWebReferenceDiv">
+                                            <label> {{publication.publicationWebReference}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    [ <i title="Remove Row" data-ng-click="deleteRow('publication' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            [ <a title="Add New Row" data-ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div data-ng-show="training">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label">Training Name</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Training Institution/Organization Name</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Duration(In Months)</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Accredited Year</label>
+                            </div>
+                        </div>
+
+                        <div data-ng-repeat="training in entry.training track by $index">
+                            <div class="row">
+                                <div class="col-md-3" data-ng-show="showInputTrainingNameDiv">
+                                    <input type="text" data-ng-model="training.trainingName" class="form-control" placeholder="Training Name">
+                                </div>
+                                <div class="col-md-3"  style="border-bottom: 1px dashed;" data-ng-show="showLabelTrainingNameDiv">
+                                    <label> {{training.trainingName}} </label>
+                                </div>
+                                <div class="col-md-4" data-ng-show="showInputTrainingInstitutionDiv">
+                                    <input type="text" data-ng-model="training.trainingInstitution" class="form-control" placeholder="Training Institution/Organization Name">
+                                </div>
+                                <div class="col-md-4"  style="border-bottom: 1px dashed;" data-ng-show="showLabelTrainingInstitutionDiv">
+                                    <label> {{training.trainingInstitution}} </label>
+                                </div>
+                                <div class="col-md-2" data-ng-show="showInputTrainingDurationDiv">
+                                    <input type="text" data-ng-model="training.trainingDuration" class="form-control" placeholder="Duration">
+                                </div>
+                                <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelTrainingDurationDiv">
+                                    <label> {{training.trainingDuration}} </label>
+                                </div>
+                                <div class="col-md-2" data-ng-show="showInputTrainingAccreditedYearDiv">
+                                    <input type="text" data-ng-model="training.trainingYear" class="form-control" placeholder="Accredited Year">
+                                </div>
+                                <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelTrainingAccreditedYearDiv">
+                                    <label> {{training.trainingYear}} </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <span>[ <i title="Remove Row" data-ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</span>
+                                </div>
+                            </div>
+                            <br/>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                [ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div data-ng-show="award">
+                    <div data-ng-repeat="award in entry.award track by $index">
+                        <h5><b>{{$index + 1}}.</b></h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="col-md-3 control-label">Award/Honor Name</label>
+                                    <div class="col-md-9" data-ng-show="showInputAwardNameDiv">
+                                        <input data-ng-model="award.awardName"
+                                               type="text"
+                                               placeholder="Award/Honor Name"
+                                               class="form-control"/>
+                                    </div>
+                                    <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelAwardNameDiv">
+                                        <label> {{award.awardName}} </label></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="col-md-3 control-label">Purpose Of The Award</label>
+                                    <div class="col-md-9" data-ng-show="showInputPurposeDiv">
+                                        <input data-ng-model="award.purposeOfTheAward"
+                                               type="text"
+                                               placeholder="Purpose Of The Award"
+                                               class="form-control"/>
+                                    </div>
+                                    <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPurposeDiv">
+                                        <label> {{award.purposeOfTheAward}} </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="col-md-3 control-label">Year Of Recognition</label>
+                                    <div class="col-md-9" data-ng-show="showInputYearOfRecognitionDiv">
+                                        <input data-ng-model="award.yearOfRecognition"
+                                               type="text"
+                                               placeholder="Short Description"
+                                               class="form-control"/>
+                                    </div>
+                                    <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelYearOfRecognitionDiv">
+                                        <label> {{award.yearOfRecognition}} </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="col-md-3 control-label">Short Description</label>
+                                    <div class="col-md-9" data-ng-show="showInputDescriptionDiv">
+                                        <input data-ng-model="award.shortDescription"
+                                               type="text"
+                                               placeholder="Short Description"
+                                               class="form-control"/>
+                                    </div>
+                                    <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelDescriptionDiv">
+                                        <label> {{award.shortDescription}} </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class='col-md-6'>
+                                [ <i title="Remove Row" data-ng-click="deleteRow('award' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div data-ng-show="experience">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-3">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1">
+                                    <label class="col-md-3 control-label">From</label>
+                                </div>
+                                <div class="col-md-1"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1">
+                                    <label class="col-md-3 control-label">To</label>
+                                </div>
+                                <div class="col-md-1"></div>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label">Institution/Organization</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Designation</label>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="control-label">Month</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Year</label>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="control-label">Month</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Year</label>
+                            </div>
+                        </div>
+
+                        <div data-ng-repeat="experience in entry.experience track by $index">
+                            <div class="row">
+                                <div class="col-md-3" data-ng-show="showInputExperienceInstitutionDiv">
+                                    <input type="text" data-ng-model="experience.experienceInstitution" class="form-control" placeholder="Institution/Organization">
+                                </div>
+                                <div class="col-md-3"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceInstitutionDiv">
+                                    <label> {{experience.experienceInstitution}} </label>
+                                </div>
+                                <div class="col-md-2" data-ng-show="showInputExperienceDesignationDiv">
+                                    <input type="text" data-ng-model="experience.experienceDesignation" class="form-control" placeholder="Designation">
+                                </div>
+                                <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceDesignationDiv">
+                                    <label> {{experience.experienceDesignation}} </label>
+                                </div>
+                                <div class="col-md-1" data-ng-show="showInputExperienceFromMonthDiv">
+                                    <input type="text" data-ng-model="experience.experienceFromMonth" class="form-control" placeholder="Month">
+                                </div>
+                                <div class="col-md-1"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceFromMonthDiv">
+                                    <label> {{experience.experienceFromMonth}} </label>
+                                </div>
+                                <div class="col-md-2" data-ng-show="showInputExperienceFromYearDiv">
+                                    <input type="text" data-ng-model="experience.experienceFromYear" class="form-control" placeholder="Year">
+                                </div>
+                                <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceFromYearDiv">
+                                    <label> {{experience.experienceFromYear}} </label>
+                                </div>
+                                <div class="col-md-1" data-ng-show="showInputExperienceToMonthDiv">
+                                    <input type="text" data-ng-model="experience.experienceToMonth" class="form-control" placeholder="Month">
+                                </div>
+                                <div class="col-md-1"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceToMonthDiv">
+                                    <label> {{experience.experienceToMonth}} </label>
+                                </div>
+                                <div class="col-md-2" data-ng-show="showInputExperienceToYearDiv">
+                                    <input type="text" data-ng-model="experience.experienceToYear" class="form-control" placeholder="Year">
+                                </div>
+                                <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelExperienceToYearDiv">
+                                    <label> {{experience.experienceToYear}} </label>
+                                </div>
+                                <div class='col-md-1'>
+                                    [ <i title="Remove Row" data-ng-click="deleteRow('experience' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                [ <a title="Add New Row" data-ng-click="addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="text-right pal">
+                <button type="submit" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                <button type="submit" title="Cancel" class="btn" data-ng-click="cancel()">Cancel</button>
+                <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submit()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

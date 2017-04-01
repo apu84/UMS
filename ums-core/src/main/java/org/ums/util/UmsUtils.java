@@ -112,4 +112,7 @@ public class UmsUtils {
     return updateTimeInfoOfDate(inputDate, 0, 0, 0, 0);
   }
 
+  public static String join(String s, Object... a) {
+    return a.length == 0 ? "" : a[0] + (a.length == 1 ? "" : s + join(s, Arrays.copyOfRange(a, 1, a.length)));
+  }
 }

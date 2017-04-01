@@ -22,13 +22,14 @@ public class SupplierCache extends ContentCache<Supplier, MutableSupplier, Long,
   }
 
   @Override
-  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder) {
-    return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pWhereClause,
+      final String pOrder) {
+    return getManager().getAllForPagination(pItemPerPage, pPage, pWhereClause, pOrder);
   }
 
   @Override
-  public int getTotalForPagination() {
-    return getManager().getTotalForPagination();
+  public int getTotalForPagination(final String pWhereClause) {
+    return getManager().getTotalForPagination(pWhereClause);
   }
 
   @Override

@@ -29,10 +29,6 @@ module ums {
           $element.removeClass('headerSortUp');
           $element.addClass('headerSortDown');
         }
-        console.log("inside onclick of columnSorter"+ this.sort+"-------");
-        console.log(this);
-        console.log(this.columnSorter);
-        // console.log(this.columnSorter());
         this.columnSorter()(this.sort);
       });
     }

@@ -1,0 +1,8 @@
+
+<span  ng-repeat="iObject in iObjects track by $index">
+    <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
+       data-ng-click="iObject.callback();manageUI(iObject.id);" style="background-color: white;" id="{{iObject.id}}">
+        <i class="{{iObject.icon}}" style="color: black;"></i>
+    </a>
+</span>
+

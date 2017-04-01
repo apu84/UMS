@@ -68,6 +68,7 @@
                             </select>
                         </div>
 
+
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Type</label>
@@ -83,7 +84,7 @@
                         <label class="col-md-4 control-label">Dept./School</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.dept_id" data-ng-change="loadPrograms()" data-convert-to-number>
+                            <select class="form-control" id="dept_id" data-ng-model="inputParams.dept_id" data-ng-change="loadPrograms()" data-convert-to-number>
                                 <option data-ng-repeat="department in data.depts" value="{{department.id}}">{{department.name}}</option>
                             </select>
                         </div>
@@ -92,7 +93,7 @@
                         <label class="col-md-4 control-label">Program Name</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.program_id" data-convert-to-number>
+                            <select class="form-control" id="program_id" data-ng-model="inputParams.program_id" data-convert-to-number>
                                 <option data-ng-repeat="program in data.programs" value="{{program.id}}">{{program.shortName}}</option>
                             </select>
                         </div>
@@ -124,7 +125,7 @@
     <div id="rightDiv">
         <div class="panel">
             <div class="panel-heading">Assigned Course List<span
-                    class="subtitle"></span></div>
+                    class="subtitle" data-ng-if="allMarksSubmissionStatus!=null">Total {{allMarksSubmissionStatus.length}} course(s) found</span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
 
                 <table class="table table-hover table-bordered">

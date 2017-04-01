@@ -49,6 +49,7 @@ module ums {
             return 'Error: ' + data.responseText
           },
           onclickSubmit: function (row, data) {
+            console.log(data);
             if (scope.grid.api.gridEditActions
                 && scope.grid.api.gridEditActions.edit) {
               scope.grid.api.gridEditActions.edit(data);

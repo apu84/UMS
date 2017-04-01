@@ -988,3 +988,165 @@ CREATE TABLE DB_IUMS.UG_LATE_FEE
   SEMESTER_ID    NUMBER,
   LAST_MODIFIED  VARCHAR2(18 BYTE)
 )
+
+
+
+
+
+//********************************************Employee Information Management*****************************************
+
+
+/******************************** Existing Employee Personal Info Table
+CREATE TABLE DB_IUMS.EMPLOYEES
+(
+  EMPLOYEE_ID         VARCHAR2(15 BYTE)         NOT NULL,
+  EMPLOYEE_NAME       VARCHAR2(100 BYTE)        NOT NULL,
+  DESIGNATION         NUMBER                    NOT NULL,
+  EMPLOYMENT_TYPE     VARCHAR2(2 BYTE)          NOT NULL,
+  DEPT_OFFICE         VARCHAR2(100 BYTE)        NOT NULL,
+  FATHER_NAME         VARCHAR2(100 BYTE)        NOT NULL,
+  MOTHER_NAME         VARCHAR2(100 BYTE)        NOT NULL,
+  BIRTH_DATE          DATE                      NOT NULL,
+  GENDER              CHAR(1 BYTE)              NOT NULL,
+  BLOOD_GROUP         VARCHAR2(4 BYTE),
+  PRESENT_ADDRESS     VARCHAR2(300 BYTE)        NOT NULL,
+  PERMANENT_ADDRESS   VARCHAR2(300 BYTE),
+  MOBILE_NUMBER       VARCHAR2(50 BYTE)         NOT NULL,
+  PHONE_NUMBER        VARCHAR2(50 BYTE),
+  EMAIL_ADDRESS       VARCHAR2(100 BYTE),
+  JOINING_DATE        DATE                      NOT NULL,
+  JOB_PERMANENT_DATE  DATE,
+  STATUS              NUMBER                    NOT NULL,
+  LAST_MODIFIED       VARCHAR2(18 BYTE),
+  SHORT_NAME          VARCHAR2(5 BYTE)
+);
+
+
+/*****************************************Employee Academic Info Table
+
+CREATE TABLE DB_IUMS.EMP_ACADEMIC_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID NUMBER,
+  DEGREE_NAME  VARCHAR2(15 BYTE),
+  DEGREE_INSTITUTE  VARCHAR2(80 BYTE),
+  DEGREE_CGPA NUMBER,
+  DEGREE_PASSING_YEAR NUMBER
+);
+
+create sequence emp_academic_info_id_seq;
+
+create trigger trg_emp_academic_info_id
+before insert on EMP_ACADEMIC_INFO
+for each row
+begin
+   select emp_academic_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+
+/*****************************************Employee Publication Info Table
+
+CREATE TABLE DB_IUMS.EMP_PUBLICATION_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID NUMBER,
+  PUBLICATION_TITLE VARCHAR2(100 BYTE),
+  PUBLICATION_TYPE VARCHAR2(30 BYTE),
+  PUBLICATION_YEAR NUMBER,
+  PUBLICATION_PLACE VARCHAR2(60 BYTE),
+  PUBLICATION_WEB_REFERENCE VARCHAR2(50 BYTE)
+);
+
+create sequence emp_publication_info_id_seq;
+
+create trigger trg_emp_publication_info_id
+before insert on EMP_PUBLICATION_INFO
+for each row
+begin
+   select emp_publication_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+
+/*****************************************Employee Training Info Table
+
+CREATE TABLE DB_IUMS.EMP_TRAINING_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID NUMBER,
+  TRAINING_NAME VARCHAR2(50 BYTE),
+  TRAINING_INSTITUTE VARCHAR2(80 BYTE),
+  TRAINING_DURATION NUMBER,
+  TRAINING_ACCREDITED_YEAR NUMBER
+);
+
+create sequence emp_training_info_id_seq;
+
+create trigger trg_emp_training_info_id
+before insert on EMP_TRAINING_INFO
+for each row
+begin
+   select emp_training_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+
+/*****************************************Employee Award Info Table
+
+CREATE TABLE DB_IUMS.EMP_AWARD_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID NUMBER,
+  AWARD_NAME VARCHAR2(50 BYTE),
+  AWARD_PURPOSE VARCHAR2(60 BYTE),
+  AWARD_RECOGNITION_YEAR NUMBER,
+  AWARD_SHORT_DESCRIPTION VARCHAR2(100 BYTE)
+);
+
+create sequence emp_award_info_id_seq;
+
+create trigger trg_emp_award_info_id
+before insert on EMP_AWARD_INFO
+for each row
+begin
+   select emp_award_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+
+/*****************************************Employee Experience Info Table
+
+CREATE TABLE DB_IUMS.EMP_EXPERIENCE_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID NUMBER,
+  EXPERIENCE_INSTITUTE VARCHAR2(80 BYTE),
+  EXPERIENCE_DESIGNATION VARCHAR2(30 BYTE),
+  EXPERIENCE_FROM_MONTH NUMBER,
+  EXPERIENCE_FROM_YEAR NUMBER,
+  EXPERIENCE_TO_MONTH NUMBER,
+  EXPERIENCE_TO_YEAR NUMBER
+);
+
+create sequence emp_experience_info_id_seq;
+
+create trigger trg_emp_experience_info_id
+before insert on EMP_EXPERIENCE_INFO
+for each row
+begin
+   select emp_experience_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+//*********************************************************************************************************************

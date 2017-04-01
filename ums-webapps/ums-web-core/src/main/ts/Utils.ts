@@ -155,6 +155,16 @@ module ums {
       });
     }
 
+    /**
+     * Get Id from location Header URL
+     */
+    public static  getIdFromUrl(url: string): string {
+      var resourceUrl = url;
+      var startIndex = url.lastIndexOf('/') + 1;
+      var lastIndex = resourceUrl.length;
+      return url.substring(startIndex, lastIndex);
+    }
+
 
 
   }

@@ -100,11 +100,10 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME, 0 preparer_id,0 scrutinizer_id, STATUS  "
           + "From MARKS_SUBMISSION_STATUS Ms_Status,Mst_Course,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM "
           + "Where Ms_Status.Semester_Id=? And Exam_Type=? "
-          + "And MST_PROGRAM.PROGRAM_ID =? "
           + "And Ms_Status.Course_Id=Mst_Course.Course_Id "
           + "And Mst_Course.Course_Id=COURSE_SYLLABUS_MAP.Course_Id "
           + "AND MST_SYLLABUS.SYLLABUS_ID = COURSE_SYLLABUS_MAP.SYLLABUS_ID "
-          + "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " + "And Offer_By =? ";
+          + "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID";
 
   String UPDATE_STATUS_SAVE_RECHECK =
       "Update %s Set RECHECK_STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and "
@@ -475,7 +474,10 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       if(year != 0) {
         query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
       }
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pProgramId, deptId},
+      if(!deptId.equalsIgnoreCase("NA")) {
+        query += " AND MST_PROGRAM.PROGRAM_ID =  " + pProgramId;
+      }
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
           new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("V")) { // CoE
@@ -486,7 +488,11 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       if(year != 0) {
         query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
       }
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pProgramId, deptId},
+      if(!deptId.equalsIgnoreCase("NA")) {
+        query += " AND MST_PROGRAM.PROGRAM_ID =  " + pProgramId;
+      }
+
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
           new MarksSubmissionStatusTableRowMapper());
     }
     return null;

@@ -4,9 +4,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.library.SupplierDaoDecorator;
 import org.ums.domain.model.immutable.library.Supplier;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.library.MutableSupplier;
 import org.ums.generator.IdGenerator;
-import org.ums.persistent.dao.PersistentCourseDao;
 import org.ums.persistent.model.library.PersistentSupplier;
 
 import java.sql.ResultSet;
@@ -22,6 +22,12 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
       "Select ID,NAME,EMAIL,CONTACT_PERSON,CONTACT_NUMBER,ADDRESS,NOTE, LAST_MODIFIED  FROM MST_SUPPLIER";
 
   static String SELECT_COUNT = "Select COUNT(ID) FROM MST_SUPPLIER";
+
+  static String UPDATE_ONE =
+      "UPDATE MST_SUPPLIER SET NAME = ? ,EMAIL= ? ,CONTACT_PERSON= ? ,CONTACT_NUMBER= ? ,ADDRESS= ? ,NOTE= ? , LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
+
+  static String DELETE_ONE = "DELETE FROM MST_SUPPLIER ";
 
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
@@ -44,22 +50,24 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
   }
 
   @Override
-  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder) {
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pWhereClause,
+      final String pOrder) {
     int startIndex = pItemPerPage * pPage - pItemPerPage + 1;
     int endIndex = startIndex + pItemPerPage;
     String query =
-        "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL + " " + pOrder + ")tmp1 ) tmp2"
-            + " WHERE ind >=? and ind<=?  ";
+        "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL + pWhereClause + pOrder
+            + ")tmp1 ) tmp2  WHERE ind >=? and ind<=?  ";
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex},
         new PersistentSupplierDao.SupplierRowMapper());
   }
 
   @Override
-  public int getTotalForPagination() {
-    String query = SELECT_COUNT;
+  public int getTotalForPagination(final String pWhereClause) {
+    String query = SELECT_COUNT + pWhereClause;
     return mJdbcTemplate.queryForObject(query, new Object[] {}, Integer.class);
   }
 
+  @Override
   public Long create(final MutableSupplier pSupplier) {
     Long id = mIdGenerator.getNumericId();
     pSupplier.setId(id);
@@ -68,9 +76,22 @@ public class PersistentSupplierDao extends SupplierDaoDecorator {
             + "VALUES(?, ?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
 
     mJdbcTemplate.update(INSERT_ONE, pSupplier.getId(), pSupplier.getName(), pSupplier.getEmail(),
-        pSupplier.getContactNumber(), pSupplier.getContactNumber(), pSupplier.getAddress(), pSupplier.getNote());
+        pSupplier.getContactPerson(), pSupplier.getContactNumber(), pSupplier.getAddress(), pSupplier.getNote());
 
     return pSupplier.getId();
+  }
+
+  @Override
+  public int update(final MutableSupplier pSupplier) {
+    String query = UPDATE_ONE + "WHERE ID = ?";
+    return mJdbcTemplate.update(query, pSupplier.getName(), pSupplier.getEmail(), pSupplier.getContactPerson(),
+        pSupplier.getContactNumber(), pSupplier.getAddress(), pSupplier.getNote(), pSupplier.getId());
+  }
+
+  @Override
+  public int delete(final MutableSupplier pSupplier) {
+    String query = DELETE_ONE + "WHERE ID = ?";
+    return mJdbcTemplate.update(query, pSupplier.getId());
   }
 
   class SupplierRowMapper implements RowMapper<Supplier> {

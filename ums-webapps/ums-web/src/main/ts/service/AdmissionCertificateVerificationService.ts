@@ -89,7 +89,7 @@ module ums{
             this.notify.success("Successfully Saved");
             defer.resolve("Saved");
           }).error((data) => {
-        this.notify.success("Error in saving");
+        this.notify.error("Error in saving");
         defer.resolve("Error in saving");
       });
       return defer.promise;

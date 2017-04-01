@@ -18,5 +18,6 @@
     <module>ums-web</module>
     <module>ums-bank-web</module>
     <module>ums-library-web</module>
+    <module>ums-registrar-web</module>
   </modules>
 </project>

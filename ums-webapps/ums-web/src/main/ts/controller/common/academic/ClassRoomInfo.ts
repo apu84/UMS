@@ -32,6 +32,8 @@ module ums {
     }
 
     public edit(rowData: RowData): void {
+      console.log('rowData');
+      console.log(rowData);
       this.decorateScope().grid.api.toggleMessage('Saving...');
       this.httpClient.put('academic/classroom', rowData, HttpClient.MIME_TYPE_JSON)
           .success(() => {

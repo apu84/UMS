@@ -13,6 +13,7 @@ module ums{
                                             examType:number,
                                             examDate:string
                                             ): IPromise<any>{
+      var contentType: string = UmsUtil.getFileContentType("pdf");
 
       var defer= this.$q.defer();
 

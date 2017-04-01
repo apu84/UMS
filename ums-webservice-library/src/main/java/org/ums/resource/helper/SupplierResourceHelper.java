@@ -63,9 +63,9 @@ public class SupplierResourceHelper extends ResourceHelper<Supplier, MutableSupp
   }
 
   public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder,
-      final UriInfo pUriInfo) {
-    List<Supplier> suppliers = getContentManager().getAllForPagination(pItemPerPage, pPage, pOrder);
-    int total = getContentManager().getTotalForPagination();
+      final String pWhereClause, final UriInfo pUriInfo) {
+    List<Supplier> suppliers = getContentManager().getAllForPagination(pItemPerPage, pPage, pWhereClause, pOrder);
+    int total = getContentManager().getTotalForPagination(pWhereClause);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

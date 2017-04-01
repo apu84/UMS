@@ -380,15 +380,37 @@ module ums {
 
     private fetchGradeSubmissionTable(): void {
 
+      console.log( this.$scope.inputParams);
       var status = 0;
       if (this.$scope.userRole != "T") {
         status = this.$scope.inputParams.status;
       }
 
+      var deptId =this.$scope.inputParams.dept_id+'';
+      var programId = 99;
+
+      console.log( deptId);
+      console.log( this.$scope.inputParams.dept_id);
+
+
+      console.log( this.$scope.inputParams);
+
+
+      if(deptId == "" || deptId == null || deptId == 'NaN') {
+        deptId = "NA";
+      }
+      else {
+        if(this.$scope.inputParams.dept_id!="AS") {
+          deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
+          programId  =  this.$scope.inputParams.program_id;
+        }
+
+      }
+
       this.httpClient.get("academic/gradeSubmission/semester/" + this.$scope.inputParams.semester_id +
           "/examtype/" + this.$scope.inputParams.exam_typeId +
-          "/dept/" + this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0') +
-          "/program/" + this.$scope.inputParams.program_id +
+          "/dept/" +deptId+
+          "/program/" + programId +
           "/yearsemester/" + this.$scope.inputParams.year_semester +
           "/role/" + this.$scope.userRole +
           "/status/" + status,
@@ -490,12 +512,12 @@ module ums {
       $(window).scrollTop($('#panel_top').offset().top - 56);
 
       //To show new features for a certain time
+      /* Don't remove this code.
       if(this. $scope.data.totalInfoView  == 0) {
         $("#modal-feature-info").modal('show');
       }
-
-
       this. $scope.data.totalInfoView++;
+      */
     }
 
     private calculateTotalAndGradeLetter(student_id: string): void {
@@ -1537,8 +1559,15 @@ module ums {
       var resultPrograms: any = $.grep(programJson, function (e: any) {
         return e.deptId == controllerScope.inputParams.dept_id;
       });
-      this.$scope.data.programs = resultPrograms[0].programs;
-      this.$scope.inputParams.program_id = resultPrograms[0].programs[0].id;
+
+      if(resultPrograms[0] == undefined) {
+        this.$scope.data.programs = null;
+        this.$scope.inputParams.program_id = null;
+      }  else {
+        this.$scope.data.programs = resultPrograms[0].programs;
+        this.$scope.inputParams.program_id = resultPrograms[0].programs[0].id;
+      }
+
     }
 
 
