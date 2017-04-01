@@ -57,6 +57,12 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
     return id;
   }
 
+  @Override
+  public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId) {
+    String query = SELECT_ALL + "WHERE (FACULTY_ID = ? OR FACULTY_ID IS NULL) AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pFacultyId, pSemesterId}, new FeeRowMapper());
+  }
+
   private class FeeRowMapper implements RowMapper<UGFee> {
     @Override
     public UGFee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -64,7 +70,9 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
       fee.setId(rs.getLong("ID"));
       fee.setFeeCategoryId(rs.getString("FEE_CATEGORY_ID"));
       fee.setSemesterId(rs.getInt("SEMESTER_ID"));
-      fee.setFacultyId(rs.getInt("FACULTY_ID"));
+      if(rs.getObject("FACULTY_ID") != null) {
+        fee.setFacultyId(rs.getInt("FACULTY_ID"));
+      }
       fee.setAmount(rs.getDouble("AMOUNT"));
       fee.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<UGFee> atomicReference = new AtomicReference<>(fee);

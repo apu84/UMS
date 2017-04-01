@@ -6,7 +6,8 @@ module ums {
 
     public restrict:string = "E";
     public scope = {
-      callbacks : '='
+      callbacks : '=',
+      defaultselected : '='
     };
     public iconsArr = Array<String>();
     public idsArr  = Array<String>();
@@ -33,8 +34,6 @@ module ums {
         $("#"+ navId).css({"background-color": "black"});
         $("#"+ navId+" > i").css({"color": "white"});
         $("#container_"+ navId).show();
-
-
       }
 
 
@@ -43,6 +42,9 @@ module ums {
         scope.iObjects.push(obj);
       }
 
+      // console.log($("#"+ scope.defaultselected));
+      // $("#"+ scope.defaultselected).css({"background-color": "black"});
+      // $("#"+ scope.defaultselected+" > i").css({"color": "white"});
     };
 
     public templateUrl:string = "./views/directive/navigation-buttons.html";

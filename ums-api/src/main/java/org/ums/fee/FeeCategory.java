@@ -67,6 +67,7 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
     TRANSCRIPT_INITIAL,
     TRANSCRIPT_DUPLICATE,
     CERTIFICATE_CONVOCATION,
-    CERTIFICATE_DUPLICATE;
+    CERTIFICATE_DUPLICATE,
+    LATE_FEE;
   }
 }

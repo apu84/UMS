@@ -25,6 +25,7 @@ module ums {
     supplierService: any;
     notifyService: any;
     callbackList : Array<Function>;
+    selectedTab: string;
   }
 
 
@@ -92,6 +93,15 @@ module ums {
       }, "This field is required");
 
       $scope.record = <IRecord>{};
+      $scope.record.imprint = <IImprint>{};
+      $scope.record.physicalDescription = <IPhysicalDescription>{};
+
+      $scope.record.language = Utils.NUMBER_SELECT;
+      $scope.record.materialType = Utils.NUMBER_SELECT;
+      $scope.record.status = Utils.NUMBER_SELECT;
+      $scope.record.bindingType = Utils.NUMBER_SELECT;
+      $scope.record.acqType = Utils.NUMBER_SELECT;
+
 
       $scope.item = <IItem> {};
       $scope.supplier = <ISupplier> {};
@@ -114,6 +124,8 @@ module ums {
       this.initializeDatePickers();
       catalogingService.fetchItems("1");
 
+      this.setRecordHeaderTitle();
+
     }
 
     /**
@@ -127,11 +139,22 @@ module ums {
         $("#headerTitle").html("Add Items");
       };
 
+
       this.$scope.callbackList.push(recordCallback);
       this.$scope.callbackList.push(itemCallback);
 
+      this.$scope.selectedTab = "recordNav";
+
       //Items for Korean-English Dictionary (Call # 005.133/B174o
     }
+
+    private setRecordHeaderTitle() {
+      if($("#mfnNo").val() === undefined)
+          $("#headerTitle").html("Add Record");
+      else
+        $("#headerTitle").html("...... Record .....");
+    }
+
 
     /**
      * Set Material name when user select material type from the materil type

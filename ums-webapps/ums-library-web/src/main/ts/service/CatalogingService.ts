@@ -31,6 +31,10 @@ module ums{
       var resourceUrl = "record";
       var defer = this.$q.defer();
 
+      record.contributorJsonString = JSON.stringify(record.contributorList);
+      record.noteJsonString = JSON.stringify(record.noteList);
+      record.subjectJsonString = JSON.stringify(record.subjectList);
+
       if (record.mfnNo != undefined) {
         this.httpClient.put(resourceUrl + '/' + record.mfnNo, record, 'application/json')
             .success(() => {

@@ -29,26 +29,29 @@ public class BasicGenerator {
     if(model != null) {
       String immutableModelName = model.get("name").toString();
       String mutableModelName = String.format("%s%s", "Mutable", immutableModelName);
-      generateImmutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"));
-      generateMutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"));
+      generateImmutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"), model.get("package")
+          .toString());
+      generateMutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"), model.get("package")
+          .toString());
       String idType = getIdType((JSONArray) model.get("fields"));
-      generateContentManager(immutableModelName, mutableModelName, idType);
-      generatePersistentModel(immutableModelName, mutableModelName, (JSONArray) model.get("fields"));
-      generateDaoDecorator(immutableModelName, mutableModelName, idType);
+      generateContentManager(immutableModelName, mutableModelName, idType, model.get("package").toString());
+      generatePersistentModel(immutableModelName, mutableModelName, (JSONArray) model.get("fields"),
+          model.get("package").toString());
+      generateDaoDecorator(immutableModelName, mutableModelName, idType, model.get("package").toString());
     }
 
   }
 
-  private void generateImmutable(String pImmutable, String pMutable, JSONArray pFields) {
+  private void generateImmutable(String pImmutable, String pMutable, JSONArray pFields, String pPackage) {
     JavaInterfaceSource immutable = Roaster.create(JavaInterfaceSource.class);
-    immutable.setPackage("org.ums.domain.model.immutable").setName(pImmutable);
+    immutable.setPackage(pPackage).setName(pImmutable);
     immutable.addInterface(Serializable.class);
     if(hasDateField(pFields)) {
       immutable.addImport("java.util.Date");
     }
     immutable.addImport("org.ums.domain.model.common.Identifier");
     immutable.addImport("org.ums.domain.model.common.EditType");
-    immutable.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+    immutable.addImport(String.format("%s.%s", pPackage, pMutable));
 
     immutable.addInterface(String.format("EditType<%s>", pMutable))
         .addInterface(org.ums.domain.model.common.LastModifier.class)
@@ -61,7 +64,10 @@ public class BasicGenerator {
         String fieldName = (String) fieldNameObject;
 
         if(field.get(fieldName) instanceof String) {
-          immutable.addMethod().setName(String.format("get%s", WordUtils.capitalize(fieldName)))
+          immutable
+              .addMethod()
+              .setName(
+                  String.format("%s%s", getterPrefix(field.get(fieldName).toString()), WordUtils.capitalize(fieldName)))
               .setReturnType(field.get(fieldName).toString());
         }
         else {
@@ -88,13 +94,13 @@ public class BasicGenerator {
     print(immutable.toString());
   }
 
-  private void generateMutable(String pImmutable, String pMutable, JSONArray pFields) {
+  private void generateMutable(String pImmutable, String pMutable, JSONArray pFields, String pPackage) {
     JavaInterfaceSource mutable = Roaster.create(JavaInterfaceSource.class);
-    mutable.setPackage("org.ums.domain.model.mutable").setName(String.format("Mutable%s", pImmutable));
+    mutable.setPackage(pPackage).setName(String.format("Mutable%s", pImmutable));
     mutable.addImport("org.ums.domain.model.common.Editable");
     mutable.addImport("org.ums.domain.model.common.MutableIdentifier");
     mutable.addImport("org.ums.domain.model.mutable.MutableLastModifier");
-    mutable.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
+    mutable.addImport(String.format("%s.%s", pPackage, pImmutable));
     if(hasDateField(pFields)) {
       mutable.addImport("java.util.Date");
     }
@@ -137,29 +143,29 @@ public class BasicGenerator {
     print(mutable.toString());
   }
 
-  private void generateContentManager(String pImmutable, String pMutable, String idType) {
+  private void generateContentManager(String pImmutable, String pMutable, String idType, String pPackage) {
     JavaInterfaceSource manager = Roaster.create(JavaInterfaceSource.class);
-    manager.setPackage("org.ums.manager").setName(String.format("%sManager", pImmutable));
+    manager.setPackage(pPackage).setName(String.format("%sManager", pImmutable));
     manager.addImport("org.ums.manager.ContentManager");
-    manager.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
-    manager.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+    manager.addImport(String.format("%s.%s", pPackage, pImmutable));
+    manager.addImport(String.format("%s.%s", pPackage, pMutable));
 
     manager.addInterface(String.format("ContentManager<%s, %s, %s>", pImmutable, pMutable, idType));
 
     print(manager.toString());
   }
 
-  private void generatePersistentModel(String pImmutable, String pMutable, JSONArray pFields) {
+  private void generatePersistentModel(String pImmutable, String pMutable, JSONArray pFields, String pPackage) {
     JavaClassSource model = Roaster.create(JavaClassSource.class);
     String modelName = String.format("Persistent%s", pImmutable);
-    model.setPackage("org.ums.persistent.model").setName(modelName);
+    model.setPackage(pPackage).setName(modelName);
     model.addImport("org.springframework.context.ApplicationContext");
     model.addImport("org.ums.context.AppContext");
-    model.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
-    model.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+    model.addImport(String.format("%s.%s", pPackage, pImmutable));
+    model.addImport(String.format("%s.%s", pPackage, pMutable));
 
     String managerName = String.format("%sManager", WordUtils.capitalize(pImmutable));
-    model.addImport(String.format("org.ums.manager.%s", managerName));
+    model.addImport(String.format("%s.%s", pPackage, managerName));
     if(hasDateField(pFields)) {
       model.addImport("java.util.Date");
     }
@@ -217,9 +223,12 @@ public class BasicGenerator {
               .setType(field.get(fieldName).toString()).setPrivate();
 
           MethodSource getMethodSource =
-              model.addMethod().setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
-                  .setName(String.format("get%s", WordUtils.capitalize(fieldName)))
-                  .setReturnType(field.get(fieldName).toString()).setPublic();
+              model
+                  .addMethod()
+                  .setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
+                  .setName(
+                      String.format("%s%s", getterPrefix(field.get(fieldName).toString()),
+                          WordUtils.capitalize(fieldName))).setReturnType(field.get(fieldName).toString()).setPublic();
           getMethodSource.addAnnotation().setName("Override");
 
           MethodSource setMethodSource =
@@ -351,13 +360,13 @@ public class BasicGenerator {
     print(model.toString().replace("void staticBlock()", ""));
   }
 
-  private void generateDaoDecorator(String pImmutable, String pMutable, String idType) {
+  private void generateDaoDecorator(String pImmutable, String pMutable, String idType, String pPackage) {
     JavaClassSource decorator = Roaster.create(JavaClassSource.class);
-    decorator.setPackage("org.ums.decorator").setName(String.format("%sDaoDecorator", pImmutable));
-    decorator.addImport(String.format("org.ums.manager.%sManager", pImmutable));
+    decorator.setPackage(pPackage).setName(String.format("%sDaoDecorator", pImmutable));
+    decorator.addImport(String.format("%s.%sManager", pPackage, pImmutable));
     decorator.addImport("org.ums.decorator.ContentDaoDecorator");
-    decorator.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
-    decorator.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+    decorator.addImport(String.format("%s.%s", pPackage, pImmutable));
+    decorator.addImport(String.format("%s.%s", pPackage, pMutable));
     decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, %s, %sManager>", pImmutable, pMutable, idType,
         pImmutable));
     decorator.addInterface(String.format("%sManager", pImmutable));
@@ -374,8 +383,8 @@ public class BasicGenerator {
         String fieldName = (String) fieldNameObject;
 
         if(field.get(fieldName) instanceof String) {
-          builder.append(String.format("set%s(%s.get%s());\r\n", WordUtils.capitalize(fieldName), pImmutable,
-              WordUtils.capitalize(fieldName)));
+          builder.append(String.format("set%s(%s.%s%s());\r\n", WordUtils.capitalize(fieldName), pImmutable,
+              getterPrefix(field.get(fieldName).toString()), WordUtils.capitalize(fieldName)));
         }
         else {
           JSONObject fieldValue = (JSONObject) field.get(fieldName);
@@ -509,5 +518,9 @@ public class BasicGenerator {
       }
     }
     return null;
+  }
+
+  private String getterPrefix(String fieldType) {
+    return fieldType.equalsIgnoreCase("Boolean") ? "is" : "get";
   }
 }

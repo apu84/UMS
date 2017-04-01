@@ -1,6 +1,7 @@
 {
   "model": {
-    "name": "LateFee",
+    "name": "InstallmentStatus",
+    "package": "org.ums.fee.semesterfee",
     "fields": [
       {
         "id": {
@@ -9,13 +10,13 @@
         }
       },
       {
-        "from": "Date"
+        "receivedOn": "Date"
       },
       {
-        "to": "Date"
+        "paymentCompleted": "Boolean"
       },
       {
-        "fee": "Integer"
+        "installmentOrder": "Integer"
       },
       {
         "semester": {
@@ -23,11 +24,27 @@
           "reference": {
             "name": "Semester",
             "package": "org.ums.domain.model.immutable",
-            "id" : {
+            "id": {
               "type": "Integer"
             },
             "manager": {
               "name": "SemesterManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "student": {
+          "type": "Ref",
+          "reference": {
+            "name": "Student",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "String"
+            },
+            "manager": {
+              "name": "StudentManager",
               "package": "org.ums.manager"
             }
           }
