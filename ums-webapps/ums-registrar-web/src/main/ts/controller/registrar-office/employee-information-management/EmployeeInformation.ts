@@ -2,6 +2,7 @@ module ums{
   interface IEmployeeInformation extends ng.IScope {
     personal: boolean;
     academic: boolean;
+    job: boolean;
     publication: boolean;
     training: boolean;
     award: boolean;
@@ -17,11 +18,20 @@ module ums{
     spouseName: string;
     nationalIdNo: number;
     bloodGroup: string;
-    spouseNationalIdNo: string;
+    spouseNationalIdNo: number;
     email: string;
     phone: string;
     presentAddress: string;
     permanentAddress: string;
+
+    employeeId: number;
+    employeeDesignation: string;
+    employeeEmploymentType: number;
+    employeeDepartment : number;
+    employeeJoiningDate: string;
+    employeeJobPermanentDate: string;
+    employeeExtensionNumber: number;
+    employeeShortName: string;
 
     sscSelected: string;
     sscInstitution: string;
@@ -96,6 +106,22 @@ module ums{
     showLabelPresentAddressDiv: boolean;
     showInputPermanentAddressDiv: boolean;
     showLabelPermanentAddressDiv: boolean;
+    showInputEmployeeIdDiv: boolean;
+    showLabelEmployeeIdDiv: boolean;
+    showInputEmployeeDesignationDiv: boolean;
+    showLabelEmployeeDesignationDiv: boolean;
+    showInputEmploymentTypeDiv: boolean;
+    showLabelEmploymentTypeDiv: boolean;
+    showSpouseInputEmployeeDepartmentDiv: boolean;
+    showLabelEmployeeDepartmentDiv: boolean;
+    showInputEmployeeJoiningDateDiv: boolean;
+    showLabelEmployeeJoiningDateDiv: boolean;
+    showInputEmployeeJobPermanentDateDiv: boolean;
+    showLabelEmployeeJobPermanentDateDiv: boolean;
+    showInputEmployeeExtensionDiv: boolean;
+    showLabelEmployeeExtensionDiv: boolean;
+    showSpouseInputEmployeeShortNameDiv: boolean;
+    showLabelEmployeeShortNameDiv: boolean;
     showInputSSCSelectedDiv: boolean;
     showLabelSSCSelectedDiv: boolean;
     showInputSSCInstitutionDiv: boolean;
@@ -295,6 +321,22 @@ module ums{
       $scope.showLabelPresentAddressDiv = false;
       $scope.showInputPermanentAddressDiv = true;
       $scope.showLabelPermanentAddressDiv = false;
+      $scope.showInputEmployeeIdDiv = true;
+      $scope.showLabelEmployeeIdDiv = false;
+      $scope.showInputEmployeeDesignationDiv = true;
+      $scope.showLabelEmployeeDesignationDiv = false;
+      $scope.showInputEmploymentTypeDiv = true;
+      $scope.showLabelEmploymentTypeDiv = false;
+      $scope.showSpouseInputEmployeeDepartmentDiv = true;
+      $scope.showLabelEmployeeDepartmentDiv = false;
+      $scope.showInputEmployeeJoiningDateDiv = true;
+      $scope.showLabelEmployeeJoiningDateDiv = false;
+      $scope.showInputEmployeeJobPermanentDateDiv = true;
+      $scope.showLabelEmployeeJobPermanentDateDiv = false;
+      $scope.showInputEmployeeExtensionDiv = true;
+      $scope.showLabelEmployeeExtensionDiv = false;
+      $scope.showSpouseInputEmployeeShortNameDiv = true;
+      $scope.showLabelEmployeeShortNameDiv = false;
       $scope.showInputSSCSelectedDiv = true;
       $scope.showLabelSSCSelectedDiv = false;
       $scope.showInputSSCInstitutionDiv = true;
@@ -382,6 +424,8 @@ module ums{
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
 
+      this.addDate();
+
       console.log("i am in EmployeeInformation.ts 1");
     }
 
@@ -390,6 +434,7 @@ module ums{
 
       this.$scope.personal = false;
       this.$scope.academic = false;
+      this.$scope.job = false;
       this.$scope.publication = false;
       this.$scope.training = false;
       this.$scope.award = false;
@@ -402,18 +447,21 @@ module ums{
         this.$scope.personal = true;
       }
       else if(navTitle == 2){
-        this.$scope.academic = true;
+        this.$scope.job = true;
       }
       else if(navTitle == 3){
-        this.$scope.publication = true;
+        this.$scope.academic = true;
       }
       else if(navTitle == 4){
-        this.$scope.training = true;
+        this.$scope.publication = true;
       }
       else if(navTitle == 5){
-        this.$scope.award = true;
+        this.$scope.training = true;
       }
       else if(navTitle == 6){
+        this.$scope.award = true;
+      }
+      else if(navTitle == 7){
         this.$scope.experience = true;
       }
     }
@@ -436,6 +484,15 @@ module ums{
       this.$scope.phone = "+8801672494863";
       this.$scope.presentAddress = "34/1 K R Road Posta Lalbagh Dhaka-1211, Bangladesh";
       this.$scope.permanentAddress = "Don't Know";
+
+      this.$scope.employeeId = 1;
+      this.$scope.employeeDesignation = "Programmer";
+      this.$scope.employeeEmploymentType = 1;
+      this.$scope.employeeDepartment = 1;
+      this.$scope.employeeJoiningDate = "01/11/2017";
+      this.$scope.employeeJobPermanentDate = "01/11/2017";
+      this.$scope.employeeExtensionNumber = 724;
+      this.$scope.employeeShortName = "mmk";
 
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
@@ -497,6 +554,22 @@ module ums{
       this.$scope.showLabelPresentAddressDiv = true;
       this.$scope.showInputPermanentAddressDiv = false;
       this.$scope.showLabelPermanentAddressDiv = true;
+      this.$scope.showInputEmployeeIdDiv = false;
+      this.$scope.showLabelEmployeeIdDiv = true;
+      this.$scope.showInputEmployeeDesignationDiv = false;
+      this.$scope.showLabelEmployeeDesignationDiv = true;
+      this.$scope.showInputEmploymentTypeDiv = false;
+      this.$scope.showLabelEmploymentTypeDiv = true;
+      this.$scope.showSpouseInputEmployeeDepartmentDiv = false;
+      this.$scope.showLabelEmployeeDepartmentDiv = true;
+      this.$scope.showInputEmployeeJoiningDateDiv = false;
+      this.$scope.showLabelEmployeeJoiningDateDiv = true;
+      this.$scope.showInputEmployeeJobPermanentDateDiv = false;
+      this.$scope.showLabelEmployeeJobPermanentDateDiv = true;
+      this.$scope.showInputEmployeeExtensionDiv = false;
+      this.$scope.showLabelEmployeeExtensionDiv = true;
+      this.$scope.showSpouseInputEmployeeShortNameDiv = false;
+      this.$scope.showLabelEmployeeShortNameDiv = true;
       this.$scope.showInputSSCSelectedDiv = false;
       this.$scope.showLabelSSCSelectedDiv = true;
       this.$scope.showInputSSCInstitutionDiv = false;
@@ -597,6 +670,15 @@ module ums{
       this.$scope.presentAddress = "";
       this.$scope.permanentAddress = "";
 
+      this.$scope.employeeId = null;
+      this.$scope.employeeDesignation = "";
+      this.$scope.employeeEmploymentType = null;
+      this.$scope.employeeDepartment = null;
+      this.$scope.employeeJoiningDate = "";
+      this.$scope.employeeJobPermanentDate = "";
+      this.$scope.employeeExtensionNumber = null;
+      this.$scope.employeeShortName = "";
+
       this.$scope.entry.academic[0].academicDegreeName.name = "";
       this.$scope.entry.academic[0].academicInstitution = "";
       this.$scope.entry.academic[0].academicCgpa = "";
@@ -655,6 +737,22 @@ module ums{
       this.$scope.showLabelPresentAddressDiv = false;
       this.$scope.showInputPermanentAddressDiv = true;
       this.$scope.showLabelPermanentAddressDiv = false;
+      this.$scope.showInputEmployeeIdDiv = true;
+      this.$scope.showLabelEmployeeIdDiv = false;
+      this.$scope.showInputEmployeeDesignationDiv = true;
+      this.$scope.showLabelEmployeeDesignationDiv = false;
+      this.$scope.showInputEmploymentTypeDiv = true;
+      this.$scope.showLabelEmploymentTypeDiv = false;
+      this.$scope.showSpouseInputEmployeeDepartmentDiv = true;
+      this.$scope.showLabelEmployeeDepartmentDiv = false;
+      this.$scope.showInputEmployeeJoiningDateDiv = true;
+      this.$scope.showLabelEmployeeJoiningDateDiv = false;
+      this.$scope.showInputEmployeeJobPermanentDateDiv = true;
+      this.$scope.showLabelEmployeeJobPermanentDateDiv = false;
+      this.$scope.showInputEmployeeExtensionDiv = true;
+      this.$scope.showLabelEmployeeExtensionDiv = false;
+      this.$scope.showSpouseInputEmployeeShortNameDiv = true;
+      this.$scope.showLabelEmployeeShortNameDiv = false;
       this.$scope.showInputSSCSelectedDiv = true;
       this.$scope.showLabelSSCSelectedDiv = false;
       this.$scope.showInputSSCInstitutionDiv = true;
@@ -808,8 +906,20 @@ module ums{
       personalItem['presentAddress'] = this.$scope.presentAddress;
       personalItem['permanentAddress'] = this.$scope.permanentAddress;
       personalArray.push(personalItem);
-
       item['personal'] = personalArray;
+
+      var jobArray = [];
+      var jobItem: any = {};
+      jobItem['employee_id'] = this.$scope.employeeId;
+      jobItem['employee_designation'] = this.$scope.employeeDesignation;
+      jobItem['employment_type'] = this.$scope.employeeEmploymentType;
+      jobItem['employee_dept'] = this.$scope.employeeDepartment;
+      jobItem['employee_joining_date'] = this.$scope.employeeJoiningDate;
+      jobItem['employee_job_permanent_date'] = this.$scope.employeeJobPermanentDate;
+      jobItem['employee_ext_no'] = this.$scope.employeeExtensionNumber;
+      jobItem['employee_short_name'] = this.$scope.employeeShortName;
+      jobArray.push(jobItem);
+      item['job'] = jobArray;
 
       var academicArray = [];
       for(var i = 0; i < this.$scope.entry.academic.length; i++) {
@@ -820,7 +930,6 @@ module ums{
         academicItem['degreePassingYear'] = this.$scope.entry.academic[i].academicPassingYear;
         academicArray.push(academicItem);
       }
-
       item['academic'] = academicArray;
 
       var publicationArray = [];
@@ -833,7 +942,6 @@ module ums{
         publicationItem['publicationWebReference'] = this.$scope.entry.publication[i].publicationWebReference;
         publicationArray.push(publicationItem);
       }
-
       item['publication'] = publicationArray;
 
       var trainingArray = [];
@@ -845,7 +953,6 @@ module ums{
         trainingItem['trainingYear'] = this.$scope.entry.training[i].trainingYear;
         trainingArray.push(trainingItem);
       }
-
       item['training'] = trainingArray;
 
       var awardArray = [];
@@ -857,7 +964,6 @@ module ums{
         awardItem['shortDescription'] = this.$scope.entry.award[i].shortDescription;
         awardArray.push(awardItem);
       }
-
       item['award'] = awardArray;
 
       var experienceArray = [];
@@ -871,7 +977,6 @@ module ums{
         experienceItem['experienceToYear'] = this.$scope.entry.experience[i].experienceToYear;
         experienceArray.push(experienceItem);
       }
-
       item['experience'] = experienceArray;
 
       JsonArray.push(item);
@@ -882,6 +987,15 @@ module ums{
       console.log(JsonObject);
 
       return defer.promise;
+    }
+
+    private addDate(): void {
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 100);
     }
   }
 

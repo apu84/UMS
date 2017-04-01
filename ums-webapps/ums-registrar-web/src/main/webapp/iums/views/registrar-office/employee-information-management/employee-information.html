@@ -11,16 +11,16 @@
     }
 </style>
 
-
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs ul-edit nav-justified" role="tablist">
             <li class="active"><a data-ng-click="changeNav(1)" title="Personal Tab" data-toggle="tab">Personal</a></li>
-            <li><a data-ng-click="changeNav(2)" title="Academic Tab" data-toggle="tab">Academic</a></li>
-            <li><a data-ng-click="changeNav(3)" title="Publication Tab" data-toggle="tab">Publication</a></li>
-            <li><a data-ng-click="changeNav(4)" title="Training Tab" data-toggle="tab">Training</a></li>
-            <li><a data-ng-click="changeNav(5)" title="Honor/Award Tab" data-toggle="tab">Honor/Award</a></li>
-            <li><a data-ng-click="changeNav(6)" title="Experience Tab" data-toggle="tab">Experience</a></li>
+            <li><a data-ng-click="changeNav(2)" title="Job Tab" data-toggle="tab">Job</a></li>
+            <li><a data-ng-click="changeNav(3)" title="Academic Tab" data-toggle="tab">Academic</a></li>
+            <li><a data-ng-click="changeNav(4)" title="Publication Tab" data-toggle="tab">Publication</a></li>
+            <li><a data-ng-click="changeNav(5)" title="Training Tab" data-toggle="tab">Training</a></li>
+            <li><a data-ng-click="changeNav(6)" title="Honor/Award Tab" data-toggle="tab">Honor/Award</a></li>
+            <li><a data-ng-click="changeNav(7)" title="Experience Tab" data-toggle="tab">Experience</a></li>
         </ul>
         <div class="tab-content">
             <form>
@@ -256,6 +256,143 @@
                                 </div>
                                 <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPermanentAddressDiv">
                                     <label> {{permanentAddress}} </label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+
+                <div data-ng-show="job">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Employee Id<span class='require'>*</span></label>
+                                <div class="col-md-9"  data-ng-show="showInputEmployeeIdDiv">
+                                    <input data-ng-model="employeeId"
+                                           type="text"
+                                           placeholder="Employee Id"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeIdDiv">
+                                    <label>{{employeeId}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Designation<span class='require'>*</span></label>
+                                <div class="col-md-9" data-ng-show="showInputEmployeeDesignationDiv">
+                                    <input data-ng-model="employeeDesignation"
+                                           type="text"
+                                           placeholder="Designation"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeDesignationDiv">
+                                    <label> {{employeeDesignation}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Employment Type<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmploymentTypeDiv">
+                                    <input data-ng-model="employeeEmploymentType"
+                                           type="text"
+                                           placeholder="Employment Type"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmploymentTypeDiv">
+                                    <label> {{employeeEmploymentType}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Department/Office</label>
+                                <div class="col-md-9" data-ng-show="showSpouseInputEmployeeDepartmentDiv">
+                                    <input data-ng-model="employeeDepartment"
+                                           type="text"
+                                           placeholder="Department/Office"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeDepartmentDiv">
+                                    <label> {{employeeDepartment}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Joining Date<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmployeeJoiningDateDiv">
+                                    <input data-ng-model="employeeJoiningDate"
+                                           type="text"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="datepicker-default form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeJoiningDateDiv">
+                                    <label> {{employeeJoiningDate}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Job Permanent Date</label>
+                                <div class="col-md-9" data-ng-show="showInputEmployeeJobPermanentDateDiv">
+                                    <input data-ng-model="employeeJobPermanentDate"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="datepicker-default form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeJobPermanentDateDiv">
+                                    <label> {{employeeJobPermanentDate}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Extension Number<span class="require">*</span></label>
+
+                                <div class="col-md-9" data-ng-show="showInputEmployeeExtensionDiv">
+                                    <input data-ng-model="employeeExtensionNumber"
+                                           type="text"
+                                           placeholder="Extension Number"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmployeeExtensionDiv">
+                                    <label> {{employeeExtensionNumber}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="col-md-3 control-label">Short Name</label>
+                                <div class="col-md-9" data-ng-show="showSpouseInputEmployeeShortNameDiv">
+                                    <input data-ng-model="employeeShortName"
+                                           type="text"
+                                           placeholder="Short Name"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-9"  style="border-bottom: 1px dashed;" data-ng-show="showLabelEmployeeShortNameDiv">
+                                    <label> {{employeeShortName}} </label>
+                                </div>
                             </div>
                         </div>
                     </div>
