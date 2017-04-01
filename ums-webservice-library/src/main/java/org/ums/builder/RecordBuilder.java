@@ -95,7 +95,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pMutable.setRecordStatus(RecordStatus.get(pJsonObject.getInt("status")));
     pMutable.setKeyWords(pJsonObject.getString("keywords"));
 
-    pMutable.setContributorJsonString(pJsonObject.getString("contributorJsonString"));
+    if(pJsonObject.containsKey("contributorJsonString"))
+      pMutable.setContributorJsonString(pJsonObject.getString("contributorJsonString"));
     pMutable.setSubjectJsonString(pJsonObject.getString("subjectJsonString"));
     pMutable.setNoteJsonString(pJsonObject.getString("noteJsonString"));
   }
