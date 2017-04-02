@@ -23,6 +23,13 @@
         top:15px;
     }
 
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
 </style>
 <div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
@@ -101,7 +108,7 @@
             <div class="panel-heading">Program Type <b>{{programType.name}}</b>, Semester <b>{{semester.name}}</b>, Faculty <b>{{faculty.shortName}}</b>, Merit Type <b>{{meritType.name}}</b><span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
-                <div data-ng-show="showReportSection">
+                <div data-ng-show="showReportSection"  class="sample-show-hide">
                     <div class="row">
                         <div class="col-md-12" align="center">
                             <h1>Report Section</h1>
@@ -123,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-                <div data-ng-show="!showReportSection">
+                <div data-ng-show="!showReportSection" class="sample-show-hide">
                     <div class="row">
                         <div class="col-md-12" align="center">
                             <i class="fa fa-angle-down" aria-hidden="true" style="cursor: pointer;" data-ng-click="enableReportSection()"></i>
@@ -162,7 +169,7 @@
                         </div>
                         <br/>
 
-                        <div class="row" align="center" data-ng-show="showStudentPortion">
+                        <div class="row sample-show-hide" align="center" data-ng-show="showStudentPortion">
                             <div class="col-md-6">
                                 <table class="table table-striped">
                                     <tbody>
@@ -249,7 +256,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row" data-ng-show="showStudentPortion">
+                        <div class="row sample-show-hide" data-ng-show="showStudentPortion">
                             <div class="col-md-6">
                                 <div class="well" align="right">
                                     <!--<button class="btn btn-info">Edit</button>-->

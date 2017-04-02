@@ -191,7 +191,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     }
     else {
       // examDate="";
-      examDates = "Date: " + examDate;
+      if(type == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
+        String testExamDate = UmsUtils.formatDate(examDate, "mm-DD-YYYY", "dd/MM/YYYY");
+        examDates = "Date: " + "06-04-2017";
+      }
+      else {
+        examDates = "Date: " + examDate;
+      }
     }
 
     long startTimeOfTheMainAlgorithm = System.currentTimeMillis();
@@ -1189,9 +1195,20 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     long startTime = System.currentTimeMillis();
     Map<String, String> studentsUsageMap = new HashMap<>();
 
+    List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
+    Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
+    if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
+      ugRegistrationResults =
+          mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(pExamDate, "mm-dd-yyyy", "dd-mm-yyyy"));
+      for(int i = 0; i < ugRegistrationResults.size(); i++) {
+        studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId()
+            + ugRegistrationResults.get(i).getCourse().getNo(), ugRegistrationResults.get(i));
+      }
+    }
+
     while(true) {
-      SeatPlanReportDto seatPlanReportDto = getUnusedStudents(seatPlanReports, studentsUsageMap);
-      studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
+      // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
+      SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
 
       routineCounter += 1;
       PdfPTable table = new PdfPTable(2);
@@ -1360,23 +1377,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       int counter = 0;
       int studentCounter = 0;
 
-      List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
-      Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
-      if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
-        ugRegistrationResults =
-            mUGRegistrationResultManager
-                .getCCI(pSemesterId, UmsUtils.formatDate(pExamDate, "mm-dd-yyyy", "dd-mm-yyyy"));
-        for(int i = 0; i < ugRegistrationResults.size(); i++) {
-          studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId(),
-              ugRegistrationResults.get(i));
-        }
-      }
-
       while(true) {
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
+        seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
+        // studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
 
         if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
+          studentsUsageMap.put(seatPlanInner.getStudentId(), "used");
           if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
               && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
@@ -1511,7 +1519,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+                                              Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
       DocumentException {
     List<SeatPlanReportDto> seatPlans =
         mSeatPlanReportManager.getSeatPlanDataForTopSheet(pSemesterId, pExamType, pExamDate);
@@ -1540,11 +1548,28 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     Semester semester = mSemesterManager.get(pSemesterId);
     int seatPlanCounter = 0;
+    List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
+    Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
+    Map<String, String> studentsUsageMap = new HashMap<>();
+
+    if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()){
+      String examDates = UmsUtils.formatDate(pExamDate,"mm-dd-yyyy","dd-mm-yyyy");
+      ugRegistrationResults= mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(pExamDate,"mm-dd-yyyy","dd-mm-yyyy"));
+      for(int i=0;i<ugRegistrationResults.size();i++){
+        studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId()+ugRegistrationResults.get(i).getCourse().getNo(), ugRegistrationResults.get(i));
+      }
+    }
     while(true) {
 
       seatPlanCounter += 1;
+      if(seatPlanCounter==34){
+        boolean sls=true;
+      }
 
       SeatPlanReportDto seatPlan = seatPlans.get(0);
+      if(seatPlan.getCourseNo().equals("MATH 2107")){
+        boolean found=true;
+      }
 
       String examDate = seatPlan.getExamDate();
 
@@ -1693,32 +1718,25 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       int studentCounter = 0;
 
 
-      List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
-      Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
-      Map<String, String> studentsUsageMap = new HashMap<>();
 
-      if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()){
-        ugRegistrationResults= mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(examDate,"mm-dd-yyyy","dd-mm-yyyy"));
-        for(int i=0;i<ugRegistrationResults.size();i++){
-          studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId(), ugRegistrationResults.get(i));
-        }
-      }
 
       while(true) {
         if(seatPlans.size() != 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
-          if(seatPlanReportDto.getCourseNo().equals("BBA 213")){
-            boolean found=true;
-          }
+
           if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlanReportDto.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanReportDto.getCurrentSemester()==seatPlan.getCurrentSemester()
               && seatPlans.size() != 0) {
             Chunk studentId = new Chunk("");
             Paragraph studentIdParagraph = new Paragraph();
 
             for(int i = 0; i < 6; i++) {
+              seatPlans = getUnusedStudents(seatPlans, studentsUsageMap);
               if(seatPlans.size() != 0) {
-                SeatPlanReportDto seatPlanInnerReport = getUnusedStudents(seatPlans, studentsUsageMap);
-                studentsUsageMap.put(seatPlanInnerReport.getStudentId(),"used");
+                SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
+                if(seatPlanInnerReport.getStudentId().equals("110207069")){
+                  boolean hur=true;
+                }
+                studentsUsageMap.put(seatPlanInnerReport.getStudentId()+seatPlanInnerReport.getCourseNo(),"used");
                 if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo() ) && seatPlanInnerReport.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanInnerReport.getCurrentSemester()==seatPlan.getCurrentSemester()
                     && seatPlans.size() != 0) {
                   /*
@@ -1913,21 +1931,30 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     baos.writeTo(pOutputStream);
   }
 
-  private SeatPlanReportDto getUnusedStudents(List<SeatPlanReportDto> pSeatPlans, Map<String, String> pStudentsUsageMap) {
-    SeatPlanReportDto seatPlanInnerReport = pSeatPlans.get(0);
-    if(pStudentsUsageMap.get(seatPlanInnerReport.getStudentId()) != null) {
-      pSeatPlans.remove(0);
-      while(true) {
-        if(pStudentsUsageMap.containsKey(pSeatPlans.get(0))) {
+  private List<SeatPlanReportDto> getUnusedStudents(List<SeatPlanReportDto> pSeatPlans,
+      Map<String, String> pStudentsUsageMap) {
+    SeatPlanReportDto seatPlanInnerReport = new SeatPlanReportDto();
+    if(pSeatPlans.size() > 0) {
+
+      seatPlanInnerReport = pSeatPlans.get(0);
+      if(pStudentsUsageMap.get(seatPlanInnerReport.getStudentId() + seatPlanInnerReport.getCourseNo()) != null) {
+        if(pSeatPlans.size() > 0)
           pSeatPlans.remove(0);
-        }
-        else {
-          seatPlanInnerReport = pSeatPlans.get(0);
-          break;
+        while(true) {
+          if(pSeatPlans.size() == 0)
+            break;
+          if(pStudentsUsageMap.containsKey(pSeatPlans.get(0).getStudentId() + seatPlanInnerReport.getCourseNo())) {
+            if(pSeatPlans.size() > 0)
+              pSeatPlans.remove(0);
+          }
+          else {
+            // seatPlanInnerReport = pSeatPlans.get(0);
+            break;
+          }
         }
       }
     }
-    return seatPlanInnerReport;
+    return pSeatPlans;
   }
 
   private Chunk getStudentTypeChunk(Integer pExamType,
@@ -1943,14 +1970,18 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       }
     }
     else {
-      if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.CARRY) {
+      String mapString = (pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseId());
+      if(pStudentIdUgRegistrationResultMap
+          .get(pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.CARRY) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
       }
-      else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.IMPROVEMENT) {
+      else if(pStudentIdUgRegistrationResultMap.get(
+          pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.IMPROVEMENT) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
         pStudentId.setBackground(BaseColor.LIGHT_GRAY);
       }
-      else if(pStudentIdUgRegistrationResultMap.get(pSeatPlanInnerReport.getStudentId()).getType() == CourseRegType.SPECIAL_CARRY) {
+      else if(pStudentIdUgRegistrationResultMap.get(
+          pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.SPECIAL_CARRY) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLDITALIC));
         pStudentId.setBackground(BaseColor.LIGHT_GRAY);
       }
@@ -2165,7 +2196,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType,
-      OutputStream pOutputStream) throws IOException, DocumentException {
+                                                     OutputStream pOutputStream) throws IOException, DocumentException {
     List<SeatPlan> seatPlans = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType);
 
     Map<String, List<SeatPlan>> seatPlanMapUnordered = seatPlans
