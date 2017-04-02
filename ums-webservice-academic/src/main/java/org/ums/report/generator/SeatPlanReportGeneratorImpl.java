@@ -192,8 +192,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     else {
       // examDate="";
       if(type == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
-        String testExamDate = UmsUtils.formatDate(examDate, "mm-DD-YYYY", "dd/MM/YYYY");
-        examDates = "Date: " + "06-04-2017";
+        String testExamDate = UmsUtils.formatDate(examDate, "MM-dd-yyyy", "dd/MM/yyyy");
+        examDates = "Date: " + testExamDate;
       }
       else {
         examDates = "Date: " + examDate;
