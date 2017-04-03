@@ -3,13 +3,11 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableSeatPlan;
-import org.ums.manager.ClassRoomManager;
-import org.ums.manager.SeatPlanManager;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.StudentManager;
+import org.ums.manager.*;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -19,6 +17,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private static ClassRoomManager sClassRoomManager;
   private static StudentManager sStudentManager;
   private static SemesterManager sSemesterManager;
+  private static CourseManager sCourseManager;
   private static SeatPlanManager sSeatPlanManager;
 
   static {
@@ -26,6 +25,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     sClassRoomManager = applicationContext.getBean("classRoomManager", ClassRoomManager.class);
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sSeatPlanManager = applicationContext.getBean("seatPlanManager", SeatPlanManager.class);
   }
 
@@ -43,6 +43,8 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private String mExamDate;
   private Integer mApplicationType;
   private String mLastModified;
+  private Course mCourse;
+  private String mCourseId;
 
   public PersistentSeatPlan() {
 
@@ -63,6 +65,26 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     mExamDate = pPersistentSeatPlan.getExamDate();
     mApplicationType = pPersistentSeatPlan.getApplicationType();
     mLastModified = pPersistentSeatPlan.getLastModified();
+  }
+
+  @Override
+  public String getCourseId() {
+    return mCourseId;
+  }
+
+  @Override
+  public Course getCourse() {
+    return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
+  }
+
+  @Override
+  public void setCourse(Course pCourse) {
+    mCourse = pCourse;
+  }
+
+  @Override
+  public void setCourseId(String pCourseId) {
+    mCourseId = pCourseId;
   }
 
   @Override

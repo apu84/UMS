@@ -107,19 +107,25 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     Map<String, List<Student>> studentsByProgramYearSemesterStatusList = new HashMap<>();
     Map<String, List<Student>> studentsByProgramYearSemesterStatusList2 = new HashMap<>();
 
+    Map<String, List<UGRegistrationResult>> studentsByProgramYearSemesterStatusListCCI = new HashMap<>();
+    Map<String, List<UGRegistrationResult>> studentsByProgramYearSemesterStatusList2CCI = new HashMap<>();
+
     Map<Integer, List<Student>> subGroupWithStudents = new HashMap<>();
     Map<Integer, List<Student>> tempSubGroupWithStudents = new HashMap<>();
 
-    if(pGroupNo == 0) {
-      studentsByProgramYearSemesterStatusList = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
-      studentsByProgramYearSemesterStatusList2 = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
+    Map<Integer, List<UGRegistrationResult>> subGroupWithStudentsCCI = new HashMap<>();
+    Map<Integer, List<UGRegistrationResult>> tempSubGroupWithStudentsCCI = new HashMap<>();
 
-      subGroupWithStudents =
+    if(pGroupNo == 0) {
+      studentsByProgramYearSemesterStatusListCCI = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
+      studentsByProgramYearSemesterStatusList2CCI = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
+
+      subGroupWithStudentsCCI =
           getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate, numberOfSubGroups,
-              studentsByProgramYearSemesterStatusList);
-      tempSubGroupWithStudents =
+              studentsByProgramYearSemesterStatusListCCI);
+      tempSubGroupWithStudentsCCI =
           getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate, numberOfSubGroups,
-              studentsByProgramYearSemesterStatusList2);
+              studentsByProgramYearSemesterStatusList2CCI);
     }
     else {
       studentsByProgramYearSemesterStatusList =
@@ -158,129 +164,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         int secondGroupAllZeroSizeCounter = 0;
         List<Integer> firstGroupWithZeroSize = new ArrayList<>();
         List<Integer> secondGroupWithZeroSize = new ArrayList<>();
-        for(int j = 0; j < room.getTotalColumn(); j++) {
-
-          for(int i = 0; i < room.getTotalRow(); i++) {
-
-            if(j % 2 == 0) {
-              if(tempSubGroupWithStudents.get(evenRow).size() > 0) {
-                if(i > 0) {
-                  if(roomStructure[i - 1][j].equals(Integer.toString(evenRow))) {
-                    if(i + 1 < room.getTotalRow()) {
-                      roomStructure[i][j] = "";
-                      i += 1;
-                    }
-                    if(i + 1 == room.getTotalRow()) {
-                      roomStructure[i][j] = "";
-                      break;
-                    }
-
-                  }
-                }
-                roomStructure[i][j] = Integer.toString(evenRow);
-                List<Student> tempStudentOfTheSubgroup = tempSubGroupWithStudents.get(evenRow);
-                tempStudentOfTheSubgroup.remove(0);
-                tempSubGroupWithStudents.put(evenRow, tempStudentOfTheSubgroup);
-                if(evenRow == divider) {
-                  evenRow = 1;
-                }
-                else {
-                  evenRow += 1;
-                }
-              }
-              else {
-                if(secondGroupWithZeroSize.size() == ((divider + 1) - 1)) {
-                  roomStructure[i][j] = "";
-                }
-                else {
-                  boolean alreadyInList = false;
-                  if(secondGroupWithZeroSize.size() == 0) {
-                    secondGroupWithZeroSize.add(evenRow);
-                  }
-                  else {
-                    if(secondGroupWithZeroSize.contains(evenRow)) {
-                      alreadyInList = true;
-                    }
-                    else {
-                      secondGroupWithZeroSize.add(evenRow);
-                    }
-                  }
-                  evenRow += 1;
-                  if(evenRow > divider) {
-                    evenRow = 1;
-                  }
-                  if(roomStructure[i][j] == null) {
-                    i -= 1;
-
-                  }
-
-                }
-
-              }
-
-            }
-            else {
-
-              if(tempSubGroupWithStudents.get(oddRow).size() > 0) {
-
-                if(i > 0) {
-                  if(roomStructure[i - 1][j].equals(Integer.toString(oddRow))) {
-                    if(i + 1 < room.getTotalRow()) {
-                      roomStructure[i][j] = "";
-
-                      i += 1;
-
-                    }
-                    if(i + 1 == room.getTotalRow()) {
-                      roomStructure[i][j] = "";
-                      break;
-                    }
-                  }
-                }
-
-                roomStructure[i][j] = Integer.toString(oddRow);
-                List<Student> studentsOfTheSubGroup = tempSubGroupWithStudents.get(oddRow);
-                studentsOfTheSubGroup.remove(0);
-                tempSubGroupWithStudents.put(oddRow, studentsOfTheSubGroup);
-                if(oddRow >= numberOfSubGroups) {
-                  oddRow = divider + 1;
-                }
-                else {
-                  oddRow += 1;
-                }
-              }
-              else {
-                if(firstGroupWithZeroSize.size() == (numberOfSubGroups - divider)) {
-                  roomStructure[i][j] = "";
-                }
-                else {
-                  boolean alreadyInList = false;
-                  if(firstGroupWithZeroSize.size() == 0) {
-                    firstGroupWithZeroSize.add(oddRow);
-                  }
-                  else {
-                    if(firstGroupWithZeroSize.contains(oddRow)) {
-                      alreadyInList = true;
-                    }
-                    else {
-                      firstGroupWithZeroSize.add(oddRow);
-                    }
-                  }
-                  oddRow += 1;
-                  if(oddRow > numberOfSubGroups) {
-                    oddRow = divider + 1;
-                  }
-                  if(roomStructure[i][j] == null) {
-                    i -= 1;
-
-                  }
-
-                }
-
-              }
-
-            }
-          }
+        if(pGroupNo == 0) {
+          getSeatPlanStructureCCI(numberOfSubGroups, tempSubGroupWithStudentsCCI, room, roomStructure, divider,
+              evenRow, oddRow, firstGroupWithZeroSize, secondGroupWithZeroSize);
+        }
+        else {
+          getSeatPlanStructure(numberOfSubGroups, tempSubGroupWithStudents, room, roomStructure, divider, evenRow,
+              oddRow, firstGroupWithZeroSize, secondGroupWithZeroSize);
         }
 
         // *********end of new Algorithm ******************
@@ -294,33 +184,66 @@ public class SeatPlanServiceImpl implements SeatPlanService {
             for(int subGroup = 1; subGroup <= numberOfSubGroups; subGroup++) {
               if(roomStructure[roomRow][roomColumn] != null) {
                 if(roomStructure[roomRow][roomColumn].equals(Integer.toString(subGroup))) {
-                  if(subGroupWithStudents.get(subGroup) != null) {
-                    List<Student> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
-                    Student student = studentsOfTheSubGroup.get(0);
-
-                    roomStructure[roomRow][roomColumn] = student.getId();
-                    MutableSeatPlan seatPlan = new PersistentSeatPlan();
-                    PersistentClassRoom classRoom = new PersistentClassRoom();
-                    classRoom.setId(room.getId());
-                    seatPlan.setClassRoom(classRoom);
-                    seatPlan.setRowNo(roomRow + 2);
-                    seatPlan.setColumnNo(roomColumn + 1);
-                    PersistentStudent spStudent = new PersistentStudent();
-                    spStudent.setId(student.getId());
-                    seatPlan.setStudent(spStudent);
-                    seatPlan.setExamType(pExamType);
-                    PersistentSemester semester = new PersistentSemester();
-                    semester.setId(pSemesterId);
-                    seatPlan.setSemester(semester);
-                    seatPlan.setGroupNo(pGroupNo);
-                    if(pGroupNo == 0) {
-                      seatPlan.setExamDate(pExamDate);
-                      seatPlan.setApplicationType(student.getApplicationType());
+                  if(pGroupNo == 0) {
+                    if(subGroupWithStudentsCCI.get(subGroup) != null) {
+                      List<UGRegistrationResult> studentsOfTheSubGroup = subGroupWithStudentsCCI.get(subGroup);
+                      UGRegistrationResult ugStudent = studentsOfTheSubGroup.get(0);
+                      Student student = mStudentManager.get(ugStudent.getStudentId());
+                      roomStructure[roomRow][roomColumn] = student.getId();
+                      MutableSeatPlan seatPlan = new PersistentSeatPlan();
+                      PersistentClassRoom classRoom = new PersistentClassRoom();
+                      classRoom.setId(room.getId());
+                      seatPlan.setClassRoom(classRoom);
+                      seatPlan.setRowNo(roomRow + 2);
+                      seatPlan.setColumnNo(roomColumn + 1);
+                      PersistentStudent spStudent = new PersistentStudent();
+                      spStudent.setId(student.getId());
+                      seatPlan.setStudent(spStudent);
+                      seatPlan.setExamType(pExamType);
+                      PersistentSemester semester = new PersistentSemester();
+                      semester.setId(pSemesterId);
+                      seatPlan.setSemester(semester);
+                      seatPlan.setGroupNo(pGroupNo);
+                      seatPlan.setCourseId(ugStudent.getCourse().getId());
+                      if(pGroupNo == 0) {
+                        seatPlan.setExamDate(pExamDate);
+                        seatPlan.setApplicationType(student.getApplicationType());
+                      }
+                      totalSeatPlan.add(seatPlan);
+                      studentsOfTheSubGroup.remove(0);
+                      subGroupWithStudentsCCI.put(subGroup, studentsOfTheSubGroup);
+                      break;
                     }
-                    totalSeatPlan.add(seatPlan);
-                    studentsOfTheSubGroup.remove(0);
-                    subGroupWithStudents.put(subGroup, studentsOfTheSubGroup);
-                    break;
+                  }
+                  else {
+                    if(subGroupWithStudents.get(subGroup) != null) {
+                      List<Student> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
+                      Student student = studentsOfTheSubGroup.get(0);
+
+                      roomStructure[roomRow][roomColumn] = student.getId();
+                      MutableSeatPlan seatPlan = new PersistentSeatPlan();
+                      PersistentClassRoom classRoom = new PersistentClassRoom();
+                      classRoom.setId(room.getId());
+                      seatPlan.setClassRoom(classRoom);
+                      seatPlan.setRowNo(roomRow + 2);
+                      seatPlan.setColumnNo(roomColumn + 1);
+                      PersistentStudent spStudent = new PersistentStudent();
+                      spStudent.setId(student.getId());
+                      seatPlan.setStudent(spStudent);
+                      seatPlan.setExamType(pExamType);
+                      PersistentSemester semester = new PersistentSemester();
+                      semester.setId(pSemesterId);
+                      seatPlan.setSemester(semester);
+                      seatPlan.setGroupNo(pGroupNo);
+                      if(pGroupNo == 0) {
+                        seatPlan.setExamDate(pExamDate);
+                        seatPlan.setApplicationType(student.getApplicationType());
+                      }
+                      totalSeatPlan.add(seatPlan);
+                      studentsOfTheSubGroup.remove(0);
+                      subGroupWithStudents.put(subGroup, studentsOfTheSubGroup);
+                      break;
+                    }
                   }
 
                 }
@@ -357,6 +280,135 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     }
 
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
+  }
+
+  private void getSeatPlanStructure(int pNumberOfSubGroups, Map<Integer, List<Student>> pTempSubGroupWithStudents,
+      ClassRoom room, String[][] pRoomStructure, int pDivider, int pEvenRow, int pOddRow,
+      List<Integer> pFirstGroupWithZeroSize, List<Integer> pSecondGroupWithZeroSize) {
+    for(int j = 0; j < room.getTotalColumn(); j++) {
+
+      for(int i = 0; i < room.getTotalRow(); i++) {
+
+        if(j % 2 == 0) {
+          if(pTempSubGroupWithStudents.get(pEvenRow).size() > 0) {
+            if(i > 0) {
+              if(pRoomStructure[i - 1][j].equals(Integer.toString(pEvenRow))) {
+                if(i + 1 < room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  i += 1;
+                }
+                if(i + 1 == room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  break;
+                }
+
+              }
+            }
+            pRoomStructure[i][j] = Integer.toString(pEvenRow);
+            List<Student> tempStudentOfTheSubgroup = pTempSubGroupWithStudents.get(pEvenRow);
+            tempStudentOfTheSubgroup.remove(0);
+            pTempSubGroupWithStudents.put(pEvenRow, tempStudentOfTheSubgroup);
+            if(pEvenRow == pDivider) {
+              pEvenRow = 1;
+            }
+            else {
+              pEvenRow += 1;
+            }
+          }
+          else {
+            if(pSecondGroupWithZeroSize.size() == ((pDivider + 1) - 1)) {
+              pRoomStructure[i][j] = "";
+            }
+            else {
+              boolean alreadyInList = false;
+              if(pSecondGroupWithZeroSize.size() == 0) {
+                pSecondGroupWithZeroSize.add(pEvenRow);
+              }
+              else {
+                if(pSecondGroupWithZeroSize.contains(pEvenRow)) {
+                  alreadyInList = true;
+                }
+                else {
+                  pSecondGroupWithZeroSize.add(pEvenRow);
+                }
+              }
+              pEvenRow += 1;
+              if(pEvenRow > pDivider) {
+                pEvenRow = 1;
+              }
+              if(pRoomStructure[i][j] == null) {
+                i -= 1;
+
+              }
+
+            }
+
+          }
+
+        }
+        else {
+
+          if(pTempSubGroupWithStudents.get(pOddRow).size() > 0) {
+
+            if(i > 0) {
+              if(pRoomStructure[i - 1][j].equals(Integer.toString(pOddRow))) {
+                if(i + 1 < room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+
+                  i += 1;
+
+                }
+                if(i + 1 == room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  break;
+                }
+              }
+            }
+
+            pRoomStructure[i][j] = Integer.toString(pOddRow);
+            List<Student> studentsOfTheSubGroup = pTempSubGroupWithStudents.get(pOddRow);
+            studentsOfTheSubGroup.remove(0);
+            pTempSubGroupWithStudents.put(pOddRow, studentsOfTheSubGroup);
+            if(pOddRow >= pNumberOfSubGroups) {
+              pOddRow = pDivider + 1;
+            }
+            else {
+              pOddRow += 1;
+            }
+          }
+          else {
+            if(pFirstGroupWithZeroSize.size() == (pNumberOfSubGroups - pDivider)) {
+              pRoomStructure[i][j] = "";
+            }
+            else {
+              boolean alreadyInList = false;
+              if(pFirstGroupWithZeroSize.size() == 0) {
+                pFirstGroupWithZeroSize.add(pOddRow);
+              }
+              else {
+                if(pFirstGroupWithZeroSize.contains(pOddRow)) {
+                  alreadyInList = true;
+                }
+                else {
+                  pFirstGroupWithZeroSize.add(pOddRow);
+                }
+              }
+              pOddRow += 1;
+              if(pOddRow > pNumberOfSubGroups) {
+                pOddRow = pDivider + 1;
+              }
+              if(pRoomStructure[i][j] == null) {
+                i -= 1;
+
+              }
+
+            }
+
+          }
+
+        }
+      }
+    }
   }
 
   @Override
@@ -455,6 +507,136 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     }
 
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
+  }
+
+  private void getSeatPlanStructureCCI(int pNumberOfSubGroups,
+      Map<Integer, List<UGRegistrationResult>> pTempSubGroupWithStudents, ClassRoom room, String[][] pRoomStructure,
+      int pDivider, int pEvenRow, int pOddRow, List<Integer> pFirstGroupWithZeroSize,
+      List<Integer> pSecondGroupWithZeroSize) {
+    for(int j = 0; j < room.getTotalColumn(); j++) {
+
+      for(int i = 0; i < room.getTotalRow(); i++) {
+
+        if(j % 2 == 0) {
+          if(pTempSubGroupWithStudents.get(pEvenRow).size() > 0) {
+            if(i > 0) {
+              if(pRoomStructure[i - 1][j].equals(Integer.toString(pEvenRow))) {
+                if(i + 1 < room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  i += 1;
+                }
+                if(i + 1 == room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  break;
+                }
+
+              }
+            }
+            pRoomStructure[i][j] = Integer.toString(pEvenRow);
+            List<UGRegistrationResult> tempStudentOfTheSubgroup = pTempSubGroupWithStudents.get(pEvenRow);
+            tempStudentOfTheSubgroup.remove(0);
+            pTempSubGroupWithStudents.put(pEvenRow, tempStudentOfTheSubgroup);
+            if(pEvenRow == pDivider) {
+              pEvenRow = 1;
+            }
+            else {
+              pEvenRow += 1;
+            }
+          }
+          else {
+            if(pSecondGroupWithZeroSize.size() == ((pDivider + 1) - 1)) {
+              pRoomStructure[i][j] = "";
+            }
+            else {
+              boolean alreadyInList = false;
+              if(pSecondGroupWithZeroSize.size() == 0) {
+                pSecondGroupWithZeroSize.add(pEvenRow);
+              }
+              else {
+                if(pSecondGroupWithZeroSize.contains(pEvenRow)) {
+                  alreadyInList = true;
+                }
+                else {
+                  pSecondGroupWithZeroSize.add(pEvenRow);
+                }
+              }
+              pEvenRow += 1;
+              if(pEvenRow > pDivider) {
+                pEvenRow = 1;
+              }
+              if(pRoomStructure[i][j] == null) {
+                i -= 1;
+
+              }
+
+            }
+
+          }
+
+        }
+        else {
+
+          if(pTempSubGroupWithStudents.get(pOddRow).size() > 0) {
+
+            if(i > 0) {
+              if(pRoomStructure[i - 1][j].equals(Integer.toString(pOddRow))) {
+                if(i + 1 < room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+
+                  i += 1;
+
+                }
+                if(i + 1 == room.getTotalRow()) {
+                  pRoomStructure[i][j] = "";
+                  break;
+                }
+              }
+            }
+
+            pRoomStructure[i][j] = Integer.toString(pOddRow);
+            List<UGRegistrationResult> studentsOfTheSubGroup = pTempSubGroupWithStudents.get(pOddRow);
+            studentsOfTheSubGroup.remove(0);
+            pTempSubGroupWithStudents.put(pOddRow, studentsOfTheSubGroup);
+            if(pOddRow >= pNumberOfSubGroups) {
+              pOddRow = pDivider + 1;
+            }
+            else {
+              pOddRow += 1;
+            }
+          }
+          else {
+            if(pFirstGroupWithZeroSize.size() == (pNumberOfSubGroups - pDivider)) {
+              pRoomStructure[i][j] = "";
+            }
+            else {
+              boolean alreadyInList = false;
+              if(pFirstGroupWithZeroSize.size() == 0) {
+                pFirstGroupWithZeroSize.add(pOddRow);
+              }
+              else {
+                if(pFirstGroupWithZeroSize.contains(pOddRow)) {
+                  alreadyInList = true;
+                }
+                else {
+                  pFirstGroupWithZeroSize.add(pOddRow);
+                }
+              }
+              pOddRow += 1;
+              if(pOddRow > pNumberOfSubGroups) {
+                pOddRow = pDivider + 1;
+              }
+              if(pRoomStructure[i][j] == null) {
+                i -= 1;
+
+              }
+
+            }
+
+          }
+
+        }
+      }
+    }
   }
 
   MutableSeatPlanGroup storeCourseInfo(ExamRoutineDto examRoutineDto, int pSemesterId, int pExamType, int group) {
@@ -584,10 +766,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupMap;
   }
 
-  Map<Integer, List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo, int pExamType,
-      String examDate, int numberOfSubGroups, Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
+  Map<Integer, List<UGRegistrationResult>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo, int pExamType,
+      String examDate, int numberOfSubGroups,
+      Map<String, List<UGRegistrationResult>> studentsByProgramYearSemesterStatusList) {
     List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
-    Map<Integer, List<Student>> subGroupNumberWithStudentsMap = new HashMap<>();
+    Map<Integer, List<UGRegistrationResult>> subGroupNumberWithStudentsMap = new HashMap<>();
     Integer numberOfZeroValuedSubGroups = mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId, examDate);
 
     /*
@@ -597,13 +780,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
      * then, the sub group number must be omitted in the loop.
      */
     for(SubGroupCCI member : subGroupMembers) {
-      List<Student> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+      List<UGRegistrationResult> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
       for(int i = 1; i <= numberOfSubGroups; i++) {
         if(i == member.getSubGroupNo()) {
           if(subGroupNumberWithStudentsMap.get(i) != null) {
-            List<Student> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
+            List<UGRegistrationResult> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
             for(int j = 0; j < member.getTotalStudent(); j++) {
-              Student spStudent = students.get(0);
+              UGRegistrationResult spStudent = students.get(0);
               students.remove(0);
               studentsOfTheSubGroup.add(spStudent);
             }
@@ -611,9 +794,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
             subGroupNumberWithStudentsMap.put(i, studentsOfTheSubGroup);
           }
           else {
-            List<Student> studentsOfTheSubGroup = new ArrayList<>();
+            List<UGRegistrationResult> studentsOfTheSubGroup = new ArrayList<>();
             for(int j = 0; j < member.getTotalStudent(); j++) {
-              Student spStudent1 = students.get(0);
+              UGRegistrationResult spStudent1 = students.get(0);
               students.remove(0);
               studentsOfTheSubGroup.add(spStudent1);
             }
@@ -632,7 +815,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupNumberWithStudentsMap;
   }
 
-  Map<String, List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate) {
+  Map<String, List<UGRegistrationResult>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate) {
     Map<String, List<Student>> studentMap = new HashMap<>();
     List<UGRegistrationResult>  ugRegistrationResults = mUGRegistrationResultManager.getCCI(pSemester, pExamDate) ;
     Map<String, List<UGRegistrationResult>> courseIdMapUgRegistratoionResult =  ugRegistrationResults
@@ -658,7 +841,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     }
 
 
-    return studentMap;
+    return courseIdMapUgRegistratoionResult;
   }
 
   Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo, int pSemesterId,

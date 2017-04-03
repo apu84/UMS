@@ -119,8 +119,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     if(groupNo == 0) {
       ugRegistrationResults = mUGRegistrationResultManager.getCCI(pSemesterId, examDate);
       for(UGRegistrationResult ug : ugRegistrationResults) {
-        studentCourseMap.put(ug.getStudentId(), ug.getCourse());
-        studentCourseRegType.put(ug.getStudentId(), ug.getType());
+        studentCourseMap.put(ug.getStudentId() + ug.getCourse().getId(), ug.getCourse());
+        studentCourseRegType.put(ug.getStudentId() + ug.getCourse().getId(), ug.getType());
       }
     }
     java.util.List<Student> students;
@@ -279,12 +279,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 String dept;
                 String deptName;
                 if(groupNo == 0) {
-                  int year = studentCourseMap.get(student.getId()).getYear();
-                  int semester = studentCourseMap.get(student.getId()).getSemester();
+                  int year = studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear();
+                  int semester = studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
                   dept =
                       student.getProgram().getShortName().replace("B.Sc in ", "") + " "
-                          + studentCourseMap.get(student.getId()).getYear() + "/"
-                          + studentCourseMap.get(student.getId()).getSemester();
+                          + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
                   deptName = student.getProgram().getShortName().replace("B.Sc in ", "");
                 }
                 else {
@@ -298,8 +298,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 String yearSemester = "";
                 if(groupNo == 0) {
                   yearSemester =
-                      studentCourseMap.get(student.getId()).getYear() + "/"
-                          + studentCourseMap.get(student.getId()).getSemester();
+                      studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
                 }
                 else {
                   yearSemester = student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
@@ -308,13 +308,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
                   if(groupNo == 0) {
-                    if(studentCourseRegType.get(student.getId()).getId() == 3) {
+                    if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                       studentList.add(student.getId() + "(C)");
                     }
-                    else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                    else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 4) {
                       studentList.add(student.getId() + "(SC)");
                     }
-                    else if(studentCourseRegType.get(student.getId()).getId() == 5) {
+                    else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 5) {
                       studentList.add(student.getId() + "(I)");
 
                     }
@@ -337,13 +337,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     if(deptOfTheList.equals(dept)) {
                       java.util.List<String> studentList = deptStudentListMap.get(dept);
                       if(groupNo == 0) {
-                        if(studentCourseRegType.get(student.getId()).getId() == 3) {
+                        if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                           studentList.add(student.getId() + "(C)");
                         }
-                        else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                        else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 4) {
                           studentList.add(student.getId() + "(SC)");
                         }
-                        else if(studentCourseRegType.get(student.getId()).getId() == 5) {
+                        else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 5) {
                           studentList.add(student.getId() + "(I)");
 
                         }
@@ -365,13 +365,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     deptList.add(dept);
                     java.util.List<String> studentList = new ArrayList<>();
                     if(groupNo == 0) {
-                      if(studentCourseRegType.get(student.getId()).getId() == 3) {
+                      if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                         studentList.add(student.getId() + "(C)");
                       }
-                      else if(studentCourseRegType.get(student.getId()).getId() == 4) {
+                      else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 4) {
                         studentList.add(student.getId() + "(SC)");
                       }
-                      else if(studentCourseRegType.get(student.getId()).getId() == 5) {
+                      else if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 5) {
                         studentList.add(student.getId() + "(I)");
 
                       }
@@ -486,7 +486,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
               }
               else {
                 if(studentList.size() > 10) {
-                  studentListInString = studentListInString + "," + studentOfTheList;
+                  studentListInString = studentListInString + ", " + studentOfTheList;
 
                 }
                 else {
@@ -578,8 +578,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 if(groupNo == 0) {
                   upperPart =
                       program.getShortName().replace("B.Sc in ", "") + " "
-                          + studentCourseMap.get(student.getId()).getYear() + "/"
-                          + studentCourseMap.get(student.getId()).getSemester();
+                          + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear() + "/"
+                          + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
                 }
                 else {
                   upperPart =
@@ -632,14 +632,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 if(groupNo == 0) {
                   upperPart =
                       program2.getShortName().replace("B.Sc in ", "") + " "
-                          + studentCourseMap.get(student2.getId()).getYear() + "/"
-                          + studentCourseMap.get(student2.getId()).getSemester();
+                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getYear() + "/"
+                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getSemester();
                 }
                 else {
                   upperPart =
                       program2.getShortName().replace("B.Sc in ", "") + " "
-                          + studentCourseMap.get(student2.getId()).getYear() + "/"
-                          + studentCourseMap.get(student2.getId()).getSemester();
+                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getYear() + "/"
+                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getSemester();
                 }
 
                 Paragraph upperParagraph =
@@ -1359,13 +1359,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       float[] attendenceSheetColSpan = {4, 7};
       PdfPTable attendanceSheetTable = new PdfPTable(attendenceSheetColSpan);
       attendanceSheetTable.setWidthPercentage(100);
-      PdfPCell sttudentNoCell = new PdfPCell(new Paragraph(studentNo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+      PdfPCell sttudentNoCell = new PdfPCell(new Paragraph(studentNo, FontFactory.getFont(FontFactory.TIMES_BOLD, 10)));
       sttudentNoCell.setHorizontalAlignment(Element.ALIGN_CENTER);
       Paragraph studentsSignutureSection = new Paragraph("Signature of the examinee");
       studentsSignutureSection.setAlignment(Element.ALIGN_CENTER);
-      studentsSignutureSection.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
+      studentsSignutureSection.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, 10));
       PdfPCell signatureCell =
-          new PdfPCell(new Paragraph(signatureOfTheStudents, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+          new PdfPCell(new Paragraph(signatureOfTheStudents, FontFactory.getFont(FontFactory.TIMES_BOLD, 10)));
       signatureCell.setHorizontalAlignment(Element.ALIGN_CENTER);
       attendanceSheetTable.addCell(sttudentNoCell);
       attendanceSheetTable.addCell(signatureCell);
@@ -1379,7 +1379,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
       while(true) {
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
-        seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
+        // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
         // studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
 
         if(seatPlanReports.size() != 0) {
@@ -1388,7 +1388,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
               && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
-              && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 20
+              && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 18
               && seatPlanReports.size() != 0) {
             PdfPCell innerCellOne = new PdfPCell();
             /*
@@ -1410,7 +1410,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             counter += 1;
           }
           else {
-            if(counter == 20) {
+            if(counter > 18) {
               break;
             }
             else {
@@ -1424,7 +1424,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         }
         else {
 
-          if(counter == 20) {
+          if(counter > 18) {
             break;
           }
           else {

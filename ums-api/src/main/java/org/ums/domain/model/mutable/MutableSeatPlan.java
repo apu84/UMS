@@ -2,10 +2,7 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.ClassRoom;
-import org.ums.domain.model.immutable.SeatPlan;
-import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.*;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -32,4 +29,8 @@ public interface MutableSeatPlan extends SeatPlan, Editable<Long>, MutableLastMo
   void setExamDate(final String pExamDate);
 
   void setApplicationType(final Integer pApplicationType);
+
+  void setCourse(final Course pCourse);
+
+  void setCourseId(final String pCourseId);
 }
