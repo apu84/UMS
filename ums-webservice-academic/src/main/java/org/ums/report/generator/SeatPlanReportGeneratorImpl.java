@@ -1201,6 +1201,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       ugRegistrationResults =
           mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(pExamDate, "mm-dd-yyyy", "dd-mm-yyyy"));
       for(int i = 0; i < ugRegistrationResults.size(); i++) {
+
         studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId()
             + ugRegistrationResults.get(i).getCourse().getNo(), ugRegistrationResults.get(i));
       }
@@ -1211,6 +1212,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
 
       routineCounter += 1;
+
       PdfPTable table = new PdfPTable(2);
       table.setWidthPercentage(110);
       PdfPTable tableOne = new PdfPTable(1);
@@ -1378,6 +1380,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       int studentCounter = 0;
 
       while(true) {
+
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
         // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
         // studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
