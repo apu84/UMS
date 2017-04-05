@@ -254,7 +254,7 @@ public class UgGradeSheetGenerator {
         }
         else {
           tmpTotal =
-              student.getPartA() == null ? new BigDecimal(0) : BigDecimal.valueOf(student.getPartA()).setScale(1,
+              student.getPartA() == null ? null : BigDecimal.valueOf(student.getPartA()).setScale(1,
                   RoundingMode.HALF_UP);
         }
 
