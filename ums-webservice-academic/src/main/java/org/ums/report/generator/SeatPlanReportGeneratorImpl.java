@@ -1565,13 +1565,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     while(true) {
 
       seatPlanCounter += 1;
-      if(seatPlanCounter==34){
-        boolean sls=true;
-      }
 
       SeatPlanReportDto seatPlan = seatPlans.get(0);
-      if(seatPlan.getCourseNo().equals("MATH 2107")){
-        boolean found=true;
+      if(seatPlan.getCourseNo().equals("ME 403")){
+        boolean foundxls;
+        foundxls=true;
       }
 
       String examDate = seatPlan.getExamDate();
@@ -1733,7 +1731,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             Paragraph studentIdParagraph = new Paragraph();
 
             for(int i = 0; i < 6; i++) {
-              seatPlans = getUnusedStudents(seatPlans, studentsUsageMap);
+//              seatPlans = getUnusedStudents(seatPlans, studentsUsageMap);
               if(seatPlans.size() != 0) {
                 SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
                 if(seatPlanInnerReport.getStudentId().equals("110207069")){

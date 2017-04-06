@@ -85,7 +85,8 @@ public class UgGradeSheetGenerator {
       PdfPTable secondColumnGradeTable = getGradeTable(gradeList, i * 80 + 40, 40, course.getCourseType(), examType);
 
       PdfPTable mainTable = getMainTable(secondColumnGradeTable == null ? 1 : 3);
-      PdfPCell cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(), offeredToProgram, examType));
+      PdfPCell cell =
+          new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(), offeredToProgram, examType));
       cell.setPadding(0);
       mainTable.addCell(cell);
 
@@ -94,7 +95,8 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       if(secondColumnGradeTable != null) {
-        cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(), offeredToProgram, examType));
+        cell =
+            new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(), offeredToProgram, examType));
         cell.setPadding(0);
         mainTable.addCell(cell);
       }
@@ -289,8 +291,8 @@ public class UgGradeSheetGenerator {
     return table;
   }
 
-  public PdfPTable getSubTableHeader(Course course, int totalStudents, String semesterName, Program program, ExamType examType)
-      throws DocumentException {
+  public PdfPTable getSubTableHeader(Course course, int totalStudents, String semesterName, Program program,
+      ExamType examType) throws DocumentException {
     // a table with three columns
     Font fontAUST = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
     Font gradeSheetHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -330,7 +332,9 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p = new Paragraph("Examination : "+(examType == ExamType.SEMESTER_FINAL ? "Final" : "Improvement/Clearance/Carryover"), nFont);
+    p =
+        new Paragraph("Examination : "
+            + (examType == ExamType.SEMESTER_FINAL ? "Final" : "Improvement/Clearance/Carryover"), nFont);
     cell = new PdfPCell(p);
     cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
