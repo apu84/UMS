@@ -354,57 +354,15 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "ORDER BY "
           + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
-  String SELECT_ALL_TOP_SHEET_EXAM_DATE_CCI =
-      "SELECT "
-          + "  seatPlan.ROOM_NO, "
-          + "  examRoutine.PROGRAM_LONG_NAME, "
-          + "  examRoutine.COURSE_TITLE, "
-          + "  examRoutine.COURSE_NO, "
-          + "  examRoutine.COURSE_ID, "
-          + "  to_char(examRoutine.EXAM_DATE, 'dd-mm-YYYY') EXAM_DATE, "
-          + "  examRoutine.YEAR     AS                      curr_year, "
-          + "  examRoutine.SEMESTER AS                      curr_semester, "
-          + "  seatPlan.STUDENT_ID, "
-          + "  'R'                                          REGISTRATION_TYPE "
-          + "FROM (SELECT "
-          + "        ROOM_INFO.ROOM_NO, "
-          + "        SEAT_PLAN.STUDENT_ID, "
-          + "        SEAT_PLAN.SEMESTER_ID, "
-          + "        STUDENTS.PROGRAM_ID "
-          + "      FROM SEAT_PLAN, "
-          + "        STUDENTS, ROOM_INFO "
-          + "      WHERE "
-          + "        SEAT_PLAN.STUDENT_ID = STUDENTS.STUDENT_ID AND "
-          + "        SEAT_PLAN.SEMESTER_ID = ? AND SEAT_PLAN.EXAM_TYPE = ? AND "
-          + "        SEAT_PLAN.ROOM_ID = ROOM_INFO.ROOM_ID "
-          + "      ORDER BY "
-          + "        ROOM_INFO.ROOM_ID, STUDENTS.STUDENT_ID) seatPlan, ( "
-          + "                                                            SELECT "
-          + "                                                              EXAM_ROUTINE.EXAM_DATE, "
-          + "                                                              EXAM_ROUTINE.EXAM_TYPE, "
-          + "                                                              MST_PROGRAM.PROGRAM_ID, "
-          + "                                                              MST_PROGRAM.PROGRAM_LONG_NAME, "
-          + "                                                              MST_COURSE.COURSE_NO, "
-          + "                                                              MST_COURSE.COURSE_ID, "
-          + "                                                              MST_COURSE.COURSE_TITLE, "
-          + "                                                              MST_COURSE.YEAR, "
-          + "                                                              MST_COURSE.SEMESTER "
-          + "                                                            FROM EXAM_ROUTINE, MST_PROGRAM, MST_COURSE "
-          + "                                                            WHERE EXAM_ROUTINE.EXAM_TYPE = ? "
-          + "                                                                  AND EXAM_ROUTINE.SEMESTER = ? "
-          + "                                                                  AND Exam_routine.exam_date = to_date(?, 'DD-MM-YYYY') "
-          + "                                                                  AND MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID "
-          + "                                                                  AND MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID "
-          + "                                                            ORDER BY "
-          + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
-          + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT "
-          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
-          + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
-          + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
-          + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE "
-          + "ORDER BY "
-          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, to_number(seatPlan.STUDENT_ID), examRoutine.YEAR, examRoutine.SEMESTER";
+  String SELECT_ALL_TOP_SHEET_EXAM_DATE_CCI = "SELECT " + "  room_no, " + "  PROGRAM_LONG_NAME, " + "  course_title, "
+      + "  course_no, " + "  SEAT_PLAN.course_id, " + "  to_char(exam_date, 'dd-mm-yyyy') AS exam_date, "
+      + "  YEAR                             AS curr_year, " + "  SEMESTER                         AS curr_semester, "
+      + "  SEAT_PLAN.STUDENT_ID, " + "  'R'                              AS registration_type "
+      + "FROM SEAT_PLAN, ROOM_INFO, MST_PROGRAM, MST_COURSE, STUDENTS "
+      + "WHERE SEAT_PLAN.SEMESTER_ID = ? AND EXAM_TYPE = 2 AND EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
+      + "      SEAT_PLAN.course_id = MST_COURSE.COURSE_ID AND SEAT_PLAN.STUDENT_ID = students.STUDENT_ID AND "
+      + "      room_info.room_id = seat_plan.room_id AND " + "      students.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID "
+      + "ORDER BY SEAT_PLAN.ROOM_ID, MST_PROGRAM.PROGRAM_ID, COURSE_NO, YEAR, SEMESTER, seat_plan.student_id";
 
   String SELECT_ALL_STICKER = "SELECT " + "  seatPlans.ROOM_NO, " + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
       + "  STUDENTS.CURR_YEAR, " + "  STUDENTS.CURR_SEMESTER, " + "  STUDENTS.STUDENT_ID "
@@ -463,8 +421,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
         query = SELECT_ALL_TOP_SHEET_EXAM_DATE;
       else
         query = SELECT_ALL_TOP_SHEET_EXAM_DATE_CCI;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pExamType, pSemesterId, pExamDate},
-          new SeatPlanRowMapperTopSheet());
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new SeatPlanRowMapperTopSheet());
     }
   }
 
