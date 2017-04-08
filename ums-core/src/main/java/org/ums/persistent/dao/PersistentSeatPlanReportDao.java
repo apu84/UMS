@@ -361,8 +361,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
       + "FROM SEAT_PLAN, ROOM_INFO, MST_PROGRAM, MST_COURSE, STUDENTS "
       + "WHERE SEAT_PLAN.SEMESTER_ID = ? AND EXAM_TYPE = 2 AND EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
       + "      SEAT_PLAN.course_id = MST_COURSE.COURSE_ID AND SEAT_PLAN.STUDENT_ID = students.STUDENT_ID AND "
-      + "      room_info.room_id = seat_plan.room_id AND " + "      students.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID "
-      + "ORDER BY SEAT_PLAN.ROOM_ID, MST_PROGRAM.PROGRAM_ID, COURSE_NO, YEAR, SEMESTER, seat_plan.student_id";
+      + "      room_info.room_id = seat_plan.room_id AND students.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID "
+      + "ORDER BY MST_PROGRAM.PROGRAM_ID, COURSE_NO, YEAR, SEMESTER, seat_plan.student_id";
 
   String SELECT_ALL_STICKER = "SELECT " + "  seatPlans.ROOM_NO, " + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
       + "  STUDENTS.CURR_YEAR, " + "  STUDENTS.CURR_SEMESTER, " + "  STUDENTS.STUDENT_ID "
