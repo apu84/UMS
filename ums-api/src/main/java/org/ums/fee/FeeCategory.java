@@ -1,9 +1,6 @@
 package org.ums.fee;
 
 import java.io.Serializable;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
@@ -13,38 +10,13 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
 
   String getFeeId();
 
-  FeeCategory.Type getType();
+  FeeType getType();
+
+  Integer getFeeTypeId();
 
   String getName();
 
   String getDescription();
-
-  enum Type {
-    PRIMARY(1),
-    OTHERS(0);
-
-    private static final Map<Integer, FeeCategory.Type> lookup = new HashMap<>();
-
-    static {
-      for(FeeCategory.Type c : EnumSet.allOf(FeeCategory.Type.class)) {
-        lookup.put(c.getValue(), c);
-      }
-    }
-
-    private Integer typeCode;
-
-    Type(final Integer pStatusCode) {
-      this.typeCode = pStatusCode;
-    }
-
-    public static FeeCategory.Type get(final Integer pStatusCode) {
-      return lookup.get(pStatusCode);
-    }
-
-    public Integer getValue() {
-      return this.typeCode;
-    }
-  }
 
   enum Categories {
     ADMISSION,

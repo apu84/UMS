@@ -6,18 +6,13 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.Student;
 
-interface SemesterAdmissionStatus extends Serializable, EditType<MutableSemesterAdmissionStatus>, LastModifier,
+public interface InstallmentSettings extends Serializable, EditType<MutableInstallmentSettings>, LastModifier,
     Identifier<Long> {
 
-  Boolean isAdmitted();
+  Boolean isEnabled();
 
   Semester getSemester();
 
   Integer getSemesterId();
-
-  Student getStudent();
-
-  String getStudentId();
 }

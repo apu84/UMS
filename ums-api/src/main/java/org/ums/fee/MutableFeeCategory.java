@@ -8,7 +8,9 @@ public interface MutableFeeCategory extends FeeCategory, Editable<String>, Mutab
     MutableIdentifier<String> {
   void setFeeId(String pId);
 
-  void setType(FeeCategory.Type pType);
+  void setType(FeeType pType);
+
+  void setFeeTypeId(Integer pTypeId);
 
   void setName(String pName);
 

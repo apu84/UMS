@@ -1,7 +1,5 @@
 package org.ums.fee.semesterfee;
 
-import java.util.Date;
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Semester;
@@ -15,8 +13,7 @@ class PersistentSemesterAdmissionStatus implements MutableSemesterAdmissionStatu
   private static StudentManager sStudentManager;
   private static SemesterAdmissionStatusManager sSemesterAdmissionStatusManager;
   private Long mId;
-  private Date mReceivedOn;
-  private Boolean mPaymentCompleted;
+  private Boolean mAdmitted;
   private Semester mSemester;
   private Integer mSemesterId;
   private Student mStudent;
@@ -34,23 +31,13 @@ class PersistentSemesterAdmissionStatus implements MutableSemesterAdmissionStatu
   }
 
   @Override
-  public Date getReceivedOn() {
-    return mReceivedOn;
+  public Boolean isAdmitted() {
+    return mAdmitted;
   }
 
   @Override
-  public void setReceivedOn(Date pReceivedOn) {
-    this.mReceivedOn = pReceivedOn;
-  }
-
-  @Override
-  public Boolean isPaymentCompleted() {
-    return mPaymentCompleted;
-  }
-
-  @Override
-  public void setPaymentCompleted(Boolean pPaymentCompleted) {
-    this.mPaymentCompleted = pPaymentCompleted;
+  public void setAdmitted(Boolean pAdmitted) {
+    this.mAdmitted = pAdmitted;
   }
 
   @Override
@@ -127,8 +114,7 @@ class PersistentSemesterAdmissionStatus implements MutableSemesterAdmissionStatu
 
   PersistentSemesterAdmissionStatus(MutableSemesterAdmissionStatus pSemesterAdmissionStatus) {
     setId(pSemesterAdmissionStatus.getId());
-    setReceivedOn(pSemesterAdmissionStatus.getReceivedOn());
-    setPaymentCompleted(pSemesterAdmissionStatus.isPaymentCompleted());
+    setAdmitted(pSemesterAdmissionStatus.isAdmitted());
     setSemester(pSemesterAdmissionStatus.getSemester());
     setSemesterId(pSemesterAdmissionStatus.getSemesterId());
     setStudent(pSemesterAdmissionStatus.getStudent());

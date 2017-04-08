@@ -10,10 +10,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 
 public interface MutableSemesterAdmissionStatus extends SemesterAdmissionStatus, Editable<Long>,
     MutableIdentifier<Long>, MutableLastModifier {
-
-  void setReceivedOn(Date pReceivedOn);
-
-  void setPaymentCompleted(Boolean pPaymentCompleted);
+  void setAdmitted(Boolean pPaymentCompleted);
 
   void setSemester(Semester pSemester);
 

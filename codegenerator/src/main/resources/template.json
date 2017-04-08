@@ -1,54 +1,16 @@
 {
   "model": {
-    "name": "InstallmentStatus",
-    "package": "org.ums.fee.semesterfee",
+    "name": "FeeType",
+    "package": "org.ums.fee",
     "fields": [
       {
         "id": {
-          "type": "Long",
+          "type": "Integer",
           "idType": true
         }
       },
       {
-        "receivedOn": "Date"
-      },
-      {
-        "paymentCompleted": "Boolean"
-      },
-      {
-        "installmentOrder": "Integer"
-      },
-      {
-        "semester": {
-          "type": "Ref",
-          "reference": {
-            "name": "Semester",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "Integer"
-            },
-            "manager": {
-              "name": "SemesterManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "student": {
-          "type": "Ref",
-          "reference": {
-            "name": "Student",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "String"
-            },
-            "manager": {
-              "name": "StudentManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "description": "String"
       }
     ]
   }

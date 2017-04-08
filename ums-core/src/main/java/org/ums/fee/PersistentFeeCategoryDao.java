@@ -37,7 +37,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
   public int update(MutableFeeCategory pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFeeId(), pMutable.getName(),
-        pMutable.getDescription(), pMutable.getType().getValue());
+        pMutable.getDescription(), pMutable.getType().getId());
   }
 
   @Override
@@ -49,7 +49,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
   @Override
   public String create(MutableFeeCategory pMutable) {
     mJdbcTemplate.update(INSERT_ALL, pMutable.getFeeId(), pMutable.getName(), pMutable.getDescription(), pMutable
-        .getType().getValue(), pMutable.getId());
+        .getType().getId(), pMutable.getId());
     return pMutable.getId();
   }
 
@@ -60,7 +60,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
       feeCategory.setId(rs.getString("ID"));
       feeCategory.setFeeId(rs.getString("FEE_ID"));
       feeCategory.setName(rs.getString("NAME"));
-      feeCategory.setType(FeeCategory.Type.get(rs.getInt("TYPE")));
+      feeCategory.setFeeTypeId(rs.getInt("TYPE"));
       feeCategory.setDescription(rs.getString("Description"));
       feeCategory.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<FeeCategory> atomicReference = new AtomicReference<>(feeCategory);

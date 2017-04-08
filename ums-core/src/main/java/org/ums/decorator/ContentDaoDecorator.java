@@ -88,12 +88,4 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   public boolean exists(I pId) {
     return getManager().exists(pId);
   }
-
-  protected List<I> getIdList(final List<Object[]> paramsList) {
-    List<I> ids = new ArrayList<I>();
-    for(Object[] params : paramsList) {
-      ids.add((I) params[0]);
-    }
-    return ids;
-  }
 }

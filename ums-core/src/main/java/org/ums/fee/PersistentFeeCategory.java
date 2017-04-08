@@ -11,7 +11,8 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   }
   private String mId;
   private String mFeeId;
-  private FeeCategory.Type mType;
+  private FeeType mFeeType;
+  private Integer mFeeTypeId;
   private String mName;
   private String mDescription;
   private String mLastModified;
@@ -66,11 +67,6 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   }
 
   @Override
-  public void setType(Type pType) {
-    mType = pType;
-  }
-
-  @Override
   public void setName(String pName) {
     mName = pName;
   }
@@ -78,11 +74,6 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   @Override
   public void setDescription(String pDescription) {
     mDescription = pDescription;
-  }
-
-  @Override
-  public Type getType() {
-    return mType;
   }
 
   @Override
@@ -103,5 +94,25 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   @Override
   public String getFeeId() {
     return mFeeId;
+  }
+
+  @Override
+  public FeeType getType() {
+    return mFeeType;
+  }
+
+  @Override
+  public void setType(FeeType pType) {
+    mFeeType = pType;
+  }
+
+  @Override
+  public Integer getFeeTypeId() {
+    return mFeeTypeId;
+  }
+
+  @Override
+  public void setFeeTypeId(Integer pTypeId) {
+    mFeeTypeId = pTypeId;
   }
 }
