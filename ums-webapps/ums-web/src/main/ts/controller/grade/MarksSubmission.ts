@@ -400,7 +400,6 @@ module ums {
 
     private fetchGradeSubmissionTable(): void {
 
-      console.log( this.$scope.inputParams);
       var status = 0;
       if (this.$scope.userRole != "T") {
         status = this.$scope.inputParams.status;
@@ -408,13 +407,6 @@ module ums {
 
       var deptId =this.$scope.inputParams.dept_id+'';
       var programId = 99;
-
-      console.log( deptId);
-      console.log( this.$scope.inputParams.dept_id);
-
-
-      console.log( this.$scope.inputParams);
-
 
       if(deptId == "" || deptId == null || deptId == 'NaN') {
         deptId = "NA";
@@ -545,7 +537,7 @@ module ums {
     }
 
     private calculateTotalAndGradeLetter(student_id: string, reg_type : number): void {
-      console.log(student_id+"---"+reg_type);
+
       var total;
       var regType = $("#reg_type_" + student_id).val();
       if (this.$scope.courseType == "THEORY") {
@@ -560,10 +552,6 @@ module ums {
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
         total = quiz + class_perf + part_a + part_b;
-
-
-        console.log(reg_type);
-
         total = this.decideTotal(total, reg_type);
 
 
@@ -603,7 +591,7 @@ module ums {
     private decideTotal(total : number, regType : number) :number {
       var totalMarks = 0;
       if(regType == 3 || regType == 4)
-        totalMarks = Math.round((total/70) * 100);
+        totalMarks = Math.round((Math.round(total)/70) * 100);
       else
         totalMarks = Math.round(total);
 
@@ -915,7 +903,7 @@ module ums {
 
           var cTotal = Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB);
           var calculatedTotal = Math.round(cTotal);
-          var calculatedTotalForCarry = Math.round((cTotal/70)*100);
+          var calculatedTotalForCarry = Math.round(( Math.round(cTotal)/70)*100);
 
 
           if (this.checkNumber(total) == false || Number(total) > 100 ||
