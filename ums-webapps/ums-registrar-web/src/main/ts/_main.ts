@@ -87,6 +87,14 @@
 
 /// <reference path='service/EmployeeInformationService.ts'/>
 
+/// <reference path='model/EmployeeInformation/AcademicInformationModel.ts' />
+/// <reference path='model/EmployeeInformation/AwardInformationModel.ts' />
+/// <reference path='model/EmployeeInformation/EmployeeModel.ts' />
+/// <reference path='model/EmployeeInformation/ExperienceInformationModel.ts' />
+/// <reference path='model/EmployeeInformation/PersonalInformationModel.ts' />
+/// <reference path='model/EmployeeInformation/PublicationInformationModel.ts' />
+/// <reference path='model/EmployeeInformation/TrainingInformationModel.ts' />
+
 
 
 
