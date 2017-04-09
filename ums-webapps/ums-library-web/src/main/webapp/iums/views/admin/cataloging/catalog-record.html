@@ -229,7 +229,9 @@
                     <option data-ng-repeat="role in data.contributorRoleOptions" value="{{role.id}}">{{role.name}}</option>
                 </select>
             </div>
-            <label  class="col-md-1 control-label" for="contributorName{{$index}}">Name</label>
+            <label  class="col-md-1 control-label" for="contributorName{{$index}}">Name
+                &nbsp;&nbsp;<i class="fa fa-wpforms  fa-lg" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"></i>
+            </label>
             <div class="col-md-4" id="ami{{$index}}">
                 <div  data-ng-if="!data.readOnlyMode">
                     <input type="text" class="form-control required" style="width: 99%"  data-select="select2"  page="true" id="contributorName{{$index}}" name="contributorName{{$index}}"

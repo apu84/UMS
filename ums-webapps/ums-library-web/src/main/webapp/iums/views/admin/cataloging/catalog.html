@@ -114,6 +114,7 @@
         <a data-ng-click="fillSampleData()">Sample</a>
         <navigation-button icons="fa fa-book bookIcon,fa fa-files-o recordIcon"
                            ids="recordNav,itemNav"
+                           containers="container_recordNav,container_itemNav"
                            callbacks="callbackList"
                            defaultselected="selectedTab">
         </navigation-button>
@@ -132,6 +133,7 @@
 
 <div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
 <div data-ng-include="'views/admin/cataloging/supporting-panels/supplier-panel.html'"></div>
+<div data-ng-include="'views/admin/cataloging/supporting-panels/publisher-panel.html'"></div>
 <script>
     setTimeout(function(){
         $('[data-toggle="tooltip"]').tooltip(

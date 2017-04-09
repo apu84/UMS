@@ -23,17 +23,19 @@ module ums {
     setBulkItemsValue: Function;
     itemList: Array<IItem>;
     supplierService: any;
+    publisherService: any;
+    contributorService: any;
     notifyService: any;
     callbackList : Array<Function>;
     selectedTab: string;
   }
 
-
   export class Cataloging {
-    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','catalogingService'];
+    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','publisherService','contributorService','catalogingService'];
     constructor(private $scope: ICatalogingScope,
                 private $q: ng.IQService, private notify: Notify, private libConstants: any,
-                private supplierService : SupplierService, private catalogingService : CatalogingService) {
+                private supplierService : SupplierService, private publisherService : PublisherService, private contributorService : ContributorService,
+                private catalogingService : CatalogingService) {
 
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
@@ -46,6 +48,8 @@ module ums {
       $scope.setBulkItemsValue = this.setBulkItemsValue.bind(this);
       $scope.fillSampleData = this.fillSampleData.bind(this);
       $scope.supplierService = supplierService;
+      $scope.publisherService = publisherService;
+      $scope.contributorService = contributorService;
       $scope.notifyService = notify;
       this.$scope.showRecordInfo = true;
       this.$scope.showItemInfo = false;

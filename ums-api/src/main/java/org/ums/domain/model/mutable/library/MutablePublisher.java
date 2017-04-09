@@ -17,4 +17,11 @@ public interface MutablePublisher extends Publisher, Editable<Integer>, MutableL
 
   void setCountry(final Country pCountry);
 
+  void setContactPerson(final String pContactPerson);
+
+  void setPhoneNumber(final String pPhoneNumber);
+
+  void setEmailAddress(final String pEmailAddress);
+
+
 }

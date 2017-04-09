@@ -7,7 +7,7 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
     }
 
-    public createNewSupplier(supplier : ISupplier):ng.IPromise<any> {
+    public createNewRecord(supplier : ISupplier):ng.IPromise<any> {
       var resourceUrl = "supplier";
       var defer = this.$q.defer();
       console.log( this.libConstants.mimeTypeJson);

@@ -20,4 +20,9 @@ public interface Publisher extends Serializable, LastModifier, EditType<MutableP
 
   Country getCountry();
 
+  String getContactPerson();
+
+  String getPhoneNumber();
+
+  String getEmailAddress();
 }

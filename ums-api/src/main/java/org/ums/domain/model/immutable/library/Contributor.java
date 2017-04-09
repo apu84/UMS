@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Represents Mst_Contributor
  */
-public interface Contributor extends Serializable, LastModifier, EditType<MutableContributor>, Identifier<Integer> {
+public interface Contributor extends Serializable, LastModifier, EditType<MutableContributor>, Identifier<Long> {
 
   String getFirstName();
 

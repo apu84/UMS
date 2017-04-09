@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public enum Gender {
 
-  BANGLA(1, "Bangla"),
-  ENGLISH(2, "English'");
+  MALE(1, "Male"),
+  FEMALE(2, "Female'");
 
   private String label;
   private int id;

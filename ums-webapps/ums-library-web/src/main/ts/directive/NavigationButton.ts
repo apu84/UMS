@@ -11,7 +11,7 @@ module ums {
     };
     public iconsArr = Array<String>();
     public idsArr  = Array<String>();
-
+    public containersArr  = Array<String>();
 
 
     public link = (scope:any, element:JQuery, attributes:any) => {
@@ -20,6 +20,7 @@ module ums {
 
       this.iconsArr = attributes.icons.split(",");
       this.idsArr = attributes.ids.split(",");
+      this.containersArr = attributes.containers.split(",");
 
 
       scope.manageUI = function(navId : string){
@@ -38,7 +39,7 @@ module ums {
 
 
       for(var i=0; i < this.iconsArr.length; i++) {
-        var obj = {"icon" : this.iconsArr[i], "id" :  this.idsArr[i], "callback": scope.callbacks[i]}
+        var obj = {"icon" : this.iconsArr[i], "id" :  this.idsArr[i], "callback": scope.callbacks == undefined || scope.callbacks.length != this.iconsArr.length ? {} : scope.callbacks[i]}
         scope.iObjects.push(obj);
       }
 

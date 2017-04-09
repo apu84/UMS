@@ -87,8 +87,13 @@
 /// <reference path='directive/CirculationSearchBox.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>
 
+/// <reference path='../../../../ums-library-web/src/main/ts/service/BaseService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/SupplierService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/service/PublisherService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/service/ContributorService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CatalogingService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/directive/NavigationButton.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
+

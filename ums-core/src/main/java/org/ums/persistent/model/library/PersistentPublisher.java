@@ -27,7 +27,11 @@ public class PersistentPublisher implements MutablePublisher {
   private String mName;
   private int mCountryId;
   private Country mCountry;
+  private String mContactPerson;
+  private String mPhoneNumber;
+  private String mEmailAddress;
   private String mLastModified;
+
 
   public PersistentPublisher() {}
 
@@ -35,6 +39,9 @@ public class PersistentPublisher implements MutablePublisher {
     mId = pPersistentPublisher.getId();
     mName = pPersistentPublisher.getName();
     mCountryId = pPersistentPublisher.getCountryId();
+    mContactPerson = pPersistentPublisher.getContactPerson();
+    mPhoneNumber = pPersistentPublisher.getPhoneNumber();
+    mEmailAddress = pPersistentPublisher.getEmailAddress();
   }
 
   @Override
@@ -104,7 +111,36 @@ public class PersistentPublisher implements MutablePublisher {
 
   @Override
   public void delete() {
-
     sSupplierManager.delete(this);
+  }
+
+  @Override
+  public void setContactPerson(String pContactPerson) {
+    mContactPerson = pContactPerson;
+  }
+
+  @Override
+  public String getContactPerson() {
+    return mContactPerson;
+  }
+
+  @Override
+  public String getPhoneNumber() {
+    return mPhoneNumber;
+  }
+
+  @Override
+  public void setPhoneNumber(String pPhoneNumber) {
+  mPhoneNumber = pPhoneNumber;
+  }
+
+  @Override
+  public String getEmailAddress() {
+    return mEmailAddress;
+  }
+
+  @Override
+  public void setEmailAddress(String pEmailAddress) {
+mEmailAddress = pEmailAddress;
   }
 }

@@ -34,8 +34,7 @@ public class PersistentContributor implements MutableContributor {
     mRefUserId = pPersistentContributor.getRefUserId();
   }
 
-  private Integer mId;
-  private String mMfn;
+  private Long mId;
   private String mFirstName;
   private String mMiddleName;
   private String mLastName;
@@ -48,7 +47,7 @@ public class PersistentContributor implements MutableContributor {
   private String mLastModified;
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sContributorManager.create(this);
   }
 
@@ -68,12 +67,12 @@ public class PersistentContributor implements MutableContributor {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -114,7 +113,7 @@ public class PersistentContributor implements MutableContributor {
 
   @Override
   public void setLastName(String pLastName) {
-    mLastModified = pLastName;
+    mLastName = pLastName;
   }
 
   @Override
