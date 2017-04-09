@@ -1,208 +1,19 @@
 module ums{
   interface IEmployeeInformation extends ng.IScope {
-    personal: boolean;
-    academic: boolean;
-    job: boolean;
-    publication: boolean;
-    training: boolean;
-    award: boolean;
-    experience: boolean;
 
-    //testData
-    name: string;
-    fatherName: string;
-    motherName: string;
-    gender: string;
-    birthday: string;
-    maritalStatus: string;
-    spouseName: string;
-    nationalIdNo: number;
-    bloodGroup: string;
-    spouseNationalIdNo: number;
-    email: string;
-    phone: string;
-    presentAddress: string;
-    permanentAddress: string;
+    personalTab: boolean;
+    academicTab: boolean;
+    jobTab: boolean;
+    publicationTab: boolean;
+    trainingTab: boolean;
+    awardTab: boolean;
+    experienceTab: boolean;
 
-    employeeId: number;
-    employeeDesignation: string;
-    employeeEmploymentType: number;
-    employeeDepartment : number;
-    employeeJoiningDate: string;
-    employeeJobPermanentDate: string;
-    employeeExtensionNumber: number;
-    employeeShortName: string;
-
-    sscSelected: string;
-    sscInstitution: string;
-    sscGPA: string;
-    sscPassingYear: string;
-    hscSelected: string;
-    hscInstitution: string;
-    hscGPA: string;
-    hscPassingYear: string;
-    bachelorSelected: string;
-    bachelorInstitution: string;
-    bachelorCGPA: string;
-    bachelorPassingYear: string;
-    mastersSelected: string;
-    mastersInstitution: string;
-    mastersCGPA: string;
-    mastersPassingYear: string;
-    phdSelected: string;
-    phdInstitution: string;
-    phdCGPA: string;
-    phdPassingYear: string;
-
-    publicationTitle: string;
-    publicationType: string;
-    publicationYear: string;
-    publicationPlace: string;
-    webReference: string;
-
-    trainingName: string;
-    trainingInstitution: string;
-    trainingDuration: string;
-    trainingAccreditedYear: string;
-
-    awardName: string;
-    purpose: string;
-    yearOfRecognition: string;
-    description: string;
-
-    experienceInstitution: string;
-    experienceDesignation: string;
-    experienceFromMonth: string;
-    experienceFromYear: string;
-    experienceToMonth: string;
-    experienceToYear: string;
-
-
-    showInputNameDiv: boolean;
-    showLabelNameDiv: boolean;
-    showInputFatherNameDiv: boolean;
-    showLabelFatherNameDiv: boolean;
-    showInputMotherNameDiv: boolean;
-    showLabelMotherNameDiv: boolean;
-    showInputGenderDiv: boolean;
-    showLabelGenderDiv: boolean;
-    showInputBirthdayDiv: boolean;
-    showLabelBirthdayDiv: boolean;
-    showInputMaritalStatusDiv: boolean;
-    showLabelMaritalStatusDiv: boolean;
-    showInputSpouseNameDiv: boolean;
-    showLabelSpouseNameDiv: boolean;
-    showInputNationalIdNoDiv: boolean;
-    showLabelNationalIdNoDiv: boolean;
-    showSpouseInputNationalIdNoDiv: boolean;
-    showLabelSpouseNationalIdNoDiv: boolean;
-    showInputBloodGroupDiv: boolean;
-    showLabelBloodGroupDiv: boolean;
-    showInputEmailDiv: boolean;
-    showLabelEmailDiv: boolean;
-    showInputPhoneDiv: boolean;
-    showLabelPhoneDiv: boolean;
-    showInputPresentAddressDiv: boolean;
-    showLabelPresentAddressDiv: boolean;
-    showInputPermanentAddressDiv: boolean;
-    showLabelPermanentAddressDiv: boolean;
-    showInputEmployeeIdDiv: boolean;
-    showLabelEmployeeIdDiv: boolean;
-    showInputEmployeeDesignationDiv: boolean;
-    showLabelEmployeeDesignationDiv: boolean;
-    showInputEmploymentTypeDiv: boolean;
-    showLabelEmploymentTypeDiv: boolean;
-    showSpouseInputEmployeeDepartmentDiv: boolean;
-    showLabelEmployeeDepartmentDiv: boolean;
-    showInputEmployeeJoiningDateDiv: boolean;
-    showLabelEmployeeJoiningDateDiv: boolean;
-    showInputEmployeeJobPermanentDateDiv: boolean;
-    showLabelEmployeeJobPermanentDateDiv: boolean;
-    showInputEmployeeExtensionDiv: boolean;
-    showLabelEmployeeExtensionDiv: boolean;
-    showSpouseInputEmployeeShortNameDiv: boolean;
-    showLabelEmployeeShortNameDiv: boolean;
-    showInputSSCSelectedDiv: boolean;
-    showLabelSSCSelectedDiv: boolean;
-    showInputSSCInstitutionDiv: boolean;
-    showLabelSSCInstitutionDiv: boolean;
-    showInputSSCGpaDiv: boolean;
-    showLabelSSCGpaDiv: boolean;
-    showInputSSCPassingYearDiv: boolean;
-    showLabelSSCPassingYearDiv: boolean;
-    showInputHSCSelectedDiv: boolean;
-    showLabelHSCSelectedDiv: boolean;
-    showInputHSCInstitutionDiv: boolean;
-    showLabelHSCInstitutionDiv: boolean;
-    showInputHSCGpaDiv: boolean;
-    showLabelHSCGpaDiv: boolean;
-    showInputHSCPassingYearDiv: boolean;
-    showLabelHSCPassingYearDiv: boolean;
-    showInputBachelorSelectedDiv: boolean;
-    showLabelBachelorSelectedDiv: boolean;
-    showInputBachelorInstitutionDiv: boolean;
-    showLabelBachelorInstitutionDiv: boolean;
-    showInputBachelorCGpaDiv: boolean;
-    showLabelBachelorCGpaDiv: boolean;
-    showInputBachelorPassingYearDiv: boolean;
-    showLabelBachelorPassingYearDiv: boolean;
-    showInputMastersSelectedDiv: boolean;
-    showLabelMastersSelectedDiv: boolean;
-    showInputMastersInstitutionDiv: boolean;
-    showLabelMastersInstitutionDiv: boolean;
-    showInputMastersCGpaDiv: boolean;
-    showLabelMastersCGpaDiv: boolean;
-    showInputMastersPassingYearDiv: boolean;
-    showLabelMastersPassingYearDiv: boolean;
-    showInputPhdSelectedDiv: boolean;
-    showLabelPhdSelectedDiv: boolean;
-    showInputPhdInstitutionDiv: boolean;
-    showLabelPhdInstitutionDiv: boolean;
-    showInputPhdCGpaDiv: boolean;
-    showLabelPhdCGpaDiv: boolean;
-    showInputPhdPassingYearDiv: boolean;
-    showLabelPhdPassingYearDiv: boolean;
-    showInputPublicationTitleDiv: boolean;
-    showLabelPublicationTitleDiv: boolean;
-    showInputPublicationTypeDiv: boolean;
-    showLabelPublicationTypeDiv: boolean;
-    showInputPublicationYearDiv: boolean;
-    showLabelPublicationYearDiv: boolean;
-    showInputPublicationPlaceDiv: boolean;
-    showLabelPublicationPlaceDiv: boolean;
-    showInputWebReferenceDiv: boolean;
-    showLabelWebReferenceDiv: boolean;
-    showInputTrainingNameDiv: boolean;
-    showLabelTrainingNameDiv: boolean;
-    showInputTrainingInstitutionDiv: boolean;
-    showLabelTrainingInstitutionDiv: boolean;
-    showInputTrainingDurationDiv: boolean;
-    showLabelTrainingDurationDiv: boolean;
-    showInputTrainingAccreditedYearDiv: boolean;
-    showLabelTrainingAccreditedYearDiv: boolean;
-    showInputAwardNameDiv: boolean;
-    showLabelAwardNameDiv: boolean;
-    showInputPurposeDiv: boolean;
-    showLabelPurposeDiv: boolean;
-    showInputYearOfRecognitionDiv: boolean;
-    showLabelYearOfRecognitionDiv: boolean;
-    showInputDescriptionDiv: boolean;
-    showLabelDescriptionDiv: boolean;
-    showInputExperienceInstitutionDiv: boolean;
-    showLabelExperienceInstitutionDiv: boolean;
-    showInputExperienceDesignationDiv: boolean;
-    showLabelExperienceDesignationDiv: boolean;
-    showInputExperienceFromMonthDiv: boolean;
-    showLabelExperienceFromMonthDiv: boolean;
-    showInputExperienceFromYearDiv: boolean;
-    showLabelExperienceFromYearDiv: boolean;
-    showInputExperienceToMonthDiv: boolean;
-    showLabelExperienceToMonthDiv: boolean;
-    showInputExperienceToYearDiv: boolean;
-    showLabelExperienceToYearDiv: boolean;
-
-    degreeNames: Array<IDegreeName>;
-    entry: IEntry;
+    showInputDiv: boolean;
+    showLabelDiv: boolean;
+    hideRequireSpan: boolean;
+    required: boolean;
+    //showPermanentAddressCheckbox: boolean;
 
     changeNav: Function;
     submit: Function;
@@ -210,51 +21,29 @@ module ums{
     addNewRow: Function;
     deleteRow: Function;
     testData: Function;
+    saveAsPresentAddress: Function;
+    getDesignation: Function;
+    getEmploymentType: Function;
+    getDeptOffice: Function;
+
+    entry: IEntry;
+    employeeGender: Array<IEmpGender>;
+    employeeMaritalStatus: Array<IEmpMaritalStatus>;
+    employeeReligion: Array<IReligion>;
+    employeeNationality: Array<INationality>;
+    degreeNames: Array<IEmpDegree>;
+    typeOfPublication: Array<IPublicationType>;
+
   }
 
-  interface IDegreeName{
-    id: number;
-    name: string;
-  }
-  interface IAcademicEntry{
-    academicDegreeName: IDegreeName;
-    academicInstitution: string;
-    academicCgpa: string;
-    academicPassingYear: string;
-  }
-  interface IPublicationEntry{
-    publicationTitle: string;
-    publicationType: string;
-    publicationYear: string;
-    publicationPlace: string;
-    publicationWebReference: string;
-  }
-  interface ITrainingEntry{
-    trainingName: string;
-    trainingInstitution: string;
-    trainingDuration: string;
-    trainingYear: string;
-  }
-  interface IAwardEntry{
-    awardName: string;
-    purposeOfTheAward: string;
-    yearOfRecognition: string;
-    shortDescription: string;
-  }
-  interface IExperienceEntry{
-    experienceInstitution: string;
-    experienceDesignation: string;
-    experienceFromMonth: string;
-    experienceFromYear: string;
-    experienceToMonth: string;
-    experienceToYear: string;
-  }
   interface IEntry {
-    academic: Array<IAcademicEntry>;
-    publication: Array<IPublicationEntry>;
-    training: Array<ITrainingEntry>;
-    award: Array<IAwardEntry>;
-    experience: Array<IExperienceEntry>;
+    employee: IEmployeeModel;
+    personal: IPersonalInformationModel;
+    academic: Array<IAcademicInformationModel>;
+    publication: Array<IPublicationInformationModel>;
+    training: Array<ITrainingInformationModel>;
+    award: Array<IAwardInformationModel>;
+    experience: Array<IExperienceInformationModel>;
   }
 
   class EmployeeInformation {
@@ -270,6 +59,36 @@ module ums{
                 private employeeInformationService: EmployeeInformationService) {
 
 
+      $scope.employeeGender = appConstants.gender;
+      // $scope.employeeMaritalStatus = appConstanst.maritalStatus;
+      // $scope.degreeNames = appConstants.degreeName;
+
+      $scope.employeeReligion = [
+        {id: 0, name: "Select Religion"},
+        {id: 1, name: "ISLAM"}
+      ];
+
+      $scope.employeeNationality = [
+        {id: 0, name: "Select Nationality"},
+        {id: 1, name: "Bangladeshi"}
+      ];
+
+      $scope.typeOfPublication = [
+        {id: 0, name: "Select Publication type"},
+        {id: 1, name: "Conference"},
+        {id: 2, name: "Journal"},
+        {id: 3, name: "Proceedings"},
+        {id: 4, name: "Presentation"}
+      ];
+
+      $scope.employeeMaritalStatus = [
+        {id: 0, name: "Select Marital Status"},
+        {id: 1, name: "Single"},
+        {id: 2, name: "Married"},
+        {id: 3, name: "Divorced"},
+        {id: 4, name: "Widowed"}
+      ];
+
       $scope.degreeNames = [
         {id: 1, name: "SSC"},
         {id: 2, name: "HSC"},
@@ -279,11 +98,13 @@ module ums{
       ];
 
       $scope.entry = {
-        academic: new Array<IAcademicEntry>(),
-        publication: new Array<IPublicationEntry>(),
-        training: new Array<ITrainingEntry>(),
-        award: new Array<IAwardEntry>(),
-        experience: new Array<IExperienceEntry>()
+        employee: <IEmployeeModel> {},
+        personal: <IPersonalInformationModel> {},
+        academic: new Array<IAcademicInformationModel>(),
+        publication: new Array<IPublicationInformationModel>(),
+        training: new Array<ITrainingInformationModel>(),
+        award: new Array<IAwardInformationModel>(),
+        experience: new Array<IExperienceInformationModel>()
       };
 
       this.addNewRow("academic");
@@ -292,130 +113,12 @@ module ums{
       this.addNewRow("award");
       this.addNewRow("experience");
 
-      $scope.personal = true;
-      $scope.showInputNameDiv = true;
-      $scope.showLabelNameDiv = false;
-      $scope.showInputFatherNameDiv = true;
-      $scope.showLabelFatherNameDiv = false;
-      $scope.showInputMotherNameDiv = true;
-      $scope.showLabelMotherNameDiv = false;
-      $scope.showInputGenderDiv = true;
-      $scope.showLabelGenderDiv = false;
-      $scope.showInputBirthdayDiv = true;
-      $scope.showLabelBirthdayDiv = false;
-      $scope.showInputMaritalStatusDiv = true;
-      $scope.showLabelMaritalStatusDiv = false;
-      $scope.showInputSpouseNameDiv = true;
-      $scope.showLabelSpouseNameDiv = false;
-      $scope.showInputNationalIdNoDiv = true;
-      $scope.showLabelNationalIdNoDiv = false;
-      $scope.showSpouseInputNationalIdNoDiv = true;
-      $scope.showLabelSpouseNationalIdNoDiv = false;
-      $scope.showInputBloodGroupDiv = true;
-      $scope.showLabelBloodGroupDiv = false;
-      $scope.showInputEmailDiv = true;
-      $scope.showLabelEmailDiv = false;
-      $scope.showInputPhoneDiv = true;
-      $scope.showLabelPhoneDiv = false;
-      $scope.showInputPresentAddressDiv = true;
-      $scope.showLabelPresentAddressDiv = false;
-      $scope.showInputPermanentAddressDiv = true;
-      $scope.showLabelPermanentAddressDiv = false;
-      $scope.showInputEmployeeIdDiv = true;
-      $scope.showLabelEmployeeIdDiv = false;
-      $scope.showInputEmployeeDesignationDiv = true;
-      $scope.showLabelEmployeeDesignationDiv = false;
-      $scope.showInputEmploymentTypeDiv = true;
-      $scope.showLabelEmploymentTypeDiv = false;
-      $scope.showSpouseInputEmployeeDepartmentDiv = true;
-      $scope.showLabelEmployeeDepartmentDiv = false;
-      $scope.showInputEmployeeJoiningDateDiv = true;
-      $scope.showLabelEmployeeJoiningDateDiv = false;
-      $scope.showInputEmployeeJobPermanentDateDiv = true;
-      $scope.showLabelEmployeeJobPermanentDateDiv = false;
-      $scope.showInputEmployeeExtensionDiv = true;
-      $scope.showLabelEmployeeExtensionDiv = false;
-      $scope.showSpouseInputEmployeeShortNameDiv = true;
-      $scope.showLabelEmployeeShortNameDiv = false;
-      $scope.showInputSSCSelectedDiv = true;
-      $scope.showLabelSSCSelectedDiv = false;
-      $scope.showInputSSCInstitutionDiv = true;
-      $scope.showLabelSSCInstitutionDiv = false;
-      $scope.showInputSSCGpaDiv = true;
-      $scope.showLabelSSCGpaDiv = false;
-      $scope.showInputSSCPassingYearDiv = true;
-      $scope. showLabelSSCPassingYearDiv = false;
-      $scope.showInputHSCSelectedDiv = true;
-      $scope.showLabelHSCSelectedDiv = false;
-      $scope.showInputHSCInstitutionDiv = true;
-      $scope.showLabelHSCInstitutionDiv = false;
-      $scope.showInputHSCGpaDiv = true;
-      $scope.showLabelHSCGpaDiv = false;
-      $scope.showInputHSCPassingYearDiv = true;
-      $scope.showLabelHSCPassingYearDiv = false;
-      $scope.showInputBachelorSelectedDiv = true;
-      $scope.showLabelBachelorSelectedDiv = false;
-      $scope.showInputBachelorInstitutionDiv = true;
-      $scope.showLabelBachelorInstitutionDiv = false;
-      $scope.showInputBachelorCGpaDiv = true;
-      $scope.showLabelBachelorCGpaDiv = false;
-      $scope.showInputBachelorPassingYearDiv = true;
-      $scope.showLabelBachelorPassingYearDiv = false;
-      $scope.showInputMastersSelectedDiv = true;
-      $scope.showLabelMastersSelectedDiv = false;
-      $scope.showInputMastersInstitutionDiv = true;
-      $scope.showLabelMastersInstitutionDiv = false;
-      $scope.showInputMastersCGpaDiv = true;
-      $scope.showLabelMastersCGpaDiv = false;
-      $scope.showInputMastersPassingYearDiv = true;
-      $scope.showLabelMastersPassingYearDiv = false;
-      $scope.showInputPhdSelectedDiv = true;
-      $scope.showLabelPhdSelectedDiv = false;
-      $scope.showInputPhdInstitutionDiv = true;
-      $scope.showLabelPhdInstitutionDiv = false;
-      $scope.showInputPhdCGpaDiv = true;
-      $scope.showLabelPhdCGpaDiv = false;
-      $scope.showInputPhdPassingYearDiv = true;
-      $scope.showLabelPhdPassingYearDiv = false;
-      $scope.showInputPublicationTitleDiv = true;
-      $scope.showLabelPublicationTitleDiv = false;
-      $scope.showInputPublicationTypeDiv = true;
-      $scope.showLabelPublicationTypeDiv = false;
-      $scope.showInputPublicationYearDiv = true;
-      $scope.showLabelPublicationYearDiv = false;
-      $scope.showInputPublicationPlaceDiv = true;
-      $scope.showLabelPublicationPlaceDiv = false;
-      $scope.showInputWebReferenceDiv = true;
-      $scope.showLabelWebReferenceDiv = false;
-      $scope.showInputTrainingNameDiv = true;
-      $scope.showLabelTrainingNameDiv = false;
-      $scope.showInputTrainingInstitutionDiv = true;
-      $scope.showLabelTrainingInstitutionDiv = false;
-      $scope.showInputTrainingDurationDiv = true;
-      $scope.showLabelTrainingDurationDiv = false;
-      $scope.showInputTrainingAccreditedYearDiv = true;
-      $scope.showLabelTrainingAccreditedYearDiv = false;
-      $scope.showInputAwardNameDiv = true;
-      $scope.showLabelAwardNameDiv = false;
-      $scope.showInputPurposeDiv = true;
-      $scope.showLabelPurposeDiv = false;
-      $scope.showInputYearOfRecognitionDiv = true;
-      $scope.showLabelYearOfRecognitionDiv = false;
-      $scope.showInputDescriptionDiv = true;
-      $scope.showLabelDescriptionDiv = false;
-      $scope.showInputExperienceInstitutionDiv = true;
-      $scope.showLabelExperienceInstitutionDiv = false;
-      $scope.showInputExperienceDesignationDiv = true;
-      $scope.showLabelExperienceDesignationDiv = false;
-      $scope.showInputExperienceFromMonthDiv = true;
-      $scope.showLabelExperienceFromMonthDiv = false;
-      $scope.showInputExperienceFromYearDiv = true;
-      $scope.showLabelExperienceFromYearDiv = false;
-      $scope.showInputExperienceToMonthDiv = true;
-      $scope.showLabelExperienceToMonthDiv = false;
-      $scope.showInputExperienceToYearDiv = true;
-      $scope.showLabelExperienceToYearDiv = false;
-
+      $scope.personalTab = true;
+      $scope.showInputDiv = true;
+      $scope.showLabelDiv = false;
+      $scope.hideRequireSpan = false;
+      $scope.required = true;
+      //$scope.showPermanentAddressCheckbox = true;
 
       $scope.changeNav = this.changeNav.bind(this);
       $scope.testData = this.testData.bind(this);
@@ -423,441 +126,257 @@ module ums{
       $scope.cancel = this.cancel.bind(this);
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
+      $scope.saveAsPresentAddress = this.saveAsPresentAddress.bind(this);
+      $scope.getDesignation = this.getDesignation.bind(this);
+      $scope.getEmploymentType = this.getEmploymentType.bind(this);
+      $scope.getDeptOffice = this.getDeptOffice.bind(this);
 
       this.addDate();
-
-      console.log("i am in EmployeeInformation.ts 1");
+      this.getDesignation();
+      console.log("i am in EmployeeInformation.ts 11");
     }
 
 
     private changeNav(navTitle: number){
 
-      this.$scope.personal = false;
-      this.$scope.academic = false;
-      this.$scope.job = false;
-      this.$scope.publication = false;
-      this.$scope.training = false;
-      this.$scope.award = false;
-      this.$scope.experience = false;
+      this.$scope.personalTab = false;
+      this.$scope.academicTab = false;
+      this.$scope.jobTab = false;
+      this.$scope.publicationTab = false;
+      this.$scope.trainingTab = false;
+      this.$scope.awardTab = false;
+      this.$scope.experienceTab = false;
 
       if(navTitle == null){
 
       }
       else if(navTitle == 1){
-        this.$scope.personal = true;
+        this.$scope.personalTab = true;
       }
       else if(navTitle == 2){
-        this.$scope.job = true;
+        this.$scope.jobTab = true;
       }
       else if(navTitle == 3){
-        this.$scope.academic = true;
+        this.$scope.academicTab = true;
       }
       else if(navTitle == 4){
-        this.$scope.publication = true;
+        this.$scope.publicationTab = true;
       }
       else if(navTitle == 5){
-        this.$scope.training = true;
+        this.$scope.trainingTab = true;
       }
       else if(navTitle == 6){
-        this.$scope.award = true;
+        this.$scope.awardTab = true;
       }
       else if(navTitle == 7){
-        this.$scope.experience = true;
+        this.$scope.experienceTab = true;
       }
     }
 
-
-    // Used For Test Data
     private testData(){
       console.log("i am in testData()");
-      this.$scope.name = "Cooldude ilu";
-      this.$scope.fatherName = "Mir Abdul Aziz";
-      this.$scope.motherName = "Mst Hosne Ara";
-      this.$scope.gender = "Male";
-      this.$scope.birthday = "20/10/1995";
-      this.$scope.maritalStatus = "Single";
-      this.$scope.spouseName = "";
-      this.$scope.nationalIdNo = 19952641478954758;
-      this.$scope.spouseNationalIdNo = null;
-      this.$scope.bloodGroup = "B+";
-      this.$scope.email = "kawsur.iums@aust.edu";
-      this.$scope.phone = "+8801672494863";
-      this.$scope.presentAddress = "34/1 K R Road Posta Lalbagh Dhaka-1211, Bangladesh";
-      this.$scope.permanentAddress = "Don't Know";
+      this.$scope.entry.personal.firstName = "Kawsur";
+      this.$scope.entry.personal.lastName = "Mir Md.";
+      this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
+      this.$scope.entry.personal.motherName = "Mst Hosne Ara";
+      this.$scope.entry.personal.gender = this.$scope.employeeGender[1];
+      this.$scope.entry.personal.birthday = "20/10/1995";
+      this.$scope.entry.personal.nationality = this.$scope.employeeNationality[1];
+      this.$scope.entry.personal.religion = this.$scope.employeeReligion[1];
+      this.$scope.entry.personal.maritalStatus = this.$scope.employeeMaritalStatus[1];
+      this.$scope.entry.personal.spouseName = "";
+      this.$scope.entry.personal.nationalIdNo = 19952641478954758;
+      this.$scope.entry.personal.spouseNationalIdNo = null;
+      this.$scope.entry.personal.bloodGroup = "B+";
+      this.$scope.entry.personal.website = "www.kawsur.com";
+      this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
+      this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
+      this.$scope.entry.personal.mobile = "+8801672494863";
+      this.$scope.entry.personal.phone = "none";
+      this.$scope.entry.personal.presentAddressHouse = "34/1";
+      this.$scope.entry.personal.presentAddressRoad = "Kazi Riaz Uddin Road";
+      this.$scope.entry.personal.presentAddressPoliceStation = "Lalgagh";
+      this.$scope.entry.personal.presentAddressPostalCode = "1211";
+      this.$scope.entry.personal.presentAddressDistrict = "Dhaka";
+      this.$scope.entry.personal.presentAddressDivision = "Dhaka";
+      this.$scope.entry.personal.presentAddressCountry = "Bangladesh";
+      this.$scope.entry.personal.permanentAddressHouse = "None";
+      this.$scope.entry.personal.permanentAddressRoad = "";
+      this.$scope.entry.personal.permanentAddressPoliceStation = "";
+      this.$scope.entry.personal.permanentAddressPostalCode = "";
+      this.$scope.entry.personal.permanentAddressDistrict = "";
+      this.$scope.entry.personal.permanentAddressDivision = "None";
+      this.$scope.entry.personal.permanentAddressCountry = "None";
+      this.$scope.entry.personal.emergencyContactName = "None";
+      this.$scope.entry.personal.emergencyContactRelation = "None";
+      this.$scope.entry.personal.emergencyContactPhone = "None";
+      this.$scope.entry.personal.emergencyContactAddress = "None";
 
-      this.$scope.employeeId = 1;
-      this.$scope.employeeDesignation = "Programmer";
-      this.$scope.employeeEmploymentType = 1;
-      this.$scope.employeeDepartment = 1;
-      this.$scope.employeeJoiningDate = "01/11/2017";
-      this.$scope.employeeJobPermanentDate = "01/11/2017";
-      this.$scope.employeeExtensionNumber = 724;
-      this.$scope.employeeShortName = "mmk";
+      this.$scope.entry.employee.employeeId = 1;
+      this.$scope.entry.employee.employeeDesignation = "Programmer";
+      this.$scope.entry.employee.employeeEmploymentType = 1;
+      this.$scope.entry.employee.employeeDepartment = 1;
+      this.$scope.entry.employee.employeeJoiningDate = "01/11/2017";
+      this.$scope.entry.employee.employeeJobPermanentDate = "01/11/2017";
+      this.$scope.entry.employee.employeeExtensionNumber = 724;
+      this.$scope.entry.employee.employeeShortName = "mmk";
+      this.$scope.entry.employee.employeeRoomNumber = "6A03";
+      this.$scope.entry.employee.employeeResignDate = "01/11/3017";
 
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
-      this.$scope.entry.academic[0].academicCgpa = "3.79";
       this.$scope.entry.academic[0].academicPassingYear = "2016";
 
-      this.$scope.entry.publication[0].publicationTitle = "ABC";
-      this.$scope.entry.publication[0].publicationType = "XYZ";
-      this.$scope.entry.publication[0].publicationPlace = "Unknown";
-      this.$scope.entry.publication[0].publicationYear = "2015";
-      this.$scope.entry.publication[0].publicationWebReference = "ABC.COM";
+      this.$scope.entry.publication[0].publicationTitle = "N/A";
+      this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
+      this.$scope.entry.publication[0].authorsName = "N/A";
+      this.$scope.entry.publication[0].publisherName = "N/A";
+      this.$scope.entry.publication[0].dateOfPublication = "N/A";
+      this.$scope.entry.publication[0].publicationType = this.$scope.typeOfPublication[1];
+      this.$scope.entry.publication[0].publicationWebLink = "N/A";
 
       this.$scope.entry.training[0].trainingInstitution = "ABC";
       this.$scope.entry.training[0].trainingName = "XYZ";
-      this.$scope.entry.training[0].trainingDuration = "Unknown";
-      this.$scope.entry.training[0].trainingYear = "2015";
+      this.$scope.entry.training[0].trainingFrom = "2016";
+      this.$scope.entry.training[0].trainingTo = "2015";
+      this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
 
       this.$scope.entry.award[0].awardName = "My Award";
-      this.$scope.entry.award[0].purposeOfTheAward = "Really !";
-      this.$scope.entry.award[0].yearOfRecognition = "1990";
-      this.$scope.entry.award[0].shortDescription = "Hello! This is My Award, Don't Ask Description :@";
+      this.$scope.entry.award[0].awardInstitute = "Really !";
+      this.$scope.entry.award[0].awardedYear = "1990";
+      this.$scope.entry.award[0].awardShortDescription = "Hello! This is My Award, Don't Ask Description :@";
 
       this.$scope.entry.experience[0].experienceInstitution = "My Award";
       this.$scope.entry.experience[0].experienceDesignation = "Really !";
-      this.$scope.entry.experience[0].experienceFromMonth = "6";
-      this.$scope.entry.experience[0].experienceFromYear = "2010";
-      this.$scope.entry.experience[0].experienceToMonth = "7";
-      this.$scope.entry.experience[0].experienceToYear = "2009";
+      this.$scope.entry.experience[0].experienceFrom = "6";
+      this.$scope.entry.experience[0].experienceTo = "2010";
     }
 
 
     private submit(){
       console.log("i am in submit()");
-      this.$scope.showInputNameDiv = false;
-      this.$scope.showLabelNameDiv = true;
-      this.$scope.showInputFatherNameDiv = false;
-      this.$scope.showLabelFatherNameDiv = true;
-      this.$scope.showInputMotherNameDiv = false;
-      this.$scope.showLabelMotherNameDiv = true;
-      this.$scope.showInputGenderDiv = false;
-      this.$scope.showLabelGenderDiv = true;
-      this.$scope.showInputBirthdayDiv = false;
-      this.$scope.showLabelBirthdayDiv = true;
-      this.$scope.showInputMaritalStatusDiv = false;
-      this.$scope.showLabelMaritalStatusDiv = true;
-      this.$scope.showInputSpouseNameDiv = false;
-      this.$scope.showLabelSpouseNameDiv = true;
-      this.$scope.showInputNationalIdNoDiv = false;
-      this.$scope.showLabelNationalIdNoDiv = true;
-      this.$scope.showSpouseInputNationalIdNoDiv = false;
-      this.$scope.showLabelSpouseNationalIdNoDiv = true;
-      this.$scope.showInputBloodGroupDiv = false;
-      this.$scope.showLabelBloodGroupDiv = true;
-      this.$scope.showInputEmailDiv = false;
-      this.$scope.showLabelEmailDiv = true;
-      this.$scope.showInputPhoneDiv = false;
-      this.$scope.showLabelPhoneDiv = true;
-      this.$scope.showInputPresentAddressDiv = false;
-      this.$scope.showLabelPresentAddressDiv = true;
-      this.$scope.showInputPermanentAddressDiv = false;
-      this.$scope.showLabelPermanentAddressDiv = true;
-      this.$scope.showInputEmployeeIdDiv = false;
-      this.$scope.showLabelEmployeeIdDiv = true;
-      this.$scope.showInputEmployeeDesignationDiv = false;
-      this.$scope.showLabelEmployeeDesignationDiv = true;
-      this.$scope.showInputEmploymentTypeDiv = false;
-      this.$scope.showLabelEmploymentTypeDiv = true;
-      this.$scope.showSpouseInputEmployeeDepartmentDiv = false;
-      this.$scope.showLabelEmployeeDepartmentDiv = true;
-      this.$scope.showInputEmployeeJoiningDateDiv = false;
-      this.$scope.showLabelEmployeeJoiningDateDiv = true;
-      this.$scope.showInputEmployeeJobPermanentDateDiv = false;
-      this.$scope.showLabelEmployeeJobPermanentDateDiv = true;
-      this.$scope.showInputEmployeeExtensionDiv = false;
-      this.$scope.showLabelEmployeeExtensionDiv = true;
-      this.$scope.showSpouseInputEmployeeShortNameDiv = false;
-      this.$scope.showLabelEmployeeShortNameDiv = true;
-      this.$scope.showInputSSCSelectedDiv = false;
-      this.$scope.showLabelSSCSelectedDiv = true;
-      this.$scope.showInputSSCInstitutionDiv = false;
-      this.$scope.showLabelSSCInstitutionDiv = true;
-      this.$scope.showInputSSCGpaDiv = false;
-      this.$scope.showLabelSSCGpaDiv = true;
-      this.$scope.showInputSSCPassingYearDiv = false;
-      this.$scope.showLabelSSCPassingYearDiv = true;
-      this.$scope.showInputHSCSelectedDiv = false;
-      this.$scope.showLabelHSCSelectedDiv = true;
-      this.$scope.showInputHSCInstitutionDiv = false;
-      this.$scope.showLabelHSCInstitutionDiv = true;
-      this.$scope.showInputHSCGpaDiv = false;
-      this.$scope.showLabelHSCGpaDiv = true;
-      this.$scope.showInputHSCPassingYearDiv = false;
-      this.$scope.showLabelHSCPassingYearDiv = true;
-      this.$scope.showInputBachelorSelectedDiv = false;
-      this.$scope.showLabelBachelorSelectedDiv = true;
-      this.$scope.showInputBachelorInstitutionDiv = false;
-      this.$scope.showLabelBachelorInstitutionDiv = true;
-      this.$scope.showInputBachelorCGpaDiv = false;
-      this.$scope.showLabelBachelorCGpaDiv = true;
-      this.$scope.showInputBachelorPassingYearDiv = false;
-      this.$scope.showLabelBachelorPassingYearDiv = true;
-      this.$scope.showInputMastersSelectedDiv = false;
-      this.$scope.showLabelMastersSelectedDiv = true;
-      this.$scope.showInputMastersInstitutionDiv = false;
-      this.$scope.showLabelMastersInstitutionDiv = true;
-      this.$scope.showInputMastersCGpaDiv = false;
-      this.$scope.showLabelMastersCGpaDiv = true;
-      this.$scope.showInputMastersPassingYearDiv = false;
-      this.$scope.showLabelMastersPassingYearDiv = true;
-      this.$scope.showInputPhdSelectedDiv = false;
-      this.$scope.showLabelPhdSelectedDiv = true;
-      this.$scope.showInputPhdInstitutionDiv = false;
-      this.$scope.showLabelPhdInstitutionDiv = true;
-      this.$scope.showInputPhdCGpaDiv = false;
-      this.$scope.showLabelPhdCGpaDiv = true;
-      this.$scope.showInputPhdPassingYearDiv = false;
-      this.$scope.showLabelPhdPassingYearDiv = true;
-      this.$scope.showInputPublicationTitleDiv = false;
-      this.$scope.showLabelPublicationTitleDiv = true;
-      this.$scope.showInputPublicationTypeDiv = false;
-      this.$scope.showLabelPublicationTypeDiv = true;
-      this.$scope.showInputPublicationYearDiv = false;
-      this.$scope.showLabelPublicationYearDiv = true;
-      this.$scope.showInputPublicationPlaceDiv = false;
-      this.$scope.showLabelPublicationPlaceDiv = true;
-      this.$scope.showInputWebReferenceDiv = false;
-      this.$scope.showLabelWebReferenceDiv = true;
-      this.$scope.showInputTrainingNameDiv = false;
-      this.$scope.showLabelTrainingNameDiv = true;
-      this.$scope.showInputTrainingInstitutionDiv = false;
-      this.$scope.showLabelTrainingInstitutionDiv = true;
-      this.$scope.showInputTrainingDurationDiv = false;
-      this.$scope.showLabelTrainingDurationDiv = true;
-      this.$scope.showInputTrainingAccreditedYearDiv = false;
-      this.$scope.showLabelTrainingAccreditedYearDiv = true;
-      this.$scope.showInputAwardNameDiv = false;
-      this.$scope.showLabelAwardNameDiv = true;
-      this.$scope.showInputPurposeDiv = false;
-      this.$scope.showLabelPurposeDiv = true;
-      this.$scope.showInputYearOfRecognitionDiv = false;
-      this.$scope.showLabelYearOfRecognitionDiv = true;
-      this.$scope.showInputDescriptionDiv = false;
-      this.$scope.showLabelDescriptionDiv = true;
-      this.$scope.showInputExperienceInstitutionDiv = false;
-      this.$scope.showLabelExperienceInstitutionDiv = true;
-      this.$scope.showInputExperienceDesignationDiv = false;
-      this.$scope.showLabelExperienceDesignationDiv = true;
-      this.$scope.showInputExperienceFromMonthDiv = false;
-      this.$scope.showLabelExperienceFromMonthDiv = true;
-      this.$scope.showInputExperienceFromYearDiv = false;
-      this.$scope.showLabelExperienceFromYearDiv = true;
-      this.$scope.showInputExperienceToMonthDiv = false;
-      this.$scope.showLabelExperienceToMonthDiv = true;
-      this.$scope.showInputExperienceToYearDiv = false;
-      this.$scope.showLabelExperienceToYearDiv = true;
+      this.convertToJSon()
+          .then((json: any) => {
+            this.employeeInformationService.saveEmployeeInformation(json)
+                .then((message: any) => {
+                  console.log("This is message");
+                  console.log(message);
+                });
+          });
+      this.$scope.showInputDiv = false;
+      this.$scope.showLabelDiv = true;
+      this.$scope.required = true;
+      //this.$scope.showPermanentAddressCheckbox = false;
 
-      this.convertToJSon();
-      this.notify.success("Data Saved");
     }
 
     private cancel(){
       console.log("i am in cancel()");
-      this.$scope.name = "";
-      this.$scope.fatherName = "";
-      this.$scope.motherName = "";
-      this.$scope.gender = "";
-      this.$scope.birthday = "";
-      this.$scope.maritalStatus = "";
-      this.$scope.spouseName = "";
-      this.$scope.nationalIdNo = null;
-      this.$scope.spouseNationalIdNo = null;
-      this.$scope.bloodGroup = "";
-      this.$scope.email = "";
-      this.$scope.phone = "";
-      this.$scope.presentAddress = "";
-      this.$scope.permanentAddress = "";
+      this.$scope.entry.personal.firstName = "";
+      this.$scope.entry.personal.lastName = "";
+      this.$scope.entry.personal.fatherName = "";
+      this.$scope.entry.personal.motherName = "";
+      this.$scope.entry.personal.gender = this.$scope.employeeGender[0];
+      this.$scope.entry.personal.birthday = "";
+      this.$scope.entry.personal.nationality = this.$scope.employeeNationality[0];
+      this.$scope.entry.personal.maritalStatus = this.$scope.employeeMaritalStatus[0];
+      this.$scope.entry.personal.spouseName = "";
+      this.$scope.entry.personal.nationalIdNo = null;
+      this.$scope.entry.personal.spouseNationalIdNo = null;
+      this.$scope.entry.personal.bloodGroup = "";
+      this.$scope.entry.personal.website = "";
+      this.$scope.entry.personal.organizationalEmail = "";
+      this.$scope.entry.personal.personalEmail = "";
+      this.$scope.entry.personal.mobile = "";
+      this.$scope.entry.personal.phone = "";
+      this.$scope.entry.personal.presentAddressHouse = "";
+      this.$scope.entry.personal.presentAddressRoad = "";
+      this.$scope.entry.personal.presentAddressPoliceStation = "";
+      this.$scope.entry.personal.presentAddressPostalCode = "";
+      this.$scope.entry.personal.presentAddressDistrict = "";
+      this.$scope.entry.personal.presentAddressDivision = "";
+      this.$scope.entry.personal.presentAddressCountry = "";
+      this.$scope.entry.personal.permanentAddressHouse = "";
+      this.$scope.entry.personal.permanentAddressRoad = "";
+      this.$scope.entry.personal.permanentAddressPoliceStation = "";
+      this.$scope.entry.personal.permanentAddressPostalCode = "";
+      this.$scope.entry.personal.permanentAddressDistrict = "";
+      this.$scope.entry.personal.permanentAddressDivision = "";
+      this.$scope.entry.personal.permanentAddressCountry = "";
+      this.$scope.entry.personal.emergencyContactName = "";
+      this.$scope.entry.personal.emergencyContactRelation = "";
+      this.$scope.entry.personal.emergencyContactPhone = "";
+      this.$scope.entry.personal.emergencyContactAddress = "";
 
-      this.$scope.employeeId = null;
-      this.$scope.employeeDesignation = "";
-      this.$scope.employeeEmploymentType = null;
-      this.$scope.employeeDepartment = null;
-      this.$scope.employeeJoiningDate = "";
-      this.$scope.employeeJobPermanentDate = "";
-      this.$scope.employeeExtensionNumber = null;
-      this.$scope.employeeShortName = "";
+      this.$scope.entry.employee.employeeId = null;
+      this.$scope.entry.employee.employeeDesignation = "";
+      this.$scope.entry.employee.employeeEmploymentType = null;
+      this.$scope.entry.employee.employeeDepartment = null;
+      this.$scope.entry.employee.employeeJoiningDate = "";
+      this.$scope.entry.employee.employeeJobPermanentDate = "";
+      this.$scope.entry.employee.employeeExtensionNumber = null;
+      this.$scope.entry.employee.employeeShortName = "";
+      this.$scope.entry.employee.employeeRoomNumber = "";
+      this.$scope.entry.employee.employeeResignDate = "";
 
       this.$scope.entry.academic[0].academicDegreeName.name = "";
       this.$scope.entry.academic[0].academicInstitution = "";
-      this.$scope.entry.academic[0].academicCgpa = "";
       this.$scope.entry.academic[0].academicPassingYear = "";
 
       this.$scope.entry.publication[0].publicationTitle = "";
-      this.$scope.entry.publication[0].publicationType = "";
-      this.$scope.entry.publication[0].publicationPlace = "";
-      this.$scope.entry.publication[0].publicationYear = "";
-      this.$scope.entry.publication[0].publicationWebReference = "";
+      this.$scope.entry.publication[0].publicationInterestGenre = "";
+      this.$scope.entry.publication[0].authorsName = "";
+      this.$scope.entry.publication[0].publisherName = "";
+      this.$scope.entry.publication[0].dateOfPublication = "";
+      this.$scope.entry.publication[0].publicationType = this.$scope.typeOfPublication[0];
+      this.$scope.entry.publication[0].publicationWebLink = "";
 
       this.$scope.entry.training[0].trainingInstitution = "";
       this.$scope.entry.training[0].trainingName = "";
+      this.$scope.entry.training[0].trainingFrom = "";
+      this.$scope.entry.training[0].trainingTo = "";
       this.$scope.entry.training[0].trainingDuration = "";
-      this.$scope.entry.training[0].trainingYear = "";
 
       this.$scope.entry.award[0].awardName = "";
-      this.$scope.entry.award[0].purposeOfTheAward = "";
-      this.$scope.entry.award[0].yearOfRecognition = "";
-      this.$scope.entry.award[0].shortDescription = "";
+      this.$scope.entry.award[0].awardInstitute = "";
+      this.$scope.entry.award[0].awardedYear = "";
+      this.$scope.entry.award[0].awardShortDescription = "";
 
       this.$scope.entry.experience[0].experienceInstitution = "";
       this.$scope.entry.experience[0].experienceDesignation = "";
-      this.$scope.entry.experience[0].experienceFromMonth = "";
-      this.$scope.entry.experience[0].experienceFromYear = "";
-      this.$scope.entry.experience[0].experienceToMonth = "";
-      this.$scope.entry.experience[0].experienceToYear = "";
+      this.$scope.entry.experience[0].experienceFrom = "";
+      this.$scope.entry.experience[0].experienceTo = "";
 
-
-
-      this.$scope.showInputNameDiv = true;
-      this.$scope.showLabelNameDiv = false;
-      this.$scope.showInputFatherNameDiv = true;
-      this.$scope.showLabelFatherNameDiv = false;
-      this.$scope.showInputMotherNameDiv = true;
-      this.$scope.showLabelMotherNameDiv = false;
-      this.$scope.showInputGenderDiv = true;
-      this.$scope.showLabelGenderDiv = false;
-      this.$scope.showInputBirthdayDiv = true;
-      this.$scope.showLabelBirthdayDiv = false;
-      this.$scope.showInputMaritalStatusDiv = true;
-      this.$scope.showLabelMaritalStatusDiv = false;
-      this.$scope.showInputSpouseNameDiv = true;
-      this.$scope.showLabelSpouseNameDiv = false;
-      this.$scope.showInputNationalIdNoDiv = true;
-      this.$scope.showLabelNationalIdNoDiv = false;
-      this.$scope.showSpouseInputNationalIdNoDiv = true;
-      this.$scope.showLabelSpouseNationalIdNoDiv = false;
-      this.$scope.showInputBloodGroupDiv = true;
-      this.$scope.showLabelBloodGroupDiv = false;
-      this.$scope.showInputEmailDiv = true;
-      this.$scope.showLabelEmailDiv = false;
-      this.$scope.showInputPhoneDiv = true;
-      this.$scope.showLabelPhoneDiv = false;
-      this.$scope.showInputPresentAddressDiv = true;
-      this.$scope.showLabelPresentAddressDiv = false;
-      this.$scope.showInputPermanentAddressDiv = true;
-      this.$scope.showLabelPermanentAddressDiv = false;
-      this.$scope.showInputEmployeeIdDiv = true;
-      this.$scope.showLabelEmployeeIdDiv = false;
-      this.$scope.showInputEmployeeDesignationDiv = true;
-      this.$scope.showLabelEmployeeDesignationDiv = false;
-      this.$scope.showInputEmploymentTypeDiv = true;
-      this.$scope.showLabelEmploymentTypeDiv = false;
-      this.$scope.showSpouseInputEmployeeDepartmentDiv = true;
-      this.$scope.showLabelEmployeeDepartmentDiv = false;
-      this.$scope.showInputEmployeeJoiningDateDiv = true;
-      this.$scope.showLabelEmployeeJoiningDateDiv = false;
-      this.$scope.showInputEmployeeJobPermanentDateDiv = true;
-      this.$scope.showLabelEmployeeJobPermanentDateDiv = false;
-      this.$scope.showInputEmployeeExtensionDiv = true;
-      this.$scope.showLabelEmployeeExtensionDiv = false;
-      this.$scope.showSpouseInputEmployeeShortNameDiv = true;
-      this.$scope.showLabelEmployeeShortNameDiv = false;
-      this.$scope.showInputSSCSelectedDiv = true;
-      this.$scope.showLabelSSCSelectedDiv = false;
-      this.$scope.showInputSSCInstitutionDiv = true;
-      this.$scope.showLabelSSCInstitutionDiv = false;
-      this.$scope.showInputSSCGpaDiv = true;
-      this.$scope.showLabelSSCGpaDiv = false;
-      this.$scope.showInputSSCPassingYearDiv = true;
-      this.$scope.showLabelSSCPassingYearDiv = false;
-      this.$scope.showInputHSCSelectedDiv = true;
-      this.$scope.showLabelHSCSelectedDiv = false;
-      this.$scope.showInputHSCInstitutionDiv = true;
-      this.$scope.showLabelHSCInstitutionDiv = false;
-      this.$scope.showInputHSCGpaDiv = true;
-      this.$scope.showLabelHSCGpaDiv = false;
-      this.$scope.showInputHSCPassingYearDiv = true;
-      this.$scope.showLabelHSCPassingYearDiv = false;
-      this.$scope.showInputBachelorSelectedDiv = true;
-      this.$scope.showLabelBachelorSelectedDiv = false;
-      this.$scope.showInputBachelorInstitutionDiv = true;
-      this.$scope.showLabelBachelorInstitutionDiv = false;
-      this.$scope.showInputBachelorCGpaDiv = true;
-      this.$scope.showLabelBachelorCGpaDiv = false;
-      this.$scope.showInputBachelorPassingYearDiv = true;
-      this.$scope.showLabelBachelorPassingYearDiv = false;
-      this.$scope.showInputMastersSelectedDiv = true;
-      this.$scope.showLabelMastersSelectedDiv = false;
-      this.$scope.showInputMastersInstitutionDiv = true;
-      this.$scope.showLabelMastersInstitutionDiv = false;
-      this.$scope.showInputMastersCGpaDiv = true;
-      this.$scope.showLabelMastersCGpaDiv = false;
-      this.$scope.showInputMastersPassingYearDiv = true;
-      this.$scope.showLabelMastersPassingYearDiv = false;
-      this.$scope.showInputPhdSelectedDiv = true;
-      this.$scope.showLabelPhdSelectedDiv = false;
-      this.$scope.showInputPhdInstitutionDiv = true;
-      this.$scope.showLabelPhdInstitutionDiv = false;
-      this.$scope.showInputPhdCGpaDiv = true;
-      this.$scope.showLabelPhdCGpaDiv = false;
-      this.$scope.showInputPhdPassingYearDiv = true;
-      this.$scope.showLabelPhdPassingYearDiv = false;
-      this.$scope.showInputPublicationTitleDiv = true;
-      this.$scope.showLabelPublicationTitleDiv = false;
-      this.$scope.showInputPublicationTypeDiv = true;
-      this.$scope.showLabelPublicationTypeDiv = false;
-      this.$scope.showInputPublicationYearDiv = true;
-      this.$scope.showLabelPublicationYearDiv = false;
-      this.$scope.showInputPublicationPlaceDiv = true;
-      this.$scope.showLabelPublicationPlaceDiv = false;
-      this.$scope.showInputWebReferenceDiv = true;
-      this.$scope.showLabelWebReferenceDiv = false;
-      this.$scope.showInputTrainingNameDiv = true;
-      this.$scope.showLabelTrainingNameDiv = false;
-      this.$scope.showInputTrainingInstitutionDiv = true;
-      this.$scope.showLabelTrainingInstitutionDiv = false;
-      this.$scope.showInputTrainingDurationDiv = true;
-      this.$scope.showLabelTrainingDurationDiv = false;
-      this.$scope.showInputTrainingAccreditedYearDiv = true;
-      this.$scope.showLabelTrainingAccreditedYearDiv = false;
-      this.$scope.showInputAwardNameDiv = true;
-      this.$scope.showLabelAwardNameDiv = false;
-      this.$scope.showInputPurposeDiv = true;
-      this.$scope.showLabelPurposeDiv = false;
-      this.$scope.showInputYearOfRecognitionDiv = true;
-      this.$scope.showLabelYearOfRecognitionDiv = false;
-      this.$scope.showInputDescriptionDiv = true;
-      this.$scope.showLabelDescriptionDiv = false;
-      this.$scope.showInputExperienceInstitutionDiv = true;
-      this.$scope.showLabelExperienceInstitutionDiv = false;
-      this.$scope.showInputExperienceDesignationDiv = true;
-      this.$scope.showLabelExperienceDesignationDiv = false;
-      this.$scope.showInputExperienceFromMonthDiv = true;
-      this.$scope.showLabelExperienceFromMonthDiv = false;
-      this.$scope.showInputExperienceFromYearDiv = true;
-      this.$scope.showLabelExperienceFromYearDiv = false;
-      this.$scope.showInputExperienceToMonthDiv = true;
-      this.$scope.showLabelExperienceToMonthDiv = false;
-      this.$scope.showInputExperienceToYearDiv = true;
-      this.$scope.showLabelExperienceToYearDiv = false;
+      this.$scope.showInputDiv = true;
+      this.$scope.showLabelDiv = false;
+      this.$scope.hideRequireSpan = false;
     }
 
     private addNewRow(divName: string){
       console.log("i am in addNewRow()");
       if(divName == 'academic') {
-        var academicEntry: IAcademicEntry;
-        academicEntry = {academicDegreeName: this.$scope.degreeNames[0], academicInstitution: "", academicCgpa: "", academicPassingYear: ""};
+        var academicEntry: IAcademicInformationModel;
+        academicEntry = {employeeId: null, academicDegreeName: this.$scope.degreeNames[0], academicInstitution: "", academicPassingYear: ""};
         this.$scope.entry.academic.push(academicEntry);
       }
       else if(divName == 'publication'){
-        var publicationEntry: IPublicationEntry;
-        publicationEntry = {publicationTitle: "", publicationType: "", publicationYear: "", publicationPlace: "", publicationWebReference: ""};
+        var publicationEntry: IPublicationInformationModel;
+        publicationEntry = {employeeId: null, publicationTitle: "", publicationType: this.$scope.typeOfPublication[0], publicationInterestGenre: "", authorsName: "", publicationWebLink: "", publisherName: "", dateOfPublication: ""};
         this.$scope.entry.publication.push(publicationEntry);
       }
       else if(divName == 'training'){
-        var trainingEntry: ITrainingEntry;
-        trainingEntry = {trainingName: "", trainingInstitution: "", trainingDuration: "", trainingYear: ""};
+        var trainingEntry: ITrainingInformationModel;
+        trainingEntry = {employeeId: null, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", trainingDuration: ""};
         this.$scope.entry.training.push(trainingEntry);
       }
       else if(divName == 'award'){
-        var awarEntry: IAwardEntry;
-        awarEntry = {awardName: "", purposeOfTheAward: "", yearOfRecognition: "", shortDescription: ""};
+        var awarEntry: IAwardInformationModel;
+        awarEntry = {employeeId: null, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: ""};
         this.$scope.entry.award.push(awarEntry);
       }
       else if(divName == 'experience'){
-        var enperienceEntry: IExperienceEntry;
-        enperienceEntry = {experienceInstitution: "", experienceDesignation: "", experienceFromMonth: "", experienceFromYear: "", experienceToMonth: "", experienceToYear: "" };
+        var enperienceEntry: IExperienceInformationModel;
+        enperienceEntry = {employeeId: null, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "" };
         this.$scope.entry.experience.push(enperienceEntry);
       }
     }
@@ -882,6 +401,17 @@ module ums{
       }
     }
 
+    private saveAsPresentAddress(){
+      console.log("I am in saveAsPresentAddress()");
+      this.$scope.entry.personal.permanentAddressHouse = this.$scope.entry.personal.presentAddressHouse;
+      this.$scope.entry.personal.permanentAddressRoad = this.$scope.entry.personal.presentAddressRoad;
+      this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.entry.personal.presentAddressPoliceStation;
+      this.$scope.entry.personal.permanentAddressPostalCode = this.$scope.entry.personal.presentAddressPostalCode;
+      this.$scope.entry.personal.permanentAddressDistrict = this.$scope.entry.personal.presentAddressDistrict;
+      this.$scope.entry.personal.permanentAddressDivision = this.$scope.entry.personal.presentAddressDivision;
+      this.$scope.entry.personal.permanentAddressCountry = this.$scope.entry.personal.presentAddressCountry;
+    }
+
     public convertToJSon(): ng.IPromise<any>{
       console.log("I am in convertToJSon()");
       var defer = this.$q.defer();
@@ -889,103 +419,51 @@ module ums{
       var JsonArray = [];
       var item: any = {};
 
-      var personalArray = [];
-      var personalItem: any = {};
-      personalItem['name'] = this.$scope.name;
-      personalItem['fatherName'] = this.$scope.fatherName;
-      personalItem['gender'] = this.$scope.gender;
-      personalItem['motherName'] = this.$scope.motherName;
-      personalItem['bloodGroup'] = this.$scope.bloodGroup;
-      personalItem['dateOfBirth'] = this.$scope.birthday;
-      personalItem['maritalStatus'] = this.$scope.maritalStatus;
-      personalItem['spouseName'] = this.$scope.spouseName;
-      personalItem['nationalIdNo'] = this.$scope.nationalIdNo;
-      personalItem['spouseNationalIdNo'] = this.$scope.spouseNationalIdNo;
-      personalItem['email'] = this.$scope.email;
-      personalItem['phone'] = this.$scope.phone;
-      personalItem['presentAddress'] = this.$scope.presentAddress;
-      personalItem['permanentAddress'] = this.$scope.permanentAddress;
-      personalArray.push(personalItem);
-      item['personal'] = personalArray;
+      var personalInformation = <IPersonalInformationModel> {} ;
+      personalInformation  = this.$scope.entry.personal;
+      item['personal'] = personalInformation;
 
-      var jobArray = [];
-      var jobItem: any = {};
-      jobItem['employee_id'] = this.$scope.employeeId;
-      jobItem['employee_designation'] = this.$scope.employeeDesignation;
-      jobItem['employment_type'] = this.$scope.employeeEmploymentType;
-      jobItem['employee_dept'] = this.$scope.employeeDepartment;
-      jobItem['employee_joining_date'] = this.$scope.employeeJoiningDate;
-      jobItem['employee_job_permanent_date'] = this.$scope.employeeJobPermanentDate;
-      jobItem['employee_ext_no'] = this.$scope.employeeExtensionNumber;
-      jobItem['employee_short_name'] = this.$scope.employeeShortName;
-      jobArray.push(jobItem);
-      item['job'] = jobArray;
+      var employeeInformation = <IEmployeeModel> {} ;
+      employeeInformation  = this.$scope.entry.employee;
+      item['employee'] = employeeInformation;
 
-      var academicArray = [];
+      var academicInformation = new Array<IAcademicInformationModel>();
       for(var i = 0; i < this.$scope.entry.academic.length; i++) {
-        var academicItem: any = {};
-        academicItem['degreeName'] = this.$scope.entry.academic[i].academicDegreeName;
-        academicItem['degreeInstitute'] = this.$scope.entry.academic[i].academicInstitution;
-        academicItem['degreeCgpa'] = this.$scope.entry.academic[i].academicCgpa;
-        academicItem['degreePassingYear'] = this.$scope.entry.academic[i].academicPassingYear;
-        academicArray.push(academicItem);
+        academicInformation = this.$scope.entry.academic;
       }
-      item['academic'] = academicArray;
+      item['academic'] = academicInformation;
 
-      var publicationArray = [];
+      var publicationInformation = new Array<IPublicationInformationModel>();
       for(var i = 0; i < this.$scope.entry.publication.length; i++){
-        var publicationItem: any = {};
-        publicationItem['publicationTitle'] = this.$scope.entry.publication[i].publicationTitle;
-        publicationItem['publicationType'] = this.$scope.entry.publication[i].publicationType;
-        publicationItem['publicationYear'] = this.$scope.entry.publication[i].publicationYear;
-        publicationItem['publicationPlace'] = this.$scope.entry.publication[i].publicationPlace;
-        publicationItem['publicationWebReference'] = this.$scope.entry.publication[i].publicationWebReference;
-        publicationArray.push(publicationItem);
+        publicationInformation = this.$scope.entry.publication;
       }
-      item['publication'] = publicationArray;
+      item['publication'] = publicationInformation;
 
-      var trainingArray = [];
+      var trainingInformation = new Array<ITrainingInformationModel>();
       for(var i = 0; i < this.$scope.entry.training.length; i++){
-        var trainingItem: any = {};
-        trainingItem['trainingName'] = this.$scope.entry.training[i].trainingName;
-        trainingItem['trainingInstitution'] = this.$scope.entry.training[i].trainingInstitution;
-        trainingItem['trainingDuration'] = this.$scope.entry.training[i].trainingDuration;
-        trainingItem['trainingYear'] = this.$scope.entry.training[i].trainingYear;
-        trainingArray.push(trainingItem);
+        trainingInformation = this.$scope.entry.training;
       }
-      item['training'] = trainingArray;
+      item['training'] = trainingInformation;
 
-      var awardArray = [];
+      var awardInformation = new Array<IAwardInformationModel>();
       for(var i = 0; i < this.$scope.entry.award.length; i++){
-        var awardItem: any = {};
-        awardItem['awardName'] = this.$scope.entry.award[i].awardName;
-        awardItem['purposeOfTheAward'] = this.$scope.entry.award[i].purposeOfTheAward;
-        awardItem['yearOfRecognition'] = this.$scope.entry.award[i].yearOfRecognition;
-        awardItem['shortDescription'] = this.$scope.entry.award[i].shortDescription;
-        awardArray.push(awardItem);
+        awardInformation = this.$scope.entry.award;
       }
-      item['award'] = awardArray;
+      item['award'] = awardInformation;
 
-      var experienceArray = [];
+      var experienceInformation = new Array<IExperienceInformationModel>();
       for(var i = 0; i < this.$scope.entry.experience.length; i++){
-        var experienceItem: any = {};
-        experienceItem['experienceInstitution'] = this.$scope.entry.experience[i].experienceInstitution;
-        experienceItem['experienceDesignation'] = this.$scope.entry.experience[i].experienceDesignation;
-        experienceItem['experienceFromMonth'] = this.$scope.entry.experience[i].experienceFromMonth;
-        experienceItem['experienceFromYear'] = this.$scope.entry.experience[i].experienceFromYear;
-        experienceItem['experienceToMonth'] = this.$scope.entry.experience[i].experienceToMonth;
-        experienceItem['experienceToYear'] = this.$scope.entry.experience[i].experienceToYear;
-        experienceArray.push(experienceItem);
+        experienceInformation = this.$scope.entry.experience;
       }
-      item['experience'] = experienceArray;
+      item['experience'] = experienceInformation;
 
       JsonArray.push(item);
-
       JsonObject['entries'] = JsonArray;
 
-      console.log("Json Data");
+      console.log("My Json Data");
       console.log(JsonObject);
 
+      defer.resolve(JsonObject);
       return defer.promise;
     }
 
@@ -996,6 +474,60 @@ module ums{
           $('.datepicker').hide();
         });
       }, 100);
+
+      setTimeout(function () {
+        $('.modified-datepicker').datepicker({
+          // startView: 1,
+          // minViewMode: 1
+        });
+        $('.modified-datepicker').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 100);
+
+      setTimeout(function () {
+        $('.custom-datepicker').datepicker({
+          // startView: 2,
+          // minViewMode: 2
+        });
+        $('.custom-datepicker').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 100);
+    }
+
+    private getDesignation(): void {
+      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
+      //   this.$scope.semesters = semesters;
+      //   for (var i = 0; i < semesters.length; i++) {
+      //     if (semesters[i].status == 2) {
+      //       this.$scope.semester = semesters[i];
+      //       break;
+      //     }
+      //   }
+      // });
+    }
+    private getEmploymentType(): void {
+      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
+      //   this.$scope.semesters = semesters;
+      //   for (var i = 0; i < semesters.length; i++) {
+      //     if (semesters[i].status == 2) {
+      //       this.$scope.semester = semesters[i];
+      //       break;
+      //     }
+      //   }
+      // });
+    }
+    private getDeptOffice(): void {
+      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
+      //   this.$scope.semesters = semesters;
+      //   for (var i = 0; i < semesters.length; i++) {
+      //     if (semesters[i].status == 2) {
+      //       this.$scope.semester = semesters[i];
+      //       break;
+      //     }
+      //   }
+      // });
     }
   }
 

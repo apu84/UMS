@@ -96,10 +96,10 @@
     </servlet-mapping>
 
     <!--  <security-constraint>
-        <web-resource-collection>
-          <web-resource-name>ums-webservice-academic</web-resource-name>
+        <org.ums.resourceurce-collection>
+          <org.ums.resourceurce-name>ums-webservice-academic</org.ums.resourceurce-name>
           <url-pattern>/*</url-pattern>
-        </web-resource-collection>
+        </org.ums.resourceurce-collection>
         <user-data-constraint>
           <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>

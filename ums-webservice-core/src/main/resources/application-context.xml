@@ -12,5 +12,5 @@
 
   <aop:aspectj-autoproxy/>
   <context:component-scan
-      base-package="org.ums.login,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.solr.repository"/>
+      base-package="org.ums.login,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.solr.repository,org.ums.report.generator"/>
 </beans>
