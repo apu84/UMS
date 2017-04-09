@@ -30,9 +30,9 @@
     <appender-ref ref="fileAppender"/>
   </logger>
   -->
-  <!--  Comment out this block to debug sql query and prepared statements  -->
+  <!--  Comment out this block to debug sql query and prepared statements
   <Logger name="org.springframework.jdbc.core" level="TRACE" additivity="false">
     <Appender-Ref ref="fileAppender" />
   </Logger>
-
+-->
 </configuration>
