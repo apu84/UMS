@@ -266,6 +266,7 @@ module ums {
       Utils.setValidationOptions("form-horizontal");
       $scope.data.totalInfoView = 0;
       $scope.data.addiInfoArr = ["Abs","Rep"];
+
     }
 
     private getSubmissionColorCodeStyle(statusType: string): string {
@@ -461,6 +462,10 @@ module ums {
       this.$scope.current_courseId = courseId;
       this.$scope.current_semesterId = semesterId;
       this.$scope.current_examTypeId = examTypeId;
+
+      if($("#tbl_recheck_accepted")) {
+        $('#tbl_recheck_accepted > tbody').html("");
+      }
 
 
       $('.page-title.ng-binding').html("Online Grade Preparation/Scrutiny/Approval");
