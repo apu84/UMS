@@ -73,6 +73,7 @@ module ums {
     userRole: string;
     downloadPdf: Function;
     copyGradeRow: Function;
+    copyAllGradeRow: Function;
     loadSemesters: Function;
     loadPrograms: Function;
 
@@ -223,6 +224,7 @@ module ums {
       $scope.closePopupModal = this.closePopupModal.bind(this);
 
       $scope.copyGradeRow = this.copyGradeRow.bind(this);
+      $scope.copyAllGradeRow = this.copyAllGradeRow.bind(this);
       $scope.sendRecheckRequestToVC = this.sendRecheckRequestToVC.bind(this);
       $scope.recheckRequestHandler = this.recheckRequestHandler.bind(this);
       $scope.loadSemesters = this.loadSemesters.bind(this);
@@ -322,14 +324,24 @@ module ums {
 
     private copyGradeRow(): void {
       var studentId: any = this.$scope.data.recheck_accepted_studentId;
+      this.appendDataForRecheckRequest(studentId);
+      this.$scope.data.recheck_accepted_studentId = "";
+    }
+
+    private copyAllGradeRow() : void {
+      for(var i=0;i<this.$scope.acceptedGrades.length; i++) {
+        var marks :IStudentMarks = this.$scope.acceptedGrades[i];
+        this.appendDataForRecheckRequest(marks.studentId);
+      }
+    }
+
+    private appendDataForRecheckRequest(studentId : String) : void {
       var newRowId: any = "recheck_accepted_" + studentId;
       if ($("#" + newRowId).length) return;
       var $clone = $("#row_" + studentId).clone();
       $clone.attr("id", newRowId);
       $clone.append('<td style="text-align: center;cursor:pointer;" onclick="removeTableRow(\'' + newRowId + '\')"><img src="https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Delete.png" /></td>');
       $clone.appendTo($('#tbl_recheck_accepted > tbody'));
-      this.$scope.data.recheck_accepted_studentId = "";
-
     }
 
     private sendRecheckRequestToVC(): void {
@@ -342,6 +354,11 @@ module ums {
         student.studentId = el.id.substr(17, 9);
         recheckRequestStudentList.push(student);
       });
+
+      if(recheckRequestStudentList.length == 0) {
+        alert("Please select at least one student to recheck.");
+        return;
+      }
 
       var url = "academic/gradeSubmission/recheckApprove";
       var complete_json = this.createCompleteJson("recheck_request_submit", null, recheckRequestStudentList, approveStudentList);
