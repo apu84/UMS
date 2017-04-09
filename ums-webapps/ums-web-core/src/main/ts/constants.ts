@@ -406,10 +406,10 @@ module ums {
         ],
         meritListTypes:[
           {id:"0", name:"Combined (GA+RA+FF) "},
-          {id:"1", name:"General "},
-          {id:"2", name:"Freedom Fighter "},
-          {id:"3", name:"Rural Area "},
-          {id:"4", name:"English Medium "}
+          {id:"1", name:"GL"},
+          {id:"2", name:"FF"},
+          {id:"3", name:"RA"},
+          {id:"4", name:"GCE"}
         ],
         quotaTypes:[
           {id:"1", name:"General "},

@@ -176,7 +176,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Override
   public int saveMeritList(List<MutableAdmissionStudent> pStudents) {
     String query =
-        "update admission_students set merit_sl_no=? , admission_roll=? where semester_id=? and receipt_id=?";
+        "update admission_students set merit_sl_no=? , admission_roll=? where semester_id=? and receipt_id=? and quota=?";
     return mJdbcTemplate.batchUpdate(query, getMeritListParams(pStudents)).length;
   }
 
@@ -216,7 +216,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
 
     for(AdmissionStudent student : pStudents) {
       params.add(new Object[] {student.getMeritSerialNo(), student.getAdmissionRoll(), student.getSemester().getId(),
-          student.getReceiptId()});
+          student.getReceiptId(), student.getQuota()});
     }
     return params;
   }
@@ -263,9 +263,9 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     String query =
         SELECT_ONE
             + " where semester_id=? and program_type=? and unit=? and merit_sl_no is not null and admission_roll is not null  "
-            + " and receipt_id in (select receipt_id from admission_students where ";
+            + " and  ";
     query = getQuotaSql(pQuotaType, query);
-    query = query + ") order by merit_sl_no";
+    query = query + " order by merit_sl_no";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(), pUnit},
         new AdmissionStudentRowMapper());
   }

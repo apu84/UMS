@@ -239,9 +239,9 @@ module ums{
       return defer.promise;
     }
 
-    public saveMeritList(json:any):ng.IPromise<any>{
+    public saveMeritList(json:any,quota:string):ng.IPromise<any>{
       var defer=this.$q.defer();
-      var url="academic/admission/meritListUpload";
+      var url="academic/admission/meritListUpload/quota/"+quota;
       this.httpClient.put(url,json,'application/json')
           .success(()=>{
             defer.resolve("success");

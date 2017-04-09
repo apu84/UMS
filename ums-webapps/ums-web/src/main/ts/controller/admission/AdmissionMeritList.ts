@@ -240,7 +240,7 @@ module ums{
     private saveMeritList():void{
       this.$scope.searchSpinner=true;
       this.convertToJson().then((json:any)=>{
-        this.admissionStudentService.saveMeritList(json).then((status:string)=>{
+        this.admissionStudentService.saveMeritList(json, this.$scope.meritType.name).then((status:string)=>{
 
           this.fetchMeritList();
 
@@ -259,6 +259,8 @@ module ums{
         item['meritSlNo']=students[i].meritSlNo;
         item['receiptId'] = students[i].receiptId;
         item['admissionRoll'] = students[i].admissionRoll;
+        item['quota'] = this.$scope.meritType.name;
+        item['programType'] = +this.$scope.programType.id;
         jsonObject.push(item);
       }
 

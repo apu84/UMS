@@ -27,9 +27,9 @@ public class MutableAdmissionStudentResource extends Resource {
   }
 
   @PUT
-  @Path("/meritListUpload")
-  public Response saveMeritList(final JsonObject pJsonObject) throws Exception {
-    return mHelper.saveMeritListData(pJsonObject, mUriInfo);
+  @Path("/meritListUpload/quota/{quota}")
+  public Response saveMeritList(final JsonObject pJsonObject, @PathParam("quota") String pQuota) throws Exception {
+    return mHelper.saveMeritListData(pJsonObject, pQuota, mUriInfo);
   }
 
   @PUT

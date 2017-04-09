@@ -86,7 +86,7 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
   }
 
   @Transactional
-  public Response saveMeritListData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response saveMeritListData(JsonObject pJsonObject, String pQuota, UriInfo pUriInfo) throws Exception {
     List<MutableAdmissionStudent> students = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
@@ -97,12 +97,44 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
       getBuilder().build(student, jsonObject, "meritList", localCache);
       students.add(student);
     }
+
+    insertNewTeletalkDataBasedOnQuotaType(students, pQuota);
     getContentManager().saveMeritList(students);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
 
+  }
+
+  /*
+   * In the admission system, students from quota can also be in general quota.
+   */
+  private void insertNewTeletalkDataBasedOnQuotaType(List<MutableAdmissionStudent> pStudents, String pQuota) {
+    Map<String, List<AdmissionStudent>> receiptIdMapTeletalkStudent = getContentManager()
+
+        .getTaletalkData(pStudents.get(0).getSemester().getId(), pStudents.get(0).getProgramType())
+        .stream()
+        .collect(Collectors.groupingBy(AdmissionStudent::getReceiptId));
+
+    List<MutableAdmissionStudent> newTeletalkData = new ArrayList<>();
+
+    for(AdmissionStudent student: pStudents){
+      List<AdmissionStudent> recordsOfReceiptId = receiptIdMapTeletalkStudent.get(student.getReceiptId());
+      boolean found=false;
+      for(AdmissionStudent record: recordsOfReceiptId){
+        if((record.getQuota().equals(pQuota))){
+          found=true;
+          break;
+        }
+      }
+      if(!found){
+        PersistentAdmissionStudent newStudent = (PersistentAdmissionStudent) recordsOfReceiptId.get(0);
+        newStudent.setQuota(pQuota);
+        newTeletalkData.add(newStudent);
+      }
+    }
+    getContentManager().saveTaletalkData(newTeletalkData);
   }
 
   public Response saveMigrationData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
