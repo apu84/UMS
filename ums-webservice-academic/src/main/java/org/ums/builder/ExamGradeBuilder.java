@@ -140,30 +140,32 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
       StudentGradeDto grade = new StudentGradeDto();
       grade.setStudentId(jsonObject.getString("studentId"));
       if(courseInfo.getInt("course_typeId") == 1) { // For only theory courses
-        grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1
-            : Double.parseDouble(jsonObject.getString("quiz")));
+        grade
+            .setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? null
+                : Double.parseDouble(jsonObject.getString("quiz")));
         grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString(
-            "classPerformance").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject
+            "classPerformance").equalsIgnoreCase("")) ? null : Double.parseDouble(jsonObject
             .getString("classPerformance")));
         grade
-            .setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1
+            .setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? null
                 : Double.parseDouble(jsonObject.getString("partA")));
         grade.setPartAAddiInfo(jsonObject.getString("partAAddiInfo"));
         if(courseInfo.getInt("total_part") == 2) {
           grade
-              .setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1
+              .setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? null
                   : Double.parseDouble(jsonObject.getString("partB")));
           grade.setPartBAddiInfo(jsonObject.getString("partBAddiInfo"));
         }
       }
-      grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1
-          : Double.parseDouble(jsonObject.getString("total")));
+      grade
+          .setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? null
+              : Double.parseDouble(jsonObject.getString("total")));
       grade.setGradeLetter((jsonObject.getString("gradeLetter") == null || jsonObject.getString("gradeLetter")
           .equalsIgnoreCase("")) ? "" : jsonObject.getString("gradeLetter"));
       grade.setStatusId(jsonObject.getInt("statusId"));
       grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("statusId")]);
 
-      grade.setRegType(Integer.parseInt(jsonObject.getString("regType")));
+      grade.setRegType(jsonObject.getInt("regType"));
       // grade.setrec(RecheckStatus.values()[jsonObject.getInt("status")]);
       // grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("status")]);
 

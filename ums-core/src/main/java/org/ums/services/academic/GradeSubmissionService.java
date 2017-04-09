@@ -283,6 +283,8 @@ public class GradeSubmissionService {
       for(StudentGradeDto gradeDTO : gradeList) {
         try {
           hasError = validateMarks(hasError, gradeDTO, actualStatus);
+          if(hasError)
+            break;
         } catch(Exception ex) {
           throw new RuntimeException(ex);
         }
@@ -320,14 +322,14 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateQuiz(Boolean error, Double quiz, CourseRegType regType) {
-    if(quiz > 20 && regType == CourseRegType.REGULAR) {
+    if((regType != CourseRegType.CARRY && regType != CourseRegType.SPECIAL_CARRY) && quiz > 20) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validateClassPerformance(Boolean error, Double classPerf, CourseRegType regType) {
-    if(classPerf > 10 && regType == CourseRegType.REGULAR) {
+    if((regType != CourseRegType.CARRY && regType != CourseRegType.SPECIAL_CARRY) && classPerf > 10) {
       error = Boolean.TRUE;
     }
     return error;
@@ -352,9 +354,23 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
+    System.out.println(gradeDTO.getStudentId());
+    if(gradeDTO.getStudentId().equalsIgnoreCase("110105065")) {
+      System.out.println("--");
+    }
+    double aQuiz = gradeDTO.getQuiz() == null ? 0 : gradeDTO.getQuiz();
+    double aCPerformance = gradeDTO.getClassPerformance() == null ? 0 : gradeDTO.getClassPerformance();
+    double aPartA = gradeDTO.getPartA() == null ? 0 : gradeDTO.getPartA();
+    double aPartB = gradeDTO.getPartB() == null ? 0 : gradeDTO.getPartB();
+
+    double calculatedTotal = Math.round(aQuiz + aCPerformance + aPartA + aPartB);
+    double calculatedTotalForCarry = Math.round((calculatedTotal / 70) * 100);
+
     if(gradeDTO.getTotal() > 100
-        || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance() + gradeDTO.getPartA()
-            + (gradeDTO.getPartB() == null ? 0 : gradeDTO.getPartB()))) {
+        || (gradeDTO.getTotal() != calculatedTotal && (gradeDTO.getRegType() != CourseRegType.CARRY && gradeDTO
+            .getRegType() != CourseRegType.SPECIAL_CARRY))
+        || (gradeDTO.getTotal() != calculatedTotalForCarry && (gradeDTO.getRegType() == CourseRegType.CARRY || gradeDTO
+            .getRegType() == CourseRegType.SPECIAL_CARRY))) {
       error = Boolean.TRUE;
     }
     return error;

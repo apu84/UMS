@@ -48,7 +48,7 @@
             <h3 class="panel-title">Select Parameters</h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchGradeSubmissionTable" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchGradeSubmissionTable"  id="frmGradeSheetPramSelector">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -75,7 +75,7 @@
                         <div class="col-md-8">
                             <select name="examType" class="form-control required" data-ng-model="inputParams.exam_typeId" data-convert-to-number>
                                 <option  value="1">Semester Final</option>
-                                <!--<option  value="2">Clearance/Carry/Improvement</option>-->
+                                <option  value="2">Clearance/Carry/Improvement</option>
                             </select>
                         </div>
                     </div>
@@ -325,12 +325,14 @@
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}0"/>
+                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}0"
+                                           data-ng-disabled="checkDisable(response.regType)"/>
                                     <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}1"/>
+                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}1"
+                                           data-ng-disabled="checkDisable(response.regType)"/>
                                     <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
@@ -532,12 +534,14 @@
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)"  maxlength="5" tabindex="{{$index+1}}0"/>
+                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)"  maxlength="5" tabindex="{{$index+1}}0"
+                                           data-ng-disabled="checkDisable(response.regType)"/>
                                     <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)"  maxlength="5" tabindex="{{$index+1}}1"/>
+                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)"  maxlength="5" tabindex="{{$index+1}}1"
+                                           data-ng-disabled="checkDisable(response.regType)"/>
                                     <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
@@ -1208,17 +1212,24 @@
         document.getElementById('selection1').style.display='block';
         document.getElementById('selection2').style.display='none';
         $('.page-title.ng-binding').html("Grade Sheet Selection");
+
+        var scope = angular.element(document.getElementById("frmGradeSheetPramSelector")).scope();
+        scope.$apply(function () {
+            scope.fetchGradeSubmissionTable();
+        });
     }
     $('.page-title.ng-binding').html("Grade Sheet Selection");
     $("#btn_stat").focus();
 
     function calculateTotalAndGradeLetter(fieldId){
         var arr=fieldId.split("_");
+        var studentId = arr[arr.length-1];
         var scope = angular.element(document.getElementById(fieldId)).scope();
         scope.$apply(function () {
-            scope.calculateTotalAndGradeLetter(arr[arr.length-1]);
+            scope.calculateTotalAndGradeLetter(studentId, $("#reg_type_"+studentId).val());
         });
     }
+
 
     function handleKeyPress(event,elementId){
         var arr=elementId.split("_");

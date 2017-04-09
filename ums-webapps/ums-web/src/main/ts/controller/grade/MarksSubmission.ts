@@ -84,6 +84,7 @@ module ums {
     alertMessage: string;
     searchStudent: Function;
     clearSearch: Function;
+    checkDisable: Function;
   }
   interface IStudentMarks {
     studentId: string;
@@ -234,6 +235,7 @@ module ums {
 
       $scope.searchStudent = this.searchStudent.bind(this);
       $scope.clearSearch = this.clearSearch.bind(this);
+      $scope.checkDisable =this.checkDisable.bind(this)
 
       $scope.inputParams = {
         program_type: this.appConstants.programTypeEnum.UG,
@@ -520,7 +522,8 @@ module ums {
       */
     }
 
-    private calculateTotalAndGradeLetter(student_id: string): void {
+    private calculateTotalAndGradeLetter(student_id: string, reg_type : number): void {
+      console.log(student_id+"---"+reg_type);
       var total;
       var regType = $("#reg_type_" + student_id).val();
       if (this.$scope.courseType == "THEORY") {
@@ -535,7 +538,13 @@ module ums {
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
         total = quiz + class_perf + part_a + part_b;
-        total = Math.round(total);
+
+
+        console.log(reg_type);
+
+        total = this.decideTotal(total, reg_type);
+
+
         $("#total_" + student_id).val(String(total));
         var grade_letter: string = this.commonService.getGradeLetter(total, regType);
         $("#grade_letter_" + student_id).val(grade_letter);
@@ -567,6 +576,16 @@ module ums {
         $("#partDiv").show();
       }
       this.$scope.$broadcast("renderScrollableTable");
+    }
+
+    private decideTotal(total : number, regType : number) :number {
+      var totalMarks = 0;
+      if(regType == 3 || regType == 4)
+        totalMarks = Math.round((total/70) * 100);
+      else
+        totalMarks = Math.round(total);
+
+      return totalMarks;
     }
 
     private checkNumber(sNum): boolean {
@@ -629,11 +648,10 @@ module ums {
             gradeInExcel =  row[6];
           }
 
-
           if (totalInExcel == "") {
             try {
               total = Number(row[2]) + Number(row[3]) + Number(partAMarks) + Number(partBMarks);
-              total = Math.round(total);
+              total = this.decideTotal(total, regType);
               this.setFieldValue("total_" + studentId, total);
             } catch (Exception) {
             }
@@ -786,13 +804,6 @@ module ums {
               $("#part_a_" + student_id).css(border_error);
               row_error = true;
 
-              if(student_id == "120205071"){
-                console.log("--------A");
-                console.log(this.$scope.data.addiInfoArr);
-                console.log(part_a);
-                console.log(this.$scope.data.addiInfoArr.includes(part_a));
-              }
-
               if (part_a == "")
                 message = "Provide marks.";
               else if (!this.checkNumber(part_a) && !this.$scope.data.addiInfoArr.includes(part_a))
@@ -817,14 +828,6 @@ module ums {
 
                 $("#part_b_" + student_id).css(border_error);
                 row_error = true;
-
-                if(student_id == "120205071"){
-                  console.log("--------B");
-                  console.log(this.$scope.data.addiInfoArr);
-                  console.log(part_b);
-                  console.log(this.$scope.data.addiInfoArr.includes(part_b));
-                }
-
 
                 if (part_b == "")
                   message = "Provide marks.";
@@ -873,11 +876,17 @@ module ums {
           if(part_b == "Abs" || part_b == "Rep")
             lPartB= "0";
 
+          var cTotal = Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB);
+          var calculatedTotal = Math.round(cTotal);
+          var calculatedTotalForCarry = Math.round((cTotal/70)*100);
 
-          if (this.checkNumber(total) == false || Number(total) > 100 || Number(total) != Math.round(Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB))) {
+
+          if (this.checkNumber(total) == false || Number(total) > 100 ||
+              (Number(total) != calculatedTotal && reg_type != 3 && reg_type != 4) ||
+              (Number(total) != calculatedTotalForCarry  && (reg_type == 3 || reg_type == 4))
+          ) {
             $("#total_" + student_id).css(border_error);
             row_error = true;
-
 
             if (total == "")
               message = "Provide marks.";
@@ -885,7 +894,8 @@ module ums {
               message = "Not a valid Number.";
             else if (Number(total) > 100)
               message = "Maximum can be 100.";
-            else if (Number(total) != Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB))
+            else if ((Number(total) != calculatedTotal && (reg_type != 3 && reg_type != 4) ) ||
+                (Number(total) != calculatedTotalForCarry && (reg_type == 3 || reg_type == 4)))
               message = "Wrong total value.";
             this.showErrorTooltip("total", student_id, message);
 
@@ -1010,10 +1020,11 @@ module ums {
           studentMark = <IStudentMarks>{};
           studentId = currentStudent.studentId;
           studentMark.studentId = studentId;
-          studentMark.regType = $("#reg_type_" + studentId).val();
+          studentMark.regType = Number($("#reg_type_" + studentId).val());
           if (this.$scope.courseType == "THEORY") {
             studentMark.quiz = $("#quiz_" + studentId).val();
             studentMark.classPerformance = $("#class_perf_" + studentId).val();
+
 
             if($("#part_a_" + studentId).val() == "Abs" || $("#part_a_" + studentId).val() == "Rep"){
               studentMark.partA = "0";
@@ -1593,12 +1604,22 @@ module ums {
     //Styling for different type registrations
     private calculateStyle(regType: number): any {
       var style = {backgroundColor: ''};
-      if (regType == this.appConstants.regColorCode.CLEARANCE) style.backgroundColor = this.appConstants.regColorCode.CLEARANCE;
-      else if (regType == this.appConstants.regColorCode.CARRY) style.backgroundColor = this.appConstants.regColorCode.CARRY;
-      else if (regType == this.appConstants.regColorCode.SPECIAL_CARRY) style.backgroundColor = this.appConstants.regColorCode.SPECIAL_CARRY;
-      else if (regType == this.appConstants.regColorCode.IMPROVEMENT) style.backgroundColor = this.appConstants.regColorCode.IMPROVEMENT;
+      if (regType == this.appConstants.courseRegType.CLEARANCE) style.backgroundColor = this.appConstants.regColorCode.CLEARANCE;
+      else if (regType == this.appConstants.courseRegType.CARRY) style.backgroundColor = this.appConstants.regColorCode.CARRY;
+      else if (regType == this.appConstants.courseRegType.SPECIAL_CARRY) style.backgroundColor = this.appConstants.regColorCode.SPECIAL_CARRY;
+      else if (regType == this.appConstants.courseRegType.IMPROVEMENT) style.backgroundColor = this.appConstants.regColorCode.IMPROVEMENT;
       return style;
     }
+
+    //Disable classTest and Class Attendance entry field for CCI Exam
+    private checkDisable(regType: number): any {
+      if (regType != this.appConstants.courseRegType.REGULAR)
+        return true;
+      else
+        return false;
+    }
+
+
 
 
     private colorRow(colorCode: string, studentId: string): void {

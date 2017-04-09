@@ -1008,10 +1008,18 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
                 || actualStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
                 || actualStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
                 || actualStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
-              ps.setDouble(7, gradeDto.getQuiz());
-              ps.setDouble(8, gradeDto.getClassPerformance());
+              if(gradeDto.getQuiz() == null)
+                ps.setNull(7, Types.NULL);
+              else
+                ps.setDouble(7, gradeDto.getQuiz());
+
+              if(gradeDto.getClassPerformance() == null)
+                ps.setNull(8, Types.NULL);
+              else
+                ps.setDouble(8, gradeDto.getClassPerformance());
+
               ps.setDouble(9, gradeDto.getPartA());
-              if(gradeDto.getPartB() == null || gradeDto.getPartB() == -1)
+              if(gradeDto.getPartB() == null)
                 ps.setNull(10, Types.NULL);
               else
                 ps.setDouble(10, gradeDto.getPartB());
