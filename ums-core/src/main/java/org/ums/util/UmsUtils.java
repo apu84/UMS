@@ -2,6 +2,9 @@ package org.ums.util;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -114,5 +117,107 @@ public class UmsUtils {
 
   public static String join(String s, Object... a) {
     return a.length == 0 ? "" : a[0] + (a.length == 1 ? "" : s + join(s, Arrays.copyOfRange(a, 1, a.length)));
+  }
+
+  public static String getWhereClause(String pFilter) {
+    String where = "";
+    try {
+      String abc = "{\"rules\":" + pFilter + "}";
+      JSONParser parser = new JSONParser();
+      Object obj = parser.parse(abc);
+
+      JSONObject filters = (JSONObject) obj;
+      JSONArray rules = (JSONArray) filters.get("rules");
+
+      String groupOperation = "and";
+      List<String> whereArray = new ArrayList<String>();
+
+      for(Object rule_ : rules) {
+        JSONObject rule = (JSONObject) rule_;
+        String fieldName = (String) rule.get("fieldName");
+        String fieldData = (String) rule.get("fieldValue");
+        String op = (String) rule.get("operator");
+        String fieldOperation = "";
+
+        if(op.equalsIgnoreCase("eq")) {
+
+          if(fieldName.contains("date"))
+            fieldOperation = " = to_date('" + fieldData + "','dd-MM-YYYY')";
+          else
+            fieldOperation = " = '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("ne"))
+          fieldOperation = " != '" + fieldData + "'";
+
+        else if(op.equalsIgnoreCase("lt")) {
+          if(fieldName.contains("date"))
+            fieldOperation = " < to_date('" + fieldData + "','dd-MM-YYYY')";
+          else
+            fieldOperation = " < '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("gt")) {
+          if(fieldName.contains("date"))
+            fieldOperation = " > to_date('" + fieldData + "','dd-MM-YYYY')";
+          else
+            fieldOperation = " > '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("le")) {
+          if(fieldName.contains("date"))
+            fieldOperation = " <= to_date('" + fieldData + "','dd-MM-YYYY')";
+          else
+            fieldOperation = " <= '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("ge")) {
+          if(fieldName.contains("date"))
+            fieldOperation = " >= to_date('" + fieldData + "','dd-MM-YYYY')";
+          else
+            fieldOperation = " >= '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("eqMonth")) {
+
+          fieldOperation = " = " + fieldData + "";
+        }
+        else if(op.equalsIgnoreCase("eqYear")) {
+
+          fieldOperation = " = '" + fieldData + "'";
+        }
+        else if(op.equalsIgnoreCase("nu"))
+          fieldOperation = " = '' ";
+        else if(op.equalsIgnoreCase("nn"))
+          fieldOperation = " != '' ";
+        else if(op.equalsIgnoreCase("in"))
+          fieldOperation = " IN (" + fieldData + ")";
+        else if(op.equalsIgnoreCase("ni"))
+          fieldOperation = " NOT IN '" + fieldData + "";
+        else if(op.equalsIgnoreCase("bw"))
+          fieldOperation = " LIKE '" + fieldData + "%'";
+        else if(op.equalsIgnoreCase("bn"))
+          fieldOperation = " NOT LIKE '" + fieldData + "%'";
+        else if(op.equalsIgnoreCase("ew"))
+          fieldOperation = " LIKE '%" + fieldData + "'";
+        else if(op.equalsIgnoreCase("en"))
+          fieldOperation = " Not LIKE '%" + fieldData + "'";
+        else if(op.equalsIgnoreCase("cn"))
+          fieldOperation = " LIKE '%" + fieldData + "%'";
+        else if(op.equalsIgnoreCase("nc"))
+          fieldOperation = " NOT LIKE '%" + fieldData + "%'";
+
+        if(fieldOperation != "") {
+          whereArray.add(fieldName + " " + fieldOperation);
+        }
+      }
+      String[] array = whereArray.toArray(new String[whereArray.size()]);
+      if(whereArray.size() > 0) {
+        where += UmsUtils.join(" " + groupOperation + " ", array);
+      }
+      else {
+        where = "";
+      }
+      where = where.equals("") ? "" : " Where " + where;
+    } catch(Exception ex) {
+
+    }
+    return where;
+
   }
 }

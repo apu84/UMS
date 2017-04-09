@@ -28,6 +28,9 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("countryId", pReadOnly.getCountryId());
     pBuilder.add("countryName", mPublisherManager.get(pReadOnly.getCountryId()).getName());
+    pBuilder.add("contactPerson", pReadOnly.getContactPerson());
+    pBuilder.add("phoneNumber", pReadOnly.getPhoneNumber());
+    pBuilder.add("emailAddress", pReadOnly.getEmailAddress());
     pBuilder.add("lastModified", UmsUtils.nullConversion(pReadOnly.getLastModified()));
 
   }
@@ -38,6 +41,9 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
     pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setName(pJsonObject.getString("name"));
     pMutable.setCountryId(pJsonObject.getInt("countryId"));
+    pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
+    pMutable.setPhoneNumber(pJsonObject.getString("phoneNumber"));
+    pMutable.setEmailAddress(pJsonObject.getString("emailAddress"));
     pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

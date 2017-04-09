@@ -2,7 +2,8 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.resource.helper.SupplierResourceHelper;
+import org.ums.resource.helper.ContributorResourceHelper;
+import org.ums.resource.helper.PublisherResourceHelper;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
@@ -10,20 +11,18 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Ifti on 04-Feb-17.
  */
 
 @Component
-@Path("supplier")
+@Path("contributor")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SupplierResource extends MutableSupplierResource {
+public class ContributorResource extends MutableContributorResource {
   @Autowired
-  SupplierResourceHelper mResourceHelper;
+  ContributorResourceHelper mResourceHelper;
 
   @GET
   @Path("/all")
@@ -44,4 +43,5 @@ public class SupplierResource extends MutableSupplierResource {
       final @PathParam("order") String pOrder, final @PathParam("filter") String pFilter) throws Exception {
     return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder, UmsUtils.getWhereClause(pFilter), mUriInfo);
   }
+
 }

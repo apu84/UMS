@@ -7,6 +7,8 @@ import org.ums.cache.CacheFactory;
 import org.ums.cache.LibraryCache;
 import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.*;
+import org.ums.domain.model.immutable.library.Contributor;
+import org.ums.enums.library.ContributorCategory;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.LibraryManager;
 import org.ums.manager.common.CountryManager;
@@ -72,5 +74,12 @@ public class LibraryContext {
     ItemCache itemCache = new ItemCache(mCacheFactory.getCacheManager());
     itemCache.setManager(new PersistentItemDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return itemCache;
+  }
+
+  @Bean
+  ContributorManager contributorManager() {
+    ContributorCache contributorCache = new ContributorCache(mCacheFactory.getCacheManager());
+    contributorCache.setManager(new PersistentContributorDao(mTemplateFactory.getLmsJdbcTemplate()));
+    return contributorCache;
   }
 }

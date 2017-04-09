@@ -3,16 +3,16 @@
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <data-table-paginator-wrapper dataservice="contributorService"  datanotify="notifyService"
+            <data-table-paginator-wrapper dataservice="publisherService"  datanotify="notifyService"
                                           ipp="10"
-                                          tableprefix="contributor">
+                                          tableprefix="publisher">
                 <div class="modal-header">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
                     <h4 id="modal-default-label" class="modal-title">Publishers</h4></div>
                 <div class="modal-body" style="padding: 0px;min-height: 480px;">
                     <div class="panel">
                         <div class="panel-heading"> <!--start of panel-heading -->
-                            <p class="alignLeft" id="pageTitle_contributor" style="float: left;">Search Publisher</p>
+                            <p class="alignLeft" id="pageTitle_publisher" style="float: left;">Search Publisher</p>
                             <p class="alignRight" style="float: right">
                                 <a href="javascript:;" class="btn btn-xs btn-default singleAnchor" data-ng-click="showSearchPanel()" style="background-color: black;">
                                     <i class="fa fa fa-search" style="color: white;"></i>
@@ -55,19 +55,19 @@
                                     </fieldset>
 
                                     <div class="btn pull-right" style="padding: 0px;margin-right: 2.5%;">
-                                        <button class="btn btn-default" value="search_contributor" data-ng-click="search();">Search</button>
+                                        <button class="btn btn-default" value="search_publisher" data-ng-click="search();">Search</button>
                                     </div>
                                 </div>
-                                <div id="listPanel_contributor" style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
-                                    <!-- Start of Contributor list -->
+                                <div id="listPanel_publisher" style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
+                                    <!-- Start of Publisher list -->
                                     <div class="row">
                                         <div class="col-md-12" >
 
-                                            <button data-ng-click="pageChanged(1)" id="btnReloadContributor" data-ng-show="false"></button>
+                                            <button data-ng-click="pageChanged(1)" id="btnReloadPublisher" data-ng-show="false"></button>
                                             <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
                                                 <thead>
                                                 <tr>
-                                                    <th class="header" column-sorter="sort('name')">Contributor Name</th>
+                                                    <th class="header" column-sorter="sort('name')">Publisher Name</th>
                                                 </tr>
                                                 </tr></thead>
                                                 <tbody>
@@ -91,13 +91,13 @@
                                             </div>
 
                                         </div>
-                                        <!-- End of contributor list -->
+                                        <!-- End of publisher list -->
                                     </div>
                                 </div>
 
 
-                                <div id="entryPanel_contributor" style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
-                                    <form action="" class="form-horizontal"  data-onvalidate="saveRecord" data-validate=""  id="contributorForm">
+                                <div id="entryPanel_publisher" style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
+                                    <form action="" class="form-horizontal"  data-onvalidate="saveRecord" data-validate=""  id="publisherForm">
                                         <div class="form-body pal">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -111,38 +111,28 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-envelope"></i><input
-                                                                id="inputEmail" type="text" placeholder="E-mail"  class="form-control" data-ng-model="record.email" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="contactPerson" type="text" placeholder="Contact Person"  class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-user-circle"></i><input
-                                                                id="contactPerson" type="text" placeholder="Contact Person"
-                                                                class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
+                                                        <div class="input-icon"><i class="fa fa-envelope"></i><input
+                                                                id="phoneNumber" type="text" placeholder="Phone"  class="form-control" data-ng-model="record.phoneNumber" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-phone"></i><input
-                                                                id="phone" type="text" placeholder="Phone"
-                                                                class="form-control" data-ng-model="record.contactNumber" ng-disabled="data.readOnlyMode"/></div>
+                                                        <div class="input-icon"><i class="fa fa-envelope"></i><input
+                                                                id="emailAddress" type="text" placeholder="E-mail"  class="form-control" data-ng-model="record.emailAddress" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr/>
 
-                                            <div class="form-group"><textarea rows="4" placeholder="Additional info"
-                                                                              class="form-control" data-ng-model="record.note" ng-disabled="data.readOnlyMode"></textarea></div>
-
-                                            <div class="form-group"><input id="inputAddress" type="text"
-                                                                           placeholder="Address Information" class="form-control" data-ng-model="record.address" ng-disabled="data.readOnlyMode"/>
-                                            </div>
-
-                                            <button type="button" class="btn btn-dark btn-success" id="btn_addContributor" data-ng-show="false"></button>
+                                            <button type="button" class="btn btn-dark btn-success" id="btn_addPublisher" data-ng-show="false"></button>
                                         </div>
 
                                     </form>
@@ -151,10 +141,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="margin-top: 10px;" id="footer_contributor">
-                    <button type="button" class="btn btn-dark btn-success"  value="add_contributor" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
-                    <button type="button" class="btn btn-danger btn-success"  value="delete_contributor" data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete</button>
-                    <button type="button" class="btn btn-success btn-success"  value="add_contributor" onclick="$('#btn_addContributor').click();" data-ng-show="data.showSave">Save</button>
+                <div class="modal-footer" style="margin-top: 10px;" id="footer_publisher">
+                    <button type="button" class="btn btn-dark btn-success"  value="add_publisher" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
+                    <button type="button" class="btn btn-danger btn-success"  value="delete_publisher" data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete</button>
+                    <button type="button" class="btn btn-success btn-success"  value="add_publisher" onclick="$('#btn_addPublisher').click();" data-ng-show="data.showSave">Save</button>
                     <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                 </div>
             </data-table-paginator-wrapper>

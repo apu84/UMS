@@ -2,12 +2,17 @@ package org.ums.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.ContributorBuilder;
 import org.ums.builder.PublisherBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Publisher;
 import org.ums.domain.model.immutable.library.Supplier;
+import org.ums.domain.model.mutable.library.MutableContributor;
 import org.ums.domain.model.mutable.library.MutablePublisher;
+import org.ums.manager.library.ContributorManager;
 import org.ums.manager.library.PublisherManager;
+import org.ums.persistent.model.library.PersistentContributor;
 import org.ums.persistent.model.library.PersistentPublisher;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.SemesterResource;
@@ -26,36 +31,36 @@ import java.util.List;
  * Created by Ifti on 04-Feb-17.
  */
 @Component
-public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePublisher, Integer>
+public class ContributorResourceHelper extends ResourceHelper<Contributor, MutableContributor, Long>
 
 {
 
   @Autowired
-  private PublisherManager mManager;
+  private ContributorManager mManager;
 
   @Autowired
-  private PublisherBuilder mBuilder;
+  private ContributorBuilder mBuilder;
 
   @Override
-  public PublisherManager getContentManager() {
+  public ContributorManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public PublisherBuilder getBuilder() {
+  public ContributorBuilder getBuilder() {
     return mBuilder;
   }
 
   @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
-    MutablePublisher mutablePublisher = new PersistentPublisher();
+    MutableContributor mutableContributor = new PersistentContributor();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutablePublisher, pJsonObject, localCache);
-    mutablePublisher.create();
+    getBuilder().build(mutableContributor, pJsonObject, localCache);
+    mutableContributor.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
-            .build(mutablePublisher.getId());
+            .build(mutableContributor.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -63,14 +68,14 @@ public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePu
 
   public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder,
       final String pWhereClause, final UriInfo pUriInfo) {
-    List<Publisher> publishers = getContentManager().getAllForPagination(pItemPerPage, pPage, pWhereClause, pOrder);
+    List<Contributor> contributors = getContentManager().getAllForPagination(pItemPerPage, pPage, pWhereClause, pOrder);
     int total = getContentManager().getTotalForPagination(pWhereClause);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(Publisher publisher : publishers) {
-      children.add(toJson(publisher, pUriInfo, localCache));
+    for(Contributor contributor : contributors) {
+      children.add(toJson(contributor, pUriInfo, localCache));
     }
     object.add("entries", children);
     object.add("total", total);
@@ -81,7 +86,7 @@ public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePu
   }
 
   @Override
-  protected String getETag(Publisher pReadonly) {
+  protected String getETag(Contributor pReadonly) {
     return UmsUtils.nullConversion(pReadonly.getLastModified());
   }
 

@@ -31,7 +31,7 @@
                                         <ul>
                                             <li style="list-style-type: none;margin-top:10px; ">
                                                 <label style="width:105px;text-align: right;"><b>Search by name:</b> </label>
-                                                <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = 'name'" />
+                                                <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = &quot;(first_name||' '|| middle_name || ' '|| last_name)&quot;" />
                                                 <select name="operator" style="width:100px;" data-ng-model="filterlist[0].operator" data-ng-init="filterlist[0].operator = 'cn'">
                                                     <option value="cn">contains</option>
                                                     <option value="start">starts with</option>
@@ -75,7 +75,7 @@
                                                     data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
 
 
-                                                    <td style="text-align: left;">{{ record.name }}
+                                                    <td style="text-align: left;">{{ record.first_name }} {{ record.middle_name }} {{ record.lat_name }}
                                                         <div style="float: right;display: none;" id="actionPanel{{$index}}">
                                                             <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>
                                                             <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="editRecord(record.id)"></i>
