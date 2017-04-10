@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
-import org.ums.cache.registrar.Employee.*;
+import org.ums.cache.registrar.employee.*;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.registrar.Employee.*;
-import org.ums.persistent.dao.registrar.Employee.*;
+import org.ums.manager.registrar.employee.*;
+import org.ums.persistent.dao.registrar.employee.*;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration

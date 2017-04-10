@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.employee.*;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.registrar.Employee.AcademicInformation;
-import org.ums.domain.model.immutable.registrar.Employee.EmployeeInformation;
-import org.ums.domain.model.mutable.registrar.Employee.*;
-import org.ums.manager.registrar.Employee.*;
-import org.ums.persistent.model.registrar.Employee.*;
+import org.ums.domain.model.immutable.registrar.employee.AcademicInformation;
+import org.ums.domain.model.immutable.registrar.employee.EmployeeInformation;
+import org.ums.domain.model.mutable.registrar.employee.*;
+import org.ums.manager.registrar.employee.*;
+import org.ums.persistent.model.registrar.employee.*;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Component
 public class EmployeeInformationResourceHelper extends
-    ResourceHelper<EmployeeInformation, MutableEmployeeInformation, Integer> {
+        ResourceHelper<EmployeeInformation, MutableEmployeeInformation, Integer> {
 
   private static final Logger mLoger = LoggerFactory.getLogger(EmployeeInformationResourceHelper.class);
 
@@ -47,65 +47,47 @@ public class EmployeeInformationResourceHelper extends
   TrainingInformationManager mTrainingInformationManager;
 
   @Autowired
-  AcademicInformationBuilder mAcademicInformationBuilder;
-
-  @Autowired
-  AwardInformationBuilder mAwardInformationBuilder;
-
-  @Autowired
   EmployeeInformationBuilder mEmployeeInformationBuilder;
-
-  @Autowired
-  ExperienceInformationBuilder mExperienceInformationBuilder;
-
-  @Autowired
-  PersonalInformationBuilder mPersonalInformationBuilder;
-
-  @Autowired
-  PublicationInformationBuilder mPublicationInformationBuilder;
-
-  @Autowired
-  TrainingInformationBuilder mTrainingInformationBuilder;
 
   public JsonObject getEmployeeAcademicInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeeAwardInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeeInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeeExperienceInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeePersonalInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeePublicationInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
   public JsonObject getEmployeeTrainingInformation(final int pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation =
-        mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+            mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     return jsonCreator(pAcademicInformation, pUriInfo);
   }
 
@@ -115,17 +97,15 @@ public class EmployeeInformationResourceHelper extends
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject JsonObject = entries.getJsonObject(0);
-    System.out.println("Json: " + JsonObject);
 
     // MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
     // JsonObject academicJsonObject = entries.getJsonObject(0).getJsonObject("academic");
-    // mAcademicInformationBuilder.build(academicInformation, academicJsonObject, localCache);
+    // mEmployeeInformationBuilder.build(academicInformation, academicJsonObject, localCache);
     // mAcademicInformationManager.saveAcademicInformation(academicInformation);
-    //
+
     // MutableAwardInformation awardInformation = new PersistentAwardInformation();
     // JsonObject awardJsonObject = entries.getJsonObject(0).getJsonObject("award");
-    // mAwardInformationBuilder.build(awardInformation, awardJsonObject, localCache);
+    // mEmployeeInformationBuilder.build(awardInformation, awardJsonObject, localCache);
     // mAwardInformationManager.saveAwardInformation(awardInformation);
     //
     // MutableEmployeeInformation employeeInformation = new PersistentEmployeeInformation();
@@ -135,24 +115,24 @@ public class EmployeeInformationResourceHelper extends
     //
     // MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
     // JsonObject experienceJsonObject = entries.getJsonObject(0).getJsonObject("experience");
-    // mExperienceInformationBuilder.build(experienceInformation, experienceJsonObject, localCache);
+    // mEmployeeInformationBuilder.build(experienceInformation, experienceJsonObject, localCache);
     // mExperienceInformationManager.saveExperienceInformation(experienceInformation);
     //
-    // MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-    // JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    // mPersonalInformationBuilder.build(personalInformation, personalJsonObject, localCache);
-    // mPersonalInformationManager.savePersonalInformation(personalInformation);
+    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
+    mEmployeeInformationBuilder.build(personalInformation, personalJsonObject, localCache);
+    mPersonalInformationManager.savePersonalInformation(personalInformation);
     //
     // MutablePublicationInformation publicationInformation = new
     // PersistentPublicationInformation();
     // JsonObject publicationJsonObject = entries.getJsonObject(0).getJsonObject("publication");
-    // mPublicationInformationBuilder.build(publicationInformation, publicationJsonObject,
+    // mEmployeeInformationBuilder.build(publicationInformation, publicationJsonObject,
     // localCache);
     // mPublicationInformationManager.savePublicationInformation(publicationInformation);
     //
     // MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
     // JsonObject trainingJsonObject = entries.getJsonObject(0).getJsonObject("training");
-    // mTrainingInformationBuilder.build(trainingInformation, trainingJsonObject, localCache);
+    // mEmployeeInformationBuilder.build(trainingInformation, trainingJsonObject, localCache);
     // mTrainingInformationManager.saveTrainingInformation(trainingInformation);
 
     Response.ResponseBuilder builder = Response.created(null);
@@ -168,7 +148,7 @@ public class EmployeeInformationResourceHelper extends
 
     for(AcademicInformation academicInformation : pAcademicInformation) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      mAcademicInformationBuilder.build(jsonObject, academicInformation, pUriInfo, localCache);
+      mEmployeeInformationBuilder.build(jsonObject, academicInformation, pUriInfo, localCache);
       children.add(jsonObject);
     }
     jObject.add("entries", children);

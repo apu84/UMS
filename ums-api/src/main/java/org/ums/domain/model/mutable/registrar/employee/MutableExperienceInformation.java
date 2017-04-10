@@ -1,0 +1,20 @@
+package org.ums.domain.model.mutable.registrar.employee;
+
+import org.ums.domain.model.common.Editable;
+import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.registrar.employee.ExperienceInformation;
+import org.ums.domain.model.mutable.MutableLastModifier;
+
+public interface MutableExperienceInformation extends ExperienceInformation, Editable<Integer>,
+    MutableIdentifier<Integer>, MutableLastModifier {
+
+  void setEmployeeId(final int pEmployeeId);
+
+  void setExperienceInstitute(final String pExperienceInstitute);
+
+  void setDesignation(final String pDesignation);
+
+  void setExperienceFromDate(final String pExperienceFromDate);
+
+  void setExperienceToDate(final String pExperienceToDate);
+}
