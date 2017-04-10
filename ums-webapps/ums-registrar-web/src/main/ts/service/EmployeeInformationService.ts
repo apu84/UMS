@@ -10,7 +10,7 @@ module ums{
         }
 
         public saveEmployeeInformation(json: any): ng.IPromise<any> {
-            var url = "";
+            var url = "registrar/employee/saveEmployeeInformation";
             var defer = this.$q.defer();
             this.httpClient.post(url, json, 'application/json')
                 .success(() => {

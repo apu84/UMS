@@ -111,36 +111,49 @@ public class EmployeeInformationResourceHelper extends
 
   @Transactional
   public Response saveEmployeeInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+    System.out.println("I am in saveEmployeeInformation(). And it is a helper Helper");
+
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject JsonObject = entries.getJsonObject(0);
+    System.out.println("Json: " + JsonObject);
 
-    MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
-    JsonObject academicJsonObject = entries.getJsonObject(0).getJsonObject("academic");
-    System.out.println("My Json Object For employee Academic: " + academicJsonObject);
-
-    MutableAwardInformation awardInformation = new PersistentAwardInformation();
-    JsonObject awardJsonObject = entries.getJsonObject(0).getJsonObject("award");
-    System.out.println("My Json Object For employee Award: " + awardJsonObject);
-
-    MutableEmployeeInformation employeeInformation = new PersistentEmployeeInformation();
-    JsonObject employeeJsonObject = entries.getJsonObject(0).getJsonObject("employee");
-    System.out.println("My Json Object For employee: " + employeeJsonObject);
-
-    MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
-    JsonObject experienceJsonObject = entries.getJsonObject(0).getJsonObject("experience");
-    System.out.println("My Json Object For employee Experience: " + experienceJsonObject);
-
-    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    System.out.println("My Json Object For employee Personal: " + personalJsonObject);
-
-    MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
-    JsonObject publicationJsonObject = entries.getJsonObject(0).getJsonObject("publication");
-    System.out.println("My Json Object For employee Publication: " + publicationJsonObject);
-
-    MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
-    JsonObject trainingJsonObject = entries.getJsonObject(0).getJsonObject("training");
-    System.out.println("My Json Object For employee Training: " + trainingJsonObject);
+    // MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
+    // JsonObject academicJsonObject = entries.getJsonObject(0).getJsonObject("academic");
+    // mAcademicInformationBuilder.build(academicInformation, academicJsonObject, localCache);
+    // mAcademicInformationManager.saveAcademicInformation(academicInformation);
+    //
+    // MutableAwardInformation awardInformation = new PersistentAwardInformation();
+    // JsonObject awardJsonObject = entries.getJsonObject(0).getJsonObject("award");
+    // mAwardInformationBuilder.build(awardInformation, awardJsonObject, localCache);
+    // mAwardInformationManager.saveAwardInformation(awardInformation);
+    //
+    // MutableEmployeeInformation employeeInformation = new PersistentEmployeeInformation();
+    // JsonObject employeeJsonObject = entries.getJsonObject(0).getJsonObject("employee");
+    // mEmployeeInformationBuilder.build(employeeInformation, employeeJsonObject, localCache);
+    // mEmployeeInformationManager.saveEmployeeInformation(employeeInformation);
+    //
+    // MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
+    // JsonObject experienceJsonObject = entries.getJsonObject(0).getJsonObject("experience");
+    // mExperienceInformationBuilder.build(experienceInformation, experienceJsonObject, localCache);
+    // mExperienceInformationManager.saveExperienceInformation(experienceInformation);
+    //
+    // MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+    // JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
+    // mPersonalInformationBuilder.build(personalInformation, personalJsonObject, localCache);
+    // mPersonalInformationManager.savePersonalInformation(personalInformation);
+    //
+    // MutablePublicationInformation publicationInformation = new
+    // PersistentPublicationInformation();
+    // JsonObject publicationJsonObject = entries.getJsonObject(0).getJsonObject("publication");
+    // mPublicationInformationBuilder.build(publicationInformation, publicationJsonObject,
+    // localCache);
+    // mPublicationInformationManager.savePublicationInformation(publicationInformation);
+    //
+    // MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
+    // JsonObject trainingJsonObject = entries.getJsonObject(0).getJsonObject("training");
+    // mTrainingInformationBuilder.build(trainingInformation, trainingJsonObject, localCache);
+    // mTrainingInformationManager.saveTrainingInformation(trainingInformation);
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
