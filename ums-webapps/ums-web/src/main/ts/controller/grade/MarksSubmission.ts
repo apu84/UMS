@@ -460,6 +460,7 @@ module ums {
       }
 
 
+
       $('.page-title.ng-binding').html("Online Grade Preparation/Scrutiny/Approval");
 
       this.$scope.toggleColumn = true;
