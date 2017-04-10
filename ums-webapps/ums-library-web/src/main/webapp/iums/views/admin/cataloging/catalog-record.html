@@ -234,8 +234,15 @@
             </label>
             <div class="col-md-4" id="ami{{$index}}">
                 <div  data-ng-if="!data.readOnlyMode">
+
+                    <!--
                     <input type="text" class="form-control required" style="width: 99%"  data-select="select2"  page="true" id="contributorName{{$index}}" name="contributorName{{$index}}"
                            data-ng-model="abc"   datas="contributors"  placeholder="Select a Name" />
+                    -->
+                    <input type="text" class="form-control required" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showContributorSelect2"
+                           datas="contributorList"  placeholder="Select a Contributor" data-ng-model="record.imprint.publisher"  id="contributorName{{$index}}" name="contributorName{{$index}}"/>
+
+
                 </div>
 
                 <div  data-ng-if="data.readOnlyMode" style="padding-top: 6px;">
@@ -256,8 +263,13 @@
                 &nbsp;&nbsp;<i class="fa fa-wpforms  fa-lg" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher"></i>
             </label>
             <div class="col-md-4">
+                <!--
                 <select  class="form-control" data-select="select2" data-ng-model="abc" placeholder="Select a Publisher" style="width:99%;" id="publisher" name="publisher">
                 </select>
+                -->
+                <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showPublisherSelect2"
+                       datas="publisherList"  placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"  id="publisher" name="publisher"/>
+
             </div>
             <label class="col-md-1 control-label" for="placeOfPublication">PoP</label>
             <div class="col-md-2">

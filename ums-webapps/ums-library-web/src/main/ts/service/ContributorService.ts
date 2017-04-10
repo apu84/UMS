@@ -33,6 +33,12 @@ module ums{
     private fetchDataForPaginationTable(): Function {
       return super.bFetchDataForPaginationTable("contributor","(first_name||' '|| middle_name || ' '|| last_name)");
     }
+
+    public fetchAllContributors() : ng.IPromise<any> {
+      var resourceUrl = "contributor/all";
+      return super.bGetAllRecord(resourceUrl);
+    }
+
   }
   UMS.service("contributorService",ContributorService);
 }

@@ -77,5 +77,17 @@ module ums{
       };
     }
 
+    public bGetAllRecord(resourceUrl : string): ng.IPromise<any> {
+      var defer = this.b$q.defer();
+      this.bHttpClient.get(resourceUrl, 'application/json',
+          (json: any, etag: string) => {
+            defer.resolve(json);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
+
   }
   }

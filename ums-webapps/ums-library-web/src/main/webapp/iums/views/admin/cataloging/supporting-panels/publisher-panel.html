@@ -72,11 +72,11 @@
                                                 </tr></thead>
                                                 <tbody>
                                                 <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total"
-                                                    data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
+                                                    data-ng-mouseover="showActionPanel('publisherActionPanel',$index)" data-ng-mouseleave="hideActionPanel('publisherActionPanel',$index)">
 
 
                                                     <td style="text-align: left;">{{ record.name }}
-                                                        <div style="float: right;display: none;" id="actionPanel{{$index}}">
+                                                        <div style="float: right;display: none;" id="publisherActionPanel{{$index}}">
                                                             <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>
                                                             <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="editRecord(record.id)"></i>
                                                         </div>

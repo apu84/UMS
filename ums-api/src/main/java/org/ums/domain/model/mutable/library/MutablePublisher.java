@@ -23,5 +23,4 @@ public interface MutablePublisher extends Publisher, Editable<Integer>, MutableL
 
   void setEmailAddress(final String pEmailAddress);
 
-
 }

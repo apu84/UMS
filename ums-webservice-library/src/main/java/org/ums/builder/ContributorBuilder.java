@@ -31,7 +31,8 @@ public class ContributorBuilder implements Builder<Contributor, MutableContribut
     pBuilder.add("first_name", pReadOnly.getFirstName());
     pBuilder.add("middle_name", pReadOnly.getMiddleName());
     pBuilder.add("last_name", pReadOnly.getLastName());
-    // pBuilder.add("name", pReadOnly.getName());
+    pBuilder.add("text", pReadOnly.getFirstName()+ ' ' + pReadOnly.getMiddleName()+ ' ' + pReadOnly.getLastName() );
+     pBuilder.add("name",  pReadOnly.getFirstName()+ ' ' + pReadOnly.getMiddleName()+ ' ' + pReadOnly.getLastName());
     // pBuilder.add("countryId", pReadOnly.getCountryId());
     // pBuilder.add("countryName", mContributorManager.get(pReadOnly.getCountryId()).getName());
     pBuilder.add("lastModified", UmsUtils.nullConversion(pReadOnly.getLastModified()));

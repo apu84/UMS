@@ -26,6 +26,7 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
       final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getName());
+    pBuilder.add("text", pReadOnly.getName());
     pBuilder.add("address", UmsUtils.nullConversion(pReadOnly.getAddress()));
     pBuilder.add("contactPerson", UmsUtils.nullConversion(pReadOnly.getContactPerson()));
     pBuilder.add("contactNumber", UmsUtils.nullConversion(pReadOnly.getContactNumber()));

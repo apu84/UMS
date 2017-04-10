@@ -1,13 +1,10 @@
 module ums {
 
-  export interface IContributorEntry {
+  export interface IContributor {
     viewOrder: number;
     role: number;
     id: string,
     name: string;
-  }
-  export interface IContributorDD {
-    id: string;
     text: string;
   }
   export interface INoteEntry {
@@ -69,7 +66,7 @@ module ums {
     classNo: string;
     callDate: string;
     authorMark: string;
-    contributorList: Array<IContributorEntry>; //need separate channel
+    contributorList: Array<IContributor>; //need separate channel
     imprint: IImprint;
     physicalDescription: IPhysicalDescription;
     subjectList: Array<ISubjectEntry>;
@@ -95,6 +92,7 @@ module ums {
   }
   export interface ISupplier {
     id: string;
+    text: string;
     name: string;
     email: string;
     contactPerson: string;
@@ -102,4 +100,16 @@ module ums {
     address: string,
     note: string;
   }
+
+  export interface IPublisher {
+    id: string;
+    text: string;
+    name: string;
+    countryId: string;
+    countryName: string;
+    contactPerson: string;
+    phoneNumber: string,
+    emailAddress: string;
+  }
+
 }
