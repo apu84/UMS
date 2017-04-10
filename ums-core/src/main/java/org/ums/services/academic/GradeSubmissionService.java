@@ -354,10 +354,10 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
-//    System.out.println(gradeDTO.getStudentId());
-//    if(gradeDTO.getStudentId().equalsIgnoreCase("120206075")) {
-//      System.out.println("--");
-//    }
+    // System.out.println(gradeDTO.getStudentId());
+    // if(gradeDTO.getStudentId().equalsIgnoreCase("120206075")) {
+    // System.out.println("--");
+    // }
     double aQuiz = gradeDTO.getQuiz() == null ? 0 : gradeDTO.getQuiz();
     double aCPerformance = gradeDTO.getClassPerformance() == null ? 0 : gradeDTO.getClassPerformance();
     double aPartA = gradeDTO.getPartA() == null ? 0 : gradeDTO.getPartA();

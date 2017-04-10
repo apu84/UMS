@@ -739,7 +739,7 @@
                 <!-- End of Approved Grades -->
 
                 <!-- Start of Accepted Grades -->
-                <div ng-if="acceptedGrades.length>0">
+                <div ng-if="acceptedGrades.length>0 || recheckAcceptedGrades.length>0">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle"></i>
                         <span style="padding-right: 100px;">Accepted(by CoE) Grades<span class="badge badge-total pull-right">{{acceptedGrades.length}}</span></span>
@@ -808,7 +808,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="response in recheckAcceptedGrades" id="recheck_accepted_{{response.studentId}}">
+                                <tr ng-repeat="response in recheckAcceptedGrades" id="recheck_accepted_{{response.studentId}}" data-emit-last-repeater-element>
                                     <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
                                     <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                     <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
@@ -858,7 +858,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="response in recheckAcceptedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
+                                <tr ng-repeat="response in recheckAcceptedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
                                     <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
                                     <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                     <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
