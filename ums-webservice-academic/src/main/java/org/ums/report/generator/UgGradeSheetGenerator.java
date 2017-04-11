@@ -82,6 +82,7 @@ public class UgGradeSheetGenerator {
       if(i != 0)
         document.newPage();
 
+      PdfPTable firstColumnGradeTable = getGradeTable(gradeList, i * 80, 40, course.getCourseType(), examType);
       PdfPTable secondColumnGradeTable = getGradeTable(gradeList, i * 80 + 40, 40, course.getCourseType(), examType);
 
       PdfPTable mainTable = getMainTable(secondColumnGradeTable == null ? 1 : 3);
@@ -102,7 +103,7 @@ public class UgGradeSheetGenerator {
       }
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList, i * 80, 40, course.getCourseType(), examType));
+      cell.addElement(firstColumnGradeTable);
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
