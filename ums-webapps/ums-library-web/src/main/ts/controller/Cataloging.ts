@@ -8,7 +8,7 @@ module ums {
     deleteRow: Function;
     roleDropDown: string;
     contributorNameDropDown: string;
-    contributors: Array<IContributorDD>;
+    contributors: Array<IContributor>;
     bulkItemList: Array<IItem>;
     addNewItems: Function;
     showHideItemsTable: Function;
@@ -28,6 +28,12 @@ module ums {
     notifyService: any;
     callbackList : Array<Function>;
     selectedTab: string;
+    supplierList: Array<ISupplier>;
+    publisherList: Array<IPublisher>;
+    contributorList: Array<IContributor>;
+    showSupplierSelect2: boolean;
+    showPublisherSelect2: boolean;
+    showContributorSelect2: boolean;
   }
 
   export class Cataloging {
@@ -54,14 +60,8 @@ module ums {
       this.$scope.showRecordInfo = true;
       this.$scope.showItemInfo = false;
 
-      $scope.contributors = Array<IContributorDD>();
+      $scope.contributors = Array<IContributor>();
       $scope.bulkItemList = Array<IItem>();
-
-      let contributor = {id: "", text: ""};
-      this.$scope.contributors.push(contributor);
-      contributor = {id: "2", text: "Jami1111"};
-      this.$scope.contributors.push(contributor);
-      contributor = {id: "3", text: "Hasan"};
 
       $scope.data = {
         languageOptions: libConstants.languages,
@@ -114,7 +114,7 @@ module ums {
       };
 
 
-      $scope.record.contributorList = Array <IContributorEntry>();
+      $scope.record.contributorList = Array <IContributor>();
       $scope.record.subjectList = Array<ISubjectEntry>();
       $scope.record.noteList = Array <INoteEntry>();
       $scope.callbackList = Array<Function>();
@@ -127,9 +127,15 @@ module ums {
       this.addNewRow("subject");
       this.initializeDatePickers();
       catalogingService.fetchItems("1");
-
       this.setRecordHeaderTitle();
 
+      this.getAllSuppliers();
+      this.getAllContributors();
+      this.getAllPublishers();
+
+      $scope.showSupplierSelect2 = false;
+      $scope.showPublisherSelect2 = false;
+      $scope.showContributorSelect2 = false;
     }
 
     /**
@@ -182,8 +188,9 @@ module ums {
         if(this.$scope.record.contributorList != undefined)
           size = this.$scope.record.contributorList.length;
 
-        let contributor: IContributorEntry;
-        contributor = {viewOrder: size, name: "", role: 1, id: ""};
+        let contributor: IContributor = <IContributor>{};
+        contributor.viewOrder = size;
+        //{viewOrder: size, name: "", role: 1, id: ""};
         this.$scope.record.contributorList.push(contributor);
         let index = size - 1;
         //ToDo: This should be removed and check whether it still works or not
@@ -341,6 +348,34 @@ module ums {
         let e = jQuery.Event("keydown");
         e.which = 13;
         $("#" + inputElementId).trigger(e);
+      });
+    }
+
+
+    private getAllSuppliers(): void {
+      this.supplierService.fetchAllSuppliers().then((response : any ) => {
+        this.$scope.supplierList = response.entries;
+        this.$scope.showSupplierSelect2 = true;
+      }, function errorCallback(response) {
+        this.notify.error(response);
+      });
+    }
+
+    private getAllPublishers(): void {
+      this.publisherService.fetchAllPublishers().then((response : any ) => {
+        this.$scope.publisherList = response.entries;
+        this.$scope.showPublisherSelect2 = true;
+      }, function errorCallback(response) {
+        this.notify.error(response);
+      });
+    }
+
+    private getAllContributors(): void {
+      this.contributorService.fetchAllContributors().then((response : any ) => {
+        this.$scope.contributorList = response.entries;
+        this.$scope.showContributorSelect2 = true;
+      }, function errorCallback(response) {
+        this.notify.error(response);
       });
     }
 

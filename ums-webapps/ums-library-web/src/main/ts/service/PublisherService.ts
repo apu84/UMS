@@ -10,28 +10,33 @@ module ums{
       super(libConstants,httpClient,$q, notify, $sce, $window, messageFactory);
     }
 
-    public createNewRecord(supplier : ISupplier):ng.IPromise<any> {
+    public createNewRecord(publisher : IPublisher):ng.IPromise<any> {
       var resourceUrl = "publisher";
-      return super.bCreateNewRecord(resourceUrl,resourceUrl,supplier);
+      return super.bCreateNewRecord(resourceUrl,resourceUrl,publisher);
     }
 
-    public updateRecord(supplier : ISupplier):ng.IPromise<any> {
-      var resourceUrl = "publisher/"+supplier.id;
-      return super.bUpdateRecord(resourceUrl, supplier);
+    public updateRecord(publisher : IPublisher):ng.IPromise<any> {
+      var resourceUrl = "publisher/"+publisher.id;
+      return super.bUpdateRecord(resourceUrl, publisher);
     }
 
-    public deleteRecord(supplierId : string) : ng.IPromise<any> {
-      var resourceUrl = "publisher/"+supplierId;
+    public deleteRecord(publisherId : string) : ng.IPromise<any> {
+      var resourceUrl = "publisher/"+publisherId;
       return super.bDeleteRecord(resourceUrl, "supplier");
     }
 
-    public getRecord(supplierId : string): ng.IPromise<any> {
-      var resourceUrl = "publisher/"+supplierId
+    public getRecord(publisherId : string): ng.IPromise<any> {
+      var resourceUrl = "publisher/"+publisherId
       return super.bGetRecord(resourceUrl);
     }
 
     private fetchDataForPaginationTable(): Function {
       return super.bFetchDataForPaginationTable("publisher","name");
+    }
+
+    public fetchAllPublishers() : ng.IPromise<any> {
+      var resourceUrl = "publisher/all";
+      return super.bGetAllRecord(resourceUrl);
     }
 
 

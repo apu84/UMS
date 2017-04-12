@@ -26,6 +26,7 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
       final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
+    pBuilder.add("text", pReadOnly.getName());
     pBuilder.add("countryId", pReadOnly.getCountryId());
     pBuilder.add("countryName", mPublisherManager.get(pReadOnly.getCountryId()).getName());
     pBuilder.add("contactPerson", pReadOnly.getContactPerson());
