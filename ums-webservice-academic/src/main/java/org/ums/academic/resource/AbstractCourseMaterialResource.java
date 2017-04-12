@@ -25,7 +25,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.util.Asserts;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.ums.manager.BinaryContentManager;
@@ -45,6 +47,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
       final @PathParam("semester-name") String pSemesterName, final @PathParam("course-no") String pCourseNo,
       final JsonObject pJsonObject) throws Exception {
     Map<String, Object> result = new HashMap<>();
+    Asserts.notNull(pRequest, "cant be");
+    Asserts.notNull(pJsonObject, "thats working");
     if(pJsonObject != null && pJsonObject.containsKey("action")) {
       switch(pJsonObject.getString("action")) {
 

@@ -32,7 +32,6 @@ public class PersistentPublisher implements MutablePublisher {
   private String mEmailAddress;
   private String mLastModified;
 
-
   public PersistentPublisher() {}
 
   public PersistentPublisher(final PersistentPublisher pPersistentPublisher) {
@@ -131,7 +130,7 @@ public class PersistentPublisher implements MutablePublisher {
 
   @Override
   public void setPhoneNumber(String pPhoneNumber) {
-  mPhoneNumber = pPhoneNumber;
+    mPhoneNumber = pPhoneNumber;
   }
 
   @Override
@@ -141,6 +140,6 @@ public class PersistentPublisher implements MutablePublisher {
 
   @Override
   public void setEmailAddress(String pEmailAddress) {
-mEmailAddress = pEmailAddress;
+    mEmailAddress = pEmailAddress;
   }
 }

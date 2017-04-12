@@ -38,6 +38,12 @@
       <type>war</type>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>ums-webservice-registrar</artifactId>
+      <type>war</type>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Spring 3 dependencies -->
     <dependency>

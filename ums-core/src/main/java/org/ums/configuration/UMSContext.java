@@ -19,7 +19,7 @@ import org.ums.manager.CacheWarmerManager;
 @EnableScheduling
 @EnableSolrRepositories(basePackages = "org.ums.solr.repository", multicoreSupport = true)
 @Import({CoreContext.class, AcademicContext.class, AdmissionContext.class, FeeContext.class, LibraryContext.class,
-    SolrContext.class})
+    SolrContext.class, RegistrarContext.class})
 public class UMSContext {
   @Autowired
   CacheFactory mCacheFactory;

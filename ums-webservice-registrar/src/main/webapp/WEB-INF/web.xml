@@ -73,6 +73,7 @@
             <param-value>
                 org.ums.resource,
                 org.ums.login,
+                org.ums.builder,
                 org.ums.cachewarmer,
                 org.ums.navigation,
                 org.ums.filter.cors,
@@ -96,10 +97,10 @@
     </servlet-mapping>
 
     <!--  <security-constraint>
-        <org.ums.resourceurce-collection>
-          <org.ums.resourceurce-name>ums-webservice-academic</org.ums.resourceurce-name>
+        <web-resource-collection>
+          <web-resource-name>ums-webservice-academic</web-resource-name>
           <url-pattern>/*</url-pattern>
-        </org.ums.resourceurce-collection>
+        </web-resource-collection>
         <user-data-constraint>
           <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>

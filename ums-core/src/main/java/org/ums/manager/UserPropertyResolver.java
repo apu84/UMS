@@ -57,7 +57,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       try {
         employee = mEmployeeManager.get(user.getEmployeeId());
       } catch(Exception e) {
-        mLogger.error("User not found as Employee, " + user.getId(), e);
+        mLogger.error("User not found as employee, " + user.getId(), e);
       }
       if(employee != null) {
         mutableUser.setDepartment(employee.getDepartment());
