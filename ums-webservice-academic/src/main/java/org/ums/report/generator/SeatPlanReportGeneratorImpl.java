@@ -1372,7 +1372,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       attendanceSheetTable.addCell(sttudentNoCell);
       attendanceSheetTable.addCell(signatureCell);
       String classRoomNo = seatPlanReportDto.getRoomNo();
-      String courseNoOfStudent = seatPlanReportDto.getCourseNo();
+      String courseIdOfStudent = seatPlanReportDto.getCourseId();
       String programOfStudent = seatPlanReportDto.getProgramName();
       int currYearOfStudent = seatPlanReportDto.getCurrentYear();
       int currSemesterOfStudent = seatPlanReportDto.getCurrentSemester();
@@ -1388,7 +1388,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
           studentsUsageMap.put(seatPlanInner.getStudentId(), "used");
-          if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
+          if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseId().equals(courseIdOfStudent)
               && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
               && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 18
@@ -1725,7 +1725,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         if(seatPlans.size() != 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
 
-          if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlanReportDto.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanReportDto.getCurrentSemester()==seatPlan.getCurrentSemester()
+          if(seatPlanReportDto.getCourseId().equals(seatPlan.getCourseId()) && seatPlanReportDto.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanReportDto.getCurrentSemester()==seatPlan.getCurrentSemester()
               && seatPlans.size() != 0) {
             Chunk studentId = new Chunk("");
             Paragraph studentIdParagraph = new Paragraph();
@@ -1738,7 +1738,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                   boolean hur=true;
                 }
                 studentsUsageMap.put(seatPlanInnerReport.getStudentId()+seatPlanInnerReport.getCourseNo(),"used");
-                if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo() ) && seatPlanInnerReport.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanInnerReport.getCurrentSemester()==seatPlan.getCurrentSemester()
+                if(seatPlanInnerReport.getCourseId().equals(seatPlan.getCourseId() ) && seatPlanInnerReport.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanInnerReport.getCurrentSemester()==seatPlan.getCurrentSemester()
                     && seatPlans.size() != 0) {
                   /*
                    * String stdIdTmp = ""; stdIdTmp = studentId; studentId = "";
