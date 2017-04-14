@@ -14,7 +14,7 @@ import java.util.List;
  * Created by My Pc on 20-Aug-16.
  */
 public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
-
+  // todo add course_id in attendance sheet
   String SELECT_ALL_ATTENDENCE_SHEET =
       "SELECT "
           + "  seatPlan.ROOM_NO, "
@@ -279,21 +279,16 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
       + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.CURR_YEAR, "
       + "  seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
-  String SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE_CCI =
-      "SELECT "
-          + "  room_no, "
-          + "  PROGRAM_SHORT_NAME, "
-          + "  course_title, "
-          + "  course_no, "
-          + "  to_char(exam_date, 'dd-mm-yyyy') as exam_date, "
-          + "  YEAR     AS curr_year, "
-          + "  SEMESTER AS curr_semester, "
-          + "  SEAT_PLAN.STUDENT_ID, "
-          + "  'R'      AS registration_type "
-          + "FROM SEAT_PLAN, ROOM_INFO, MST_PROGRAM, MST_COURSE, STUDENTS "
-          + "WHERE SEAT_PLAN.SEMESTER_ID = ? AND EXAM_TYPE = 2 AND EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
-          + "      SEAT_PLAN.course_id = MST_COURSE.COURSE_ID AND SEAT_PLAN.STUDENT_ID = students.STUDENT_ID and room_info.room_id=seat_plan.room_id AND "
-          + "      students.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID ORDER BY SEAT_PLAN.ROOM_ID,MST_PROGRAM.PROGRAM_ID,COURSE_NO,YEAR,SEMESTER, seat_plan.student_id";
+  String SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE_CCI = "SELECT " + "  room_no, " + "  PROGRAM_SHORT_NAME, "
+      + "  MST_COURSE.COURSE_ID, " + "  course_title, " + "  course_no, "
+      + "  to_char(exam_date, 'dd-mm-yyyy') AS exam_date, " + "  YEAR                             AS curr_year, "
+      + "  SEMESTER                         AS curr_semester, " + "  SEAT_PLAN.STUDENT_ID, "
+      + "  'R'                              AS registration_type "
+      + "FROM SEAT_PLAN, ROOM_INFO, MST_PROGRAM, MST_COURSE, STUDENTS "
+      + "WHERE SEAT_PLAN.SEMESTER_ID = ? AND EXAM_TYPE = 2 AND EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
+      + "      SEAT_PLAN.course_id = MST_COURSE.COURSE_ID AND SEAT_PLAN.STUDENT_ID = students.STUDENT_ID AND "
+      + "      room_info.room_id = seat_plan.room_id AND " + "      students.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID "
+      + "ORDER BY SEAT_PLAN.ROOM_ID, MST_PROGRAM.PROGRAM_ID, COURSE_NO, YEAR, SEMESTER, seat_plan.student_id";
 
   String SELECT_ALL_TOP_SHEET_EXAM_DATE =
       "SELECT "
@@ -438,6 +433,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
       SeatPlanReportDto seatPlan = new SeatPlanReportDto();
       seatPlan.setRoomNo(pResultSet.getString("room_no"));
       seatPlan.setProgramName(pResultSet.getString("program_short_name"));
+      seatPlan.setCourseId(pResultSet.getString("course_id"));
       seatPlan.setCourseTitle(pResultSet.getString("course_title"));
       seatPlan.setCourseNo(pResultSet.getString("course_no"));
       seatPlan.setExamDate(pResultSet.getString("exam_date"));
