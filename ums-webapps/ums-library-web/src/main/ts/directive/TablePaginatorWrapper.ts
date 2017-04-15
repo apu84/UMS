@@ -25,7 +25,9 @@ module ums {
       tableprefix:"@",
       ipp:"@",   /* Item Per Pate */
       dataservice:"&",
-      datanotify: "&"
+      datanotify: "&",
+      datalist: "&",
+      collectionlist: "="
     };
 
 
@@ -42,16 +44,25 @@ module ums {
           scope.pagination = {};
           scope.pagination.currentPage = 1;
           scope.filterlist = new Array <IFilter>();
+          // console.log("----------");
+          console.log(scope.collectionlist);
+          // scope.$watch("collectionlist", function(val) {
+          //  console.log(val);
+          // });
+
           scope.data = {
             readOnlyMode: Boolean,
             showList: Boolean,
             showDelete: Boolean,
-            showSave: Boolean
+            showSave: Boolean,
+            select2Show: Boolean
+
           };
 
           scope.data.showList = false;
           scope.data.showDelete = false;
           scope.data.showSave = false;
+          scope.data.select2Show = false;
 
           //Sort function which will be called when  a user tries to sort record by pressing column header.
           scope.sort = function (field: string): any {
@@ -104,6 +115,7 @@ module ums {
             scope.data.showDelete = false;
             scope.data.showList = false;
             scope.data.showSave = true;
+            scope.data.select2Show = true;
             scope.showRecordPanel(false);
 
           }
@@ -115,12 +127,19 @@ module ums {
             scope.getRecord(recordId, false);
             scope.data.showList = true;
             scope.data.showDelete = true;
+            scope.data.showSave = true;
+
           }
 
           scope.getRecord = function (recordId: any, readOnlyMode: boolean): void {
             this.dataservice().getRecord(recordId).then(function successCallback(record) {
               scope.showRecordPanel(readOnlyMode);
+              scope.data.select2Show = false;
               scope.record = record;
+              setTimeout(() => {
+                scope.data.select2Show = true;
+              }, 100);
+
             }, function errorCallback(response) {
             });
           }
@@ -132,6 +151,7 @@ module ums {
           scope.search = function (): any {
             scope.showResultPanel();
             scope.fetchData(1);
+            scope.pagination.currentPage = 1;
           }
 
           /**
@@ -173,6 +193,7 @@ module ums {
            */
 
           scope.fetchData = function (pageNumber: number): any {
+            console.log("----------");
             this.dataservice().fetchDataForPaginationTable()(pageNumber, scope.orderBy, scope.ipp, scope.filterlist).then((resultData: any) => {
               scope.records = resultData.entries;
               scope.total = resultData.total;
@@ -188,16 +209,19 @@ module ums {
             } else {
               scope.updateRecord();
             }
+
           }
+
 
           /**
            * Create a new record
            */
           scope.createNewRecord = function (): void {
             var self = this;
-            this.dataservice().createNewSupplier(scope.record).then(function successCallback(response) {
+            this.dataservice().createNewRecord(scope.record).then(function successCallback(response) {
               scope.datanotify().show(response);
-              scope.record = {};
+              if(response.responseType  != "error")
+                    scope.record = {};
             }, function errorCallback(response) {
               scope.datanotify().error(response);
             });
@@ -207,7 +231,8 @@ module ums {
            * Update an existing record
            */
           scope.updateRecord = function (): void {
-            this.dataservice().updateSupplier(scope.record).then((response) => {
+            this.dataservice().updateRecord(scope.record).then((response) => {
+              console.log(response);
               scope.datanotify().show(response);
             }, (response) => {
               scope.datanotify().error(response);
@@ -238,3 +263,6 @@ module ums {
 
   UMS.directive("tablePaginatorWrapper", () => new TablePaginatorWrapper());
 }
+
+//asdfadssadasdfasdfdsaf sfsadfsd
+

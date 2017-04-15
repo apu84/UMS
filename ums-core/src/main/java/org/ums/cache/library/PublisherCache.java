@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class PublisherCache extends ContentCache<Publisher, MutablePublisher, Integer, PublisherManager> implements
+public class PublisherCache extends ContentCache<Publisher, MutablePublisher, Long, PublisherManager> implements
     PublisherManager {
 
-  CacheManager<Publisher, Integer> mCacheManager;
+  CacheManager<Publisher, Long> mCacheManager;
 
-  public PublisherCache(CacheManager<Publisher, Integer> pCacheManager) {
+  public PublisherCache(CacheManager<Publisher, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -36,7 +36,7 @@ public class PublisherCache extends ContentCache<Publisher, MutablePublisher, In
   }
 
   @Override
-  protected CacheManager<Publisher, Integer> getCacheManager() {
+  protected CacheManager<Publisher, Long> getCacheManager() {
     return mCacheManager;
   }
 }

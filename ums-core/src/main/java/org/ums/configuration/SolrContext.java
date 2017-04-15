@@ -21,7 +21,9 @@ import org.ums.solr.indexer.manager.IndexManager;
 import org.ums.solr.indexer.resolver.EmployeeResolver;
 import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
+import org.ums.solr.indexer.resolver.lms.RecordResolver;
 import org.ums.solr.repository.EmployeeRepository;
+import org.ums.solr.repository.RecordRepository;
 import org.ums.statistics.JdbcTemplateFactory;
 
 import com.google.common.collect.Lists;
@@ -41,8 +43,15 @@ public class SolrContext {
   CoreContext mCoreContext;
 
   @Autowired
+  LibraryContext mLibraryContext;
+
+  @Autowired
   @Lazy
   EmployeeRepository mEmployeeRepository;
+
+  @Autowired
+  @Lazy
+  RecordRepository mRecordRepository;
 
   @Bean
   public SolrClient solrClient() {
@@ -77,8 +86,13 @@ public class SolrContext {
   }
 
   @Bean
+  RecordResolver recordResolver() {
+    return new RecordResolver(mLibraryContext.recordManager(), mRecordRepository);
+  }
+
+  @Bean
   EntityResolverFactory entityResolverFactory() {
-    return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver()));
+    return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver(), recordResolver()));
   }
 
   @Bean

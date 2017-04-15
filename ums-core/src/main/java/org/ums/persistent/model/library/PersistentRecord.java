@@ -49,6 +49,7 @@ public class PersistentRecord implements MutableRecord {
   private String mAuthorMark;
   private List<MaterialContributor> mContributorList;
   private ImprintDto mImprint;
+  private Long mPublisherId;
   private PhysicalDescriptionDto mPhysicalDescription;
   private MaterialType mMaterialType;
   private RecordStatus mRecordStatus;
@@ -103,6 +104,7 @@ public class PersistentRecord implements MutableRecord {
     mAuthorMark = pPersistentRecord.getAuthorMark();
     mContributorList = pPersistentRecord.getContributorList();
     mImprint = pPersistentRecord.getImprint();
+    mPublisherId = pPersistentRecord.getPublisherId();
     mPhysicalDescription = pPersistentRecord.getPhysicalDescription();
     mMaterialType = pPersistentRecord.getMaterialType();
     mRecordStatus = pPersistentRecord.getRecordStatus();
@@ -575,5 +577,13 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setNoteJsonString(String pNoteJsonString) {
     mNoteJsonString = pNoteJsonString;
+  }
+
+  public Long getPublisherId() {
+    return mPublisherId;
+  }
+
+  public void setPublisherId(Long pPublisherId) {
+    this.mPublisherId = pPublisherId;
   }
 }

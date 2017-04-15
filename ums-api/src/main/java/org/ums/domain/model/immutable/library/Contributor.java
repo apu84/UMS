@@ -15,11 +15,7 @@ import java.io.Serializable;
  */
 public interface Contributor extends Serializable, LastModifier, EditType<MutableContributor>, Identifier<Long> {
 
-  String getFirstName();
-
-  String getMiddleName();
-
-  String getLastName();
+  String getFullName();
 
   String getShortName();
 
@@ -28,6 +24,8 @@ public interface Contributor extends Serializable, LastModifier, EditType<Mutabl
   String getAddress();
 
   Country getCountry();
+
+  Integer getCountryId();
 
   ContributorCategory getCategory();
 

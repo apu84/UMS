@@ -31,17 +31,21 @@ module ums {
     supplierList: Array<ISupplier>;
     publisherList: Array<IPublisher>;
     contributorList: Array<IContributor>;
+    countryList: Array<ICountry>;
     showSupplierSelect2: boolean;
     showPublisherSelect2: boolean;
     showContributorSelect2: boolean;
+    reloadSuppliers : Function;
+    reloadPublishers: Function;
+    collectionList : Array<any>;
   }
 
   export class Cataloging {
-    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','publisherService','contributorService','catalogingService'];
+    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','publisherService','contributorService','catalogingService','countryService'];
     constructor(private $scope: ICatalogingScope,
                 private $q: ng.IQService, private notify: Notify, private libConstants: any,
                 private supplierService : SupplierService, private publisherService : PublisherService, private contributorService : ContributorService,
-                private catalogingService : CatalogingService) {
+                private catalogingService : CatalogingService, private countryService : CountryService) {
 
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
@@ -53,12 +57,16 @@ module ums {
       $scope.saveBulkItems = this.saveBulkItems.bind(this);
       $scope.setBulkItemsValue = this.setBulkItemsValue.bind(this);
       $scope.fillSampleData = this.fillSampleData.bind(this);
+      $scope.reloadSuppliers = this.reloadSuppliers.bind(this);
+      $scope.reloadPublishers = this.reloadPublishers.bind(this);
       $scope.supplierService = supplierService;
       $scope.publisherService = publisherService;
       $scope.contributorService = contributorService;
       $scope.notifyService = notify;
+
       this.$scope.showRecordInfo = true;
       this.$scope.showItemInfo = false;
+
 
       $scope.contributors = Array<IContributor>();
       $scope.bulkItemList = Array<IItem>();
@@ -101,11 +109,11 @@ module ums {
       $scope.record.physicalDescription = <IPhysicalDescription>{};
 
       $scope.record.language = Utils.NUMBER_SELECT;
-      $scope.record.materialType = Utils.NUMBER_SELECT;
+      $scope.record.materialType = 1;
+      this.setMaterialTypeName(1);
       $scope.record.status = Utils.NUMBER_SELECT;
       $scope.record.bindingType = Utils.NUMBER_SELECT;
       $scope.record.acqType = Utils.NUMBER_SELECT;
-
 
       $scope.item = <IItem> {};
       $scope.supplier = <ISupplier> {};
@@ -132,6 +140,7 @@ module ums {
       this.getAllSuppliers();
       this.getAllContributors();
       this.getAllPublishers();
+      this.loadCountries();
 
       $scope.showSupplierSelect2 = false;
       $scope.showPublisherSelect2 = false;
@@ -186,7 +195,7 @@ module ums {
       let size = 1;
       if (tableType == 'contributor') {
         if(this.$scope.record.contributorList != undefined)
-          size = this.$scope.record.contributorList.length;
+          size = this.$scope.record.contributorList.length+1;
 
         let contributor: IContributor = <IContributor>{};
         contributor.viewOrder = size;
@@ -203,7 +212,7 @@ module ums {
       }
       else if (tableType == "note") {
         if(this.$scope.record.noteList != undefined)
-          size = this.$scope.record.noteList.length;
+          size = this.$scope.record.noteList.length+1;
         let note: INoteEntry;
         note = {viewOrder:size, note: ""};
         this.$scope.record.noteList.push(note);
@@ -211,7 +220,7 @@ module ums {
       else if (tableType == "subject") {
         let subject: ISubjectEntry;
         if(this.$scope.record.subjectList != undefined)
-          size = this.$scope.record.subjectList.length;
+          size = this.$scope.record.subjectList.length+1;
         subject = {viewOrder: size, subject: ""};
         this.$scope.record.subjectList.push(subject);
       }
@@ -303,6 +312,7 @@ module ums {
      * Save Item
      */
     private saveItem(): void {
+      this.$scope.item.mfnNo = this.$scope.record.mfnNo;
       this.catalogingService.saveItem(this.$scope.item).then((response : any ) => {
         this.notify.show(response);
       }, function errorCallback(response) {
@@ -361,6 +371,8 @@ module ums {
       });
     }
 
+
+
     private getAllPublishers(): void {
       this.publisherService.fetchAllPublishers().then((response : any ) => {
         this.$scope.publisherList = response.entries;
@@ -378,6 +390,42 @@ module ums {
         this.notify.error(response);
       });
     }
+
+    private reloadSuppliers() : void {
+      let data = $("#supplier").select2("data");
+      let searchTerm = data.text;
+      this.$scope.showSupplierSelect2 = false;
+      this.getAllSuppliers();
+      setTimeout(() => {this.$scope.showSupplierSelect2 = true;
+        setTimeout(() => {
+            Utils.setSelect2Value("supplierSelect2Div",searchTerm);
+        }, 200);
+      }, 300);
+    }
+
+
+    private reloadPublishers() : void {
+      this.$scope.showPublisherSelect2 = false;
+      this.getAllPublishers();
+      setTimeout(() => {this.$scope.showPublisherSelect2 = true}, 300);
+    }
+
+    private reloadContributors() : void {
+      this.$scope.showContributorSelect2 = false;
+      this.getAllContributors();
+      setTimeout(() => {this.$scope.showContributorSelect2 = true}, 300);
+    }
+
+    private loadCountries() : void {
+      this.countryService.getCountryList().then((response : any ) => {
+        // this.$scope.countryList = response.entries;
+        this.$scope.collectionList = Array<any>();
+        this.$scope.collectionList.push(response.entries);
+      }, function errorCallback(response) {
+        this.notify.error(response);
+      });
+    }
+
 
     /**/
     private fillSampleData() {

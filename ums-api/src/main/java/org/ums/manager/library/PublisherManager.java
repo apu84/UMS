@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public interface PublisherManager extends ContentManager<Publisher, MutablePublisher, Integer> {
+public interface PublisherManager extends ContentManager<Publisher, MutablePublisher, Long> {
   List<Publisher> getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pWhereClause,
       final String pOrder);
 

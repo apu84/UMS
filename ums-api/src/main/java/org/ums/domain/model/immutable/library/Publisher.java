@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public interface Publisher extends Serializable, LastModifier, EditType<MutablePublisher>, Identifier<Integer> {
+public interface Publisher extends Serializable, LastModifier, EditType<MutablePublisher>, Identifier<Long> {
 
   String getName();
 

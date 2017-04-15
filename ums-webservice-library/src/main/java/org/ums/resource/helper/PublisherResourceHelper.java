@@ -26,7 +26,7 @@ import java.util.List;
  * Created by Ifti on 04-Feb-17.
  */
 @Component
-public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePublisher, Integer>
+public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePublisher, Long>
 
 {
 

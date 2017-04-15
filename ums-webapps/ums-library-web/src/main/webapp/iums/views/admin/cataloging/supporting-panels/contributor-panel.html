@@ -3,7 +3,7 @@
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <data-table-paginator-wrapper dataservice="contributorService"  datanotify="notifyService"
+            <data-table-paginator-wrapper dataservice="contributorService"  datanotify="notifyService" collectionlist="collectionList"
                                           ipp="10"
                                           tableprefix="contributor">
                 <div class="modal-header">
@@ -31,7 +31,8 @@
                                         <ul>
                                             <li style="list-style-type: none;margin-top:10px; ">
                                                 <label style="width:105px;text-align: right;"><b>Search by name:</b> </label>
-                                                <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = &quot;(first_name||' '|| middle_name || ' '|| last_name)&quot;" />
+                                                <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = &quot;(full_name)&quot;" />
+
                                                 <select name="operator" style="width:100px;" data-ng-model="filterlist[0].operator" data-ng-init="filterlist[0].operator = 'cn'">
                                                     <option value="cn">contains</option>
                                                     <option value="start">starts with</option>
@@ -67,15 +68,14 @@
                                             <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
                                                 <thead>
                                                 <tr>
-                                                    <th class="header" column-sorter="sort('name')">Contributor Name</th>
+                                                    <th class="header" column-sorter="sort('full_name')">Contributor Name</th>
                                                 </tr>
                                                 </tr></thead>
                                                 <tbody>
-                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total"
+                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" pagination-id="contributorPaginator"
                                                     data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
 
-
-                                                    <td style="text-align: left;">{{ record.first_name }} {{ record.middle_name }} {{ record.lat_name }}
+                                                    <td style="text-align: left;">{{ record.name }}
                                                         <div style="float: right;display: none;" id="actionPanel{{$index}}">
                                                             <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>
                                                             <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="editRecord(record.id)"></i>
@@ -85,7 +85,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="pull-right" style="margin-top:-30px;">
-                                                <dir-pagination-controls boundary-links="true"
+                                                <dir-pagination-controls boundary-links="true" pagination-id="contributorPaginator"
                                                                          on-page-change="pageChanged(newPageNumber)"
                                                                          template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
                                             </div>
@@ -102,48 +102,57 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-user"></i><input
-                                                                id="inputFirstName" type="text" placeholder="Name"  class="form-control required" data-ng-model="record.name" ng-disabled="data.readOnlyMode"/></div>
+                                                        <div class="input-icon"> <i class="fa fa-user"></i>
+                                                            <input  id="inputFirstName" type="text" placeholder="Name"  class="form-control required" data-ng-model="record.name" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-envelope"></i><input
-                                                                id="inputEmail" type="text" placeholder="E-mail"  class="form-control" data-ng-model="record.email" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="inputShortName" type="text" placeholder="Short Name" class="form-control"  data-ng-model="record.shortName" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-user-circle"></i><input
-                                                                id="contactPerson" type="text" placeholder="Contact Person"
-                                                                class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
-                                                    </div>
+                                                            <select data-ng-model="record.gender" class="form-control"    ng-disabled="data.readOnlyMode" data-convert-to-number>
+                                                                <option value="0">Gender</option>
+                                                                <option value="1">Male</option>
+                                                                <option value="2">Female</option>
+                                                            </select>
                                                 </div>
                                             </div>
+                                            </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-phone"></i><input
-                                                                id="phone" type="text" placeholder="Phone"
-                                                                class="form-control" data-ng-model="record.contactNumber" ng-disabled="data.readOnlyMode"/></div>
+                                                        <div class="input-group" data-ng-if="data.select2Show">
+                                                            <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>
+                                                            <select class="form-control" style="text-align: left;"
+                                                                    ng-disabled="data.readOnlyMode"
+                                                                    data-select="select2"
+                                                                    data-ng-model="record.countryId"
+                                                                    data-ng-placeholder="Select a Country"
+                                                                    data-ng-options="country.id as country.name for country in collectionlist[0]">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <hr/>
 
-                                            <div class="form-group"><textarea rows="4" placeholder="Additional info"
-                                                                              class="form-control" data-ng-model="record.note" ng-disabled="data.readOnlyMode"></textarea></div>
-
-                                            <div class="form-group"><input id="inputAddress" type="text"
-                                                                           placeholder="Address Information" class="form-control" data-ng-model="record.address" ng-disabled="data.readOnlyMode"/>
+                                            <div class="form-group">
+                                                <textarea rows="4" placeholder="Address" class="form-control" data-ng-model="record.address" ng-disabled="data.readOnlyMode"></textarea></div>
+                                                <button type="button" class="btn btn-dark btn-success" id="btn_addContributor" data-ng-show="false"></button>
                                             </div>
-
-                                            <button type="button" class="btn btn-dark btn-success" id="btn_addContributor" data-ng-show="false"></button>
-                                        </div>
 
                                     </form>
                                 </div>

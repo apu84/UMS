@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 @Path("publisher")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class PublisherResource extends MutableSupplierResource {
+public class PublisherResource extends MutablePublisherResource {
   @Autowired
   PublisherResourceHelper mResourceHelper;
 
@@ -31,8 +31,7 @@ public class PublisherResource extends MutableSupplierResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") Integer pObjectId)
-      throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") Long pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 

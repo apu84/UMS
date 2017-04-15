@@ -17,7 +17,7 @@ module ums{
 
     public updateRecord(publisher : IPublisher):ng.IPromise<any> {
       var resourceUrl = "publisher/"+publisher.id;
-      return super.bUpdateRecord(resourceUrl, publisher);
+      return super.bUpdateRecord(resourceUrl, publisher, "publisher");
     }
 
     public deleteRecord(publisherId : string) : ng.IPromise<any> {
@@ -37,6 +37,7 @@ module ums{
     public fetchAllPublishers() : ng.IPromise<any> {
       var resourceUrl = "publisher/all";
       return super.bGetAllRecord(resourceUrl);
+
     }
 
 

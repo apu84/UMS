@@ -7,6 +7,9 @@ import org.ums.decorator.library.SupplierDaoDecorator;
 import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.immutable.library.Publisher;
 import org.ums.domain.model.immutable.library.Supplier;
+import org.ums.domain.model.mutable.library.MutablePublisher;
+import org.ums.domain.model.mutable.library.MutableSupplier;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.library.PersistentPublisher;
 import org.ums.persistent.model.library.PersistentSupplier;
 
@@ -20,17 +23,22 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentPublisherDao extends PublisherDaoDecorator {
   static String SELECT_ALL = "Select ID,NAME,COUNTRY,CONTACT_PERSON, PHONE, EMAIL,LAST_MODIFIED  FROM MST_PUBLISHER";
-
   static String SELECT_COUNT = "Select COUNT(ID) FROM MST_PUBLISHER";
+  static String UPDATE_ONE =
+      "UPDATE MST_PUBLISHER SET NAME = ? ,COUNTRY= ? ,CONTACT_PERSON= ? ,PHONE= ? ,EMAIL= ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
+  static String DELETE_ONE = "DELETE FROM MST_PUBLISHER ";
 
   private JdbcTemplate mJdbcTemplate;
+  public IdGenerator mIdGenerator;
 
-  public PersistentPublisherDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentPublisherDao(final JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public Publisher get(final Integer pId) {
+  public Publisher get(final Long pId) {
     String query = SELECT_ALL + " Where Id = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentPublisherDao.PublisherRowMapper());
   }
@@ -39,6 +47,20 @@ public class PersistentPublisherDao extends PublisherDaoDecorator {
   public List<Publisher> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new PersistentPublisherDao.PublisherRowMapper());
+  }
+
+  @Override
+  public Long create(final MutablePublisher pPublisher) {
+    Long id = mIdGenerator.getNumericId();
+    pPublisher.setId(id);
+    String INSERT_ONE =
+        "INSERT INTO MST_PUBLISHER(ID, NAME, COUNTRY, CONTACT_PERSON, PHONE, EMAIL,  LAST_MODIFIED) "
+            + "VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+
+    mJdbcTemplate.update(INSERT_ONE, pPublisher.getId(), pPublisher.getName(), pPublisher.getCountryId(),
+        pPublisher.getContactPerson(), pPublisher.getPhoneNumber(), pPublisher.getEmailAddress());
+
+    return pPublisher.getId();
   }
 
   @Override
@@ -59,11 +81,24 @@ public class PersistentPublisherDao extends PublisherDaoDecorator {
     return mJdbcTemplate.queryForObject(query, new Object[] {}, Integer.class);
   }
 
+  @Override
+  public int update(final MutablePublisher pPublisher) {
+    String query = UPDATE_ONE + "WHERE ID = ?";
+    return mJdbcTemplate.update(query, pPublisher.getName(), pPublisher.getCountryId(), pPublisher.getContactPerson(),
+        pPublisher.getPhoneNumber(), pPublisher.getEmailAddress(), pPublisher.getId());
+  }
+
+  @Override
+  public int delete(final MutablePublisher pPublisher) {
+    String query = DELETE_ONE + "WHERE ID = ?";
+    return mJdbcTemplate.update(query, pPublisher.getId());
+  }
+
   class PublisherRowMapper implements RowMapper<Publisher> {
     @Override
     public Publisher mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentPublisher publisher = new PersistentPublisher();
-      publisher.setId(resultSet.getInt("ID"));
+      publisher.setId(resultSet.getLong("ID"));
       publisher.setName(resultSet.getString("NAME"));
       publisher.setCountryId(resultSet.getInt("COUNTRY"));
       publisher.setContactPerson(resultSet.getString("CONTACT_PERSON"));

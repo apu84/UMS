@@ -198,12 +198,12 @@ public class UmsUtils {
         else if(op.equalsIgnoreCase("en"))
           fieldOperation = " Not LIKE '%" + fieldData + "'";
         else if(op.equalsIgnoreCase("cn"))
-          fieldOperation = " LIKE '%" + fieldData + "%'";
+          fieldOperation = " LIKE  lower('%" + fieldData + "%')";
         else if(op.equalsIgnoreCase("nc"))
           fieldOperation = " NOT LIKE '%" + fieldData + "%'";
 
         if(fieldOperation != "") {
-          whereArray.add(fieldName + " " + fieldOperation);
+          whereArray.add(" lower(" + fieldName + ") " + " " + fieldOperation);
         }
       }
       String[] array = whereArray.toArray(new String[whereArray.size()]);
