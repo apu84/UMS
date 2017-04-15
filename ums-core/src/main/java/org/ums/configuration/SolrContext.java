@@ -18,10 +18,13 @@ import org.ums.solr.indexer.IndexConsumerDao;
 import org.ums.solr.indexer.IndexDao;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
 import org.ums.solr.indexer.manager.IndexManager;
+import org.ums.solr.indexer.resolver.EmployeeResolver;
 import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.statistics.JdbcTemplateFactory;
+
+import com.google.common.collect.Lists;
 
 @Configuration
 public class SolrContext {
@@ -69,8 +72,13 @@ public class SolrContext {
   }
 
   @Bean
+  EmployeeResolver employeeResolver() {
+    return new EmployeeResolver(mCoreContext.employeeManager(), mEmployeeRepository);
+  }
+
+  @Bean
   EntityResolverFactory entityResolverFactory() {
-    return new EntityResolverFactoryImpl(mCoreContext.employeeManager(), mEmployeeRepository);
+    return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver()));
   }
 
   @Bean
