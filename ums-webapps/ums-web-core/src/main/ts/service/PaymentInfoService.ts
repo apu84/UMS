@@ -11,8 +11,8 @@ module ums{
 
     }
 
-    public fetchAdmissionPaymentInfo(receiptId:string, semesterId:number):ng.IPromise<any>{
-      var url:string = 'core/payment/semester/'+semesterId+'/receiptId/'+receiptId;
+    public fetchAdmissionPaymentInfo(receiptId:string, semesterId:number, quota:string):ng.IPromise<any>{
+      var url:string = 'core/payment/semester/'+semesterId+'/receiptId/'+receiptId+'/quota/'+quota;
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string)=>{

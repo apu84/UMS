@@ -1,5 +1,5 @@
 /**
- * Created by My Pc on 05-Jan-17.
+ * Created by Monjur-E-Morshed on 05-Jan-17.
  */
 
 module ums{
@@ -23,8 +23,10 @@ module ums{
     admissionStudent:AdmissionStudent;
     receiptId:string;
     meritSerialNo:string;
+    testVar:string;
     receiptIdMap:any;
     meritMap:any;
+    selectionBackground:string;
 
     selectedStudent:AdmissionStudent;
     statistics:Array<AdmissionStudent>;
@@ -33,6 +35,9 @@ module ums{
     selectionPrograms:Array<Program>;
     selectedProgram:Program;
     waitingProgram:Program;
+    selectedProgramIdClr:number;
+    waitingProgramIdClr:number;
+    statisticsColor:string;
     programMap:any;
     gridOpts:any;
     departmentSelectionStatus:number;
@@ -103,10 +108,13 @@ module ums{
       $scope.gridOpts = {};
       //$scope.datePickerOptions = <DatepickerOptions>{};
       $scope.showModal=true;
+      $scope.selectedProgramIdClr=0;
+      $scope.waitingProgramIdClr=0;
       $scope.fromMeritSerialNumber=0;
       $scope.toMeritSerialNumber=0;
       $scope.deadLine="";
-      $scope.meritSerialNo="";
+      $scope.selectionBackground="white";
+      $scope.statisticsColor="white";
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.showStudentPortion=false;
@@ -349,6 +357,7 @@ module ums{
           this.$scope.statistics.push(students[i]);
           this.$scope.statisticsMap[students[i].programId]=students[i];
         }
+        this.makeStatistisChangeBlink();
         defer.resolve(this.$scope.statistics);
       });
       return defer.promise;
@@ -366,7 +375,11 @@ module ums{
     }
 
     private searchByMeritSerialNo(meritSerialNo:any){
+      this.$scope.meritSerialNo=meritSerialNo;
+      $("#searchBar").focus();
       console.log(meritSerialNo);
+      console.log("merit serial no from scope-xxx");
+      console.log(this.$scope.meritSerialNo);
       if(meritSerialNo!="" || meritSerialNo!=null || String(meritSerialNo)!="0"){
         this.admissionStudentService.fetchAdmissionStudentByMeritSerialNo(this.$scope.semester.id,+this.$scope.meritType.id, +meritSerialNo).then((student:AdmissionStudent)=>{
           console.log("Receipt id student");
@@ -377,12 +390,14 @@ module ums{
 
           this.$scope.selectedStudent.waitingProgram = this.$scope.programMap[student.programIdByTransfer];
           if(student.programIdByMerit!=null || student.programIdByTransfer!=null){
+            this.$scope.selectionBackground="lightsalmon";
             if(student.deadline==null){
               this.$scope.deadLine="";
             }else{
-
               this.$scope.deadLine = student.deadline;
             }
+          }else{
+            this.$scope.selectionBackground="white";
           }
 
 
@@ -521,6 +536,8 @@ module ums{
     }
 
     private saveAndRetrieveNext(){
+      var that = this;
+
       if( this.$scope.deadLine==""){
         this.notify.error("Deadline is not selected");
       }
@@ -531,7 +548,11 @@ module ums{
             this.$scope.selectedStudent = data[0];
             this.$scope.receiptId="";
             this.$scope.receiptId = this.$scope.selectedStudent.receiptId;
-            this.$scope.meritSerialNo = String(this.$scope.selectedStudent.meritSlNo);
+            that.$scope.meritSerialNo = this.$scope.selectedStudent.meritSlNo+"";
+            console.log("Merit serial no of the scope");
+            console.log(this.$scope.meritSerialNo);
+            this.$scope.testVar = this.$scope.selectedStudent.meritSlNo+"";
+
             if(this.$scope.selectedStudent.programIdByMerit==null){
               this.$scope.selectedStudent.selectedProgram=this.$scope.programs[0];
             }
@@ -542,10 +563,19 @@ module ums{
             this.getStatistics();
             this.$scope.showSearch=false;
             //this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
+
           });
         });
       }
 
+    }
+
+    private makeStatistisChangeBlink(){
+      this.$scope.statisticsColor="yellow";
+
+      this.$timeout(()=>{
+        this.$scope.statisticsColor="";
+      }, 2500);
     }
 
     private assignSelectedProgram(student:AdmissionStudent, programId:number){
@@ -580,7 +610,8 @@ module ums{
         this.convertToJson().then((json)=>{
 
           this.admissionStudentService.saveAndFetchNextStudentForDepartmentSelection(this.$scope.departmentSelectionStatus, json).then((data)=>{
-            this.searchByMeritSerialNo(this.$scope.meritSerialNo);
+            console.log("in save only");
+            this.searchByMeritSerialNo(String(this.$scope.meritSerialNo));
             this.getStatistics();
             this.$scope.showSearch=false;
             this.$scope.selectedProgram = <Program>{};
@@ -611,9 +642,15 @@ module ums{
         item['deadline'] = this.$scope.deadLine;
         if(students.selectedProgram.id!=0){
           item['programIdByMerit'] = students.selectedProgram.id;
+          this.$scope.selectedProgramIdClr=students.selectedProgram.id;
+        }else{
+          this.$scope.selectedProgramIdClr=111;
         }
         if(students.waitingProgram.id!=0 || students.waitingProgram.id!=null){
           item['programIdByTransfer'] = students.waitingProgram.id;
+          this.$scope.waitingProgramIdClr = students.waitingProgram.id;
+        }else{
+          this.$scope.waitingProgramIdClr=111;
         }
         if(this.$scope.selectedStudent.selectedProgram.id!=0 || this.$scope.selectedStudent.waitingProgram.id!=0 ){
           item['presentStatus']=Utils.PRESENT;

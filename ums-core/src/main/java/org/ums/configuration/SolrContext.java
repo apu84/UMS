@@ -3,6 +3,7 @@ package org.ums.configuration;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -47,6 +48,7 @@ public class SolrContext {
 
   @Autowired
   @Lazy
+  @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mEmployeeRepository;
 
   @Autowired
@@ -60,7 +62,9 @@ public class SolrContext {
 
   @Bean
   public SolrTemplate solrTemplate(SolrClient client) throws Exception {
-    SolrTemplate template = new SolrTemplate(client);
+    // without core name mentioned in here, custom solr repository doesn't get the core name by
+    // default
+    SolrTemplate template = new SolrTemplate(client, "ums");
     template.setSolrConverter(new SolrJConverter());
     return template;
   }

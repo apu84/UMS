@@ -24,4 +24,6 @@ public interface MutablePaymentInfo extends PaymentInfo, Editable<Integer>, Muta
   void setPaymentDate(final String pPaymentDate);
 
   void setPaymentMode(final PaymentMode pPaymentMode);
+
+  void setQuota(final String pQuota);
 }

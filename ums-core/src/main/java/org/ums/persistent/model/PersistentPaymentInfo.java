@@ -36,6 +36,7 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
   private int mAmount;
   private String mPaymentDate;
   private PaymentMode mPaymentMode;
+  private String mQuota;
   private String mLastModified;
 
   public PersistentPaymentInfo() {}
@@ -50,6 +51,17 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
     mPaymentDate = pPersistentAdmissionPayment.getPaymentDate();
     mPaymentMode = pPersistentAdmissionPayment.getPaymentMode();
     mLastModified = pPersistentAdmissionPayment.getLastModified();
+    mQuota = pPersistentAdmissionPayment.getQuota();
+  }
+
+  @Override
+  public String getQuota() {
+    return mQuota;
+  }
+
+  @Override
+  public void setQuota(String pQuota) {
+    mQuota = pQuota;
   }
 
   @Override

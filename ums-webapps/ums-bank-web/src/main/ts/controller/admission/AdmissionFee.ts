@@ -12,6 +12,8 @@ module ums {
     admissionStudent: AdmissionStudent;
     paymentInfo: Array<PaymentInfo>;
     paymentModes: Array<IConstants>;
+    meritTypes:Array<IMeritListType>;
+    meritType:IMeritListType;
     paymentMode: IConstants;
     paymentType: number;
     amount: number;
@@ -41,6 +43,11 @@ module ums {
   interface  IProgramType {
     id: string;
     name: string;
+  }
+
+  interface IMeritListType{
+    id:string;
+    name:string;
   }
 
 
@@ -80,10 +87,15 @@ module ums {
       $scope.changeCheckBoxValue = this.changeCheckBoxValue.bind(this);
 
       this.getSemesters();
-
+      this.getMeritListTypes();
 
     }
 
+    private getMeritListTypes():void{
+      this.$scope.meritTypes = [];
+      this.$scope.meritTypes = this.appConstants.meritListTypes;
+      this.$scope.meritType = this.$scope.meritTypes[1];
+    }
 
     private getSemesters() {
       this.semesterService.fetchSemesters(+this.$scope.programType.id,5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: Array<Semester>) => {
@@ -107,7 +119,7 @@ module ums {
     private searchByReceiptId(receiptId: string) {
       console.log("Working");
       this.$scope.showDescriptionSection = false;
-      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId).then((data) => {
+      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId, this.$scope.meritType.name).then((data) => {
         this.$scope.admissionStudent = <AdmissionStudent>{};
         this.$scope.admissionStudent = data;
         console.log(this.$scope.admissionStudent);
@@ -142,7 +154,7 @@ module ums {
     private fetchPaymentInfo(receiptId: string) {
       console.log("In the payment info section");
 
-      this.paymentInfoService.fetchAdmissionPaymentInfo(receiptId, this.$scope.semester.id).then((data) => {
+      this.paymentInfoService.fetchAdmissionPaymentInfo(receiptId, this.$scope.semester.id, this.$scope.meritType.name).then((data) => {
         this.$scope.paymentInfo = [];
         this.$scope.paymentInfo = data;
         this.configurePaymentViewSection();
@@ -243,6 +255,7 @@ module ums {
       item['paymentType'] = this.$scope.paymentType;
       item['amount'] = this.$scope.amount;
       item['paymentMode'] = this.$scope.paymentMode.id;
+      item['quota'] = this.$scope.meritType.name;
       jsonObject.push(item);
       completeJson['entries'] = jsonObject;
       defer.resolve(completeJson);

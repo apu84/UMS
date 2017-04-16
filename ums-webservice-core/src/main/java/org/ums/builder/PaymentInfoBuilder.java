@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.PaymentInfo;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutablePaymentInfo;
 import org.ums.enums.PaymentMode;
@@ -48,7 +47,8 @@ public class PaymentInfoBuilder implements Builder<PaymentInfo, MutablePaymentIn
     if(pPaymentType == PaymentType.ADMISSION_FEE || pPaymentType == PaymentType.MIGRATION_FEE) {
       AdmissionStudent admissionStudent =
           mAdmissionStudentManager.getAdmissionStudent(pReadOnly.getSemesterId(),
-              ProgramType.get(pReadOnly.getSemester().getProgramTypeId()), pReadOnly.getReferenceId());
+              ProgramType.get(pReadOnly.getSemester().getProgramTypeId()), pReadOnly.getReferenceId(),
+              pReadOnly.getQuota());
       pBuilder.add("receiptId", admissionStudent.getReceiptId());
       pBuilder.add("studentName", admissionStudent.getStudentName());
       pBuilder.add("unit", admissionStudent.getUnit());
@@ -75,5 +75,6 @@ public class PaymentInfoBuilder implements Builder<PaymentInfo, MutablePaymentIn
     pMutable.setPaymentType(PaymentType.get(pJsonObject.getInt("paymentType")));
     pMutable.setAmount(pJsonObject.getInt("amount"));
     pMutable.setPaymentMode(PaymentMode.get(pJsonObject.getInt("paymentMode")));
+    pMutable.setQuota(pJsonObject.getString("quota"));
   }
 }

@@ -33,9 +33,9 @@ module ums{
       return defer.promise;
     }
 
-    public fetchMigrationData(semesterId:number):ng.IPromise<any>{
-      console.log("in the service");
-      var url="academic/admission/migrationList/semester/"+semesterId;
+    public fetchMigrationData(semesterId:number, quotaType:any):ng.IPromise<any>{
+
+      var url="academic/admission/migrationList/semester/"+semesterId+"/quota/"+quotaType;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -50,8 +50,8 @@ module ums{
       return defer.promise;
     }
 
-    public fetchAdmissionStudentByReceiptId(semesterId:number, programType:number, receiptId:string):ng.IPromise<any>{
-      var url="academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId;
+    public fetchAdmissionStudentByReceiptId(semesterId:number, programType:number, receiptId:string, quota:String):ng.IPromise<any>{
+      var url="academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId+"/quota/"+quota;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -266,6 +266,20 @@ module ums{
 
           });
       return defer.promise;
+    }
+
+    public getQuotaType(quotaType:number):string{
+      var quotaStr="";
+      if(quotaType==1){
+        quotaStr='GL';
+      }else if(quotaType==2){
+        quotaStr='FF';
+      }else if(quotaType==3){
+        quotaStr='RA'
+      }else{
+        quotaStr='GCE';
+      }
+      return quotaStr;
     }
   }
 

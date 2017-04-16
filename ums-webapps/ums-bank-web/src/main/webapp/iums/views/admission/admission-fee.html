@@ -60,6 +60,19 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Merit Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="meritType.name for meritType in meritTypes track by meritType.id"
+                                    data-ng-model="meritType"
+                            >
+                            </select>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="form-actions text-right pal">
@@ -144,14 +157,21 @@
                                     </td>
                                     <td align="center">
                                         <br>
-                                        <div data-ng-if="admissionStudent.unit==='BBA'">
-                                            <b>Tk.</b><br>
-                                            <b>80,360/-</b>
+                                        <div data-ng-if="showMigrationFeeSection==false">
+                                            <div data-ng-if="admissionStudent.unit==='BBA'">
+                                                <b>Tk.</b><br>
+                                                <b>80,360/-</b>
+                                            </div>
+                                            <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                                <b>Tk.</b><br>
+                                                <b>1,04,800/-</b>
+                                            </div>
                                         </div>
-                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                        <div data-ng-if="showMigrationFeeSection">
                                             <b>Tk.</b><br>
-                                            <b>1,04,800/-</b>
+                                            <b>4,000/-</b>
                                         </div>
+
                                     </td>
 
                                 </tr>
@@ -159,12 +179,18 @@
                                     <td align="center"><b>Total</b></td>
                                     <td></td>
                                     <td align="center" colspan="1">
-                                        <div data-ng-if="admissionStudent.unit==='BBA'">
-                                            <b>Tk. 80,360/-</b>
+                                        <div data-ng-if="showMigrationFeeSection==false">
+                                            <div data-ng-if="admissionStudent.unit==='BBA'">
+                                                <b>Tk. 80,360/-</b>
+                                            </div>
+                                            <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                                <b>Tk. 1,04,800/-</b>
+                                            </div>
                                         </div>
-                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
-                                            <b>Tk. 1,04,800/-</b>
-                                        </div>
+
+                                    </td>
+                                    <td data-ng-if="showMigrationFeeSection">
+                                        <b>Tk. 4,000/-</b>
                                     </td>
                                 </tr>
                                 </tbody>

@@ -148,6 +148,7 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
       student.setId(jsonObject.getString("receiptId"));
       student.setSemesterId(jsonObject.getInt("semesterId"));
       student.setDeadline(jsonObject.getString("deadline"));
+      student.setQuota(jsonObject.getString("quota"));
       student.setMigrationStatus(MigrationStatus.MIGRATION_ABLE);
       students.add(student);
     }
@@ -271,9 +272,9 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
   }
 
   public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId, final ProgramType pProgramType,
-      final String pReceiptId, final UriInfo pUriInfo) {
+      final String pReceiptId, final String pQuota, final UriInfo pUriInfo) {
 
-    AdmissionStudent student = getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+    AdmissionStudent student = getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId, pQuota);
     return getAdmissionStudentJson(pUriInfo, student);
   }
 
@@ -306,10 +307,10 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
     return jsonCreator(students, "meritList", pUriInfo);
   }
 
-  public JsonObject getMigrationList(final int pSemesterId, final UriInfo pUriInfo) {
+  public JsonObject getMigrationList(final int pSemesterId, final String quota, final UriInfo pUriInfo) {
     List<AdmissionStudent> students =
         getContentManager().getAdmissionStudent(pSemesterId,
-            MigrationStatus.get(MigrationStatus.MIGRATION_ABLE.getId()));
+            MigrationStatus.get(MigrationStatus.MIGRATION_ABLE.getId()), quota);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

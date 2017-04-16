@@ -61,7 +61,7 @@ module ums {
     * Migration status*/
     static NOT_MIGRATED=1;
     static MIGRATION_ABLE=2;
-    static MIGRATED=2;
+    static MIGRATED=3;
 
     /*
     * Quota type for admission*/

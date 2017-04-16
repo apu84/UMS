@@ -19,10 +19,10 @@ import java.util.List;
 public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
 
   String SELECT_ALL =
-      "SELECT id, reference_id, semester_id, payment_type, amount, to_char(payment_date,'dd/mm/yyyy') payment_date, last_modified, PAYMENT_MODE from PAYMENT_INFO ";
+      "SELECT id, reference_id, semester_id, payment_type, amount, to_char(payment_date,'dd/mm/yyyy') payment_date, last_modified, PAYMENT_MODE, quota from PAYMENT_INFO ";
   String INSERT_ONE =
-      "INSERT INTO  PAYMENT_INFO (REFERENCE_ID, SEMESTER_ID, PAYMENT_TYPE, AMOUNT, PAYMENT_DATE, LAST_MODIFIED, PAYMENT_MODE)"
-          + "    VALUES (?,?,?,?,sysdate," + getLastModifiedSql() + ",?)";
+      "INSERT INTO  PAYMENT_INFO (REFERENCE_ID, SEMESTER_ID, PAYMENT_TYPE, AMOUNT, PAYMENT_DATE, LAST_MODIFIED, PAYMENT_MODE, quota)"
+          + "    VALUES (?,?,?,?,sysdate," + getLastModifiedSql() + ",?,?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -34,13 +34,13 @@ public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
   public Integer create(MutablePaymentInfo pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getReferenceId(), pMutable.getSemester().getId(), pMutable
-        .getPaymentType().getId(), pMutable.getAmount(), pMutable.getPaymentMode().getId());
+        .getPaymentType().getId(), pMutable.getAmount(), pMutable.getPaymentMode().getId(), pMutable.getQuota());
   }
 
   @Override
-  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {
-    String query = SELECT_ALL + " WHERE REFERENCE_ID=? AND SEMESTER_ID=?";
-    return mJdbcTemplate.query(query, new Object[] {pReferenceId, pSemesterId}, new PaymentInfoRowMapper());
+  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId, String pQuota) {
+    String query = SELECT_ALL + " WHERE REFERENCE_ID=? AND SEMESTER_ID=? and quota=?";
+    return mJdbcTemplate.query(query, new Object[] {pReferenceId, pSemesterId, pQuota}, new PaymentInfoRowMapper());
   }
 
   class PaymentInfoRowMapper implements RowMapper<PaymentInfo> {
@@ -55,6 +55,7 @@ public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
       paymentInfo.setPaymentDate(pResultSet.getString("payment_date"));
       paymentInfo.setLastModified(pResultSet.getString("last_modified"));
       paymentInfo.setPaymentMode(PaymentMode.get(pResultSet.getInt("payment_mode")));
+      paymentInfo.setQuota(pResultSet.getString("quota"));
       return paymentInfo;
     }
   }
