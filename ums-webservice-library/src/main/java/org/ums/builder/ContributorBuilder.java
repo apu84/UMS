@@ -31,7 +31,7 @@ public class ContributorBuilder implements Builder<Contributor, MutableContribut
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Contributor pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+      final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getFullName());
     pBuilder.add("text", pReadOnly.getFullName());

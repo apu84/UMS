@@ -1,8 +1,20 @@
 package org.ums.academic.resource.helper;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.EmployeeResource;
@@ -19,17 +31,6 @@ import org.ums.resource.ResourceHelper;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.document.EmployeeDocument;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmployee, String> {
 
@@ -43,6 +44,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   private UserManager mUserManager;
 
   @Autowired
+  @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mEmployeeRepository;
 
   @Override
@@ -106,7 +108,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   public JsonObject searchUserByName(String pQuery, int page, final UriInfo pUriInfo) {
-    Page<EmployeeDocument> userDocuments = mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
+    List<EmployeeDocument> userDocuments = mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
     List<Employee> users = new ArrayList<>();
     for(EmployeeDocument document : userDocuments) {
       users.add(mEmployeeManager.get(document.getId()));

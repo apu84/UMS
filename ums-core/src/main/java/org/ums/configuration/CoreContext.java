@@ -47,6 +47,7 @@ public class CoreContext {
 
   @Autowired
   @Lazy
+  @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mEmployeeRepository;
 
   @Bean

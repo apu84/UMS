@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
@@ -19,6 +20,7 @@ import org.ums.solr.repository.document.EmployeeDocument;
 public class SolrIndexer extends Resource {
 
   @Autowired
+  @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mUserRepository;
 
   @Autowired

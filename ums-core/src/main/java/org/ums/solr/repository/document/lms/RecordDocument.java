@@ -101,7 +101,7 @@ public class RecordDocument implements SearchDocument<String> {
     corpAuthorBody = pRecord.getCorpSubBody();
     corpCityCountry = pRecord.getCorpCityCountry();
     callNo = pRecord.getCallNo();
-//    publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
+    // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
     status = pRecord.getRecordStatus().getLabel();
     bindingType = pRecord.getBookBindingType().getLabel();
     acquisitionType = pRecord.getAcquisitionType().getLabel();
