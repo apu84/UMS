@@ -9,6 +9,8 @@ import org.ums.persistent.model.registrar.PersistentAcademicInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
@@ -22,11 +24,20 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   }
 
   @Override
-  public int saveAcademicInformation(MutableAcademicInformation pMutableAcademicInformation) {
+  public int saveAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableAcademicInformation.getEmployeeId(),
-        pMutableAcademicInformation.getDegreeName(), pMutableAcademicInformation.getDegreeInstitute(),
-        pMutableAcademicInformation.getDegreePassingYear());
+    return mJdbcTemplate.batchUpdate(query, getEmployeeAcademicInformationParams(pMutableAcademicInformation)).length;
+  }
+
+  private List<Object[]> getEmployeeAcademicInformationParams(
+      List<MutableAcademicInformation> pMutableAcademicInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(AcademicInformation academicInformation : pMutableAcademicInformation) {
+      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegreeName(),
+          academicInformation.getDegreeInstitute(), academicInformation.getDegreePassingYear()});
+
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<AcademicInformation> {

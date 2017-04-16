@@ -24,7 +24,7 @@ public class AcademicInformationCache extends
   }
 
   @Override
-  public int saveAcademicInformation(MutableAcademicInformation pMutableAcademicInformation) {
+  public int saveAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
     return getManager().saveAcademicInformation(pMutableAcademicInformation);
   }
 

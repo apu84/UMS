@@ -3,24 +3,28 @@ package org.ums.domain.model.immutable.registrar;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
-import org.ums.domain.model.mutable.registrar.MutableEmployeeInformation;
+import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
 
 import java.io.Serializable;
 
-public interface EmployeeInformation extends Serializable, EditType<MutableEmployeeInformation>, Identifier<Integer>,
+public interface ServiceInformation extends Serializable, EditType<MutableServiceInformation>, Identifier<Integer>,
     LastModifier {
 
   int getEmployeeId();
 
-  String getEmploymentType();
+  int getEmploymentType();
 
   int getDesignation();
 
-  String getDeptOffice();
+  int getDeptOffice();
 
   String getJoiningDate();
 
   String getJobPermanentDate();
+
+  String getJobContractualDate();
+
+  String getJobProbationDate();
 
   String getJobTerminationDate();
 

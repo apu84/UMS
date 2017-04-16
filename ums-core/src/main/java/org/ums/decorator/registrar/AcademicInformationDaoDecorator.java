@@ -11,7 +11,7 @@ public class AcademicInformationDaoDecorator extends
     ContentDaoDecorator<AcademicInformation, MutableAcademicInformation, Integer, AcademicInformationManager> implements
     AcademicInformationManager {
   @Override
-  public int saveAcademicInformation(MutableAcademicInformation pMutableAcademicInformation) {
+  public int saveAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
     return getManager().saveAcademicInformation(pMutableAcademicInformation);
   }
 

@@ -12,7 +12,7 @@ public class PublicationInformationDaoDecorator extends
     implements PublicationInformationManager {
 
   @Override
-  public int savePublicationInformation(MutablePublicationInformation pMutablePublicationInformation) {
+  public int savePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     return getManager().savePublicationInformation(pMutablePublicationInformation);
   }
 

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class PersistentPersonalInformationDao extends PersonalInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_HOUSE_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?)";
+      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,TO_DATE(?, 'DD/MM/YYYY'), ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -25,7 +25,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   public int savePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutablePersonalInformation.getEmployeeId(),
-        pMutablePersonalInformation.getFatherName(), pMutablePersonalInformation.getLastName(),
+        pMutablePersonalInformation.getFirstName(), pMutablePersonalInformation.getLastName(),
         pMutablePersonalInformation.getGender(), pMutablePersonalInformation.getBloodGroup(),
         pMutablePersonalInformation.getFatherName(), pMutablePersonalInformation.getMotherName(),
         pMutablePersonalInformation.getNationality(), pMutablePersonalInformation.getReligion(),

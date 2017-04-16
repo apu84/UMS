@@ -3,12 +3,16 @@ package org.ums.persistent.dao.registrar;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.TrainingInformationDaoDecorator;
+import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.immutable.registrar.TrainingInformation;
+import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
 import org.ums.persistent.model.registrar.PersistentTrainingInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersistentTrainingInformationDao extends TrainingInformationDaoDecorator {
 
@@ -22,11 +26,21 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
   }
 
   @Override
-  public int saveTrainingInformation(MutableTrainingInformation pMutableTrainingInformation) {
+  public int saveTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableTrainingInformation.getEmployeeId(),
-        pMutableTrainingInformation.getTrainingName(), pMutableTrainingInformation.getTrainingInstitute(),
-        pMutableTrainingInformation.getTrainingFromDate(), pMutableTrainingInformation.getTrainingToDate());
+    return mJdbcTemplate.batchUpdate(query, getEmployeeTrainingInformationParams(pMutableTrainingInformation)).length;
+  }
+
+  private List<Object[]> getEmployeeTrainingInformationParams(
+      List<MutableTrainingInformation> pMutableTrainingInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(TrainingInformation trainingInformation : pMutableTrainingInformation) {
+      params.add(new Object[] {trainingInformation.getEmployeeId(), trainingInformation.getTrainingName(),
+          trainingInformation.getTrainingInstitute(), trainingInformation.getTrainingFromDate(),
+          trainingInformation.getTrainingToDate()});
+
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<TrainingInformation> {

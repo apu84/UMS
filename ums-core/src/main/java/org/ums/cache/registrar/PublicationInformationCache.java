@@ -24,7 +24,7 @@ public class PublicationInformationCache extends
   }
 
   @Override
-  public int savePublicationInformation(MutablePublicationInformation pMutablePublicationInformation) {
+  public int savePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     return getManager().savePublicationInformation(pMutablePublicationInformation);
   }
 

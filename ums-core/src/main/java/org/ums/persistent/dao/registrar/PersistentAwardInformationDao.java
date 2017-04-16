@@ -9,11 +9,13 @@ import org.ums.persistent.model.registrar.PersistentAwardInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersistentAwardInformationDao extends AwardInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARDED_SHORT_DESCRIPTION) VALUES (? ,? ,?, ?, ?)";
+      "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION) VALUES (? ,? ,?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -22,11 +24,20 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   }
 
   @Override
-  public int saveAwardInformation(MutableAwardInformation pMutableAwardInformation) {
+  public int saveAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableAwardInformation.getEmployeeId(),
-        pMutableAwardInformation.getAwardName(), pMutableAwardInformation.getAwardInstitute(),
-        pMutableAwardInformation.getAwardedYear(), pMutableAwardInformation.getAwardShortDescription());
+    return mJdbcTemplate.batchUpdate(query, getEmployeeAwardInformationParams(pMutableAwardInformation)).length;
+  }
+
+  private List<Object[]> getEmployeeAwardInformationParams(List<MutableAwardInformation> pMutableAwardInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(AwardInformation awardInformation : pMutableAwardInformation) {
+      params.add(new Object[] {awardInformation.getEmployeeId(), awardInformation.getAwardName(),
+          awardInformation.getAwardInstitute(), awardInformation.getAwardedYear(),
+          awardInformation.getAwardShortDescription()});
+
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<AwardInformation> {

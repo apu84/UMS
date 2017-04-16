@@ -12,7 +12,7 @@ public class ExperienceInformationDaoDecorator extends
     implements ExperienceInformationManager {
 
   @Override
-  public int saveExperienceInformation(MutableExperienceInformation pMutableExperienceInformation) {
+  public int saveExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
     return getManager().saveExperienceInformation(pMutableExperienceInformation);
   }
 

@@ -37,10 +37,10 @@ public class RegistrarContext {
   }
 
   @Bean
-  EmployeeInformationManager employeeInformationManager() {
-    EmployeeInformationCache employeeInformationCache = new EmployeeInformationCache(mCacheFactory.getCacheManager());
-    employeeInformationCache.setManager(new PersistentEmployeeInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return employeeInformationCache;
+  ServiceInformationManager serviceInformationManager() {
+    ServiceInformationCache serviceInformationCache = new ServiceInformationCache(mCacheFactory.getCacheManager());
+    serviceInformationCache.setManager(new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate()));
+    return serviceInformationCache;
   }
 
   @Bean

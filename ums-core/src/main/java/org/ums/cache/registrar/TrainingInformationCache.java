@@ -24,7 +24,7 @@ public class TrainingInformationCache extends
   }
 
   @Override
-  public int saveTrainingInformation(MutableTrainingInformation pMutableTrainingInformation) {
+  public int saveTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
     return getManager().saveTrainingInformation(pMutableTrainingInformation);
   }
 

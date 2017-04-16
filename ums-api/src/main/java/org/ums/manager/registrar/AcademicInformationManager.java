@@ -9,7 +9,7 @@ import java.util.List;
 public interface AcademicInformationManager extends
     ContentManager<AcademicInformation, MutableAcademicInformation, Integer> {
 
-  int saveAcademicInformation(final MutableAcademicInformation pMutableAcademicInformation);
+  int saveAcademicInformation(final List<MutableAcademicInformation> pMutableAcademicInformation);
 
   List<AcademicInformation> getEmployeeAcademicInformation(final int pEmployeeId);
 }

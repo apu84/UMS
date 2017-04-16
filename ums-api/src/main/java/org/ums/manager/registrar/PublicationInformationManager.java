@@ -9,7 +9,7 @@ import java.util.List;
 public interface PublicationInformationManager extends
     ContentManager<PublicationInformation, MutablePublicationInformation, Integer> {
 
-  int savePublicationInformation(final MutablePublicationInformation pMutablePublicationInformation);
+  int savePublicationInformation(final List<MutablePublicationInformation> pMutablePublicationInformation);
 
   List<PublicationInformation> getEmployeePublicationInformation(final int pEmployeeId);
 }

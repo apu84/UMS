@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AwardInformationManager extends ContentManager<AwardInformation, MutableAwardInformation, Integer> {
 
-  int saveAwardInformation(final MutableAwardInformation pMutableAwardInformation);
+  int saveAwardInformation(final List<MutableAwardInformation> pMutableAwardInformation);
 
   List<AwardInformation> getEmployeeAwardInformation(final int pEmployeeId);
 }

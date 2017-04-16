@@ -9,11 +9,13 @@ import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, AUTHOR, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK) VALUES (? ,? ,?, ?, ?, ?, ?, ?)";
+      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, AUTHOR, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK) VALUES (? ,? ,?, ?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -22,13 +24,22 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   }
 
   @Override
-  public int savePublicationInformation(MutablePublicationInformation pMutablePublicationInformation) {
+  public int savePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutablePublicationInformation.getEmployeeId(),
-        pMutablePublicationInformation.getPublicationTitle(), pMutablePublicationInformation.getInterestGenre(),
-        pMutablePublicationInformation.getAuthor(), pMutablePublicationInformation.getPublisherName(),
-        pMutablePublicationInformation.getDateOfPublication(), pMutablePublicationInformation.getPublicationType(),
-        pMutablePublicationInformation.getPublicationWebLink());
+    return mJdbcTemplate.batchUpdate(query, getEmployeePublicationInformationParams(pMutablePublicationInformation)).length;
+  }
+
+  private List<Object[]> getEmployeePublicationInformationParams(
+      List<MutablePublicationInformation> pMutablePublicationInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(PublicationInformation publicationInformation : pMutablePublicationInformation) {
+      params.add(new Object[] {publicationInformation.getEmployeeId(), publicationInformation.getPublicationTitle(),
+          publicationInformation.getInterestGenre(), publicationInformation.getAuthor(),
+          publicationInformation.getPublisherName(), publicationInformation.getDateOfPublication(),
+          publicationInformation.getPublicationType(), publicationInformation.getPublicationWebLink()});
+
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<PublicationInformation> {

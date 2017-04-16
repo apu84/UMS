@@ -10,15 +10,17 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class EmployeeInformationBuilder implements Builder<EmployeeInformation, MutableEmployeeInformation> {
+public class EmployeeInformationBuilder implements Builder<ServiceInformation, MutableServiceInformation> {
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, EmployeeInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ServiceInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("employeeDesignation", pReadOnly.getDesignation());
     pBuilder.add("employeeEmploymentType", pReadOnly.getEmploymentType());
     pBuilder.add("employeeDepartment", pReadOnly.getDeptOffice());
-    pBuilder.add("employeeJoiningDate", pReadOnly.getJobPermanentDate());
+    pBuilder.add("employeeJoiningDate", pReadOnly.getJoiningDate());
+    pBuilder.add("employeeContractualDate", pReadOnly.getJobContractualDate());
+    pBuilder.add("employeeProbationDate", pReadOnly.getJobProbationDate());
     pBuilder.add("employeeJobPermanentDate", pReadOnly.getJobPermanentDate());
     pBuilder.add("employeeExtensionNumber", pReadOnly.getExtNo());
     pBuilder.add("employeeShortName", pReadOnly.getShortName());
@@ -27,12 +29,14 @@ public class EmployeeInformationBuilder implements Builder<EmployeeInformation, 
   }
 
   @Override
-  public void build(MutableEmployeeInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+  public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
     pMutable.setDesignation(pJsonObject.getInt("employeeDesignation"));
-    pMutable.setEmploymentType(pJsonObject.getString("employeeEmploymentType"));
-    pMutable.setDeptOffice(pJsonObject.getString("employeeDepartment"));
+    pMutable.setEmploymentType(pJsonObject.getInt("employeeEmploymentType"));
+    pMutable.setDeptOffice(pJsonObject.getInt("employeeDepartment"));
     pMutable.setJoiningDate(pJsonObject.getString("employeeJoiningDate"));
+    pMutable.setJobContractualDate(pJsonObject.getString("employeeContractualDate"));
+    pMutable.setJobProbationDate(pJsonObject.getString("employeeProbationDate"));
     pMutable.setJobPermanentDate(pJsonObject.getString("employeeJobPermanentDate"));
     pMutable.setExtNo(pJsonObject.getInt("employeeExtensionNumber"));
     pMutable.setShortName(pJsonObject.getString("employeeShortName"));
@@ -49,8 +53,8 @@ public class EmployeeInformationBuilder implements Builder<EmployeeInformation, 
   }
 
   public void build(MutableAcademicInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getInt("employeId"));
-    pMutable.setDegreeName(pJsonObject.getString("academicDegreeName"));
+    pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
+    pMutable.setDegreeName(pJsonObject.getJsonObject("academicDegreeName").getString("name"));
     pMutable.setDegreeInstitute(pJsonObject.getString("academicInstitution"));
     pMutable.setDegreePassingYear(pJsonObject.getString("academicPassingYear"));
   }
@@ -134,13 +138,12 @@ public class EmployeeInformationBuilder implements Builder<EmployeeInformation, 
     pMutable.setLastName(pJsonObject.getString("lastName"));
     pMutable.setFatherName(pJsonObject.getString("fatherName"));
     pMutable.setMotherName(pJsonObject.getString("motherName"));
-    System.out.println("Hello Java World");
     System.out.println(pJsonObject.getJsonObject("gender").getString("name"));
-    pMutable.setGender(pJsonObject.getJsonObject("gender").getString("name"));
+    pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
     pMutable.setDateOfBirth(pJsonObject.getString("birthday"));
-    pMutable.setNationality(pJsonObject.getString("nationality"));
-    pMutable.setReligion(pJsonObject.getString("religion"));
-    pMutable.setMaritalStatus(pJsonObject.getInt("maritalStatus"));
+    pMutable.setNationality(pJsonObject.getJsonObject("nationality").getString("name"));
+    pMutable.setReligion(pJsonObject.getJsonObject("religion").getString("name"));
+    pMutable.setMaritalStatus(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
     pMutable.setSpouseName(pJsonObject.getString("spouseName"));
     pMutable.setNationalId(pJsonObject.getInt("nationalIdNo"));
     pMutable.setBloodGroup(pJsonObject.getString("bloodGroup"));
@@ -189,7 +192,7 @@ public class EmployeeInformationBuilder implements Builder<EmployeeInformation, 
     pMutable.setAuthor(pJsonObject.getString("authorsName"));
     pMutable.setPublisherName(pJsonObject.getString("publisherName"));
     pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
-    pMutable.setPublicationType(pJsonObject.getString("publicationType"));
+    pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
     pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
   }
 

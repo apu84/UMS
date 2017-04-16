@@ -12,7 +12,7 @@ public class TrainingInformationDaoDecorator extends
     TrainingInformationManager {
 
   @Override
-  public int saveTrainingInformation(MutableTrainingInformation pMutableTrainingInformation) {
+  public int saveTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
     return getManager().saveTrainingInformation(pMutableTrainingInformation);
   }
 

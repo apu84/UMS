@@ -9,7 +9,7 @@ import java.util.List;
 public interface TrainingInformationManager extends
     ContentManager<TrainingInformation, MutableTrainingInformation, Integer> {
 
-  int saveTrainingInformation(final MutableTrainingInformation pMutableTrainingInformation);
+  int saveTrainingInformation(final List<MutableTrainingInformation> pMutableTrainingInformation);
 
   List<TrainingInformation> getEmployeeTrainingInformation(final int pEmployeeId);
 }

@@ -57,6 +57,29 @@ module ums {
             }]
           }
         })
+        .state('empServiceInfo', {
+          url: "/empServiceInfo",
+          templateUrl: 'views/registrar-office/employee-information-management/employee-service-information.html',
+          controller: 'EmployeeServiceInformation',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js',
+                  'vendors/multi-select/js/jquery.multi-select.js',
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('meetingMS', {
           url: "/meetingMS",
           templateUrl: 'views/registrar-office/meeting-management/meeting.html',

@@ -12,7 +12,7 @@ public class AwardInformationDaoDecorator extends
     AwardInformationManager {
 
   @Override
-  public int saveAwardInformation(MutableAwardInformation pMutableAwardInformation) {
+  public int saveAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
     return getManager().saveAwardInformation(pMutableAwardInformation);
   }
 

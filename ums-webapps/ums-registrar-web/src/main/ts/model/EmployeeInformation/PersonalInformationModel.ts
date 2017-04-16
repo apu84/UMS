@@ -65,8 +65,8 @@ module ums {
         name: string;
     }
 
-    export interface IReligion{
-    id: number;
-    name: string;
-}
+    export interface IReligion {
+        id: number;
+        name: string;
+    }
 }

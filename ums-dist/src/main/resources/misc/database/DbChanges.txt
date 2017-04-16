@@ -996,21 +996,6 @@ CREATE TABLE DB_IUMS.UG_LATE_FEE
 //********************************************Employee Information Management*****************************************
 
 
-CREATE TABLE DB_IUMS.EMPLOYESS1
-(
-  EMPLOYEE_ID NUMBER PRIMARY KEY,
-  EMPLOYMENT_TYPE VARCHAR2(2 BYTE),
-  DESIGNATION  NUMBER,
-  DEPT_OFFICE  VARCHAR2(4 BYTE),
-  JOB_JOINING_DATE DATE,
-  JOB_PERMANENT_DATE DATE,
-  RESIGN_DATE DATE,
-  EXT_NO NUMBER,
-  SHORT_NAME VARCHAR2(5 BYTE),
-  ROOM_NO VARCHAR2(25 BYTE)
-);
-
-
 CREATE TABLE DB_IUMS.EMP_PERSONAL_INFO
 (
   EMPLOYEE_ID NUMBER PRIMARY KEY,
@@ -1166,6 +1151,35 @@ before insert on EMP_EXPERIENCE_INFO
 for each row
 begin
    select emp_experience_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
+
+
+CREATE TABLE DB_IUMS.EMP_SERVICE_INFO
+(
+  ID NUMBER PRIMARY KEY,
+  EMPLOYEE_ID         NUMBER,
+  EMPLOYMENT_TYPE     VARCHAR2(2 BYTE),
+  DESIGNATION         NUMBER,
+  DEPT_OFFICE         VARCHAR2(4 BYTE),
+  JOB_JOINING_DATE    DATE,
+  JOB_PERMANENT_DATE  DATE,
+  RESIGN_DATE         DATE,
+  EXT_NO              NUMBER,
+  SHORT_NAME          VARCHAR2(5 BYTE),
+  ROOM_NO             VARCHAR2(25 BYTE)
+)
+
+create sequence emp_service_info_id_seq;
+
+create trigger trg_emp_service_info_id
+before insert on EMP_SERVICE_INFO
+for each row
+begin
+   select emp_service_info_id_seq.nextval
    into :new.id
    from dual;
 end;

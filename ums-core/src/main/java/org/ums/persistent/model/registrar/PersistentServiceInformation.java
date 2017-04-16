@@ -2,26 +2,28 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.EmployeeInformation;
-import org.ums.domain.model.mutable.registrar.MutableEmployeeInformation;
-import org.ums.manager.registrar.EmployeeInformationManager;
+import org.ums.domain.model.immutable.registrar.ServiceInformation;
+import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
+import org.ums.manager.registrar.ServiceInformationManager;
 
-public class PersistentEmployeeInformation implements MutableEmployeeInformation {
+public class PersistentServiceInformation implements MutableServiceInformation {
 
-  private static EmployeeInformationManager sEmployeeInformationManager;
+  private static ServiceInformationManager sEmployeeInformationManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sEmployeeInformationManager =
-        applicationContext.getBean("employeeInformationManager", EmployeeInformationManager.class);
+        applicationContext.getBean("employeeInformationManager", ServiceInformationManager.class);
   }
 
   private int mId;
   private int mEmployeeId;
-  private String mEmploymentType;
+  private int mEmploymentType;
   private int mDesignation;
-  private String mDeptOffice;
+  private int mDeptOffice;
   private String mJoiningDate;
+  private String mJobContractualDate;
+  private String mJobProbationDate;
   private String mJobPermanentDate;
   private String mJobTerminationDate;
   private int mExtNo;
@@ -29,14 +31,16 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   private String mRoomNo;
   private String mLastModified;
 
-  public PersistentEmployeeInformation() {}
+  public PersistentServiceInformation() {}
 
-  public PersistentEmployeeInformation(EmployeeInformation pEmployeeInformation) {
+  public PersistentServiceInformation(ServiceInformation pEmployeeInformation) {
     mEmployeeId = pEmployeeInformation.getEmployeeId();
     mEmploymentType = pEmployeeInformation.getEmploymentType();
     mDesignation = pEmployeeInformation.getDesignation();
     mDeptOffice = pEmployeeInformation.getDeptOffice();
     mJoiningDate = pEmployeeInformation.getJoiningDate();
+    mJobContractualDate = pEmployeeInformation.getJobContractualDate();
+    mJobProbationDate = pEmployeeInformation.getJobProbationDate();
     mJobPermanentDate = pEmployeeInformation.getJobPermanentDate();
     mJobTerminationDate = pEmployeeInformation.getJobTerminationDate();
     mExtNo = pEmployeeInformation.getExtNo();
@@ -45,8 +49,8 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   }
 
   @Override
-  public MutableEmployeeInformation edit() {
-    return new PersistentEmployeeInformation(this);
+  public MutableServiceInformation edit() {
+    return new PersistentServiceInformation(this);
   }
 
   @Override
@@ -90,7 +94,7 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   }
 
   @Override
-  public void setEmploymentType(String pEmploymentType) {
+  public void setEmploymentType(int pEmploymentType) {
     mEmploymentType = pEmploymentType;
   }
 
@@ -100,7 +104,7 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   }
 
   @Override
-  public void setDeptOffice(String pDeptOffice) {
+  public void setDeptOffice(int pDeptOffice) {
     mDeptOffice = pDeptOffice;
   }
 
@@ -112,6 +116,16 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   @Override
   public void setJobPermanentDate(String pJobPermanentDate) {
     mJobPermanentDate = pJobPermanentDate;
+  }
+
+  @Override
+  public void setJobContractualDate(String pJobContractualDate) {
+    mJobContractualDate = pJobContractualDate;
+  }
+
+  @Override
+  public void setJobProbationDate(String pJobProbationDate) {
+    mJobProbationDate = pJobProbationDate;
   }
 
   @Override
@@ -140,7 +154,7 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   }
 
   @Override
-  public String getEmploymentType() {
+  public int getEmploymentType() {
     return mEmploymentType;
   }
 
@@ -150,7 +164,7 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   }
 
   @Override
-  public String getDeptOffice() {
+  public int getDeptOffice() {
     return mDeptOffice;
   }
 
@@ -162,6 +176,16 @@ public class PersistentEmployeeInformation implements MutableEmployeeInformation
   @Override
   public String getJobPermanentDate() {
     return mJobPermanentDate;
+  }
+
+  @Override
+  public String getJobContractualDate() {
+    return mJobContractualDate;
+  }
+
+  @Override
+  public String getJobProbationDate() {
+    return mJobProbationDate;
   }
 
   @Override

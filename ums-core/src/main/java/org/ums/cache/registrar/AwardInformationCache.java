@@ -24,7 +24,7 @@ public class AwardInformationCache extends
   }
 
   @Override
-  public int saveAwardInformation(MutableAwardInformation pMutableAwardInformation) {
+  public int saveAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
     return getManager().saveAwardInformation(pMutableAwardInformation);
   }
 

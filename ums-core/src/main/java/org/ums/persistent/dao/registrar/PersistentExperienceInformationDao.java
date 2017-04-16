@@ -9,11 +9,13 @@ import org.ums.persistent.model.registrar.PersistentExperienceInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersistentExperienceInformationDao extends ExperienceInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EMPLOYEE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO) VALUES (? ,? ,?, ?, ?)";
+      "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO) VALUES (?,?,?,?,?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -22,11 +24,21 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
   }
 
   @Override
-  public int saveExperienceInformation(MutableExperienceInformation pMutableExperienceInformation) {
+  public int saveExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableExperienceInformation.getEmployeeId(),
-        pMutableExperienceInformation.getExperienceInstitute(), pMutableExperienceInformation.getDesignation(),
-        pMutableExperienceInformation.getExperienceFromDate(), pMutableExperienceInformation.getExperienceToDate());
+    return mJdbcTemplate.batchUpdate(query, getEmployeeExperienceInformationParams(pMutableExperienceInformation)).length;
+  }
+
+  private List<Object[]> getEmployeeExperienceInformationParams(
+      List<MutableExperienceInformation> pMutableExperienceInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(ExperienceInformation experienceInformation : pMutableExperienceInformation) {
+      params.add(new Object[] {experienceInformation.getEmployeeId(), experienceInformation.getExperienceInstitute(),
+          experienceInformation.getDesignation(), experienceInformation.getExperienceFromDate(),
+          experienceInformation.getExperienceToDate()});
+
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<ExperienceInformation> {

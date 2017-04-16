@@ -1,6 +1,4 @@
 module ums{
-    import IPromise = ng.IPromise;
-
     export class EmployeeInformationService{
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
@@ -22,6 +20,7 @@ module ums{
             });
             return defer.promise;
         }
+
 
         public getEmployeeInformation(employeeId: number): ng.IPromise<any> {
             var defer = this.$q.defer();
