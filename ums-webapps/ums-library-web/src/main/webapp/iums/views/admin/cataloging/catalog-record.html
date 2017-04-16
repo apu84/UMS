@@ -214,6 +214,8 @@
     </fieldset>
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>Contributors
+            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"></i>
+            &nbsp;&nbsp;
             <span style="float: right;">[ <a ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;color: white;"></i></a> ]</span>
         </legend>
 
@@ -230,7 +232,6 @@
                 </select>
             </div>
             <label  class="col-md-1 control-label" for="contributorName{{$index}}">Name
-                &nbsp;&nbsp;<i class="fa fa-wpforms  fa-lg" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"></i>
             </label>
             <div class="col-md-4" id="ami{{$index}}">
                 <div  data-ng-if="!data.readOnlyMode">
@@ -260,15 +261,14 @@
         <legend>Imprint</legend>
         <div class="form-group">
             <label class="col-md-1 control-label" for="publisher">Publisher
-                &nbsp;&nbsp;<i class="fa fa-wpforms  fa-lg" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher"></i>
+                &nbsp<i class="fa fa-wpforms  fa-md"  style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher"></i>
+                &nbsp;<i class="fa fa-refresh" data-ng-click="reloadPublishers()"></i>
             </label>
             <div class="col-md-4">
-                <!--
-                <select  class="form-control" data-select="select2" data-ng-model="abc" placeholder="Select a Publisher" style="width:99%;" id="publisher" name="publisher">
-                </select>
-                -->
-                <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showPublisherSelect2"
+            <span data-ng-if="showPublisherSelect2">
+                <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
                        datas="publisherList"  placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"  id="publisher" name="publisher"/>
+            </span>
 
             </div>
             <label class="col-md-1 control-label" for="placeOfPublication">PoP</label>

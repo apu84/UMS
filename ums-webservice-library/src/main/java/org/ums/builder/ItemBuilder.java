@@ -54,12 +54,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     // pMutable.setId(pJsonObject.get("title"));
     pMutable.setMfn(Long.valueOf(pJsonObject.getString("mfnNo")));
-    pMutable.setCopyNumber(pJsonObject.getInt("copyNumber"));
+    pMutable.setCopyNumber(Integer.valueOf(pJsonObject.getString("copyNumber")));
     pMutable.setAccessionNumber(pJsonObject.getString("accessionNumber"));
     pMutable.setAccessionDate(pJsonObject.getString("accessionDate"));
     if(pJsonObject.containsKey("barcode"))
       pMutable.setBarcode(pJsonObject.getString("barcode"));
-    pMutable.setPrice(pJsonObject.getJsonNumber("price").doubleValue());
+    pMutable.setPrice(Double.valueOf(pJsonObject.getString("price")));
     pMutable.setInternalNote(pJsonObject.getString("internalNote"));
     // pMutable.setSupplier(pJsonObject.getInt("copyNumber"));
     // pMutable.setSupplierId(pJsonObject.getInt("supplier"));

@@ -13,11 +13,7 @@ import org.ums.enums.library.ContributorCategory;
  */
 public interface MutableContributor extends Contributor, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
-  void setFirstName(final String pFirstName);
-
-  void setMiddleName(final String pMiddleName);
-
-  void setLastName(final String pLastName);
+  void setFullName(final String pFullName);
 
   void setShortName(final String pShortName);
 
@@ -26,6 +22,8 @@ public interface MutableContributor extends Contributor, Editable<Long>, Mutable
   void setAddress(final String pAddress);
 
   void setCountry(final Country pCountry);
+
+  void setCountryId(final Integer pCountryId);
 
   void setCategory(final ContributorCategory pContributorCategory);
 

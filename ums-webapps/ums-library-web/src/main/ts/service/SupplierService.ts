@@ -15,7 +15,7 @@ module ums{
 
     public updateRecord(supplier : ISupplier):ng.IPromise<any> {
       var resourceUrl = "supplier/"+supplier.id;
-      return super.bUpdateRecord(resourceUrl, supplier);
+      return super.bUpdateRecord(resourceUrl, supplier, "supplier");
     }
 
     public deleteRecord(supplierId : string) : ng.IPromise<any> {

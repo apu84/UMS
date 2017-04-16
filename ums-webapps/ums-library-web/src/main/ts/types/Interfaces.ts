@@ -6,6 +6,11 @@ module ums {
     id: string,
     name: string;
     text: string;
+    shortName:string;
+    gender:string;
+    countryId: string;
+    countryName: string;
+    address:string;
   }
   export interface INoteEntry {
     viewOrder: number;

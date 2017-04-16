@@ -77,6 +77,7 @@ interface Select2Options {
    */
   templateSelection?: (object: Select2SelectionObject) => any;
   templateResult?: (object: Select2SelectionObject) => any;
+  simple_tags?:boolean;
 }
 
 interface Select2JQueryEventObject extends JQueryEventObject {

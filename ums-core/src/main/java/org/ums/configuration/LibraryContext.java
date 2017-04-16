@@ -3,19 +3,25 @@ package org.ums.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.ums.cache.CacheFactory;
+import org.ums.cache.EmployeeCache;
 import org.ums.cache.LibraryCache;
 import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.*;
 import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.enums.library.ContributorCategory;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.LibraryManager;
 import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.*;
+import org.ums.persistent.dao.PersistentEmployeeDao;
 import org.ums.persistent.dao.PersistentLibraryDao;
 import org.ums.persistent.dao.common.PersistentCountryDao;
 import org.ums.persistent.dao.library.*;
+import org.ums.solr.repository.transaction.EmployeeTransaction;
+import org.ums.solr.repository.transaction.lms.RecordTransaction;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -58,14 +64,19 @@ public class LibraryContext {
   @Bean
   PublisherManager publisherManager() {
     PublisherCache publisherCache = new PublisherCache(mCacheFactory.getCacheManager());
-    publisherCache.setManager(new PersistentPublisherDao(mTemplateFactory.getLmsJdbcTemplate()));
+    publisherCache.setManager(new PersistentPublisherDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return publisherCache;
   }
 
   @Bean
+  @Lazy
   RecordManager recordManager() {
+    RecordTransaction recordTransaction = new RecordTransaction();
+    PersistentRecordDao persistentRecordDao =
+        new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator);
+    recordTransaction.setManager(persistentRecordDao);
     RecordCache recordCache = new RecordCache(mCacheFactory.getCacheManager());
-    recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    recordCache.setManager(recordTransaction);
     return recordCache;
   }
 
@@ -79,7 +90,7 @@ public class LibraryContext {
   @Bean
   ContributorManager contributorManager() {
     ContributorCache contributorCache = new ContributorCache(mCacheFactory.getCacheManager());
-    contributorCache.setManager(new PersistentContributorDao(mTemplateFactory.getLmsJdbcTemplate()));
+    contributorCache.setManager(new PersistentContributorDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return contributorCache;
   }
 }

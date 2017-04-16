@@ -145,6 +145,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setAuthorMark(resultSet.getString("AUTHOR_MARK"));
 
       ImprintDto imprintDto = new ImprintDto();
+      record.setPublisherId(resultSet.getLong("PUBLISHER"));
       imprintDto.setPlaceOfPublication(resultSet.getString("PLACE_OF_PUBLICATION"));
       imprintDto.setDateOfPublication(resultSet.getString("DATE_YEAR_OF_PUBLICATION"));
       imprintDto.setCopyRightDate(resultSet.getString("COPY_RIGHT_DATE"));

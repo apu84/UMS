@@ -96,5 +96,7 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   String getLastUpdatedOn();
 
+  Long getPublisherId();
+
   String getLastUpdatedBy();
 }

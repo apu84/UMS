@@ -31,7 +31,7 @@ public class MutableSupplierResource extends Resource {
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteCourse(final @PathParam("object-id") Long pObjectId) throws Exception {
+  public Response deleteSupplier(final @PathParam("object-id") Long pObjectId) throws Exception {
     return mResourceHelper.delete(pObjectId);
   }
 

@@ -71,7 +71,7 @@
                                                 </tr>
                                                 </tr></thead>
                                                 <tbody>
-                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total"
+                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" pagination-id="supplierPaginator"
                                                     data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
 
 
@@ -85,7 +85,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="pull-right" style="margin-top:-30px;">
-                                                <dir-pagination-controls boundary-links="true"
+                                                <dir-pagination-controls boundary-links="true" pagination-id="supplierPaginator"
                                                                          on-page-change="pageChanged(newPageNumber)"
                                                                          template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
                                             </div>
@@ -152,7 +152,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="margin-top: 10px;" id="footer_supplier">
-                <button type="button" class="btn btn-dark btn-success"  value="add_supplier" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
+                <button type="button" class="btn btn-dark btn-success"  value="back_supplier_list" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
                 <button type="button" class="btn btn-danger btn-success"  value="delete_supplier" data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete</button>
                 <button type="button" class="btn btn-success btn-success"  value="add_supplier" onclick="$('#btn_addSupplier').click();" data-ng-show="data.showSave">Save</button>
                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>

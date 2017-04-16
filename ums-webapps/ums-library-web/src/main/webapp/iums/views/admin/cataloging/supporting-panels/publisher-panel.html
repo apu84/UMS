@@ -3,7 +3,7 @@
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <data-table-paginator-wrapper dataservice="publisherService"  datanotify="notifyService"
+            <data-table-paginator-wrapper dataservice="publisherService"  datanotify="notifyService" collectionlist="collectionList"
                                           ipp="10"
                                           tableprefix="publisher">
                 <div class="modal-header">
@@ -71,7 +71,7 @@
                                                 </tr>
                                                 </tr></thead>
                                                 <tbody>
-                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total"
+                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" pagination-id="publisherPaginator"
                                                     data-ng-mouseover="showActionPanel('publisherActionPanel',$index)" data-ng-mouseleave="hideActionPanel('publisherActionPanel',$index)">
 
 
@@ -85,7 +85,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="pull-right" style="margin-top:-30px;">
-                                                <dir-pagination-controls boundary-links="true"
+                                                <dir-pagination-controls boundary-links="true" pagination-id="publisherPaginator"
                                                                          on-page-change="pageChanged(newPageNumber)"
                                                                          template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
                                             </div>
@@ -107,10 +107,29 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-envelope"></i><input
+                                                        <div class="input-group" data-ng-if="data.select2Show">
+                                                            <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>
+                                                            <select class="form-control" style="text-align: left;"
+                                                                    ng-disabled="data.readOnlyMode"
+                                                                    data-select="select2"
+                                                                    data-ng-model="record.countryId"
+                                                                    data-ng-placeholder="Select a Country"
+                                                                    data-ng-options="country.id as country.name for country in collectionlist[0]">
+                                                                <option></option>
+                                                            </select>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="input-icon"><i class="fa fa-user-circle"></i><input
                                                                 id="contactPerson" type="text" placeholder="Contact Person"  class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
@@ -118,7 +137,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <div class="input-icon"><i class="fa fa-envelope"></i><input
+                                                        <div class="input-icon"><i class="fa fa-phone"></i><input
                                                                 id="phoneNumber" type="text" placeholder="Phone"  class="form-control" data-ng-model="record.phoneNumber" ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>

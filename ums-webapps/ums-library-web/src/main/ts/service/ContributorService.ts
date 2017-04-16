@@ -17,7 +17,7 @@ module ums{
 
     public updateRecord(supplier : ISupplier):ng.IPromise<any> {
       var resourceUrl = "contributor/"+supplier.id;
-      return super.bUpdateRecord(resourceUrl, supplier);
+      return super.bUpdateRecord(resourceUrl, supplier, "contributor");
     }
 
     public deleteRecord(supplierId : string) : ng.IPromise<any> {
@@ -25,14 +25,16 @@ module ums{
       return super.bDeleteRecord(resourceUrl, "supplier");
     }
 
+
     public getRecord(supplierId : string): ng.IPromise<any> {
       var resourceUrl = "contributor/"+supplierId
       return super.bGetRecord(resourceUrl);
     }
 
     private fetchDataForPaginationTable(): Function {
-      return super.bFetchDataForPaginationTable("contributor","(first_name||' '|| middle_name || ' '|| last_name)");
+      return super.bFetchDataForPaginationTable("contributor","full_name");
     }
+
 
     public fetchAllContributors() : ng.IPromise<any> {
       var resourceUrl = "contributor/all";

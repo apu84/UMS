@@ -13,7 +13,7 @@ module ums{
 
     public bCreateNewRecord(resourceUrl: string,messagePostfix : string, entry: any): ng.IPromise<any> {
         var defer = this.b$q.defer();
-        console.log(this.bLibConstants.mimeTypeJson);
+        // console.log(this.bLibConstants.mimeTypeJson);
         this.bHttpClient.post(resourceUrl, entry, 'application/json')
             .success(() => {
               defer.resolve(this.bMessageFactory.getSuccessMessage("Successfully created new "+messagePostfix));
@@ -23,12 +23,13 @@ module ums{
       return defer.promise;
       }
 
-    public bUpdateRecord(resourceUrl : string, entry : any):ng.IPromise<any> {
+    public bUpdateRecord(resourceUrl : string, entry : any, messagePostfix : string):ng.IPromise<any> {
       var defer = this.b$q.defer();
-      this.bHttpClient.put(resourceUrl, entry, 'application/json').then(function successCallback(response) {
-        defer.resolve();
+      this.bHttpClient.put(resourceUrl, entry, 'application/json').then((response) => {
+        defer.resolve(this.bMessageFactory.getSuccessMessage("Successfully updated selected "+messagePostfix));
       }, function errorCallback(response) {
         console.error(response);
+        defer.resolve(this.bMessageFactory.getErrorMessage("Failed to update  "+messagePostfix));
       });
       return defer.promise;
     }

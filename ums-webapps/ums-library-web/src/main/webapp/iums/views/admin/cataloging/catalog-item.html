@@ -102,12 +102,15 @@
     <div class="form-group">
 
         <label class="col-md-1 control-label">Supplier
-            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-lg" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-supplier"></i>
+            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-supplier"></i>
+            &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
+
         </label>
         <div class="col-md-3">
-            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showSupplierSelect2"
+            <span data-ng-if="showSupplierSelect2" id="supplierSelect2Div">
+            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
                    datas="supplierList"  placeholder="Select a Name" data-ng-model="item.supplier"  id="supplier" name="supplier"/>
-
+                </span>
         </div>
 
         <label class="col-md-1 control-label">Status</label>
@@ -162,7 +165,7 @@
                     <td align="center"><input type='text' style='width:80px;border: 1px solid grey;text-align: right; padding-right: 4px;' data-ng-model="item.price" /></td>
                     <td align="center">
                         <input type="text" class="form-control bbvfd" style="width: 99%"  data-select="select2"  page="true" id="bulkContributorName{{$index}}" name="bulkContributorName{{$index}}"
-                               data-ng-model="item.supplier.id"   datas="contributors"  placeholder="Select a Name"  />
+                               data-ng-model="item.supplier.id"   datas="supplierList"  placeholder="Select a Name"  />
                     </td>
                     <td align="center">
                         <select style="width: 98%;height: 24px;padding: 0px;" class="required" data-ng-model="item.status"  id="itemStatus1" name="itemStatus" data-convert-to-number>
@@ -182,7 +185,7 @@
             </div>
         </form>
     </div>
-<fieldset id="add_multiple_copies_span" data-ng-show="!data.showItemMainButtonPanel">
+<fieldset id="add_multiple_copies_span" data-ng-if="!data.showItemMainButtonPanel">
     <label for="number_of_copies">Number of copies of this item to add: </label>
     <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" style="text-align:center;border:1px solid grey;" ng-model="data.bulkAddCount">
     <input type="button" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" ng-click="addNewItems()">
@@ -206,7 +209,7 @@
                     <td>Supplier :</td>
                     <td>
                         <input type="text" class="form-control"   data-select="select2"  page="true"
-                               data-ng-model="bulk.config.supplier"   datas="contributors"  placeholder="Select a Name" id="configSupplierName" name="configSupplierName" />
+                               data-ng-model="bulk.config.supplier"   datas="supplierList"  placeholder="Select a Name" id="configSupplierName" name="configSupplierName" />
 
                     </td>
                 </tr>

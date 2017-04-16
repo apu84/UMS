@@ -8,6 +8,7 @@ import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
+import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentPublisher;
 import org.ums.persistent.model.library.PersistentRecord;
@@ -24,6 +25,9 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
   @Autowired
   RecordManager mRecordManager;
+
+  @Autowired
+  PublisherManager mPublisherManager;
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
@@ -83,9 +87,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     ImprintDto imprintDto = new ImprintDto();
     JsonObject imprintObject = (JsonObject) (pJsonObject.get("imprint"));
-    PersistentPublisher publisher = new PersistentPublisher();
-    publisher.setId(1);
-    imprintDto.setPublisher(publisher);
+    imprintDto.setPublisher(mPublisherManager.get(Long.valueOf(imprintObject.getString("publisher"))));
     imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
     imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
     imprintDto.setCopyRightDate(imprintObject.getString("copyRightDate"));

@@ -23,25 +23,23 @@ public class PersistentContributor implements MutableContributor {
 
   public PersistentContributor(final PersistentContributor pPersistentContributor) {
     mId = pPersistentContributor.getId();
-    mFirstName = pPersistentContributor.getFirstName();
-    mMiddleName = pPersistentContributor.getMiddleName();
-    mLastName = pPersistentContributor.getLastName();
+    mFullName = pPersistentContributor.getFullName();
     mShortName = pPersistentContributor.getShortName();
     mGender = pPersistentContributor.getGender();
     mAddress = pPersistentContributor.getAddress();
     mCountry = pPersistentContributor.getCountry();
+    mCountryId = pPersistentContributor.getCountryId();
     mContributorCategory = pPersistentContributor.getCategory();
     mRefUserId = pPersistentContributor.getRefUserId();
   }
 
   private Long mId;
-  private String mFirstName;
-  private String mMiddleName;
-  private String mLastName;
+  private String mFullName;
   private String mShortName;
   private Gender mGender;
   private String mAddress;
   private Country mCountry;
+  private Integer mCountryId;
   private ContributorCategory mContributorCategory;
   private String mRefUserId;
   private String mLastModified;
@@ -87,33 +85,13 @@ public class PersistentContributor implements MutableContributor {
   }
 
   @Override
-  public void setFirstName(String pFirstName) {
-    mFirstName = pFirstName;
+  public void setFullName(String pFullName) {
+    mFullName = pFullName;
   }
 
   @Override
-  public String getFirstName() {
-    return mFirstName;
-  }
-
-  @Override
-  public void setMiddleName(String pMiddleName) {
-    mMiddleName = pMiddleName;
-  }
-
-  @Override
-  public String getMiddleName() {
-    return mMiddleName;
-  }
-
-  @Override
-  public String getLastName() {
-    return mLastName;
-  }
-
-  @Override
-  public void setLastName(String pLastName) {
-    mLastName = pLastName;
+  public String getFullName() {
+    return mFullName;
   }
 
   @Override
@@ -174,5 +152,13 @@ public class PersistentContributor implements MutableContributor {
   @Override
   public void setRefUserId(String pRefUserId) {
     mRefUserId = pRefUserId;
+  }
+
+  public Integer getCountryId() {
+    return mCountryId;
+  }
+
+  public void setCountryId(Integer mCountryId) {
+    this.mCountryId = mCountryId;
   }
 }

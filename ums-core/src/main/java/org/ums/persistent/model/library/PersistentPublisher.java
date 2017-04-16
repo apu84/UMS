@@ -23,7 +23,7 @@ public class PersistentPublisher implements MutablePublisher {
     sCountryManager = applicationContext.getBean("countryManager", CountryManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mName;
   private int mCountryId;
   private Country mCountry;
@@ -49,12 +49,12 @@ public class PersistentPublisher implements MutablePublisher {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -85,7 +85,7 @@ public class PersistentPublisher implements MutablePublisher {
 
   @Override
   public Country getCountry() {
-    return sCountryManager.get(mId);
+    return sCountryManager.get(1);
   }
 
   @Override
@@ -94,7 +94,7 @@ public class PersistentPublisher implements MutablePublisher {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sSupplierManager.create(this);
   }
 

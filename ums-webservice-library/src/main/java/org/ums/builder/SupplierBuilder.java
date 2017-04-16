@@ -30,6 +30,8 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
     pBuilder.add("address", UmsUtils.nullConversion(pReadOnly.getAddress()));
     pBuilder.add("contactPerson", UmsUtils.nullConversion(pReadOnly.getContactPerson()));
     pBuilder.add("contactNumber", UmsUtils.nullConversion(pReadOnly.getContactNumber()));
+    pBuilder.add("email", UmsUtils.nullConversion(pReadOnly.getEmail()));
+    pBuilder.add("note", UmsUtils.nullConversion(pReadOnly.getNote()));
     pBuilder.add("lastModified", UmsUtils.nullConversion(pReadOnly.getLastModified()));
 
   }
@@ -38,14 +40,19 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
   public void build(final MutableSupplier pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     if(pJsonObject.containsKey("id"))
-      pMutable.setId(Long.valueOf(pJsonObject.getJsonNumber("id").toString()));
-
+      pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     pMutable.setName(pJsonObject.getString("name"));
-    pMutable.setAddress(pJsonObject.getString("address"));
-    pMutable.setNote(pJsonObject.getString("note"));
-    pMutable.setEmail(pJsonObject.getString("email"));
-    pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
-    pMutable.setContactNumber(pJsonObject.getString("contactNumber"));
+
+    if(pJsonObject.containsKey("address"))
+      pMutable.setAddress(pJsonObject.getString("address"));
+    if(pJsonObject.containsKey("note"))
+      pMutable.setNote(pJsonObject.getString("note"));
+    if(pJsonObject.containsKey("email"))
+      pMutable.setEmail(pJsonObject.getString("email"));
+    if(pJsonObject.containsKey("contactPerson"))
+      pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
+    if(pJsonObject.containsKey("contactNumber"))
+      pMutable.setContactNumber(pJsonObject.getString("contactNumber"));
     // pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

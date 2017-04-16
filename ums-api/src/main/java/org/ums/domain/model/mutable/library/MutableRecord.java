@@ -103,4 +103,6 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setLastUpdatedBy(String pLastUpdatedBy);
 
+  void setPublisherId(Long pPublisherId);
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class PublisherDaoDecorator extends ContentDaoDecorator<Publisher, MutablePublisher, Integer, PublisherManager>
+public class PublisherDaoDecorator extends ContentDaoDecorator<Publisher, MutablePublisher, Long, PublisherManager>
     implements PublisherManager {
   @Override
   public List<Publisher> getAllForPagination(final Integer pItemPerPage, final Integer pPage,

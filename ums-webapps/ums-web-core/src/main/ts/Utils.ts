@@ -168,6 +168,21 @@ module ums {
       return url.substring(startIndex, lastIndex);
     }
 
+    /**
+     * Set Select2 Value from parentElement and Search Term
+     */
+    public static setSelect2Value(parentElementId:string, searchTerm : string) {
+      $('#'+parentElementId).find('.select2-input').each(function (index) {
+      let inputElement: any = $(this)[0];
+      let inputElementId = inputElement.id;
+
+      $("#supplier").select2("search", searchTerm);
+      let e = jQuery.Event("keydown");
+      e.which = 13;
+      console.log(inputElementId);
+      $("#" + inputElementId).trigger(e);
+    });
+  }
 
 
   }
