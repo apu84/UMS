@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.builder.Builder;
 import org.ums.builder.PaymentInfoBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
-import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutablePaymentInfo;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.enums.*;
-import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 import org.ums.persistent.model.*;
 import org.ums.resource.ResourceHelper;
@@ -22,7 +19,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +59,8 @@ public class PaymentInfoResourceHelper extends ResourceHelper<PaymentInfo, Mutab
     semesterIdStr = semesterIdStr.substring(0, 2);
     AdmissionStudent admissionStudent =
         mAdmissionStudentManager.getAdmissionStudent(paymentInfos.getSemester().getId(),
-            org.ums.enums.ProgramType.get(Integer.parseInt(semesterIdStr)), paymentInfos.getReferenceId());
+            org.ums.enums.ProgramType.get(Integer.parseInt(semesterIdStr)), paymentInfos.getReferenceId(),
+            paymentInfos.getQuota());
     String studentId = generateStudentId(admissionStudent, paymentInfos.getPaymentType());
 
     updateAdmissionStudent(admissionStudent, studentId, paymentInfos.getPaymentType());
@@ -80,8 +77,9 @@ public class PaymentInfoResourceHelper extends ResourceHelper<PaymentInfo, Mutab
       final String pStudentId, final PaymentType pPaymentType) {
 
     PersistentAdmissionStudent mAdmissionStudent = new PersistentAdmissionStudent();
-    mAdmissionStudent.setId(pAdmissionStudent.getReceiptId());
-    mAdmissionStudent.setSemesterId(pAdmissionStudent.getSemester().getId());
+//    mAdmissionStudent.setId(pAdmissionStudent.getReceiptId());
+//    mAdmissionStudent.setSemesterId(pAdmissionStudent.getSemester().getId());
+    mAdmissionStudent = (PersistentAdmissionStudent) pAdmissionStudent;
     if(pAdmissionStudent.getUnit().equals("BBA")) {
       mAdmissionStudent.setUnit("BBA");
       List<Program> program = mProgramManager.getAll().stream().filter(p-> p.getShortName().equals("BBA")).collect(Collectors.toList());
@@ -147,12 +145,13 @@ public class PaymentInfoResourceHelper extends ResourceHelper<PaymentInfo, Mutab
     mStudentManager.create(student);
   }
 
-  public JsonObject getAdmissionPaymentInfo(final String pReceiptId, final int pSemesterId, final UriInfo mUriInfo) {
+  public JsonObject getAdmissionPaymentInfo(final String pReceiptId, final int pSemesterId, final String pQuota,
+      final UriInfo mUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     try {
-      List<PaymentInfo> paymentInfos = getContentManager().getPaymentInfo(pReceiptId, pSemesterId);
+      List<PaymentInfo> paymentInfos = getContentManager().getPaymentInfo(pReceiptId, pSemesterId, pQuota);
       for(PaymentInfo paymentInfo : paymentInfos) {
         JsonObjectBuilder jsonObject = Json.createObjectBuilder();
         getBuilder().build(jsonObject, paymentInfo, mUriInfo, localCache, PaymentType.ADMISSION_FEE);

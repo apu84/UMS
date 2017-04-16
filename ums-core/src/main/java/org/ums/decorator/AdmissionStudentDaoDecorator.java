@@ -47,8 +47,9 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType, String pReceiptId) {
-    return getManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType, String pReceiptId,
+      String pQuota) {
+    return getManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId, pQuota);
   }
 
   @Override
@@ -91,8 +92,8 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus) {
-    return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus);
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus, String quota) {
+    return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus, quota);
   }
 
   @Override

@@ -13,7 +13,7 @@ public class PaymentInfoDaoDecorator extends
     ContentDaoDecorator<PaymentInfo, MutablePaymentInfo, Integer, PaymentInfoManager> implements PaymentInfoManager {
 
   @Override
-  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {
-    return getManager().getPaymentInfo(pReferenceId, pSemesterId);
+  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId, String pQuota) {
+    return getManager().getPaymentInfo(pReferenceId, pSemesterId, pQuota);
   }
 }

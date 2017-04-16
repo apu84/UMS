@@ -29,11 +29,11 @@ public interface AdmissionStudentManager extends ContentManager<AdmissionStudent
   List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType, String pUnit,
       ProgramType pProgramType);
 
-  List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus);
+  List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus, String quota);
 
   int updateStudentsAllocatedProgram(final AdmissionStudent pAdmissionStudent, final MigrationStatus pMigrationStatus);
 
-  AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType, String pReceiptId);
+  AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType, String pReceiptId, String pQuota);
 
   AdmissionStudent getAdmissionStudent(final int pSemesterId, QuotaType pQuotaType, int pMeritSerialNo);
 

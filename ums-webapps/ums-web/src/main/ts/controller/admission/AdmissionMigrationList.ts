@@ -14,6 +14,8 @@ module ums{
     admissionStudentMap:any;
     modalData:any;
     deadline:string;
+    meritTypes:Array<IMeritListType>;
+    meritType:IMeritListType;
 
     showMainSection:boolean;
     searchSpinner:boolean;
@@ -35,6 +37,12 @@ module ums{
 
 
   interface  IProgramType{
+    id:string;
+    name:string;
+  }
+
+
+  interface IMeritListType{
     id:string;
     name:string;
   }
@@ -64,6 +72,9 @@ module ums{
       $scope.showMainSection=false;
       $scope.showAddButton=false;
       $scope.migrationStudents=[];
+      $scope.meritTypes = [];
+      $scope.meritTypes = this.appConstants.meritListTypes;
+      $scope.meritType = this.$scope.meritTypes[1];
 
       $scope.data = {
         settings:{
@@ -132,10 +143,10 @@ module ums{
       this.admissionStudentService.fetchTaletalkData(this.$scope.semester.id, +this.$scope.programType.id).then((admissionStudents:Array<AdmissionStudent>)=>{
 
         for(var i=0;i<admissionStudents.length;i++){
+          admissionStudents[i].quota=this.$scope.meritType.name;
           this.$scope.admissionStudents.push(admissionStudents[i]);
           this.$scope.admissionStudentMap[admissionStudents[i].receiptId] = admissionStudents[i];
         }
-        this.$scope.migrationStudents = [];
 
         this.fetchMigrationData();
 
@@ -167,9 +178,11 @@ module ums{
     }
 
     private fetchMigrationData(){
-      this.admissionStudentService.fetchMigrationData(this.$scope.semester.id).then((data)=>{
+      this.$scope.migrationStudents=[];
+      this.admissionStudentService.fetchMigrationData(this.$scope.semester.id, this.$scope.meritType.name).then((data)=>{
         this.$scope.migrationStudents = data;
-
+        console.log("Fetched migration students");
+        console.log(this.$scope.migrationStudents);
         this.configureViewSection();
         this.$scope.searchSpinner = false;
       });
@@ -192,11 +205,15 @@ module ums{
     }
 
     private processData(modalData:any){
+      console.log("modal data ----->");
+      console.log(modalData);
       this.$scope.disableSaveButton=false;
       this.$scope.migrationStudents=[];
       this.$scope.searchSpinner=false;
       this.addDate();
       this.fillUpAdmissionStudents(modalData).then((students:Array<AdmissionStudent>)=>{
+        console.log("Modal students");
+        console.log(students);
         this.$scope.showFileUploadSection=false;
       });
     }
@@ -230,7 +247,12 @@ module ums{
     private insertDataIntoAdmissionStudents(cellData:Array<string>){
 
       var receiptId=cellData[0];
+      console.log(receiptId);
+      console.log("Cell data");
+      console.log(cellData);
       var student:AdmissionStudent = this.$scope.admissionStudentMap[receiptId];
+      console.log("Student from map");
+      console.log(student);
       student.migrationStatus=Utils.MIGRATION_ABLE;
       student.migrationDes="Migration-able";
       this.$scope.migrationStudents.push(student);
@@ -263,6 +285,7 @@ module ums{
         item['receiptId'] = students[i].receiptId;
         item['semesterId'] = this.$scope.semester.id;
         item['deadline'] = this.$scope.deadline;
+        item['quota']=this.$scope.meritType.name;
         jsonObject.push(item);
       }
 

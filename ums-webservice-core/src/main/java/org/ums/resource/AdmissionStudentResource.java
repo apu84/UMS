@@ -65,11 +65,12 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   //
 
   @GET
-  @Path("/semester/{semester-id}/programType/{program-type}/receiptId/{receipt-id}")
+  @Path("/semester/{semester-id}/programType/{program-type}/receiptId/{receipt-id}/quota/{quota-type}")
   public JsonObject getStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
       @PathParam("program-type") int pProgramType, @PathParam("receipt-id") String pReceiptId,
-      final @Context Request pRequest) {
-    return mHelper.getAdmissionStudentByReceiptId(pSemesterId, ProgramType.get(pProgramType), pReceiptId, mUriInfo);
+      @PathParam("quota-type") String pQuota, final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentByReceiptId(pSemesterId, ProgramType.get(pProgramType), pReceiptId, pQuota,
+        mUriInfo);
   }
 
   @GET
@@ -90,9 +91,10 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   @GET
-  @Path("/migrationList/semester/{semester-id}")
-  public JsonObject getMigrationList(@PathParam("semester-id") int pSemesterId, final @Context Request pRequest) {
-    return mHelper.getMigrationList(pSemesterId, mUriInfo);
+  @Path("/migrationList/semester/{semester-id}/quota/{quota-type}")
+  public JsonObject getMigrationList(@PathParam("semester-id") int pSemesterId,
+      @PathParam("quota-type") String pQuotaType, final @Context Request pRequest) {
+    return mHelper.getMigrationList(pSemesterId, pQuotaType, mUriInfo);
   }
 
 }

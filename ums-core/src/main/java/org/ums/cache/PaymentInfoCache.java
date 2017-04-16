@@ -4,7 +4,6 @@ import org.ums.domain.model.immutable.PaymentInfo;
 import org.ums.domain.model.mutable.MutablePaymentInfo;
 import org.ums.manager.PaymentInfoManager;
 import org.ums.manager.CacheManager;
-import org.ums.util.CacheUtil;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class PaymentInfoCache extends ContentCache<PaymentInfo, MutablePaymentIn
   }
 
   @Override
-  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {
-    return getManager().getPaymentInfo(pReferenceId, pSemesterId);
+  public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId, String pQuota) {
+    return getManager().getPaymentInfo(pReferenceId, pSemesterId, pQuota);
   }
 }

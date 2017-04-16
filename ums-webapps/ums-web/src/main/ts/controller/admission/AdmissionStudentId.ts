@@ -6,6 +6,8 @@ module ums{
     programTypes:Array<IProgramType>;
     programType:IProgramType;
     admissionStudent: AdmissionStudent;
+    meritTypes:Array<IMeritListType>;
+    meritType:IMeritListType;
 
     showStudentSection: boolean;
 
@@ -17,6 +19,11 @@ module ums{
 
 
   interface  IProgramType{
+    id:string;
+    name:string;
+  }
+
+  interface IMeritListType{
     id:string;
     name:string;
   }
@@ -37,7 +44,9 @@ module ums{
       $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.showStudentSection=false;
-
+      $scope.meritTypes = [];
+      $scope.meritTypes = this.appConstants.meritListTypes;
+      $scope.meritType = this.$scope.meritTypes[1];
       $scope.showMainPanel = this.showManePanel.bind(this);
       $scope.searchByReceiptId  = this.searchByReceiptId.bind(this);
 
@@ -60,7 +69,7 @@ module ums{
 
     private searchByReceiptId(receiptId: string) {
       this.$scope.showStudentSection=false;
-      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId).then((data) => {
+      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId, this.$scope.meritType.name).then((data) => {
         this.$scope.admissionStudent = <AdmissionStudent>{};
         this.$scope.admissionStudent = data;
 

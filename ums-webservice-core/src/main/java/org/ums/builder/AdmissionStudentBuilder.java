@@ -76,6 +76,9 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
         pBuilder.add("programIdByTransfer", pReadOnly.getProgramByTransfer().getId());
         pBuilder.add("programNameByTransfer", pReadOnly.getProgramByTransfer().getShortName());
       }
+      if(pReadOnly.getMigrationStatus() != null) {
+        pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
+      }
     }
 
     if(pReadOnly.getStudentId() != null)

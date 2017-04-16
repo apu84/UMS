@@ -28,4 +28,6 @@ public interface PaymentInfo extends Serializable, EditType<MutablePaymentInfo>,
 
   PaymentMode getPaymentMode();
 
+  String getQuota();
+
 }

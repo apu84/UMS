@@ -2,7 +2,6 @@ package org.ums.report.generator;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.AdmissionAllTypesOfCertificate;
@@ -14,7 +13,6 @@ import org.ums.enums.SemesterStatus;
 import org.ums.manager.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.List;
 
 @Component
@@ -40,9 +38,9 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
       OutputStream pOutputStream) throws IOException, DocumentException {
 
     Semester semester = mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
-
+    // todo change static quota
     AdmissionStudent admissionStudent =
-        mAdmissionStudentManager.getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+        mAdmissionStudentManager.getAdmissionStudent(pSemesterId, pProgramType, pReceiptId, "GL");
 
     String getQuota = admissionStudent.getQuota();
     String quota;
