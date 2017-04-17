@@ -56,7 +56,6 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
   private UserManager mUserManager;
 
   @Autowired
-  @Qualifier("recordRepositoryImpl")
   RecordRepository mRecordRepository;
 
   @Override

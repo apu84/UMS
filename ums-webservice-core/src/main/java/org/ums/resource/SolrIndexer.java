@@ -21,10 +21,9 @@ import org.ums.solr.repository.lms.RecordRepository;
 public class SolrIndexer extends Resource {
 
   @Autowired
-  @Qualifier("employeeRepositoryImpl")
-  EmployeeRepository mUserRepository;
+  EmployeeRepository mEmployeeRepository;
 
-  @Qualifier("recordRepositoryImpl")
+  @Autowired
   RecordRepository mRecordRepository;
 
   @Autowired
@@ -39,7 +38,7 @@ public class SolrIndexer extends Resource {
 
   private void indexDocuments() {
     SimpleConverter<User, EmployeeDocument> converter = new SimpleConverter<>(User.class, EmployeeDocument.class);
-    mUserRepository.deleteAll();
-    mUserRepository.save(converter.convert(mUserManager.getAll()));
+    mEmployeeRepository.deleteAll();
+    mEmployeeRepository.save(converter.convert(mUserManager.getAll()));
   }
 }

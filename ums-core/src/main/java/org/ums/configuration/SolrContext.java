@@ -24,7 +24,9 @@ import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.solr.indexer.resolver.lms.RecordResolver;
 import org.ums.solr.repository.EmployeeRepository;
+import org.ums.solr.repository.EmployeeRepositoryImpl;
 import org.ums.solr.repository.lms.RecordRepository;
+import org.ums.solr.repository.lms.RecordRepositoryImpl;
 import org.ums.statistics.JdbcTemplateFactory;
 
 import com.google.common.collect.Lists;
@@ -46,26 +48,16 @@ public class SolrContext {
   @Autowired
   LibraryContext mLibraryContext;
 
-  @Autowired
-  @Lazy
-  @Qualifier("employeeRepositoryImpl")
-  EmployeeRepository mEmployeeRepository;
-
-  @Autowired
-  @Lazy
-  @Qualifier("recordRepositoryImpl")
-  RecordRepository mRecordRepository;
-
   @Bean
   public SolrClient solrClient() {
     return new HttpSolrClient("http://localhost:8983/solr/");
   }
 
   @Bean
-  public SolrTemplate solrTemplate(SolrClient client) throws Exception {
+  public SolrTemplate solrTemplate() throws Exception {
     // without core name mentioned in here, custom solr repository doesn't get the core name by
     // default
-    SolrTemplate template = new SolrTemplate(client, "ums");
+    SolrTemplate template = new SolrTemplate(solrClient(), "ums");
     template.setSolrConverter(new SolrJConverter());
     return template;
   }
@@ -86,22 +78,32 @@ public class SolrContext {
   }
 
   @Bean
-  EmployeeResolver employeeResolver() {
-    return new EmployeeResolver(mCoreContext.employeeManager(), mEmployeeRepository);
+  EmployeeResolver employeeResolver() throws Exception {
+    return new EmployeeResolver(mCoreContext.employeeManager(), employeeRepository());
   }
 
   @Bean
-  RecordResolver recordResolver() {
-    return new RecordResolver(mLibraryContext.recordManager(), mRecordRepository);
+  RecordRepository recordRepository() throws Exception {
+    return new RecordRepositoryImpl(solrTemplate());
   }
 
   @Bean
-  EntityResolverFactory entityResolverFactory() {
+  RecordResolver recordResolver() throws Exception {
+    return new RecordResolver(mLibraryContext.recordManager(), recordRepository());
+  }
+
+  @Bean
+  EntityResolverFactory entityResolverFactory() throws Exception {
     return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver(), recordResolver()));
   }
 
   @Bean
-  ConsumeIndex consumeIndex() {
+  ConsumeIndex consumeIndex() throws Exception {
     return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager());
+  }
+
+  @Bean
+  EmployeeRepository employeeRepository() throws Exception {
+    return new EmployeeRepositoryImpl(solrTemplate());
   }
 }
