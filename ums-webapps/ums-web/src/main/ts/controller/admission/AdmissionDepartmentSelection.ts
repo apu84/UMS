@@ -508,9 +508,7 @@ module ums{
 
     private checkForSameSelectedPrograms(student:AdmissionStudent){
       this.$scope.selectedStudent = student;
-      console.log("checking selected programs");
-      console.log(student);
-      console.log(this.$scope.selectedStudent.selectedProgram.shortName);
+
       if(this.$scope.selectedStudent.selectedProgram.id!=0 &&
           this.$scope.selectedStudent.waitingProgram.id!=0 ){
         if(this.$scope.selectedStudent.selectedProgram.id==this.$scope.selectedStudent.waitingProgram.id){
@@ -522,11 +520,14 @@ module ums{
       }else{
         this.$scope.disableSaveButton=false;
       }
+
+      console.log("students");
+      console.log(student);
       this.checkIfEmptyProgramIsSelected();
     }
 
     private checkIfEmptyProgramIsSelected(){
-      if(this.$scope.statisticsMap[this.$scope.selectedStudent.selectedProgram.id].remaining==0){
+      if(this.$scope.statisticsMap[this.$scope.selectedStudent.selectedProgram.id].remaining<=0){
         this.$scope.disableSaveButton=true;
         this.notify.error("No seat remaining for the selected program");
       }
