@@ -220,4 +220,27 @@ public class UmsUtils {
     return where;
 
   }
+
+  public static String[] convertJsonStringToStringArray(String stringJsonArray, String propertyName) {
+    List<String> strArr = new ArrayList<>();
+    try {
+      String abc = "{\"entries\":" + stringJsonArray+ "}";
+      JSONParser parser = new JSONParser();
+      Object obj = parser.parse(abc);
+
+      JSONObject filters = (JSONObject) obj;
+      JSONArray rules = (JSONArray) filters.get("entries");
+
+      for(Object rule_ : rules) {
+        JSONObject rule = (JSONObject) rule_;
+        strArr.add((String) rule.get(propertyName));
+      }
+    }
+    catch (Exception ex){
+
+    }
+
+
+    return strArr.stream().toArray(String[]::new);
+  }
 }

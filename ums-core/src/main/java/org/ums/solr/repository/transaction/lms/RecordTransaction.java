@@ -19,6 +19,20 @@ public class RecordTransaction extends RecordDaoDecorator {
     return id;
   }
 
+  @Override
+  public int update(MutableRecord pMutable) {
+    int update = getManager().update(pMutable);
+    generateIndexEntity(pMutable.getId(), false);
+    return update;
+  }
+
+  @Override
+  public int delete(MutableRecord pMutable) {
+    int delete = getManager().delete(pMutable);
+    generateIndexEntity(pMutable.getId(), true);
+    return delete;
+  }
+
   private void generateIndexEntity(Long pId, boolean isDeleted) {
     MutableIndex index = new PersistentIndex();
     index.setEntityId(pId.toString());

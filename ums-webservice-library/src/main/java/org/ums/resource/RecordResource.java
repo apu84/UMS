@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.resource.helper.PublisherResourceHelper;
 import org.ums.resource.helper.RecordResourceHelper;
+import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -35,5 +36,14 @@ public class RecordResource extends MutableRecordResource {
   public Response get(final @Context Request pRequest, final @PathParam("object-id") Long pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
+
+//  @GET
+//  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}/filter/{filter}")
+//  public JsonObject getAllForPagination(final @Context Request pRequest,
+//                                        final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
+//                                        final @PathParam("order") String pOrder, final @PathParam("filter") String pFilter) throws Exception {
+//    return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder, UmsUtils.getWhereClause(pFilter), mUriInfo);
+//  }
+
 
 }

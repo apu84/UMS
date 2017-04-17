@@ -1,6 +1,9 @@
 package org.ums.solr.repository.document.lms;
 
 import org.apache.solr.client.solrj.beans.Field;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
@@ -11,6 +14,10 @@ import org.ums.domain.model.immutable.library.Record;
 import org.ums.enums.library.MaterialType;
 import org.ums.manager.library.PublisherManager;
 import org.ums.solr.repository.document.SearchDocument;
+import org.ums.util.UmsUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ifti on 15-Apr-17.
@@ -83,7 +90,7 @@ public class RecordDocument implements SearchDocument<String> {
   private String contributors;
 
   @Field("subjects_txt")
-  private String subjects;
+  private String[] subjects;
 
   public RecordDocument() {}
 
@@ -107,8 +114,7 @@ public class RecordDocument implements SearchDocument<String> {
     acquisitionType = pRecord.getAcquisitionType().getLabel();
     keywords = pRecord.getKeyWords();
     contributors = pRecord.getContributorJsonString();
-    subjects = pRecord.getSubjectJsonString();
-
+    subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");
   }
 
   @Override
