@@ -1,5 +1,6 @@
 package org.ums.solr.repository.document.lms;
 
+import com.google.common.collect.Lists;
 import org.apache.solr.client.solrj.beans.Field;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,96 +26,98 @@ import java.util.List;
 @SolrDocument(solrCoreName = "ums")
 public class RecordDocument implements SearchDocument<String> {
 
-  @Autowired
-  PublisherManager mPublisherManager;
+  // @Autowired
+  // PublisherManager mPublisherManager;
 
   @Id
   @Indexed
   private String id;
 
   @Field("title_txt")
-  private String title;
+  private List<String> title;
 
   @Field("type_s")
   private String type = "Record";
 
-  @Field("materialType_txt")
-  private String materialType;
+  // @Field("materialType_txt")
+  // private List<String> materialType;
+  //
+  // @Field("seriesTitle_txt")
+  // private List<String> seriesTitle;
+  //
+  // @Field("volumeNo_txt")
+  // private List<String> volumeNo;
+  //
+  // @Field("volumeTitle_txt")
+  // private List<String> volumeTitle;
+  //
+  // @Field("changedTitle_txt")
+  // private List<String> changedTitle;
+  //
+  // @Field("isbn_txt")
+  // private List<String> isbn;
+  //
+  // @Field("issn_txt")
+  // private List<String> issn;
+  //
+  // @Field("corpAuthorMain_txt")
+  // private List<String> corpAuthorMain;
+  //
+  // @Field("corpAuthorBody_txt")
+  // private List<String> corpAuthorBody;
+  //
+  // @Field("corpCityCountry_txt")
+  // private List<String> corpCityCountry;
+  //
+  // @Field("callNo_txt")
+  // private List<String> callNo;
+  //
+  // @Field("publisher_txt")
+  // private List<String> publisher;
+  //
+  // @Field("status_txt")
+  // private List<String> status;
+  //
+  // @Field("bindingType_txt")
+  // private List<String> bindingType;
+  //
+  // @Field("acquisitionType_txt")
+  // private List<String> acquisitionType;
+  //
+  // @Field("keywords_txt")
+  // private List<String> keywords;
+  //
+  // @Field("contributors_txt")
+  // private List<String> contributors;
 
-  @Field("seriesTitle_txt")
-  private String seriesTitle;
-
-  @Field("volumeNo_txt")
-  private String volumeNo;
-
-  @Field("volumeTitle_txt")
-  private String volumeTitle;
-
-  @Field("changedTitle_txt")
-  private String changedTitle;
-
-  @Field("isbn_txt")
-  private String isbn;
-
-  @Field("issn_txt")
-  private String issn;
-
-  @Field("corpAuthorMain_txt")
-  private String corpAuthorMain;
-
-  @Field("corpAuthorBody_txt")
-  private String corpAuthorBody;
-
-  @Field("corpCityCountry_txt")
-  private String corpCityCountry;
-
-  @Field("callNo_txt")
-  private String callNo;
-
-  @Field("publisher_txt")
-  private String publisher;
-
-  @Field("status_txt")
-  private String status;
-
-  @Field("bindingType_text")
-  private String bindingType;
-
-  @Field("acquisitionType_txt")
-  private String acquisitionType;
-
-  @Field("keywords_txt")
-  private String keywords;
-
-  @Field("contributors_txt")
-  private String contributors;
-
-  @Field("subjects_txt")
-  private String[] subjects;
+  // @Field("subjects_txt")
+  // private String[] subjects;
 
   public RecordDocument() {}
 
   public RecordDocument(final Record pRecord) {
     id = pRecord.getMfn().toString();
-    title = pRecord.getTitle();
-    materialType = MaterialType.get(pRecord.getMaterialType().getId()).getLabel();
-    seriesTitle = pRecord.getSeriesTitle();
-    volumeTitle = pRecord.getVolumeTitle();
-    volumeNo = pRecord.getVolumeNo();
-    changedTitle = pRecord.getChangedTitle();
-    isbn = pRecord.getIsbn();
-    issn = pRecord.getIssn();
-    corpAuthorMain = pRecord.getCorpAuthorMain();
-    corpAuthorBody = pRecord.getCorpSubBody();
-    corpCityCountry = pRecord.getCorpCityCountry();
-    callNo = pRecord.getCallNo();
-    // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
-    status = pRecord.getRecordStatus().getLabel();
-    bindingType = pRecord.getBookBindingType().getLabel();
-    acquisitionType = pRecord.getAcquisitionType().getLabel();
-    keywords = pRecord.getKeyWords();
-    contributors = pRecord.getContributorJsonString();
-    subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");
+    title = Lists.newArrayList(pRecord.getTitle());
+    // materialType =
+    // Lists.newArrayList(MaterialType.get(pRecord.getMaterialType().getId()).getLabel());
+    // seriesTitle = Lists.newArrayList(pRecord.getSeriesTitle());
+    // volumeTitle = Lists.newArrayList(pRecord.getVolumeTitle());
+    // volumeNo = Lists.newArrayList(pRecord.getVolumeNo());
+    // changedTitle = Lists.newArrayList(pRecord.getChangedTitle());
+    // isbn = Lists.newArrayList(pRecord.getIsbn());
+    // issn = Lists.newArrayList(pRecord.getIssn());
+    // corpAuthorMain = Lists.newArrayList(pRecord.getCorpAuthorMain());
+    // corpAuthorBody = Lists.newArrayList(pRecord.getCorpSubBody());
+    // corpCityCountry = Lists.newArrayList(pRecord.getCorpCityCountry());
+    // callNo = Lists.newArrayList(pRecord.getCallNo());
+    // // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
+    // status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
+    // bindingType = Lists.newArrayList(pRecord.getBookBindingType().getLabel());
+    // acquisitionType = Lists.newArrayList(pRecord.getAcquisitionType().getLabel());
+    // keywords = Lists.newArrayList(pRecord.getKeyWords());
+    // contributors = Lists.newArrayList(pRecord.getContributorJsonString());
+    // subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(),
+    // "subject");
   }
 
   @Override

@@ -24,7 +24,7 @@ import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.solr.indexer.resolver.lms.RecordResolver;
 import org.ums.solr.repository.EmployeeRepository;
-import org.ums.solr.repository.RecordRepository;
+import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.statistics.JdbcTemplateFactory;
 
 import com.google.common.collect.Lists;
@@ -53,6 +53,7 @@ public class SolrContext {
 
   @Autowired
   @Lazy
+  @Qualifier("recordRepositoryImpl")
   RecordRepository mRecordRepository;
 
   @Bean

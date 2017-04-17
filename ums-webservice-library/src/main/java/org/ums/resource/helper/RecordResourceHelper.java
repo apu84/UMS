@@ -2,10 +2,13 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.ums.builder.RecordBuilder;
 import org.ums.builder.SupplierBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.immutable.library.Supplier;
@@ -19,12 +22,21 @@ import org.ums.persistent.model.library.PersistentSupplier;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.SemesterResource;
+import org.ums.solr.repository.EmployeeRepository;
+import org.ums.solr.repository.document.EmployeeDocument;
+import org.ums.solr.repository.document.lms.RecordDocument;
+import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.util.UmsUtils;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -42,6 +54,10 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  @Qualifier("recordRepositoryImpl")
+  RecordRepository mRecordRepository;
 
   @Override
   public RecordManager getContentManager() {
@@ -71,6 +87,28 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  public JsonObject searchRecord(String pQuery, int page, final UriInfo pUriInfo) {
+    List<RecordDocument> recordDocuments = mRecordRepository.findByCustomQuery(pQuery, new PageRequest(0, 10));
+    List<Record> records = new ArrayList<>();
+    for(RecordDocument document : recordDocuments) {
+      records.add(mManager.get(Long.valueOf(document.getId())));
+    }
+    return convertToJson(records, pUriInfo);
+  }
+
+  private JsonObject convertToJson(List<Record> records, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(Record record : records) {
+      children.add(toJson(record, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

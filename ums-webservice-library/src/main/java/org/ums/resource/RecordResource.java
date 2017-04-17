@@ -37,13 +37,14 @@ public class RecordResource extends MutableRecordResource {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
-//  @GET
-//  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}/filter/{filter}")
-//  public JsonObject getAllForPagination(final @Context Request pRequest,
-//                                        final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
-//                                        final @PathParam("order") String pOrder, final @PathParam("filter") String pFilter) throws Exception {
-//    return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder, UmsUtils.getWhereClause(pFilter), mUriInfo);
-//  }
-
+  @GET
+  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}/filter/{filter}")
+  public JsonObject getAllForPagination(final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
+      final @PathParam("order") String pOrder, final @PathParam("filter") String pFilter) throws Exception {
+    // return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder,
+    // UmsUtils.getWhereClause(pFilter), mUriInfo);
+    return mResourceHelper.searchRecord("Material Title 308", 1, mUriInfo);
+  }
 
 }

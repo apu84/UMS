@@ -13,6 +13,7 @@ import org.ums.manager.UserManager;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.converter.SimpleConverter;
 import org.ums.solr.repository.document.EmployeeDocument;
+import org.ums.solr.repository.lms.RecordRepository;
 
 @Component
 @Path("/indexer")
@@ -22,6 +23,9 @@ public class SolrIndexer extends Resource {
   @Autowired
   @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mUserRepository;
+
+  @Qualifier("recordRepositoryImpl")
+  RecordRepository mRecordRepository;
 
   @Autowired
   UserManager mUserManager;
