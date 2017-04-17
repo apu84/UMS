@@ -33,7 +33,6 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
     mEmployeeId = pPublicationInformation.getEmployeeId();
     mPublicationTitle = pPublicationInformation.getPublicationTitle();
     mInterestGenre = pPublicationInformation.getInterestGenre();
-    mAuthor = pPublicationInformation.getAuthor();
     mPublisherName = pPublicationInformation.getPublisherName();
     mDateOfPublication = pPublicationInformation.getDateOfPublication();
     mPublicationType = pPublicationInformation.getPublicationType();
@@ -97,11 +96,6 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public void setAuthor(String pAuthor) {
-    mAuthor = pAuthor;
-  }
-
-  @Override
   public void setPublisherName(String pPublisherName) {
     mPublisherName = pPublisherName;
   }
@@ -134,11 +128,6 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   @Override
   public String getInterestGenre() {
     return mInterestGenre;
-  }
-
-  @Override
-  public String getAuthor() {
-    return mAuthor;
   }
 
   @Override

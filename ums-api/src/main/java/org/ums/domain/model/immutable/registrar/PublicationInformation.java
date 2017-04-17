@@ -16,8 +16,6 @@ public interface PublicationInformation extends Serializable, EditType<MutablePu
 
   String getInterestGenre();
 
-  String getAuthor();
-
   String getPublisherName();
 
   String getDateOfPublication();

@@ -3,11 +3,13 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.registrar.ServiceInformation;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.EmployeeManager;
 
 import java.util.Date;
+import java.util.List;
 
 public class PersistentEmployee implements MutableEmployee {
 
@@ -41,6 +43,11 @@ public class PersistentEmployee implements MutableEmployee {
   private int mStatus;
   private String mShortName;
   private String mLastModified;
+  private List<ServiceInformation> mServiceInformationList;
+
+  public List<ServiceInformation> getServiceInformationList() {
+    return null;
+  }
 
   public PersistentEmployee() {
 

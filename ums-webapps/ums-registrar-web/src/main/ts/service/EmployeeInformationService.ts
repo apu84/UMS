@@ -7,8 +7,8 @@ module ums{
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
-        public saveEmployeeInformation(json: any): ng.IPromise<any> {
-            var url = "registrar/employee/saveEmployeeInformation";
+        public savePersonalInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/personal/savePersonalInformation";
             var defer = this.$q.defer();
             this.httpClient.post(url, json, 'application/json')
                 .success(() => {
@@ -22,7 +22,77 @@ module ums{
         }
 
 
-        public getEmployeeInformation(employeeId: number): ng.IPromise<any> {
+        public saveAcademicInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/academic/saveAcademicInformation";
+            var defer = this.$q.defer();
+            this.httpClient.post(url, json, 'application/json')
+                .success(() => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve("Saved");
+                }).error((data) => {
+                this.notify.error("Error in saving");
+                defer.resolve("Error");
+            });
+            return defer.promise;
+        }
+
+        public savePublicationInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/publication/savePublicationInformation";
+            var defer = this.$q.defer();
+            this.httpClient.post(url, json, 'application/json')
+                .success(() => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve("Saved");
+                }).error((data) => {
+                this.notify.error("Error in saving");
+                defer.resolve("Error");
+            });
+            return defer.promise;
+        }
+
+        public saveTrainingInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/training/saveTrainingInformation";
+            var defer = this.$q.defer();
+            this.httpClient.post(url, json, 'application/json')
+                .success(() => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve("Saved");
+                }).error((data) => {
+                this.notify.error("Error in saving");
+                defer.resolve("Error");
+            });
+            return defer.promise;
+        }
+
+        public saveAwardInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/award/saveAwardInformation";
+            var defer = this.$q.defer();
+            this.httpClient.post(url, json, 'application/json')
+                .success(() => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve("Saved");
+                }).error((data) => {
+                this.notify.error("Error in saving");
+                defer.resolve("Error");
+            });
+            return defer.promise;
+        }
+
+        public saveExperienceInformation(json: any): ng.IPromise<any> {
+            var url = "registrar/employee/experience/saveExperienceInformation";
+            var defer = this.$q.defer();
+            this.httpClient.post(url, json, 'application/json')
+                .success(() => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve("Saved");
+                }).error((data) => {
+                this.notify.error("Error in saving");
+                defer.resolve("Error");
+            });
+            return defer.promise;
+        }
+
+        public getPersonalInformation(employeeId: number): ng.IPromise<any> {
             var defer = this.$q.defer();
             this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -34,31 +104,63 @@ module ums{
             return defer.promise;
         }
 
-        public updateEmployeeInformation(employeeId: number, json:any): ng.IPromise<any>{
-            var url = "" + employeeId;
+        public getAcademicInformation(employeeId: number): ng.IPromise<any> {
             var defer = this.$q.defer();
-            this.httpClient.put(url, json, 'application/json')
-                .success(() => {
-                    this.notify.success("Updated");
-                    defer.resolve("Updated");
-                }).error((data) => {
-                this.notify.error("Error");
-                defer.resolve("Error");
-            });
+            this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
             return defer.promise;
         }
 
-        public deleteEmployeeInformation(): ng.IPromise<any>{
-            var url = "";
+        public getPublicationInformation(employeeId: number): ng.IPromise<any> {
             var defer = this.$q.defer();
-            this.httpClient.delete(url)
-                .success(() =>{
-                this.notify.success("Deleted");
-                defer.resolve("Deleted");
-                }).error(()=> {
-                this.notify.error("Error");
-                defer.resolve("Error");
-            });
+            this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+            return defer.promise;
+        }
+
+        public getTrainingInformation(employeeId: number): ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+            return defer.promise;
+        }
+
+        public getAwardInformation(employeeId: number): ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+            return defer.promise;
+        }
+
+        public getExperienceInformation(employeeId: number): ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get("" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
             return defer.promise;
         }
     }

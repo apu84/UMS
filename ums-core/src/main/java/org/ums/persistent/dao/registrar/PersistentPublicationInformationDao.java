@@ -15,7 +15,7 @@ import java.util.List;
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, AUTHOR, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK) VALUES (? ,? ,?, ?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?)";
+      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -34,9 +34,9 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     List<Object[]> params = new ArrayList<>();
     for(PublicationInformation publicationInformation : pMutablePublicationInformation) {
       params.add(new Object[] {publicationInformation.getEmployeeId(), publicationInformation.getPublicationTitle(),
-          publicationInformation.getInterestGenre(), publicationInformation.getAuthor(),
-          publicationInformation.getPublisherName(), publicationInformation.getDateOfPublication(),
-          publicationInformation.getPublicationType(), publicationInformation.getPublicationWebLink()});
+          publicationInformation.getInterestGenre(), publicationInformation.getPublisherName(),
+          publicationInformation.getDateOfPublication(), publicationInformation.getPublicationType(),
+          publicationInformation.getPublicationWebLink()});
 
     }
     return params;
@@ -50,7 +50,6 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setEmployeeId(resultSet.getInt("employee_id"));
       publicationInformation.setPublicationTitle(resultSet.getString("publication_title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
-      publicationInformation.setAuthor(resultSet.getString("author"));
       publicationInformation.setPublisherName(resultSet.getString("publisher_name"));
       publicationInformation.setDateOfPublication(resultSet.getString("date_of_publication"));
       publicationInformation.setPublicationType(resultSet.getString("publication_type"));

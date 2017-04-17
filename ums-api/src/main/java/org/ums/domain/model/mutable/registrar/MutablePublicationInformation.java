@@ -14,8 +14,6 @@ public interface MutablePublicationInformation extends PublicationInformation, E
 
   void setInterestGenre(final String pInterestGenre);
 
-  void setAuthor(final String pAuthor);
-
   void setPublisherName(final String pPublisherName);
 
   void setDateOfPublication(final String pDateOfPublication);
