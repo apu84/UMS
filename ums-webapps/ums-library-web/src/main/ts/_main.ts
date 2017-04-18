@@ -83,6 +83,9 @@
 /// <reference path='data.ts'/>
 
 /// <reference path='controller/Cataloging.ts'/>
+/// <reference path='controller/RecordSearch.ts'/>
+
+/// <reference path='controller/Cataloging.ts'/>
 /// <reference path='controller/PatronHome.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>

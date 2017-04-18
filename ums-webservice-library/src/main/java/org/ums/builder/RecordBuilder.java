@@ -1,5 +1,6 @@
 package org.ums.builder;
 
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -16,6 +17,7 @@ import org.ums.persistent.model.library.PersistentRecord;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -32,15 +34,27 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
-    // pBuilder.add("id", pReadOnly.getId());
-    // pBuilder.add("firstName", pReadOnly.getFirstName());
-    // pBuilder.add("middleName", pReadOnly.getMiddleName());
-    // pBuilder.add("lastName", pReadOnly.getLastName());
-    // pBuilder.add("shortName", pReadOnly.getShortName());
-    // pBuilder.add("gender", pReadOnly.getGender());
-    // pBuilder.add("address", pReadOnly.getAddress());
-    // pBuilder.add("countryId", pReadOnly.getCountryId());
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("title", pReadOnly.getTitle());
+    pBuilder.add("materialType", pReadOnly.getMaterialType().getLabel());
+    pBuilder.add("seriesTitle", pReadOnly.getSeriesTitle());
+    pBuilder.add("volumeNo", pReadOnly.getVolumeNo());
+    pBuilder.add("changedTitle", pReadOnly.getChangedTitle());
 
+    pBuilder.add("isbn", pReadOnly.getIsbn());
+    pBuilder.add("issn", pReadOnly.getIssn());
+    pBuilder.add("corpAuthorMain", pReadOnly.getCorpAuthorMain());
+
+    pBuilder.add("corpAuthorBody", pReadOnly.getCorpSubBody());
+    pBuilder.add("corpAuthorCountry", pReadOnly.getCorpCityCountry());
+    pBuilder.add("callNo", pReadOnly.getCallNo());
+//    pBuilder.add("publisher", pReadOnly.getPublisherId());
+    pBuilder.add("status", pReadOnly.getRecordStatus().getLabel());
+    pBuilder.add("bindingType", pReadOnly.getBookBindingType().getLabel());
+    pBuilder.add("acquisitionType", pReadOnly.getAcquisitionType().getLabel());
+    pBuilder.add("keywords", pReadOnly.getKeyWords());
+    pBuilder.add("contributors", pReadOnly.getContributorJsonString());
+    pBuilder.add("subjects", pReadOnly.getSubjectJsonString());
   }
 
   @Override

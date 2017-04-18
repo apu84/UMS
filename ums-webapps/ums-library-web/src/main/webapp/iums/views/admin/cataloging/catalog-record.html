@@ -227,7 +227,9 @@
             </div>
             <label for="contributorRole{{$index}}" class="col-md-1 control-label">Role</label>
             <div class="col-md-2">
-                <select class="required" style="width: 100%" name="contributorRole{{$index}}" id="contributorRole{{$index}}" ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
+                <select class="required" style="width: 100%" name="contributorRole{{$index}}" id="contributorRole{{$index}}"
+                        data-ng-model="contributor.role"
+                        ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
                     <option data-ng-repeat="role in data.contributorRoleOptions" value="{{role.id}}">{{role.name}}</option>
                 </select>
             </div>
@@ -235,17 +237,9 @@
             </label>
             <div class="col-md-4" id="ami{{$index}}">
                 <div  data-ng-if="!data.readOnlyMode">
-
-                    <!--
-                    <input type="text" class="form-control required" style="width: 99%"  data-select="select2"  page="true" id="contributorName{{$index}}" name="contributorName{{$index}}"
-                           data-ng-model="abc"   datas="contributors"  placeholder="Select a Name" />
-                    -->
                     <input type="text" class="form-control required" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showContributorSelect2"
-                           datas="contributorList"  placeholder="Select a Contributor" data-ng-model="record.imprint.publisher"  id="contributorName{{$index}}" name="contributorName{{$index}}"/>
-
-
+                           datas="contributorList"  placeholder="Select a Contributor" data-ng-model="contributor.id"  id="contributorName{{$index}}" name="contributorName{{$index}}"/>
                 </div>
-
                 <div  data-ng-if="data.readOnlyMode" style="padding-top: 6px;">
                     Name goes here...
                 </div>

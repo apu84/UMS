@@ -138,6 +138,23 @@ module ums{
         item.accessionNumber = firstAccession.replace(incrementSegment, serial);
       }
     }
+
+    /**
+     * Fetch Record List
+     */
+    public fetchRecords(): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      var resourceUrl = "record/all/ipp/1/page/2/order/3/filter/a";
+      this.httpClient.get(resourceUrl, 'application/json',
+          (json: any, etag: string) => {
+            defer.resolve(json.entries);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
+//asdfasasdasfs asdfsadf adsf
   }
 
   UMS.service("catalogingService",CatalogingService);

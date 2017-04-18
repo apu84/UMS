@@ -20,7 +20,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
 
   @Override
   public List<RecordDocument> findByCustomQuery(String searchTerm, Pageable pageable) {
-    Criteria conditions = createSearchConditions(searchTerm);
+    Criteria conditions = createSearchConditions("title");
     SimpleQuery search = new SimpleQuery(conditions);
     search.setPageRequest(pageable);
     Page<RecordDocument> results = this.getSolrOperations().queryForPage(search, RecordDocument.class);

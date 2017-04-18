@@ -38,6 +38,7 @@ module ums {
     reloadSuppliers : Function;
     reloadPublishers: Function;
     collectionList : Array<any>;
+    recordList : Array<IRecord>;
   }
 
   export class Cataloging {
@@ -70,6 +71,7 @@ module ums {
 
       $scope.contributors = Array<IContributor>();
       $scope.bulkItemList = Array<IItem>();
+      $scope.recordList = Array<IRecord>();
 
       $scope.data = {
         languageOptions: libConstants.languages,
@@ -135,6 +137,7 @@ module ums {
       this.addNewRow("subject");
       this.initializeDatePickers();
       catalogingService.fetchItems("1");
+      this.fetchRecords();
       this.setRecordHeaderTitle();
 
       this.getAllSuppliers();
@@ -145,6 +148,18 @@ module ums {
       $scope.showSupplierSelect2 = false;
       $scope.showPublisherSelect2 = false;
       $scope.showContributorSelect2 = false;
+    }
+
+    private fetchRecords() : void {
+      this.catalogingService.fetchRecords().then((response : any ) => {
+        console.log(response);
+        console.log( response.entries);
+        this.$scope.recordList = response.entries;
+
+        console.log(this.$scope.recordList);
+      }, function errorCallback(response) {
+        this.notify.error(response);
+      });
     }
 
     /**
@@ -490,6 +505,11 @@ module ums {
       this.$scope.record.physicalDescription.accompanyingMaterials = "Materials " + offSet;
       this.$scope.record.physicalDescription.dimensions = "Dimensions " + offSet;
       this.$scope.record.physicalDescription.paperQuality = "Paper Quality " + offSet;
+
+      this.$scope.record.noteList[0].note = "Note 0";
+      this.$scope.record.subjectList[0].subject = "Subject 0";
+      this.$scope.record.keywords = "Keyword1, ";
+
 
     }
 

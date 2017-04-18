@@ -181,6 +181,46 @@
     <div class="row">
         <div class="col-md-12">
     <div style="margin-top: 0px;" >
+        <table class="table table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+            <tr>
+                <th width="70%">Results</th>
+                <th width="30%">Available</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="record in recordList | itemsPerPage: 10" current-page="1" total-items="10" pagination-id="mainRecordPaginator">
+                <td>
+                    <ul class="list-unstyled">
+                        <li><span style="font-size: 110%;">1. </span><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a></li>
+                        <li>by <a>Unknown (Musician) [author.]</a></li>
+                        <li> Material type: book Book</li>
+                        <li>Publisher: <span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span></li>
+                    </ul>
+                    <p class="hold">
+                        <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview" href="javascript:void()">
+                            <img src="https://cdn3.iconfinder.com/data/icons/outline-location-icon-set/64/Library_1-128.png"
+                                 height="20" width="20" />
+                        </a>
+                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">View record</a>
+                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">Edit record</a>
+                        | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=83">Add/Edit item(s)</a>
+                    </p>
+                </td>
+                <td style="text-align: right;padding-right: 20px;">
+                    <ul class="list-unstyled">
+                        <li><span style="font-size: 100%;width: 50%;">Total : </span> <span style="font-size: 90%;width: 50%;">10 Copies</span></li>
+                        <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span style="font-size: 90%;width: 50%;">3 Copies</span></li>
+                        <li><span style="font-size: 100%;width: 50%;">Available : </span> <span style="font-size: 90%;width: 50%;">6 Copies</span></li>
+                        <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span style="font-size: 90%;width: 50%;">1 Copies</span></li>
+                    </ul>
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <!--
     <table class="table table-bordered table-striped table-condensed cf">
         <thead class="cf">
         <tr>
@@ -267,6 +307,7 @@
         </tr>
         </tbody>
     </table>
+    -->
 </div>
         </div>
     </div>

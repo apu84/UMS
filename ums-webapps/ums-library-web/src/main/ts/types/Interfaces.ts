@@ -1,9 +1,9 @@
 module ums {
 
   export interface IContributor {
+    id: string,
     viewOrder: number;
     role: number;
-    id: string,
     name: string;
     text: string;
     shortName:string;
