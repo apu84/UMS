@@ -135,10 +135,10 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     if(pAdmissionStudent.getUnit().equals("BBA")) {
       // todo assign deadline information for bba students
       String query =
-          "update admission_students set allocated_program_id=?, student_id=?, MIGRATION_STATUS=? where receipt_id=? and semester_id=? ";
-      return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
-          pAdmissionStudent.getStudentId(), MigrationStatus.NOT_MIGRATED.getId(), pAdmissionStudent.getReceiptId(),
-          pAdmissionStudent.getSemester().getId());
+          "update admission_students set allocated_program_id=?, student_id=?, MIGRATION_STATUS=?, program_id_by_merit=? where receipt_id=? and semester_id=? ";
+      return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(), pAdmissionStudent
+          .getStudentId(), MigrationStatus.NOT_MIGRATED.getId(), pAdmissionStudent.getAllocatedProgram().getId(),
+          pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester().getId());
     }
     else {
       if(pMigrationStatus == MigrationStatus.NOT_MIGRATED) {
