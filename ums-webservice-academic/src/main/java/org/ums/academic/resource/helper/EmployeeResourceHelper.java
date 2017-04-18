@@ -44,7 +44,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   private UserManager mUserManager;
 
   @Autowired
-  @Qualifier("employeeRepositoryImpl")
   EmployeeRepository mEmployeeRepository;
 
   @Override

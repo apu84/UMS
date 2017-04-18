@@ -17,7 +17,6 @@ import org.ums.manager.CacheWarmerManager;
 @Configuration
 @EnableAsync
 @EnableScheduling
-@EnableSolrRepositories(basePackages = "org.ums.solr.repository", multicoreSupport = true)
 @Import({CoreContext.class, AcademicContext.class, AdmissionContext.class, FeeContext.class, LibraryContext.class,
     SolrContext.class, RegistrarContext.class})
 public class UMSContext {
@@ -37,6 +36,9 @@ public class UMSContext {
   @Autowired
   AcademicContext mAcademicContext;
 
+  @Autowired
+  LibraryContext mLibraryContext;
+
   @Bean
   CacheWarmerManager cacheWarmerManager() {
     return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
@@ -47,7 +49,8 @@ public class UMSContext {
         mAcademicContext.courseGroupManager(), mAcademicContext.equivalentCourseManager(),
         mAcademicContext.teacherManager(), mAcademicContext.courseTeacherManager(), mAcademicContext.examinerManager(),
         mCoreContext.studentManager(), mAcademicContext.studentRecordManager(), mAcademicContext.classRoomManager(),
-        mAcademicContext.courseManager(), mAcademicContext.marksSubmissionStatusManager(), mCoreContext.userManager());
+        mAcademicContext.courseManager(), mAcademicContext.marksSubmissionStatusManager(), mCoreContext.userManager(),
+        mLibraryContext.recordManager());
   }
 
   @Bean

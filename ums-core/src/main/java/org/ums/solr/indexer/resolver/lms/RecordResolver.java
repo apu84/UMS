@@ -1,16 +1,11 @@
 package org.ums.solr.indexer.resolver.lms;
 
-import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.library.Record;
-import org.ums.manager.EmployeeManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.solr.indexer.model.Index;
 import org.ums.solr.indexer.resolver.EntityResolver;
-import org.ums.solr.indexer.resolver.EntityResolverFactory;
-import org.ums.solr.repository.EmployeeRepository;
-import org.ums.solr.repository.RecordRepository;
+import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.solr.repository.converter.SimpleConverter;
-import org.ums.solr.repository.document.EmployeeDocument;
 import org.ums.solr.repository.document.lms.RecordDocument;
 
 /**
@@ -39,7 +34,7 @@ public class RecordResolver implements EntityResolver {
       mRecordRepository.save(recordDocument);
     }
     else {
-      mRecordRepository.delete(pIndex.getEntityId());
+      mRecordRepository.delete(Long.valueOf(pIndex.getEntityId()));
     }
   }
 }

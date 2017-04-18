@@ -14,7 +14,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx">
 
   <context:component-scan
-      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.solr.repository,org.ums.persistent.model"/>
+      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.persistent.model"/>
   <context:annotation-config/>
   <context:spring-configured/>
 
