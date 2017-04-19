@@ -196,7 +196,7 @@ module ums{
             if( students[i].programIdByMerit!=null)
               students[i].selectedProgram=this.$scope.programMap[students[i].programIdByMerit];
             else{
-              students[i].slectedProgram = this.$scope.programs[0];
+              students[i].selectedProgram = this.$scope.programs[0];
             }
             if(students[i].programIdByTransfer!=null)
               students[i].waitingProgram = this.$scope.programMap[students[i].programIdByTransfer];
@@ -204,6 +204,8 @@ module ums{
               students[i].waitingProgram = this.$scope.programs[0];
             }
             this.$scope.admissionStudents.push(students[i]);
+
+            console.log(students[i]);
           }
         });
       }else{
@@ -590,15 +592,9 @@ module ums{
     private saveStudent(student:AdmissionStudent){
       console.log("students in save");
       console.log(student);
+      this.$scope.meritSerialNo=""+student.meritSlNo;
       this.$scope.selectedStudent = student;
-      if(this.$scope.selectedProgram!=null){
-        this.$scope.selectedStudent.selectedProgram = this.$scope.selectedProgram;
-      }
-      if(this.$scope.waitingProgram!=null){
-        this.$scope.selectedStudent.waitingProgram = this.$scope.waitingProgram;
-      }else{
-        this.$scope.selectedStudent.waitingProgram = this.$scope.programs[0];
-      }
+      this.$scope.selectedStudent = student;
       this.$scope.selectedStudent.deadline = this.$scope.deadLine;
       this.saveOnly();
     }
@@ -606,6 +602,9 @@ module ums{
     private saveOnly(){
       if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.deadLine=="" || this.$scope.deadLine==null){
         this.notify.error("Deadline is not selected");
+      }
+      else if(this.$scope.selectedStudent.selectedProgram.id=== this.$scope.waitingProgram.id){
+        this.notify.error("Both program can't be same");
       }
       else{
         this.convertToJson().then((json)=>{

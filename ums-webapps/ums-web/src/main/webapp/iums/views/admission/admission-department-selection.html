@@ -424,9 +424,30 @@
                                     <tr data-ng-repeat="s in statistics">
                                         <td>{{s.programName}}</td>
                                         <td align="center">{{s.allocatedSeat}}</td>
-                                        <td align="center">{{s.selected}}</td>
-                                        <td align="center">{{s.remaining}}</td>
-                                        <td align="center">{{s.waiting}}</td>
+                                        <td align="center">
+                                            <p data-ng-if="s.programId===selectedProgramIdClr || s.programId===waitingProgramIdClr" data-ng-style="{'background-color':statisticsColor}">
+                                                {{s.selected}}
+                                            </p>
+                                            <p data-ng-if="s.programId!=selectedProgramIdClr && s.programId!=waitingProgramIdClr " >
+                                                {{s.selected}}
+                                            </p>
+                                        </td>
+                                        <td align="center">
+                                            <p data-ng-if="s.programId==selectedProgramIdClr || s.programId==waitingProgramIdClr" data-ng-style="{'background-color':statisticsColor}">
+                                                {{s.remaining}}
+                                            </p>
+                                            <p data-ng-if="s.programId!=selectedProgramIdClr && s.programId!=waitingProgramIdClr" >
+                                                {{s.remaining}}
+                                            </p>
+                                        </td>
+                                        <td align="center">
+                                            <p data-ng-if="s.programId==selectedProgramIdClr || s.programId==waitingProgramIdClr" data-ng-style="{'background-color':statisticsColor}">
+                                                {{s.waiting}}
+                                            </p>
+                                            <p data-ng-if="s.programId != selectedProgramIdClr && s.programId != waitingProgramIdClr" >
+                                                {{s.waiting}}
+                                            </p>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
