@@ -44,7 +44,7 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
     @Override
     public AwardInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableAwardInformation awardInformation = new PersistentAwardInformation();
-      awardInformation.setEmployeeId(resultSet.getInt("employee_id"));
+      awardInformation.setEmployeeId(resultSet.getString("employee_id"));
       awardInformation.setAwardName(resultSet.getString("award_name"));
       awardInformation.setAwardInstitute(resultSet.getString("institution"));
       awardInformation.setAwardedYear(resultSet.getString("awarded_year"));

@@ -17,7 +17,7 @@ public class AwardInformationDaoDecorator extends
   }
 
   @Override
-  public List<AwardInformation> getEmployeeAwardInformation(int pEmployeeId) {
+  public List<AwardInformation> getEmployeeAwardInformation(String pEmployeeId) {
     return getManager().getEmployeeAwardInformation(pEmployeeId);
   }
 }

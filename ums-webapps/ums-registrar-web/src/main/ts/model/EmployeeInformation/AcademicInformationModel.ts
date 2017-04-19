@@ -1,7 +1,7 @@
 module ums{
     export interface IAcademicInformationModel{
-        employeeId: number;
-        academicDegreeName: IEmpDegree;
+        employeeId: string;
+        academicDegreeName: IDegreeType;
         academicInstitution: string;
         academicPassingYear: string;
     }

@@ -8,7 +8,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 public interface MutableAcademicInformation extends AcademicInformation, Editable<Integer>, MutableIdentifier<Integer>,
     MutableLastModifier {
 
-  void setEmployeeId(final int pEmployeeId);
+  void setEmployeeId(final String pEmployeeId);
 
   void setDegreeName(final String pDegreeName);
 

@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.ExperienceInformation;
 import org.ums.domain.model.mutable.registrar.MutableExperienceInformation;
 import org.ums.manager.registrar.ExperienceInformationManager;
 
@@ -17,7 +16,7 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   private int mId;
-  private int mEmployeeId;
+  private String mEmployeeId;
   private String mExperienceInstitute;
   private String mDesignation;
   private String mExperienceFromDate;
@@ -26,12 +25,12 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
 
   public PersistentExperienceInformation() {}
 
-  public PersistentExperienceInformation(ExperienceInformation pExperienceInformation) {
-    mEmployeeId = pExperienceInformation.getEmployeeId();
-    mExperienceInstitute = pExperienceInformation.getExperienceInstitute();
-    mDesignation = pExperienceInformation.getDesignation();
-    mExperienceFromDate = pExperienceInformation.getExperienceFromDate();
-    mExperienceToDate = pExperienceInformation.getExperienceToDate();
+  public PersistentExperienceInformation(PersistentExperienceInformation pPersistentExperienceInformation) {
+    mEmployeeId = pPersistentExperienceInformation.getEmployeeId();
+    mExperienceInstitute = pPersistentExperienceInformation.getExperienceInstitute();
+    mDesignation = pPersistentExperienceInformation.getDesignation();
+    mExperienceFromDate = pPersistentExperienceInformation.getExperienceFromDate();
+    mExperienceToDate = pPersistentExperienceInformation.getExperienceToDate();
   }
 
   @Override
@@ -76,7 +75,7 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -101,7 +100,7 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 import org.ums.manager.registrar.AwardInformationManager;
 
@@ -15,7 +14,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   private int mId;
-  private int mEmployeeId;
+  private String mEmployeeId;
   private String mAwardName;
   private String mAwardInstitute;
   private String mAwardedYear;
@@ -24,12 +23,12 @@ public class PersistentAwardInformation implements MutableAwardInformation {
 
   public PersistentAwardInformation() {}
 
-  public PersistentAwardInformation(AwardInformation pAwardInformation) {
-    mEmployeeId = pAwardInformation.getEmployeeId();
-    mAwardName = pAwardInformation.getAwardName();
-    mAwardInstitute = pAwardInformation.getAwardInstitute();
-    mAwardedYear = pAwardInformation.getAwardedYear();
-    mAwardShortDescription = pAwardInformation.getAwardShortDescription();
+  public PersistentAwardInformation(PersistentAwardInformation pPersistentAwardInformation) {
+    mEmployeeId = pPersistentAwardInformation.getEmployeeId();
+    mAwardName = pPersistentAwardInformation.getAwardName();
+    mAwardInstitute = pPersistentAwardInformation.getAwardInstitute();
+    mAwardedYear = pPersistentAwardInformation.getAwardedYear();
+    mAwardShortDescription = pPersistentAwardInformation.getAwardShortDescription();
   }
 
   @Override
@@ -73,7 +72,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -98,7 +97,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

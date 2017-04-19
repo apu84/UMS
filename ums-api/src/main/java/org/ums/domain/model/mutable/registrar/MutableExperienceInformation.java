@@ -8,7 +8,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 public interface MutableExperienceInformation extends ExperienceInformation, Editable<Integer>,
     MutableIdentifier<Integer>, MutableLastModifier {
 
-  void setEmployeeId(final int pEmployeeId);
+  void setEmployeeId(final String pEmployeeId);
 
   void setExperienceInstitute(final String pExperienceInstitute);
 

@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
 import org.ums.manager.registrar.PublicationInformationManager;
 
@@ -17,7 +16,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   private int mId;
-  private int mEmployeeId;
+  private String mEmployeeId;
   private String mPublicationTitle;
   private String mInterestGenre;
   private String mAuthor;
@@ -29,14 +28,14 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
 
   public PersistentPublicationInformation() {}
 
-  public PersistentPublicationInformation(PublicationInformation pPublicationInformation) {
-    mEmployeeId = pPublicationInformation.getEmployeeId();
-    mPublicationTitle = pPublicationInformation.getPublicationTitle();
-    mInterestGenre = pPublicationInformation.getInterestGenre();
-    mPublisherName = pPublicationInformation.getPublisherName();
-    mDateOfPublication = pPublicationInformation.getDateOfPublication();
-    mPublicationType = pPublicationInformation.getPublicationType();
-    mPublicationWebLink = pPublicationInformation.getPublicationWebLink();
+  public PersistentPublicationInformation(PersistentPublicationInformation pPersistentPublicationInformation) {
+    mEmployeeId = pPersistentPublicationInformation.getEmployeeId();
+    mPublicationTitle = pPersistentPublicationInformation.getPublicationTitle();
+    mInterestGenre = pPersistentPublicationInformation.getInterestGenre();
+    mPublisherName = pPersistentPublicationInformation.getPublisherName();
+    mDateOfPublication = pPersistentPublicationInformation.getDateOfPublication();
+    mPublicationType = pPersistentPublicationInformation.getPublicationType();
+    mPublicationWebLink = pPersistentPublicationInformation.getPublicationWebLink();
   }
 
   @Override
@@ -81,7 +80,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -116,7 +115,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

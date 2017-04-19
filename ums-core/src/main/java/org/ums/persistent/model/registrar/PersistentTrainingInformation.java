@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.TrainingInformation;
 import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
 import org.ums.manager.registrar.TrainingInformationManager;
 
@@ -17,7 +16,7 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   private int mId;
-  private int mEmployeeId;
+  private String mEmployeeId;
   private String mTrainingName;
   private String mTrainingInstitute;
   private String mTrainingFromDate;
@@ -26,12 +25,12 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
 
   public PersistentTrainingInformation() {}
 
-  public PersistentTrainingInformation(TrainingInformation pTrainingInformation) {
-    mEmployeeId = pTrainingInformation.getEmployeeId();
-    mTrainingName = pTrainingInformation.getTrainingName();
-    mTrainingInstitute = pTrainingInformation.getTrainingInstitute();
-    mTrainingFromDate = pTrainingInformation.getTrainingFromDate();
-    mTrainingToDate = pTrainingInformation.getTrainingToDate();
+  public PersistentTrainingInformation(PersistentTrainingInformation pPersistentTrainingInformation) {
+    mEmployeeId = pPersistentTrainingInformation.getEmployeeId();
+    mTrainingName = pPersistentTrainingInformation.getTrainingName();
+    mTrainingInstitute = pPersistentTrainingInformation.getTrainingInstitute();
+    mTrainingFromDate = pPersistentTrainingInformation.getTrainingFromDate();
+    mTrainingToDate = pPersistentTrainingInformation.getTrainingToDate();
   }
 
   @Override
@@ -75,7 +74,7 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -100,7 +99,7 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

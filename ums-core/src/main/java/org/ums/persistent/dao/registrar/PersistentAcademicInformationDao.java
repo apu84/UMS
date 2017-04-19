@@ -44,7 +44,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     @Override
     public AcademicInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
-      academicInformation.setEmployeeId(resultSet.getInt("employee_id"));
+      academicInformation.setEmployeeId(resultSet.getString("employee_id"));
       academicInformation.setDegreeName(resultSet.getString("degree_name"));
       academicInformation.setDegreeInstitute(resultSet.getString("degree_institution"));
       academicInformation.setDegreePassingYear(resultSet.getString("degree_passing_Year"));

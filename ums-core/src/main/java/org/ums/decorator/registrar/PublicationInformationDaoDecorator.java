@@ -17,7 +17,7 @@ public class PublicationInformationDaoDecorator extends
   }
 
   @Override
-  public List<PublicationInformation> getEmployeePublicationInformation(int pEmployeeId) {
+  public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId) {
     return getManager().getEmployeePublicationInformation(pEmployeeId);
   }
 }

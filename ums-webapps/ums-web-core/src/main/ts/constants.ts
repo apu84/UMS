@@ -643,5 +643,56 @@ module ums {
         ]
       }
     }
+    static  RegistrarConstant(): any {
+      return {
+        gender: [
+          {id: 'M', name: 'Male'},
+          {id: 'F', name: 'Female'}
+        ],
+        religionTypes: [
+          {id: 1, name: "Islam"},
+          {id: 2, name: "Buddhism"},
+          {id: 3, name: "Hinduism"},
+          {id: 4, name: "Jainism"},
+          {id: 5, name: "Judaism"},
+          {id: 6, name: "Sikhism"},
+          {id: 7, name: "Others"}
+        ],
+        nationalities: [
+          {id: 1, name: "Bangladeshi"},
+          {id: 2, name: "Others"}
+        ],
+        bloodGroups: [
+          {id: 1, name: "A+"},
+          {id: 2, name: "A-"},
+          {id: 3, name: "B+"},
+          {id: 4, name: "B-"},
+          {id: 5, name: "AB+"},
+          {id: 6, name: "AB-"},
+          {id: 7, name: "O+"},
+          {id: 8, name: "O-"}
+        ],
+        publicationTypes: [
+          {id: 1, name: "Conference"},
+          {id: 2, name: "Journal"},
+          {id: 3, name: "Proceedings"},
+          {id: 4, name: "Presentation"},
+          {id: 5, name: "Others"}
+        ],
+        maritalStatus: [
+          {id: 1, name: "Single"},
+          {id: 2, name: "Married"},
+          {id: 3, name: "Divorced"},
+          {id: 4, name: "Widowed"}
+        ],
+        degreeTypes: [
+          {id: 1, name: "SSC"},
+          {id: 2, name: "HSC"},
+          {id: 3, name: "Bachelor"},
+          {id: 4, name: "Master's"},
+          {id: 5, name: "PhD"}
+        ]
+      }
+    }
   }
 }

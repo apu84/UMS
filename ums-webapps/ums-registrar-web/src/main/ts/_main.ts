@@ -31,6 +31,10 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -78,6 +82,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 
+/// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
+
+
 /// <reference path='data.ts'/>
 
 
@@ -96,6 +103,7 @@
 /// <reference path='model/EmployeeInformation/PersonalInformationModel.ts' />
 /// <reference path='model/EmployeeInformation/PublicationInformationModel.ts' />
 /// <reference path='model/EmployeeInformation/TrainingInformationModel.ts' />
+
 
 
 

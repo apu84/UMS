@@ -1,6 +1,6 @@
 module ums{
     export interface IExperienceInformationModel{
-        employeeId: number;
+        employeeId: string;
         experienceInstitution: string;
         experienceDesignation: string;
         experienceFrom: string;

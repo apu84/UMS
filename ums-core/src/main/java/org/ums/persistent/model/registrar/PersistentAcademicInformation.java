@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.AcademicInformation;
 import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
 import org.ums.manager.registrar.AcademicInformationManager;
 
@@ -17,7 +16,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   private int mId;
-  private int mEmployeeId;
+  private String mEmployeeId;
   private String mDegreeName;
   private String mDegreeInstitute;
   private String mDegreePassingYear;
@@ -25,11 +24,11 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
 
   public PersistentAcademicInformation() {}
 
-  public PersistentAcademicInformation(AcademicInformation pAcademicInformation) {
-    mEmployeeId = pAcademicInformation.getEmployeeId();
-    mDegreeName = pAcademicInformation.getDegreeName();
-    mDegreeInstitute = pAcademicInformation.getDegreeInstitute();
-    mDegreePassingYear = pAcademicInformation.getDegreePassingYear();
+  public PersistentAcademicInformation(PersistentAcademicInformation pPersistentAcademicInformation) {
+    mEmployeeId = pPersistentAcademicInformation.getEmployeeId();
+    mDegreeName = pPersistentAcademicInformation.getDegreeName();
+    mDegreeInstitute = pPersistentAcademicInformation.getDegreeInstitute();
+    mDegreePassingYear = pPersistentAcademicInformation.getDegreePassingYear();
   }
 
   @Override
@@ -73,7 +72,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -93,7 +92,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

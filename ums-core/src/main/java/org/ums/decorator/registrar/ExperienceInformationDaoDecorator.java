@@ -17,7 +17,7 @@ public class ExperienceInformationDaoDecorator extends
   }
 
   @Override
-  public List<ExperienceInformation> getEmployeeExperienceInformation(int pEmployeeId) {
+  public List<ExperienceInformation> getEmployeeExperienceInformation(String pEmployeeId) {
     return getManager().getEmployeeExperienceInformation(pEmployeeId);
   }
 }

@@ -13,22 +13,24 @@ import org.ums.manager.registrar.PersonalInformationManager;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PersonalInformationResourceHelper extends
-    ResourceHelper<PersonalInformation, MutablePersonalInformation, Integer> {
+    ResourceHelper<PersonalInformation, MutablePersonalInformation, String> {
 
   @Autowired
   PersonalInformationManager mPersonalInformationManager;
 
   @Autowired
   PersonalInformationBuilder mPersonalInformationBuilder;
+
+  public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+    PersonalInformation pPersonalInformation = mPersonalInformationManager.getEmployeePersonalInformation(pEmployeeId);
+    return toJson(pPersonalInformation, pUriInfo);
+  }
 
   @Transactional
   public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -45,13 +47,25 @@ public class PersonalInformationResourceHelper extends
     return builder.build();
   }
 
+  private JsonObject toJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
+    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    getBuilder().build(jsonObject, pPersonalInformation, pUriInfo, localCache);
+    jsonObject.add("entries", children);
+
+    localCache.invalidate();
+    return jsonObject.build();
+  }
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
   @Override
-  protected ContentManager<PersonalInformation, MutablePersonalInformation, Integer> getContentManager() {
+  protected PersonalInformationManager getContentManager() {
     return mPersonalInformationManager;
   }
 

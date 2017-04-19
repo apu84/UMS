@@ -7,17 +7,17 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.registrar.PersonalInformationManager;
 
 public class PersonalInformationCache extends
-    ContentCache<PersonalInformation, MutablePersonalInformation, Integer, PersonalInformationManager> implements
+    ContentCache<PersonalInformation, MutablePersonalInformation, String, PersonalInformationManager> implements
     PersonalInformationManager {
 
-  private CacheManager<PersonalInformation, Integer> mCacheManager;
+  private CacheManager<PersonalInformation, String> mCacheManager;
 
-  public PersonalInformationCache(CacheManager<PersonalInformation, Integer> pCacheManager) {
+  public PersonalInformationCache(CacheManager<PersonalInformation, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<PersonalInformation, Integer> getCacheManager() {
+  protected CacheManager<PersonalInformation, String> getCacheManager() {
     return mCacheManager;
   }
 
@@ -27,7 +27,7 @@ public class PersonalInformationCache extends
   }
 
   @Override
-  public PersonalInformation getEmployeePersonalInformation(int pEmployeeId) {
+  public PersonalInformation getEmployeePersonalInformation(String pEmployeeId) {
     return getManager().getEmployeePersonalInformation(pEmployeeId);
   }
 }

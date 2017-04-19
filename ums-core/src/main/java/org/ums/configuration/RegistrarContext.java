@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
+import org.ums.cache.common.DivisionCache;
 import org.ums.cache.registrar.*;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.common.DivisionManager;
 import org.ums.manager.registrar.*;
+import org.ums.persistent.dao.common.PersistentDivisionDao;
 import org.ums.persistent.dao.registrar.*;
 import org.ums.statistics.JdbcTemplateFactory;
 

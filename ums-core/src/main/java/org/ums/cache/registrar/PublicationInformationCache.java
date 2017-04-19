@@ -29,7 +29,7 @@ public class PublicationInformationCache extends
   }
 
   @Override
-  public List<PublicationInformation> getEmployeePublicationInformation(int pEmployeeId) {
+  public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId) {
     return getManager().getEmployeePublicationInformation(pEmployeeId);
   }
 }

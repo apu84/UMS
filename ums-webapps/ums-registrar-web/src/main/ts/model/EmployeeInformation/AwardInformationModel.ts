@@ -1,6 +1,6 @@
 module ums{
     export interface IAwardInformationModel{
-        employeeId: number;
+        employeeId: string;
         awardName: string;
         awardInstitute: string;
         awardedYear: string;

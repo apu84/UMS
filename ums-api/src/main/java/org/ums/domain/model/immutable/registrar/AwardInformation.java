@@ -10,7 +10,7 @@ import java.io.Serializable;
 public interface AwardInformation extends Serializable, EditType<MutableAwardInformation>, Identifier<Integer>,
     LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
   String getAwardName();
 

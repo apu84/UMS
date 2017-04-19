@@ -7,10 +7,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
+import org.ums.cache.common.CountryCache;
+import org.ums.cache.common.DistrictCache;
+import org.ums.cache.common.DivisionCache;
+import org.ums.cache.common.ThanaCache;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
+import org.ums.manager.common.CountryManager;
+import org.ums.manager.common.DistrictManager;
+import org.ums.manager.common.DivisionManager;
+import org.ums.manager.common.ThanaManager;
 import org.ums.persistent.dao.*;
+import org.ums.persistent.dao.common.PersistentCountryDao;
+import org.ums.persistent.dao.common.PersistentDistrictDao;
+import org.ums.persistent.dao.common.PersistentDivisionDao;
+import org.ums.persistent.dao.common.PersistentThanaDao;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -177,5 +189,33 @@ public class CoreContext {
   @Bean
   DateFormat getGenericDateFormat() {
     return new DateFormat(Constants.DATE_FORMAT);
+  }
+
+  @Bean
+  CountryManager countryManager() {
+    CountryCache countryCache = new CountryCache(mCacheFactory.getCacheManager());
+    countryCache.setManager(new PersistentCountryDao(mTemplateFactory.getJdbcTemplate()));
+    return countryCache;
+  }
+
+  @Bean
+  DivisionManager divisionManager() {
+    DivisionCache divisionCache = new DivisionCache(mCacheFactory.getCacheManager());
+    divisionCache.setManager(new PersistentDivisionDao(mTemplateFactory.getJdbcTemplate()));
+    return divisionCache;
+  }
+
+  @Bean
+  DistrictManager districtManager() {
+    DistrictCache districtCache = new DistrictCache(mCacheFactory.getCacheManager());
+    districtCache.setManager(new PersistentDistrictDao(mTemplateFactory.getJdbcTemplate()));
+    return districtCache;
+  }
+
+  @Bean
+  ThanaManager thanaManager() {
+    ThanaCache thanaCache = new ThanaCache(mCacheFactory.getCacheManager());
+    thanaCache.setManager(new PersistentThanaDao(mTemplateFactory.getJdbcTemplate()));
+    return thanaCache;
   }
 }

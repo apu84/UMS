@@ -16,7 +16,7 @@ module ums {
     baseUriProvider.setServicePath('/ums-webservice-registrar/');
   }]);
 
-  UMS.constant("appConstants", Constants.Default());
+  UMS.constant("registrarConstants", Constants.RegistrarConstant());
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.otherwise("/userHome");

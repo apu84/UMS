@@ -33,19 +33,19 @@ public class PersistentServiceInformation implements MutableServiceInformation {
 
   public PersistentServiceInformation() {}
 
-  public PersistentServiceInformation(ServiceInformation pEmployeeInformation) {
-    mEmployeeId = pEmployeeInformation.getEmployeeId();
-    mEmploymentType = pEmployeeInformation.getEmploymentType();
-    mDesignation = pEmployeeInformation.getDesignation();
-    mDeptOffice = pEmployeeInformation.getDeptOffice();
-    mJoiningDate = pEmployeeInformation.getJoiningDate();
-    mJobContractualDate = pEmployeeInformation.getJobContractualDate();
-    mJobProbationDate = pEmployeeInformation.getJobProbationDate();
-    mJobPermanentDate = pEmployeeInformation.getJobPermanentDate();
-    mJobTerminationDate = pEmployeeInformation.getJobTerminationDate();
-    mExtNo = pEmployeeInformation.getExtNo();
-    mShortName = pEmployeeInformation.getShortName();
-    mRoomNo = pEmployeeInformation.getRoomNo();
+  public PersistentServiceInformation(PersistentServiceInformation pPersistentServiceInformation) {
+    mEmployeeId = pPersistentServiceInformation.getEmployeeId();
+    mEmploymentType = pPersistentServiceInformation.getEmploymentType();
+    mDesignation = pPersistentServiceInformation.getDesignation();
+    mDeptOffice = pPersistentServiceInformation.getDeptOffice();
+    mJoiningDate = pPersistentServiceInformation.getJoiningDate();
+    mJobContractualDate = pPersistentServiceInformation.getJobContractualDate();
+    mJobProbationDate = pPersistentServiceInformation.getJobProbationDate();
+    mJobPermanentDate = pPersistentServiceInformation.getJobPermanentDate();
+    mJobTerminationDate = pPersistentServiceInformation.getJobTerminationDate();
+    mExtNo = pPersistentServiceInformation.getExtNo();
+    mShortName = pPersistentServiceInformation.getShortName();
+    mRoomNo = pPersistentServiceInformation.getRoomNo();
   }
 
   @Override

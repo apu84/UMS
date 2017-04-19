@@ -10,7 +10,7 @@ import java.io.Serializable;
 public interface ExperienceInformation extends Serializable, EditType<MutableExperienceInformation>,
     Identifier<Integer>, LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
   String getExperienceInstitute();
 

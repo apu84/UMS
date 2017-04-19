@@ -54,7 +54,7 @@ module ums{
     }
 
     class Meeting{
-        constructor(private appConstants: any,
+        constructor(private registrarConstants: any,
                     private $scope: IMeeting,
                     private $q: ng.IQService,
                     private notify: Notify,

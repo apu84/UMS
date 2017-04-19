@@ -5,10 +5,10 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutablePersonalInformation extends PersonalInformation, Editable<Integer>, MutableIdentifier<Integer>,
+public interface MutablePersonalInformation extends PersonalInformation, Editable<String>, MutableIdentifier<String>,
     MutableLastModifier {
 
-  void setEmployeeId(final int pEmployeeId);
+  void setEmployeeId(final String pEmployeeId);
 
   void setFirstName(final String pFirstName);
 

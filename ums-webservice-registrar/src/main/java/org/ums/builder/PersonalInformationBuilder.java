@@ -54,7 +54,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
 
   @Override
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setFirstName(pJsonObject.getString("firstName"));
     pMutable.setLastName(pJsonObject.getString("lastName"));
     pMutable.setFatherName(pJsonObject.getString("fatherName"));
@@ -67,7 +67,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setMaritalStatus(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
     pMutable.setSpouseName(pJsonObject.getString("spouseName"));
     pMutable.setNationalId(pJsonObject.getInt("nationalIdNo"));
-    pMutable.setBloodGroup(pJsonObject.getString("bloodGroup"));
+    pMutable.setBloodGroup(pJsonObject.getJsonObject("bloodGroup").getString("name"));
     pMutable.setSpouseNationalId(pJsonObject.getInt("spouseNationalIdNo"));
     pMutable.setWebsite(pJsonObject.getString("website"));
     pMutable.setOrganizationalEmail(pJsonObject.getString("organizationalEmail"));
@@ -76,18 +76,18 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setPhoneNumber(pJsonObject.getString("phone"));
     pMutable.setPresentAddressHouse(pJsonObject.getString("presentAddressHouse"));
     pMutable.setPresentAddressRoad(pJsonObject.getString("presentAddressRoad"));
-    pMutable.setPresentAddressThana(pJsonObject.getString("presentAddressPoliceStation"));
+    pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressPoliceStation").getString("name"));
     pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostalCode"));
-    pMutable.setPresentAddressDistrict(pJsonObject.getString("presentAddressDistrict"));
-    pMutable.setPresentAddressDivision(pJsonObject.getString("presentAddressDivision"));
-    pMutable.setPresentAddressCountry(pJsonObject.getString("presentAddressCountry"));
+    pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("presentAddressDistrict").getString("name"));
+    pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("presentAddressDivision").getString("name"));
+    pMutable.setPresentAddressCountry(pJsonObject.getJsonObject("presentAddressCountry").getString("name"));
     pMutable.setPermanentAddressHouse(pJsonObject.getString("permanentAddressHouse"));
     pMutable.setPermanentAddressRoad(pJsonObject.getString("permanentAddressRoad"));
-    pMutable.setPermanentAddressThana(pJsonObject.getString("permanentAddressPoliceStation"));
+    pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressPoliceStation").getString("name"));
     pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostalCode"));
-    pMutable.setPermanentAddressDistrict(pJsonObject.getString("permanentAddressDistrict"));
-    pMutable.setPermanentAddressDivision(pJsonObject.getString("permanentAddressDivision"));
-    pMutable.setPermanentAddressCountry(pJsonObject.getString("permanentAddressCountry"));
+    pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("permanentAddressDistrict").getString("name"));
+    pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("permanentAddressDivision").getString("name"));
+    pMutable.setPermanentAddressCountry(pJsonObject.getJsonObject("permanentAddressCountry").getString("name"));
     pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
     pMutable.setEmergencyContactRelation(pJsonObject.getString("emergencyContactRelation"));
     pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));

@@ -2,7 +2,6 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.manager.registrar.PersonalInformationManager;
 
@@ -16,8 +15,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
   }
 
-  private int mId;
-  private int mEmployeeId;
+  private String mId;
+  private String mEmployeeId;
   private String mFirstName;
   private String mLastName;
   private String mGender;
@@ -58,48 +57,48 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
 
   public PersistentPersonalInformation() {}
 
-  public PersistentPersonalInformation(PersonalInformation pPersonalInformation) {
-    mEmployeeId = pPersonalInformation.getEmployeeId();
-    mFirstName = pPersonalInformation.getFirstName();
-    mLastName = pPersonalInformation.getLastName();
-    mGender = pPersonalInformation.getGender();
-    mBloodGroup = pPersonalInformation.getBloodGroup();
-    mFatherName = pPersonalInformation.getFatherName();
-    mMotherName = pPersonalInformation.getMotherName();
-    mNationality = pPersonalInformation.getNationality();
-    mReligion = pPersonalInformation.getReligion();
-    mDateOfBirth = pPersonalInformation.getDateOfBirth();
-    mNationalId = pPersonalInformation.getNationalId();
-    mMaritalStatus = pPersonalInformation.getMaritalStatus();
-    mSpouseName = pPersonalInformation.getSpouseName();
-    mSpouseNationalId = pPersonalInformation.getSpouseNationalId();
-    mWebsite = pPersonalInformation.getWebsite();
-    mOrganizationalEmail = pPersonalInformation.getOrganizationalEmail();
-    mPersonalEmail = pPersonalInformation.getPersonalEmail();
-    mMobileNumber = pPersonalInformation.getMobileNumber();
-    mPhoneNumber = pPersonalInformation.getPhoneNumber();
-    mPresentAddressHouse = pPersonalInformation.getPresentAddressHouse();
-    mPresentAddressRoad = pPersonalInformation.getPresentAddressRoad();
-    mPresentAddressThana = pPersonalInformation.getPresentAddressThana();
-    mPresentAddressDistrict = pPersonalInformation.getPresentAddressDistrict();
-    mPresentAddressZip = pPersonalInformation.getPresentAddressZip();
-    mPresentAddressDivision = pPersonalInformation.getPresentAddressDivision();
-    mPresentAddressCountry = pPersonalInformation.getPresentAddressCountry();
-    mPermanentAddressHouse = pPersonalInformation.getPermanentAddressHouse();
-    mPermanentAddressRoad = pPersonalInformation.getPermanentAddressRoad();
-    mPermanentAddressThana = pPersonalInformation.getPermanentAddressThana();
-    mPermanentAddressDistrict = pPersonalInformation.getPermanentAddressDistrict();
-    mPermanentAddressZip = pPersonalInformation.getPermanentAddressZip();
-    mPermanentAddressDivision = pPersonalInformation.getPermanentAddressDivision();
-    mPermanentAddressCountry = pPersonalInformation.getPermanentAddressCountry();
-    mEmergencyContactName = pPersonalInformation.getEmergencyContactName();
-    mEmergencyContactRelation = pPersonalInformation.getEmergencyContactRelation();
-    mEmergencyContactPhone = pPersonalInformation.getEmergencyContactPhone();
-    mEmergencyContactAddress = pPersonalInformation.getEmergencyContactAddress();
+  public PersistentPersonalInformation(PersistentPersonalInformation pPersistentPersonalInformation) {
+    mEmployeeId = pPersistentPersonalInformation.getEmployeeId();
+    mFirstName = pPersistentPersonalInformation.getFirstName();
+    mLastName = pPersistentPersonalInformation.getLastName();
+    mGender = pPersistentPersonalInformation.getGender();
+    mBloodGroup = pPersistentPersonalInformation.getBloodGroup();
+    mFatherName = pPersistentPersonalInformation.getFatherName();
+    mMotherName = pPersistentPersonalInformation.getMotherName();
+    mNationality = pPersistentPersonalInformation.getNationality();
+    mReligion = pPersistentPersonalInformation.getReligion();
+    mDateOfBirth = pPersistentPersonalInformation.getDateOfBirth();
+    mNationalId = pPersistentPersonalInformation.getNationalId();
+    mMaritalStatus = pPersistentPersonalInformation.getMaritalStatus();
+    mSpouseName = pPersistentPersonalInformation.getSpouseName();
+    mSpouseNationalId = pPersistentPersonalInformation.getSpouseNationalId();
+    mWebsite = pPersistentPersonalInformation.getWebsite();
+    mOrganizationalEmail = pPersistentPersonalInformation.getOrganizationalEmail();
+    mPersonalEmail = pPersistentPersonalInformation.getPersonalEmail();
+    mMobileNumber = pPersistentPersonalInformation.getMobileNumber();
+    mPhoneNumber = pPersistentPersonalInformation.getPhoneNumber();
+    mPresentAddressHouse = pPersistentPersonalInformation.getPresentAddressHouse();
+    mPresentAddressRoad = pPersistentPersonalInformation.getPresentAddressRoad();
+    mPresentAddressThana = pPersistentPersonalInformation.getPresentAddressThana();
+    mPresentAddressDistrict = pPersistentPersonalInformation.getPresentAddressDistrict();
+    mPresentAddressZip = pPersistentPersonalInformation.getPresentAddressZip();
+    mPresentAddressDivision = pPersistentPersonalInformation.getPresentAddressDivision();
+    mPresentAddressCountry = pPersistentPersonalInformation.getPresentAddressCountry();
+    mPermanentAddressHouse = pPersistentPersonalInformation.getPermanentAddressHouse();
+    mPermanentAddressRoad = pPersistentPersonalInformation.getPermanentAddressRoad();
+    mPermanentAddressThana = pPersistentPersonalInformation.getPermanentAddressThana();
+    mPermanentAddressDistrict = pPersistentPersonalInformation.getPermanentAddressDistrict();
+    mPermanentAddressZip = pPersistentPersonalInformation.getPermanentAddressZip();
+    mPermanentAddressDivision = pPersistentPersonalInformation.getPermanentAddressDivision();
+    mPermanentAddressCountry = pPersistentPersonalInformation.getPermanentAddressCountry();
+    mEmergencyContactName = pPersistentPersonalInformation.getEmergencyContactName();
+    mEmergencyContactRelation = pPersistentPersonalInformation.getEmergencyContactRelation();
+    mEmergencyContactPhone = pPersistentPersonalInformation.getEmergencyContactPhone();
+    mEmergencyContactAddress = pPersistentPersonalInformation.getEmergencyContactAddress();
   }
 
   @Override
-  public Integer create() {
+  public String create() {
     return sPersonalInformationManager.create(this);
   }
 
@@ -124,12 +123,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getId() {
+  public String getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 
@@ -139,7 +138,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
@@ -324,7 +323,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public int getEmployeeId() {
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 

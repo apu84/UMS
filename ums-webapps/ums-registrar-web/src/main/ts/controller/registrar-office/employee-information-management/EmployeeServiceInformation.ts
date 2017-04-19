@@ -21,9 +21,9 @@ module ums{
 
     class EmployeeServiceInformation{
 
-        public static $inject = ['appConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeServiceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeServiceInformationService'];
 
-        constructor(private appConstants: any,
+        constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
                     private $q: ng.IQService,
                     private notify: Notify,

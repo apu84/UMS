@@ -1,18 +1,18 @@
 module ums {
     export interface IPersonalInformationModel {
-        employeeId: number;
+        employeeId: string;
         firstName: string;
         lastName: string;
         fatherName: string;
         motherName: string;
-        gender: IEmpGender;
+        gender: IGender;
         birthday: string;
         nationality: INationality;
         religion: IReligion;
-        maritalStatus: IEmpMaritalStatus;
+        maritalStatus: IMaritalStatus;
         spouseName: string;
         nationalIdNo: number;
-        bloodGroup: string;
+        bloodGroup: IBloodGroup;
         spouseNationalIdNo: number;
         website: string;
         organizationalEmail: string;
@@ -21,52 +21,22 @@ module ums {
         phone: string;
         presentAddressHouse: string;
         presentAddressRoad: string;
-        presentAddressPoliceStation: string;
+        presentAddressPoliceStation: IThana;
         presentAddressPostalCode: string;
-        presentAddressDistrict: string;
-        presentAddressDivision: string;
-        presentAddressCountry: string;
+        presentAddressDistrict: IDistrict;
+        presentAddressDivision: IDivision;
+        presentAddressCountry: ICountry;
         permanentAddressHouse: string;
         permanentAddressRoad: string;
-        permanentAddressPoliceStation: string;
+        permanentAddressPoliceStation: IThana;
         permanentAddressPostalCode: string;
-        permanentAddressDistrict: string;
-        permanentAddressDivision: string;
-        permanentAddressCountry: string;
+        permanentAddressDistrict: IDistrict;
+        permanentAddressDivision: IDivision;
+        permanentAddressCountry: ICountry;
         emergencyContactName: string;
         emergencyContactRelation: string;
         emergencyContactPhone: string;
         emergencyContactAddress: string;
 
-    }
-
-    export interface IEmpGender {
-        id: string;
-        name: string;
-    }
-
-    export interface IEmpMaritalStatus {
-        id: number;
-        name: string;
-    }
-
-    export interface IEmpDegree {
-        id: number;
-        name: string;
-    }
-
-    export interface IPublicationType {
-        id: number;
-        name: string;
-    }
-
-    export interface INationality{
-        id: number;
-        name: string;
-    }
-
-    export interface IReligion {
-        id: number;
-        name: string;
     }
 }

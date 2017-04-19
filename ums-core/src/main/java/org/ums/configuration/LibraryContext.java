@@ -48,13 +48,6 @@ public class LibraryContext {
   }
 
   @Bean
-  CountryManager countryManager() {
-    CountryCache countryCache = new CountryCache(mCacheFactory.getCacheManager());
-    countryCache.setManager(new PersistentCountryDao(mTemplateFactory.getJdbcTemplate()));
-    return countryCache;
-  }
-
-  @Bean
   SupplierManager supplierManager() {
     SupplierCache supplierCache = new SupplierCache(mCacheFactory.getCacheManager());
     supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));

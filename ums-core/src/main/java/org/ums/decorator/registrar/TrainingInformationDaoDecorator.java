@@ -17,7 +17,7 @@ public class TrainingInformationDaoDecorator extends
   }
 
   @Override
-  public List<TrainingInformation> getEmployeeTrainingInformation(int pEmployeeId) {
+  public List<TrainingInformation> getEmployeeTrainingInformation(String pEmployeeId) {
     return getManager().getEmployeeTrainingInformation(pEmployeeId);
   }
 }

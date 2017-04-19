@@ -6,7 +6,7 @@ import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.manager.registrar.PersonalInformationManager;
 
 public class PersonalInformationDaoDecorator extends
-    ContentDaoDecorator<PersonalInformation, MutablePersonalInformation, Integer, PersonalInformationManager> implements
+    ContentDaoDecorator<PersonalInformation, MutablePersonalInformation, String, PersonalInformationManager> implements
     PersonalInformationManager {
 
   @Override
@@ -15,7 +15,7 @@ public class PersonalInformationDaoDecorator extends
   }
 
   @Override
-  public PersonalInformation getEmployeePersonalInformation(int pEmployeeId) {
+  public PersonalInformation getEmployeePersonalInformation(String pEmployeeId) {
     return getManager().getEmployeePersonalInformation(pEmployeeId);
   }
 }

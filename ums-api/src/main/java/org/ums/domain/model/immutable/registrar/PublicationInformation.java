@@ -10,7 +10,7 @@ import java.io.Serializable;
 public interface PublicationInformation extends Serializable, EditType<MutablePublicationInformation>,
     Identifier<Integer>, LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
   String getPublicationTitle();
 

@@ -22,7 +22,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
 
   @Override
   public void build(MutableAcademicInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeName(pJsonObject.getJsonObject("academicDegreeName").getString("name"));
     pMutable.setDegreeInstitute(pJsonObject.getString("academicInstitution"));
     pMutable.setDegreePassingYear(pJsonObject.getString("academicPassingYear"));

@@ -25,7 +25,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
     pMutable.setPublisherName(pJsonObject.getString("publisherName"));

@@ -7,10 +7,10 @@ import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 
 import java.io.Serializable;
 
-public interface PersonalInformation extends Serializable, EditType<MutablePersonalInformation>, Identifier<Integer>,
+public interface PersonalInformation extends Serializable, EditType<MutablePersonalInformation>, Identifier<String>,
     LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
   String getFirstName();
 

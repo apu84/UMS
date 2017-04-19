@@ -10,7 +10,7 @@ import java.io.Serializable;
 public interface TrainingInformation extends Serializable, EditType<MutableTrainingInformation>, Identifier<Integer>,
     LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
   String getTrainingName();
 

@@ -17,6 +17,9 @@ module ums{
     showTrainingLabelDiv: boolean;
     showAwardInputDiv: boolean;
     showAwardLabelDiv: boolean;
+    showExperienceInputDiv: boolean;
+    showExperienceLabelDiv: boolean;
+
     showAcademicAddIcon: boolean;
     showPublicationAddIcon: boolean;
     showTrainingAddIcon: boolean;
@@ -27,37 +30,104 @@ module ums{
     showTrainingCrossIcon: boolean;
     showAwardCrossIcon: boolean;
     showExperienceCrossIcon: boolean;
-    showExperienceInputDiv: boolean;
-    showExperienceLabelDiv: boolean;
+
     showRequireSign: boolean;
     showPermanentAddressCheckbox: boolean;
+
 
     changeNav: Function;
     edit: Function;
     addNewRow: Function;
     deleteRow: Function;
     testData: Function;
+
     submitPersonalForm: Function;
     submitAcademicForm: Function;
     submitPublicationForm: Function;
     submitTrainingForm: Function;
     submitAwardForm: Function;
     submitExperienceForm: Function;
-    saveAsPresentAddress: Function;
-    getDesignation: Function;
-    getEmploymentType: Function;
-    getDeptOffice: Function;
 
+    saveAsPresentAddress: Function;
+
+    getCountry: Function;
+    getDivision: Function;
+    getDistrictL: Function;
+    getThana: Function;
+
+    
     entry: IEntry;
-    employeeGender: Array<IEmpGender>;
-    employeeMaritalStatus: Array<IEmpMaritalStatus>;
-    employeeReligion: Array<IReligion>;
-    employeeNationality: Array<INationality>;
-    degreeNames: Array<IEmpDegree>;
+    gender: Array<IGender>;
+    maritalStatus: Array<IMaritalStatus>;
+    religion: Array<IReligion>;
+    nationality: Array<INationality>;
+    degreeNames: Array<IDegreeType>;
+    bloodGroup: Array<IBloodGroup>;
     typeOfPublication: Array<IPublicationType>;
+    countries: Array<ICountry>;
+    divisions: Array<IDivision>;
+    districts: Array<IDistrict>;
+    thanas: Array<IThana>;
   }
 
-  interface IEntry {
+  export interface IGender {
+    id: string;
+    name: string;
+  }
+
+  export interface IMaritalStatus {
+    id: number;
+    name: string;
+  }
+
+  export interface IDegreeType {
+    id: number;
+    name: string;
+  }
+
+  export interface IPublicationType {
+    id: number;
+    name: string;
+  }
+
+  export interface INationality{
+    id: number;
+    name: string;
+  }
+
+  export interface IReligion {
+    id: number;
+    name: string;
+  }
+
+  export interface IBloodGroup {
+    id: number;
+    name: string;
+  }
+
+  export interface ICountry{
+    id: number;
+    name: string;
+  }
+
+  export interface IDivision{
+    id: string;
+    name: string;
+  }
+
+  export interface IDistrict{
+    id: string;
+    division_id: string;
+    name: string;
+  }
+
+  export interface IThana{
+    id: string;
+    district_id: string;
+    name: string;
+  }
+
+  export interface IEntry {
     personal: IPersonalInformationModel;
     academic: Array<IAcademicInformationModel>;
     publication: Array<IPublicationInformationModel>;
@@ -67,72 +137,35 @@ module ums{
   }
 
   class EmployeeInformation {
-
-    public static $inject = ['appConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeInformationService'];
-
-    constructor(private appConstants: any,
+    public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'countryService', 'divisionService', 'districtService', 'thanaService', 'employeeInformationService'];
+    constructor(private registrarConstants: any,
                 private $scope: IEmployeeInformation,
                 private $q: ng.IQService,
                 private notify: Notify,
                 private $window: ng.IWindowService,
                 private $sce: ng.ISCEService,
+                private countryService: CountryService,
+                private divisionService: DivisionService,
+                private districtService: DistrictService,
+                private thanaService: ThanaService,
                 private employeeInformationService: EmployeeInformationService) {
 
-
-      $scope.employeeGender = appConstants.gender;
-      // $scope.employeeMaritalStatus = appConstanst.maritalStatus;
-      // $scope.degreeNames = appConstants.degreeName;
-
-      $scope.employeeReligion = [
-        {id: 0, name: "Select Religion"},
-        {id: 1, name: "ISLAM"}
-      ];
-
-      $scope.employeeNationality = [
-        {id: 0, name: "Select Nationality"},
-        {id: 1, name: "Bangladeshi"}
-      ];
-
-      $scope.typeOfPublication = [
-        {id: 0, name: "Select Publication type"},
-        {id: 1, name: "Conference"},
-        {id: 2, name: "Journal"},
-        {id: 3, name: "Proceedings"},
-        {id: 4, name: "Presentation"}
-      ];
-
-      $scope.employeeMaritalStatus = [
-        {id: 0, name: "Select Marital Status"},
-        {id: 1, name: "Single"},
-        {id: 2, name: "Married"},
-        {id: 3, name: "Divorced"},
-        {id: 4, name: "Widowed"}
-      ];
-
-      $scope.degreeNames = [
-        {id: 1, name: "SSC"},
-        {id: 2, name: "HSC"},
-        {id: 3, name: "Bachelor"},
-        {id: 4, name: "Master's"},
-        {id: 5, name: "PhD"}
-      ];
+      $scope.gender = registrarConstants.gender;
+      $scope.religion = registrarConstants.religionTypes;
+      $scope.nationality = registrarConstants.nationalities;
+      $scope.typeOfPublication = registrarConstants.publicationTypes;
+      $scope.maritalStatus = registrarConstants.maritalStatus;
+      $scope.degreeNames = registrarConstants.degreeTypes;
+      $scope.bloodGroup = registrarConstants.bloodGroups;
 
       $scope.entry = {
-        personal: <IPersonalInformationModel> {},
-        academic: new Array<IAcademicInformationModel>(),
-        publication: new Array<IPublicationInformationModel>(),
-        training: new Array<ITrainingInformationModel>(),
-        award: new Array<IAwardInformationModel>(),
-        experience: new Array<IExperienceInformationModel>()
-      };
-
-      this.changeNav("personal");
-
-      this.addNewRow("academic");
-      this.addNewRow("publication");
-      this.addNewRow("training");
-      this.addNewRow("award");
-      this.addNewRow("experience");
+       personal: <IPersonalInformationModel> {},
+       academic: new Array<IAcademicInformationModel>(),
+       publication: new Array<IPublicationInformationModel>(),
+       training: new Array<ITrainingInformationModel>(),
+       award: new Array<IAwardInformationModel>(),
+       experience: new Array<IExperienceInformationModel>()
+       };
 
       $scope.changeNav = this.changeNav.bind(this);
       $scope.testData = this.testData.bind(this);
@@ -146,13 +179,21 @@ module ums{
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
       $scope.saveAsPresentAddress = this.saveAsPresentAddress.bind(this);
-      $scope.getDesignation = this.getDesignation.bind(this);
-      $scope.getEmploymentType = this.getEmploymentType.bind(this);
-      $scope.getDeptOffice = this.getDeptOffice.bind(this);
+      $scope.getCountry = this.getCountry.bind(this);
 
+      this.changeNav("personal");
+      this.addNewRow("academic");
+      this.addNewRow("publication");
+      this.addNewRow("training");
+      this.addNewRow("award");
+      this.addNewRow("experience");
       this.addDate();
-      this.getDesignation();
-      console.log("i am in EmployeeInformation.ts");
+      this.getCountry();
+      this.getDivision();
+      this.getDistrict();
+      this.getThana();
+      console.log("i am in EmployeeInformation.ts 55");
+
     }
 
 
@@ -213,20 +254,20 @@ module ums{
 
     private testData(){
       console.log("i am in testData()");
-      this.$scope.entry.personal.employeeId = 11;
+      this.$scope.entry.personal.employeeId = "11";
       this.$scope.entry.personal.firstName = "Kawsur";
       this.$scope.entry.personal.lastName = "Mir Md.";
       this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
       this.$scope.entry.personal.motherName = "Mst Hosne Ara";
-      this.$scope.entry.personal.gender = this.$scope.employeeGender[1];
+      this.$scope.entry.personal.gender = this.$scope.gender[1];
       this.$scope.entry.personal.birthday = "20/10/1995";
-      this.$scope.entry.personal.nationality = this.$scope.employeeNationality[1];
-      this.$scope.entry.personal.religion = this.$scope.employeeReligion[1];
-      this.$scope.entry.personal.maritalStatus = this.$scope.employeeMaritalStatus[1];
+      this.$scope.entry.personal.nationality = this.$scope.nationality[1];
+      this.$scope.entry.personal.religion = this.$scope.religion[1];
+      this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
       this.$scope.entry.personal.spouseName = "";
       this.$scope.entry.personal.nationalIdNo = 19952641478954758;
       this.$scope.entry.personal.spouseNationalIdNo = 0;
-      this.$scope.entry.personal.bloodGroup = "B+";
+      this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroup[1];
       this.$scope.entry.personal.website = "www.kawsur.com";
       this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
       this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
@@ -234,29 +275,19 @@ module ums{
       this.$scope.entry.personal.phone = "none";
       this.$scope.entry.personal.presentAddressHouse = "34/1";
       this.$scope.entry.personal.presentAddressRoad = "Kazi Riaz Uddin Road";
-      this.$scope.entry.personal.presentAddressPoliceStation = "Lalgagh";
-      this.$scope.entry.personal.presentAddressPostalCode = "1211";
-      this.$scope.entry.personal.presentAddressDistrict = "Dhaka";
-      this.$scope.entry.personal.presentAddressDivision = "Dhaka";
-      this.$scope.entry.personal.presentAddressCountry = "Bangladesh";
       this.$scope.entry.personal.permanentAddressHouse = "None";
       this.$scope.entry.personal.permanentAddressRoad = "";
-      this.$scope.entry.personal.permanentAddressPoliceStation = "";
-      this.$scope.entry.personal.permanentAddressPostalCode = "";
-      this.$scope.entry.personal.permanentAddressDistrict = "";
-      this.$scope.entry.personal.permanentAddressDivision = "None";
-      this.$scope.entry.personal.permanentAddressCountry = "None";
       this.$scope.entry.personal.emergencyContactName = "None";
       this.$scope.entry.personal.emergencyContactRelation = "None";
       this.$scope.entry.personal.emergencyContactPhone = "None";
       this.$scope.entry.personal.emergencyContactAddress = "None";
 
-      this.$scope.entry.academic[0].employeeId = 111;
+      this.$scope.entry.academic[0].employeeId = "111";
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
       this.$scope.entry.academic[0].academicPassingYear = "2016";
 
-      this.$scope.entry.publication[0].employeeId = 111;
+      this.$scope.entry.publication[0].employeeId = "11";
       this.$scope.entry.publication[0].publicationTitle = "N/A";
       this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
       this.$scope.entry.publication[0].publisherName = "N/A";
@@ -264,7 +295,7 @@ module ums{
       this.$scope.entry.publication[0].publicationType = this.$scope.typeOfPublication[1];
       this.$scope.entry.publication[0].publicationWebLink = "N/A";
 
-      this.$scope.entry.training[0].employeeId = 111;
+      this.$scope.entry.training[0].employeeId = "111";
       this.$scope.entry.training[0].trainingInstitution = "ABC";
       this.$scope.entry.training[0].trainingName = "XYZ";
       this.$scope.entry.training[0].trainingFrom = "2016";
@@ -272,13 +303,13 @@ module ums{
       this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
 
 
-      this.$scope.entry.award[0].employeeId = 111;
+      this.$scope.entry.award[0].employeeId = "111";
       this.$scope.entry.award[0].awardName = "My Award";
       this.$scope.entry.award[0].awardInstitute = "Really !";
       this.$scope.entry.award[0].awardedYear = "1990";
       this.$scope.entry.award[0].awardShortDescription = "Hello! This is My Award, Don't Ask Description :@";
 
-      this.$scope.entry.experience[0].employeeId = 111;
+      this.$scope.entry.experience[0].employeeId = "111";
       this.$scope.entry.experience[0].experienceInstitution = "My Award";
       this.$scope.entry.experience[0].experienceDesignation = "Really !";
       this.$scope.entry.experience[0].experienceFrom = "6";
@@ -413,27 +444,27 @@ module ums{
       console.log("i am in addNewRow()");
       if(divName == 'academic') {
         var academicEntry: IAcademicInformationModel;
-        academicEntry = {employeeId: 1, academicDegreeName: this.$scope.degreeNames[0], academicInstitution: "", academicPassingYear: ""};
+        academicEntry = {employeeId: "", academicDegreeName: this.$scope.degreeNames[1], academicInstitution: "", academicPassingYear: ""};
         this.$scope.entry.academic.push(academicEntry);
       }
       else if(divName == 'publication'){
         var publicationEntry: IPublicationInformationModel;
-        publicationEntry = {employeeId: 1, publicationTitle: "", publicationType: this.$scope.typeOfPublication[0], publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: ""};
+        publicationEntry = {employeeId: "", publicationTitle: "", publicationType: this.$scope.typeOfPublication[1], publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: ""};
         this.$scope.entry.publication.push(publicationEntry);
       }
       else if(divName == 'training'){
         var trainingEntry: ITrainingInformationModel;
-        trainingEntry = {employeeId: 1, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", trainingDuration: ""};
+        trainingEntry = {employeeId: "", trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", trainingDuration: ""};
         this.$scope.entry.training.push(trainingEntry);
       }
       else if(divName == 'award'){
         var awarEntry: IAwardInformationModel;
-        awarEntry = {employeeId: 1, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: ""};
+        awarEntry = {employeeId: "", awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: ""};
         this.$scope.entry.award.push(awarEntry);
       }
       else if(divName == 'experience'){
         var enperienceEntry: IExperienceInformationModel;
-        enperienceEntry = {employeeId: 1, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "" };
+        enperienceEntry = {employeeId: "", experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "" };
         this.$scope.entry.experience.push(enperienceEntry);
       }
     }
@@ -562,40 +593,43 @@ module ums{
       }, 100);
     }
 
-    private getDesignation(): void {
-      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
-      //   this.$scope.semesters = semesters;
-      //   for (var i = 0; i < semesters.length; i++) {
-      //     if (semesters[i].status == 2) {
-      //       this.$scope.semester = semesters[i];
-      //       break;
-      //     }
-      //   }
-      // });
+    private getCountry(){
+      console.log("i am in getCountry()");
+      this.countryService.getCountryList().then((country: any) => {
+        this.$scope.countries = country.entries;
+        console.log("ALL Countries");
+        console.log(this.$scope.countries);
+      });
     }
-    private getEmploymentType(): void {
-      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
-      //   this.$scope.semesters = semesters;
-      //   for (var i = 0; i < semesters.length; i++) {
-      //     if (semesters[i].status == 2) {
-      //       this.$scope.semester = semesters[i];
-      //       break;
-      //     }
-      //   }
-      // });
+
+    private getDivision(){
+      console.log("i am in getDivision()");
+      this.divisionService.getDivisionList().then((division: any) => {
+        this.$scope.divisions = division.entries;
+        console.log("ALL Divisions");
+        console.log(this.$scope.divisions);
+      });
     }
-    private getDeptOffice(): void {
-      // this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters: any) => {
-      //   this.$scope.semesters = semesters;
-      //   for (var i = 0; i < semesters.length; i++) {
-      //     if (semesters[i].status == 2) {
-      //       this.$scope.semester = semesters[i];
-      //       break;
-      //     }
-      //   }
-      // });
+
+    private getDistrict(){
+      console.log("i am in getDistrict()");
+      this.districtService.getDistrictList().then((district: any) => {
+        this.$scope.districts = district.entries;
+        console.log("ALL Districts");
+        console.log(this.$scope.districts);
+      });
+    }
+
+    private getThana(){
+      console.log("i am in getThana()");
+      this.thanaService.getThanaList().then((thana: any) => {
+        this.$scope.thanas = thana.entries;
+        console.log("ALL Thanas");
+        console.log(this.$scope.thanas);
+      });
     }
   }
+
 
   UMS.controller("EmployeeInformation",EmployeeInformation);
 }

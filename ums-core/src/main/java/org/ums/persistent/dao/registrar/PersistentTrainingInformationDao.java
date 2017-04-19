@@ -48,7 +48,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
     @Override
     public TrainingInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
-      trainingInformation.setEmployeeId(resultSet.getInt("employee_id"));
+      trainingInformation.setEmployeeId(resultSet.getString("employee_id"));
       trainingInformation.setTrainingName(resultSet.getString("training_name"));
       trainingInformation.setTrainingInstitute(resultSet.getString("training_institute"));
       trainingInformation.setTrainingFromDate(resultSet.getString("training_from"));

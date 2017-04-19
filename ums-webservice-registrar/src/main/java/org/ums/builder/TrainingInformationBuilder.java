@@ -22,7 +22,7 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
 
   @Override
   public void build(MutableTrainingInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getInt("employeeId"));
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTrainingName(pJsonObject.getString("trainingName"));
     pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
     pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));

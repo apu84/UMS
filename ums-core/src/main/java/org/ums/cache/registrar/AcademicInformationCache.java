@@ -29,7 +29,7 @@ public class AcademicInformationCache extends
   }
 
   @Override
-  public List<AcademicInformation> getEmployeeAcademicInformation(int pEmployeeId) {
+  public List<AcademicInformation> getEmployeeAcademicInformation(String pEmployeeId) {
     return getManager().getEmployeeAcademicInformation(pEmployeeId);
   }
 }

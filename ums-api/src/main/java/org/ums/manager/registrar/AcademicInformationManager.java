@@ -11,5 +11,5 @@ public interface AcademicInformationManager extends
 
   int saveAcademicInformation(final List<MutableAcademicInformation> pMutableAcademicInformation);
 
-  List<AcademicInformation> getEmployeeAcademicInformation(final int pEmployeeId);
+  List<AcademicInformation> getEmployeeAcademicInformation(final String pEmployeeId);
 }
