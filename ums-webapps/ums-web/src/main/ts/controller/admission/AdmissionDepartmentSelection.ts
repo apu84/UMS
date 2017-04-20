@@ -107,24 +107,10 @@ module ums{
 
       $scope.gridOpts = {};
       //$scope.datePickerOptions = <DatepickerOptions>{};
-      $scope.showModal=true;
-      $scope.selectedProgramIdClr=0;
-      $scope.waitingProgramIdClr=0;
-      $scope.fromMeritSerialNumber=0;
-      $scope.toMeritSerialNumber=0;
-      $scope.deadLine="";
-      $scope.selectionBackground="white";
-      $scope.statisticsColor="white";
+
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
-      $scope.showStudentPortion=false;
-      $scope.showSearch = true;
-      $scope.disableSaveButton=false;
-      $scope.showReportSection = false;
-      $scope.focusSearch=false;
-      $scope.focusMeritProgramSelection=false;
-      $scope.focusWaitingProgramSelection=false;
-      $scope.showSheetStyle=false;
+
 
 
 
@@ -283,7 +269,23 @@ module ums{
 
     private getProgramsAndStatistics(){
       Utils.expandRightDiv();
-
+      this.$scope.admissionStudents=[];
+      this.$scope.showStudentPortion=false;
+      this.$scope.showSearch = true;
+      this.$scope.disableSaveButton=false;
+      this.$scope.showReportSection = false;
+      this.$scope.focusSearch=false;
+      this.$scope.focusMeritProgramSelection=false;
+      this.$scope.focusWaitingProgramSelection=false;
+      this.$scope.showSheetStyle=false;
+      this.$scope.showModal=true;
+      this.$scope.selectedProgramIdClr=0;
+      this.$scope.waitingProgramIdClr=0;
+      this.$scope.fromMeritSerialNumber=0;
+      this.$scope.toMeritSerialNumber=0;
+      this.$scope.deadLine="";
+      this.$scope.selectionBackground="white";
+      this.$scope.statisticsColor="white";
       var unit=this.getUnit();
       this.getPrograms().then((programs)=>{
         this.getStatistics();
@@ -377,7 +379,7 @@ module ums{
     }
 
     private searchByMeritSerialNo(meritSerialNo:any){
-      this.$scope.meritSerialNo=meritSerialNo;
+      this.$scope.meritSerialNo=angular.copy(meritSerialNo);
       $("#searchBar").focus();
       console.log(meritSerialNo);
       console.log("merit serial no from scope-xxx");
@@ -446,7 +448,7 @@ module ums{
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
-      }, 100);
+      }, 40);
 
     }
 
@@ -481,7 +483,7 @@ module ums{
     private getMeritListTypes():void{
       this.$scope.meritTypes = [];
       this.$scope.meritTypes = this.appConstants.meritListTypes;
-      this.$scope.meritType = this.$scope.meritTypes[1];
+      this.$scope.meritType = this.$scope.meritTypes[0];
     }
 
 
@@ -525,10 +527,12 @@ module ums{
 
       console.log("students");
       console.log(student);
-      this.checkIfEmptyProgramIsSelected();
+      if(!this.$scope.disableSaveButton)
+        this.checkIfEmptyProgramIsSelected();
     }
 
     private checkIfEmptyProgramIsSelected(){
+      console.log("I am inn");
       if(this.$scope.statisticsMap[this.$scope.selectedStudent.selectedProgram.id].remaining<=0){
         this.$scope.disableSaveButton=true;
         this.notify.error("No seat remaining for the selected program");
@@ -583,10 +587,12 @@ module ums{
 
     private assignSelectedProgram(student:AdmissionStudent, programId:number){
       this.$scope.selectedProgram = this.$scope.programMap[programId];
+      this.checkForSameSelectedPrograms(student);
     }
 
     private assignWaitingProgram(student:AdmissionStudent, programId:number){
       this.$scope.waitingProgram = this.$scope.programMap[programId];
+      this.checkForSameSelectedPrograms(student);
     }
 
     private saveStudent(student:AdmissionStudent){
@@ -603,7 +609,7 @@ module ums{
       if(this.$scope.selectedStudent.selectedProgram.id!=0 && this.$scope.deadLine=="" || this.$scope.deadLine==null){
         this.notify.error("Deadline is not selected");
       }
-      else if(this.$scope.selectedStudent.selectedProgram.id=== this.$scope.waitingProgram.id){
+      else if(this.$scope.selectedStudent.selectedProgram === this.$scope.waitingProgram){
         this.notify.error("Both program can't be same");
       }
       else{

@@ -48,7 +48,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("corpAuthorBody", pReadOnly.getCorpSubBody());
     pBuilder.add("corpAuthorCountry", pReadOnly.getCorpCityCountry());
     pBuilder.add("callNo", pReadOnly.getCallNo());
-//    pBuilder.add("publisher", pReadOnly.getPublisherId());
+    // pBuilder.add("publisher", pReadOnly.getPublisherId());
     pBuilder.add("status", pReadOnly.getRecordStatus().getLabel());
     pBuilder.add("bindingType", pReadOnly.getBookBindingType().getLabel());
     pBuilder.add("acquisitionType", pReadOnly.getAcquisitionType().getLabel());

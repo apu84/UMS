@@ -74,7 +74,7 @@ module ums{
       $scope.migrationStudents=[];
       $scope.meritTypes = [];
       $scope.meritTypes = this.appConstants.meritListTypes;
-      $scope.meritType = this.$scope.meritTypes[1];
+      $scope.meritType = this.$scope.meritTypes[0];
 
       $scope.data = {
         settings:{

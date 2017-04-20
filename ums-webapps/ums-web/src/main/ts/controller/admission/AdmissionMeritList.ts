@@ -241,7 +241,7 @@ module ums{
       this.$scope.searchSpinner=true;
       this.convertToJson().then((json:any)=>{
         this.admissionStudentService.saveMeritList(json, this.$scope.meritType.name).then((status:string)=>{
-
+          this.$scope.modalData="";
           this.fetchMeritList();
 
         });
