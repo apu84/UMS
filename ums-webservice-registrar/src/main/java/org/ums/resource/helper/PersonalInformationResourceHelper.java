@@ -61,7 +61,7 @@ public class PersonalInformationResourceHelper extends
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(jsonObject, pPersonalInformation, pUriInfo, localCache);
+    children.add(toJson(pPersonalInformation, pUriInfo, localCache));
     jsonObject.add("entries", children);
     localCache.invalidate();
     return jsonObject.build();

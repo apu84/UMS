@@ -209,7 +209,7 @@ module ums{
       // this.getPublicationInformation();
       // this.getExperienceInformation();
       // this.getTrainingInformation();
-      console.log("i am in EmployeeInformation.ts");
+      console.log("i am in EmployeeInformation.ts 26");
 
     }
 
@@ -344,6 +344,8 @@ module ums{
       this.employeeInformationService.getPersonalInformation("33333").then((personalInformation: any) =>{
         console.log("Employee's Personal Information");
         console.log(personalInformation);
+        this.$scope.entry.personal = personalInformation;
+
       });
     }
 
