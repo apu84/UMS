@@ -65,6 +65,7 @@ module ums{
 
     
     entry: IEntry;
+    degreeNameMapDegree:any;
     gender: Array<IGender>;
     maritalStatus: Array<IMaritalStatus>;
     religion: Array<IReligion>;
@@ -165,7 +166,8 @@ module ums{
       $scope.nationality = registrarConstants.nationalities;
       $scope.typeOfPublication = registrarConstants.publicationTypes;
       $scope.maritalStatus = registrarConstants.maritalStatus;
-      $scope.degreeNames = registrarConstants.degreeTypes;
+      this.$scope.degreeNames = this.registrarConstants.degreeTypes;
+
       $scope.bloodGroup = registrarConstants.bloodGroups;
 
       $scope.entry = {
@@ -202,15 +204,23 @@ module ums{
       this.getCountry();
       this.getDivision();
       this.getDistrict();
+      this.createDegreeMap();
       this.getThana();
-      this.getPersonalInformation();
-      // this.getAcademicInformation();
-      // this.getAwardInformation();
-      // this.getPublicationInformation();
+      //this.getPersonalInformation();
+       this.getAcademicInformation();
+       //this.getAwardInformation();
+       //this.getPublicationInformation();
       // this.getExperienceInformation();
-      // this.getTrainingInformation();
-      console.log("i am in EmployeeInformation.ts 26");
+       //this.getTrainingInformation();
+      console.log("i am in EmployeeInformation.ts 27");
 
+    }
+
+    private createDegreeMap(){
+      this.$scope.degreeNameMapDegree={};
+      for(var i=0;i<this.$scope.degreeNames.length;i++){
+        this.$scope.degreeNameMapDegree[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
+      }
     }
 
 
@@ -238,6 +248,7 @@ module ums{
         this.$scope.showAcademicLabelDiv = true;
         this.$scope.showAcademicAddIcon = false;
         this.$scope.showAcademicCrossIcon = false;
+        this.$scope.showRequireSign = false;
       }
       else if(navTitle == "publication"){
         this.$scope.publicationTab = true;
@@ -271,6 +282,7 @@ module ums{
 
     private testData(){
       console.log("i am in testData()");
+      this.$scope.entry.personal = <IPersonalInformationModel>{};
       this.$scope.entry.personal.firstName = "Kawsur";
       this.$scope.entry.personal.lastName = "Mir Md.";
       this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
@@ -281,8 +293,8 @@ module ums{
       this.$scope.entry.personal.religion = this.$scope.religion[1];
       this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
       this.$scope.entry.personal.spouseName = "";
-      this.$scope.entry.personal.nationalIdNo = 19952641478954758;
-      this.$scope.entry.personal.spouseNationalIdNo = 0;
+      this.$scope.entry.personal.nationalIdNo = "19952641478954758";
+      this.$scope.entry.personal.spouseNationalIdNo = "";
       this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroup[1];
       this.$scope.entry.personal.website = "www.kawsur.com";
       this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
@@ -300,7 +312,7 @@ module ums{
 
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
-      this.$scope.entry.academic[0].academicPassingYear = "2016";
+      this.$scope.entry.academic[0].academicPassingYear = "";
 
       this.$scope.entry.publication[0].publicationTitle = "N/A";
       this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
@@ -344,8 +356,7 @@ module ums{
       this.employeeInformationService.getPersonalInformation("33333").then((personalInformation: any) =>{
         console.log("Employee's Personal Information");
         console.log(personalInformation);
-        this.$scope.entry.personal = personalInformation;
-
+        this.$scope.entry.personal = personalInformation[0];
       });
     }
 
@@ -367,6 +378,15 @@ module ums{
       this.employeeInformationService.getAcademicInformation("33333").then((academicInformation: any) =>{
         console.log("Employee's Academic Information");
         console.log(academicInformation);
+        for(var i = 0; i < academicInformation.length; i++)
+        {
+          this.$scope.entry.academic[i] = academicInformation[i];
+          this.$scope.entry.academic[i].academicDegreeName =this.$scope.degreeNameMapDegree[academicInformation[i].academicDegreeName ] ;
+          console.log("Main data ");
+          console.log(academicInformation[i]);
+          console.log("Assigned data ");
+          console.log(this.$scope.entry.academic[i]);
+        }
       });
     }
 
@@ -388,6 +408,12 @@ module ums{
       this.employeeInformationService.getPublicationInformation("33333").then((publicationInformation: any) =>{
         console.log("Employee's Publication Information");
         console.log(publicationInformation);
+        console.log("Publication.length");
+        console.log(publicationInformation.length);
+        for(var i = 0; i < publicationInformation.length; i++)
+        {
+          this.$scope.entry.publication[i] = publicationInformation[i];
+        }
       });
     }
 
@@ -409,6 +435,10 @@ module ums{
       this.employeeInformationService.getTrainingInformation("33333").then((trainingInformation: any) =>{
         console.log("Employee's Training Information");
         console.log(trainingInformation);
+        for(var i = 0; i < trainingInformation.length; i++)
+        {
+          this.$scope.entry.training[i] = trainingInformation[i];
+        }
       });
     }
 
@@ -430,6 +460,11 @@ module ums{
       this.employeeInformationService.getAwardInformation("33333").then((awardInformation: any) =>{
         console.log("Employee's award Information");
         console.log(awardInformation);
+        for(var i = 0; i < awardInformation.length; i++)
+        {
+          this.$scope.entry.training[i] = awardInformation[i];
+        }
+
       });
     }
 
@@ -451,6 +486,10 @@ module ums{
       this.employeeInformationService.getExperienceInformation("33333").then((experienceInformation: any) =>{
         console.log("Employee's Experience Information");
         console.log(experienceInformation);
+        for(var i = 0; i < experienceInformation.length; i++)
+        {
+          this.$scope.entry.training[i] = experienceInformation[i];
+        }
       });
     }
 
@@ -469,6 +508,7 @@ module ums{
         this.$scope.showRequireSign = true;
         this.$scope.showAcademicAddIcon = true;
         this.$scope.showAcademicCrossIcon = true;
+        this.$scope.showRequireSign = true;
       }
       else if(formName == "publication") {
         this.$scope.showPublicationInputDiv = true;
@@ -646,6 +686,7 @@ module ums{
         $('.custom-datepicker').datepicker({
           // startView: 2,
           // minViewMode: 2
+
         });
         $('.custom-datepicker').on('change', function () {
           $('.datepicker').hide();
@@ -670,8 +711,9 @@ module ums{
     private getDistrict(){
       console.log("i am in getDistrict()");
       this.districtService.getDistrictList().then((district: any) => {
-        this.$scope.allDistricts = district.entries;
-        //this.$scope.districts = district.entries;
+        this.$scope.districts = district.entries;
+        //this.$scope.allDistricts = district.entries;
+
       });
     }
 
@@ -683,15 +725,15 @@ module ums{
     }
 
     private changeDistrict(){
-      var districtLength = this.$scope.allDistricts.length;
-      var index = 0;
-      console.log("i am in changeDistrict()");
-      console.log(districtLength);
-      for(var i = 0; i < districtLength; i++){
-        if(this.$scope.entry.personal.presentAddressDivision.id == this.$scope.allDistricts[i].division_id ){
-          this.$scope.districts[index++] = this.$scope.allDistricts[i];
-        }
-      }
+      // var districtLength = this.$scope.allDistricts.length;
+      // var index = 0;
+      // console.log("i am in changeDistrict()");
+      // console.log(districtLength);
+      // for(var i = 0; i < districtLength; i++){
+      //   if(this.$scope.entry.personal.presentAddressDivision.id == this.$scope.allDistricts[i].division_id ){
+      //     this.$scope.districts[index++] = this.$scope.allDistricts[i];
+      //   }
+      // }
     }
   }
 

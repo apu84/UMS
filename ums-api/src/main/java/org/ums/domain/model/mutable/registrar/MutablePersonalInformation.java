@@ -28,13 +28,13 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setDateOfBirth(final String pDateOfBirth);
 
-  void setNationalId(final int pNationalId);
+  void setNationalId(final String pNationalId);
 
-  void setMaritalStatus(final int pMaritalStatus);
+  void setMaritalStatus(final String pMaritalStatus);
 
   void setSpouseName(final String pSpouseName);
 
-  void setSpouseNationalId(final int pSpouseNationalId);
+  void setSpouseNationalId(final String pSpouseNationalId);
 
   void setWebsite(final String pWebsite);
 

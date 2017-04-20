@@ -63,42 +63,113 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    pMutable.setFirstName(pJsonObject.getString("firstName"));
-    pMutable.setLastName(pJsonObject.getString("lastName"));
-    pMutable.setFatherName(pJsonObject.getString("fatherName"));
-    pMutable.setMotherName(pJsonObject.getString("motherName"));
-    System.out.println(pJsonObject.getJsonObject("gender").getString("name"));
-    pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
-    pMutable.setDateOfBirth(pJsonObject.getString("birthday"));
-    pMutable.setNationality(pJsonObject.getJsonObject("nationality").getString("name"));
-    pMutable.setReligion(pJsonObject.getJsonObject("religion").getString("name"));
-    pMutable.setMaritalStatus(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
-    pMutable.setSpouseName(pJsonObject.getString("spouseName"));
-    pMutable.setNationalId(pJsonObject.getInt("nationalIdNo"));
-    pMutable.setBloodGroup(pJsonObject.getJsonObject("bloodGroup").getString("name"));
-    pMutable.setSpouseNationalId(pJsonObject.getInt("spouseNationalIdNo"));
-    pMutable.setWebsite(pJsonObject.getString("website"));
-    pMutable.setOrganizationalEmail(pJsonObject.getString("organizationalEmail"));
-    pMutable.setPersonalEmail(pJsonObject.getString("personalEmail"));
-    pMutable.setMobileNumber(pJsonObject.getString("mobile"));
-    pMutable.setPhoneNumber(pJsonObject.getString("phone"));
-    pMutable.setPresentAddressHouse(pJsonObject.getString("presentAddressHouse"));
-    pMutable.setPresentAddressRoad(pJsonObject.getString("presentAddressRoad"));
-    pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressPoliceStation").getString("name"));
-    pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostalCode"));
-    pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("presentAddressDistrict").getString("name"));
-    pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("presentAddressDivision").getString("name"));
-    pMutable.setPresentAddressCountry(pJsonObject.getJsonObject("presentAddressCountry").getString("name"));
-    pMutable.setPermanentAddressHouse(pJsonObject.getString("permanentAddressHouse"));
-    pMutable.setPermanentAddressRoad(pJsonObject.getString("permanentAddressRoad"));
-    pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressPoliceStation").getString("name"));
-    pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostalCode"));
-    pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("permanentAddressDistrict").getString("name"));
-    pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("permanentAddressDivision").getString("name"));
-    pMutable.setPermanentAddressCountry(pJsonObject.getJsonObject("permanentAddressCountry").getString("name"));
-    pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
-    pMutable.setEmergencyContactRelation(pJsonObject.getString("emergencyContactRelation"));
-    pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));
-    pMutable.setEmergencyContactAddress(pJsonObject.getString("emergencyContactAddress"));
+    if(!pJsonObject.getString("firstName").equals("")) {
+      pMutable.setFirstName(pJsonObject.getString("firstName"));
+    }
+    if(!pJsonObject.getString("lastName").equals("")) {
+      pMutable.setLastName(pJsonObject.getString("lastName"));
+    }
+    if(!pJsonObject.getString("fatherName").equals("")) {
+      pMutable.setFatherName(pJsonObject.getString("fatherName"));
+    }
+    if(!pJsonObject.getString("motherName").equals("")) {
+      pMutable.setMotherName(pJsonObject.getString("motherName"));
+    }
+    if(pJsonObject.getJsonObject("gender") != null) {
+      pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
+    }
+    if(!pJsonObject.getString("birthday").equals("")) {
+      pMutable.setDateOfBirth(pJsonObject.getString("birthday"));
+    }
+    if(pJsonObject.getJsonObject("nationality") != null) {
+      pMutable.setNationality(pJsonObject.getJsonObject("nationality").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("religion") != null) {
+      pMutable.setReligion(pJsonObject.getJsonObject("religion").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("maritalStatus") != null) {
+      pMutable.setMaritalStatus(pJsonObject.getJsonObject("maritalStatus").getString("name"));
+    }
+    if(!pJsonObject.getString("spouseName").equals("")) {
+      pMutable.setSpouseName(pJsonObject.getString("spouseName"));
+    }
+    if(!pJsonObject.getString("nationalIdNo").equals("")) {
+      pMutable.setNationalId(pJsonObject.getString("nationalIdNo"));
+    }
+    if(pJsonObject.getJsonObject("bloodGroup") != null) {
+      pMutable.setBloodGroup(pJsonObject.getJsonObject("bloodGroup").getString("name"));
+    }
+    if(!pJsonObject.getString("spouseNationalIdNo").equals("")) {
+      pMutable.setSpouseNationalId(pJsonObject.getString("spouseNationalIdNo"));
+    }
+    if(!pJsonObject.getString("website").equals("")) {
+      pMutable.setWebsite(pJsonObject.getString("website"));
+    }
+    if(!pJsonObject.getString("organizationalEmail").equals("")) {
+      pMutable.setOrganizationalEmail(pJsonObject.getString("organizationalEmail"));
+    }
+    if(!pJsonObject.getString("personalEmail").equals("")) {
+      pMutable.setPersonalEmail(pJsonObject.getString("personalEmail"));
+    }
+    if(!pJsonObject.getString("mobile").equals("")) {
+      pMutable.setMobileNumber(pJsonObject.getString("mobile"));
+    }
+    if(!pJsonObject.getString("phone").equals("")) {
+      pMutable.setPhoneNumber(pJsonObject.getString("phone"));
+    }
+    if(!pJsonObject.getString("presentAddressHouse").equals("")) {
+      pMutable.setPresentAddressHouse(pJsonObject.getString("presentAddressHouse"));
+    }
+    if(!pJsonObject.getString("presentAddressRoad").equals("")) {
+      pMutable.setPresentAddressRoad(pJsonObject.getString("presentAddressRoad"));
+    }
+    if(pJsonObject.getJsonObject("presentAddressPoliceStation") != null) {
+      pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressPoliceStation").getString("name"));
+    }
+    if(pJsonObject.getString("presentAddressPostalCode") != null) {
+      pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostalCode"));
+    }
+    if(pJsonObject.getJsonObject("presentAddressDistrict") != null) {
+      pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("presentAddressDistrict").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("presentAddressDivision") != null) {
+      pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("presentAddressDivision").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("presentAddressCountry") != null) {
+      pMutable.setPresentAddressCountry(pJsonObject.getJsonObject("presentAddressCountry").getString("name"));
+    }
+    if(!pJsonObject.getString("permanentAddressHouse").equals("")) {
+      pMutable.setPermanentAddressHouse(pJsonObject.getString("permanentAddressHouse"));
+    }
+    if(!pJsonObject.getString("permanentAddressRoad").equals("")) {
+      pMutable.setPermanentAddressRoad(pJsonObject.getString("permanentAddressRoad"));
+    }
+    if(pJsonObject.getJsonObject("permanentAddressPoliceStation") != null) {
+      pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressPoliceStation").getString("name"));
+    }
+    if(!pJsonObject.getString("permanentAddressPostalCode").equals("")) {
+      pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostalCode"));
+    }
+    if(pJsonObject.getJsonObject("permanentAddressDistrict") != null) {
+      pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("permanentAddressDistrict").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("permanentAddressDivision") != null) {
+      pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("permanentAddressDivision").getString("name"));
+    }
+    if(pJsonObject.getJsonObject("permanentAddressCountry") != null) {
+      pMutable.setPermanentAddressCountry(pJsonObject.getJsonObject("permanentAddressCountry").getString("name"));
+    }
+    if(!pJsonObject.getString("emergencyContactName").equals("")) {
+      pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
+    }
+    if(!pJsonObject.getString("emergencyContactRelation").equals("")) {
+      pMutable.setEmergencyContactRelation(pJsonObject.getString("emergencyContactRelation"));
+    }
+    if(!pJsonObject.getString("emergencyContactPhone").equals("")) {
+      pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));
+    }
+    if(!pJsonObject.getString("emergencyContactAddress").equals("")) {
+      pMutable.setEmergencyContactAddress(pJsonObject.getString("emergencyContactAddress"));
+    }
   }
 }

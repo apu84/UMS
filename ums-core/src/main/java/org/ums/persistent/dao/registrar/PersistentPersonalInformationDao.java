@@ -82,10 +82,10 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
       personalInformation.setNationality(resultSet.getString("nationality"));
       personalInformation.setReligion(resultSet.getString("religion"));
       personalInformation.setDateOfBirth(resultSet.getString("date_of_birth"));
-      personalInformation.setNationalId(resultSet.getInt("national_id_card"));
-      personalInformation.setMaritalStatus(resultSet.getInt("marital_status"));
+      personalInformation.setNationalId(resultSet.getString("national_id_card"));
+      personalInformation.setMaritalStatus(resultSet.getString("marital_status"));
       personalInformation.setSpouseName(resultSet.getString("spouse_name"));
-      personalInformation.setSpouseNationalId(resultSet.getInt("spouse_national_id_card"));
+      personalInformation.setSpouseNationalId(resultSet.getString("spouse_national_id_card"));
       personalInformation.setWebsite(resultSet.getString("website"));
       personalInformation.setOrganizationalEmail(resultSet.getString("organizational_email"));
       personalInformation.setPersonalEmail(resultSet.getString("personal_email"));

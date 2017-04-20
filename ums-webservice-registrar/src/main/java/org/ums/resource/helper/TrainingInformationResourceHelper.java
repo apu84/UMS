@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -35,8 +36,12 @@ public class TrainingInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getTrainingInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<TrainingInformation> pTrainingInformation =
-        mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+    List<TrainingInformation> pTrainingInformation = new ArrayList<>();
+    try {
+      pTrainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
     return toJson(pTrainingInformation, pUriInfo);
   }
 

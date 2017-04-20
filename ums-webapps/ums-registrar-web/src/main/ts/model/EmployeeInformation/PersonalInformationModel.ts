@@ -11,9 +11,9 @@ module ums {
         religion: IReligion;
         maritalStatus: IMaritalStatus;
         spouseName: string;
-        nationalIdNo: number;
+        nationalIdNo: string;
         bloodGroup: IBloodGroup;
-        spouseNationalIdNo: number;
+        spouseNationalIdNo: string;
         website: string;
         organizationalEmail: string;
         personalEmail: string;

@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -34,8 +35,16 @@ public class PersonalInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    PersonalInformation pPersonalInformation = mPersonalInformationManager.getEmployeePersonalInformation(pEmployeeId);
-    return toJson(pPersonalInformation, pUriInfo);
+    PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
+    try {
+      PersonalInformation pPersonalInformation =
+          mPersonalInformationManager.getEmployeePersonalInformation(pEmployeeId);
+      personalInformation = (PersistentPersonalInformation) pPersonalInformation;
+    } catch(EmptyResultDataAccessException e) {
+      // Do nothing
+    }
+
+    return toJson((PersonalInformation) personalInformation, pUriInfo);
   }
 
   @Transactional
@@ -61,7 +70,8 @@ public class PersonalInformationResourceHelper extends
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    children.add(toJson(pPersonalInformation, pUriInfo, localCache));
+    if(pPersonalInformation.getEmployeeId() != null)
+      children.add(toJson(pPersonalInformation, pUriInfo, localCache));
     jsonObject.add("entries", children);
     localCache.invalidate();
     return jsonObject.build();

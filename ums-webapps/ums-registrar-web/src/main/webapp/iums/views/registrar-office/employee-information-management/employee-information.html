@@ -101,7 +101,7 @@
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label"> {{entry.personal.bloodGroup}} </label>
+                        <label class="control-label"> {{entry.personal.bloodGroup.name}} </label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -133,7 +133,7 @@
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.nationality}}</label>
+                        <label class="control-label">{{entry.personal.nationality.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -147,7 +147,7 @@
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.religion}}</label>
+                        <label class="control-label">{{entry.personal.religion.name}}</label>
                     </div>
                 </div>
             </div>
@@ -189,7 +189,7 @@
                 <div class="col-md-6">
                     <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="number"
+                        <input type="text"
                                name="nNationalId"
                                id="iNationalId"
                                data-ng-model="entry.personal.nationalIdNo"
@@ -203,7 +203,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="number"
+                        <input type="text"
                                name="nSpouseNationalId"
                                id="iSpouseNationalId"
                                data-ng-model="entry.personal.spouseNationalIdNo"
@@ -392,7 +392,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.presentAddressDivision}}</label>
+                        <label class="control-label">{{entry.personal.presentAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -411,7 +411,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.presentAddressDistrict}}</label>
+                        <label class="control-label">{{entry.personal.presentAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -425,7 +425,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.presentAddressPoliceStation}}</label>
+                        <label class="control-label">{{entry.personal.presentAddressPoliceStation.name}}</label>
                     </div>
                 </div>
             </div>
@@ -506,7 +506,7 @@
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.permanentAddressCountry}}</label>
+                        <label class="control-label">{{entry.personal.permanentAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -521,7 +521,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.permanentAddressDivision}}</label>
+                        <label class="control-label">{{entry.personal.permanentAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -540,7 +540,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.permanentAddressDistrict}}</label>
+                        <label class="control-label">{{entry.personal.permanentAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -554,7 +554,7 @@
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.permanentAddressPoliceStation}}</label>
+                        <label class="control-label">{{entry.personal.permanentAddressPoliceStation.name}}</label>
                     </div>
                 </div>
             </div>
@@ -667,13 +667,13 @@
                     <label class="control-label">Sl.</label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Degree</label>
+                    <label class="control-label">Degree<span class="require" data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-6">
-                    <label class="control-label">Institution</label>
+                    <label class="control-label">Institution<span class="require" data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Passing Year</label>
+                    <label class="control-label">Passing Year<span class="require" data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-1">
                     <label class="control-label"></label>

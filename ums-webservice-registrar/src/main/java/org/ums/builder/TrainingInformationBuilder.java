@@ -30,9 +30,18 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
   @Override
   public void build(MutableTrainingInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    pMutable.setTrainingName(pJsonObject.getString("trainingName"));
-    pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
-    pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));
-    pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
+
+    if(!pJsonObject.getJsonString("trainingName").equals("")) {
+      pMutable.setTrainingName(pJsonObject.getString("trainingName"));
+    }
+    if(!pJsonObject.getJsonString("trainingInstitution").equals("")) {
+      pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
+    }
+    if(!pJsonObject.getJsonString("trainingFrom").equals("")) {
+      pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));
+    }
+    if(!pJsonObject.getJsonString("trainingTo").equals("")) {
+      pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
+    }
   }
 }

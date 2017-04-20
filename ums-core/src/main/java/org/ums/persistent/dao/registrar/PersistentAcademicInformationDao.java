@@ -36,7 +36,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
 
   @Override
   public int deleteAcademicInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID=?";
     return mJdbcTemplate.update(query, pEmployeeId);
   }
 
@@ -52,9 +52,9 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   }
 
   @Override
-  public List<AcademicInformation> getEmployeeAcademicInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
-    return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAcademicInformationDao.RoleRowMapper());
+  public List<AcademicInformation> getEmployeeAcademicInformation(final String pEmployeeId) {
+    String query = GET_ONE + " Where EMPLOYEE_ID=?";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentAcademicInformationDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<AcademicInformation> {
@@ -63,8 +63,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
       academicInformation.setEmployeeId(resultSet.getString("employee_id"));
       academicInformation.setDegreeName(resultSet.getString("degree_name"));
-      academicInformation.setDegreeInstitute(resultSet.getString("degree_institution"));
-      academicInformation.setDegreePassingYear(resultSet.getString("degree_passing_Year"));
+      academicInformation.setDegreeInstitute(resultSet.getString("degree_institute"));
+      academicInformation.setDegreePassingYear(resultSet.getString("degree_passing_year"));
       return academicInformation;
     }
   }

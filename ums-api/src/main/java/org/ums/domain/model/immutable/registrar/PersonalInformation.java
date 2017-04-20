@@ -30,13 +30,13 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getDateOfBirth();
 
-  int getNationalId();
+  String getNationalId();
 
-  int getMaritalStatus();
+  String getMaritalStatus();
 
   String getSpouseName();
 
-  int getSpouseNationalId();
+  String getSpouseNationalId();
 
   String getWebsite();
 

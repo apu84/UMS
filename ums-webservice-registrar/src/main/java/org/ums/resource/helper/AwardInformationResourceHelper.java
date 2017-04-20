@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.AwardInformationBuilder;
@@ -34,7 +35,11 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   UserManager userManager;
 
   public JsonObject getAwardInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<AwardInformation> pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+    List<AwardInformation> pAwardInformation = new ArrayList<>();
+    try {
+      pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+    } catch(EmptyResultDataAccessException e) {
+    }
     return toJson(pAwardInformation, pUriInfo);
   }
 

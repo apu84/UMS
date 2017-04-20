@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -35,8 +36,12 @@ public class ExperienceInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getExperienceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<ExperienceInformation> pExperienceInformation =
-        mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+    List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
+    try {
+      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
     return toJson(pExperienceInformation, pUriInfo);
   }
 

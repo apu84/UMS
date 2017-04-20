@@ -26,10 +26,10 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private String mNationality;
   private String mReligion;
   private String mDateOfBirth;
-  private int mNationalId;
-  private int mMaritalStatus;
+  private String mNationalId;
+  private String mMaritalStatus;
   private String mSpouseName;
-  private int mSpouseNationalId;
+  private String mSpouseNationalId;
   private String mWebsite;
   private String mOrganizationalEmail;
   private String mPersonalEmail;
@@ -188,12 +188,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setNationalId(int pNationalId) {
+  public void setNationalId(String pNationalId) {
     mNationalId = pNationalId;
   }
 
   @Override
-  public void setMaritalStatus(int pMaritalStatus) {
+  public void setMaritalStatus(String pMaritalStatus) {
     mMaritalStatus = pMaritalStatus;
   }
 
@@ -203,7 +203,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setSpouseNationalId(int pSpouseNationalId) {
+  public void setSpouseNationalId(String pSpouseNationalId) {
     mSpouseNationalId = pSpouseNationalId;
   }
 
@@ -373,12 +373,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public int getNationalId() {
+  public String getNationalId() {
     return mNationalId;
   }
 
   @Override
-  public int getMaritalStatus() {
+  public String getMaritalStatus() {
     return mMaritalStatus;
   }
 
@@ -388,7 +388,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public int getSpouseNationalId() {
+  public String getSpouseNationalId() {
     return mSpouseNationalId;
   }
 
