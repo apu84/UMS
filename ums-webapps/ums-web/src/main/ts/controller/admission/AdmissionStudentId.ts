@@ -46,7 +46,7 @@ module ums{
       $scope.showStudentSection=false;
       $scope.meritTypes = [];
       $scope.meritTypes = this.appConstants.meritListTypes;
-      $scope.meritType = this.$scope.meritTypes[1];
+      $scope.meritType = this.$scope.meritTypes[0];
       $scope.showMainPanel = this.showManePanel.bind(this);
       $scope.searchByReceiptId  = this.searchByReceiptId.bind(this);
 

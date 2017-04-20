@@ -405,7 +405,6 @@ module ums {
           {id: "1", name: "Permanent"}
         ],
         meritListTypes:[
-          {id:"0", name:"Combined (GA+RA+FF) "},
           {id:"1", name:"GL"},
           {id:"2", name:"FF"},
           {id:"3", name:"RA"},

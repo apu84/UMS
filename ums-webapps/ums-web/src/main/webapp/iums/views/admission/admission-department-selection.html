@@ -150,6 +150,7 @@
                                 <div class="input-icon right" >
                                     <i class="fa fa-calendar"></i>
                                     <input  type="text"  data-ng-model="deadLine" data-ng-change="assignDeadline(deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/>
+
                                 </div>
                             </div>
                             <div class="col-md-3"></div>
@@ -402,7 +403,7 @@
                                             ></select>
                                             </td>
                                             <td>{{s.deadline}}</td>
-                                            <td><button class="btn btn-success" data-ng-click="saveStudent(s)">Save</button></td>
+                                            <td><button data-ng-disabled="disableSaveButton==true" class="btn btn-success" data-ng-click="saveStudent(s)">Save</button></td>
                                         </tr>
                                         </tbody>
                                     </table>
