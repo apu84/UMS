@@ -20,4 +20,9 @@ public class TrainingInformationDaoDecorator extends
   public List<TrainingInformation> getEmployeeTrainingInformation(String pEmployeeId) {
     return getManager().getEmployeeTrainingInformation(pEmployeeId);
   }
+
+  @Override
+  public int deleteTrainingInformation(String pEmployeeId) {
+    return getManager().deleteTrainingInformation(pEmployeeId);
+  }
 }

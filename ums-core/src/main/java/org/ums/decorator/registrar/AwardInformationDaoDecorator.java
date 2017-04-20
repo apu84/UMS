@@ -20,4 +20,9 @@ public class AwardInformationDaoDecorator extends
   public List<AwardInformation> getEmployeeAwardInformation(String pEmployeeId) {
     return getManager().getEmployeeAwardInformation(pEmployeeId);
   }
+
+  @Override
+  public int deleteAwardInformation(String pEmployeeId) {
+    return getManager().deleteAwardInformation(pEmployeeId);
+  }
 }

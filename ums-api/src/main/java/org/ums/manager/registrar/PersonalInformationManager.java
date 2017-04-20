@@ -10,4 +10,6 @@ public interface PersonalInformationManager extends
   int savePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
 
   PersonalInformation getEmployeePersonalInformation(final String pEmployeeId);
+
+  int deletePersonalInformation(final String pEmployeeId);
 }

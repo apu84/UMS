@@ -387,6 +387,7 @@
                                 id="iPresentAddressDivision"
                                 data-ng-model="entry.personal.presentAddressDivision"
                                 data-ng-options="divisions.name for divisions in divisions"
+                                data-ng-change="changeDistrict()"
                                 class="form-control">
                         </select>
                     </div>
@@ -515,6 +516,7 @@
                                 id="iPermanentAddressDivision"
                                 data-ng-model="entry.personal.permanentAddressDivision"
                                 data-ng-options="division.name for division in divisions"
+                                data-ng-change="changeDistrict()"
                                 class="form-control">
                         </select>
                     </div>

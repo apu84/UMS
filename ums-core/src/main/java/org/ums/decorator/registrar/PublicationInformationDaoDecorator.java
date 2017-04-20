@@ -20,4 +20,9 @@ public class PublicationInformationDaoDecorator extends
   public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId) {
     return getManager().getEmployeePublicationInformation(pEmployeeId);
   }
+
+  @Override
+  public int deletePublicationInformation(String pEmployeeId) {
+    return getManager().deletePublicationInformation(pEmployeeId);
+  }
 }

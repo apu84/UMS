@@ -1,9 +1,12 @@
 package org.ums.builder;
 
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
+import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -11,6 +14,10 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class PersonalInformationBuilder implements Builder<PersonalInformation, MutablePersonalInformation> {
+
+  @Autowired
+  UserManager userManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, PersonalInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
@@ -54,7 +61,8 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
 
   @Override
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+
+    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setFirstName(pJsonObject.getString("firstName"));
     pMutable.setLastName(pJsonObject.getString("lastName"));
     pMutable.setFatherName(pJsonObject.getString("fatherName"));

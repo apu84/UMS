@@ -12,4 +12,7 @@ public interface TrainingInformationManager extends
   int saveTrainingInformation(final List<MutableTrainingInformation> pMutableTrainingInformation);
 
   List<TrainingInformation> getEmployeeTrainingInformation(final String pEmployeeId);
+
+  int deleteTrainingInformation(final String pEmployeeId);
+
 }

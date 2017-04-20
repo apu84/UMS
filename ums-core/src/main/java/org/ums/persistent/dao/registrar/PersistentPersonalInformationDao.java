@@ -18,6 +18,8 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   static String GET_ONE =
       "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS FROM EMP_PERSONAL_INFO";
 
+  static String DELETE_ALL = "DELETE FROM EMP_PERSONAL_INFO";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentPersonalInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -29,6 +31,12 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
     String query = GET_ONE + " Where employee_id = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {employeeId},
         new PersistentPersonalInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int deletePersonalInformation(String pEmployeeId) {
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pEmployeeId);
   }
 
   @Override

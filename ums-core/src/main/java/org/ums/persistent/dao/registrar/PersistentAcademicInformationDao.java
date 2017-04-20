@@ -17,6 +17,11 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   static String INSERT_ONE =
       "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR) VALUES (? ,? ,?, ?)";
 
+  static String GET_ONE =
+      "Select EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR From EMP_ACADEMIC_INFO";
+
+  static String DELETE_ALL = "DELETE FROM EMP_ACADEMIC_INFO";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentAcademicInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -29,6 +34,12 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     return mJdbcTemplate.batchUpdate(query, getEmployeeAcademicInformationParams(pMutableAcademicInformation)).length;
   }
 
+  @Override
+  public int deleteAcademicInformation(String pEmployeeId) {
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pEmployeeId);
+  }
+
   private List<Object[]> getEmployeeAcademicInformationParams(
       List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
@@ -38,6 +49,12 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
 
     }
     return params;
+  }
+
+  @Override
+  public List<AcademicInformation> getEmployeeAcademicInformation(final String employeeId) {
+    String query = GET_ONE + " Where employee_id = ?";
+    return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAcademicInformationDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<AcademicInformation> {

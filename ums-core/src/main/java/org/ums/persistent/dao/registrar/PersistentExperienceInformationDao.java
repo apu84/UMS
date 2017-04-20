@@ -17,6 +17,11 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
   static String INSERT_ONE =
       "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO) VALUES (?,?,?,?,?)";
 
+  static String GET_ONE =
+      "Select EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO From EMP_EXPERIENCE_INFO";
+
+  static String DELETE_ALL = "DELETE FROM EMP_EXPERIENCE_INFO";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentExperienceInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -29,6 +34,12 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     return mJdbcTemplate.batchUpdate(query, getEmployeeExperienceInformationParams(pMutableExperienceInformation)).length;
   }
 
+  @Override
+  public int deleteExperienceInformation(String pEmployeeId) {
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pEmployeeId);
+  }
+
   private List<Object[]> getEmployeeExperienceInformationParams(
       List<MutableExperienceInformation> pMutableExperienceInformation) {
     List<Object[]> params = new ArrayList<>();
@@ -39,6 +50,13 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
 
     }
     return params;
+  }
+
+  @Override
+  public List<ExperienceInformation> getEmployeeExperienceInformation(final String employeeId) {
+    String query = GET_ONE + " Where employee_id = ?";
+    return mJdbcTemplate
+        .query(query, new Object[] {employeeId}, new PersistentExperienceInformationDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<ExperienceInformation> {

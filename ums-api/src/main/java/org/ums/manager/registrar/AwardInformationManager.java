@@ -11,4 +11,6 @@ public interface AwardInformationManager extends ContentManager<AwardInformation
   int saveAwardInformation(final List<MutableAwardInformation> pMutableAwardInformation);
 
   List<AwardInformation> getEmployeeAwardInformation(final String pEmployeeId);
+
+  int deleteAwardInformation(final String pEmployeeId);
 }

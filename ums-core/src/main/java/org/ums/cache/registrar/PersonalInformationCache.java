@@ -30,4 +30,9 @@ public class PersonalInformationCache extends
   public PersonalInformation getEmployeePersonalInformation(String pEmployeeId) {
     return getManager().getEmployeePersonalInformation(pEmployeeId);
   }
+
+  @Override
+  public int deletePersonalInformation(String pEmployeeId) {
+    return getManager().deletePersonalInformation(pEmployeeId);
+  }
 }

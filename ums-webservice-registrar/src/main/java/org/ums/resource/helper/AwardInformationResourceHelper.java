@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,12 +10,12 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 import org.ums.manager.ContentManager;
+import org.ums.manager.UserManager;
 import org.ums.manager.registrar.AwardInformationManager;
 import org.ums.persistent.model.registrar.PersistentAwardInformation;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
@@ -29,8 +30,19 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   @Autowired
   AwardInformationBuilder mAwardInformationBuilder;
 
+  @Autowired
+  UserManager userManager;
+
+  public JsonObject getAwardInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+    List<AwardInformation> pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+    return toJson(pAwardInformation, pUriInfo);
+  }
+
   @Transactional
   public Response saveAwardInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+    mAwardInformationManager.deleteAwardInformation(userManager.get(
+        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
@@ -48,6 +60,22 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  private JsonObject toJson(List<AwardInformation> pAwardInformation, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AwardInformation awardInformation : pAwardInformation) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().build(jsonObject, awardInformation, pUriInfo, localCache);
+      children.add(jsonObject);
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

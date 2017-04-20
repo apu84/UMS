@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,12 +10,12 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
 import org.ums.manager.ContentManager;
+import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PublicationInformationManager;
 import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
@@ -30,8 +31,20 @@ public class PublicationInformationResourceHelper extends
   @Autowired
   PublicationInformationBuilder mPublicationInformationBuilder;
 
+  @Autowired
+  UserManager userManager;
+
+  public JsonObject getPublicationInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+    List<PublicationInformation> pPublicationInformation =
+        mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+    return toJson(pPublicationInformation, pUriInfo);
+  }
+
   @Transactional
   public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+    mPublicationInformationManager.deletePublicationInformation(userManager.get(
+        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
@@ -49,6 +62,21 @@ public class PublicationInformationResourceHelper extends
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  private JsonObject toJson(List<PublicationInformation> pPublicationInformation, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(PublicationInformation publicationInformation : pPublicationInformation) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().build(jsonObject, publicationInformation, pUriInfo, localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

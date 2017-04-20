@@ -17,6 +17,11 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   static String INSERT_ONE =
       "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?)";
 
+  static String GET_ONE =
+      "Select EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK From EMP_PUBLICATION_INFO";
+
+  static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentPublicationInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -27,6 +32,12 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int savePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getEmployeePublicationInformationParams(pMutablePublicationInformation)).length;
+  }
+
+  @Override
+  public int deletePublicationInformation(String pEmployeeId) {
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pEmployeeId);
   }
 
   private List<Object[]> getEmployeePublicationInformationParams(
@@ -40,6 +51,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
 
     }
     return params;
+  }
+
+  @Override
+  public List<PublicationInformation> getEmployeePublicationInformation(final String employeeId) {
+    String query = GET_ONE + " Where employee_id = ?";
+    return mJdbcTemplate.query(query, new Object[] {employeeId},
+        new PersistentPublicationInformationDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<PublicationInformation> {

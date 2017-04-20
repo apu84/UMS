@@ -19,4 +19,9 @@ public class AcademicInformationDaoDecorator extends
   public List<AcademicInformation> getEmployeeAcademicInformation(String pEmployeeId) {
     return getManager().getEmployeeAcademicInformation(pEmployeeId);
   }
+
+  @Override
+  public int deleteAcademicInformation(String pEmployeeId) {
+    return getManager().deleteAcademicInformation(pEmployeeId);
+  }
 }

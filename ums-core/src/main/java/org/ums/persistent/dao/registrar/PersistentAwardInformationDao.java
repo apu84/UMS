@@ -17,6 +17,11 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   static String INSERT_ONE =
       "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION) VALUES (? ,? ,?, ?, ?)";
 
+  static String GET_ONE =
+      "Select EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION From EMP_AWARD_INFO";
+
+  static String DELETE_ALL = "DELETE FROM EMP_AWARD_INFO";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentAwardInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -29,6 +34,12 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
     return mJdbcTemplate.batchUpdate(query, getEmployeeAwardInformationParams(pMutableAwardInformation)).length;
   }
 
+  @Override
+  public int deleteAwardInformation(String pEmployeeId) {
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pEmployeeId);
+  }
+
   private List<Object[]> getEmployeeAwardInformationParams(List<MutableAwardInformation> pMutableAwardInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AwardInformation awardInformation : pMutableAwardInformation) {
@@ -38,6 +49,12 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
 
     }
     return params;
+  }
+
+  @Override
+  public List<AwardInformation> getEmployeeAwardInformation(final String employeeId) {
+    String query = GET_ONE + " Where employee_id = ?";
+    return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAwardInformationDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<AwardInformation> {

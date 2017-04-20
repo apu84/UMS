@@ -32,4 +32,9 @@ public class ExperienceInformationCache extends
   public List<ExperienceInformation> getEmployeeExperienceInformation(String pEmployeeId) {
     return getManager().getEmployeeExperienceInformation(pEmployeeId);
   }
+
+  @Override
+  public int deleteExperienceInformation(String pEmployeeId) {
+    return getManager().deleteExperienceInformation(pEmployeeId);
+  }
 }

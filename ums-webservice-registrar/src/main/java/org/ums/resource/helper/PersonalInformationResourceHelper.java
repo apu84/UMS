@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.manager.ContentManager;
+import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PersonalInformationManager;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
@@ -16,6 +18,7 @@ import org.ums.resource.ResourceHelper;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Component
 public class PersonalInformationResourceHelper extends
@@ -27,6 +30,9 @@ public class PersonalInformationResourceHelper extends
   @Autowired
   PersonalInformationBuilder mPersonalInformationBuilder;
 
+  @Autowired
+  UserManager userManager;
+
   public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     PersonalInformation pPersonalInformation = mPersonalInformationManager.getEmployeePersonalInformation(pEmployeeId);
     return toJson(pPersonalInformation, pUriInfo);
@@ -34,6 +40,10 @@ public class PersonalInformationResourceHelper extends
 
   @Transactional
   public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+
+    mPersonalInformationManager.deletePersonalInformation(userManager.get(
+        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
@@ -51,10 +61,8 @@ public class PersonalInformationResourceHelper extends
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
     getBuilder().build(jsonObject, pPersonalInformation, pUriInfo, localCache);
     jsonObject.add("entries", children);
-
     localCache.invalidate();
     return jsonObject.build();
   }

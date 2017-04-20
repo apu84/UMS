@@ -41,6 +41,13 @@ module ums{
     deleteRow: Function;
     testData: Function;
 
+    getPersonalInformation: Function;
+    getAcademicInformation: Function;
+    getPublicationInformation: Function;
+    getTrainingInformation: Function;
+    getAwardInformation: Function;
+    getExperienceInformation: Function;
+
     submitPersonalForm: Function;
     submitAcademicForm: Function;
     submitPublicationForm: Function;
@@ -49,6 +56,7 @@ module ums{
     submitExperienceForm: Function;
 
     saveAsPresentAddress: Function;
+    changeDistrict: Function;
 
     getCountry: Function;
     getDivision: Function;
@@ -67,7 +75,9 @@ module ums{
     countries: Array<ICountry>;
     divisions: Array<IDivision>;
     districts: Array<IDistrict>;
+    allDistricts: Array<IDistrict>;
     thanas: Array<IThana>;
+    allThanas: Array<IThana>;
   }
 
   export interface IGender {
@@ -180,6 +190,7 @@ module ums{
       $scope.deleteRow = this.deleteRow.bind(this);
       $scope.saveAsPresentAddress = this.saveAsPresentAddress.bind(this);
       $scope.getCountry = this.getCountry.bind(this);
+      $scope.changeDistrict = this.changeDistrict.bind(this);
 
       this.changeNav("personal");
       this.addNewRow("academic");
@@ -192,7 +203,13 @@ module ums{
       this.getDivision();
       this.getDistrict();
       this.getThana();
-      console.log("i am in EmployeeInformation.ts 55");
+      this.getPersonalInformation();
+      // this.getAcademicInformation();
+      // this.getAwardInformation();
+      // this.getPublicationInformation();
+      // this.getExperienceInformation();
+      // this.getTrainingInformation();
+      console.log("i am in EmployeeInformation.ts");
 
     }
 
@@ -254,7 +271,6 @@ module ums{
 
     private testData(){
       console.log("i am in testData()");
-      this.$scope.entry.personal.employeeId = "11";
       this.$scope.entry.personal.firstName = "Kawsur";
       this.$scope.entry.personal.lastName = "Mir Md.";
       this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
@@ -282,12 +298,10 @@ module ums{
       this.$scope.entry.personal.emergencyContactPhone = "None";
       this.$scope.entry.personal.emergencyContactAddress = "None";
 
-      this.$scope.entry.academic[0].employeeId = "111";
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
       this.$scope.entry.academic[0].academicPassingYear = "2016";
 
-      this.$scope.entry.publication[0].employeeId = "11";
       this.$scope.entry.publication[0].publicationTitle = "N/A";
       this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
       this.$scope.entry.publication[0].publisherName = "N/A";
@@ -295,21 +309,17 @@ module ums{
       this.$scope.entry.publication[0].publicationType = this.$scope.typeOfPublication[1];
       this.$scope.entry.publication[0].publicationWebLink = "N/A";
 
-      this.$scope.entry.training[0].employeeId = "111";
       this.$scope.entry.training[0].trainingInstitution = "ABC";
       this.$scope.entry.training[0].trainingName = "XYZ";
       this.$scope.entry.training[0].trainingFrom = "2016";
       this.$scope.entry.training[0].trainingTo = "2015";
       this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
 
-
-      this.$scope.entry.award[0].employeeId = "111";
       this.$scope.entry.award[0].awardName = "My Award";
       this.$scope.entry.award[0].awardInstitute = "Really !";
       this.$scope.entry.award[0].awardedYear = "1990";
       this.$scope.entry.award[0].awardShortDescription = "Hello! This is My Award, Don't Ask Description :@";
 
-      this.$scope.entry.experience[0].employeeId = "111";
       this.$scope.entry.experience[0].experienceInstitution = "My Award";
       this.$scope.entry.experience[0].experienceDesignation = "Really !";
       this.$scope.entry.experience[0].experienceFrom = "6";
@@ -329,6 +339,14 @@ module ums{
       this.changeNav("personal");
     }
 
+    private getPersonalInformation(){
+      console.log("i am in getPersonalInformation()");
+      this.employeeInformationService.getPersonalInformation("33333").then((personalInformation: any) =>{
+        console.log("Employee's Personal Information");
+        console.log(personalInformation);
+      });
+    }
+
     private submitAcademicForm(){
       console.log("i am in submitAcademicForm()");
       this.convertToJson('academic')
@@ -340,6 +358,14 @@ module ums{
                 });
           });
       this.changeNav("academic");
+    }
+
+    private getAcademicInformation(){
+      console.log("i am in getAcademicInformation()");
+      this.employeeInformationService.getAcademicInformation("33333").then((academicInformation: any) =>{
+        console.log("Employee's Academic Information");
+        console.log(academicInformation);
+      });
     }
 
     private submitPublicationForm(){
@@ -355,6 +381,14 @@ module ums{
       this.changeNav("publication");
     }
 
+    private getPublicationInformation(){
+      console.log("i am in getPublicationInformation()");
+      this.employeeInformationService.getPublicationInformation("33333").then((publicationInformation: any) =>{
+        console.log("Employee's Publication Information");
+        console.log(publicationInformation);
+      });
+    }
+
     private submitTrainingForm(){
       console.log("i am in submitTrainingForm()");
       this.convertToJson('training')
@@ -366,6 +400,14 @@ module ums{
                 });
           });
       this.changeNav("training");
+    }
+
+    private getTrainingInformation(){
+      console.log("i am in getTrainingInformation()");
+      this.employeeInformationService.getTrainingInformation("33333").then((trainingInformation: any) =>{
+        console.log("Employee's Training Information");
+        console.log(trainingInformation);
+      });
     }
 
     private submitAwardForm(){
@@ -381,6 +423,14 @@ module ums{
       this.changeNav("award");
     }
 
+    private getAwardInformation(){
+      console.log("i am in getAwardInformation()");
+      this.employeeInformationService.getAwardInformation("33333").then((awardInformation: any) =>{
+        console.log("Employee's award Information");
+        console.log(awardInformation);
+      });
+    }
+
     private submitExperienceForm(){
       console.log("i am in submitExperienceForm()");
       this.convertToJson('experience')
@@ -392,6 +442,14 @@ module ums{
                 });
           });
       this.changeNav("experience");
+    }
+
+    private getExperienceInformation(){
+      console.log("i am in getExperienceInformation()");
+      this.employeeInformationService.getExperienceInformation("33333").then((experienceInformation: any) =>{
+        console.log("Employee's Experience Information");
+        console.log(experienceInformation);
+      });
     }
 
     private edit(formName: string){
@@ -597,8 +655,6 @@ module ums{
       console.log("i am in getCountry()");
       this.countryService.getCountryList().then((country: any) => {
         this.$scope.countries = country.entries;
-        console.log("ALL Countries");
-        console.log(this.$scope.countries);
       });
     }
 
@@ -606,17 +662,14 @@ module ums{
       console.log("i am in getDivision()");
       this.divisionService.getDivisionList().then((division: any) => {
         this.$scope.divisions = division.entries;
-        console.log("ALL Divisions");
-        console.log(this.$scope.divisions);
       });
     }
 
     private getDistrict(){
       console.log("i am in getDistrict()");
       this.districtService.getDistrictList().then((district: any) => {
-        this.$scope.districts = district.entries;
-        console.log("ALL Districts");
-        console.log(this.$scope.districts);
+        this.$scope.allDistricts = district.entries;
+        //this.$scope.districts = district.entries;
       });
     }
 
@@ -624,9 +677,19 @@ module ums{
       console.log("i am in getThana()");
       this.thanaService.getThanaList().then((thana: any) => {
         this.$scope.thanas = thana.entries;
-        console.log("ALL Thanas");
-        console.log(this.$scope.thanas);
       });
+    }
+
+    private changeDistrict(){
+      var districtLength = this.$scope.allDistricts.length;
+      var index = 0;
+      console.log("i am in changeDistrict()");
+      console.log(districtLength);
+      for(var i = 0; i < districtLength; i++){
+        if(this.$scope.entry.personal.presentAddressDivision.id == this.$scope.allDistricts[i].division_id ){
+          this.$scope.districts[index++] = this.$scope.allDistricts[i];
+        }
+      }
     }
   }
 

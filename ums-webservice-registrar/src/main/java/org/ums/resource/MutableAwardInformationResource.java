@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.helper.AwardInformationResourceHelper;
 
 import javax.json.JsonObject;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 public class MutableAwardInformationResource extends Resource {
@@ -17,5 +19,11 @@ public class MutableAwardInformationResource extends Resource {
   @Path("/saveAwardInformation")
   public Response saveServiceInformation(final JsonObject pJsonObject) {
     return mAwardInformationResourceHelper.saveAwardInformation(pJsonObject, mUriInfo);
+  }
+
+  @DELETE
+  @Path(PATH_PARAM_OBJECT_ID)
+  public Response deleteSupplier(final @PathParam("object-id") Integer pObjectId) throws Exception {
+    return mAwardInformationResourceHelper.delete(pObjectId);
   }
 }

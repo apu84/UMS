@@ -1,9 +1,12 @@
 package org.ums.builder;
 
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -11,6 +14,10 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class PublicationInformationBuilder implements Builder<PublicationInformation, MutablePublicationInformation> {
+
+  @Autowired
+  UserManager userManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, PublicationInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
@@ -25,7 +32,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
     pMutable.setPublisherName(pJsonObject.getString("publisherName"));
