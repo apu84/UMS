@@ -35,10 +35,12 @@ public class ExperienceInformationResourceHelper extends
   @Autowired
   UserManager userManager;
 
-  public JsonObject getExperienceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getExperienceInformation(final UriInfo pUriInfo) {
     List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
     try {
-      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+      pExperienceInformation =
+          mExperienceInformationManager.getEmployeeExperienceInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
 
     }

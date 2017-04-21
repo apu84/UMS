@@ -35,10 +35,12 @@ public class AcademicInformationResourceHelper extends
   @Autowired
   UserManager userManager;
 
-  public JsonObject getAcademicInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getAcademicInformation(final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation = new ArrayList<>();
     try {
-      pAcademicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+      pAcademicInformation =
+          mAcademicInformationManager.getEmployeeAcademicInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
 
     }

@@ -15,9 +15,8 @@ import javax.ws.rs.core.UriInfo;
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
   @GET
-  @Path("/getPersonalInformation/{employee-id}")
-  public JsonObject getPersonalInformation(final @Context Request pRequest,
-      final @PathParam("employee-id") String pEmployeeId) throws Exception {
-    return mPersonalInformationResourceHelper.getPersonalInformation(pEmployeeId, mUriInfo);
+  @Path("/getPersonalInformation")
+  public JsonObject getPersonalInformation(final @Context Request pRequest) throws Exception {
+    return mPersonalInformationResourceHelper.getPersonalInformation(mUriInfo);
   }
 }

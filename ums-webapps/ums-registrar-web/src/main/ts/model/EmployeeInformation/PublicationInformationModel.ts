@@ -7,5 +7,6 @@ module ums{
         dateOfPublication: string;
         publicationType: IPublicationType;
         publicationWebLink: string;
+        //status: string;
     }
 }

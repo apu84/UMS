@@ -16,8 +16,7 @@ public class ExperienceInformationResource extends MutableExperienceInformationR
 
   @GET
   @Path("/getExperienceInformation/{employee-id}")
-  public JsonObject getExperienceInformation(final @Context Request pRequest,
-      final @PathParam("employee-id") String pEmployeeId) throws Exception {
-    return mExperienceInformationResourceHelper.getExperienceInformation(pEmployeeId, mUriInfo);
+  public JsonObject getExperienceInformation(final @Context Request pRequest) throws Exception {
+    return mExperienceInformationResourceHelper.getExperienceInformation(mUriInfo);
   }
 }

@@ -34,7 +34,7 @@ module ums {
         permanentAddressDivision: IDivision;
         permanentAddressCountry: ICountry;
         emergencyContactName: string;
-        emergencyContactRelation: string;
+        emergencyContactRelation: IRelation;
         emergencyContactPhone: string;
         emergencyContactAddress: string;
 

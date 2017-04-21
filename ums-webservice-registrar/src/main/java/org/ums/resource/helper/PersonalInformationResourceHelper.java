@@ -34,11 +34,12 @@ public class PersonalInformationResourceHelper extends
   @Autowired
   UserManager userManager;
 
-  public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
     PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
       PersonalInformation pPersonalInformation =
-          mPersonalInformationManager.getEmployeePersonalInformation(pEmployeeId);
+          mPersonalInformationManager.getEmployeePersonalInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
       personalInformation = (PersistentPersonalInformation) pPersonalInformation;
     } catch(EmptyResultDataAccessException e) {
       // Do nothing

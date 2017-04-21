@@ -35,10 +35,12 @@ public class PublicationInformationResourceHelper extends
   @Autowired
   UserManager userManager;
 
-  public JsonObject getPublicationInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getPublicationInformation(final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {
-      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+      pPublicationInformation =
+          mPublicationInformationManager.getEmployeePublicationInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
 
     }

@@ -690,6 +690,34 @@ module ums {
           {id: 3, name: "Bachelor"},
           {id: 4, name: "Master's"},
           {id: 5, name: "PhD"}
+        ],
+        relationTypes: [
+          {id: 1, name: "Spouse"},
+          {id: 2, name: "Aunt"},
+          {id: 3, name: "Brother"},
+          {id: 4, name: "Brother-in-law"},
+          {id: 5, name: "Colleague"},
+          {id: 6, name: "Cousin"},
+          {id: 7, name: "Daughter"},
+          {id: 8, name: "Daughter-in-law"},
+          {id: 9, name: "Employee"},
+          {id: 10, name: "Father"},
+          {id: 11, name: "Father-in-law"},
+          {id: 12, name: "Friend"},
+          {id: 13, name: "Grand Father"},
+          {id: 14, name: "Grand Mother"},
+          {id: 15, name: "Grand Son"},
+          {id: 16, name: "Mother"},
+          {id: 17, name: "Mother-in-law"},
+          {id: 18, name: "Nephew"},
+          {id: 19, name: "Niece"},
+          {id: 20, name: "Sister"},
+          {id: 21, name: "Sister-in-law"},
+          {id: 22, name: "Son"},
+          {id: 23, name: "Son-in-law"},
+          {id: 24, name: "Others"}
+
+
         ]
       }
     }

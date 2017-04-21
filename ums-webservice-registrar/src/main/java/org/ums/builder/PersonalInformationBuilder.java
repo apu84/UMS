@@ -30,33 +30,68 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pBuilder.add("nationality", pReadOnly.getNationality());
     pBuilder.add("religion", pReadOnly.getReligion());
     pBuilder.add("maritalStatus", pReadOnly.getMaritalStatus());
-    pBuilder.add("spouseName", pReadOnly.getSpouseName());
+    if(pReadOnly.getSpouseName() == null) {
+      pBuilder.add("spouseName", "");
+    }
+    else {
+      pBuilder.add("spouseName", pReadOnly.getSpouseName());
+    }
     pBuilder.add("nationalIdNo", pReadOnly.getNationalId());
     pBuilder.add("bloodGroup", pReadOnly.getBloodGroup());
-    pBuilder.add("spouseNationalIdNo", pReadOnly.getSpouseNationalId());
+    if(pReadOnly.getSpouseNationalId() == null) {
+      pBuilder.add("spouseNationalIdNo", "");
+    }
+    else {
+      pBuilder.add("spouseNationalIdNo", pReadOnly.getSpouseNationalId());
+    }
     pBuilder.add("website", pReadOnly.getWebsite());
-    pBuilder.add("organizationalEmail", pReadOnly.getOrganizationalEmail());
+    if(pReadOnly.getOrganizationalEmail() == null) {
+      pBuilder.add("organizationalEmail", "");
+    }
+    else {
+      pBuilder.add("organizationalEmail", pReadOnly.getOrganizationalEmail());
+    }
     pBuilder.add("personalEmail", pReadOnly.getPersonalEmail());
     pBuilder.add("mobile", pReadOnly.getMobileNumber());
-    pBuilder.add("phone", pReadOnly.getPhoneNumber());
+    if(pReadOnly.getPhoneNumber() == null) {
+      pBuilder.add("phone", "");
+    }
+    else {
+      pBuilder.add("phone", pReadOnly.getPhoneNumber());
+    }
     pBuilder.add("presentAddressHouse", pReadOnly.getPresentAddressHouse());
     pBuilder.add("presentAddressRoad", pReadOnly.getPresentAddressRoad());
     pBuilder.add("presentAddressPoliceStation", pReadOnly.getPresentAddressThana());
-    pBuilder.add("presentAddressPostalCode", pReadOnly.getPresentAddressZip());
+    if(pReadOnly.getPresentAddressZip() == null) {
+      pBuilder.add("presentAddressPostalCode", "");
+    }
+    else {
+      pBuilder.add("presentAddressPostalCode", pReadOnly.getPresentAddressZip());
+    }
     pBuilder.add("presentAddressDistrict", pReadOnly.getPresentAddressDistrict());
     pBuilder.add("presentAddressDivision", pReadOnly.getPresentAddressDivision());
     pBuilder.add("presentAddressCountry", pReadOnly.getPresentAddressCountry());
     pBuilder.add("permanentAddressHouse", pReadOnly.getPermanentAddressHouse());
     pBuilder.add("permanentAddressRoad", pReadOnly.getPermanentAddressRoad());
     pBuilder.add("permanentAddressPoliceStation", pReadOnly.getPermanentAddressThana());
-    pBuilder.add("permanentAddressPostalCode", pReadOnly.getPermanentAddressZip());
+    if(pReadOnly.getPermanentAddressZip() == null) {
+      pBuilder.add("permanentAddressPostalCode", "");
+    }
+    else {
+      pBuilder.add("permanentAddressPostalCode", pReadOnly.getPermanentAddressZip());
+    }
     pBuilder.add("permanentAddressDistrict", pReadOnly.getPermanentAddressDistrict());
     pBuilder.add("permanentAddressDivision", pReadOnly.getPermanentAddressDivision());
     pBuilder.add("permanentAddressCountry", pReadOnly.getPermanentAddressCountry());
     pBuilder.add("emergencyContactName", pReadOnly.getEmergencyContactName());
     pBuilder.add("emergencyContactRelation", pReadOnly.getEmergencyContactRelation());
     pBuilder.add("emergencyContactPhone", pReadOnly.getEmergencyContactPhone());
-    pBuilder.add("emergencyContactAddress", pReadOnly.getEmergencyContactAddress());
+    if(pReadOnly.getEmergencyContactAddress() == null) {
+      pBuilder.add("emergencyContactAddress", "");
+    }
+    else {
+      pBuilder.add("emergencyContactAddress", pReadOnly.getEmergencyContactAddress());
+    }
   }
 
   @Override
@@ -162,8 +197,8 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     if(!pJsonObject.getString("emergencyContactName").equals("")) {
       pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
     }
-    if(!pJsonObject.getString("emergencyContactRelation").equals("")) {
-      pMutable.setEmergencyContactRelation(pJsonObject.getString("emergencyContactRelation"));
+    if(pJsonObject.getJsonObject("emergencyContactRelation") != null) {
+      pMutable.setEmergencyContactRelation(pJsonObject.getJsonObject("emergencyContactRelation").getString("name"));
     }
     if(!pJsonObject.getString("emergencyContactPhone").equals("")) {
       pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));

@@ -92,11 +92,11 @@ module ums {
             return defer.promise;
         }
 
-        public getPersonalInformation(employeeId: string): ng.IPromise<any> {
+        public getPersonalInformation(): ng.IPromise<any> {
             console.log("i am in getPersonalInformation()");
-            var url= "registrar/employee/personal/getPersonalInformation/";
+            var url= "registrar/employee/personal/getPersonalInformation";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -106,10 +106,10 @@ module ums {
             return defer.promise;
         }
 
-        public getAcademicInformation(employeeId: string): ng.IPromise<any> {
+        public getAcademicInformation(): ng.IPromise<any> {
             var url= "registrar/employee/academic/getAcademicInformation/";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -119,10 +119,10 @@ module ums {
             return defer.promise;
         }
 
-        public getPublicationInformation(employeeId: string): ng.IPromise<any> {
+        public getPublicationInformation(): ng.IPromise<any> {
             var url= "registrar/employee/publication/getPublicationInformation/";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -132,10 +132,10 @@ module ums {
             return defer.promise;
         }
 
-        public getTrainingInformation(employeeId: string): ng.IPromise<any> {
+        public getTrainingInformation(): ng.IPromise<any> {
             var url= "registrar/employee/training/getTrainingInformation/";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -145,10 +145,10 @@ module ums {
             return defer.promise;
         }
 
-        public getAwardInformation(employeeId: string): ng.IPromise<any> {
+        public getAwardInformation(): ng.IPromise<any> {
             var url= "registrar/employee/award/getAwardInformation/";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -158,10 +158,10 @@ module ums {
             return defer.promise;
         }
 
-        public getExperienceInformation(employeeId: string): ng.IPromise<any> {
+        public getExperienceInformation(): ng.IPromise<any> {
             var url= "registrar/employee/experience/getExperienceInformation/";
             var defer = this.$q.defer();
-            this.httpClient.get(url + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },

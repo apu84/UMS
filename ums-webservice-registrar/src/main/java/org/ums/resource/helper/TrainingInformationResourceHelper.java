@@ -35,10 +35,12 @@ public class TrainingInformationResourceHelper extends
   @Autowired
   UserManager userManager;
 
-  public JsonObject getTrainingInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getTrainingInformation(final UriInfo pUriInfo) {
     List<TrainingInformation> pTrainingInformation = new ArrayList<>();
     try {
-      pTrainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+      pTrainingInformation =
+          mTrainingInformationManager.getEmployeeTrainingInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
 
     }

@@ -34,10 +34,12 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   @Autowired
   UserManager userManager;
 
-  public JsonObject getAwardInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getAwardInformation(final UriInfo pUriInfo) {
     List<AwardInformation> pAwardInformation = new ArrayList<>();
     try {
-      pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+      pAwardInformation =
+          mAwardInformationManager.getEmployeeAwardInformation(userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
     }
     return toJson(pAwardInformation, pUriInfo);

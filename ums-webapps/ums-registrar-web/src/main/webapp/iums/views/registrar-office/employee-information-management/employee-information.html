@@ -23,7 +23,7 @@
 <div class="tab-content">
 
     <div data-ng-show="personalTab">
-        <form name="nPersonalForm">
+        <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
             <h5><b>General:</b></h5>
             <div class="row">
                 <div class="col-md-6">
@@ -91,12 +91,12 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group</label>
+                    <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group<span class='require' data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nBloodGroup"
                                 id="iBloodGroup"
                                 data-ng-model="entry.personal.bloodGroup"
-                                data-ng-options="bloodGroup.name for bloodGroup in bloodGroup"
+                                data-ng-options="bloodGroup.name for bloodGroup in bloodGroups"
                                 class="form-control" required>
                         </select>
                     </div>
@@ -128,8 +128,8 @@
                         <select name="nNationality"
                                 id="iNationality"
                                 data-ng-model="entry.personal.nationality"
-                                data-ng-options="nationality.name for nationality in nationality"
-                                class="form-control">
+                                data-ng-options="nationality.name for nationality in nationalities"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -142,7 +142,7 @@
                         <select name="nReligion"
                                 id="iReligion"
                                 data-ng-model="entry.personal.religion"
-                                data-ng-options="religion.name for religion in religion"
+                                data-ng-options="religion.name for religion in religions"
                                 class="form-control" required>
                         </select>
                     </div>
@@ -161,7 +161,7 @@
                                 id="iMaritalStatus"
                                 data-ng-model="entry.personal.maritalStatus"
                                 data-ng-options="maritalStatus.name for maritalStatus in maritalStatus"
-                                class="form-control">
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -283,7 +283,7 @@
                                    id="iPersonalEmail"
                                    data-ng-model="entry.personal.personalEmail"
                                    placeholder="Personal Email Address"
-                                   class="form-control">
+                                   class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -295,14 +295,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile</label>
+                    <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile<span class='require' data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="tel"
                                name="nMobile"
                                id="iMobile"
                                data-ng-model="entry.personal.mobile"
                                placeholder="Mobile"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.mobile}}</label>
@@ -335,21 +335,21 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressHouse">House/Holding No.<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPresentAddressHouse"
                                id="iPresentAddressHouse"
                                data-ng-model="entry.personal.presentAddressHouse"
                                placeholder="House/Holding No."
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.presentAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressRoad">Road/Street<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPresentAddressRoad"
@@ -373,7 +373,8 @@
                                 id="iPresentAddressCountry"
                                 data-ng-model="entry.personal.presentAddressCountry"
                                 data-ng-options="country.name for country in countries"
-                                class="form-control">
+                                data-ng-change="disablePresentAddressFields()"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -381,14 +382,15 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressDivision">Division/State<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPresentAddressDivision"
                                 id="iPresentAddressDivision"
                                 data-ng-model="entry.personal.presentAddressDivision"
                                 data-ng-options="divisions.name for divisions in divisions"
-                                data-ng-change="changeDistrict()"
-                                class="form-control">
+                                data-ng-change="changePresentAddressDistrict()"
+                                data-ng-disabled="disablePresentAddressDropdown"
+                                class="form-control" requried>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -401,13 +403,15 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressDistrict">District/City<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPresentAddressDistrict"
                                 id="iPresentAddressDistrict"
                                 data-ng-model="entry.personal.presentAddressDistrict"
-                                data-ng-options="districts.name for districts in districts"
-                                class="form-control">
+                                data-ng-options="districts.name for districts in presentAddressDistricts"
+                                data-ng-change="changePresentAddressThana()"
+                                data-ng-disabled="disablePresentAddressDropdown"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -415,13 +419,14 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Police Station/Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPresentAddressPoliceStation"
                                 id="iPresentAddressPoliceStation"
                                 data-ng-model="entry.personal.presentAddressPoliceStation"
-                                data-ng-options="thanas.name for thanas in thanas"
-                                class="form-control">
+                                data-ng-options="thanas.name for thanas in presentAddressThanas"
+                                data-ng-disabled="disablePresentAddressDropdown"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -433,14 +438,15 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office/Zip<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPresentAddressPostOffice"
                                id="iPresentAddressPostOffice"
                                data-ng-model="entry.personal.presentAddressPostalCode"
                                placeholder="Police Post Office/Zip"
-                               class="form-control" >
+                               data-ng-disabled="disablePresentAddressDropdown"
+                               class="form-control">
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.presentAddressPostalCode}}</label>
@@ -454,8 +460,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4"><b>Permanent Address</b></label>
                     <div class="col-md-8" data-ng-show="showPermanentAddressCheckbox">
-                        <input type="checkbox"
-                               data-ng-click="saveAsPresentAddress()">Same as present address
+                        <input type="checkbox" data-ng-click="sameAsPresentAddress()" />Same as present address
                     </div>
                 </div>
                 <div class="col-md-6"></div>
@@ -464,21 +469,21 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressHouse">House/Holding No.<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPermanentAddressHouse"
                                id="iPermanentAddressHouse"
                                data-ng-model="entry.personal.permanentAddressHouse"
                                placeholder="House/Holding No."
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.permanentAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressRoad">Road/Street<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPermanentAddressRoad"
@@ -502,7 +507,8 @@
                                 id="iPermanentAddressCountry"
                                 data-ng-model="entry.personal.permanentAddressCountry"
                                 data-ng-options="country.name for country in countries"
-                                class="form-control">
+                                data-ng-change="disablePermanentAddressFields()"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -510,14 +516,15 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division/State<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPermanentAddressDivision"
                                 id="iPermanentAddressDivision"
                                 data-ng-model="entry.personal.permanentAddressDivision"
                                 data-ng-options="division.name for division in divisions"
-                                data-ng-change="changeDistrict()"
-                                class="form-control">
+                                data-ng-change="changePermanentAddressDistrict()"
+                                data-ng-disabled="disablePermanentAddressDropdown"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -530,13 +537,15 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District/City<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPermanentAddressDistrict"
                                 id="iPermanentAddressDistrict"
                                 data-ng-model="entry.personal.permanentAddressDistrict"
-                                data-ng-options="district.name for district in districts"
-                                class="form-control">
+                                data-ng-options="district.name for district in permanentAddressDistricts"
+                                data-ng-change="changePermanentAddressThana()"
+                                data-ng-disabled="disablePermanentAddressDropdown"
+                                class="form-control" requried>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -544,13 +553,14 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Police Station/Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <select name="nPermanentAddressPoliceStation"
                                 id="iPermanentAddressPoliceStation"
                                 data-ng-model="entry.personal.permanentAddressPoliceStation"
-                                data-ng-options="thana.name for thana in thanas"
-                                class="form-control">
+                                data-ng-options="thana.name for thana in permanentAddressThanas"
+                                data-ng-disabled="disablePermanentAddressDropdown"
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
@@ -562,14 +572,15 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office/Zip<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nPermanentAddressPostOffice"
                                id="iPermanentAddressPostOffice"
                                data-ng-model="entry.personal.permanentAddressPostalCode"
                                placeholder="Police Post Office/Zip"
-                               class="form-control" >
+                               data-ng-disabled="disablePermanentAddressDropdown"
+                               class="form-control">
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.permanentAddressPostalCode}}</label>
@@ -590,7 +601,7 @@
                                id="idEmergencyContactName"
                                data-ng-model="entry.personal.emergencyContactName"
                                placeholder="Name"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.emergencyContactName}}</label>
@@ -599,15 +610,15 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation<span class="require" data-ng-show="showRequireSign">*</span></label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nEmergencyContactRelation"
-                               id="iEmergencyContactRelation"
-                               data-ng-model="entry.personal.emergencyContactRelation"
-                               placeholder="Relation"
-                               class="form-control">
+                        <select name="nEmergencyContactRelation"
+                                id="iEmergencyContactRelation"
+                                data-ng-model="entry.personal.emergencyContactRelation"
+                                data-ng-options="relation.name for relation in relations"
+                                class="form-control" required>
+                        </select>
                     </div>
                     <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                        <label class="control-label">{{entry.personal.emergencyContactRelation}}</label>
+                        <label class="control-label">{{entry.personal.emergencyContactRelation.name}}</label>
                     </div>
                 </div>
             </div>
@@ -622,14 +633,21 @@
                                id="iEmergencyContactPhone"
                                data-ng-model="entry.personal.emergencyContactPhone"
                                placeholder="Phone"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
                         <label class="control-label">{{entry.personal.emergencyContactPhone}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Full Address<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address<sup data-ng-show="showSup">
+                        <select data-ng-model="data.supOptions" data-ng-change="fillEmergencyContactAddress()">
+                            <option value="1" selected>Default</option>
+                            <option value="2">Present</option>
+                            <option value="3">Permanent</option>
+                        </select>
+                    </sup>
+                    </label>
                     <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                         <input type="text"
                                name="nEmergencyContactAddress"
@@ -650,7 +668,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('personal')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitPersonalForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
@@ -661,19 +679,19 @@
 
 
     <div data-ng-show="academicTab">
-        <form name="nAcademicForm">
+        <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label">Sl.</label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Degree<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="control-label">Degree<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-6">
-                    <label class="control-label">Institution<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="control-label">Institution<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Passing Year<span class="require" data-ng-show="showRequireSign">*</span></label>
+                    <label class="control-label">Passing Year<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-1">
                     <label class="control-label"></label>
@@ -689,7 +707,7 @@
                     <div class="col-md-2" data-ng-show="showAcademicInputDiv">
                         <select data-ng-model="academic.academicDegreeName"
                                 data-ng-options="degreeName.name for degreeName in degreeNames"
-                                class="form-control">
+                                class="form-control" required>
                         </select>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showAcademicLabelDiv">
@@ -697,20 +715,24 @@
                     </div>
                     <div class="col-md-6" data-ng-show="showAcademicInputDiv">
                         <input type="text"
+                               name="nAcademicInstitution{{$index}}"
+                               id="iAcademicInstitution {{$index}}"
                                data-ng-model="academic.academicInstitution"
                                placeholder="Institution"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-6"  style="border-bottom: 1px dashed;" data-ng-show="showAcademicLabelDiv">
                         <label class="control-label">{{academic.academicInstitution}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showAcademicInputDiv">
                         <input type="text"
+                               name="nPassingYear{{$index}}"
+                               id="iPassingYear{{$index}}"
                                data-ng-model="academic.academicPassingYear"
                                data-date-format="yyyy"
                                placeholder="YYYY"
                                autocomplete="off"
-                               class="custom-datepicker form-control">
+                               class="custom-datepicker form-control" required>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showAcademicLabelDiv">
                         <label class="control-label">{{academic.academicPassingYear}}</label>
@@ -734,7 +756,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('academic')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitAcademicForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
@@ -744,7 +766,7 @@
 
 
     <form data-ng-show="publicationTab">
-        <form name="nPublicationForm">
+        <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
             <div data-ng-repeat="publication in entry.publication track by $index">
                 <div class="row">
                     <div class="col-md-6">
@@ -758,14 +780,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationTitle{{$index}}">Publication Title</label>
+                        <label class="col-md-4 control-label" for="iPublicationTitle{{$index}}">Publication Title<span class='require' data-ng-show="showRequireSign">*</span></label>
                         <div class="col-md-8" data-ng-show="showPublicationInputDiv">
                             <input type="text"
                                    name="nPublicationTitle{{$index}}"
                                    id="iPublicationTitle{{$index}}"
                                    data-ng-model="publication.publicationTitle"
                                    placeholder="Publication Title"
-                                   class="form-control">
+                                   class="form-control" required>
                         </div>
                         <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
                             <label class="control-label">{{publication.publicationTitle}}</label>
@@ -790,13 +812,13 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationType{{$index}}">Publication Type</label>
+                        <label class="col-md-4 control-label" for="iPublicationType{{$index}}">Publication Type<span class='require' data-ng-show="showRequireSign">*</span></label>
                         <div class="col-md-8" data-ng-show="showPublicationInputDiv">
                             <select name="nPublicationType{{$index}}"
                                     id="iPublicationType{{$index}}"
                                     data-ng-model="publication.publicationType"
-                                    data-ng-options="typeOfPublication.name for typeOfPublication in typeOfPublication"
-                                    class="form-control">
+                                    data-ng-options="publicationType.name for publicationType in publicationTypes"
+                                    class="form-control" required>
                             </select>
                         </div>
                         <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
@@ -823,7 +845,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div>
-                            <label class="col-md-4 control-label" for="iDateOfPublication{{$index}}">Date Of Publication</label>
+                            <label class="col-md-4 control-label" for="iDateOfPublication{{$index}}">Date Of Publication<span class='require' data-ng-show="showRequireSign">*</span></label>
                             <div class="col-md-8" data-ng-show="showPublicationInputDiv">
                                 <input type="text"
                                        name="nDateOfPublication{{$index}}"
@@ -832,7 +854,7 @@
                                        data-date-format="dd/mm/yyyy"
                                        placeholder="DD/MM/YYYY"
                                        autocomplete="off"
-                                       class="datepicker-default form-control">
+                                       class="datepicker-default form-control" required>
                             </div>
                             <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
                                 <label class="control-label">{{publication.dateOfPublication}}</label>
@@ -868,7 +890,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('publication')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitPublicationForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
@@ -878,22 +900,22 @@
 
 
     <div data-ng-show="trainingTab">
-        <form name="nTrainingForm">
+        <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label">Sl.</label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Training Name</label>
+                    <label class="control-label">Training Name<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-4">
-                    <label class="control-label">Training Institution/Organization Name</label>
+                    <label class="control-label">Training Institution/Organization Name<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">From</label>
+                    <label class="control-label">From<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">To</label>
+                    <label class="control-label">To<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-1">
                     <label class="control-label"></label>
@@ -908,40 +930,48 @@
                     </div>
                     <div class="col-md-2" data-ng-show="showTrainingInputDiv">
                         <input type="text"
+                               name="nTrainingName{{$index}}"
+                               id="iTrainingName{{$index}}"
                                data-ng-model="training.trainingName"
                                placeholder="Training Name"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showTrainingLabelDiv">
                         <label class="control-label">{{training.trainingName}}</label>
                     </div>
                     <div class="col-md-4" data-ng-show="showTrainingInputDiv">
                         <input type="text"
+                               name="nTrainingInstitution{{$index}}"
+                               id="iTrainingInstitution{{$index}}"
                                data-ng-model="training.trainingInstitution"
                                placeholder="Training Institution/Organization Name"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-4" style="border-bottom: 1px dashed;" data-ng-show="showTrainingLabelDiv">
                         <label class="control-label">{{training.trainingInstitution}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showTrainingInputDiv">
                         <input type="text"
+                               name="nTrainingFrom{{$index}}"
+                               id="iTrainingFrom{{$index}}"
                                data-ng-model="training.trainingFrom"
                                data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control " />
+                               class="modified-datepicker form-control " required/>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showTrainingLabelDiv">
                         <label class="control-label">{{training.trainingFrom}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showTrainingInputDiv">
                         <input type="text"
+                               name="nTrainingTo{{$index}}"
+                               id="iTrainingTo{{$index}}"
                                data-ng-model="training.trainingTo"
                                data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control " />
+                               class="modified-datepicker form-control " required/>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showTrainingLabelDiv">
                         <label class="control-label">{{training.trainingTo}}</label>
@@ -965,7 +995,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('training')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitTrainingForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
@@ -975,7 +1005,7 @@
 
 
     <div data-ng-show="awardTab">
-        <form name="nAwardForm">
+        <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
             <div data-ng-repeat="award in entry.award track by $index">
                 <div class="row">
                     <div class="col-md-6">
@@ -989,14 +1019,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name</label>
+                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span class='require' data-ng-show="showRequireSign">*</span></label>
                         <div class="col-md-8" data-ng-show="showAwardInputDiv">
                             <input type="text"
                                    name="iAwardName{{$index}}"
                                    id="iAwardName{{$index}}"
                                    data-ng-model="award.awardName"
                                    placeholder="Award/Honor Name"
-                                   class="form-control">
+                                   class="form-control" required>
                         </div>
                         <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showAwardLabelDiv">
                             <label class="control-label">{{award.awardName}}</label>
@@ -1021,7 +1051,7 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year</label>
+                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span class='require' data-ng-show="showRequireSign">*</span></label>
                         <div class="col-md-8" data-ng-show="showAwardInputDiv">
                             <input type="text"
                                    name="nAwardedYear{{$index}}"
@@ -1030,7 +1060,7 @@
                                    data-date-format="yyyy"
                                    placeholder="YYYY"
                                    autocomplete="off"
-                                   class="custom-datepicker form-control">
+                                   class="custom-datepicker form-control" required>
                         </div>
                         <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showAwardLabelDiv">
                             <label class="control-label">{{award.awardedYear}}</label>
@@ -1066,7 +1096,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('award')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitAwardForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
@@ -1076,22 +1106,22 @@
 
 
     <div data-ng-show="experienceTab">
-        <form name="nExperienceForm">
+        <form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label">Sl.</label>
                 </div>
                 <div class="col-md-4">
-                    <label class="control-label">Institution/Organization</label>
+                    <label class="control-label">Institution/Organization<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">Designation</label>
+                    <label class="control-label">Designation<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">From</label>
+                    <label class="control-label">From<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-2">
-                    <label class="control-label">To</label>
+                    <label class="control-label">To<span class='require' data-ng-show="showRequireSign">*</span></label>
                 </div>
                 <div class="col-md-1">
                     <label class="control-label"></label>
@@ -1105,40 +1135,48 @@
                     </div>
                     <div class="col-md-4" data-ng-show="showExperienceInputDiv">
                         <input type="text"
+                               name="nExperienceInstitution{{$index}}"
+                               id="iExperienceInstitution{{$index}}"
                                data-ng-model="experience.experienceInstitution"
                                placeholder="Institution/Organization"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-4" style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
                         <label class="control-label">{{experience.experienceInstitution}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showExperienceInputDiv">
                         <input type="text"
+                               name="nExperienceDesignation{{$index}}"
+                               id="iExperienceDesignation{{$index}}"
                                data-ng-model="experience.experienceDesignation"
                                placeholder="Designation"
-                               class="form-control">
+                               class="form-control" required>
                     </div>
                     <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
                         <label class="control-label">{{experience.experienceDesignation}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showExperienceInputDiv">
                         <input type="text"
+                               name="nExperienceFrom{{$index}}"
+                               id="iExperienceFrom{{$index}}"
                                data-ng-model="experience.experienceFrom"
                                data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control">
+                               class="modified-datepicker form-control" required>
                     </div>
                     <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
                         <label class="control-label">{{experience.experienceFrom}}</label>
                     </div>
                     <div class="col-md-2" data-ng-show="showExperienceInputDiv">
                         <input type="text"
+                               name="nExperienceTo{{$index}}"
+                               id="iExperienceTo{{$index}}"
                                data-ng-model="experience.experienceTo"
                                data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control">
+                               class="modified-datepicker form-control" required>
                     </div>
                     <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
                         <label class="control-label">{{experience.experienceTo}}</label>
@@ -1161,7 +1199,7 @@
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="edit('experience')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submitExperienceForm()">Submit</button>
+                        <button type="submit" title="Submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </div>
