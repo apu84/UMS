@@ -15,7 +15,7 @@ import javax.ws.rs.core.Request;
 public class PublicationInformationResource extends MutablePublicationInformationResource {
 
   @GET
-  @Path("/getPublicationInformation/{employee-id}")
+  @Path("/getPublicationInformation")
   public JsonObject getPublicationInformation(final @Context Request pRequest) throws Exception {
     return mPublicationInformationResourceHelper.getPublicationInformation(mUriInfo);
   }

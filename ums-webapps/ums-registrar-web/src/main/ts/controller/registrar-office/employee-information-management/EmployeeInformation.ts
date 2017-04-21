@@ -271,9 +271,9 @@ module ums{
 
     private getEmployeeInformation() {
       this.getPersonalInformation();
-      // this.getAcademicInformation();
-      // this.getAwardInformation();
-      // this.getPublicationInformation();
+      this.getAcademicInformation();
+      this.getAwardInformation();
+      this.getPublicationInformation();
       // this.getExperienceInformation();
       // this.getTrainingInformation();
     }

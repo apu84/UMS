@@ -22,54 +22,37 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
   public void build(JsonObjectBuilder pBuilder, PublicationInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
-    if(pReadOnly.getPublicationTitle() != null) {
-      pBuilder.add("publicationTitle", pReadOnly.getPublicationTitle());
+    pBuilder.add("publicationTitle", pReadOnly.getPublicationTitle());
+    if(pReadOnly.getInterestGenre().equals("") || pReadOnly.getInterestGenre() == null) {
+      pBuilder.add("publicationInterestGenre", "");
     }
     else {
-      pBuilder.add("publicationTitle", "");
+      pBuilder.add("publicationInterestGenre", pReadOnly.getInterestGenre());
     }
-    pBuilder.add("publicationInterestGenre", pReadOnly.getInterestGenre());
-    pBuilder.add("publisherName", pReadOnly.getPublisherName());
+    if(pReadOnly.getPublisherName().equals("") || pReadOnly.getPublisherName() == null) {
+      pBuilder.add("publisherName", "");
+    }
+    else {
+      pBuilder.add("publisherName", pReadOnly.getPublisherName());
+    }
     pBuilder.add("dateOfPublication", pReadOnly.getDateOfPublication());
     pBuilder.add("publicationType", pReadOnly.getPublicationType());
-    pBuilder.add("publicationWebLink", pReadOnly.getPublicationWebLink());
+    if(pReadOnly.getPublicationWebLink().equals("") || pReadOnly.getPublicationWebLink() == null) {
+      pBuilder.add("publicationWebLink", "");
+    }
+    else {
+      pBuilder.add("publicationWebLink", pReadOnly.getPublicationWebLink());
+    }
   }
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    if(!pJsonObject.getString("publicationTitle").equals("")) {
-      pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
-    }
-    else {
-      pMutable.setPublicationTitle("");
-    }
-    if(!pJsonObject.getString("publicationInterestGenre").equals("")) {
-      pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
-    }
-    else {
-      pMutable.setInterestGenre("");
-    }
-    if(!pJsonObject.getString("publisherName").equals("")) {
-      pMutable.setPublisherName(pJsonObject.getString("publisherName"));
-    }
-    else {
-      pMutable.setPublisherName("");
-    }
-    if(!pJsonObject.getString("dateOfPublication").equals("")) {
-      pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
-    }
-    else {
-      pMutable.setDateOfPublication("");
-    }
-    if(pJsonObject.getJsonObject("publicationType") != null) {
-      pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
-    }
-    if(!pJsonObject.getString("publicationWebLink").equals("")) {
-      pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
-    }
-    else {
-      pMutable.setPublicationWebLink("");
-    }
+    pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
+    pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
+    pMutable.setPublisherName(pJsonObject.getString("publisherName"));
+    pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
+    pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
+    pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
   }
 }

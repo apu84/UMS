@@ -15,7 +15,7 @@ import javax.ws.rs.core.Request;
 public class ExperienceInformationResource extends MutableExperienceInformationResource {
 
   @GET
-  @Path("/getExperienceInformation/{employee-id}")
+  @Path("/getExperienceInformation")
   public JsonObject getExperienceInformation(final @Context Request pRequest) throws Exception {
     return mExperienceInformationResourceHelper.getExperienceInformation(mUriInfo);
   }

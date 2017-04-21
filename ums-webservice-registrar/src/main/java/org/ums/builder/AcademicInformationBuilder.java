@@ -21,18 +21,8 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
   public void build(JsonObjectBuilder pBuilder, AcademicInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("academicDegreeName", pReadOnly.getDegreeName());
-    if(pReadOnly.getDegreeInstitute().equals("")) {
-      pBuilder.add("academicInstitution", "");
-    }
-    else {
-      pBuilder.add("academicInstitution", pReadOnly.getDegreeInstitute());
-    }
-    if(pReadOnly.getDegreePassingYear().equals("")) {
-      pBuilder.add("academicPassingYear", "");
-    }
-    else {
-      pBuilder.add("academicPassingYear", pReadOnly.getDegreePassingYear());
-    }
+    pBuilder.add("academicInstitution", pReadOnly.getDegreeInstitute());
+    pBuilder.add("academicPassingYear", pReadOnly.getDegreePassingYear());
   }
 
   @Override
