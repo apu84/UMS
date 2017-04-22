@@ -36,15 +36,16 @@ public class TrainingInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getTrainingInformation(final UriInfo pUriInfo) {
-    List<TrainingInformation> pTrainingInformation = new ArrayList<>();
-    try {
-      pTrainingInformation =
-          mTrainingInformationManager.getEmployeeTrainingInformation(userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    } catch(EmptyResultDataAccessException e) {
+      String userId = userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      List<TrainingInformation> pTrainingInformation = new ArrayList<>();
+      try {
+          pTrainingInformation =
+                  mTrainingInformationManager.getEmployeeTrainingInformation(userId);
+      } catch (EmptyResultDataAccessException e) {
 
-    }
-    return toJson(pTrainingInformation, pUriInfo);
+      }
+      return toJson(pTrainingInformation, pUriInfo);
   }
 
   @Transactional

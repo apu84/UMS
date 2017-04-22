@@ -35,17 +35,18 @@ public class PersonalInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
-    PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
-    try {
-      PersonalInformation pPersonalInformation =
-          mPersonalInformationManager.getEmployeePersonalInformation(userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-      personalInformation = (PersistentPersonalInformation) pPersonalInformation;
-    } catch(EmptyResultDataAccessException e) {
-      // Do nothing
-    }
+      String userId = userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
+      try {
+          PersonalInformation pPersonalInformation =
+                  mPersonalInformationManager.getEmployeePersonalInformation(userId);
+          personalInformation = (PersistentPersonalInformation) pPersonalInformation;
+      } catch (EmptyResultDataAccessException e) {
+          // Do nothing
+      }
 
-    return toJson((PersonalInformation) personalInformation, pUriInfo);
+      return toJson((PersonalInformation) personalInformation, pUriInfo);
   }
 
   @Transactional

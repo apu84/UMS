@@ -23,25 +23,25 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
       LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("publicationTitle", pReadOnly.getPublicationTitle());
-    if(pReadOnly.getInterestGenre().equals("") || pReadOnly.getInterestGenre() == null) {
-      pBuilder.add("publicationInterestGenre", "");
-    }
-    else {
+    if(pReadOnly.getInterestGenre() != null) {
       pBuilder.add("publicationInterestGenre", pReadOnly.getInterestGenre());
     }
-    if(pReadOnly.getPublisherName().equals("") || pReadOnly.getPublisherName() == null) {
-      pBuilder.add("publisherName", "");
+    else {
+      pBuilder.add("publicationInterestGenre", "");
+    }
+    if(pReadOnly.getPublisherName() != null) {
+      pBuilder.add("publisherName", pReadOnly.getPublisherName());
     }
     else {
-      pBuilder.add("publisherName", pReadOnly.getPublisherName());
+      pBuilder.add("publisherName", "");
     }
     pBuilder.add("dateOfPublication", pReadOnly.getDateOfPublication());
     pBuilder.add("publicationType", pReadOnly.getPublicationType());
-    if(pReadOnly.getPublicationWebLink().equals("") || pReadOnly.getPublicationWebLink() == null) {
-      pBuilder.add("publicationWebLink", "");
+    if(pReadOnly.getPublicationWebLink() != null) {
+      pBuilder.add("publicationWebLink", pReadOnly.getPublicationWebLink());
     }
     else {
-      pBuilder.add("publicationWebLink", pReadOnly.getPublicationWebLink());
+      pBuilder.add("publicationWebLink", "");
     }
   }
 

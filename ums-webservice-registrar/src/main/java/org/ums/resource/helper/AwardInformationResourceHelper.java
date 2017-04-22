@@ -35,14 +35,16 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   UserManager userManager;
 
   public JsonObject getAwardInformation(final UriInfo pUriInfo) {
-    List<AwardInformation> pAwardInformation = new ArrayList<>();
-    try {
-      pAwardInformation =
-          mAwardInformationManager.getEmployeeAwardInformation(userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    } catch(EmptyResultDataAccessException e) {
-    }
-    return toJson(pAwardInformation, pUriInfo);
+      String userId = userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      List<AwardInformation> pAwardInformation = new ArrayList<>();
+      try {
+          pAwardInformation =
+                  mAwardInformationManager.getEmployeeAwardInformation(userId);
+      } catch (EmptyResultDataAccessException e) {
+
+      }
+      return toJson(pAwardInformation, pUriInfo);
   }
 
   @Transactional

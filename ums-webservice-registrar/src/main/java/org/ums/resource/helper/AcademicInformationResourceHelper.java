@@ -36,15 +36,16 @@ public class AcademicInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getAcademicInformation(final UriInfo pUriInfo) {
-    List<AcademicInformation> pAcademicInformation = new ArrayList<>();
-    try {
-      pAcademicInformation =
-          mAcademicInformationManager.getEmployeeAcademicInformation(userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    } catch(EmptyResultDataAccessException e) {
+      String userId = userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      List<AcademicInformation> pAcademicInformation = new ArrayList<>();
+      try {
+          pAcademicInformation =
+                  mAcademicInformationManager.getEmployeeAcademicInformation(userId);
+      } catch (EmptyResultDataAccessException e) {
 
-    }
-    return toJson(pAcademicInformation, pUriInfo);
+      }
+      return toJson(pAcademicInformation, pUriInfo);
   }
 
   @Transactional

@@ -36,15 +36,16 @@ public class PublicationInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPublicationInformation(final UriInfo pUriInfo) {
-    List<PublicationInformation> pPublicationInformation = new ArrayList<>();
-    try {
-      pPublicationInformation =
-          mPublicationInformationManager.getEmployeePublicationInformation(userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    } catch(EmptyResultDataAccessException e) {
+      String userId = userManager.get(
+              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+      try {
+          pPublicationInformation =
+                  mPublicationInformationManager.getEmployeePublicationInformation(userId);
+      } catch (EmptyResultDataAccessException e) {
 
-    }
-    return toJson(pPublicationInformation, pUriInfo);
+      }
+      return toJson(pPublicationInformation, pUriInfo);
   }
 
   @Transactional

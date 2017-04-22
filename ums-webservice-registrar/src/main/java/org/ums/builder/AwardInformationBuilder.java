@@ -22,9 +22,19 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
   public void build(JsonObjectBuilder pBuilder, AwardInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("awardName", pReadOnly.getAwardName());
-    pBuilder.add("awardInstitute", pReadOnly.getAwardInstitute());
+    if(pReadOnly.getAwardInstitute() != null) {
+      pBuilder.add("awardInstitute", pReadOnly.getAwardInstitute());
+    }
+    else {
+      pBuilder.add("awardInstitute", "");
+    }
     pBuilder.add("awardedYear", pReadOnly.getAwardedYear());
-    pBuilder.add("awardShortDescription", pReadOnly.getAwardShortDescription());
+    if(pReadOnly.getAwardShortDescription() != null) {
+      pBuilder.add("awardShortDescription", pReadOnly.getAwardShortDescription());
+    }
+    else {
+      pBuilder.add("awardShortDescription", "");
+    }
   }
 
   @Override

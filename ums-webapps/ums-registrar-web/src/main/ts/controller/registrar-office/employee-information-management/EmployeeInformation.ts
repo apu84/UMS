@@ -37,7 +37,7 @@ module ums{
     disablePresentAddressDropdown: boolean;
     disablePermanentAddressDropdown: boolean;
     showSup: boolean;
-
+    disableSubmitButton: boolean;
 
     supOptions: string;
     degreeNameMap: any;
@@ -218,7 +218,6 @@ module ums{
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
       $scope.sameAsPresentAddress = this.sameAsPresentAddress.bind(this);
-      $scope.getCountry = this.getCountry.bind(this);
       $scope.changePresentAddressDistrict = this.changePresentAddressDistrict.bind(this);
       $scope.changePresentAddressThana = this.changePresentAddressThana.bind(this);
       $scope.changePermanentAddressDistrict = this.changePermanentAddressDistrict.bind(this);
@@ -235,6 +234,7 @@ module ums{
       this.$scope.disablePresentAddressDropdown = false;
       this.$scope.disablePermanentAddressDropdown = false;
       this.$scope.showSup = false;
+      this.$scope.disableSubmitButton = true;
 
       this.getCountry();
       this.getDivision();
@@ -266,16 +266,12 @@ module ums{
       this.addDate();
       this.changeNav("personal");
       this.createMap();
-      this.getEmployeeInformation();
-    }
-
-    private getEmployeeInformation() {
       this.getPersonalInformation();
       this.getAcademicInformation();
       this.getAwardInformation();
       this.getPublicationInformation();
-      // this.getExperienceInformation();
-      // this.getTrainingInformation();
+      this.getExperienceInformation();
+      this.getTrainingInformation();
     }
 
     private createMap(){
@@ -326,6 +322,8 @@ module ums{
       this.$scope.trainingTab = false;
       this.$scope.awardTab = false;
       this.$scope.experienceTab = false;
+
+      this.$scope.disableSubmitButton = true;
 
       if(navTitle === ""){
         this.$scope.personalTab = true;
@@ -392,7 +390,7 @@ module ums{
       this.$scope.entry.personal.nationalIdNo = "19952641478954758";
       this.$scope.entry.personal.spouseNationalIdNo = "";
       this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
-      this.$scope.entry.personal.website = "www.kawsur.com";
+      this.$scope.entry.personal.website = "https://www.kawsur.com";
       this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
       this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
       this.$scope.entry.personal.mobile = "+8801672494863";
@@ -445,6 +443,7 @@ module ums{
                 });
           });
       this.changeNav("personal");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getPersonalInformation(){
@@ -452,21 +451,25 @@ module ums{
       this.employeeInformationService.getPersonalInformation().then((personalInformation: any) =>{
         console.log("Employee's Personal Information");
         console.log(personalInformation);
-        this.$scope.entry.personal = personalInformation[0];
-        this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatus];
-        this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
-        this.$scope.entry.personal.religion = this.$scope.religionNameMap[personalInformation[0].religion];
-        this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationality];
-        this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroup];
-        this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelation];
-        this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
-        this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
-        this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
-        this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
-        this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
-        this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
-        this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
-        this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+        console.log("Perosnal length");
+        console.log(personalInformation.length);
+        if(personalInformation.length > 0) {
+            this.$scope.entry.personal = personalInformation[0];
+            this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatus];
+            this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
+            this.$scope.entry.personal.religion = this.$scope.religionNameMap[personalInformation[0].religion];
+            this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationality];
+            this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroup];
+            this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelation];
+            this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
+            this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
+            this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
+            this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
+            this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
+            this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
+            this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
+            this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+        }
       });
     }
 
@@ -481,6 +484,7 @@ module ums{
                 });
           });
       this.changeNav("academic");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getAcademicInformation(){
@@ -506,6 +510,7 @@ module ums{
                 });
           });
       this.changeNav("publication");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getPublicationInformation(){
@@ -518,6 +523,7 @@ module ums{
         for(var i = 0; i < publicationInformation.length; i++)
         {
           this.$scope.entry.publication[i] = publicationInformation[i];
+          this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
         }
       });
     }
@@ -533,6 +539,7 @@ module ums{
                 });
           });
       this.changeNav("training");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getTrainingInformation(){
@@ -558,6 +565,7 @@ module ums{
                 });
           });
       this.changeNav("award");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getAwardInformation(){
@@ -567,9 +575,8 @@ module ums{
         console.log(awardInformation);
         for(var i = 0; i < awardInformation.length; i++)
         {
-          this.$scope.entry.training[i] = awardInformation[i];
+          this.$scope.entry.award[i] = awardInformation[i];
         }
-
       });
     }
 
@@ -584,6 +591,7 @@ module ums{
                 });
           });
       this.changeNav("experience");
+      this.$scope.disableSubmitButton = true;
     }
 
     private getExperienceInformation(){
@@ -593,14 +601,14 @@ module ums{
         console.log(experienceInformation);
         for(var i = 0; i < experienceInformation.length; i++)
         {
-          this.$scope.entry.training[i] = experienceInformation[i];
+          this.$scope.entry.experience[i] = experienceInformation[i];
         }
       });
     }
 
     private edit(formName: string){
       console.log("i am in edit()");
-
+      this.$scope.disableSubmitButton = false;
       if(formName === "personal") {
         this.$scope.showPersonalInputDiv = true;
         this.$scope.showPersonalLabelDiv = false;
