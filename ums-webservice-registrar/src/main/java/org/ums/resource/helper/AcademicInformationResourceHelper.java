@@ -36,23 +36,21 @@ public class AcademicInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getAcademicInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      List<AcademicInformation> pAcademicInformation = new ArrayList<>();
-      try {
-          pAcademicInformation =
-                  mAcademicInformationManager.getEmployeeAcademicInformation(userId);
-      } catch (EmptyResultDataAccessException e) {
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<AcademicInformation> pAcademicInformation = new ArrayList<>();
+    try {
+      pAcademicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
 
-      }
-      return toJson(pAcademicInformation, pUriInfo);
+    }
+    return toJson(pAcademicInformation, pUriInfo);
   }
 
   @Transactional
   public Response saveAcademicInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
 
-    mAcademicInformationManager.deleteAcademicInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mAcademicInformationManager.deleteAcademicInformation(userId);
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 

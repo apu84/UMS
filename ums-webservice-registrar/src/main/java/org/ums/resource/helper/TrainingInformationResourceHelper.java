@@ -36,23 +36,20 @@ public class TrainingInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getTrainingInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      List<TrainingInformation> pTrainingInformation = new ArrayList<>();
-      try {
-          pTrainingInformation =
-                  mTrainingInformationManager.getEmployeeTrainingInformation(userId);
-      } catch (EmptyResultDataAccessException e) {
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<TrainingInformation> pTrainingInformation = new ArrayList<>();
+    try {
+      pTrainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
 
-      }
-      return toJson(pTrainingInformation, pUriInfo);
+    }
+    return toJson(pTrainingInformation, pUriInfo);
   }
 
   @Transactional
   public Response saveTrainingInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-
-    mTrainingInformationManager.deleteTrainingInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mTrainingInformationManager.deleteTrainingInformation(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");

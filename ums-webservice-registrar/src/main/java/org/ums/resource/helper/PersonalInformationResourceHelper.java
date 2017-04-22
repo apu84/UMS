@@ -35,25 +35,22 @@ public class PersonalInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
-      try {
-          PersonalInformation pPersonalInformation =
-                  mPersonalInformationManager.getEmployeePersonalInformation(userId);
-          personalInformation = (PersistentPersonalInformation) pPersonalInformation;
-      } catch (EmptyResultDataAccessException e) {
-          // Do nothing
-      }
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+      PersonalInformation personalInformation =  null;
+    try {
+    personalInformation = mPersonalInformationManager.getEmployeePersonalInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
+      // Do nothing
+    }
 
-      return toJson((PersonalInformation) personalInformation, pUriInfo);
+    return toJson(personalInformation, pUriInfo);
   }
 
   @Transactional
   public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
 
-    mPersonalInformationManager.deletePersonalInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mPersonalInformationManager.deletePersonalInformation(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");

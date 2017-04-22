@@ -35,22 +35,20 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   UserManager userManager;
 
   public JsonObject getAwardInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      List<AwardInformation> pAwardInformation = new ArrayList<>();
-      try {
-          pAwardInformation =
-                  mAwardInformationManager.getEmployeeAwardInformation(userId);
-      } catch (EmptyResultDataAccessException e) {
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<AwardInformation> pAwardInformation = new ArrayList<>();
+    try {
+      pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
 
-      }
-      return toJson(pAwardInformation, pUriInfo);
+    }
+    return toJson(pAwardInformation, pUriInfo);
   }
 
   @Transactional
   public Response saveAwardInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    mAwardInformationManager.deleteAwardInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mAwardInformationManager.deleteAwardInformation(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");

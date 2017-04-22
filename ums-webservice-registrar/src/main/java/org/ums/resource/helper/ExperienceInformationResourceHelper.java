@@ -36,22 +36,21 @@ public class ExperienceInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getExperienceInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
-      try {
-          pExperienceInformation =
-                  mExperienceInformationManager.getEmployeeExperienceInformation(userId);
-      } catch (EmptyResultDataAccessException e) {
 
-      }
-      return toJson(pExperienceInformation, pUriInfo);
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
+    try {
+      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
+    return toJson(pExperienceInformation, pUriInfo);
   }
 
   @Transactional
   public Response saveExperienceInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    mExperienceInformationManager.deleteExperienceInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mExperienceInformationManager.deleteExperienceInformation(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");

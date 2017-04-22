@@ -267,11 +267,11 @@ module ums{
       this.changeNav("personal");
       this.createMap();
       this.getPersonalInformation();
-      this.getAcademicInformation();
-      this.getAwardInformation();
-      this.getPublicationInformation();
-      this.getExperienceInformation();
-      this.getTrainingInformation();
+      // this.getAcademicInformation();
+      // this.getAwardInformation();
+      // this.getPublicationInformation();
+      // this.getExperienceInformation();
+      // this.getTrainingInformation();
     }
 
     private createMap(){
@@ -395,14 +395,9 @@ module ums{
       this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
       this.$scope.entry.personal.mobile = "+8801672494863";
       this.$scope.entry.personal.phone = "none";
-      this.$scope.entry.personal.presentAddressHouse = "34/1";
-      this.$scope.entry.personal.presentAddressRoad = "Kazi Riaz Uddin Road";
-      this.$scope.entry.personal.permanentAddressHouse = "None";
-      this.$scope.entry.personal.permanentAddressRoad = "";
       this.$scope.entry.personal.emergencyContactName = "None";
       this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
-      this.$scope.entry.personal.emergencyContactPhone = "None";
-      this.$scope.entry.personal.emergencyContactAddress = "None";
+      this.$scope.entry.personal.emergencyContactPhone = "01898889851";
 
       this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
       this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
@@ -451,7 +446,7 @@ module ums{
       this.employeeInformationService.getPersonalInformation().then((personalInformation: any) =>{
         console.log("Employee's Personal Information");
         console.log(personalInformation);
-        console.log("Perosnal length");
+        console.log("Personal length");
         console.log(personalInformation.length);
         if(personalInformation.length > 0) {
             this.$scope.entry.personal = personalInformation[0];

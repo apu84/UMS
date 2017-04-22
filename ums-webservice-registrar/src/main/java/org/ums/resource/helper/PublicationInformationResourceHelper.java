@@ -36,22 +36,20 @@ public class PublicationInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPublicationInformation(final UriInfo pUriInfo) {
-      String userId = userManager.get(
-              SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      List<PublicationInformation> pPublicationInformation = new ArrayList<>();
-      try {
-          pPublicationInformation =
-                  mPublicationInformationManager.getEmployeePublicationInformation(userId);
-      } catch (EmptyResultDataAccessException e) {
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+    try {
+      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(userId);
+    } catch(EmptyResultDataAccessException e) {
 
-      }
-      return toJson(pPublicationInformation, pUriInfo);
+    }
+    return toJson(pPublicationInformation, pUriInfo);
   }
 
   @Transactional
   public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    mPublicationInformationManager.deletePublicationInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    mPublicationInformationManager.deletePublicationInformation(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
