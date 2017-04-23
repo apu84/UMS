@@ -55,4 +55,11 @@ public class EmployeeResource extends MutableEmployeeResource {
   public JsonObject searchUser(@QueryParam("term") String pTerm, @QueryParam("page") int pPage) throws Exception {
     return mEmployeeResourceHelper.searchUserByName(pTerm, pPage, mUriInfo);
   }
+
+  @GET
+  @Path("/searchByDepartment")
+  public JsonObject searchUserByChildren(@QueryParam("term") String pTerm, @QueryParam("page") int pPage)
+      throws Exception {
+    return mEmployeeResourceHelper.searchUserByDepartment(pTerm, pPage, mUriInfo);
+  }
 }

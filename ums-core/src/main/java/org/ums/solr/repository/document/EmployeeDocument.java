@@ -1,17 +1,13 @@
 package org.ums.solr.repository.document;
 
-import com.google.common.collect.Lists;
-import org.apache.solr.client.solrj.beans.Field;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.Indexed;
-import org.springframework.data.solr.core.mapping.SolrDocument;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.User;
-
 import java.util.List;
 
-@SolrDocument(solrCoreName = "ums")
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.annotation.Id;
+import org.ums.domain.model.immutable.Employee;
+
+import com.google.common.collect.Lists;
+
 public class EmployeeDocument implements SearchDocument<String> {
   @Id
   @Field
@@ -21,27 +17,24 @@ public class EmployeeDocument implements SearchDocument<String> {
   @Field("name_txt")
   private List<String> name;
 
-  @Field("departmentShortName_txt")
-  private List<String> departmentShortName;
-
-  @Field("departmentLongName_txt")
-  private List<String> departmentLongName;
-
-  @Field("departmentId_s")
-  private String departmentId;
-
   @Field("type_s")
   private String type = "Employee";
+
+  // @Field("dynamicMappedField_*")
+  // private Map<String, String> dynamicMappedFieldValues;
+
+  @Field(child = true)
+  private DepartmentDocument departmentDocument;
 
   public EmployeeDocument() {}
 
   public EmployeeDocument(final Employee pEmployee) {
     id = pEmployee.getId();
     name = Lists.newArrayList(pEmployee.getEmployeeName());
-    Department department = pEmployee.getDepartment();
-    departmentShortName = Lists.newArrayList(department.getShortName());
-    departmentLongName = Lists.newArrayList(department.getLongName());
-    departmentId = department.getId();
+    departmentDocument = new DepartmentDocument(pEmployee.getDepartment());
+    // dynamicMappedFieldValues = new HashMap<>();
+    // dynamicMappedFieldValues.put("key1", "value1");
+    // dynamicMappedFieldValues.put("key2", "value2");
   }
 
   @Override

@@ -14,7 +14,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.EmployeeResource;
@@ -108,6 +107,15 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   public JsonObject searchUserByName(String pQuery, int page, final UriInfo pUriInfo) {
     List<EmployeeDocument> userDocuments = mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
+    List<Employee> users = new ArrayList<>();
+    for(EmployeeDocument document : userDocuments) {
+      users.add(mEmployeeManager.get(document.getId()));
+    }
+    return convertToJson(users, pUriInfo);
+  }
+
+  public JsonObject searchUserByDepartment(String pQuery, int page, final UriInfo pUriInfo) {
+    List<EmployeeDocument> userDocuments = mEmployeeRepository.findByDepartment(pQuery, new PageRequest(page, 10));
     List<Employee> users = new ArrayList<>();
     for(EmployeeDocument document : userDocuments) {
       users.add(mEmployeeManager.get(document.getId()));

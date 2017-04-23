@@ -3,12 +3,9 @@ package org.ums.configuration;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.convert.SolrJConverter;
 import org.ums.cache.CacheFactory;
 import org.ums.generator.IdGenerator;
 import org.ums.lock.LockDao;
@@ -23,6 +20,7 @@ import org.ums.solr.indexer.resolver.EmployeeResolver;
 import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.solr.indexer.resolver.lms.RecordResolver;
+import org.ums.solr.repository.CustomSolrJConverter;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.EmployeeRepositoryImpl;
 import org.ums.solr.repository.lms.RecordRepository;
@@ -50,7 +48,7 @@ public class SolrContext {
 
   @Bean
   public SolrClient solrClient() {
-    return new HttpSolrClient("http://localhost:8983/solr/");
+    return new HttpSolrClient("http://localhost:8983/solr");
   }
 
   @Bean
@@ -58,7 +56,7 @@ public class SolrContext {
     // without core name mentioned in here, custom solr repository doesn't get the core name by
     // default
     SolrTemplate template = new SolrTemplate(solrClient(), "ums");
-    template.setSolrConverter(new SolrJConverter());
+    template.setSolrConverter(new CustomSolrJConverter());
     return template;
   }
 
