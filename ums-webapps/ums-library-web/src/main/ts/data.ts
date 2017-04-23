@@ -4,6 +4,7 @@
   };
   var $this:any = $.fn.Data;
 
+
   $.fn.Data.pages = {
     '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
     '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},

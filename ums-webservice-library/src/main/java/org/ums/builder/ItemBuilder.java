@@ -14,6 +14,7 @@ import org.ums.manager.library.ItemManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentPublisher;
 
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -33,20 +34,27 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getMfn());
-    pBuilder.add("itemId", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
     pBuilder.add("accessionDate", pReadOnly.getAccessionDate());
     pBuilder.add("barcode", pReadOnly.getBarcode());
     pBuilder.add("price", pReadOnly.getPrice());
     pBuilder.add("internalNote", pReadOnly.getInternalNote());
-
+//    pBuilder.add("supplierName", pReadOnly.getSupplier().getName());
+//    pBuilder.add("supplier", pReadOnly.getSupplier().getId());
     pBuilder.add("status", pReadOnly.getStatus().getId());
     pBuilder.add("statusName", pReadOnly.getStatus().getLabel());
     pBuilder.add("insertedBy", pReadOnly.getInsertedBy());
     pBuilder.add("insertedOn", pReadOnly.getInsertedOn());
     pBuilder.add("lastUpdatedBy", pReadOnly.getLastUpdatedBy());
     pBuilder.add("lastUpdatedOn", pReadOnly.getLastUpdatedOn());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    object.add("id", pReadOnly.getSupplier().getId());
+    object.add("name", pReadOnly.getSupplier().getName());
+    pBuilder.add("supplier", object);
+
   }
 
   @Override
@@ -57,6 +65,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setCopyNumber(Integer.valueOf(pJsonObject.getString("copyNumber")));
     pMutable.setAccessionNumber(pJsonObject.getString("accessionNumber"));
     pMutable.setAccessionDate(pJsonObject.getString("accessionDate"));
+
+    if(pJsonObject.containsKey("supplier")) {
+      JsonObject supplierObject = (JsonObject) (pJsonObject.get("supplier"));
+      pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
+    }
+
     if(pJsonObject.containsKey("barcode"))
       pMutable.setBarcode(pJsonObject.getString("barcode"));
     pMutable.setPrice(Double.valueOf(pJsonObject.getString("price")));

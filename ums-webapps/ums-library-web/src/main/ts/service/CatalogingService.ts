@@ -1,10 +1,10 @@
 module ums{
 
   export class CatalogingService{
-    public static $inject = ['libConstants','HttpClient','$q','notify','$sce','$window'];
+    public static $inject = ['libConstants','HttpClient','$q','notify','$sce','$window','MessageFactory'];
     constructor(private libConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,
-                private $sce:ng.ISCEService,private $window:ng.IWindowService) {
+                private $sce:ng.ISCEService,private $window:ng.IWindowService, private messageFactory: MessageFactory) {
     }
 
     /**
@@ -34,6 +34,11 @@ module ums{
       record.contributorJsonString = JSON.stringify(record.contributorList);
       record.noteJsonString = JSON.stringify(record.noteList);
       record.subjectJsonString = JSON.stringify(record.subjectList);
+      record.physicalDescriptionString = JSON.stringify(record.physicalDescription);
+      record.imprint.publisher = record.imprint.publisher+'';
+
+
+      console.log("record.physicalDescriptionString :"+record.physicalDescriptionString);
 
       if (record.mfnNo != undefined) {
         this.httpClient.put(resourceUrl + '/' + record.mfnNo, record, 'application/json')
@@ -43,6 +48,7 @@ module ums{
               msg.message = "Data Saved Updated";
               defer.resolve(msg);
             }).error((data) => {
+              defer.resolve(this.messageFactory.getErrorMessage("Failed to update record information.  "+data));
         });
       }
       else {
@@ -56,7 +62,7 @@ module ums{
 
         }, function errorCallback(response) {
           console.error(response);
-          defer.resolve({"responseType":"error", "message" : "Failed to Create Supplier"});
+          defer.resolve(this.messageFactory.getErrorMessage("Failed to create record information."));
         });
       }
       return defer.promise;
@@ -70,8 +76,8 @@ module ums{
       var resourceUrl = "item";
       var defer = this.$q.defer();
 
-      if (item.itemId != undefined) {
-        this.httpClient.put(resourceUrl + '/' + item.itemId, item, 'application/json')
+      if (item.id != undefined) {
+        this.httpClient.put(resourceUrl + '/' + item.id, item, 'application/json')
             .success(() => {
               var msg : NotifyMessage  =<NotifyMessage>{};
               msg.responseType = "success";
@@ -83,7 +89,7 @@ module ums{
       else {
         this.httpClient.post(resourceUrl, item, 'application/json').then((response : any) => {
           var itemId = Utils.getIdFromUrl(response.headers('Location'));
-          item.itemId = itemId;
+          item.id = itemId;
           var msg : NotifyMessage  =<NotifyMessage>{};
           msg.responseType = "success";
           msg.message = "Data Saved Successfully";
@@ -142,19 +148,52 @@ module ums{
     /**
      * Fetch Record List
      */
-    public fetchRecords(): ng.IPromise<any> {
+    public fetchRecords(page : number, itemPerPage : number, orderBy: string, filter : string): ng.IPromise<any> {
       var defer = this.$q.defer();
-      var resourceUrl = "record/all/ipp/1/page/2/order/3/filter/a";
+      var tPage = page-1;
+      var resourceUrl = "record/all/ipp/"+itemPerPage+"/page/"+tPage+"/order/3/filter/a";
       this.httpClient.get(resourceUrl, 'application/json',
           (json: any, etag: string) => {
-            defer.resolve(json.entries);
+            defer.resolve(json);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
       return defer.promise;
     }
-//asdfasasdasfs asdfsadf adsf
+
+    /**
+     * Fetch a Particular Record
+     */
+    public fetchRecord(recordId : string): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get("record/"+recordId, 'application/json',
+          (json: any, etag: string) => {
+            defer.resolve(json);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
+
+    /**
+     * Fetch a Particular Item
+     */
+    public fetchItem(itemId : string): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get("item/"+itemId, 'application/json',
+          (json: any, etag: string) => {
+            defer.resolve(json);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
+
+
+
   }
 
   UMS.service("catalogingService",CatalogingService);

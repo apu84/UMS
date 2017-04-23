@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentItemDao extends ItemDaoDecorator {
   static String SELECT_ALL =
-      "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, ACCESSION_DATE, BARCODE,    PRICE, SUPPLIER, INTERNAL_NOTE,  STATUS, INSERTED_BY, INSERTED_ON, "
+      "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, TO_CHAR(ACCESSION_DATE,'DD-MM-YYYY') ACCESSION_DATE, BARCODE,    PRICE, SUPPLIER, INTERNAL_NOTE,  STATUS, INSERTED_BY, INSERTED_ON, "
           + "   LAST_UPDATED_BY, LAST_UPDATED_ON, LAST_MODIFIED FROM ITEMS ";
 
   static String UPDATE_ONE =
@@ -64,7 +64,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
   }
 
   public List<Item> getByMfn(final Long pMfn) {
-    String query = SELECT_ALL + " Where MFN = ?";
+    String query = SELECT_ALL + " Where MFN = ? Order by Copy_Number";
     return mJdbcTemplate.query(query, new Object[] {pMfn}, new PersistentItemDao.ItemRowMapper());
   }
 
@@ -122,7 +122,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
 
   @Override
   public List<Item> getAll() {
-    String query = SELECT_ALL;
+    String query = SELECT_ALL +" Order by Copy_Number ";
     return mJdbcTemplate.query(query, new PersistentItemDao.ItemRowMapper());
   }
 
@@ -139,7 +139,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
       item.setBarcode(resultSet.getString("BARCODE"));
       item.setPrice(resultSet.getDouble("PRICE"));
 
-      item.setSupplierId(resultSet.getInt("SUPPLIER"));
+      item.setSupplierId(resultSet.getLong("SUPPLIER"));
       item.setInternalNote(resultSet.getString("INTERNAL_NOTE"));
       item.setStatus(ItemStatus.get(resultSet.getInt("STATUS")));
       item.setInsertedBy(resultSet.getString("INSERTED_BY"));

@@ -27,6 +27,12 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
     return results.getContent();
   }
 
+  public Long getTotalCount(String searchTerm) {
+    Criteria conditions = createSearchConditions("title");
+    SimpleQuery search = new SimpleQuery(conditions);
+    return this.getSolrOperations().count(search);
+  }
+
   private Criteria createSearchConditions(String term) {
     return new Criteria("type_s").is("Record").and(new Criteria("title_txt").contains(term));
   }

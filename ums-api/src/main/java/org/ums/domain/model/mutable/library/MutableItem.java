@@ -28,7 +28,7 @@ public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, 
 
   void setSupplier(Supplier pSupplier);
 
-  void setSupplierId(Integer pSupplierId);
+  void setSupplierId(Long pSupplierId);
 
   void setStatus(ItemStatus pStatus);
 

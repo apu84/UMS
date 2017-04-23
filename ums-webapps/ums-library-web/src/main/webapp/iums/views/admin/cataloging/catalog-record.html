@@ -258,8 +258,8 @@
                 &nbsp<i class="fa fa-wpforms  fa-md"  style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher"></i>
                 &nbsp;<i class="fa fa-refresh" data-ng-click="reloadPublishers()"></i>
             </label>
-            <div class="col-md-4">
-            <span data-ng-if="showPublisherSelect2">
+            <div class="col-md-4" id="recordPublisherDiv">
+            <span data-ng-if="showPublisherSelect2" >
                 <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
                        datas="publisherList"  placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"  id="publisher" name="publisher"/>
             </span>
@@ -339,7 +339,7 @@
         <div class="form-group">
             <label class="col-md-1 control-label" for="keywords">Keywords</label>
             <div class="col-md-11">
-                <input type="text" placeholder="" class="form-control dottedInput"  data-ng-model="record.keywords"  name="keywords"  id="keywords" ng-readonly="data.readOnlyMode"/>
+                <input type="text" class="form-control dottedInput"  data-ng-model="record.keywords"  name="keywords"  id="keywords" ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
     </fieldset>
