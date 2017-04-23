@@ -413,7 +413,7 @@ module ums {
         quotaTypes:[
           {id:"1", name:"General "},
           {id:"2", name:"Freedom Fighter "},
-          {id:"3", name:"Rural Area "},
+          {id:"3", name:"Remote Area "},
           {id:"4", name:"English Medium "}
         ],
         applicationTypes: [
