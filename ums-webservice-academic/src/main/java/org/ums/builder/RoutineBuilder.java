@@ -75,7 +75,9 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
         .collect(Collectors.toList());
 
 
-    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    if(!pJsonObject.getString("id").equals("")){
+        pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    }
     PersistentSemester persistentSemester = new PersistentSemester();
     persistentSemester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setSemester(persistentSemester);

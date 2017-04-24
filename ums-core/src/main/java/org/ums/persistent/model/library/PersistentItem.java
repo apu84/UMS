@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.ItemStatus;
 import org.ums.manager.library.ItemManager;
+import org.ums.manager.library.SupplierManager;
 
 /**
  * Created by Ifti on 04-Mar-17.
@@ -13,6 +14,7 @@ import org.ums.manager.library.ItemManager;
 public class PersistentItem implements MutableItem {
 
   private static ItemManager sItemManager;
+  private static SupplierManager sSupplierManager;
 
   private Long mId;
   private Long mMfn;
@@ -23,7 +25,7 @@ public class PersistentItem implements MutableItem {
   private Double mPrice;
   private String mInternalNote;
   private Supplier mSupplier;
-  private Integer mSupplierId;
+  private Long mSupplierId;
   private ItemStatus mStatus;
   private String mInsertedBy;
   private String mInsertedOn;
@@ -34,6 +36,8 @@ public class PersistentItem implements MutableItem {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sItemManager = applicationContext.getBean("itemManager", ItemManager.class);
+    sSupplierManager = applicationContext.getBean("supplierManager", SupplierManager.class);
+
   }
 
   public PersistentItem() {}
@@ -47,7 +51,6 @@ public class PersistentItem implements MutableItem {
     mBarcode = pPersistentItem.getBarcode();
     mPrice = pPersistentItem.getPrice();
     mInternalNote = pPersistentItem.getInternalNote();
-    mSupplier = pPersistentItem.getSupplier();
     mSupplierId = pPersistentItem.getSupplierId();
     mStatus = pPersistentItem.getStatus();
 
@@ -134,11 +137,11 @@ public class PersistentItem implements MutableItem {
 
   @Override
   public Supplier getSupplier() {
-    return mSupplier;
+    return sSupplierManager.get(mSupplierId);
   }
 
   @Override
-  public Integer getSupplierId() {
+  public Long getSupplierId() {
     return mSupplierId;
   }
 
@@ -208,7 +211,7 @@ public class PersistentItem implements MutableItem {
   }
 
   @Override
-  public void setSupplierId(Integer pSupplierId) {
+  public void setSupplierId(Long pSupplierId) {
     mSupplierId = pSupplierId;
   }
 

@@ -77,6 +77,8 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setPhysicalDescription(PhysicalDescriptionDto pPhysicalDescription);
 
+  void setPhysicalDescriptionString(String pPhysicalDescriptionString);
+
   void setMaterialType(MaterialType pMaterialType);
 
   void setRecordStatus(RecordStatus pRecordStatus);

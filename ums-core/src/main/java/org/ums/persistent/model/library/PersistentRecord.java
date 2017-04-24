@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
+import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PersistentRecord implements MutableRecord {
 
   private static RecordManager sRecordManager;
+  private static PublisherManager sPublisherManager;
 
   private Long mId;
   private Long mMfn;
@@ -67,10 +69,12 @@ public class PersistentRecord implements MutableRecord {
   private String mContributorJsonString;
   private String mNoteJsonString;
   private String mSubjectJsonString;
+  private String mPhysicalDescriptionString;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sRecordManager = applicationContext.getBean("recordManager", RecordManager.class);
+    sPublisherManager = applicationContext.getBean("publisherManager", PublisherManager.class);
   }
 
   public PersistentRecord() {}
@@ -391,7 +395,12 @@ public class PersistentRecord implements MutableRecord {
 
   @Override
   public ImprintDto getImprint() {
+
+    if(mImprint.getPublisher() == null)
+      mImprint.setPublisher(sPublisherManager.get(mImprint.getPublisherId()));
+
     return mImprint;
+
   }
 
   @Override
@@ -567,6 +576,14 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setContributorJsonString(String pContributorJsonString) {
     mContributorJsonString = pContributorJsonString;
+  }
+
+  public String getPhysicalDescriptionString() {
+    return mPhysicalDescriptionString;
+  }
+
+  public void setPhysicalDescriptionString(String pPhysicalDescriptionString) {
+    mPhysicalDescriptionString = pPhysicalDescriptionString;
   }
 
   @Override

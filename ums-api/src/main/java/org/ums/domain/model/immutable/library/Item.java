@@ -29,7 +29,7 @@ public interface Item extends Serializable, EditType<MutableItem>, LastModifier,
 
   Supplier getSupplier();
 
-  Integer getSupplierId();
+  Long getSupplierId();
 
   ItemStatus getStatus();
 

@@ -20,9 +20,22 @@ public class EmployeeRepositoryImpl extends SimpleSolrRepository<EmployeeDocumen
   @Override
   public List<EmployeeDocument> findByCustomQuery(String searchTerm, Pageable pageable) {
     Criteria conditions = createSearchConditions(searchTerm);
-    SimpleQuery search = new SimpleQuery(conditions);
-    search.setPageRequest(pageable);
-    Page<EmployeeDocument> results = this.getSolrOperations().queryForPage(search, EmployeeDocument.class);
+    SimpleQuery query = new SimpleQuery(conditions);
+    query.setPageRequest(pageable);
+    return search(query);
+  }
+
+  @Override
+  public List<EmployeeDocument> findByDepartment(String searchTerm, Pageable pageable) {
+    SimpleQuery query =
+        new SimpleQuery(String.format("{!parent which=\"type_s:Employee\"}longName_txt:*%s* OR shortName_txt:*%s*",
+            searchTerm, searchTerm));
+    query.setPageRequest(pageable);
+    return search(query);
+  }
+
+  List<EmployeeDocument> search(SimpleQuery query) {
+    Page<EmployeeDocument> results = this.getSolrOperations().queryForPage(query, EmployeeDocument.class);
     return results.getContent();
   }
 

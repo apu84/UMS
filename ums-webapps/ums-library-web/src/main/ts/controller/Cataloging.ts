@@ -1,4 +1,5 @@
-module ums {
+///<reference path="../../../../../ums-web-core/src/main/ts/lib/jquery.tokenfield.d.ts"/>
+ module ums {
   export interface ICatalogingScope extends ng.IScope {
     data: any;
     fillSampleData: Function;
@@ -39,14 +40,23 @@ module ums {
     reloadPublishers: Function;
     collectionList : Array<any>;
     recordList : Array<IRecord>;
+    recordId : string;
+    goPrevious : Function;
+    goNext : Function;
+    mangeRecordNavigator: Function;
+    showLeftNav : boolean;
+    showRightNav : boolean;
+    fetchItem : Function;
+    resetItemForm : Function;
   }
 
   export class Cataloging {
-    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','publisherService','contributorService','catalogingService','countryService'];
+    public static $inject = ['$scope', '$q', 'notify', 'libConstants','supplierService','publisherService','contributorService','catalogingService','countryService','$stateParams'];
     constructor(private $scope: ICatalogingScope,
                 private $q: ng.IQService, private notify: Notify, private libConstants: any,
                 private supplierService : SupplierService, private publisherService : PublisherService, private contributorService : ContributorService,
-                private catalogingService : CatalogingService, private countryService : CountryService) {
+                private catalogingService : CatalogingService, private countryService : CountryService, private $stateParams: any) {
+
 
       $scope.addNewRow = this.addNewRow.bind(this);
       $scope.deleteRow = this.deleteRow.bind(this);
@@ -60,6 +70,13 @@ module ums {
       $scope.fillSampleData = this.fillSampleData.bind(this);
       $scope.reloadSuppliers = this.reloadSuppliers.bind(this);
       $scope.reloadPublishers = this.reloadPublishers.bind(this);
+      $scope.goNext = this.goNext.bind(this);
+      $scope.goPrevious = this.goPrevious.bind(this);
+      $scope.mangeRecordNavigator =this.mangeRecordNavigator.bind(this);
+      $scope.fetchItem =this.fetchItem.bind(this);
+      $scope.resetItemForm = this.resetItemForm.bind(this);
+
+
       $scope.supplierService = supplierService;
       $scope.publisherService = publisherService;
       $scope.contributorService = contributorService;
@@ -88,7 +105,8 @@ module ums {
         multipleItemAdd: false,
         bulkAddCount: 4,
         collapsedItemTable: false,
-        headerTitle: "Add New - Book Record"
+        headerTitle: "Add New - Book Record",
+        itemReadOnlyMode : false
       };
       // setTimeout(this.$scope.showRecordUI(), 1000);
       // $scope.$watch('selectedMaterialId', function (NewValue, OldValue) {
@@ -129,15 +147,26 @@ module ums {
       $scope.record.noteList = Array <INoteEntry>();
       $scope.callbackList = Array<Function>();
 
+      $scope.showLeftNav =false;
+      $scope.showRightNav = false;
+      this.$scope.recordId = $stateParams["2"];
+      if(this.$scope.recordId != null && this.$scope.recordId != "" ) {
+        this.fetchRecord(this.$scope.recordId);
+        this.mangeRecordNavigator();
+        $("#o1").removeClass("active");
+        $("#o2").removeClass("active").addClass("active");
+      }
+      if($stateParams["1"] == "view") {
+          this.$scope.data.readOnlyMode  = true;
+      }
+
       this.initNavButtonCallbacks();
 
-      this.addNewRow("");
+      // this.addNewRow("");
       this.addNewRow("contributor");
       this.addNewRow("note");
       this.addNewRow("subject");
       this.initializeDatePickers();
-      catalogingService.fetchItems("1");
-      this.fetchRecords();
       this.setRecordHeaderTitle();
 
       this.getAllSuppliers();
@@ -148,29 +177,243 @@ module ums {
       $scope.showSupplierSelect2 = false;
       $scope.showPublisherSelect2 = false;
       $scope.showContributorSelect2 = false;
+
     }
 
-    private fetchRecords() : void {
-      this.catalogingService.fetchRecords().then((response : any ) => {
-        console.log(response);
-        console.log( response.entries);
-        this.$scope.recordList = response.entries;
+    private resetItemForm() : void {
+      this.$scope.item = <IItem> {};
+      this.$scope.data.itemReadOnlyMode = false;
+      $('#supplier').select2('enable');
+    }
 
-        console.log(this.$scope.recordList);
+    private mangeRecordNavigator() : void {
+
+      if(this.$scope.recordId == "") {
+        this.$scope.showLeftNav = false;
+        this.$scope.showRightNav = false;
+      } else {
+        var currentIndex = Number(localStorage.getItem("lms_current_index"));
+        var page = Number(localStorage.getItem("lms_page"));
+        var totalRecord = Number(localStorage.getItem("lms_total_record"));
+
+          if(currentIndex == 0 && page == 1) {
+            this.$scope.showLeftNav= false;
+          } else {
+            this.$scope.showLeftNav = true;
+          }
+
+          var recordIdList:Array<any> = JSON.parse(localStorage.getItem("lms_records"));
+
+          var aa = Number(((page-1)*10))+Number(recordIdList.length);
+          if(totalRecord == aa) {
+            this.$scope.showRightNav= false;
+          }
+        else {
+          this.$scope.showRightNav = true;
+        }
+      }
+
+    }
+
+    private fetchRecord(recordId:string) : void {
+      this.catalogingService.fetchRecord(recordId).then((response : any ) => {
+        this.$scope.record = response;
+
+        this.$scope.record.contributorList = Array <IContributor>();
+        this.$scope.record.subjectList = Array<ISubjectEntry>();
+        this.$scope.record.noteList = Array <INoteEntry>();
+
+        this.setMaterialTypeName(this.$scope.record.materialType);
+
+        var jsonObj = $.parseJSON(this.$scope.record.noteJsonString);
+
+        for(var i=0;i<jsonObj.length;i++){
+          var note = {viewOrder:jsonObj[i].viewOrder, note: jsonObj[i].note};
+          this.$scope.record.noteList.push(note);
+        }
+
+        var jsonObj = $.parseJSON(this.$scope.record.subjectJsonString);
+        for(var i=0;i<jsonObj.length;i++){
+          var subject = {viewOrder:jsonObj[i].viewOrder, subject: jsonObj[i].subject};
+          this.$scope.record.subjectList.push(subject);
+        }
+
+        var jsonObj = $.parseJSON(this.$scope.record.physicalDescriptionString);
+        console.log("--------");
+        console.log(jsonObj);
+        if(jsonObj!=null) {
+          var physicalDescription = {
+            pagination: jsonObj.pagination,
+            illustrations: jsonObj.illustrations,
+            accompanyingMaterials: jsonObj.accompanyingMaterials,
+            dimensions: jsonObj.dimensions,
+            paperQuality: jsonObj.paperQuality
+          };
+          this.$scope.record.physicalDescription = physicalDescription;
+        }
+
+
+
+
+
+
+        setTimeout(() => {
+          // Utils.setSelect2Value("recordPublisherDiv","publisher", this.$scope.record.imprint.publisherName);
+          $("#publisher").select2('data', {id: this.$scope.record.imprint.publisher , text: this.$scope.record.imprint.publisherName});
+          if(this.$scope.data.readOnlyMode) {
+            $('#publisher').select2('disable');
+          } else {
+            $('#publisher').select2('enable');
+          }
+
+        }, 500);
+
+        $('#keywords').tokenfield('setTokens', this.$scope.record.keywords);
+
+        $("#headerTitle").html("Record : "+this.$scope.record.title);
+
+
+
+
       }, function errorCallback(response) {
         this.notify.error(response);
       });
+    }
+
+
+    private fetchItem(itemId:string, mode:string) : void {
+      this.catalogingService.fetchItem(itemId).then((response : any ) => {
+        this.$scope.item = response;
+
+        if(mode == "view") {
+          this.$scope.data.itemReadOnlyMode = true;
+          $('#supplier').select2('disable');
+        } else {
+          this.$scope.data.itemReadOnlyMode = false;
+          $('#supplier').select2('enable');
+        }
+
+
+        setTimeout(() => {
+          $("#supplier").select2('data', {id: this.$scope.item.supplier.id, text: this.$scope.item.supplier.name});
+        }, 500);
+
+
+        // $("#headerTitle").html("Record : "+this.$scope.record.title);
+      }, function errorCallback(response) {
+        this.notify.error(response);
+      });
+    }
+
+
+
+    private goPrevious() {
+
+      var recordIdList:Array<any> = JSON.parse(localStorage.getItem("lms_records"));
+      var currentIndex = Number(localStorage.getItem("lms_current_index"));
+      var page = Number(localStorage.getItem("lms_page"));
+
+      var previousIndex = currentIndex  - 1;
+
+      if(previousIndex<0) {
+        var tPage = page - 1;
+        this.fetchRecords(tPage).then((response : any ) => {
+          var recordIdList = Array<string>();
+          this.$scope.recordList = response.entries;
+          for(var i=0;i < this.$scope.recordList.length;i++){
+            recordIdList.push(this.$scope.recordList[i].mfnNo);
+          }
+
+          localStorage["lms_records"] = JSON.stringify(recordIdList);
+          localStorage["lms_page"] =  tPage;
+          localStorage["lms_current_index"] = recordIdList.length-1;
+
+          this.fetchRecord(recordIdList[recordIdList.length-1]);
+
+
+        }, function errorCallback(response) {
+          this.notify.error(response);
+        });
+      } else {
+        var recordId : string = recordIdList[previousIndex];
+
+        localStorage["lms_current_index"] = previousIndex;
+        this.fetchRecord(recordId);
+      }
+      this.mangeRecordNavigator();
+    }
+
+    private goNext() {
+
+      var recordIdList:Array<any> = JSON.parse(localStorage.getItem("lms_records"));
+      var currentIndex = Number(localStorage.getItem("lms_current_index"));
+      var page = Number(localStorage.getItem("lms_page"));
+
+      var nextIndex = currentIndex  + 1;
+
+
+
+      if(nextIndex>recordIdList.length-1) {
+
+          var tPage = page+1;
+          this.fetchRecords(tPage).then((response : any ) => {
+            var recordIdList = Array<string>();
+            this.$scope.recordList = response.entries;
+            for(var i=0;i < this.$scope.recordList.length;i++){
+              recordIdList.push(this.$scope.recordList[i].mfnNo);
+            }
+
+            localStorage["lms_records"] = JSON.stringify(recordIdList);
+            localStorage["lms_current_index"] = 0;
+            localStorage["lms_page"] =  tPage;
+            this.fetchRecord(recordIdList[0]);
+
+          }, function errorCallback(response) {
+            this.notify.error(response);
+          });
+
+      } else {
+        var recordId : string = recordIdList[nextIndex];
+        localStorage["lms_current_index"] = nextIndex;
+        this.fetchRecord(recordId);
+
+      }
+      this.mangeRecordNavigator();
+    }
+
+    private fetchRecords(pageNumber : number) : ng.IPromise<any> {
+      return this.catalogingService.fetchRecords(pageNumber,10,"","");
     }
 
     /**
      * Settings of navigation buttons callback. We will send this to NavigationButton directive .
      */
     private initNavButtonCallbacks() {
+      let that =  this;
       let recordCallback= function() {
-        $("#headerTitle").html("Add Record");
+        if(that.$scope.record.mfnNo == "" || that.$scope.record.mfnNo == null) {
+          $("#headerTitle").html("Add Record");
+        } else {
+          $("#headerTitle").html("Record : "+that.$scope.record.title);
+        }
+
       };
       let itemCallback =  function() {
-        $("#headerTitle").html("Add Items");
+        if(that.$scope.record.mfnNo == "" || that.$scope.record.mfnNo == null) {
+          $("#headerTitle").html("Add Items");
+        }
+        else {
+          $("#headerTitle").html("Items : "+that.$scope.record.title);
+
+          that.catalogingService.fetchItems(that.$scope.record.mfnNo).then((itemList : any ) => {
+            that.$scope.itemList = itemList;
+          }, function errorCallback(response) {
+            that.notify.error(response);
+          });
+
+        }
+
+
       };
 
 
@@ -413,7 +656,8 @@ module ums {
       this.getAllSuppliers();
       setTimeout(() => {this.$scope.showSupplierSelect2 = true;
         setTimeout(() => {
-            Utils.setSelect2Value("supplierSelect2Div",searchTerm);
+            Utils.setSelect2Value("supplierSelect2Div","supplier", searchTerm);
+
         }, 200);
       }, 300);
     }

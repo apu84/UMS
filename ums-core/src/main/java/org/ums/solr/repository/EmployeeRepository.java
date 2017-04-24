@@ -9,4 +9,6 @@ import org.ums.solr.repository.document.EmployeeDocument;
 
 public interface EmployeeRepository extends SolrCrudRepository<EmployeeDocument, String> {
   List<EmployeeDocument> findByCustomQuery(String searchTerm, Pageable pageable);
+
+  List<EmployeeDocument> findByDepartment(String searchTerm, Pageable pageable);
 }

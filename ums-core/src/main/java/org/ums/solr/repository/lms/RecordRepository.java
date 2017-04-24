@@ -14,4 +14,7 @@ import java.util.List;
  */
 public interface RecordRepository extends SolrCrudRepository<RecordDocument, Long> {
   List<RecordDocument> findByCustomQuery(String searchTerm, Pageable pageable);
+
+  Long getTotalCount(String searchTerm);
+
 }

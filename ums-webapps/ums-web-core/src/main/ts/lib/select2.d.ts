@@ -44,6 +44,7 @@ interface Select2Options {
   maximumSelectionSize?: number;
   placeholder?: string;
   separator?: string;
+  dropdownParent? : any;
   allowClear?: boolean;
   multiple?: boolean;
   closeOnSelect?: boolean;

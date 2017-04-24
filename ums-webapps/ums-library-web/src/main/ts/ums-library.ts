@@ -60,7 +60,7 @@ module ums {
           }
         })
         .state('cataloging.record', {
-          url: "/record",
+          url: "/:1/record/:2",
           controller: 'Cataloging',
           templateUrl: 'views/admin/cataloging/catalog.html',
           resolve: {
@@ -69,8 +69,14 @@ module ums {
                 files: [
                   'https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css',
                   'https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js',
+                  // 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+              // 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js',
+
+
                   'vendors/select2/select2-madmin.css',
                   'vendors/select2/select2.min.js',
+
+
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
 

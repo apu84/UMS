@@ -22,7 +22,7 @@ module ums {
   }
 
   export interface IImprint {
-    publisher: number;
+    publisher: string;
     publisherName: string;
     placeOfPublication: string;
     yearDateOfPublication: string;
@@ -80,11 +80,12 @@ module ums {
     contributorJsonString: string;
     noteJsonString: string;
     subjectJsonString: string;
+    physicalDescriptionString: string;
   }
 
   export interface IItem {
     mfnNo: string;
-    itemId: string;
+    id: string;
     copyNumber: number;
     accessionNumber: string;
     accessionDate: string;

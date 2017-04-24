@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.library.ContributorDaoDecorator;
 import org.ums.decorator.library.RecordDaoDecorator;
 import org.ums.domain.model.dto.library.ImprintDto;
+import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
 import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.MutableCourse;
@@ -30,9 +31,9 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       "Select MFN, LANGUAGE, TITLE,    SUB_TITLE, GMD, SERIES_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
-          + "   CALL_NO, CLASS_NO, CALL_DATE, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
-          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS, SUBJECTS, NOTES, LAST_MODIFIED "
+          + "   CALL_NO, CLASS_NO, TO_CHAR(CALL_DATE, 'DD-MM-YYYY') CALL_DATE, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
+          + "   DATE_YEAR_OF_PUBLICATION, TO_CHAR(COPY_RIGHT_DATE, 'DD-MM-YYYY') COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
+          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, LAST_MODIFIED "
           + "FROM RECORDS ";
 
   static String UPDATE_ONE =
@@ -47,11 +48,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
           + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
-          + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
+          + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, "
+          + " ?, ?, ?, ?, ?, ?, ?, ?,"
           + " sysdate, sysdate, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
@@ -100,7 +101,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
             .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
             .getDocumentalist(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
-            .getNoteJsonString(), pRecord.getLastUpdatedBy());
+            .getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
 
     return id;
   }
@@ -145,11 +146,13 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setAuthorMark(resultSet.getString("AUTHOR_MARK"));
 
       ImprintDto imprintDto = new ImprintDto();
-      record.setPublisherId(resultSet.getLong("PUBLISHER"));
+      imprintDto.setPublisherId(resultSet.getLong("PUBLISHER"));
       imprintDto.setPlaceOfPublication(resultSet.getString("PLACE_OF_PUBLICATION"));
       imprintDto.setDateOfPublication(resultSet.getString("DATE_YEAR_OF_PUBLICATION"));
       imprintDto.setCopyRightDate(resultSet.getString("COPY_RIGHT_DATE"));
       record.setImprint(imprintDto);
+
+      record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
 
       record.setMaterialType(MaterialType.get(resultSet.getInt("MATERIAL_TYPE")));
       record.setRecordStatus(RecordStatus.get(resultSet.getInt("STATUS")));
@@ -164,6 +167,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
       record.setContributorJsonString(resultSet.getString("CONTRIBUTORS"));
+      record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
       record.setSubjectJsonString(resultSet.getString("SUBJECTS"));
       record.setNoteJsonString(resultSet.getString("NOTES"));
 
