@@ -1266,3 +1266,40 @@ end;
 
 
 //*********************************************************************************************************************
+
+
+//***************************Leave Management System***************************************
+
+
+CREATE TABLE LMS_LEAVE_TYPES(
+ID NUMBER PRIMARY KEY, //LEAVE_TYPE
+LEAVE_NAME VARCHAR2(50 BYTE),
+PERMISSION NUMBER, //100=ALL, 200=OFFICIALS, 300=TEACHERS
+DURATION NUMBER
+);
+
+CREATE TABLE LMS_LEAVE_APPLICATION(
+ID NUMBER PRIMARY KEY, //APPLICATION_ID
+EMP_ID VARCHAR2(6 BYTE),
+LEAVE_TYPE NUMBER
+APPLIED_ON DATE,
+DATE_FROM DATE,
+DATE_TO DATE,
+REASON VARCHAR2(150 BYTE),
+STATUS NUMBER
+);
+
+CREATE TABLE LMS_LEAVE_STATUS(
+ID NUMBER PRIMARY KEY,
+APPLICATION_ID NUMBER
+STATUS NUMBER,
+APPROVED_ON DATE,
+REJECTED_ON,
+APPROVED_BY, // EMPLOYEE_ID
+REJECTED_BY NUMBER, // EMPLOYEE_ID
+COMMENTS VARCHAR2(150 BYTE)
+};
+
+
+
+//**************************************************************************************
