@@ -10,7 +10,6 @@
         background: grey;
     }
 </style>
-
 <ul class="nav nav-tabs ul-edit nav-justified">
     <li class="active"><a data-ng-click="changeNav('personal')" title="Click to open personal tab" data-toggle="tab">Personal</a></li>
     <li><a data-ng-click="changeNav('academic')" title="Click to open academic tab" data-toggle="tab">Academic</a></li>
@@ -19,7 +18,6 @@
     <li><a data-ng-click="changeNav('award')" title="Click to open honor/award tab" data-toggle="tab">Honor/Award</a></li>
     <li><a data-ng-click="changeNav('experience')" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>
 </ul>
-
 <div class="tab-content">
 
     <div data-ng-show="personalTab">
@@ -667,8 +665,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('personal')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('personal')" data-ng-show="showPersonalEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('personal')" data-ng-show="showPersonalCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePersonalSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>
@@ -755,8 +754,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('academic')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('academic')" data-ng-show="showAcademicEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('academic')" data-ng-show="showAcademicCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAcademicSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>
@@ -889,8 +889,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('publication')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('publication')" data-ng-show="showPublicationEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('publication')" data-ng-show="showPublicationCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePublicationSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>
@@ -994,8 +995,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('training')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('training')" data-ng-show="showTrainingEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('training')" data-ng-show="showTrainingCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableTrainingSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>
@@ -1095,8 +1097,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('award')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('award')" data-ng-show="showAwardEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('award')" data-ng-show="showAwardCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAwardSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>
@@ -1198,8 +1201,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('experience')">Edit</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('experience')" data-ng-show="showExperienceEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('experience')" data-ng-show="showExperienceCancelButton">Cancel</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableExperienceSubmitButton">Submit</button>
                     </div>
                 </div>
             </div>

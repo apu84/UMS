@@ -1,111 +1,130 @@
 module ums{
   interface IEmployeeInformation extends ng.IScope {
-    personalTab: boolean;
-    academicTab: boolean;
-    publicationTab: boolean;
-    trainingTab: boolean;
-    awardTab: boolean;
-    experienceTab: boolean;
+      personalTab: boolean;
+      academicTab: boolean;
+      publicationTab: boolean;
+      trainingTab: boolean;
+      awardTab: boolean;
+      experienceTab: boolean;
 
-    showPersonalInputDiv: boolean;
-    showPersonalLabelDiv: boolean;
-    showAcademicInputDiv: boolean;
-    showAcademicLabelDiv: boolean;
-    showPublicationInputDiv: boolean;
-    showPublicationLabelDiv: boolean;
-    showTrainingInputDiv: boolean;
-    showTrainingLabelDiv: boolean;
-    showAwardInputDiv: boolean;
-    showAwardLabelDiv: boolean;
-    showExperienceInputDiv: boolean;
-    showExperienceLabelDiv: boolean;
+      showPersonalInputDiv: boolean;
+      showPersonalLabelDiv: boolean;
+      showAcademicInputDiv: boolean;
+      showAcademicLabelDiv: boolean;
+      showPublicationInputDiv: boolean;
+      showPublicationLabelDiv: boolean;
+      showTrainingInputDiv: boolean;
+      showTrainingLabelDiv: boolean;
+      showAwardInputDiv: boolean;
+      showAwardLabelDiv: boolean;
+      showExperienceInputDiv: boolean;
+      showExperienceLabelDiv: boolean;
 
-    showAcademicAddIcon: boolean;
-    showPublicationAddIcon: boolean;
-    showTrainingAddIcon: boolean;
-    showAwardAddIcon: boolean;
-    showExperienceAddIcon: boolean;
-    showAcademicCrossIcon: boolean;
-    showPublicationCrossIcon: boolean;
-    showTrainingCrossIcon: boolean;
-    showAwardCrossIcon: boolean;
-    showExperienceCrossIcon: boolean;
+      showAcademicAddIcon: boolean;
+      showPublicationAddIcon: boolean;
+      showTrainingAddIcon: boolean;
+      showAwardAddIcon: boolean;
+      showExperienceAddIcon: boolean;
+      showAcademicCrossIcon: boolean;
+      showPublicationCrossIcon: boolean;
+      showTrainingCrossIcon: boolean;
+      showAwardCrossIcon: boolean;
+      showExperienceCrossIcon: boolean;
 
-    showRequireSign: boolean;
-    showPermanentAddressCheckbox: boolean;
+      showRequireSign: boolean;
+      showPermanentAddressCheckbox: boolean;
 
-    disablePresentAddressDropdown: boolean;
-    disablePermanentAddressDropdown: boolean;
-    showSup: boolean;
-    disableSubmitButton: boolean;
+      disablePresentAddressDropdown: boolean;
+      disablePermanentAddressDropdown: boolean;
+      showSup: boolean;
+      disablePersonalSubmitButton: boolean;
+      disableAcademicSubmitButton: boolean;
+      disablePublicationSubmitButton: boolean;
+      disableTrainingSubmitButton: boolean;
+      disableAwardSubmitButton: boolean;
+      disableExperienceSubmitButton: boolean;
 
-    supOptions: string;
-    degreeNameMap: any;
-    genderNameMap: any;
-    religionNameMap: any;
-    nationalityMap: any;
-    bloodGroupMap: any;
-    martialStatusMap: any;
-    publicationTypeMap: any;
-    relationMap: any;
-    countryMap: any;
-    divisionMap: any;
-    districtMap: any;
-    thanaMap: any;
-    data: any;
+      showPersonalEditButton: boolean;
+      showPersonalCancelButton: boolean;
+      showAcademicEditButton: boolean;
+      showAcademicCancelButton: boolean;
+      showPublicationEditButton: boolean;
+      showPublicationCancelButton: boolean;
+      showTrainingEditButton: boolean;
+      showTrainingCancelButton: boolean;
+      showAwardEditButton: boolean;
+      showAwardCancelButton: boolean;
+      showExperienceEditButton: boolean;
+      showExperienceCancelButton: boolean;
 
-    changeNav: Function;
-    edit: Function;
-    addNewRow: Function;
-    deleteRow: Function;
-    testData: Function;
+      supOptions: string;
+      degreeNameMap: any;
+      genderNameMap: any;
+      religionNameMap: any;
+      nationalityMap: any;
+      bloodGroupMap: any;
+      martialStatusMap: any;
+      publicationTypeMap: any;
+      relationMap: any;
+      countryMap: any;
+      divisionMap: any;
+      districtMap: any;
+      thanaMap: any;
+      data: any;
 
-    getPersonalInformation: Function;
-    getAcademicInformation: Function;
-    getPublicationInformation: Function;
-    getTrainingInformation: Function;
-    getAwardInformation: Function;
-    getExperienceInformation: Function;
+      changeNav: Function;
+      edit: Function;
+      cancel: Function;
+      addNewRow: Function;
+      deleteRow: Function;
+      testData: Function;
 
-    submitPersonalForm: Function;
-    submitAcademicForm: Function;
-    submitPublicationForm: Function;
-    submitTrainingForm: Function;
-    submitAwardForm: Function;
-    submitExperienceForm: Function;
+      getPersonalInformation: Function;
+      getAcademicInformation: Function;
+      getPublicationInformation: Function;
+      getTrainingInformation: Function;
+      getAwardInformation: Function;
+      getExperienceInformation: Function;
 
-    sameAsPresentAddress: Function;
-    changePresentAddressDistrict: Function;
-    changePresentAddressThana: Function;
-    changePermanentAddressDistrict: Function;
-    changePermanentAddressThana: Function;
-    disablePresentAddressFields: Function;
-    disablePermanentAddressFields: Function;
+      submitPersonalForm: Function;
+      submitAcademicForm: Function;
+      submitPublicationForm: Function;
+      submitTrainingForm: Function;
+      submitAwardForm: Function;
+      submitExperienceForm: Function;
 
-    fillEmergencyContactAddress: Function;
+      sameAsPresentAddress: Function;
+      changePresentAddressDistrict: Function;
+      changePresentAddressThana: Function;
+      changePermanentAddressDistrict: Function;
+      changePermanentAddressThana: Function;
+      disablePresentAddressFields: Function;
+      disablePermanentAddressFields: Function;
 
-    getCountry: Function;
-    getDivision: Function;
-    getDistrictL: Function;
-    getThana: Function;
-    
-    entry: IEntry;
-    gender: Array<IGender>;
-    maritalStatus: Array<IMaritalStatus>;
-    religions: Array<IReligion>;
-    nationalities: Array<INationality>;
-    degreeNames: Array<IDegreeType>;
-    bloodGroups: Array<IBloodGroup>;
-    publicationTypes: Array<IPublicationType>;
-    relations: Array<IRelation>;
-    countries: Array<ICountry>;
-    divisions: Array<IDivision>;
-    presentAddressDistricts: Array<IDistrict>;
-    permanentAddressDistricts: Array<IDistrict>;
-    allDistricts: Array<IDistrict>;
-    presentAddressThanas: Array<IThana>;
-    permanentAddressThanas: Array<IThana>;
-    allThanas: Array<IThana>;
+      fillEmergencyContactAddress: Function;
+
+      getCountry: Function;
+      getDivision: Function;
+      getDistrictL: Function;
+      getThana: Function;
+
+      entry: IEntry;
+      gender: Array<IGender>;
+      maritalStatus: Array<IMaritalStatus>;
+      religions: Array<IReligion>;
+      nationalities: Array<INationality>;
+      degreeNames: Array<IDegreeType>;
+      bloodGroups: Array<IBloodGroup>;
+      publicationTypes: Array<IPublicationType>;
+      relations: Array<IRelation>;
+      countries: Array<ICountry>;
+      divisions: Array<IDivision>;
+      presentAddressDistricts: Array<IDistrict>;
+      permanentAddressDistricts: Array<IDistrict>;
+      allDistricts: Array<IDistrict>;
+      presentAddressThanas: Array<IThana>;
+      permanentAddressThanas: Array<IThana>;
+      allThanas: Array<IThana>;
   }
 
   export interface IGender {
@@ -159,15 +178,15 @@ module ums{
     name: string;
   }
 
-  export interface IThana{
-    id: string;
-    district_id: string;
-    name: string;
+  export interface IThana {
+      id: string;
+      district_id: string;
+      name: string;
   }
 
-  export interface IRelation{
-    id: number;
-    name: string;
+  export interface IRelation {
+      id: number;
+      name: string;
   }
 
   export interface IEntry {
@@ -193,400 +212,455 @@ module ums{
                 private thanaService: ThanaService,
                 private employeeInformationService: EmployeeInformationService) {
 
-      $scope.entry = {
-       personal: <IPersonalInformationModel> {},
-       academic: new Array<IAcademicInformationModel>(),
-       publication: new Array<IPublicationInformationModel>(),
-       training: new Array<ITrainingInformationModel>(),
-       award: new Array<IAwardInformationModel>(),
-       experience: new Array<IExperienceInformationModel>()
-       };
+        $scope.entry = {
+            personal: <IPersonalInformationModel> {},
+            academic: new Array<IAcademicInformationModel>(),
+            publication: new Array<IPublicationInformationModel>(),
+            training: new Array<ITrainingInformationModel>(),
+            award: new Array<IAwardInformationModel>(),
+            experience: new Array<IExperienceInformationModel>()
+        };
 
-      $scope.data = {
-        supOptions: ""
-      };
+        $scope.data = {
+            supOptions: ""
+        };
 
-      $scope.changeNav = this.changeNav.bind(this);
-      $scope.testData = this.testData.bind(this);
-      $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
-      $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
-      $scope.submitPublicationForm = this.submitPublicationForm.bind(this);
-      $scope.submitTrainingForm = this.submitTrainingForm.bind(this);
-      $scope.submitAwardForm = this.submitAwardForm.bind(this);
-      $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
-      $scope.edit = this.edit.bind(this);
-      $scope.addNewRow = this.addNewRow.bind(this);
-      $scope.deleteRow = this.deleteRow.bind(this);
-      $scope.sameAsPresentAddress = this.sameAsPresentAddress.bind(this);
-      $scope.changePresentAddressDistrict = this.changePresentAddressDistrict.bind(this);
-      $scope.changePresentAddressThana = this.changePresentAddressThana.bind(this);
-      $scope.changePermanentAddressDistrict = this.changePermanentAddressDistrict.bind(this);
-      $scope.changePermanentAddressThana = this.changePermanentAddressThana.bind(this);
-      $scope.disablePresentAddressFields = this.disablePresentAddressFields.bind(this);
-      $scope.disablePermanentAddressFields = this.disablePermanentAddressFields.bind(this);
-      $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
+        $scope.gender = this.registrarConstants.gender;
+        $scope.religions = this.registrarConstants.religionTypes;
+        $scope.nationalities = this.registrarConstants.nationalities;
+        $scope.bloodGroups = this.registrarConstants.bloodGroups;
+        $scope.maritalStatus = this.registrarConstants.maritalStatus;
+        $scope.publicationTypes = this.registrarConstants.publicationTypes;
+        $scope.degreeNames = this.registrarConstants.degreeTypes;
+        $scope.relations = this.registrarConstants.relationTypes;
 
-      this.initializeVariables();
-      console.log("i am in EmployeeInformation.ts");
+        $scope.changeNav = this.changeNav.bind(this);
+        $scope.testData = this.testData.bind(this);
+        $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
+        $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
+        $scope.submitPublicationForm = this.submitPublicationForm.bind(this);
+        $scope.submitTrainingForm = this.submitTrainingForm.bind(this);
+        $scope.submitAwardForm = this.submitAwardForm.bind(this);
+        $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
+        $scope.edit = this.edit.bind(this);
+        $scope.cancel = this.cancel.bind(this);
+        $scope.addNewRow = this.addNewRow.bind(this);
+        $scope.deleteRow = this.deleteRow.bind(this);
+        $scope.sameAsPresentAddress = this.sameAsPresentAddress.bind(this);
+        $scope.changePresentAddressDistrict = this.changePresentAddressDistrict.bind(this);
+        $scope.changePresentAddressThana = this.changePresentAddressThana.bind(this);
+        $scope.changePermanentAddressDistrict = this.changePermanentAddressDistrict.bind(this);
+        $scope.changePermanentAddressThana = this.changePermanentAddressThana.bind(this);
+        $scope.disablePresentAddressFields = this.disablePresentAddressFields.bind(this);
+        $scope.disablePermanentAddressFields = this.disablePermanentAddressFields.bind(this);
+        $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
+
+        this.getCountry();
+        this.getDivision();
+        this.getDistrict();
+        this.getThana();
+        this.initializeVariables();
+        console.log("i am in EmployeeInformation.ts");
     }
 
     private initializeVariables() {
-      this.$scope.disablePresentAddressDropdown = false;
-      this.$scope.disablePermanentAddressDropdown = false;
-      this.$scope.showSup = false;
-      this.$scope.disableSubmitButton = true;
-
-      this.getCountry();
-      this.getDivision();
-      this.getDistrict();
-      this.getThana();
-
-      this.$scope.gender = this.registrarConstants.gender;
-      this.$scope.religions = this.registrarConstants.religionTypes;
-      this.$scope.nationalities = this.registrarConstants.nationalities;
-      this.$scope.bloodGroups = this.registrarConstants.bloodGroups;
-      this.$scope.maritalStatus = this.registrarConstants.maritalStatus;
-      this.$scope.publicationTypes = this.registrarConstants.publicationTypes;
-      this.$scope.degreeNames = this.registrarConstants.degreeTypes;
-      this.$scope.relations = this.registrarConstants.relationTypes;
-
-      this.$scope.entry.personal.gender = this.$scope.gender[0];
-      this.$scope.entry.personal.religion = this.$scope.religions[0];
-      this.$scope.entry.personal.nationality = this.$scope.nationalities[0];
-      this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[0];
-      this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[0];
-      this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
-
-      this.addNewRow("academic");
-      this.addNewRow("publication");
-      this.addNewRow("training");
-      this.addNewRow("award");
-      this.addNewRow("experience");
-
-      this.addDate();
-      this.changeNav("personal");
-      this.createMap();
-      this.getPersonalInformation();
-      // this.getAcademicInformation();
-      // this.getAwardInformation();
-      // this.getPublicationInformation();
-      // this.getExperienceInformation();
-      // this.getTrainingInformation();
-    }
-
-    private createMap(){
-      this.$scope.degreeNameMap = {};
-      this.$scope.genderNameMap = {};
-      this.$scope.religionNameMap = {};
-      this.$scope.nationalityMap = {};
-      this.$scope.bloodGroupMap = {};
-      this.$scope.martialStatusMap = {};
-      this.$scope.publicationTypeMap = {};
-      this.$scope.relationMap = {};
-      this.$scope.countryMap = {};
-      this.$scope.divisionMap = {};
-      this.$scope.districtMap = {};
-      this.$scope.thanaMap = {};
-
-      for(var i = 0; i < this.$scope.degreeNames.length; i++){
-        this.$scope.degreeNameMap[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
-      }
-      for(var i = 0; i < this.$scope.gender.length; i++){
-        this.$scope.genderNameMap[this.$scope.gender[i].id] = this.$scope.gender[i];
-      }
-      for(var i = 0; i < this.$scope.religions.length; i++){
-        this.$scope.religionNameMap[this.$scope.religions[i].name] = this.$scope.religions[i];
-      }
-      for(var i = 0; i < this.$scope.nationalities.length; i++){
-        this.$scope.nationalityMap[this.$scope.nationalities[i].name] = this.$scope.nationalities[i];
-      }
-      for(var i = 0; i < this.$scope.bloodGroups.length; i++){
-        this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].name] = this.$scope.bloodGroups[i];
-      }
-      for(var i = 0; i < this.$scope.maritalStatus.length; i++){
-        this.$scope.martialStatusMap[this.$scope.maritalStatus[i].name] = this.$scope.maritalStatus[i];
-      }
-      for(var i = 0; i < this.$scope.publicationTypes.length; i++){
-        this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
-      }
-      for(var i = 0; i < this.$scope.relations.length; i++){
-        this.$scope.relationMap[this.$scope.relations[i].name] = this.$scope.relations[i];
-      }
-    }
-
-
-    private changeNav(navTitle: string){
-      this.$scope.personalTab = false;
-      this.$scope.academicTab = false;
-      this.$scope.publicationTab = false;
-      this.$scope.trainingTab = false;
-      this.$scope.awardTab = false;
-      this.$scope.experienceTab = false;
-
-      this.$scope.disableSubmitButton = true;
-
-      if(navTitle === ""){
-        this.$scope.personalTab = true;
-      }
-      else if(navTitle === "personal"){
-        this.$scope.personalTab = true;
         this.$scope.showPersonalInputDiv = false;
         this.$scope.showPersonalLabelDiv = true;
         this.$scope.showRequireSign = false;
         this.$scope.showPermanentAddressCheckbox = false;
         this.$scope.showSup = false;
-      }
-      else if(navTitle === "academic"){
-        this.$scope.academicTab = true;
+        this.$scope.showPersonalCancelButton = false;
+        this.$scope.showPersonalEditButton = true;
+
         this.$scope.showAcademicInputDiv = false;
         this.$scope.showAcademicLabelDiv = true;
         this.$scope.showAcademicAddIcon = false;
         this.$scope.showAcademicCrossIcon = false;
         this.$scope.showRequireSign = false;
-      }
-      else if(navTitle === "publication"){
-        this.$scope.publicationTab = true;
+        this.$scope.showAcademicCancelButton = false;
+        this.$scope.showAcademicEditButton = true;
+
         this.$scope.showPublicationInputDiv = false;
         this.$scope.showPublicationLabelDiv = true;
         this.$scope.showPublicationAddIcon = false;
         this.$scope.showPublicationCrossIcon = false;
-      }
-      else if(navTitle === "training"){
-        this.$scope.trainingTab = true;
+        this.$scope.showPublicationCancelButton = false;
+        this.$scope.showPublicationEditButton = true;
+
         this.$scope.showTrainingInputDiv = false;
         this.$scope.showTrainingLabelDiv = true;
         this.$scope.showTrainingAddIcon = false;
         this.$scope.showTrainingCrossIcon = false;
-      }
-      else if(navTitle === "award"){
-        this.$scope.awardTab = true;
+        this.$scope.showTrainingCancelButton = false;
+        this.$scope.showTrainingEditButton = true;
+
         this.$scope.showAwardInputDiv = false;
         this.$scope.showAwardLabelDiv = true;
         this.$scope.showAwardAddIcon = false;
         this.$scope.showAwardCrossIcon = false;
-      }
-      else if(navTitle === "experience"){
-        this.$scope.experienceTab = true;
+        this.$scope.showAwardCancelButton = false;
+        this.$scope.showAwardEditButton = true;
+
         this.$scope.showExperienceInputDiv = false;
         this.$scope.showExperienceLabelDiv = true;
         this.$scope.showExperienceAddIcon = false;
         this.$scope.showExperienceCrossIcon = false;
-      }
+        this.$scope.showExperienceCancelButton = false;
+        this.$scope.showExperienceEditButton = true;
+
+        this.$scope.disablePresentAddressDropdown = false;
+        this.$scope.disablePermanentAddressDropdown = false;
+        this.$scope.showSup = false;
+        this.$scope.disablePersonalSubmitButton = true;
+        this.$scope.disableAcademicSubmitButton = true;
+        this.$scope.disablePublicationSubmitButton = true;
+        this.$scope.disableTrainingSubmitButton = true;
+        this.$scope.disableAwardSubmitButton = true;
+        this.$scope.disableExperienceSubmitButton = true;
+
+        this.$scope.entry.personal.gender = this.$scope.gender[0];
+        console.log("In gend");
+        console.log(this.$scope.entry.personal.gender);
+        this.$scope.entry.personal.religion = this.$scope.religions[0];
+        this.$scope.entry.personal.nationality = this.$scope.nationalities[0];
+        this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[0];
+        this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[0];
+        this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
+
+        this.addNewRow("academic");
+        this.addNewRow("publication");
+        this.addNewRow("training");
+        this.addNewRow("award");
+        this.addNewRow("experience");
+
+        this.addDate();
+        this.changeNav("personal");
+        this.createMap();
+        this.getPersonalInformation();
+        // this.getAcademicInformation();
+        // this.getAwardInformation();
+        // this.getPublicationInformation();
+        // this.getExperienceInformation();
+        // this.getTrainingInformation();
     }
 
-    private testData(){
-      console.log("i am in testData()");
-      this.$scope.entry.personal = <IPersonalInformationModel>{};
-      this.$scope.entry.personal.firstName = "Kawsur";
-      this.$scope.entry.personal.lastName = "Mir Md.";
-      this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
-      this.$scope.entry.personal.motherName = "Mst Hosne Ara";
-      this.$scope.entry.personal.gender = this.$scope.gender[1];
-      this.$scope.entry.personal.birthday = "20/10/1995";
-      this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
-      this.$scope.entry.personal.religion = this.$scope.religions[1];
-      this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
-      this.$scope.entry.personal.spouseName = "";
-      this.$scope.entry.personal.nationalIdNo = "19952641478954758";
-      this.$scope.entry.personal.spouseNationalIdNo = "";
-      this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
-      this.$scope.entry.personal.website = "https://www.kawsur.com";
-      this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
-      this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
-      this.$scope.entry.personal.mobile = "+8801672494863";
-      this.$scope.entry.personal.phone = "none";
-      this.$scope.entry.personal.emergencyContactName = "None";
-      this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
-      this.$scope.entry.personal.emergencyContactPhone = "01898889851";
+    private createMap() {
+        this.$scope.degreeNameMap = {};
+        this.$scope.genderNameMap = {};
+        this.$scope.religionNameMap = {};
+        this.$scope.nationalityMap = {};
+        this.$scope.bloodGroupMap = {};
+        this.$scope.martialStatusMap = {};
+        this.$scope.publicationTypeMap = {};
+        this.$scope.relationMap = {};
+        this.$scope.countryMap = {};
+        this.$scope.divisionMap = {};
+        this.$scope.districtMap = {};
+        this.$scope.thanaMap = {};
 
-      this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
-      this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
-      this.$scope.entry.academic[0].academicPassingYear = "";
-
-      this.$scope.entry.publication[0].publicationTitle = "N/A";
-      this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
-      this.$scope.entry.publication[0].publisherName = "N/A";
-      this.$scope.entry.publication[0].dateOfPublication = "11/11/3010";
-      this.$scope.entry.publication[0].publicationType = this.$scope.publicationTypes[1];
-      this.$scope.entry.publication[0].publicationWebLink = "N/A";
-
-      this.$scope.entry.training[0].trainingInstitution = "ABC";
-      this.$scope.entry.training[0].trainingName = "XYZ";
-      this.$scope.entry.training[0].trainingFrom = "2016";
-      this.$scope.entry.training[0].trainingTo = "2015";
-      this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
-
-      this.$scope.entry.award[0].awardName = "My Award";
-      this.$scope.entry.award[0].awardInstitute = "Really !";
-      this.$scope.entry.award[0].awardedYear = "1990";
-      this.$scope.entry.award[0].awardShortDescription = "Hello! This is My Award, Don't Ask Description :@";
-
-      this.$scope.entry.experience[0].experienceInstitution = "My Award";
-      this.$scope.entry.experience[0].experienceDesignation = "Really !";
-      this.$scope.entry.experience[0].experienceFrom = "6";
-      this.$scope.entry.experience[0].experienceTo = "2010";
-    }
-
-    private submitPersonalForm(){
-      console.log("i am in submitPersonalForm()");
-      this.convertToJson('personal')
-          .then((json: any) => {
-            this.employeeInformationService.savePersonalInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("personal");
-      this.$scope.disableSubmitButton = true;
-    }
-
-    private getPersonalInformation(){
-      console.log("i am in getPersonalInformation()");
-      this.employeeInformationService.getPersonalInformation().then((personalInformation: any) =>{
-        console.log("Employee's Personal Information");
-        console.log(personalInformation);
-        console.log("Personal length");
-        console.log(personalInformation.length);
-        if(personalInformation.length > 0) {
-            this.$scope.entry.personal = personalInformation[0];
-            this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatus];
-            this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
-            this.$scope.entry.personal.religion = this.$scope.religionNameMap[personalInformation[0].religion];
-            this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationality];
-            this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroup];
-            this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelation];
-            this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
-            this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
-            this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
-            this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
-            this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
-            this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
-            this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
-            this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+        for (var i = 0; i < this.$scope.degreeNames.length; i++) {
+            this.$scope.degreeNameMap[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
         }
-      });
-    }
-
-    private submitAcademicForm(){
-      console.log("i am in submitAcademicForm()");
-      this.convertToJson('academic')
-          .then((json: any) => {
-            this.employeeInformationService.saveAcademicInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("academic");
-      this.$scope.disableSubmitButton = true;
-    }
-
-    private getAcademicInformation(){
-      console.log("i am in getAcademicInformation()");
-      this.employeeInformationService.getAcademicInformation().then((academicInformation: any) =>{
-        console.log("Employee's Academic Information");
-        console.log(academicInformation);
-        for(var i = 0; i < academicInformation.length; i++) {
-          this.$scope.entry.academic[i] = academicInformation[i];
-          this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];
+        for (var i = 0; i < this.$scope.gender.length; i++) {
+            this.$scope.genderNameMap[this.$scope.gender[i].id] = this.$scope.gender[i];
         }
-      });
-    }
-
-    private submitPublicationForm(){
-      console.log("i am in submitPublicationForm()");
-      this.convertToJson('publication')
-          .then((json: any) => {
-            this.employeeInformationService.savePublicationInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("publication");
-      this.$scope.disableSubmitButton = true;
-    }
-
-    private getPublicationInformation(){
-      console.log("i am in getPublicationInformation()");
-      this.employeeInformationService.getPublicationInformation().then((publicationInformation: any) =>{
-        console.log("Employee's Publication Information");
-        console.log(publicationInformation);
-        console.log("Publication.length");
-        console.log(publicationInformation.length);
-        for(var i = 0; i < publicationInformation.length; i++)
-        {
-          this.$scope.entry.publication[i] = publicationInformation[i];
-          this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+        for (var i = 0; i < this.$scope.religions.length; i++) {
+            this.$scope.religionNameMap[this.$scope.religions[i].name] = this.$scope.religions[i];
         }
-      });
-    }
-
-    private submitTrainingForm(){
-      console.log("i am in submitTrainingForm()");
-      this.convertToJson('training')
-          .then((json: any) => {
-            this.employeeInformationService.saveTrainingInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("training");
-      this.$scope.disableSubmitButton = true;
-    }
-
-    private getTrainingInformation(){
-      console.log("i am in getTrainingInformation()");
-      this.employeeInformationService.getTrainingInformation().then((trainingInformation: any) =>{
-        console.log("Employee's Training Information");
-        console.log(trainingInformation);
-        for(var i = 0; i < trainingInformation.length; i++)
-        {
-          this.$scope.entry.training[i] = trainingInformation[i];
+        for (var i = 0; i < this.$scope.nationalities.length; i++) {
+            this.$scope.nationalityMap[this.$scope.nationalities[i].name] = this.$scope.nationalities[i];
         }
-      });
-    }
-
-    private submitAwardForm(){
-      console.log("i am in submitAwardForm()");
-      this.convertToJson('award')
-          .then((json: any) => {
-            this.employeeInformationService.saveAwardInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("award");
-      this.$scope.disableSubmitButton = true;
-    }
-
-    private getAwardInformation(){
-      console.log("i am in getAwardInformation()");
-      this.employeeInformationService.getAwardInformation().then((awardInformation: any) =>{
-        console.log("Employee's award Information");
-        console.log(awardInformation);
-        for(var i = 0; i < awardInformation.length; i++)
-        {
-          this.$scope.entry.award[i] = awardInformation[i];
+        for (var i = 0; i < this.$scope.bloodGroups.length; i++) {
+            this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].name] = this.$scope.bloodGroups[i];
         }
-      });
+        for (var i = 0; i < this.$scope.maritalStatus.length; i++) {
+            this.$scope.martialStatusMap[this.$scope.maritalStatus[i].name] = this.$scope.maritalStatus[i];
+        }
+        for (var i = 0; i < this.$scope.publicationTypes.length; i++) {
+            this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
+        }
+        for (var i = 0; i < this.$scope.relations.length; i++) {
+            this.$scope.relationMap[this.$scope.relations[i].name] = this.$scope.relations[i];
+        }
     }
 
-    private submitExperienceForm(){
-      console.log("i am in submitExperienceForm()");
-      this.convertToJson('experience')
-          .then((json: any) => {
-            this.employeeInformationService.saveExperienceInformation(json)
-                .then((message: any) => {
-                  console.log("This is message");
-                  console.log(message);
-                });
-          });
-      this.changeNav("experience");
-      this.$scope.disableSubmitButton = true;
+
+    private changeNav(navTitle: string) {
+        this.$scope.personalTab = false;
+        this.$scope.academicTab = false;
+        this.$scope.publicationTab = false;
+        this.$scope.trainingTab = false;
+        this.$scope.awardTab = false;
+        this.$scope.experienceTab = false;
+
+        if (navTitle === "") {
+            this.$scope.personalTab = true;
+        }
+        else if (navTitle === "personal") {
+            this.$scope.personalTab = true;
+        }
+        else if (navTitle === "academic") {
+            this.$scope.academicTab = true;
+
+        }
+        else if (navTitle === "publication") {
+            this.$scope.publicationTab = true;
+        }
+        else if (navTitle === "training") {
+            this.$scope.trainingTab = true;
+        }
+        else if (navTitle === "award") {
+            this.$scope.awardTab = true;
+        }
+        else if (navTitle === "experience") {
+            this.$scope.experienceTab = true;
+        }
+    }
+
+    private testData() {
+        console.log("i am in testData()");
+        this.$scope.entry.personal = <IPersonalInformationModel>{};
+        this.$scope.entry.personal.firstName = "Kawsur";
+        this.$scope.entry.personal.lastName = "Mir Md.";
+        this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
+        this.$scope.entry.personal.motherName = "Mst Hosne Ara";
+        this.$scope.entry.personal.gender = this.$scope.gender[1];
+        this.$scope.entry.personal.birthday = "20/10/1995";
+        this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
+        this.$scope.entry.personal.religion = this.$scope.religions[1];
+        this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
+        this.$scope.entry.personal.spouseName = "";
+        this.$scope.entry.personal.nationalIdNo = "19952641478954758";
+        this.$scope.entry.personal.spouseNationalIdNo = "";
+        this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
+        this.$scope.entry.personal.website = "https://www.kawsur.com";
+        this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
+        this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
+        this.$scope.entry.personal.mobile = "+8801672494863";
+        this.$scope.entry.personal.phone = "none";
+        this.$scope.entry.personal.emergencyContactName = "None";
+        this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
+        this.$scope.entry.personal.emergencyContactPhone = "01898889851";
+
+        this.$scope.entry.academic[0].academicDegreeName.name = "Bachelor";
+        this.$scope.entry.academic[0].academicInstitution = "American International University-Bangladesh";
+        this.$scope.entry.academic[0].academicPassingYear = "";
+
+        this.$scope.entry.publication[0].publicationTitle = "N/A";
+        this.$scope.entry.publication[0].publicationInterestGenre = "N/A";
+        this.$scope.entry.publication[0].publisherName = "N/A";
+        this.$scope.entry.publication[0].dateOfPublication = "11/11/3010";
+        this.$scope.entry.publication[0].publicationType = this.$scope.publicationTypes[1];
+        this.$scope.entry.publication[0].publicationWebLink = "N/A";
+
+        this.$scope.entry.training[0].trainingInstitution = "ABC";
+        this.$scope.entry.training[0].trainingName = "XYZ";
+        this.$scope.entry.training[0].trainingFrom = "2016";
+        this.$scope.entry.training[0].trainingTo = "2015";
+        this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
+
+        this.$scope.entry.award[0].awardName = "My Award";
+        this.$scope.entry.award[0].awardInstitute = "Really !";
+        this.$scope.entry.award[0].awardedYear = "1990";
+        this.$scope.entry.award[0].awardShortDescription = "Hello! This is My Award, Don't Ask Description :@";
+
+        this.$scope.entry.experience[0].experienceInstitution = "My Award";
+        this.$scope.entry.experience[0].experienceDesignation = "Really !";
+        this.$scope.entry.experience[0].experienceFrom = "6";
+        this.$scope.entry.experience[0].experienceTo = "2010";
+    }
+
+    private submitPersonalForm() {
+        console.log("i am in submitPersonalForm()");
+        this.convertToJson('personal')
+            .then((json: any) => {
+                this.employeeInformationService.savePersonalInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.changeNav("personal");
+        this.$scope.disablePersonalSubmitButton = true;
+        this.$scope.showPersonalInputDiv = false;
+        this.$scope.showPersonalLabelDiv = true;
+        this.$scope.showRequireSign = false;
+        this.$scope.showPermanentAddressCheckbox = false;
+        this.$scope.showSup = false;
+        this.$scope.showPersonalCancelButton = false;
+        this.$scope.showPersonalEditButton = true;
+    }
+
+    private getPersonalInformation() {
+        console.log("i am in getPersonalInformation()");
+        this.employeeInformationService.getPersonalInformation().then((personalInformation: any) => {
+            console.log("Employee's Personal Information");
+            console.log(personalInformation);
+            console.log("Personal length");
+            console.log(personalInformation.length);
+            if (personalInformation.length > 0) {
+                this.$scope.entry.personal = personalInformation[0];
+                this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatus];
+                this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
+                this.$scope.entry.personal.religion = this.$scope.religionNameMap[personalInformation[0].religion];
+                this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationality];
+                this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroup];
+                this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelation];
+                this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
+                this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
+                this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
+                this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
+                this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
+                this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
+                this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
+                this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+            }
+
+        });
+    }
+
+    private submitAcademicForm() {
+        console.log("i am in submitAcademicForm()");
+        this.convertToJson('academic')
+            .then((json: any) => {
+                this.employeeInformationService.saveAcademicInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.$scope.disableAcademicSubmitButton = true;
+        this.$scope.showAcademicInputDiv = false;
+        this.$scope.showAcademicLabelDiv = true;
+        this.$scope.showAcademicAddIcon = false;
+        this.$scope.showAcademicCrossIcon = false;
+        this.$scope.showRequireSign = false;
+        this.$scope.showAcademicCancelButton = false;
+        this.$scope.showAcademicEditButton = true;
+    }
+
+    private getAcademicInformation() {
+        console.log("i am in getAcademicInformation()");
+        this.employeeInformationService.getAcademicInformation().then((academicInformation: any) => {
+            console.log("Employee's Academic Information");
+            console.log(academicInformation);
+            for (var i = 0; i < academicInformation.length; i++) {
+                this.$scope.entry.academic[i] = academicInformation[i];
+                this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];
+            }
+        });
+    }
+
+    private submitPublicationForm() {
+        console.log("i am in submitPublicationForm()");
+        this.convertToJson('publication')
+            .then((json: any) => {
+                this.employeeInformationService.savePublicationInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.$scope.disablePublicationSubmitButton = true;
+        this.$scope.showPublicationInputDiv = false;
+        this.$scope.showPublicationLabelDiv = true;
+        this.$scope.showPublicationAddIcon = false;
+        this.$scope.showPublicationCrossIcon = false;
+        this.$scope.showPublicationCancelButton = false;
+        this.$scope.showPublicationEditButton = true;
+    }
+
+    private getPublicationInformation() {
+        console.log("i am in getPublicationInformation()");
+        this.employeeInformationService.getPublicationInformation().then((publicationInformation: any) => {
+            console.log("Employee's Publication Information");
+            console.log(publicationInformation);
+            console.log("Publication.length");
+            console.log(publicationInformation.length);
+            for (var i = 0; i < publicationInformation.length; i++) {
+                this.$scope.entry.publication[i] = publicationInformation[i];
+                this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+            }
+        });
+    }
+
+    private submitTrainingForm() {
+        console.log("i am in submitTrainingForm()");
+        this.convertToJson('training')
+            .then((json: any) => {
+                this.employeeInformationService.saveTrainingInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.$scope.disableTrainingSubmitButton = true;
+        this.$scope.showTrainingInputDiv = false;
+        this.$scope.showTrainingLabelDiv = true;
+        this.$scope.showTrainingAddIcon = false;
+        this.$scope.showTrainingCrossIcon = false;
+        this.$scope.showTrainingCancelButton = false;
+        this.$scope.showTrainingEditButton = true;
+    }
+
+    private getTrainingInformation() {
+        console.log("i am in getTrainingInformation()");
+        this.employeeInformationService.getTrainingInformation().then((trainingInformation: any) => {
+            console.log("Employee's Training Information");
+            console.log(trainingInformation);
+            for (var i = 0; i < trainingInformation.length; i++) {
+                this.$scope.entry.training[i] = trainingInformation[i];
+            }
+        });
+    }
+
+    private submitAwardForm() {
+        console.log("i am in submitAwardForm()");
+        this.convertToJson('award')
+            .then((json: any) => {
+                this.employeeInformationService.saveAwardInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.$scope.disableAwardSubmitButton = true;
+        this.$scope.showAwardInputDiv = false;
+        this.$scope.showAwardLabelDiv = true;
+        this.$scope.showAwardAddIcon = false;
+        this.$scope.showAwardCrossIcon = false;
+        this.$scope.showAwardCancelButton = false;
+        this.$scope.showAwardEditButton = true;
+    }
+
+    private getAwardInformation() {
+        console.log("i am in getAwardInformation()");
+        this.employeeInformationService.getAwardInformation().then((awardInformation: any) => {
+            console.log("Employee's award Information");
+            console.log(awardInformation);
+            for (var i = 0; i < awardInformation.length; i++) {
+                this.$scope.entry.award[i] = awardInformation[i];
+            }
+        });
+    }
+
+    private submitExperienceForm() {
+        console.log("i am in submitExperienceForm()");
+        this.convertToJson('experience')
+            .then((json: any) => {
+                this.employeeInformationService.saveExperienceInformation(json)
+                    .then((message: any) => {
+                        console.log("This is message");
+                        console.log(message);
+                    });
+            });
+        this.$scope.disableExperienceSubmitButton = true;
+        this.$scope.showExperienceInputDiv = false;
+        this.$scope.showExperienceLabelDiv = true;
+        this.$scope.showExperienceAddIcon = false;
+        this.$scope.showExperienceCrossIcon = false;
+        this.$scope.showExperienceCancelButton = false;
+        this.$scope.showExperienceEditButton = true;
     }
 
     private getExperienceInformation(){
@@ -601,53 +675,137 @@ module ums{
       });
     }
 
-    private edit(formName: string){
-      console.log("i am in edit()");
-      this.$scope.disableSubmitButton = false;
-      if(formName === "personal") {
-        this.$scope.showPersonalInputDiv = true;
-        this.$scope.showPersonalLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showPermanentAddressCheckbox = true;
-        this.$scope.showSup = true;
-      }
-      else if(formName === "academic") {
-        this.$scope.showAcademicInputDiv = true;
-        this.$scope.showAcademicLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showAcademicAddIcon = true;
-        this.$scope.showAcademicCrossIcon = true;
-        this.$scope.showRequireSign = true;
-      }
-      else if(formName === "publication") {
-        this.$scope.showPublicationInputDiv = true;
-        this.$scope.showPublicationLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showPublicationAddIcon = true;
-        this.$scope.showPublicationCrossIcon = true;
-      }
-      else if(formName === "training") {
-        this.$scope.showTrainingInputDiv = true;
-        this.$scope.showTrainingLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showTrainingAddIcon = true;
-        this.$scope.showTrainingCrossIcon = true;
-      }
-      else if(formName === "award") {
-        this.$scope.showAwardInputDiv = true;
-        this.$scope.showAwardLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showAwardAddIcon = true;
-        this.$scope.showAwardCrossIcon = true;
-      }
-      else if(formName === "experience") {
-        this.$scope.showExperienceInputDiv = true;
-        this.$scope.showExperienceLabelDiv = false;
-        this.$scope.showRequireSign = true;
-        this.$scope.showExperienceAddIcon = true;
-        this.$scope.showExperienceCrossIcon = true;
-      }
+    private edit(formName: string) {
+        console.log("i am in edit()");
+
+        if (formName === "personal") {
+            this.$scope.showPersonalInputDiv = true;
+            this.$scope.showPersonalLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showPermanentAddressCheckbox = true;
+            this.$scope.showSup = true;
+            this.$scope.disablePersonalSubmitButton = false;
+            this.$scope.showPersonalCancelButton = true;
+            this.$scope.showPersonalEditButton = false;
+        }
+        else if (formName === "academic") {
+            this.$scope.showAcademicInputDiv = true;
+            this.$scope.showAcademicLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showAcademicAddIcon = true;
+            this.$scope.showAcademicCrossIcon = true;
+            this.$scope.showRequireSign = true;
+            this.$scope.disableAcademicSubmitButton = false;
+            this.$scope.showAcademicCancelButton = true;
+            this.$scope.showAcademicEditButton = false;
+        }
+        else if (formName === "publication") {
+            this.$scope.showPublicationInputDiv = true;
+            this.$scope.showPublicationLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showPublicationAddIcon = true;
+            this.$scope.showPublicationCrossIcon = true;
+            this.$scope.disablePublicationSubmitButton = false;
+            this.$scope.showPublicationCancelButton = true;
+            this.$scope.showPublicationEditButton = false;
+        }
+        else if (formName === "training") {
+            this.$scope.showTrainingInputDiv = true;
+            this.$scope.showTrainingLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showTrainingAddIcon = true;
+            this.$scope.showTrainingCrossIcon = true;
+            this.$scope.disableTrainingSubmitButton = false;
+            this.$scope.showTrainingCancelButton = true;
+            this.$scope.showTrainingEditButton = false;
+        }
+        else if (formName === "award") {
+            this.$scope.showAwardInputDiv = true;
+            this.$scope.showAwardLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showAwardAddIcon = true;
+            this.$scope.showAwardCrossIcon = true;
+            this.$scope.disableAwardSubmitButton = false;
+            this.$scope.showAwardCancelButton = true;
+            this.$scope.showAwardEditButton = false;
+        }
+        else if (formName === "experience") {
+            this.$scope.showExperienceInputDiv = true;
+            this.$scope.showExperienceLabelDiv = false;
+            this.$scope.showRequireSign = true;
+            this.$scope.showExperienceAddIcon = true;
+            this.$scope.showExperienceCrossIcon = true;
+            this.$scope.disableExperienceSubmitButton = false;
+            this.$scope.showExperienceCancelButton = true;
+            this.$scope.showExperienceEditButton = false;
+        }
     }
+
+      private cancel(formName: string) {
+          console.log("i am in cancel()");
+
+          if (formName === "personal") {
+              this.$scope.showPersonalInputDiv = false;
+              this.$scope.showPersonalLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showPermanentAddressCheckbox = false;
+              this.$scope.showSup = false;
+              this.$scope.disablePersonalSubmitButton = true;
+              this.$scope.showPersonalCancelButton = false;
+              this.$scope.showPersonalEditButton = true;
+          }
+          else if (formName === "academic") {
+              this.$scope.showAcademicInputDiv = false;
+              this.$scope.showAcademicLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showAcademicAddIcon = false;
+              this.$scope.showAcademicCrossIcon = false;
+              this.$scope.showRequireSign = false;
+              this.$scope.disableAcademicSubmitButton = true;
+              this.$scope.showAcademicCancelButton = false;
+              this.$scope.showAcademicEditButton = true;
+          }
+          else if (formName === "publication") {
+              this.$scope.showPublicationInputDiv = false;
+              this.$scope.showPublicationLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showPublicationAddIcon = false;
+              this.$scope.showPublicationCrossIcon = false;
+              this.$scope.disablePublicationSubmitButton = true;
+              this.$scope.showPublicationCancelButton = false;
+              this.$scope.showPublicationEditButton = true;
+          }
+          else if (formName === "training") {
+              this.$scope.showTrainingInputDiv = false;
+              this.$scope.showTrainingLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showTrainingAddIcon = false;
+              this.$scope.showTrainingCrossIcon = false;
+              this.$scope.disableTrainingSubmitButton = true;
+              this.$scope.showTrainingCancelButton = false;
+              this.$scope.showTrainingEditButton = true;
+          }
+          else if (formName === "award") {
+              this.$scope.showAwardInputDiv = false;
+              this.$scope.showAwardLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showAwardAddIcon = false;
+              this.$scope.showAwardCrossIcon = false;
+              this.$scope.disableAwardSubmitButton = true;
+              this.$scope.showAwardCancelButton = false;
+              this.$scope.showAwardEditButton = true;
+          }
+          else if (formName === "experience") {
+              this.$scope.showExperienceInputDiv = false;
+              this.$scope.showExperienceLabelDiv = true;
+              this.$scope.showRequireSign = false;
+              this.$scope.showExperienceAddIcon = false;
+              this.$scope.showExperienceCrossIcon = false;
+              this.$scope.disableExperienceSubmitButton = true;
+              this.$scope.showExperienceCancelButton = false;
+              this.$scope.showExperienceEditButton = true;
+          }
+      }
 
     private addNewRow(divName: string){
       console.log("i am in addNewRow()");
@@ -696,7 +854,6 @@ module ums{
       else if(divName === 'experience'){
         this.$scope.entry.experience.splice(index, 1);
       }
-
     }
 
     public convertToJson(convertThis: string): ng.IPromise<any>{

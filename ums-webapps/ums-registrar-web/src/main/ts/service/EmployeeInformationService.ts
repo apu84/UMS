@@ -107,7 +107,7 @@ module ums {
         }
 
         public getAcademicInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/academic/getAcademicInformation/";
+            var url= "registrar/employee/academic/getAcademicInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -120,7 +120,7 @@ module ums {
         }
 
         public getPublicationInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/publication/getPublicationInformation/";
+            var url= "registrar/employee/publication/getPublicationInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -133,7 +133,7 @@ module ums {
         }
 
         public getTrainingInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/training/getTrainingInformation/";
+            var url= "registrar/employee/training/getTrainingInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -146,7 +146,7 @@ module ums {
         }
 
         public getAwardInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/award/getAwardInformation/";
+            var url= "registrar/employee/award/getAwardInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -159,7 +159,7 @@ module ums {
         }
 
         public getExperienceInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/experience/getExperienceInformation/";
+            var url= "registrar/employee/experience/getExperienceInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
