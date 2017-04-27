@@ -10,6 +10,7 @@
         background: grey;
     }
 </style>
+
 <ul class="nav nav-tabs ul-edit nav-justified">
     <li class="active"><a data-ng-click="changeNav('personal')" title="Click to open personal tab" data-toggle="tab">Personal</a></li>
     <li><a data-ng-click="changeNav('academic')" title="Click to open academic tab" data-toggle="tab">Academic</a></li>
@@ -371,7 +372,7 @@
                                 id="iPresentAddressCountry"
                                 data-ng-model="entry.personal.presentAddressCountry"
                                 data-ng-options="country.name for country in countries"
-                                data-ng-change="disablePresentAddressFields()"
+                                data-ng-change="changePresentAddressFields()"
                                 class="form-control" required>
                         </select>
                     </div>
@@ -505,7 +506,7 @@
                                 id="iPermanentAddressCountry"
                                 data-ng-model="entry.personal.permanentAddressCountry"
                                 data-ng-options="country.name for country in countries"
-                                data-ng-change="disablePermanentAddressFields()"
+                                data-ng-change="changePermanentAddressFields()"
                                 class="form-control" required>
                         </select>
                     </div>
@@ -665,8 +666,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('personal')" data-ng-show="showPersonalEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('personal')" data-ng-show="showPersonalCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePersonalSubmitButton">Submit</button>
                     </div>
                 </div>
@@ -754,8 +755,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('academic')" data-ng-show="showAcademicEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('academic')" data-ng-show="showAcademicCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')" data-ng-show="showAcademicEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('academic')" data-ng-show="showAcademicCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAcademicSubmitButton">Submit</button>
                     </div>
                 </div>
@@ -889,8 +890,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('publication')" data-ng-show="showPublicationEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('publication')" data-ng-show="showPublicationCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')" data-ng-show="showPublicationEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('publication')" data-ng-show="showPublicationCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePublicationSubmitButton">Submit</button>
                     </div>
                 </div>
@@ -995,8 +996,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('training')" data-ng-show="showTrainingEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('training')" data-ng-show="showTrainingCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('training')" data-ng-show="showTrainingEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')" data-ng-show="showTrainingCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableTrainingSubmitButton">Submit</button>
                     </div>
                 </div>
@@ -1035,24 +1036,6 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
-                        <div class="col-md-8" data-ng-show="showAwardInputDiv">
-                            <input type="text"
-                                   name="nAwardInstitute{{$index}}"
-                                   id="iAwardInstitute{{$index}}"
-                                   data-ng-model="award.awardInstitute"
-                                   placeholder="Institution"
-                                   class="form-control">
-                        </div>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showAwardLabelDiv">
-                            <label class="control-label">{{award.awardInstitute}}</label>
-                        </div>
-                    </div>
-                </div>
-                <br />
-
-                <div class="row">
-                    <div class="col-md-6">
                         <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span class='require' data-ng-show="showRequireSign">*</span></label>
                         <div class="col-md-8" data-ng-show="showAwardInputDiv">
                             <input type="text"
@@ -1068,15 +1051,34 @@
                             <label class="control-label">{{award.awardedYear}}</label>
                         </div>
                     </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
+                        <div class="col-md-8" data-ng-show="showAwardInputDiv">
+                            <input type="text"
+                                   name="nAwardInstitute{{$index}}"
+                                   id="iAwardInstitute{{$index}}"
+                                   data-ng-model="award.awardInstitute"
+                                   placeholder="Institution"
+                                   class="form-control">
+                        </div>
+                        <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showAwardLabelDiv">
+                            <label class="control-label">{{award.awardInstitute}}</label>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" for="iShortDescription{{$index}}">Short Description</label>
                         <div class="col-md-8" data-ng-show="showAwardInputDiv">
-                            <input type="text"
-                                   name="nShortDescription{{$index}}"
-                                   id="iShortDescription{{$index}}"
-                                   data-ng-model="award.awardShortDescription"
-                                   placeholder="Short Description"
-                                   class="form-control">
+                            <textarea type="text"
+                                      name="nShortDescription{{$index}}"
+                                      id="iShortDescription{{$index}}"
+                                      data-ng-model="award.awardShortDescription"
+                                      placeholder="Short Description"
+                                      class="form-control">
+                            </textarea>
                         </div>
                         <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showAwardLabelDiv">
                             <label class="control-label">{{award.awardShortDescription}}</label>
@@ -1097,8 +1099,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('award')" data-ng-show="showAwardEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('award')" data-ng-show="showAwardCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('award')" data-ng-show="showAwardEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')" data-ng-show="showAwardCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAwardSubmitButton">Submit</button>
                     </div>
                 </div>
@@ -1201,8 +1203,8 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="edit('experience')" data-ng-show="showExperienceEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="cancel('experience')" data-ng-show="showExperienceCancelButton">Cancel</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton">Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton">Cancel</button>
                         <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableExperienceSubmitButton">Submit</button>
                     </div>
                 </div>
