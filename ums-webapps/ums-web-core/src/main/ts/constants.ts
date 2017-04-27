@@ -685,7 +685,7 @@ module ums {
                     {id: 4, name: "Presentation"},
                     {id: 5, name: "Others"}
                 ],
-                maritalStatus: [
+                maritalStatuses: [
                     {id: 0, name: "Select Marital Status"},
                     {id: 1, name: "Single"},
                     {id: 2, name: "Married"},
