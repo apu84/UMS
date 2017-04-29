@@ -44,8 +44,6 @@ public class ProcessResultImpl implements ProcessResult {
   private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
   private final static String PUBLISH_RESULT = "publish_result";
   private final static Integer UPDATE_NOTIFICATION_AFTER = 20;
-  private final static Integer MAX_NO_FAILED_COURSE = 4;
-  private final static Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
 
   private Map<String, Double> GPA_MAP = null;
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();

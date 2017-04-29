@@ -1,5 +1,14 @@
 package org.ums.services.academic;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.ApplicationCCI;
@@ -10,16 +19,6 @@ import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.persistent.model.PersistentApplicationCCI;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * Created by My Pc on 7/18/2016.
@@ -43,20 +42,11 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
     ParameterSetting parameterSetting =
         mParameterSettingManager.getByParameterAndSemesterId("application_cci", pStudent.getSemesterId());
     Timestamp currentTimestamp = new Timestamp(date.getTime());
-    DateFormat startDateFormatter;
-    startDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    DateFormat endDateFormatter;
-    endDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    Date startDate = null;
-    Date endDate = null;
-    try {
-      startDate = startDateFormatter.parse(parameterSetting.getStartDate());
-      endDate = endDateFormatter.parse(parameterSetting.getEndDate());
-    } catch(ParseException pe) {
-      throw new RuntimeException(pe);
-    }
-    Timestamp startDateTimeStamp = new Timestamp(startDate.getTime());
-    Timestamp endDateTimeStamp = new Timestamp(endDate.getTime());
+
+    Date startDate, endDate;
+
+    startDate = parameterSetting.getStartDate();
+    endDate = parameterSetting.getEndDate();
 
     List<ApplicationCCI> allApps = mAppManager.getAll();
     List<ApplicationCCI> savedApps = new ArrayList<>();
@@ -70,7 +60,7 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
       }
       return pApplicationCCIs;
     }
-    if(currentTimestamp.before(startDateTimeStamp) && currentTimestamp.after(endDate)) {
+    if(currentTimestamp.before(startDate) && currentTimestamp.after(endDate)) {
       for(PersistentApplicationCCI appsIteration : pApplicationCCIs) {
         appsIteration.setMessage("timeError");
         break;

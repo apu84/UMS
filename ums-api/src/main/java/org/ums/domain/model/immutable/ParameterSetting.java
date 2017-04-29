@@ -6,19 +6,17 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableParameterSetting;
 
 import java.io.Serializable;
+import java.util.Date;
 
-/**
- * Created by My Pc on 3/14/2016.
- */
 public interface ParameterSetting extends Serializable, LastModifier, EditType<MutableParameterSetting>,
     Identifier<Long> {
+  Integer getSemesterId();
+
   Semester getSemester();
 
   Parameter getParameter();
 
-  String getStartDate();
+  Date getStartDate();
 
-  String getEndDate();
-
-  String getLastModified();
+  Date getEndDate();
 }
