@@ -29,4 +29,6 @@ public interface UGRegistrationResultManager extends
   List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId);
 
   List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId);
+
+  List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester);
 }

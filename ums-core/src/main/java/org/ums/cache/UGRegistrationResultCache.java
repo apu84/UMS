@@ -7,7 +7,6 @@ import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.UGRegistrationResultManager;
-import org.ums.util.CacheUtil;
 
 public class UGRegistrationResultCache extends
     ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager> implements
@@ -75,5 +74,10 @@ public class UGRegistrationResultCache extends
   @Override
   public List<UGRegistrationResult> getCCI(int pSemesterId, String pExamDate) {
     return getManager().getCCI(pSemesterId, pExamDate);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    return getManager().getResults(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

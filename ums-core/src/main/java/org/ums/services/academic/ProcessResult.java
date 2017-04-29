@@ -15,6 +15,8 @@ public interface ProcessResult {
 
   void process(final int pProgramId, final int pSemesterId);
 
+  void process(final int pProgramId, final int pSemesterId, final int pYear, final int pSemester);
+
   GenericResponse<TaskStatus> status(int pProgramId, final int pSemesterId);
 
   void publishResult(final int pProgramId, final int pSemesterId);

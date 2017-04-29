@@ -3,11 +3,8 @@ package org.ums.services.academic;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -61,6 +58,27 @@ public class ProcessResultImpl implements ProcessResult {
     processResult(pProgramId, pSemesterId);
   }
 
+  @Override
+  public void process(int pProgramId, int pSemesterId, int pYear, int pSemester) {
+    processResult(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
+  @Async
+  private void processResult(int pProgramId, int pSemesterId, int pYear, int pSemester) {
+    List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId, pYear, pSemester);
+
+    MutableTaskStatus processResultStatus = new PersistentTaskStatus();
+    processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
+    processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
+    processResultStatus.create();
+
+    List<StudentRecord> studentRecords =
+        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId, pYear, pSemester);
+
+    processResult(pProgramId, pSemesterId,
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
+  }
+
   @Async
   private void processResult(int pProgramId, int pSemesterId) {
     List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
@@ -70,18 +88,19 @@ public class ProcessResultImpl implements ProcessResult {
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
     processResultStatus.create();
 
+    List<StudentRecord> studentRecords =
+        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
     processResult(pProgramId, pSemesterId,
-        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
   }
 
   private void processResult(int pProgramId, int pSemesterId,
-      Map<String, List<UGRegistrationResult>> studentCourseGradeMap) {
+      Map<String, List<UGRegistrationResult>> studentCourseGradeMap,
+      List<StudentRecord> studentRecords) {
     String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
 
-    List<StudentRecord> studentRecords =
-        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
     Map<String, StudentRecord> studentRecordMap = studentRecords.stream()
         .collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
 
