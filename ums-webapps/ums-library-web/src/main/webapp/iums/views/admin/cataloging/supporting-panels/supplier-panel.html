@@ -73,8 +73,6 @@
                                                 <tbody>
                                                 <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" pagination-id="supplierPaginator"
                                                     data-ng-mouseover="showActionPanel('actionPanel',$index)" data-ng-mouseleave="hideActionPanel('actionPanel',$index)">
-
-
                                                     <td style="text-align: left;">{{ record.name }}
                                                     <div style="float: right;display: none;" id="actionPanel{{$index}}">
                                                         <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>

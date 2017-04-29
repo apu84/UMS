@@ -88,16 +88,18 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     return builder.build();
   }
 
-  public JsonObject searchRecord(String pQuery, int page, final UriInfo pUriInfo) {
-    List<RecordDocument> recordDocuments = mRecordRepository.findByCustomQuery(pQuery, new PageRequest(0, 10));
+  public JsonObject searchRecord(String pQuery, int pPage, int pItemPerPage, final UriInfo pUriInfo) {
+    List<RecordDocument> recordDocuments =
+        mRecordRepository.findByCustomQuery(pQuery, new PageRequest(pPage, pItemPerPage));
     List<Record> records = new ArrayList<>();
     for(RecordDocument document : recordDocuments) {
       records.add(mManager.get(Long.valueOf(document.getId())));
     }
-    return convertToJson(records, pUriInfo);
+
+    return convertToJson(records, mRecordRepository.getTotalCount(pQuery), pUriInfo);
   }
 
-  private JsonObject convertToJson(List<Record> records, UriInfo pUriInfo) {
+  private JsonObject convertToJson(List<Record> records, long totalCount, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -106,6 +108,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       children.add(toJson(record, pUriInfo, localCache));
     }
     object.add("entries", children);
+    object.add("total", totalCount);
     localCache.invalidate();
     return object.build();
   }

@@ -72,6 +72,8 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   PhysicalDescriptionDto getPhysicalDescription();
 
+  String getPhysicalDescriptionString();
+
   MaterialType getMaterialType();
 
   RecordStatus getRecordStatus();

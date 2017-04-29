@@ -1,7 +1,13 @@
 package org.ums.domain.model.dto.library;
 
 import com.google.gson.Gson;
+import org.springframework.context.ApplicationContext;
 import org.ums.domain.model.immutable.library.Publisher;
+import org.ums.manager.CourseGroupManager;
+import org.ums.manager.CourseManager;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.SyllabusManager;
+import org.ums.manager.library.PublisherManager;
 
 import java.io.Serializable;
 
@@ -10,6 +16,7 @@ import java.io.Serializable;
  */
 public class ImprintDto implements Serializable {
   private Publisher publisher;
+  private Long publisherId;
   private String placeOfPublication;
   private String dateOfPublication;
   private String copyRightDate;
@@ -44,6 +51,14 @@ public class ImprintDto implements Serializable {
 
   public void setCopyRightDate(String copyRightDate) {
     this.copyRightDate = copyRightDate;
+  }
+
+  public Long getPublisherId() {
+    return publisherId;
+  }
+
+  public void setPublisherId(Long publisherId) {
+    this.publisherId = publisherId;
   }
 
   public String toString() {

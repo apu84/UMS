@@ -23,18 +23,23 @@ module ums {
           element.select2('destroy');
         }
 
+
        var pHolder = attributes['placeholder'];
        if(pHolder=="") pHolder =  "Select an option";
         if(attributes['page']=="true")
         {
           var dataSet= $scope.dataSet;
+          var a= $("#"+attributes['parent']);
           this.$timeout(() => {
+            console.log(attributes['parent']);
             element.select2({
               allowClear:true,
               placeholder: pHolder,
-
+              dropdownParent: a,
               minimumInputLength: 2,
               query: function (options) {
+
+                console.log("-----");
                 var pageSize = 50;
                 var startIndex = (options.page - 1) * pageSize;
                 var endIndex = startIndex + pageSize;
@@ -59,6 +64,7 @@ module ums {
               }
             });
             this.elementInitialized = true;
+
           });
         }
         else {

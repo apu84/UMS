@@ -21,26 +21,29 @@
         <table class="table table-bordered table-striped table-condensed cf">
             <thead class="cf">
             <tr style="background-color: #EEE">
-                <th>SL</th>
-                <th>Copy No</th>
+                <th style="text-align: center">SL</th>
+                <th style="text-align: center">Copy No</th>
                 <th class="numeric">Accession No</th>
                 <th class="numeric">Accession Date</th>
-                <th class="numeric">Purchase Price</th>
+                <th class="numeric" style="text-align: center">Purchase Price</th>
                 <th class="numeric">Supplier</th>
-                <th class="numeric">Status</th>
-                <th class="numeric">Action</th>
+                <th class="numeric" style="text-align: center">Status</th>
+                <th class="numeric" style="text-align: center">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="item in itemList">
-                <td data-title="SL">{{$index+1}}</td>
-                <td data-title="Copy No">{{item.copyNumber}}</td>
+                <td data-title="SL" style="text-align: center">{{$index+1}}</td>
+                <td data-title="Copy No"  style="text-align: center">{{item.copyNumber}}</td>
                 <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
                 <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
-                <td data-title="Purchase Price" class="numeric">{{item.price}}</td>
-                <td data-title="Supplier" class="numeric">-</td>
-                <td data-title="Status" class="numeric">{{item.statusName}}</td>
-                <td data-title="Action" class="numeric"></td>
+                <td data-title="Purchase Price" class="numeric"  style="text-align: right">{{item.price}}</td>
+                <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
+                <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
+                <td data-title="Action" class="numeric" style="text-align: center">
+                    <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
+                    <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="fetchItem(item.id, 'edit')"></i>
+                </td>
             </tr>
 
             </tbody>
@@ -56,7 +59,13 @@
             <span ng-if="!data.multipleItemAdd">Add Item</span>
             <span ng-if="data.multipleItemAdd">Add Items</span>
         </p>
+        <p class="alignRight" style="padding-right: 10px;">
 
+            <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
+               data-ng-click="resetItemForm()" style="background-color: white;">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+            </a>
+        </p>
         <!--Edit Item # 3 / Barcode 3 -->
         <hr style="clear: both;"/>
     </div>
@@ -67,27 +76,27 @@
     <div class="form-group">
         <label class="col-md-1 control-label">Copy Number</label>
         <div class="col-md-3">
-            <input type="text" class="form-control dottedInput" data-ng-model="item.copyNumber" id="copyNumber" name="copyNumber" ng-readonly="data.item.readOnlyMode"/>
+            <input type="text" class="form-control dottedInput" data-ng-model="item.copyNumber" id="copyNumber" name="copyNumber" ng-readonly="data.itemReadOnlyMode"/>
         </div>
         <label class="col-md-1 control-label">Accession #</label>
         <div class="col-md-3">
-            <input  type="text" class="form-control dottedInput required" data-ng-model="item.accessionNumber"  id="accessionNumber" name="accessionNumber"/>
+            <input  type="text" class="form-control dottedInput required" data-ng-model="item.accessionNumber"  id="accessionNumber" name="accessionNumber" ng-readonly="data.itemReadOnlyMode"/>
         </div>
         <label class="col-md-1 control-label">Access. Date</label>
         <div class="col-md-3">
             <input type="text" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control dottedInput"
-                   data-ng-model="item.accessionDate"  id="accessionDate" name="accessionDate"/>
+                   data-ng-model="item.accessionDate"  id="accessionDate" name="accessionDate" ng-readonly="data.itemReadOnlyMode"/>
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-1 control-label">Barcode</label>
         <div class="col-md-3">
-            <input    type="text" class="form-control dottedInput" data-ng-model="item.barcode"  id="barcode" name="barcode"/>
+            <input    type="text" class="form-control dottedInput" data-ng-model="item.barcode"  id="barcode" name="barcode" ng-readonly="data.itemReadOnlyMode"/>
         </div>
         <label class="col-md-1 control-label">Price</label>
         <div class="col-md-3">
-            <input type="text" class="form-control dottedInput" data-ng-model="item.price"  id="price" name="price"/>
+            <input type="text" class="form-control dottedInput" data-ng-model="item.price"  id="price" name="price" ng-readonly="data.itemReadOnlyMode"/>
         </div>
     </div>
 
@@ -95,7 +104,7 @@
     <div class="form-group">
         <label class="col-md-1 control-label">Internal Note</label>
         <div class="col-md-11">
-            <input    type="text" class="form-control dottedInput" data-ng-model="item.internalNote"  id="internalNote" name="internalNote"/>
+            <input    type="text" class="form-control dottedInput" data-ng-model="item.internalNote"  id="internalNote" name="internalNote" ng-readonly="data.itemReadOnlyMode"/>
         </div>
     </div>
 
@@ -106,16 +115,16 @@
             &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
 
         </label>
-        <div class="col-md-3">
-            <span data-ng-if="showSupplierSelect2" id="supplierSelect2Div">
-            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
-                   datas="supplierList"  placeholder="Select a Name" data-ng-model="item.supplier"  id="supplier" name="supplier"/>
-                </span>
+        <div class="col-md-3" id="supplierSelect2Div">
+            <div data-ng-if="showSupplierSelect2">
+            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"  parent="supplierSelect2Div"
+                   datas="supplierList"  placeholder="Select a Name" data-ng-model="item.supplier.id"  id="supplier" name="supplier" ng-disabled="data.itemReadOnlyMode" />
+                </div>
         </div>
 
         <label class="col-md-1 control-label">Status</label>
         <div class="col-md-3">
-            <select style="width: 98%" class="required" data-ng-model="item.status"  id="itemStatus" name="itemStatus" data-convert-to-number>
+            <select style="width: 98%" class="required" data-ng-model="item.status"  id="itemStatus" name="itemStatus" ng-disabled="data.itemReadOnlyMode"  ng-class="{'disabledElement': data.itemReadOnlyMode}"  data-convert-to-number>
                 <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
             </select>
         </div>
@@ -126,7 +135,7 @@
 </div>
 
 <div class="row" data-ng-show="data.showItemMainButtonPanel">
-    <div class="col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
+    <div class="text-right col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
         <button type="button" class="btn btn-dark btn-success"  value="add_item">Add Item</button>&nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-dark btn-success"  value="add_and_duplicate_item">Add & Duplicate</button>&nbsp;&nbsp;&nbsp;
         <a  class="btn btn-dark"  value="save_edit_record" ng-click="data.showItemMainButtonPanel=false;">Add Multiple copies of this item</a>

@@ -14,6 +14,7 @@ import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentPublisher;
 import org.ums.persistent.model.library.PersistentRecord;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -33,28 +34,57 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+                    final LocalCache pLocalCache) {
+    pBuilder.add("mfnNo", pReadOnly.getId().toString());
+    pBuilder.add("language", pReadOnly.getLanguage().getId());
+    pBuilder.add("materialType", pReadOnly.getMaterialType().getId());
+    pBuilder.add("status", pReadOnly.getRecordStatus().getId());
+    pBuilder.add("bindingType", pReadOnly.getBookBindingType().getId());
+    pBuilder.add("acqType", pReadOnly.getAcquisitionType().getId());
     pBuilder.add("title", pReadOnly.getTitle());
-    pBuilder.add("materialType", pReadOnly.getMaterialType().getLabel());
+    pBuilder.add("subTitle", pReadOnly.getSubTitle());
+    pBuilder.add("gmd", pReadOnly.getGmd());
+    pBuilder.add("edition", pReadOnly.getEdition());
+
     pBuilder.add("seriesTitle", pReadOnly.getSeriesTitle());
     pBuilder.add("volumeNo", pReadOnly.getVolumeNo());
+    pBuilder.add("volumeTitle", pReadOnly.getVolumeTitle());
     pBuilder.add("changedTitle", pReadOnly.getChangedTitle());
+    pBuilder.add("libraryLacks", pReadOnly.getLibraryLacks());
 
     pBuilder.add("isbn", pReadOnly.getIsbn());
     pBuilder.add("issn", pReadOnly.getIssn());
     pBuilder.add("corpAuthorMain", pReadOnly.getCorpAuthorMain());
-
-    pBuilder.add("corpAuthorBody", pReadOnly.getCorpSubBody());
-    pBuilder.add("corpAuthorCountry", pReadOnly.getCorpCityCountry());
+    pBuilder.add("corpSubBody", pReadOnly.getCorpSubBody());
+    pBuilder.add("corpCityCountry", pReadOnly.getCorpCityCountry());
+    pBuilder.add("translateTitleEdition", pReadOnly.getTranslateTitleEdition());
     pBuilder.add("callNo", pReadOnly.getCallNo());
+    pBuilder.add("callDate", pReadOnly.getCallDate());
+    pBuilder.add("classNo", pReadOnly.getClassNo());
+    pBuilder.add("authorMark", pReadOnly.getAuthorMark());
+    // pBuilder.add("physicalDescription.pagination", pReadOnly.getPhysicalDescription().);
+
     // pBuilder.add("publisher", pReadOnly.getPublisherId());
-    pBuilder.add("status", pReadOnly.getRecordStatus().getLabel());
-    pBuilder.add("bindingType", pReadOnly.getBookBindingType().getLabel());
-    pBuilder.add("acquisitionType", pReadOnly.getAcquisitionType().getLabel());
+
     pBuilder.add("keywords", pReadOnly.getKeyWords());
     pBuilder.add("contributors", pReadOnly.getContributorJsonString());
-    pBuilder.add("subjects", pReadOnly.getSubjectJsonString());
+    pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString());
+    pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString());
+    pBuilder.add("physicalDescriptionString",
+        pReadOnly.getPhysicalDescriptionString() == null ? "" : pReadOnly.getPhysicalDescriptionString());
+
+    // pBuilder.add("placeOfPublication",);
+    // pBuilder.add("yearDateOfPublication",pReadOnly.getImprint().getDateOfPublication());
+    // pBuilder.add("copyRightDate",pReadOnly.getImprint().getCopyRightDate());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    object.add("placeOfPublication", pReadOnly.getImprint().getPlaceOfPublication());
+    object.add("yearDateOfPublication", pReadOnly.getImprint().getDateOfPublication());
+    object.add("copyRightDate", pReadOnly.getImprint().getCopyRightDate());
+    object.add("publisher", pReadOnly.getImprint().getPublisherId().toString());
+    object.add("publisherName", pReadOnly.getImprint().getPublisher().getName());
+    pBuilder.add("imprint", object);
+
   }
 
   @Override
@@ -80,19 +110,31 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pMutable.setSeriesTitle(pJsonObject.getString("seriesTitle"));
     pMutable.setVolumeNo(pJsonObject.getString("volumeNo"));
     pMutable.setVolumeTitle(pJsonObject.getString("volumeTitle"));
-    pMutable.setSerialIssueNo(pJsonObject.getString("serialIssueNo"));
-    pMutable.setSerialNumber(pJsonObject.getString("serialNumber"));
 
-    pMutable.setSerialSpecial(pJsonObject.getString("serialSpecial"));
-    pMutable.setLibraryLacks(pJsonObject.getString("libraryLacks"));
-    pMutable.setChangedTitle(pJsonObject.getString("changedTitle"));
-    pMutable.setIsbn(pJsonObject.getString("isbn"));
-    pMutable.setIssn(pJsonObject.getString("issn"));
-    pMutable.setCorpAuthorMain(pJsonObject.getString("corpAuthorMain"));
-    pMutable.setCorpSubBody(pJsonObject.getString("corpSubBody"));
-    pMutable.setCorpCityCountry(pJsonObject.getString("corpCityCountry"));
-    pMutable.setEdition(pJsonObject.getString("edition"));
-    pMutable.setTranslateTitleEdition(pJsonObject.getString("translateTitleEdition"));
+    if(pJsonObject.containsKey("serialIssueNo"))
+      pMutable.setSerialIssueNo(pJsonObject.getString("serialIssueNo"));
+    if(pJsonObject.containsKey("serialNumber"))
+      pMutable.setSerialNumber(pJsonObject.getString("serialNumber"));
+    if(pJsonObject.containsKey("serialSpecial"))
+      pMutable.setSerialSpecial(pJsonObject.getString("serialSpecial"));
+    if(pJsonObject.containsKey("libraryLacks"))
+      pMutable.setLibraryLacks(pJsonObject.getString("libraryLacks"));
+    if(pJsonObject.containsKey("changedTitle"))
+      pMutable.setChangedTitle(pJsonObject.getString("changedTitle"));
+    if(pJsonObject.containsKey("isbn"))
+      pMutable.setIsbn(pJsonObject.getString("isbn"));
+    if(pJsonObject.containsKey("issn"))
+      pMutable.setIssn(pJsonObject.getString("issn"));
+    if(pJsonObject.containsKey("corpAuthorMain"))
+      pMutable.setCorpAuthorMain(pJsonObject.getString("corpAuthorMain"));
+    if(pJsonObject.containsKey("corpSubBody"))
+      pMutable.setCorpSubBody(pJsonObject.getString("corpSubBody"));
+    if(pJsonObject.containsKey("corpCityCountry"))
+      pMutable.setCorpCityCountry(pJsonObject.getString("corpCityCountry"));
+    if(pJsonObject.containsKey("edition"))
+      pMutable.setEdition(pJsonObject.getString("edition"));
+    if(pJsonObject.containsKey("translateTitleEdition"))
+      pMutable.setTranslateTitleEdition(pJsonObject.getString("translateTitleEdition"));
 
     pMutable.setCallNo(pJsonObject.getString("callNo"));
     pMutable.setClassNo(pJsonObject.getString("classNo"));
@@ -115,5 +157,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
       pMutable.setContributorJsonString(pJsonObject.getString("contributorJsonString"));
     pMutable.setSubjectJsonString(pJsonObject.getString("subjectJsonString"));
     pMutable.setNoteJsonString(pJsonObject.getString("noteJsonString"));
+    if(pJsonObject.containsKey("physicalDescriptionString"))
+      pMutable.setPhysicalDescriptionString(pJsonObject.getString("physicalDescriptionString"));
   }
 }

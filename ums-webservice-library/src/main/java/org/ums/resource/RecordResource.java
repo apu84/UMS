@@ -44,7 +44,7 @@ public class RecordResource extends MutableRecordResource {
       final @PathParam("order") String pOrder, final @PathParam("filter") String pFilter) throws Exception {
     // return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder,
     // UmsUtils.getWhereClause(pFilter), mUriInfo);
-    return mResourceHelper.searchRecord("Material Title 308", 1, mUriInfo);
+    return mResourceHelper.searchRecord("Material Title 308", pPage, pItemPerPage, mUriInfo);
   }
 
 }
