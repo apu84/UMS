@@ -1,0 +1,177 @@
+
+<style>
+
+    thead{
+        background-color: #efefef;
+    }
+
+
+    .grid {
+        width: 750px;
+        height: 500px;
+    }
+
+
+
+    tbody{
+        overflow-y: scroll;
+        height: 450px;
+    }
+
+    #header-fixed{
+        position:fixed;
+        top:15px;
+    }
+
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getDeadlines" >
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType"
+                                    data-ng-change="getSemesters()"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Faculty</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="faculty"
+                                    id="faculty"
+                                    data-ng-options="faculty.shortName for faculty in faculties track by faculty.id"
+                                    data-ng-model="faculty"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Merit Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="meritType.name for meritType in meritTypes track by meritType.id"
+                                    data-ng-model="meritType"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel" >
+            <div class="panel-heading">Program Type <b>{{programType.name}}</b>, Semester <b>{{semester.name}}</b>, Faculty <b>{{faculty.shortName}}</b>, Merit Type <b>{{meritType.name}}</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" align="center" ><i style="cursor: pointer;" class="fa fa-angle-down" aria-hidden="true"></i></div>
+                    <div class="col-md-4"></div>
+                </div>
+                <div class="row" align="center" data-ng-if="showLoader">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Deadline</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberFrom" type="text"/></div></td>
+                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberTo" type="text"/></div> </td>
+                                    <td><div date-picker date-model="date" date-format="dd/mm/yyyy"></div></td>
+                                    <td><Button class="btn btn-primary" data-ng-click="add()">Add</Button></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Deadline</th>
+                            <th>Action</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="deadline in departmentSelectionDeadline">
+                                <td><input class="form-control" data-ng-model="deadline.meritSerialNumberFrom" type="number"/></td>
+                                <td><input class="form-control" data-ng-model="deadline.meritSerialNumberTo" type="number"/> </td>
+                                <td>{{deadline.deadline}}</td>
+                                <td><Button class="btn btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button><button class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" align="right">
+                    <div class="col-md-12">
+                        <div class="well">
+                            <button class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
