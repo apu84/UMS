@@ -26,7 +26,7 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
     ORIENTATION(1L, "orientation"),
     CLASS_BF_MIDTERM(2L, "cls_bf_mid"),
     MIDTERM_BREAK(3L, "midterm_break"),
-    CLASS_AFETR_MIDTERM(4L, "cls_af_mid"),
+    CLASS_AFTER_MIDTERM(4L, "cls_af_mid"),
     FAREWELL(5L, "farewell"),
     PL(6L, "pre_leave"),
     EXAM_RESULT(7L, "ex_res"),
@@ -34,6 +34,7 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
     APPLICATION_SEMESTER_WITHDRAW(9L, "application_semester_withdraw"),
     APPLICATION_CCI(10L, "application_cci"),
     APPLICATION_READMISSION(11L, "application_readmission"),
+    SEMESTER_ADMISSION(12L, "semester_admission"),
     NONE(0L, "");
 
     private String label;

@@ -9,16 +9,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.fee.FeeType;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
 
 public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   String SELECT_ALL = "SELECT ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, VERIFIED_ON,"
-      + " LAST_MODIFIED FROM STUDENT_PAYMENT ";
+      + " LAST_MODIFIED, FEE_TYPE FROM STUDENT_PAYMENT ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_PAYMENT (ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, "
-          + "LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, SYSDATE " + getLastModifiedSql() + ") ";
+          + "LAST_MODIFIED, FEE_TYPE) VALUES (?, ?, ?, ?, ?, ?, SYSDATE " + getLastModifiedSql() + ", ?) ";
   String UPDATE_ALL = "UPDATE STUDENT_PAYMENT SET STATUS = ?, VERIFIED_ON = SYSDATE, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
 
@@ -81,9 +82,22 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     for(StudentPayment studentPayment : pStudentPayments) {
       params.add(new Object[] {mIdGenerator.getNumericId(), mIdGenerator.getAlphaNumericId(),
           studentPayment.getStudentId(), studentPayment.getSemesterId(), studentPayment.getAmount(),
-          studentPayment.getStatus().getValue()});
+          studentPayment.getStatus().getValue(), studentPayment.getFeeTypeId()});
     }
     return params;
+  }
+
+  @Override
+  public List<StudentPayment> getPayments(String pStudentId, Integer pSemesterId) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new StudentPaymentRowMapper());
+  }
+
+  @Override
+  public List<StudentPayment> getPayments(String pStudentId, Integer pSemesterId, FeeType pFeeType) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND FEE_TYPE = ?";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pFeeType.getId()},
+        new StudentPaymentRowMapper());
   }
 
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {
@@ -99,6 +113,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
       studentPayment.setAppliedOn(rs.getTimestamp("APPLIED_ON"));
       studentPayment.setVerifiedOn(rs.getTimestamp("VERIFIED_ON"));
       studentPayment.setLastModified(rs.getString("LAST_MODIFIED"));
+      studentPayment.setFeeTypeId(rs.getInt("FEE_TYPE"));
       AtomicReference<StudentPayment> atomicReference = new AtomicReference<>(studentPayment);
       return atomicReference.get();
     }

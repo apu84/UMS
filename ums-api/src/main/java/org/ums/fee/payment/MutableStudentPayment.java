@@ -7,6 +7,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.fee.FeeType;
 
 public interface MutableStudentPayment extends StudentPayment, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
@@ -28,4 +29,8 @@ public interface MutableStudentPayment extends StudentPayment, Editable<Long>, M
   void setAppliedOn(Date pAppliedOn);
 
   void setVerifiedOn(Date pVerifiedOn);
+
+  void setFeeTypeId(Integer feeTypeId);
+
+  void setFeeType(FeeType feeType);
 }

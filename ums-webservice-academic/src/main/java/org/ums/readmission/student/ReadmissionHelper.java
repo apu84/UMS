@@ -10,7 +10,6 @@ import javax.json.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.*;
 import org.ums.enums.CourseType;
 import org.ums.fee.semesterfee.SemesterAdmissionStatus;
@@ -41,50 +40,6 @@ public class ReadmissionHelper {
   private DateFormat mDateFormat;
   @Autowired
   private ParameterSettingManager mParameterSettingManager;
-
-  private boolean isReadmissionApplicable(String pStudentId, Integer pSemesterId) {
-    StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId);
-    return studentRecord.getType().equals(StudentRecord.Type.READMISSION_REQUIRED);
-  }
-
-  private boolean alreadyAppliedForReadmission(String pStudentId, Integer pSemesterId) {
-    List<ReadmissionApplication> readmissionApplicationList = readmissionApplication(pStudentId, pSemesterId);
-    return readmissionApplicationList != null && readmissionApplicationList.size() > 0;
-  }
-
-  private Optional<List<UGRegistrationResult>> resultUntilLastAppearedSemester(String pStudentId, Integer pSemesterId) {
-    Student student = mStudentManager.get(pStudentId);
-    List<Semester> previousSemesters =
-        mSemesterManager.getPreviousSemesters(pSemesterId, student.getProgram().getProgramTypeId());
-    for(Semester semester : previousSemesters) {
-      SemesterAdmissionStatus admissionStatus =
-          mSemesterAdmissionStatusManager.getAdmissionStatus(pStudentId, semester.getId());
-      if(admissionStatus.isAdmitted()) {
-        return Optional.of(mUgRegistrationResultManager.getResults(pStudentId, semester.getId()));
-      }
-    }
-    return Optional.empty();
-  }
-
-  private List<ReadmissionApplication> readmissionApplication(String pStudentId, Integer pSemesterId) {
-    return mReadmissionApplicationManager.getReadmissionApplication(pSemesterId, pStudentId);
-  }
-
-  private Optional<List<UGRegistrationResult>> lastSemesterFailedCourses(String pStudentId, Integer pSemesterId) {
-    return failedCourses(pStudentId, pSemesterId, false);
-  }
-
-  private Optional<List<UGRegistrationResult>> failedCourses(String pStudentId, Integer pSemesterId, boolean all) {
-    Optional<List<UGRegistrationResult>> results = resultUntilLastAppearedSemester(pStudentId, pSemesterId);
-    if(results.isPresent()) {
-      List<UGRegistrationResult> registrationResults =
-          results.get().stream().filter(result -> result.getGradeLetter().equalsIgnoreCase("F")
-              && (all || result.getSemesterId().intValue() == pSemesterId.intValue())).collect(Collectors.toList());
-      return Optional.of(registrationResults);
-    }
-
-    return Optional.empty();
-  }
 
   JsonObject appliedReadmissionCourses(String pStudentId, Integer pSemesterId) {
     List<ReadmissionApplication> applications = readmissionApplication(pStudentId, pSemesterId);
@@ -131,14 +86,6 @@ public class ReadmissionHelper {
     return objectBuilder.build();
   }
 
-  private boolean withinReadmissionApplicationSlot(Integer pSemesterId) {
-    ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId(
-            Parameter.ParameterName.APPLICATION_READMISSION.getLabel(), pSemesterId);
-    Date now = new Date();
-    return parameterSetting.getStartDate().after(now) && parameterSetting.getEndDate().before(now);
-  }
-
   ReadmissionApplicationStatus readmissionApplicationStatus(String pStudentId, Integer pSemesterId) {
     if(isReadmissionApplicable(pStudentId, pSemesterId)) {
       if(alreadyAppliedForReadmission(pStudentId, pSemesterId)) {
@@ -161,6 +108,9 @@ public class ReadmissionHelper {
   ReadmissionApplicationStatus apply(String pStudentId, Integer pSemesterId, JsonObject pJsonObject) {
     ReadmissionHelper.ReadmissionApplicationStatus status = readmissionApplicationStatus(pStudentId, pSemesterId);
     if(status == ReadmissionHelper.ReadmissionApplicationStatus.ALLOWED) {
+      if(!withinReadmissionApplicationSlot(pSemesterId)) {
+        return ReadmissionApplicationStatus.NOT_IN_READMISSION_SLOT;
+      }
       ReadmissionApplicationStatus validationStatus = validateApplication(pStudentId, pSemesterId, pJsonObject);
       if(validationStatus == ReadmissionApplicationStatus.ALLOWED) {
         if(pJsonObject != null && pJsonObject.containsKey("entries")) {
@@ -184,6 +134,58 @@ public class ReadmissionHelper {
       }
     }
     return status;
+  }
+
+  private boolean isReadmissionApplicable(String pStudentId, Integer pSemesterId) {
+    StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId);
+    return studentRecord.getType().equals(StudentRecord.Type.READMISSION_REQUIRED);
+  }
+
+  private boolean alreadyAppliedForReadmission(String pStudentId, Integer pSemesterId) {
+    List<ReadmissionApplication> readmissionApplicationList = readmissionApplication(pStudentId, pSemesterId);
+    return readmissionApplicationList != null && readmissionApplicationList.size() > 0;
+  }
+
+  private Optional<List<UGRegistrationResult>> resultUntilLastAppearedSemester(String pStudentId, Integer pSemesterId) {
+    Student student = mStudentManager.get(pStudentId);
+    List<Semester> previousSemesters =
+        mSemesterManager.getPreviousSemesters(pSemesterId, student.getProgram().getProgramTypeId());
+    for(Semester semester : previousSemesters) {
+      SemesterAdmissionStatus admissionStatus =
+          mSemesterAdmissionStatusManager.getAdmissionStatus(pStudentId, semester.getId());
+      if(admissionStatus.isAdmitted()) {
+        return Optional.of(mUgRegistrationResultManager.getResults(pStudentId, semester.getId()));
+      }
+    }
+    return Optional.empty();
+  }
+
+  private List<ReadmissionApplication> readmissionApplication(String pStudentId, Integer pSemesterId) {
+    return mReadmissionApplicationManager.getReadmissionApplication(pSemesterId, pStudentId);
+  }
+
+  private Optional<List<UGRegistrationResult>> lastSemesterFailedCourses(String pStudentId, Integer pSemesterId) {
+    return failedCourses(pStudentId, pSemesterId, false);
+  }
+
+  private Optional<List<UGRegistrationResult>> failedCourses(String pStudentId, Integer pSemesterId, boolean all) {
+    Optional<List<UGRegistrationResult>> results = resultUntilLastAppearedSemester(pStudentId, pSemesterId);
+    if(results.isPresent()) {
+      List<UGRegistrationResult> registrationResults =
+          results.get().stream().filter(result -> result.getGradeLetter().equalsIgnoreCase("F")
+              && (all || result.getSemesterId().intValue() == pSemesterId.intValue())).collect(Collectors.toList());
+      return Optional.of(registrationResults);
+    }
+
+    return Optional.empty();
+  }
+
+  private boolean withinReadmissionApplicationSlot(Integer pSemesterId) {
+    ParameterSetting parameterSetting =
+        mParameterSettingManager.getByParameterAndSemesterId(
+            Parameter.ParameterName.APPLICATION_READMISSION.getLabel(), pSemesterId);
+    Date now = new Date();
+    return parameterSetting.getStartDate().after(now) && parameterSetting.getEndDate().before(now);
   }
 
   private ReadmissionApplicationStatus validateApplication(String pStudentId, Integer pSemesterId,

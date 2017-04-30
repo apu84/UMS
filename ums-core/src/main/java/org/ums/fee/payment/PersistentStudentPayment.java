@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
+import org.ums.fee.FeeType;
+import org.ums.fee.FeeTypeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 
@@ -14,6 +16,7 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   private static SemesterManager sSemesterManager;
   private static StudentManager sStudentManager;
   private static StudentPaymentManager sStudentPaymentManager;
+  private static FeeTypeManager sFeeTypeManager;
   private Long mId;
   private String mTransactionId;
   private Semester mSemester;
@@ -25,6 +28,8 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   private Date mAppliedOn;
   private Date mVerifiedOn;
   private String mLastModified;
+  private Integer mFeeTypeId;
+  private FeeType mFeeType;
 
   @Override
   public Long getId() {
@@ -137,6 +142,26 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   }
 
   @Override
+  public Integer getFeeTypeId() {
+    return mFeeTypeId;
+  }
+
+  @Override
+  public FeeType getFeeType() {
+    return mFeeType == null ? sFeeTypeManager.get(mFeeTypeId) : sFeeTypeManager.validate(mFeeType);
+  }
+
+  @Override
+  public void setFeeTypeId(Integer feeTypeId) {
+    mFeeTypeId = feeTypeId;
+  }
+
+  @Override
+  public void setFeeType(FeeType feeType) {
+    mFeeType = feeType;
+  }
+
+  @Override
   public Long create() {
     return sStudentPaymentManager.create(this);
   }
@@ -177,5 +202,6 @@ public class PersistentStudentPayment implements MutableStudentPayment {
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sStudentPaymentManager = applicationContext.getBean("studentPaymentManager", StudentPaymentManager.class);
+    sFeeTypeManager = applicationContext.getBean("feeTypeManager", FeeTypeManager.class);
   }
 }

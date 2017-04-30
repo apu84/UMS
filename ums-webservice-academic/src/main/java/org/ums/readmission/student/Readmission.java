@@ -14,7 +14,7 @@ import org.ums.resource.Resource;
 @Path("/readmission")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class Readmission {
+public class Readmission extends Resource {
   @Autowired
   ReadmissionHelper mReadmissionHelper;
 
