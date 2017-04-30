@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
@@ -36,6 +37,8 @@ public class ProcessResultImpl implements ProcessResult {
   StudentRecordManager mStudentRecordManager;
   @Autowired
   ResultPublishManager mResultPublishManager;
+  @Autowired
+  UMSConfiguration mUmsConfiguration;
 
   private final static String PROCESS_GRADES = "process_grades";
   private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
@@ -107,16 +110,17 @@ public class ProcessResultImpl implements ProcessResult {
     List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
 
     for(String studentId : studentCourseGradeMap.keySet()) {
+      MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
+
       Double gpa = calculateGPA(studentCourseGradeMap.get(studentId).stream()
           .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
-
-      Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
-      boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
-
-      MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
       studentRecord.setGPA(gpa);
-      studentRecord.setCGPA(cgpa);
-      studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+      if(!mUmsConfiguration.isProcessGPAOnly()) {
+        Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
+        boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
+        studentRecord.setCGPA(cgpa);
+        studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+      }
       updatedStudentRecords.add(studentRecord);
 
       i++;
@@ -142,8 +146,11 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   private Double calculateGPA(List<UGRegistrationResult> pResults) {
-    int totalCrHr = 0;
+    Double totalCrHr = 0D;
     Double totalGPA = 0D;
+    if(pResults.size() == 0) {
+      return 0D;
+    }
     for(UGRegistrationResult result : pResults) {
       if(!EXCLUDE_GRADES.contains(result.getGradeLetter())) {
         totalCrHr += result.getCourse().getCrHr();
