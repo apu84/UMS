@@ -1,10 +1,13 @@
 package org.ums.util;
 
+import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.ums.enums.ExamType;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -74,6 +77,21 @@ public class UmsUtils {
 
     }
     return fDate;
+  }
+
+  public static String formatDate(Date date, String outputFormat) {
+    Format formatter = new SimpleDateFormat(outputFormat);
+    return formatter.format(date);
+  }
+
+  public static Date convertToDate(String date, String dateFormat) {
+    DateFormat format = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
+    Date outputDate = new Date();
+    try {
+      return format.parse(date);
+    } catch(Exception e) {
+      return outputDate;
+    }
   }
 
   /**
