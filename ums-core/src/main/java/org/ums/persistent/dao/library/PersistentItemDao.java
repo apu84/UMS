@@ -122,7 +122,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
 
   @Override
   public List<Item> getAll() {
-    String query = SELECT_ALL +" Order by Copy_Number ";
+    String query = SELECT_ALL + " Order by Copy_Number ";
     return mJdbcTemplate.query(query, new PersistentItemDao.ItemRowMapper());
   }
 
