@@ -7,6 +7,12 @@ module ums{
         dateOfPublication: string;
         publicationType: IPublicationType;
         publicationWebLink: string;
-        //status: string;
+        publicationISSN: string;
+        publicationIssue: String;
+        publicationVolume: string;
+        publicationJournalName: string;
+        publicationCountry: string;
+        status: string;
+        publicationPages: String;
     }
 }

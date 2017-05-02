@@ -23,4 +23,18 @@ public interface PublicationInformation extends Serializable, EditType<MutablePu
   String getPublicationType();
 
   String getPublicationWebLink();
+
+  String getPublicationISSN();
+
+  String getPublicationIssue();
+
+  String getPublicationVolume();
+
+  String getPublicationJournalName();
+
+  String getPublicationCountry();
+
+  String getPublicationPages();
+
+  String getPublicationStatus();
 }

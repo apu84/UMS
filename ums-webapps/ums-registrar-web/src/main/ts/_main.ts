@@ -94,6 +94,7 @@
 /// <reference path='controller/registrar-office/employee-information-management/EmployeeInformation.ts'/>
 /// <reference path='controller/registrar-office/employee-information-management/EmployeeServiceInformation.ts'/>
 /// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
+/// <reference path='controller/registrar-office/ApprovePublication.ts'/>
 
 
 /// <reference path='service/EmployeeInformationService.ts'/>

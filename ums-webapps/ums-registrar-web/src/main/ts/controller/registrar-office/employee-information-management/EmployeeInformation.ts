@@ -1,4 +1,5 @@
 module ums {
+    import IPublicationInformationModel = ums.IPublicationInformationModel;
     interface IEmployeeInformation extends ng.IScope {
         personalTab: boolean;
         academicTab: boolean;
@@ -39,6 +40,7 @@ module ums {
         disablePresentAddressDropdown: boolean;
         disablePermanentAddressDropdown: boolean;
         showSup: boolean;
+        showPublicationISSNDiv: boolean;
 
         disablePersonalSubmitButton: boolean;
         disableAcademicSubmitButton: boolean;
@@ -76,6 +78,7 @@ module ums {
         districtMap: any;
         thanaMap: any;
         data: any;
+        //$$childTail: any;
 
         changeNav: Function;
         enableEditMode: Function;
@@ -116,6 +119,7 @@ module ums {
         degreeNames: Array<IDegreeType>;
         bloodGroups: Array<IBloodGroup>;
         publicationTypes: Array<IPublicationType>;
+        waitingForApprovalPublications: Array<IPublicationInformationModel>;
         relations: Array<IRelation>;
         countries: Array<ICountry>;
         divisions: Array<IDivision>;
@@ -226,6 +230,8 @@ module ums {
                 supOptions: ""
             };
 
+            $scope.waitingForApprovalPublications = new Array<IPublicationInformationModel>();
+
             $scope.gender = this.registrarConstants.gender;
             $scope.religions = this.registrarConstants.religionTypes;
             $scope.nationalities = this.registrarConstants.nationalities;
@@ -293,9 +299,9 @@ module ums {
             this.changeNav('personal');
 
             //this.getPersonalInformation();
-            this.getAcademicInformation();
+            //this.getAcademicInformation();
             //this.getAwardInformation();
-            //this.getPublicationInformation();
+            this.getPublicationInformation();
             //this.getExperienceInformation();
             //this.getTrainingInformation();
         }
@@ -331,6 +337,7 @@ module ums {
                 this.$scope.showPublicationLabelDiv = true;
                 this.$scope.showPublicationEditButton = true;
                 this.$scope.disablePublicationSubmitButton = true;
+                this.$scope.showPublicationISSNDiv = true;
             }
             else if (formName === 'training') {
                 this.$scope.showTrainingInputDiv = false;
@@ -620,9 +627,19 @@ module ums {
         }
 
         private setSavedValuesOfPublicationForm(publicationInformation: any) {
-            for (var i = 0; i < publicationInformation.length; i++) {
-                this.$scope.entry.publication[i] = publicationInformation[i];
-                this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+            for (var i = 0, a = 0, b = 0; i < publicationInformation.length; i++) {
+                if(publicationInformation[i].status === "Approved") {
+                    this.$scope.entry.publication[a] = publicationInformation[i];
+                    this.$scope.entry.publication[a].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+                    a++;
+                }
+                else{
+                    console.log("Not Entering Here ");
+                    console.log( publicationInformation[i]);
+                    this.$scope.waitingForApprovalPublications[b] = publicationInformation[i];
+                    this.$scope.waitingForApprovalPublications[b].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+                    b++;
+                }
             }
         }
 
@@ -672,8 +689,8 @@ module ums {
         }
 
         private enableEditMode(formName: string) {
-            console.log("i am in enableEditMode()");
-
+            console.log("i am in enableEditMode() ");
+            console.log("I am here and working");
             if (formName === "personal") {
                 this.$scope.showPersonalInputDiv = true;
                 this.$scope.showPersonalLabelDiv = false;
@@ -758,7 +775,14 @@ module ums {
                     publicationInterestGenre: "",
                     publicationWebLink: "",
                     publisherName: "",
-                    dateOfPublication: ""
+                    dateOfPublication: "",
+                    publicationISSN: "",
+                    publicationIssue: "",
+                    publicationVolume: "",
+                    publicationJournalName: "",
+                    publicationCountry: "",
+                    status: "",
+                    publicationPages: ""
                 };
                 this.$scope.entry.publication.push(publicationEntry);
             }

@@ -1,0 +1,36 @@
+<div class="panel">
+    <div class="panel-body shadowPanel"   style="min-height: 490px;">
+        <div class="row">
+            <div class="col-md-1">
+                <label><b>Sl.</b></label>
+            </div>
+            <div class="col-md-8">
+                <label><b>Publication Title</b></label>
+            </div>
+            <div class="col-md-2">
+                <label><b>Publication Type</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Status</b></label>
+            </div>
+        </div>
+        <br />
+        <div data-ng-repeat="waitingPublication in waitingForApprovalPublications track by $index">
+            <div class="row">
+                <div class="col-md-1">
+                    <label><b>{{$index + 1}}</b></label>
+                </div>
+                <div class="col-md-8">
+                    <label>{{waitingPublication.publicationTitle}}</label>
+                </div>
+                <div class="col-md-2">
+                    <label>{{waitingPublication.publicationType.name}}</label>
+                </div>
+                <div class="col-md-1">
+                    <label style="color: orangered">{{waitingPublication.status}}</label>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>

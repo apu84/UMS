@@ -36,9 +36,9 @@ public class PersonalInformationResourceHelper extends
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      PersonalInformation personalInformation =  null;
+    PersonalInformation personalInformation = null;
     try {
-    personalInformation = mPersonalInformationManager.getEmployeePersonalInformation(userId);
+      personalInformation = mPersonalInformationManager.getEmployeePersonalInformation(userId);
     } catch(EmptyResultDataAccessException e) {
       // Do nothing
     }

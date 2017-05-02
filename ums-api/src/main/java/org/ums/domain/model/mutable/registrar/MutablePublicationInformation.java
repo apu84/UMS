@@ -21,4 +21,18 @@ public interface MutablePublicationInformation extends PublicationInformation, E
   void setPublicationType(final String pPublicationType);
 
   void setPublicationWebLink(final String pPublicationWebLink);
+
+  void setPublicationISSN(final String pPublicationISSN);
+
+  void setPublicationIssue(final String pPublicationIssue);
+
+  void setPublicationVolume(final String pPublicationVolume);
+
+  void setPublicationJournalName(final String pPublicationJournalName);
+
+  void setPublicationCountry(final String pPublicationCountry);
+
+  void setPublicationPages(final String pPublicationPages);
+
+  void setPublicationStatus(final String pPublicationStatus);
 }

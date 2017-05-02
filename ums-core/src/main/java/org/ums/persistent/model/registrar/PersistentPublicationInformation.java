@@ -24,6 +24,13 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   private String mDateOfPublication;
   private String mPublicationType;
   private String mPublicationWebLink;
+  private String mPublicationISSN;
+  private String mPublicationIssue;
+  private String mPublicationVolume;
+  private String mPublicationJournalName;
+  private String mPublicationCountry;
+  private String mPublicationPages;
+  private String mPublicationStatus;
   private String mLastModified;
 
   public PersistentPublicationInformation() {}
@@ -36,6 +43,13 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
     mDateOfPublication = pPersistentPublicationInformation.getDateOfPublication();
     mPublicationType = pPersistentPublicationInformation.getPublicationType();
     mPublicationWebLink = pPersistentPublicationInformation.getPublicationWebLink();
+    mPublicationISSN = pPersistentPublicationInformation.getPublicationISSN();
+    mPublicationIssue = pPersistentPublicationInformation.getPublicationIssue();
+    mPublicationVolume = pPersistentPublicationInformation.getPublicationVolume();
+    mPublicationJournalName = pPersistentPublicationInformation.getPublicationJournalName();
+    mPublicationCountry = pPersistentPublicationInformation.getPublicationCountry();
+    mPublicationStatus = pPersistentPublicationInformation.getPublicationStatus();
+    mPublicationPages = pPersistentPublicationInformation.getPublicationPages();
   }
 
   @Override
@@ -115,6 +129,41 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
+  public void setPublicationISSN(String pPublicationISSN) {
+    mPublicationIssue = pPublicationISSN;
+  }
+
+  @Override
+  public void setPublicationIssue(String pPublicationIssue) {
+    mPublicationIssue = pPublicationIssue;
+  }
+
+  @Override
+  public void setPublicationVolume(String pPublicationVolume) {
+    mPublicationVolume = pPublicationVolume;
+  }
+
+  @Override
+  public void setPublicationJournalName(String pPublicationJournalName) {
+    mPublicationJournalName = pPublicationJournalName;
+  }
+
+  @Override
+  public void setPublicationCountry(String pPublicationCountry) {
+    mPublicationCountry = pPublicationCountry;
+  }
+
+  @Override
+  public void setPublicationPages(String pPublicationPages) {
+    mPublicationPages = pPublicationPages;
+  }
+
+  @Override
+  public void setPublicationStatus(String pPublicationStatus) {
+    mPublicationStatus = pPublicationStatus;
+  }
+
+  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -148,4 +197,40 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   public String getPublicationWebLink() {
     return mPublicationWebLink;
   }
+
+  @Override
+  public String getPublicationISSN() {
+    return mPublicationISSN;
+  }
+
+  @Override
+  public String getPublicationIssue() {
+    return mPublicationIssue;
+  }
+
+  @Override
+  public String getPublicationVolume() {
+    return mPublicationVolume;
+  }
+
+  @Override
+  public String getPublicationJournalName() {
+    return mPublicationJournalName;
+  }
+
+  @Override
+  public String getPublicationCountry() {
+    return mPublicationCountry;
+  }
+
+  @Override
+  public String getPublicationPages() {
+    return mPublicationPages;
+  }
+
+  @Override
+  public String getPublicationStatus() {
+    return mPublicationStatus;
+  }
+
 }
