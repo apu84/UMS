@@ -41,8 +41,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pBuilder.add("barcode", pReadOnly.getBarcode());
     pBuilder.add("price", pReadOnly.getPrice());
     pBuilder.add("internalNote", pReadOnly.getInternalNote());
-//    pBuilder.add("supplierName", pReadOnly.getSupplier().getName());
-//    pBuilder.add("supplier", pReadOnly.getSupplier().getId());
+    // pBuilder.add("supplierName", pReadOnly.getSupplier().getName());
+    // pBuilder.add("supplier", pReadOnly.getSupplier().getId());
     pBuilder.add("status", pReadOnly.getStatus().getId());
     pBuilder.add("statusName", pReadOnly.getStatus().getLabel());
     pBuilder.add("insertedBy", pReadOnly.getInsertedBy());

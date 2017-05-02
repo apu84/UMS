@@ -1,11 +1,11 @@
 package org.ums.decorator;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.manager.UGRegistrationResultManager;
-
-import java.util.List;
 
 public class UGRegistrationResultDaoDecorator extends
     ContentDaoDecorator<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager> implements
@@ -61,5 +61,10 @@ public class UGRegistrationResultDaoDecorator extends
   @Override
   public List<UGRegistrationResult> getCCI(int pSemesterId, String pExamDate) {
     return getManager().getCCI(pSemesterId, pExamDate);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    return getManager().getResults(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

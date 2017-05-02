@@ -8,7 +8,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 
-interface SemesterAdmissionStatus extends Serializable, EditType<MutableSemesterAdmissionStatus>, LastModifier,
+public interface SemesterAdmissionStatus extends Serializable, EditType<MutableSemesterAdmissionStatus>, LastModifier,
     Identifier<Long> {
 
   Boolean isAdmitted();

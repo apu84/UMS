@@ -34,7 +34,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+      final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getId().toString());
     pBuilder.add("language", pReadOnly.getLanguage().getId());
     pBuilder.add("materialType", pReadOnly.getMaterialType().getId());

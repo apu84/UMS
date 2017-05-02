@@ -122,6 +122,19 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    String query =
+        SELECT_ALL + ", STUDENT_RECORD, STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
+            + "AND STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID "
+            + "AND STUDENT_RECORD.REGISTRATION_TYPE != 'D' AND STUDENT_RECORD.REGISTRATION_TYPE != 'W' "
+            + "AND STUDENT_RECORD.SEMESTER_ID = ? " + "AND STUDENT_RECORD.YEAR = ? "
+            + "AND STUDENT_RECORD.SEMESTER = ? " + "AND STUDENTS.PROGRAM_ID = ? "
+            + "ORDER BY STUDENT_RECORD.STUDENT_ID, UG_REGISTRATION_RESULT.SEMESTER_ID";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pYear, pSemester, pProgramId},
+        new UGRegistrationResultRowMapperWithResult());
+  }
+
+  @Override
   public List<Long> create(List<MutableUGRegistrationResult> pMutableList) {
     List<Object[]> params = getInsertParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);

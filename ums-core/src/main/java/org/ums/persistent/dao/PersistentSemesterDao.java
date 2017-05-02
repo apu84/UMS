@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SemesterDaoDecorator;
@@ -102,6 +101,14 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   public Semester getActiveSemester(Integer pProgramType) {
     String query = SELECT_ALL + " where  STATUS=1 AND PROGRAM_TYPE=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pProgramType}, new SemesterRowMapper());
+  }
+
+  @Override
+  public List<Semester> getPreviousSemesters(Integer pSemesterId, Integer pProgramTypeId) {
+    String query =
+        SELECT_ALL + "WHERE START_DATE < (SELECT START_DATE FROM SEMESTER WHERE SEMESTER_ID = ? "
+            + "AND PROGRAM_TYPE = ?) ORDER BY START_DATE DESC";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramTypeId}, new SemesterRowMapper());
   }
 
   class SemesterRowMapper implements RowMapper<Semester> {

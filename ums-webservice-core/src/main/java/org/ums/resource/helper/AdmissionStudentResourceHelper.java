@@ -223,11 +223,14 @@ public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStud
     List<AdmissionTotalSeat> totalSeats = mAdmissionTotalSeatManager.getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
     List<AdmissionStudent> students = new ArrayList<>();
 
-    if(pQuotaType.equals(QuotaType.GENERAL)){
+    /*if(pQuotaType.equals(QuotaType.GENERAL)){
       students= getContentManager().getMeritList(pSemesterId,QuotaType.COMBINED, pUnit,pProgramType);
     }else{
       students= getContentManager().getMeritList(pSemesterId,pQuotaType, pUnit,pProgramType);
-    }
+    }*/
+
+    students= getContentManager().getMeritList(pSemesterId,pQuotaType, pUnit,pProgramType);
+
 
     Map<Integer, List<AdmissionStudent>> allocatedProgramMapStudents = students
         .parallelStream()

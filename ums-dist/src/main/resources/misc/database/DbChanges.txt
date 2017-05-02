@@ -1306,3 +1306,95 @@ COMMENTS VARCHAR2(150 BYTE)
 
 
 //**************************************************************************************
+//*****************************************LMS****************************************
+CREATE TABLE lms_type (
+  id       NUMBER,
+  name     VARCHAR(15),
+  type     NUMBER,
+  duration NUMBER,
+  PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE lms_type_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER lms_type_trig
+BEFORE INSERT ON lms_type
+FOR EACH ROW
+  BEGIN
+    SELECT lms_type_seq.nextval
+    INTO :new.id
+    FROM dual;
+  END;
+/
+
+
+CREATE TABLE lms_application (
+  id         NUMBER,
+  emp_id     VARCHAR2(8),
+  type_id    NUMBER,
+  applied_on TIMESTAMP,
+  from_date  TIMESTAMP,
+  to_date    TIMESTAMP,
+  reason     VARCHAR2(200),
+  PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE lms_application_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER lms_application_trig
+BEFORE INSERT ON lms_application
+FOR EACH ROW
+  BEGIN
+    SELECT lms_application_seq.nextval
+    INTO :new.id
+    FROM dual;
+  END;
+/
+
+
+CREATE TABLE lms_app_status (
+  id              NUMBER,
+  app_id          NUMBER,
+  action_taken_on TIMESTAMP,
+  action_taken_by VARCHAR2(8),
+  comments        VARCHAR2(200),
+  action_status   NUMBER,
+  PRIMARY KEY (id)
+);
+
+
+CREATE SEQUENCE lms_app_status_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER lms_app_status_trig
+BEFORE INSERT ON lms_app_status
+FOR EACH ROW
+  BEGIN
+    SELECT lms_app_status_seq.nextval
+    INTO :new.id
+    FROM dual;
+  END;
+/
+
+//***********************************admission department selection deadline ***********************
+create table dept_selection_deadline(
+  id number,
+  semester_id number,
+  unit varchar2(15),
+  merit_from number,
+  merit_to number,
+  deadline DATE,
+  PRIMARY KEY (id)
+);
+
+
+CREATE SEQUENCE dept_selection_deadline_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER dept_selection_deadline_trg
+BEFORE INSERT ON dept_selection_deadline
+FOR EACH ROW
+  BEGIN
+    SELECT dept_selection_deadline_seq.nextval
+    INTO :new.id
+    FROM dual;
+  END;
+/

@@ -7,12 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
+import org.ums.fee.semesterfee.SemesterAdmissionDao;
+import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
 import org.ums.generator.IdGenerator;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
+import org.ums.readmission.ReadmissionApplicationDao;
+import org.ums.readmission.ReadmissionApplicationManager;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -336,5 +340,15 @@ public class AcademicContext {
   @Bean
   ClassAttendanceManager classAttendanceManager() {
     return new PersistentClassAttendanceDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  ReadmissionApplicationManager readmissionApplicationManager() {
+    return new ReadmissionApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  SemesterAdmissionStatusManager semesterAdmissionStatusManager() {
+    return new SemesterAdmissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 }

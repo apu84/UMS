@@ -11,6 +11,7 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
+import org.ums.fee.FeeType;
 
 public interface StudentPayment extends Serializable, EditType<MutableStudentPayment>, LastModifier, Identifier<Long> {
 
@@ -31,6 +32,10 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
   Date getAppliedOn();
 
   Date getVerifiedOn();
+
+  Integer getFeeTypeId();
+
+  FeeType getFeeType();
 
   enum Status {
     RECEIVED(1),

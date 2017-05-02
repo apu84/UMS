@@ -1,12 +1,12 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.mutable.MutableSemester;
+import java.util.List;
+
 import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.enums.ProgramType;
 import org.ums.enums.SemesterStatus;
 import org.ums.manager.SemesterManager;
-
-import java.util.List;
 
 /**
  * Created by Ifti on 27-Dec-15.
@@ -36,5 +36,10 @@ public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableS
   @Override
   public Semester getActiveSemester(Integer pProgramType) {
     return getManager().getActiveSemester(pProgramType);
+  }
+
+  @Override
+  public List<Semester> getPreviousSemesters(Integer pSemesterId, Integer pProgramTypeId) {
+    return getManager().getPreviousSemesters(pSemesterId, pProgramTypeId);
   }
 }

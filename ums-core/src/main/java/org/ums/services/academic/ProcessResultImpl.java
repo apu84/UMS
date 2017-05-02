@@ -3,11 +3,8 @@ package org.ums.services.academic;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
@@ -39,13 +37,13 @@ public class ProcessResultImpl implements ProcessResult {
   StudentRecordManager mStudentRecordManager;
   @Autowired
   ResultPublishManager mResultPublishManager;
+  @Autowired
+  UMSConfiguration mUmsConfiguration;
 
   private final static String PROCESS_GRADES = "process_grades";
   private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
   private final static String PUBLISH_RESULT = "publish_result";
   private final static Integer UPDATE_NOTIFICATION_AFTER = 20;
-  private final static Integer MAX_NO_FAILED_COURSE = 4;
-  private final static Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
 
   private Map<String, Double> GPA_MAP = null;
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();
@@ -63,6 +61,27 @@ public class ProcessResultImpl implements ProcessResult {
     processResult(pProgramId, pSemesterId);
   }
 
+  @Override
+  public void process(int pProgramId, int pSemesterId, int pYear, int pSemester) {
+    processResult(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
+  @Async
+  private void processResult(int pProgramId, int pSemesterId, int pYear, int pSemester) {
+    List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId, pYear, pSemester);
+
+    MutableTaskStatus processResultStatus = new PersistentTaskStatus();
+    processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
+    processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
+    processResultStatus.create();
+
+    List<StudentRecord> studentRecords =
+        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId, pYear, pSemester);
+
+    processResult(pProgramId, pSemesterId,
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
+  }
+
   @Async
   private void processResult(int pProgramId, int pSemesterId) {
     List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
@@ -72,34 +91,36 @@ public class ProcessResultImpl implements ProcessResult {
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
     processResultStatus.create();
 
+    List<StudentRecord> studentRecords =
+        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
     processResult(pProgramId, pSemesterId,
-        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
   }
 
   private void processResult(int pProgramId, int pSemesterId,
-      Map<String, List<UGRegistrationResult>> studentCourseGradeMap) {
+      Map<String, List<UGRegistrationResult>> studentCourseGradeMap,
+      List<StudentRecord> studentRecords) {
     String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
 
-    List<StudentRecord> studentRecords =
-        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
     Map<String, StudentRecord> studentRecordMap = studentRecords.stream()
         .collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
 
     List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
 
     for(String studentId : studentCourseGradeMap.keySet()) {
+      MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
+
       Double gpa = calculateGPA(studentCourseGradeMap.get(studentId).stream()
           .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
-
-      Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
-      boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
-
-      MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
       studentRecord.setGPA(gpa);
-      studentRecord.setCGPA(cgpa);
-      studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+      if(!mUmsConfiguration.isProcessGPAOnly()) {
+        Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
+        boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
+        studentRecord.setCGPA(cgpa);
+        studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+      }
       updatedStudentRecords.add(studentRecord);
 
       i++;
@@ -125,8 +146,11 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   private Double calculateGPA(List<UGRegistrationResult> pResults) {
-    int totalCrHr = 0;
+    Double totalCrHr = 0D;
     Double totalGPA = 0D;
+    if(pResults.size() == 0) {
+      return 0D;
+    }
     for(UGRegistrationResult result : pResults) {
       if(!EXCLUDE_GRADES.contains(result.getGradeLetter())) {
         totalCrHr += result.getCourse().getCrHr();

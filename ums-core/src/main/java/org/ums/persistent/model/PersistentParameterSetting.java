@@ -9,6 +9,8 @@ import org.ums.manager.ParameterManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.SemesterManager;
 
+import java.util.Date;
+
 public class PersistentParameterSetting implements MutableParameterSetting {
   private static SemesterManager sSemesterManager;
   private static ParameterManager sParameterManager;
@@ -23,11 +25,11 @@ public class PersistentParameterSetting implements MutableParameterSetting {
 
   private Long mId;
   private Semester mSemester;
-  private int mSemesterId;
+  private Integer mSemesterId;
   private Parameter mParameter;
   private Long mParameterId;
-  private String mStartDate;
-  private String mEndDate;
+  private Date mStartDate;
+  private Date mEndDate;
   private String mLastModified;
 
   public PersistentParameterSetting() {
@@ -45,11 +47,11 @@ public class PersistentParameterSetting implements MutableParameterSetting {
     mLastModified = pPersistentParameterSetting.getLastModified();
   }
 
-  public int getSemesterId() {
+  public Integer getSemesterId() {
     return mSemesterId;
   }
 
-  public void setSemesterId(int pSemesterId) {
+  public void setSemesterId(Integer pSemesterId) {
     mSemesterId = pSemesterId;
   }
 
@@ -72,12 +74,12 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public void setStartDate(String pStartDate) {
+  public void setStartDate(Date pStartDate) {
     mStartDate = pStartDate;
   }
 
   @Override
-  public void setEndDate(String pEndDate) {
+  public void setEndDate(Date pEndDate) {
     mEndDate = pEndDate;
   }
 
@@ -122,12 +124,12 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public String getStartDate() {
+  public Date getStartDate() {
     return mStartDate;
   }
 
   @Override
-  public String getEndDate() {
+  public Date getEndDate() {
     return mEndDate;
   }
 

@@ -58,11 +58,20 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
+    List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId);
+    return processResult(resultList, pProgramId, pSemesterId);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId, pYear, pSemester);
+    return processResult(resultList, pProgramId, pSemesterId);
+  }
+
+  private List<UGRegistrationResult> processResult(List<UGRegistrationResult> resultList, Integer pProgramId,
+      Integer pSemesterId) {
     String taskId = String.format("%s_%s%s", pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
     createTaskStatus(taskId);
-
-    List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId);
-
     Map<String, List<UGRegistrationResult>> studentCourseGradeMap =
         resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
 
@@ -82,8 +91,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
       i++;
       if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudentFound)) {
-        updateTaskStatus(taskId, TaskStatus.Status.INPROGRESS,
-            UmsUtils.getPercentageString(i, totalStudentFound));
+        updateTaskStatus(taskId, TaskStatus.Status.INPROGRESS, UmsUtils.getPercentageString(i, totalStudentFound));
       }
     }
     List<UGRegistrationResult> returnList =

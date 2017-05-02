@@ -32,6 +32,9 @@ public class UMSConfiguration {
   @Value("${enable.cache.warmer}")
   private boolean mEnableCacheWarmer;
 
+  @Value("${process.gpa.only}")
+  private boolean mProcessGPAOnly;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -70,5 +73,9 @@ public class UMSConfiguration {
 
   public boolean isEnableCacheWarmer() {
     return mEnableCacheWarmer;
+  }
+
+  public boolean isProcessGPAOnly() {
+    return mProcessGPAOnly;
   }
 }

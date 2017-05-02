@@ -37,6 +37,15 @@ public class ProcessResultResource extends Resource {
   }
 
   @POST
+  @Path("/processResult/program/{program-id}/semesterId/{semester-id}/year/{year}/semester/{semester}")
+  public Response processResult(final @PathParam("program-id") int pProgramId,
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("year") int pYear,
+      final @PathParam("semester") int pSemester) {
+    mProcessResult.process(pProgramId, pSemesterId, pYear, pSemester);
+    return Response.ok().build();
+  }
+
+  @POST
   @Path("/publishResult/program/{program-id}/semester/{semester-id}/")
   public Response publishResult(final @PathParam("program-id") int pProgramId,
       final @PathParam("semester-id") int pSemesterId) {

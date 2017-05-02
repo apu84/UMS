@@ -1,14 +1,13 @@
 package org.ums.cache;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.enums.ProgramType;
 import org.ums.enums.SemesterStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.SemesterManager;
-import org.ums.util.CacheUtil;
-
-import java.util.List;
 
 public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements
     SemesterManager {
@@ -46,5 +45,10 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   @Override
   public Semester getActiveSemester(Integer pProgramType) {
     return getManager().getActiveSemester(pProgramType);
+  }
+
+  @Override
+  public List<Semester> getPreviousSemesters(Integer pSemesterId, Integer pProgramTypeId) {
+    return getManager().getPreviousSemesters(pSemesterId, pProgramTypeId);
   }
 }

@@ -24,6 +24,13 @@ public class SemesterAdmissionDao extends SemesterAdmissionStatusDaoDecorator {
     this.mIdGenerator = mIdGenerator;
   }
 
+  @Override
+  public SemesterAdmissionStatus getAdmissionStatus(String pStudentId, Integer pSemesterId) {
+    String query = SELECT_ALL + " WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId},
+        new SemesterAdmissionStatusRowMapper());
+  }
+
   class SemesterAdmissionStatusRowMapper implements RowMapper<SemesterAdmissionStatus> {
     @Override
     public SemesterAdmissionStatus mapRow(ResultSet rs, int rowNum) throws SQLException {

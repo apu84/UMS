@@ -97,8 +97,8 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
       parameterSetting.setId(pResultSet.getLong("PS_ID"));
       parameterSetting.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       parameterSetting.setParameterId(pResultSet.getLong("PARAMETER_ID"));
-      parameterSetting.setStartDate(pResultSet.getString("START_DATE"));
-      parameterSetting.setEndDate(pResultSet.getString("END_DATE"));
+      parameterSetting.setStartDate(pResultSet.getTimestamp("START_DATE"));
+      parameterSetting.setEndDate(pResultSet.getTimestamp("END_DATE"));
       parameterSetting.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return parameterSetting;
     }

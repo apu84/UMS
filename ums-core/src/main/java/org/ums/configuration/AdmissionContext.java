@@ -74,4 +74,13 @@ public class AdmissionContext {
         .getJdbcTemplate()));
     return admissionStudentsCertificateCommentCache;
   }
+
+  @Bean
+  DepartmentSelectionDeadlineManager departmentSelectionDeadlineManager() {
+    DepartmentSelectionDeadlineCache departmentSelectionDeadlineCache =
+        new DepartmentSelectionDeadlineCache(mCacheFactory.getCacheManager());
+    departmentSelectionDeadlineCache.setManager(new PersistentDepartmentSelectionDeadlineDao(mTemplateFactory
+        .getJdbcTemplate()));
+    return departmentSelectionDeadlineCache;
+  }
 }

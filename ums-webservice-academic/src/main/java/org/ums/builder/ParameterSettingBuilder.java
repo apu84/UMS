@@ -1,26 +1,30 @@
 package org.ums.builder;
 
-import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
-import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.ParameterSetting;
-import org.ums.domain.model.mutable.MutableParameterSetting;
-import org.ums.persistent.model.PersistentParameter;
-import org.ums.persistent.model.PersistentSemester;
-
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.ParameterSetting;
+import org.ums.domain.model.mutable.MutableParameterSetting;
+import org.ums.formatter.DateFormat;
+import org.ums.persistent.model.PersistentParameter;
+import org.ums.persistent.model.PersistentSemester;
+
 @Component
 public class ParameterSettingBuilder implements Builder<ParameterSetting, MutableParameterSetting> {
+  @Autowired
+  DateFormat mDateFormat;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("parameterId", pReadOnly.getParameter().getId());
-    pBuilder.add("startDate", pReadOnly.getStartDate());
-    pBuilder.add("endDate", pReadOnly.getEndDate());
+    pBuilder.add("startDate", mDateFormat.format(pReadOnly.getStartDate()));
+    pBuilder.add("endDate", mDateFormat.format(pReadOnly.getEndDate()));
     pBuilder.add("self",
         pUriInfo.getBaseUriBuilder().path("academic").path("parameterSetting").path(String.valueOf(pReadOnly.getId()))
             .build().toString());
@@ -38,7 +42,7 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
     PersistentParameter parameter = new PersistentParameter();
     parameter.setId(Long.parseLong(pJsonObject.getString("parameterId")));
     pMutable.setParameter(parameter);
-    pMutable.setStartDate(pJsonObject.getString("startDate"));
-    pMutable.setEndDate(pJsonObject.getString("endDate"));
+    pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
+    pMutable.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));
   }
 }
