@@ -4,8 +4,9 @@ module ums{
     semesterId:number;
     semesterName:string;
     unit:string;
-    meritSerialNumberFrom: number;
-    meritSerialNumberTo: number;
+    meritSerialNumberFrom: string;
+    meritSerialNumberTo: string;
+    disable:boolean;
     deadline: string;
   }
 }

@@ -8,29 +8,25 @@ module ums {
     public restrict: string = "A";
     public scope={
       model:'=dateModel',
-      format:'=dateFormat'
+      format:'=dateFormat',
+      disable:'=disable'
     };
 
     public link = ($scope: any, element: any, attribute:any) => {
-      console.log("in the date picker directive");
+
+      console.log("attributes");
+      console.log(attribute.disable);
+      console.log("scope");
       console.log($scope);
-      console.log("element");
-      console.log(element);
-      console.log("attribute");
-      console.log(attribute);
+      if($scope.disable==true){
+        $('.datepicker').disableSelection();
+      }
       this.$timeout(() => {
         $('.datepicker-default').datepicker();
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
 
-
-     /*   element.datepicker({
-          dateFormat: $scope.format
-        });
-        element.on('change', function () {
-          $('.datepicker').hide();
-        });*/
       });
 
 

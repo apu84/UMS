@@ -57,6 +57,7 @@ module ums{
       $scope.programType = $scope.programTypes[0];
       $scope.quotaTypes = appConstants.quotaTypes;
       $scope.quotaType = $scope.quotaTypes[0];
+      $scope.date="";
       $scope.departmentSelectionDeadline={};
       $scope.showLoader = false;
 
@@ -103,24 +104,25 @@ module ums{
       this.$scope.showLoader = true;
       this.$scope.departmentSelectionDeadlines=[];
       this.departmentSelectionDeadlineService.getDeadlines(this.$scope.semester.id, this.$scope.meritType.name, this.$scope.faculty.shortName).then((deadlines)=>{
-        this.$scope.departmentSelectionDeadlines = deadlines;
+        for(var i=0;i<deadlines.length;i++){
+          deadlines[i].editable=false;
+          this.$scope.departmentSelectionDeadlines.push(deadlines[i]);
+        }
         this.$scope.showLoader = false;
       });
     }
 
 
     private add(){
-      console.log("Before");
-      console.log(this.$scope.departmentSelectionDeadlines);
+
       this.$scope.departmentSelectionDeadline={};
       this.$scope.departmentSelectionDeadline.deadline = this.$scope.date;
       this.$scope.departmentSelectionDeadline.meritSerialNumberFrom = +this.$scope.meritSerialNumberFrom;
       this.$scope.departmentSelectionDeadline.meritSerialNumberTo = +this.$scope.meritSerialNumberTo;
+      this.$scope.departmentSelectionDeadline.disable=true;
       this.$scope.departmentSelectionDeadlines.push(this.$scope.departmentSelectionDeadline);
-      console.log("after");
-
+      console.log(this.$scope.date);
       console.log(this.$scope.departmentSelectionDeadlines);
-
     }
 
     private convertToJson():ng.IPromise<any>{
