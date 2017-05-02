@@ -22,7 +22,11 @@ module ums {
         $('.datepicker').disableSelection();
       }
       this.$timeout(() => {
-        $('.datepicker-default').datepicker();
+
+        $('.datepicker-default').datepicker({
+          dateFormat:'dd/mm/yy'
+        });
+
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });

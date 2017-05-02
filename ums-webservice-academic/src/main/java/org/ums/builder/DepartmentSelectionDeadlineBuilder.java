@@ -1,14 +1,20 @@
 package org.ums.builder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.DepartmentSelectionDeadline;
 import org.ums.domain.model.mutable.MutableDepartmentSelectionDeadline;
+import org.ums.formatter.DateFormat;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Formatter;
 
 /**
  * Created by Monjur-E-Morshed on 27-Apr-17.
@@ -16,6 +22,10 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class DepartmentSelectionDeadlineBuilder implements
     Builder<DepartmentSelectionDeadline, MutableDepartmentSelectionDeadline> {
+
+  @Autowired
+  DateFormat mDateFormat;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, DepartmentSelectionDeadline pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
@@ -30,11 +40,12 @@ public class DepartmentSelectionDeadlineBuilder implements
     if(pReadOnly.getQuota() != null)
       pBuilder.add("quota", pReadOnly.getQuota());
     if(pReadOnly.getFromMeritSerialNumber() != 0)
-      pBuilder.add("fromMeritSerialNumber", pReadOnly.getFromMeritSerialNumber());
+      pBuilder.add("meritSerialNumberFrom", pReadOnly.getFromMeritSerialNumber());
     if(pReadOnly.getToMeritSerialNumber() != 0)
-      pBuilder.add("toMeritSerialNumber", pReadOnly.getToMeritSerialNumber());
+      pBuilder.add("meritSerialNumberTo", pReadOnly.getToMeritSerialNumber());
+    Format formatter = new SimpleDateFormat("dd/MM/YYYY");
     if(pReadOnly.getDeadline() != null)
-      pBuilder.add("deadline", UmsUtils.formatDate(pReadOnly.getDeadline(), "DD/MM/YYYY"));
+      pBuilder.add("deadline", formatter.format(pReadOnly.getDeadline()));
   }
 
   @Override
@@ -51,7 +62,8 @@ public class DepartmentSelectionDeadlineBuilder implements
       pMutable.setFromMeritSerialNumber(pJsonObject.getInt("fromMeritSerialNumber"));
     if(pJsonObject.containsKey("toMeritSerialNumber"))
       pMutable.setToMeritSerialNumber(pJsonObject.getInt("toMeritSerialNumber"));
+    Date date = mDateFormat.parse(pJsonObject.getString("deadline"));
     if(pJsonObject.containsKey("deadline"))
-      pMutable.setDeadline(UmsUtils.convertToDate(pJsonObject.getString("deadline"), "dd/MM/YYYY"));
+      pMutable.setDeadline(mDateFormat.parse(pJsonObject.getString("deadline")));
   }
 }

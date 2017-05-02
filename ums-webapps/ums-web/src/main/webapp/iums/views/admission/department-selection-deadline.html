@@ -129,9 +129,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberFrom" type="text"/></div></td>
-                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberTo" type="text"/></div> </td>
-                                    <td><div date-picker date-model="date" date-format="dd/mm/yyyy" disable="false"></div></td>
+                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberFrom" type="number"/></div></td>
+                                    <td><div><input class="form-control" data-ng-model="meritSerialNumberTo" type="number"/></div> </td>
+                                    <td><div date-picker date-model="date" date-format="dd/MM/YYYY" disable="false"></div></td>
                                     <td><Button class="btn btn-primary" data-ng-click="add()">Add</Button></td>
                                 </tr>
 
@@ -155,8 +155,8 @@
                             <tr data-ng-repeat="d in departmentSelectionDeadlines">
                                 <td><input disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberFrom" type="number"/></td>
                                 <td><input disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberTo" type="number"/> </td>
-                                <td><div  date-picker date-model="d.deadline" date-format="dd/mm/yyyy"  disable="d.disable"></div></td>
-                                <td><Button class="btn btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button><button class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                <td><div  date-picker date-model="d.deadline" date-format="dd/MM/yyyy"  disable="d.disable"></div></td>
+                                <td><Button class="btn btn-primary" data-ng-click="edit(d)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button><button data-ng-click="delete(d)" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                             </tr>
 
                             </tbody>
@@ -166,7 +166,7 @@
                 <div class="row" align="right">
                     <div class="col-md-12">
                         <div class="well">
-                            <button class="btn btn-success">Save</button>
+                            <button class="btn btn-success" data-ng-click="save()">Save</button>
                         </div>
                     </div>
                 </div>

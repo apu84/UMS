@@ -21,6 +21,9 @@ module ums{
 
     getDeadlines:Function;
     add:Function;
+    edit:Function;
+    delete:Function;
+    save:Function;
   }
 
   interface  IProgramType{
@@ -64,6 +67,10 @@ module ums{
 
       $scope.getDeadlines = this.getDeadlines.bind(this);
       $scope.add = this.add.bind(this);
+      $scope.edit = this.edit.bind(this);
+      $scope.delete = this.delete.bind(this);
+      $scope.save = this.save.bind(this);
+
       this.getFaculties();
       this.getSemesters();
       this.getMeritListTypes();
@@ -104,8 +111,10 @@ module ums{
       this.$scope.showLoader = true;
       this.$scope.departmentSelectionDeadlines=[];
       this.departmentSelectionDeadlineService.getDeadlines(this.$scope.semester.id, this.$scope.meritType.name, this.$scope.faculty.shortName).then((deadlines)=>{
+        console.log("Fetched deadlines-");
+        console.log(deadlines);
         for(var i=0;i<deadlines.length;i++){
-          deadlines[i].editable=false;
+          deadlines[i].disable=true;
           this.$scope.departmentSelectionDeadlines.push(deadlines[i]);
         }
         this.$scope.showLoader = false;
@@ -125,7 +134,35 @@ module ums{
       console.log(this.$scope.departmentSelectionDeadlines);
     }
 
+
+    private edit(departmentSelectionDeadline: DepartmentSelectionDeadline){
+      departmentSelectionDeadline.disable=false;
+    }
+
+    private delete(departmentSelectionDeadline: DepartmentSelectionDeadline){
+      for(var i=0;i<this.$scope.departmentSelectionDeadlines.length;i++){
+        if(this.$scope.departmentSelectionDeadlines[i] == departmentSelectionDeadline){
+          this.$scope.departmentSelectionDeadlines.splice(i,1);
+          break;
+        }
+      }
+
+      if(departmentSelectionDeadline.id==null){
+        this.notify.success("Sucessfully Deleted");
+      }else{
+        this.departmentSelectionDeadlineService.delete(departmentSelectionDeadline.id);
+      }
+    }
+
+    private save(){
+      this.convertToJson().then((json:any)=>{
+        this.departmentSelectionDeadlineService.saveOrUpdateDeadline(json).then((status:string)=>{
+          this.getDeadlines();
+        });
+      });
+    }
     private convertToJson():ng.IPromise<any>{
+    
       var defer = this.$q.defer();
       var completeJson={};
       var jsonObject = [];
@@ -137,7 +174,7 @@ module ums{
          item['quota'] = this.$scope.meritType.name;
          item['fromMeritSerialNumber'] = this.$scope.departmentSelectionDeadlines[i].meritSerialNumberFrom;
          item['toMeritSerialNumber'] = this.$scope.departmentSelectionDeadlines[i].meritSerialNumberTo;
-         item['deadline'] = this.$scope.departmentSelectionDeadline[i].deadline;
+         item['deadline'] = this.$scope.departmentSelectionDeadlines[i].deadline;
          jsonObject.push(item);
        }
        completeJson["entries"] = jsonObject;

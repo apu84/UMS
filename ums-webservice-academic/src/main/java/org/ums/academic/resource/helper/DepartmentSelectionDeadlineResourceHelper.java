@@ -57,6 +57,11 @@ public class DepartmentSelectionDeadlineResourceHelper extends
     return builder.build();
   }
 
+  @Override
+  public Response delete(Integer pObjectId) throws Exception {
+    return super.delete(pObjectId);
+  }
+
   public JsonObject getDeadline(final int pSemesterId, final String pQuota, final String pUnit, final UriInfo pUriInfo) {
     List<DepartmentSelectionDeadline> deadlines = new ArrayList<>();
     try {

@@ -5,8 +5,7 @@ import org.ums.academic.resource.helper.DepartmentSelectionDeadlineResourceHelpe
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
@@ -22,4 +21,11 @@ public class MutableDepartmentSelectionDeadlineResource extends Resource {
   public Response saveOrUpdateData(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
   }
+
+  @DELETE
+  @Path("/delete/id/{id}")
+  public Response delete(@PathParam("id") int pId) throws Exception {
+    return mHelper.delete(pId);
+  }
+
 }
