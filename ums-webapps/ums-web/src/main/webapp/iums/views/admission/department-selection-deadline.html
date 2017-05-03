@@ -110,7 +110,7 @@
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div class="row">
                     <div class="col-md-4"></div>
-                    <div class="col-md-4" align="center" ><i style="cursor: pointer;" class="fa fa-angle-down" aria-hidden="true"></i></div>
+                    <div class="col-md-4" align="center" ><i data-ng-click="showHide()" style="cursor: pointer;" class="fa fa-angle-down" aria-hidden="true"></i></div>
                     <div class="col-md-4"></div>
                 </div>
                 <div class="row" align="center" data-ng-if="showLoader">
@@ -119,7 +119,7 @@
                 </div>
                 <div class="row">
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" data-ng-show="showAddSection">
                         <table class="table table-bordered">
                             <thead>
                                 <th>From</th>
@@ -153,8 +153,8 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="d in departmentSelectionDeadlines">
-                                <td><input disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberFrom" type="number"/></td>
-                                <td><input disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberTo" type="number"/> </td>
+                                <td><input data-ng-disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberFrom" type="number"/></td>
+                                <td><input data-ng-disabled="d.disable" class="form-control" data-ng-model="d.meritSerialNumberTo" type="number"/> </td>
                                 <td><div  date-picker date-model="d.deadline" date-format="dd/MM/yyyy"  disable="d.disable"></div></td>
                                 <td><Button class="btn btn-primary" data-ng-click="edit(d)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button><button data-ng-click="delete(d)" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                             </tr>

@@ -9,8 +9,8 @@ module ums{
     faculty:Faculty;
     faculties:Array<Faculty>;
     departmentSelectionDeadline: any;
-    meritSerialNumberFrom:string;
-    meritSerialNumberTo:string;
+    meritSerialNumberFrom:number;
+    meritSerialNumberTo:number;
     date:string;
     departmentSelectionDeadlines : Array<DepartmentSelectionDeadline>;
     meritTypes:Array<IMeritListType>;
@@ -18,12 +18,14 @@ module ums{
 
 
     showLoader:boolean;
+    showAddSection:boolean;
 
     getDeadlines:Function;
     add:Function;
     edit:Function;
     delete:Function;
     save:Function;
+    showHide:Function;
   }
 
   interface  IProgramType{
@@ -56,11 +58,13 @@ module ums{
                 private departmentSelectionDeadlineService: DepartmentSelectionDeadlineService
       ) {
 
+      $scope.showAddSection=false;
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.quotaTypes = appConstants.quotaTypes;
       $scope.quotaType = $scope.quotaTypes[0];
-      $scope.date="";
+      $scope.meritSerialNumberFrom=0;
+      $scope.meritSerialNumberTo=0;
       $scope.departmentSelectionDeadline={};
       $scope.showLoader = false;
 
@@ -70,11 +74,16 @@ module ums{
       $scope.edit = this.edit.bind(this);
       $scope.delete = this.delete.bind(this);
       $scope.save = this.save.bind(this);
+      $scope.showHide = this.showHide.bind(this);
 
       this.getFaculties();
       this.getSemesters();
       this.getMeritListTypes();
 
+    }
+
+    private showHide(){
+      this.$scope.showAddSection=!this.$scope.showAddSection;
     }
 
     private getFaculties(){
@@ -125,13 +134,15 @@ module ums{
     private add(){
 
       this.$scope.departmentSelectionDeadline={};
-      this.$scope.departmentSelectionDeadline.deadline = this.$scope.date;
-      this.$scope.departmentSelectionDeadline.meritSerialNumberFrom = +this.$scope.meritSerialNumberFrom;
-      this.$scope.departmentSelectionDeadline.meritSerialNumberTo = +this.$scope.meritSerialNumberTo;
+      this.$scope.departmentSelectionDeadline.deadline = angular.copy(this.$scope.date);
+      this.$scope.departmentSelectionDeadline.meritSerialNumberFrom = angular.copy(+this.$scope.meritSerialNumberFrom);
+      this.$scope.departmentSelectionDeadline.meritSerialNumberTo = angular.copy(+this.$scope.meritSerialNumberTo);
       this.$scope.departmentSelectionDeadline.disable=true;
       this.$scope.departmentSelectionDeadlines.push(this.$scope.departmentSelectionDeadline);
-      console.log(this.$scope.date);
-      console.log(this.$scope.departmentSelectionDeadlines);
+      this.$scope.meritSerialNumberFrom=0;
+      this.$scope.meritSerialNumberTo=0;
+      this.$scope.date = "";
+
     }
 
 

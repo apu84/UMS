@@ -32,6 +32,12 @@ public class PersistentDepartmentSelectionDeadlineDao extends DepartmentSelectio
   }
 
   @Override
+  public DepartmentSelectionDeadline get(Integer pId) {
+    String query = "select * from dept_selection_deadline where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new DepartmentSelectionDeadlineRowMapper());
+  }
+
+  @Override
   public List<DepartmentSelectionDeadline> getDeadline(int pSemesterId, String pUnit, String pQuota) {
     String query = "select * from dept_selection_deadline where semester_id=? and unit=? and quota=? order by id";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pUnit, pQuota},
