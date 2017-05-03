@@ -9,8 +9,8 @@ module ums{
     faculty:Faculty;
     faculties:Array<Faculty>;
     departmentSelectionDeadline: any;
-    meritSerialNumberFrom:string;
-    meritSerialNumberTo:string;
+    meritSerialNumberFrom:number;
+    meritSerialNumberTo:number;
     date:string;
     departmentSelectionDeadlines : Array<DepartmentSelectionDeadline>;
     meritTypes:Array<IMeritListType>;
@@ -18,9 +18,14 @@ module ums{
 
 
     showLoader:boolean;
+    showAddSection:boolean;
 
     getDeadlines:Function;
     add:Function;
+    edit:Function;
+    delete:Function;
+    save:Function;
+    showHide:Function;
   }
 
   interface  IProgramType{
@@ -53,20 +58,32 @@ module ums{
                 private departmentSelectionDeadlineService: DepartmentSelectionDeadlineService
       ) {
 
+      $scope.showAddSection=false;
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.quotaTypes = appConstants.quotaTypes;
       $scope.quotaType = $scope.quotaTypes[0];
+      $scope.meritSerialNumberFrom=0;
+      $scope.meritSerialNumberTo=0;
       $scope.departmentSelectionDeadline={};
       $scope.showLoader = false;
 
 
       $scope.getDeadlines = this.getDeadlines.bind(this);
       $scope.add = this.add.bind(this);
+      $scope.edit = this.edit.bind(this);
+      $scope.delete = this.delete.bind(this);
+      $scope.save = this.save.bind(this);
+      $scope.showHide = this.showHide.bind(this);
+
       this.getFaculties();
       this.getSemesters();
       this.getMeritListTypes();
 
+    }
+
+    private showHide(){
+      this.$scope.showAddSection=!this.$scope.showAddSection;
     }
 
     private getFaculties(){
@@ -103,27 +120,60 @@ module ums{
       this.$scope.showLoader = true;
       this.$scope.departmentSelectionDeadlines=[];
       this.departmentSelectionDeadlineService.getDeadlines(this.$scope.semester.id, this.$scope.meritType.name, this.$scope.faculty.shortName).then((deadlines)=>{
-        this.$scope.departmentSelectionDeadlines = deadlines;
+        console.log("Fetched deadlines-");
+        console.log(deadlines);
+        for(var i=0;i<deadlines.length;i++){
+          deadlines[i].disable=true;
+          this.$scope.departmentSelectionDeadlines.push(deadlines[i]);
+        }
         this.$scope.showLoader = false;
       });
     }
 
 
     private add(){
-      console.log("Before");
-      console.log(this.$scope.departmentSelectionDeadlines);
-      this.$scope.departmentSelectionDeadline={};
-      this.$scope.departmentSelectionDeadline.deadline = this.$scope.date;
-      this.$scope.departmentSelectionDeadline.meritSerialNumberFrom = +this.$scope.meritSerialNumberFrom;
-      this.$scope.departmentSelectionDeadline.meritSerialNumberTo = +this.$scope.meritSerialNumberTo;
-      this.$scope.departmentSelectionDeadlines.push(this.$scope.departmentSelectionDeadline);
-      console.log("after");
 
-      console.log(this.$scope.departmentSelectionDeadlines);
+      this.$scope.departmentSelectionDeadline={};
+      this.$scope.departmentSelectionDeadline.deadline = angular.copy(this.$scope.date);
+      this.$scope.departmentSelectionDeadline.meritSerialNumberFrom = angular.copy(+this.$scope.meritSerialNumberFrom);
+      this.$scope.departmentSelectionDeadline.meritSerialNumberTo = angular.copy(+this.$scope.meritSerialNumberTo);
+      this.$scope.departmentSelectionDeadline.disable=true;
+      this.$scope.departmentSelectionDeadlines.push(this.$scope.departmentSelectionDeadline);
+      this.$scope.meritSerialNumberFrom=0;
+      this.$scope.meritSerialNumberTo=0;
+      this.$scope.date = "";
 
     }
 
+
+    private edit(departmentSelectionDeadline: DepartmentSelectionDeadline){
+      departmentSelectionDeadline.disable=false;
+    }
+
+    private delete(departmentSelectionDeadline: DepartmentSelectionDeadline){
+      for(var i=0;i<this.$scope.departmentSelectionDeadlines.length;i++){
+        if(this.$scope.departmentSelectionDeadlines[i] == departmentSelectionDeadline){
+          this.$scope.departmentSelectionDeadlines.splice(i,1);
+          break;
+        }
+      }
+
+      if(departmentSelectionDeadline.id==null){
+        this.notify.success("Sucessfully Deleted");
+      }else{
+        this.departmentSelectionDeadlineService.delete(departmentSelectionDeadline.id);
+      }
+    }
+
+    private save(){
+      this.convertToJson().then((json:any)=>{
+        this.departmentSelectionDeadlineService.saveOrUpdateDeadline(json).then((status:string)=>{
+          this.getDeadlines();
+        });
+      });
+    }
     private convertToJson():ng.IPromise<any>{
+    
       var defer = this.$q.defer();
       var completeJson={};
       var jsonObject = [];
@@ -135,7 +185,7 @@ module ums{
          item['quota'] = this.$scope.meritType.name;
          item['fromMeritSerialNumber'] = this.$scope.departmentSelectionDeadlines[i].meritSerialNumberFrom;
          item['toMeritSerialNumber'] = this.$scope.departmentSelectionDeadlines[i].meritSerialNumberTo;
-         item['deadline'] = this.$scope.departmentSelectionDeadline[i].deadline;
+         item['deadline'] = this.$scope.departmentSelectionDeadlines[i].deadline;
          jsonObject.push(item);
        }
        completeJson["entries"] = jsonObject;

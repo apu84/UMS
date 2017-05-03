@@ -6,6 +6,7 @@ module ums{
     unit:string;
     meritSerialNumberFrom: number;
     meritSerialNumberTo: number;
+    disable:boolean;
     deadline: string;
   }
 }

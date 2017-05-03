@@ -3,6 +3,8 @@ package org.ums.util;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -85,10 +87,12 @@ public class UmsUtils {
   }
 
   public static Date convertToDate(String date, String dateFormat) {
-    DateFormat format = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
+    DateTimeFormatter format = DateTimeFormatter.ofPattern(dateFormat, Locale.ENGLISH);
     Date outputDate = new Date();
     try {
-      return format.parse(date);
+      LocalDate localDate = LocalDate.parse(date, format);
+      outputDate = java.sql.Date.valueOf(localDate);
+      return java.sql.Date.valueOf(localDate);
     } catch(Exception e) {
       return outputDate;
     }

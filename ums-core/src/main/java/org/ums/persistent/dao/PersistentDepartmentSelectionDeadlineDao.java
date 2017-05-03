@@ -26,8 +26,20 @@ public class PersistentDepartmentSelectionDeadlineDao extends DepartmentSelectio
   }
 
   @Override
+  public int delete(MutableDepartmentSelectionDeadline pMutable) {
+    String query = "delete from dept_selection_deadline where id=?";
+    return mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+  @Override
+  public DepartmentSelectionDeadline get(Integer pId) {
+    String query = "select * from dept_selection_deadline where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new DepartmentSelectionDeadlineRowMapper());
+  }
+
+  @Override
   public List<DepartmentSelectionDeadline> getDeadline(int pSemesterId, String pUnit, String pQuota) {
-    String query = "select * from dept_selection_deadline where semester_id=? and unit=? and quota=?";
+    String query = "select * from dept_selection_deadline where semester_id=? and unit=? and quota=? order by id";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pUnit, pQuota},
         new DepartmentSelectionDeadlineRowMapper());
   }
@@ -43,8 +55,8 @@ public class PersistentDepartmentSelectionDeadlineDao extends DepartmentSelectio
   @Override
   public int update(List<MutableDepartmentSelectionDeadline> pMutableList) {
     String query =
-        "update dept_selection_deadline set merit_from=?, merit_to=" + getLastModifiedSql()
-            + ", last_modified=? where semester_id=? and quota=? and unit=?";
+        "update dept_selection_deadline set merit_from=?, merit_to=?, deadline=?, last_modified="
+            + getLastModifiedSql() + " where semester_id=? and quota=? and unit=? and id=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableList)).length;
   }
 
@@ -61,7 +73,8 @@ public class PersistentDepartmentSelectionDeadlineDao extends DepartmentSelectio
     List<Object[]> params = new ArrayList<>();
     for(DepartmentSelectionDeadline deadline : pList) {
       params.add(new Object[] {deadline.getFromMeritSerialNumber(), deadline.getToMeritSerialNumber(),
-          deadline.getSemester().getId(), deadline.getQuota(), deadline.getUnit()});
+          deadline.getDeadline(), deadline.getSemester().getId(), deadline.getQuota(), deadline.getUnit(),
+          deadline.getId()});
     }
     return params;
   }

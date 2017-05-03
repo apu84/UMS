@@ -57,6 +57,16 @@ public class DepartmentSelectionDeadlineResourceHelper extends
     return builder.build();
   }
 
+  @Override
+  public Response delete(Integer pObjectId) throws Exception {
+    DepartmentSelectionDeadline deadline = getContentManager().get(pObjectId);
+    getContentManager().delete((MutableDepartmentSelectionDeadline) deadline);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.ACCEPTED);
+    return builder.build();
+  }
+
   public JsonObject getDeadline(final int pSemesterId, final String pQuota, final String pUnit, final UriInfo pUriInfo) {
     List<DepartmentSelectionDeadline> deadlines = new ArrayList<>();
     try {
