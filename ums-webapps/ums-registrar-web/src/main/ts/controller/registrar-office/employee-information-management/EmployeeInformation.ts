@@ -63,6 +63,7 @@ module ums {
         showAwardCancelButton: boolean;
         showExperienceCancelButton: boolean;
 
+        borderColor: string;
         supOptions: string;
 
         degreeNameMap: any;
@@ -219,18 +220,19 @@ module ums {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
-                academic: new Array<IAcademicInformationModel>(),
-                publication: new Array<IPublicationInformationModel>(),
-                training: new Array<ITrainingInformationModel>(),
-                award: new Array<IAwardInformationModel>(),
-                experience: new Array<IExperienceInformationModel>()
+                academic: Array<IAcademicInformationModel>(),
+                publication: Array<IPublicationInformationModel>(),
+                training: Array<ITrainingInformationModel>(),
+                award: Array<IAwardInformationModel>(),
+                experience: Array<IExperienceInformationModel>()
             };
 
             $scope.data = {
-                supOptions: ""
+                supOptions: "",
+                borderColor: ""
             };
 
-            $scope.waitingForApprovalPublications = new Array<IPublicationInformationModel>();
+            $scope.waitingForApprovalPublications = Array<IPublicationInformationModel>();
 
             $scope.gender = this.registrarConstants.gender;
             $scope.religions = this.registrarConstants.religionTypes;
@@ -273,13 +275,6 @@ module ums {
             this.getDivision();
             this.getDistrict();
             this.getThana();
-
-            this.$scope.entry.personal.gender = this.$scope.gender[0];
-            this.$scope.entry.personal.religion = this.$scope.religions[0];
-            this.$scope.entry.personal.nationality = this.$scope.nationalities[0];
-            this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[0];
-            this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[0];
-            this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
 
             this.enableViewMode('personal');
             this.enableViewMode('academic');
@@ -382,28 +377,28 @@ module ums {
             this.$scope.districtMap = {};
             this.$scope.thanaMap = {};
 
-            for (var i = 0; i < this.$scope.degreeNames.length; i++) {
+            for (let i = 0; i < this.$scope.degreeNames.length; i++) {
                 this.$scope.degreeNameMap[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
             }
-            for (var i = 0; i < this.$scope.gender.length; i++) {
+            for (let i = 0; i < this.$scope.gender.length; i++) {
                 this.$scope.genderNameMap[this.$scope.gender[i].id] = this.$scope.gender[i];
             }
-            for (var i = 0; i < this.$scope.religions.length; i++) {
+            for (let i = 0; i < this.$scope.religions.length; i++) {
                 this.$scope.religionNameMap[this.$scope.religions[i].name] = this.$scope.religions[i];
             }
-            for (var i = 0; i < this.$scope.nationalities.length; i++) {
+            for (let i = 0; i < this.$scope.nationalities.length; i++) {
                 this.$scope.nationalityMap[this.$scope.nationalities[i].name] = this.$scope.nationalities[i];
             }
-            for (var i = 0; i < this.$scope.bloodGroups.length; i++) {
+            for (let i = 0; i < this.$scope.bloodGroups.length; i++) {
                 this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].name] = this.$scope.bloodGroups[i];
             }
-            for (var i = 0; i < this.$scope.maritalStatus.length; i++) {
+            for (let i = 0; i < this.$scope.maritalStatus.length; i++) {
                 this.$scope.martialStatusMap[this.$scope.maritalStatus[i].name] = this.$scope.maritalStatus[i];
             }
-            for (var i = 0; i < this.$scope.publicationTypes.length; i++) {
+            for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
                 this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
             }
-            for (var i = 0; i < this.$scope.relations.length; i++) {
+            for (let i = 0; i < this.$scope.relations.length; i++) {
                 this.$scope.relationMap[this.$scope.relations[i].name] = this.$scope.relations[i];
             }
         }
@@ -609,7 +604,7 @@ module ums {
         }
 
         private setSavedValuesOfAcademicForm(academicInformation: any) {
-            for (var i = 0; i < academicInformation.length; i++) {
+            for (let i = 0; i < academicInformation.length; i++) {
                 this.$scope.entry.academic[i] = academicInformation[i];
                 this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];
             }
@@ -627,18 +622,16 @@ module ums {
         }
 
         private setSavedValuesOfPublicationForm(publicationInformation: any) {
-            for (var i = 0, a = 0, b = 0; i < publicationInformation.length; i++) {
-                if(publicationInformation[i].status === "Approved") {
-                    this.$scope.entry.publication[a] = publicationInformation[i];
-                    this.$scope.entry.publication[a].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
-                    a++;
+            for (let i = 0; i < publicationInformation.length; i++) {
+                if(publicationInformation[i].status === "Waiting") {
+                    this.$scope.borderColor = "red";
+                    this.$scope.entry.publication[i] = publicationInformation[i];
+                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
                 }
                 else{
-                    console.log("Not Entering Here ");
-                    console.log( publicationInformation[i]);
-                    this.$scope.waitingForApprovalPublications[b] = publicationInformation[i];
-                    this.$scope.waitingForApprovalPublications[b].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
-                    b++;
+                    this.$scope.borderColor = "black";
+                    this.$scope.entry.publication[i] = publicationInformation[i];
+                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
                 }
             }
         }
@@ -653,7 +646,7 @@ module ums {
         }
 
         private setSavedValuesOfTrainingForm(trainingInformation: any) {
-            for (var i = 0; i < trainingInformation.length; i++) {
+            for (let i = 0; i < trainingInformation.length; i++) {
                 this.$scope.entry.training[i] = trainingInformation[i];
             }
         }
@@ -668,7 +661,7 @@ module ums {
         }
 
         private setSavedValuesOfAwardForm(awardInformation: any) {
-            for (var i = 0; i < awardInformation.length; i++) {
+            for (let i = 0; i < awardInformation.length; i++) {
                 this.$scope.entry.award[i] = awardInformation[i];
             }
         }
@@ -683,7 +676,7 @@ module ums {
         }
 
         private setSavedValuesOfExperienceForm(experienceInformation: any) {
-            for (var i = 0; i < experienceInformation.length; i++) {
+            for (let i = 0; i < experienceInformation.length; i++) {
                 this.$scope.entry.experience[i] = experienceInformation[i];
             }
         }
@@ -757,21 +750,21 @@ module ums {
         private addNewRow(divName: string) {
             console.log("i am in addNewRow()");
             if (divName === 'academic') {
-                var academicEntry: IAcademicInformationModel;
+                let academicEntry: IAcademicInformationModel;
                 academicEntry = {
                     employeeId: "",
-                    academicDegreeName: this.$scope.degreeNames[0],
+                    academicDegreeName: null,
                     academicInstitution: "",
                     academicPassingYear: ""
                 };
                 this.$scope.entry.academic.push(academicEntry);
             }
             else if (divName === 'publication') {
-                var publicationEntry: IPublicationInformationModel;
+                let publicationEntry: IPublicationInformationModel;
                 publicationEntry = {
                     employeeId: "",
                     publicationTitle: "",
-                    publicationType: this.$scope.publicationTypes[0],
+                    publicationType: null,
                     publicationInterestGenre: "",
                     publicationWebLink: "",
                     publisherName: "",
@@ -787,7 +780,7 @@ module ums {
                 this.$scope.entry.publication.push(publicationEntry);
             }
             else if (divName === 'training') {
-                var trainingEntry: ITrainingInformationModel;
+                let trainingEntry: ITrainingInformationModel;
                 trainingEntry = {
                     employeeId: "",
                     trainingName: "",
@@ -799,7 +792,7 @@ module ums {
                 this.$scope.entry.training.push(trainingEntry);
             }
             else if (divName === 'award') {
-                var awardEntry: IAwardInformationModel;
+                let awardEntry: IAwardInformationModel;
                 awardEntry = {
                     employeeId: "",
                     awardName: "",
@@ -810,7 +803,7 @@ module ums {
                 this.$scope.entry.award.push(awardEntry);
             }
             else if (divName === 'experience') {
-                var experienceEntry: IExperienceInformationModel;
+                let experienceEntry: IExperienceInformationModel;
                 experienceEntry = {
                     employeeId: "",
                     experienceInstitution: "",
@@ -845,52 +838,52 @@ module ums {
 
         public convertToJson(convertThis: string): ng.IPromise<any> {
             console.log("I am in convertToJSon()");
-            var defer = this.$q.defer();
-            var JsonObject = {};
-            var JsonArray = [];
-            var item: any = {};
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            let JsonArray = [];
+            let item: any = {};
 
             if (convertThis === "personal") {
-                var personalInformation = <IPersonalInformationModel> {};
+                let personalInformation = <IPersonalInformationModel> {};
                 personalInformation = this.$scope.entry.personal;
                 item['personal'] = personalInformation;
             }
 
             else if (convertThis === "academic") {
-                var academicInformation = new Array<IAcademicInformationModel>();
-                for (var i = 0; i < this.$scope.entry.academic.length; i++) {
+                let academicInformation = Array<IAcademicInformationModel>();
+                for (let i = 0; i < this.$scope.entry.academic.length; i++) {
                     academicInformation = this.$scope.entry.academic;
                 }
                 item['academic'] = academicInformation;
             }
 
             else if (convertThis === "publication") {
-                var publicationInformation = new Array<IPublicationInformationModel>();
-                for (var i = 0; i < this.$scope.entry.publication.length; i++) {
+                let publicationInformation = Array<IPublicationInformationModel>();
+                for (let i = 0; i < this.$scope.entry.publication.length; i++) {
                     publicationInformation = this.$scope.entry.publication;
                 }
                 item['publication'] = publicationInformation;
             }
 
             else if (convertThis === "training") {
-                var trainingInformation = new Array<ITrainingInformationModel>();
-                for (var i = 0; i < this.$scope.entry.training.length; i++) {
+                let trainingInformation = Array<ITrainingInformationModel>();
+                for (let i = 0; i < this.$scope.entry.training.length; i++) {
                     trainingInformation = this.$scope.entry.training;
                 }
                 item['training'] = trainingInformation;
             }
 
             else if (convertThis === "award") {
-                var awardInformation = new Array<IAwardInformationModel>();
-                for (var i = 0; i < this.$scope.entry.award.length; i++) {
+                let awardInformation = Array<IAwardInformationModel>();
+                for (let i = 0; i < this.$scope.entry.award.length; i++) {
                     awardInformation = this.$scope.entry.award;
                 }
                 item['award'] = awardInformation;
             }
 
             else if (convertThis === "experience") {
-                var experienceInformation = new Array<IExperienceInformationModel>();
-                for (var i = 0; i < this.$scope.entry.experience.length; i++) {
+                let experienceInformation = Array<IExperienceInformationModel>();
+                for (let i = 0; i < this.$scope.entry.experience.length; i++) {
                     experienceInformation = this.$scope.entry.experience;
                 }
                 item['experience'] = experienceInformation;
@@ -940,11 +933,9 @@ module ums {
             console.log("i am in getCountry()");
             this.countryService.getCountryList().then((country: any) => {
                 this.$scope.countries = country.entries;
-                this.$scope.entry.personal.presentAddressCountry = this.$scope.countries[17];
-                this.$scope.entry.personal.permanentAddressCountry = this.$scope.countries[17];
                 console.log("Finding Country length");
                 console.log(this.$scope.countries.length);
-                for (var i = 0; i < this.$scope.countries.length; i++) {
+                for (let i = 0; i < this.$scope.countries.length; i++) {
                     this.$scope.countryMap[this.$scope.countries[i].name] = this.$scope.countries[i];
                 }
             });
@@ -954,9 +945,7 @@ module ums {
             console.log("i am in getDivision()");
             this.divisionService.getDivisionList().then((division: any) => {
                 this.$scope.divisions = division.entries;
-                this.$scope.entry.personal.presentAddressDivision = this.$scope.divisions[0];
-                this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisions[0];
-                for (var i = 0; i < this.$scope.divisions.length; i++) {
+                for (let i = 0; i < this.$scope.divisions.length; i++) {
                     this.$scope.divisionMap[this.$scope.divisions[i].name] = this.$scope.divisions[i];
                 }
             });
@@ -968,9 +957,7 @@ module ums {
                 this.$scope.presentAddressDistricts = district.entries;
                 this.$scope.permanentAddressDistricts = district.entries;
                 this.$scope.allDistricts = district.entries;
-                this.$scope.entry.personal.presentAddressDistrict = this.$scope.presentAddressDistricts[17];
-                this.$scope.entry.personal.permanentAddressDistrict = this.$scope.permanentAddressDistricts[17];
-                for (var i = 0; i < this.$scope.allDistricts.length; i++) {
+                for (let i = 0; i < this.$scope.allDistricts.length; i++) {
                     this.$scope.districtMap[this.$scope.allDistricts[i].name] = this.$scope.allDistricts[i];
                 }
             });
@@ -982,9 +969,7 @@ module ums {
                 this.$scope.presentAddressThanas = thana.entries;
                 this.$scope.permanentAddressThanas = thana.entries;
                 this.$scope.allThanas = thana.entries;
-                this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.presentAddressThanas[196];
-                this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.permanentAddressThanas[196];
-                for (var i = 0; i < this.$scope.allThanas.length; i++) {
+                for (let i = 0; i < this.$scope.allThanas.length; i++) {
                     this.$scope.thanaMap[this.$scope.allThanas[i].name] = this.$scope.allThanas[i];
                 }
             });
@@ -992,9 +977,9 @@ module ums {
 
         private changePresentAddressDistrict() {
             this.$scope.presentAddressDistricts = [];
-            var districtLength = this.$scope.allDistricts.length;
-            var index = 0;
-            for (var i = 0; i < districtLength; i++) {
+            let districtLength = this.$scope.allDistricts.length;
+            let index = 0;
+            for (let i = 0; i < districtLength; i++) {
                 if (this.$scope.entry.personal.presentAddressDivision.id === this.$scope.allDistricts[i].division_id) {
                     this.$scope.presentAddressDistricts[index++] = this.$scope.allDistricts[i];
                 }
@@ -1004,9 +989,9 @@ module ums {
 
         private changePermanentAddressDistrict() {
             this.$scope.permanentAddressDistricts = [];
-            var districtLength = this.$scope.allDistricts.length;
-            var index = 0;
-            for (var i = 0; i < districtLength; i++) {
+            let districtLength = this.$scope.allDistricts.length;
+            let index = 0;
+            for (let i = 0; i < districtLength; i++) {
                 if (this.$scope.entry.personal.permanentAddressDivision.id === this.$scope.allDistricts[i].division_id) {
                     this.$scope.permanentAddressDistricts[index++] = this.$scope.allDistricts[i];
                 }
@@ -1016,9 +1001,9 @@ module ums {
 
         private changePresentAddressThana() {
             this.$scope.presentAddressThanas = [];
-            var thanaLength = this.$scope.allThanas.length;
-            var index = 0;
-            for (var i = 0; i < thanaLength; i++) {
+            let thanaLength = this.$scope.allThanas.length;
+            let index = 0;
+            for (let i = 0; i < thanaLength; i++) {
                 if (this.$scope.entry.personal.presentAddressDistrict.id === this.$scope.allThanas[i].district_id) {
                     this.$scope.presentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
@@ -1028,9 +1013,9 @@ module ums {
 
         private changePermanentAddressThana() {
             this.$scope.permanentAddressThanas = [];
-            var thanaLength = this.$scope.allThanas.length;
-            var index = 0;
-            for (var i = 0; i < thanaLength; i++) {
+            let thanaLength = this.$scope.allThanas.length;
+            let index = 0;
+            for (let i = 0; i < thanaLength; i++) {
                 if (this.$scope.entry.personal.permanentAddressDistrict.id === this.$scope.allThanas[i].district_id) {
                     this.$scope.permanentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
@@ -1086,12 +1071,12 @@ module ums {
         }
 
         private fillEmergencyContactAddress() {
-            var presentAddressLine1;
-            var presentAddressLine2;
-            var presentPostalCode;
-            var permanentAddressLine1;
-            var permanentAddressLine2;
-            var permanentPostalCode;
+            let presentAddressLine1;
+            let presentAddressLine2;
+            let presentPostalCode;
+            let permanentAddressLine1;
+            let permanentAddressLine2;
+            let permanentPostalCode;
 
             if (this.$scope.entry.personal.presentAddressHouse === "" || this.$scope.entry.personal.presentAddressHouse === undefined) {
                 presentAddressLine1 = "";

@@ -647,12 +647,10 @@ module ums {
         static  RegistrarConstant(): any {
             return {
                 gender: [
-                    {id: '0', name: "Select Gender"},
                     {id: 'M', name: 'Male'},
                     {id: 'F', name: 'Female'}
                 ],
                 religionTypes: [
-                    {id: 0, name: "Select Religion"},
                     {id: 1, name: "Islam"},
                     {id: 2, name: "Buddhism"},
                     {id: 3, name: "Hinduism"},
@@ -662,12 +660,10 @@ module ums {
                     {id: 7, name: "Others"}
                 ],
                 nationalities: [
-                    {id: 0, name: "Select Nationality"},
                     {id: 1, name: "Bangladeshi"},
                     {id: 2, name: "Others"}
                 ],
                 bloodGroups: [
-                    {id: 0, name: "Select Blood Group"},
                     {id: 1, name: "A+"},
                     {id: 2, name: "A-"},
                     {id: 3, name: "B+"},
@@ -678,7 +674,6 @@ module ums {
                     {id: 8, name: "O-"}
                 ],
                 publicationTypes: [
-                    {id: 0, name: "Select Publication Type"},
                     {id: 1, name: "Conference"},
                     {id: 2, name: "Journal"},
                     {id: 3, name: "Proceedings"},
@@ -686,14 +681,12 @@ module ums {
                     {id: 5, name: "Others"}
                 ],
                 maritalStatuses: [
-                    {id: 0, name: "Select Marital Status"},
                     {id: 1, name: "Single"},
                     {id: 2, name: "Married"},
                     {id: 3, name: "Divorced"},
                     {id: 4, name: "Widowed"}
                 ],
                 degreeTypes: [
-                    {id: 0, name: "Select Degree Name"},
                     {id: 1, name: "SSC"},
                     {id: 2, name: "HSC"},
                     {id: 3, name: "Bachelor"},
@@ -701,7 +694,6 @@ module ums {
                     {id: 5, name: "PhD"}
                 ],
                 relationTypes: [
-                    {id: 0, name: "Select Relation"},
                     {id: 1, name: "Spouse"},
                     {id: 2, name: "Aunt"},
                     {id: 3, name: "Brother"},
@@ -726,8 +718,6 @@ module ums {
                     {id: 22, name: "Son"},
                     {id: 23, name: "Son-in-law"},
                     {id: 24, name: "Others"}
-
-
                 ]
             }
         }
