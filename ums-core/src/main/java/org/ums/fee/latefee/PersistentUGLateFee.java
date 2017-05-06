@@ -18,6 +18,7 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   private Semester mSemester;
   private Integer mSemesterId;
   private String mLastModified;
+  private AdmissionType mAdmissionType;
 
   @Override
   public Long getId() {
@@ -77,6 +78,16 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   @Override
   public void setSemesterId(Integer pSemesterId) {
     this.mSemesterId = pSemesterId;
+  }
+
+  @Override
+  public void setAdmissionType(AdmissionType pAdmissionType) {
+    mAdmissionType = pAdmissionType;
+  }
+
+  @Override
+  public AdmissionType getAdmissionType() {
+    return mAdmissionType;
   }
 
   @Override

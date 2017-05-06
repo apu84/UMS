@@ -34,7 +34,12 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
     APPLICATION_SEMESTER_WITHDRAW(9L, "application_semester_withdraw"),
     APPLICATION_CCI(10L, "application_cci"),
     APPLICATION_READMISSION(11L, "application_readmission"),
-    SEMESTER_ADMISSION(12L, "semester_admission"),
+    REGUALR_ADMISSION(12L, "semester_admission"),
+    REGULAR_FIRST_INSTALLMENT(13L, "first_installment_for_regular_admission"),
+    REGULAR_SECOND_INSTALLMENT(14L, "second_installment_for_regular_admission"),
+    READMISSION(15L, "readmission"),
+    READMISSION_FIRST_INSTALLMENT(16L, "first_installment_for_readmission"),
+    READMISSION_SECOND_INSTALLMENT(17L, "second_installment_for_readmission"),
     NONE(0L, "");
 
     private String label;

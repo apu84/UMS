@@ -18,4 +18,6 @@ public interface MutableUGLateFee extends UGLateFee, Editable<Long>, MutableIden
   void setSemester(Semester pSemester);
 
   void setSemesterId(Integer pSemesterId);
+
+  void setAdmissionType(AdmissionType pAdmissionType);
 }
