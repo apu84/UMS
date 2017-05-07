@@ -48,10 +48,6 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
     return Optional.empty();
   }
 
-  StudentRecord.Type getAdmissionType(String pStudentId, Integer pSemesterId) {
-    return getStudentRecordManager().getStudentRecord(pStudentId, pSemesterId).getType();
-  }
-
   private boolean hasAppliedForPayment(String pStudentId, Integer pSemesterId) {
     List<StudentPayment> payments =
         getStudentPaymentManager().getPayments(pStudentId, pSemesterId,
