@@ -71,6 +71,12 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     return mJdbcTemplate.update(query);
   }
 
+  @Override
+  public List<StudentPayment> getToExpirePayments() {
+    String query = SELECT_ALL + "WHERE TRANSACTION_VALID_TILL <= SYSDATE";
+    return mJdbcTemplate.query(query, new StudentPaymentRowMapper());
+  }
+
   private List<Object[]> getUpdateParamArray(List<MutableStudentPayment> pStudentPayments) {
     List<Object[]> params = new ArrayList<>();
     for(StudentPayment studentPayment : pStudentPayments) {
