@@ -98,9 +98,9 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   @Override
   public List<StudentPayment> getPayments(String pStudentId, Integer pSemesterId, FeeType pFeeType) {
-    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND FEE_TYPE = ?";
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pFeeType.getId()},
-        new StudentPaymentRowMapper());
+    return getPayments(pStudentId, pSemesterId).stream()
+        .filter(payment -> payment.getFeeCategory().getType().getId().intValue() == pFeeType.getId())
+        .collect(Collectors.toList());
   }
 
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {
