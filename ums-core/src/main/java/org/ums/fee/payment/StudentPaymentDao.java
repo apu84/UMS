@@ -1,5 +1,6 @@
 package org.ums.fee.payment;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,11 +16,12 @@ import org.ums.generator.IdGenerator;
 import com.google.common.collect.Lists;
 
 public class StudentPaymentDao extends StudentPaymentDaoDecorator {
-  String SELECT_ALL = "SELECT ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, VERIFIED_ON,"
-      + " LAST_MODIFIED, FEE_TYPE FROM STUDENT_PAYMENT ";
+  String SELECT_ALL = "SELECT ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, VERIFIED_ON, "
+      + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY FROM STUDENT_PAYMENT ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_PAYMENT (ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, "
-          + "LAST_MODIFIED, FEE_TYPE) VALUES (?, ?, ?, ?, ?, ?, SYSDATE " + getLastModifiedSql() + ", ?) ";
+          + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY) VALUES (?, ?, ?, ?, ?, ?, SYSDATE, ? "
+          + getLastModifiedSql() + ", ?) ";
   String UPDATE_ALL = "UPDATE STUDENT_PAYMENT SET STATUS = ?, VERIFIED_ON = SYSDATE, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
 
@@ -82,7 +84,8 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     for(StudentPayment studentPayment : pStudentPayments) {
       params.add(new Object[] {mIdGenerator.getNumericId(), mIdGenerator.getAlphaNumericId(),
           studentPayment.getStudentId(), studentPayment.getSemesterId(), studentPayment.getAmount(),
-          studentPayment.getStatus().getValue(), studentPayment.getFeeTypeId()});
+          StudentPayment.Status.APPLIED.getValue(), studentPayment.getTransactionValidTill(),
+          studentPayment.getFeeCategoryId()});
     }
     return params;
   }
@@ -108,12 +111,13 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
       studentPayment.setTransactionId(rs.getString("TRANSACTION_ID"));
       studentPayment.setSemesterId(rs.getInt("SEMESTER_ID"));
       studentPayment.setStudentId(rs.getString("STUDENT_ID"));
-      studentPayment.setAmount(rs.getDouble("AMOUNT"));
+      studentPayment.setAmount(new BigDecimal(rs.getDouble("AMOUNT")));
       studentPayment.setStatus(StudentPayment.Status.get(rs.getInt("STATUS")));
       studentPayment.setAppliedOn(rs.getTimestamp("APPLIED_ON"));
       studentPayment.setVerifiedOn(rs.getTimestamp("VERIFIED_ON"));
+      studentPayment.setTransactionValidTill(rs.getTimestamp("TRANSACTION_VALID_TILL"));
       studentPayment.setLastModified(rs.getString("LAST_MODIFIED"));
-      studentPayment.setFeeTypeId(rs.getInt("FEE_TYPE"));
+      studentPayment.setFeeCategoryId(rs.getString("FEE_CATEGORY"));
       AtomicReference<StudentPayment> atomicReference = new AtomicReference<>(studentPayment);
       return atomicReference.get();
     }

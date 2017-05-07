@@ -53,6 +53,12 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
     return pMutable.getId();
   }
 
+  @Override
+  public List<FeeCategory> getFeeCategories(Integer pFeeTypeId) {
+    String query = SELECT_ALL + "WHERE TYPE = ? ";
+    return mJdbcTemplate.query(query, new Object[] {pFeeTypeId}, new FeeCategoryRowMapper());
+  }
+
   class FeeCategoryRowMapper implements RowMapper<FeeCategory> {
     @Override
     public FeeCategory mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -61,7 +67,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
       feeCategory.setFeeId(rs.getString("FEE_ID"));
       feeCategory.setName(rs.getString("NAME"));
       feeCategory.setFeeTypeId(rs.getInt("TYPE"));
-      feeCategory.setDescription(rs.getString("Description"));
+      feeCategory.setDescription(rs.getString("DESCRIPTION"));
       feeCategory.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<FeeCategory> atomicReference = new AtomicReference<>(feeCategory);
       return atomicReference.get();

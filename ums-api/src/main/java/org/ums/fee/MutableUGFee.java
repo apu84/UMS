@@ -6,6 +6,8 @@ import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
+import java.math.BigDecimal;
+
 public interface MutableUGFee extends UGFee, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
   void setFeeCategoryId(String pFeeCategoryId);
 
@@ -19,5 +21,5 @@ public interface MutableUGFee extends UGFee, Editable<Long>, MutableLastModifier
 
   void setFaculty(Faculty pFaculty);
 
-  void setAmount(Double pAmount);
+  void setAmount(BigDecimal pAmount);
 }

@@ -1,6 +1,7 @@
 package org.ums.fee.latefee;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public interface UGLateFee extends Serializable, EditType<MutableUGLateFee>, Las
 
   Date getTo();
 
-  Integer getFee();
+  BigDecimal getFee();
 
   Semester getSemester();
 

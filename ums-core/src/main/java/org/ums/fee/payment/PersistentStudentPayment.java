@@ -1,35 +1,37 @@
 package org.ums.fee.payment;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.fee.FeeType;
-import org.ums.fee.FeeTypeManager;
+import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeCategoryManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 
 public class PersistentStudentPayment implements MutableStudentPayment {
-
   private static SemesterManager sSemesterManager;
   private static StudentManager sStudentManager;
   private static StudentPaymentManager sStudentPaymentManager;
-  private static FeeTypeManager sFeeTypeManager;
+  private static FeeCategoryManager sFeeCategoryManager;
+
   private Long mId;
   private String mTransactionId;
   private Semester mSemester;
   private Integer mSemesterId;
   private Student mStudent;
   private String mStudentId;
-  private Double mAmount;
+  private BigDecimal mAmount;
   private Status mStatus;
   private Date mAppliedOn;
   private Date mVerifiedOn;
   private String mLastModified;
-  private Integer mFeeTypeId;
-  private FeeType mFeeType;
+  private String mFeeCategoryId;
+  private FeeCategory mFeeCategory;
+  private Date mTransactionValidTill;
 
   @Override
   public Long getId() {
@@ -92,12 +94,12 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   }
 
   @Override
-  public Double getAmount() {
+  public BigDecimal getAmount() {
     return mAmount;
   }
 
   @Override
-  public void setAmount(Double pAmount) {
+  public void setAmount(BigDecimal pAmount) {
     this.mAmount = pAmount;
   }
 
@@ -142,23 +144,33 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   }
 
   @Override
-  public Integer getFeeTypeId() {
-    return mFeeTypeId;
+  public String getFeeCategoryId() {
+    return mFeeCategoryId;
   }
 
   @Override
-  public FeeType getFeeType() {
-    return mFeeType == null ? sFeeTypeManager.get(mFeeTypeId) : sFeeTypeManager.validate(mFeeType);
+  public FeeCategory getFeeCategory() {
+    return mFeeCategory == null ? sFeeCategoryManager.get(mFeeCategoryId) : sFeeCategoryManager.validate(mFeeCategory);
   }
 
   @Override
-  public void setFeeTypeId(Integer feeTypeId) {
-    mFeeTypeId = feeTypeId;
+  public void setFeeCategoryId(String feeCategoryId) {
+    mFeeCategoryId = feeCategoryId;
   }
 
   @Override
-  public void setFeeType(FeeType feeType) {
-    mFeeType = feeType;
+  public void setFeeCategory(FeeCategory feeCategory) {
+    mFeeCategory = feeCategory;
+  }
+
+  @Override
+  public Date getTransactionValidTill() {
+    return mTransactionValidTill;
+  }
+
+  @Override
+  public void setTransactionValidTill(Date pDate) {
+    mTransactionValidTill = pDate;
   }
 
   @Override
@@ -183,7 +195,7 @@ public class PersistentStudentPayment implements MutableStudentPayment {
 
   public PersistentStudentPayment() {}
 
-  public PersistentStudentPayment(MutableStudentPayment pStudentPayment) {
+  private PersistentStudentPayment(MutableStudentPayment pStudentPayment) {
     setId(pStudentPayment.getId());
     setTransactionId(pStudentPayment.getTransactionId());
     setSemester(pStudentPayment.getSemester());
@@ -191,9 +203,11 @@ public class PersistentStudentPayment implements MutableStudentPayment {
     setStudent(pStudentPayment.getStudent());
     setStudentId(pStudentPayment.getStudentId());
     setAmount(pStudentPayment.getAmount());
+    setFeeCategory(pStudentPayment.getFeeCategory());
     setStatus(pStudentPayment.getStatus());
     setAppliedOn(pStudentPayment.getAppliedOn());
     setVerifiedOn(pStudentPayment.getVerifiedOn());
+    setTransactionValidTill(pStudentPayment.getTransactionValidTill());
     setLastModified(pStudentPayment.getLastModified());
   }
 
@@ -202,6 +216,6 @@ public class PersistentStudentPayment implements MutableStudentPayment {
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sStudentPaymentManager = applicationContext.getBean("studentPaymentManager", StudentPaymentManager.class);
-    sFeeTypeManager = applicationContext.getBean("feeTypeManager", FeeTypeManager.class);
+    sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
   }
 }

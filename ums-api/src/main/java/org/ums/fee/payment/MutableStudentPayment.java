@@ -1,5 +1,6 @@
 package org.ums.fee.payment;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.ums.domain.model.common.Editable;
@@ -7,6 +8,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 
 public interface MutableStudentPayment extends StudentPayment, Editable<Long>, MutableIdentifier<Long>,
@@ -22,7 +24,7 @@ public interface MutableStudentPayment extends StudentPayment, Editable<Long>, M
 
   void setStudentId(String pStudentId);
 
-  void setAmount(Double pAmount);
+  void setAmount(BigDecimal pAmount);
 
   void setStatus(Status pStatus);
 
@@ -30,7 +32,9 @@ public interface MutableStudentPayment extends StudentPayment, Editable<Long>, M
 
   void setVerifiedOn(Date pVerifiedOn);
 
-  void setFeeTypeId(Integer feeTypeId);
+  void setFeeCategoryId(String feeCategoryId);
 
-  void setFeeType(FeeType feeType);
+  void setFeeCategory(FeeCategory feeCategory);
+
+  void setTransactionValidTill(Date pDate);
 }

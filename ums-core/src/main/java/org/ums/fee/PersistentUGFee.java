@@ -7,6 +7,8 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.FacultyManager;
 import org.ums.manager.SemesterManager;
 
+import java.math.BigDecimal;
+
 public class PersistentUGFee implements MutableUGFee {
   private static UGFeeManager sUGFeeManager;
   private static FeeCategoryManager sFeeCategoryManager;
@@ -28,7 +30,7 @@ public class PersistentUGFee implements MutableUGFee {
   private Semester mSemester;
   private Integer mFacultyId;
   private Faculty mFaculty;
-  private Double mAmount;
+  private BigDecimal mAmount;
   private String mLastModified;
 
   PersistentUGFee() {}
@@ -145,12 +147,12 @@ public class PersistentUGFee implements MutableUGFee {
   }
 
   @Override
-  public Double getAmount() {
+  public BigDecimal getAmount() {
     return mAmount;
   }
 
   @Override
-  public void setAmount(Double pAmount) {
+  public void setAmount(BigDecimal pAmount) {
     mAmount = pAmount;
   }
 }

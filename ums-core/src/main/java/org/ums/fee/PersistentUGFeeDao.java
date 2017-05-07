@@ -1,12 +1,17 @@
 package org.ums.fee;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.generator.IdGenerator;
 
 public class PersistentUGFeeDao extends UGFeeDaoDecorator {
@@ -63,6 +68,21 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pFacultyId, pSemesterId}, new FeeRowMapper());
   }
 
+  @Override
+  public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId, List<FeeCategory> pCategories) {
+    Set<String> categoryIds = pCategories.stream().map((category) -> category.getId()).collect(Collectors.toSet());
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("categoryIds", categoryIds);
+    parameters.addValue("facultyId", pFacultyId);
+    parameters.addValue("semesterId", pSemesterId);
+
+    String query = SELECT_ALL + "WHERE (FACULTY_ID = :facultyId OR FACULTY_ID IS NULL) AND SEMESTER_ID = :semesterId"
+        + " AND FEE_CATEGORY_ID IN (:categoryIds)";
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate =
+        new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+    return namedParameterJdbcTemplate.query(query, parameters, new FeeRowMapper());
+  }
+
   private class FeeRowMapper implements RowMapper<UGFee> {
     @Override
     public UGFee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -73,7 +93,7 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
       if(rs.getObject("FACULTY_ID") != null) {
         fee.setFacultyId(rs.getInt("FACULTY_ID"));
       }
-      fee.setAmount(rs.getDouble("AMOUNT"));
+      fee.setAmount(new BigDecimal(rs.getDouble("AMOUNT")));
       fee.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<UGFee> atomicReference = new AtomicReference<>(fee);
       return atomicReference.get();

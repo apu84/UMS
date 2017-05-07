@@ -1,5 +1,6 @@
 package org.ums.fee.latefee;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.ums.domain.model.common.Editable;
@@ -13,7 +14,7 @@ public interface MutableUGLateFee extends UGLateFee, Editable<Long>, MutableIden
 
   void setTo(Date pTo);
 
-  void setFee(Integer pFee);
+  void setFee(BigDecimal pFee);
 
   void setSemester(Semester pSemester);
 

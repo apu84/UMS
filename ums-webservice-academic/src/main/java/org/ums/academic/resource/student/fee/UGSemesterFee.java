@@ -1,19 +1,15 @@
 package org.ums.academic.resource.student.fee;
 
-import java.util.List;
-
-import org.ums.fee.UGFee;
-
 interface UGSemesterFee {
   boolean withinFirstInstallmentSlot(Integer pSemesterId);
 
   boolean withinSecondInstallmentSlot(Integer pSemesterId);
 
-  List<UGFee> firstInstallment(String pStudentId, Integer pSemesterId);
+  UGFees firstInstallment(String pStudentId, Integer pSemesterId);
 
-  List<UGFee> secondInstallment(String pStudentId, Integer pSemesterId);
+  UGFees secondInstallment(String pStudentId, Integer pSemesterId);
 
-  List<UGFee> getFee(String pStudentId, Integer pSemesterId);
+  UGFees getFee(String pStudentId, Integer pSemesterId);
 
   boolean withInAdmissionSlot(Integer pSemesterId);
 
@@ -26,6 +22,12 @@ interface UGSemesterFee {
   boolean installmentAvailable(String pStudentId, Integer pSemesterId);
 
   UGSemesterFeeResponse getAdmissionStatus(String pStudentId, Integer pSemesterId);
+
+  UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId);
+
+  UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId);
+
+  UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId);
 
   enum UGSemesterFeeResponse {
     ADMITTED,

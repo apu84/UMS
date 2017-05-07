@@ -3,7 +3,6 @@ package org.ums.academic.resource.student.fee;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +18,8 @@ public class SemesterFee extends Resource {
 
   @GET
   @Path("/{semesterId}")
-  public Response getReadmissionStatus(final @Context Request pRequest, final @PathParam("semesterId") int pSemesterId)
-      throws Exception {
+  public UGSemesterFee.UGSemesterFeeResponse getReadmissionStatus(final @Context Request pRequest,
+      final @PathParam("semesterId") int pSemesterId) throws Exception {
     return null;
   }
 }
