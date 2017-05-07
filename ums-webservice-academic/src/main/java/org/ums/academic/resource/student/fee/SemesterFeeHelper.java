@@ -24,47 +24,47 @@ class SemesterFeeHelper {
   FeeConverter mFeeConverter;
 
   UGSemesterFee.UGSemesterFeeResponse getSemesterFeeStatus(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).getSemesterFeeStatus(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).getSemesterFeeStatus(pStudentId, pSemesterId);
   }
 
   UGSemesterFee.UGSemesterFeeResponse getInstallmentStatus(Integer pSemesterId, String pStudentId) {
-    return getSemesterFee(pStudentId, pSemesterId).getInstallmentStatus(pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).getInstallmentStatus(pSemesterId);
   }
 
   UGSemesterFee.UGSemesterFeeResponse getInstallmentStatus(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).getInstallmentStatus(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).getInstallmentStatus(pStudentId, pSemesterId);
   }
 
   Boolean withInAdmissionSlot(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).withInAdmissionSlot(pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).withInAdmissionSlot(pSemesterId);
   }
 
   UGFees getFee(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).getFee(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).getFee(pStudentId, pSemesterId);
   }
 
   Boolean withinFirstInstallmentSlot(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).withinFirstInstallmentSlot(pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).withinFirstInstallmentSlot(pSemesterId);
   }
 
   Boolean withinSecondInstallmentSlot(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).withinSecondInstallmentSlot(pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).withinSecondInstallmentSlot(pSemesterId);
   }
 
   UGFees firstInstallment(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).firstInstallment(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).firstInstallment(pStudentId, pSemesterId);
   }
 
   UGFees secondInstallment(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).secondInstallment(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).secondInstallment(pStudentId, pSemesterId);
   }
 
   UGSemesterFee.UGSemesterFeeResponse getAdmissionStatus(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).getAdmissionStatus(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).getAdmissionStatus(pStudentId, pSemesterId);
   }
 
   Boolean installmentAvailable(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).installmentAvailable(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).installmentAvailable(pStudentId, pSemesterId);
   }
 
   JsonObject generatePayable(UGFees pUgFees) {
@@ -82,18 +82,18 @@ class SemesterFeeHelper {
   }
 
   UGSemesterFee.UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).pay(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).pay(pStudentId, pSemesterId);
   }
 
   UGSemesterFee.UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).payFirstInstallment(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).payFirstInstallment(pStudentId, pSemesterId);
   }
 
   UGSemesterFee.UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
-    return getSemesterFee(pStudentId, pSemesterId).paySecondInstallment(pStudentId, pSemesterId);
+    return getSemesterFeeType(pStudentId, pSemesterId).paySecondInstallment(pStudentId, pSemesterId);
   }
 
-  private UGSemesterFee getSemesterFee(String pStudentId, Integer pSemesterId) {
-    return mUGSemesterFeeFactory.getSemesterFee(pStudentId, pSemesterId);
+  private UGSemesterFee getSemesterFeeType(String pStudentId, Integer pSemesterId) {
+    return mUGSemesterFeeFactory.getSemesterFeeType(pStudentId, pSemesterId);
   }
 }

@@ -16,7 +16,7 @@ class UGSemesterFeeFactory {
   @Autowired
   private StudentRecordManager mStudentRecordManager;
 
-  UGSemesterFee getSemesterFee(String pStudentId, Integer pSemesterId) {
+  UGSemesterFee getSemesterFeeType(String pStudentId, Integer pSemesterId) {
     return mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId).getType() == StudentRecord.Type.READMISSION_REQUIRED ? mUGReadmissionFee
         : mUGRegularSemesterFee;
   }
