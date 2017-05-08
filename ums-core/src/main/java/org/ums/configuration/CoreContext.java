@@ -7,22 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
-import org.ums.cache.common.CountryCache;
-import org.ums.cache.common.DistrictCache;
-import org.ums.cache.common.DivisionCache;
-import org.ums.cache.common.ThanaCache;
+import org.ums.cache.common.*;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
-import org.ums.manager.common.CountryManager;
-import org.ums.manager.common.DistrictManager;
-import org.ums.manager.common.DivisionManager;
-import org.ums.manager.common.ThanaManager;
+import org.ums.manager.common.*;
 import org.ums.persistent.dao.*;
-import org.ums.persistent.dao.common.PersistentCountryDao;
-import org.ums.persistent.dao.common.PersistentDistrictDao;
-import org.ums.persistent.dao.common.PersistentDivisionDao;
-import org.ums.persistent.dao.common.PersistentThanaDao;
+import org.ums.persistent.dao.common.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -210,6 +201,27 @@ public class CoreContext {
     DistrictCache districtCache = new DistrictCache(mCacheFactory.getCacheManager());
     districtCache.setManager(new PersistentDistrictDao(mTemplateFactory.getJdbcTemplate()));
     return districtCache;
+  }
+
+  @Bean
+  LmsTypeManager lmsTypeManager() {
+    LmsTypeCache lmsTypeCache = new LmsTypeCache(mCacheFactory.getCacheManager());
+    lmsTypeCache.setManager(new PersistentLmsTypeDao(mTemplateFactory.getJdbcTemplate()));
+    return lmsTypeCache;
+  }
+
+  @Bean
+  LmsApplicationManager lmsApplicationmanager() {
+    LmsApplicationCache lmsApplicationCache = new LmsApplicationCache(mCacheFactory.getCacheManager());
+    lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate()));
+    return lmsApplicationCache;
+  }
+
+  @Bean
+  LmsAppStatusManager lmsAppStatusManager() {
+    LmsAppStatusCache lmsAppStatusCache = new LmsAppStatusCache(mCacheFactory.getCacheManager());
+    lmsAppStatusCache.setManager(new PersistentLmsAppStatusDao(mTemplateFactory.getJdbcTemplate()));
+    return lmsAppStatusCache;
   }
 
   @Bean

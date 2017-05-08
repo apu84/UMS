@@ -86,15 +86,12 @@ public class UmsUtils {
     return formatter.format(date);
   }
 
-  public static Date convertToDate(String date, String dateFormat) {
-    DateTimeFormatter format = DateTimeFormatter.ofPattern(dateFormat, Locale.ENGLISH);
-    Date outputDate = new Date();
+  public static Date convertToDate(String dateStr, String dateFormat) {
+    DateFormat formatter = new SimpleDateFormat(dateFormat);
     try {
-      LocalDate localDate = LocalDate.parse(date, format);
-      outputDate = java.sql.Date.valueOf(localDate);
-      return java.sql.Date.valueOf(localDate);
+      return formatter.parse(dateStr);
     } catch(Exception e) {
-      return outputDate;
+      return null;
     }
   }
 

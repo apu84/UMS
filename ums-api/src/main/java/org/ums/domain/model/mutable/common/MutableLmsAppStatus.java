@@ -1,0 +1,28 @@
+package org.ums.domain.model.mutable.common;
+
+import org.ums.domain.model.common.Editable;
+import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.common.LmsAppStatus;
+import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.common.LeaveApprovalStatus;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Created by Monjur-E-Morshed on 06-May-17.
+ */
+public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Integer>, MutableLastModifier,
+    MutableIdentifier<Integer> {
+
+  void setLmsApplicationId(int pLmsApplicationId);
+
+  void setActionTakenOn(Date pActionTakenOn);
+
+  void setActionTakenById(String pActionTakenBy);
+
+  void setComments(String pComments);
+
+  void setActionStatus(LeaveApprovalStatus pActionStatus);
+
+}
