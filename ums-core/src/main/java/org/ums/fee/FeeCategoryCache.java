@@ -1,5 +1,7 @@
 package org.ums.fee;
 
+import java.util.List;
+
 import org.ums.cache.ContentCache;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
@@ -21,5 +23,10 @@ public class FeeCategoryCache extends ContentCache<FeeCategory, MutableFeeCatego
   @Override
   protected String getCacheKey(String pId) {
     return CacheUtil.getCacheKey(FeeCategory.class, pId);
+  }
+
+  @Override
+  public List<FeeCategory> getFeeCategories(Integer pFeeTypeId) {
+    return getManager().getFeeCategories(pFeeTypeId);
   }
 }

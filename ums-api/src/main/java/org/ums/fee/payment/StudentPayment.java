@@ -1,6 +1,7 @@
 package org.ums.fee.payment;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.fee.FeeType;
+import org.ums.fee.FeeCategory;
 
 public interface StudentPayment extends Serializable, EditType<MutableStudentPayment>, LastModifier, Identifier<Long> {
 
@@ -25,7 +26,7 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
 
   String getStudentId();
 
-  Double getAmount();
+  BigDecimal getAmount();
 
   Status getStatus();
 
@@ -33,13 +34,16 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
 
   Date getVerifiedOn();
 
-  Integer getFeeTypeId();
+  String getFeeCategoryId();
 
-  FeeType getFeeType();
+  FeeCategory getFeeCategory();
+
+  Date getTransactionValidTill();
 
   enum Status {
     RECEIVED(1),
     REJECTED(2),
+    EXPIRED(3),
     APPLIED(0);
 
     private static final Map<Integer, Status> lookup = new HashMap<>();

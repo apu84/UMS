@@ -1,5 +1,6 @@
 package org.ums.fee.latefee;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
@@ -14,10 +15,11 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   private Long mId;
   private Date mFrom;
   private Date mTo;
-  private Integer mFee;
+  private BigDecimal mFee;
   private Semester mSemester;
   private Integer mSemesterId;
   private String mLastModified;
+  private AdmissionType mAdmissionType;
 
   @Override
   public Long getId() {
@@ -50,12 +52,12 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   }
 
   @Override
-  public Integer getFee() {
+  public BigDecimal getFee() {
     return mFee;
   }
 
   @Override
-  public void setFee(Integer pFee) {
+  public void setFee(BigDecimal pFee) {
     this.mFee = pFee;
   }
 
@@ -77,6 +79,16 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   @Override
   public void setSemesterId(Integer pSemesterId) {
     this.mSemesterId = pSemesterId;
+  }
+
+  @Override
+  public void setAdmissionType(AdmissionType pAdmissionType) {
+    mAdmissionType = pAdmissionType;
+  }
+
+  @Override
+  public AdmissionType getAdmissionType() {
+    return mAdmissionType;
   }
 
   @Override
