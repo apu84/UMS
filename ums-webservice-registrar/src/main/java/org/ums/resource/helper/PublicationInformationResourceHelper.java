@@ -46,6 +46,16 @@ public class PublicationInformationResourceHelper extends
     return toJson(pPublicationInformation, pUriInfo);
   }
 
+  public JsonObject getTeachersList(final String pPublicationStatus, final UriInfo pUriInfo) {
+    List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+    try {
+      pPublicationInformation = mPublicationInformationManager.getPublicationInformation(pPublicationStatus);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
+    return toJson(pPublicationInformation, pUriInfo);
+  }
+
   @Transactional
   public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();

@@ -99,6 +99,7 @@
 
 /// <reference path='service/EmployeeInformationService.ts'/>
 /// <reference path='service/EmployeeServiceInformationService.ts'/>
+/// <reference path='service/ApprovePublicationService.ts'/>
 
 /// <reference path='model/EmployeeInformation/AcademicInformationModel.ts' />
 /// <reference path='model/EmployeeInformation/AwardInformationModel.ts' />

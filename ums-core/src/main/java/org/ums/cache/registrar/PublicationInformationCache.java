@@ -34,6 +34,11 @@ public class PublicationInformationCache extends
   }
 
   @Override
+  public List<PublicationInformation> getPublicationInformation(String pPublicationStatus) {
+    return getManager().getPublicationInformation(pPublicationStatus);
+  }
+
+  @Override
   public int deletePublicationInformation(String pEmployeeId) {
     return getManager().deletePublicationInformation(pEmployeeId);
   }

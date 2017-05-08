@@ -63,6 +63,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
         new PersistentPublicationInformationDao.RoleRowMapper());
   }
 
+  @Override
+  public List<PublicationInformation> getPublicationInformation(final String pPublicationStatus) {
+    String query = GET_ONE + " Where status = ?";
+    return mJdbcTemplate.query(query, new Object[] {pPublicationStatus},
+        new PersistentPublicationInformationDao.RoleRowMapper());
+  }
+
   class RoleRowMapper implements RowMapper<PublicationInformation> {
 
     @Override

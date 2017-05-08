@@ -1,270 +1,175 @@
-<div id="rightDiv" >
-    <div class="panel">
-        <div class="panel-body" style="min-height: 290px;">
-            <h4>List Of Publications</h4>
-            <table class="table table-bordered">
-                <thead class="heading well">
-                <tr>
-                    <th >Teacher Name</th>
-                    <th>Designation</th>
-                    <th>Department</th>
-                    <th>Total Publications</th>
-                    <th>Requested</th>
-                    <th>Requested On</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Kawsur Mir Md.</td>
-                    <td>Professor</td>
-                    <td>CSE</td>
-                    <td>20</td>
-                    <td>5</td>
-                    <td>Gotokalk</td>
-                    <td><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#demo">View</button></td>
-                </tr>
-                <tr>
-                    <td>Kawsur</td>
-                    <td>Professor</td>
-                    <td>CSE</td>
-                    <td>20</td>
-                    <td>5</td>
-                    <td>Gotokalk</td>
-                    <td><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#demo">View</button></td>
-                </tr>
-                </tbody>
-            </table>
+<div class="page-content">
+
+    <div class="row" id="topArrowDiv">
+        <div class="col-md-2 col-md-offset-5">
+            <i class="fa fa-chevron-down" aria-hidden="true" data-ng-click="resetTopBottomDivs()"  style="cursor: pointer;"></i>
         </div>
     </div>
-</div>
 
-
-<div id="demo" class="collapse">
-    <div id="downDiv" >
+    <div class="row" id="teachersListWaitingForApprovalDiv">
         <div class="panel">
-            <div class="panel-body" style="min-height: 290px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Teacher's List</h3>
+            </div>
+            <div class="panel-body" style="min-height: 490px;">
+                <table class="table table-bordered">
+                    <thead class="heading well">
+                    <tr>
+                        <th >Teacher Name</th>
+                        <th>Designation</th>
+                        <th>Requested On</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Kawsur Mir Md.</td>
+                        <td>Professor</td>
+                        <td>Last Day</td>
+                        <td><button type="button" class="btn btn-default" data-ng-click="submit()">View</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" id="waitingPublicationListDiv" hidden>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Publication List</h3>
+            </div>
+            <div class="panel-body" style="min-height: 490px;">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-8">
+                        <div class="row">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <label>Email:</label> email@test.com<br>
+                                    <label>Birth date:</label> 01.01.2001<br>
+                                    <label>Gender:</label> male<br>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4" align="center">
-                        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/oliveirasimoes/128.jpg"
-                             style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);"
-                             class="img-square" />
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 text-right">
+                        <img class="img-square" src="https://s3.amazonaws.com/uifaces/faces/twitter/oliveirasimoes/128.jpg">
                     </div>
                 </div>
-                <div data-ng-repeat="publication in entry.publication track by $index">
-                    <div data-ng-class="{'outlined': publication.status==='Waiting', 'noOutlined': publication.status==='Approved'}">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5><b>{{$index + 1}}.</b></h5>
-                            </div>
-                            <div class='col-md-6' data-ng-show="showPublicationCrossIcon">
-                            <span style="float:right">
-                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('publication', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
-                            </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationType{{$index}}">Publication Type<span class='require' data-ng-show="showRequireSign">*</span></label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <select name="nPublicationType{{$index}}"
-                                            id="iPublicationType{{$index}}"
-                                            data-ng-model="publication.publicationType"
-                                            data-ng-options="publicationType.name for publicationType in publicationTypes"
-                                            data-ng-change="changeFieldsByPublicationType($index)"
-                                            class="form-control" required>
-                                        <option value="">Select Publication Type</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationType.name}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationISSN{{$index}}"
-                                           id="iPublicationISSN{{$index}}"
-                                           data-ng-model="publication.publicationISSN"
-                                           placeholder="ISSN No."
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationISSN}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationTitle{{$index}}">Publication Title<span class='require' data-ng-show="showRequireSign">*</span></label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationTitle{{$index}}"
-                                           id="iPublicationTitle{{$index}}"
-                                           data-ng-model="publication.publicationTitle"
-                                           placeholder="Publication Title"
-                                           class="form-control" required>
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationTitle}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationVolume{{$index}}">Volume</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationVolume{{$index}}"
-                                           id="iPublicationVolume{{$index}}"
-                                           data-ng-model="publication.publicationVolume"
-                                           placeholder="Volume"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationVolume}}</label>
-                                </div>
+                <div data-ng-repeat="publication in publications track by $index">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 align="center"><b>{{$index + 1}}</b></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publication Type</label>
+                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationType}}</label>
                             </div>
                         </div>
-                        <br />
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iDateOfPublication{{$index}}">Date Of Publication<span class='require' data-ng-show="showRequireSign">*</span></label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nDateOfPublication{{$index}}"
-                                           id="iDateOfPublication{{$index}}"
-                                           data-ng-model="publication.dateOfPublication"
-                                           data-date-format="dd/mm/yyyy"
-                                           placeholder="DD/MM/YYYY"
-                                           autocomplete="off"
-                                           class="datepicker-default form-control" required>
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.dateOfPublication}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationIssue{{$index}}">Issue</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationIssue{{$index}}"
-                                           id="iPublicationIssue{{$index}}"
-                                           data-ng-model="publication.publicationIssue"
-                                           placeholder="Issue"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationIssue}}</label>
-                                </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">ISSN/DOI</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationISSN}}</label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationJournalName{{$index}}">Journal/Conference Name</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationJournalName{{$index}}"
-                                           id="iPublicationJournalName{{$index}}"
-                                           data-ng-model="publication.publicationJournalName"
-                                           placeholder="Journal Name"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationJournalName}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationPage{{$index}}">Pages</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationPage{{$index}}"
-                                           id="iPublicationPage{{$index}}"
-                                           data-ng-model="publication.publicationPages"
-                                           placeholder="Page"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationPages}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nEmployeeWebLink{{$index}}"
-                                           id="iEmployeeWebLink{{$index}}"
-                                           data-ng-model="publication.publicationWebLink"
-                                           placeholder="Web Link"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationWebLink}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationInterestGenre{{$index}}"
-                                           id="iPublicationInterestGenre{{$index}}"
-                                           data-ng-model="publication.publicationInterestGenre"
-                                           placeholder="Genre"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationInterestGenre}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input type="text"
-                                           name="nPublicationCountry{{$index}}"
-                                           id="iPublicationCountry{{$index}}"
-                                           data-ng-model="publication.publicationCountry"
-                                           placeholder="Volume"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publicationCountry}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label" for="iPublishername{{$index}}">Publisher Name</label>
-                                <div class="col-md-8" data-ng-show="showPublicationInputDiv">
-                                    <input data-ng-model="publication.publisherName"
-                                           name="nPublishername{{$index}}"
-                                           id="iPublishername{{$index}}"
-                                           type="text"
-                                           placeholder="Publisher Name"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPublicationLabelDiv">
-                                    <label class="control-label">{{publication.publisherName}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
                     </div>
                     <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publication Title</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationTitle}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Volume</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationVolume}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Date Of Publication</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.dateOfPublication}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Issue</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationIssue}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Journal/Conference Name</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationJournalName}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Pages</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationPages}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Web Link</label>
+                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationWebLink}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Genre</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Country</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationCountry}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publisher Name</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publisherName}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row well">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="text-right">
+                            <button type="button" title="Cancel" class="btn">Reject All</button>
+                            <button type="submit" title="Submit" class="btn btn-success">Approve All</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
-
-

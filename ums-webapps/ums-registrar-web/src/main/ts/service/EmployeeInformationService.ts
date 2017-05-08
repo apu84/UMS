@@ -120,6 +120,7 @@ module ums {
         }
 
         public getPublicationInformation(): ng.IPromise<any> {
+            console.log("i am here " + "here too");
             var url= "registrar/employee/publication/getPublicationInformation";
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
