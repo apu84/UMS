@@ -6,6 +6,10 @@ module ums {
     pageChanged: Function;
     navigateRecord : Function;
     recordIdList : Array<String>;
+    search : any;
+    choice: string;
+
+    doSearch : Function;
   }
 
   export class RecordSearch {
@@ -26,7 +30,51 @@ module ums {
       $scope.pagination.currentPage = 1;
       $scope.pageChanged = this.pageChanged.bind(this);
       $scope.navigateRecord = this.navigateRecord.bind(this);
+      $scope.doSearch = this.doSearch.bind(this);
+      $scope.search = {queryTerm : ""};
 
+      console.log("Inside record Search. ............"+$stateParams["1"]);
+      if($stateParams["1"] == null || $stateParams["1"] =="") {
+        console.log("inside if");
+
+        console.log(localStorage.getItem("lms_search_filter"));
+        var filter:IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
+        this.$scope.search.queryTerm = filter.basicQueryTerm;
+        this.$scope.choice =  filter.basicQueryField;
+        console.log(filter);
+      } else {
+        console.log("inside else");
+
+      }
+
+      this.prepareFilter();
+
+      if($stateParams["1"] == null || $stateParams["1"] =="") {
+        var page = Number(localStorage.getItem("lms_page"));
+        $scope.pagination.currentPage = page;
+        this.fetchRecords(page);
+      }
+      else{
+        this.fetchRecords(1);
+      }
+
+
+
+
+    }
+
+    private prepareFilter() {
+      var filter  : IFilter = <IFilter> {};
+      filter.searchType  = "basic";
+      filter.basicQueryField = this.$scope.choice;
+      filter.basicQueryTerm = this.$scope.search.queryTerm;
+      // console.log(filter);
+      this.$scope.search.filter = filter;
+      localStorage["lms_search_filter"] = JSON.stringify(filter);
+    }
+
+    private doSearch() : void {
+      this.prepareFilter();
       this.fetchRecords(1);
     }
 
@@ -37,16 +85,21 @@ module ums {
     }
 
     private fetchRecords(pageNumber : number) : void {
-      this.catalogingService.fetchRecords(pageNumber,this.$scope.data.itemPerPage,"","").then((response : any ) => {
-
+      this.catalogingService.fetchRecords(pageNumber,this.$scope.data.itemPerPage,"",this.$scope.search.filter).then((response : any ) => {
+        this.$scope.recordIdList = Array<String>();
         this.$scope.recordList = response.entries;
          this.$scope.data.totalRecord = response.total;
         for(var i=0;i < this.$scope.recordList.length;i++){
           this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
         }
+
+        console.log("------------"+response.entries.length);
+        console.log(this.$scope.recordIdList.length);
         localStorage["lms_records"] = JSON.stringify(this.$scope.recordIdList);
         localStorage["lms_current_index"] = 0;
         localStorage["lms_total_record"] = response.total;
+        localStorage["lms_page"] = pageNumber;
+
       }, function errorCallback(response) {
         this.notify.error(response);
       });

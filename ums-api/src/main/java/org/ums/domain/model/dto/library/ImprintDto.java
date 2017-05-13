@@ -1,13 +1,7 @@
 package org.ums.domain.model.dto.library;
 
 import com.google.gson.Gson;
-import org.springframework.context.ApplicationContext;
 import org.ums.domain.model.immutable.library.Publisher;
-import org.ums.manager.CourseGroupManager;
-import org.ums.manager.CourseManager;
-import org.ums.manager.DepartmentManager;
-import org.ums.manager.SyllabusManager;
-import org.ums.manager.library.PublisherManager;
 
 import java.io.Serializable;
 

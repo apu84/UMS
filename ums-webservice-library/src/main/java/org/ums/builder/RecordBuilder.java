@@ -36,40 +36,43 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getId().toString());
-    pBuilder.add("language", pReadOnly.getLanguage().getId());
-    pBuilder.add("materialType", pReadOnly.getMaterialType().getId());
-    pBuilder.add("status", pReadOnly.getRecordStatus().getId());
-    pBuilder.add("bindingType", pReadOnly.getBookBindingType().getId());
-    pBuilder.add("acqType", pReadOnly.getAcquisitionType().getId());
+    pBuilder.add("language", pReadOnly.getLanguage() == null ? 101101 : pReadOnly.getLanguage().getId());
+    pBuilder.add("materialType", pReadOnly.getMaterialType() == null ? 101101 : pReadOnly.getMaterialType().getId());
+    pBuilder.add("status", pReadOnly.getRecordStatus() == null ? 101101 : pReadOnly.getRecordStatus().getId());
+    pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
+        .getId());
+    pBuilder.add("acqType", pReadOnly.getAcquisitionType() == null ? 101101 : pReadOnly.getAcquisitionType().getId());
     pBuilder.add("title", pReadOnly.getTitle());
-    pBuilder.add("subTitle", pReadOnly.getSubTitle());
-    pBuilder.add("gmd", pReadOnly.getGmd());
-    pBuilder.add("edition", pReadOnly.getEdition());
+    pBuilder.add("subTitle", pReadOnly.getSubTitle() == null ? "" : pReadOnly.getSubTitle());
+    pBuilder.add("gmd", pReadOnly.getGmd() == null ? "" : pReadOnly.getGmd());
+    pBuilder.add("edition", pReadOnly.getEdition() == null ? "" : pReadOnly.getEdition());
 
-    pBuilder.add("seriesTitle", pReadOnly.getSeriesTitle());
-    pBuilder.add("volumeNo", pReadOnly.getVolumeNo());
-    pBuilder.add("volumeTitle", pReadOnly.getVolumeTitle());
-    pBuilder.add("changedTitle", pReadOnly.getChangedTitle());
-    pBuilder.add("libraryLacks", pReadOnly.getLibraryLacks());
+    pBuilder.add("seriesTitle", pReadOnly.getSeriesTitle() == null ? "" : pReadOnly.getSeriesTitle());
+    pBuilder.add("volumeNo", pReadOnly.getVolumeNo() == null ? "" : pReadOnly.getVolumeNo());
+    pBuilder.add("volumeTitle", pReadOnly.getVolumeTitle() == null ? "" : pReadOnly.getVolumeTitle());
+    pBuilder.add("changedTitle", pReadOnly.getChangedTitle() == null ? "" : pReadOnly.getChangedTitle());
+    pBuilder.add("libraryLacks", pReadOnly.getLibraryLacks() == null ? "" : pReadOnly.getLibraryLacks());
 
-    pBuilder.add("isbn", pReadOnly.getIsbn());
-    pBuilder.add("issn", pReadOnly.getIssn());
-    pBuilder.add("corpAuthorMain", pReadOnly.getCorpAuthorMain());
-    pBuilder.add("corpSubBody", pReadOnly.getCorpSubBody());
-    pBuilder.add("corpCityCountry", pReadOnly.getCorpCityCountry());
-    pBuilder.add("translateTitleEdition", pReadOnly.getTranslateTitleEdition());
-    pBuilder.add("callNo", pReadOnly.getCallNo());
-    pBuilder.add("callDate", pReadOnly.getCallDate());
-    pBuilder.add("classNo", pReadOnly.getClassNo());
-    pBuilder.add("authorMark", pReadOnly.getAuthorMark());
+    pBuilder.add("isbn", pReadOnly.getIsbn() == null ? "" : pReadOnly.getIsbn());
+    pBuilder.add("issn", pReadOnly.getIssn() == null ? "" : pReadOnly.getIssn());
+    pBuilder.add("corpAuthorMain", pReadOnly.getCorpAuthorMain() == null ? "" : pReadOnly.getCorpAuthorMain());
+    pBuilder.add("corpSubBody", pReadOnly.getCorpSubBody() == null ? "" : pReadOnly.getCorpSubBody());
+    pBuilder.add("corpCityCountry", pReadOnly.getCorpCityCountry() == null ? "" : pReadOnly.getCorpCityCountry());
+    pBuilder.add("translateTitleEdition",
+        pReadOnly.getTranslateTitleEdition() == null ? "" : pReadOnly.getTranslateTitleEdition());
+    pBuilder.add("callNo", pReadOnly.getCallNo() == null ? "" : pReadOnly.getCallNo());
+    pBuilder.add("callDate", pReadOnly.getCallDate() == null ? "" : pReadOnly.getCallDate());
+    pBuilder.add("classNo", pReadOnly.getClassNo() == null ? "" : pReadOnly.getClassNo());
+    pBuilder.add("authorMark", pReadOnly.getAuthorMark() == null ? "" : pReadOnly.getAuthorMark());
     // pBuilder.add("physicalDescription.pagination", pReadOnly.getPhysicalDescription().);
 
     // pBuilder.add("publisher", pReadOnly.getPublisherId());
 
-    pBuilder.add("keywords", pReadOnly.getKeyWords());
-    pBuilder.add("contributors", pReadOnly.getContributorJsonString());
-    pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString());
-    pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString());
+    pBuilder.add("keywords", pReadOnly.getKeyWords() == null ? "" : pReadOnly.getKeyWords());
+    pBuilder.add("contributors",
+        pReadOnly.getContributorJsonString() == null ? "" : pReadOnly.getContributorJsonString());
+    pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString() == null ? "" : pReadOnly.getSubjectJsonString());
+    pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString() == null ? "" : pReadOnly.getNoteJsonString());
     pBuilder.add("physicalDescriptionString",
         pReadOnly.getPhysicalDescriptionString() == null ? "" : pReadOnly.getPhysicalDescriptionString());
 
@@ -78,11 +81,18 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     // pBuilder.add("copyRightDate",pReadOnly.getImprint().getCopyRightDate());
 
     JsonObjectBuilder object = Json.createObjectBuilder();
-    object.add("placeOfPublication", pReadOnly.getImprint().getPlaceOfPublication());
-    object.add("yearDateOfPublication", pReadOnly.getImprint().getDateOfPublication());
-    object.add("copyRightDate", pReadOnly.getImprint().getCopyRightDate());
-    object.add("publisher", pReadOnly.getImprint().getPublisherId().toString());
-    object.add("publisherName", pReadOnly.getImprint().getPublisher().getName());
+    object.add("placeOfPublication",
+        (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPlaceOfPublication() == null) ? "" : pReadOnly
+            .getImprint().getPlaceOfPublication());
+    object.add("yearDateOfPublication", (pReadOnly.getImprint() == null || pReadOnly.getImprint()
+        .getDateOfPublication() == null) ? "" : pReadOnly.getImprint().getDateOfPublication());
+    object.add("copyRightDate",
+        (pReadOnly.getImprint() == null || pReadOnly.getImprint().getCopyRightDate() == null) ? "" : pReadOnly
+            .getImprint().getCopyRightDate());
+    object.add("publisher", (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPublisherId() == null) ? ""
+        : pReadOnly.getImprint().getPublisherId().toString());
+    object.add("publisherName", (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPublisher() == null) ? ""
+        : pReadOnly.getImprint().getPublisher().getName());
     pBuilder.add("imprint", object);
 
   }
