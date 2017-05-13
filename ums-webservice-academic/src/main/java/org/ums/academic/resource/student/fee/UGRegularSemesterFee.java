@@ -1,12 +1,12 @@
 package org.ums.academic.resource.student.fee;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Parameter;
+import org.ums.domain.model.immutable.Student;
 import org.ums.fee.*;
 import org.ums.fee.latefee.UGLateFee;
 import org.ums.fee.latefee.UGLateFeeManager;
@@ -70,8 +70,9 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
 
   @Override
   public UGFees secondInstallment(String pStudentId, Integer pSemesterId) {
-    List<UGFee> ugFees = mUgFeeManager.getFee(mStudentManager.get(pStudentId).getProgram().getFaculty().getId(),
-        pSemesterId, mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
+    Student student = mStudentManager.get(pStudentId);
+    List<UGFee> ugFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(),
+        student.getSemesterId(), mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
     List<UGFee> installmentFees = ugFees.stream().filter(
         (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.INSTALLMENT_CHARGE.toString()))
         .collect(Collectors.toList());
@@ -88,8 +89,9 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
 
   @Override
   public UGFees getFee(String pStudentId, Integer pSemesterId) {
+    Student student = mStudentManager.get(pStudentId);
     List<UGFee> ugFees =
-        mUgFeeManager.getFee(mStudentManager.get(pStudentId).getProgram().getFaculty().getId(), pSemesterId);
+        mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId());
     ugFees = ugFees.stream()
         .filter((fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.ADMISSION.toString())
             || fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.ESTABLISHMENT.toString())

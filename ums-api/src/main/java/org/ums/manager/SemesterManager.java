@@ -22,4 +22,8 @@ public interface SemesterManager extends ContentManager<Semester, MutableSemeste
   Semester getBySemesterName(final String pSemesterName, final Integer pProgramTypeId);
 
   Semester getActiveSemester(final Integer pProgramType);
+
+  List<Semester> semestersAfter(final Integer pStartSemester, final Integer pEndSemester, final Integer pProgramTypeId);
+
+  List<Semester> semestersAfter(final Integer pStartSemester, final Integer pProgramTypeId);
 }

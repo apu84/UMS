@@ -151,9 +151,9 @@ public class ReadmissionHelper {
     List<Semester> previousSemesters =
         mSemesterManager.getPreviousSemesters(pSemesterId, student.getProgram().getProgramTypeId());
     for(Semester semester : previousSemesters) {
-      SemesterAdmissionStatus admissionStatus =
+      Optional<SemesterAdmissionStatus> admissionStatus =
           mSemesterAdmissionStatusManager.getAdmissionStatus(pStudentId, semester.getId());
-      if(admissionStatus.isAdmitted()) {
+      if(admissionStatus.isPresent() && admissionStatus.get().isAdmitted()) {
         return Optional.of(mUgRegistrationResultManager.getResults(pStudentId, semester.getId()));
       }
     }
