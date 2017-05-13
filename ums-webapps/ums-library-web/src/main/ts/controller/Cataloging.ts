@@ -113,6 +113,7 @@
       //   console.log("bbbb");
       // }, true);
 
+      console.log("inside cataloging.........");
       jQuery.validator.addMethod("cRequired", function (value, element) {
 
         if ($(element).attr('id') == "recordStatus" && value == 101101)
@@ -184,6 +185,7 @@
       this.$scope.item = <IItem> {};
       this.$scope.data.itemReadOnlyMode = false;
       $('#supplier').select2('enable');
+      $('#supplier').select2('data', null)
     }
 
     private mangeRecordNavigator() : void {
@@ -204,7 +206,10 @@
 
           var recordIdList:Array<any> = JSON.parse(localStorage.getItem("lms_records"));
 
-          var aa = Number(((page-1)*10))+Number(recordIdList.length);
+          console.log("total record : "+recordIdList.length);
+
+          //var aa = Number(((page-1)*10))+Number(recordIdList.length);
+        var aa = Number(((page-1)*10))+Number(currentIndex)+1;
           if(totalRecord == aa) {
             this.$scope.showRightNav= false;
           }
@@ -227,15 +232,19 @@
 
         var jsonObj = $.parseJSON(this.$scope.record.noteJsonString);
 
-        for(var i=0;i<jsonObj.length;i++){
-          var note = {viewOrder:jsonObj[i].viewOrder, note: jsonObj[i].note};
-          this.$scope.record.noteList.push(note);
+        if(jsonObj != null) {
+          for (var i = 0; i < jsonObj.length; i++) {
+            var note = {viewOrder: jsonObj[i].viewOrder, note: jsonObj[i].note};
+            this.$scope.record.noteList.push(note);
+          }
         }
 
         var jsonObj = $.parseJSON(this.$scope.record.subjectJsonString);
-        for(var i=0;i<jsonObj.length;i++){
-          var subject = {viewOrder:jsonObj[i].viewOrder, subject: jsonObj[i].subject};
-          this.$scope.record.subjectList.push(subject);
+        if(jsonObj != null) {
+          for (var i = 0; i < jsonObj.length; i++) {
+            var subject = {viewOrder: jsonObj[i].viewOrder, subject: jsonObj[i].subject};
+            this.$scope.record.subjectList.push(subject);
+          }
         }
 
         var jsonObj = $.parseJSON(this.$scope.record.physicalDescriptionString);
@@ -251,10 +260,6 @@
           };
           this.$scope.record.physicalDescription = physicalDescription;
         }
-
-
-
-
 
 
         setTimeout(() => {
@@ -382,7 +387,8 @@
     }
 
     private fetchRecords(pageNumber : number) : ng.IPromise<any> {
-      return this.catalogingService.fetchRecords(pageNumber,10,"","");
+      var filter:IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
+      return this.catalogingService.fetchRecords(pageNumber,10,"", filter);
     }
 
     /**

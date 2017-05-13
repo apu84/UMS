@@ -148,10 +148,12 @@ module ums{
     /**
      * Fetch Record List
      */
-    public fetchRecords(page : number, itemPerPage : number, orderBy: string, filter : string): ng.IPromise<any> {
+    public fetchRecords(page : number, itemPerPage : number, orderBy: string, filter : any): ng.IPromise<any> {
+
       var defer = this.$q.defer();
       var tPage = page-1;
-      var resourceUrl = "record/all/ipp/"+itemPerPage+"/page/"+tPage+"/order/3/filter/a";
+
+      var resourceUrl = "record/all/ipp/"+itemPerPage+"/page/"+tPage+"/order/3/filter/"+encodeURIComponent(JSON.stringify(filter));
       this.httpClient.get(resourceUrl, 'application/json',
           (json: any, etag: string) => {
             defer.resolve(json);

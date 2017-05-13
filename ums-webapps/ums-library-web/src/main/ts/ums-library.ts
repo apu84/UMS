@@ -22,7 +22,7 @@ module ums {
   UMS.constant("libConstants", Constants.LibConstant());
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
-    $urlRouterProvider.when('/cataloging','/cataloging/search');
+    $urlRouterProvider.when('/cataloging','/cataloging/search/new');
     //$urlRouterProvider.otherwise("/userHome");
     $stateProvider
         .state('userHome', {
@@ -40,14 +40,11 @@ module ums {
             }]
           }
         })
-        .state('cataloging', {
-          url: "/cataloging",
-          templateUrl: 'views/admin/cataloging/catalog-home.html'
-        })
         .state('cataloging.search', {
-          url: "/search",
+          url: "/search/:1",
           controller: 'RecordSearch',
           templateUrl: 'views/admin/cataloging/catalog-search.html',
+
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -84,6 +81,10 @@ module ums {
               });
             }]
           }
+        })
+        .state('cataloging', {
+          url: "/cataloging",
+          templateUrl: 'views/admin/cataloging/catalog-home.html'
         })
         .state('cataloging.thesis', {
           url: "/thesis",

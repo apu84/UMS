@@ -68,6 +68,7 @@ public class UmsUtils {
     return value == null ? "" : value;
   }
 
+
   public static String formatDate(String date, String inputFormat, String outputFormat) {
     String fDate = "";
     try {
