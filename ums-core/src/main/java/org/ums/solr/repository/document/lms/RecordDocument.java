@@ -14,10 +14,12 @@ import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.enums.library.MaterialType;
 import org.ums.manager.library.PublisherManager;
+import org.ums.solr.repository.document.DepartmentDocument;
 import org.ums.solr.repository.document.SearchDocument;
 import org.ums.util.UmsUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -93,6 +95,9 @@ public class RecordDocument implements SearchDocument<String> {
   @Field("subjects_txt")
   private String[] subjects;
 
+  @Field(child = true)
+  private List<ContributorDocument> contributorDocument;
+
   public RecordDocument() {}
 
   public RecordDocument(final Record pRecord) {
@@ -111,11 +116,22 @@ public class RecordDocument implements SearchDocument<String> {
     callNo = Lists.newArrayList(pRecord.getCallNo());
     // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
     status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
-    bindingType = Lists.newArrayList(pRecord.getBookBindingType().getLabel());
-    acquisitionType = Lists.newArrayList(pRecord.getAcquisitionType().getLabel());
+    bindingType =
+        Lists.newArrayList(pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getLabel());
+    acquisitionType =
+        Lists.newArrayList(pRecord.getAcquisitionType() == null ? null : pRecord.getAcquisitionType().getLabel());
     keywords = Lists.newArrayList(pRecord.getKeyWords());
-    contributors = Lists.newArrayList(pRecord.getContributorJsonString());
+
     subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");
+
+    List<ContributorDocument> aa = new ArrayList<>();
+    aa.add(new ContributorDocument("Author", "kawsur"));
+    aa.add(new ContributorDocument("Co-Author", "morshed"));
+    // String contributorString = "[{\"viewOrder\":1,\"id\":\"2\",\"role\":\"2\"}]";
+    contributorDocument = aa;
+
+    // contributors = Lists.newArrayList(pRecord.getContributorJsonString());
+    contributors = Arrays.asList(new String[] {"kawsur", "morshed"});// Lists.newArrayList({""});
   }
 
   @Override

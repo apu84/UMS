@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import com.google.gson.Gson;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.ums.builder.RecordBuilder;
 import org.ums.builder.SupplierBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.dto.library.FilterDto;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.library.Record;
@@ -88,15 +90,41 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     return builder.build();
   }
 
-  public JsonObject searchRecord(String pQuery, int pPage, int pItemPerPage, final UriInfo pUriInfo) {
+  public JsonObject searchRecord(int pPage, int pItemPerPage, final String pFilter, final UriInfo pUriInfo) {
     List<RecordDocument> recordDocuments =
-        mRecordRepository.findByCustomQuery(pQuery, new PageRequest(pPage, pItemPerPage));
+        mRecordRepository.findByCustomQuery(queryBuilder(pFilter), new PageRequest(pPage, pItemPerPage));
     List<Record> records = new ArrayList<>();
     for(RecordDocument document : recordDocuments) {
       records.add(mManager.get(Long.valueOf(document.getId())));
     }
+    // queryBuilder(pFilter);
+    return convertToJson(records, mRecordRepository.getTotalCount(queryBuilder(pFilter)), pUriInfo);
+  }
 
-    return convertToJson(records, mRecordRepository.getTotalCount(pQuery), pUriInfo);
+  private String queryBuilder(final String pFilter) {
+    Gson g = new Gson();
+    FilterDto filterDto = g.fromJson(pFilter, FilterDto.class);
+    String queryString = "";
+
+    System.out.println(filterDto.getSearchType());
+    System.out.println(filterDto.getBasicQueryField());
+    System.out.println(filterDto.getBasicQueryTerm());
+
+    if(filterDto.getSearchType().equalsIgnoreCase("basic")) {
+      if(filterDto.getBasicQueryField().equals("any"))
+        queryString = String.format("*%s* AND type_s:Record", filterDto.getBasicQueryTerm());
+      else
+        queryString =
+            String.format(filterDto.getBasicQueryField() + " : *%s* AND type_s:Record", filterDto.getBasicQueryTerm());
+
+      // queryString =
+      // String.format("{!parent which=\"type_s:Record  AND _text_:*%s*\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
+      // filterDto.getBasicQueryTerm(), filterDto.getBasicQueryTerm(),
+      // filterDto.getBasicQueryTerm());
+
+    }
+
+    return queryString;
   }
 
   private JsonObject convertToJson(List<Record> records, long totalCount, UriInfo pUriInfo) {

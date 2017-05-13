@@ -47,21 +47,22 @@
                     <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
             </span>
             <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
-            margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;" />
+            margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
+            data-ng-model="search.queryTerm"/>
 
-            <select data-style="btn-white"
+            <select data-style="btn-white" data-ng-model="search.searchType"
                     class="selectpier" style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;" onchange="searchSelection(this.value)">
-                    <option value="1">Basic Search</option>
-                    <option value="2">Advanced Search</option>
+                    <option value="basic_search">Basic Search</option>
+                    <option value="advanced_search">Advanced Search</option>
                 <optgroup label="Camping">
-                    <option value="3">Authors</option>
-                    <option value="4">Corporate Authors</option>
-                    <option value="5">Subjects</option>
-                    <option value="6">Titles</option>
-                    <option value="7">Series</option>
+                    <option value="authors">Authors</option>
+                    <option value="corporate_authors">Corporate Authors</option>
+                    <option value="subjects">Subjects</option>
+                    <option value="titles">Titles</option>
+                    <!--<option value="7">Series</option>-->
                 </optgroup>
             </select>
-            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+            <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-click="doSearch()"
                style="border-radius: 0.5em;padding: 8px 10px;background-color: white;margin-left: 5px;margin-top: -1px;" >
                 <i class="fa fa-search fa-lg" style="color: #0093d9;"></i>
             </a>
@@ -145,11 +146,13 @@
 
 <div class="row" id="generalSearchDiv" style="padding-top: 8px;padding-left: 2%;position: absolute;width: 100%;clear: both;">
     <div class="col-md-12" id="squareRadio">
-        <input type="radio" id="square-radio-1" name="choice"  type="radio" name="square-radio">&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-2"  name="choice" type="radio" name="square-radio" checked="checked">&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-3"  name="choice" type="radio" name="square-radio">&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-4"  name="choice" type="radio" name="square-radio">&nbsp;<label for="square-radio-4">Series</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-1" name="choice"  ng-model="choice" value="subjects_txt" />&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-2"  name="choice" ng-model="choice" value="title_txt" />&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-3"  name="choice" ng-model="choice" value="contributors_txt" />&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-4"  name="choice" ng-model="choice" value="any" checked />&nbsp;<label for="square-radio-3">Any Field</label>&nbsp;&nbsp;
         </div>
+
+
     <div class="col-md-12">
 
         </div>
@@ -355,7 +358,7 @@
     function searchSelection(id){
         var offset = $("#bbcd").offset();
         console.log(currentSearchType);
-        if(id==2) {
+        if(id=="advanced_search") {
             $("#bbcd").offset({top:offset.top+260});
            $("#generalSearchDiv").hide("slide", {direction: "right"}, 600);
             $("#advancedSearchDiv").show("slide", {direction: "left"}, 600);
@@ -365,7 +368,7 @@
             $("#advancedSearchDiv").hide("slide", {direction: "left"}, 600);
             $("#generalSearchDiv").show("slide", {direction: "right"}, 600);
 
-            if(currentSearchType=="2") {
+            if(currentSearchType=="advanced_search") {
             setTimeout(function(){
                         $("#bbcd").offset({top: offset.top - 260});
 
@@ -375,10 +378,12 @@
         currentSearchType=id;
     }
     $("#searchBox").focus();
+    /*
     $('#squareRadio input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'iradio_square-blue'
     });
+    */
 
     $('.selectpicker').selectpicker({
         iconBase: 'fa',
