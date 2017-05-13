@@ -19,6 +19,11 @@ public class StudentPaymentDaoDecorator extends
   }
 
   @Override
+  public List<StudentPayment> getPayments(String pStudentId, FeeType pFeeType) {
+    return getManager().getPayments(pStudentId, pFeeType);
+  }
+
+  @Override
   public List<StudentPayment> getToExpirePayments() {
     return getManager().getToExpirePayments();
   }

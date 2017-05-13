@@ -75,4 +75,9 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
     String cacheKey = getCacheKey(StudentRecord.class.toString(), pStudentId, pSemesterId);
     return cachedEntity(cacheKey, () -> getManager().getStudentRecord(pStudentId, pSemesterId));
   }
+
+  @Override
+  public List<StudentRecord> getStudentRecord(String pStudentId) {
+    return getManager().getStudentRecord(pStudentId);
+  }
 }

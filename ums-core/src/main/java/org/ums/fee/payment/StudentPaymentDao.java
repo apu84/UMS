@@ -109,6 +109,14 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public List<StudentPayment> getPayments(String pStudentId, FeeType pFeeType) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? ORDER BY APPLIED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper()).stream()
+        .filter(payment -> payment.getFeeCategory().getType().getId().intValue() == pFeeType.getId())
+        .collect(Collectors.toList());
+  }
+
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {
     @Override
     public StudentPayment mapRow(ResultSet rs, int rowNum) throws SQLException {

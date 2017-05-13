@@ -1,15 +1,16 @@
 package org.ums.util;
 
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.ums.enums.ExamType;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -264,5 +265,11 @@ public class UmsUtils {
 
 
     return strArr.stream().toArray(String[]::new);
+  }
+
+  public static Date addDay(Date pDate, int noOfDayToAdd) {
+    LocalDateTime localDateTime = pDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    localDateTime = localDateTime.plusDays(noOfDayToAdd);
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
   }
 }

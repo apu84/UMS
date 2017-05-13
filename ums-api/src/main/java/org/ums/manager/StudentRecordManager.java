@@ -21,4 +21,6 @@ public interface StudentRecordManager extends ContentManager<StudentRecord, Muta
       final Integer pAcademicSemester);
 
   StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId);
+
+  List<StudentRecord> getStudentRecord(final String pStudentId);
 }

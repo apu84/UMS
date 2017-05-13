@@ -8,4 +8,6 @@ public interface UGFeeManager extends ContentManager<UGFee, MutableUGFee, Long> 
   List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId);
 
   List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId, List<FeeCategory> pCategories);
+
+  List<UGFee> getLatestFee(Integer pFacultyId, Integer pProgramTypeId);
 }

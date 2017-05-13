@@ -42,6 +42,7 @@ public interface StudentRecord extends Serializable, Identifier<Long>, LastModif
     TEMPORARY("T"),
     DROPPED("D"),
     SUSPENDED("S"),
+    WITHDRAWN("W"),
     UNKNOWN("U");
 
     private static final Map<String, Type> lookup = new HashMap<>();
