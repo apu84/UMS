@@ -39,7 +39,10 @@ public interface StudentRecord extends Serializable, Identifier<Long>, LastModif
     REGULAR("R"),
     READMISSION_REQUIRED("RR"),
     READMITTED("RA"),
-    TEMPORARY("T");
+    TEMPORARY("T"),
+    DROPPED("D"),
+    SUSPENDED("S"),
+    UNKNOWN("U");
 
     private static final Map<String, Type> lookup = new HashMap<>();
 

@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Parameter;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.enums.CourseType;
 import org.ums.fee.*;
 import org.ums.fee.latefee.UGLateFee;
@@ -16,8 +19,10 @@ import org.ums.fee.latefee.UGLateFeeManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
+import org.ums.fee.semesterfee.SemesterAdmissionStatus;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
 import org.ums.manager.ParameterSettingManager;
+import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.readmission.ReadmissionApplication;
@@ -53,6 +58,8 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   private UGRegularSemesterFee mUgRegularSemesterFee;
   @Autowired
   private FeeCategoryManager mFeeCategoryManager;
+  @Autowired
+  private SemesterManager mSemesterManager;
 
   @Override
   public boolean withinFirstInstallmentSlot(Integer pSemesterId) {
@@ -72,6 +79,10 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
     ugFees = ugFees.stream().filter(
         (fee) -> !fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.THEORY_REPEATER.toString()))
         .collect(Collectors.toList());
+    Optional<UGFee> dropFee = dropFee(pStudentId, pSemesterId);
+    if(dropFee.isPresent()) {
+      ugFees.add(dropFee.get());
+    }
     UGFees fees = new UGFees(ugFees);
     fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.READMISSION_FIRST_INSTALLMENT));
     return fees;
@@ -79,8 +90,8 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
 
   @Override
   public UGFees secondInstallment(String pStudentId, Integer pSemesterId) {
-    List<UGFee> ugFees =
-        mUgFeeManager.getFee(mStudentManager.get(pStudentId).getProgram().getFaculty().getId(), pSemesterId);
+    Student student = mStudentManager.get(pStudentId);
+    List<UGFee> ugFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId());
     List<UGFee> installmentFees = ugFees.stream().filter(
         (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.INSTALLMENT_CHARGE.toString()))
         .collect(Collectors.toList());
@@ -97,12 +108,18 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
 
   @Override
   public UGFees getFee(String pStudentId, Integer pSemesterId) {
-    List<UGFee> ugFees = mUgFeeManager.getFee(mStudentManager.get(pStudentId).getProgram().getFaculty().getId(),
-        pSemesterId, mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
-    ugFees = ugFees.stream()
+    Student student = mStudentManager.get(pStudentId);
+    List<UGFee> semesterFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId(),
+        mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
+    List<UGFee> ugFees = semesterFees.stream()
         .filter((fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.READMISSION.toString())
             || fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.ESTABLISHMENT.toString()))
         .collect(Collectors.toList());
+
+    Optional<UGFee> dropFee = dropFee(pStudentId, pSemesterId);
+    if(dropFee.isPresent()) {
+      ugFees.add(dropFee.get());
+    }
 
     List<ReadmissionApplication> applications =
         mReadmissionApplicationManager.getReadmissionApplication(pSemesterId, pStudentId);
@@ -162,6 +179,44 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
         mReadmissionApplicationManager.getReadmissionApplication(pSemesterId, pStudentId);
     return applications != null && applications.size() > 0 ? UGSemesterFeeResponse.READMISSION_APPLIED
         : UGSemesterFeeResponse.READMISSION_NOT_APPLIED;
+  }
+
+  private Optional<UGFee> dropFee(String pStudentId, Integer pSemesterId) {
+    Student student = mStudentManager.get(pStudentId);
+    List<UGFee> semesterFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId(),
+        mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
+
+    Integer droppedSemester = noOfDroppedSemester(pStudentId, pSemesterId);
+    if(droppedSemester > 0 && droppedSemester <= 2) {
+      List<UGFee> penaltyFees = semesterFees.stream()
+          .filter(
+              (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.DROP_PENALTY.toString()))
+          .collect(Collectors.toList());
+      UGFee penaltyFee = penaltyFees.get(0);
+      penaltyFee.edit().setAmount(penaltyFee.getAmount().multiply(new BigDecimal(droppedSemester)));
+      return Optional.of(penaltyFee);
+    }
+    return Optional.empty();
+  }
+
+  private Integer noOfDroppedSemester(String pStudentId, Integer pSemesterId) {
+    Student student = mStudentManager.get(pStudentId);
+    Optional<SemesterAdmissionStatus> status = mSemesterAdmissionStatusManager.lastAdmissionStatus(pStudentId);
+    if(status.isPresent()) {
+      Semester lastAdmittedSemester = status.get().getSemester();
+      List<Semester> noOfSemesterSince =
+          mSemesterManager.semestersAfter(lastAdmittedSemester.getId(), pSemesterId, student.getProgram()
+              .getProgramTypeId());
+      int dropCount = 0;
+      for(Semester semester : noOfSemesterSince) {
+        StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, semester.getId());
+        if(studentRecord != null && studentRecord.getType() == StudentRecord.Type.DROPPED) {
+          dropCount++;
+        }
+      }
+      return dropCount;
+    }
+    return 0;
   }
 
   @Override
