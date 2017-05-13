@@ -381,50 +381,52 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId, Integer pExamType,
-      String pExamDate) {
+                                                                   String pExamDate) {
     String query = "";
-    if(pExamDate.equals("NULL")) {
-      if(pExamType == ExamType.SEMESTER_FINAL.getId())
+    if (pExamDate.equals("NULL")) {
+      if (pExamType == ExamType.SEMESTER_FINAL.getId())
         query = SELECT_ALL_ATTENDENCE_SHEET;
       else
         query = SELECT_ALL_ATTENDENCE_SHEET_CCI;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pExamType, pSemesterId},
+      return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamType, pExamType, pSemesterId},
           new SeatPlanReportRowMapper());
-    }
-    else {
-      if(pExamType == ExamType.SEMESTER_FINAL.getId())
+    } else {
+      if (pExamType == ExamType.SEMESTER_FINAL.getId())
         query = SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE;
       else
         query = SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE_CCI;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new SeatPlanReportRowMapper());
+      return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamDate}, new SeatPlanReportRowMapper());
     }
   }
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType, String pExamDate) {
     String query = "";
-    if(pExamDate.equals("NULL")) {
-      if(pExamType == ExamType.SEMESTER_FINAL.getId())
+    if (pExamDate.equals("NULL")) {
+      if (pExamType == ExamType.SEMESTER_FINAL.getId())
         query = SELECT_ALL_TOP_SHEET;
       else
         query = SELECT_ALL_TOP_SHEET_CCI;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pExamType, pSemesterId},
+      return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamType, pExamType, pSemesterId},
           new SeatPlanRowMapperTopSheet());
-    }
-    else {
-      if(pExamType == ExamType.SEMESTER_FINAL.getId())
+    } else {
+      if (pExamType == ExamType.SEMESTER_FINAL.getId()) {
         query = SELECT_ALL_TOP_SHEET_EXAM_DATE;
-      else
+        return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamType, pExamType, pSemesterId, pExamDate},
+            new SeatPlanRowMapperTopSheet());
+      } else {
         query = SELECT_ALL_TOP_SHEET_EXAM_DATE_CCI;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new SeatPlanRowMapperTopSheet());
+        return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamDate}, new SeatPlanRowMapperTopSheet());
+
+      }
     }
   }
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType, String pExamDate,
-      int pRoomId) {
+                                                           int pRoomId) {
     String query = SELECT_ALL_STICKER;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pRoomId}, new SeatPlanRowMapperSticker());
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pExamType, pRoomId}, new SeatPlanRowMapperSticker());
   }
 
   class SeatPlanReportRowMapper implements RowMapper<SeatPlanReportDto> {

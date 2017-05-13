@@ -40,11 +40,15 @@
 /// <reference path='service/PaymentInfoService.ts'/>
 /// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/Settings.ts'/>
+/// <reference path='service/leaveManagementService/LeaveApplicationService.ts'/>
+/// <reference path='service/leaveManagementService/LeaveStatusService.ts'/>
+/// <reference path='service/leaveManagementService/LeaveTypeService.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
 /// <reference path='controller/ChangePassword.ts'/>
 /// <reference path='controller/Logout.ts'/>
+/// <reference path='controller/leaveManagement/LeaveApplicationManagement.ts'/>
 
 /// <reference path='directive/FlushCache.ts'/>
 /// <reference path='directive/LeftMenu.ts'/>
@@ -65,6 +69,8 @@
 /// <reference path='directive/Modal.ts'/>
 /// <reference path='directive/Notification.ts'/>
 /// <reference path='directive/ConfirmationDIalog.ts'/>
+/// <reference path='directive/leaveManagement/LmsAppDir.ts'/>
+
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
@@ -77,6 +83,8 @@
 /// <reference path='model/AdmissionStudent.ts'/>
 /// <reference path='model/PaymentInfo.ts'/>
 /// <reference path='model/Semester.ts'/>
+/// <reference path='model/leaveManagement/LmsApplication.ts'/>
+/// <reference path='model/leaveManagement/LmsType.ts'/>
 
 
 /// <reference path='grid/GridConfig.ts'/>
