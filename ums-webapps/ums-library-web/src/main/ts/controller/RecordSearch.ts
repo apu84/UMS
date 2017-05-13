@@ -34,8 +34,9 @@ module ums {
       $scope.search = {queryTerm : ""};
 
       console.log("Inside record Search. ............"+$stateParams["1"]);
-      if($stateParams["1"] == null || $stateParams["1"] =="") {
+      if($stateParams["1"] == null || $stateParams["1"] =="old") {
         console.log("inside if");
+
 
         console.log(localStorage.getItem("lms_search_filter"));
         var filter:IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
@@ -49,7 +50,7 @@ module ums {
 
       this.prepareFilter();
 
-      if($stateParams["1"] == null || $stateParams["1"] =="") {
+      if($stateParams["1"] == null || $stateParams["1"] =="old") {
         var page = Number(localStorage.getItem("lms_page"));
         $scope.pagination.currentPage = page;
         this.fetchRecords(page);
@@ -57,8 +58,6 @@ module ums {
       else{
         this.fetchRecords(1);
       }
-
-
 
 
     }
