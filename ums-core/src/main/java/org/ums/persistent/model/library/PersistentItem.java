@@ -137,7 +137,7 @@ public class PersistentItem implements MutableItem {
 
   @Override
   public Supplier getSupplier() {
-    return mSupplierId!=0?sSupplierManager.get(mSupplierId):null;
+    return mSupplierId != 0 ? sSupplierManager.get(mSupplierId) : null;
   }
 
   @Override

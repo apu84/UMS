@@ -35,11 +35,12 @@ public class ContributorBuilder implements Builder<Contributor, MutableContribut
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getFullName());
     pBuilder.add("text", pReadOnly.getFullName());
-    pBuilder.add("shortName", pReadOnly.getShortName()==null?"":pReadOnly.getShortName());
-    pBuilder.add("gender", pReadOnly.getGender() ==null ? 101101 :pReadOnly.getGender().getId());
+    pBuilder.add("shortName", pReadOnly.getShortName() == null ? "" : pReadOnly.getShortName());
+    pBuilder.add("gender", pReadOnly.getGender() == null ? 101101 : pReadOnly.getGender().getId());
     pBuilder.add("countryId", pReadOnly.getCountryId());
-    pBuilder.add("countryName",pReadOnly.getCountryId()==0?"":mCountryManager.get(pReadOnly.getCountryId()).getName());
-    pBuilder.add("address", pReadOnly.getAddress()==null?"":pReadOnly.getAddress());
+    pBuilder.add("countryName", pReadOnly.getCountryId() == 0 ? "" : mCountryManager.get(pReadOnly.getCountryId())
+        .getName());
+    pBuilder.add("address", pReadOnly.getAddress() == null ? "" : pReadOnly.getAddress());
     pBuilder.add("lastModified", UmsUtils.nullConversion(pReadOnly.getLastModified()));
   }
 

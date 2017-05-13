@@ -32,7 +32,8 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("text", pReadOnly.getName());
     pBuilder.add("countryId", pReadOnly.getCountryId());
-    pBuilder.add("countryName", pReadOnly.getCountryId()==0 ? "" : mCountryManager.get(pReadOnly.getCountryId()).getName());
+    pBuilder.add("countryName", pReadOnly.getCountryId() == 0 ? "" : mCountryManager.get(pReadOnly.getCountryId())
+        .getName());
     pBuilder.add("contactPerson", UmsUtils.nullConversion(pReadOnly.getContactPerson()));
     pBuilder.add("phoneNumber", UmsUtils.nullConversion(pReadOnly.getPhoneNumber()));
     pBuilder.add("emailAddress", UmsUtils.nullConversion(pReadOnly.getEmailAddress()));

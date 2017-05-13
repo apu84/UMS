@@ -33,27 +33,27 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+      final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getMfn());
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
-    pBuilder.add("accessionDate",  UmsUtils.nullConversion(pReadOnly.getAccessionDate()));
+    pBuilder.add("accessionDate", UmsUtils.nullConversion(pReadOnly.getAccessionDate()));
     pBuilder.add("barcode", UmsUtils.nullConversion(pReadOnly.getBarcode()));
-    pBuilder.add("price",pReadOnly.getPrice());
+    pBuilder.add("price", pReadOnly.getPrice());
     pBuilder.add("internalNote", UmsUtils.nullConversion(pReadOnly.getInternalNote()));
     // pBuilder.add("supplierName", pReadOnly.getSupplier().getName());
     // pBuilder.add("supplier", pReadOnly.getSupplier().getId());
-    pBuilder.add("status", pReadOnly.getStatus()==null?0:pReadOnly.getStatus().getId());
-    pBuilder.add("statusName",  pReadOnly.getStatus()==null?"":pReadOnly.getStatus().getLabel());
+    pBuilder.add("status", pReadOnly.getStatus() == null ? 0 : pReadOnly.getStatus().getId());
+    pBuilder.add("statusName", pReadOnly.getStatus() == null ? "" : pReadOnly.getStatus().getLabel());
     pBuilder.add("insertedBy", UmsUtils.nullConversion(pReadOnly.getInsertedBy()));
     pBuilder.add("insertedOn", UmsUtils.nullConversion(pReadOnly.getInsertedOn()));
     pBuilder.add("lastUpdatedBy", UmsUtils.nullConversion(pReadOnly.getLastUpdatedBy()));
     pBuilder.add("lastUpdatedOn", UmsUtils.nullConversion(pReadOnly.getLastUpdatedOn()));
 
     JsonObjectBuilder object = Json.createObjectBuilder();
-    object.add("id",  pReadOnly.getSupplier()==null?0:pReadOnly.getSupplier().getId());
-    object.add("name",  pReadOnly.getSupplier()==null?"":pReadOnly.getSupplier().getName());
+    object.add("id", pReadOnly.getSupplier() == null ? 0 : pReadOnly.getSupplier().getId());
+    object.add("name", pReadOnly.getSupplier() == null ? "" : pReadOnly.getSupplier().getName());
     pBuilder.add("supplier", object);
 
   }
