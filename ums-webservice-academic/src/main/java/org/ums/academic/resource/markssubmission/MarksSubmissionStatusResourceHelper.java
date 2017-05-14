@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.markssubmission;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
-import org.ums.builder.MarksSubmissionStatusBuilder;
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.manager.ContentManager;

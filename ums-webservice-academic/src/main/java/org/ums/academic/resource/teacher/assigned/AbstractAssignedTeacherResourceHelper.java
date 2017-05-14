@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.teacher.assigned;
 
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;

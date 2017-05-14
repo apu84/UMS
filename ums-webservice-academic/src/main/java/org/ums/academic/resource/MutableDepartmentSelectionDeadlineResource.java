@@ -17,7 +17,6 @@ public class MutableDepartmentSelectionDeadlineResource extends Resource {
   DepartmentSelectionDeadlineResourceHelper mHelper;
 
   @POST
-  @Path("/")
   public Response saveOrUpdateData(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
   }

@@ -1,4 +1,8 @@
-package org.ums.builder;
+package org.ums.academic.resource.teacher;
+
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -7,10 +11,6 @@ import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutableTeacher;
 
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-
 @Component
 public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
   @Override
@@ -18,8 +18,8 @@ public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
 
-    Department department = (Department) pLocalCache.cache(() -> pReadOnly.getDepartment(),
-        pReadOnly.getDepartmentId(), Department.class);
+    Department department =
+        (Department) pLocalCache.cache(pReadOnly::getDepartment, pReadOnly.getDepartmentId(), Department.class);
 
     pBuilder.add("departmentName", department.getShortName());
     pBuilder.add("departmentId", department.getId());

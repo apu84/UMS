@@ -1,4 +1,4 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.markssubmission;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -7,7 +7,6 @@ import javax.ws.rs.core.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.helper.MarksSubmissionStatusResourceHelper;
 import org.ums.resource.Resource;
 
 @Component

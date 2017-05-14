@@ -1,4 +1,4 @@
-package org.ums.builder;
+package org.ums.academic.resource.teacher.assigned;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

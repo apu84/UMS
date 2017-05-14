@@ -1,9 +1,8 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.teacher;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.TeacherBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
