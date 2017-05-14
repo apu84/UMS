@@ -87,7 +87,7 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
   public List<UGFee> getLatestFee(Integer pFacultyId, Integer pProgramTypeId) {
     String query =
         SELECT_ALL
-            + "WHERE FACULTY_ID = ? AND SEMESTER_ID = "
+            + "WHERE (FACULTY_ID = ? OR FACULTY_ID IS NULL) AND SEMESTER_ID = "
             + "(SELECT SEMESTER_ID FROM MST_SEMESTER WHERE MST_SEMESTER.PROGRAM_TYPE = ? AND MST_SEMESTER.START_DATE = "
             + "(SELECT MAX(MST_SEMESTER.START_DATE) FROM MST_SEMESTER WHERE MST_SEMESTER.PROGRAM_TYPE = ? "
             + "AND MST_SEMESTER.SEMESTER_ID IN (SELECT DISTINCT UG_FEE.SEMESTER_ID FROM UG_FEE))";

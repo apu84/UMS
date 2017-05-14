@@ -86,12 +86,12 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   }
 
   private List<Object[]> getInsertParamArray(List<MutableStudentPayment> pStudentPayments) {
+    String transactionId = mIdGenerator.getAlphaNumericId();
     List<Object[]> params = new ArrayList<>();
     for(StudentPayment studentPayment : pStudentPayments) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), mIdGenerator.getAlphaNumericId(),
-          studentPayment.getStudentId(), studentPayment.getSemesterId(), studentPayment.getAmount(),
-          StudentPayment.Status.APPLIED.getValue(), studentPayment.getTransactionValidTill(),
-          studentPayment.getFeeCategoryId()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), transactionId, studentPayment.getStudentId(),
+          studentPayment.getSemesterId(), studentPayment.getAmount(), StudentPayment.Status.APPLIED.getValue(),
+          studentPayment.getTransactionValidTill(), studentPayment.getFeeCategoryId()});
     }
     return params;
   }
@@ -115,6 +115,12 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper()).stream()
         .filter(payment -> payment.getFeeCategory().getType().getId().intValue() == pFeeType.getId())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<StudentPayment> getTransactionDetails(String pStudentId, String pTransactionId) {
+    String query = SELECT_ALL + "WHERE TRANSACTION_ID = ? AND STUDENT_ID = ? ORDER BY APPLIED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {pTransactionId, pStudentId}, new StudentPaymentRowMapper());
   }
 
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {

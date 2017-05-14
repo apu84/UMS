@@ -1,4 +1,4 @@
-package org.ums.academic.resource.student.fee;
+package org.ums.academic.resource.fee.semesterfee;
 
 import javax.json.Json;
 import javax.json.JsonObject;

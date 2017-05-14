@@ -1,4 +1,4 @@
-package org.ums.academic.resource.student.fee;
+package org.ums.academic.resource.fee.semesterfee;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.immutable.ParameterSetting;
-import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.fee.FeeTypeManager;

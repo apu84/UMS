@@ -1,4 +1,4 @@
-package org.ums.academic.resource.student.fee;
+package org.ums.academic.resource.fee.semesterfee;
 
 import java.util.List;
 import java.util.Optional;

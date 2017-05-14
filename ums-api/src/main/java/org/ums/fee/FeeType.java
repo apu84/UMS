@@ -11,13 +11,16 @@ import org.ums.domain.model.common.LastModifier;
 
 public interface FeeType extends Serializable, EditType<MutableFeeType>, LastModifier, Identifier<Integer> {
 
+  String getName();
+
   String getDescription();
 
   enum Types {
-    SEMESTER_FEE(1, "Semester fee"),
-    CERTIFICATE_FEE(2, "Certificate fee"),
-    DUES(3, "Dues"),
-    OTHERS(0, "Others");
+    SEMESTER_FEE(1, "SEMESTER_FEE"),
+    CERTIFICATE_FEE(2, "CERTIFICATE_FEE"),
+    DUES(3, "DUES"),
+    PENALTY(4, "PENALTY"),
+    OTHERS(0, "OTHERS");
 
     private String label;
     private int id;

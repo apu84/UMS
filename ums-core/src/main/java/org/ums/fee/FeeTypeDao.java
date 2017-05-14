@@ -9,10 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class FeeTypeDao extends FeeTypeDaoDecorator {
-  String SELECT_ALL = "SELECT ID, DESCRIPTION, LAST_MODIFIED FROM FEE_TYPE ";
-  String INSERT_ALL = "INSERT INTO FEE_TYPE (ID, DESCRIPTION, LAST_MODIFIED) VALUES ( ?, ?, " + getLastModifiedSql()
-      + ")";
-  String UPDATE_ALL = "UPDATE FEE_TYPE SET DESCRIPTION = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL = "SELECT ID, NAME, DESCRIPTION, LAST_MODIFIED FROM FEE_TYPE ";
+  String INSERT_ALL = "INSERT INTO FEE_TYPE (ID, NAME, DESCRIPTION, LAST_MODIFIED) VALUES ( ?, ?, "
+      + getLastModifiedSql() + ")";
+  String UPDATE_ALL = "UPDATE FEE_TYPE SET NAME = ?, DESCRIPTION = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM FEE_TYPE ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -35,7 +35,7 @@ public class FeeTypeDao extends FeeTypeDaoDecorator {
   @Override
   public int update(MutableFeeType pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getName(), pMutable.getDescription(), pMutable.getId());
   }
 
   @Override
@@ -46,7 +46,7 @@ public class FeeTypeDao extends FeeTypeDaoDecorator {
 
   @Override
   public Integer create(MutableFeeType pMutable) {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getDescription());
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName(), pMutable.getDescription());
     return pMutable.getId();
   }
 
@@ -55,6 +55,7 @@ public class FeeTypeDao extends FeeTypeDaoDecorator {
     public FeeType mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableFeeType feeType = new PersistentFeeType();
       feeType.setId(rs.getInt("ID"));
+      feeType.setName(rs.getString("NAME"));
       feeType.setDescription(rs.getString("DESCRIPTION"));
       feeType.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<FeeType> reference = new AtomicReference<>(feeType);

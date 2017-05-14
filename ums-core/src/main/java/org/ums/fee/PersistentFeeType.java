@@ -8,6 +8,7 @@ public class PersistentFeeType implements MutableFeeType {
   private static FeeTypeManager sFeeTypeManager;
   private Integer mId;
   private String mDescription;
+  private String mName;
   private String mLastModified;
 
   @Override
@@ -28,6 +29,16 @@ public class PersistentFeeType implements MutableFeeType {
   @Override
   public void setDescription(String pDescription) {
     this.mDescription = pDescription;
+  }
+
+  @Override
+  public void setName(String pName) {
+    mName = pName;
+  }
+
+  @Override
+  public String getName() {
+    return mName;
   }
 
   @Override
@@ -65,6 +76,7 @@ public class PersistentFeeType implements MutableFeeType {
   public PersistentFeeType(MutableFeeType pFeeType) {
     setId(pFeeType.getId());
     setDescription(pFeeType.getDescription());
+    setName(pFeeType.getName());
     setLastModified(pFeeType.getLastModified());
   }
 

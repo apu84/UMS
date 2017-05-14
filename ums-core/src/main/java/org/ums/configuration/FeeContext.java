@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.fee.*;
+import org.ums.fee.dues.StudentDuesDao;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.latefee.UGLateFeeDao;
 import org.ums.fee.latefee.UGLateFeeManager;
 import org.ums.fee.payment.StudentPaymentDao;
@@ -64,5 +66,10 @@ public class FeeContext {
   @Bean
   InstallmentStatusManager installmentStatusManager() {
     return new InstallmentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  StudentDuesManager studentDuesManager() {
+    return new StudentDuesDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 }

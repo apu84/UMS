@@ -1,4 +1,4 @@
-package org.ums.academic.resource.latefee;
+package org.ums.academic.resource.fee.latefee;
 
 import org.ums.resource.Resource;
 
