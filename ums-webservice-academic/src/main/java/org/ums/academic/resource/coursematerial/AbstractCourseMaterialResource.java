@@ -1,4 +1,4 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.coursematerial;
 
 import java.io.IOException;
 import java.io.InputStream;

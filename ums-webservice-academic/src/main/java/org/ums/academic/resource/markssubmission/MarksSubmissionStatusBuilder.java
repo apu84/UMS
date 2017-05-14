@@ -1,4 +1,4 @@
-package org.ums.builder;
+package org.ums.academic.resource.markssubmission;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -6,6 +6,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;

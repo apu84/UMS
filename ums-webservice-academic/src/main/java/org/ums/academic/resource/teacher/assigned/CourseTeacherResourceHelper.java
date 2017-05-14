@@ -1,13 +1,11 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.teacher.assigned;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.builder.CourseTeacherBuilder;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.manager.AssignedTeacherManager;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 

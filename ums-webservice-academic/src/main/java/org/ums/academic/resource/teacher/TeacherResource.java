@@ -1,8 +1,7 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.teacher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.helper.TeacherResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

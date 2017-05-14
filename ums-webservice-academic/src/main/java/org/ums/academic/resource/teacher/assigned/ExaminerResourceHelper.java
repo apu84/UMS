@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.teacher.assigned;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
-import org.ums.builder.ExaminerBuilder;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableExaminer;

@@ -14,7 +14,7 @@ import org.ums.fee.FeeTypeManager;
 import org.ums.resource.Resource;
 
 @Component
-@Path("/fee-types")
+@Path("/fee-type")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class FeeTypeResource extends Resource {
