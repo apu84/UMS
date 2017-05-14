@@ -1,4 +1,4 @@
-package org.ums.academic.resource.student.fee.certificate;
+package org.ums.academic.resource.fee.certificate;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +19,6 @@ import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.fee.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
-import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;

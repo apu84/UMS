@@ -6,4 +6,6 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 
 public interface MutableFeeType extends FeeType, Editable<Integer>, MutableIdentifier<Integer>, MutableLastModifier {
   void setDescription(String pDescription);
+
+  void setName(String pName);
 }

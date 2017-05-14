@@ -1,6 +1,7 @@
 package org.ums.fee.dues;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.ums.domain.model.common.EditType;
@@ -24,7 +25,7 @@ public interface StudentDues extends Serializable, EditType<MutableStudentDues>,
 
   String getStudentId();
 
-  Double getAmount();
+  BigDecimal getAmount();
 
   Date getAddedOn();
 

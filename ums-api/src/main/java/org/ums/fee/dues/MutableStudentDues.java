@@ -1,5 +1,6 @@
 package org.ums.fee.dues;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.ums.domain.model.common.Editable;
@@ -23,7 +24,7 @@ public interface MutableStudentDues extends StudentDues, Editable<Long>, Mutable
 
   void setStudentId(String pStudentId);
 
-  void setAmount(Double pAmount);
+  void setAmount(BigDecimal pAmount);
 
   void setAddedOn(Date pAddedOn);
 

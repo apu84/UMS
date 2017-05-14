@@ -1,5 +1,6 @@
 package org.ums.fee.dues;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
@@ -24,7 +25,7 @@ public class PersistentStudentDues implements MutableStudentDues {
   private String mTransactionId;
   private Student mStudent;
   private String mStudentId;
-  private Double mAmount;
+  private BigDecimal mAmount;
   private Date mAddedOn;
   private Date mPayBefore;
   private User mUser;
@@ -102,12 +103,12 @@ public class PersistentStudentDues implements MutableStudentDues {
   }
 
   @Override
-  public Double getAmount() {
+  public BigDecimal getAmount() {
     return mAmount;
   }
 
   @Override
-  public void setAmount(Double pAmount) {
+  public void setAmount(BigDecimal pAmount) {
     this.mAmount = pAmount;
   }
 
@@ -183,7 +184,7 @@ public class PersistentStudentDues implements MutableStudentDues {
 
   public PersistentStudentDues() {}
 
-  PersistentStudentDues(MutableStudentDues pStudentDues) {
+  private PersistentStudentDues(MutableStudentDues pStudentDues) {
     setId(pStudentDues.getId());
     setFeeCategory(pStudentDues.getFeeCategory());
     setFeeCategoryId(pStudentDues.getFeeCategoryId());

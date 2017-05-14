@@ -1,4 +1,4 @@
-package org.ums.academic.resource.latefee;
+package org.ums.academic.resource.fee.latefee;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

@@ -1,4 +1,4 @@
-package org.ums.academic.resource.student.fee;
+package org.ums.academic.resource.fee.semesterfee;
 
 interface UGSemesterFee {
   boolean withinFirstInstallmentSlot(Integer pSemesterId);
