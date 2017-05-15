@@ -5,6 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
+import org.ums.enums.common.LeaveApplicationStatus;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.manager.common.LmsTypeManager;
@@ -36,6 +37,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   private Date mFromDate;
   private Date mToDate;
   private String mReason;
+  private LeaveApplicationStatus mLeaveApplicationStatus;
   private String mLastModified;
 
   public PersistentLmsApplication() {
@@ -53,6 +55,17 @@ public class PersistentLmsApplication implements MutableLmsApplication {
     mToDate = pPersistentLmsApplication.getToDate();
     mReason = pPersistentLmsApplication.getReason();
     mLastModified = pPersistentLmsApplication.getLastModified();
+    mLeaveApplicationStatus = pPersistentLmsApplication.getApplicationStatus();
+  }
+
+  @Override
+  public void setLeaveApplicationStatus(LeaveApplicationStatus pLeaveApplicationStatus) {
+    mLeaveApplicationStatus = pLeaveApplicationStatus;
+  }
+
+  @Override
+  public LeaveApplicationStatus getApplicationStatus() {
+    return mLeaveApplicationStatus;
   }
 
   @Override

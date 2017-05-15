@@ -32,7 +32,7 @@ public class SeatPlanStickerReport {
   public static final String DEST = "seat_plan_report.pdf";
 
   public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                          String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
 
     List<SeatPlanReportDto> seatPlans =
         mSeatPlanReportManager.getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate, pRoomId);
@@ -50,9 +50,10 @@ public class SeatPlanStickerReport {
     document.setPageSize(PageSize.A4);
 
     int totalRow;
-    if (pExamType == 1) {
+    if(pExamType == 1) {
       totalRow = 5;
-    } else {
+    }
+    else {
       totalRow = 4;
     }
 
@@ -66,7 +67,7 @@ public class SeatPlanStickerReport {
     masterTable.setWidthPercentage(108);
 
     int rowCounter = 0;
-    while (true) {
+    while(true) {
       PdfPCell masterLeftCell = new PdfPCell();
       PdfPCell masterRightCell = new PdfPCell();
       PdfPTable leftTable = new PdfPTable(1);
@@ -76,11 +77,11 @@ public class SeatPlanStickerReport {
       leftCell.setPaddingRight(13.0f);
       rightCell.setPaddingLeft(13.0f);
       boolean dataEnd = false;
-      for (int i = 1; i <= 2; i++) {
+      for(int i = 1; i <= 2; i++) {
 
-        if (seatPlans.size() > 0) {
+        if(seatPlans.size() > 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
-          if (seatPlanReportDto.getStudentId().equals("140107092")) {
+          if(seatPlanReportDto.getStudentId().equals("140107092")) {
             boolean foundI = true;
           }
           Paragraph paragraph = new Paragraph();
@@ -88,31 +89,35 @@ public class SeatPlanStickerReport {
           paragraph.add(roomInfo);
           paragraph.setAlignment(Element.ALIGN_RIGHT);
           paragraph.setFont(boldFont);
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           String semesterInfo;
-          if (pExamType == 1) {
+          if(pExamType == 1) {
             semesterInfo = "Semester Final Examination, " + semester.getName();
-          } else {
+          }
+          else {
             semesterInfo = "Carry/Clearance/Improvement Examination, " + semester.getName();
           }
 
           paragraph = new Paragraph(semesterInfo, boldFont);
           paragraph.setAlignment(Element.ALIGN_CENTER);
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           paragraph = new Paragraph("  ");
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
@@ -120,37 +125,42 @@ public class SeatPlanStickerReport {
               "  Year :" + seatPlanReportDto.getCurrentYear() + "           " + "            Semester: "
                   + seatPlanReportDto.getCurrentSemester();
           paragraph = new Paragraph(yearSemester, boldFont);
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           String department = " Department :" + seatPlanReportDto.getProgramName();
           paragraph = new Paragraph(department, boldFont);
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           paragraph = new Paragraph(" Student Id: " + seatPlanReportDto.getStudentId(), boldFont);
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           paragraph = new Paragraph(" ");
-          if (i == 1) {
+          if(i == 1) {
             leftCell.addElement(paragraph);
-          } else {
+          }
+          else {
             rightCell.addElement(paragraph);
           }
 
           seatPlans.remove(0);
 
-        } else {
+        }
+        else {
           dataEnd = true;
           break;
         }
@@ -175,16 +185,17 @@ public class SeatPlanStickerReport {
 
       rowCounter += 1;
 
-      if (rowCounter >= totalRow || seatPlans.size() == 0) {
+      if(rowCounter >= totalRow || seatPlans.size() == 0) {
         document.add(masterTable);
         rowCounter = 0;
         masterTable = new PdfPTable(2);
         masterTable.setWidthPercentage(108);
       }
 
-      if (seatPlans.size() == 0) {
+      if(seatPlans.size() == 0) {
         break;
-      } else {
+      }
+      else {
         document.newPage();
 
       }

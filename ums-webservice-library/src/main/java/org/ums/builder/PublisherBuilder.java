@@ -27,12 +27,13 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Publisher pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+                    final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("text", pReadOnly.getName());
     pBuilder.add("countryId", pReadOnly.getCountryId());
-    pBuilder.add("countryName", pReadOnly.getCountryId()==0 ? "" : mCountryManager.get(pReadOnly.getCountryId()).getName());
+    pBuilder.add("countryName", pReadOnly.getCountryId() == 0 ? "" : mCountryManager.get(pReadOnly.getCountryId())
+        .getName());
     pBuilder.add("contactPerson", UmsUtils.nullConversion(pReadOnly.getContactPerson()));
     pBuilder.add("phoneNumber", UmsUtils.nullConversion(pReadOnly.getPhoneNumber()));
     pBuilder.add("emailAddress", UmsUtils.nullConversion(pReadOnly.getEmailAddress()));
@@ -43,16 +44,16 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
   @Override
   public void build(final MutablePublisher pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
-    if(pJsonObject.containsKey("id"))
+    if (pJsonObject.containsKey("id"))
       pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     pMutable.setName(pJsonObject.getString("name"));
-    if(pJsonObject.containsKey("countryId"))
+    if (pJsonObject.containsKey("countryId"))
       pMutable.setCountryId(pJsonObject.getInt("countryId"));
-    if(pJsonObject.containsKey("contactPerson"))
+    if (pJsonObject.containsKey("contactPerson"))
       pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
-    if(pJsonObject.containsKey("phoneNumber"))
+    if (pJsonObject.containsKey("phoneNumber"))
       pMutable.setPhoneNumber(pJsonObject.getString("phoneNumber"));
-    if(pJsonObject.containsKey("emailAddress"))
+    if (pJsonObject.containsKey("emailAddress"))
       pMutable.setEmailAddress(pJsonObject.getString("emailAddress"));
   }
 }

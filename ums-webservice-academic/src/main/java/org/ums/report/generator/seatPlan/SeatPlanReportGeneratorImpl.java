@@ -4,8 +4,7 @@ import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.enums.ExamType;
-import org.ums.report.generator.seatPlan.support.SeatChartReport;
-import org.ums.report.generator.seatPlan.support.SittingArrangementReport;
+import org.ums.report.generator.seatPlan.support.*;
 
 import javax.ws.rs.WebApplicationException;
 import java.io.IOException;
@@ -67,7 +66,6 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
                                           String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
 
-    SeatPlanStickerReport seatPlanStickerReport = new SeatPlanStickerReport();
     mSeatPlanStickerReport.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType, pExamDate, pRoomId,
         pOutputStream);
   }
@@ -84,7 +82,6 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   public void createRoomWiseQuestionDistributionReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream)
       throws IOException, DocumentException {
 
-    RoomWiseQuestionDistributionReport roomWiseQuestionDistributionReport = new RoomWiseQuestionDistributionReport();
     mRoomWiseQuestionDistributionReport.createRoomWiseQuestionDistributionReport(pSemesterId, pExamType, pOutputStream);
   }
 

@@ -16,7 +16,7 @@ import org.ums.domain.model.immutable.SubGroupCCI;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
-import org.ums.report.generator.SeatPlanReportGenerator;
+import org.ums.report.generator.seatPlan.SeatPlanReportGenerator;
 import org.ums.resource.ResourceHelper;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.SeatPlanService;

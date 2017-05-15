@@ -7,6 +7,7 @@ module ums {
     leaveApplication: LmsApplication;
     leaveTypes: Array<LmsType>;
     leaveType: LmsType;
+    remainingLeaves: Array<RemainingLmsLeave>;
   }
 
   class LmsAppController {
@@ -27,7 +28,8 @@ module ums {
     public scope = {
       leaveApplication: '=leaveApplication',
       leaveTypes: '=leaveTypes',
-      leaveType: '=leaveType'
+      leaveType: '=leaveType',
+      remainingLeaves: '=remainingLeaves'
     };
 
     public controller = LmsAppController;

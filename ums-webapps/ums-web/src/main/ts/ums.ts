@@ -839,7 +839,7 @@ module ums {
         .state('leaveApplication', {
           url: "/leaveApplication",
           controller: 'LeaveApplicationManagement',
-          templateUrl: 'views/common/leaveManagement/leave-application.html',
+          templateUrl: 'views/leave-management/leave-application.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

@@ -1,0 +1,14 @@
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Leave Type</th>
+        <th>Days Left</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="remainingLeave in remainingLeaves">
+        <td>{{remainingLeave.leaveName}}</td>
+        <td>{{remainingLeave.daysLeft}}</td>
+    </tr>
+    </tbody>
+</table>

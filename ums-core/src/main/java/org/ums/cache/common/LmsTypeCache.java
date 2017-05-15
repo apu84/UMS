@@ -4,6 +4,7 @@ import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsType;
 import org.ums.enums.common.EmployeeLeaveType;
+import org.ums.enums.common.Gender;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsTypeManager;
 
@@ -27,7 +28,7 @@ public class LmsTypeCache extends ContentCache<LmsType, MutableLmsType, Integer,
   }
 
   @Override
-  public List<LmsType> getLmsTypes(EmployeeLeaveType pType) {
-    return getManager().getLmsTypes(pType);
+  public List<LmsType> getLmsTypes(EmployeeLeaveType pType, Gender pGender) {
+    return getManager().getLmsTypes(pType, pGender);
   }
 }

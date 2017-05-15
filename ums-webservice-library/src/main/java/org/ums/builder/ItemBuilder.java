@@ -38,22 +38,22 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
-    pBuilder.add("accessionDate",  UmsUtils.nullConversion(pReadOnly.getAccessionDate()));
+    pBuilder.add("accessionDate", UmsUtils.nullConversion(pReadOnly.getAccessionDate()));
     pBuilder.add("barcode", UmsUtils.nullConversion(pReadOnly.getBarcode()));
-    pBuilder.add("price",pReadOnly.getPrice());
+    pBuilder.add("price", pReadOnly.getPrice());
     pBuilder.add("internalNote", UmsUtils.nullConversion(pReadOnly.getInternalNote()));
     // pBuilder.add("supplierName", pReadOnly.getSupplier().getName());
     // pBuilder.add("supplier", pReadOnly.getSupplier().getId());
-    pBuilder.add("status", pReadOnly.getStatus()==null?0:pReadOnly.getStatus().getId());
-    pBuilder.add("statusName",  pReadOnly.getStatus()==null?"":pReadOnly.getStatus().getLabel());
+    pBuilder.add("status", pReadOnly.getStatus() == null ? 0 : pReadOnly.getStatus().getId());
+    pBuilder.add("statusName", pReadOnly.getStatus() == null ? "" : pReadOnly.getStatus().getLabel());
     pBuilder.add("insertedBy", UmsUtils.nullConversion(pReadOnly.getInsertedBy()));
     pBuilder.add("insertedOn", UmsUtils.nullConversion(pReadOnly.getInsertedOn()));
     pBuilder.add("lastUpdatedBy", UmsUtils.nullConversion(pReadOnly.getLastUpdatedBy()));
     pBuilder.add("lastUpdatedOn", UmsUtils.nullConversion(pReadOnly.getLastUpdatedOn()));
 
     JsonObjectBuilder object = Json.createObjectBuilder();
-    object.add("id",  pReadOnly.getSupplier()==null?0:pReadOnly.getSupplier().getId());
-    object.add("name",  pReadOnly.getSupplier()==null?"":pReadOnly.getSupplier().getName());
+    object.add("id", pReadOnly.getSupplier() == null ? 0 : pReadOnly.getSupplier().getId());
+    object.add("name", pReadOnly.getSupplier() == null ? "" : pReadOnly.getSupplier().getName());
     pBuilder.add("supplier", object);
 
   }
@@ -67,12 +67,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setAccessionNumber(pJsonObject.getString("accessionNumber"));
     pMutable.setAccessionDate(pJsonObject.getString("accessionDate"));
 
-    if(pJsonObject.containsKey("supplier")) {
+    if (pJsonObject.containsKey("supplier")) {
       JsonObject supplierObject = (JsonObject) (pJsonObject.get("supplier"));
       pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
     }
 
-    if(pJsonObject.containsKey("barcode"))
+    if (pJsonObject.containsKey("barcode"))
       pMutable.setBarcode(pJsonObject.getString("barcode"));
     pMutable.setPrice(Double.valueOf(pJsonObject.getString("price")));
     pMutable.setInternalNote(pJsonObject.getString("internalNote"));

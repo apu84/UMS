@@ -31,31 +31,32 @@ public class ContributorBuilder implements Builder<Contributor, MutableContribut
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Contributor pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+                    final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("name", pReadOnly.getFullName());
     pBuilder.add("text", pReadOnly.getFullName());
-    pBuilder.add("shortName", pReadOnly.getShortName()==null?"":pReadOnly.getShortName());
-    pBuilder.add("gender", pReadOnly.getGender() ==null ? 101101 :pReadOnly.getGender().getId());
+    pBuilder.add("shortName", pReadOnly.getShortName() == null ? "" : pReadOnly.getShortName());
+    pBuilder.add("gender", pReadOnly.getGender() == null ? 101101 : pReadOnly.getGender().getId());
     pBuilder.add("countryId", pReadOnly.getCountryId());
-    pBuilder.add("countryName",pReadOnly.getCountryId()==0?"":mCountryManager.get(pReadOnly.getCountryId()).getName());
-    pBuilder.add("address", pReadOnly.getAddress()==null?"":pReadOnly.getAddress());
+    pBuilder.add("countryName", pReadOnly.getCountryId() == 0 ? "" : mCountryManager.get(pReadOnly.getCountryId())
+        .getName());
+    pBuilder.add("address", pReadOnly.getAddress() == null ? "" : pReadOnly.getAddress());
     pBuilder.add("lastModified", UmsUtils.nullConversion(pReadOnly.getLastModified()));
   }
 
   @Override
   public void build(final MutableContributor pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
-    if(pJsonObject.containsKey("id"))
+    if (pJsonObject.containsKey("id"))
       pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     pMutable.setFullName(pJsonObject.getString("name"));
-    if(pJsonObject.containsKey("shortName"))
+    if (pJsonObject.containsKey("shortName"))
       pMutable.setShortName(pJsonObject.getString("shortName"));
-    if(pJsonObject.containsKey("gender"))
+    if (pJsonObject.containsKey("gender"))
       pMutable.setGender(Gender.get(pJsonObject.getInt("gender")));
-    if(pJsonObject.containsKey("address"))
+    if (pJsonObject.containsKey("address"))
       pMutable.setAddress(pJsonObject.getString("address"));
-    if(pJsonObject.containsKey("countryId"))
+    if (pJsonObject.containsKey("countryId"))
       pMutable.setCountryId(pJsonObject.getInt("countryId"));
 
     // pMutable.setLastModified(pJsonObject.getString("lastModified"));

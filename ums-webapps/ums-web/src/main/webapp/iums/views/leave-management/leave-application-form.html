@@ -1,0 +1,43 @@
+<form action="" class="form-horizontal" data-validate="" data-onvalidate="getProgramsAndStatistics">
+    <div class="form-body pal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Leave Type</label>
+            <div class="col-md-4">
+                <select
+                        class="form-control required"
+                        name="leaveType"
+                        id="leaveType"
+                        data-ng-options="leaveType.name for leaveType in leaveTypes track by leaveType.id"
+                        data-ng-model="$parent.leaveType"
+                ></select>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">From</label>
+            <div class="col-md-4">
+                <div date-picker date-model="leaveApplication.fromDate" date-format="dd/MM/YYYY"
+                     disable="false"></div>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">To</label>
+            <div class="col-md-4">
+                <div date-picker date-model="leaveApplication.toDate" date-format="dd/MM/YYYY"
+                     disable="false"></div>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="comment" class="col-md-4">Reason</label>
+            <textarea class="form-control col-md-8" data-ng-model="leaveApplication.reason" rows="10"
+                      id="comment"></textarea>
+        </div>
+
+
+    </div>
+
+</form>

@@ -32,9 +32,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/SemesterService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/leaveManagementService/LeaveApplicationService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/leaveManagementService/LeaveStatusService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/leaveManagementService/LeaveTypeService.ts'/>
+/// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
+/// <reference path='./service/leaveManagementService/LeaveStatusService.ts'/>
+/// <reference path='./service/leaveManagementService/LeaveTypeService.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -45,7 +45,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailInbox.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailCompose.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/controller/leaveManagement/LeaveApplicationManagement.ts'/>
+/// <reference path='./controller/leaveManagement/LeaveApplicationManagement.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
@@ -69,7 +69,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Modal.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Notification.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ConfirmationDIalog.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/directive/leaveManagement/LmsAppDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsAppDir.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/Unauthorized.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ValidationExceptions.ts'/>
@@ -81,8 +81,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/model/leaveManagement/LmsApplication.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/model/leaveManagement/LmsType.ts'/>
+/// <reference path='./model/leaveManagement/LmsApplication.ts'/>
+/// <reference path='./model/leaveManagement/LmsType.ts'/>
+/// <reference path='./model/leaveManagement/RemainingLmsLeave.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>

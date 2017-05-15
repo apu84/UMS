@@ -4,6 +4,7 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.common.LeaveApplicationStatus;
 
 import java.util.Date;
 
@@ -24,5 +25,7 @@ public interface MutableLmsApplication extends LmsApplication, Editable<Integer>
   void setToDate(Date pToDate);
 
   void setReason(String pReason);
+
+  void setLeaveApplicationStatus(LeaveApplicationStatus pLeaveApplicationStatus);
 
 }

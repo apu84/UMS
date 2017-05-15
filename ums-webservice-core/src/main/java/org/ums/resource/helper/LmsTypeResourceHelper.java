@@ -12,7 +12,7 @@ import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsType;
 import org.ums.enums.common.EmployeeLeaveType;
 import org.ums.enums.common.EmployeeType;
-import org.ums.manager.ContentManager;
+import org.ums.enums.common.Gender;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.manager.common.LmsTypeManager;
@@ -56,11 +56,16 @@ public class LmsTypeResourceHelper extends ResourceHelper<LmsType, MutableLmsTyp
 
     // todo Need to know gender, waiting till employee management completion. Gender is needed for
     // knowing whether the maternity leave is applicable or not
-    if(loggedEmployee.getDesignation() == EmployeeType.TEACHER.getId()) {
-      leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE);
-    }
-    else {
-      leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.COMMON_LEAVE);
+    if (loggedEmployee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
+      if (loggedEmployee.getGender().equals("M"))
+        leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
+      else
+        leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
+    } else {
+      if (loggedEmployee.getGender().equals("M"))
+        leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
+      else
+        leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);
     }
     return getJsonObject(pUriInfo, leaveTypes);
 
@@ -71,7 +76,7 @@ public class LmsTypeResourceHelper extends ResourceHelper<LmsType, MutableLmsTyp
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(LmsType lmsType : pLeaveTypes) {
+    for (LmsType lmsType : pLeaveTypes) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, lmsType, pUriInfo, localCache);
       children.add(jsonObject);
