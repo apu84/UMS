@@ -16,6 +16,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   private int mId;
+  private int mRowId;
   private String mEmployeeId;
   private String mPublicationTitle;
   private String mInterestGenre;
@@ -36,6 +37,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   public PersistentPublicationInformation() {}
 
   public PersistentPublicationInformation(PersistentPublicationInformation pPersistentPublicationInformation) {
+    mRowId = pPersistentPublicationInformation.getRowId();
     mEmployeeId = pPersistentPublicationInformation.getEmployeeId();
     mPublicationTitle = pPersistentPublicationInformation.getPublicationTitle();
     mInterestGenre = pPersistentPublicationInformation.getInterestGenre();
@@ -91,6 +93,11 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public void setRowId(int pRowId) {
+    mRowId = pRowId;
   }
 
   @Override
@@ -161,6 +168,11 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   @Override
   public void setPublicationStatus(String pPublicationStatus) {
     mPublicationStatus = pPublicationStatus;
+  }
+
+  @Override
+  public int getRowId() {
+    return mRowId;
   }
 
   @Override

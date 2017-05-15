@@ -14,4 +14,6 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
   List<Employee> getByDesignation(final String pDesignationId);
 
   List<Employee> getActiveTeachersOfDept(String deptId);
+
+  List<Employee> getEmployees(String pDeptId, String pPublicationStatus);
 }

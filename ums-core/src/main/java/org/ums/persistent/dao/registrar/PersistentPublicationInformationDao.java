@@ -18,9 +18,11 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   static String GET_ONE =
-      "Select EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES From EMP_PUBLICATION_INFO";
+      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES From EMP_PUBLICATION_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
+
+  static String UPDATE_STATUS = "UPDATE EMP_PUBLICATION_INFO SET STATUS=? ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -38,6 +40,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int deletePublicationInformation(String pEmployeeId) {
     String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ? AND STATUS = '2' ";
     return mJdbcTemplate.update(query, pEmployeeId);
+  }
+
+  @Override
+  public int updatePublicationStatus(MutablePublicationInformation pMutablePublicationInformation) {
+    String query = UPDATE_STATUS + "WHERE ID=?";
+    return mJdbcTemplate.update(query, pMutablePublicationInformation.getPublicationStatus(),
+        pMutablePublicationInformation.getRowId());
   }
 
   private List<Object[]> getEmployeePublicationInformationParams(
@@ -75,6 +84,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     @Override
     public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
+      publicationInformation.setRowId(resultSet.getInt("id"));
       publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
       publicationInformation.setPublicationTitle(resultSet.getString("publication_title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));

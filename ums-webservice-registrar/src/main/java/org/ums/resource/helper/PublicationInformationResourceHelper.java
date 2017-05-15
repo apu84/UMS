@@ -46,6 +46,16 @@ public class PublicationInformationResourceHelper extends
     return toJson(pPublicationInformation, pUriInfo);
   }
 
+  public JsonObject getPublicationInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+    List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+    try {
+      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
+    return toJson(pPublicationInformation, pUriInfo);
+  }
+
   public JsonObject getTeachersList(final String pPublicationStatus, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {
@@ -75,6 +85,19 @@ public class PublicationInformationResourceHelper extends
     }
     mPublicationInformationManager.savePublicationInformation(mutablePublicationInformation);
 
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  @Transactional
+  public Response updatePublicationStatus(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("publication");
+    mPublicationInformationBuilder.updatePublicationInformationBuilder(publicationInformation, jsonObject, localCache);
+    mPublicationInformationManager.updatePublicationStatus(publicationInformation);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

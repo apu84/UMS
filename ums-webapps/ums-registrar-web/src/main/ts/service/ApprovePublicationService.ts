@@ -1,5 +1,4 @@
 module ums {
-    import IHttpPromiseCallback = ng.IHttpPromiseCallback;
     export class ApprovePublicationService {
         public static $inject = ['registrarConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
@@ -21,8 +20,9 @@ module ums {
             return defer.promise;
         }
 
-        public getTeachersList(status: string): ng.IPromise<any>{
-            const url="registrar/employee/publication/getTeachersList/" + status;
+        public getTeachersList(publicationStatus: string): ng.IPromise<any>{
+            //const url="registrar/employee/publication/getTeachersList/" + status;
+            const url ="/ums-webservice-academic/academic/employee/getEmployee/" + publicationStatus;
             let defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -31,6 +31,21 @@ module ums {
                 (response: ng.IHttpPromiseCallback<any>) => {
                 console.log();
                 });
+            return defer.promise;
+        }
+
+        public updatePublicationStatus(json: any):ng.IPromise<any>{
+            const url = "registrar/employee/publication/updatePublicationStatus";
+            var defer = this.$q.defer();
+            this.httpClient.put(url , json, HttpClient.MIME_TYPE_JSON)
+                .success(()=>{
+                    this.notify.success("Updated Successfully");
+                    defer.resolve("Successfully saved");
+                }).error((data)=>{
+                this.notify.error("Error in Updating");
+                console.log(data);
+            });
+
             return defer.promise;
         }
     }

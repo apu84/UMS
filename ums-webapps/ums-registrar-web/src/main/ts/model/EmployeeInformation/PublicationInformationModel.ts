@@ -1,5 +1,6 @@
 module ums{
     export interface IPublicationInformationModel{
+        rowId: number;
         employeeId: string;
         publicationTitle: string;
         publicationInterestGenre: string;

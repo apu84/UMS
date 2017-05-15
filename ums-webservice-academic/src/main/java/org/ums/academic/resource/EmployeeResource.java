@@ -62,4 +62,11 @@ public class EmployeeResource extends MutableEmployeeResource {
       throws Exception {
     return mEmployeeResourceHelper.searchUserByDepartment(pTerm, pPage, mUriInfo);
   }
+
+  @GET
+  @Path("/getEmployee/{publication-status}")
+  public JsonObject getEmployees(final @PathParam("publication-status") String pPublicationStatus,
+      final @Context Request pRequest) {
+    return mEmployeeResourceHelper.getEmployees(pPublicationStatus, pRequest, mUriInfo);
+  }
 }

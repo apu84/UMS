@@ -16,10 +16,12 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.ums.academic.resource.DepartmentResource;
 import org.ums.academic.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableEmployee;
@@ -121,6 +123,28 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       users.add(mEmployeeManager.get(document.getId()));
     }
     return convertToJson(users, pUriInfo);
+  }
+
+  public JsonObject getEmployees(final String pPublicationStatus, final Request pRequest, final UriInfo pUriInfo) {
+    Department department = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getDepartment();
+    String departmentId = department.getId().toString();
+    List<Employee> employees = mEmployeeManager.getEmployees(departmentId, pPublicationStatus);
+    return JsonCreator(employees, pUriInfo);
+  }
+
+  private JsonObject JsonCreator(List<Employee> pEmployees, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(Employee employee : pEmployees) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      mBuilder.customBuilderForEmployee(jsonObject, employee, pUriInfo, localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

@@ -8,6 +8,8 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 public interface MutablePublicationInformation extends PublicationInformation, Editable<Integer>,
     MutableIdentifier<Integer>, MutableLastModifier {
 
+  void setRowId(final int pRowId);
+
   void setEmployeeId(final String pEmployeeId);
 
   void setPublicationTitle(final String pPublicationTitle);

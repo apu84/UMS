@@ -762,6 +762,7 @@ module ums {
             else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
                 publicationEntry = {
+                    rowId: null,
                     employeeId: "",
                     publicationTitle: "",
                     publicationType: null,
@@ -836,7 +837,7 @@ module ums {
             }
         }
 
-        public convertToJson(convertThis: string): ng.IPromise<any> {
+        private convertToJson(convertThis: string): ng.IPromise<any> {
             console.log("I am in convertToJSon()");
             let defer = this.$q.defer();
             let JsonObject = {};

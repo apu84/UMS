@@ -6,30 +6,45 @@
         </div>
     </div>
 
-    <div class="row" id="teachersListWaitingForApprovalDiv">
+    <div data-ng-show="showNoPendingPublicationListDiv">
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Teacher's List</h3>
             </div>
             <div class="panel-body" style="min-height: 490px;">
-                <table class="table table-bordered">
-                    <thead class="heading well">
-                    <tr>
-                        <th >Teacher Name</th>
-                        <th>Designation</th>
-                        <th>Requested On</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Kawsur Mir Md.</td>
-                        <td>Professor</td>
-                        <td>Last Day</td>
-                        <td><button type="button" class="btn btn-default" data-ng-click="submit()">View</button></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <h1>No Pending Request</h1>
+            </div>
+        </div>
+    </div>
+
+    <div data-ng-show="showPendingPublicationDiv">
+        <div class="row" id="teachersListWaitingForApprovalDiv">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Teacher's List</h3>
+                </div>
+                <div class="panel-body" style="min-height: 490px;">
+                    <table class="table table-bordered">
+                        <thead class="heading well">
+                        <tr>
+                            <th >Teacher Name</th>
+                            <th>Designation</th>
+                            <th>Employment Type</th>
+                            <th>Department</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="teacher in teachers track by $index">
+                            <td>{{teacher.name}}</td>
+                            <td>{{teacher.designation}}</td>
+                            <td>{{teacher.employmentType}}</td>
+                            <td>{{teacher.department}}</td>
+                            <td><button type="button" class="btn btn-default" data-ng-click="submit($index)">View</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -157,9 +172,19 @@
                             </div>
                         </div>
                     </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
+                                <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <br /><br />
-                <div class="row well">
+                <div class="row">
                     <div class="col-md-6"></div>
                     <div class="col-md-6">
                         <div class="text-right">

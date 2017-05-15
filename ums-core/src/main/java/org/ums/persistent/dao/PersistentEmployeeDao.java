@@ -95,6 +95,13 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {deptId}, new EmployeeRowMapper());
   }
 
+  public List<Employee> getEmployees(String pDeptId, String pPublicationStatus) {
+    String query =
+        SELECT_ALL
+            + " WHERE DEPT_OFFICE=? AND STATUS='1' AND EMPLOYEE_ID IN (SELECT DISTINCT EMPLOYEE_ID FROM EMP_PUBLICATION_INFO WHERE STATUS=?)";
+    return mJdbcTemplate.query(query, new Object[] {pDeptId, pPublicationStatus}, new EmployeeRowMapper());
+  }
+
   @Override
   public String create(MutableEmployee pMutable) {
     mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getEmployeeName(), pMutable.getShortName(),

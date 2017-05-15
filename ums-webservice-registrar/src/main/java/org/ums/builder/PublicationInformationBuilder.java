@@ -22,6 +22,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
   @Override
   public void build(JsonObjectBuilder pBuilder, PublicationInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
+    pBuilder.add("rowId", pReadOnly.getRowId());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("publicationTitle", pReadOnly.getPublicationTitle());
     if(pReadOnly.getInterestGenre() != null) {
@@ -105,6 +106,27 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
     pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
     pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
+    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
+    pMutable.setPublicationStatus("1");
+  }
+
+  public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) {
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setRowId(pJsonObject.getInt("rowId"));
+    pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
+    pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
+    pMutable.setPublisherName(pJsonObject.getString("publisherName"));
+    pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
+    pMutable.setPublicationType(pJsonObject.getString("publicationType"));
+    pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
+    pMutable.setPublicationISSN(pJsonObject.getString("publicationISSN"));
+    pMutable.setPublicationIssue(pJsonObject.getString("publicationIssue"));
+    pMutable.setPublicationVolume(pJsonObject.getString("publicationVolume"));
+    pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
+    pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
+    pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
+    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
     pMutable.setPublicationStatus("1");
   }
 }

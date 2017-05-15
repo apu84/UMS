@@ -21,6 +21,13 @@ public class PublicationInformationResource extends MutablePublicationInformatio
   }
 
   @GET
+  @Path("/getPublicationInformation/{employee-id}")
+  public JsonObject getPublicationInformation(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest) throws Exception {
+    return mPublicationInformationResourceHelper.getPublicationInformation(pEmployeeId, mUriInfo);
+  }
+
+  @GET
   @Path("/getTeachersList/{status}")
   public JsonObject getTeachersList(final @PathParam("status") String pStatus) {
     return mPublicationInformationResourceHelper.getTeachersList(pStatus, mUriInfo);

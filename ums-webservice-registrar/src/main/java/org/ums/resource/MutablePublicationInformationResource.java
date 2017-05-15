@@ -5,7 +5,9 @@ import org.ums.resource.helper.PublicationInformationResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 public class MutablePublicationInformationResource extends Resource {
@@ -17,5 +19,11 @@ public class MutablePublicationInformationResource extends Resource {
   @Path("/savePublicationInformation")
   public Response saveServiceInformation(final JsonObject pJsonObject) {
     return mPublicationInformationResourceHelper.savePublicationInformation(pJsonObject, mUriInfo);
+  }
+
+  @PUT
+  @Path("/updatePublicationStatus")
+  public Response updatePublicationStatus(final JsonObject pJsonObject) {
+    return mPublicationInformationResourceHelper.updatePublicationStatus(pJsonObject, mUriInfo);
   }
 }

@@ -118,10 +118,24 @@ module ums {
                 });
             return defer.promise;
         }
-
         public getPublicationInformation(): ng.IPromise<any> {
             console.log("i am here " + "here too");
             var url= "registrar/employee/publication/getPublicationInformation";
+            var defer = this.$q.defer();
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+            return defer.promise;
+        }
+
+
+        public getSpecificTeacherPublicationInformation(employeeId: string): ng.IPromise<any> {
+            console.log("i am here " + "here too");
+            var url= "registrar/employee/publication/getPublicationInformation/" + employeeId;
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {

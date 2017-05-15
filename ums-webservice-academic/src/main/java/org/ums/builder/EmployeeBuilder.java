@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
 import org.ums.persistent.model.PersistentDepartment;
 
@@ -67,5 +68,21 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pMutable.setJobParmanentDate(mDateFormat.parse(pJsonObject.getString("jobPermanentDate")));
     pMutable.setStatus(pJsonObject.getInt("status"));
     pMutable.setShortName(pJsonObject.getString("shortName"));
+  }
+
+  public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("name", pReadOnly.getEmployeeName());
+    pBuilder.add("designation", pReadOnly.getDesignation());
+    if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
+      pBuilder.add("employmentType", "Permanent");
+    else if(pReadOnly.getEmploymentType().equals(EmploymentType.CONTRACTUAL.getLabel()))
+      pBuilder.add("employmentType", "Contractual");
+    else if(pReadOnly.getEmploymentType().equals(EmploymentType.PROVISIONAL.getLabel()))
+      pBuilder.add("employmentType", "Provisional");
+    else if(pReadOnly.getEmploymentType().equals(EmploymentType.PARTTIME.getLabel()))
+      pBuilder.add("employmentType", "Part Time");
+    pBuilder.add("department", pReadOnly.getDepartment().getLongName());
   }
 }

@@ -27,6 +27,11 @@ public class PublicationInformationDaoDecorator extends
   }
 
   @Override
+  public int updatePublicationStatus(MutablePublicationInformation pMutablePublicationInformation) {
+    return getManager().updatePublicationStatus(pMutablePublicationInformation);
+  }
+
+  @Override
   public int deletePublicationInformation(String pEmployeeId) {
     return getManager().deletePublicationInformation(pEmployeeId);
   }
