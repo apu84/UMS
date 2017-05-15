@@ -41,6 +41,7 @@
 /// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/Settings.ts'/>
 
+
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
 /// <reference path='controller/ChangePassword.ts'/>
@@ -65,6 +66,7 @@
 /// <reference path='directive/Modal.ts'/>
 /// <reference path='directive/Notification.ts'/>
 /// <reference path='directive/ConfirmationDIalog.ts'/>
+
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>

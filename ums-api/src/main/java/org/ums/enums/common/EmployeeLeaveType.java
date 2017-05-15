@@ -10,7 +10,7 @@ import java.util.Map;
 public enum EmployeeLeaveType {
   COMMON_LEAVE(1, "Leave for all employees"),
   TEACHERS_LEAVE(2, "Leave only applicable for teachers"),
-  FEMALE_LEAVE(3, "Leave only applicable for females");
+  FEMALE_LEAVE(3, "Leave only applicable for female employees");
 
   private String label;
   private int id;
@@ -23,7 +23,7 @@ public enum EmployeeLeaveType {
   private static final Map<Integer, EmployeeLeaveType> lookup = new HashMap<>();
 
   static {
-    for(EmployeeLeaveType c : EnumSet.allOf(EmployeeLeaveType.class)) {
+    for (EmployeeLeaveType c : EnumSet.allOf(EmployeeLeaveType.class)) {
       lookup.put(c.getId(), c);
     }
   }

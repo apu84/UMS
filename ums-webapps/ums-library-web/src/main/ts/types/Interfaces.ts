@@ -118,4 +118,16 @@ module ums {
     emailAddress: string;
   }
 
+  export interface IFilter {
+    searchType: string,
+    basicQueryField: string;
+    basicQueryTerm: string;
+    advancedQueryMap: Array<IAdvancedSearchMap>;
+  }
+
+  export interface IAdvancedSearchMap {
+    key: string;
+    value: string;
+  }
+
 }

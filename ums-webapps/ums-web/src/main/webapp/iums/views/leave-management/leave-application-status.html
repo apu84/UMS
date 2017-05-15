@@ -1,0 +1,22 @@
+<h2>Pending Applications</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Applied On</th>
+        <th>Leave Type</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="p in pendingApplications">
+        <td>{{p.appliedOn}}</td>
+        <td>{{p.leaveTypeName}}</td>
+        <td>{{p.fromDate}}</td>
+        <td>{{p.toDate}}</td>
+        <td>{{p.statusName}}</td>
+    </tr>
+    </tbody>
+</table>

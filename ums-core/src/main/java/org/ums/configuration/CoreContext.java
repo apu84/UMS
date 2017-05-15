@@ -211,7 +211,7 @@ public class CoreContext {
   }
 
   @Bean
-  LmsApplicationManager lmsApplicationmanager() {
+  LmsApplicationManager lmsApplicationManager() {
     LmsApplicationCache lmsApplicationCache = new LmsApplicationCache(mCacheFactory.getCacheManager());
     lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate()));
     return lmsApplicationCache;

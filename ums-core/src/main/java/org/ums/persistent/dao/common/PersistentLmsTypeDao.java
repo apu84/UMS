@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsType;
 import org.ums.enums.common.DurationType;
 import org.ums.enums.common.EmployeeLeaveType;
+import org.ums.enums.common.Gender;
 import org.ums.enums.common.SalaryType;
 import org.ums.persistent.model.common.PersistentLmsType;
 
@@ -36,15 +37,19 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
   }
 
   @Override
-  public List<LmsType> getLmsTypes(EmployeeLeaveType pType) {
-    String query = SELECT_ALL + " where type=1 or type=?";
-    return mJdbcTemplate.query(query, new Object[] {pType.getId()}, new LmsTypeRowMapper());
+  public List<LmsType> getLmsTypes(EmployeeLeaveType pType, Gender pGender) {
+    String query = "";
+    if (pGender == Gender.MALE)
+      query = SELECT_ALL + " where type=1 or type=? order by id";
+    else
+      query = SELECT_ALL + " where type=1 or type=3 or type=? order by id";
+    return mJdbcTemplate.query(query, new Object[]{pType.getId()}, new LmsTypeRowMapper());
   }
 
   @Override
   public LmsType get(Integer pId) {
     String query = SELECT_ALL + " WHERE ID=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LmsTypeRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new LmsTypeRowMapper());
   }
 
   @Override
@@ -100,9 +105,9 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
       lmsType.setDuration(rs.getInt("duration"));
       lmsType.setMaxDuration(rs.getInt("max_duration"));
       lmsType.setMaxSimultaneousDuration(rs.getInt("max_simultaneous_duration"));
-      if(rs.getInt("duration_type") != 0)
+      if (rs.getInt("duration_type") != 0)
         lmsType.setDurationType(DurationType.get(rs.getInt("duration_type")));
-      if(rs.getInt("salary_type") != 0)
+      if (rs.getInt("salary_type") != 0)
         lmsType.setSalaryType(SalaryType.get(rs.getInt("salary_type")));
       lmsType.setLastModified(rs.getString("last_modified"));
       lmsType.setAuthorizeRoleId(rs.getInt("authorize_role"));

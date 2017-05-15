@@ -10,7 +10,7 @@ import java.util.Map;
 public enum RecordStatus {
 
   ENTRY_MODE(0, "Entry Mode"),
-  AVAILABLE(2, "'Available'");
+  AVAILABLE(2, "Available");
 
   private String label;
   private int id;
