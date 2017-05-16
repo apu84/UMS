@@ -3,12 +3,16 @@ package org.ums.fee.latefee;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.generator.IdGenerator;
+import org.ums.solr.indexer.model.Index;
+import org.ums.solr.indexer.model.MutableIndex;
 
 public class UGLateFeeDao extends UGLateFeeDaoDecorator {
   String SELECT_ALL = "SELECT ID, FROM_DATE, TO_DATE, FEE, SEMESTER_ID, ADMISSION_TYPE, LAST_MODIFIED FROM LATE_FEE";
@@ -57,6 +61,23 @@ public class UGLateFeeDao extends UGLateFeeDaoDecorator {
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getFrom(), pMutable.getTo(), pMutable.getFee(), pMutable
         .getSemester().getId(), pMutable.getAdmissionType().getId());
     return id;
+  }
+
+  @Override
+  public List<Long> create(List<MutableUGLateFee> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toList());
+  }
+
+  private List<Object[]> getInsertParamList(List<MutableUGLateFee> pMutableUGLateFees) {
+    List<Object[]> params = new ArrayList<>();
+    for(UGLateFee mutable : pMutableUGLateFees) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), mutable.getFrom(), mutable.getTo(), mutable.getFee(),
+          mutable.getSemester().getId(), mutable.getAdmissionType().getId()});
+    }
+    return params;
   }
 
   class LateFeeRowMapper implements RowMapper<UGLateFee> {
