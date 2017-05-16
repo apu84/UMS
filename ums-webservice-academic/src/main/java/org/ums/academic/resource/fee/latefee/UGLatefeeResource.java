@@ -13,7 +13,7 @@ import javax.ws.rs.core.Request;
 @Path("/academic/ug/latefee")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class UGLatefeeResource extends MutableUGLatefeeResource {
+public class UGLatefeeResource extends Resource {
   @Autowired
   UGLatefeeResourceHelper mUGUgLatefeeResourceHelper;
 
