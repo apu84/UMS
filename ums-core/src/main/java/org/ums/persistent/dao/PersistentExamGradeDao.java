@@ -396,7 +396,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           SELECT_THEORY_MARKS
               + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,UG_THEORY_MARKS.Status  ";
     }
-    else if(courseType == CourseType.SESSIONAL) {
+    else if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
       query =
           SELECT_SESSIONAL_MARKS
               + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,UG_SESSIONAL_MARKS.Status  ";
