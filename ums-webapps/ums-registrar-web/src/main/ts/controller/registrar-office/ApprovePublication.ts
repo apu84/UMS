@@ -56,7 +56,7 @@ module ums {
 
         private getPublication(index: number){
             console.log("i am in getPublicationInformation()");
-            this.employeeInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id).then((publicationInformation: any) => {
+            this.employeeInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, '0').then((publicationInformation: any) => {
                 console.log("Employee's Publication Information");
                 console.log(publicationInformation);
                 this.$scope.publications = publicationInformation;
@@ -66,7 +66,7 @@ module ums {
 
         private fetchTeachersListWaitingForPublicationApproval(){
             console.log("i am in fetchTeachersListWaitingForPublicationApproval()");
-            this.approvePublicationService.getTeachersList('2').then((teachers: any) => {
+            this.approvePublicationService.getTeachersList('0').then((teachers: any) => {
                 this.$scope.teachers = teachers;
                 console.log(this.$scope.teachers);
 
@@ -81,20 +81,28 @@ module ums {
         }
 
         private accept(index: number){
-            this.convertToJson(index).then((json: any) => {
+            this.convertToJson(index, '1').then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
-                        console.log("This is message");
+                        $("#index").hide(10);
+                        console.log("this should be hidden");
                         console.log(message);
                     });
             });
         }
 
-        private reject(){
-
+        private reject(index: number){
+            this.convertToJson(index, '2').then((json: any) => {
+                this.approvePublicationService.updatePublicationStatus(json)
+                    .then((message: any) => {
+                        $("#index").hide(10);
+                        console.log("this should be hidden");
+                        console.log(message);
+                    });
+            });
         }
 
-        public convertToJson(index: number): ng.IPromise<any> {
+        private convertToJson(index: number, status: string): ng.IPromise<any> {
             console.log("I am in convertToJSon()");
             let defer = this.$q.defer();
             let JsonObject = {};
@@ -106,6 +114,7 @@ module ums {
             publicationInformation = this.$scope.publications[index];
 
             item['publication'] = publicationInformation;
+            item['publication']['status'] = status;
 
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;

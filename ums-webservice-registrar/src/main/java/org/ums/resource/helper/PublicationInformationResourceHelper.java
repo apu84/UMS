@@ -46,10 +46,10 @@ public class PublicationInformationResourceHelper extends
     return toJson(pPublicationInformation, pUriInfo);
   }
 
-  public JsonObject getPublicationInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getPublicationInformation(final String pEmployeeId, final String pStatus, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {
-      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId, pStatus);
     } catch(EmptyResultDataAccessException e) {
 
     }

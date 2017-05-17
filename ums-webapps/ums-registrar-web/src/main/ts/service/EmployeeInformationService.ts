@@ -133,9 +133,8 @@ module ums {
         }
 
 
-        public getSpecificTeacherPublicationInformation(employeeId: string): ng.IPromise<any> {
-            console.log("i am here " + "here too");
-            var url= "registrar/employee/publication/getPublicationInformation/" + employeeId;
+        public getSpecificTeacherPublicationInformation(employeeId: string, status: string): ng.IPromise<any> {
+            var url= "registrar/employee/publication/getPublicationInformation/" + employeeId + "/" + status;
             var defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {

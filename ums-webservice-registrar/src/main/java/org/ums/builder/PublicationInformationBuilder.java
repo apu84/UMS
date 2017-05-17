@@ -76,12 +76,8 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     else {
       pBuilder.add("publicationCountry", "");
     }
-    if(pReadOnly.getPublicationStatus().equals("1")) {
-      pBuilder.add("status", "Waiting");
-    }
-    else {
-      pBuilder.add("status", "Approved");
-    }
+
+    pBuilder.add("status", pReadOnly.getPublicationStatus());
 
     if(pReadOnly.getPublicationPages() != null) {
       pBuilder.add("publicationPages", pReadOnly.getPublicationPages());
@@ -106,8 +102,8 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
     pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
     pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
-    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    pMutable.setPublicationStatus("1");
+    pMutable.setPublicationStatus(pJsonObject.getString("status"));
+    // pMutable.setPublicationStatus("1");
   }
 
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
@@ -126,7 +122,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
     pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
     pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
-    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    pMutable.setPublicationStatus("1");
+    pMutable.setPublicationStatus(pJsonObject.getString("status"));
+    // pMutable.setPublicationStatus("1");
   }
 }

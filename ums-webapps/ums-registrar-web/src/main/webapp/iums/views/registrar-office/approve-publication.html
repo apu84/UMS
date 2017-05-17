@@ -76,109 +76,111 @@
                 </div>
 
                 <div data-ng-repeat="publication in publications track by $index">
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5 align="center"><b>{{$index + 1}}</b></h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Publication Type</label>
-                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationType}}</label>
+                    <div id="{{$index}}">
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 align="center"><b>{{$index + 1}}</b></h5>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">ISSN/DOI</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationISSN}}</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Publication Type</label>
+                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationType}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">ISSN/DOI</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationISSN}}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Publication Title</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationTitle}}</label>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Publication Title</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationTitle}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Volume</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationVolume}}</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Volume</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationVolume}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
+                        <br />
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Date Of Publication</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.dateOfPublication}}</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Date Of Publication</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.dateOfPublication}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Issue</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationIssue}}</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Issue</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationIssue}}</label>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Journal/Conference Name</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationJournalName}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Pages</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationPages}}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Journal/Conference Name</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationJournalName}}</label>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Web Link</label>
+                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationWebLink}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Genre</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Pages</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationPages}}</label>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Country</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publicationCountry}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-md-4 control-label">Publisher Name</label>
+                                <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{publication.publisherName}}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Web Link</label>
-                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationWebLink}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Genre</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationInterestGenre}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Country</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationCountry}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label">Publisher Name</label>
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publisherName}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6"></div>
-                        <div class="col-md-6">
-                            <div class="text-right">
-                                <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
-                                <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <div class="text-right">
+                                    <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
+                                    <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
+                                </div>
                             </div>
                         </div>
                     </div>

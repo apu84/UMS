@@ -66,9 +66,16 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   }
 
   @Override
-  public List<PublicationInformation> getEmployeePublicationInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
-    return mJdbcTemplate.query(query, new Object[] {employeeId},
+  public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId) {
+    String query = GET_ONE + " Where employee_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
+        new PersistentPublicationInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId, final String pStatus) {
+    String query = GET_ONE + " Where employee_id=? and status=?";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pStatus},
         new PersistentPublicationInformationDao.RoleRowMapper());
   }
 
