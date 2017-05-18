@@ -44,13 +44,13 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   @Override
   public List<LmsApplication> getPendingLmsApplication(String pEmployeeId) {
     String query = SELECT_ALL + " where app_status=2 and employee_id=?";
-    return mJdbcTemplate.query(query, new Object[]{pEmployeeId}, new LmsApplicationRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsApplicationRowMapper());
   }
 
   @Override
   public LmsApplication get(Integer pId) {
     String query = SELECT_ONE + " where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new LmsApplicationRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LmsApplicationRowMapper());
   }
 
   @Override
@@ -74,8 +74,8 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
 
   private List<Object[]> getUpdateParams(List<MutableLmsApplication> pLmsApplications) {
     List<Object[]> params = new ArrayList<>();
-    for (LmsApplication application : pLmsApplications) {
-      params.add(new Object[]{application.getEmployee().getId(), application.getLmsType().getId(),
+    for(LmsApplication application : pLmsApplications) {
+      params.add(new Object[] {application.getEmployee().getId(), application.getLmsType().getId(),
           application.getFromDate(), application.getToDate(), application.getReason(),
           application.getApplicationStatus().getId(), application.getId()});
     }
@@ -90,8 +90,8 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
 
   private List<Object[]> getDeleteParams(List<MutableLmsApplication> pLmsApplications) {
     List<Object[]> params = new ArrayList<>();
-    for (LmsApplication application : pLmsApplications) {
-      params.add(new Object[]{application.getEmployee().getId()});
+    for(LmsApplication application : pLmsApplications) {
+      params.add(new Object[] {application.getEmployee().getId()});
     }
     return params;
   }
@@ -117,8 +117,8 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
 
   private List<Object[]> getCreateParams(List<MutableLmsApplication> pLmsApplications) {
     List<Object[]> params = new ArrayList<>();
-    for (LmsApplication application : pLmsApplications) {
-      params.add(new Object[]{application.getEmployee().getId(), application.getLmsType().getId(),
+    for(LmsApplication application : pLmsApplications) {
+      params.add(new Object[] {application.getEmployee().getId(), application.getLmsType().getId(),
           application.getFromDate(), application.getToDate(), application.getReason(),
           application.getApplicationStatus().getId()});
     }
@@ -136,7 +136,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   public List<LmsApplication> getLmsApplication(String pEmployeeId, int pYear) {
     String query =
         "select * from LMS_APPLICATION where EMPLOYEE_ID=? and (extract(year from APPLIED_ON)=? or type_id in (select id from LMS_TYPE where DURATION_TYPE=3))";
-    return mJdbcTemplate.query(query, new Object[]{pEmployeeId, pYear}, new LmsApplicationRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pYear}, new LmsApplicationRowMapper());
   }
 
   class LmsApplicationRowMapper implements RowMapper<LmsApplication> {
@@ -151,7 +151,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
       application.setToDate(rs.getDate("to_date"));
       application.setReason(rs.getString("reason"));
       application.setLastModified(rs.getString("last_modified"));
-      if (rs.getInt("app_status") != 0)
+      if(rs.getInt("app_status") != 0)
         application.setLeaveApplicationStatus(LeaveApplicationStatus.get(rs.getInt("app_status")));
       return application;
     }

@@ -16,29 +16,34 @@ import java.util.Map;
  */
 public class ReportSupport {
   public static Chunk getStudentTypeChunk(Integer pExamType,
-                                          Map<String, UGRegistrationResult> pStudentIdUgRegistrationResultMap, Chunk pStudentId,
-                                          SeatPlanReportDto pSeatPlanInnerReport) {
-    if (pExamType == ExamType.SEMESTER_FINAL.getId()) {
-      if (pSeatPlanInnerReport.getStudentType().equals("RA")) {
+      Map<String, UGRegistrationResult> pStudentIdUgRegistrationResultMap, Chunk pStudentId,
+      SeatPlanReportDto pSeatPlanInnerReport) {
+    if(pExamType == ExamType.SEMESTER_FINAL.getId()) {
+      if(pSeatPlanInnerReport.getStudentType().equals("RA")) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
 
-      } else {
+      }
+      else {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
       }
-    } else {
+    }
+    else {
       String mapString = (pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseId());
-      if (pStudentIdUgRegistrationResultMap
+      if(pStudentIdUgRegistrationResultMap
           .get(pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.CARRY) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLD));
-      } else if (pStudentIdUgRegistrationResultMap.get(
+      }
+      else if(pStudentIdUgRegistrationResultMap.get(
           pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.IMPROVEMENT) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
         pStudentId.setBackground(BaseColor.LIGHT_GRAY);
-      } else if (pStudentIdUgRegistrationResultMap.get(
+      }
+      else if(pStudentIdUgRegistrationResultMap.get(
           pSeatPlanInnerReport.getStudentId() + pSeatPlanInnerReport.getCourseNo()).getType() == CourseRegType.SPECIAL_CARRY) {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES_BOLDITALIC));
         pStudentId.setBackground(BaseColor.LIGHT_GRAY);
-      } else {
+      }
+      else {
         pStudentId = new Chunk(pSeatPlanInnerReport.getStudentId(), FontFactory.getFont(FontFactory.TIMES));
       }
     }
@@ -46,7 +51,7 @@ public class ReportSupport {
   }
 
   public static void addHeaderToSittingArrangementDataTable(PdfPTable pSittingArrangementTable,
-                                                            PdfPCell pTableHeaderCell, Paragraph pCellData) {
+      PdfPCell pTableHeaderCell, Paragraph pCellData) {
     pCellData.setAlignment(Element.ALIGN_CENTER);
     pTableHeaderCell = new PdfPCell(pCellData);
     pTableHeaderCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -56,7 +61,7 @@ public class ReportSupport {
   }
 
   public static PdfPTable getSittingArrangementHeader(ExamType pExamType, Font pBoldFont,
-                                                      java.util.List<SeatPlan> pSeatPlansOfTheMap, Map<Long, java.util.List<SeatPlan>> seatPlanMapByRoomNo) {
+      java.util.List<SeatPlan> pSeatPlansOfTheMap, Map<Long, java.util.List<SeatPlan>> seatPlanMapByRoomNo) {
     PdfPTable headerTable = new PdfPTable(1);
     PdfPCell headerCell = new PdfPCell();
     Paragraph headerParagraph = new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
@@ -69,14 +74,15 @@ public class ReportSupport {
     headerParagraph.setSpacingBefore(-5f);
     headerCell.addElement(headerParagraph);
 
-    if (pExamType == ExamType.SEMESTER_FINAL) {
+    if(pExamType == ExamType.SEMESTER_FINAL) {
       headerParagraph =
           new Paragraph("Semester Final Examination :" + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
       headerParagraph.setAlignment(Element.ALIGN_CENTER);
       headerParagraph.setPaddingTop(-5f);
       headerParagraph.setSpacingBefore(-5f);
       headerCell.addElement(headerParagraph);
-    } else {
+    }
+    else {
       headerParagraph =
           new Paragraph(
               "Carry/Clearance/Improvement Examination :" + pSeatPlansOfTheMap.get(0).getSemester().getName(),

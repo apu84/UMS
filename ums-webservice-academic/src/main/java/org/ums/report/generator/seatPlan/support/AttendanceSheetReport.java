@@ -43,7 +43,7 @@ public class AttendanceSheetReport {
   public static final String DEST = "seat_plan_report.pdf";
 
   public void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                                String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
 
     java.util.List<SeatPlanReportDto> seatPlanReports = new ArrayList<>();
     String universityName = new String("Ahsanullah University of Science and Technology");
@@ -57,9 +57,10 @@ public class AttendanceSheetReport {
     String courseTitle = new String("Course Title: ");
     Semester semesterManager = mSemesterManager.get(pSemesterId);
     String examName = "";
-    if (pExamType == 1) {
+    if(pExamType == 1) {
       examName = "Semester Final Examination, " + semesterManager.getName();
-    } else {
+    }
+    else {
       examName = "Carry/Clearance/Improvement Examination, " + semesterManager.getName();
     }
     String studentNo = new String("Student No.");
@@ -93,17 +94,17 @@ public class AttendanceSheetReport {
 
     List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
     Map<String, UGRegistrationResult> studentIdUgRegistrationResultMap = new HashMap<>();
-    if (pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
+    if(pExamType == ExamType.CLEARANCE_CARRY_IMPROVEMENT.getId()) {
       ugRegistrationResults =
           mUGRegistrationResultManager.getCCI(pSemesterId, UmsUtils.formatDate(pExamDate, "mm-dd-yyyy", "dd-mm-yyyy"));
-      for (int i = 0; i < ugRegistrationResults.size(); i++) {
+      for(int i = 0; i < ugRegistrationResults.size(); i++) {
 
         studentIdUgRegistrationResultMap.put(ugRegistrationResults.get(i).getStudentId()
             + ugRegistrationResults.get(i).getCourse().getNo(), ugRegistrationResults.get(i));
       }
     }
 
-    while (true) {
+    while(true) {
       // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
       SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
 
@@ -275,16 +276,16 @@ public class AttendanceSheetReport {
       int counter = 0;
       int studentCounter = 0;
 
-      while (true) {
+      while(true) {
 
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
         // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
         // studentsUsageMap.put(seatPlanReportDto.getStudentId(), "used");
 
-        if (seatPlanReports.size() != 0) {
+        if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
           studentsUsageMap.put(seatPlanInner.getStudentId(), "used");
-          if (seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseId().equals(courseIdOfStudent)
+          if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseId().equals(courseIdOfStudent)
               && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
               && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 18
@@ -307,10 +308,12 @@ public class AttendanceSheetReport {
             seatPlanReports.remove(0);
             studentCounter += 1;
             counter += 1;
-          } else {
-            if (counter > 18) {
+          }
+          else {
+            if(counter > 18) {
               break;
-            } else {
+            }
+            else {
               PdfPCell innerCellOne = new PdfPCell(new Paragraph("   "));
               PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
               attendanceSheetTable.addCell(innerCellOne);
@@ -318,11 +321,13 @@ public class AttendanceSheetReport {
               counter += 1;
             }
           }
-        } else {
+        }
+        else {
 
-          if (counter > 18) {
+          if(counter > 18) {
             break;
-          } else {
+          }
+          else {
             PdfPCell innerCellOne = new PdfPCell(new Paragraph("   "));
             PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
             attendanceSheetTable.addCell(innerCellOne);
@@ -397,7 +402,7 @@ public class AttendanceSheetReport {
       document.newPage();
       // break;
 
-      if (seatPlanReports.size() == 0) {
+      if(seatPlanReports.size() == 0) {
         break;
       }
 

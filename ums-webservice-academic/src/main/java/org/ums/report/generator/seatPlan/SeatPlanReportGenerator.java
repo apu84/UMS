@@ -12,19 +12,19 @@ import java.io.OutputStream;
 
 public interface SeatPlanReportGenerator {
   void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, String examDate,
-                 OutputStream pOutputStream) throws IOException, DocumentException;
+      OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate,
-                                      OutputStream pOutputStream) throws IOException, DocumentException;
+      OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                         String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException;
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate,
-                                       OutputStream pOutputStream) throws IOException, DocumentException;
+      OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate,
-                                   int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException;
+      int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream)
       throws IOException, DocumentException;

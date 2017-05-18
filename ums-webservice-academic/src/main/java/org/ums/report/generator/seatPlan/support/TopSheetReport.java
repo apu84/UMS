@@ -452,12 +452,13 @@ public class TopSheetReport {
     Paragraph noteParagraph = new Paragraph(" Font Style: ", pLightFont);
     Phrase notePhrase = new Phrase();
     notePhrase.add(noteParagraph);
-    if (pExamType == ExamType.SEMESTER_FINAL.getId()) {
+    if(pExamType == ExamType.SEMESTER_FINAL.getId()) {
       noteParagraph = new Paragraph("Regular ", pLightFont);
       notePhrase.add(noteParagraph);
       noteParagraph = new Paragraph("Re-admission", pBoldFont);
       notePhrase.add(noteParagraph);
-    } else {
+    }
+    else {
       noteParagraph = new Paragraph("Clearance ", pLightFont);
       notePhrase.add(noteParagraph);
       noteParagraph = new Paragraph("Carryover ", pBoldFont);

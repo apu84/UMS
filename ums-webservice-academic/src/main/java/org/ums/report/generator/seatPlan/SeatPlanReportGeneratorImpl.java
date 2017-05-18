@@ -37,20 +37,20 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, String examDate,
-                        OutputStream pOutputStream) throws IOException, DocumentException, WebApplicationException {
+      OutputStream pOutputStream) throws IOException, DocumentException, WebApplicationException {
 
     mSeatChartReport.createPdf(dest, noSeatPlanInfo, pSemesterId, groupNo, type, examDate, pOutputStream);
   }
 
   @Override
   public void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                             String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
 
   }
 
   @Override
   public void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                                String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
 
     mAttendanceSheetReport.createSeatPlanAttendencePdfReport(pProgramType, pSemesterId, pExamType, pExamDate,
         pOutputStream);
@@ -58,13 +58,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                              String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
     mTopSheetReport.createSeatPlanTopSheetPdfReport(pProgramType, pSemesterId, pExamType, pExamDate, pOutputStream);
   }
 
   @Override
   public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                          String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
+      String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
 
     mSeatPlanStickerReport.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType, pExamDate, pRoomId,
         pOutputStream);

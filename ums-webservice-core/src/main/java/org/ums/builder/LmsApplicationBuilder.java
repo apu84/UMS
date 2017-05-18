@@ -47,31 +47,32 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
 
   @Override
   public void build(MutableLmsApplication pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if (pJsonObject.containsKey("id")) {
+    if(pJsonObject.containsKey("id")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }
-    if (pJsonObject.containsKey("employeeId")) {
+    if(pJsonObject.containsKey("employeeId")) {
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    } else {
+    }
+    else {
       User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
       pMutable.setEmployeeId(user.getEmployeeId());
     }
-    if (pJsonObject.containsKey("typeId"))
+    if(pJsonObject.containsKey("typeId"))
       pMutable.setLeaveTypeId(pJsonObject.getInt("typeId"));
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     try {
 
-      if (pJsonObject.containsKey("fromDate"))
+      if(pJsonObject.containsKey("fromDate"))
         pMutable.setFromDate(formatter.parse(pJsonObject.getString("fromDate")));
-      if (pJsonObject.containsKey("toDate"))
+      if(pJsonObject.containsKey("toDate"))
         pMutable.setToDate(formatter.parse(pJsonObject.getString("toDate")));
-    } catch (Exception e) {
+    } catch(Exception e) {
 
     }
 
-    if (pJsonObject.containsKey("reason"))
+    if(pJsonObject.containsKey("reason"))
       pMutable.setReason(pJsonObject.getString("reason"));
-    if (pJsonObject.containsKey("appStatus"))
+    if(pJsonObject.containsKey("appStatus"))
       pMutable.setLeaveApplicationStatus(LeaveApplicationStatus.get(pJsonObject.getInt("appStatus")));
   }
 }

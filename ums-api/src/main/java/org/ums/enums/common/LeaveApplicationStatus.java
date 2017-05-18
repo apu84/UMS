@@ -24,7 +24,7 @@ public enum LeaveApplicationStatus {
   private static final Map<Integer, LeaveApplicationStatus> lookup = new HashMap<>();
 
   static {
-    for (LeaveApplicationStatus c : EnumSet.allOf(LeaveApplicationStatus.class)) {
+    for(LeaveApplicationStatus c : EnumSet.allOf(LeaveApplicationStatus.class)) {
       lookup.put(c.getId(), c);
     }
   }

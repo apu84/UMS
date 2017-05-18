@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         esteWatch: {
             options: {
                 dirs: (function () {
-                    var dirs = ['../ums-web-core/src/main/webapp/**/', 'src/main/webapp/**/',
+                    var dirs = ['src/main/webapp/**/',
                         '!src/main/webapp/templates/**/',
                         '!src/main/webapp/vendors/**/'];
                     var ts = grunt.option('ts') || false;

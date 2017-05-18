@@ -82,12 +82,12 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
   public JsonObject getSeatPlanForStudentsSeatPlanView(final String pStudentId, final Integer pSemesterId,
-                                                       final UriInfo mUriInfo) {
+      final UriInfo mUriInfo) {
     List<SeatPlan> seatPlans = getContentManager().getForStudent(pStudentId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (SeatPlan seatPlan : seatPlans) {
+    for(SeatPlan seatPlan : seatPlans) {
       children.add(toJson(seatPlan, mUriInfo, localCache));
     }
     object.add("entries", children);
@@ -96,12 +96,12 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public JsonObject getSeatPlanForStudentAndCCIExam(final String pStudentId, final Integer pSemesterId,
-                                                    final String pExamDate, final UriInfo mUriInfo) {
+      final String pExamDate, final UriInfo mUriInfo) {
     List<SeatPlan> seatPlans = getContentManager().getForStudentAndCCIExam(pStudentId, pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (SeatPlan seatPlan : seatPlans) {
+    for(SeatPlan seatPlan : seatPlans) {
       children.add(toJson(seatPlan, mUriInfo, localCache));
     }
     object.add("entries", children);
@@ -130,14 +130,16 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
     File file = new File(DEST);
     file.getParentFile().mkdirs();
 
-    if (allSeatPlans.size() > 0) {
+    if(allSeatPlans.size() > 0) {
       List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(semesterId, groupNo, type);
-      if (seatPlanOfTheGroup.size() > 0) {
+      if(seatPlanOfTheGroup.size() > 0) {
         // new SeatPlanResourceHelper().createPdf(DEST);
-      } else {
+      }
+      else {
 
       }
-    } else {
+    }
+    else {
       // new SeatPlanResourceHelper().createPdf(DEST);
     }
 
@@ -145,7 +147,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type,
-                                                     final String examDate, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo)
+      final String examDate, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo)
       throws IOException, DocumentException {
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
@@ -155,42 +157,47 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
     file.getParentFile().mkdirs();
     boolean noSeatPlanInfo;
     boolean seatPlanOfTheGroupFound = false;
-    if (allSeatPlans.size() > 0) {
-      if (groupNo == 0) {
+    if(allSeatPlans.size() > 0) {
+      if(groupNo == 0) {
         List<SeatPlan> seatPlanOfTheGroup =
             mManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, groupNo, type, examDate);
-        if (seatPlanOfTheGroup.size() > 0) {
+        if(seatPlanOfTheGroup.size() > 0) {
           seatPlanOfTheGroupFound = true;
         }
-      } else {
+      }
+      else {
         List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(pSemesterId, groupNo, type);
-        if (seatPlanOfTheGroup.size() > 0) {
+        if(seatPlanOfTheGroup.size() > 0) {
           seatPlanOfTheGroupFound = true;
         }
       }
 
     }
 
-    if (seatPlanOfTheGroupFound) {
+    if(seatPlanOfTheGroupFound) {
 
       noSeatPlanInfo = false;
       mSeatPlanReportGenerator.createPdf(DEST, noSeatPlanInfo, pSemesterId, groupNo, type, examDate, pOutputStream);
 
-    } else {
-      if (groupNo == 0) {
+    }
+    else {
+      if(groupNo == 0) {
         List<SubGroupCCI> subGroupCCIs = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
-        if (subGroupCCIs.size() > 0) {
+        if(subGroupCCIs.size() > 0) {
           genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId, groupNo, type, examDate);
           noSeatPlanInfo = false;
-        } else {
+        }
+        else {
           noSeatPlanInfo = true;
         }
-      } else {
+      }
+      else {
         List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId, groupNo, type);
-        if (subGroupOfTheGroup.size() > 0) {
+        if(subGroupOfTheGroup.size() > 0) {
           genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId, groupNo, type, examDate);
           noSeatPlanInfo = false;
-        } else {
+        }
+        else {
           noSeatPlanInfo = true;
         }
       }
@@ -202,7 +209,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void getSeatPlanAttendenceSheetReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                               String pExamDate, OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws IOException,
+      String pExamDate, OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws IOException,
       DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanAttendencePdfReport(pProgramType, pSemesterId, pExamType, pExamDate,
@@ -211,7 +218,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void getSeatPlanTopSheetReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate,
-                                        OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws IOException, DocumentException {
+      OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanTopSheetPdfReport(pProgramType, pSemesterId, pExamType, pExamDate,
         pOutputStream);
@@ -219,7 +226,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void getSeatPlanStudentStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-                                              String pExamDate, int pRoomId, OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo)
+      String pExamDate, int pRoomId, OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo)
       throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType, pExamDate, pRoomId,
@@ -228,7 +235,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType, OutputStream pOutputStream,
-                                            Request pRequest, UriInfo pUriInfo) throws IOException, DocumentException {
+      Request pRequest, UriInfo pUriInfo) throws IOException, DocumentException {
     mSeatPlanReportGenerator.createSeatPlanSittingArrangementReport(pSemesterId, pExamType, pOutputStream);
   }
 

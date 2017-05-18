@@ -23,7 +23,7 @@ public enum EmployeeLeaveType {
   private static final Map<Integer, EmployeeLeaveType> lookup = new HashMap<>();
 
   static {
-    for (EmployeeLeaveType c : EnumSet.allOf(EmployeeLeaveType.class)) {
+    for(EmployeeLeaveType c : EnumSet.allOf(EmployeeLeaveType.class)) {
       lookup.put(c.getId(), c);
     }
   }
