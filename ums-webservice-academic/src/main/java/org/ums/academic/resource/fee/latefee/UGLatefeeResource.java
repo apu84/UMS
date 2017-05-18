@@ -8,6 +8,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 @Component
 @Path("/academic/ug/latefee")
@@ -18,8 +19,21 @@ public class UGLatefeeResource extends Resource {
   UGLatefeeResourceHelper mUGUgLatefeeResourceHelper;
 
   @GET
-  @Path("/semester" + PATH_PARAM_OBJECT_ID)
-  public JsonObject getLatefeeInfo(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId) {
-    return null;
+  @Path("/semester/{semester-id}")
+  public JsonObject getLatefeeInfo(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId)
+      throws Exception {
+    return mUGUgLatefeeResourceHelper.getLatefees(pSemesterId, mUriInfo);
+  }
+
+  @POST
+  public Response create(final JsonObject pJsonObject) throws Exception {
+    return mUGUgLatefeeResourceHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @GET
+  @Path("/semester/{semester-id}")
+  public Response update(final JsonObject pJsonObject, final @PathParam("object-id") Integer pSemesterId)
+      throws Exception {
+    return mUGUgLatefeeResourceHelper.updateLatefees(pSemesterId, pJsonObject, mUriInfo);
   }
 }

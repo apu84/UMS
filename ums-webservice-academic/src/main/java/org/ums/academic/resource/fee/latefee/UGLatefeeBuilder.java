@@ -29,6 +29,7 @@ public class UGLatefeeBuilder implements Builder<UGLateFee, MutableUGLateFee> {
     Semester semester = (Semester) pLocalCache.cache(pReadOnly::getSemester, pReadOnly.getSemesterId(), Semester.class);
     pBuilder.add("semesterId", semester.getId());
     pBuilder.add("semesterName", semester.getName());
+    pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
 
   @Override
