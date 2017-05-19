@@ -12,7 +12,11 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.User;
 
-public interface MutableCertificateStatus extends CertificateStatus, Editable<Long>, MutableIdentifier<Long>,
+public interface MutableCertificateStatus
+    extends
+    CertificateStatus,
+    Editable<Long>,
+    MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setFeeCategory(FeeCategory pFeeCategory);
@@ -31,7 +35,7 @@ public interface MutableCertificateStatus extends CertificateStatus, Editable<Lo
 
   void setProcessedOn(Date pProcessedOn);
 
-  void setStatus(Status pStatus);
+  void setStatus(boolean pStatus);
 
   void setUser(User pUser);
 
