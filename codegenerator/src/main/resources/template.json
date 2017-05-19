@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "StudentDues",
-    "package": "org.ums.fee.dues",
+    "name": "CertificateStatus",
+    "package": "org.ums.fee.certificate",
     "fields": [
       {
         "id": {
@@ -26,9 +26,6 @@
         }
       },
       {
-        "Description": "String"
-      },
-      {
         "transactionId": "String"
       },
       {
@@ -38,7 +35,23 @@
             "name": "Student",
             "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "String"
+              "type": "Integer"
+            },
+            "manager": {
+              "name": "SemesterManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "semester": {
+          "type": "Ref",
+          "reference": {
+            "name": "Semester",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Integer"
             },
             "manager": {
               "name": "StudentManager",
@@ -48,13 +61,10 @@
         }
       },
       {
-        "amount": "Double"
+        "processedOn": "Date"
       },
       {
-        "addedOn": "Date"
-      },
-      {
-        "payBefore": "Date"
+        "status": "boolean"
       },
       {
         "user": {
