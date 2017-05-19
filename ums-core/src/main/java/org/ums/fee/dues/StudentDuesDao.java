@@ -20,7 +20,8 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
   String INSERT_ALL =
       "INSERT INTO STUDENT_DUES (ID, FEE_CATEGORY, DESCRIPTION, STUDENT_ID, AMOUNT, ADDED_ON, ADDED_BY, "
           + "PAY_BEFORE, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, SYSDATE, ?, ?, " + getLastModifiedSql() + ")";
-  String UPDATE_ALL = "UPDATE STUDENT_DUES SET TRANSACTION_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String UPDATE_ALL = "UPDATE STUDENT_DUES SET FEE_CATEGORY = ?, DESCRIPTION = ?, STUDENT_ID = ?,  AMOUNT = ?,"
+      + " ADDED_BY = ?, PAY_BEFORE = ?, TRANSACTION_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM STUDENT_DUES ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -81,7 +82,8 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
   private List<Object[]> getUpdateParamList(List<MutableStudentDues> pMutableStudentDues) {
     List<Object[]> params = new ArrayList<>();
     for(StudentDues dues : pMutableStudentDues) {
-      params.add(new Object[] {dues.getTransactionId(), dues.getId()});
+      params.add(new Object[] {dues.getFeeCategoryId(), dues.getDescription(), dues.getStudentId(), dues.getAmount(),
+          dues.getUserId(), dues.getPayBefore(), dues.getTransactionId(), dues.getId()});
     }
     return params;
   }
@@ -89,7 +91,8 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
   private List<Object[]> getInsertParamArray(List<MutableStudentDues> pMutableStudentDues) {
     List<Object[]> params = new ArrayList<>();
     for(StudentDues dues : pMutableStudentDues) {
-      params.add(new Object[] {dues.getTransactionId(), dues.getId()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), dues.getFeeCategoryId(), dues.getDescription(),
+          dues.getStudentId(), dues.getAmount(), dues.getUserId(), dues.getPayBefore()});
     }
     return params;
   }

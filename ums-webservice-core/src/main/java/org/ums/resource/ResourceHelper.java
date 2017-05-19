@@ -5,6 +5,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;
+import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.fee.latefee.MutableUGLateFee;
 import org.ums.fee.latefee.PersistentUGLateFee;
@@ -19,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ResourceHelper<R extends EditType<M>, M extends Editable, I> {
+public abstract class ResourceHelper<R extends EditType<M> & Identifier, M extends Editable & Identifier, I> {
 
   public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);
@@ -96,6 +97,19 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Editable, 
       mutables.add(mutable);
     }
     return mutables;
+  }
+
+  protected boolean isValidUpdateOfEntities(List<R> latest, List<M> updated) {
+    for(R latestR : latest) {
+      for(M updatedR : updated) {
+        // loosely checking on id
+        if(latestR.getId().toString().equalsIgnoreCase(updatedR.getId().toString())
+            && !hasUpdatedVersion(latestR, (R) updatedR)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   public Response delete(final I pObjectId) throws Exception {
