@@ -30,7 +30,7 @@ public class UGLatefeeResource extends Resource {
     return mUGUgLatefeeResourceHelper.post(pJsonObject, mUriInfo);
   }
 
-  @GET
+  @PUT
   @Path("/semester/{semester-id}")
   public Response update(final JsonObject pJsonObject, final @PathParam("object-id") Integer pSemesterId)
       throws Exception {
