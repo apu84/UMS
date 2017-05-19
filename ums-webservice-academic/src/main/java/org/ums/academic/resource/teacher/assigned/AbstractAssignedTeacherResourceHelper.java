@@ -2,6 +2,7 @@ package org.ums.academic.resource.teacher.assigned;
 
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;
+import org.ums.domain.model.common.Identifier;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.resource.ResourceHelper;
@@ -11,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M>, M extends Editable<I>, I, C extends AssignedTeacherManager<R, M, I>>
+public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M> & Identifier, M extends Editable<I> & Identifier, I, C extends AssignedTeacherManager<R, M, I>>
     extends ResourceHelper<R, M, I> {
 
   protected abstract void modifyContent(JsonObject pJsonObject);

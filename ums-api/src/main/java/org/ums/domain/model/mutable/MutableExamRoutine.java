@@ -1,12 +1,13 @@
 package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Editable;
+import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.ExamRoutine;
 
 import java.util.List;
 
-public interface MutableExamRoutine extends ExamRoutine, Editable<Integer> {
+public interface MutableExamRoutine extends ExamRoutine, Editable<Integer>, MutableIdentifier<Long> {
   void setRoutine(final List<ExamRoutineDto> pRoutineList);
 
   void setSemesterId(final Integer pSemesterId);

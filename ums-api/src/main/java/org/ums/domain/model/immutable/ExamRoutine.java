@@ -1,12 +1,13 @@
 package org.ums.domain.model.immutable;
 
 import org.ums.domain.model.common.EditType;
+import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import java.io.Serializable;
 import java.util.List;
 
-public interface ExamRoutine extends Serializable, EditType<MutableExamRoutine> {
+public interface ExamRoutine extends Serializable, EditType<MutableExamRoutine>, Identifier<Long> {
   List<ExamRoutineDto> getRoutine();
 
   Integer getSemesterId();

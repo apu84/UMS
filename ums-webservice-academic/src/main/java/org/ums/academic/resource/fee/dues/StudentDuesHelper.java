@@ -103,6 +103,17 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     return Response.ok().build();
   }
 
+  Response updateDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    Validate.notEmpty(pJsonObject.getJsonArray("entries"));
+    List<MutableStudentDues> updatedDues = readEntities(pJsonObject, PersistentStudentDues.class);
+    List<StudentDues> latestDues = mStudentDuesManager.getByStudent(pStudentId);
+    if(!isValidUpdateOfEntities(latestDues, updatedDues)) {
+      return Response.status(Response.Status.PRECONDITION_FAILED).build();
+    }
+    mStudentDuesManager.update(updatedDues);
+    return Response.ok().build();
+  }
+
   private void validateDues(String studentId, StudentDues dues) {
     Assert.isTrue(dues.getStudentId().equalsIgnoreCase(studentId), "Invalid dues");
     Assert.isTrue(dues.getPayBefore().before(new Date()), "Expired date");

@@ -52,17 +52,11 @@ public class UGLatefeeResourceHelper extends ResourceHelper<UGLateFee, MutableUG
     Validate.notEmpty(pJsonObject);
     Validate.notNull(pJsonObject.getJsonObject("entries"));
     List<MutableUGLateFee> mutableUGLateFees = readEntities(pJsonObject, PersistentUGLateFee.class);
-
     // Validate first
     List<UGLateFee> fees = mUGLateFeeManager.getLateFees(pSemesterId);
-    for(UGLateFee fee : fees) {
-      for(UGLateFee mutableFee : mutableUGLateFees) {
-        if(fee.getAdmissionType() == mutableFee.getAdmissionType() && !hasUpdatedVersion(fee, mutableFee)) {
-          return Response.status(Response.Status.PRECONDITION_FAILED).build();
-        }
-      }
+    if(!isValidUpdateOfEntities(fees, mutableUGLateFees)) {
+      return Response.status(Response.Status.PRECONDITION_FAILED).build();
     }
-
     mUGLateFeeManager.update(mutableUGLateFees);
     return Response.ok().build();
   }

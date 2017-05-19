@@ -32,6 +32,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   private Integer mCourseYear;
   private Integer mCourseSemester;
   private Integer mExamGroup;
+  private Long mId;
 
   public PersistentExamRoutine() {}
 
@@ -210,5 +211,15 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   @Override
   public void setExamGroup(Integer mExamGroup) {
     this.mExamGroup = mExamGroup;
+  }
+
+  @Override
+  public Long getId() {
+    return mId;
+  }
+
+  @Override
+  public void setId(Long pId) {
+    mId = pId;
   }
 }
