@@ -7,15 +7,12 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.User;
 import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeType;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
-public interface CertificateStatus
-    extends
-    Serializable,
-    EditType<MutableCertificateStatus>,
-    LastModifier,
+public interface CertificateStatus extends Serializable, EditType<MutableCertificateStatus>, LastModifier,
     Identifier<Long> {
 
   FeeCategory getFeeCategory();
@@ -34,9 +31,42 @@ public interface CertificateStatus
 
   Date getProcessedOn();
 
-  boolean isStatus();
+  Status getStatus();
 
   User getUser();
 
   String getUserId();
+
+  enum Status {
+    APPLIED(1, "APPLIED"),
+    PROCESSED(2, "PROCESSED");
+
+    private String label;
+    private int id;
+
+    Status(int id, String label) {
+      this.id = id;
+      this.label = label;
+    }
+
+    private static final Map<Integer, Status> lookup = new HashMap<>();
+
+    static {
+      for(Status c : EnumSet.allOf(Status.class)) {
+        lookup.put(c.getId(), c);
+      }
+    }
+
+    public static Status get(final int pId) {
+      return lookup.get(pId);
+    }
+
+    public String getLabel() {
+      return this.label;
+    }
+
+    public int getId() {
+      return this.id;
+    }
+  }
 }

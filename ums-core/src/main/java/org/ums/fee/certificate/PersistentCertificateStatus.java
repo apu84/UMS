@@ -31,7 +31,7 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
   private Semester mSemester;
   private Integer mSemesterId;
   private Date mProcessedOn;
-  private boolean mStatus;
+  private Status mStatus;
   private User mUser;
   private String mUserId;
   private String mLastModified;
@@ -48,9 +48,7 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
 
   @Override
   public FeeCategory getFeeCategory() {
-    return mFeeCategory == null
-        ? sFeeCategoryManager.get(mFeeCategoryId)
-        : sFeeCategoryManager.validate(mFeeCategory);
+    return mFeeCategory == null ? sFeeCategoryManager.get(mFeeCategoryId) : sFeeCategoryManager.validate(mFeeCategory);
   }
 
   @Override
@@ -80,9 +78,7 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
 
   @Override
   public Student getStudent() {
-    return mStudent == null
-        ? sStudentManager.get(mStudentId)
-        : sStudentManager.validate(mStudent);
+    return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   @Override
@@ -102,9 +98,7 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null
-        ? sSemesterManager.get(mSemesterId)
-        : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
@@ -133,19 +127,18 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
   }
 
   @Override
-  public boolean isStatus() {
+  public Status getStatus() {
     return mStatus;
   }
 
   @Override
-  public void setStatus(boolean pStatus) {
+  public void setStatus(Status pStatus) {
     this.mStatus = pStatus;
   }
 
   @Override
   public User getUser() {
-    return mUser == null ? sUserManager.get(mUserId) : sUserManager
-        .validate(mUser);
+    return mUser == null ? sUserManager.get(mUserId) : sUserManager.validate(mUser);
   }
 
   @Override
@@ -193,11 +186,9 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
     sCertificateStatusManager.delete(this);
   }
 
-  public PersistentCertificateStatus() {
-  }
+  public PersistentCertificateStatus() {}
 
-  public PersistentCertificateStatus(
-      MutableCertificateStatus pCertificateStatus) {
+  public PersistentCertificateStatus(MutableCertificateStatus pCertificateStatus) {
     setId(pCertificateStatus.getId());
     setFeeCategory(pCertificateStatus.getFeeCategory());
     setFeeCategoryId(pCertificateStatus.getFeeCategoryId());
@@ -207,24 +198,18 @@ public class PersistentCertificateStatus implements MutableCertificateStatus {
     setSemester(pCertificateStatus.getSemester());
     setSemesterId(pCertificateStatus.getSemesterId());
     setProcessedOn(pCertificateStatus.getProcessedOn());
-    setStatus(pCertificateStatus.isStatus());
+    setStatus(pCertificateStatus.getStatus());
     setUser(pCertificateStatus.getUser());
     setUserId(pCertificateStatus.getUserId());
     setLastModified(pCertificateStatus.getLastModified());
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sFeeCategoryManager = applicationContext.getBean("feeCategoryManager",
-        FeeCategoryManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManager",
-        SemesterManager.class);
-    sStudentManager = applicationContext.getBean("studentManager",
-        StudentManager.class);
-    sUserManager = applicationContext.getBean("userManager",
-        UserManager.class);
-    sCertificateStatusManager = applicationContext.getBean(
-        "certificateStatusManager", CertificateStatusManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
+    sUserManager = applicationContext.getBean("userManager", UserManager.class);
+    sCertificateStatusManager = applicationContext.getBean("certificateStatusManager", CertificateStatusManager.class);
   }
 }
