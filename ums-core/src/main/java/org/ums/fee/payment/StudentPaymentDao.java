@@ -50,7 +50,8 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   @Override
   public int update(List<MutableStudentPayment> pMutableList) {
     List<Object[]> params = getUpdateParamArray(pMutableList);
-    return mJdbcTemplate.batchUpdate(UPDATE_ALL, params).length;
+    mJdbcTemplate.batchUpdate(UPDATE_ALL, params);
+    return super.update(pMutableList);
   }
 
   @Override

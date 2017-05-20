@@ -11,6 +11,7 @@ import org.ums.fee.dues.StudentDuesDao;
 import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.latefee.UGLateFeeDao;
 import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.payment.PostPaymentActions;
 import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsDao;
@@ -51,11 +52,6 @@ public class FeeContext {
   }
 
   @Bean
-  StudentPaymentManager studentPaymentManager() {
-    return new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
   FeeTypeManager feeTypeManager() {
     return new FeeTypeDao(mTemplateFactory.getJdbcTemplate());
   }
@@ -79,4 +75,13 @@ public class FeeContext {
   CertificateStatusManager certificateStatusManager() {
     return new CertificateStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
+
+  @Bean
+  StudentPaymentManager studentPaymentManager() {
+    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager());
+    StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    studentPaymentDao.setManager(postPaymentActions);
+    return studentPaymentDao;
+  }
+
 }
