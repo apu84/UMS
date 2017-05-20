@@ -62,6 +62,16 @@ class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, Mutabl
     return buildJson(payments, pUriInfo);
   }
 
+  JsonObject getDuesStatus(String pStudentId, UriInfo pUriInfo) {
+    List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.DUES.getId());
+    return buildJson(payments, pUriInfo);
+  }
+
+  JsonObject getPenaltyStatus(String pStudentId, UriInfo pUriInfo) {
+    List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.PENALTY.getId());
+    return buildJson(payments, pUriInfo);
+  }
+
   private JsonObject buildJson(List<StudentPayment> pPayments, UriInfo pUriInfo) {
     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
     LocalCache cache = new LocalCache();

@@ -1,5 +1,7 @@
 package org.ums.resource;
 
+import org.apache.shiro.SecurityUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -16,4 +18,8 @@ public class Resource {
 
   @Context
   protected HttpServletRequest mRequest;
+
+  protected String getLoggedInUserId() {
+    return SecurityUtils.getSubject().toString();
+  }
 }
