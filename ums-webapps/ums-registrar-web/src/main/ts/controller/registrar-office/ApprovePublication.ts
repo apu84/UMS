@@ -8,6 +8,9 @@ module ums {
         showNoPendingPublicationListDiv: boolean;
         accept: Function;
         reject: Function;
+        currentTeacher: IEmployee;
+        totalPendingPublications: number;
+        remainingPendingPublications: number;
     }
 
     interface IEmployee{
@@ -36,6 +39,7 @@ module ums {
 
             $scope.publications = Array<IPublicationInformationModel>();
             $scope.teachers = Array<IEmployee>();
+            $scope.currentTeacher = <IEmployee>{};
             this.fetchTeachersListWaitingForPublicationApproval();
         }
 
@@ -55,12 +59,13 @@ module ums {
         }
 
         private getPublication(index: number){
-            console.log("i am in getPublicationInformation()");
+            console.log("i am in getPublicationInformation() method");
+            this.$scope.currentTeacher = this.$scope.teachers[index];
             this.employeeInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, '0').then((publicationInformation: any) => {
                 console.log("Employee's Publication Information");
                 console.log(publicationInformation);
                 this.$scope.publications = publicationInformation;
-
+                this.$scope.totalPendingPublications = this.$scope.publications.length;
             });
         }
 
@@ -84,8 +89,6 @@ module ums {
             this.convertToJson(index, '1').then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
-                        $("#index").hide(10);
-                        console.log("this should be hidden");
                         console.log(message);
                     });
             });
@@ -95,7 +98,6 @@ module ums {
             this.convertToJson(index, '2').then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
-                        $("#index").hide(10);
                         console.log("this should be hidden");
                         console.log(message);
                     });

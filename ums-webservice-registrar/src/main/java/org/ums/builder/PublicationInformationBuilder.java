@@ -7,17 +7,25 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.enums.registrar.PublicationStatus;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class PublicationInformationBuilder implements Builder<PublicationInformation, MutablePublicationInformation> {
 
   @Autowired
   UserManager userManager;
+
+  Date date = new Date();
+  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+  String mDate = sdf.format(date);
 
   @Override
   public void build(JsonObjectBuilder pBuilder, PublicationInformation pReadOnly, UriInfo pUriInfo,
@@ -77,6 +85,16 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
       pBuilder.add("publicationCountry", "");
     }
 
+    // if (pReadOnly.getPublicationStatus().equals(PublicationStatus.WAITING.getLabel())) {
+    // pBuilder.add("status", "Pending");
+    // }
+    // else if (pReadOnly.getPublicationStatus().equals(PublicationStatus.ACCEPTED.getLabel())) {
+    // pBuilder.add("status", "Accepted");
+    // }
+    // else if (pReadOnly.getPublicationStatus().equals(PublicationStatus.REJECTED)){
+    // pBuilder.add("status", "Rejected");
+    // }
+
     pBuilder.add("status", pReadOnly.getPublicationStatus());
 
     if(pReadOnly.getPublicationPages() != null) {
@@ -85,25 +103,73 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     else {
       pBuilder.add("publicationPages", "");
     }
+    pBuilder.add("appliedOn", pReadOnly.getAppliedOn());
   }
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
-    pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
-    pMutable.setPublisherName(pJsonObject.getString("publisherName"));
+    if(!pJsonObject.containsKey("publicationInterestGenre")) {
+      pMutable.setInterestGenre("");
+    }
+    else {
+      pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
+    }
+    if(!pJsonObject.containsKey("publisherName")) {
+      pMutable.setPublisherName("");
+    }
+    else {
+      pMutable.setPublisherName(pJsonObject.getString("publisherName"));
+    }
+    if(!pJsonObject.containsKey("publicationWebLink")) {
+      pMutable.setPublicationWebLink("");
+    }
+    else {
+      pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
+    }
+    if(!pJsonObject.containsKey("publicationISSN")) {
+      pMutable.setPublicationISSN("");
+    }
+    else {
+      pMutable.setPublicationISSN(pJsonObject.getString("publicationISSN"));
+    }
+    if(!pJsonObject.containsKey("publicationIssue")) {
+      pMutable.setPublicationIssue("");
+    }
+    else {
+      pMutable.setPublicationIssue(pJsonObject.getString("publicationIssue"));
+    }
+    if(!pJsonObject.containsKey("publicationVolume")) {
+      pMutable.setPublicationVolume("");
+    }
+    else {
+      pMutable.setPublicationVolume(pJsonObject.getString("publicationVolume"));
+    }
+    if(!pJsonObject.containsKey("publicationJournalName")) {
+      pMutable.setPublicationJournalName("");
+    }
+    else {
+      pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
+    }
+    if(!pJsonObject.containsKey("publicationCountry")) {
+      pMutable.setPublicationCountry("");
+    }
+    else {
+      pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
+    }
+    if(!pJsonObject.containsKey("publicationPages")) {
+      pMutable.setPublicationPages("");
+    }
+    else {
+      pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
+    }
     pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
     pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
-    pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
-    pMutable.setPublicationISSN(pJsonObject.getString("publicationISSN"));
-    pMutable.setPublicationIssue(pJsonObject.getString("publicationIssue"));
-    pMutable.setPublicationVolume(pJsonObject.getString("publicationVolume"));
-    pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
-    pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
-    pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
-    pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    // pMutable.setPublicationStatus("1");
+    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
+    System.out.println(mDate);
+    pMutable.setAppliedOn(mDate);
+    pMutable.setPublicationStatus("0");
   }
 
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
@@ -123,6 +189,6 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
     pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
     pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    // pMutable.setPublicationStatus("1");
+    pMutable.setAppliedOn(pJsonObject.getString("appliedOn"));
   }
 }

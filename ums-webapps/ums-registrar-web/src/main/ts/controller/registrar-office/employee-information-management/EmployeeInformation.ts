@@ -36,6 +36,7 @@ module ums {
 
         showRequireSign: boolean;
         showPermanentAddressCheckbox: boolean;
+        required: boolean;
 
         disablePresentAddressDropdown: boolean;
         disablePermanentAddressDropdown: boolean;
@@ -265,11 +266,11 @@ module ums {
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
 
             this.initializeVariables();
-
-            console.log("i am in EmployeeInformation.ts");
         }
 
         private initializeVariables() {
+
+            //this.getLoggedUserId();
 
             this.getCountry();
             this.getDivision();
@@ -300,6 +301,12 @@ module ums {
             //this.getExperienceInformation();
             //this.getTrainingInformation();
         }
+
+        // private getLoggedUserId(){
+        //     this.employeeService.getLoggedEmployeeInfo().then((user: any) => {
+        //        console.log(user);
+        //     });
+        // }
 
         private enableViewMode(formName: string) {
             if (formName === 'personal') {
@@ -693,6 +700,7 @@ module ums {
                 this.$scope.disablePersonalSubmitButton = false;
                 this.$scope.showPersonalCancelButton = true;
                 this.$scope.showPersonalEditButton = false;
+                this.$scope.required = false;
             }
             else if (formName === "academic") {
                 this.$scope.showAcademicInputDiv = true;
@@ -776,7 +784,8 @@ module ums {
                     publicationJournalName: "",
                     publicationCountry: "",
                     status: "",
-                    publicationPages: ""
+                    publicationPages: "",
+                    appliedOn: ""
                 };
                 this.$scope.entry.publication.push(publicationEntry);
             }
@@ -1042,12 +1051,14 @@ module ums {
 
         private changePresentAddressFields() {
             if (this.$scope.entry.personal.presentAddressCountry.name === "Bangladesh") {
+                this.$scope.required = true;
                 this.$scope.disablePresentAddressDropdown = false;
                 this.$scope.entry.personal.presentAddressDivision = this.$scope.divisions[0];
                 this.changePresentAddressDistrict();
                 this.changePresentAddressThana();
             }
             else {
+                this.$scope.required = false;
                 this.$scope.disablePresentAddressDropdown = true;
                 this.$scope.entry.personal.presentAddressDivision = null;
                 this.$scope.entry.personal.presentAddressDistrict = null;

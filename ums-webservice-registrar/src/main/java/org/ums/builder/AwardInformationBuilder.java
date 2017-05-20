@@ -41,8 +41,18 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
   public void build(MutableAwardInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setAwardName(pJsonObject.getString("awardName"));
-    pMutable.setAwardInstitute(pJsonObject.getString("awardInstitute"));
+    if(!pJsonObject.containsKey("awardInstitute")) {
+      pMutable.setAwardInstitute("");
+    }
+    else {
+      pMutable.setAwardInstitute(pJsonObject.getString("awardInstitute"));
+    }
     pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
-    pMutable.setAwardShortDescription(pJsonObject.getString("awardShortDescription"));
+    if(!pJsonObject.containsKey("awardShortDescription")) {
+      pMutable.setAwardShortDescription("");
+    }
+    else {
+      pMutable.setAwardShortDescription(pJsonObject.getString("awardShortDescription"));
+    }
   }
 }

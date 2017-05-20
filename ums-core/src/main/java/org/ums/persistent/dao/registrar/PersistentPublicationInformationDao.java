@@ -15,10 +15,10 @@ import java.util.List;
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, APPLIED_ON) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES From EMP_PUBLICATION_INFO";
+      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON From EMP_PUBLICATION_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
 
@@ -59,7 +59,8 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
           publicationInformation.getPublicationWebLink(), publicationInformation.getPublicationISSN(),
           publicationInformation.getPublicationIssue(), publicationInformation.getPublicationVolume(),
           publicationInformation.getPublicationJournalName(), publicationInformation.getPublicationCountry(),
-          publicationInformation.getPublicationStatus(), publicationInformation.getPublicationPages()});
+          publicationInformation.getPublicationStatus(), publicationInformation.getPublicationPages(),
+          publicationInformation.getAppliedOn()});
 
     }
     return params;
@@ -106,6 +107,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setPublicationCountry(resultSet.getString("country"));
       publicationInformation.setPublicationStatus(resultSet.getString("status"));
       publicationInformation.setPublicationPages(resultSet.getString("publication_pages"));
+      publicationInformation.setAppliedOn(resultSet.getString("applied_on"));
       return publicationInformation;
     }
   }

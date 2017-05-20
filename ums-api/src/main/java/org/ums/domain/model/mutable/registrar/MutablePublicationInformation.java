@@ -37,4 +37,6 @@ public interface MutablePublicationInformation extends PublicationInformation, E
   void setPublicationPages(final String pPublicationPages);
 
   void setPublicationStatus(final String pPublicationStatus);
+
+  void setAppliedOn(final String pAppliedOn);
 }

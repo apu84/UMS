@@ -423,7 +423,7 @@
                                         data-ng-options="divisions.name for divisions in divisions"
                                         data-ng-change="changePresentAddressDistrict()"
                                         data-ng-disabled="disablePresentAddressDropdown"
-                                        class="form-control" requried>
+                                        class="form-control" requried="required">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -445,7 +445,7 @@
                                         data-ng-options="districts.name for districts in presentAddressDistricts"
                                         data-ng-change="changePresentAddressThana()"
                                         data-ng-disabled="disablePresentAddressDropdown"
-                                        class="form-control" required>
+                                        class="form-control" required="required">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -461,7 +461,7 @@
                                         data-ng-model="entry.personal.presentAddressPoliceStation"
                                         data-ng-options="thanas.name for thanas in presentAddressThanas"
                                         data-ng-disabled="disablePresentAddressDropdown"
-                                        class="form-control" required>
+                                        class="form-control" required="required">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>
@@ -561,7 +561,7 @@
                                         data-ng-options="division.name for division in divisions"
                                         data-ng-change="changePermanentAddressDistrict()"
                                         data-ng-disabled="disablePermanentAddressDropdown"
-                                        class="form-control" required>
+                                        class="form-control" required="required">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -583,7 +583,7 @@
                                         data-ng-options="district.name for district in permanentAddressDistricts"
                                         data-ng-change="changePermanentAddressThana()"
                                         data-ng-disabled="disablePermanentAddressDropdown"
-                                        class="form-control" requried>
+                                        class="form-control" requried="required">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -599,7 +599,7 @@
                                         data-ng-model="entry.personal.permanentAddressPoliceStation"
                                         data-ng-options="thana.name for thana in permanentAddressThanas"
                                         data-ng-disabled="disablePermanentAddressDropdown"
-                                        class="form-control" required>
+                                        class="form-control" required="required">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>

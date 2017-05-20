@@ -39,4 +39,6 @@ public interface PublicationInformation extends Serializable, EditType<MutablePu
   String getPublicationPages();
 
   String getPublicationStatus();
+
+  String getAppliedOn();
 }

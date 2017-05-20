@@ -15,5 +15,6 @@ module ums{
         publicationCountry: string;
         status: string;
         publicationPages: String;
+        appliedOn: string;
     }
 }

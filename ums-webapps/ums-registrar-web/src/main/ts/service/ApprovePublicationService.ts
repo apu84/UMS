@@ -29,7 +29,7 @@ module ums {
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallback<any>) => {
-                console.log();
+                    console.log();
                 });
             return defer.promise;
         }
@@ -39,7 +39,13 @@ module ums {
             var defer = this.$q.defer();
             this.httpClient.put(url , json, HttpClient.MIME_TYPE_JSON)
                 .success(()=>{
-                    this.notify.success("Updated Successfully");
+                    console.log("here");
+                    if(json.entries[0]['publication'].status === '1') {
+                        this.notify.success("Successfully Approved");
+                    }
+                    else if(json.entries[0]['publication'].status === '2'){
+                        this.notify.success("Successfully Rejected");
+                    }
                     defer.resolve("Successfully saved");
                 }).error((data)=>{
                 this.notify.error("Error in Updating");
