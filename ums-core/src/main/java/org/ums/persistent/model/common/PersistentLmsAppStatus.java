@@ -29,7 +29,7 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   }
 
   private int mId;
-  private int mLmsApplicationId;
+  private Long mLmsApplicationId;
   private LmsApplication mLmsApplication;
   private Date mActionTakenOn;
   private String mActionTakenById;
@@ -95,12 +95,12 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   }
 
   @Override
-  public void setLmsApplicationId(int pLmsApplicationId) {
+  public void setLmsApplicationId(Long pLmsApplicationId) {
     mLmsApplicationId = pLmsApplicationId;
   }
 
   @Override
-  public int getLmsAppId() {
+  public Long getLmsAppId() {
     return mLmsApplicationId;
   }
 

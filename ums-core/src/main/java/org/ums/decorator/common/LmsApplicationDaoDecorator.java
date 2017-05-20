@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 06-May-17.
  */
 public class LmsApplicationDaoDecorator extends
-    ContentDaoDecorator<LmsApplication, MutableLmsApplication, Integer, LmsApplicationManager> implements
+    ContentDaoDecorator<LmsApplication, MutableLmsApplication, Long, LmsApplicationManager> implements
     LmsApplicationManager {
 
   @Override

@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsAppStatusDaoDecorator;
@@ -15,15 +17,19 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Monjur-E-Morshed on 07-May-17.
+ * Created by Monjur-
+ * <p>
+ * E-Morshed on 07-May-17.
  */
 public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
+
+  private static final Logger mLogger = LoggerFactory.getLogger(PersistentLmsAppStatusDao.class);
 
   private JdbcTemplate mJdbcTemplate;
 
   private String SELECT_ALL = "select * from lms_app_status";
   private String INSERT_ONE =
-      "insert into lms_app_status(app_id,action_taken_on,action_taken_by,comments,action_status,last_modified) values (?,?,?,?,?,"
+      "insert into LMS_APP_STATUS(APP_ID,ACTION_TAKEN_ON, ACTION_TAKEN_BY, COMMENTS, ACTION_STATUS, LAST_MODIFIED) values(?,sysdate,?,?,?,"
           + getLastModifiedSql() + ")";
   private String UPDATE_ONE =
       "update lms_app_status set app_id=?,action_taken_on=?, action_taken_by=?,comments=?,action_status=?, last_modified="
@@ -95,8 +101,8 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   @Override
   public Integer create(MutableLmsAppStatus pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getLmsApplication().getId(), pMutable.getActionTakenOn(), pMutable
-        .getActionTakenBy().getId(), pMutable.getComments(), pMutable.getActionStatus().getId());
+    return mJdbcTemplate.update(query, pMutable.getLmsAppId(), pMutable.getActionTakenBy().getId(),
+        pMutable.getComments(), pMutable.getActionStatus().getId());
   }
 
   @Override
@@ -124,7 +130,7 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
     public LmsAppStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
       PersistentLmsAppStatus status = new PersistentLmsAppStatus();
       status.setId(rs.getInt("id"));
-      status.setLmsApplicationId(rs.getInt("app_id"));
+      status.setLmsApplicationId(rs.getLong("app_id"));
       status.setActionTakenOn(rs.getDate("action_taken_on"));
       status.setActionTakenById(rs.getString("action_taken_by"));
       status.setComments(rs.getString("comments"));

@@ -12,17 +12,16 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 06-May-17.
  */
 public class LmsApplicationCache extends
-    ContentCache<LmsApplication, MutableLmsApplication, Integer, LmsApplicationManager> implements
-    LmsApplicationManager {
+    ContentCache<LmsApplication, MutableLmsApplication, Long, LmsApplicationManager> implements LmsApplicationManager {
 
-  CacheManager<LmsApplication, Integer> mCacheManager;
+  CacheManager<LmsApplication, Long> mCacheManager;
 
-  public LmsApplicationCache(CacheManager<LmsApplication, Integer> pCacheManager) {
+  public LmsApplicationCache(CacheManager<LmsApplication, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<LmsApplication, Integer> getCacheManager() {
+  protected CacheManager<LmsApplication, Long> getCacheManager() {
     return mCacheManager;
   }
 

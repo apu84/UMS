@@ -28,7 +28,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
     sLmsApplicationManager = applicationContext.getBean("lmsApplicationManager", LmsApplicationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private Employee mEmployee;
   private int mLeaveTypeId;
@@ -69,7 +69,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sLmsApplicationManager.create(this);
   }
 
@@ -84,12 +84,12 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

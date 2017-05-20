@@ -6,7 +6,6 @@ import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.common.LeaveApprovalStatus;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Date;
 public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
 
-  void setLmsApplicationId(int pLmsApplicationId);
+  void setLmsApplicationId(Long pLmsApplicationId);
 
   void setActionTakenOn(Date pActionTakenOn);
 

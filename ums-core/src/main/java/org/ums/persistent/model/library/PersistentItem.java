@@ -40,8 +40,7 @@ public class PersistentItem implements MutableItem {
 
   }
 
-  public PersistentItem() {
-  }
+  public PersistentItem() {}
 
   public PersistentItem(final PersistentItem pPersistentItem) {
     mId = pPersistentItem.getId();

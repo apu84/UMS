@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 06-May-17.
  */
-public interface LmsApplicationManager extends ContentManager<LmsApplication, MutableLmsApplication, Integer> {
+public interface LmsApplicationManager extends ContentManager<LmsApplication, MutableLmsApplication, Long> {
   List<LmsApplication> getLmsApplication(String pEmployeeId, int pYear);
 
   List<LmsApplication> getPendingLmsApplication(String pEmployeeId);

@@ -1,17 +1,20 @@
 package org.ums.persistent.dao.common;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsApplicationDaoDecorator;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,13 +29,15 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
       "update lms_application set employee_id=?, type_id=?, applied_on=sysdate, from_date=?, to_date=?, reason=?,  app_status=?, last_modified="
           + getLastModifiedSql() + " ";
   private String INSERT_ONE =
-      "INSERT INTO LMS_APPLICATION (EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, LAST_MODIFIED) VALUES (?,?,sysdate,?,?,?,?,"
+      "INSERT INTO LMS_APPLICATION (ID,EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, LAST_MODIFIED) VALUES (?,?,?,sysdate,?,?,?,?,"
           + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentLmsApplicationDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentLmsApplicationDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -48,7 +53,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public LmsApplication get(Integer pId) {
+  public LmsApplication get(Long pId) {
     String query = SELECT_ONE + " where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LmsApplicationRowMapper());
   }
@@ -103,16 +108,43 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public Integer create(MutableLmsApplication pMutable) {
+  public Long create(MutableLmsApplication pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getEmployee().getId(), pMutable.getLmsType().getId(),
+    pMutable.setId(mIdGenerator.getNumericId());
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmployee().getId(), pMutable.getLmsType().getId(),
         pMutable.getFromDate(), pMutable.getToDate(), pMutable.getReason(), pMutable.getApplicationStatus().getId());
+    return pMutable.getId();
   }
 
   @Override
-  public List<Integer> create(List<MutableLmsApplication> pMutableList) {
+  public List<Long> create(List<MutableLmsApplication> pMutableList) {
     String query = INSERT_ONE;
-    return Arrays.asList(mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList)).length);
+    /*
+     * return Arrays.asList(mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList)).length);
+     * mJdbcTemplate.
+     */
+    mJdbcTemplate.batchUpdate(INSERT_ONE, new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        LmsApplication application = pMutableList.get(i);
+        Long id = mIdGenerator.getNumericId();
+        ps.setLong(1, id);
+        ps.setString(2, application.getEmployee().getId());
+        ps.setInt(3, application.getLeaveTypeId());
+        Date date = new Date(application.getFromDate().getTime());
+        ps.setDate(4, date);
+        date = new Date(application.getToDate().getTime());
+        ps.setDate(5, date);
+        ps.setString(6, application.getReason());
+        ps.setInt(7, application.getApplicationStatus().getId());
+      }
+
+      @Override
+      public int getBatchSize() {
+        return pMutableList.size();
+      }
+    });
+    return null;
   }
 
   private List<Object[]> getCreateParams(List<MutableLmsApplication> pLmsApplications) {
@@ -126,7 +158,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public boolean exists(Integer pId) {
+  public boolean exists(Long pId) {
     String query = SELECT_ONE + " where id=?";
     Integer size = mJdbcTemplate.queryForObject(query, Integer.class, pId);
     return (size != null && size > 0) ? true : false;
@@ -143,7 +175,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     @Override
     public LmsApplication mapRow(ResultSet rs, int rowNum) throws SQLException {
       PersistentLmsApplication application = new PersistentLmsApplication();
-      application.setId(rs.getInt("id"));
+      application.setId(rs.getLong("id"));
       application.setEmployeeId(rs.getString("employee_id"));
       application.setLeaveTypeId(rs.getInt("type_id"));
       application.setAppliedOn(rs.getDate("applied_on"));

@@ -9,6 +9,7 @@ module ums {
     leaveApplication: LmsApplication;
     remainingLeaves: Array<RemainingLmsLeave>;
     pendingApplications: Array<LmsApplication>;
+    pendingApplication: LmsApplication;
 
     save: Function;
     applyLeave: Function;
@@ -81,6 +82,10 @@ module ums {
           this.getPendingApplications();
         });
       });
+    }
+
+    private fetchApplicationStatus(pendingApplication: LmsApplication){
+      
     }
 
 

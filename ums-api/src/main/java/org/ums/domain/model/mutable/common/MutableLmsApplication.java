@@ -11,8 +11,8 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 06-May-17.
  */
-public interface MutableLmsApplication extends LmsApplication, Editable<Integer>, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableLmsApplication extends LmsApplication, Editable<Long>, MutableLastModifier,
+    MutableIdentifier<Long> {
 
   void setEmployeeId(String pEmployeeId);
 

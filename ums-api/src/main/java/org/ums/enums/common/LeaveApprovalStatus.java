@@ -8,12 +8,15 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 06-May-17.
  */
 public enum LeaveApprovalStatus {
-  ACCEPTED_BY_DEPT_HEAD(1, "ACCEPTED BY DEPARTMENTAL HEAD"),
-  REJECTED_BY_DEPT_HEAD(2, "Application Rejected By Head"),
-  ACCEPTED_BY_VC(3, "Application Accepted By VC"),
-  REJECTED_BY_VC(4, "Application Rejected By VC"),
-  ACCEPTED_BY_REGISTRAR(5, "Application Accepted By Registrar"),
-  REJECTED_BY_REGISTRAR(6, "Application Rejected By Registrar");
+  WAITING_FOR_HEAD_APPROVAL(1, "Waiting For Head's Approval"),
+  ACCEPTED_BY_DEPT_HEAD(2, "Application Approved By Head"),
+  REJECTED_BY_DEPT_HEAD(3, "Application Rejected By Head"),
+  WAITING_FOR_VC_APPROVAL(4, "Waiting For VC's Approval"),
+  ACCEPTED_BY_VC(5, "Application Accepted By VC"),
+  REJECTED_BY_VC(6, "Application Rejected By VC"),
+  WAITING_FOR_REGISTRAR_APPROVAL(7, "Waiting For Registrar's Approval"),
+  ACCEPTED_BY_REGISTRAR(8, "Application Accepted By Registrar"),
+  REJECTED_BY_REGISTRAR(9, "Application Rejected By Registrar");
 
   private String label;
   private int id;

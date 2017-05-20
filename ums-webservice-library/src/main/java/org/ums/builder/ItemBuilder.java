@@ -33,7 +33,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+      final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getMfn());
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
@@ -67,12 +67,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setAccessionNumber(pJsonObject.getString("accessionNumber"));
     pMutable.setAccessionDate(pJsonObject.getString("accessionDate"));
 
-    if (pJsonObject.containsKey("supplier")) {
+    if(pJsonObject.containsKey("supplier")) {
       JsonObject supplierObject = (JsonObject) (pJsonObject.get("supplier"));
       pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
     }
 
-    if (pJsonObject.containsKey("barcode"))
+    if(pJsonObject.containsKey("barcode"))
       pMutable.setBarcode(pJsonObject.getString("barcode"));
     pMutable.setPrice(Double.valueOf(pJsonObject.getString("price")));
     pMutable.setInternalNote(pJsonObject.getString("internalNote"));

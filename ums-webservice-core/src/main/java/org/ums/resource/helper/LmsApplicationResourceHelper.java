@@ -10,15 +10,15 @@ import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.immutable.common.LmsType;
+import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
-import org.ums.enums.common.EmployeeLeaveType;
-import org.ums.enums.common.EmployeeType;
-import org.ums.enums.common.Gender;
-import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.enums.common.*;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
+import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.manager.common.LmsTypeManager;
+import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 import org.ums.resource.ResourceHelper;
 
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * Created by Monjur-E-Morshed on 08-May-17.
  */
 @Component
-public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication, MutableLmsApplication, Integer> {
+public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication, MutableLmsApplication, Long> {
 
   @Autowired
   private LmsApplicationManager mManager;
@@ -51,6 +51,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   private LmsApplicationBuilder mBuilder;
 
   @Autowired
+  private LmsAppStatusManager mLmsAppStatusManager;
+
+  @Autowired
   private LmsTypeManager mLmsTypeManager;
 
   @Override
@@ -60,15 +63,26 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
-    if(application.getId() == 0)
-      getContentManager().create(application);
-    else
-      getContentManager().update(application);
+    Long appId = new Long(0);
+    appId = getContentManager().create(application);
 
+    inserIntoLeaveApplicationStatus(application, appId);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  private void inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication, Long pAppId) {
+    MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
+    lmsAppStatus.setLmsApplicationId(pAppId);
+    lmsAppStatus.setActionTakenOn(pApplication.getAppliedOn());
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    lmsAppStatus.setActionTakenById(user.getEmployeeId());
+    lmsAppStatus.setComments(LeaveApplicationStatus.PENDING.getLabel());
+    lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_VC_APPROVAL);
+
+    mLmsAppStatusManager.create(lmsAppStatus);
   }
 
   public JsonObject getPendingLeavesOfEmployee(UriInfo pUriInfo) {

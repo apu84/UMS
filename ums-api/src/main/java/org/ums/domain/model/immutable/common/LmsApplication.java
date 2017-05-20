@@ -13,8 +13,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 06-May-17.
  */
-public interface LmsApplication extends Serializable, LastModifier, EditType<MutableLmsApplication>,
-    Identifier<Integer> {
+public interface LmsApplication extends Serializable, LastModifier, EditType<MutableLmsApplication>, Identifier<Long> {
   String getEmployeeId();
 
   Employee getEmployee();
