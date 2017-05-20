@@ -11,7 +11,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -25,7 +24,6 @@ import org.ums.resource.ResourceHelper;
 @Component
 class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, MutableStudentPayment, Long> {
   @Autowired
-  @Qualifier("studentPaymentBuilder")
   StudentPaymentBuilder mStudentPaymentBuilder;
   @Autowired
   StudentPaymentManager mStudentPaymentManager;
@@ -55,22 +53,34 @@ class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, Mutabl
   JsonObject getSemesterFeeStatus(String pStudentId, Integer pSemesterId, UriInfo pUriInfo) {
     FeeType feeType = mFeeTypeManager.get(FeeType.Types.SEMESTER_FEE.getId());
     List<StudentPayment> payments = getContentManager().getPayments(pStudentId, pSemesterId, feeType);
-    return buildJsonResponse(payments, pUriInfo);
+    return buildJson(payments, pUriInfo);
   }
 
   JsonObject getCertificateFeeStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments =
         mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.CERTIFICATE_FEE.getId());
-    return buildJsonResponse(payments, pUriInfo);
+    return buildJson(payments, pUriInfo);
   }
 
   JsonObject getDuesStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.DUES.getId());
-    return buildJsonResponse(payments, pUriInfo);
+    return buildJson(payments, pUriInfo);
   }
 
   JsonObject getPenaltyStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.PENALTY.getId());
-    return buildJsonResponse(payments, pUriInfo);
+    return buildJson(payments, pUriInfo);
+  }
+
+  private JsonObject buildJson(List<StudentPayment> pPayments, UriInfo pUriInfo) {
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+    LocalCache cache = new LocalCache();
+    for(StudentPayment payment : pPayments) {
+      arrayBuilder.add(toJson(payment, pUriInfo, cache));
+    }
+
+    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+    jsonObject.add("entries", arrayBuilder);
+    return jsonObject.build();
   }
 }
