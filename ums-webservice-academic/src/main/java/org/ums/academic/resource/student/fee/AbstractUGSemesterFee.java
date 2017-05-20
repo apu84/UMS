@@ -70,9 +70,9 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
       return UGSemesterFeeResponse.APPLIED;
     }
     else {
-      SemesterAdmissionStatus admissionStatus =
+      Optional<SemesterAdmissionStatus> admissionStatus =
           getSemesterAdmissionStatusManager().getAdmissionStatus(pStudentId, pSemesterId);
-      if(admissionStatus.isAdmitted()) {
+      if(admissionStatus.isPresent() && admissionStatus.get().isAdmitted()) {
         return UGSemesterFeeResponse.ADMITTED;
       }
       return !withInAdmissionSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : UGSemesterFeeResponse.ALLOWED;

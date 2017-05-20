@@ -3,6 +3,7 @@ package org.ums.persistent.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -116,14 +117,23 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   public List<Long> create(List<MutableStudentRecord> pStudentRecordList) {
     List<Object[]> params = getInsertParamList(pStudentRecordList);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);
-    return params.stream().map(param -> (Long) param[0])
-        .collect(Collectors.toCollection(ArrayList::new));
+    return params.stream().map(param -> (Long) param[0]).collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
   public int update(List<MutableStudentRecord> pStudentRecordList) {
     String query = UPDATE_ALL + "WHERE ID=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pStudentRecordList)).length;
+  }
+
+  @Override
+  public List<StudentRecord> getStudentRecord(String pStudentId) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ?";
+    List<StudentRecord> studentRecords =
+        mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentRecordRowMapper());
+    Collections.sort(studentRecords, (StudentRecord o1, StudentRecord o2) -> o1.getSemester().getStartDate()
+        .compareTo(o2.getSemester().getStartDate()));
+    return studentRecords;
   }
 
   private List<Object[]> getUpdateParamList(List<MutableStudentRecord> pStudentRecords) {

@@ -1,14 +1,14 @@
 package org.ums.builder;
 
-import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
-import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.domain.model.mutable.MutableStudentRecord;
-
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+
+import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.StudentRecord;
+import org.ums.domain.model.mutable.MutableStudentRecord;
 
 /**
  * Created by My Pc on 08-Aug-16.

@@ -153,7 +153,12 @@ module ums{
       var defer = this.$q.defer();
       var tPage = page-1;
 
-      var resourceUrl = "record/all/ipp/"+itemPerPage+"/page/"+tPage+"/order/3/filter/"+encodeURIComponent(JSON.stringify(filter));
+      var resourceUrl = "record/all/ipp/"+itemPerPage+"/page/"+tPage+"/order/3?filter="+encodeURIComponent(JSON.stringify(filter));
+
+
+
+
+
       this.httpClient.get(resourceUrl, 'application/json',
           (json: any, etag: string) => {
             defer.resolve(json);

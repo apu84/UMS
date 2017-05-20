@@ -41,4 +41,9 @@ public class StudentRecordDaoDecorator extends
   public StudentRecord getStudentRecord(String pStudentId, Integer pSemesterId) {
     return getManager().getStudentRecord(pStudentId, pSemesterId);
   }
+
+  @Override
+  public List<StudentRecord> getStudentRecord(String pStudentId) {
+    return getManager().getStudentRecord(pStudentId);
+  }
 }

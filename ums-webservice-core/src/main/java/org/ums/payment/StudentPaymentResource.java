@@ -25,4 +25,11 @@ public class StudentPaymentResource extends Resource {
     String studentId = SecurityUtils.getSubject().toString();
     return mStudentPaymentResourceHelper.getSemesterFeeStatus(studentId, pSemesterId, mUriInfo);
   }
+
+  @GET
+  @Path("/certificate-fee")
+  public JsonObject getCertificateFeeStatus(final @Context Request pRequest) throws Exception {
+    String studentId = SecurityUtils.getSubject().toString();
+    return mStudentPaymentResourceHelper.getCertificateFeeStatus(studentId, mUriInfo);
+  }
 }

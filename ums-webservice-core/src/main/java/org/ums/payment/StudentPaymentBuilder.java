@@ -31,6 +31,6 @@ class StudentPaymentBuilder implements Builder<StudentPayment, MutableStudentPay
 
   @Override
   public void build(MutableStudentPayment pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-
+    throw new UnsupportedOperationException();
   }
 }

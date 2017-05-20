@@ -111,6 +111,26 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramTypeId}, new SemesterRowMapper());
   }
 
+  @Override
+  public List<Semester> semestersAfter(Integer pStartSemester, Integer pEndSemester, Integer pProgramTypeId) {
+    String query =
+        SELECT_ALL
+            + "WHERE START_DATE > (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?) "
+            + "WHERE START_DATE < (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?) "
+            + "ORDER BY MST_SEMESTER.START_DATE DESC";
+    return mJdbcTemplate.query(query, new Object[] {pStartSemester, pProgramTypeId, pEndSemester, pProgramTypeId},
+        new SemesterRowMapper());
+  }
+
+  @Override
+  public List<Semester> semestersAfter(Integer pStartSemester, Integer pProgramTypeId) {
+    String query =
+        SELECT_ALL
+            + "WHERE START_DATE > (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?) "
+            + "ORDER BY MST_SEMESTER.START_DATE DESC";
+    return mJdbcTemplate.query(query, new Object[] {pStartSemester, pProgramTypeId}, new SemesterRowMapper());
+  }
+
   class SemesterRowMapper implements RowMapper<Semester> {
     @Override
     public Semester mapRow(ResultSet resultSet, int i) throws SQLException {

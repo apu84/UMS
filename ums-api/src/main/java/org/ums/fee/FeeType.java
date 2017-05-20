@@ -15,6 +15,8 @@ public interface FeeType extends Serializable, EditType<MutableFeeType>, LastMod
 
   enum Types {
     SEMESTER_FEE(1, "Semester fee"),
+    CERTIFICATE_FEE(2, "Certificate fee"),
+    DUES(3, "Dues"),
     OTHERS(0, "Others");
 
     private String label;

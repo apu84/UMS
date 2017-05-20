@@ -151,7 +151,7 @@
       $scope.showLeftNav =false;
       $scope.showRightNav = false;
       this.$scope.recordId = $stateParams["2"];
-      if(this.$scope.recordId != null && this.$scope.recordId != "" ) {
+      if(this.$scope.recordId != null && this.$scope.recordId != "-1" ) {
         this.fetchRecord(this.$scope.recordId);
         this.mangeRecordNavigator();
         $("#o1").removeClass("active");

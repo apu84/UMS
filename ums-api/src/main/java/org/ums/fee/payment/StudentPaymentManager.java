@@ -10,5 +10,7 @@ public interface StudentPaymentManager extends ContentManager<StudentPayment, Mu
 
   List<StudentPayment> getPayments(String pStudentId, Integer pSemesterId, FeeType pFeeType);
 
+  List<StudentPayment> getPayments(String pStudentId, FeeType pFeeType);
+
   List<StudentPayment> getToExpirePayments();
 }
