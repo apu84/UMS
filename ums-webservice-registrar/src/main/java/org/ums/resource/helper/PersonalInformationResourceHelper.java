@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.PersonalInformationBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.manager.ContentManager;
@@ -15,6 +16,7 @@ import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PersonalInformationManager;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
+import sun.util.resources.cldr.lag.LocaleNames_lag;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -60,6 +62,18 @@ public class PersonalInformationResourceHelper extends
     mPersonalInformationBuilder.build(personalInformation, personalJsonObject, localCache);
     mPersonalInformationManager.savePersonalInformation(personalInformation);
 
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  public Response updatePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+    LocalCache localeCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject jsonObject = entries.getJsonObject(0);
+    mPersonalInformationBuilder.build(personalInformation, jsonObject, localeCache);
+    mPersonalInformationManager.updatePersonalInformation(personalInformation);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

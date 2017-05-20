@@ -97,9 +97,14 @@
 /// <reference path='controller/registrar-office/ApprovePublication.ts'/>
 
 
-/// <reference path='service/EmployeeInformationService.ts'/>
 /// <reference path='service/EmployeeServiceInformationService.ts'/>
 /// <reference path='service/ApprovePublicationService.ts'/>
+/// <reference path='service/PersonalInformationService.ts'/>
+/// <reference path='service/AcademicInformationService.ts'/>
+/// <reference path='service/PublicationInformationService.ts'/>
+/// <reference path='service/TrainingInformationService.ts'/>
+/// <reference path='service/AwardInformationService.ts'/>
+/// <reference path='service/ExperienceInformationService.ts'/>
 
 /// <reference path='model/EmployeeInformation/AcademicInformationModel.ts' />
 /// <reference path='model/EmployeeInformation/AwardInformationModel.ts' />

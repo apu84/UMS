@@ -37,6 +37,5 @@ module ums {
         emergencyContactRelation: IRelation;
         emergencyContactPhone: string;
         emergencyContactAddress: string;
-
     }
 }

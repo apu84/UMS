@@ -16,5 +16,6 @@ module ums{
         status: string;
         publicationPages: String;
         appliedOn: string;
+        actionTakenOn: string;
     }
 }

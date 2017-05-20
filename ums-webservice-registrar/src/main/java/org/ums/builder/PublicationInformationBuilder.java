@@ -104,6 +104,13 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
       pBuilder.add("publicationPages", "");
     }
     pBuilder.add("appliedOn", pReadOnly.getAppliedOn());
+
+    if(pReadOnly.getActionTakenOn() != null) {
+      pBuilder.add("actionTakenOn", pReadOnly.getActionTakenOn());
+    }
+    else {
+      pBuilder.add("actionTakenOn", "");
+    }
   }
 
   @Override
@@ -167,9 +174,9 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
     pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
     // pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    System.out.println(mDate);
     pMutable.setAppliedOn(mDate);
     pMutable.setPublicationStatus("0");
+    pMutable.setActionTakenOn("");
   }
 
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
@@ -190,5 +197,6 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
     pMutable.setPublicationStatus(pJsonObject.getString("status"));
     pMutable.setAppliedOn(pJsonObject.getString("appliedOn"));
+    pMutable.setActionTakenOn(mDate);
   }
 }

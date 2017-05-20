@@ -15,14 +15,14 @@ import java.util.List;
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, APPLIED_ON) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, APPLIED_ON, ACTION_TAKEN_ON) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), ?)";
 
   static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON From EMP_PUBLICATION_INFO";
+      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON From EMP_PUBLICATION_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
 
-  static String UPDATE_STATUS = "UPDATE EMP_PUBLICATION_INFO SET STATUS=? ";
+  static String UPDATE_STATUS = "UPDATE EMP_PUBLICATION_INFO SET STATUS=?, ACTION_TAKEN_ON=TO_DATE(?, 'DD/MM/YYYY') ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -46,7 +46,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int updatePublicationStatus(MutablePublicationInformation pMutablePublicationInformation) {
     String query = UPDATE_STATUS + "WHERE ID=?";
     return mJdbcTemplate.update(query, pMutablePublicationInformation.getPublicationStatus(),
-        pMutablePublicationInformation.getRowId());
+        pMutablePublicationInformation.getActionTakenOn(), pMutablePublicationInformation.getRowId());
   }
 
   private List<Object[]> getEmployeePublicationInformationParams(
@@ -60,7 +60,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
           publicationInformation.getPublicationIssue(), publicationInformation.getPublicationVolume(),
           publicationInformation.getPublicationJournalName(), publicationInformation.getPublicationCountry(),
           publicationInformation.getPublicationStatus(), publicationInformation.getPublicationPages(),
-          publicationInformation.getAppliedOn()});
+          publicationInformation.getAppliedOn(), publicationInformation.getActionTakenOn()});
 
     }
     return params;
@@ -108,6 +108,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setPublicationStatus(resultSet.getString("status"));
       publicationInformation.setPublicationPages(resultSet.getString("publication_pages"));
       publicationInformation.setAppliedOn(resultSet.getString("applied_on"));
+      publicationInformation.setActionTakenOn(resultSet.getString("action_taken_on"));
       return publicationInformation;
     }
   }

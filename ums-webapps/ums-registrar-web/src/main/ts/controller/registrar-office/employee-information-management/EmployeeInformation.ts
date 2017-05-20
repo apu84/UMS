@@ -205,7 +205,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'countryService', 'divisionService', 'districtService', 'thanaService', 'employeeInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -217,7 +217,12 @@ module ums {
                     private divisionService: DivisionService,
                     private districtService: DistrictService,
                     private thanaService: ThanaService,
-                    private employeeInformationService: EmployeeInformationService) {
+                    private personalInformationService: PersonalInformationService,
+                    private academicInformationService: AcademicInformationService,
+                    private publicationInformationService: PublicationInformationService,
+                    private trainingInformationService: TrainingInformationService,
+                    private awardInformationService: AwardInformationService,
+                    private experienceInformationService: ExperienceInformationService) {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -499,7 +504,7 @@ module ums {
             console.log("i am in submitPersonalForm()");
             this.convertToJson('personal')
                 .then((json: any) => {
-                    this.employeeInformationService.savePersonalInformation(json)
+                    this.personalInformationService.savePersonalInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -508,11 +513,22 @@ module ums {
             this.enableViewMode('personal');
         }
 
+        private updatePersonalForm() {
+            console.log("i am in updatePersonalForm");
+            this.convertToJson('personal')
+                .then((json: any) => {
+                    this.personalInformationService.updatePersonalInformation(json)
+                        .then((message: any) => {
+                        console.log("Hello");
+                        });
+                });
+        }
+
         private submitAcademicForm() {
             console.log("i am in submitAcademicForm()");
             this.convertToJson('academic')
                 .then((json: any) => {
-                    this.employeeInformationService.saveAcademicInformation(json)
+                    this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -525,7 +541,7 @@ module ums {
             console.log("i am in submitPublicationForm()");
             this.convertToJson('publication')
                 .then((json: any) => {
-                    this.employeeInformationService.savePublicationInformation(json)
+                    this.publicationInformationService.savePublicationInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -538,7 +554,7 @@ module ums {
             console.log("i am in submitTrainingForm()");
             this.convertToJson('training')
                 .then((json: any) => {
-                    this.employeeInformationService.saveTrainingInformation(json)
+                    this.trainingInformationService.saveTrainingInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -551,7 +567,7 @@ module ums {
             console.log("i am in submitAwardForm()");
             this.convertToJson('award')
                 .then((json: any) => {
-                    this.employeeInformationService.saveAwardInformation(json)
+                    this.awardInformationService.saveAwardInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -564,7 +580,7 @@ module ums {
             console.log("i am in submitExperienceForm()");
             this.convertToJson('experience')
                 .then((json: any) => {
-                    this.employeeInformationService.saveExperienceInformation(json)
+                    this.experienceInformationService.saveExperienceInformation(json)
                         .then((message: any) => {
                             console.log("This is message");
                             console.log(message);
@@ -576,7 +592,7 @@ module ums {
 
         private getPersonalInformation() {
             console.log("i am in getPersonalInformation()");
-            this.employeeInformationService.getPersonalInformation().then((personalInformation: any) => {
+            this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
                 this.setSavedValuesOfPersonalForm(personalInformation);
             });
         }
@@ -603,7 +619,7 @@ module ums {
 
         private getAcademicInformation() {
             console.log("i am in getAcademicInformation()");
-            this.employeeInformationService.getAcademicInformation().then((academicInformation: any) => {
+            this.academicInformationService.getAcademicInformation().then((academicInformation: any) => {
                 console.log("Employee's Academic Information");
                 console.log(academicInformation);
                 this.setSavedValuesOfAcademicForm(academicInformation);
@@ -619,7 +635,7 @@ module ums {
 
         private getPublicationInformation() {
             console.log("i am in getPublicationInformation()");
-            this.employeeInformationService.getPublicationInformation().then((publicationInformation: any) => {
+            this.publicationInformationService.getPublicationInformation().then((publicationInformation: any) => {
                 console.log("Employee's Publication Information");
                 console.log(publicationInformation);
                 console.log("Publication.length");
@@ -645,7 +661,7 @@ module ums {
 
         private getTrainingInformation() {
             console.log("i am in getTrainingInformation()");
-            this.employeeInformationService.getTrainingInformation().then((trainingInformation: any) => {
+            this.trainingInformationService.getTrainingInformation().then((trainingInformation: any) => {
                 console.log("Employee's Training Information");
                 console.log(trainingInformation);
                 this.setSavedValuesOfTrainingForm(trainingInformation);
@@ -660,7 +676,7 @@ module ums {
 
         private getAwardInformation() {
             console.log("i am in getAwardInformation()");
-            this.employeeInformationService.getAwardInformation().then((awardInformation: any) => {
+            this.awardInformationService.getAwardInformation().then((awardInformation: any) => {
                 console.log("Employee's award Information");
                 console.log(awardInformation);
                 this.setSavedValuesOfAwardForm(awardInformation);
@@ -675,7 +691,7 @@ module ums {
 
         private getExperienceInformation() {
             console.log("i am in getExperienceInformation()");
-            this.employeeInformationService.getExperienceInformation().then((experienceInformation: any) => {
+            this.experienceInformationService.getExperienceInformation().then((experienceInformation: any) => {
                 console.log("Employee's Experience Information");
                 console.log(experienceInformation);
                 this.setSavedValuesOfExperienceForm(experienceInformation);
@@ -785,7 +801,8 @@ module ums {
                     publicationCountry: "",
                     status: "",
                     publicationPages: "",
-                    appliedOn: ""
+                    appliedOn: "",
+                    actionTakenOn: ""
                 };
                 this.$scope.entry.publication.push(publicationEntry);
             }

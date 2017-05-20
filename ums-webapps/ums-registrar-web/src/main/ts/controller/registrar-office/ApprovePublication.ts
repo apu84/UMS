@@ -10,7 +10,6 @@ module ums {
         reject: Function;
         currentTeacher: IEmployee;
         totalPendingPublications: number;
-        remainingPendingPublications: number;
     }
 
     interface IEmployee{
@@ -22,7 +21,7 @@ module ums {
     }
 
     class ApprovePublication {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeInformationService', 'approvePublicationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'publicationInformationService', 'approvePublicationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IApprovePublication,
@@ -30,7 +29,7 @@ module ums {
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private employeeInformationService: EmployeeInformationService,
+                    private publicationInformationService: PublicationInformationService,
                     private approvePublicationService: ApprovePublicationService) {
             $scope.submit = this.submit.bind(this);
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
@@ -41,6 +40,7 @@ module ums {
             $scope.teachers = Array<IEmployee>();
             $scope.currentTeacher = <IEmployee>{};
             this.fetchTeachersListWaitingForPublicationApproval();
+            $scope.totalPendingPublications = 0;
         }
 
         private submit(index: number){
@@ -53,6 +53,7 @@ module ums {
         }
 
         private resetTopBottomDivs(){
+            this.fetchTeachersListWaitingForPublicationApproval();
             $("#topArrowDiv").hide(10);
             $("#waitingPublicationListDiv").hide(10);
             $("#teachersListWaitingForApprovalDiv").show(200);
@@ -61,11 +62,12 @@ module ums {
         private getPublication(index: number){
             console.log("i am in getPublicationInformation() method");
             this.$scope.currentTeacher = this.$scope.teachers[index];
-            this.employeeInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, '0').then((publicationInformation: any) => {
+            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, '0').then((publicationInformation: any) => {
                 console.log("Employee's Publication Information");
                 console.log(publicationInformation);
                 this.$scope.publications = publicationInformation;
                 this.$scope.totalPendingPublications = this.$scope.publications.length;
+                console.log("this.$scope.totalPendingPublications: " + this.$scope.totalPendingPublications);
             });
         }
 
@@ -99,7 +101,6 @@ module ums {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
                         console.log("this should be hidden");
-                        console.log(message);
                     });
             });
         }

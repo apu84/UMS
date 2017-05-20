@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.enums.common.DesignationType;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
 import org.ums.persistent.model.PersistentDepartment;
+import sun.security.krb5.internal.crypto.Des;
 
 @Component
 public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
@@ -72,9 +74,11 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
 
   public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
+
+      DesignationType designationType = null;
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getEmployeeName());
-    pBuilder.add("designation", pReadOnly.getDesignation());
+    pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignation()).getLabel());
     if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
       pBuilder.add("employmentType", "Permanent");
     else if(pReadOnly.getEmploymentType().equals(EmploymentType.CONTRACTUAL.getLabel()))
