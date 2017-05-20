@@ -27,6 +27,10 @@ class StudentPaymentBuilder implements Builder<StudentPayment, MutableStudentPay
     pBuilder.add("transactionId", pReadOnly.getTransactionId());
     pBuilder.add("appliedOn", mDateFormat.format(pReadOnly.getAppliedOn()));
     pBuilder.add("status", pReadOnly.getStatus().toString());
+    pBuilder.add("feeType", feeCategory.getFeeTypeId());
+    pBuilder.add("feeTypeName", feeCategory.getType().getName());
+    pBuilder.add("feeTypeDescription", feeCategory.getType().getDescription());
+    pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
 
   @Override

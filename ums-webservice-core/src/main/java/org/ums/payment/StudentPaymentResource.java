@@ -5,7 +5,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.resource.Resource;
@@ -22,14 +21,25 @@ public class StudentPaymentResource extends Resource {
   @Path("/semester-fee/{semesterId}")
   public JsonObject getSemesterFeeStatus(final @Context Request pRequest, final @PathParam("semesterId") int pSemesterId)
       throws Exception {
-    String studentId = SecurityUtils.getSubject().toString();
-    return mStudentPaymentResourceHelper.getSemesterFeeStatus(studentId, pSemesterId, mUriInfo);
+    return mStudentPaymentResourceHelper.getSemesterFeeStatus(getLoggedInUserId(), pSemesterId, mUriInfo);
   }
 
   @GET
   @Path("/certificate-fee")
   public JsonObject getCertificateFeeStatus(final @Context Request pRequest) throws Exception {
-    String studentId = SecurityUtils.getSubject().toString();
-    return mStudentPaymentResourceHelper.getCertificateFeeStatus(studentId, mUriInfo);
+    return mStudentPaymentResourceHelper.getCertificateFeeStatus(getLoggedInUserId(), mUriInfo);
   }
+
+  @GET
+  @Path("/dues")
+  public JsonObject getDuesStatus() throws Exception {
+    return mStudentPaymentResourceHelper.getDuesStatus(getLoggedInUserId(), mUriInfo);
+  }
+
+  @GET
+  @Path("/penalty")
+  public JsonObject getPenaltyStatus() throws Exception {
+    return mStudentPaymentResourceHelper.getPenaltyStatus(getLoggedInUserId(), mUriInfo);
+  }
+
 }
