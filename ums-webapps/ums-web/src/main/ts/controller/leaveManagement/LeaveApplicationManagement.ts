@@ -84,8 +84,8 @@ module ums {
       });
     }
 
-    private fetchApplicationStatus(pendingApplication: LmsApplication){
-      
+    private fetchApplicationStatus(pendingApplication: LmsApplication) {
+
     }
 
 
