@@ -1,7 +1,7 @@
-package org.ums.resource;
+package org.ums.resource.leavemanagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.resource.helper.LmsApplicationResourceHelper;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.POST;

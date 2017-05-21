@@ -11,8 +11,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 06-May-17.
  */
-public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Integer>, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
   void setLmsApplicationId(Long pLmsApplicationId);
 

@@ -1,11 +1,11 @@
-package org.ums.resource.helper;
+package org.ums.resource.leavemanagement;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
-import org.ums.builder.LmsApplicationBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsApplication;
@@ -13,6 +13,7 @@ import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.*;
+import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.manager.common.LmsAppStatusManager;
@@ -21,6 +22,7 @@ import org.ums.manager.common.LmsTypeManager;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 import org.ums.resource.ResourceHelper;
+import org.ums.services.leave.management.LeaveManagementService;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -56,6 +58,12 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   @Autowired
   private LmsTypeManager mLmsTypeManager;
 
+  @Autowired
+  private LeaveManagementService mLeaveManagementService;
+
+  @Autowired
+  private AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -78,10 +86,21 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     lmsAppStatus.setLmsApplicationId(pAppId);
     lmsAppStatus.setActionTakenOn(pApplication.getAppliedOn());
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
     lmsAppStatus.setActionTakenById(user.getEmployeeId());
-    lmsAppStatus.setComments(LeaveApplicationStatus.PENDING.getLabel());
-    lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_VC_APPROVAL);
+    lmsAppStatus.setComments(LeaveApplicationStatus.APPLIED.getLabel());
+    // todo add more roles, currently mst_role table in db is not complete.
+    List<Integer> roles = user.getRoleIds();
+    if (user.getPrimaryRole().getId() == RoleType.DEPT_HEAD.getId()
+        || user.getPrimaryRole().getId() == RoleType.COE.getId()
+        || user.getPrimaryRole().getId() == RoleType.REGISTRAR.getId()
+        || user.getPrimaryRole().getId() == RoleType.LIBRARIAN.getId())
+      lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_VC_APPROVAL);
+    else
+      lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
 
+    List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
+    mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), employee);
     mLmsAppStatusManager.create(lmsAppStatus);
   }
 
@@ -91,7 +110,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(LmsApplication application : applications) {
+    for (LmsApplication application : applications) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, application, pUriInfo, localCache);
       children.add(jsonObject);
@@ -130,8 +149,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) {
     int leavesTaken = 0;
-    if(pApplicationMap.get(lmsType.getId()) != null)
-      for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
+    if (pApplicationMap.get(lmsType.getId()) != null)
+      for (LmsApplication application : pApplicationMap.get(lmsType.getId())) {
         leavesTaken +=
             (application.getToDate().getTime() - application.getFromDate().getTime()) / (1000 * 60 * 60 * 24);
       }
@@ -142,14 +161,13 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<LmsType> lmsTypes = new ArrayList<>();
     Employee employee =
         mEmployeeManager.get(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    if(employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if(employee.getGender().equals("M"))
+    if (employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
+      if (employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
-    }
-    else {
-      if(employee.getGender().equals("M"))
+    } else {
+      if (employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

@@ -33,7 +33,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
-/// <reference path='./service/leaveManagementService/LeaveStatusService.ts'/>
+/// <reference path='./service/leaveManagementService/LeaveApplicationStatusService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveTypeService.ts'/>
 
 
@@ -82,6 +82,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
+/// <reference path='./model/leaveManagement/LmsApplicationStatus.ts'/>
 /// <reference path='./model/leaveManagement/LmsType.ts'/>
 /// <reference path='./model/leaveManagement/RemainingLmsLeave.ts'/>
 

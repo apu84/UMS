@@ -11,7 +11,8 @@ public enum LeaveApplicationStatus {
   SAVED(1, "Saved"),
   ACCEPTED(3, "Accepted"),
   PENDING(2, "Pending"),
-  REJECTED(4, "Rejected");
+  REJECTED(4, "Rejected"),
+  APPLIED(5, "Applied");
 
   private String label;
   private int id;

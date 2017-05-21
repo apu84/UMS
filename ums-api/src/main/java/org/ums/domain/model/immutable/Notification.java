@@ -27,7 +27,8 @@ public interface Notification extends Serializable, EditType<MutableNotification
   enum Type {
     COURSE_MATERIAL("CM"),
     COURSE_ASSIGNMENT("CA"),
-    GRADE_SUBMISSION("GS");
+    GRADE_SUBMISSION("GS"),
+    LEAVE_APPLICATION("LA");
 
     private static final Map<String, Type> lookup = new HashMap<>();
 

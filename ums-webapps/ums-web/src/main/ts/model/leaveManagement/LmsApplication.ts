@@ -3,7 +3,7 @@
  */
 module ums {
   export interface LmsApplication {
-    id: number;
+    id: string;
     employeeId: string;
     employeeName: string;
     leaveType: number;
@@ -11,6 +11,7 @@ module ums {
     appliedOn: string;
     fromDate: string;
     toDate: string;
+    duration: number;
     reason: string;
     applicationStatus: number;
   }

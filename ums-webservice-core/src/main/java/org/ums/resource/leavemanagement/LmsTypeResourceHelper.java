@@ -1,10 +1,10 @@
-package org.ums.resource.helper;
+package org.ums.resource.leavemanagement;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
-import org.ums.builder.LmsTypeBuilder;
+import org.ums.resource.leavemanagement.LmsTypeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;

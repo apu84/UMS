@@ -220,7 +220,7 @@ public class CoreContext {
   @Bean
   LmsAppStatusManager lmsAppStatusManager() {
     LmsAppStatusCache lmsAppStatusCache = new LmsAppStatusCache(mCacheFactory.getCacheManager());
-    lmsAppStatusCache.setManager(new PersistentLmsAppStatusDao(mTemplateFactory.getJdbcTemplate()));
+    lmsAppStatusCache.setManager(new PersistentLmsAppStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return lmsAppStatusCache;
   }
 

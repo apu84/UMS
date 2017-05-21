@@ -28,7 +28,7 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
     sLmsAppStatusManager = applicationContext.getBean("lmsAppStatusManager", LmsAppStatusManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private Long mLmsApplicationId;
   private LmsApplication mLmsApplication;
   private Date mActionTakenOn;
@@ -55,7 +55,7 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sLmsAppStatusManager.create(this);
   }
 
@@ -70,12 +70,12 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -111,7 +111,8 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
 
   @Override
   public LmsApplication getLmsApplication() {
-    return mLmsApplication;
+    return mLmsApplication == null ? sLmsApplicationManager.get(mLmsApplicationId) : sLmsApplicationManager
+        .validate(mLmsApplication);
   }
 
   @Override

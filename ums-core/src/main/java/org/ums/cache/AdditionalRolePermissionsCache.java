@@ -6,7 +6,6 @@ import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.CacheManager;
-import org.ums.util.CacheUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -49,5 +48,10 @@ public class AdditionalRolePermissionsCache extends
   @Override
   public int removeExistingAdditionalRolePermissions(String pUserId, String pAssignedBy) {
     return getManager().removeExistingAdditionalRolePermissions(pUserId, pAssignedBy);
+  }
+
+  @Override
+  public List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId) {
+    return getManager().getAdditionalRole(pDepartmentId);
   }
 }

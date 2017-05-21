@@ -1,6 +1,7 @@
-package org.ums.builder;
+package org.ums.resource.leavemanagement;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsType;

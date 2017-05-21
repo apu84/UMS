@@ -37,6 +37,8 @@ module ums {
           (json: any, etag: string) => {
             var leaves: any = {};
             leaves = json.entries;
+            console.log("pending leaves from service");
+            console.log(json.entries);
             defer.resolve(leaves);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {

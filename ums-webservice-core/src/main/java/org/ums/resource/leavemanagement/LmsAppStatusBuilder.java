@@ -1,8 +1,9 @@
-package org.ums.builder;
+package org.ums.resource.leavemanagement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
@@ -25,8 +26,10 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
   @Override
   public void build(JsonObjectBuilder pBuilder, LmsAppStatus pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("appId", pReadOnly.getLmsApplication().getId());
+    pBuilder.add("appId", pReadOnly.getLmsApplication().getId().toString());
+    pBuilder.add("reason", pReadOnly.getLmsApplication().getReason());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");
+    pBuilder.add("appliedOn", formatter.format(pReadOnly.getLmsApplication().getAppliedOn()));
     pBuilder.add("actionTakenOn", formatter.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("actionTakenBy", pReadOnly.getActionTakenBy().getId());
     pBuilder.add("actionTakenByName", pReadOnly.getActionTakenBy().getEmployeeName());
@@ -38,7 +41,7 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
   @Override
   public void build(MutableLmsAppStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id"))
-      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setId(Long.valueOf(pJsonObject.getInt("id")));
     if(pJsonObject.containsKey("appId"))
       pMutable.setLmsApplicationId(Long.valueOf(pJsonObject.getInt("appId")));
     if(pJsonObject.containsKey("actionTakenOn")) {

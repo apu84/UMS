@@ -9,6 +9,7 @@
                         id="leaveType"
                         data-ng-options="leaveType.name for leaveType in leaveTypes track by leaveType.id"
                         data-ng-model="$parent.leaveType"
+                        data-ng-change="updateLeaveType(leaveType)"
                 ></select>
             </div>
             <div class="col-md-6"></div>
@@ -29,7 +30,6 @@
             </div>
             <div class="col-md-6"></div>
         </div>
-
 
         <div class="form-group">
             <label for="comment" class="col-md-4">Reason</label>

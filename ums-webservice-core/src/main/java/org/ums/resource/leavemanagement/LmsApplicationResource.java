@@ -1,4 +1,4 @@
-package org.ums.resource;
+package org.ums.resource.leavemanagement;
 
 import org.springframework.stereotype.Component;
 

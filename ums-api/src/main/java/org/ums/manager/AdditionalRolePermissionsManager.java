@@ -1,9 +1,9 @@
 package org.ums.manager;
 
-import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +18,9 @@ public interface AdditionalRolePermissionsManager extends
   int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate, final Date pToDate);
 
   int addPermissions(final String pUserId, final Set<String> pPermissions, final User pAssignedBy,
-      final Date pFromDate, final Date pToDate);
+                     final Date pFromDate, final Date pToDate);
 
   int removeExistingAdditionalRolePermissions(final String pUserId, final String pAssignedBy);
+
+  List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId);
 }

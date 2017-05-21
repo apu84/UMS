@@ -2,18 +2,20 @@ package org.ums.persistent.dao.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsAppStatusDaoDecorator;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,18 +28,20 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(PersistentLmsAppStatusDao.class);
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
   private String SELECT_ALL = "select * from lms_app_status";
   private String INSERT_ONE =
-      "insert into LMS_APP_STATUS(APP_ID,ACTION_TAKEN_ON, ACTION_TAKEN_BY, COMMENTS, ACTION_STATUS, LAST_MODIFIED) values(?,sysdate,?,?,?,"
+      "insert into LMS_APP_STATUS(ID,APP_ID,ACTION_TAKEN_ON, ACTION_TAKEN_BY, COMMENTS, ACTION_STATUS, LAST_MODIFIED) values(?,?,sysdate,?,?,?,"
           + getLastModifiedSql() + ")";
   private String UPDATE_ONE =
       "update lms_app_status set app_id=?,action_taken_on=?, action_taken_by=?,comments=?,action_status=?, last_modified="
           + getLastModifiedSql() + "  where id=?";
   private String DELETE_ONE = "delete from lms_app_status where id=?";
 
-  public PersistentLmsAppStatusDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentLmsAppStatusDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -47,7 +51,7 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
-  public LmsAppStatus get(Integer pId) {
+  public LmsAppStatus get(Long pId) {
     String query = SELECT_ALL + " id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LmsAppStatusRowMapper());
   }
@@ -99,16 +103,34 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
-  public Integer create(MutableLmsAppStatus pMutable) {
+  public Long create(MutableLmsAppStatus pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getLmsAppId(), pMutable.getActionTakenBy().getId(),
+    Long appId = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(query, appId, pMutable.getLmsAppId(), pMutable.getActionTakenBy().getId(),
         pMutable.getComments(), pMutable.getActionStatus().getId());
+    return appId;
   }
 
   @Override
-  public List<Integer> create(List<MutableLmsAppStatus> pMutableList) {
+  public List<Long> create(List<MutableLmsAppStatus> pMutableList) {
     String query = INSERT_ONE;
-    return Arrays.asList(mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList)).length);
+    mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        LmsAppStatus status = pMutableList.get(i);
+        ps.setLong(1, mIdGenerator.getNumericId());
+        ps.setLong(2, status.getLmsAppId());
+        ps.setString(3, status.getActionTakenById());
+        ps.setString(4, status.getComments());
+        ps.setInt(5, status.getActionStatus().getId());
+      }
+
+      @Override
+      public int getBatchSize() {
+        return 0;
+      }
+    });
+    return null;
   }
 
   private List<Object[]> getCreateParams(List<MutableLmsAppStatus> pAppStatus) {
@@ -121,15 +143,21 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
-  public boolean exists(Integer pId) {
+  public boolean exists(Long pId) {
     return get(pId) == null ? false : true;
+  }
+
+  @Override
+  public List<LmsAppStatus> getAppStatus(Long pApplicationId) {
+    String query = SELECT_ALL + " where app_id=? order by action_taken_on";
+    return mJdbcTemplate.query(query, new Object[] {pApplicationId}, new LmsAppStatusRowMapper());
   }
 
   class LmsAppStatusRowMapper implements RowMapper<LmsAppStatus> {
     @Override
     public LmsAppStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
       PersistentLmsAppStatus status = new PersistentLmsAppStatus();
-      status.setId(rs.getInt("id"));
+      status.setId(rs.getLong("id"));
       status.setLmsApplicationId(rs.getLong("app_id"));
       status.setActionTakenOn(rs.getDate("action_taken_on"));
       status.setActionTakenById(rs.getString("action_taken_by"));

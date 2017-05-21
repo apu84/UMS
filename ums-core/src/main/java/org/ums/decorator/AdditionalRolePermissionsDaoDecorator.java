@@ -1,9 +1,9 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.manager.AdditionalRolePermissionsManager;
 
 import java.util.Date;
@@ -37,5 +37,10 @@ public class AdditionalRolePermissionsDaoDecorator
   @Override
   public int removeExistingAdditionalRolePermissions(String pUserId, String pAssignedBy) {
     return getManager().removeExistingAdditionalRolePermissions(pUserId, pAssignedBy);
+  }
+
+  @Override
+  public List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId) {
+    return getManager().getAdditionalRole(pDepartmentId);
   }
 }
