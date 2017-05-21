@@ -65,6 +65,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   public int update(M pMutable) {
     int modified = super.update(pMutable);
     invalidate(pMutable);
+    getCacheManager().invalidateList(getCachedListKey());
     return modified;
   }
 
@@ -74,6 +75,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     for(M mutable : pMutableList) {
       invalidate(mutable);
     }
+    getCacheManager().invalidateList(getCachedListKey());
     return modified;
   }
 
@@ -141,7 +143,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return "all_cached_list";
   }
 
-  List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) {
+  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) {
     String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
     String cacheKey = pCacheKey + methodName;
 

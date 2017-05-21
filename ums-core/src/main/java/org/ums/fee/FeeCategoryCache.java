@@ -27,6 +27,12 @@ public class FeeCategoryCache extends ContentCache<FeeCategory, MutableFeeCatego
 
   @Override
   public List<FeeCategory> getFeeCategories(Integer pFeeTypeId) {
-    return getManager().getFeeCategories(pFeeTypeId);
+    String cacheKey = getCacheKey(FeeCategory.class.toString(), pFeeTypeId);
+    return cachedList(cacheKey, () -> getManager().getFeeCategories(pFeeTypeId));
+  }
+
+  @Override
+  protected String getCachedListKey() {
+    return "FeeCategoryCacheList";
   }
 }
