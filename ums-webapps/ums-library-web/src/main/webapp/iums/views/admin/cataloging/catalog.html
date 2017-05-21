@@ -121,6 +121,8 @@
                            callbacks="callbackList"
                            defaultselected="selectedTab">
         </navigation-button>
+
+        <button type="button" class="btn btn-default btn-xs" data-ng-click="enableEdit()" data-ng-if="data.readOnlyMode==true"><i class="fa fa-pencil-square-o"></i> Edit</button>
     </p>
 </div>
 

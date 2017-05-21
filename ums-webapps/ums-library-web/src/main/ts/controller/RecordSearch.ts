@@ -45,7 +45,8 @@ module ums {
         console.log(filter);
       } else {
         console.log("inside else");
-
+        this.$scope.search.searchType = "basic";
+        this.$scope.choice =  "any";
       }
 
       this.prepareFilter();
@@ -64,6 +65,7 @@ module ums {
 
     private prepareFilter() {
       var filter  : IFilter = <IFilter> {};
+
       filter.searchType  = "basic";
       filter.basicQueryField = this.$scope.choice;
       filter.basicQueryTerm = this.$scope.search.queryTerm;
