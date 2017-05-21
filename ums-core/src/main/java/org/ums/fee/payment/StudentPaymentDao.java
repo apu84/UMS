@@ -27,6 +27,8 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   String DELETE_ALL = "DELETE FROM STUDENT_PAYMENT ";
 
+  String ORDER_BY = "ORDER BY APPLIED_ON";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
@@ -99,7 +101,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   @Override
   public List<StudentPayment> getPayments(String pStudentId, Integer pSemesterId) {
-    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? " + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new StudentPaymentRowMapper());
   }
 
@@ -112,7 +114,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   @Override
   public List<StudentPayment> getPayments(String pStudentId, FeeType pFeeType) {
-    String query = SELECT_ALL + "WHERE STUDENT_ID = ? ORDER BY APPLIED_ON DESC";
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? " + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper()).stream()
         .filter(payment -> payment.getFeeCategory().getType().getId().intValue() == pFeeType.getId())
         .collect(Collectors.toList());
@@ -120,8 +122,14 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   @Override
   public List<StudentPayment> getTransactionDetails(String pStudentId, String pTransactionId) {
-    String query = SELECT_ALL + "WHERE TRANSACTION_ID = ? AND STUDENT_ID = ? ORDER BY APPLIED_ON DESC";
+    String query = SELECT_ALL + "WHERE TRANSACTION_ID = ? AND STUDENT_ID = ? " + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[] {pTransactionId, pStudentId}, new StudentPaymentRowMapper());
+  }
+
+  @Override
+  public List<StudentPayment> getPayments(String pStudentId) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? " + ORDER_BY;
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper());
   }
 
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {
