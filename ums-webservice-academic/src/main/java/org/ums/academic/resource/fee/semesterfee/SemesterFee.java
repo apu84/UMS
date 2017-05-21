@@ -112,10 +112,10 @@ public class SemesterFee extends Resource {
   }
 
   private String getLoggedInUser() {
-    User user = mUserManager.get(SecurityUtils.getSubject().toString());
+    User user = mUserManager.get(getLoggedInUserId());
     if(!user.getPrimaryRole().getName().equalsIgnoreCase("student")) {
       throw new IllegalArgumentException("User is not a student");
     }
-    return SecurityUtils.getSubject().toString();
+    return getLoggedInUserId();
   }
 }

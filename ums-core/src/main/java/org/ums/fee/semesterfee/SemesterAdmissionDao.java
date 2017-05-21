@@ -16,9 +16,10 @@ import org.ums.generator.IdGenerator;
 public class SemesterAdmissionDao extends SemesterAdmissionStatusDaoDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(SemesterAdmissionDao.class);
 
-  String SELECT_ALL = "SELECT STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED FROM SEMESTER_ADMISSION_STATUS ";
-  String INSERT_ALL = "INSERT INTO SEMESTER_ADMISSION_STATUS (STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED) "
-      + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
+  String SELECT_ALL = "SELECT ID, STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED FROM SEMESTER_ADMISSION_STATUS ";
+  String INSERT_ALL =
+      "INSERT INTO SEMESTER_ADMISSION_STATUS (ID, STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE SEMESTER_ADMISSION_STATUS SET IS_ADMITTED = ?, LAST_MODIFIED = " + getLastModifiedSql()
       + " ";
   String DELETE_ALL = "DELETE FROM SEMESTER_ADMISSION_STATUS ";
@@ -32,10 +33,24 @@ public class SemesterAdmissionDao extends SemesterAdmissionStatusDaoDecorator {
   }
 
   @Override
+  public SemesterAdmissionStatus get(Long pId) {
+    String query = SELECT_ALL + "WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SemesterAdmissionStatusRowMapper());
+  }
+
+  @Override
+  public Long create(MutableSemesterAdmissionStatus pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getStudentId(), pMutable.getSemesterId(), 1);
+    return id;
+  }
+
+  @Override
   public Optional<SemesterAdmissionStatus> getAdmissionStatus(String pStudentId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
-    return Optional.of(mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId},
-        new SemesterAdmissionStatusRowMapper()));
+    List<SemesterAdmissionStatus> statuses =
+        mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new SemesterAdmissionStatusRowMapper());
+    return statuses.size() > 0 ? Optional.of(statuses.get(0)) : Optional.empty();
   }
 
   @Override

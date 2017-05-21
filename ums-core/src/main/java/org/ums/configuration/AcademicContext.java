@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
+import org.ums.fee.semesterfee.SemesterAdmissionCache;
 import org.ums.fee.semesterfee.SemesterAdmissionDao;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
 import org.ums.generator.IdGenerator;
@@ -349,6 +350,8 @@ public class AcademicContext {
 
   @Bean
   SemesterAdmissionStatusManager semesterAdmissionStatusManager() {
-    return new SemesterAdmissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    SemesterAdmissionCache cache = new SemesterAdmissionCache(mCacheFactory.getCacheManager());
+    cache.setManager(new SemesterAdmissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return cache;
   }
 }
