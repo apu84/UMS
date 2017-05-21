@@ -198,7 +198,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     }
   }
 
-  R cachedEntity(final String pCacheKey, Callable<R> pCallable) {
+  protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) {
     String referredKey = getCacheManager().getReferred(pCacheKey);
     if(StringUtils.isEmpty(referredKey)) {
       return cache(pCacheKey, pCallable);
@@ -220,9 +220,11 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
       mLogger.error("Exception while caching entity", e);
       throw new RuntimeException(e);
     }
-    String idCacheKey = getCacheKey(readonly.getId());
-    getCacheManager().put(idCacheKey, readonly);
-    getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
+    if(readonly != null) {
+      String idCacheKey = getCacheKey(readonly.getId());
+      getCacheManager().put(idCacheKey, readonly);
+      getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
+    }
     return readonly;
   }
 }
