@@ -75,7 +75,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
 
-      DesignationType designationType = null;
+    DesignationType designationType = null;
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getEmployeeName());
     pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignation()).getLabel());

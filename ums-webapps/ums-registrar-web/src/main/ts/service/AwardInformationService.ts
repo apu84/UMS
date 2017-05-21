@@ -35,5 +35,5 @@ module ums{
         }
     }
 
-    UMS.service("AwardInformationService", AwardInformationService);
+    UMS.service("awardInformationService", AwardInformationService);
 }

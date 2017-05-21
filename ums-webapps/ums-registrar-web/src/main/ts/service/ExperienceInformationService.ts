@@ -35,5 +35,5 @@ module ums{
         }
     }
 
-    UMS.service("ExperienceInformationService", ExperienceInformationService);
+    UMS.service("experienceInformationService", ExperienceInformationService);
 }

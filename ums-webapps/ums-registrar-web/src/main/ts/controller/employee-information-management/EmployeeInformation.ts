@@ -1,5 +1,4 @@
 module ums {
-    import IPublicationInformationModel = ums.IPublicationInformationModel;
     interface IEmployeeInformation extends ng.IScope {
         personalTab: boolean;
         academicTab: boolean;
@@ -249,7 +248,7 @@ module ums {
             $scope.degreeNames = this.registrarConstants.degreeTypes;
             $scope.relations = this.registrarConstants.relationTypes;
 
-            $scope.changeNav = this.changeNav.bind(this);
+            // $scope.changeNav = this.changeNav.bind(this);
             $scope.testData = this.testData.bind(this);
             $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
             $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
@@ -297,7 +296,7 @@ module ums {
 
             this.addDate();
             this.createMap();
-            this.changeNav('personal');
+            // this.changeNav('personal');
 
             //this.getPersonalInformation();
             //this.getAcademicInformation();
@@ -416,37 +415,37 @@ module ums {
         }
 
 
-        private changeNav(navTitle: string) {
-            this.$scope.personalTab = false;
-            this.$scope.academicTab = false;
-            this.$scope.publicationTab = false;
-            this.$scope.trainingTab = false;
-            this.$scope.awardTab = false;
-            this.$scope.experienceTab = false;
-
-            if (navTitle === "") {
-                this.$scope.personalTab = true;
-            }
-            else if (navTitle === "personal") {
-                this.$scope.personalTab = true;
-            }
-            else if (navTitle === "academic") {
-                this.$scope.academicTab = true;
-
-            }
-            else if (navTitle === "publication") {
-                this.$scope.publicationTab = true;
-            }
-            else if (navTitle === "training") {
-                this.$scope.trainingTab = true;
-            }
-            else if (navTitle === "award") {
-                this.$scope.awardTab = true;
-            }
-            else if (navTitle === "experience") {
-                this.$scope.experienceTab = true;
-            }
-        }
+        // private changeNav(navTitle: string) {
+        //     this.$scope.personalTab = false;
+        //     this.$scope.academicTab = false;
+        //     this.$scope.publicationTab = false;
+        //     this.$scope.trainingTab = false;
+        //     this.$scope.awardTab = false;
+        //     this.$scope.experienceTab = false;
+        //
+        //     if (navTitle === "") {
+        //         this.$scope.personalTab = true;
+        //     }
+        //     else if (navTitle === "personal") {
+        //         this.$scope.personalTab = true;
+        //     }
+        //     else if (navTitle === "academic") {
+        //         this.$scope.academicTab = true;
+        //
+        //     }
+        //     else if (navTitle === "publication") {
+        //         this.$scope.publicationTab = true;
+        //     }
+        //     else if (navTitle === "training") {
+        //         this.$scope.trainingTab = true;
+        //     }
+        //     else if (navTitle === "award") {
+        //         this.$scope.awardTab = true;
+        //     }
+        //     else if (navTitle === "experience") {
+        //         this.$scope.experienceTab = true;
+        //     }
+        // }
 
         private testData() {
             console.log("i am in testData()");

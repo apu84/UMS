@@ -50,5 +50,5 @@ module ums{
         }
     }
 
-    UMS.service("PersonalInformationService", PersonalInformationService);
+    UMS.service("personalInformationService", PersonalInformationService);
 }

@@ -31,32 +31,34 @@ module ums {
                     private $sce: ng.ISCEService,
                     private publicationInformationService: PublicationInformationService,
                     private approvePublicationService: ApprovePublicationService) {
+
+            $scope.publications = Array<IPublicationInformationModel>();
+            $scope.teachers = Array<IEmployee>();
+            $scope.currentTeacher = <IEmployee>{};
             $scope.submit = this.submit.bind(this);
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
             $scope.accept = this.accept.bind(this);
             $scope.reject = this.reject.bind(this);
 
-            $scope.publications = Array<IPublicationInformationModel>();
-            $scope.teachers = Array<IEmployee>();
-            $scope.currentTeacher = <IEmployee>{};
-            this.fetchTeachersListWaitingForPublicationApproval();
             $scope.totalPendingPublications = 0;
+            this.fetchTeachersList();
+
         }
 
         private submit(index: number){
             console.log("i am in submit11()");
-            $("#teachersListWaitingForApprovalDiv").hide(10);
+            $("#teachersListDiv").hide(10);
             $("#topArrowDiv").show(200);
-            $("#waitingPublicationListDiv").show(200);
+            $("#publicationListDiv").show(200);
 
             this.getPublication(index);
         }
 
         private resetTopBottomDivs(){
-            this.fetchTeachersListWaitingForPublicationApproval();
+            this.fetchTeachersList();
             $("#topArrowDiv").hide(10);
-            $("#waitingPublicationListDiv").hide(10);
-            $("#teachersListWaitingForApprovalDiv").show(200);
+            $("#publicationListDiv").hide(10);
+            $("#teachersListDiv").show(200);
         }
 
         private getPublication(index: number){
@@ -71,16 +73,18 @@ module ums {
             });
         }
 
-        private fetchTeachersListWaitingForPublicationApproval(){
-            console.log("i am in fetchTeachersListWaitingForPublicationApproval()");
+        private fetchTeachersList(){
+            console.log("i am in fetchTeachersList()");
             this.approvePublicationService.getTeachersList('0').then((teachers: any) => {
                 this.$scope.teachers = teachers;
                 console.log(this.$scope.teachers);
 
                 if(teachers.length >= 1){
+                    this.$scope.showNoPendingPublicationListDiv = false;
                     this.$scope.showPendingPublicationDiv = true;
                 }
                 else{
+                    this.$scope.showPendingPublicationDiv = false;
                     this.$scope.showNoPendingPublicationListDiv = true;
                 }
 

@@ -6,53 +6,41 @@
         </div>
     </div>
 
-    <div data-ng-show="showNoPendingPublicationListDiv">
-        <div class="row">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Teacher's List</h3>
-                </div>
-                <div class="panel-body" style="min-height: 490px;">
+    <div class="row" id="teachersListDiv">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Teacher's List</h3>
+            </div>
+            <div class="panel-body" style="min-height: 490px;">
+                <table class="table table-bordered">
+                    <thead class="heading well">
+                    <tr>
+                        <th >Teacher Name</th>
+                        <th>Designation</th>
+                        <th>Employment Type</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="teacher in teachers track by $index">
+                        <td>{{teacher.name}}</td>
+                        <td>{{teacher.designation}}</td>
+                        <td>{{teacher.employmentType}}</td>
+                        <td>{{teacher.department}}</td>
+                        <td><button type="button" class="btn btn-default" data-ng-click="submit($index)">View</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div data-ng-show="showNoPendingPublicationListDiv">
+                    <br /><br /><br /><br /><br />
                     <h2 style="text-align: center">No Pending Request</h2>
                 </div>
             </div>
         </div>
     </div>
 
-    <div data-ng-show="showPendingPublicationDiv">
-        <div class="row" id="teachersListWaitingForApprovalDiv">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Teacher's List</h3>
-                </div>
-                <div class="panel-body" style="min-height: 490px;">
-                    <table class="table table-bordered">
-                        <thead class="heading well">
-                        <tr>
-                            <th >Teacher Name</th>
-                            <th>Designation</th>
-                            <th>Employment Type</th>
-                            <th>Department</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr data-ng-repeat="teacher in teachers track by $index">
-                            <td>{{teacher.name}}</td>
-                            <td>{{teacher.designation}}</td>
-                            <td>{{teacher.employmentType}}</td>
-                            <td>{{teacher.department}}</td>
-                            <td><button type="button" class="btn btn-default" data-ng-click="submit($index)">View</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row" id="waitingPublicationListDiv" hidden>
+    <div class="row" id="publicationListDiv" hidden>
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Publication List</h3>
@@ -61,22 +49,22 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
-                        </div>
-                        <div class="row">
                             <div class="col-md-12">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label>Employee Name: <b>{{currentTeacher.name}}</b></label><br>
                                     <label>Designation: <b>{{currentTeacher.designation}}</b></label><br>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="nPublicationList"
+                                            id="iPublicationList"
+                                            class="form-control">
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 text-right">
                         <img class="img-square" src="https://s3.amazonaws.com/uifaces/faces/twitter/oliveirasimoes/128.jpg">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
                     </div>
                 </div>
 

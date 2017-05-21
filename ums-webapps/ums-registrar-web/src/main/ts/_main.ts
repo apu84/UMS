@@ -91,10 +91,10 @@
 /// <reference path='data.ts'/>
 
 
-/// <reference path='controller/registrar-office/employee-information-management/EmployeeInformation.ts'/>
-/// <reference path='controller/registrar-office/employee-information-management/EmployeeServiceInformation.ts'/>
-/// <reference path='controller/registrar-office/meeting-management/Meeting.ts'/>
-/// <reference path='controller/registrar-office/ApprovePublication.ts'/>
+/// <reference path='controller/employee-information-management/EmployeeInformation.ts'/>
+/// <reference path='controller/employee-information-management/EmployeeServiceInformation.ts'/>
+/// <reference path='controller/meeting-management/Meeting.ts'/>
+/// <reference path='controller/approve-publication/ApprovePublication.ts'/>
 
 
 /// <reference path='service/EmployeeServiceInformationService.ts'/>
@@ -106,13 +106,13 @@
 /// <reference path='service/AwardInformationService.ts'/>
 /// <reference path='service/ExperienceInformationService.ts'/>
 
-/// <reference path='model/EmployeeInformation/AcademicInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/AwardInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/ServiceInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/ExperienceInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/PersonalInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/PublicationInformationModel.ts' />
-/// <reference path='model/EmployeeInformation/TrainingInformationModel.ts' />
+/// <reference path='model/employee/AcademicInformationModel.ts' />
+/// <reference path='model/employee/AwardInformationModel.ts' />
+/// <reference path='model/employee/ServiceInformationModel.ts' />
+/// <reference path='model/employee/ExperienceInformationModel.ts' />
+/// <reference path='model/employee/PersonalInformationModel.ts' />
+/// <reference path='model/employee/PublicationInformationModel.ts' />
+/// <reference path='model/employee/TrainingInformationModel.ts' />
 
 
 

@@ -4,13 +4,13 @@
     }
     ul.nav.nav-tabs.ul-edit li a {
         background: lightgrey;
-        padding: 7px 10px;
+        padding: 10px;
     }
     ul.nav.nav-tabs.ul-edit li.active a {
         background: grey;
     }
     .customContainer:hover .box{
-        opacity: 0.70;
+        opacity: 0.90;
     }
     .customContainer .box:hover{
         /*background: whitesmoke;*/
@@ -28,20 +28,30 @@
         opacity: 1.0;
     }
 
-
 </style>
 
-<ul class="nav nav-tabs ul-edit nav-justified">
-    <li class="active"><a data-ng-click="changeNav('personal')" title="Click to open personal tab" data-toggle="tab">Personal</a></li>
-    <li><a data-ng-click="changeNav('academic')" title="Click to open academic tab" data-toggle="tab">Academic</a></li>
-    <li><a data-ng-click="changeNav('publication')" title="Click to open publication tab" data-toggle="tab">Publication</a></li>
-    <li><a data-ng-click="changeNav('training')" title="Click to open training tab" data-toggle="tab">Training</a></li>
-    <li><a data-ng-click="changeNav('award')" title="Click to open honor/award tab" data-toggle="tab">Honor/Award</a></li>
-    <li><a data-ng-click="changeNav('experience')" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>
-</ul>
-<div class="tab-content">
+<!--<ul id="iTabs" class="nav nav-tabs ul-edit nav-justified responsive">-->
+    <!--<li class="active"><a data-ng-click="changeNav('personal')" title="Click to open personal tab" data-toggle="tab">Personal</a></li>-->
+    <!--<li><a data-ng-click="changeNav('academic')" title="Click to open academic tab" data-toggle="tab">Academic</a></li>-->
+    <!--<li><a data-ng-click="changeNav('publication')" title="Click to open publication tab" data-toggle="tab">Publication</a></li>-->
+    <!--<li><a data-ng-click="changeNav('training')" title="Click to open training tab" data-toggle="tab">Training</a></li>-->
+    <!--<li><a data-ng-click="changeNav('award')" title="Click to open honor/award tab" data-toggle="tab">Honor/Award</a></li>-->
+    <!--<li><a data-ng-click="changeNav('experience')" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>-->
+<!--</ul>-->
 
-    <div data-ng-show="personalTab">
+<ul id="iTab" class="nav nav-tabs ul-edit nav-justified responsive">
+    <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab">Personal</a></li>
+    <li><a href="employee-information.htm#academic" title="Click to open academic tab" data-toggle="tab">Academic</a></li>
+    <li><a href="employee-information.htm#publication" title="Click to open publication tab" data-toggle="tab">Publication</a></li>
+    <li><a href="employee-information.htm#training" title="Click to open training tab" data-toggle="tab">Training</a></li>
+    <li><a href="employee-information.htm#award" title="Click to open honor/award tab" data-toggle="tab">Honor/Award</a></li>
+    <li><a href="employee-information.htm#experience" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>
+</ul>
+
+<div id="iTabContent" class="tab-content responsive">
+
+    <div id="personal" class="tab-pane fade in active">
+    <!--<div data-ng-show="personalTab">-->
         <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
             <div class="customContainer">
                 <div class="box">
@@ -726,7 +736,8 @@
 
 
 
-    <div data-ng-show="academicTab">
+    <div id="academic" class="tab-pane fade">
+    <!--<div data-ng-show="academicTab">-->
         <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
             <div class="row">
                 <div class="col-md-1">
@@ -747,7 +758,7 @@
             </div>
             <br />
 
-            <div  data-ng-repeat="academic in entry.academic track by $index">
+            <div data-ng-repeat="academic in entry.academic track by $index">
                 <div class="row">
                     <div class="col-md-1">
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -817,7 +828,8 @@
 
 
 
-    <div data-ng-show="publicationTab">
+    <div id="publication" class="tab-pane fade">
+    <!--<div data-ng-show="publicationTab">-->
         <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
             <div data-ng-repeat="publication in entry.publication track by $index">
                 <div data-ng-class="{'outlined': publication.status==='Waiting', 'noOutlined': publication.status==='Approved'}">
@@ -1083,7 +1095,9 @@
 
 
 
-    <div data-ng-show="trainingTab">
+
+    <div id="training" class="tab-pane fade">
+    <!--<div data-ng-show="trainingTab">-->
         <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
             <div class="row">
                 <div class="col-md-1">
@@ -1189,7 +1203,8 @@
 
 
 
-    <div data-ng-show="awardTab">
+    <div id="award" class="tab-pane fade">
+    <!--<div data-ng-show="awardTab">-->
         <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
             <div data-ng-repeat="award in entry.award track by $index">
                 <div class="row">
@@ -1292,7 +1307,8 @@
 
 
 
-    <div data-ng-show="experienceTab">
+    <div id="experience" class="tab-pane fade">
+    <!--<div data-ng-show="experienceTab">-->
         <form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
             <div class="row">
                 <div class="col-md-1">

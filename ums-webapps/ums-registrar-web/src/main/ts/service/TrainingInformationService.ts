@@ -35,5 +35,5 @@ module ums{
         }
     }
 
-    UMS.service("TrainingInformationService", TrainingInformationService);
+    UMS.service("trainingInformationService", TrainingInformationService);
 }

@@ -37,5 +37,5 @@ module ums{
 
     }
 
-    UMS.service("AcademicInformationService", AcademicInformationService);
+    UMS.service("academicInformationService", AcademicInformationService);
 }

@@ -49,5 +49,5 @@ module ums{
         }
     }
 
-    UMS.service("PublicationInformationService", PublicationInformationService);
+    UMS.service("publicationInformationService", PublicationInformationService);
 }
