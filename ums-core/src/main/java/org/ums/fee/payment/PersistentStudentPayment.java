@@ -164,6 +164,11 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   }
 
   @Override
+  public Integer getFeeTypeId() {
+    return getFeeCategory().getFeeTypeId();
+  }
+
+  @Override
   public Date getTransactionValidTill() {
     return mTransactionValidTill;
   }

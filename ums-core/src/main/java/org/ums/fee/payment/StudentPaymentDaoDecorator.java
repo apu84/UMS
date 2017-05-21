@@ -32,4 +32,9 @@ public class StudentPaymentDaoDecorator extends
   public List<StudentPayment> getTransactionDetails(String pStudentId, String pTransactionId) {
     return getManager().getTransactionDetails(pStudentId, pTransactionId);
   }
+
+  @Override
+  public List<StudentPayment> getPayments(String pStudentId) {
+    return getManager().getPayments(pStudentId);
+  }
 }
