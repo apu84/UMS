@@ -17,7 +17,12 @@ public class UGFeeDaoDecorator extends ContentDaoDecorator<UGFee, MutableUGFee, 
   }
 
   @Override
-  public List<UGFee> getLatestFee(Integer pFacultyId, Integer pProgramTypeId) {
-    return getManager().getLatestFee(pFacultyId, pProgramTypeId);
+  public List<UGFee> getLatestFee(Integer pFacultyId, Integer pSemesterId) {
+    return getManager().getLatestFee(pFacultyId, pSemesterId);
+  }
+
+  @Override
+  public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
+    return getManager().getDistinctSemesterIds(pFacultyId);
   }
 }

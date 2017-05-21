@@ -60,7 +60,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
       if(dues.getAmount().compareTo(BigDecimal.ZERO) == 0) {
         List<UGFee> fees = mUGFeeManager
             .getLatestFee(dues.getStudent().getProgram().getFaculty().getId(),
-                dues.getStudent().getProgram().getProgramTypeId())
+                dues.getStudent().getCurrentEnrolledSemesterId())
             .stream().filter((fee) -> fee.getFeeCategoryId().equalsIgnoreCase(dues.getFeeCategoryId()))
             .collect(Collectors.toList());
         dues.setAmount(fees.get(0).getAmount());

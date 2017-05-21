@@ -55,34 +55,22 @@ class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, Mutabl
   JsonObject getSemesterFeeStatus(String pStudentId, Integer pSemesterId, UriInfo pUriInfo) {
     FeeType feeType = mFeeTypeManager.get(FeeType.Types.SEMESTER_FEE.getId());
     List<StudentPayment> payments = getContentManager().getPayments(pStudentId, pSemesterId, feeType);
-    return buildJson(payments, pUriInfo);
+    return buildJsonResponse(payments, pUriInfo);
   }
 
   JsonObject getCertificateFeeStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments =
         mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.CERTIFICATE_FEE.getId());
-    return buildJson(payments, pUriInfo);
+    return buildJsonResponse(payments, pUriInfo);
   }
 
   JsonObject getDuesStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.DUES.getId());
-    return buildJson(payments, pUriInfo);
+    return buildJsonResponse(payments, pUriInfo);
   }
 
   JsonObject getPenaltyStatus(String pStudentId, UriInfo pUriInfo) {
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.PENALTY.getId());
-    return buildJson(payments, pUriInfo);
-  }
-
-  private JsonObject buildJson(List<StudentPayment> pPayments, UriInfo pUriInfo) {
-    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-    LocalCache cache = new LocalCache();
-    for(StudentPayment payment : pPayments) {
-      arrayBuilder.add(toJson(payment, pUriInfo, cache));
-    }
-
-    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-    jsonObject.add("entries", arrayBuilder);
-    return jsonObject.build();
+    return buildJsonResponse(payments, pUriInfo);
   }
 }

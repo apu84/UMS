@@ -34,7 +34,12 @@ public class UGFeeCache extends ContentCache<UGFee, MutableUGFee, Long, UGFeeMan
   }
 
   @Override
-  public List<UGFee> getLatestFee(Integer pFacultyId, Integer pProgramTypeId) {
-    return getManager().getLatestFee(pFacultyId, pProgramTypeId);
+  public List<UGFee> getLatestFee(Integer pFacultyId, Integer pSemesterId) {
+    return getManager().getLatestFee(pFacultyId, pSemesterId);
+  }
+
+  @Override
+  public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
+    return getManager().getDistinctSemesterIds(pFacultyId);
   }
 }

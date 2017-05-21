@@ -52,4 +52,9 @@ public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableS
   public List<Semester> semestersAfter(Integer pStartSemester, Integer pProgramTypeId) {
     return getManager().semestersAfter(pStartSemester, pProgramTypeId);
   }
+
+  @Override
+  public Semester closestSemester(Integer pCheckSemester, List<Integer> pCheckAgainstSemesters) {
+    return getManager().closestSemester(pCheckSemester, pCheckAgainstSemesters);
+  }
 }

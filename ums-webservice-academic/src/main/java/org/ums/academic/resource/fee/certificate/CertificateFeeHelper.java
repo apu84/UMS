@@ -65,7 +65,7 @@ public class CertificateFeeHelper {
     FeeCategory category = mFeeCategoryManager.get(pFeeCategoryId);
     Student student = mStudentManager.get(pStudentId);
     List<UGFee> fees = mUGFeeManager
-        .getLatestFee(student.getProgram().getFacultyId(), student.getProgram().getProgramTypeId()).stream()
+        .getLatestFee(student.getProgram().getFacultyId(), student.getCurrentEnrolledSemesterId()).stream()
         .filter((fee) -> fee.getFeeCategory().getId().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
     if(fees.size() > 0) {
       UGFee fee = fees.get(0);
