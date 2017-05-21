@@ -11,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -24,6 +25,7 @@ import org.ums.resource.ResourceHelper;
 @Component
 class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, MutableStudentPayment, Long> {
   @Autowired
+  @Qualifier("studentPaymentBuilder")
   StudentPaymentBuilder mStudentPaymentBuilder;
   @Autowired
   StudentPaymentManager mStudentPaymentManager;
