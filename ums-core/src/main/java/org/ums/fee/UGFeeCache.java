@@ -1,7 +1,6 @@
 package org.ums.fee;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.ums.cache.ContentCache;
 import org.ums.manager.CacheManager;
@@ -21,35 +20,26 @@ public class UGFeeCache extends ContentCache<UGFee, MutableUGFee, Long, UGFeeMan
 
   @Override
   protected String getCacheKey(Long pId) {
-    return CacheUtil.getCacheKey(UGFee.class, pId);
+    return CacheUtil.getCacheKey(FeeCategory.class, pId);
   }
 
   @Override
   public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId) {
-    String cacheKey = getCacheKey(UGFee.class.toString(), pFacultyId, pSemesterId);
-    return cachedList(cacheKey, () -> getManager().getFee(pFacultyId, pSemesterId));
+    return getManager().getFee(pFacultyId, pSemesterId);
   }
 
   @Override
   public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId, List<FeeCategory> pCategories) {
-    String cacheKey = getCacheKey(UGFee.class.toString(), pFacultyId, pSemesterId,
-        pCategories.stream().map(FeeCategory::getFeeId).collect(Collectors.joining("-")));
-    return cachedList(cacheKey, () -> getManager().getFee(pFacultyId, pSemesterId, pCategories));
+    return getManager().getFee(pFacultyId, pSemesterId, pCategories);
   }
 
   @Override
   public List<UGFee> getLatestFee(Integer pFacultyId, Integer pSemesterId) {
-    String cacheKey = getCacheKey(UGFee.class.toString(), pFacultyId, pSemesterId);
-    return cachedList(cacheKey, () -> getManager().getLatestFee(pFacultyId, pSemesterId));
+    return getManager().getLatestFee(pFacultyId, pSemesterId);
   }
 
   @Override
   public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
     return getManager().getDistinctSemesterIds(pFacultyId);
-  }
-
-  @Override
-  protected String getCachedListKey() {
-    return "UGFeeCacheList";
   }
 }
