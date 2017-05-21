@@ -51,9 +51,10 @@
             data-ng-model="search.queryTerm"/>
 
             <select data-style="btn-white" data-ng-model="search.searchType"
-                    class="selectpier" style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;" onchange="searchSelection(this.value)">
-                    <option value="basic_search">Basic Search</option>
-                    <option value="advanced_search">Advanced Search</option>
+                    class="selectpier" style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
+                    onchange="searchSelection(this.value)" autocomplete="off">
+                    <option value="basic">Basic Search</option>
+                    <option value="advanced">Advanced Search</option>
                 <optgroup label="Camping">
                     <option value="authors">Authors</option>
                     <option value="corporate_authors">Corporate Authors</option>
@@ -146,10 +147,10 @@
 
 <div class="row" id="generalSearchDiv" style="padding-top: 8px;padding-left: 2%;position: absolute;width: 100%;clear: both;">
     <div class="col-md-12" id="squareRadio">
-        <input type="radio" id="square-radio-1" name="choice"  ng-model="choice" value="subjects_txt" />&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-2"  name="choice" ng-model="choice" value="title_txt" />&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-3"  name="choice" ng-model="choice" value="contributors_txt" />&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
-        <input type="radio" id="square-radio-4"  name="choice" ng-model="choice" value="any" checked />&nbsp;<label for="square-radio-3">Any Field</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-1" name="choice"  ng-model="choice" value="subjects_txt" autocomplete="off" />&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-2"  name="choice" ng-model="choice" value="title_txt" autocomplete="off"/>&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-3"  name="choice" ng-model="choice" value="contributors_txt" autocomplete="off" />&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
+        <input type="radio" id="square-radio-4"  name="choice" ng-model="choice" value="any"  checked="checked" autocomplete="off"/>&nbsp;<label for="square-radio-3">Any Field</label>&nbsp;&nbsp;
         </div>
 
 
@@ -201,7 +202,7 @@
             <tr dir-paginate="record in recordList | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="mainRecordPaginator">
                 <td>
                     <ul class="list-unstyled">
-                        <li><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.  </span><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a></li>
+                        <li><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.  </span><a  style="cursor: pointer" data-toggle="modal" data-target="#bookPreview" href="javascript:void()" class="title">{{record.title}}</a></li>
                         <li>by <a>Unknown (Musician) [author.]</a></li>
                         <li> Material type: book Book</li>
                         <li>Publisher: <span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span></li>

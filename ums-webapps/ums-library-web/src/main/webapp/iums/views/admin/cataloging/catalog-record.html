@@ -214,9 +214,9 @@
     </fieldset>
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>Contributors
-            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"></i>
+            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"  data-ng-if="data.readOnlyMode==false"></i>
             &nbsp;&nbsp;
-            <span style="float: right;">[ <a ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;color: white;"></i></a> ]</span>
+            <span style="float: right;"  data-ng-if="data.readOnlyMode==false">[ <a ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;color: white;"></i></a> ]</span>
         </legend>
 
         <div class="form-group" ng-repeat="contributor in record.contributorList track by $index">
@@ -233,12 +233,12 @@
                     <option data-ng-repeat="role in data.contributorRoleOptions" value="{{role.id}}">{{role.name}}</option>
                 </select>
             </div>
-            <label  class="col-md-1 control-label" for="contributorName{{$index}}">Name
+            <label  class="col-md-1 control-label" for="contributor{{$index}}">Name
             </label>
-            <div class="col-md-4" id="ami{{$index}}">
+            <div class="col-md-4" >
                 <div  data-ng-if="!data.readOnlyMode">
                     <input type="text" class="form-control required" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showContributorSelect2"
-                           datas="contributorList"  placeholder="Select a Contributor" data-ng-model="contributor.id"  id="contributorName{{$index}}" name="contributorName{{$index}}"/>
+                           datas="contributorList"  placeholder="Select a Contributor" data-ng-model="contributor.id"  id="contributor{{$index}}" name="contributor{{$index}}"/>
                 </div>
                 <div  data-ng-if="data.readOnlyMode" style="padding-top: 6px;">
                     Name goes here...
@@ -255,13 +255,13 @@
         <legend>Imprint</legend>
         <div class="form-group">
             <label class="col-md-1 control-label" for="publisher">Publisher
-                &nbsp<i class="fa fa-wpforms  fa-md"  style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher"></i>
-                &nbsp;<i class="fa fa-refresh" data-ng-click="reloadPublishers()"></i>
+                &nbsp<i class="fa fa-wpforms  fa-md"  style="cursor: pointer" data-toggle="modal" data-target="#modal-publisher" ></i>
+                &nbsp;<i class="fa fa-refresh" data-ng-click="reloadPublishers()" data-ng-if="data.readOnlyMode==false"></i>
             </label>
             <div class="col-md-4" id="recordPublisherDiv">
             <span data-ng-if="showPublisherSelect2" >
                 <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
-                       datas="publisherList"  placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"  id="publisher" name="publisher"/>
+                       datas="publisherList"  placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"  id="publisher" name="publisher" ng-readonly="data.readOnlyMode"/>
             </span>
 
             </div>
@@ -366,7 +366,7 @@
     </fieldset>
 
 <div class="row">
-    <div class="text-right col-md-12"  style="padding-top: 45px;padding-left: 2%;">
+    <div class="text-right col-md-12"  style="padding-top: 45px;padding-left: 2%;" data-ng-if="data.readOnlyMode==false">
         <button type="button" class="btn btn-dark btn-success" value="save_edit_record">Save & Continue Editing</button>&nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-dark btn-success" value="save_edit_items">Save & Edit Items</button>&nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-dark btn-success" value="save_view">Save & View Record</button>

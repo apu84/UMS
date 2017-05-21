@@ -48,6 +48,8 @@
     showRightNav : boolean;
     fetchItem : Function;
     resetItemForm : Function;
+    enableEdit: Function;
+
   }
 
   export class Cataloging {
@@ -75,6 +77,7 @@
       $scope.mangeRecordNavigator =this.mangeRecordNavigator.bind(this);
       $scope.fetchItem =this.fetchItem.bind(this);
       $scope.resetItemForm = this.resetItemForm.bind(this);
+      $scope.enableEdit = this.enableEdit.bind(this);
 
 
       $scope.supplierService = supplierService;
@@ -230,6 +233,18 @@
 
         this.setMaterialTypeName(this.$scope.record.materialType);
 
+        var jsonObj = $.parseJSON(this.$scope.record.contributorJsonString);
+
+        if(jsonObj != null) {
+          for (var i = 0; i < jsonObj.length; i++) {
+            var contributor =<IContributor> {};
+            contributor.viewOrder = jsonObj[i].viewOrder;
+            contributor.role =  jsonObj[i].role;
+                contributor.id = jsonObj[i].id;
+            this.$scope.record.contributorList.push(contributor);
+          }
+        }
+
         var jsonObj = $.parseJSON(this.$scope.record.noteJsonString);
 
         if(jsonObj != null) {
@@ -271,7 +286,21 @@
             $('#publisher').select2('enable');
           }
 
-        }, 500);
+        }, 1000);
+
+        setTimeout(() => {
+
+
+          for(var i=0; i<this.$scope.record.contributorList.length; i++) {
+            $("#contributor" + i).select2('data', {
+              viewOrder: this.$scope.record.contributorList[i].viewOrder,
+              id: this.$scope.record.contributorList[i].id,
+              role: this.$scope.record.contributorList[i].role
+            });
+          }
+
+        }, 1000);
+
 
         $('#keywords').tokenfield('setTokens', this.$scope.record.keywords);
 
@@ -691,10 +720,15 @@
       });
     }
 
+    private enableEdit(){
+      this.$scope.data.readOnlyMode = false;
+  }
 
     /**/
+
+
     private fillSampleData() {
-      this.$scope.data.readOnlyMode = false;
+      this.enableEdit();
       this.$scope.record.mfnNo = undefined;
       this.$scope.record.language = 1;
       this.$scope.record.status = 0;

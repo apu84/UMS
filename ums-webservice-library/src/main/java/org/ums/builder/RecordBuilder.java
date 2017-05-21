@@ -69,7 +69,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     // pBuilder.add("publisher", pReadOnly.getPublisherId());
 
     pBuilder.add("keywords", pReadOnly.getKeyWords() == null ? "" : pReadOnly.getKeyWords());
-    pBuilder.add("contributors",
+    pBuilder.add("contributorJsonString",
         pReadOnly.getContributorJsonString() == null ? "" : pReadOnly.getContributorJsonString());
     pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString() == null ? "" : pReadOnly.getSubjectJsonString());
     pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString() == null ? "" : pReadOnly.getNoteJsonString());
@@ -106,9 +106,10 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
           .getInt("bindingType")));
       pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
           .getInt("acqType")));
+      if(pJsonObject.containsKey("frequency"))
       pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency.get(pJsonObject
           .getInt("frequency")));
-      pJsonObject.getInt("mfn");
+//      pJsonObject.getInt("mfn");
     } catch(Exception ex) {
       pMutable.setFrequency(null);
     }
@@ -153,6 +154,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     ImprintDto imprintDto = new ImprintDto();
     JsonObject imprintObject = (JsonObject) (pJsonObject.get("imprint"));
+    if(imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0"))
     imprintDto.setPublisher(mPublisherManager.get(Long.valueOf(imprintObject.getString("publisher"))));
     imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
     imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
