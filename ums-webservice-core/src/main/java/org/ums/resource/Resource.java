@@ -20,6 +20,6 @@ public class Resource {
   protected HttpServletRequest mRequest;
 
   protected String getLoggedInUserId() {
-    return SecurityUtils.getSubject().toString();
+    return SecurityUtils.getSubject().getPrincipal().toString();
   }
 }

@@ -28,7 +28,6 @@ public class FeeCategoryResource extends Resource {
   @GET
   @Path("/type/{typeId}")
   public List<FeeCategory> getFeeCategories(@PathParam("typeId") Integer pTypeId) throws Exception {
-    return mFeeCategoryManager.getAll().stream()
-        .filter(pFeeCategory -> pFeeCategory.getFeeTypeId().intValue() == pTypeId).collect(Collectors.toList());
+    return mFeeCategoryManager.getFeeCategories(pTypeId);
   }
 }
