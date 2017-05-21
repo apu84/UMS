@@ -13,6 +13,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeType;
 
 public interface StudentPayment extends Serializable, EditType<MutableStudentPayment>, LastModifier, Identifier<Long> {
 
@@ -37,6 +38,8 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
   String getFeeCategoryId();
 
   FeeCategory getFeeCategory();
+
+  Integer getFeeTypeId();
 
   Date getTransactionValidTill();
 

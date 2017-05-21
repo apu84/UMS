@@ -9,7 +9,7 @@ import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 
 @Component
-public class ReceivePaymentBuilder extends StudentPaymentBuilder {
+class ReceivePaymentBuilder extends StudentPaymentBuilder {
   @Override
   public void build(MutableStudentPayment pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject.getString("id"));
