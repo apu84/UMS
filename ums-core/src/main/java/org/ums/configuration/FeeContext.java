@@ -19,6 +19,7 @@ import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusDao;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.SemesterManager;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -32,6 +33,9 @@ public class FeeContext {
   @Autowired
   IdGenerator mIdGenerator;
 
+  @Autowired
+  SemesterManager mSemesterManager;
+
   @Bean
   FeeCategoryManager feeCategoryManager() {
     FeeCategoryCache feeCategoryCache = new FeeCategoryCache(mCacheFactory.getCacheManager());
@@ -42,7 +46,7 @@ public class FeeContext {
   @Bean
   UGFeeManager feeManager() {
     UGFeeCache feeCache = new UGFeeCache(mCacheFactory.getCacheManager());
-    feeCache.setManager(new PersistentUGFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    feeCache.setManager(new PersistentUGFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator, mSemesterManager));
     return feeCache;
   }
 

@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.SemesterDaoDecorator;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableSemester;
@@ -129,6 +131,30 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
             + "WHERE START_DATE > (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?) "
             + "ORDER BY MST_SEMESTER.START_DATE DESC";
     return mJdbcTemplate.query(query, new Object[] {pStartSemester, pProgramTypeId}, new SemesterRowMapper());
+  }
+
+  @Override
+  public Semester closestSemester(Integer pCheckSemester, List<Integer> pCheckAgainstSemesters) {
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("semesterIds", pCheckAgainstSemesters);
+    parameters.addValue("semesterId", pCheckSemester);
+
+    String query =
+        SELECT_ALL + "WHERE SEMESTER_ID = (SELECT SEMESTER_ID"
+            + "                        FROM (SELECT SEMESTER_ID, ROWNUM ind"
+            + "                                FROM (  SELECT SEMESTER_ID, START_DATE"
+            + "                                          FROM MST_SEMESTER"
+            + "                                         WHERE     SEMESTER_ID IN"
+            + "                                                      (:semesterIds)"
+            + "                                      ORDER BY START_DATE DESC) TMP1"
+            + "                               WHERE TMP1.START_DATE <="
+            + "                                        (SELECT START_DATE"
+            + "                                           FROM MST_SEMESTER"
+            + "                                          WHERE SEMESTER_ID = :semesterId)) TMP2"
+            + "                       WHERE TMP2.IND = 1)";
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate =
+        new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+    return namedParameterJdbcTemplate.queryForObject(query, parameters, new SemesterRowMapper());
   }
 
   class SemesterRowMapper implements RowMapper<Semester> {
