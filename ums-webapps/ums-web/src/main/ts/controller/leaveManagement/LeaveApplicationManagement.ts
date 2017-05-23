@@ -108,13 +108,19 @@ module ums {
     }
 
     private applyLeave() {
-      this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
-        this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
-          this.$scope.leaveApplication = <LmsApplication>{};
-          this.$scope.leaveType = this.$scope.leaveTypes[0];
-          this.getPendingApplications();
+      console.log("**************");
+      console.log("In apply leave method");
+      if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
+        this.notify.error("Please fill up all the fields");
+      } else {
+        this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
+          this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+            this.$scope.leaveApplication = <LmsApplication>{};
+            this.$scope.leaveType = this.$scope.leaveTypes[0];
+            this.getPendingApplications();
+          });
         });
-      });
+      }
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplication) {

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
-import org.ums.enums.common.DesignationType;
 import org.ums.manager.NotificationManager;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.Notifier;
@@ -52,8 +51,7 @@ public class LeaveManagementService {
       public String payload() {
         try {
           return "Leave Application from employee: " + sender.getEmployeeName() + " of department: "
-              + DesignationType.get(sender.getDesignation()).getLabel() + sender.getDepartment().getShortName()
-              + " is waiting for your approval.";
+              + sender.getDepartment().getShortName() + " is waiting for your approval.";
         } catch(Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }
