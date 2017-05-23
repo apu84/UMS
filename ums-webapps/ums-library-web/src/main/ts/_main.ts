@@ -31,7 +31,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
 
-
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/ChangePassword.ts'/>
@@ -48,6 +47,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/MainNavigation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ProfilePicture.ts'/>
@@ -93,7 +93,6 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/service/PublisherService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/ContributorService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CatalogingService.ts'/>
-/// <reference path='../../../../ums-library-web/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/directive/NavigationButton.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
