@@ -1,11 +1,11 @@
 <style>
     ul.nav.nav-tabs.ul-edit {
-        border-bottom: 1px white !important;
+        border-bottom: 0px white !important;
     }
-    ul.nav.nav-tabs.ul-edit li a {
-        background: lightgrey;
-        padding: 10px;
-    }
+    /*ul.nav.nav-tabs.ul-edit li a {*/
+        /*background: lightgrey;*/
+        /*padding: 10px;*/
+    /*}*/
     ul.nav.nav-tabs.ul-edit li.active a {
         background: grey;
     }
@@ -39,24 +39,39 @@
     <!--<li><a data-ng-click="changeNav('experience')" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>-->
 <!--</ul>-->
 
-<ul id="iTab" class="nav nav-tabs ul-edit nav-justified responsive">
-    <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab">Personal</a></li>
-    <li><a href="employee-information.htm#academic" title="Click to open academic tab" data-toggle="tab">Academic</a></li>
-    <li><a href="employee-information.htm#publication" title="Click to open publication tab" data-toggle="tab">Publication</a></li>
-    <li><a href="employee-information.htm#training" title="Click to open training tab" data-toggle="tab">Training</a></li>
-    <li><a href="employee-information.htm#award" title="Click to open honor/award tab" data-toggle="tab">Honor/Award</a></li>
-    <li><a href="employee-information.htm#experience" title="Click to open Experience tab" data-toggle="tab">Experience</a></li>
+<ul id="iTab" class="nav nav-tabs ul-edit nav-justified">
+    <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
+    <li><a href="employee-information.html#academic" title="Click to open academic tab" data-toggle="tab"><i class="fa fa-university"></i>&nbsp;Academic</a></li>
+    <li><a href="employee-information.html#publication" title="Click to open publication tab" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+    <li><a href="employee-information.html#training" title="Click to open training tab" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
+    <li><a href="employee-information.html#award" title="Click to open honor/award tab" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Honor/Award</a></li>
+    <li><a href="employee-information.html#experience" title="Click to open Experience tab" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
 </ul>
 
-<div id="iTabContent" class="tab-content responsive">
+
+<div id="iTabContent" class="tab-content">
 
     <div id="personal" class="tab-pane fade in active">
     <!--<div data-ng-show="personalTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
             <div class="customContainer">
                 <div class="box">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div align="center">
+                                <h5><b>General</b></h5>
+                            </div>
+                        </div>
+                    </div>
                     <br />
-                    <h5><b>General:</b></h5>
                     <div class="row">
                         <div class="col-md-6">
                             <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require' data-ng-show="showRequireSign">*</span></label>
@@ -295,8 +310,14 @@
 
 
                 <div class="box">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div align="center">
+                                <h5><b>Contact</b></h5>
+                            </div>
+                        </div>
+                    </div>
                     <br />
-                    <h5><b>Contact:</b></h5>
                     <div class="row">
                         <div class="col-md-6">
                             <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
@@ -369,7 +390,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="col-md-6"><b>Present Address</b></label>
+                            <label class="col-md-12"><b>Present Address:</b></label>
                         </div>
                         <div class="col-md-6"></div>
                     </div>
@@ -503,13 +524,12 @@
                     <br /><br />
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4"><b>Permanent Address</b></label>
-                            <div class="col-md-8" data-ng-show="showPermanentAddressCheckbox">
+                        <div class="col-md-12">
+                            <label class="col-md-2"><b>Permanent Address:</b></label>
+                            <div class="col-md-6" data-ng-show="showPermanentAddressCheckbox">
                                 <input type="checkbox" data-ng-click="sameAsPresentAddress()" />Same as present address
                             </div>
                         </div>
-                        <div class="col-md-6"></div>
                     </div>
                     <br />
 
@@ -644,8 +664,14 @@
 
 
                 <div class="box">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div align="center">
+                                <h5><b>Emergency Contact</b></h5>
+                            </div>
+                        </div>
+                    </div>
                     <br />
-                    <h5><b>Emergency Contact:</b></h5>
                     <div class="row">
                         <div class="col-md-6">
                             <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require" data-ng-show="showRequireSign">*</span></label>
@@ -719,15 +745,15 @@
                     <br />
                 </div>
             </div>
-
+            <hr />
             <div class="row">
                 <div class="col-md-6"></div>
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePersonalSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePersonalSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>
@@ -738,6 +764,14 @@
 
     <div id="academic" class="tab-pane fade">
     <!--<div data-ng-show="academicTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('academic')" data-ng-show="showAcademicEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('academic')" data-ng-show="showAcademicCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
             <div class="row">
                 <div class="col-md-1">
@@ -817,9 +851,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')" data-ng-show="showAcademicEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('academic')" data-ng-show="showAcademicCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAcademicSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')" data-ng-show="showAcademicEditButton"><i class="fa fa-edit"></i>&nbsp;Edit </button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('academic')" data-ng-show="showAcademicCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAcademicSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>
@@ -830,6 +864,14 @@
 
     <div id="publication" class="tab-pane fade">
     <!--<div data-ng-show="publicationTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('publication')" data-ng-show="showPublicationEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('publication')" data-ng-show="showPublicationCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
             <div data-ng-repeat="publication in entry.publication track by $index">
                 <div data-ng-class="{'outlined': publication.status==='Waiting', 'noOutlined': publication.status==='Approved'}">
@@ -1048,9 +1090,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')" data-ng-show="showPublicationEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('publication')" data-ng-show="showPublicationCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePublicationSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')" data-ng-show="showPublicationEditButton"><i class="fa fa-edit"></i>&nbsp;Edit </button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('publication')" data-ng-show="showPublicationCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePublicationSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>
@@ -1098,6 +1140,14 @@
 
     <div id="training" class="tab-pane fade">
     <!--<div data-ng-show="trainingTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('training')" data-ng-show="showTrainingEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('training')" data-ng-show="showTrainingCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
             <div class="row">
                 <div class="col-md-1">
@@ -1192,9 +1242,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('training')" data-ng-show="showTrainingEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')" data-ng-show="showTrainingCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableTrainingSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('training')" data-ng-show="showTrainingEditButton"><i class="fa fa-edit"></i>&nbsp;Edit </button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')" data-ng-show="showTrainingCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableTrainingSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>
@@ -1205,6 +1255,14 @@
 
     <div id="award" class="tab-pane fade">
     <!--<div data-ng-show="awardTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('award')" data-ng-show="showAwardEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('award')" data-ng-show="showAwardCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
             <div data-ng-repeat="award in entry.award track by $index">
                 <div class="row">
@@ -1284,7 +1342,6 @@
                 </div>
                 <hr />
             </div>
-            <br />
             <div class="row">
                 <div class="col-md-6" data-ng-show="showAwardAddIcon">
                     [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
@@ -1296,9 +1353,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('award')" data-ng-show="showAwardEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')" data-ng-show="showAwardCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAwardSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('award')" data-ng-show="showAwardEditButton"><i class="fa fa-edit"></i>&nbsp;Edit </button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')" data-ng-show="showAwardCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableAwardSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>
@@ -1309,6 +1366,14 @@
 
     <div id="experience" class="tab-pane fade">
     <!--<div data-ng-show="experienceTab">-->
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton"></i>
+                    <i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton"></i>
+                </div>
+            </div>
+        </div>
         <form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
             <div class="row">
                 <div class="col-md-1">
@@ -1401,9 +1466,9 @@
                 <div class="col-md-6">
                     <div class="text-right pal">
                         <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton">Edit</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton">Cancel</button>
-                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableExperienceSubmitButton">Submit</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton"><i class="fa fa-edit"></i>&nbsp;Edit </button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton"><i class="fa fa-eye"></i>&nbsp;View Mode</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableExperienceSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
             </div>

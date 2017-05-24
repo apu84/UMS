@@ -27,7 +27,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pBuilder.add("fatherName", pReadOnly.getFatherName());
     pBuilder.add("motherName", pReadOnly.getMotherName());
     pBuilder.add("gender", pReadOnly.getGender());
-    pBuilder.add("birthday", pReadOnly.getDateOfBirth());
+    pBuilder.add("dateOfBirth", pReadOnly.getDateOfBirth());
     pBuilder.add("nationality", pReadOnly.getNationality());
     pBuilder.add("religion", pReadOnly.getReligion());
     pBuilder.add("maritalStatus", pReadOnly.getMaritalStatus());
@@ -51,10 +51,10 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
       pBuilder.add("spouseNationalIdNo", "");
     }
     if(pReadOnly.getWebsite() != null) {
-      pBuilder.add("website", pReadOnly.getWebsite());
+      pBuilder.add("personalWebsite", pReadOnly.getWebsite());
     }
     else {
-      pBuilder.add("website", "");
+      pBuilder.add("personalWebsite", "");
     }
     if(pReadOnly.getOrganizationalEmail() != null) {
       pBuilder.add("organizationalEmail", pReadOnly.getOrganizationalEmail());
@@ -78,16 +78,16 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
       pBuilder.add("presentAddressRoad", "");
     }
     if(pReadOnly.getPresentAddressThana() != null) {
-      pBuilder.add("presentAddressPoliceStation", pReadOnly.getPresentAddressThana());
+      pBuilder.add("presentAddressThana", pReadOnly.getPresentAddressThana());
     }
     else {
-      pBuilder.add("presentAddressPoliceStation", "");
+      pBuilder.add("presentAddressThana", "");
     }
     if(pReadOnly.getPresentAddressZip() != null) {
-      pBuilder.add("presentAddressPostalCode", pReadOnly.getPresentAddressZip());
+      pBuilder.add("presentAddressPostOfficeNo", pReadOnly.getPresentAddressZip());
     }
     else {
-      pBuilder.add("presentAddressPostalCode", "");
+      pBuilder.add("presentAddressPostOfficeNo", "");
     }
     if(pReadOnly.getPresentAddressDistrict() != null) {
       pBuilder.add("presentAddressDistrict", pReadOnly.getPresentAddressDistrict());
@@ -110,16 +110,16 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
       pBuilder.add("permanentAddressRoad", "");
     }
     if(pReadOnly.getPresentAddressThana() != null) {
-      pBuilder.add("permanentAddressPoliceStation", pReadOnly.getPermanentAddressThana());
+      pBuilder.add("permanentAddressThana", pReadOnly.getPermanentAddressThana());
     }
     else {
-      pBuilder.add("permanentAddressPoliceStation", "");
+      pBuilder.add("permanentAddressThana", "");
     }
     if(pReadOnly.getPermanentAddressZip() != null) {
-      pBuilder.add("permanentAddressPostalCode", pReadOnly.getPermanentAddressZip());
+      pBuilder.add("permanentAddressPostOfficeNo", pReadOnly.getPermanentAddressZip());
     }
     else {
-      pBuilder.add("permanentAddressPostalCode", "");
+      pBuilder.add("permanentAddressPostOfficeNo", "");
     }
     if(pReadOnly.getPermanentAddressDistrict() != null) {
       pBuilder.add("permanentAddressDistrict", pReadOnly.getPermanentAddressDistrict());
@@ -154,7 +154,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setFatherName(pJsonObject.getString("fatherName"));
     pMutable.setMotherName(pJsonObject.getString("motherName"));
     pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
-    pMutable.setDateOfBirth(pJsonObject.getString("birthday"));
+    pMutable.setDateOfBirth(pJsonObject.getString("dateOfBirth"));
     pMutable.setNationality(pJsonObject.getJsonObject("nationality").getString("name"));
     pMutable.setReligion(pJsonObject.getJsonObject("religion").getString("name"));
     pMutable.setMaritalStatus(pJsonObject.getJsonObject("maritalStatus").getString("name"));
@@ -177,11 +177,11 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     else {
       pMutable.setSpouseNationalId(pJsonObject.getString("spouseNationalIdNo"));
     }
-    if(!pJsonObject.containsKey("website")) {
+    if(!pJsonObject.containsKey("personalWebsite")) {
       pMutable.setWebsite("");
     }
     else {
-      pMutable.setWebsite(pJsonObject.getString("website"));
+      pMutable.setWebsite(pJsonObject.getString("personalWebsite"));
     }
     if(!pJsonObject.containsKey("organizationalEmail")) {
       pMutable.setOrganizationalEmail("");
@@ -204,14 +204,14 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     else {
       pMutable.setPresentAddressRoad(pJsonObject.getString("presentAddressRoad"));
     }
-    if(!pJsonObject.containsKey("presentAddressPostalCode")) {
+    if(!pJsonObject.containsKey("presentAddressPostOfficeNo")) {
       pMutable.setPresentAddressZip("");
     }
     else {
-      pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostalCode"));
+      pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostOfficeNo"));
     }
     if(pJsonObject.getJsonObject("presentAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressPoliceStation").getString("name"));
+      pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressThana").getString("name"));
       pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("presentAddressDistrict").getString("name"));
       pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("presentAddressDivision").getString("name"));
     }
@@ -228,14 +228,14 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     else {
       pMutable.setPermanentAddressRoad(pJsonObject.getString("permanentAddressRoad"));
     }
-    if(!pJsonObject.containsKey("permanentAddressPostalCode")) {
+    if(!pJsonObject.containsKey("permanentAddressPostOfficeNo")) {
       pMutable.setPermanentAddressZip("");
     }
     else {
-      pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostalCode"));
+      pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostOfficeNo"));
     }
     if(pJsonObject.getJsonObject("permanentAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressPoliceStation").getString("name"));
+      pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressThana").getString("name"));
       pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("permanentAddressDistrict").getString("name"));
       pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("permanentAddressDivision").getString("name"));
     }

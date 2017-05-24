@@ -274,8 +274,6 @@ module ums {
 
         private initializeVariables() {
 
-            //this.getLoggedUserId();
-
             this.getCountry();
             this.getDivision();
             this.getDistrict();
@@ -301,16 +299,11 @@ module ums {
             //this.getPersonalInformation();
             //this.getAcademicInformation();
             //this.getAwardInformation();
-            this.getPublicationInformation();
+            //this.getPublicationInformation();
             //this.getExperienceInformation();
             //this.getTrainingInformation();
         }
 
-        // private getLoggedUserId(){
-        //     this.employeeService.getLoggedEmployeeInfo().then((user: any) => {
-        //        console.log(user);
-        //     });
-        // }
 
         private enableViewMode(formName: string) {
             if (formName === 'personal') {
@@ -454,7 +447,7 @@ module ums {
             this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
             this.$scope.entry.personal.motherName = "Mst Hosne Ara";
             this.$scope.entry.personal.gender = this.$scope.gender[1];
-            this.$scope.entry.personal.birthday = "20/10/1995";
+            this.$scope.entry.personal.dateOfBirth = "20/10/1995";
             this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
             this.$scope.entry.personal.religion = this.$scope.religions[1];
             this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
@@ -462,7 +455,7 @@ module ums {
             this.$scope.entry.personal.nationalIdNo = "19952641478954758";
             this.$scope.entry.personal.spouseNationalIdNo = "";
             this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
-            this.$scope.entry.personal.website = "https://www.kawsur.com";
+            this.$scope.entry.personal.personalWebsite = "https://www.kawsur.com";
             this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
             this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
             this.$scope.entry.personal.mobile = "+8801672494863";
@@ -608,11 +601,11 @@ module ums {
                 this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
                 this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
                 this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
-                this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
+                this.$scope.entry.personal.presentAddressThana = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
                 this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
                 this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
                 this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
-                this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+                this.$scope.entry.personal.permanentAddressThana = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
             }
         }
 
@@ -1034,7 +1027,7 @@ module ums {
                     this.$scope.presentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
             }
-            this.$scope.entry.personal.presentAddressPoliceStation = this.$scope.presentAddressThanas[0];
+            this.$scope.entry.personal.presentAddressThana = this.$scope.presentAddressThanas[0];
         }
 
         private changePermanentAddressThana() {
@@ -1046,7 +1039,7 @@ module ums {
                     this.$scope.permanentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
             }
-            this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.permanentAddressThanas[0];
+            this.$scope.entry.personal.permanentAddressThana = this.$scope.permanentAddressThanas[0];
         }
 
         private sameAsPresentAddress() {
@@ -1059,9 +1052,9 @@ module ums {
             }
             else {
                 this.$scope.entry.personal.permanentAddressDivision = this.$scope.entry.personal.presentAddressDivision;
-                this.$scope.entry.personal.permanentAddressPostalCode = this.$scope.entry.personal.presentAddressPostalCode;
+                this.$scope.entry.personal.permanentAddressPostOfficeNo = this.$scope.entry.personal.presentAddressPostOfficeNo;
                 this.$scope.entry.personal.permanentAddressDistrict = this.$scope.entry.personal.presentAddressDistrict;
-                this.$scope.entry.personal.permanentAddressPoliceStation = this.$scope.entry.personal.presentAddressPoliceStation;
+                this.$scope.entry.personal.permanentAddressThana = this.$scope.entry.personal.presentAddressThana;
             }
         }
 
@@ -1078,8 +1071,8 @@ module ums {
                 this.$scope.disablePresentAddressDropdown = true;
                 this.$scope.entry.personal.presentAddressDivision = null;
                 this.$scope.entry.personal.presentAddressDistrict = null;
-                this.$scope.entry.personal.presentAddressPoliceStation = null;
-                this.$scope.entry.personal.presentAddressPostalCode = "";
+                this.$scope.entry.personal.presentAddressThana = null;
+                this.$scope.entry.personal.presentAddressPostOfficeNo = "";
             }
         }
 
@@ -1093,8 +1086,8 @@ module ums {
                 this.$scope.disablePermanentAddressDropdown = true;
                 this.$scope.entry.personal.permanentAddressDivision = null;
                 this.$scope.entry.personal.permanentAddressDistrict = null;
-                this.$scope.entry.personal.permanentAddressPoliceStation = null;
-                this.$scope.entry.personal.permanentAddressPostalCode = "";
+                this.$scope.entry.personal.permanentAddressThana = null;
+                this.$scope.entry.personal.permanentAddressPostOfficeNo = "";
             }
         }
 
@@ -1120,11 +1113,11 @@ module ums {
                 presentAddressLine2 = this.$scope.entry.personal.presentAddressRoad;
             }
 
-            if (this.$scope.entry.personal.presentAddressPostalCode === "" || this.$scope.entry.personal.presentAddressPostalCode === undefined) {
+            if (this.$scope.entry.personal.presentAddressPostOfficeNo === "" || this.$scope.entry.personal.presentAddressPostOfficeNo === undefined) {
                 presentPostalCode = "";
             }
             else {
-                presentPostalCode = this.$scope.entry.personal.presentAddressPostalCode;
+                presentPostalCode = this.$scope.entry.personal.presentAddressPostOfficeNo;
             }
 
             if (this.$scope.entry.personal.permanentAddressHouse === "" || this.$scope.entry.personal.permanentAddressHouse === undefined) {
@@ -1141,11 +1134,11 @@ module ums {
                 permanentAddressLine2 = this.$scope.entry.personal.presentAddressRoad;
             }
 
-            if (this.$scope.entry.personal.permanentAddressPostalCode === "" || this.$scope.entry.personal.permanentAddressPostalCode === undefined) {
+            if (this.$scope.entry.personal.permanentAddressPostOfficeNo === "" || this.$scope.entry.personal.permanentAddressPostOfficeNo === undefined) {
                 permanentPostalCode = "";
             }
             else {
-                permanentPostalCode = this.$scope.entry.personal.permanentAddressPostalCode;
+                permanentPostalCode = this.$scope.entry.personal.permanentAddressPostOfficeNo;
             }
 
             if (this.$scope.data.supOptions === "1") {
@@ -1156,12 +1149,12 @@ module ums {
             else if (this.$scope.data.supOptions === "2") {
                 console.log("this.$scope.data.supOptions");
                 console.log(this.$scope.data.supOptions);
-                this.$scope.entry.personal.emergencyContactAddress = presentAddressLine1 + " " + presentAddressLine2 + " " + this.$scope.entry.personal.presentAddressPoliceStation.name + " " + this.$scope.entry.personal.presentAddressDistrict.name + " - " + presentPostalCode;
+                this.$scope.entry.personal.emergencyContactAddress = presentAddressLine1 + " " + presentAddressLine2 + " " + this.$scope.entry.personal.presentAddressThana.name + " " + this.$scope.entry.personal.presentAddressDistrict.name + " - " + presentPostalCode;
             }
             else if (this.$scope.data.supOptions === "3") {
                 console.log("this.$scope.data.supOptions");
                 console.log(this.$scope.data.supOptions);
-                this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.permanentAddressPoliceStation.name + " " + this.$scope.entry.personal.permanentAddressDistrict.name + " - " + permanentPostalCode;
+                this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.permanentAddressThana.name + " " + this.$scope.entry.personal.permanentAddressDistrict.name + " - " + permanentPostalCode;
             }
         }
     }
