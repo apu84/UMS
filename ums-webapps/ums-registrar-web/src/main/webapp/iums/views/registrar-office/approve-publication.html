@@ -55,9 +55,11 @@
                                     <label>Designation: <b>{{currentTeacher.designation}}</b></label><br>
                                 </div>
                                 <div class="col-md-6">
-                                    <select name="nPublicationList"
-                                            id="iPublicationList"
-                                            class="form-control">
+                                    <select data-ng-model="data.publicationListViewCategory" data-ng-change="changePublicationList()" class="form-control">
+                                        <option value="">Select Category</option>
+                                        <option value="0">Pending Publication</option>
+                                        <option value="1">Approved Publication</option>
+                                        <option value="2">Rejected Publication</option>
                                     </select>
                                 </div>
                             </div>

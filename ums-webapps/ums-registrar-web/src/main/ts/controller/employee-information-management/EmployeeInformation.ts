@@ -296,12 +296,12 @@ module ums {
             this.createMap();
             // this.changeNav('personal');
 
-            //this.getPersonalInformation();
-            //this.getAcademicInformation();
-            //this.getAwardInformation();
-            //this.getPublicationInformation();
-            //this.getExperienceInformation();
-            //this.getTrainingInformation();
+             this.getPersonalInformation();
+            // this.getAcademicInformation();
+            // this.getAwardInformation();
+            // this.getPublicationInformation();
+            // this.getExperienceInformation();
+            // this.getTrainingInformation();
         }
 
 
@@ -601,11 +601,11 @@ module ums {
                 this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
                 this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
                 this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
-                this.$scope.entry.personal.presentAddressThana = this.$scope.thanaMap[personalInformation[0].presentAddressPoliceStation];
+                this.$scope.entry.personal.presentAddressThana = this.$scope.thanaMap[personalInformation[0].presentAddressThana];
                 this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
                 this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
                 this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
-                this.$scope.entry.personal.permanentAddressThana = this.$scope.thanaMap[personalInformation[0].permanentAddressPoliceStation];
+                this.$scope.entry.personal.permanentAddressThana = this.$scope.thanaMap[personalInformation[0].permanentAddressThana];
             }
         }
 
@@ -881,6 +881,7 @@ module ums {
                 for (let i = 0; i < this.$scope.entry.publication.length; i++) {
                     publicationInformation = this.$scope.entry.publication;
                 }
+                item['publication']['status'] = '0';
                 item['publication'] = publicationInformation;
             }
 

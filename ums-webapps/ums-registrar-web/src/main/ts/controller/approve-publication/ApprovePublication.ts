@@ -10,6 +10,11 @@ module ums {
         reject: Function;
         currentTeacher: IEmployee;
         totalPendingPublications: number;
+        changePublicationList: Function;
+        currentTeacherIndex: number;
+
+        data: any;
+        publicationListViewCategory: string;
     }
 
     interface IEmployee{
@@ -39,6 +44,11 @@ module ums {
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
             $scope.accept = this.accept.bind(this);
             $scope.reject = this.reject.bind(this);
+            $scope.changePublicationList = this.changePublicationList.bind(this);
+
+            $scope.data ={
+                publicationListViewCategory: ""
+            };
 
             $scope.totalPendingPublications = 0;
             this.fetchTeachersList();
@@ -46,12 +56,13 @@ module ums {
         }
 
         private submit(index: number){
+            this.$scope.currentTeacherIndex = index;
             console.log("i am in submit11()");
             $("#teachersListDiv").hide(10);
             $("#topArrowDiv").show(200);
             $("#publicationListDiv").show(200);
 
-            this.getPublication(index);
+            this.getPublication(this.$scope.currentTeacherIndex, '0');
         }
 
         private resetTopBottomDivs(){
@@ -61,10 +72,10 @@ module ums {
             $("#teachersListDiv").show(200);
         }
 
-        private getPublication(index: number){
-            console.log("i am in getPublicationInformation() method");
+        private getPublication(index: number, publicationCategory:string){
+            console.log("i am in getPublicationInformation method! yee");
             this.$scope.currentTeacher = this.$scope.teachers[index];
-            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, '0').then((publicationInformation: any) => {
+            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, publicationCategory).then((publicationInformation: any) => {
                 console.log("Employee's Publication Information");
                 console.log(publicationInformation);
                 this.$scope.publications = publicationInformation;
@@ -107,6 +118,27 @@ module ums {
                         console.log("this should be hidden");
                     });
             });
+        }
+
+        private changePublicationList(){
+            if(this.$scope.data.publicationListViewCategory == "0"){
+                console.log("show Pending List");
+                this.getPublication(this.$scope.currentTeacherIndex, '0')
+
+            }
+
+            else if(this.$scope.data.publicationListViewCategory == "1"){
+                console.log("show Approved List");
+                this.getPublication(this.$scope.currentTeacherIndex, '1')
+            }
+
+            else if(this.$scope.data.publicationListViewCategory == "2"){
+                console.log("show Rejected List");
+                this.getPublication(this.$scope.currentTeacherIndex, '2')
+            }
+            else{
+                console.log("Do Nothing: " + this.$scope.data.publicationListViewCategory);
+            }
         }
 
         private convertToJson(index: number, status: string): ng.IPromise<any> {
