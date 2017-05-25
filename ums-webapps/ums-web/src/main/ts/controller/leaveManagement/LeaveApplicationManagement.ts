@@ -8,8 +8,8 @@ module ums {
     leaveType: LmsType;
     leaveApplication: LmsApplication;
     remainingLeaves: Array<RemainingLmsLeave>;
-    pendingApplications: Array<LmsApplication>;
-    pendingApplication: LmsApplication;
+    pendingApplications: Array<LmsApplicationStatus>;
+    pendingApplication: LmsApplicationStatus;
     applicationStatusList: Array<LmsApplicationStatus>;
     totalLeaveDurationInDays: number;
 
@@ -80,7 +80,7 @@ module ums {
 
     private getPendingApplications() {
       this.$scope.pendingApplications = [];
-      this.leaveApplicationService.fetchPendingLeaves().then((pendingLeaves) => {
+      this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
         this.$scope.pendingApplications = pendingLeaves;
         console.log("Pending leaves");
         console.log(pendingLeaves);
@@ -123,11 +123,11 @@ module ums {
       }
     }
 
-    private fetchApplicationStatus(pendingApplication: LmsApplication) {
+    private fetchApplicationStatus(pendingApplication: LmsApplicationStatus) {
       this.$scope.showStatusSection = true;
       this.$scope.pendingApplication = pendingApplication;
       this.$scope.applicationStatusList = [];
-      this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.id).then((statusList: Array<LmsApplicationStatus>) => {
+      this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
         console.log("Status list");
         console.log(statusList);
         this.$scope.applicationStatusList = statusList;

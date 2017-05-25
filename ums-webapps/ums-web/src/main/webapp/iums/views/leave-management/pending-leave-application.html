@@ -18,7 +18,20 @@
         <td>{{p.fromDate}}</td>
         <td>{{p.toDate}}</td>
         <td>{{p.duration}}(days)</td>
-        <td>{{p.statusName}}</td>
+        <td>{{p.actionStatusLabel}}</td>
     </tr>
+    <!--<tr dir-paginate="p in pendingApplications | itemsPerPage: 10">
+        <td>{{p.appliedOn}}</td>
+        <td>{{p.leaveTypeName}}</td>
+        <td>{{p.fromDate}}</td>
+        <td>{{p.toDate}}</td>
+        <td>{{p.duration}}(days)</td>
+        <td>{{p.actionStatusLabel}}</td>
+    </tr>-->
     </tbody>
 </table>
+<dir-pagination-controls boundary-links="true"
+                         on-page-change="pageChanged(newPageNumber)"
+                         template-url="'views/leave-management/dirPagination.pendingLeaves.html"></dir-pagination-controls>
+
+

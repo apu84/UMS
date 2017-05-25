@@ -14,6 +14,7 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 06-May-17.
  */
 public interface LmsAppStatus extends Serializable, LastModifier, EditType<MutableLmsAppStatus>, Identifier<Long> {
+
   Long getLmsAppId();
 
   LmsApplication getLmsApplication();
@@ -27,5 +28,7 @@ public interface LmsAppStatus extends Serializable, LastModifier, EditType<Mutab
   String getComments();
 
   LeaveApprovalStatus getActionStatus();
+
+  int getRowNumber();
 
 }

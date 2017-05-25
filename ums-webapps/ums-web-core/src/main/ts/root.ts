@@ -9,6 +9,7 @@ module ums {
     'ngSanitize',
     'scrollable-table',
     'ui.sortable',
-    'ngHandsontableApp'
+    'ngHandsontableApp',
+    "angularUtils.directives.dirPagination"
   ]);
 }

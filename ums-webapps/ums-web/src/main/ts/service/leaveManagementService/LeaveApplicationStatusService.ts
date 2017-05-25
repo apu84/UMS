@@ -29,6 +29,42 @@ module ums {
       return defer.promise;
     }
 
+    public fetchPendingLeaves(): ng.IPromise<any> {
+      var url = "lmsAppStatus/pendingLeaves";
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var lmsAppStatusList: any = {};
+            lmsAppStatusList = json.entries;
+            defer.resolve(lmsAppStatusList);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting pending leaves");
+          });
+
+      return defer.promise;
+    }
+
+    public fetchLeaveApplicationsWithPagination(leaveApprovalStatus: number, pageNumber: number, pageSize: number): ng.IPromise<any> {
+      var url = "lmsAppStatus/leaveApplications/status/" + leaveApprovalStatus + "/pageNumber/" + pageNumber + "/pageSize/" + pageSize;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var lmsAppStatusList: any = {};
+            lmsAppStatusList = json.entries;
+            defer.resolve(lmsAppStatusList);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting leave applications");
+          });
+
+      return defer.promise;
+    }
+
   }
 
   UMS.service("leaveApplicationStatusService", LeaveApplicationStatusService);
