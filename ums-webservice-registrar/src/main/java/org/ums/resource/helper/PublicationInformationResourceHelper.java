@@ -8,13 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.PublicationInformationBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
 import org.ums.manager.ContentManager;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PublicationInformationManager;
 import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 import org.ums.resource.ResourceHelper;
+import org.ums.services.ApprovePublicationService;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -31,6 +34,12 @@ public class PublicationInformationResourceHelper extends
 
   @Autowired
   PublicationInformationBuilder mPublicationInformationBuilder;
+
+  @Autowired
+  ApprovePublicationService mApprovePublicationService;
+
+  @Autowired
+  EmployeeManager mEmployeeManager;
 
   @Autowired
   UserManager userManager;
@@ -69,6 +78,7 @@ public class PublicationInformationResourceHelper extends
   @Transactional
   public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    Employee employee = mEmployeeManager.get(userId);
     mPublicationInformationManager.deletePublicationInformation(userId);
 
     LocalCache localCache = new LocalCache();
@@ -83,6 +93,7 @@ public class PublicationInformationResourceHelper extends
       mPublicationInformationBuilder.build(publicationInformation, publicationJsonArray.getJsonObject(i), localCache);
       mutablePublicationInformation.add(publicationInformation);
     }
+    mApprovePublicationService.setNotification("dpreg", employee);
     mPublicationInformationManager.savePublicationInformation(mutablePublicationInformation);
 
     Response.ResponseBuilder builder = Response.created(null);

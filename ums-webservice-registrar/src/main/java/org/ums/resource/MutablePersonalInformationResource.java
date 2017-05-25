@@ -18,14 +18,14 @@ public class MutablePersonalInformationResource extends Resource {
   @POST
   @Path("/savePersonalInformation")
   public Response saveServiceInformation(final JsonObject pJsonObject) {
-//    return mPersonalInformationResourceHelper.post(pJsonObject, mUriInfo);
+    // return mPersonalInformationResourceHelper.post(pJsonObject, mUriInfo);
     return null;
   }
 
   @PUT
   @Path("/updatePersonalInformation")
   public Response updatePersonalInformation(final JsonObject pJsonObject) {
-//    return mPersonalInformationResourceHelper.put(pJsonObject, mUriInfo);
+    // return mPersonalInformationResourceHelper.put(pJsonObject, mUriInfo);
     return null;
   }
 }

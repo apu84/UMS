@@ -16,7 +16,9 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
 
   @GET
   @Path("/getPersonalInformation")
-  public JsonObject getPersonalInformation(final @Context Request pRequest) throws Exception {
-    return mPersonalInformationResourceHelper.getPersonalInformation(mUriInfo);
+  public JsonObject getPersonalInformation(final @Context Request pRequest,
+      final @PathParam("object-id") String pObjectId) throws Exception {
+    // return mPersonalInformationResourceHelper.get(mUriInfo);
+    return null;
   }
 }

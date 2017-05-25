@@ -204,7 +204,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','employeeService','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -212,6 +212,7 @@ module ums {
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
+                    private employeeService: EmployeeService,
                     private countryService: CountryService,
                     private divisionService: DivisionService,
                     private districtService: DistrictService,
@@ -273,6 +274,7 @@ module ums {
         }
 
         private initializeVariables() {
+            this.getLoggedUserId();
 
             this.getCountry();
             this.getDivision();
@@ -296,7 +298,7 @@ module ums {
             this.createMap();
             // this.changeNav('personal');
 
-             this.getPersonalInformation();
+             //this.getPersonalInformation();
             // this.getAcademicInformation();
             // this.getAwardInformation();
             // this.getPublicationInformation();
@@ -304,6 +306,12 @@ module ums {
             // this.getTrainingInformation();
         }
 
+        private getLoggedUserId(){
+            this.employeeService.getLoggedEmployeeInfo().then((user: any) => {
+               console.log(user);
+            });
+
+        }
 
         private enableViewMode(formName: string) {
             if (formName === 'personal') {
@@ -879,9 +887,9 @@ module ums {
             else if (convertThis === "publication") {
                 let publicationInformation = Array<IPublicationInformationModel>();
                 for (let i = 0; i < this.$scope.entry.publication.length; i++) {
+                    this.$scope.entry.publication[i].status = '0';
                     publicationInformation = this.$scope.entry.publication;
                 }
-                item['publication']['status'] = '0';
                 item['publication'] = publicationInformation;
             }
 

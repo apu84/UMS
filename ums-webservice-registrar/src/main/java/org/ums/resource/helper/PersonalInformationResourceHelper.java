@@ -52,7 +52,7 @@ public class PersonalInformationResourceHelper extends
   public Response create(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    //getContentManager().delete(userId);
+    // getContentManager().delete(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
