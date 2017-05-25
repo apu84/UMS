@@ -8,8 +8,6 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 public interface MutablePersonalInformation extends PersonalInformation, Editable<String>, MutableIdentifier<String>,
     MutableLastModifier {
 
-  void setEmployeeId(final String pEmployeeId);
-
   void setFirstName(final String pFirstName);
 
   void setLastName(final String pLastName);

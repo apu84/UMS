@@ -40,7 +40,7 @@ public class PersonalInformationResourceHelper extends
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
     PersonalInformation personalInformation = null;
     try {
-      personalInformation = mPersonalInformationManager.getEmployeePersonalInformation(userId);
+      personalInformation = mPersonalInformationManager.get(userId);
     } catch(EmptyResultDataAccessException e) {
       // Do nothing
     }
@@ -49,10 +49,10 @@ public class PersonalInformationResourceHelper extends
   }
 
   @Transactional
-  public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+  public Response create(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    mPersonalInformationManager.deletePersonalInformation(userId);
+    //getContentManager().delete(userId);
 
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -60,7 +60,7 @@ public class PersonalInformationResourceHelper extends
     MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
     JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
     mPersonalInformationBuilder.build(personalInformation, personalJsonObject, localCache);
-    mPersonalInformationManager.savePersonalInformation(personalInformation);
+    mPersonalInformationManager.create(personalInformation);
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -73,7 +73,7 @@ public class PersonalInformationResourceHelper extends
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonObject jsonObject = entries.getJsonObject(0);
     mPersonalInformationBuilder.build(personalInformation, jsonObject, localeCache);
-    mPersonalInformationManager.updatePersonalInformation(personalInformation);
+    mPersonalInformationManager.update(personalInformation);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -83,7 +83,7 @@ public class PersonalInformationResourceHelper extends
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    if(pPersonalInformation.getEmployeeId() != null)
+    if(pPersonalInformation.getId() != null)
       children.add(toJson(pPersonalInformation, pUriInfo, localCache));
     jsonObject.add("entries", children);
     localCache.invalidate();

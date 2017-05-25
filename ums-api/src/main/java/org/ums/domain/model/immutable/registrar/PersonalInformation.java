@@ -10,8 +10,6 @@ import java.io.Serializable;
 public interface PersonalInformation extends Serializable, EditType<MutablePersonalInformation>, Identifier<String>,
     LastModifier {
 
-  String getEmployeeId();
-
   String getFirstName();
 
   String getLastName();

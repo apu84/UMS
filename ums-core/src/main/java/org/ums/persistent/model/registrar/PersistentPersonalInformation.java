@@ -16,7 +16,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   private String mId;
-  private String mEmployeeId;
   private String mFirstName;
   private String mLastName;
   private String mGender;
@@ -58,7 +57,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   public PersistentPersonalInformation() {}
 
   public PersistentPersonalInformation(PersistentPersonalInformation pPersistentPersonalInformation) {
-    mEmployeeId = pPersistentPersonalInformation.getEmployeeId();
+    mId = pPersistentPersonalInformation.getId();
     mFirstName = pPersistentPersonalInformation.getFirstName();
     mLastName = pPersistentPersonalInformation.getLastName();
     mGender = pPersistentPersonalInformation.getGender();
@@ -95,6 +94,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mEmergencyContactRelation = pPersistentPersonalInformation.getEmergencyContactRelation();
     mEmergencyContactPhone = pPersistentPersonalInformation.getEmergencyContactPhone();
     mEmergencyContactAddress = pPersistentPersonalInformation.getEmergencyContactAddress();
+    mLastModified = pPersistentPersonalInformation.getLastModified();
   }
 
   @Override
@@ -135,11 +135,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
-  }
-
-  @Override
-  public void setEmployeeId(String pEmployeeId) {
-    mEmployeeId = pEmployeeId;
   }
 
   @Override
@@ -320,11 +315,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   @Override
   public void setEmergencyContactAddress(String pEmergencyContactAddress) {
     mEmergencyContactAddress = pEmergencyContactAddress;
-  }
-
-  @Override
-  public String getEmployeeId() {
-    return mEmployeeId;
   }
 
   @Override

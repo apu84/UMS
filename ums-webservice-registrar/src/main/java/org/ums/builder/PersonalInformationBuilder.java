@@ -21,7 +21,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
 
   @Override
   public void build(JsonObjectBuilder pBuilder, PersonalInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("employeeId", pReadOnly.getEmployeeId());
+    pBuilder.add("employeeId", pReadOnly.getId());
     pBuilder.add("firstName", pReadOnly.getFirstName());
     pBuilder.add("lastName", pReadOnly.getLastName());
     pBuilder.add("fatherName", pReadOnly.getFatherName());
@@ -148,7 +148,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   @Override
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
-    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    pMutable.setId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setFirstName(pJsonObject.getString("firstName"));
     pMutable.setLastName(pJsonObject.getString("lastName"));
     pMutable.setFatherName(pJsonObject.getString("fatherName"));

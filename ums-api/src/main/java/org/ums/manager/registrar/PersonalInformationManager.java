@@ -6,12 +6,4 @@ import org.ums.manager.ContentManager;
 
 public interface PersonalInformationManager extends
     ContentManager<PersonalInformation, MutablePersonalInformation, String> {
-
-  int savePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
-
-  PersonalInformation getEmployeePersonalInformation(final String pEmployeeId);
-
-  int deletePersonalInformation(final String pEmployeeId);
-
-  int updatePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
 }

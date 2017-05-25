@@ -20,24 +20,4 @@ public class PersonalInformationCache extends
   protected CacheManager<PersonalInformation, String> getCacheManager() {
     return mCacheManager;
   }
-
-  @Override
-  public int savePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
-    return getManager().savePersonalInformation(pMutablePersonalInformation);
-  }
-
-  @Override
-  public PersonalInformation getEmployeePersonalInformation(String pEmployeeId) {
-    return getManager().getEmployeePersonalInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deletePersonalInformation(String pEmployeeId) {
-    return getManager().deletePersonalInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updatePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
-    return getManager().updatePersonalInformation(pMutablePersonalInformation);
-  }
 }

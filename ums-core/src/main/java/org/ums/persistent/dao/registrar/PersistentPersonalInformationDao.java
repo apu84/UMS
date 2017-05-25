@@ -16,9 +16,9 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
       "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,TO_DATE(?, 'DD/MM/YYYY'), ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?)";
 
   static String GET_ONE =
-      "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, to_char(DATE_OF_BIRTH, 'dd/mm/yyyy') DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS FROM EMP_PERSONAL_INFO";
+      "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, to_char(DATE_OF_BIRTH, 'dd/mm/yyyy') DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS FROM EMP_PERSONAL_INFO ";
 
-  static String DELETE_ALL = "DELETE FROM EMP_PERSONAL_INFO";
+  static String DELETE_ONE = "DELETE FROM EMP_PERSONAL_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -27,22 +27,22 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   }
 
   @Override
-  public PersonalInformation getEmployeePersonalInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {employeeId},
+  public PersonalInformation get(final String pId) {
+    String query = GET_ONE + "Where employee_id = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new PersistentPersonalInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int deletePersonalInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pEmployeeId);
+  public int delete(final MutablePersonalInformation pMutablePersonalInformation) {
+    String query = DELETE_ONE + "WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutablePersonalInformation.getId());
   }
 
   @Override
-  public int savePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
+  public String create(MutablePersonalInformation pMutablePersonalInformation) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutablePersonalInformation.getEmployeeId(),
+    return String.valueOf(mJdbcTemplate.update(query, pMutablePersonalInformation.getId(),
         pMutablePersonalInformation.getFirstName(), pMutablePersonalInformation.getLastName(),
         pMutablePersonalInformation.getGender(), pMutablePersonalInformation.getBloodGroup(),
         pMutablePersonalInformation.getFatherName(), pMutablePersonalInformation.getMotherName(),
@@ -64,7 +64,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
         pMutablePersonalInformation.getEmergencyContactName(),
         pMutablePersonalInformation.getEmergencyContactRelation(),
         pMutablePersonalInformation.getEmergencyContactPhone(),
-        pMutablePersonalInformation.getEmergencyContactAddress());
+        pMutablePersonalInformation.getEmergencyContactAddress()));
   }
 
   class RoleRowMapper implements RowMapper<PersonalInformation> {
@@ -72,7 +72,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
     @Override
     public PersonalInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-      personalInformation.setEmployeeId(resultSet.getString("employee_id"));
+      personalInformation.setId(resultSet.getString("employee_id"));
       personalInformation.setFirstName(resultSet.getString("first_name"));
       personalInformation.setLastName(resultSet.getString("last_name"));
       personalInformation.setGender(resultSet.getString("gender"));
