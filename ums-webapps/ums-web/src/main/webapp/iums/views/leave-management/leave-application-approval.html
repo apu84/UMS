@@ -3,9 +3,41 @@
         <div class="panel-heading">Leave Application Approval<span
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div class="col-md-6">
 
+            <div class="col-md-6">
+                <div class="form-group" align="right">
+                    <label class="col-md-4 control-label">Approval Status</label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="leaveType"
+                                id="leaveType"
+                                data-ng-options="l.name for l in leaveApprovalStatusList track by l.id"
+                                data-ng-model="leaveApprovalStatus"
+                        ></select>
+                    </div>
+                </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="form-group" align="right">
+                    <label class="col-md-4 control-label">Results per page</label>
+                    <div class="col-md-8">
+                        <input type="text"
+                               class="form-control required"
+                               id="itemsPerPage"
+                               data-ng-model="itemsPerPage"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <dir-pagination-controls boundary-links="true"
+                                         on-page-change="pageChanged(newPageNumber)"
+                                         template-url="views\leave-management\dirPagination.pendingLeaves.html"></dir-pagination-controls>
+            </div>
+
         </div>
     </div>
 </div>

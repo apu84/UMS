@@ -37,6 +37,7 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   private String mComments;
   private LeaveApprovalStatus mActionStatus;
   private String mLastModified;
+  private int mRowNumber;
 
   public PersistentLmsAppStatus() {
 
@@ -51,7 +52,18 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
     mActionTakenBy = pPersistentLmsAppStatus.getActionTakenBy();
     mComments = pPersistentLmsAppStatus.getComments();
     mActionStatus = pPersistentLmsAppStatus.getActionStatus();
+    mRowNumber = pPersistentLmsAppStatus.getRowNumber();
     mLastModified = pPersistentLmsAppStatus.getLastModified();
+  }
+
+  @Override
+  public void setRowNumber(int pRowNumber) {
+    mRowNumber = pRowNumber;
+  }
+
+  @Override
+  public int getRowNumber() {
+    return mRowNumber;
   }
 
   @Override

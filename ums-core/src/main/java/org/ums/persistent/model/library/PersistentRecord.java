@@ -396,7 +396,7 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public ImprintDto getImprint() {
 
-    if(mImprint.getPublisher() == null && ( mImprint.getPublisherId() !=null && mImprint.getPublisherId() != 0 ))
+    if(mImprint.getPublisher() == null && (mImprint.getPublisherId() != null && mImprint.getPublisherId() != 0))
       mImprint.setPublisher(sPublisherManager.get(mImprint.getPublisherId()));
 
     return mImprint;

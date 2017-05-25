@@ -23,4 +23,6 @@ public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Long>, Mutab
 
   void setActionStatus(LeaveApprovalStatus pActionStatus);
 
+  void setRowNumber(int pRowNumber);
+
 }

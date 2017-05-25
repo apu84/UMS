@@ -51,6 +51,7 @@ module ums {
   }]);
 
   angular.module('ngHandsontableApp', ['ngHandsontable']);
+  angular.module('angularUtils.directives.dirPagination', ['angularUtils.directives.dirPagination']);
 
   UMS.constant("appConstants", Constants.Default());
 

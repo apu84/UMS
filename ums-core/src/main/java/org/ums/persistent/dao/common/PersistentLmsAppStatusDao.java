@@ -6,9 +6,12 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsAppStatusDaoDecorator;
+import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.RoleType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 
@@ -153,6 +156,47 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pApplicationId}, new LmsAppStatusRowMapper());
   }
 
+  @Override
+  public List<LmsAppStatus> getLmsAppStatusList(String pEmployeeId) {
+    String query =
+        "select * from LMS_APP_STATUS where APP_ID in (select id from LMS_APPLICATION where APP_STATUS=2 and EMPLOYEE_ID=?)  ORDER BY action_taken_on";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsAppStatusRowMapper());
+  }
+
+  @Override
+  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApplicationStatus, Role pRole, User pUser,
+      int pageNumber, int pageSize) {
+    String query = "";
+    if(pRole.getId() == RoleType.DEPT_HEAD.getId()) {
+      query =
+          "SELECT * "
+              + "FROM ( "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE ACTION_STATUS = ? AND APP_ID IN ( "
+              + "           SELECT ID "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE APP_STATUS = 2 AND EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * "
+              + pageSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * " + pageSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationStatus.getId(), pUser.getDepartment().getId()},
+          new LmsAppStatusRowMapper());
+    }
+    else {
+      query =
+          "SELECT * " + "FROM ( " + "  SELECT " + "    a.*, " + "    ROWNUM row_number " + "  FROM ( "
+              + "         SELECT * " + "         FROM LMS_APP_STATUS " + "         WHERE ACTION_STATUS = ? "
+              + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * " + pageSize
+              + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * " + pageSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationStatus.getId()}, new LmsAppStatusRowMapper());
+    }
+
+  }
+
   class LmsAppStatusRowMapper implements RowMapper<LmsAppStatus> {
     @Override
     public LmsAppStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -164,6 +208,9 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
       status.setComments(rs.getString("comments"));
       if(rs.getInt("action_status") != 0)
         status.setActionStatus(LeaveApprovalStatus.get(rs.getInt("action_status")));
+      /*
+       * if(rs.getInt("row_number") != 0) status.setRowNumber(rs.getInt("row_number"));
+       */
       status.setLastModified(rs.getString("last_modified"));
       return status;
     }
