@@ -3,9 +3,11 @@
  */
 module ums{
   export class EmployeeService{
-    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
-    constructor(private appConstants: any, private httpClient: HttpClient,
-                private $q:ng.IQService, private notify: Notify,
+    public static $inject = ['HttpClient','$q','notify','$sce','$window'];
+    constructor(
+                private httpClient: HttpClient,
+                private $q:ng.IQService,
+                private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
     }
@@ -13,7 +15,7 @@ module ums{
     public getActiveTeacherByDept():ng.IPromise<any>{
       var defer = this.$q.defer();
       var teachers:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/employee/getActiveTeachersByDept",'application/json',
+      this.httpClient.get("academic/employee/getActiveTeachersByDept",'application/json',
           (json:any,etag:string)=>{
             teachers = json.entries;
             defer.resolve(teachers);
@@ -26,10 +28,11 @@ module ums{
       return defer.promise;
     }
 
+
     public getLoggedEmployeeInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var employees:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/employee/employeeById",'application/json',
+      this.httpClient.get("academic/employee/employeeById",'application/json',
           (json:any,etag:string)=>{
             employees = json.entries;
             defer.resolve(employees[0]);

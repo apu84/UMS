@@ -30,6 +30,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
@@ -81,9 +82,6 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
-
-
-/// <reference path='../../../../ums-web/src/main/ts/service/EmployeeService.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 

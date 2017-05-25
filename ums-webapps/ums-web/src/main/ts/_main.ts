@@ -35,6 +35,7 @@
 /// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationStatusService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveTypeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -118,7 +119,6 @@
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
-/// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
 /// <reference path='service/AdmissionCertificateVerificationService.ts'/>
