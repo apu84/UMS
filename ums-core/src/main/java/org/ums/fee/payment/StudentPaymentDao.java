@@ -20,7 +20,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
       + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY FROM STUDENT_PAYMENT ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_PAYMENT (ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, "
-          + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY) VALUES (?, ?, ?, ?, ?, ?, SYSDATE, ? "
+          + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY) VALUES (?, ?, ?, ?, ?, ?, SYSDATE, ?, "
           + getLastModifiedSql() + ", ?) ";
   String UPDATE_ALL = "UPDATE STUDENT_PAYMENT SET STATUS = ?, VERIFIED_ON = SYSDATE, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";

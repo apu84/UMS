@@ -29,6 +29,12 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
   }
 
   @Override
+  public FeeCategory getByFeeId(String pFeeId) {
+    String query = SELECT_ALL + "WHERE FEE_ID = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFeeId}, new FeeCategoryRowMapper());
+  }
+
+  @Override
   public List<FeeCategory> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new FeeCategoryRowMapper());
   }

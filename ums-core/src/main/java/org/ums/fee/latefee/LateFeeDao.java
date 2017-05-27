@@ -11,11 +11,9 @@ import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.generator.IdGenerator;
-import org.ums.solr.indexer.model.Index;
-import org.ums.solr.indexer.model.MutableIndex;
 
-public class UGLateFeeDao extends UGLateFeeDaoDecorator {
-  String SELECT_ALL = "SELECT ID, FROM_DATE, TO_DATE, FEE, SEMESTER_ID, ADMISSION_TYPE, LAST_MODIFIED FROM LATE_FEE";
+public class LateFeeDao extends LateFeeDaoDecorator {
+  String SELECT_ALL = "SELECT ID, FROM_DATE, TO_DATE, FEE, SEMESTER_ID, ADMISSION_TYPE, LAST_MODIFIED FROM LATE_FEE ";
   String INSERT_ALL = "INSERT INTO LATE_FEE(ID, FROM_DATE, TO_DATE, FEE, SEMESTER_ID, ADMISSION_TYPE, LAST_MODIFIED) "
       + "VALUES(?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE LATE_FEE SET FROM_DATE = ?, TO_DATE = ?, FEE = ?, SEMESTER_ID = ?, ADMISSION_TYPE = ?,"
@@ -25,38 +23,38 @@ public class UGLateFeeDao extends UGLateFeeDaoDecorator {
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public UGLateFeeDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  public LateFeeDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public List<UGLateFee> getLateFees(Integer pSemesterId) {
+  public List<LateFee> getLateFees(Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new LateFeeRowMapper());
   }
 
   @Override
-  public UGLateFee get(Long pId) {
+  public LateFee get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LateFeeRowMapper());
   }
 
   @Override
-  public int update(MutableUGLateFee pMutable) {
+  public int update(MutableLateFee pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getFrom(), pMutable.getTo(), pMutable.getFee(), pMutable.getSemester()
         .getId(), pMutable.getAdmissionType().getId(), pMutable.getId());
   }
 
   @Override
-  public int delete(MutableUGLateFee pMutable) {
+  public int delete(MutableLateFee pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public Long create(MutableUGLateFee pMutable) {
+  public Long create(MutableLateFee pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getFrom(), pMutable.getTo(), pMutable.getFee(), pMutable
         .getSemester().getId(), pMutable.getAdmissionType().getId());
@@ -64,33 +62,32 @@ public class UGLateFeeDao extends UGLateFeeDaoDecorator {
   }
 
   @Override
-  public List<Long> create(List<MutableUGLateFee> pMutableList) {
+  public List<Long> create(List<MutableLateFee> pMutableList) {
     List<Object[]> params = getInsertParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);
-    return params.stream().map(param -> (Long) param[0])
-        .collect(Collectors.toList());
+    return params.stream().map(param -> (Long) param[0]).collect(Collectors.toList());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGLateFee> pMutableUGLateFees) {
+  private List<Object[]> getInsertParamList(List<MutableLateFee> pMutableUGLateFees) {
     List<Object[]> params = new ArrayList<>();
-    for(UGLateFee mutable : pMutableUGLateFees) {
+    for(LateFee mutable : pMutableUGLateFees) {
       params.add(new Object[] {mIdGenerator.getNumericId(), mutable.getFrom(), mutable.getTo(), mutable.getFee(),
           mutable.getSemester().getId(), mutable.getAdmissionType().getId()});
     }
     return params;
   }
 
-  class LateFeeRowMapper implements RowMapper<UGLateFee> {
+  class LateFeeRowMapper implements RowMapper<LateFee> {
     @Override
-    public UGLateFee mapRow(ResultSet rs, int rowNum) throws SQLException {
-      MutableUGLateFee lateFee = new PersistentUGLateFee();
+    public LateFee mapRow(ResultSet rs, int rowNum) throws SQLException {
+      MutableLateFee lateFee = new PersistentLateFee();
       lateFee.setId(rs.getLong("ID"));
       lateFee.setFrom(rs.getTimestamp("FROM_DATE"));
       lateFee.setTo(rs.getTimestamp("TO_DATE"));
       lateFee.setFee(new BigDecimal(rs.getInt("FEE")));
-      lateFee.setAdmissionType(UGLateFee.AdmissionType.get(rs.getInt("ADMISSION_TYPE")));
+      lateFee.setAdmissionType(LateFee.AdmissionType.get(rs.getInt("ADMISSION_TYPE")));
       lateFee.setLastModified(rs.getString("LAST_MODIFIED"));
-      AtomicReference<UGLateFee> atomicReference = new AtomicReference<>(lateFee);
+      AtomicReference<LateFee> atomicReference = new AtomicReference<>(lateFee);
       return atomicReference.get();
     }
   }

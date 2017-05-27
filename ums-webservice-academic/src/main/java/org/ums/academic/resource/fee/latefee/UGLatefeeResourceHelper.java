@@ -5,25 +5,23 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.Validate;
-import org.glassfish.jersey.server.Uri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.fee.latefee.MutableUGLateFee;
-import org.ums.fee.latefee.PersistentUGLateFee;
-import org.ums.fee.latefee.UGLateFee;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.latefee.MutableLateFee;
+import org.ums.fee.latefee.PersistentLateFee;
+import org.ums.fee.latefee.LateFee;
+import org.ums.fee.latefee.LateFeeManager;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UGLatefeeResourceHelper extends ResourceHelper<UGLateFee, MutableUGLateFee, Long> {
+public class UGLatefeeResourceHelper extends ResourceHelper<LateFee, MutableLateFee, Long> {
   @Autowired
-  private UGLateFeeManager mUGLateFeeManager;
+  private LateFeeManager mLateFeeManager;
   @Autowired
   private UGLatefeeBuilder mUGLatefeeBuilder;
 
@@ -31,16 +29,16 @@ public class UGLatefeeResourceHelper extends ResourceHelper<UGLateFee, MutableUG
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     Validate.notEmpty(pJsonObject);
     Validate.notNull(pJsonObject.getJsonObject("entries"));
-    List<MutableUGLateFee> mutableUGLateFees = readEntities(pJsonObject, PersistentUGLateFee.class);
-    mUGLateFeeManager.create(mutableUGLateFees);
+    List<MutableLateFee> mutableUGLateFees = readEntities(pJsonObject, PersistentLateFee.class);
+    mLateFeeManager.create(mutableUGLateFees);
     return Response.ok().build();
   }
 
   JsonObject getLatefees(Integer pSemesterId, UriInfo pUriInfo) {
-    List<UGLateFee> fees = mUGLateFeeManager.getLateFees(pSemesterId);
+    List<LateFee> fees = mLateFeeManager.getLateFees(pSemesterId);
     LocalCache localCache = new LocalCache();
     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-    for(UGLateFee fee : fees) {
+    for(LateFee fee : fees) {
       arrayBuilder.add(toJson(fee, pUriInfo, localCache));
     }
     JsonObjectBuilder builder = Json.createObjectBuilder();
@@ -51,28 +49,28 @@ public class UGLatefeeResourceHelper extends ResourceHelper<UGLateFee, MutableUG
   Response updateLatefees(Integer pSemesterId, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     Validate.notEmpty(pJsonObject);
     Validate.notNull(pJsonObject.getJsonObject("entries"));
-    List<MutableUGLateFee> mutableUGLateFees = readEntities(pJsonObject, PersistentUGLateFee.class);
+    List<MutableLateFee> mutableUGLateFees = readEntities(pJsonObject, PersistentLateFee.class);
     // Validate first
-    List<UGLateFee> fees = mUGLateFeeManager.getLateFees(pSemesterId);
+    List<LateFee> fees = mLateFeeManager.getLateFees(pSemesterId);
     if(!isValidUpdateOfEntities(fees, mutableUGLateFees)) {
       return Response.status(Response.Status.PRECONDITION_FAILED).build();
     }
-    mUGLateFeeManager.update(mutableUGLateFees);
+    mLateFeeManager.update(mutableUGLateFees);
     return Response.ok().build();
   }
 
   @Override
-  protected ContentManager<UGLateFee, MutableUGLateFee, Long> getContentManager() {
-    return mUGLateFeeManager;
+  protected ContentManager<LateFee, MutableLateFee, Long> getContentManager() {
+    return mLateFeeManager;
   }
 
   @Override
-  protected Builder<UGLateFee, MutableUGLateFee> getBuilder() {
+  protected Builder<LateFee, MutableLateFee> getBuilder() {
     return mUGLatefeeBuilder;
   }
 
   @Override
-  protected String getETag(UGLateFee pReadonly) {
+  protected String getETag(LateFee pReadonly) {
     return pReadonly.getLastModified();
   }
 }

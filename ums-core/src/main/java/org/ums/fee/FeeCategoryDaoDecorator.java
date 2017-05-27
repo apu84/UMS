@@ -10,4 +10,9 @@ public class FeeCategoryDaoDecorator extends
   public List<FeeCategory> getFeeCategories(Integer pFeeTypeId) {
     return getManager().getFeeCategories(pFeeTypeId);
   }
+
+  @Override
+  public FeeCategory getByFeeId(String pFeeId) {
+    return getManager().getByFeeId(pFeeId);
+  }
 }

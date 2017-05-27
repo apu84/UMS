@@ -69,7 +69,8 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
   public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE (FACULTY_ID = ? OR FACULTY_ID IS NULL) AND SEMESTER_ID = ?";
     return mJdbcTemplate.query(query,
-        new Object[] {pFacultyId, mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId))},
+        new Object[] {pFacultyId,
+            mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId)).getId()},
         new FeeRowMapper());
   }
 
@@ -80,7 +81,7 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
     parameters.addValue("categoryIds", categoryIds);
     parameters.addValue("facultyId", pFacultyId);
     parameters.addValue("semesterId",
-        mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId)));
+        mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId)).getId());
 
     String query = SELECT_ALL + "WHERE (FACULTY_ID = :facultyId OR FACULTY_ID IS NULL) AND SEMESTER_ID = :semesterId"
         + " AND FEE_CATEGORY_ID IN (:categoryIds)";
@@ -93,13 +94,14 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
   public List<UGFee> getLatestFee(Integer pFacultyId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE (FACULTY_ID = ? OR FACULTY_ID IS NULL) AND SEMESTER_ID = ?";
     return mJdbcTemplate.query(query,
-        new Object[] {pFacultyId, mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId))},
+        new Object[] {pFacultyId,
+            mSemesterManager.closestSemester(pSemesterId, getDistinctSemesterIds(pFacultyId)).getId()},
         new FeeRowMapper());
   }
 
   @Override
   public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
-    String query = "SELECT DISTINCT SEMESTER_ID FROM UG_FEE WHERE FACULTY_ID = ?";
+    String query = "SELECT DISTINCT SEMESTER_ID FROM FEE WHERE FACULTY_ID = ?  OR FACULTY_ID IS NULL";
     return mJdbcTemplate.query(query, new Object[] {pFacultyId}, new FeeSemesterRowMapper());
   }
 

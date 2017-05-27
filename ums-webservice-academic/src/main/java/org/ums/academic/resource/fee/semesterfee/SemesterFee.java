@@ -87,7 +87,7 @@ public class SemesterFee extends Resource {
 
   @GET
   @Path("/installment-available/{semesterId}")
-  public Boolean installmentAvailble(final @PathParam("semesterId") int pSemesterId) throws Exception {
+  public Boolean installmentAvailable(final @PathParam("semesterId") int pSemesterId) throws Exception {
     return mSemesterFeeHelper.installmentAvailable(getLoggedInUser(), pSemesterId);
   }
 

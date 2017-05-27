@@ -9,8 +9,8 @@ import org.ums.fee.certificate.CertificateStatusDao;
 import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.dues.StudentDuesDao;
 import org.ums.fee.dues.StudentDuesManager;
-import org.ums.fee.latefee.UGLateFeeDao;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.latefee.LateFeeDao;
+import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.PostPaymentActions;
 import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.fee.payment.StudentPaymentManager;
@@ -51,8 +51,8 @@ public class FeeContext {
   }
 
   @Bean
-  UGLateFeeManager ugLateFeeManager() {
-    return new UGLateFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  LateFeeManager lateFeeManager() {
+    return new LateFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean

@@ -8,10 +8,10 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.SemesterManager;
 
-public class PersistentUGLateFee implements MutableUGLateFee {
+public class PersistentLateFee implements MutableLateFee {
 
   private static SemesterManager sSemesterManager;
-  private static UGLateFeeManager sUGLateFeeManager;
+  private static LateFeeManager sLateFeeManager;
   private Long mId;
   private Date mFrom;
   private Date mTo;
@@ -103,27 +103,27 @@ public class PersistentUGLateFee implements MutableUGLateFee {
 
   @Override
   public Long create() {
-    return sUGLateFeeManager.create(this);
+    return sLateFeeManager.create(this);
   }
 
   @Override
   public void update() {
-    sUGLateFeeManager.update(this);
+    sLateFeeManager.update(this);
   }
 
   @Override
-  public MutableUGLateFee edit() {
-    return new PersistentUGLateFee(this);
+  public MutableLateFee edit() {
+    return new PersistentLateFee(this);
   }
 
   @Override
   public void delete() {
-    sUGLateFeeManager.delete(this);
+    sLateFeeManager.delete(this);
   }
 
-  public PersistentUGLateFee() {}
+  public PersistentLateFee() {}
 
-  public PersistentUGLateFee(MutableUGLateFee pLateFee) {
+  public PersistentLateFee(MutableLateFee pLateFee) {
     setId(pLateFee.getId());
     setFrom(pLateFee.getFrom());
     setTo(pLateFee.getTo());
@@ -136,6 +136,6 @@ public class PersistentUGLateFee implements MutableUGLateFee {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sUGLateFeeManager = applicationContext.getBean("lateFeeManager", UGLateFeeManager.class);
+    sLateFeeManager = applicationContext.getBean("lateFeeManager", LateFeeManager.class);
   }
 }
