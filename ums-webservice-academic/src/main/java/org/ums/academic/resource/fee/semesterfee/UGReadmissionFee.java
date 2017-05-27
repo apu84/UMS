@@ -14,8 +14,8 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.enums.CourseType;
 import org.ums.fee.*;
-import org.ums.fee.latefee.UGLateFee;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.latefee.LateFee;
+import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
@@ -37,8 +37,6 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   @Autowired
   private ParameterSettingManager mParameterSettingManager;
   @Autowired
-  private UGLateFeeManager mUGLateFeeManager;
-  @Autowired
   private SemesterAdmissionStatusManager mSemesterAdmissionStatusManager;
   @Autowired
   private InstallmentSettingsManager mInstallmentSettingsManager;
@@ -49,7 +47,7 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   @Autowired
   UGFeeManager mUgFeeManager;
   @Autowired
-  UGLateFeeManager mUgLateFeeManager;
+  LateFeeManager mLateFeeManager;
   @Autowired
   StudentManager mStudentManager;
   @Autowired
@@ -64,13 +62,13 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   @Override
   public boolean withinFirstInstallmentSlot(Integer pSemesterId) {
     return withInSlot(Parameter.ParameterName.READMISSION_FIRST_INSTALLMENT,
-        UGLateFee.AdmissionType.READMISSION_FIRST_INSTALLMENT, pSemesterId);
+        LateFee.AdmissionType.READMISSION_FIRST_INSTALLMENT, pSemesterId);
   }
 
   @Override
   public boolean withinSecondInstallmentSlot(Integer pSemesterId) {
     return withInSlot(Parameter.ParameterName.READMISSION_SECOND_INSTALLMENT,
-        UGLateFee.AdmissionType.READMISSION_SECOND_INSTALLMENT, pSemesterId);
+        LateFee.AdmissionType.READMISSION_SECOND_INSTALLMENT, pSemesterId);
   }
 
   @Override
@@ -84,7 +82,7 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
       ugFees.add(dropFee.get());
     }
     UGFees fees = new UGFees(ugFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.READMISSION_FIRST_INSTALLMENT));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.READMISSION_FIRST_INSTALLMENT));
     return fees;
   }
 
@@ -102,7 +100,7 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
         .collect(Collectors.toList());
     readmissionFees.addAll(installmentFees);
     UGFees fees = new UGFees(readmissionFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.READMISSION_SECOND_INSTALLMENT));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.READMISSION_SECOND_INSTALLMENT));
     return fees;
   }
 
@@ -145,14 +143,14 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
       ugFees.add(sessionalFee.get());
     }
     UGFees fees = new UGFees(ugFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.READMISSION));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.READMISSION));
     return fees;
   }
 
   @Override
   public boolean withInAdmissionSlot(Integer pSemesterId) {
     UGSemesterFeeResponse installmentStatus = getInstallmentStatus(pSemesterId);
-    return withInSlot(Parameter.ParameterName.READMISSION, UGLateFee.AdmissionType.READMISSION, pSemesterId)
+    return withInSlot(Parameter.ParameterName.READMISSION, LateFee.AdmissionType.READMISSION, pSemesterId)
         || (installmentStatus == UGSemesterFeeResponse.INSTALLMENT_AVAILABLE && (withinFirstInstallmentSlot(pSemesterId) || withinSecondInstallmentSlot(pSemesterId)));
   }
 
@@ -224,9 +222,8 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
     return mParameterSettingManager;
   }
 
-  @Override
-  UGLateFeeManager getUGLateFeeManager() {
-    return mUGLateFeeManager;
+  LateFeeManager getLateFeeManager() {
+    return mLateFeeManager;
   }
 
   @Override
@@ -257,5 +254,10 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   @Override
   InstallmentStatusManager getInstallmentStatusManager() {
     return mInstallmentStatusManager;
+  }
+
+  @Override
+  FeeCategoryManager getFeeCategoryManager() {
+    return mFeeCategoryManager;
   }
 }

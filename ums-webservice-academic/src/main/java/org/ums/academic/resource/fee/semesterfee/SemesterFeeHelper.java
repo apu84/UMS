@@ -10,15 +10,15 @@ import javax.json.JsonObjectBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.fee.UGFee;
-import org.ums.fee.latefee.UGLateFee;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.latefee.LateFee;
+import org.ums.fee.latefee.LateFeeManager;
 
 @Component
 class SemesterFeeHelper {
   @Autowired
   UGSemesterFeeFactory mUGSemesterFeeFactory;
   @Autowired
-  UGLateFeeManager mUGLateFeeManager;
+  LateFeeManager mLateFeeManager;
 
   @Autowired
   FeeConverter mFeeConverter;
@@ -73,7 +73,7 @@ class SemesterFeeHelper {
     for(UGFee ugFee : pUgFees.getUGFees()) {
       jsonArray.add(mFeeConverter.convert(ugFee));
     }
-    Optional<UGLateFee> lateFee = pUgFees.getUGLateFee();
+    Optional<LateFee> lateFee = pUgFees.getUGLateFee();
     if(lateFee.isPresent()) {
       jsonArray.add(mFeeConverter.convert(lateFee.get()));
     }

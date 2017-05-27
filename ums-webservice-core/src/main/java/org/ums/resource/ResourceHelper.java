@@ -1,14 +1,10 @@
 package org.ums.resource;
 
-import javassist.bytecode.annotation.NoSuchClassError;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.Identifier;
-import org.ums.domain.model.common.LastModifier;
-import org.ums.fee.latefee.MutableUGLateFee;
-import org.ums.fee.latefee.PersistentUGLateFee;
 import org.ums.manager.ContentManager;
 
 import javax.json.*;

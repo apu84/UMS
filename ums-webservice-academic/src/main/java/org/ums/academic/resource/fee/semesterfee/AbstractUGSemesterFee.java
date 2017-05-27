@@ -8,12 +8,9 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.immutable.ParameterSetting;
-import org.ums.fee.FeeCategory;
-import org.ums.fee.FeeType;
-import org.ums.fee.FeeTypeManager;
-import org.ums.fee.UGFee;
-import org.ums.fee.latefee.UGLateFee;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.*;
+import org.ums.fee.latefee.LateFee;
+import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -23,24 +20,24 @@ import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.StudentRecordManager;
 
 abstract class AbstractUGSemesterFee implements UGSemesterFee {
-  boolean withInSlot(Parameter.ParameterName parameterName, UGLateFee.AdmissionType pLateFeeFor, Integer pSemesterId) {
+  boolean withInSlot(Parameter.ParameterName parameterName, LateFee.AdmissionType pLateFeeFor, Integer pSemesterId) {
     Date today = new Date();
     ParameterSetting semesterAdmissionDate =
         getParameterSettingManager().getByParameterAndSemesterId(parameterName.getLabel(), pSemesterId);
-    if(semesterAdmissionDate.getStartDate().after(today) && semesterAdmissionDate.getEndDate().before(today)) {
+    if(semesterAdmissionDate.getStartDate().before(today) && semesterAdmissionDate.getEndDate().after(today)) {
       return true;
     }
     else {
-      Optional<UGLateFee> ugLateFee = getLateFee(pSemesterId, pLateFeeFor);
+      Optional<LateFee> ugLateFee = getLateFee(pSemesterId, pLateFeeFor);
       return ugLateFee.isPresent();
     }
   }
 
-  Optional<UGLateFee> getLateFee(Integer pSemesterId, UGLateFee.AdmissionType pLateFeeFor) {
+  Optional<LateFee> getLateFee(Integer pSemesterId, LateFee.AdmissionType pLateFeeFor) {
     Date today = new Date();
-    List<UGLateFee> lateFees = getUGLateFeeManager().getLateFees(pSemesterId);
-    for(UGLateFee fee : lateFees) {
-      if(fee.getFrom().after(today) && fee.getTo().before(today) && fee.getAdmissionType() == pLateFeeFor) {
+    List<LateFee> lateFees = getLateFeeManager().getLateFees(pSemesterId);
+    for(LateFee fee : lateFees) {
+      if(fee.getFrom().before(today) && fee.getTo().after(today) && fee.getAdmissionType() == pLateFeeFor) {
         return Optional.of(fee);
       }
     }
@@ -116,7 +113,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
 
   @Transactional
   private UGSemesterFeeResponse payFee(UGFees fees, String pStudentId, Integer pSemesterId) {
-    Optional<UGLateFee> lateFee = fees.getUGLateFee();
+    Optional<LateFee> lateFee = fees.getUGLateFee();
     Date transactionValidTill =
         lateFee.isPresent() ? lateFee.get().getTo() : getTransactionValidTill(
             Parameter.ParameterName.REGUALR_ADMISSION, pSemesterId);
@@ -141,9 +138,9 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
     return payment;
   }
 
-  private MutableStudentPayment createPayment(UGLateFee fee, String pStudentId, Integer pSemesterId, Date pValidTill) {
+  private MutableStudentPayment createPayment(LateFee fee, String pStudentId, Integer pSemesterId, Date pValidTill) {
     MutableStudentPayment payment = new PersistentStudentPayment();
-    payment.setFeeCategoryId(FeeCategory.Categories.LATE_FEE.toString());
+    payment.setFeeCategoryId(getFeeCategoryManager().getByFeeId(FeeCategory.Categories.LATE_FEE.toString()).getId());
     payment.setStudentId(pStudentId);
     payment.setSemesterId(pSemesterId);
     payment.setAmount(fee.getFee());
@@ -159,7 +156,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
 
   abstract ParameterSettingManager getParameterSettingManager();
 
-  abstract UGLateFeeManager getUGLateFeeManager();
+  abstract LateFeeManager getLateFeeManager();
 
   abstract StudentRecordManager getStudentRecordManager();
 
@@ -172,4 +169,6 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
   abstract SemesterAdmissionStatusManager getSemesterAdmissionStatusManager();
 
   abstract InstallmentStatusManager getInstallmentStatusManager();
+
+  abstract FeeCategoryManager getFeeCategoryManager();
 }

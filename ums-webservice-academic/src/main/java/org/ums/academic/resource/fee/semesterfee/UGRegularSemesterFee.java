@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.immutable.Student;
 import org.ums.fee.*;
-import org.ums.fee.latefee.UGLateFee;
-import org.ums.fee.latefee.UGLateFeeManager;
+import org.ums.fee.latefee.LateFee;
+import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
@@ -27,8 +27,6 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Autowired
   private ParameterSettingManager mParameterSettingManager;
   @Autowired
-  private UGLateFeeManager mUGLateFeeManager;
-  @Autowired
   private SemesterAdmissionStatusManager mSemesterAdmissionStatusManager;
   @Autowired
   private InstallmentSettingsManager mInstallmentSettingsManager;
@@ -37,24 +35,24 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Autowired
   private StudentRecordManager mStudentRecordManager;
   @Autowired
-  UGFeeManager mUgFeeManager;
+  private UGFeeManager mUgFeeManager;
   @Autowired
-  UGLateFeeManager mUgLateFeeManager;
+  private LateFeeManager mLateFeeManager;
   @Autowired
-  StudentManager mStudentManager;
+  private StudentManager mStudentManager;
   @Autowired
-  FeeCategoryManager mFeeCategoryManager;
+  private FeeCategoryManager mFeeCategoryManager;
 
   @Override
   public boolean withinFirstInstallmentSlot(Integer pSemesterId) {
     return withInSlot(Parameter.ParameterName.REGULAR_FIRST_INSTALLMENT,
-        UGLateFee.AdmissionType.REGULAR_FIRST_INSTALLMENT, pSemesterId);
+        LateFee.AdmissionType.REGULAR_FIRST_INSTALLMENT, pSemesterId);
   }
 
   @Override
   public boolean withinSecondInstallmentSlot(Integer pSemesterId) {
-    return withInSlot(Parameter.ParameterName.READMISSION_SECOND_INSTALLMENT,
-        UGLateFee.AdmissionType.READMISSION_SECOND_INSTALLMENT, pSemesterId);
+    return withInSlot(Parameter.ParameterName.REGULAR_SECOND_INSTALLMENT,
+        LateFee.AdmissionType.REGULAR_SECOND_INSTALLMENT, pSemesterId);
   }
 
   @Override
@@ -64,15 +62,15 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
         .filter((fee) -> !fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.TUITION.toString()))
         .collect(Collectors.toList());
     UGFees fees = new UGFees(ugFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.REGULAR_FIRST_INSTALLMENT));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.REGULAR_FIRST_INSTALLMENT));
     return fees;
   }
 
   @Override
   public UGFees secondInstallment(String pStudentId, Integer pSemesterId) {
     Student student = mStudentManager.get(pStudentId);
-    List<UGFee> ugFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(),
-        student.getSemesterId(), mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
+    List<UGFee> ugFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId(),
+        mFeeCategoryManager.getFeeCategories(FeeType.Types.SEMESTER_FEE.getId()));
     List<UGFee> installmentFees = ugFees.stream().filter(
         (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.INSTALLMENT_CHARGE.toString()))
         .collect(Collectors.toList());
@@ -83,15 +81,14 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
         .collect(Collectors.toList());
     admissionFees.addAll(installmentFees);
     UGFees fees = new UGFees(admissionFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.REGULAR_SECOND_INSTALLMENT));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.REGULAR_SECOND_INSTALLMENT));
     return fees;
   }
 
   @Override
   public UGFees getFee(String pStudentId, Integer pSemesterId) {
     Student student = mStudentManager.get(pStudentId);
-    List<UGFee> ugFees =
-        mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId());
+    List<UGFee> ugFees = mUgFeeManager.getFee(student.getProgram().getFaculty().getId(), student.getSemesterId());
     ugFees = ugFees.stream()
         .filter((fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.ADMISSION.toString())
             || fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.ESTABLISHMENT.toString())
@@ -99,14 +96,14 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
             || fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.LABORATORY.toString()))
         .collect(Collectors.toList());
     UGFees fees = new UGFees(ugFees);
-    fees.setUGLateFee(getLateFee(pSemesterId, UGLateFee.AdmissionType.REGULAR_ADMISSION));
+    fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.REGULAR_ADMISSION));
     return fees;
   }
 
   @Override
   public boolean withInAdmissionSlot(Integer pSemesterId) {
     UGSemesterFeeResponse installmentStatus = getInstallmentStatus(pSemesterId);
-    return withInSlot(Parameter.ParameterName.REGUALR_ADMISSION, UGLateFee.AdmissionType.REGULAR_ADMISSION, pSemesterId)
+    return withInSlot(Parameter.ParameterName.REGUALR_ADMISSION, LateFee.AdmissionType.REGULAR_ADMISSION, pSemesterId)
         || (installmentStatus == UGSemesterFeeResponse.INSTALLMENT_AVAILABLE && (withinFirstInstallmentSlot(pSemesterId) || withinSecondInstallmentSlot(pSemesterId)));
   }
 
@@ -117,7 +114,7 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
 
   @Override
   public UGSemesterFeeResponse getAdmissionStatus(String pStudentId, Integer pSemesterId) {
-    return null;
+    return UGSemesterFeeResponse.ALLOWED;
   }
 
   @Override
@@ -125,9 +122,8 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
     return mParameterSettingManager;
   }
 
-  @Override
-  UGLateFeeManager getUGLateFeeManager() {
-    return mUGLateFeeManager;
+  LateFeeManager getLateFeeManager() {
+    return mLateFeeManager;
   }
 
   @Override
@@ -158,5 +154,10 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Override
   InstallmentStatusManager getInstallmentStatusManager() {
     return mInstallmentStatusManager;
+  }
+
+  @Override
+  FeeCategoryManager getFeeCategoryManager() {
+    return mFeeCategoryManager;
   }
 }

@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.manager.DepartmentManager;
+import org.ums.manager.FacultyManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.ProgramTypeManager;
 
@@ -15,12 +16,14 @@ public class PersistentProgram implements MutableProgram {
   private static DepartmentManager sDepartmentManger;
   private static ProgramManager sProgramManager;
   private static ProgramTypeManager sProgramTypeManager;
+  private static FacultyManager sFacultyManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManger = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sProgramTypeManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
+    sFacultyManager = applicationContext.getBean("facultyManager", FacultyManager.class);
   }
 
   private int mId;
@@ -49,7 +52,7 @@ public class PersistentProgram implements MutableProgram {
 
   @Override
   public Faculty getFaculty() {
-    return mFaculty;
+    return mFaculty == null ? sFacultyManager.get(mFacultyId) : sFacultyManager.validate(mFaculty);
   }
 
   @Override
