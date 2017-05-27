@@ -9,7 +9,8 @@ module ums {
     'ngSanitize',
     'scrollable-table',
     'amChartsDirective',
-    'ui.sortable'
+    'ui.sortable',
+      "angularUtils.directives.dirPagination"
   ]);
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {

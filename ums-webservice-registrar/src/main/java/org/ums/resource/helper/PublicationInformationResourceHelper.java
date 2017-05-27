@@ -3,14 +3,18 @@ package org.ums.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.PublicationInformationBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.enums.common.RoleType;
+import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
@@ -22,8 +26,10 @@ import org.ums.services.ApprovePublicationService;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PublicationInformationResourceHelper extends
@@ -37,6 +43,9 @@ public class PublicationInformationResourceHelper extends
 
   @Autowired
   ApprovePublicationService mApprovePublicationService;
+
+  @Autowired
+  AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
   @Autowired
   EmployeeManager mEmployeeManager;
@@ -54,6 +63,22 @@ public class PublicationInformationResourceHelper extends
     }
     return toJson(pPublicationInformation, pUriInfo);
   }
+
+  // public JsonObject getPaginatedPublicationInformation(final int pPageNumber, final int
+  // pItemPerPage,
+  // final UriInfo pUriInfo) {
+  // String userId =
+  // userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  //
+  // List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+  // try {
+  // pPublicationInformation =
+  // mPublicationInformationManager.getEmployeePublicationInformation(userId);
+  // } catch(EmptyResultDataAccessException e) {
+  //
+  // }
+  // return toJson(pPublicationInformation, pUriInfo);
+  // }
 
   public JsonObject getPublicationInformation(final String pEmployeeId, final String pStatus, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
@@ -93,7 +118,10 @@ public class PublicationInformationResourceHelper extends
       mPublicationInformationBuilder.build(publicationInformation, publicationJsonArray.getJsonObject(i), localCache);
       mutablePublicationInformation.add(publicationInformation);
     }
-    mApprovePublicationService.setNotification("dpreg", employee);
+
+    List<AdditionalRolePermissions> rolePermissions = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
+
+      mApprovePublicationService.setNotification("dpreg", employee);
     mPublicationInformationManager.savePublicationInformation(mutablePublicationInformation);
 
     Response.ResponseBuilder builder = Response.created(null);

@@ -79,6 +79,7 @@ module ums {
         districtMap: any;
         thanaMap: any;
         data: any;
+        pagination: any;
         //$$childTail: any;
 
         changeNav: Function;
@@ -111,6 +112,7 @@ module ums {
         getDivision: Function;
         getDistrictL: Function;
         getThana: Function;
+        pageChanged: Function;
 
         entry: IEntry;
         gender: Array<IGender>;
@@ -235,8 +237,13 @@ module ums {
 
             $scope.data = {
                 supOptions: "",
-                borderColor: ""
+                borderColor: "",
+                itemPerPage: 2,
+                totalRecord: 0
             };
+
+            $scope.pagination = {};
+            $scope.pagination.currentPage = 1;
 
             $scope.waitingForApprovalPublications = Array<IPublicationInformationModel>();
 
@@ -269,6 +276,7 @@ module ums {
             $scope.changePresentAddressFields = this.changePresentAddressFields.bind(this);
             $scope.changePermanentAddressFields = this.changePermanentAddressFields.bind(this);
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
+            $scope.pageChanged = this.pageChanged.bind(this);
 
             this.initializeVariables();
         }
@@ -298,10 +306,10 @@ module ums {
             this.createMap();
             // this.changeNav('personal');
 
-             this.getPersonalInformation();
+            // this.getPersonalInformation();
             // this.getAcademicInformation();
             // this.getAwardInformation();
-            // this.getPublicationInformation();
+             this.getPublicationInformation();
             // this.getExperienceInformation();
             // this.getTrainingInformation();
         }
@@ -643,13 +651,16 @@ module ums {
                 console.log(publicationInformation);
                 console.log("Publication.length");
                 console.log(publicationInformation.length);
+                this.$scope.data.totalRecord = publicationInformation.length;
+                console.log("Total Records: ");
+                console.log(this.$scope.data.totalRecord);
                 this.setSavedValuesOfPublicationForm(publicationInformation);
             });
         }
 
         private setSavedValuesOfPublicationForm(publicationInformation: any) {
             for (let i = 0; i < publicationInformation.length; i++) {
-                if(publicationInformation[i].status === "Waiting") {
+                if(publicationInformation[i].status === "0") {
                     this.$scope.borderColor = "red";
                     this.$scope.entry.publication[i] = publicationInformation[i];
                     this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
@@ -1168,6 +1179,10 @@ module ums {
                 console.log(this.$scope.data.supOptions);
                 this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.permanentAddressThana.name + " " + this.$scope.entry.personal.permanentAddressDistrict.name + " - " + permanentPostalCode;
             }
+        }
+
+        private pageChanged(pageNumber: number){
+            //this.getPublicationInformation(pageNumber);
         }
     }
 
