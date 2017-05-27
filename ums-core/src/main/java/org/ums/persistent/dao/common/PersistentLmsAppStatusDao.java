@@ -33,7 +33,7 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  private String SELECT_ALL = "select * from lms_app_status";
+  private String SELECT_ALL = "select *,ROWNUM row_number from lms_app_status";
   private String INSERT_ONE =
       "insert into LMS_APP_STATUS(ID,APP_ID,ACTION_TAKEN_ON, ACTION_TAKEN_BY, COMMENTS, ACTION_STATUS, LAST_MODIFIED) values(?,?,sysdate,?,?,?,"
           + getLastModifiedSql() + ")";
@@ -49,13 +49,13 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
 
   @Override
   public List<LmsAppStatus> getAll() {
-    String query = SELECT_ALL;
+    String query = "select a.*, rownum row_number from (select * from LMS_APP_STATUS)a";
     return mJdbcTemplate.query(query, new LmsAppStatusRowMapper());
   }
 
   @Override
   public LmsAppStatus get(Long pId) {
-    String query = SELECT_ALL + " id=?";
+    String query = "select a.*, rownum row_number from (select * from LMS_APP_STATUS where id=?)a";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LmsAppStatusRowMapper());
   }
 
@@ -152,14 +152,15 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
 
   @Override
   public List<LmsAppStatus> getAppStatus(Long pApplicationId) {
-    String query = SELECT_ALL + " where app_id=? order by action_taken_on";
+    String query =
+        " select a.*, rownum row_number from (select * from LMS_APP_STATUS where APP_ID=? ORDER BY  ACTION_TAKEN_ON)a";
     return mJdbcTemplate.query(query, new Object[] {pApplicationId}, new LmsAppStatusRowMapper());
   }
 
   @Override
   public List<LmsAppStatus> getLmsAppStatusList(String pEmployeeId) {
     String query =
-        "select * from LMS_APP_STATUS where APP_ID in (select id from LMS_APPLICATION where APP_STATUS=2 and EMPLOYEE_ID=?)  ORDER BY action_taken_on";
+        "select a.*, rownum row_number from (select * from LMS_APP_STATUS where APP_ID in (select id from LMS_APPLICATION where APP_STATUS=2 and EMPLOYEE_ID=?)  ORDER BY action_taken_on)a";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsAppStatusRowMapper());
   }
 
@@ -197,6 +198,37 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
 
   }
 
+  @Override
+  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApprovalStatus, User pUser, Role pRole) {
+    String query = "";
+    if(pRole.getId() == RoleType.DEPT_HEAD.getId()) {
+      query =
+          "SELECT * "
+              + "FROM ( "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE ACTION_STATUS = ? AND APP_ID IN ( "
+              + "           SELECT ID "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE APP_STATUS = 2 AND EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a)";
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApprovalStatus.getId(), pUser.getDepartment().getId()},
+          new LmsAppStatusRowMapper());
+    }
+    else {
+      query =
+          "SELECT * " + "FROM ( " + "  SELECT " + "    a.*, " + "    ROWNUM row_number " + "  FROM ( "
+              + "         SELECT * " + "         FROM LMS_APP_STATUS " + "         WHERE ACTION_STATUS = ? "
+              + "         ORDER BY ACTION_TAKEN_ON) a)";
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApprovalStatus.getId()}, new LmsAppStatusRowMapper());
+
+    }
+  }
+
   class LmsAppStatusRowMapper implements RowMapper<LmsAppStatus> {
     @Override
     public LmsAppStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -208,9 +240,8 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
       status.setComments(rs.getString("comments"));
       if(rs.getInt("action_status") != 0)
         status.setActionStatus(LeaveApprovalStatus.get(rs.getInt("action_status")));
-      /*
-       * if(rs.getInt("row_number") != 0) status.setRowNumber(rs.getInt("row_number"));
-       */
+      if(rs.getInt("row_number") != 0)
+        status.setRowNumber(rs.getInt("row_number"));
       status.setLastModified(rs.getString("last_modified"));
       return status;
     }

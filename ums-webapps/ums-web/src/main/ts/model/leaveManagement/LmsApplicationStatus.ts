@@ -16,6 +16,7 @@ module ums {
     actionTakenOn: string;
     actionTakenBy: string;
     actionTakenByName: string;
+    rowNumber: number;
     comments: string;
     actionStatus: number;
     actionStatusLabel: string;

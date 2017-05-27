@@ -43,6 +43,8 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
      * pBuilder.add("applicationStatusLabel",
      * pReadOnly.getLmsApplication().getApplicationStatus().getLabel());
      */
+    if(pReadOnly.getRowNumber() != 0)
+      pBuilder.add("rowNumber", pReadOnly.getRowNumber());
     pBuilder.add("actionTakenOn", formatter.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("actionTakenBy", pReadOnly.getActionTakenBy().getId());
     pBuilder.add("actionTakenByName", pReadOnly.getActionTakenBy().getEmployeeName());

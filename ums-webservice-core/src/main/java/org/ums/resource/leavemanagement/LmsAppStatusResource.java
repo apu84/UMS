@@ -35,4 +35,10 @@ public class LmsAppStatusResource extends MutableLmsAppStatusResource {
       @PathParam("page-number") int pageNumber, @PathParam("page-size") int pageSize) {
     return mHelper.getLeaveApplications(LeaveApprovalStatus.get(pStatus), pageNumber, pageSize, mUriInfo);
   }
+
+  @GET
+  @Path("/leaveApplications/status/{status}")
+  public JsonObject getLeaveApplications(final @Context Request pRequest, @PathParam("status") int pStatus) {
+    return mHelper.getLeaveApplications(LeaveApprovalStatus.get(pStatus), mUriInfo);
+  }
 }

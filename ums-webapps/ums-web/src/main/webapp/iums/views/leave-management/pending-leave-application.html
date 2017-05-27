@@ -1,8 +1,15 @@
-<h2>Pending Applications</h2>
+<div align="right">
+    <dir-pagination-controls boundary-links="true"
+                             pagination-id="leaveApplication"
+                             on-page-change="pageChanged(newPageNumber)"
+                             template-url="views\leave-management\dirPagination.html"></dir-pagination-controls>
+</div>
+
 
 <table class="table table-bordered table-striped">
     <thead>
     <tr>
+        <th></th>
         <th>Applied On</th>
         <th>Leave Type</th>
         <th>From</th>
@@ -12,15 +19,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="p in pendingApplications" data-ng-click="fetchApplicationStatus(p)" style="cursor: pointer;">
-        <td>{{p.appliedOn}}</td>
-        <td>{{p.leaveTypeName}}</td>
-        <td>{{p.fromDate}}</td>
-        <td>{{p.toDate}}</td>
-        <td>{{p.duration}}(days)</td>
-        <td>{{p.actionStatusLabel}}</td>
-    </tr>
-    <!--<tr dir-paginate="p in pendingApplications | itemsPerPage: 10">
+    <!--<tr data-ng-repeat="p in pendingApplications" data-ng-click="fetchApplicationStatus(p)" style="cursor: pointer;">
+        <td>{{p.rowNumber}}</td>
         <td>{{p.appliedOn}}</td>
         <td>{{p.leaveTypeName}}</td>
         <td>{{p.fromDate}}</td>
@@ -28,10 +28,22 @@
         <td>{{p.duration}}(days)</td>
         <td>{{p.actionStatusLabel}}</td>
     </tr>-->
+    <tr dir-paginate="p in pendingApplications | itemsPerPage: itemsPerPage" current-page="pagination.currentPage"
+        total-items="totalItems"
+        pagination-id="leaveApplication"
+        data-ng-click="fetchApplicationStatus(p, pagination.currentPage)"
+        style="cursor: pointer;">
+        <td>{{p.rowNumber}}</td>
+        <td>{{p.appliedOn}}</td>
+        <td>{{p.leaveTypeName}}</td>
+        <td>{{p.fromDate}}</td>
+        <td>{{p.toDate}}</td>
+        <td>{{p.duration}}(days)</td>
+        <td>{{p.actionStatusLabel}}</td>
+    </tr>
+
     </tbody>
 </table>
-<dir-pagination-controls boundary-links="true"
-                         on-page-change="pageChanged(newPageNumber)"
-                         template-url="'views/leave-management/dirPagination.pendingLeaves.html"></dir-pagination-controls>
+
 
 

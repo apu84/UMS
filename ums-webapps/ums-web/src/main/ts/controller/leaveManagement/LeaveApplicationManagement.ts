@@ -12,6 +12,10 @@ module ums {
     pendingApplication: LmsApplicationStatus;
     applicationStatusList: Array<LmsApplicationStatus>;
     totalLeaveDurationInDays: number;
+    itemsPerPage: number;
+    pageNumber: number;
+    pagination: any;
+    totalItems: number;
 
     showStatusSection: boolean;
 
@@ -21,6 +25,7 @@ module ums {
     closeStatusSection: Function;
     getTotalDuration: Function;
     updateLeaveType: Function;
+    pageChanged: Function;
   }
 
   class LeaveApplicationManagement {
@@ -43,12 +48,17 @@ module ums {
       $scope.leaveApplication = <LmsApplication>{};
       $scope.showStatusSection = false;
       $scope.totalLeaveDurationInDays = 0;
+      $scope.pageNumber = 1;
+      $scope.pagination = {};
+      $scope.pagination.currentPage = 1;
+      $scope.itemsPerPage = 50;
       $scope.save = this.save.bind(this);
       $scope.applyLeave = this.applyLeave.bind(this);
       $scope.fetchApplicationStatus = this.fetchApplicationStatus.bind(this);
       $scope.closeStatusSection = this.closeStatusSection.bind(this);
       $scope.getTotalDuration = this.getTotalDuration.bind(this);
       $scope.updateLeaveType = this.updateLeaveType.bind(this);
+      $scope.pageChanged = this.pageChanged.bind(this);
 
       this.getLeaveTypes();
       this.getRemainingLeaves();
@@ -82,6 +92,7 @@ module ums {
       this.$scope.pendingApplications = [];
       this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
         this.$scope.pendingApplications = pendingLeaves;
+        this.$scope.totalItems = pendingLeaves.length;
         console.log("Pending leaves");
         console.log(pendingLeaves);
       });
@@ -123,7 +134,8 @@ module ums {
       }
     }
 
-    private fetchApplicationStatus(pendingApplication: LmsApplicationStatus) {
+    private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
+      this.$scope.pagination.currentPage = currentPage;
       this.$scope.showStatusSection = true;
       this.$scope.pendingApplication = pendingApplication;
       this.$scope.applicationStatusList = [];
@@ -132,6 +144,13 @@ module ums {
         console.log(statusList);
         this.$scope.applicationStatusList = statusList;
       });
+    }
+
+    private pageChanged(currentPage: number) {
+      console.log("in the set current");
+      //this.$scope.totalItems = this.$scope.applicationStatusList.length;
+      this.$scope.pagination.currentPage = currentPage;
+      this.getRemainingLeaves();
     }
 
 
