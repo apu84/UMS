@@ -65,7 +65,8 @@ module ums{
         if(orderByClause === undefined || !orderByClause)
           orderByClause = " order by "+defaultOrderByField+" asc";
 
-        var resourceUrl = urlPrefix+"/all/ipp/" +itemPerPage + "/page/" + pageNumber + "/order/" + orderByClause+"/filter/"+JSON.stringify(filterList);
+        var resourceUrl = urlPrefix+"/all/ipp/" +itemPerPage + "/page/" + pageNumber + "/order/" + orderByClause+"?filter="+JSON.stringify(filterList);
+
         var defer = this.b$q.defer();
         this.bHttpClient.get(resourceUrl, HttpClient.MIME_TYPE_JSON,
             (json: any, etag: string) => {
