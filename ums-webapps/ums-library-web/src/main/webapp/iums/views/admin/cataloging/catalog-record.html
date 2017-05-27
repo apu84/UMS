@@ -214,8 +214,8 @@
     </fieldset>
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>Contributors
-            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"  data-ng-if="data.readOnlyMode==false"></i>
-            &nbsp;&nbsp;
+            &nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor"  data-ng-if="data.readOnlyMode==false"></i>
+            <i class="fa fa-refresh" style="cursor: pointer" data-ng-click="reloadContributors()" data-ng-if="data.readOnlyMode==false"></i>
             <span style="float: right;"  data-ng-if="data.readOnlyMode==false">[ <a ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;color: white;"></i></a> ]</span>
         </legend>
 
@@ -235,14 +235,19 @@
             </div>
             <label  class="col-md-1 control-label" for="contributor{{$index}}">Name
             </label>
-            <div class="col-md-4" >
-                <div  data-ng-if="!data.readOnlyMode">
-                    <input type="text" class="form-control required" style="width: 98%"  data-select="select2"  page="true" data-ng-if="showContributorSelect2"
+            <div class="col-md-4" id="recordContributorDiv{{$index}}">
+
+                <span data-ng-if="showContributorSelect2" >
+                    <input type="text" class="form-control required" style="width: 98%"  data-select="select2"  page="true"
                            datas="contributorList"  placeholder="Select a Contributor" data-ng-model="contributor.id"  id="contributor{{$index}}" name="contributor{{$index}}"/>
+                </span>
+                <!--
+                <div  data-ng-if="!data.readOnlyMode">
                 </div>
                 <div  data-ng-if="data.readOnlyMode" style="padding-top: 6px;">
                     Name goes here...
                 </div>
+                -->
             </div>
             <div  class="col-md-1s" style="width: 7%">
                 <i ng-click="deleteRow('contributor',$index)" class="fa fa-times fa-lg" aria-hidden="true" style="color:red;cursor:pointer;" data-ng-if="!data.readOnlyMode"></i>

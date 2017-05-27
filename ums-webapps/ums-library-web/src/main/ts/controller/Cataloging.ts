@@ -38,6 +38,7 @@
     showContributorSelect2: boolean;
     reloadSuppliers : Function;
     reloadPublishers: Function;
+    reloadContributors:Function;
     collectionList : Array<any>;
     recordList : Array<IRecord>;
     recordId : string;
@@ -72,6 +73,8 @@
       $scope.fillSampleData = this.fillSampleData.bind(this);
       $scope.reloadSuppliers = this.reloadSuppliers.bind(this);
       $scope.reloadPublishers = this.reloadPublishers.bind(this);
+      $scope.reloadContributors = this.reloadContributors.bind(this);
+
       $scope.goNext = this.goNext.bind(this);
       $scope.goPrevious = this.goPrevious.bind(this);
       $scope.mangeRecordNavigator =this.mangeRecordNavigator.bind(this);
@@ -692,22 +695,47 @@
       setTimeout(() => {this.$scope.showSupplierSelect2 = true;
         setTimeout(() => {
             Utils.setSelect2Value("supplierSelect2Div","supplier", searchTerm);
-
         }, 200);
       }, 300);
     }
 
 
     private reloadPublishers() : void {
+      let data = $("#publisher").select2("data");
+      console.log(data);
+
+      let searchTerm = data.text;
       this.$scope.showPublisherSelect2 = false;
       this.getAllPublishers();
-      setTimeout(() => {this.$scope.showPublisherSelect2 = true}, 300);
+      setTimeout(() => {
+        // Utils.setSelect2Value("recordPublisherDiv","publisher", searchTerm);
+        $("#publisher").select2('data', {id: data.id , text: data.text});
+      }, 1000);
     }
 
     private reloadContributors() : void {
+      var text :string[] = new Array(this.$scope.record.contributorList.length);
+
+      for(var i=0;i <this.$scope.record.contributorList.length;i++) {
+        let data = $("#contributor"+i).select2("data");
+        console.log(data);
+        text[i] =  data.text;
+      }
+      console.log(text);
+
       this.$scope.showContributorSelect2 = false;
       this.getAllContributors();
-      setTimeout(() => {this.$scope.showContributorSelect2 = true}, 300);
+      setTimeout(() => {
+        this.$scope.showContributorSelect2 = true;
+        setTimeout(() => {
+          for(var i=0;i <this.$scope.record.contributorList.length;i++) {
+            console.log("=====>>"+text[i]);
+            Utils.setSelect2Value("recordContributorDiv"+i,"contributor"+i, text[i]);
+          }
+
+        }, 500);
+
+      }, 300);
     }
 
     private loadCountries() : void {

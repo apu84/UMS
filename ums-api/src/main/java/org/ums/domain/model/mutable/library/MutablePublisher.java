@@ -13,7 +13,7 @@ public interface MutablePublisher extends Publisher, Editable<Long>, MutableLast
 
   void setName(final String pName);
 
-  void setCountryId(final int pCountryId);
+  void setCountryId(final Integer pCountryId);
 
   void setCountry(final Country pCountry);
 
