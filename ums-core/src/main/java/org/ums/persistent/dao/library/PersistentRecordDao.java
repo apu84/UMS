@@ -97,7 +97,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher().getId(),
+            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher()==null?Types.NULL:pRecord.getImprint().getPublisher().getId(),
         pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
             .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
             .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
