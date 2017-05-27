@@ -588,14 +588,12 @@ module ums {
       return {
         leaveApprovalStatus: [
           {id: 1, name: "Waiting for head's approval"},
-          {id: 2, name: "Approved by Head"},
+          {id: 2, name: "Waiting For Registrar's Approval"},
           {id: 3, name: "Rejected by Head"},
           {id: 4, name: "Waiting for VC's approval"},
-          {id: 5, name: "Approved by VC"},
+          {id: 5, name: "Rejected By Registrar"},
           {id: 6, name: "Rejected by VC"},
-          {id: 7, name: "Waiting for Registrar's approval"},
-          {id: 8, name: "Approved by Registrar"},
-          {id: 9, name: "Rejected by Registrar"}
+          {id: 7, name: "Application Approved"}
         ]
       }
     }

@@ -19,4 +19,6 @@ public interface LmsAppStatusManager extends ContentManager<LmsAppStatus, Mutabl
 
   List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApplicationStatus, Role pRole, User pUser,
       int pageNumber, int pageSize);
+
+  List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApprovalStatus, User pUser, Role pRole);
 }

@@ -9,14 +9,12 @@ import java.util.Map;
  */
 public enum LeaveApprovalStatus {
   WAITING_FOR_HEAD_APPROVAL(1, "Waiting For Head's Approval"),
-  ACCEPTED_BY_DEPT_HEAD(2, "Application Approved By Head"),
+  WAITING_FOR_REGISTRARS_APPROVAL(2, "Waiting For Registrar's Approval"),
   REJECTED_BY_DEPT_HEAD(3, "Application Rejected By Head"),
   WAITING_FOR_VC_APPROVAL(4, "Waiting For VC's Approval"),
-  ACCEPTED_BY_VC(5, "Application Accepted By VC"),
+  REJECTED_BY_REGISTRAR(5, "Application Rejected By Registrar"),
   REJECTED_BY_VC(6, "Application Rejected By VC"),
-  WAITING_FOR_REGISTRAR_APPROVAL(7, "Waiting For Registrar's Approval"),
-  ACCEPTED_BY_REGISTRAR(8, "Application Accepted By Registrar"),
-  REJECTED_BY_REGISTRAR(9, "Application Rejected By Registrar");
+  APPLICATION_APPROVED(7, "Application Approved");
 
   private String label;
   private int id;

@@ -43,4 +43,9 @@ public class LmsAppStatusCache extends ContentCache<LmsAppStatus, MutableLmsAppS
       int pageNumber, int pageSize) {
     return getManager().getLmsAppStatusList(pLeaveApplicationStatus, pRole, pUser, pageNumber, pageSize);
   }
+
+  @Override
+  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApprovalStatus, User pUser, Role pRole) {
+    return getManager().getLmsAppStatusList(pLeaveApprovalStatus, pUser, pRole);
+  }
 }

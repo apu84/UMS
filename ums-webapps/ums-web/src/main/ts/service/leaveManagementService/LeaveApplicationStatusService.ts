@@ -53,6 +53,26 @@ module ums {
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json: any, etag: string) => {
+            var lmsAppStatus: any = {};
+            lmsAppStatus.statusList = json.entries;
+            lmsAppStatus.totalSize = json.totalSize;
+            defer.resolve(lmsAppStatus);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting leave applications");
+          });
+
+      return defer.promise;
+    }
+
+
+    public fetchLeaveApplicationsWithOutPagination(leaveApprovalStatus: number): ng.IPromise<any> {
+      var url = "lmsAppStatus/leaveApplications/status/" + leaveApprovalStatus;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
             var lmsAppStatusList: any = {};
             lmsAppStatusList = json.entries;
             defer.resolve(lmsAppStatusList);
