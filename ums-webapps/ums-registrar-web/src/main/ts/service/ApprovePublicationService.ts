@@ -8,8 +8,8 @@ module ums {
         }
 
         public getPublicationInformation(): ng.IPromise<any> {
-            var url= "registrar/employee/publication/getPublicationInformation";
-            var defer = this.$q.defer();
+            let url= "employee/publication/getPublicationInformation";
+            let defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
@@ -35,8 +35,8 @@ module ums {
         }
 
         public updatePublicationStatus(json: any):ng.IPromise<any>{
-            const url = "registrar/employee/publication/updatePublicationStatus";
-            var defer = this.$q.defer();
+            const url = "employee/publication/updatePublicationStatus";
+            let defer = this.$q.defer();
             this.httpClient.put(url , json, HttpClient.MIME_TYPE_JSON)
                 .success(()=>{
                     console.log("here");

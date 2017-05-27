@@ -69,18 +69,21 @@
                         <img class="img-square" src="https://s3.amazonaws.com/uifaces/faces/twitter/oliveirasimoes/128.jpg">
                     </div>
                 </div>
+                <hr />
 
                 <div data-ng-repeat="publication in publications track by $index">
-                    <div>
-                        <hr />
+                    <div id="$index">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="col-md-6">
                                     <label>Applied On: <b>{{publication.appliedOn}}</b></label>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <h5><b>{{$index + 1}}</b></h5>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>
                             </div>
                         </div>
                         <br />

@@ -8,7 +8,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
 @Component
-@Path("registrar/employee/award")
+@Path("employee/award")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AwardInformationResource extends MutableAwardInformationResource {

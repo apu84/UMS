@@ -8,7 +8,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
 @Component
-@Path("registrar/employee/training")
+@Path("employee/training")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class TrainingInformationResource extends MutableTrainingInformationResource {

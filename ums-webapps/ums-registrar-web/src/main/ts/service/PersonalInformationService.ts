@@ -2,15 +2,16 @@ module ums{
     export class PersonalInformationService{
         public static $inject = ['registrarConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
+        url:string="employee/personal";
+
         constructor(private registrarConstants: any, private httpClient: HttpClient,
                     private $q: ng.IQService, private notify: Notify,
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
         public savePersonalInformation(json: any): ng.IPromise<any> {
-            var url = "registrar/employee/personal/savePersonalInformation";
-            var defer = this.$q.defer();
-            this.httpClient.post(url, json, 'application/json')
+            let defer = this.$q.defer();
+            this.httpClient.post(this.url+"/savePersonalInformation", json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");
@@ -22,9 +23,8 @@ module ums{
         }
 
         public updatePersonalInformation(json: any): ng.IPromise<any>{
-            const url = "";
             let defer = this.$q.defer();
-            this.httpClient.put(url, json, HttpClient.MIME_TYPE_JSON)
+            this.httpClient.put(this.url+"/updatePersonalInformation", json, HttpClient.MIME_TYPE_JSON)
                 .success(()=> {
                     this.notify.success("Update Successful");
                     defer.resolve();
@@ -35,12 +35,24 @@ module ums{
             return defer.promise;
         }
 
+        // public getPersonalInformation(): ng.IPromise<any> {
+        //     let defer = this.$q.defer();
+        //     this.httpClient.get(this.url+"/getPersonalInformation/33333", HttpClient.MIME_TYPE_JSON,
+        //         (json: any) => {
+        //             defer.resolve(json.entries);
+        //         },
+        //         (response: ng.IHttpPromiseCallbackArg<any>) => {
+        //             console.log(response);
+        //         });
+        //     return defer.promise;
+        // }
+
         public getPersonalInformation(): ng.IPromise<any> {
-            console.log("i am in getPersonalInformation()");
-            var url= "registrar/employee/personal/getPersonalInformation";
-            var defer = this.$q.defer();
-            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+            let defer = this.$q.defer();
+            this.httpClient.get(this.url+"/getPersonalInformation", HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
+                console.log("In Service");
+                console.log(json);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

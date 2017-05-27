@@ -115,6 +115,7 @@ module ums {
             this.convertToJson(index, '2').then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
+                    $("#index").hide(10);
                         console.log("this should be hidden");
                     });
             });

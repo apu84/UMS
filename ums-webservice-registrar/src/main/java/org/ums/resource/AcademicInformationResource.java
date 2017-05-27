@@ -9,7 +9,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
 @Component
-@Path("registrar/employee/academic")
+@Path("employee/academic")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AcademicInformationResource extends MutableAcademicInformationResource {

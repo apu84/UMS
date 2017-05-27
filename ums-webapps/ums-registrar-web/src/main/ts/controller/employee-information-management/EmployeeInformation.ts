@@ -274,7 +274,7 @@ module ums {
         }
 
         private initializeVariables() {
-            this.getLoggedUserId();
+            //this.getLoggedUserId();
 
             this.getCountry();
             this.getDivision();
@@ -298,7 +298,7 @@ module ums {
             this.createMap();
             // this.changeNav('personal');
 
-             //this.getPersonalInformation();
+             this.getPersonalInformation();
             // this.getAcademicInformation();
             // this.getAwardInformation();
             // this.getPublicationInformation();
@@ -593,6 +593,9 @@ module ums {
         private getPersonalInformation() {
             console.log("i am in getPersonalInformation()");
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
+                console.log("default get Method Result");
+                console.log(personalInformation);
+                console.log(personalInformation.length);
                 this.setSavedValuesOfPersonalForm(personalInformation);
             });
         }

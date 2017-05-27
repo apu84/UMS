@@ -21,6 +21,7 @@ import sun.util.resources.cldr.lag.LocaleNames_lag;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 @Component
@@ -28,81 +29,94 @@ public class PersonalInformationResourceHelper extends
     ResourceHelper<PersonalInformation, MutablePersonalInformation, String> {
 
   @Autowired
-  PersonalInformationManager mPersonalInformationManager;
+  PersonalInformationManager mManager;
 
   @Autowired
-  PersonalInformationBuilder mPersonalInformationBuilder;
+  PersonalInformationBuilder mBuilder;
 
   @Autowired
   UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    PersonalInformation personalInformation = null;
+    PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
-      personalInformation = mPersonalInformationManager.get(userId);
+      personalInformation = mManager.get(userId);
     } catch(EmptyResultDataAccessException e) {
       // Do nothing
     }
 
-    return toJson(personalInformation, pUriInfo);
+    return toJson(personalInformation, pUriInfo, localCache);
   }
 
-  @Transactional
-  public Response create(JsonObject pJsonObject, UriInfo pUriInfo) {
-
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    // getContentManager().delete(userId);
-
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-
-    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    mPersonalInformationBuilder.build(personalInformation, personalJsonObject, localCache);
-    mPersonalInformationManager.create(personalInformation);
-
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
+  // @Transactional
+  // public Response create(JsonObject pJsonObject, UriInfo pUriInfo) {
+  //
+  // String userId =
+  // userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  // // getContentManager().delete(userId);
+  //
+  // LocalCache localCache = new LocalCache();
+  // JsonArray entries = pJsonObject.getJsonArray("entries");
+  //
+  // MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+  // JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
+  // mBuilder.build(personalInformation, personalJsonObject, localCache);
+  // mManager.create(personalInformation);
+  //
+  // Response.ResponseBuilder builder = Response.created(null);
+  // builder.status(Response.Status.CREATED);
+  // return builder.build();
+  // }
 
   public Response updatePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
     LocalCache localeCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonObject jsonObject = entries.getJsonObject(0);
-    mPersonalInformationBuilder.build(personalInformation, jsonObject, localeCache);
-    mPersonalInformationManager.update(personalInformation);
+    mBuilder.build(personalInformation, jsonObject, localeCache);
+    mManager.update(personalInformation);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  private JsonObject toJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
-    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    if(pPersonalInformation.getId() != null)
-      children.add(toJson(pPersonalInformation, pUriInfo, localCache));
-    jsonObject.add("entries", children);
-    localCache.invalidate();
-    return jsonObject.build();
-  }
+  // private JsonObject toJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
+  // JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+  // JsonArrayBuilder children = Json.createArrayBuilder();
+  // LocalCache localCache = new LocalCache();
+  // if(pPersonalInformation.getId() != null)
+  // children.add(toJson(pPersonalInformation, pUriInfo, localCache));
+  // jsonObject.add("entries", children);
+  // localCache.invalidate();
+  // return jsonObject.build();
+  // }
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
+    getBuilder().build(mutablePersonalInformation, personalJsonObject, localCache);
+    mutablePersonalInformation.create();
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+
+    return builder.build();
   }
 
   @Override
   protected PersonalInformationManager getContentManager() {
-    return mPersonalInformationManager;
+    return mManager;
   }
 
   @Override
-  protected Builder<PersonalInformation, MutablePersonalInformation> getBuilder() {
-    return mPersonalInformationBuilder;
+  protected PersonalInformationBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override

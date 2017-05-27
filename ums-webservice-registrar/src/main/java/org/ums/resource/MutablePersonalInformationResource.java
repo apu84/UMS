@@ -1,6 +1,8 @@
 package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.domain.model.immutable.registrar.PersonalInformation;
+import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.resource.helper.PersonalInformationResourceHelper;
 
 import javax.json.Json;
@@ -13,19 +15,19 @@ import javax.ws.rs.core.Response;
 public class MutablePersonalInformationResource extends Resource {
 
   @Autowired
-  PersonalInformationResourceHelper mPersonalInformationResourceHelper;
+  ResourceHelper<PersonalInformation, MutablePersonalInformation, String> mResourceHelper;
 
   @POST
   @Path("/savePersonalInformation")
-  public Response saveServiceInformation(final JsonObject pJsonObject) {
-    // return mPersonalInformationResourceHelper.post(pJsonObject, mUriInfo);
-    return null;
+  public Response savePersonalInformation(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.post(pJsonObject, mUriInfo);
+    // return null;
   }
 
   @PUT
   @Path("/updatePersonalInformation")
   public Response updatePersonalInformation(final JsonObject pJsonObject) {
-    // return mPersonalInformationResourceHelper.put(pJsonObject, mUriInfo);
+    // return mResourceHelper.put(pJsonObject, mUriInfo);
     return null;
   }
 }
