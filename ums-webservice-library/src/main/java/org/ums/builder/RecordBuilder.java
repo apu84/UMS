@@ -117,7 +117,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pMutable.setLanguage(Language.get(pJsonObject.getInt("language")));
     pMutable.setTitle(pJsonObject.getString("title"));
     if(pJsonObject.containsKey("subTitle"))
-    pMutable.setSubTitle(pJsonObject.getString("subTitle"));
+      pMutable.setSubTitle(pJsonObject.getString("subTitle"));
 
     if(pJsonObject.containsKey("gmd"))
       pMutable.setGmd(pJsonObject.getString("gmd"));
@@ -160,23 +160,24 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     ImprintDto imprintDto = new ImprintDto();
     JsonObject imprintObject = (JsonObject) (pJsonObject.get("imprint"));
-    if(imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0") && !imprintObject.getString("publisher").equals(""))
+    if(imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0")
+        && !imprintObject.getString("publisher").equals(""))
       imprintDto.setPublisher(mPublisherManager.get(Long.valueOf(imprintObject.getString("publisher"))));
 
     if(pJsonObject.containsKey("placeOfPublication"))
-    imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
+      imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
     if(pJsonObject.containsKey("yearDateOfPublication"))
-    imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
+      imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
     if(pJsonObject.containsKey("copyRightDate"))
-    imprintDto.setCopyRightDate(imprintObject.getString("copyRightDate"));
+      imprintDto.setCopyRightDate(imprintObject.getString("copyRightDate"));
 
     pMutable.setImprint(imprintDto);
     if(pJsonObject.containsKey("materialType"))
-    pMutable.setMaterialType(MaterialType.get(pJsonObject.getInt("materialType")));
+      pMutable.setMaterialType(MaterialType.get(pJsonObject.getInt("materialType")));
     if(pJsonObject.containsKey("status"))
-    pMutable.setRecordStatus(RecordStatus.get(pJsonObject.getInt("status")));
+      pMutable.setRecordStatus(RecordStatus.get(pJsonObject.getInt("status")));
     if(pJsonObject.containsKey("keywords"))
-    pMutable.setKeyWords(pJsonObject.getString("keywords"));
+      pMutable.setKeyWords(pJsonObject.getString("keywords"));
 
     if(pJsonObject.containsKey("contributorJsonString"))
       pMutable.setContributorJsonString(pJsonObject.getString("contributorJsonString"));

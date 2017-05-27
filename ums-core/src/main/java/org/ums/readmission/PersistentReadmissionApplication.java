@@ -18,7 +18,6 @@ public class PersistentReadmissionApplication implements MutableReadmissionAppli
   private static ReadmissionApplicationManager sReadmissionApplicationManager;
   private Long mId;
   private Date mAppliedOn;
-  private Date mVerifiedOn;
   private Semester mSemester;
   private Integer mSemesterId;
   private Student mStudent;
@@ -46,16 +45,6 @@ public class PersistentReadmissionApplication implements MutableReadmissionAppli
   @Override
   public void setAppliedOn(Date pAppliedOn) {
     this.mAppliedOn = pAppliedOn;
-  }
-
-  @Override
-  public Date getVerifiedOn() {
-    return mVerifiedOn;
-  }
-
-  @Override
-  public void setVerifiedOn(Date pVerifiedOn) {
-    this.mVerifiedOn = pVerifiedOn;
   }
 
   @Override
@@ -163,7 +152,6 @@ public class PersistentReadmissionApplication implements MutableReadmissionAppli
   public PersistentReadmissionApplication(MutableReadmissionApplication pReadmissionApplication) {
     setId(pReadmissionApplication.getId());
     setAppliedOn(pReadmissionApplication.getAppliedOn());
-    setVerifiedOn(pReadmissionApplication.getVerifiedOn());
     setSemester(pReadmissionApplication.getSemester());
     setSemesterId(pReadmissionApplication.getSemesterId());
     setStudent(pReadmissionApplication.getStudent());
