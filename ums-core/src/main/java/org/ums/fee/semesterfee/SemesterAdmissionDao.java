@@ -55,7 +55,7 @@ public class SemesterAdmissionDao extends SemesterAdmissionStatusDaoDecorator {
 
   @Override
   public Optional<SemesterAdmissionStatus> lastAdmissionStatus(String pStudentId) {
-    String query = "WHERE STUDENT_ID = ?";
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ?";
     List<SemesterAdmissionStatus> statuses =
         mJdbcTemplate.query(query, new Object[] {pStudentId}, new SemesterAdmissionStatusRowMapper());
     if(statuses != null && statuses.size() > 0) {

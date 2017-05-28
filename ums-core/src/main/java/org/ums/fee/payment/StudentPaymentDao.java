@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.fee.FeeType;
 import org.ums.generator.IdGenerator;
 
@@ -50,9 +51,11 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   }
 
   @Override
+  @Transactional
   public int update(List<MutableStudentPayment> pMutableList) {
+    String query = UPDATE_ALL + "WHERE ID = ?";
     List<Object[]> params = getUpdateParamArray(pMutableList);
-    mJdbcTemplate.batchUpdate(UPDATE_ALL, params);
+    mJdbcTemplate.batchUpdate(query, params);
     return super.update(pMutableList);
   }
 

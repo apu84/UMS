@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +15,7 @@ import com.google.common.collect.Lists;
 
 public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   String SELECT_ALL =
-      "SELECT ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS, PROCESSED_ON, USER FROM "
+      "SELECT ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS, PROCESSED_ON, PROCESSED_BY, LAST_MODIFIED FROM "
           + "CERTIFICATE_STATUS ";
   String INSERT_ALL =
       "INSERT INTO CERTIFICATE_STATUS(ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS,"
@@ -62,10 +63,14 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
 
   @Override
   public Long create(MutableCertificateStatus pMutable) {
-    Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getStudentId(), pMutable.getSemesterId(),
-        pMutable.getFeeCategoryId(), pMutable.getTransactionId(), pMutable.getStatus().getId());
-    return id;
+    return create(Lists.newArrayList(pMutable)).get(0);
+  }
+
+  @Override
+  public List<Long> create(List<MutableCertificateStatus> pMutableList) {
+    List<Object[]> params = getCreateParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0]).collect(Collectors.toList());
   }
 
   @Override
@@ -74,7 +79,7 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
         "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL
-            + " OREDER BY LAST_MODIFIED DESC) TMP1) TPM2 WHERE IND >= ? and IND <= ?  ";
+            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new CertificateStatusRowMapper());
   }
 
@@ -85,7 +90,7 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
         "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL
-            + " WHERE CERTIFICATE_STATUS = ? OREDER BY LAST_MODIFIED DESC) TMP1) TPM2 WHERE IND >= ? and IND <= ?  ";
+            + " WHERE STATUS = ? ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), startIndex, endIndex},
         new CertificateStatusRowMapper());
   }
@@ -105,6 +110,16 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     return params;
   }
 
+  private List<Object[]> getCreateParamList(List<MutableCertificateStatus> pMutableCertificateStatuses) {
+    List<Object[]> params = new ArrayList<>();
+    for(CertificateStatus certificateStatus : pMutableCertificateStatuses) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), certificateStatus.getStudentId(),
+          certificateStatus.getSemesterId(), certificateStatus.getFeeCategoryId(),
+          certificateStatus.getTransactionId(), certificateStatus.getStatus().getId()});
+    }
+    return params;
+  }
+
   class CertificateStatusRowMapper implements RowMapper<CertificateStatus> {
     @Override
     public CertificateStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -117,6 +132,7 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
       status.setStatus(CertificateStatus.Status.get(rs.getInt("STATUS")));
       status.setProcessedOn(rs.getTimestamp("PROCESSED_ON"));
       status.setUserId(rs.getString("PROCESSED_BY"));
+      status.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<CertificateStatus> reference = new AtomicReference<>(status);
       return reference.get();
     }

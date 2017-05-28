@@ -17,6 +17,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.FeeType;
@@ -42,7 +43,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     throw new NotImplementedException();
   }
 
-  public Response receivePayment(String pStudentId, JsonObject pJsonObject) throws Exception {
+  @Transactional
+  Response receivePayment(String pStudentId, JsonObject pJsonObject) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
@@ -51,9 +53,12 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     entries.forEach((entry) -> {
       MutableStudentPayment payment = new PersistentStudentPayment();
       getBuilder().build(payment, (JsonObject) entry, cache);
-      payments.add(payment);
-
+      payment.setStudentId(pStudentId);
       StudentPayment latestPayment = mStudentPaymentManager.get(payment.getId());
+      payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
+      payment.setSemesterId(latestPayment.getSemesterId());
+      payment.setTransactionId(latestPayment.getTransactionId());
+      payments.add(payment);
       latestPayments.add(latestPayment);
     });
 
@@ -83,7 +88,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     Validate.notNull(pStudentId);
     Validate.notNull(pFeeType);
     return buildJsonResponse(
-        mStudentPaymentManager.getPayments(pStudentId, pFeeType).stream()
+        mStudentPaymentManager.getPayments(pStudentId, mFeeTypeManager.get(pFeeType)).stream()
             .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED).collect(Collectors.toList()),
         pUriInfo);
   }

@@ -20,6 +20,7 @@ class StudentPaymentBuilder implements Builder<StudentPayment, MutableStudentPay
 
   @Override
   public void build(JsonObjectBuilder pBuilder, StudentPayment pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("amount", pReadOnly.getAmount());
     FeeCategory feeCategory =
         (FeeCategory) pLocalCache.cache(pReadOnly::getFeeCategory, pReadOnly.getFeeCategoryId(), FeeCategory.class);

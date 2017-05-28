@@ -20,14 +20,16 @@ public class CertificateStatusResource extends Resource {
   @Path("/paginated")
   public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
       @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
-    return mCertificateStatusHelper.getCertificateStatus(pageNumber, itemsPerPage, mUriInfo);
+    return mCertificateStatusHelper.getCertificateStatus(itemsPerPage == null ? 0 : itemsPerPage,
+        pageNumber == null ? 1 : pageNumber, mUriInfo);
   }
 
   @GET
   @Path("/filtered/{status}")
   public JsonObject getCertificateStatus(@PathParam("status") Integer status,
       @QueryParam("pageNumber") Integer pageNumber, @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
-    return mCertificateStatusHelper.getFilteredCertificateStatus(pageNumber, itemsPerPage, status, mUriInfo);
+    return mCertificateStatusHelper.getFilteredCertificateStatus(itemsPerPage == null ? 0 : itemsPerPage,
+        pageNumber == null ? 1 : pageNumber, status, mUriInfo);
   }
 
   @PUT

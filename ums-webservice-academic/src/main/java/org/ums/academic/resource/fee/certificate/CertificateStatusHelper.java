@@ -10,6 +10,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -43,7 +44,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
     addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    if(pageNumber >= 0) {
+    if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
@@ -60,7 +61,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
     addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    if(pageNumber >= 1) {
+    if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
@@ -68,7 +69,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
 
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
-    UriBuilder builder = pUriInfo.getBaseUriBuilder().path(CertificateStatusResource.class);
+    UriBuilder builder = pUriInfo.getBaseUriBuilder();
     Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
     builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
     pJsonObjectBuilder.add(direction, builder.build().toString());
@@ -76,7 +77,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
 
   Response updateCertificateStatus(JsonObject pJsonObject, UriInfo pUriInfo) {
     Validate.notEmpty(pJsonObject);
-    Validate.notEmpty(pJsonObject.getString("entries"));
+    Validate.notEmpty(pJsonObject.getJsonArray("entries"));
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache cache = new LocalCache();
     List<MutableCertificateStatus> mutableCertificateStatuses = new ArrayList<>();
@@ -85,6 +86,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
       JsonObject entryObject = (JsonObject) entry;
       MutableCertificateStatus updated = new PersistentCertificateStatus();
       getBuilder().build(updated, entryObject, cache);
+      updated.setUserId(SecurityUtils.getSubject().getPrincipal().toString());
       CertificateStatus latest = mCertificateStatusManager.get(Long.parseLong(entryObject.getString("id")));
       if(!hasUpdatedVersion(latest, updated)) {
         return Response.status(Response.Status.PRECONDITION_FAILED).build();
