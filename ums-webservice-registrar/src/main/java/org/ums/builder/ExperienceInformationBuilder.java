@@ -21,6 +21,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
   @Override
   public void build(JsonObjectBuilder pBuilder, ExperienceInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("experienceInstitution", pReadOnly.getExperienceInstitute());
     pBuilder.add("experienceDesignation", pReadOnly.getDesignation());

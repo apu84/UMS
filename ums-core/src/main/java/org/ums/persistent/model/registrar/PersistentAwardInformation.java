@@ -24,11 +24,13 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   public PersistentAwardInformation() {}
 
   public PersistentAwardInformation(PersistentAwardInformation pPersistentAwardInformation) {
+    mId = pPersistentAwardInformation.getId();
     mEmployeeId = pPersistentAwardInformation.getEmployeeId();
     mAwardName = pPersistentAwardInformation.getAwardName();
     mAwardInstitute = pPersistentAwardInformation.getAwardInstitute();
     mAwardedYear = pPersistentAwardInformation.getAwardedYear();
     mAwardShortDescription = pPersistentAwardInformation.getAwardShortDescription();
+    mLastModified = pPersistentAwardInformation.getLastModified();
   }
 
   @Override

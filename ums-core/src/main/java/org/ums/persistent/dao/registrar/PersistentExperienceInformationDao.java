@@ -15,10 +15,11 @@ import java.util.List;
 public class PersistentExperienceInformationDao extends ExperienceInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO) VALUES (?,?,?,?,?)";
+      "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED) VALUES (?,?,?,?,?,"
+          + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO From EMP_EXPERIENCE_INFO";
+      "Select ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED From EMP_EXPERIENCE_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_EXPERIENCE_INFO";
 
@@ -64,6 +65,7 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     @Override
     public ExperienceInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
+      experienceInformation.setId(resultSet.getInt("id"));
       experienceInformation.setEmployeeId(resultSet.getString("employee_id"));
       experienceInformation.setExperienceInstitute(resultSet.getString("experience_institute"));
       experienceInformation.setDesignation(resultSet.getString("experience_designation"));

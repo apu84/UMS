@@ -11,7 +11,7 @@ module ums{
 
         public saveAcademicInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.url+"/savePersonalInformation", json, 'application/json')
+            this.httpClient.post(this.url+"/saveAcademicInformation", json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");

@@ -306,12 +306,12 @@ module ums {
             this.createMap();
             // this.changeNav('personal');
 
-            // this.getPersonalInformation();
-            // this.getAcademicInformation();
-            // this.getAwardInformation();
-             this.getPublicationInformation();
-            // this.getExperienceInformation();
-            // this.getTrainingInformation();
+            this.getPersonalInformation();
+            this.getAcademicInformation();
+            this.getAwardInformation();
+            this.getPublicationInformation();
+            this.getExperienceInformation();
+            this.getTrainingInformation();
         }
 
         private getLoggedUserId(){
@@ -512,11 +512,18 @@ module ums {
             console.log("i am in submitPersonalForm()");
             this.convertToJson('personal')
                 .then((json: any) => {
-                    this.personalInformationService.savePersonalInformation(json)
-                        .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
-                        });
+                if(json.equals(this.$scope.entry.personal)){
+                    console.log("Similar");
+
+                }
+                else{
+                    console.log("Nor similar");
+                }
+                    // this.personalInformationService.savePersonalInformation(json)
+                    //     .then((message: any) => {
+                    //         console.log("This is message");
+                    //         console.log(message);
+                    //     });
                 });
             this.enableViewMode('personal');
         }
@@ -603,7 +610,6 @@ module ums {
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
                 console.log("default get Method Result");
                 console.log(personalInformation);
-                console.log(personalInformation.length);
                 this.setSavedValuesOfPersonalForm(personalInformation);
             });
         }
@@ -790,6 +796,7 @@ module ums {
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
                 academicEntry = {
+                    id: null,
                     employeeId: "",
                     academicDegreeName: null,
                     academicInstitution: "",
@@ -800,7 +807,7 @@ module ums {
             else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
                 publicationEntry = {
-                    rowId: null,
+                    id: null,
                     employeeId: "",
                     publicationTitle: "",
                     publicationType: null,
@@ -823,6 +830,7 @@ module ums {
             else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;
                 trainingEntry = {
+                    id: null,
                     employeeId: "",
                     trainingName: "",
                     trainingInstitution: "",
@@ -835,6 +843,7 @@ module ums {
             else if (divName === 'award') {
                 let awardEntry: IAwardInformationModel;
                 awardEntry = {
+                    id: null,
                     employeeId: "",
                     awardName: "",
                     awardInstitute: "",
@@ -846,6 +855,7 @@ module ums {
             else if (divName === 'experience') {
                 let experienceEntry: IExperienceInformationModel;
                 experienceEntry = {
+                    id: null,
                     employeeId: "",
                     experienceInstitution: "",
                     experienceDesignation: "",

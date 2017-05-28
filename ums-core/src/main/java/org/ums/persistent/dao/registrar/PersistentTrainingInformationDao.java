@@ -17,10 +17,11 @@ import java.util.List;
 public class PersistentTrainingInformationDao extends TrainingInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_TRAINING_INFO (EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO) VALUES (? ,? ,?, ?, ?)";
+      "INSERT INTO EMP_TRAINING_INFO (EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, LAST_MODIFIED) VALUES (? ,? ,?, ?, ?,"
+          + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO From EMP_TRAINING_INFO";
+      "Select ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, LAST_MODIFIED From EMP_TRAINING_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_TRAINING_INFO";
 
@@ -65,6 +66,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
     @Override
     public TrainingInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
+      trainingInformation.setId(resultSet.getInt("id"));
       trainingInformation.setEmployeeId(resultSet.getString("employee_id"));
       trainingInformation.setTrainingName(resultSet.getString("training_name"));
       trainingInformation.setTrainingInstitute(resultSet.getString("training_institute"));

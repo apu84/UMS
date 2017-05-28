@@ -38,7 +38,6 @@ public class PersonalInformationResourceHelper extends
   UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
     PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
@@ -47,7 +46,7 @@ public class PersonalInformationResourceHelper extends
       // Do nothing
     }
 
-    return toJson(personalInformation, pUriInfo, localCache);
+    return buildJson(personalInformation, pUriInfo);
   }
 
   // @Transactional
@@ -82,16 +81,17 @@ public class PersonalInformationResourceHelper extends
     return builder.build();
   }
 
-  // private JsonObject toJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
-  // JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-  // JsonArrayBuilder children = Json.createArrayBuilder();
-  // LocalCache localCache = new LocalCache();
-  // if(pPersonalInformation.getId() != null)
-  // children.add(toJson(pPersonalInformation, pUriInfo, localCache));
-  // jsonObject.add("entries", children);
-  // localCache.invalidate();
-  // return jsonObject.build();
-  // }
+  private JsonObject buildJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
+    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    if(pPersonalInformation.getId() != null) {
+      children.add(toJson(pPersonalInformation, pUriInfo, localCache));
+    }
+    jsonObject.add("entries", children);
+    localCache.invalidate();
+    return jsonObject.build();
+  }
 
   @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {

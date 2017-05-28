@@ -15,10 +15,11 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR) VALUES (? ,? ,?, ?)";
+      "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,?, ?,"
+          + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR From EMP_ACADEMIC_INFO";
+      "Select ID, EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR, LAST_MODIFIED From EMP_ACADEMIC_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_ACADEMIC_INFO";
 
@@ -61,10 +62,12 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     @Override
     public AcademicInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
+      academicInformation.setId(resultSet.getInt("id"));
       academicInformation.setEmployeeId(resultSet.getString("employee_id"));
       academicInformation.setDegreeName(resultSet.getString("degree_name"));
       academicInformation.setDegreeInstitute(resultSet.getString("degree_institute"));
       academicInformation.setDegreePassingYear(resultSet.getString("degree_passing_year"));
+      academicInformation.setLastModified(resultSet.getString("last_modified"));
       return academicInformation;
     }
   }

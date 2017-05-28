@@ -15,10 +15,11 @@ import java.util.List;
 public class PersistentAwardInformationDao extends AwardInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION) VALUES (? ,? ,?, ?, ?)";
+      "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED) VALUES (? ,? ,?, ?, ?,"
+          + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION From EMP_AWARD_INFO";
+      "Select ID, EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED From EMP_AWARD_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_AWARD_INFO";
 
@@ -61,11 +62,13 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
     @Override
     public AwardInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutableAwardInformation awardInformation = new PersistentAwardInformation();
+      awardInformation.setId(resultSet.getInt("id"));
       awardInformation.setEmployeeId(resultSet.getString("employee_id"));
       awardInformation.setAwardName(resultSet.getString("award_name"));
       awardInformation.setAwardInstitute(resultSet.getString("institution"));
       awardInformation.setAwardedYear(resultSet.getString("awarded_year"));
       awardInformation.setAwardShortDescription(resultSet.getString("award_short_description"));
+      awardInformation.setLastModified(resultSet.getString("last_modified"));
       return awardInformation;
     }
   }

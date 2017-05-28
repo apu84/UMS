@@ -20,6 +20,7 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
 
   @Override
   public void build(JsonObjectBuilder pBuilder, TrainingInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("trainingName", pReadOnly.getTrainingName());
     pBuilder.add("trainingInstitution", pReadOnly.getTrainingInstitute());

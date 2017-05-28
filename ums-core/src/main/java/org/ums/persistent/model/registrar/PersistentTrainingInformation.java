@@ -26,11 +26,13 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   public PersistentTrainingInformation() {}
 
   public PersistentTrainingInformation(PersistentTrainingInformation pPersistentTrainingInformation) {
+    mId = pPersistentTrainingInformation.getId();
     mEmployeeId = pPersistentTrainingInformation.getEmployeeId();
     mTrainingName = pPersistentTrainingInformation.getTrainingName();
     mTrainingInstitute = pPersistentTrainingInformation.getTrainingInstitute();
     mTrainingFromDate = pPersistentTrainingInformation.getTrainingFromDate();
     mTrainingToDate = pPersistentTrainingInformation.getTrainingToDate();
+    mLastModified = pPersistentTrainingInformation.getLastModified();
   }
 
   @Override

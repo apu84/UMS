@@ -1,5 +1,6 @@
 module ums{
     export interface ITrainingInformationModel{
+        id: number;
         employeeId: string;
         trainingName: string;
         trainingInstitution: string;

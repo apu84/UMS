@@ -25,10 +25,12 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   public PersistentAcademicInformation() {}
 
   public PersistentAcademicInformation(PersistentAcademicInformation pPersistentAcademicInformation) {
+    mId = pPersistentAcademicInformation.getId();
     mEmployeeId = pPersistentAcademicInformation.getEmployeeId();
     mDegreeName = pPersistentAcademicInformation.getDegreeName();
     mDegreeInstitute = pPersistentAcademicInformation.getDegreeInstitute();
     mDegreePassingYear = pPersistentAcademicInformation.getDegreePassingYear();
+    mLastModified = pPersistentAcademicInformation.getLastModified();
   }
 
   @Override

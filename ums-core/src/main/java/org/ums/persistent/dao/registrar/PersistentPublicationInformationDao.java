@@ -15,10 +15,17 @@ import java.util.List;
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, APPLIED_ON, ACTION_TAKEN_ON) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY') , ?, ?, ?, ?, ?, ?, ?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), ?)";
+      "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
+          + " DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE,"
+          + " PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, APPLIED_ON, ACTION_TAKEN_ON,"
+          + " LAST_MODIFIED) VALUES (? ,? ,?, ?, TO_DATE(?, 'DD/MM/YYYY'),"
+          + "?, ?, ?, ?, ?, ?, ?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), ?, " + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON From EMP_PUBLICATION_INFO";
+  static String GET_ONE = "Select ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME, "
+      + "to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK,"
+      + " PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, "
+      + "PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, "
+      + "to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED From EMP_PUBLICATION_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
 
@@ -38,7 +45,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
 
   @Override
   public int deletePublicationInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ? AND STATUS = '2' ";
+    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ? AND STATUS = '0' ";
     return mJdbcTemplate.update(query, pEmployeeId);
   }
 
@@ -46,7 +53,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int updatePublicationStatus(MutablePublicationInformation pMutablePublicationInformation) {
     String query = UPDATE_STATUS + "WHERE ID=?";
     return mJdbcTemplate.update(query, pMutablePublicationInformation.getPublicationStatus(),
-        pMutablePublicationInformation.getActionTakenOn(), pMutablePublicationInformation.getRowId());
+        pMutablePublicationInformation.getActionTakenOn(), pMutablePublicationInformation.getId());
   }
 
   private List<Object[]> getEmployeePublicationInformationParams(
@@ -92,7 +99,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     @Override
     public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
-      publicationInformation.setRowId(resultSet.getInt("id"));
+      publicationInformation.setId(resultSet.getInt("id"));
       publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
       publicationInformation.setPublicationTitle(resultSet.getString("publication_title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
@@ -109,6 +116,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setPublicationPages(resultSet.getString("publication_pages"));
       publicationInformation.setAppliedOn(resultSet.getString("applied_on"));
       publicationInformation.setActionTakenOn(resultSet.getString("action_taken_on"));
+      publicationInformation.setLastModified(resultSet.getString("last_modified"));
       return publicationInformation;
     }
   }

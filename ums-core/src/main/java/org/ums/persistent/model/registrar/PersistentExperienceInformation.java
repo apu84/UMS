@@ -26,11 +26,13 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   public PersistentExperienceInformation() {}
 
   public PersistentExperienceInformation(PersistentExperienceInformation pPersistentExperienceInformation) {
+    mId = pPersistentExperienceInformation.getId();
     mEmployeeId = pPersistentExperienceInformation.getEmployeeId();
     mExperienceInstitute = pPersistentExperienceInformation.getExperienceInstitute();
     mDesignation = pPersistentExperienceInformation.getDesignation();
     mExperienceFromDate = pPersistentExperienceInformation.getExperienceFromDate();
     mExperienceToDate = pPersistentExperienceInformation.getExperienceToDate();
+    mLastModified = pPersistentExperienceInformation.getLastModified();
   }
 
   @Override

@@ -53,7 +53,7 @@ module ums{
                 (json: any) => {
                 console.log("In Service");
                 console.log(json);
-                    defer.resolve(json);
+                    defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.log(response);
