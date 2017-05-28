@@ -16,7 +16,7 @@ public interface Publisher extends Serializable, LastModifier, EditType<MutableP
 
   String getName();
 
-  int getCountryId();
+  Integer getCountryId();
 
   Country getCountry();
 

@@ -1,5 +1,6 @@
 package org.ums.persistent.dao.library;
 
+import com.sun.org.apache.bcel.internal.generic.Type;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.library.ContributorDaoDecorator;
@@ -14,6 +15,7 @@ import org.ums.persistent.model.library.PersistentContributor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -76,7 +78,7 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
             + "VALUES(?, ?,  ?, ?, ?,?, ?," + getLastModifiedSql() + ")";
 
     mJdbcTemplate.update(INSERT_ONE, pContributor.getId(), pContributor.getFullName(), pContributor.getShortName(),
-        pContributor.getGender().getId(), pContributor.getAddress(), pContributor.getCountry().getId(), 1);
+        pContributor.getGender()==null? Types.NULL: pContributor.getGender().getId(), pContributor.getAddress(), pContributor.getCountryId(), 1);
 
     return pContributor.getId();
   }
@@ -85,7 +87,7 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
   public int update(final MutableContributor pContributor) {
     String query = UPDATE_ONE + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pContributor.getFullName(), pContributor.getShortName(), pContributor
-        .getGender().getId(), pContributor.getAddress(), pContributor.getCountryId(), pContributor.getLastModified(),
+        .getGender()==null? Types.NULL: pContributor.getGender().getId(), pContributor.getAddress(), pContributor.getCountryId(), pContributor.getLastModified(),
         pContributor.getId());
   }
 

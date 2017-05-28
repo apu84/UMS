@@ -48,7 +48,8 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
       pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     pMutable.setName(pJsonObject.getString("name"));
     if(pJsonObject.containsKey("countryId"))
-      pMutable.setCountryId(pJsonObject.getInt("countryId"));
+      pMutable.setCountryId(pJsonObject.isNull("countryId")? null : Integer.parseInt(pJsonObject
+          .getString("countryId")));
     if(pJsonObject.containsKey("contactPerson"))
       pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
     if(pJsonObject.containsKey("phoneNumber"))
