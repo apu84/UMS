@@ -16,6 +16,8 @@ module ums {
     pageNumber: number;
     pagination: any;
     totalItems: number;
+    statusModal: LmsApplicationStatus;
+
 
     showStatusSection: boolean;
 
@@ -26,6 +28,8 @@ module ums {
     getTotalDuration: Function;
     updateLeaveType: Function;
     pageChanged: Function;
+    setStatusModalContent: Function;
+
   }
 
   class LeaveApplicationManagement {
@@ -59,6 +63,8 @@ module ums {
       $scope.getTotalDuration = this.getTotalDuration.bind(this);
       $scope.updateLeaveType = this.updateLeaveType.bind(this);
       $scope.pageChanged = this.pageChanged.bind(this);
+      $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
+
 
       this.getLeaveTypes();
       this.getRemainingLeaves();
@@ -73,6 +79,11 @@ module ums {
         this.$scope.leaveType = this.$scope.leaveTypes[0];
       });
     }
+
+    private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
+      this.$scope.statusModal = lmsApplicationStatus;
+    }
+
 
     private updateLeaveType(lmsType: LmsType) {
       this.$scope.leaveType = lmsType;
