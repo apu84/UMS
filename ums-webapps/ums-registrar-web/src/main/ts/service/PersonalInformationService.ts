@@ -51,8 +51,6 @@ module ums{
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getPersonalInformation", HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
-                console.log("In Service");
-                console.log(json);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

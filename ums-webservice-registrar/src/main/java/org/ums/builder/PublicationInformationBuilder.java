@@ -182,7 +182,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache) {
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    pMutable.setId(pJsonObject.getInt("rowId"));
+    pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
     pMutable.setPublisherName(pJsonObject.getString("publisherName"));

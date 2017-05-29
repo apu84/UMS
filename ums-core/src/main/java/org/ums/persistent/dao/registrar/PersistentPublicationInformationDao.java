@@ -25,11 +25,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       + "to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK,"
       + " PUBLICATION_ISSN, PUBLICATION_ISSUE, PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, "
       + "PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, "
-      + "to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED From EMP_PUBLICATION_INFO";
+      + "to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED From EMP_PUBLICATION_INFO ";
 
   static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
 
-  static String UPDATE_STATUS = "UPDATE EMP_PUBLICATION_INFO SET STATUS=?, ACTION_TAKEN_ON=TO_DATE(?, 'DD/MM/YYYY') ";
+  static String UPDATE_STATUS =
+      "UPDATE EMP_PUBLICATION_INFO SET STATUS=?, ACTION_TAKEN_ON=TO_DATE(?, 'DD/MM/YYYY') , LAST_MODIFIED="
+          + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -75,7 +77,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
 
   @Override
   public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId) {
-    String query = GET_ONE + " Where employee_id=?";
+    String query = GET_ONE + " Where employee_id=? ORDER BY APPLIED_ON";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
         new PersistentPublicationInformationDao.RoleRowMapper());
   }

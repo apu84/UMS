@@ -276,14 +276,14 @@
                                 <input type="text"
                                        name="nBirthDate"
                                        id="iBirthDate"
-                                       data-ng-model="entry.personal.birthday"
+                                       data-ng-model="entry.personal.dateOfBirth"
                                        data-date-format="dd/mm/yyyy"
                                        placeholder="DD/MM/YYYY"
                                        autocomplete="off"
                                        class="datepicker-default form-control" required>
                             </div>
                             <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.birthday}}</label>
+                                <label class="control-label">{{entry.personal.dateOfBirth}}</label>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -294,13 +294,13 @@
                                     <input type="url"
                                            name="nPersonalWebsite"
                                            id="iPersonalWebsite"
-                                           data-ng-model="entry.personal.website"
+                                           data-ng-model="entry.personal.personalWebsite"
                                            placeholder="Personal Website"
                                            class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.website}}</label>
+                                <label class="control-label">{{entry.personal.personalWebsite}}</label>
                             </div>
                         </div>
                     </div>
@@ -489,7 +489,7 @@
                             <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                                 <select name="nPresentAddressPoliceStation"
                                         id="iPresentAddressPoliceStation"
-                                        data-ng-model="entry.personal.presentAddressPoliceStation"
+                                        data-ng-model="entry.personal.presentAddressThana"
                                         data-ng-options="thanas.name for thanas in presentAddressThanas"
                                         data-ng-disabled="disablePresentAddressDropdown"
                                         class="form-control" required="required">
@@ -497,7 +497,7 @@
                                 </select>
                             </div>
                             <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.presentAddressPoliceStation.name}}</label>
+                                <label class="control-label">{{entry.personal.presentAddressThana.name}}</label>
                             </div>
                         </div>
                     </div>
@@ -510,13 +510,13 @@
                                 <input type="text"
                                        name="nPresentAddressPostOffice"
                                        id="iPresentAddressPostOffice"
-                                       data-ng-model="entry.personal.presentAddressPostalCode"
+                                       data-ng-model="entry.personal.presentAddressPostOfficeNo"
                                        placeholder="Police Post Office/Zip"
                                        data-ng-disabled="disablePresentAddressDropdown"
                                        class="form-control">
                             </div>
                             <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.presentAddressPostalCode}}</label>
+                                <label class="control-label">{{entry.personal.presentAddressPostOfficeNo}}</label>
                             </div>
                         </div>
                         <div class="col-md-6"></div>
@@ -626,7 +626,7 @@
                             <div class="col-md-8" data-ng-show="showPersonalInputDiv">
                                 <select name="nPermanentAddressPoliceStation"
                                         id="iPermanentAddressPoliceStation"
-                                        data-ng-model="entry.personal.permanentAddressPoliceStation"
+                                        data-ng-model="entry.personal.permanentAddressThana"
                                         data-ng-options="thana.name for thana in permanentAddressThanas"
                                         data-ng-disabled="disablePermanentAddressDropdown"
                                         class="form-control" required="required">
@@ -634,7 +634,7 @@
                                 </select>
                             </div>
                             <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.permanentAddressPoliceStation.name}}</label>
+                                <label class="control-label">{{entry.personal.permanentAddressThana.name}}</label>
                             </div>
                         </div>
                     </div>
@@ -647,13 +647,13 @@
                                 <input type="text"
                                        name="nPermanentAddressPostOffice"
                                        id="iPermanentAddressPostOffice"
-                                       data-ng-model="entry.personal.permanentAddressPostalCode"
+                                       data-ng-model="entry.personal.permanentAddressPostOfficeNo"
                                        placeholder="Police Post Office/Zip"
                                        data-ng-disabled="disablePermanentAddressDropdown"
                                        class="form-control">
                             </div>
                             <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
-                                <label class="control-label">{{entry.personal.permanentAddressPostalCode}}</label>
+                                <label class="control-label">{{entry.personal.permanentAddressPostOfficeNo}}</label>
                             </div>
                         </div>
                         <div class="col-md-6"></div>

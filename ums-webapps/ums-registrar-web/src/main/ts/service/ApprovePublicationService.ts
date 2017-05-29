@@ -39,7 +39,6 @@ module ums {
             let defer = this.$q.defer();
             this.httpClient.put(url , json, HttpClient.MIME_TYPE_JSON)
                 .success(()=>{
-                    console.log("here");
                     if(json.entries[0]['publication'].status === '1') {
                         this.notify.success("Successfully Approved");
                     }

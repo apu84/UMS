@@ -103,6 +103,7 @@
 /// <reference path='service/TrainingInformationService.ts'/>
 /// <reference path='service/AwardInformationService.ts'/>
 /// <reference path='service/ExperienceInformationService.ts'/>
+/// <reference path='service/PagerService.ts'/>
 
 /// <reference path='model/employee/AcademicInformationModel.ts' />
 /// <reference path='model/employee/AwardInformationModel.ts' />

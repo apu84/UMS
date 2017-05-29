@@ -56,7 +56,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <select data-ng-model="data.publicationListViewCategory" data-ng-change="changePublicationList()" class="form-control">
-                                        <option value="0" selected>Pending Publication</option>
+                                        <option value="">Select Category</option>
+                                        <option value="0">Pending Publication</option>
                                         <option value="1">Approved Publication</option>
                                         <option value="2">Rejected Publication</option>
                                     </select>
@@ -80,7 +81,7 @@
                 </div>
 
                 <!--<div id="iPublicationDetails" data-ng-repeat="publication in publications track by $index">-->
-                <div dir-paginate="publication in publications | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
+                <div dir-paginate="publication in item | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
                     <div id="i{{$index}}">
                         <div class="row">
                             <div class="col-md-6">
@@ -89,7 +90,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <h5><b>{{$index + 1}}</b></h5>
+                                <h5><b>{{publication.id}}</b></h5>
                             </div>
                             <div class="col-md-4" align="right">
                                 <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>

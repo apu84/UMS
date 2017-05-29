@@ -307,16 +307,15 @@ module ums {
             // this.changeNav('personal');
 
             this.getPersonalInformation();
-            this.getAcademicInformation();
-            this.getAwardInformation();
-            this.getPublicationInformation();
-            this.getExperienceInformation();
-            this.getTrainingInformation();
+            // this.getAcademicInformation();
+            // this.getAwardInformation();
+            // this.getPublicationInformation();
+            // this.getExperienceInformation();
+            // this.getTrainingInformation();
         }
 
         private getLoggedUserId(){
             this.employeeService.getLoggedEmployeeInfo().then((user: any) => {
-               console.log(user);
             });
 
         }
@@ -457,7 +456,6 @@ module ums {
         // }
 
         private testData() {
-            console.log("i am in testData()");
             this.$scope.entry.personal.firstName = "Kawsur";
             this.$scope.entry.personal.lastName = "Mir Md.";
             this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
@@ -509,96 +507,99 @@ module ums {
         }
 
         private submitPersonalForm() {
-            console.log("i am in submitPersonalForm()");
             this.convertToJson('personal')
                 .then((json: any) => {
-                if(json.equals(this.$scope.entry.personal)){
-                    console.log("Similar");
 
+                if(this.isEmpty(this.$scope.entry.personal)){
+                    console.log("object empty");
+                    // Save operation will go here.
                 }
                 else{
-                    console.log("Nor similar");
+                    console.log("Not Empty");
+
+                    if(json.entries === this.$scope.entry.personal){
+                        console.log("objects are equal");
+                    }
+                    else{
+                        console.log("objects are not equal");
+                    }
+
                 }
                     // this.personalInformationService.savePersonalInformation(json)
                     //     .then((message: any) => {
-                    //         console.log("This is message");
-                    //         console.log(message);
+                    //
                     //     });
                 });
             this.enableViewMode('personal');
         }
 
+        private isEmpty(obj: Object): boolean {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
+    }
+
         private updatePersonalForm() {
-            console.log("i am in updatePersonalForm");
             this.convertToJson('personal')
                 .then((json: any) => {
                     this.personalInformationService.updatePersonalInformation(json)
                         .then((message: any) => {
-                        console.log("Hello");
                         });
                 });
         }
 
         private submitAcademicForm() {
-            console.log("i am in submitAcademicForm()");
+
             this.convertToJson('academic')
                 .then((json: any) => {
                     this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
+
                         });
                 });
             this.enableViewMode('academic');
         }
 
         private submitPublicationForm() {
-            console.log("i am in submitPublicationForm()");
+
             this.convertToJson('publication')
                 .then((json: any) => {
                     this.publicationInformationService.savePublicationInformation(json)
                         .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
+
                         });
                 });
             this.enableViewMode('academic');
         }
 
         private submitTrainingForm() {
-            console.log("i am in submitTrainingForm()");
             this.convertToJson('training')
                 .then((json: any) => {
                     this.trainingInformationService.saveTrainingInformation(json)
                         .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
                         });
                 });
             this.enableViewMode('training');
         }
 
         private submitAwardForm() {
-            console.log("i am in submitAwardForm()");
             this.convertToJson('award')
                 .then((json: any) => {
                     this.awardInformationService.saveAwardInformation(json)
                         .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
                         });
                 });
             this.enableViewMode('award');
         }
 
         private submitExperienceForm() {
-            console.log("i am in submitExperienceForm()");
             this.convertToJson('experience')
                 .then((json: any) => {
                     this.experienceInformationService.saveExperienceInformation(json)
                         .then((message: any) => {
-                            console.log("This is message");
-                            console.log(message);
+
                         });
                 });
             this.enableViewMode('experience');
@@ -606,10 +607,7 @@ module ums {
 
 
         private getPersonalInformation() {
-            console.log("i am in getPersonalInformation()");
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
-                console.log("default get Method Result");
-                console.log(personalInformation);
                 this.setSavedValuesOfPersonalForm(personalInformation);
             });
         }
@@ -635,10 +633,7 @@ module ums {
         }
 
         private getAcademicInformation() {
-            console.log("i am in getAcademicInformation()");
             this.academicInformationService.getAcademicInformation().then((academicInformation: any) => {
-                console.log("Employee's Academic Information");
-                console.log(academicInformation);
                 this.setSavedValuesOfAcademicForm(academicInformation);
             });
         }
@@ -651,15 +646,8 @@ module ums {
         }
 
         private getPublicationInformation() {
-            console.log("i am in getPublicationInformation()");
             this.publicationInformationService.getPublicationInformation().then((publicationInformation: any) => {
-                console.log("Employee's Publication Information");
-                console.log(publicationInformation);
-                console.log("Publication.length");
-                console.log(publicationInformation.length);
                 this.$scope.data.totalRecord = publicationInformation.length;
-                console.log("Total Records: ");
-                console.log(this.$scope.data.totalRecord);
                 this.setSavedValuesOfPublicationForm(publicationInformation);
             });
         }
@@ -680,10 +668,7 @@ module ums {
         }
 
         private getTrainingInformation() {
-            console.log("i am in getTrainingInformation()");
             this.trainingInformationService.getTrainingInformation().then((trainingInformation: any) => {
-                console.log("Employee's Training Information");
-                console.log(trainingInformation);
                 this.setSavedValuesOfTrainingForm(trainingInformation);
             });
         }
@@ -695,10 +680,7 @@ module ums {
         }
 
         private getAwardInformation() {
-            console.log("i am in getAwardInformation()");
             this.awardInformationService.getAwardInformation().then((awardInformation: any) => {
-                console.log("Employee's award Information");
-                console.log(awardInformation);
                 this.setSavedValuesOfAwardForm(awardInformation);
             });
         }
@@ -710,10 +692,7 @@ module ums {
         }
 
         private getExperienceInformation() {
-            console.log("i am in getExperienceInformation()");
             this.experienceInformationService.getExperienceInformation().then((experienceInformation: any) => {
-                console.log("Employee's Experience Information");
-                console.log(experienceInformation);
                 this.setSavedValuesOfExperienceForm(experienceInformation);
             });
         }
@@ -725,8 +704,6 @@ module ums {
         }
 
         private enableEditMode(formName: string) {
-            console.log("i am in enableEditMode() ");
-            console.log("I am here and working");
             if (formName === "personal") {
                 this.$scope.showPersonalInputDiv = true;
                 this.$scope.showPersonalLabelDiv = false;
@@ -792,7 +769,6 @@ module ums {
         }
 
         private addNewRow(divName: string) {
-            console.log("i am in addNewRow()");
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
                 academicEntry = {
@@ -867,13 +843,10 @@ module ums {
         }
 
         private deleteRow(divName: string, index: number) {
-            console.log("i am in deleteRow()");
             if (divName === 'academic') {
                 this.$scope.entry.academic.splice(index, 1);
             }
             else if (divName === 'publication') {
-                console.log("this.$scope.entry.publication");
-                console.log(this.$scope.entry.publication);
                 this.$scope.entry.publication.splice(index, 1);
             }
             else if (divName === 'training') {
@@ -888,7 +861,6 @@ module ums {
         }
 
         private convertToJson(convertThis: string): ng.IPromise<any> {
-            console.log("I am in convertToJSon()");
             let defer = this.$q.defer();
             let JsonObject = {};
             let JsonArray = [];
@@ -944,9 +916,6 @@ module ums {
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;
 
-            console.log("My Json Data");
-            console.log(JsonObject);
-
             defer.resolve(JsonObject);
             return defer.promise;
         }
@@ -982,11 +951,8 @@ module ums {
         }
 
         private getCountry() {
-            console.log("i am in getCountry()");
             this.countryService.getCountryList().then((country: any) => {
                 this.$scope.countries = country.entries;
-                console.log("Finding Country length");
-                console.log(this.$scope.countries.length);
                 for (let i = 0; i < this.$scope.countries.length; i++) {
                     this.$scope.countryMap[this.$scope.countries[i].name] = this.$scope.countries[i];
                 }
@@ -994,7 +960,6 @@ module ums {
         }
 
         private getDivision() {
-            console.log("i am in getDivision()");
             this.divisionService.getDivisionList().then((division: any) => {
                 this.$scope.divisions = division.entries;
                 for (let i = 0; i < this.$scope.divisions.length; i++) {
@@ -1004,7 +969,6 @@ module ums {
         }
 
         private getDistrict() {
-            console.log("i am in getDistrict()");
             this.districtService.getDistrictList().then((district: any) => {
                 this.$scope.presentAddressDistricts = district.entries;
                 this.$scope.permanentAddressDistricts = district.entries;
@@ -1016,7 +980,6 @@ module ums {
         }
 
         private getThana() {
-            console.log("i am in getThana()");
             this.thanaService.getThanaList().then((thana: any) => {
                 this.$scope.presentAddressThanas = thana.entries;
                 this.$scope.permanentAddressThanas = thana.entries;
@@ -1076,7 +1039,6 @@ module ums {
         }
 
         private sameAsPresentAddress() {
-            console.log("I am in sameAsPresentAddress()");
             this.$scope.entry.personal.permanentAddressHouse = this.$scope.entry.personal.presentAddressHouse;
             this.$scope.entry.personal.permanentAddressRoad = this.$scope.entry.personal.presentAddressRoad;
             this.$scope.entry.personal.permanentAddressCountry = this.$scope.entry.personal.presentAddressCountry;
@@ -1175,18 +1137,12 @@ module ums {
             }
 
             if (this.$scope.data.supOptions === "1") {
-                console.log("this.$scope.data.supOptions");
-                console.log(this.$scope.data.supOptions);
                 this.$scope.entry.personal.emergencyContactAddress = "";
             }
             else if (this.$scope.data.supOptions === "2") {
-                console.log("this.$scope.data.supOptions");
-                console.log(this.$scope.data.supOptions);
                 this.$scope.entry.personal.emergencyContactAddress = presentAddressLine1 + " " + presentAddressLine2 + " " + this.$scope.entry.personal.presentAddressThana.name + " " + this.$scope.entry.personal.presentAddressDistrict.name + " - " + presentPostalCode;
             }
             else if (this.$scope.data.supOptions === "3") {
-                console.log("this.$scope.data.supOptions");
-                console.log(this.$scope.data.supOptions);
                 this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.permanentAddressThana.name + " " + this.$scope.entry.personal.permanentAddressDistrict.name + " - " + permanentPostalCode;
             }
         }
