@@ -10,6 +10,7 @@ module ums {
     totalItems: number;
     pageNumber: number;
     applicationStatusList: Array<LmsApplicationStatus>;
+    statusModal: LmsApplicationStatus;
     pagination: any;
 
     showStatusSection: boolean;
@@ -24,6 +25,7 @@ module ums {
     pageChanged: Function;
     setCurrent: Function;
     setResultsPerPage: Function;
+    setStatusModalContent: Function;
   }
 
   interface  IConstants {
@@ -64,6 +66,7 @@ module ums {
       $scope.statusChanged = this.statusChanged.bind(this);
       $scope.setCurrent = this.setCurrent.bind(this);
       $scope.setResultsPerPage = this.setResultsPerPage.bind(this);
+      $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
       this.getLeaveApplications();
     }
 
@@ -76,6 +79,11 @@ module ums {
       console.log("Leave constants");
       console.log(this.appConstants.leaveApprovalStatus);
 
+    }
+
+
+    private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
+      this.$scope.statusModal = lmsApplicationStatus;
     }
 
     private statusChanged(leaveApplicationStatus: IConstants) {

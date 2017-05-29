@@ -17,18 +17,47 @@
         <tr>
             <th>Action Taken On</th>
             <th>Action Taken By</th>
-            <th>Comments</th>
             <th>Action Status</th>
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="s in applicationStatusList">
+        <tr data-ng-repeat="s in applicationStatusList" style="cursor: pointer;" data-toggle="modal"
+            data-target="#myModal" data-ng-click="setStatusModalContent(s)">
             <td>{{s.appliedOn}}</td>
             <td>{{s.actionTakenByName}}</td>
-            <td>{{s.comments}}</td>
             <td>{{s.actionStatusLabel}}</td>
         </tr>
         </tbody>
-
     </table>
-</div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Leave Application Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6"><p>Action Taken On <b>{{statusModal.appliedOn}}</b></p></div>
+                            <div class="col-md-6"><p>Action Taken By <b>{{statusModal.actionTakenByName}}</b></p></div>
+                            <div class="col-md-12"><p><b>Comments</b></p></div>
+                            <div>
+                           <textarea disabled="true" class="form-control col-md-8" rows="10"
+                                     class="col-md-12"
+                                     style="cursor: auto; background-color: floralwhite">{{statusModal.comments}}</textarea>
+                            </div>
+                            <div class="col-md-12"><h3>Status <b>{{statusModal.actionStatusLabel}}</b></h3></p></div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
