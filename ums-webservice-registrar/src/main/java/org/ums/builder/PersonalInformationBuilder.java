@@ -21,122 +21,159 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
 
   @Override
   public void build(JsonObjectBuilder pBuilder, PersonalInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+
     pBuilder.add("employeeId", pReadOnly.getId());
+
     pBuilder.add("firstName", pReadOnly.getFirstName());
+
     pBuilder.add("lastName", pReadOnly.getLastName());
+
     pBuilder.add("fatherName", pReadOnly.getFatherName());
+
     pBuilder.add("motherName", pReadOnly.getMotherName());
+
     pBuilder.add("gender", pReadOnly.getGender());
+
     pBuilder.add("dateOfBirth", pReadOnly.getDateOfBirth());
+
     pBuilder.add("nationality", pReadOnly.getNationality());
+
     pBuilder.add("religion", pReadOnly.getReligion());
+
     pBuilder.add("maritalStatus", pReadOnly.getMaritalStatus());
+
     if(pReadOnly.getSpouseName() != null) {
       pBuilder.add("spouseName", pReadOnly.getSpouseName());
     }
     else {
       pBuilder.add("spouseName", "");
     }
+
     if(pReadOnly.getNationalId() != null) {
       pBuilder.add("nationalIdNo", pReadOnly.getNationalId());
     }
     else {
       pBuilder.add("nationalIdNo", "");
     }
+
     pBuilder.add("bloodGroup", pReadOnly.getBloodGroup());
+
     if(pReadOnly.getSpouseNationalId() != null) {
       pBuilder.add("spouseNationalIdNo", pReadOnly.getSpouseNationalId());
     }
     else {
       pBuilder.add("spouseNationalIdNo", "");
     }
+
     if(pReadOnly.getWebsite() != null) {
       pBuilder.add("personalWebsite", pReadOnly.getWebsite());
     }
     else {
       pBuilder.add("personalWebsite", "");
     }
+
     if(pReadOnly.getOrganizationalEmail() != null) {
       pBuilder.add("organizationalEmail", pReadOnly.getOrganizationalEmail());
     }
     else {
       pBuilder.add("organizationalEmail", "");
     }
+
     pBuilder.add("personalEmail", pReadOnly.getPersonalEmail());
+
     pBuilder.add("mobile", pReadOnly.getMobileNumber());
+
     if(pReadOnly.getPhoneNumber() != null) {
       pBuilder.add("phone", pReadOnly.getPhoneNumber());
     }
     else {
       pBuilder.add("phone", "");
     }
+
     pBuilder.add("presentAddressHouse", pReadOnly.getPresentAddressHouse());
+
     if(pReadOnly.getPresentAddressRoad() != null) {
       pBuilder.add("presentAddressRoad", pReadOnly.getPresentAddressRoad());
     }
     else {
       pBuilder.add("presentAddressRoad", "");
     }
+
     if(pReadOnly.getPresentAddressThana() != null) {
       pBuilder.add("presentAddressThana", pReadOnly.getPresentAddressThana());
     }
     else {
       pBuilder.add("presentAddressThana", "");
     }
+
     if(pReadOnly.getPresentAddressZip() != null) {
       pBuilder.add("presentAddressPostOfficeNo", pReadOnly.getPresentAddressZip());
     }
     else {
       pBuilder.add("presentAddressPostOfficeNo", "");
     }
+
     if(pReadOnly.getPresentAddressDistrict() != null) {
       pBuilder.add("presentAddressDistrict", pReadOnly.getPresentAddressDistrict());
     }
     else {
       pBuilder.add("presentAddressDistrict", "");
     }
+
     if(pReadOnly.getPresentAddressDivision() != null) {
       pBuilder.add("presentAddressDivision", pReadOnly.getPresentAddressDivision());
     }
     else {
       pBuilder.add("presentAddressDivision", "");
     }
+
     pBuilder.add("presentAddressCountry", pReadOnly.getPresentAddressCountry());
+
     pBuilder.add("permanentAddressHouse", pReadOnly.getPermanentAddressHouse());
+
     if(pReadOnly.getPermanentAddressRoad() != null) {
       pBuilder.add("permanentAddressRoad", pReadOnly.getPermanentAddressRoad());
     }
     else {
       pBuilder.add("permanentAddressRoad", "");
     }
+
     if(pReadOnly.getPresentAddressThana() != null) {
       pBuilder.add("permanentAddressThana", pReadOnly.getPermanentAddressThana());
     }
     else {
       pBuilder.add("permanentAddressThana", "");
     }
+
     if(pReadOnly.getPermanentAddressZip() != null) {
       pBuilder.add("permanentAddressPostOfficeNo", pReadOnly.getPermanentAddressZip());
     }
     else {
       pBuilder.add("permanentAddressPostOfficeNo", "");
     }
+
     if(pReadOnly.getPermanentAddressDistrict() != null) {
       pBuilder.add("permanentAddressDistrict", pReadOnly.getPermanentAddressDistrict());
     }
     else {
       pBuilder.add("permanentAddressDistrict", "");
     }
+
     if(pReadOnly.getPermanentAddressDivision() != null) {
       pBuilder.add("permanentAddressDivision", pReadOnly.getPermanentAddressDivision());
     }
     else {
       pBuilder.add("permanentAddressDivision", "");
     }
+
     pBuilder.add("permanentAddressCountry", pReadOnly.getPermanentAddressCountry());
+
     pBuilder.add("emergencyContactName", pReadOnly.getEmergencyContactName());
+
     pBuilder.add("emergencyContactRelation", pReadOnly.getEmergencyContactRelation());
+
     pBuilder.add("emergencyContactPhone", pReadOnly.getEmergencyContactPhone());
+
     if(pReadOnly.getEmergencyContactAddress() != null) {
       pBuilder.add("emergencyContactAddress", pReadOnly.getEmergencyContactAddress());
     }

@@ -48,7 +48,6 @@ public class AcademicInformationResourceHelper extends
 
   @Transactional
   public Response saveAcademicInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
     mAcademicInformationManager.deleteAcademicInformation(userId);
     LocalCache localCache = new LocalCache();

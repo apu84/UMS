@@ -671,7 +671,7 @@ module ums {
 
     static  RegistrarConstant(): any {
       return {
-        gender: [
+        genderTypes: [
           {id: 'M', name: 'Male'},
           {id: 'F', name: 'Female'}
         ],
@@ -684,11 +684,11 @@ module ums {
           {id: 6, name: "Sikhism"},
           {id: 7, name: "Others"}
         ],
-        nationalities: [
+        nationalityTypes: [
           {id: 1, name: "Bangladeshi"},
           {id: 2, name: "Others"}
         ],
-        bloodGroups: [
+        bloodGroupTypes: [
           {id: 1, name: "A+"},
           {id: 2, name: "A-"},
           {id: 3, name: "B+"},
