@@ -78,7 +78,8 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
             + "VALUES(?, ?,  ?, ?, ?,?, ?," + getLastModifiedSql() + ")";
 
     mJdbcTemplate.update(INSERT_ONE, pContributor.getId(), pContributor.getFullName(), pContributor.getShortName(),
-        pContributor.getGender()==null? Types.NULL: pContributor.getGender().getId(), pContributor.getAddress(), pContributor.getCountryId(), 1);
+        pContributor.getGender() == null ? Types.NULL : pContributor.getGender().getId(), pContributor.getAddress(),
+        pContributor.getCountryId(), 1);
 
     return pContributor.getId();
   }
@@ -86,9 +87,9 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
   @Override
   public int update(final MutableContributor pContributor) {
     String query = UPDATE_ONE + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pContributor.getFullName(), pContributor.getShortName(), pContributor
-        .getGender()==null? Types.NULL: pContributor.getGender().getId(), pContributor.getAddress(), pContributor.getCountryId(), pContributor.getLastModified(),
-        pContributor.getId());
+    return mJdbcTemplate.update(query, pContributor.getFullName(), pContributor.getShortName(),
+        pContributor.getGender() == null ? Types.NULL : pContributor.getGender().getId(), pContributor.getAddress(),
+        pContributor.getCountryId(), pContributor.getLastModified(), pContributor.getId());
   }
 
   @Override
