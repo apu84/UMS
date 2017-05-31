@@ -236,6 +236,8 @@ module ums {
                 experience: Array<IExperienceInformationModel>()
             };
 
+            $scope.testAcademicInformation = Array<IAcademicInformationModel>();
+
             $scope.data = {
                 supOptions: "",
                 borderColor: "",
@@ -282,6 +284,8 @@ module ums {
             $scope.changePermanentAddressFields = this.changePermanentAddressFields.bind(this);
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
+
+            console.log("i am changed");
 
             this.initializeVariables();
         }
@@ -834,12 +838,12 @@ module ums {
         }
 
         private isEmpty(obj: Object): boolean {
-        for(var key in obj) {
-            if(obj.hasOwnProperty(key))
-                return false;
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
         }
-        return true;
-    }
 
         private updatePersonalForm() {
             this.convertToJson('personal')
@@ -858,39 +862,62 @@ module ums {
                 let jsonLength: number = json.entries[0]['academic'].length;
                 let academicLength: number = this.$scope.testAcademicInformation.length;
                 let mLength: number = 0;
-                console.log(json.entries[0]['academic'].length);
                 if(jsonLength > academicLength){
                     mLength = jsonLength;
                 }
                 else{
                     mLength = academicLength;
                 }
-                for(let i = 0; i < mLength; i++){
-                    console.log(json.entries[0]['academic'][i].id);
-                    if(json.entries[0]['academic'][i].id == null){
-                        console.log("Id Null. Go For Create New Record");
-                    }
-                    else if(json.entries[0]['academic'][i] === this.$scope.testAcademicInformation[i]){
-                        console.log("Equal. No Need to Change");
-                    }
-                    else{
-                        if(json.entries[0]['academic'][i].id == this.$scope.testAcademicInformation[i].id )
-                        {
-                            console.log("json.entries[0]['academic'][i].id: " + json.entries[0]['academic'][i].id);
-                            console.log("this.$scope.testAcademicInformation[i].id: " + this.$scope.testAcademicInformation[i].id);
-                            console.log("Update this");
-                        }
 
+                for(let i = 0; i < mLength; i++){
+                    if(json.entries[0]['academic'][i] == undefined){
+                        console.log("Delete This one");
+                        console.log(this.$scope.testAcademicInformation);
+                    }
+                    else {
+                        let jsonId = json.entries[0]['academic'][i].id;
+                        if (jsonId == null) {
+                            console.log("Create New Record");
+                        }
+                        else {
+                            //find same id in this.$scope.testAcademicInformation;
+
+                            let testAcademic: any = this.find(jsonId);
+                            if (testAcademic.academicPassingYear === json.entries[0]['academic'][i].academicPassingYear && testAcademic.academicInstitution === json.entries[0]['academic'][i].academicInstitution && testAcademic.academicDegreeName.name === json.entries[0]['academic'][i].academicDegreeName.name) {
+                                console.log("both are equal");
+                                console.log("No need to change");
+                                this.$scope.testAcademicInformation = this.$scope.testAcademicInformation.slice(i, 1);
+                            }
+                            else {
+                                console.log("Not Equal .. ");
+                                console.log("Update this One");
+                                delete this.$scope.testAcademicInformation[i];
+                                this.$scope.testAcademicInformation = this.$scope.testAcademicInformation.slice(i, 1);
+                            }
+                        }
                     }
                 }
+                console.log("this.$scope.testAcademicInfomration");
+                    console.log(this.$scope.testAcademicInformation);
 
 
-                    this.academicInformationService.saveAcademicInformation(json)
-                        .then((message: any) => {
-
-                        });
+                    // this.academicInformationService.saveAcademicInformation(json)
+                    //     .then((message: any) => {
+                    //
+                    //     });
                 });
             this.enableViewMode('academic');
+        }
+
+        private find(id: number){
+            let found = null;
+            for(let i = 0; i < this.$scope.testAcademicInformation.length; i++){
+                if(id == this.$scope.testAcademicInformation[i].id){
+                    found = this.$scope.testAcademicInformation[i];
+                    break;
+                }
+            }
+            return found;
         }
 
         private submitPublicationForm() {
@@ -967,7 +994,6 @@ module ums {
         private getAcademicInformation() {
             this.academicInformationService.getAcademicInformation().then((academicInformation: any) => {
                 this.setSavedValuesOfAcademicForm(academicInformation);
-                this.$scope.testAcademicInformation = academicInformation;
             });
         }
 
@@ -976,6 +1002,7 @@ module ums {
                 this.$scope.entry.academic[i] = academicInformation[i];
                 this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];
             }
+            this.$scope.testAcademicInformation = angular.copy(this.$scope.entry.academic);
         }
 
         private getPublicationInformation() {
