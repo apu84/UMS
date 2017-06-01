@@ -117,7 +117,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (LmsApplication application : applications) {
+    for(LmsApplication application : applications) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, application, pUriInfo, localCache);
       children.add(jsonObject);
@@ -166,8 +166,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) {
     int leavesTaken = 0;
-    if (pApplicationMap.get(lmsType.getId()) != null)
-      for (LmsApplication application : pApplicationMap.get(lmsType.getId())) {
+    if(pApplicationMap.get(lmsType.getId()) != null)
+      for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
         leavesTaken +=
             (application.getToDate().getTime() - application.getFromDate().getTime()) / (1000 * 60 * 60 * 24);
       }
@@ -178,13 +178,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<LmsType> lmsTypes = new ArrayList<>();
     Employee employee =
         mEmployeeManager.get(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    if (employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if (employee.getGender().equals("M"))
+    if(employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
+      if(employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
-    } else {
-      if (employee.getGender().equals("M"))
+    }
+    else {
+      if(employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

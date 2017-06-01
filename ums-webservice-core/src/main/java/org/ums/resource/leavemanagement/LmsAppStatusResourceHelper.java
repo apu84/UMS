@@ -10,8 +10,6 @@ import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
-import org.ums.enums.common.LeaveApplicationStatus;
-import org.ums.enums.common.LeaveCategories;
 import org.ums.enums.common.RoleType;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.EmployeeManager;
@@ -74,80 +72,13 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     lmsAppStatus.setComments(jsonObject.getString("comments"));
     int approvalStatus = jsonObject.getInt("leaveApprovalStatus");
     LmsAppStatus latestStatusOfTheApplication = mLmsAppStatusManager.getLatestStatusOfTheApplication(lmsAppStatus.getLmsApplication().getId());
-    setApplicationStatus(lmsAppStatus, user, additionalRoleIds, approvalStatus, latestStatusOfTheApplication);
+    mLeaveManagementService.setApplicationStatus(lmsAppStatus, user, additionalRoleIds, approvalStatus, latestStatusOfTheApplication);
     getContentManager().create(lmsAppStatus);
 
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
-  }
-
-  private void setApplicationStatus(PersistentLmsAppStatus pLmsAppStatus, User pUser, List<Integer> pAdditionalRoleIds,
-                                    int pApprovalStatus, LmsAppStatus pLatestStatusOfTheApplication) {
-    if ((pUser.getPrimaryRole().getId() == RoleType.VC.getId() || pAdditionalRoleIds.contains(RoleType.VC.getId()))
-        && pLatestStatusOfTheApplication.getActionStatus().getId() == LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL
-        .getId()
-        && pLmsAppStatus.getLmsApplication().getLmsType().getId() != LeaveCategories.CASUAL_LEAVE_ON_FULL_PAY.getId()) {
-      if (pApprovalStatus == LeaveApplicationStatus.ACCEPTED.getId()) {
-        pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-        mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-            LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-      } else {
-        pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.REJECTED_BY_VC);
-        mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-            LeaveApplicationApprovalStatus.REJECTED_BY_VC);
-      }
-    } else if ((pUser.getPrimaryRole().getId() == RoleType.REGISTRAR.getId() || pAdditionalRoleIds
-        .contains(RoleType.REGISTRAR.getId()))
-        && pLatestStatusOfTheApplication.getActionStatus().equals(
-        LeaveApplicationApprovalStatus.WAITING_FOR_REGISTRARS_APPROVAL)) {
-      if (pLmsAppStatus.getLmsApplication().getLmsType().getId() == LeaveCategories.CASUAL_LEAVE_ON_FULL_PAY.getId()
-          && pLmsAppStatus.getLmsApplication().getEmployee().getDepartment()
-          .equals(mEmployeeManager.get(pUser.getEmployeeId()).getDepartment())) {
-        if (pApprovalStatus == LeaveApplicationStatus.ACCEPTED.getId()) {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-        } else {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.REJECTED_BY_REGISTRAR);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.REJECTED_BY_REGISTRAR);
-        }
-      } else {
-        if (pApprovalStatus == LeaveApplicationStatus.ACCEPTED.getId()) {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
-        } else {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.REJECTED_BY_REGISTRAR);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.REJECTED_BY_REGISTRAR);
-        }
-      }
-    } else {
-      if (pLmsAppStatus.getLmsApplication().getLmsType().getId() == LeaveCategories.CASUAL_LEAVE_ON_FULL_PAY.getId()) {
-        if (pApprovalStatus == LeaveApplicationStatus.ACCEPTED.getId()) {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
-        } else {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.REJECTED_BY_DEPT_HEAD);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.REJECTED_BY_DEPT_HEAD);
-        }
-      } else {
-        if (pApprovalStatus == LeaveApplicationStatus.ACCEPTED.getId()) {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_REGISTRARS_APPROVAL);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.WAITING_FOR_REGISTRARS_APPROVAL);
-        } else {
-          pLmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.REJECTED_BY_DEPT_HEAD);
-          mLmsApplicationManager.updateApplicationStatus(pLmsAppStatus.getLmsApplication().getId(),
-              LeaveApplicationApprovalStatus.REJECTED_BY_DEPT_HEAD);
-        }
-      }
-    }
   }
 
   public JsonObject getApplicationStatus(final Long pApplicationId, UriInfo pUriInfo) {
@@ -159,7 +90,7 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (LmsAppStatus status : pAppStatuses) {
+    for(LmsAppStatus status : pAppStatuses) {
       JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
       getBuilder().build(objectBuilder, status, pUriInfo, localCache);
       children.add(objectBuilder);
