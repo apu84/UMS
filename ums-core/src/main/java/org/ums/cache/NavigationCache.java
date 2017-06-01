@@ -1,11 +1,9 @@
 package org.ums.cache;
 
 import org.ums.domain.model.immutable.Navigation;
-import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.manager.CacheManager;
 import org.ums.manager.NavigationManager;
-import org.ums.util.CacheUtil;
 
 import java.util.List;
 import java.util.Set;

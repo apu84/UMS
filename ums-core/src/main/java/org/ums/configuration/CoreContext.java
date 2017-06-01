@@ -21,6 +21,13 @@ import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
+import org.ums.usermanagement.permission.*;
+import org.ums.usermanagement.role.PersistentRoleDao;
+import org.ums.usermanagement.role.RoleCache;
+import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.user.PersistentUserDao;
+import org.ums.usermanagement.user.UserCache;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.util.Constants;
 
 @Configuration

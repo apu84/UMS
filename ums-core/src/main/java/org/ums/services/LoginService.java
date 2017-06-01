@@ -1,16 +1,14 @@
 package org.ums.services;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.usermanagement.user.User;
 import org.ums.manager.EmployeeManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.message.MessageResource;
 import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;

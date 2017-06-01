@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

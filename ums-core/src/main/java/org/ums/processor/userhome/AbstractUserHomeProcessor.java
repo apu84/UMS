@@ -2,9 +2,9 @@ package org.ums.processor.userhome;
 
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.Role;
-import org.ums.domain.model.immutable.User;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.role.Role;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 public abstract class AbstractUserHomeProcessor implements UserHomeProcessor {
   protected static String ALLOWED_ROLES_SEPARATOR = ",";

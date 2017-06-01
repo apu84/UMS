@@ -15,10 +15,10 @@ import org.ums.builder.ClassAttendanceBuilder;
 import org.ums.report.generator.AttendanceSheetGenerator;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.manager.ClassAttendanceManager;
 import org.ums.manager.CourseManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.services.UserService;
 
 import com.itextpdf.text.DocumentException;

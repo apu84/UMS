@@ -30,6 +30,8 @@ import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 @Component
 public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {

@@ -2,9 +2,7 @@ package org.ums.fee.certificate;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.fee.certificate.CertificateStatus;
-import org.ums.fee.certificate.MutableCertificateStatus;
-import org.ums.fee.certificate.CertificateStatusManager;
+
 import java.util.Date;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeCategoryManager;
@@ -12,8 +10,8 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.manager.SemesterManager;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.StudentManager;
-import org.ums.domain.model.immutable.User;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 public class PersistentCertificateStatus implements MutableCertificateStatus {
 

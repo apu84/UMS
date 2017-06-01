@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.message.MessageResource;
+import org.ums.usermanagement.user.UserManager;
 
 import java.io.InputStream;
 import java.nio.file.Path;

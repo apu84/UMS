@@ -13,14 +13,14 @@ import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.immutable.SeatPlanGroup;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.exceptions.ValidationException;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamRoutine;
-import org.ums.report.generator.AttendanceSheetGenerator;
 import org.ums.report.generator.UGExamRoutineGenerator;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

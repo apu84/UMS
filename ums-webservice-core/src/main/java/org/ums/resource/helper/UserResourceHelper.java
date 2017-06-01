@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.UserBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableUser;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.MutableUser;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;

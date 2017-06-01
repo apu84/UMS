@@ -21,6 +21,8 @@ import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;

@@ -2,24 +2,17 @@ package org.ums.report.generator;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.ExamRoutine;
-import org.ums.domain.model.immutable.User;
 import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SemesterManager;
-import org.ums.util.Constants;
 import org.ums.util.ReportUtils;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 

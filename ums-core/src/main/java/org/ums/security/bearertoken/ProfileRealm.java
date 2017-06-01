@@ -1,6 +1,6 @@
 package org.ums.security.bearertoken;
 
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 
 public interface ProfileRealm {
 

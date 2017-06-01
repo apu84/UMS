@@ -1,7 +1,7 @@
 package org.ums.processor.userhome;
 
 import org.apache.shiro.subject.Subject;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

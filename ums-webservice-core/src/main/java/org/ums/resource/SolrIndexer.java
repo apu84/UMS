@@ -6,10 +6,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.User;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.converter.SimpleConverter;
 import org.ums.solr.repository.document.EmployeeDocument;

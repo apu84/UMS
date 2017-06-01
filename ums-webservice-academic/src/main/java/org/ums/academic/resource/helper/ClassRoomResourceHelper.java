@@ -12,6 +12,8 @@ import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
 import org.ums.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableClassRoom;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

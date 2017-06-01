@@ -6,11 +6,11 @@ import java.util.Date;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeCategoryManager;
 import org.ums.manager.StudentManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 
 public class PersistentStudentDues implements MutableStudentDues {
 

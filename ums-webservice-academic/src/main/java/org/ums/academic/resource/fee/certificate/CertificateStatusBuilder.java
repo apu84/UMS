@@ -14,7 +14,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.MutableCertificateStatus;

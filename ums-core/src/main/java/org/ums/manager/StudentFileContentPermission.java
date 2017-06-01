@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.message.MessageResource;
+import org.ums.usermanagement.user.UserManager;
 
 import java.io.InputStream;
 import java.nio.file.Path;

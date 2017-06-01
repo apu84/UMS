@@ -24,16 +24,18 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.domain.model.mutable.MutableUser;
+import org.ums.usermanagement.user.MutableUser;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
-import org.ums.persistent.model.PersistentUser;
+import org.ums.usermanagement.user.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.StudentResource;
+import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 @Component

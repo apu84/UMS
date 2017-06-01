@@ -3,8 +3,9 @@ package org.ums.manager;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.message.MessageResource;
+import org.ums.usermanagement.user.UserManager;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

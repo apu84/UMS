@@ -9,8 +9,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.StudentManager;
-import org.ums.manager.UserManager;
-import org.ums.report.generator.AbstractReportGenerator;
+import org.ums.usermanagement.user.UserManager;
 
 import java.net.URL;
 import java.util.Map;

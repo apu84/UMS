@@ -11,6 +11,8 @@ import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentCourse;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

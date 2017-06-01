@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
