@@ -12,12 +12,19 @@ module ums {
     applicationStatusList: Array<LmsApplicationStatus>;
     statusModal: LmsApplicationStatus;
     pagination: any;
-
+    user: User;
     showStatusSection: boolean;
-
-
+    disableApproveAndRejectButton: boolean;
+    additionalRoles: Array<AdditionalRolePermissions>;
     pendingApplications: Array<LmsApplicationStatus>;
     pendingApplication: LmsApplicationStatus;
+    remainingLeaves: Array<RemainingLmsLeave>;
+    approveOrRejectionComment: string;
+    data: any;
+
+    approveButtonClicked: boolean;
+    rejectButtonClicked: boolean;
+
 
     statusChanged: Function;
     closeStatusSection: Function;
@@ -25,7 +32,10 @@ module ums {
     pageChanged: Function;
     setCurrent: Function;
     setResultsPerPage: Function;
+    approve: Function;
+    reject: Function;
     setStatusModalContent: Function;
+    saveAction: Function;
   }
 
   interface  IConstants {
@@ -34,7 +44,7 @@ module ums {
   }
 
   class LeaveApplicationApproval {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -48,12 +58,20 @@ module ums {
                 private programService: ProgramService,
                 private $timeout: ng.ITimeoutService,
                 private leaveTypeService: LeaveTypeService,
-                private leaveApplicationService: LeaveApplicationService, private leaveApplicationStatusService: LeaveApplicationStatusService) {
+                private leaveApplicationService: LeaveApplicationService,
+                private leaveApplicationStatusService: LeaveApplicationStatusService,
+                private employeeService: EmployeeService,
+                private additionalRolePermissionsService: AdditionalRolePermissionsService,
+                private userService: UserService,
+                private commonservice: CommonService) {
 
       $scope.resultsPerPage = "3";
       $scope.pagination = {};
       $scope.pagination.currentPage = 1;
       $scope.itemsPerPage = +$scope.resultsPerPage;
+      $scope.disableApproveAndRejectButton = true;
+      $scope.approveOrRejectionComment = "";
+      $scope.data = {};
       $scope.pageNumber = 1;
       $scope.showStatusSection = false;
       this.$scope.leaveApprovalStatusList = [];
@@ -67,7 +85,47 @@ module ums {
       $scope.setCurrent = this.setCurrent.bind(this);
       $scope.setResultsPerPage = this.setResultsPerPage.bind(this);
       $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
+      $scope.saveAction = this.saveAction.bind(this);
+      $scope.approve = this.approve.bind(this);
+      $scope.reject = this.reject.bind(this);
       this.getLeaveApplications();
+      this.getUsersInformation();
+      this.getAdditionaPermissions();
+    }
+
+    private approve() {
+      this.$scope.approveButtonClicked = true;
+    }
+
+    private reject() {
+      this.$scope.rejectButtonClicked = true;
+    }
+
+
+    private getAdditionaPermissions() {
+      this.additionalRolePermissionsService.fetchLoggedUserAdditionalRolePermissions().then((additionalRolePermissions) => {
+        this.$scope.additionalRoles = [];
+        this.$scope.additionalRoles = additionalRolePermissions;
+
+        console.log("permissions");
+        console.log(additionalRolePermissions);
+      });
+    }
+
+    private saveAction() {
+      this.convertToJson().then((json) => {
+        this.leaveApplicationStatusService.saveLeaveApplicationStatus(json).then((message) => {
+          this.getRemainingLeaves(this.$scope.pendingApplication.applicantsId);
+        });
+      });
+    }
+
+    private getUsersInformation() {
+      this.userService.fetchCurrentUserInfo().then((user) => {
+        this.$scope.user = user;
+        console.log("users: ");
+        console.log(user);
+      });
     }
 
 
@@ -94,6 +152,7 @@ module ums {
 
     private closeStatusSection() {
       this.$scope.showStatusSection = false;
+      this.getLeaveApplications();
     }
 
     private setResultsPerPage(resultsPerPage: number) {
@@ -102,6 +161,14 @@ module ums {
         this.getLeaveApplications();
       }
 
+    }
+
+
+    private getRemainingLeaves(employeeId: string) {
+      this.$scope.remainingLeaves = [];
+      this.leaveApplicationService.fetchRemainingLeavesByEmployeeId(employeeId).then((remainingLeaves) => {
+        this.$scope.remainingLeaves = remainingLeaves;
+      });
     }
 
 
@@ -127,11 +194,61 @@ module ums {
       this.$scope.showStatusSection = true;
       this.$scope.pendingApplication = pendingApplication;
       this.$scope.applicationStatusList = [];
+
+      this.$scope.approveButtonClicked = false;
+      this.$scope.rejectButtonClicked = false;
+
+      this.getRemainingLeaves(pendingApplication.applicantsId);
+      this.decideWhetherToEnableOrDisableActionButtons(pendingApplication);
+
+
+      console.log("disableApproveAndRejectButton:" + this.$scope.disableApproveAndRejectButton);
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
-        console.log("Status list");
-        console.log(statusList);
         this.$scope.applicationStatusList = statusList;
       });
+    }
+
+    private decideWhetherToEnableOrDisableActionButtons(pendingApplication: ums.LmsApplicationStatus) {
+      if (pendingApplication.actionStatus == Utils.LEAVE_APPLICATION_WAITING_FOR_HEADS_APPROVAL) {
+        for (var i = 0; i < this.$scope.additionalRoles.length; i++) {
+          if (this.$scope.additionalRoles[i].roleId == Utils.DEPT_HEAD || this.$scope.user.roleId == Utils.LIBRARIAN || this.$scope.user.roleId == Utils.COE) {
+            this.$scope.disableApproveAndRejectButton = false;
+            break;
+          }
+        }
+      } else if (pendingApplication.actionStatus == Utils.LEAVE_APPLICATION_WAITING_FOR_REGISTRARS_APPROVAL) {
+        if (this.$scope.user.roleId === Utils.REGISTRAR) {
+          this.$scope.disableApproveAndRejectButton = false;
+        }
+      } else if (pendingApplication.actionStatus === Utils.LEAVE_APPLICATION_WAITING_FOR_VC_APPROVAL) {
+        if (this.$scope.user.roleId === Utils.VC) {
+          this.$scope.disableApproveAndRejectButton = false;
+        }
+      } else {
+        //Do nothing.
+      }
+    }
+
+
+    private convertToJson(): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      var completeJson = {};
+      var jsonObject = [];
+
+      var item: any = {};
+      item['appId'] = this.$scope.pendingApplication.appId;
+      item['comments'] = this.$scope.data.comment;
+      console.log("approved button clicked or not ***");
+      console.log(this.$scope.approveButtonClicked);
+      if (this.$scope.approveButtonClicked) {
+        item['leaveApprovalStatus'] = Utils.LEAVE_APPLICATION_ACCEPTED;
+      } else {
+        item['leaveApprovalStatus'] = Utils.LEAVE_APPLICATION_REJECTED;
+      }
+      jsonObject.push(item);
+      completeJson['entries'] = jsonObject;
+      defer.resolve(completeJson);
+      return defer.promise;
     }
 
   }

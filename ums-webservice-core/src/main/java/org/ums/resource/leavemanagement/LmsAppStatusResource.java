@@ -1,7 +1,7 @@
 package org.ums.resource.leavemanagement;
 
 import org.springframework.stereotype.Component;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
@@ -33,12 +33,12 @@ public class LmsAppStatusResource extends MutableLmsAppStatusResource {
   @Path("/leaveApplications/status/{status}/pageNumber/{page-number}/pageSize/{page-size}")
   public JsonObject getLeaveApplications(final @Context Request pRequest, @PathParam("status") int pStatus,
       @PathParam("page-number") int pageNumber, @PathParam("page-size") int pageSize) {
-    return mHelper.getLeaveApplications(LeaveApprovalStatus.get(pStatus), pageNumber, pageSize, mUriInfo);
+    return mHelper.getLeaveApplications(LeaveApplicationApprovalStatus.get(pStatus), pageNumber, pageSize, mUriInfo);
   }
 
   @GET
   @Path("/leaveApplications/status/{status}")
   public JsonObject getLeaveApplications(final @Context Request pRequest, @PathParam("status") int pStatus) {
-    return mHelper.getLeaveApplications(LeaveApprovalStatus.get(pStatus), mUriInfo);
+    return mHelper.getLeaveApplications(LeaveApplicationApprovalStatus.get(pStatus), mUriInfo);
   }
 }

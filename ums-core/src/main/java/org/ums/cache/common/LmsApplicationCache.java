@@ -3,6 +3,7 @@ package org.ums.cache.common;
 import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsApplicationManager;
 
@@ -35,4 +36,8 @@ public class LmsApplicationCache extends
     return getManager().getPendingLmsApplication(pEmployeeId);
   }
 
+  @Override
+  public int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    return getManager().updateApplicationStatus(pApplicationid, pLeaveApplicationStatus);
+  }
 }

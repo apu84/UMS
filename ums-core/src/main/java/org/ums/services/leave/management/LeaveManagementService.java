@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.manager.NotificationManager;
 import org.ums.services.NotificationGenerator;
@@ -28,7 +27,7 @@ public class LeaveManagementService {
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
-  public void setNotification(String userId, Employee sender) {
+  public void setNotification(String userId, String message) {
     Notifier notifier = new Notifier() {
       @Override
       public List<String> consumers() {
@@ -50,9 +49,8 @@ public class LeaveManagementService {
       @Override
       public String payload() {
         try {
-          return "Leave Application from employee: " + sender.getEmployeeName() + " of department: "
-              + sender.getDepartment().getShortName() + " is waiting for your approval.";
-        } catch(Exception e) {
+          return message;
+        } catch (Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }
         return null;
@@ -61,7 +59,7 @@ public class LeaveManagementService {
 
     try {
       mNotificationGenerator.notify(notifier);
-    } catch(Exception e) {
+    } catch (Exception e) {
       mLogger.error("Failed to generate notification", e);
     }
   }

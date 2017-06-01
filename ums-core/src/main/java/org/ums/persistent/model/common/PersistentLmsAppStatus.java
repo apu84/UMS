@@ -5,7 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
@@ -35,7 +35,7 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   private String mActionTakenById;
   private Employee mActionTakenBy;
   private String mComments;
-  private LeaveApprovalStatus mActionStatus;
+  private LeaveApplicationApprovalStatus mActionStatus;
   private String mLastModified;
   private int mRowNumber;
 
@@ -158,12 +158,12 @@ public class PersistentLmsAppStatus implements MutableLmsAppStatus {
   }
 
   @Override
-  public void setActionStatus(LeaveApprovalStatus pActionStatus) {
+  public void setActionStatus(LeaveApplicationApprovalStatus pActionStatus) {
     mActionStatus = pActionStatus;
   }
 
   @Override
-  public LeaveApprovalStatus getActionStatus() {
+  public LeaveApplicationApprovalStatus getActionStatus() {
     return mActionStatus;
   }
 }

@@ -29,6 +29,24 @@ module ums {
       return defer.promise;
     }
 
+    public fetchRemainingLeavesByEmployeeId(employeeId: string): ng.IPromise<any> {
+      var url = "lmsApplication/remainingLeaves/employeeId/" + employeeId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var lmsTypes: any = {};
+            lmsTypes = json.entries;
+            defer.resolve(lmsTypes);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting remaining leaves");
+          });
+
+      return defer.promise;
+    }
+
     public fetchPendingLeaves(): ng.IPromise<any> {
       var url = "lmsApplication/pendingLeaves";
       var defer = this.$q.defer();
@@ -51,6 +69,8 @@ module ums {
 
 
     public saveLeaveApplication(json: any): ng.IPromise<any> {
+      console.log("json");
+      console.log(json);
       var defer = this.$q.defer();
       var url = "lmsApplication/save";
       console.log("Found json");

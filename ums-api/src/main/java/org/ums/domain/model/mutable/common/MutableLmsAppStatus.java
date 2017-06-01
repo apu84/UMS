@@ -4,7 +4,7 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.MutableLastModifier;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ public interface MutableLmsAppStatus extends LmsAppStatus, Editable<Long>, Mutab
 
   void setComments(String pComments);
 
-  void setActionStatus(LeaveApprovalStatus pActionStatus);
+  void setActionStatus(LeaveApplicationApprovalStatus pActionStatus);
 
   void setRowNumber(int pRowNumber);
 
