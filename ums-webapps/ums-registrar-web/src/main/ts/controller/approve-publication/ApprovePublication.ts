@@ -1,23 +1,27 @@
 module ums {
     interface IApprovePublication extends ng.IScope {
-        submit: Function;
-        pageChanged: Function;
-        resetTopBottomDivs: Function;
-        publications: Array<IPublicationInformationModel>;
-        teachers: Array<IEmployee>;
         showPendingPublicationDiv: boolean;
         showNoPendingPublicationListDiv: boolean;
-        accept: Function;
-        reject: Function;
-        currentTeacher: IEmployee;
+
+        currentlySelectedEmployeeIndex: number;
         totalPendingPublications: number;
-        changePublicationList: Function;
-        currentTeacherIndex: number;
+
+        publicationListViewCategory: string;
 
         data: any;
         pagination: any;
-        publicationListViewCategory: string;
+
+        publications: Array<IPublicationInformationModel>;
+        employees: Array<IEmployee>;
         item: Array<IPublicationInformationModel>;
+        currentlySelectedEmployee: IEmployee;
+
+        resetTopBottomDivs: Function;
+        view: Function;
+        pageChanged: Function;
+        accept: Function;
+        reject: Function;
+        changePublicationList: Function;
     }
 
     interface IEmployee{
@@ -26,6 +30,9 @@ module ums {
         designation: string;
         employmentType: string;
         department: string;
+        // mobileNo: string;
+        // extNo: string;
+        // roomNo: string;
     }
 
     class ApprovePublication {
@@ -43,36 +50,32 @@ module ums {
 
             $scope.item = Array<IPublicationInformationModel>();
             $scope.publications = Array<IPublicationInformationModel>();
-            $scope.teachers = Array<IEmployee>();
-            $scope.currentTeacher = <IEmployee>{};
-            $scope.submit = this.submit.bind(this);
+            $scope.employees = Array<IEmployee>();
+            $scope.currentlySelectedEmployee = <IEmployee>{};
+            $scope.pagination = {};
+            $scope.pagination.currentPage = 1;
+            $scope.totalPendingPublications = 0;
+            $scope.data = { publicationListViewCategory: "", itemPerPage: 2, totalRecord: 0 };
+
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
+            $scope.view = this.view.bind(this);
             $scope.accept = this.accept.bind(this);
             $scope.reject = this.reject.bind(this);
             $scope.changePublicationList = this.changePublicationList.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
 
-            $scope.data ={
-                publicationListViewCategory: "",
-                itemPerPage: 3,
-                totalRecord: 0
-            };
-
-            $scope.pagination = {};
-            $scope.pagination.currentPage = 1;
-
-            $scope.totalPendingPublications = 0;
             this.fetchTeachersList();
 
         }
 
-        private submit(index: number){
-            this.$scope.currentTeacherIndex = index;
+        private view(selectedEmployeeIndex: number){
+            const showPendingPublicationByDefault: string = '0';
+            this.$scope.currentlySelectedEmployeeIndex = selectedEmployeeIndex;
+            this.$scope.currentlySelectedEmployee = this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex];
+            this.getPublicationList(showPendingPublicationByDefault);
             $("#teachersListDiv").hide(10);
-            $("#topArrowDiv").show(200);
             $("#publicationListDiv").show(200);
-
-            this.getPublication(this.$scope.currentTeacherIndex, '0');
+            $("#topArrowDiv").show(200);
         }
 
         private resetTopBottomDivs(){
@@ -82,33 +85,43 @@ module ums {
             $("#teachersListDiv").show(200);
         }
 
-        private getPublication(index: number, publicationCategory:string){
-            this.$scope.currentTeacher = this.$scope.teachers[index];
-            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.teachers[index].id, publicationCategory).then((publicationInformation: any) => {
-                this.$scope.publications = publicationInformation;
-                this.$scope.totalPendingPublications = this.$scope.publications.length;
-                this.$scope.data.totalRecord = this.$scope.publications.length;
-            });
+        private getPublicationList(publicationStatus: string){
+            // this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id, publicationStatus)
+            //     .then((publicationInformation: any) => {
+            //     this.$scope.publications = publicationInformation;
+            //     this.$scope.totalPendingPublications = this.$scope.publications.length;
+            //     this.$scope.data.totalRecord = this.$scope.publications.length;
+            // });
+            this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
+                publicationStatus, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
+                    this.$scope.publications = publicationInformation;
+                    this.$scope.totalPendingPublications = this.$scope.publications.length;
+                    this.$scope.data.totalRecord = this.$scope.publications.length;
+                });
         }
 
         private fetchTeachersList(){
-            this.approvePublicationService.getTeachersList('0').then((teachers: any) => {
-                this.$scope.teachers = teachers;
-                if(teachers.length >= 1){
-                    this.$scope.showNoPendingPublicationListDiv = false;
-                    this.$scope.showPendingPublicationDiv = true;
-                }
-                else{
-                    this.$scope.showPendingPublicationDiv = false;
-                    this.$scope.showNoPendingPublicationListDiv = true;
-                }
-
+            const publicationIsWaitingForApprovalStatus: string = '0';
+            this.approvePublicationService.getTeachersList(publicationIsWaitingForApprovalStatus).then((employees: any) => {
+                this.$scope.employees = employees;
+                this.showTeachersListOrNoPendingDiv(employees);
             });
         }
 
+        private showTeachersListOrNoPendingDiv(employees: any) {
+            if (employees.length >= 1) {
+                this.$scope.showNoPendingPublicationListDiv = false;
+                this.$scope.showPendingPublicationDiv = true;
+            }
+            else {
+                this.$scope.showPendingPublicationDiv = false;
+                this.$scope.showNoPendingPublicationListDiv = true;
+            }
+        }
+
         private accept(index: number){
-            $("#i"+index).hide(10);
-            this.convertToJson(index, '1').then((json: any) => {
+            const acceptStatus: string = '1';
+            this.convertToJson(index, acceptStatus).then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
                         this.$scope.totalPendingPublications--;
@@ -117,8 +130,8 @@ module ums {
         }
 
         private reject(index: number){
-            // $("#index").hide(10);
-            this.convertToJson(index, '2').then((json: any) => {
+            const rejectStatus: string = '2';
+            this.convertToJson(index, rejectStatus).then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
                         this.$scope.totalPendingPublications--;
@@ -126,35 +139,13 @@ module ums {
             });
         }
 
-        private changePublicationList(){
-            if(this.$scope.data.publicationListViewCategory == "0"){
-                this.getPublication(this.$scope.currentTeacherIndex, '0')
-
-            }
-
-            else if(this.$scope.data.publicationListViewCategory == "1"){
-                this.getPublication(this.$scope.currentTeacherIndex, '1')
-            }
-
-            else if(this.$scope.data.publicationListViewCategory == "2"){
-                this.getPublication(this.$scope.currentTeacherIndex, '2')
-            }
-            else{
-            }
+        private changePublicationList() {
+            this.getPublicationList(this.$scope.data.publicationListViewCategory);
         }
 
         private pageChanged(pageNumber: number){
-            console.log("In pageChangeMehtod . . . .................");
-            console.log(pageNumber);
-            this.pagerService.getPager(this.$scope.publications.length, pageNumber, 3).then((pager: any) => {
-                this.$scope.pagination =  pager;
-                this.$scope.pagination.currentPage = pager.currentPage;
-                this.$scope.data.itemPerPage = 3;
-                this.$scope.data.totalRecord = this.$scope.publications.length;
-                this.$scope.item = this.$scope.publications.slice(this.$scope.pagination.startIndex, this.$scope.pagination.endIndex + 1);
-            });
-
-
+            this.$scope.pagination.currentPage = pageNumber;
+            this.getPublicationList(this.$scope.publicationListViewCategory);
         }
 
         private convertToJson(index: number, status: string): ng.IPromise<any> {
@@ -162,17 +153,13 @@ module ums {
             let JsonObject = {};
             let JsonArray = [];
             let item: any = {};
-
             let publicationInformation = <IPublicationInformationModel>{};
 
             publicationInformation = this.$scope.publications[index];
-
             item['publication'] = publicationInformation;
             item['publication']['status'] = status;
-
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;
-
             defer.resolve(JsonObject);
             return defer.promise;
         }

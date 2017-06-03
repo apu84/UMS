@@ -21,8 +21,7 @@ module ums {
         }
 
         public getTeachersList(publicationStatus: string): ng.IPromise<any>{
-            //const url="registrar/employee/publication/getTeachersList/" + status;
-            const url ="/ums-webservice-academic/academic/employee/getEmployee/" + publicationStatus;
+            const url ="/ums-webservice-academic/academic/employee/getEmployee/publicationStatus/" + publicationStatus;
             let defer = this.$q.defer();
             this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {

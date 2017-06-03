@@ -15,6 +15,7 @@
                 <table class="table table-bordered">
                     <thead class="heading well">
                     <tr>
+                        <th>Sl.</th>
                         <th >Teacher Name</th>
                         <th>Designation</th>
                         <th>Employment Type</th>
@@ -23,18 +24,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr data-ng-repeat="teacher in teachers track by $index">
-                        <td>{{teacher.name}}</td>
-                        <td>{{teacher.designation}}</td>
-                        <td>{{teacher.employmentType}}</td>
-                        <td>{{teacher.department}}</td>
-                        <td><button type="button" class="btn btn-default" data-ng-click="submit($index)">View</button></td>
+                    <tr data-ng-repeat="employee in employees track by $index">
+                        <td>{{$index + 1}}.</td>
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.designation}}</td>
+                        <td>{{employee.employmentType}}</td>
+                        <td>{{employee.department}}</td>
+                        <td><button type="button" class="btn btn-default" data-ng-click="view($index)">View</button></td>
                     </tr>
                     </tbody>
                 </table>
                 <div data-ng-show="showNoPendingPublicationListDiv">
-                    <br /><br /><br /><br /><br />
-                    <h2 style="text-align: center">No Pending Request</h2>
+                    <br /><br />
+                    <h1 style="text-align: center">No Pending Request</h1>
                 </div>
             </div>
         </div>
@@ -51,8 +53,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-6">
-                                    <label>Employee Name: <b>{{currentTeacher.name}}</b></label><br>
-                                    <label>Designation: <b>{{currentTeacher.designation}}</b></label><br>
+                                    <label>Employee Name: <b>{{currentlySelectedEmployee.name}}</b></label><br>
+                                    <label>Designation: <b>{{currentlySelectedEmployee.designation}}</b></label><br>
                                 </div>
                                 <div class="col-md-6">
                                     <select data-ng-model="data.publicationListViewCategory" data-ng-change="changePublicationList()" class="form-control">
@@ -81,124 +83,119 @@
                 </div>
 
                 <!--<div id="iPublicationDetails" data-ng-repeat="publication in publications track by $index">-->
-                <div dir-paginate="publication in item | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
-                    <div id="i{{$index}}">
-                        <div class="row">
+                <div dir-paginate="publication in publications | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <label>Applied On: <b>{{publication.appliedOn}}</b></label>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <h5><b>{{publication.id}}</b></h5>
-                            </div>
-                            <div class="col-md-4" align="right">
-                                <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>
+                                <label>Applied On: <b>{{publication.appliedOn}}</b></label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Publication Type</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationType}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">ISSN/DOI</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationISSN}}</label>
-                                </div>
+                        <div class="col-md-2">
+                            <h5><b>{{publication.rowNumber}}</b></h5>
+                        </div>
+                        <div class="col-md-4" align="right">
+                            <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publication Type</label>
+                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationType}}</label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Publication Title</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationTitle}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Volume</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationVolume}}</label>
-                                </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">ISSN/DOI</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationISSN}}</label>
                             </div>
                         </div>
-                        <br />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publication Title</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationTitle}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Volume</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationVolume}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Date Of Publication</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.dateOfPublication}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Issue</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationIssue}}</label>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Date Of Publication</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.dateOfPublication}}</label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Journal/Conference Name</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationJournalName}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Pages</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationPages}}</label>
-                                </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Issue</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationIssue}}</label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Web Link</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationWebLink}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Genre</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationInterestGenre}}</label>
-                                </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Journal/Conference Name</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationJournalName}}</label>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Country</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publicationCountry}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-md-4 control-label">Publisher Name</label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{publication.publisherName}}</label>
-                                </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Pages</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationPages}}</label>
                             </div>
                         </div>
-                        <br /><br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!--<div class="col-md-12">-->
-                                    <!--<h5>Status: <b>{{publication.status}}</b></h5>-->
-                                <!--</div>-->
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Web Link</label>
+                            <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationWebLink}}</label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="text-right">
-                                    <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
-                                    <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Genre</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Country</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publicationCountry}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label">Publisher Name</label>
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{publication.publisherName}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
+                                <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
                             </div>
                         </div>
                     </div>
@@ -212,17 +209,8 @@
                         </dir-pagination-controls>
                     </div>
                 </div>
-                <!--<div class="row">-->
-                    <!--<div class="col-md-6"></div>-->
-                    <!--<div class="col-md-6">-->
-                        <!--<div class="text-right">-->
-                            <!--<button type="submit" title="Submit" class="btn btn-success">Approve All</button>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
             </div>
         </div>
     </div>
-
 </div>
 

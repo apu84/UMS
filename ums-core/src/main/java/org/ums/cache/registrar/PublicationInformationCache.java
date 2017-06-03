@@ -34,6 +34,13 @@ public class PublicationInformationCache extends
   }
 
   @Override
+  public List<PublicationInformation> getPublicationInformationWithPagination(String pEmployeeId,
+      String pPublicationStatus, int pPageNumber, int pItemPerPage) {
+    return getManager().getPublicationInformationWithPagination(pEmployeeId, pPublicationStatus, pPageNumber,
+        pItemPerPage);
+  }
+
+  @Override
   public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId, String pStatus) {
     return getManager().getEmployeePublicationInformation(pEmployeeId, pStatus);
   }

@@ -123,7 +123,7 @@ module ums {
         bloodGroups: Array<IBloodGroup>;
         publicationTypes: Array<IPublicationType>;
         waitingForApprovalPublications: Array<IPublicationInformationModel>;
-        testAcademicInformation: Array<IAcademicInformationModel>;
+        previousAcademicInformation: Array<IAcademicInformationModel>;
         relations: Array<IRelation>;
         countries: Array<ICountry>;
         divisions: Array<IDivision>;
@@ -207,7 +207,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','employeeService','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -215,7 +215,6 @@ module ums {
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private employeeService: EmployeeService,
                     private countryService: CountryService,
                     private divisionService: DivisionService,
                     private districtService: DistrictService,
@@ -236,7 +235,7 @@ module ums {
                 experience: Array<IExperienceInformationModel>()
             };
 
-            $scope.testAcademicInformation = Array<IAcademicInformationModel>();
+            $scope.previousAcademicInformation = Array<IAcademicInformationModel>();
 
             $scope.data = {
                 supOptions: "",
@@ -285,14 +284,10 @@ module ums {
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
 
-            console.log("i am changed");
-
             this.initializeVariables();
         }
 
         private initializeVariables() {
-            //this.getLoggedUserId();
-
             this.getCountry();
             this.getDivision();
             this.getDistrict();
@@ -320,15 +315,9 @@ module ums {
             //this.getPersonalInformation();
              this.getAcademicInformation();
             // this.getAwardInformation();
-            // this.getPublicationInformation();
+             this.getPublicationInformation();
             // this.getExperienceInformation();
             // this.getTrainingInformation();
-        }
-
-        private getLoggedUserId(){
-            this.employeeService.getLoggedEmployeeInfo().then((user: any) => {
-            });
-
         }
 
         private enableViewMode(formName: string) {
@@ -488,7 +477,8 @@ module ums {
                     status: "",
                     publicationPages: "",
                     appliedOn: "",
-                    actionTakenOn: ""
+                    actionTakenOn: "",
+                    rowNumber: null
                 };
                 this.$scope.entry.publication.push(publicationEntry);
             }
@@ -859,46 +849,52 @@ module ums {
             this.convertToJson('academic')
                 .then((json: any) => {
 
-                let jsonLength: number = json.entries[0]['academic'].length;
-                let academicLength: number = this.$scope.testAcademicInformation.length;
-                let mLength: number = 0;
-                if(jsonLength > academicLength){
-                    mLength = jsonLength;
-                }
-                else{
-                    mLength = academicLength;
-                }
+                let comparingArrayLength: number = json.entries[0]['academic'].length;
+                let baseArrayLength: number = this.$scope.previousAcademicInformation.length;
+                let deleteJson: any = angular.copy(json);
+                let createJson: any = angular.copy(json);
+                let flag: number = 0;
+                let deleteArrayInc: number = 0;
+                let createArrayInc: number = 0;
 
-                for(let i = 0; i < mLength; i++){
-                    if(json.entries[0]['academic'][i] == undefined){
-                        console.log("Delete This one");
-                        console.log(this.$scope.testAcademicInformation);
-                    }
-                    else {
-                        let jsonId = json.entries[0]['academic'][i].id;
-                        if (jsonId == null) {
-                            console.log("Create New Record");
+                deleteJson.entries[0]['academic'] = [];
+                createJson.entries[0]['academic'] = [];
+
+                console.log(baseArrayLength + " and " + comparingArrayLength);
+
+                for(let i = 0; i < baseArrayLength; i++){
+                    for(let j = 0; j < comparingArrayLength; j++){
+                        if(this.$scope.previousAcademicInformation[i].id == json.entries[0]['academic'][j].id){
+                            //console.log("this.$scope.previousAcademicInformation[i].id == json.entries[0]['academic'][j].id");
+                            //console.log(this.$scope.previousAcademicInformation[i].id + " == " + json.entries[0]['academic'][j].id);
+                            console.log("Equality Check For: ");
+                            console.log(json.entries[0]['academic'][j].academicInstitution);
+                            flag = 1;
+                            break;
                         }
-                        else {
-                            //find same id in this.$scope.testAcademicInformation;
-
-                            let testAcademic: any = this.find(jsonId);
-                            if (testAcademic.academicPassingYear === json.entries[0]['academic'][i].academicPassingYear && testAcademic.academicInstitution === json.entries[0]['academic'][i].academicInstitution && testAcademic.academicDegreeName.name === json.entries[0]['academic'][i].academicDegreeName.name) {
-                                console.log("both are equal");
-                                console.log("No need to change");
-                                this.$scope.testAcademicInformation = this.$scope.testAcademicInformation.slice(i, 1);
-                            }
-                            else {
-                                console.log("Not Equal .. ");
-                                console.log("Update this One");
-                                delete this.$scope.testAcademicInformation[i];
-                                this.$scope.testAcademicInformation = this.$scope.testAcademicInformation.slice(i, 1);
-                            }
+                        else{
+                            flag = 0;
                         }
                     }
+                    if(flag == 0){
+                        console.log("Deleted: ");
+                        console.log(this.$scope.previousAcademicInformation[i].academicInstitution);
+                        flag = 0;
+                        deleteJson[deleteArrayInc++] = (this.$scope.previousAcademicInformation[i]);
+                    }
                 }
-                console.log("this.$scope.testAcademicInfomration");
-                    console.log(this.$scope.testAcademicInformation);
+                for(let i = 0; i < comparingArrayLength; i++){
+                    if(json.entries[0]['academic'][i].id == null){
+                        console.log("Created: ");
+                        console.log(json.entries[0]['academic'][i].academicInstitution);
+                        createJson[createArrayInc++] = (json.entries[0]['academic'][i]);
+                    }
+                }
+
+                console.log("Delete Json");
+                console.log(deleteJson);
+                console.log("Created Json");
+                console.log(createJson);
 
 
                     // this.academicInformationService.saveAcademicInformation(json)
@@ -911,9 +907,9 @@ module ums {
 
         private find(id: number){
             let found = null;
-            for(let i = 0; i < this.$scope.testAcademicInformation.length; i++){
-                if(id == this.$scope.testAcademicInformation[i].id){
-                    found = this.$scope.testAcademicInformation[i];
+            for(let i = 0; i < this.$scope.previousAcademicInformation.length; i++){
+                if(id == this.$scope.previousAcademicInformation[i].id){
+                    found = this.$scope.previousAcademicInformation[i];
                     break;
                 }
             }
@@ -1002,7 +998,7 @@ module ums {
                 this.$scope.entry.academic[i] = academicInformation[i];
                 this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];
             }
-            this.$scope.testAcademicInformation = angular.copy(this.$scope.entry.academic);
+            this.$scope.previousAcademicInformation = angular.copy(this.$scope.entry.academic);
         }
 
         private getPublicationInformation() {

@@ -17,5 +17,6 @@ module ums{
         publicationPages: String;
         appliedOn: string;
         actionTakenOn: string;
+        rowNumber: number;
     }
 }

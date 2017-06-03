@@ -64,7 +64,7 @@ public class EmployeeResource extends MutableEmployeeResource {
   }
 
   @GET
-  @Path("/getEmployee/{publication-status}")
+  @Path("/getEmployee/publicationStatus/{publication-status}")
   public JsonObject getEmployees(final @PathParam("publication-status") String pPublicationStatus,
       final @Context Request pRequest) {
     return mEmployeeResourceHelper.getEmployees(pPublicationStatus, pRequest, mUriInfo);

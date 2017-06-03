@@ -33,6 +33,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   private String mPublicationStatus;
   private String mAppliedOn;
   private String mActionTakenOn;
+  private int mRowNumber;
   private String mLastModified;
 
   public PersistentPublicationInformation() {}
@@ -55,6 +56,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
     mPublicationPages = pPersistentPublicationInformation.getPublicationPages();
     mAppliedOn = pPersistentPublicationInformation.getAppliedOn();
     mActionTakenOn = pPersistentPublicationInformation.getActionTakenOn();
+    mRowNumber = pPersistentPublicationInformation.getRowNumber();
   }
 
   @Override
@@ -179,6 +181,11 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
+  public void setRowNumber(int pRowNumber) {
+    mRowNumber = pRowNumber;
+  }
+
+  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -256,6 +263,11 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   @Override
   public String getActionTakenOn() {
     return mActionTakenOn;
+  }
+
+  @Override
+  public int getRowNumber() {
+    return mRowNumber;
   }
 
 }

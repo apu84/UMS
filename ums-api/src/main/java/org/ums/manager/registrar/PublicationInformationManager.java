@@ -13,6 +13,9 @@ public interface PublicationInformationManager extends
 
   List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId);
 
+  List<PublicationInformation> getPublicationInformationWithPagination(final String pEmployeeId,
+      final String pPublicationStatus, final int pPageNumber, final int pItemPerPage);
+
   List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId, final String pStatus);
 
   List<PublicationInformation> getPublicationInformation(final String pPublicationStatus);

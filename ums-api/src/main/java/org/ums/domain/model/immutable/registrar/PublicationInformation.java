@@ -41,4 +41,6 @@ public interface PublicationInformation extends Serializable, EditType<MutablePu
   String getAppliedOn();
 
   String getActionTakenOn();
+
+  int getRowNumber();
 }

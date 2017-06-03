@@ -23,7 +23,6 @@ module ums{
         }
 
         public getPublicationInformation(): ng.IPromise<any> {
-            console.log("i am here " + "here too");
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getPublicationInformation", HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
@@ -35,9 +34,9 @@ module ums{
             return defer.promise;
         }
 
-        public getPaginatedPublicationInformation(pageNumber: number, itemPerPage: number): ng.IPromise<any> {
+        public getPublicationInformationWithPagination(employeeId: string, status: string, pageNumber: number, itemPerPage: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.url+"/getPublicationInformation/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getPublicationInformation/employeeId/" + employeeId + "/publicationStatus/" + status + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },

@@ -20,16 +20,6 @@ public class PublicationInformationResource extends MutablePublicationInformatio
     return mPublicationInformationResourceHelper.getPublicationInformation(mUriInfo);
   }
 
-  // @GET
-  // @Path("/getPublicationInformation/pageNumber/{page-number}/ipp/{itemPerPage}")
-  // public JsonObject getPaginatedPublicationInformation(final @Context Request pRequest,
-  // final @PathParam("page-number") int pPageNumber, final @PathParam("itemPerPage") int
-  // pItemPerPage)
-  // throws Exception {
-  // return mPublicationInformationResourceHelper
-  // .getPaginatedPublicationInformation(pPageNumber, pItemPerPage, mUriInfo);
-  // }
-
   @GET
   @Path("/getPublicationInformation/{employee-id}/{status}")
   public JsonObject getPublicationInformation(final @PathParam("employee-id") String pEmployeeId,
@@ -38,19 +28,12 @@ public class PublicationInformationResource extends MutablePublicationInformatio
   }
 
   @GET
-  @Path("/getTeachersList/{status}")
-  public JsonObject getTeachersList(final @PathParam("status") String pStatus) {
-    return mPublicationInformationResourceHelper.getTeachersList(pStatus, mUriInfo);
+  @Path("/getPublicationInformation/employeeId/{employee-id}/publicationStatus/{status}/pageNumber/{page}/ipp/{item-per-page}")
+  public JsonObject getPublicationForPagination(final @PathParam("employee-id") String pEmployeeId,
+      final @PathParam("status") String pPublicationStatus, final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage) throws Exception {
+    return mPublicationInformationResourceHelper.getPublicationWithPagination(pEmployeeId, pPublicationStatus, pPage,
+        pItemPerPage, mUriInfo);
   }
-
-  // @GET
-  // @Path("/getPublication/ipp/{item-per-page}/page/{page}/order/{order}")
-  // public JsonObject getPublicationForPagination(final @Context Request pRequest, final
-  // @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
-  // final @PathParam("order") String pOrder, final @QueryParam("filter") String pFilter) throws
-  // Exception{
-  // return mPublicationInformationResourceHelper.getPublicationForPagination(pPage, pItemPerPage,
-  // pFilter, mUriInfo);
-  // }
 
 }

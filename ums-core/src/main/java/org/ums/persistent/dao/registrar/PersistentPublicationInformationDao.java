@@ -83,6 +83,18 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   }
 
   @Override
+  public List<PublicationInformation> getPublicationInformationWithPagination(final String pEmployeeId,
+      final String pPublicationStatus, final int pPageNumber, final int pItemPerPage) {
+    String query =
+        "SELECT * FROM ( SELECT a.*,ROWNUM row_number FROM ( " + " SELECT * FROM EMP_PUBLICATION_INFO "
+            + " WHERE EMPLOYEE_ID=? and STATUS = ? ORDER BY APPLIED_ON) a " + "  WHERE ROWNUM < ((" + pPageNumber
+            + " * " + pItemPerPage + ") + 1)) " + "WHERE row_number >= (((" + pPageNumber + " - 1) * " + pItemPerPage
+            + ") + 1)";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pPublicationStatus, pPageNumber, pItemPerPage},
+        new PersistentPublicationInformationDao.customRoleRowMapper());
+  }
+
+  @Override
   public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId, final String pStatus) {
     String query = GET_ONE + " Where employee_id=? and status=?";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pStatus},
@@ -120,6 +132,36 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setActionTakenOn(resultSet.getString("action_taken_on"));
       publicationInformation.setLastModified(resultSet.getString("last_modified"));
       return publicationInformation;
+
+    }
+  }
+
+  class customRoleRowMapper implements RowMapper<PublicationInformation> {
+
+    @Override
+    public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
+      PersistentPublicationInformation publicationInformation = new PersistentPublicationInformation();
+      publicationInformation.setId(resultSet.getInt("id"));
+      publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
+      publicationInformation.setPublicationTitle(resultSet.getString("publication_title"));
+      publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
+      publicationInformation.setPublisherName(resultSet.getString("publisher_name"));
+      publicationInformation.setDateOfPublication(resultSet.getString("date_of_publication"));
+      publicationInformation.setPublicationType(resultSet.getString("publication_type"));
+      publicationInformation.setPublicationWebLink(resultSet.getString("publication_web_link"));
+      publicationInformation.setPublicationISSN(resultSet.getString("publication_issn"));
+      publicationInformation.setPublicationIssue(resultSet.getString("publication_issue"));
+      publicationInformation.setPublicationVolume(resultSet.getString("publication_volume"));
+      publicationInformation.setPublicationJournalName(resultSet.getString("journal_name"));
+      publicationInformation.setPublicationCountry(resultSet.getString("country"));
+      publicationInformation.setPublicationStatus(resultSet.getString("status"));
+      publicationInformation.setPublicationPages(resultSet.getString("publication_pages"));
+      publicationInformation.setLastModified(resultSet.getString("last_modified"));
+      publicationInformation.setActionTakenOn(resultSet.getString("action_taken_on"));
+      publicationInformation.setAppliedOn(resultSet.getString("applied_on"));
+      publicationInformation.setRowNumber(resultSet.getInt("row_number"));
+      return publicationInformation;
+
     }
   }
 }

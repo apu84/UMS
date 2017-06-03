@@ -1,5 +1,50 @@
-<div class="panel">
-    <div class="panel-body shadowPanel" style="min-height: 490px;">
+<div class="page-content">
+
+    <div class="row" id="topArrowDiv">
+        <div class="col-md-2 col-md-offset-5">
+            <i class="fa fa-chevron-down" aria-hidden="true" data-ng-click="resetTopBottomDivs()"  style="cursor: pointer;"></i>
+        </div>
+    </div>
+
+    <div class="row" id="teachersListDiv">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Employee List {DepartmentName}</h3>
+            </div>
+            <div class="panel-body" style="min-height: 490px;">
+                <table class="table table-bordered">
+                    <thead class="heading well">
+                    <tr>
+                        <th>Sl.</th>
+                        <th >Employee Name</th>
+                        <th>Designation</th>
+                        <th>Employment Type</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="employee in employees track by $index">
+                        <td>{{$index + 1}}.</td>
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.designation}}</td>
+                        <td>{{employee.employmentType}}</td>
+                        <td>{{employee.department}}</td>
+                        <td><button type="button" class="btn btn-default" data-ng-click="view($index)">View</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div data-ng-show="showNoPendingPublicationListDiv">
+                    <br /><br />
+                    <h1 style="text-align: center">No Pending Request</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="publicationListDiv" hidden>
+        <div class="panel">
+            <div class="panel-heading">
         <form action="" data-validate="" data-onvalidate="">
             <div data-ng-repeat="service in entry.service track by $index">
                 <div class="row">
