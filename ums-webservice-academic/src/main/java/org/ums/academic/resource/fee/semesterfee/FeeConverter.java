@@ -6,7 +6,7 @@ import javax.json.JsonObjectBuilder;
 
 import org.springframework.stereotype.Component;
 import org.ums.fee.UGFee;
-import org.ums.fee.latefee.UGLateFee;
+import org.ums.fee.latefee.LateFee;
 
 @Component
 class FeeConverter {
@@ -17,10 +17,10 @@ class FeeConverter {
     return jsonObject.build();
   }
 
-  JsonObject convert(UGLateFee pUGLateFee) {
+  JsonObject convert(LateFee pLateFee) {
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     jsonObject.add("name", "Late fee");
-    jsonObject.add("amount", pUGLateFee.getFee());
+    jsonObject.add("amount", pLateFee.getFee());
     return jsonObject.build();
   }
 }

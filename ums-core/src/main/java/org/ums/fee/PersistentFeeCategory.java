@@ -5,9 +5,11 @@ import org.ums.context.AppContext;
 
 public class PersistentFeeCategory implements MutableFeeCategory {
   private static FeeCategoryManager sFeeCategoryManager;
+  private static FeeTypeManager sFeeTypeManager;
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
+    sFeeTypeManager = applicationContext.getBean("feeTypeManager", FeeTypeManager.class);
   }
   private String mId;
   private String mFeeId;
@@ -98,7 +100,7 @@ public class PersistentFeeCategory implements MutableFeeCategory {
 
   @Override
   public FeeType getType() {
-    return mFeeType;
+    return mFeeType == null ? sFeeTypeManager.get(mFeeTypeId) : sFeeTypeManager.validate(mFeeType);
   }
 
   @Override

@@ -16,7 +16,7 @@ public class InstallmentSettingsDao extends InstallmentSettingsDaoDecorator {
       + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE INSTALLMENT_SETTINGS SET SEMESTER_ID = ?, IS_ENABLED = ? ";
   String DELETE_ALL = "DELETE FROM INSTALLMENT_SETTINGS ";
-  String EXISTS = "SELECT COUNT(ID) EXISTS FROM INSTALLMENT_SETTINGS ";
+  String EXISTS = "SELECT COUNT(ID) EXIST FROM INSTALLMENT_SETTINGS ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
