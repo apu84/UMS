@@ -14,4 +14,8 @@ public interface AcademicInformationManager extends
   List<AcademicInformation> getEmployeeAcademicInformation(final String pEmployeeId);
 
   int deleteAcademicInformation(final String pEmployeeId);
+
+  int updateAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation);
+
+  int deleteAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation);
 }

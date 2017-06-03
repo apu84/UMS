@@ -81,7 +81,6 @@
                         </dir-pagination-controls>
                     </div>
                 </div>
-
                 <!--<div id="iPublicationDetails" data-ng-repeat="publication in publications track by $index">-->
                 <div dir-paginate="publication in publications | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
                     <div class="row">
@@ -94,7 +93,9 @@
                             <h5><b>{{publication.rowNumber}}</b></h5>
                         </div>
                         <div class="col-md-4" align="right">
-                            <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>
+                            <div data-ng-if="showActionTakenDate">
+                                <label>Action Taken On: <b>{{publication.actionTakenOn}}</b></label>
+                            </div>
                         </div>
                     </div>
                     <br />
@@ -193,7 +194,7 @@
                         <div class="col-md-6">
                         </div>
                         <div class="col-md-6">
-                            <div class="text-right">
+                            <div class="text-right" data-ng-if="showActionButtons">
                                 <button type="button" title="Cancel" class="btn" data-ng-click="reject($index)">Reject</button>
                                 <button type="submit" title="Submit" class="btn btn-success" data-ng-click="accept($index)">Approve</button>
                             </div>

@@ -454,7 +454,8 @@ module ums {
                     employeeId: "",
                     academicDegreeName: null,
                     academicInstitution: "",
-                    academicPassingYear: ""
+                    academicPassingYear: "",
+                    dbAction: ""
                 };
                 this.$scope.entry.academic.push(academicEntry);
             }
@@ -848,27 +849,24 @@ module ums {
 
             this.convertToJson('academic')
                 .then((json: any) => {
+                console.log("json");
+                console.log(json);
 
                 let comparingArrayLength: number = json.entries[0]['academic'].length;
                 let baseArrayLength: number = this.$scope.previousAcademicInformation.length;
-                let deleteJson: any = angular.copy(json);
-                let createJson: any = angular.copy(json);
+                let customJson: any = json;
                 let flag: number = 0;
-                let deleteArrayInc: number = 0;
-                let createArrayInc: number = 0;
+                let increment: number = 0;
 
-                deleteJson.entries[0]['academic'] = [];
-                createJson.entries[0]['academic'] = [];
-
-                console.log(baseArrayLength + " and " + comparingArrayLength);
+                console.log(customJson);
 
                 for(let i = 0; i < baseArrayLength; i++){
                     for(let j = 0; j < comparingArrayLength; j++){
                         if(this.$scope.previousAcademicInformation[i].id == json.entries[0]['academic'][j].id){
-                            //console.log("this.$scope.previousAcademicInformation[i].id == json.entries[0]['academic'][j].id");
-                            //console.log(this.$scope.previousAcademicInformation[i].id + " == " + json.entries[0]['academic'][j].id);
                             console.log("Equality Check For: ");
-                            console.log(json.entries[0]['academic'][j].academicInstitution);
+                            customJson[increment] = json.entries[0]['academic'][j];
+                            customJson[increment].dbAction = 'U';
+                            increment++;
                             flag = 1;
                             break;
                         }
@@ -878,29 +876,27 @@ module ums {
                     }
                     if(flag == 0){
                         console.log("Deleted: ");
-                        console.log(this.$scope.previousAcademicInformation[i].academicInstitution);
                         flag = 0;
-                        deleteJson[deleteArrayInc++] = (this.$scope.previousAcademicInformation[i]);
+                        customJson[increment] = (this.$scope.previousAcademicInformation[i]);
+                        customJson[increment].dbAction = 'D';
+                        increment++;
                     }
                 }
                 for(let i = 0; i < comparingArrayLength; i++){
                     if(json.entries[0]['academic'][i].id == null){
                         console.log("Created: ");
-                        console.log(json.entries[0]['academic'][i].academicInstitution);
-                        createJson[createArrayInc++] = (json.entries[0]['academic'][i]);
+                        customJson[increment] = json.entries[0]['academic'][i];
+                        customJson[increment].dbAction = 'C';
+                        increment++;
                     }
                 }
+                console.log("customJson");
+                    console.log(customJson);
 
-                console.log("Delete Json");
-                console.log(deleteJson);
-                console.log("Created Json");
-                console.log(createJson);
+                    this.academicInformationService.saveAcademicInformation(customJson)
+                        .then((message: any) => {
 
-
-                    // this.academicInformationService.saveAcademicInformation(json)
-                    //     .then((message: any) => {
-                    //
-                    //     });
+                        });
                 });
             this.enableViewMode('academic');
         }

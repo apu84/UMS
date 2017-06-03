@@ -85,16 +85,6 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
       pBuilder.add("publicationCountry", "");
     }
 
-    // if (pReadOnly.getPublicationStatus().equals(PublicationStatus.WAITING.getLabel())) {
-    // pBuilder.add("status", "Pending");
-    // }
-    // else if (pReadOnly.getPublicationStatus().equals(PublicationStatus.ACCEPTED.getLabel())) {
-    // pBuilder.add("status", "Accepted");
-    // }
-    // else if (pReadOnly.getPublicationStatus().equals(PublicationStatus.REJECTED)){
-    // pBuilder.add("status", "Rejected");
-    // }
-
     pBuilder.add("status", pReadOnly.getPublicationStatus());
 
     if(pReadOnly.getPublicationPages() != null) {
@@ -110,6 +100,13 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     }
     else {
       pBuilder.add("actionTakenOn", "");
+    }
+
+    if(pReadOnly.getRowNumber() != 0){
+        pBuilder.add("rowNumber", pReadOnly.getRowNumber());
+    }
+    else{
+        pBuilder.add("rowNumber", "");
     }
   }
 

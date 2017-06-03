@@ -23,4 +23,8 @@ public interface PublicationInformationManager extends
   int updatePublicationStatus(final MutablePublicationInformation pMutablePublicationInformation);
 
   int deletePublicationInformation(final String pEmployeeId);
+
+  int deletePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation);
+
+  int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation);
 }

@@ -2,6 +2,8 @@ module ums {
     interface IApprovePublication extends ng.IScope {
         showPendingPublicationDiv: boolean;
         showNoPendingPublicationListDiv: boolean;
+        showActionTakenDate: boolean;
+        showActionButtons: boolean;
 
         currentlySelectedEmployeeIndex: number;
         totalPendingPublications: number;
@@ -55,7 +57,9 @@ module ums {
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
             $scope.totalPendingPublications = 0;
-            $scope.data = { publicationListViewCategory: "", itemPerPage: 2, totalRecord: 0 };
+            $scope.data = { publicationListViewCategory: "", itemPerPage: 3, totalRecord: 5 };
+            $scope.showActionTakenDate = false;
+            $scope.showActionButtons = true;
 
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
             $scope.view = this.view.bind(this);
@@ -86,18 +90,13 @@ module ums {
         }
 
         private getPublicationList(publicationStatus: string){
-            // this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id, publicationStatus)
-            //     .then((publicationInformation: any) => {
-            //     this.$scope.publications = publicationInformation;
-            //     this.$scope.totalPendingPublications = this.$scope.publications.length;
-            //     this.$scope.data.totalRecord = this.$scope.publications.length;
-            // });
             this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
                 publicationStatus, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
                     this.$scope.publications = publicationInformation;
                     this.$scope.totalPendingPublications = this.$scope.publications.length;
                     this.$scope.data.totalRecord = this.$scope.publications.length;
                 });
+            console.log("totalItems: " + this.$scope.data.totalRecord);
         }
 
         private fetchTeachersList(){
@@ -141,6 +140,14 @@ module ums {
 
         private changePublicationList() {
             this.getPublicationList(this.$scope.data.publicationListViewCategory);
+            if(this.$scope.data.publicationListViewCategory == '1' || this.$scope.data.publicationListViewCategory == '2'){
+                this.$scope.showActionTakenDate = true;
+                this.$scope.showActionButtons = false;
+            }
+            else{
+                this.$scope.showActionButtons = true;
+                this.$scope.showActionTakenDate = false;
+            }
         }
 
         private pageChanged(pageNumber: number){

@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.helper.AcademicInformationResourceHelper;
 
 import javax.json.JsonObject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 public class MutableAcademicInformationResource extends Resource {
@@ -17,8 +14,7 @@ public class MutableAcademicInformationResource extends Resource {
 
   @POST
   @Path("/saveAcademicInformation")
-  public Response saveServiceInformation(final JsonObject pJsonObject) {
+  public Response saveAcademicInformation(final JsonObject pJsonObject) {
     return mAcademicInformationResourceHelper.saveAcademicInformation(pJsonObject, mUriInfo);
   }
-
 }

@@ -19,7 +19,6 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   private String mEmployeeId;
   private String mPublicationTitle;
   private String mInterestGenre;
-  private String mAuthor;
   private String mPublisherName;
   private String mDateOfPublication;
   private String mPublicationType;
@@ -33,8 +32,8 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   private String mPublicationStatus;
   private String mAppliedOn;
   private String mActionTakenOn;
-  private int mRowNumber;
   private String mLastModified;
+  private int mRowNumber;
 
   public PersistentPublicationInformation() {}
 

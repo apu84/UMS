@@ -115,10 +115,7 @@ public class PublicationInformationResourceHelper extends
       mPublicationInformationBuilder.build(publicationInformation, publicationJsonArray.getJsonObject(i), localCache);
       mutablePublicationInformation.add(publicationInformation);
     }
-
-    List<AdditionalRolePermissions> rolePermissions = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
-
-      mApprovePublicationService.setNotification("dpreg", employee);
+    mApprovePublicationService.setNotification("dpreg", employee);
     mPublicationInformationManager.savePublicationInformation(mutablePublicationInformation);
 
     Response.ResponseBuilder builder = Response.created(null);

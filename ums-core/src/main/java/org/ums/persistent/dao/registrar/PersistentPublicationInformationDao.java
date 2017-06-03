@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.PublicationInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.enums.registrar.PublicationStatus;
 import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 
 import java.sql.ResultSet;
@@ -27,11 +28,17 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       + "PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, "
       + "to_char(ACTION_TAKEN_ON, 'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED From EMP_PUBLICATION_INFO ";
 
-  static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO";
+  static String DELETE_ALL = "DELETE FROM EMP_PUBLICATION_INFO ";
 
   static String UPDATE_STATUS =
       "UPDATE EMP_PUBLICATION_INFO SET STATUS=?, ACTION_TAKEN_ON=TO_DATE(?, 'DD/MM/YYYY') , LAST_MODIFIED="
           + getLastModifiedSql() + " ";
+
+  static String UPDATE_ALL =
+      "UPDATE EMP_PUBLICATION_INFO SET PUBLICATION_TITLE = ?, INTEREST_GENRE = ?, PUBLISHER_NAME = ?,"
+          + " DATE_OF_PUBLICATION = TO_DATE(?, 'DD/MM/YYYY'), PUBLICATION_TYPE = ?, PUBLICATION_WEB_LINK = ?, PUBLICATION_ISSN = ?, PUBLICATION_ISSUE = ?,"
+          + " PUBLICATION_VOLUME = ?, JOURNAL_NAME = ?, COUNTRY = ?, STATUS = ?, PUBLICATION_PAGES = ?, APPLIED_ON = TO_DATE(?, 'DD/MM/YYYY'),"
+          + " LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -86,11 +93,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public List<PublicationInformation> getPublicationInformationWithPagination(final String pEmployeeId,
       final String pPublicationStatus, final int pPageNumber, final int pItemPerPage) {
     String query =
-        "SELECT * FROM ( SELECT a.*,ROWNUM row_number FROM ( " + " SELECT * FROM EMP_PUBLICATION_INFO "
-            + " WHERE EMPLOYEE_ID=? and STATUS = ? ORDER BY APPLIED_ON) a " + "  WHERE ROWNUM < ((" + pPageNumber
-            + " * " + pItemPerPage + ") + 1)) " + "WHERE row_number >= (((" + pPageNumber + " - 1) * " + pItemPerPage
-            + ") + 1)";
-    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pPublicationStatus, pPageNumber, pItemPerPage},
+        "SELECT ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
+            + " to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE,"
+            + " PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, to_char(ACTION_TAKEN_ON,'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED, row_number FROM ( SELECT a.*,ROWNUM row_number FROM ( "
+            + " SELECT * FROM EMP_PUBLICATION_INFO " + " WHERE EMPLOYEE_ID=? and STATUS = ? ORDER BY APPLIED_ON) a "
+            + "  WHERE ROWNUM < ((" + pPageNumber + " * " + pItemPerPage + ") + 1)) " + "WHERE row_number >= ((("
+            + pPageNumber + " - 1) * " + pItemPerPage + ") + 1)";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pPublicationStatus},
         new PersistentPublicationInformationDao.customRoleRowMapper());
   }
 
@@ -106,6 +115,43 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     String query = GET_ONE + " Where status = ?";
     return mJdbcTemplate.query(query, new Object[] {pPublicationStatus},
         new PersistentPublicationInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    String query = UPDATE_ALL + " WHERE ID = ? and EMPLOYEE_ID = ?";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutablePublicationInformation)).length;
+  }
+
+  private List<Object[]> getUpdateParams(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(PublicationInformation pPublicationInformation : pMutablePublicationInformation) {
+      params.add(new Object[] {pPublicationInformation.getPublicationTitle(),
+          pPublicationInformation.getInterestGenre(), pPublicationInformation.getPublisherName(),
+          pPublicationInformation.getDateOfPublication(), pPublicationInformation.getPublicationType(),
+          pPublicationInformation.getPublicationWebLink(), pPublicationInformation.getPublicationISSN(),
+          pPublicationInformation.getPublicationIssue(), pPublicationInformation.getPublicationVolume(),
+          pPublicationInformation.getPublicationJournalName(), pPublicationInformation.getPublicationCountry(),
+          pPublicationInformation.getPublicationStatus(), pPublicationInformation.getPublicationPages(),
+          pPublicationInformation.getAppliedOn(), pPublicationInformation.getId(),
+          pPublicationInformation.getEmployeeId()});
+    }
+    return params;
+  }
+
+  @Override
+  public int deletePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    String query = DELETE_ALL + " WHERE ID = ? and Employee_ID = ?";
+    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutablePublicationInformation)).length;
+  }
+
+  private List<Object[]> getDeleteParams(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(PublicationInformation pPublicationInformation : pMutablePublicationInformation) {
+      params.add(new Object[] {pPublicationInformation.getId(), pPublicationInformation.getEmployeeId()});
+    }
+
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<PublicationInformation> {

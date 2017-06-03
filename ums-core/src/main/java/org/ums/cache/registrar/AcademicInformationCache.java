@@ -37,4 +37,14 @@ public class AcademicInformationCache extends
   public int deleteAcademicInformation(String pEmployeeId) {
     return getManager().deleteAcademicInformation(pEmployeeId);
   }
+
+  @Override
+  public int updateAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
+    return getManager().updateAcademicInformation(pMutableAcademicInformation);
+  }
+
+  @Override
+  public int deleteAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
+    return getManager().deleteAcademicInformation(pMutableAcademicInformation);
+  }
 }

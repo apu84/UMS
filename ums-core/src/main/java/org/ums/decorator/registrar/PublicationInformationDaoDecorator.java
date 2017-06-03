@@ -47,4 +47,14 @@ public class PublicationInformationDaoDecorator extends
   public int deletePublicationInformation(String pEmployeeId) {
     return getManager().deletePublicationInformation(pEmployeeId);
   }
+
+  @Override
+  public int deletePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    return getManager().deletePublicationInformation(pMutablePublicationInformation);
+  }
+
+  @Override
+  public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
+    return getManager().updatePublicationInformation(pMutablePublicationInformation);
+  }
 }
