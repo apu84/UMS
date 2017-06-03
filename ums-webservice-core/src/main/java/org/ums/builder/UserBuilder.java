@@ -21,6 +21,9 @@ public class UserBuilder implements Builder<User, MutableUser> {
     if(!StringUtils.isEmpty(pReadOnly.getEmployeeId())) {
       pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     }
+    if(pReadOnly.getPrimaryRole() != null) {
+      pBuilder.add("roleId", pReadOnly.getPrimaryRole().getId());
+    }
   }
 
   @Override

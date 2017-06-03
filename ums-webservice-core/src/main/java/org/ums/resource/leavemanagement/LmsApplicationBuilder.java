@@ -8,7 +8,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
-import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.UserManager;
 
@@ -78,6 +78,6 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     if(pJsonObject.containsKey("reason"))
       pMutable.setReason(pJsonObject.getString("reason"));
     if(pJsonObject.containsKey("appStatus"))
-      pMutable.setLeaveApplicationStatus(LeaveApplicationStatus.get(pJsonObject.getInt("appStatus")));
+      pMutable.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.get(pJsonObject.getInt("appStatus")));
   }
 }

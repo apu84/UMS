@@ -10,7 +10,7 @@ import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.RoleType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
@@ -25,6 +25,11 @@ import java.util.List;
  * Created by Monjur-
  * <p>
  * E-Morshed on 07-May-17.
+ */
+
+/*
+ * Instructions: Row_number is needed for pagination. But, if there is no row_number, the
+ * row_mapper() shows error. So, till any solution is found please, return a row_number.
  */
 public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
 
@@ -158,15 +163,23 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(String pEmployeeId) {
+  public List<LmsAppStatus> getPendingApplications(String pEmployeeId) {
     String query =
-        "select a.*, rownum row_number from (select * from LMS_APP_STATUS where APP_ID in (select id from LMS_APPLICATION where APP_STATUS=2 and EMPLOYEE_ID=?)  ORDER BY action_taken_on)a";
+        "SELECT "
+            + "  a.*, "
+            + "  rownum row_number "
+            + "FROM (SELECT * "
+            + "      FROM LMS_APP_STATUS "
+            + "      WHERE (APP_ID,ACTION_STATUS) IN (SELECT id,APP_STATUS "
+            + "                       FROM LMS_APPLICATION "
+            + "                       WHERE  EMPLOYEE_ID = ? and (app_status!=3 and app_status!=5 and app_status!=6 and app_status!=7)) "
+            + "      ORDER BY action_taken_on) a";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsAppStatusRowMapper());
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApplicationStatus, Role pRole, User pUser,
-      int pageNumber, int pageSize) {
+  public List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationStatus, Role pRole,
+      User pUser, int pageNumber, int pageSize) {
     String query = "";
     if(pRole.getId() == RoleType.DEPT_HEAD.getId()) {
       query =
@@ -178,10 +191,10 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
               + "  FROM ( "
               + "         SELECT * "
               + "         FROM LMS_APP_STATUS "
-              + "         WHERE ACTION_STATUS = ? AND APP_ID IN ( "
-              + "           SELECT ID "
+              + "         WHERE  (APP_ID,Action_status) IN ( "
+              + "           SELECT ID,APP_STATUS "
               + "           FROM LMS_APPLICATION, EMPLOYEES "
-              + "           WHERE APP_STATUS = 2 AND EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "           WHERE APP_STATUS=? AND  EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
               + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * "
               + pageSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * " + pageSize + ") + 1)";
       return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationStatus.getId(), pUser.getDepartment().getId()},
@@ -189,8 +202,15 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
     }
     else {
       query =
-          "SELECT * " + "FROM ( " + "  SELECT " + "    a.*, " + "    ROWNUM row_number " + "  FROM ( "
-              + "         SELECT * " + "         FROM LMS_APP_STATUS " + "         WHERE ACTION_STATUS = ? "
+          "SELECT * "
+              + "FROM ( "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE (APP_ID,ACTION_STATUS) IN (SELECT ID, APP_STATUS FROM LMS_APPLICATION WHERE APP_STATUS=?) "
               + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * " + pageSize
               + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * " + pageSize + ") + 1)";
       return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationStatus.getId()}, new LmsAppStatusRowMapper());
@@ -199,34 +219,36 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApprovalStatus, User pUser, Role pRole) {
+  public List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus,
+      User pUser, Role pRole) {
     String query = "";
     if(pRole.getId() == RoleType.DEPT_HEAD.getId()) {
       query =
-          "SELECT * "
-              + "FROM ( "
-              + "  SELECT "
-              + "    a.*, "
-              + "    ROWNUM row_number "
-              + "  FROM ( "
-              + "         SELECT * "
-              + "         FROM LMS_APP_STATUS "
-              + "         WHERE ACTION_STATUS = ? AND APP_ID IN ( "
-              + "           SELECT ID "
+          "SELECT * " + "FROM ( " + "  SELECT " + "    a.*, " + "    ROWNUM row_number " + "  FROM ( "
+              + "         SELECT * " + "         FROM LMS_APP_STATUS "
+              + "         WHERE ACTION_STATUS = ? AND APP_ID IN ( " + "           SELECT ID "
               + "           FROM LMS_APPLICATION, EMPLOYEES "
-              + "           WHERE APP_STATUS = 2 AND EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "           WHERE  EMPLOYEES.DEPT_OFFICE = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
               + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a)";
-      return mJdbcTemplate.query(query, new Object[] {pLeaveApprovalStatus.getId(), pUser.getDepartment().getId()},
-          new LmsAppStatusRowMapper());
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationApprovalStatus.getId(),
+          pUser.getDepartment().getId()}, new LmsAppStatusRowMapper());
     }
     else {
       query =
           "SELECT * " + "FROM ( " + "  SELECT " + "    a.*, " + "    ROWNUM row_number " + "  FROM ( "
               + "         SELECT * " + "         FROM LMS_APP_STATUS " + "         WHERE ACTION_STATUS = ? "
               + "         ORDER BY ACTION_TAKEN_ON) a)";
-      return mJdbcTemplate.query(query, new Object[] {pLeaveApprovalStatus.getId()}, new LmsAppStatusRowMapper());
+      return mJdbcTemplate.query(query, new Object[] {pLeaveApplicationApprovalStatus.getId()},
+          new LmsAppStatusRowMapper());
 
     }
+  }
+
+  @Override
+  public LmsAppStatus getLatestStatusOfTheApplication(Long pApplicationId) {
+    String query =
+        "select a.*, rownum row_number from (select * from LMS_APP_STATUS where APP_ID=? ORDER BY  ACTION_STATUS DESC )a where ROWNUM=1";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pApplicationId}, new LmsAppStatusRowMapper());
   }
 
   class LmsAppStatusRowMapper implements RowMapper<LmsAppStatus> {
@@ -239,7 +261,7 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
       status.setActionTakenById(rs.getString("action_taken_by"));
       status.setComments(rs.getString("comments"));
       if(rs.getInt("action_status") != 0)
-        status.setActionStatus(LeaveApprovalStatus.get(rs.getInt("action_status")));
+        status.setActionStatus(LeaveApplicationApprovalStatus.get(rs.getInt("action_status")));
       if(rs.getInt("row_number") != 0)
         status.setRowNumber(rs.getInt("row_number"));
       status.setLastModified(rs.getString("last_modified"));

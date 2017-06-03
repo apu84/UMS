@@ -85,6 +85,23 @@ module ums {
       return defer.promise;
     }
 
+
+    public saveLeaveApplicationStatus(json: any): ng.IPromise<any> {
+      console.log("Json");
+      console.log(json);
+      var defer = this.$q.defer();
+      var url = "lmsAppStatus/save";
+
+      this.httpClient.post(url, json, 'application/json')
+          .success(() => {
+            defer.resolve("success");
+            this.notify.success("Success");
+          }).error((data) => {
+        defer.resolve("error");
+      });
+      return defer.promise;
+    }
+
   }
 
   UMS.service("leaveApplicationStatusService", LeaveApplicationStatusService);

@@ -1,15 +1,20 @@
-<div class="col-md-12"><h3>Application Status</h3></div>
-<div class="col-md-4"><p>Applied On:<b> {{pendingApplication.appliedOn}}</b></p></div>
-<div class="col-md-4"><p>From <b>{{pendingApplication.fromDate}}</b> to <b>{{pendingApplication.toDate}}</b></p></div>
-<div class="col-md-4"><p>Duration: <b>{{pendingApplication.duration}}</b> days</p></div>
-<div class="col-md-12">Reason</div>
-<div class="col-md-12">
-    <div>
+<div class="col-md-8">
+    <div class="col-md-12"><h3>Application Status</h3></div>
+    <div class="col-md-4"><p>Applied On:<b> {{pendingApplication.appliedOn}}</b></p></div>
+    <div class="col-md-4"><p>From <b>{{pendingApplication.fromDate}}</b> to <b>{{pendingApplication.toDate}}</b></p>
+    </div>
+    <div class="col-md-4"><p>Duration: <b>{{pendingApplication.duration}}</b> days</p></div>
+    <div class="col-md-12">Reason</div>
+    <div class="col-md-12">
+        <div>
         <textarea disabled="true" class="form-control col-md-8" rows="10"
                   class="col-md-12"
                   style="cursor: auto; background-color: floralwhite">{{pendingApplication.reason}}</textarea>
+        </div>
     </div>
 </div>
+<div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>
+
 <div class="col-md-12"><h3>Status</h3></div>
 <div class="col-md-12">
     <table class="table table-bordered table-striped">
@@ -61,3 +66,4 @@
             </div>
         </div>
     </div>
+</div>

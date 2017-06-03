@@ -1,19 +1,23 @@
 package org.ums.resource.leavemanagement;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
+import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 18-May-17.
@@ -21,12 +25,16 @@ import java.text.SimpleDateFormat;
 @Component
 public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppStatus> {
 
+  @Autowired
+  private UserManager mUserManager;
+
   private static final Logger mLogger = LoggerFactory.getLogger(LmsAppStatusBuilder.class);
 
   @Override
   public void build(JsonObjectBuilder pBuilder, LmsAppStatus pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("appId", pReadOnly.getLmsApplication().getId().toString());
+    pBuilder.add("applicantsId", pReadOnly.getLmsApplication().getEmployee().getId());
     pBuilder.add("reason", pReadOnly.getLmsApplication().getReason());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");
     pBuilder.add("appliedOn", formatter.format(pReadOnly.getLmsApplication().getAppliedOn()));
@@ -67,11 +75,19 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
         mLogger.error(e.getMessage());
       }
     }
+    else {
+      pMutable.setActionTakenOn(new Date());
+    }
     if(pJsonObject.containsKey("actionTakenBy"))
       pMutable.setActionTakenById(pJsonObject.getString("actionTakenBy"));
+    else {
+      pMutable.setActionTakenById(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString())
+          .getEmployeeId());
+    }
+
     if(pJsonObject.containsKey("comments"))
       pMutable.setComments(pJsonObject.getString("comments"));
     if(pJsonObject.containsKey("actionStatus"))
-      pMutable.setActionStatus(LeaveApprovalStatus.get(pJsonObject.getInt("actionStatus")));
+      pMutable.setActionStatus(LeaveApplicationApprovalStatus.get(pJsonObject.getInt("actionStatus")));
   }
 }

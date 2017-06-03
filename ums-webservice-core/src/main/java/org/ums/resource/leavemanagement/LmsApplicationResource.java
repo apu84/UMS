@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
@@ -18,6 +19,13 @@ public class LmsApplicationResource extends MutableLmsApplicationResource {
   @Path("/remainingLeaves")
   public JsonObject getRemainingLeaves(final @Context Request pRequest) throws Exception {
     return mHelper.getRemainingLeaves();
+  }
+
+  @GET
+  @Path("/remainingLeaves/employeeId/{employee-id}")
+  public JsonObject getRemainingLeaves(final @Context Request pRequest,
+      final @PathParam("employee-id") String pEmployeeId) throws Exception {
+    return mHelper.getRemainingLeaves(pEmployeeId);
   }
 
   @GET

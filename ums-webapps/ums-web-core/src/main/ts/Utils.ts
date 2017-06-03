@@ -51,6 +51,36 @@ module ums {
     static LEAVE_APPLICATION_REJECTED: number = 4;
 
     /*
+     * Leave Application Approval Status
+     * */
+
+    static LEAVE_APPLICATION_WAITING_FOR_HEADS_APPROVAL = 1;
+    static LEAVE_APPLICATION_WAITING_FOR_REGISTRARS_APPROVAL = 2;
+    static LEAVE_APPLICATION_REJECTED_BY_HEAD = 3;
+    static LEAVE_APPLICATION_WAITING_FOR_VC_APPROVAL = 4;
+    static LEAVE_APPLICATION_REJECTED_BY_REGISTRAR = 5;
+    static LEAVE_APPLICATION_REJECTED_BY_VC = 6;
+    static LEAVE_APPLICATION_APPROVED = 7;
+
+    /*
+     * Role Types
+     * */
+    static REGISTRAR: number = 81;
+    static STUDENT: number = 11;
+    static S_ADMIN: number = 999;
+    static COE: number = 71;
+    static IUMS_SECRATARY: number = 31;
+    static TEACHER: number = 21;
+    static DEPT_OFFICE: number = 41;
+    static DEPUTY_REGISTRAR: number = 82;
+    static DEPT_HEAD: number = 22;
+    static VC: number = 99;
+    static DP_COE: number = 72;
+    static UG_ADMISSION_CHAIRMAN: number = 10101;
+    static LIBRARIAN: number = 3000;
+
+
+    /*
      * Present status during department selection
      *
      * */

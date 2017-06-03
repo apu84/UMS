@@ -5,7 +5,7 @@ import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsAppStatusManager;
 
@@ -34,18 +34,24 @@ public class LmsAppStatusCache extends ContentCache<LmsAppStatus, MutableLmsAppS
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(String pEmployeeId) {
-    return getManager().getLmsAppStatusList(pEmployeeId);
+  public List<LmsAppStatus> getPendingApplications(String pEmployeeId) {
+    return getManager().getPendingApplications(pEmployeeId);
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApplicationStatus, Role pRole, User pUser,
-      int pageNumber, int pageSize) {
-    return getManager().getLmsAppStatusList(pLeaveApplicationStatus, pRole, pUser, pageNumber, pageSize);
+  public List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationStatus, Role pRole,
+      User pUser, int pageNumber, int pageSize) {
+    return getManager().getPendingApplications(pLeaveApplicationStatus, pRole, pUser, pageNumber, pageSize);
   }
 
   @Override
-  public List<LmsAppStatus> getLmsAppStatusList(LeaveApprovalStatus pLeaveApprovalStatus, User pUser, Role pRole) {
-    return getManager().getLmsAppStatusList(pLeaveApprovalStatus, pUser, pRole);
+  public List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus,
+      User pUser, Role pRole) {
+    return getManager().getPendingApplications(pLeaveApplicationApprovalStatus, pUser, pRole);
+  }
+
+  @Override
+  public LmsAppStatus getLatestStatusOfTheApplication(Long pApplicationId) {
+    return getManager().getLatestStatusOfTheApplication(pApplicationId);
   }
 }

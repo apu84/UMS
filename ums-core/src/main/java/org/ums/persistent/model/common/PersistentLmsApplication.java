@@ -5,7 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
-import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.manager.common.LmsTypeManager;
@@ -37,7 +37,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   private Date mFromDate;
   private Date mToDate;
   private String mReason;
-  private LeaveApplicationStatus mLeaveApplicationStatus;
+  private LeaveApplicationApprovalStatus mLeaveApplicationStatus;
   private String mLastModified;
 
   public PersistentLmsApplication() {
@@ -59,12 +59,12 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   }
 
   @Override
-  public void setLeaveApplicationStatus(LeaveApplicationStatus pLeaveApplicationStatus) {
+  public void setLeaveApplicationStatus(LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
     mLeaveApplicationStatus = pLeaveApplicationStatus;
   }
 
   @Override
-  public LeaveApplicationStatus getApplicationStatus() {
+  public LeaveApplicationApprovalStatus getApplicationStatus() {
     return mLeaveApplicationStatus;
   }
 

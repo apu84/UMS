@@ -1,23 +1,21 @@
 package org.ums.builder;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.json.*;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Navigation;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.NavigationManager;
+
+import javax.json.*;
+import javax.ws.rs.core.UriInfo;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class AdditionalRolePermissionsBuilder implements
@@ -42,6 +40,7 @@ public class AdditionalRolePermissionsBuilder implements
     }
     jsonObjectBuilder.add("entries", jsonArrayBuilder);
     pBuilder.add("permissions", jsonObjectBuilder.build());
+    pBuilder.add("roleId", pReadOnly.getRole().getId());
     pBuilder.add("start", mDateFormat.format(pReadOnly.getValidFrom()));
     pBuilder.add("end", mDateFormat.format(pReadOnly.getValidTo()));
   }

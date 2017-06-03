@@ -29,7 +29,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AdmissionStudentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AdditionalRolePermissionsService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/SemesterService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
@@ -82,6 +84,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/AdditionalRolePermissions.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>

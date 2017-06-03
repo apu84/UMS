@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsApplicationDaoDecorator;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
-import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 
@@ -167,8 +167,14 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   @Override
   public List<LmsApplication> getLmsApplication(String pEmployeeId, int pYear) {
     String query =
-        "select * from LMS_APPLICATION where EMPLOYEE_ID=? and (extract(year from APPLIED_ON)=? or type_id in (select id from LMS_TYPE where DURATION_TYPE=3))";
+        "select * from LMS_APPLICATION where EMPLOYEE_ID=? and (extract(year from APPLIED_ON)=? or type_id in (select id from LMS_TYPE where DURATION_TYPE=1))";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pYear}, new LmsApplicationRowMapper());
+  }
+
+  @Override
+  public int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    String query = "update lms_application set app_status=?, last_modified=" + getLastModifiedSql() + " where id=?";
+    return mJdbcTemplate.update(query, pLeaveApplicationStatus.getId(), pApplicationid);
   }
 
   class LmsApplicationRowMapper implements RowMapper<LmsApplication> {
@@ -184,7 +190,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
       application.setReason(rs.getString("reason"));
       application.setLastModified(rs.getString("last_modified"));
       if(rs.getInt("app_status") != 0)
-        application.setLeaveApplicationStatus(LeaveApplicationStatus.get(rs.getInt("app_status")));
+        application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.get(rs.getInt("app_status")));
       return application;
     }
   }

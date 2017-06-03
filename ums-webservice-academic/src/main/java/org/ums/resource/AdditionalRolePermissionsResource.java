@@ -6,15 +6,16 @@ import org.springframework.stereotype.Component;
 import org.ums.resource.helper.AdditionalRolePermissionsHelper;
 
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
 @Path("/additionalRolePermissions")
-@Consumes(Resource.MIME_TYPE_JSON)
-@Produces(Resource.MIME_TYPE_JSON)
 public class AdditionalRolePermissionsResource extends Resource {
   @Autowired
   AdditionalRolePermissionsHelper mAdditionalRolePermissionsHelper;
@@ -25,6 +26,13 @@ public class AdditionalRolePermissionsResource extends Resource {
       final @PathParam("object-id") String pUserId) {
     return mAdditionalRolePermissionsHelper.getUserAdditionalRolePermissionsByAssignedBy(pUserId, SecurityUtils
         .getSubject().getPrincipal().toString(), mUriInfo);
+  }
+
+  @GET
+  @Path("/loggedUser")
+  public JsonObject getAddtionalRolePermission(final @Context Request pRequest) {
+    JsonObject jsonObject = mAdditionalRolePermissionsHelper.getLoggedUserAdditionalRolePermissions(mUriInfo);
+    return jsonObject;
   }
 
   @POST

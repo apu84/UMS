@@ -9,7 +9,7 @@ import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
-import org.ums.enums.common.LeaveApprovalStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.RoleType;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.EmployeeManager;
@@ -17,14 +17,14 @@ import org.ums.manager.RoleManager;
 import org.ums.manager.UserManager;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
+import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.resource.ResourceHelper;
+import org.ums.services.leave.management.LeaveManagementService;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,11 +54,31 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
   EmployeeManager mEmployeeManager;
 
   @Autowired
+  LeaveManagementService mLeaveManagementService;
+
+  @Autowired
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    LocalCache localCache = new LocalCache();
+    JsonObject jsonObject = entries.getJsonObject(0);
+    PersistentLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
+    lmsAppStatus.setLmsApplicationId(Long.parseLong(jsonObject.getString("appId")));
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    List<Integer> additionalRoleIds = mAdditionalRolePermissionsManager.getPermissionsByUser(user.getId()).stream().map(a -> a.getRole().getId()).collect(Collectors.toList());
+    lmsAppStatus.setActionTakenById(user.getEmployeeId());
+    lmsAppStatus.setComments(jsonObject.getString("comments"));
+    int approvalStatus = jsonObject.getInt("leaveApprovalStatus");
+    LmsAppStatus latestStatusOfTheApplication = mLmsAppStatusManager.getLatestStatusOfTheApplication(lmsAppStatus.getLmsApplication().getId());
+    mLeaveManagementService.setApplicationStatus(lmsAppStatus, user, additionalRoleIds, approvalStatus, latestStatusOfTheApplication);
+    getContentManager().create(lmsAppStatus);
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 
   public JsonObject getApplicationStatus(final Long pApplicationId, UriInfo pUriInfo) {
@@ -82,23 +102,23 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
 
   public JsonObject getPendingApplicationsOfEmployee(UriInfo pUriInfo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    List<LmsAppStatus> appStatuses = getContentManager().getLmsAppStatusList(user.getEmployeeId());
+    List<LmsAppStatus> appStatuses = getContentManager().getPendingApplications(user.getEmployeeId());
     return getJsonObject(pUriInfo, appStatuses);
   }
 
-  public JsonObject getLeaveApplications(LeaveApprovalStatus pStatus, int pageNumber, int pageSize, UriInfo pUriInfo) {
+  public JsonObject getLeaveApplications(LeaveApplicationApprovalStatus pStatus, int pageNumber, int pageSize, UriInfo pUriInfo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<LmsAppStatus> statuses = new ArrayList<>();
     int statusSize;
     List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionsManager.getPermissionsByUser(user.getId()).stream().filter(p -> p.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
     if (additionalRolePermissions.size() > 0) {
       statuses =
-          getContentManager().getLmsAppStatusList(pStatus, mRoleManager.get(RoleType.DEPT_HEAD.getId()), user,
+          getContentManager().getPendingApplications(pStatus, mRoleManager.get(RoleType.DEPT_HEAD.getId()), user,
               pageNumber, pageSize);
-      statusSize = getContentManager().getLmsAppStatusList(pStatus, user, mRoleManager.get(RoleType.DEPT_HEAD.getId())).size();
+      statusSize = getContentManager().getPendingApplications(pStatus, user, mRoleManager.get(RoleType.DEPT_HEAD.getId())).size();
     } else {
-      statuses = getContentManager().getLmsAppStatusList(pStatus, user.getPrimaryRole(), user, pageNumber, pageSize);
-      statusSize = getContentManager().getLmsAppStatusList(pStatus, user, user.getPrimaryRole()).size();
+      statuses = getContentManager().getPendingApplications(pStatus, user.getPrimaryRole(), user, pageNumber, pageSize);
+      statusSize = getContentManager().getPendingApplications(pStatus, user, user.getPrimaryRole()).size();
     }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -114,15 +134,15 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     return object.build();
   }
 
-  public JsonObject getLeaveApplications(LeaveApprovalStatus pStatus, UriInfo pUriInfo) {
+  public JsonObject getLeaveApplications(LeaveApplicationApprovalStatus pStatus, UriInfo pUriInfo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<LmsAppStatus> statuses = new ArrayList<>();
     List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionsManager.getPermissionsByUser(user.getId()).stream().filter(p -> p.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
     if (additionalRolePermissions.size() > 0) {
       statuses =
-          getContentManager().getLmsAppStatusList(pStatus, user, mRoleManager.get(RoleType.DEPT_HEAD.getId()));
+          getContentManager().getPendingApplications(pStatus, user, mRoleManager.get(RoleType.DEPT_HEAD.getId()));
     } else {
-      statuses = getContentManager().getLmsAppStatusList(pStatus, user, user.getPrimaryRole());
+      statuses = getContentManager().getPendingApplications(pStatus, user, user.getPrimaryRole());
     }
     return getJsonObject(pUriInfo, statuses);
 

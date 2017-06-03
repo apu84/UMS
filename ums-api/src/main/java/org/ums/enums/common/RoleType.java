@@ -19,7 +19,7 @@ public enum RoleType {
   DEPT_HEAD(22, "Department Head"),
   VC(99, "Vice Chancellor"),
   DP_COE(72, "Deputy Comptroller"),
-  UG_ADMISSION_CHAIRMAN(72, "Undergraduate Admission Chairman"),
+  UG_ADMISSION_CHAIRMAN(10101, "Undergraduate Admission Chairman"),
   LIBRARIAN(3000, "Librarian");
 
   private String label;

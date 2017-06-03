@@ -71,6 +71,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
+    application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
     Long appId = new Long(0);
     appId = getContentManager().create(application);
 
@@ -93,15 +94,18 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
     // todo add more roles, currently mst_role table in db is not complete.
     List<Integer> roles = user.getRoleIds();
+    String message = "Leave Application from employee: " + employee.getEmployeeName() + " of department: "
+        + employee.getDepartment().getShortName() + " is waiting for your approval.";
     if (rolePermissionsStream.get(0).getUserId().equals(user.getId())
         || user.getPrimaryRole().getId() == RoleType.COE.getId()
         || user.getPrimaryRole().getId() == RoleType.REGISTRAR.getId()
         || user.getPrimaryRole().getId() == RoleType.LIBRARIAN.getId()) {
-      lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_VC_APPROVAL);
-      mLeaveManagementService.setNotification("vc", employee);
+      lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
+      mLeaveManagementService.setNotification("vc", message);
     } else {
-      lmsAppStatus.setActionStatus(LeaveApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
-      mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), employee);
+      lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
+
+      mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
 
     mLmsAppStatusManager.create(lmsAppStatus);
@@ -124,13 +128,23 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   }
 
   public JsonObject getRemainingLeaves() {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    String employeeId = mUserManager.get(userId).getEmployeeId();
+    return getRemainingLeavesJsonObject(employeeId);
+  }
+
+  public JsonObject getRemainingLeaves(String pEmployeeId) {
+    return getRemainingLeavesJsonObject(pEmployeeId);
+  }
+
+  private JsonObject getRemainingLeavesJsonObject(String pEmployeeId) {
     List<LmsType> lmsTypes = getLeaveTypes();
     int year = Calendar.getInstance().get(Calendar.YEAR);
     List<LmsApplication> applications = getContentManager()
-        .getLmsApplication(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId(), year);
+        .getLmsApplication(pEmployeeId, year);
     Map<Integer, List<LmsApplication>> applicationMap = applications
         .stream()
-        .filter(app -> app.getApplicationStatus() == LeaveApplicationStatus.ACCEPTED)
+        .filter(app -> app.getApplicationStatus() == LeaveApplicationApprovalStatus.APPLICATION_APPROVED)
         .collect(Collectors.groupingBy(LmsApplication::getLeaveTypeId));
 
     JsonObjectBuilder object = Json.createObjectBuilder();

@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +72,22 @@ public class AdditionalRolePermissionsHelper extends
     LocalCache localCache = new LocalCache();
     for(AdditionalRolePermissions readOnly : additionalRolePermissions) {
       children.add(toJson(readOnly, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getLoggedUserAdditionalRolePermissions(final UriInfo pUriInfo) {
+    List<AdditionalRolePermissions> additionalRolePermissions =
+        mAdditionalRolePermissionsManager.getPermissionsByUser(SecurityUtils.getSubject().getPrincipal().toString());
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(AdditionalRolePermissions readOnly : additionalRolePermissions) {
+      JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+      getBuilder().build(objectBuilder, readOnly, pUriInfo, localCache);
+      children.add(objectBuilder);
     }
     object.add("entries", children);
     localCache.invalidate();

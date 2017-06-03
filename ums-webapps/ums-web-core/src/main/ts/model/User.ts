@@ -3,5 +3,6 @@ module ums {
     userName: string;
     firstName: string;
     lastName: string;
+    roleId: number;
   }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by Monjur-E-Morshed on 06-May-17.
  */
-public enum LeaveApprovalStatus {
+public enum LeaveApplicationApprovalStatus {
   WAITING_FOR_HEAD_APPROVAL(1, "Waiting For Head's Approval"),
   WAITING_FOR_REGISTRARS_APPROVAL(2, "Waiting For Registrar's Approval"),
   REJECTED_BY_DEPT_HEAD(3, "Application Rejected By Head"),
@@ -19,20 +19,20 @@ public enum LeaveApprovalStatus {
   private String label;
   private int id;
 
-  private LeaveApprovalStatus(int id, String label) {
+  private LeaveApplicationApprovalStatus(int id, String label) {
     this.id = id;
     this.label = label;
   }
 
-  private static final Map<Integer, LeaveApprovalStatus> lookup = new HashMap<>();
+  private static final Map<Integer, LeaveApplicationApprovalStatus> lookup = new HashMap<>();
 
   static {
-    for(LeaveApprovalStatus c : EnumSet.allOf(LeaveApprovalStatus.class)) {
+    for(LeaveApplicationApprovalStatus c : EnumSet.allOf(LeaveApplicationApprovalStatus.class)) {
       lookup.put(c.getId(), c);
     }
   }
 
-  public static LeaveApprovalStatus get(final int pId) {
+  public static LeaveApplicationApprovalStatus get(final int pId) {
     return lookup.get(pId);
   }
 

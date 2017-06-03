@@ -5,7 +5,7 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
-import org.ums.enums.common.LeaveApplicationStatus;
+import org.ums.enums.common.LeaveApplicationApprovalStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,5 +30,5 @@ public interface LmsApplication extends Serializable, LastModifier, EditType<Mut
 
   String getReason();
 
-  LeaveApplicationStatus getApplicationStatus();
+  LeaveApplicationApprovalStatus getApplicationStatus();
 }
