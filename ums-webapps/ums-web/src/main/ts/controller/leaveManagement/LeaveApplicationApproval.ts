@@ -116,6 +116,8 @@ module ums {
       this.convertToJson().then((json) => {
         this.leaveApplicationStatusService.saveLeaveApplicationStatus(json).then((message) => {
           this.getRemainingLeaves(this.$scope.pendingApplication.applicantsId);
+          this.$scope.disableApproveAndRejectButton = true;
+          this.fetchApplicationStatus(this.$scope.pendingApplication, this.$scope.pagination.currentPage);
         });
       });
     }
@@ -123,8 +125,12 @@ module ums {
     private getUsersInformation() {
       this.userService.fetchCurrentUserInfo().then((user) => {
         this.$scope.user = user;
-        console.log("users: ");
-        console.log(user);
+        if (this.$scope.user.roleId == Utils.VC)
+          this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_WAITING_FOR_VC_APPROVAL - 1];
+        else if (this.$scope.user.roleId == Utils.REGISTRAR)
+          this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_WAITING_FOR_REGISTRARS_APPROVAL - 1];
+        else
+          this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_WAITING_FOR_HEADS_APPROVAL - 1];
       });
     }
 
@@ -199,12 +205,11 @@ module ums {
       this.$scope.rejectButtonClicked = false;
 
       this.getRemainingLeaves(pendingApplication.applicantsId);
-      this.decideWhetherToEnableOrDisableActionButtons(pendingApplication);
-
 
       console.log("disableApproveAndRejectButton:" + this.$scope.disableApproveAndRejectButton);
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
         this.$scope.applicationStatusList = statusList;
+        this.decideWhetherToEnableOrDisableActionButtons(this.$scope.applicationStatusList[this.$scope.applicationStatusList.length - 1]);
       });
     }
 
