@@ -32,11 +32,4 @@ public class StudentDuesResource extends Resource {
   public Response payDues(final @PathParam("studentId") String pStudentId, final JsonObject pJsonObject) {
     return mStudentDuesHelper.payDues(pStudentId, pJsonObject, mUriInfo);
   }
-
-  @PUT
-  @Path("/updateDues/{studentId}")
-  public Response updateDues(final @PathParam("studentId") String pStudentId, final JsonObject pJsonObject)
-      throws Exception {
-    return mStudentDuesHelper.updateDues(pStudentId, pJsonObject, mUriInfo);
-  }
 }

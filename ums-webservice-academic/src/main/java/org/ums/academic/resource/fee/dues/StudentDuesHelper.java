@@ -60,7 +60,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
       if(dues.getAmount().compareTo(BigDecimal.ZERO) == 0) {
         List<UGFee> fees = mUGFeeManager
             .getLatestFee(dues.getStudent().getProgram().getFaculty().getId(),
-                dues.getStudent().getCurrentEnrolledSemesterId())
+                dues.getStudent().getProgram().getProgramTypeId())
             .stream().filter((fee) -> fee.getFeeCategoryId().equalsIgnoreCase(dues.getFeeCategoryId()))
             .collect(Collectors.toList());
         dues.setAmount(fees.get(0).getAmount());
@@ -100,17 +100,6 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
       due.setTransactionId(payment.getTransactionId());
     });
     mStudentDuesManager.update(mutableStudentDues);
-    return Response.ok().build();
-  }
-
-  Response updateDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    Validate.notEmpty(pJsonObject.getJsonArray("entries"));
-    List<MutableStudentDues> updatedDues = readEntities(pJsonObject, PersistentStudentDues.class);
-    List<StudentDues> latestDues = mStudentDuesManager.getByStudent(pStudentId);
-    if(!isValidUpdateOfEntities(latestDues, updatedDues)) {
-      return Response.status(Response.Status.PRECONDITION_FAILED).build();
-    }
-    mStudentDuesManager.update(updatedDues);
     return Response.ok().build();
   }
 

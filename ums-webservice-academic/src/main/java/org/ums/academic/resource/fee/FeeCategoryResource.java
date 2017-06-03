@@ -12,7 +12,7 @@ import org.ums.fee.FeeCategoryManager;
 import org.ums.resource.Resource;
 
 @Component
-@Path("/fee-category")
+@Path("/fee-types")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class FeeCategoryResource extends Resource {
@@ -28,6 +28,7 @@ public class FeeCategoryResource extends Resource {
   @GET
   @Path("/type/{typeId}")
   public List<FeeCategory> getFeeCategories(@PathParam("typeId") Integer pTypeId) throws Exception {
-    return mFeeCategoryManager.getFeeCategories(pTypeId);
+    return mFeeCategoryManager.getAll().stream()
+        .filter(pFeeCategory -> pFeeCategory.getFeeTypeId().intValue() == pTypeId).collect(Collectors.toList());
   }
 }

@@ -5,13 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.fee.*;
-import org.ums.fee.certificate.CertificateStatusDao;
-import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.dues.StudentDuesDao;
 import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.latefee.UGLateFeeDao;
 import org.ums.fee.latefee.UGLateFeeManager;
-import org.ums.fee.payment.PostPaymentActions;
 import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsDao;
@@ -19,7 +16,6 @@ import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusDao;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.SemesterManager;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -33,9 +29,6 @@ public class FeeContext {
   @Autowired
   IdGenerator mIdGenerator;
 
-  @Autowired
-  SemesterManager mSemesterManager;
-
   @Bean
   FeeCategoryManager feeCategoryManager() {
     FeeCategoryCache feeCategoryCache = new FeeCategoryCache(mCacheFactory.getCacheManager());
@@ -46,13 +39,18 @@ public class FeeContext {
   @Bean
   UGFeeManager feeManager() {
     UGFeeCache feeCache = new UGFeeCache(mCacheFactory.getCacheManager());
-    feeCache.setManager(new PersistentUGFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator, mSemesterManager));
+    feeCache.setManager(new PersistentUGFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return feeCache;
   }
 
   @Bean
   UGLateFeeManager ugLateFeeManager() {
     return new UGLateFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  StudentPaymentManager studentPaymentManager() {
+    return new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
@@ -74,18 +72,4 @@ public class FeeContext {
   StudentDuesManager studentDuesManager() {
     return new StudentDuesDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
-
-  @Bean
-  CertificateStatusManager certificateStatusManager() {
-    return new CertificateStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  StudentPaymentManager studentPaymentManager() {
-    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager());
-    StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-    studentPaymentDao.setManager(postPaymentActions);
-    return studentPaymentDao;
-  }
-
 }

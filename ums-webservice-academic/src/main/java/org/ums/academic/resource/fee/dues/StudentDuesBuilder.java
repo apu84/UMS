@@ -29,7 +29,7 @@ public class StudentDuesBuilder implements Builder<StudentDues, MutableStudentDu
 
   @Override
   public void build(JsonObjectBuilder pBuilder, StudentDues pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId().toString());
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("studentId", pReadOnly.getStudentId());
     FeeCategory category =
         (FeeCategory) pLocalCache.cache(pReadOnly::getFeeCategory, pReadOnly.getFeeCategoryId(), FeeCategory.class);
@@ -46,7 +46,6 @@ public class StudentDuesBuilder implements Builder<StudentDues, MutableStudentDu
       pBuilder.add("transactionId", pReadOnly.getTransactionId());
       pBuilder.add("transactionStatus", payments.get(0).getStatus().toString());
     }
-    pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
 
   @Override
@@ -62,12 +61,6 @@ public class StudentDuesBuilder implements Builder<StudentDues, MutableStudentDu
     }
     if(pJsonObject.containsKey("amount")) {
       pMutable.setAmount(new BigDecimal(pJsonObject.getString("amount")));
-    }
-    if(pJsonObject.containsKey("id")) {
-      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-    }
-    if(pJsonObject.containsKey("lastModified")) {
-      pMutable.setLastModified(pJsonObject.getString("lastModified"));
     }
   }
 }
