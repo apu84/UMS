@@ -25,6 +25,7 @@ import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
 import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.role.RolePermissionResolver;
 import org.ums.usermanagement.user.PersistentUserDao;
 import org.ums.usermanagement.user.UserCache;
 import org.ums.usermanagement.user.UserManager;
@@ -88,13 +89,6 @@ public class CoreContext {
     AppSettingCache appSettingCache = new AppSettingCache(mCacheFactory.getCacheManager());
     appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return appSettingCache;
-  }
-
-  @Bean
-  PermissionManager permissionManager() {
-    PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
-    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
-    return permissionCache;
   }
 
   @Bean
@@ -167,6 +161,14 @@ public class CoreContext {
   }
 
   @Bean
+  @Lazy
+  PermissionManager permissionManager() {
+    PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
+    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return permissionCache;
+  }
+
+  @Bean
   UserGuideManager userGuideManager() {
     UserGuideCache userGuideCache = new UserGuideCache(mCacheFactory.getCacheManager());
     userGuideCache.setManager(new PersistentUserGuideDao(mTemplateFactory.getJdbcTemplate()));
@@ -176,7 +178,9 @@ public class CoreContext {
   @Bean
   RoleManager roleManager() {
     RoleCache roleCache = new RoleCache(mCacheFactory.getCacheManager());
-    roleCache.setManager(new PersistentRoleDao(mTemplateFactory.getJdbcTemplate()));
+    RolePermissionResolver rolePermissionResolver = new RolePermissionResolver(mAuthenticationRealm);
+    rolePermissionResolver.setManager(new PersistentRoleDao(mTemplateFactory.getJdbcTemplate()));
+    roleCache.setManager(rolePermissionResolver);
     return roleCache;
   }
 

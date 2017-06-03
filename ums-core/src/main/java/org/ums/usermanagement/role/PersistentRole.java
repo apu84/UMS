@@ -1,16 +1,22 @@
 package org.ums.usermanagement.role;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-
-import java.util.Set;
+import org.ums.usermanagement.permission.Permission;
+import org.ums.usermanagement.permission.PermissionManager;
 
 public class PersistentRole implements MutableRole {
   private static RoleManager sRoleManager;
+  private static PermissionManager sPermissionManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
+    sPermissionManager = applicationContext.getBean("permissionManager", PermissionManager.class);
   }
 
   private Integer mId;
@@ -59,6 +65,14 @@ public class PersistentRole implements MutableRole {
 
   @Override
   public Set<String> getPermissions() {
+    if(mPermissions == null) {
+      List<Permission> rolePermissions = sPermissionManager.getPermissionByRole(this);
+      Set<String> permissions = new HashSet<>();
+      for(Permission permission : rolePermissions) {
+        permissions.addAll(permission.getPermissions());
+      }
+      return permissions;
+    }
     return mPermissions;
   }
 

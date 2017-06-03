@@ -1,6 +1,7 @@
 package org.ums.usermanagement.user;
 
 import org.ums.manager.ContentManager;
+import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
 
@@ -17,4 +18,6 @@ public interface UserManager extends ContentManager<User, MutableUser, String> {
   int clearPasswordResetToken(final String pUserId);
 
   List<User> getUsers();
+
+  List<User> getUsers(List<Role> pRoles);
 }

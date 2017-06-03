@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
 
 public class CertificateStatusDao extends CertificateStatusDaoDecorator {
-  String SELECT_ALL =
-      "SELECT ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS, PROCESSED_ON, PROCESSED_BY, LAST_MODIFIED FROM "
-          + "CERTIFICATE_STATUS ";
+  String SELECT_ALL = "SELECT ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS, PROCESSED_ON, "
+      + "PROCESSED_BY, LAST_MODIFIED FROM CERTIFICATE_STATUS ";
   String INSERT_ALL =
       "INSERT INTO CERTIFICATE_STATUS(ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS,"
           + "LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
@@ -50,9 +50,11 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   }
 
   @Override
+  @Transactional
   public int update(List<MutableCertificateStatus> pMutableList) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
+    mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList));
+    return super.update(pMutableList);
   }
 
   @Override
@@ -67,9 +69,11 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   }
 
   @Override
+  @Transactional
   public List<Long> create(List<MutableCertificateStatus> pMutableList) {
     List<Object[]> params = getCreateParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    super.create(pMutableList);
     return params.stream().map(param -> (Long) param[0]).collect(Collectors.toList());
   }
 

@@ -1,6 +1,7 @@
 package org.ums.usermanagement.user;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
@@ -44,5 +45,10 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   @Override
   public List<User> getUsers() {
     return getManager().getUsers();
+  }
+
+  @Override
+  public List<User> getUsers(List<Role> pRoles) {
+    return getManager().getUsers(pRoles);
   }
 }
