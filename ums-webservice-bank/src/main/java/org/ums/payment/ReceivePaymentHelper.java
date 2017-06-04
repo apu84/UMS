@@ -1,15 +1,13 @@
 package org.ums.payment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -22,11 +20,13 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.FeeType;
 import org.ums.fee.FeeTypeManager;
+import org.ums.fee.accounts.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.ContentManager;
+import org.ums.manager.StudentManager;
 import org.ums.resource.ResourceHelper;
 
 @Component
@@ -37,20 +37,32 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   private StudentPaymentManager mStudentPaymentManager;
   @Autowired
   private FeeTypeManager mFeeTypeManager;
+  @Autowired
+  private PaymentAccountsMappingManager mPaymentAccountsMappingManager;
+  @Autowired
+  private StudentManager mStudentManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     throw new NotImplementedException();
   }
 
+  /**
+   * Transaction always needs to be in a public method
+   * @param pStudentId
+   * @param pJsonObject
+   * @return
+   * @throws Exception
+   */
   @Transactional
-  Response receivePayment(String pStudentId, JsonObject pJsonObject) throws Exception {
+  public Response receivePayment(String pStudentId, JsonObject pJsonObject) {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
     LocalCache cache = new LocalCache();
+    BigDecimal amount = new BigDecimal(0);
 
-    entries.forEach((entry) -> {
+    for(JsonValue entry : entries) {
       MutableStudentPayment payment = new PersistentStudentPayment();
       getBuilder().build(payment, (JsonObject) entry, cache);
       payment.setStudentId(pStudentId);
@@ -60,12 +72,45 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setTransactionId(latestPayment.getTransactionId());
       payments.add(payment);
       latestPayments.add(latestPayment);
-    });
+      amount = amount.add(latestPayment.getAmount());
+    }
 
     validatePayment(pStudentId, latestPayments, payments);
     mStudentPaymentManager.update(payments);
 
+    Validate.notNull(pJsonObject.get("paymentMethod"));
+    String paymentDetails = null;
+    if(pJsonObject.containsKey("paymentDetails")) {
+      paymentDetails = pJsonObject.getString("paymentDetails");
+    }
+    // Taking into consideration only one of payment entry, as this would be a part of same
+    // transaction
+    updatePaymentStatus(latestPayments.get(0), pJsonObject.getInt("paymentMethod"), paymentDetails, pStudentId, amount);
     return Response.ok().build();
+  }
+
+  private void updatePaymentStatus(StudentPayment pStudentPayment, int pPaymentMethod, String pPaymentDetails,
+      String pStudentId, BigDecimal pAmount) {
+    int faculty = mStudentManager.get(pStudentId).getProgram().getFacultyId();
+    List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
+        .filter((mapping) -> mapping.getFeeTypeId().intValue() == pStudentPayment.getFeeTypeId()
+            && mapping.getFacultyId() == faculty)
+        .collect(Collectors.toList());
+    if(mappings.size() > 0) {
+      MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
+      paymentStatus.setAccount(mappings.get(0).getAccount());
+      paymentStatus.setTransactionId(pStudentPayment.getTransactionId());
+      PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
+      paymentStatus.setMethodOfPayment(paymentMethod);
+      paymentStatus.setReceivedOn(new Date());
+      if(paymentMethod == PaymentStatus.PaymentMethod.CASH || paymentMethod == PaymentStatus.PaymentMethod.PAYORDER) {
+        paymentStatus.setPaymentComplete(true);
+        paymentStatus.setCompletedOn(new Date());
+      }
+      paymentStatus.setPaymentDetails(pPaymentDetails);
+      paymentStatus.setAmount(pAmount);
+      paymentStatus.create();
+    }
   }
 
   JsonObject getStudentPayments(String pStudentId, UriInfo pUriInfo) throws Exception {

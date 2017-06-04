@@ -10,9 +10,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PaymentAccountMappingDao extends PaymentAccountsMappingDaoDecorator {
   String SELECT_ALL =
-      "SELECT ID, FEE_TYPE, FACULTY, ACCOUNT, ACCOUNTS_DETAILS, LAST_MODIFIED FROM PAYMENT_ACCOUNT_MAPPING ";
+      "SELECT ID, FEE_TYPE, FACULTY, ACCOUNT, ACCOUNT_DETAILS, LAST_MODIFIED FROM PAYMENT_ACCOUNT_MAPPING ";
 
-  JdbcTemplate mJdbcTemplate;
+  private JdbcTemplate mJdbcTemplate;
 
   public PaymentAccountMappingDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
