@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
@@ -78,6 +80,51 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PaymentStatusRowMapper());
   }
 
+  @Override
+  public List<PaymentStatus> paginatedList(PaymentStatusFilter filter, int itemsPerPage, int pageNumber) {
+    int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemsPerPage - 1;
+    FilterQueryParam filterQueryParam = buildFilterQuery(filter, startIndex, endIndex);
+    String query =
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + filterQueryParam.getQuery()
+            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+    return mJdbcTemplate.query(query, filterQueryParam.getParams(), new PaymentStatusRowMapper());
+  }
+
+  private FilterQueryParam buildFilterQuery(PaymentStatusFilter pStatusFilter, int startIndex, int endIndex) {
+    List<String> filter = new ArrayList<>();
+    List<Object> filterParams = new ArrayList<>();
+    if(pStatusFilter.getReceivedStart() != null) {
+      filter.add("RECEIVED_ON >= ?");
+      filterParams.add(pStatusFilter.getReceivedStart());
+    }
+    if(pStatusFilter.getReceivedEnd() != null) {
+      filter.add("RECEIVED_ON <= ?");
+      filterParams.add(pStatusFilter.getReceivedEnd());
+    }
+    if(!StringUtils.isEmpty(pStatusFilter.isPaymentCompleted())) {
+      filter.add("PAYMENT_COMPLETE = ?");
+      filterParams.add(!pStatusFilter.isPaymentCompleted().equalsIgnoreCase("no"));
+    }
+    if(pStatusFilter.getPaymentMethod() != null) {
+      filter.add("METHOD_OF_PAYMENT = ?");
+      filterParams.add(pStatusFilter.getPaymentMethod().getId());
+    }
+    if(!StringUtils.isEmpty(pStatusFilter.getTransactionId())) {
+      filter.add("TRANSACTION_ID = ?");
+      filterParams.add(pStatusFilter.getTransactionId());
+    }
+    if(!StringUtils.isEmpty(pStatusFilter.getAccount())) {
+      filter.add("ACCOUNT = ?");
+      filterParams.add(pStatusFilter.getAccount());
+    }
+    filterParams.add(startIndex);
+    filterParams.add(endIndex);
+    String WHERE_CLAUSE = filter.size() > 0 ? " WHERE " : "";
+    return new FilterQueryParam(WHERE_CLAUSE + filter.stream().map(x -> x).collect(Collectors.joining(" AND ")),
+        filterParams.toArray());
+  }
+
   private List<Object[]> getUpdateParamList(List<MutablePaymentStatus> pMutablePaymentStatuse) {
     List<Object[]> params = new ArrayList<>();
     for(PaymentStatus paymentStatus : pMutablePaymentStatuse) {
@@ -103,6 +150,24 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
       status.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<PaymentStatus> reference = new AtomicReference<>(status);
       return reference.get();
+    }
+  }
+
+  class FilterQueryParam {
+    private String query;
+    private Object[] params;
+
+    FilterQueryParam(String pQuery, Object[] pParams) {
+      query = pQuery;
+      params = pParams;
+    }
+
+    public String getQuery() {
+      return query;
+    }
+
+    public Object[] getParams() {
+      return params;
     }
   }
 }

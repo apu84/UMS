@@ -18,10 +18,18 @@ public class PaymentStatusResource extends Resource {
 
   @GET
   @Path("/paginated")
-  public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
+  public JsonObject getPaymentStatus(@QueryParam("pageNumber") Integer pageNumber,
       @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
     return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1
         : pageNumber, mUriInfo);
+  }
+
+  @POST
+  @Path("/paginated/filtered")
+  public JsonObject getFilteredPaymentStatus(@QueryParam("pageNumber") Integer pageNumber,
+      @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pFilter) throws Exception {
+    return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1
+        : pageNumber, pFilter, mUriInfo);
   }
 
   @PUT

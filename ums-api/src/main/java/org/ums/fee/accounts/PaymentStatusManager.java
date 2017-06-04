@@ -1,11 +1,13 @@
 package org.ums.fee.accounts;
 
-import org.ums.manager.ContentManager;
-
 import java.util.List;
+
+import org.ums.manager.ContentManager;
 
 public interface PaymentStatusManager extends ContentManager<PaymentStatus, MutablePaymentStatus, Long> {
   List<PaymentStatus> getByTransactionId(String pTransactionId);
 
   List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber);
+
+  List<PaymentStatus> paginatedList(PaymentStatusFilter filter, int itemsPerPage, int pageNumber);
 }
