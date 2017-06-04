@@ -102,11 +102,11 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
       pBuilder.add("actionTakenOn", "");
     }
 
-    if(pReadOnly.getRowNumber() != 0){
-        pBuilder.add("rowNumber", pReadOnly.getRowNumber());
+    if(pReadOnly.getRowNumber() != 0) {
+      pBuilder.add("rowNumber", pReadOnly.getRowNumber());
     }
-    else{
-        pBuilder.add("rowNumber", "");
+    else {
+      pBuilder.add("rowNumber", "");
     }
   }
 

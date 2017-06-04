@@ -48,37 +48,43 @@ public class AcademicInformationResourceHelper extends
 
   @Transactional
   public Response saveAcademicInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-      String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-      //mAcademicInformationManager.deleteAcademicInformation(userId);
-      LocalCache localCache = new LocalCache();
-      JsonArray entries = pJsonObject.getJsonArray("entries");
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonArray academicJsonArray = entries.getJsonObject(0).getJsonArray("academic");
+    int sizeOfAcademicJsonArray = academicJsonArray.size();
 
-      JsonArray academicJsonArray = entries.getJsonObject(0).getJsonArray("academic");
-      int sizeOfAcademicJsonArray = academicJsonArray.size();
+    List<MutableAcademicInformation> createMutableAcademicInformation = new ArrayList<>();
+    List<MutableAcademicInformation> updateMutableAcademicInformation = new ArrayList<>();
+    List<MutableAcademicInformation> deleteMutableAcademicInformation = new ArrayList<>();
 
-      List<MutableAcademicInformation> mutableAcademicInformation = new ArrayList<>();
-      for (int i = 0; i < sizeOfAcademicJsonArray; i++) {
-          MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
-          mAcademicInformationBuilder.build(academicInformation, academicJsonArray.getJsonObject(i), localCache);
-          mutableAcademicInformation.add(academicInformation);
+    for(int i = 0; i < sizeOfAcademicJsonArray; i++) {
+      MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
+      mAcademicInformationBuilder.build(academicInformation, academicJsonArray.getJsonObject(i), localCache);
+      if(academicJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(academicJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          createMutableAcademicInformation.add(academicInformation);
+        }
+        else if(academicJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          updateMutableAcademicInformation.add(academicInformation);
+        }
       }
-      for (int i = 0; i < sizeOfAcademicJsonArray; i++) {
-          if (academicJsonArray.getJsonObject(i).getString("dbAction").equals('C')) {
-              mAcademicInformationManager.saveAcademicInformation(mutableAcademicInformation);
-          }
-
-          else if (academicJsonArray.getJsonObject(i).getString("dbAction").equals('U')) {
-              mAcademicInformationManager.updateAcademicInformation(mutableAcademicInformation);
-          }
-
-          else if (academicJsonArray.getJsonObject(i).getString("dbAction").equals('D')) {
-              mAcademicInformationManager.deleteAcademicInformation(mutableAcademicInformation);
-          }
+      else {
+        deleteMutableAcademicInformation.add(academicInformation);
       }
+    }
 
-      Response.ResponseBuilder builder = Response.created(null);
-      builder.status(Response.Status.CREATED);
-      return builder.build();
+    if(createMutableAcademicInformation.size() != 0) {
+      mAcademicInformationManager.saveAcademicInformation(createMutableAcademicInformation);
+    }
+    if(updateMutableAcademicInformation.size() != 0) {
+      mAcademicInformationManager.updateAcademicInformation(updateMutableAcademicInformation);
+    }
+    if(deleteMutableAcademicInformation.size() != 0) {
+      mAcademicInformationManager.deleteAcademicInformation(deleteMutableAcademicInformation);
+    }
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 
   private JsonObject toJson(List<AcademicInformation> pAcademicInformation, UriInfo pUriInfo) {

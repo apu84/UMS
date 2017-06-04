@@ -541,7 +541,7 @@ module ums {
             }
         }
 
-        private convertToJson(convertThis: string): ng.IPromise<any> {
+        private convertToJson(convertThis: string, obj?: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
             let JsonArray = [];
@@ -554,11 +554,18 @@ module ums {
             }
 
             else if (convertThis === "academic") {
-                let academicInformation = Array<IAcademicInformationModel>();
-                for (let i = 0; i < this.$scope.entry.academic.length; i++) {
-                    academicInformation = this.$scope.entry.academic;
+                if(obj == null) {
+                    console.log("I am entering in Obj Null");
+                    let academicInformation = Array<IAcademicInformationModel>();
+                    for (let i = 0; i < this.$scope.entry.academic.length; i++) {
+                        academicInformation = this.$scope.entry.academic;
+                    }
+                    item['academic'] = academicInformation;
                 }
-                item['academic'] = academicInformation;
+                else{
+                    console.log("I am entering Object Not NUll'");
+                    item['academic'] = obj;
+                }
             }
 
             else if (convertThis === "publication") {
@@ -846,70 +853,72 @@ module ums {
         }
 
         private submitAcademicForm() {
+            let copyOfAcademic = this.ObjectDetectionForCRUDOperation();
 
-            this.convertToJson('academic')
+            console.log("copyOfAcademic");
+            console.log(copyOfAcademic);
+
+            this.convertToJson('academic', copyOfAcademic)
                 .then((json: any) => {
-                console.log("json");
-                console.log(json);
-
-                let comparingArrayLength: number = json.entries[0]['academic'].length;
-                let baseArrayLength: number = this.$scope.previousAcademicInformation.length;
-                let customJson: any = json;
-                let flag: number = 0;
-                let increment: number = 0;
-
-                console.log(customJson);
-
-                for(let i = 0; i < baseArrayLength; i++){
-                    for(let j = 0; j < comparingArrayLength; j++){
-                        if(this.$scope.previousAcademicInformation[i].id == json.entries[0]['academic'][j].id){
-                            console.log("Equality Check For: ");
-                            customJson[increment] = json.entries[0]['academic'][j];
-                            customJson[increment].dbAction = 'U';
-                            increment++;
-                            flag = 1;
-                            break;
-                        }
-                        else{
-                            flag = 0;
-                        }
-                    }
-                    if(flag == 0){
-                        console.log("Deleted: ");
-                        flag = 0;
-                        customJson[increment] = (this.$scope.previousAcademicInformation[i]);
-                        customJson[increment].dbAction = 'D';
-                        increment++;
-                    }
-                }
-                for(let i = 0; i < comparingArrayLength; i++){
-                    if(json.entries[0]['academic'][i].id == null){
-                        console.log("Created: ");
-                        customJson[increment] = json.entries[0]['academic'][i];
-                        customJson[increment].dbAction = 'C';
-                        increment++;
-                    }
-                }
-                console.log("customJson");
-                    console.log(customJson);
-
-                    this.academicInformationService.saveAcademicInformation(customJson)
+                    this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
-
+                            this.getAcademicInformation();
+                            this.enableViewMode('academic');
                         });
                 });
-            this.enableViewMode('academic');
         }
 
-        private find(id: number){
-            let found = null;
-            for(let i = 0; i < this.$scope.previousAcademicInformation.length; i++){
-                if(id == this.$scope.previousAcademicInformation[i].id){
-                    found = this.$scope.previousAcademicInformation[i];
-                    break;
+        private ObjectDetectionForCRUDOperation() {
+            console.log("9");
+            let copyOfAcademic: any;
+            copyOfAcademic = angular.copy(this.$scope.entry.academic);
+            let comparingArrayLength: number = copyOfAcademic.length;
+            let baseArrayLength: number = this.$scope.previousAcademicInformation.length;
+            let flag: number = 0;
+
+            for (let i = 0; i < baseArrayLength; i++) {
+                for (let j = 0; j < comparingArrayLength; j++) {
+                    if (this.$scope.previousAcademicInformation[i].id == copyOfAcademic[j].id) {
+                        console.log("Equality Check For: ");
+                        if (this.objectEqualityTest("academic", this.$scope.previousAcademicInformation[i], copyOfAcademic[i]) == true) {
+                            console.log("No Change");
+                            copyOfAcademic[i].dbAction = "No Change";
+                        }
+                        else {
+                            console.log("Change");
+                            copyOfAcademic[i].dbAction = "Update";
+                        }
+                        flag = 1;
+                        break;
+                    }
+                    else {
+                        flag = 0;
+                    }
+                }
+                if (flag == 0) {
+                    console.log("Deleted: ");
+                    flag = 0;
+                    copyOfAcademic.push(this.$scope.previousAcademicInformation[i]);
                 }
             }
-            return found;
+            for (let i = 0; i < comparingArrayLength; i++) {
+                if (this.$scope.entry.academic[i].id == null) {
+                    console.log("Created: ");
+                    copyOfAcademic[i].dbAction = "Create";
+                }
+            }
+            return copyOfAcademic;
+        }
+
+        private objectEqualityTest(objType: string, baseObj: any, comparingObj: any): boolean{
+            if(objType == "academic") {
+                if (baseObj.academicDegreeName.name == comparingObj.academicDegreeName.name && baseObj.academicInstitution == comparingObj.academicInstitution && baseObj.academicPassingYear == comparingObj.academicPassingYear) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         }
 
         private submitPublicationForm() {
@@ -990,6 +999,7 @@ module ums {
         }
 
         private setSavedValuesOfAcademicForm(academicInformation: any) {
+            this.$scope.entry.academic = Array<IAcademicInformationModel>();
             for (let i = 0; i < academicInformation.length; i++) {
                 this.$scope.entry.academic[i] = academicInformation[i];
                 this.$scope.entry.academic[i].academicDegreeName = this.$scope.degreeNameMap[academicInformation[i].academicDegreeName];

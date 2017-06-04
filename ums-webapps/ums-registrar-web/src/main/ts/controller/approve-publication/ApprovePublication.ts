@@ -90,11 +90,11 @@ module ums {
         }
 
         private getPublicationList(publicationStatus: string){
+            this.$scope.data.totalRecord = 10;
             this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
                 publicationStatus, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
                     this.$scope.publications = publicationInformation;
                     this.$scope.totalPendingPublications = this.$scope.publications.length;
-                    this.$scope.data.totalRecord = this.$scope.publications.length;
                 });
             console.log("totalItems: " + this.$scope.data.totalRecord);
         }
@@ -140,11 +140,15 @@ module ums {
 
         private changePublicationList() {
             this.getPublicationList(this.$scope.data.publicationListViewCategory);
-            if(this.$scope.data.publicationListViewCategory == '1' || this.$scope.data.publicationListViewCategory == '2'){
+            this.modifyViewOnDifferentPublicationListCategory();
+        }
+
+        private modifyViewOnDifferentPublicationListCategory() {
+            if (this.$scope.data.publicationListViewCategory == '1' || this.$scope.data.publicationListViewCategory == '2') {
                 this.$scope.showActionTakenDate = true;
                 this.$scope.showActionButtons = false;
             }
-            else{
+            else {
                 this.$scope.showActionButtons = true;
                 this.$scope.showActionTakenDate = false;
             }

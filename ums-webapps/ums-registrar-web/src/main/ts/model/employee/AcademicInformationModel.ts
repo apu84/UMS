@@ -5,6 +5,6 @@ module ums{
         academicDegreeName: IDegreeType;
         academicInstitution: string;
         academicPassingYear: string;
-        dbAction: "";
+        dbAction: string;
     }
 }
