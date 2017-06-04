@@ -61,6 +61,12 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     return id;
   }
 
+  @Override
+  public List<PaymentStatus> getByTransactionId(String pTransactionId) {
+    String query = SELECT_ALL + "WHERE TRANSACTION_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pTransactionId}, new PaymentStatusRowMapper());
+  }
+
   private List<Object[]> getUpdateParamList(List<MutablePaymentStatus> pMutablePaymentStatuse) {
     List<Object[]> params = new ArrayList<>();
     for(PaymentStatus paymentStatus : pMutablePaymentStatuse) {

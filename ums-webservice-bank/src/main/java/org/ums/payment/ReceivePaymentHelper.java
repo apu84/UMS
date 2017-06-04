@@ -41,6 +41,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   private PaymentAccountsMappingManager mPaymentAccountsMappingManager;
   @Autowired
   private StudentManager mStudentManager;
+  @Autowired
+  private PaymentStatusManager mPaymentStatusManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -49,6 +51,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
 
   /**
    * Transaction always needs to be in a public method
+   * 
    * @param pStudentId
    * @param pJsonObject
    * @return
@@ -167,6 +170,9 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
               && update.getStudentId().equalsIgnoreCase(latestPayment.getStudentId())).collect(Collectors.toList());
       Validate.isTrue(matchedPayments.size() == 1);
     });
+
+    Validate.isTrue(mPaymentStatusManager.getByTransactionId(latestPayments.get(0).getTransactionId()).size() == 0,
+        "Transaction is already received");
   }
 
   @Override
