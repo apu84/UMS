@@ -1,5 +1,6 @@
 package org.ums.builder;
 
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -10,11 +11,14 @@ import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
+import org.ums.persistent.model.library.PersistentPublisher;
+import org.ums.persistent.model.library.PersistentRecord;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -30,7 +34,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+      final LocalCache pLocalCache) {
     pBuilder.add("mfnNo", pReadOnly.getId().toString());
     pBuilder.add("language", pReadOnly.getLanguage() == null ? 101101 : pReadOnly.getLanguage().getId());
     pBuilder.add("materialType", pReadOnly.getMaterialType() == null ? 101101 : pReadOnly.getMaterialType().getId());
@@ -102,51 +106,51 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
           .getInt("bindingType")));
       pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
           .getInt("acqType")));
-      if (pJsonObject.containsKey("frequency"))
+      if(pJsonObject.containsKey("frequency"))
         pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency.get(pJsonObject
             .getInt("frequency")));
       // pJsonObject.getInt("mfn");
-    } catch (Exception ex) {
+    } catch(Exception ex) {
       pMutable.setFrequency(null);
     }
 
     pMutable.setLanguage(Language.get(pJsonObject.getInt("language")));
     pMutable.setTitle(pJsonObject.getString("title"));
-    if (pJsonObject.containsKey("subTitle"))
+    if(pJsonObject.containsKey("subTitle"))
       pMutable.setSubTitle(pJsonObject.getString("subTitle"));
 
-    if (pJsonObject.containsKey("gmd"))
+    if(pJsonObject.containsKey("gmd"))
       pMutable.setGmd(pJsonObject.getString("gmd"));
-    if (pJsonObject.containsKey("seriesTitle"))
+    if(pJsonObject.containsKey("seriesTitle"))
       pMutable.setSeriesTitle(pJsonObject.getString("seriesTitle"));
-    if (pJsonObject.containsKey("volumeNo"))
+    if(pJsonObject.containsKey("volumeNo"))
       pMutable.setVolumeNo(pJsonObject.getString("volumeNo"));
-    if (pJsonObject.containsKey("volumeTitle"))
+    if(pJsonObject.containsKey("volumeTitle"))
       pMutable.setVolumeTitle(pJsonObject.getString("volumeTitle"));
 
-    if (pJsonObject.containsKey("serialIssueNo"))
+    if(pJsonObject.containsKey("serialIssueNo"))
       pMutable.setSerialIssueNo(pJsonObject.getString("serialIssueNo"));
-    if (pJsonObject.containsKey("serialNumber"))
+    if(pJsonObject.containsKey("serialNumber"))
       pMutable.setSerialNumber(pJsonObject.getString("serialNumber"));
-    if (pJsonObject.containsKey("serialSpecial"))
+    if(pJsonObject.containsKey("serialSpecial"))
       pMutable.setSerialSpecial(pJsonObject.getString("serialSpecial"));
-    if (pJsonObject.containsKey("libraryLacks"))
+    if(pJsonObject.containsKey("libraryLacks"))
       pMutable.setLibraryLacks(pJsonObject.getString("libraryLacks"));
-    if (pJsonObject.containsKey("changedTitle"))
+    if(pJsonObject.containsKey("changedTitle"))
       pMutable.setChangedTitle(pJsonObject.getString("changedTitle"));
-    if (pJsonObject.containsKey("isbn"))
+    if(pJsonObject.containsKey("isbn"))
       pMutable.setIsbn(pJsonObject.getString("isbn"));
-    if (pJsonObject.containsKey("issn"))
+    if(pJsonObject.containsKey("issn"))
       pMutable.setIssn(pJsonObject.getString("issn"));
-    if (pJsonObject.containsKey("corpAuthorMain"))
+    if(pJsonObject.containsKey("corpAuthorMain"))
       pMutable.setCorpAuthorMain(pJsonObject.getString("corpAuthorMain"));
-    if (pJsonObject.containsKey("corpSubBody"))
+    if(pJsonObject.containsKey("corpSubBody"))
       pMutable.setCorpSubBody(pJsonObject.getString("corpSubBody"));
-    if (pJsonObject.containsKey("corpCityCountry"))
+    if(pJsonObject.containsKey("corpCityCountry"))
       pMutable.setCorpCityCountry(pJsonObject.getString("corpCityCountry"));
-    if (pJsonObject.containsKey("edition"))
+    if(pJsonObject.containsKey("edition"))
       pMutable.setEdition(pJsonObject.getString("edition"));
-    if (pJsonObject.containsKey("translateTitleEdition"))
+    if(pJsonObject.containsKey("translateTitleEdition"))
       pMutable.setTranslateTitleEdition(pJsonObject.getString("translateTitleEdition"));
 
     pMutable.setCallNo(pJsonObject.getString("callNo"));
@@ -156,30 +160,30 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     ImprintDto imprintDto = new ImprintDto();
     JsonObject imprintObject = (JsonObject) (pJsonObject.get("imprint"));
-    if (imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0")
+    if(imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0")
         && !imprintObject.getString("publisher").equals(""))
       imprintDto.setPublisher(mPublisherManager.get(Long.valueOf(imprintObject.getString("publisher"))));
 
-    if (pJsonObject.containsKey("placeOfPublication"))
+    if(pJsonObject.containsKey("placeOfPublication"))
       imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
-    if (pJsonObject.containsKey("yearDateOfPublication"))
+    if(pJsonObject.containsKey("yearDateOfPublication"))
       imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
-    if (pJsonObject.containsKey("copyRightDate"))
+    if(pJsonObject.containsKey("copyRightDate"))
       imprintDto.setCopyRightDate(imprintObject.getString("copyRightDate"));
 
     pMutable.setImprint(imprintDto);
-    if (pJsonObject.containsKey("materialType"))
+    if(pJsonObject.containsKey("materialType"))
       pMutable.setMaterialType(MaterialType.get(pJsonObject.getInt("materialType")));
-    if (pJsonObject.containsKey("status"))
+    if(pJsonObject.containsKey("status"))
       pMutable.setRecordStatus(RecordStatus.get(pJsonObject.getInt("status")));
-    if (pJsonObject.containsKey("keywords"))
+    if(pJsonObject.containsKey("keywords"))
       pMutable.setKeyWords(pJsonObject.getString("keywords"));
 
-    if (pJsonObject.containsKey("contributorJsonString"))
+    if(pJsonObject.containsKey("contributorJsonString"))
       pMutable.setContributorJsonString(pJsonObject.getString("contributorJsonString"));
     pMutable.setSubjectJsonString(pJsonObject.getString("subjectJsonString"));
     pMutable.setNoteJsonString(pJsonObject.getString("noteJsonString"));
-    if (pJsonObject.containsKey("physicalDescriptionString"))
+    if(pJsonObject.containsKey("physicalDescriptionString"))
       pMutable.setPhysicalDescriptionString(pJsonObject.getString("physicalDescriptionString"));
   }
 }

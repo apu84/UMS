@@ -13,11 +13,12 @@ import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.UGRegistrationResult;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.enums.CourseRegType;
 import org.ums.message.MessageResource;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.Notifier;
+import org.ums.usermanagement.user.UserManager;
 
 public class CourseMaterialNotifier extends AbstractSectionPermission {
   private Logger mLogger = LoggerFactory.getLogger(CourseMaterialNotifier.class);

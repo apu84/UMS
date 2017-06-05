@@ -128,19 +128,21 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
         .filter((application) -> application.getCourse().getCourseType().equals(CourseType.SESSIONAL))
         .collect(Collectors.toList());
 
-    Optional<UGFee> theoryFee = ugFees.stream().filter(
+    Optional<UGFee> theoryFee = semesterFees.stream().filter(
         (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.THEORY_REPEATER.toString()))
         .findFirst();
-    Optional<UGFee> sessionalFee = ugFees.stream().filter(
+    Optional<UGFee> sessionalFee = semesterFees.stream().filter(
         (fee) -> fee.getFeeCategory().getFeeId().equalsIgnoreCase(FeeCategory.Categories.SESSIONAL_REPEATER.toString()))
         .findFirst();
     if(theoryFee.isPresent()) {
-      theoryFee.get().edit().setAmount(theoryFee.get().getAmount().multiply(new BigDecimal(theory.size())));
-      ugFees.add(theoryFee.get());
+      MutableUGFee theoryFeeRepeater = theoryFee.get().edit();
+      theoryFeeRepeater.setAmount(theoryFee.get().getAmount().multiply(new BigDecimal(theory.size())));
+      ugFees.add(theoryFeeRepeater);
     }
     if(sessionalFee.isPresent()) {
-      sessionalFee.get().edit().setAmount(sessionalFee.get().getAmount().multiply(new BigDecimal(sessional.size())));
-      ugFees.add(sessionalFee.get());
+      MutableUGFee sessionalFeeRepeater = sessionalFee.get().edit();
+      sessionalFeeRepeater.setAmount(sessionalFee.get().getAmount().multiply(new BigDecimal(sessional.size())));
+      ugFees.add(sessionalFeeRepeater);
     }
     UGFees fees = new UGFees(ugFees);
     fees.setUGLateFee(getLateFee(pSemesterId, LateFee.AdmissionType.READMISSION));
@@ -177,6 +179,29 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
         mReadmissionApplicationManager.getReadmissionApplication(pSemesterId, pStudentId);
     return applications != null && applications.size() > 0 ? UGSemesterFeeResponse.READMISSION_APPLIED
         : UGSemesterFeeResponse.READMISSION_NOT_APPLIED;
+  }
+
+  @Override
+  public UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withInAdmissionSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        getFee(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION, pStudentId, pSemesterId);
+  }
+
+  @Override
+  public UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withinFirstInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_FIRST_INSTALLMENT, pStudentId,
+        pSemesterId);
+  }
+
+  @Override
+  public UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withinSecondInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_SECOND_INSTALLMENT, pStudentId,
+        pSemesterId);
   }
 
   private Optional<UGFee> dropFee(String pStudentId, Integer pSemesterId) {
@@ -224,11 +249,6 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
 
   LateFeeManager getLateFeeManager() {
     return mLateFeeManager;
-  }
-
-  @Override
-  StudentRecordManager getStudentRecordManager() {
-    return mStudentRecordManager;
   }
 
   @Override

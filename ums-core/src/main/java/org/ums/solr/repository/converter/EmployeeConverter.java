@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.User;
 import org.ums.solr.repository.document.EmployeeDocument;
 
 // Sample converter, Only when @SimpleConverter is not sufficient

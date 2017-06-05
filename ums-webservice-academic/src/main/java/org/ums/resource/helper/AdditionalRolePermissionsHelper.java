@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.AdditionalRolePermissionsBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.AdditionalRolePermissions;
-import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
-import org.ums.manager.AdditionalRolePermissionsManager;
+import org.ums.usermanagement.permission.AdditionalRolePermissions;
+import org.ums.usermanagement.permission.MutableAdditionalRolePermissions;
+import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
 import org.ums.manager.NavigationManager;
-import org.ums.persistent.model.PersistentAdditionalRolePermissions;
+import org.ums.usermanagement.permission.PersistentAdditionalRolePermissions;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;

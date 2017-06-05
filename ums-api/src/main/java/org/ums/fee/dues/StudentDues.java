@@ -8,7 +8,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 
 public interface StudentDues extends Serializable, EditType<MutableStudentDues>, LastModifier, Identifier<Long> {

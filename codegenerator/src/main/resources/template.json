@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "CertificateStatus",
-    "package": "org.ums.fee.certificate",
+    "name": "PaymentStatus",
+    "package": "org.ums.fee.accounts",
     "fields": [
       {
         "id": {
@@ -10,77 +10,22 @@
         }
       },
       {
-        "feeCategory": {
-          "type": "Ref",
-          "reference": {
-            "name": "FeeCategory",
-            "package": "org.ums.fee",
-            "id": {
-              "type": "String"
-            },
-            "manager": {
-              "name": "FeeCategoryManager",
-              "package": "org.ums.fee"
-            }
-          }
-        }
+        "account": "String"
       },
       {
         "transactionId": "String"
       },
       {
-        "student": {
-          "type": "Ref",
-          "reference": {
-            "name": "Student",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "Integer"
-            },
-            "manager": {
-              "name": "SemesterManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "methodOfPayment": "Integer"
       },
       {
-        "semester": {
-          "type": "Ref",
-          "reference": {
-            "name": "Semester",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "Integer"
-            },
-            "manager": {
-              "name": "StudentManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "paymentComplete": "boolean"
       },
       {
-        "processedOn": "Date"
+        "receivedOn": "Date"
       },
       {
-        "status": "boolean"
-      },
-      {
-        "user": {
-          "type": "Ref",
-          "reference": {
-            "name": "User",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "String"
-            },
-            "manager": {
-              "name": "UserManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "completedOn": "Date"
       }
     ]
   }

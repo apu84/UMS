@@ -9,6 +9,7 @@ import org.ums.manager.DepartmentManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
+import org.ums.usermanagement.user.User;
 
 import java.util.Date;
 

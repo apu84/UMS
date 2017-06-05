@@ -14,8 +14,6 @@ public interface MutableReadmissionApplication extends ReadmissionApplication, E
 
   void setAppliedOn(Date pAppliedOn);
 
-  void setVerifiedOn(Date pVerifiedOn);
-
   void setSemester(Semester pSemester);
 
   void setSemesterId(Integer pSemesterId);

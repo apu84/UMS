@@ -19,13 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
-import org.ums.domain.model.immutable.Permission;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.permission.Permission;
+import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
-import org.ums.domain.model.mutable.MutableUser;
+import org.ums.usermanagement.user.MutableUser;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.manager.ContentManager;
-import org.ums.manager.PermissionManager;
+import org.ums.usermanagement.permission.PermissionManager;
 
 import java.util.*;
 

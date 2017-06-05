@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.apache.shiro.SecurityUtils;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
+import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.certificate.MutableCertificateStatus;
 import org.ums.fee.certificate.PersistentCertificateStatus;
@@ -28,6 +30,8 @@ public class PostPaymentActions extends StudentPaymentDaoDecorator {
         mutable.setStudentId(payment.getStudentId());
         mutable.setSemesterId(payment.getSemesterId());
         mutable.setTransactionId(payment.getTransactionId());
+        mutable.setUserId(SecurityUtils.getSubject().getPrincipal().toString());
+        mutable.setStatus(CertificateStatus.Status.APPLIED);
         certificateStatusList.add(mutable);
       }
     });

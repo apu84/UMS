@@ -47,6 +47,6 @@ public class Readmission extends Resource {
   }
 
   private String getUserId() {
-    return SecurityUtils.getSubject().toString();
+    return SecurityUtils.getSubject().getPrincipal().toString();
   }
 }

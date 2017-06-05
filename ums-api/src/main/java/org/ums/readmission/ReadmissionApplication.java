@@ -18,8 +18,6 @@ public interface ReadmissionApplication extends Serializable, EditType<MutableRe
 
   Date getAppliedOn();
 
-  Date getVerifiedOn();
-
   Semester getSemester();
 
   Integer getSemesterId();

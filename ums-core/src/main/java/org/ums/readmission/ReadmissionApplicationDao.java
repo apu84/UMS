@@ -15,12 +15,12 @@ import com.google.common.collect.Lists;
 
 public class ReadmissionApplicationDao extends ReadmissionApplicationDaoDecorator {
   String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, COURSE_ID, STATUS, APPLIED_ON, VERIFIED_ON, LAST_MODIFIED FROM READMISSION_APPLICATION";
+      "SELECT ID, STUDENT_ID, SEMESTER_ID, COURSE_ID, STATUS, APPLIED_ON, LAST_MODIFIED FROM READMISSION_APPLICATION ";
   String INSERT_ALL =
-      "INSERT INTO READMISSION_APPLICATION(STUDENT_ID, SEMESTER_ID, COURSE_ID, STATUS, APPLIED_ON, VERIFIED_ON, LAST_MODIFIED) "
-          + "VALUES (?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+      "INSERT INTO READMISSION_APPLICATION(STUDENT_ID, SEMESTER_ID, COURSE_ID, STATUS, APPLIED_ON, LAST_MODIFIED, ID) "
+          + "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ", ?)";
   String UPDATE_ALL = "UPDATE READMISSION_APPLICATION SET STUDENT_ID = ?, SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, "
-      + "APPLIED_ON = ?, VERIFIED_ON = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM READMISSION_APPLICATION ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -79,7 +79,7 @@ public class ReadmissionApplicationDao extends ReadmissionApplicationDaoDecorato
   public List<Long> create(List<MutableReadmissionApplication> pMutableList) {
     List<Object[]> params = getUpdateParamArray(pMutableList, true);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);
-    return params.stream().map(param -> (Long) param[0]).collect(Collectors.toList());
+    return params.stream().map(param -> (Long) param[param.length-1]).collect(Collectors.toList());
   }
 
   private List<Object[]> getUpdateParamArray(List<MutableReadmissionApplication> pReadmissionApplications,
@@ -87,8 +87,7 @@ public class ReadmissionApplicationDao extends ReadmissionApplicationDaoDecorato
     List<Object[]> params = new ArrayList<>();
     for(ReadmissionApplication pApplication : pReadmissionApplications) {
       params.add(new Object[] {pApplication.getStudentId(), pApplication.getSemesterId(), pApplication.getCourseId(),
-          pApplication.getApplicationStatus().getId(), pApplication.getAppliedOn(), pApplication.getVerifiedOn(),
-          pCreate ? mIdGenerator.getNumericId() : pApplication.getId()});
+          pApplication.getApplicationStatus().getId(), pCreate ? mIdGenerator.getNumericId() : pApplication.getId()});
     }
     return params;
   }
@@ -97,14 +96,12 @@ public class ReadmissionApplicationDao extends ReadmissionApplicationDaoDecorato
     @Override
     public ReadmissionApplication mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableReadmissionApplication application = new PersistentReadmissionApplication();
+      application.setId(rs.getLong("ID"));
       application.setSemesterId(rs.getInt("SEMESTER_ID"));
       application.setStudentId(rs.getString("STUDENT_ID"));
       application.setCourseId(rs.getString("COURSE_ID"));
       application.setApplicationStatus(ReadmissionApplication.Status.get(rs.getInt("STATUS")));
       application.setAppliedOn(rs.getTimestamp("APPLIED_ON"));
-      if(rs.getObject("VERIFIED_ON") != null) {
-        application.setVerifiedOn(rs.getTimestamp("VERIFIED_ON"));
-      }
       application.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<ReadmissionApplication> atomicReference = new AtomicReference<>(application);
       return atomicReference.get();

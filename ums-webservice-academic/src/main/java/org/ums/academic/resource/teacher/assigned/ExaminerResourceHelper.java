@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.exceptions.ValidationException;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.manager.ExaminerManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.model.PersistentExaminer;
 

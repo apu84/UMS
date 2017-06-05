@@ -4,11 +4,11 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

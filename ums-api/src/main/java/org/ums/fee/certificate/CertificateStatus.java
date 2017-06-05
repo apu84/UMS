@@ -5,9 +5,8 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
-import org.ums.fee.FeeType;
 
 import java.io.Serializable;
 import java.util.*;

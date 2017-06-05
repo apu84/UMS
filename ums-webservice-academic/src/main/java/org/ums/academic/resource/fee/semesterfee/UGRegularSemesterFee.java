@@ -33,8 +33,6 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Autowired
   private InstallmentStatusManager mInstallmentStatusManager;
   @Autowired
-  private StudentRecordManager mStudentRecordManager;
-  @Autowired
   private UGFeeManager mUgFeeManager;
   @Autowired
   private LateFeeManager mLateFeeManager;
@@ -118,17 +116,35 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   }
 
   @Override
+  public UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withInAdmissionSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        getFee(pStudentId, pSemesterId), Parameter.ParameterName.REGUALR_ADMISSION, pStudentId, pSemesterId);
+  }
+
+  @Override
+  public UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withinFirstInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_FIRST_INSTALLMENT, pStudentId,
+        pSemesterId);
+  }
+
+  @Override
+  public UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
+    // TODO: Validate payment request
+    return !withinSecondInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
+        secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_SECOND_INSTALLMENT, pStudentId,
+        pSemesterId);
+  }
+
+  @Override
   ParameterSettingManager getParameterSettingManager() {
     return mParameterSettingManager;
   }
 
   LateFeeManager getLateFeeManager() {
     return mLateFeeManager;
-  }
-
-  @Override
-  StudentRecordManager getStudentRecordManager() {
-    return mStudentRecordManager;
   }
 
   @Override

@@ -1,7 +1,6 @@
 package org.ums.security.authentication;
 
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.Validate;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
@@ -16,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
-import org.ums.domain.model.immutable.Permission;
-import org.ums.domain.model.immutable.User;
-import org.ums.manager.PermissionManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.permission.Permission;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.permission.PermissionManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.security.bearertoken.ProfileRealm;
 
 import java.util.ArrayList;

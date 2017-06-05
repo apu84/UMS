@@ -6,13 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.decorator.BinaryContentDecorator;
 import org.ums.domain.model.immutable.BearerAccessToken;
-import org.ums.domain.model.immutable.CourseTeacher;
-import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
 import org.ums.message.MessageResource;
+import org.ums.usermanagement.user.UserManager;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;

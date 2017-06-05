@@ -25,7 +25,7 @@ public class PersistentPublisher implements MutablePublisher {
 
   private Long mId;
   private String mName;
-  private int mCountryId;
+  private Integer mCountryId;
   private Country mCountry;
   private String mContactPerson;
   private String mPhoneNumber;
@@ -74,12 +74,12 @@ public class PersistentPublisher implements MutablePublisher {
   }
 
   @Override
-  public void setCountryId(int pCountryId) {
+  public void setCountryId(Integer pCountryId) {
     mCountryId = pCountryId;
   }
 
   @Override
-  public int getCountryId() {
+  public Integer getCountryId() {
     return mCountryId;
   }
 

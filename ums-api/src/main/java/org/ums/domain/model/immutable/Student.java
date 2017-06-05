@@ -5,6 +5,7 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.enums.StudentStatus;
+import org.ums.usermanagement.user.User;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,16 +1,15 @@
 package org.ums.manager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ums.decorator.UserDaoDecorator;
+import org.ums.usermanagement.user.UserDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableUser;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.MutableUser;
 
 public class UserPropertyResolver extends UserDaoDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(UserPropertyResolver.class);

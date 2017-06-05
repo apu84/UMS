@@ -90,39 +90,16 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
     return UGSemesterFeeResponse.INSTALLMENT_NOT_TAKEN;
   }
 
-  @Override
-  public UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId) {
-    // TODO: Validate payment request
-    return !withInAdmissionSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        getFee(pStudentId, pSemesterId), pStudentId, pSemesterId);
-  }
-
-  @Override
-  public UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
-    // TODO: Validate payment request
-    return !withinFirstInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        firstInstallment(pStudentId, pSemesterId), pStudentId, pSemesterId);
-  }
-
-  @Override
-  public UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
-    // TODO: Validate payment request
-    return !withinSecondInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        secondInstallment(pStudentId, pSemesterId), pStudentId, pSemesterId);
-  }
-
   @Transactional
-  private UGSemesterFeeResponse payFee(UGFees fees, String pStudentId, Integer pSemesterId) {
+  UGSemesterFeeResponse payFee(UGFees fees, Parameter.ParameterName pType, String pStudentId, Integer pSemesterId) {
     Optional<LateFee> lateFee = fees.getUGLateFee();
-    Date transactionValidTill =
-        lateFee.isPresent() ? lateFee.get().getTo() : getTransactionValidTill(
-            Parameter.ParameterName.REGUALR_ADMISSION, pSemesterId);
+    Date transactionValid = lateFee.isPresent() ? lateFee.get().getTo() : getTransactionValidTill(pType, pSemesterId);
     List<MutableStudentPayment> payments = new ArrayList<>();
     for(UGFee fee : fees.getUGFees()) {
-      payments.add(createPayment(fee, pStudentId, pSemesterId, transactionValidTill));
+      payments.add(createPayment(fee, pStudentId, pSemesterId, transactionValid));
     }
     if(lateFee.isPresent()) {
-      payments.add(createPayment(lateFee.get(), pStudentId, pSemesterId, transactionValidTill));
+      payments.add(createPayment(lateFee.get(), pStudentId, pSemesterId, transactionValid));
     }
     getStudentPaymentManager().create(payments);
     return UGSemesterFeeResponse.APPLIED;
@@ -157,8 +134,6 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
   abstract ParameterSettingManager getParameterSettingManager();
 
   abstract LateFeeManager getLateFeeManager();
-
-  abstract StudentRecordManager getStudentRecordManager();
 
   abstract InstallmentSettingsManager getInstallmentSettingsManager();
 

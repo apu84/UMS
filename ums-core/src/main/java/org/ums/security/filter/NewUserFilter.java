@@ -7,13 +7,12 @@ import org.apache.shiro.util.PatternMatcher;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableUser;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.MutableUser;
 import org.ums.manager.ContentManager;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 

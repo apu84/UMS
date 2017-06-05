@@ -14,7 +14,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
+import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.MutableCertificateStatus;
@@ -51,6 +51,7 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
       pBuilder.add("processedBy", user.getName());
       pBuilder.add("processedOn", mDateFormat.format(pReadOnly.getProcessedOn()));
     }
+    pBuilder.add("status", pReadOnly.getStatus().getLabel());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
 
@@ -58,7 +59,7 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
   public void build(MutableCertificateStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject.getString("id"));
     pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-    pMutable.setStatus(CertificateStatus.Status.valueOf(pJsonObject.getString("status")));
+    pMutable.setStatus(CertificateStatus.Status.get(pJsonObject.getInt("status")));
     pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

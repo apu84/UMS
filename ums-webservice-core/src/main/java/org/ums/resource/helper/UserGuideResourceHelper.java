@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.UserGuide;
 import org.ums.domain.model.mutable.MutableUserGuide;
 import org.ums.manager.ContentManager;
 import org.ums.manager.UserGuideManager;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;

@@ -17,17 +17,16 @@ public class CertificateFeeResource extends Resource {
   CertificateFeeHelper mCertificateFeeHelper;
 
   @GET
-  @Path("/attended-semesters/{studentId}")
-  public JsonObject getDues(final @PathParam("studentId") String pStudentId) throws Exception {
-    return mCertificateFeeHelper.getAttendedSemesters(pStudentId, mUriInfo);
+  @Path("/attended-semesters")
+  public JsonObject getAttendedSemesters() throws Exception {
+    return mCertificateFeeHelper.getAttendedSemesters(getLoggedInUserId(), mUriInfo);
   }
 
   @POST
-  @Path("/apply/{studentId}/semester/{semesterId}/category/{categoryId}/")
-  public Response applyForCertificate(final @PathParam("studentId") String pStudentId,
-      final @PathParam("semesterId") Integer pSemesterId, final @PathParam("categoryId") String pCategoryId)
-      throws Exception {
-    mCertificateFeeHelper.applyForCertificate(pCategoryId, pStudentId, pSemesterId, mUriInfo);
+  @Path("/apply/semester/{semesterId}/category/{categoryId}")
+  public Response applyForCertificate(final @PathParam("semesterId") Integer pSemesterId,
+      final @PathParam("categoryId") String pCategoryId) throws Exception {
+    mCertificateFeeHelper.applyForCertificate(pCategoryId, getLoggedInUserId(), pSemesterId, mUriInfo);
     return Response.ok().build();
   }
 }
