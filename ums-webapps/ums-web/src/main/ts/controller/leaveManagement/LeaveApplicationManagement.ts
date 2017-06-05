@@ -11,12 +11,12 @@ module ums {
     pendingApplications: Array<LmsApplicationStatus>;
     pendingApplication: LmsApplicationStatus;
     applicationStatusList: Array<LmsApplicationStatus>;
-    totalLeaveDurationInDays: number;
     itemsPerPage: number;
     pageNumber: number;
     pagination: any;
     totalItems: number;
     statusModal: LmsApplicationStatus;
+    data: any;
 
 
     showStatusSection: boolean;
@@ -29,8 +29,7 @@ module ums {
     updateLeaveType: Function;
     pageChanged: Function;
     setStatusModalContent: Function;
-    fromDateSelected: Function;
-    toDateSelected: Function;
+    dateChanged: Function;
 
   }
 
@@ -53,7 +52,8 @@ module ums {
 
       $scope.leaveApplication = <LmsApplication>{};
       $scope.showStatusSection = false;
-      $scope.totalLeaveDurationInDays = 0;
+      $scope.data = {};
+      $scope.data.totalLeaveDurationInDays = 0;
       $scope.pageNumber = 1;
       $scope.pagination = {};
       $scope.pagination.currentPage = 1;
@@ -66,12 +66,23 @@ module ums {
       $scope.updateLeaveType = this.updateLeaveType.bind(this);
       $scope.pageChanged = this.pageChanged.bind(this);
       $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
-      $scope.fromDateSelected = this.fromDateSelected.bind(this);
+      $scope.dateChanged = this.dateChanged.bind(this);
 
+      this.initializeDatePickers();
 
       this.getLeaveTypes();
       this.getRemainingLeaves();
       this.getPendingApplications();
+    }
+
+
+    private initializeDatePickers() {
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 200);
     }
 
     private getLeaveTypes() {
@@ -83,19 +94,12 @@ module ums {
       });
     }
 
-    private fromDateSelected(fromDate: string) {
-      console.log("In the form date selected");
-      var momentFromDate: any = moment(fromDate, "DD/MM/YYYY");
-      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
-        var pendingFromDate: any = moment(this.$scope.pendingApplications[i].fromDate, "DD/MM/YYYY");
-        var pendingToDate: any = moment(this.$scope.pendingApplications[i].toDate, "DD/MM/YYYY");
-        if (moment(momentFromDate).isBetween(pendingFromDate, pendingToDate)) {
-          this.notify.error("Date overlap is not allowed");
-          this.$scope.leaveApplication.fromDate = "";
-          break;
-        }
-      }
+    private dateChanged() {
+      console.log("In the date changed");
+      if (this.$scope.leaveApplication.fromDate != null && this.$scope.leaveApplication.toDate != null)
+        this.getTotalDuration();
     }
+
 
     private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
       this.$scope.statusModal = lmsApplicationStatus;
@@ -109,10 +113,17 @@ module ums {
     private getTotalDuration() {
       console.log("In total duration");
       if (this.$scope.leaveApplication.toDate != null && this.$scope.leaveApplication.fromDate != null) {
-        var fromDate = new Date(this.$scope.leaveApplication.fromDate);
-        var toDate = new Date(this.$scope.leaveApplication.toDate);
-        var timeDiff = Math.abs(toDate.getTime() - fromDate.getTime());
-        this.$scope.totalLeaveDurationInDays = Math.ceil((timeDiff / (1000 * 3600 * 24)));
+        // var fromDate = new Date(this.$scope.leaveApplication.fromDate);
+        var fromDate: any = moment(this.$scope.leaveApplication.fromDate);
+        // var toDate = new Date(this.$scope.leaveApplication.toDate);
+        var toDate: any = moment(this.$scope.leaveApplication.toDate);
+        var timeDiff: any = toDate - fromDate;
+        console.log("***");
+        console.log(moment("12/06/2017").diff("22/06/2017", 'days'));
+        console.log(fromDate.diff(toDate, 'days'));
+        //  console.log(fromDate.diff(toDate));
+
+        this.$scope.data.totalLeaveDurationInDays = timeDiff;
       }
     }
 
@@ -138,6 +149,7 @@ module ums {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
           this.$scope.leaveApplication = <LmsApplication>{};
           this.$scope.leaveType = this.$scope.leaveTypes[0];
+          this.$scope.data.totalLeaveDurationInDays = 0;
         });
       });
     }

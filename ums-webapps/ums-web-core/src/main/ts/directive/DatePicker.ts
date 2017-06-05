@@ -1,30 +1,28 @@
 module ums {
   class DatePicker implements ng.IDirective {
-    static $inject=['$timeout'];
+    static $inject = ['$timeout'];
+
     constructor(private $timeout: ng.ITimeoutService) {
 
     }
 
-    public restrict: string = "A";
-    public scope={
-      model:'=dateModel',
-      format:'=dateFormat',
-      disable:'=disable'
+    public restrict: string = "EA";
+    public scope = {
+      model: '=dateModel',
+      format: '=dateFormat',
+      disable: '=disable',
+      dateChanged: '&dateChanged'
     };
 
-    public link = ($scope: any, element: any, attribute:any) => {
+    public link = ($scope: any, element: any, attribute: any) => {
 
-      console.log("attributes");
-      console.log(attribute.disable);
-      console.log("scope");
-      console.log($scope);
-      if($scope.disable==true){
+      if ($scope.disable == true) {
         $('.datepicker').disableSelection();
       }
       this.$timeout(() => {
 
         $('.datepicker-default').datepicker({
-          dateFormat:'dd/mm/yy'
+          dateFormat: 'dd/mm/yy'
         });
 
         $('.datepicker-default').on('change', function () {
@@ -36,7 +34,7 @@ module ums {
 
     };
 
-    public templateUrl:string="./views/directive/date-picker.html";
+    public templateUrl: string = "./views/directive/date-picker.html";
   }
-  UMS.directive('datePicker', ['$timeout', ($timeout:ng.ITimeoutService) => new DatePicker($timeout)]);
+  UMS.directive('datePicker', ['$timeout', ($timeout: ng.ITimeoutService) => new DatePicker($timeout)]);
 }
