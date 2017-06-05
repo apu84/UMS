@@ -37,4 +37,14 @@ public class AwardInformationCache extends
   public int deleteAwardInformation(String pEmployeeId) {
     return getManager().deleteAwardInformation(pEmployeeId);
   }
+
+  @Override
+  public int updateAwardInformation(List<MutableAwardInformation> pAwardInformation) {
+    return getManager().updateAwardInformation(pAwardInformation);
+  }
+
+  @Override
+  public int deleteAwardInformation(List<MutableAwardInformation> pAwardInformation) {
+    return getManager().deleteAwardInformation(pAwardInformation);
+  }
 }

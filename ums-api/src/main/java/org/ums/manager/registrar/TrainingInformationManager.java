@@ -15,4 +15,8 @@ public interface TrainingInformationManager extends
 
   int deleteTrainingInformation(final String pEmployeeId);
 
+  int updateTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation);
+
+  int deleteTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation);
+
 }

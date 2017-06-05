@@ -23,6 +23,10 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
 
   static String DELETE_ALL = "DELETE FROM EMP_AWARD_INFO";
 
+  static String UPDATE_ALL =
+      "UPDATE EMP_AWARD_INFO SET AWARD_NAME=?, INSTITUTION=?, AWARDED_YEAR=?, AWARD_SHORT_DESCRIPTION=?, LAST_MODIFIED="
+          + getLastModifiedSql() + " ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentAwardInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -56,6 +60,36 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   public List<AwardInformation> getEmployeeAwardInformation(final String employeeId) {
     String query = GET_ONE + " Where employee_id = ?";
     return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAwardInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int updateAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
+    String query = UPDATE_ALL + "WHERE EMPLOYEE_ID = ? and ID = ? ";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableAwardInformation)).length;
+  }
+
+  private List<Object[]> getUpdateParams(List<MutableAwardInformation> pMutableAwardInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(AwardInformation pAwardInformation : pMutableAwardInformation) {
+      params.add(new Object[] {pAwardInformation.getAwardName(), pAwardInformation.getAwardInstitute(),
+          pAwardInformation.getAwardedYear(), pAwardInformation.getAwardShortDescription(),
+          pAwardInformation.getEmployeeId(), pAwardInformation.getId()});
+    }
+    return params;
+  }
+
+  @Override
+  public int deleteAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
+    String query = DELETE_ALL + "WHERE ID=? AND EMPLOYEE_ID=?";
+    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableAwardInformation)).length;
+  }
+
+  private List<Object[]> getDeleteParams(List<MutableAwardInformation> pMutableAwardInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(AwardInformation pAwardInformation : pMutableAwardInformation) {
+      params.add(new Object[] {pAwardInformation.getId(), pAwardInformation.getEmployeeId()});
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<AwardInformation> {

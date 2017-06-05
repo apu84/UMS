@@ -31,7 +31,19 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
 
   @Override
   public void build(MutableExperienceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    if(pJsonObject.containsKey("dbAction")) {
+      if(pJsonObject.getString("dbAction").equals("Update")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      }
+      else if(pJsonObject.getString("dbAction").equals("Create")) {
+        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+      }
+    }
+    else {
+      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    }
     pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
     pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
     pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));

@@ -122,8 +122,12 @@ module ums {
         degreeNames: Array<IDegreeType>;
         bloodGroups: Array<IBloodGroup>;
         publicationTypes: Array<IPublicationType>;
-        waitingForApprovalPublications: Array<IPublicationInformationModel>;
+        previousPersonalInformation: IPersonalInformationModel;
         previousAcademicInformation: Array<IAcademicInformationModel>;
+        previousPublicationInformation: Array<IPublicationInformationModel>;
+        previousTrainingInformation: Array<ITrainingInformationModel>;
+        previousAwardInformation: Array<IAwardInformationModel>;
+        previousExperienceInformation: Array<IExperienceInformationModel>;
         relations: Array<IRelation>;
         countries: Array<ICountry>;
         divisions: Array<IDivision>;
@@ -235,8 +239,6 @@ module ums {
                 experience: Array<IExperienceInformationModel>()
             };
 
-            $scope.previousAcademicInformation = Array<IAcademicInformationModel>();
-
             $scope.data = {
                 supOptions: "",
                 borderColor: "",
@@ -246,8 +248,6 @@ module ums {
 
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
-
-            $scope.waitingForApprovalPublications = Array<IPublicationInformationModel>();
 
             $scope.gender = this.registrarConstants.genderTypes;
             $scope.religions = this.registrarConstants.religionTypes;
@@ -312,12 +312,12 @@ module ums {
             this.addDate();
             // this.changeNav('personal');
 
-            //this.getPersonalInformation();
-             this.getAcademicInformation();
-            // this.getAwardInformation();
-             this.getPublicationInformation();
-            // this.getExperienceInformation();
-            // this.getTrainingInformation();
+            this.getPersonalInformation();
+            this.getAcademicInformation();
+            this.getAwardInformation();
+            this.getPublicationInformation();
+            this.getExperienceInformation();
+            this.getTrainingInformation();
         }
 
         private enableViewMode(formName: string) {
@@ -479,7 +479,8 @@ module ums {
                     publicationPages: "",
                     appliedOn: "",
                     actionTakenOn: "",
-                    rowNumber: null
+                    rowNumber: null,
+                    dbAction: ""
                 };
                 this.$scope.entry.publication.push(publicationEntry);
             }
@@ -492,7 +493,7 @@ module ums {
                     trainingInstitution: "",
                     trainingFrom: "",
                     trainingTo: "",
-                    trainingDuration: ""
+                    dbAction: ""
                 };
                 this.$scope.entry.training.push(trainingEntry);
             }
@@ -504,7 +505,8 @@ module ums {
                     awardName: "",
                     awardInstitute: "",
                     awardedYear: "",
-                    awardShortDescription: ""
+                    awardShortDescription: "",
+                    dbAction: ""
                 };
                 this.$scope.entry.award.push(awardEntry);
             }
@@ -516,7 +518,8 @@ module ums {
                     experienceInstitution: "",
                     experienceDesignation: "",
                     experienceFrom: "",
-                    experienceTo: ""
+                    experienceTo: "",
+                    dbAction: ""
                 };
                 this.$scope.entry.experience.push(experienceEntry);
             }
@@ -541,64 +544,34 @@ module ums {
             }
         }
 
-        private convertToJson(convertThis: string, obj?: any): ng.IPromise<any> {
+        private convertToJson(convertThis: string, obj: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
             let JsonArray = [];
             let item: any = {};
 
             if (convertThis === "personal") {
-                let personalInformation = <IPersonalInformationModel> {};
-                personalInformation = this.$scope.entry.personal;
-                item['personal'] = personalInformation;
+                item['personal'] = obj;
             }
 
             else if (convertThis === "academic") {
-                if(obj == null) {
-                    console.log("I am entering in Obj Null");
-                    let academicInformation = Array<IAcademicInformationModel>();
-                    for (let i = 0; i < this.$scope.entry.academic.length; i++) {
-                        academicInformation = this.$scope.entry.academic;
-                    }
-                    item['academic'] = academicInformation;
-                }
-                else{
-                    console.log("I am entering Object Not NUll'");
-                    item['academic'] = obj;
-                }
+                item['academic'] = obj;
             }
 
             else if (convertThis === "publication") {
-                let publicationInformation = Array<IPublicationInformationModel>();
-                for (let i = 0; i < this.$scope.entry.publication.length; i++) {
-                    this.$scope.entry.publication[i].status = '0';
-                    publicationInformation = this.$scope.entry.publication;
-                }
-                item['publication'] = publicationInformation;
+                item['publication'] = obj;
             }
 
             else if (convertThis === "training") {
-                let trainingInformation = Array<ITrainingInformationModel>();
-                for (let i = 0; i < this.$scope.entry.training.length; i++) {
-                    trainingInformation = this.$scope.entry.training;
-                }
-                item['training'] = trainingInformation;
+                item['training'] = obj;
             }
 
             else if (convertThis === "award") {
-                let awardInformation = Array<IAwardInformationModel>();
-                for (let i = 0; i < this.$scope.entry.award.length; i++) {
-                    awardInformation = this.$scope.entry.award;
-                }
-                item['award'] = awardInformation;
+                item['award'] = obj;
             }
 
             else if (convertThis === "experience") {
-                let experienceInformation = Array<IExperienceInformationModel>();
-                for (let i = 0; i < this.$scope.entry.experience.length; i++) {
-                    experienceInformation = this.$scope.entry.experience;
-                }
-                item['experience'] = experienceInformation;
+                item['experience'] = obj;
             }
 
             JsonArray.push(item);
@@ -795,7 +768,6 @@ module ums {
             this.$scope.entry.training[0].trainingName = "XYZ";
             this.$scope.entry.training[0].trainingFrom = "2016";
             this.$scope.entry.training[0].trainingTo = "2015";
-            this.$scope.entry.training[0].trainingDuration = (+this.$scope.entry.training[0].trainingTo - +this.$scope.entry.training[0].trainingFrom).toString();
 
             this.$scope.entry.award[0].awardName = "My Award";
             this.$scope.entry.award[0].awardInstitute = "Really !";
@@ -809,56 +781,54 @@ module ums {
         }
 
         private submitPersonalForm() {
-            this.convertToJson('personal')
-                .then((json: any) => {
 
-                if(this.isEmpty(this.$scope.entry.personal)){
-                    console.log("object empty");
-                    // Save operation will go here.
+            if (this.isEmpty(this.$scope.previousPersonalInformation)) {
+                console.log("object empty");
+                // Save operation will go here.
+                this.convertToJson('personal', this.$scope.entry.personal)
+                    .then((json: any) => {
+                        this.personalInformationService.savePersonalInformation(json)
+                            .then((message: any) => {
+                                this.getPersonalInformation();
+                                this.enableViewMode('personal');
+                            });
+                    });
+            }
+            else {
+                console.log("Not Empty");
+                if (this.objectEqualityTest("personal", this.$scope.previousPersonalInformation, this.$scope.entry.personal)) {
+                    this.notify.info("No Changes Detected");
                 }
-                else{
-                    console.log("Not Empty");
-
-                    if(json.entries === this.$scope.entry.personal){
-                        console.log("objects are equal");
-                    }
-                    else{
-                        console.log("objects are not equal");
-                    }
-
+                else {
+                    console.log("Changes Detected");
+                    this.convertToJson('personal', this.$scope.entry.personal)
+                        .then((json: any) => {
+                            this.personalInformationService.updatePersonalInformation(json)
+                                .then((message: any) => {
+                                    this.getPersonalInformation();
+                                    this.enableViewMode('personal');
+                                });
+                        });
                 }
-                    // this.personalInformationService.savePersonalInformation(json)
-                    //     .then((message: any) => {
-                    //
-                    //     });
-                });
-            this.enableViewMode('personal');
+
+            }
         }
 
         private isEmpty(obj: Object): boolean {
-            for (var key in obj) {
+            for (let key in obj) {
                 if (obj.hasOwnProperty(key))
                     return false;
             }
             return true;
         }
 
-        private updatePersonalForm() {
-            this.convertToJson('personal')
-                .then((json: any) => {
-                    this.personalInformationService.updatePersonalInformation(json)
-                        .then((message: any) => {
-                        });
-                });
-        }
-
         private submitAcademicForm() {
-            let copyOfAcademic = this.ObjectDetectionForCRUDOperation();
+            let academicObjects = this.ObjectDetectionForCRUDOperation("academic", this.$scope.previousAcademicInformation, this.$scope.entry.academic);
 
-            console.log("copyOfAcademic");
-            console.log(copyOfAcademic);
+            console.log("academicObjects");
+            console.log(academicObjects);
 
-            this.convertToJson('academic', copyOfAcademic)
+            this.convertToJson('academic', academicObjects)
                 .then((json: any) => {
                     this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
@@ -868,25 +838,28 @@ module ums {
                 });
         }
 
-        private ObjectDetectionForCRUDOperation() {
-            console.log("9");
-            let copyOfAcademic: any;
-            copyOfAcademic = angular.copy(this.$scope.entry.academic);
-            let comparingArrayLength: number = copyOfAcademic.length;
-            let baseArrayLength: number = this.$scope.previousAcademicInformation.length;
+        //base = this.$scope.previousAcademicInformation
+        //comparing = this.$scope.entry.academic
+
+        private ObjectDetectionForCRUDOperation(objectType: string, baseArrayOfObjects: any, comparingArrayOfObjects: any) {
+            console.log("11");
+            let copyOfComparingArrayOfObjects: any;
+            copyOfComparingArrayOfObjects = angular.copy(comparingArrayOfObjects);
+            let baseArrayOfObjectsLength: number = baseArrayOfObjects.length;
+            let comparingArrayOfObjectsLength: number = copyOfComparingArrayOfObjects.length;
             let flag: number = 0;
 
-            for (let i = 0; i < baseArrayLength; i++) {
-                for (let j = 0; j < comparingArrayLength; j++) {
-                    if (this.$scope.previousAcademicInformation[i].id == copyOfAcademic[j].id) {
+            for (let i = 0; i < baseArrayOfObjectsLength; i++) {
+                for (let j = 0; j < comparingArrayOfObjectsLength; j++) {
+                    if (baseArrayOfObjects[i].id == copyOfComparingArrayOfObjects[j].id) {
                         console.log("Equality Check For: ");
-                        if (this.objectEqualityTest("academic", this.$scope.previousAcademicInformation[i], copyOfAcademic[i]) == true) {
+                        if (this.objectEqualityTest(objectType, baseArrayOfObjects[i], copyOfComparingArrayOfObjects[i]) == true) {
                             console.log("No Change");
-                            copyOfAcademic[i].dbAction = "No Change";
+                            copyOfComparingArrayOfObjects[i].dbAction = "No Change";
                         }
                         else {
                             console.log("Change");
-                            copyOfAcademic[i].dbAction = "Update";
+                            copyOfComparingArrayOfObjects[i].dbAction = "Update";
                         }
                         flag = 1;
                         break;
@@ -898,70 +871,132 @@ module ums {
                 if (flag == 0) {
                     console.log("Deleted: ");
                     flag = 0;
-                    copyOfAcademic.push(this.$scope.previousAcademicInformation[i]);
+                    copyOfComparingArrayOfObjects.push(baseArrayOfObjects[i]);
                 }
             }
-            for (let i = 0; i < comparingArrayLength; i++) {
-                if (this.$scope.entry.academic[i].id == null) {
+            for (let i = 0; i < comparingArrayOfObjectsLength; i++) {
+                if (copyOfComparingArrayOfObjects[i].id == null) {
                     console.log("Created: ");
-                    copyOfAcademic[i].dbAction = "Create";
+                    copyOfComparingArrayOfObjects[i].dbAction = "Create";
                 }
             }
-            return copyOfAcademic;
+            return copyOfComparingArrayOfObjects;
         }
 
         private objectEqualityTest(objType: string, baseObj: any, comparingObj: any): boolean{
+            if(objType == "personal"){
+                if(baseObj.firstName == comparingObj.firstName && baseObj.lastName == comparingObj.lastName && baseObj.fatherName == comparingObj.fatherName && baseObj.motherName == comparingObj.motherName
+                && baseObj.gender == comparingObj.gender && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
+                && baseObj.maritalStatus == comparingObj.maritalStatus && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
+                && baseObj.spouseNationalIdNo == comparingObj.spouseNationalIdNo && baseObj.personalWebsite == comparingObj.personalWebsite && baseObj.organizationalEmail == comparingObj.organizationalEmail
+                && baseObj.personalEmail == comparingObj.personalEmail && baseObj.mobile == comparingObj.mobile && baseObj.phone == comparingObj.phone && baseObj.presentAddressHouse == comparingObj.presentAddressHouse
+                && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana == comparingObj.presentAddressThana && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict == comparingObj.presentAddressDistrict
+                    && baseObj.presentAddressDivision == comparingObj.presentAddressDivision && baseObj.presentAddressCountry == comparingObj.presentAddressCountry && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
+                    baseObj.permanentAddressThana == comparingObj.permanentAddressThana && baseObj.permanentAddressPostOfficeNo == comparingObj.permanentAddressPostOfficeNo && baseObj.permanentAddressDistrict == comparingObj.permanentAddressDistrict && baseObj.permanentAddressDivision == comparingObj.permanentAddressDivision &&
+                    baseObj.permanentAddressCountry == comparingObj.permanentAddressCountry && baseObj.emergencyContactName == comparingObj.emergencyContactName && baseObj.emergencyContactRelation == comparingObj.emergencyContactRelation && baseObj.emergencyContactPhone == comparingObj.emergencyContactPhone &&
+                    baseObj.emergencyContactAddress == comparingObj.emergencyContactAddress){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
             if(objType == "academic") {
-                if (baseObj.academicDegreeName.name == comparingObj.academicDegreeName.name && baseObj.academicInstitution == comparingObj.academicInstitution && baseObj.academicPassingYear == comparingObj.academicPassingYear) {
+                if (baseObj.academicDegreeName.name == comparingObj.academicDegreeName.name && baseObj.academicInstitution == comparingObj.academicInstitution
+                    && baseObj.academicPassingYear == comparingObj.academicPassingYear) {
                     return true;
                 }
                 else {
                     return false;
                 }
             }
+            if(objType == "publication"){
+                if(baseObj.publicationType.name == comparingObj.publicationType.name && baseObj.publicationISSN == comparingObj.publicationISSN && baseObj.publicationTitle == comparingObj.publicationTitle
+                && baseObj.publicationVolume == comparingObj.publicationVolume && baseObj.dateOfPublication == comparingObj.dateOfPublication && baseObj.publicationIssue == comparingObj.publicationIssue &&
+                baseObj.publicationJournalName == comparingObj.publicationJournalName && baseObj.publicationPages == comparingObj.publicationPages && baseObj.publicationWebLink == comparingObj.publicationWebLink
+                && baseObj.publicationInterestGenre == comparingObj.publicationInterestGenre && baseObj.publicationCountry == comparingObj.publicationCountry && baseObj.publisherName == comparingObj.publisherName){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            if(objType == "training"){
+                if(baseObj.trainingName == comparingObj.trainingName && baseObj.trainingInstitution == comparingObj.trainingInstitution && baseObj.trainingFrom == comparingObj.trainingFrom
+                && baseObj.trainingTo == comparingObj.trainingTo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            if(objType == "award"){
+                if(baseObj.awardName == comparingObj.awardName && baseObj.awardedYear == comparingObj.awardedYear && baseObj.awardInstitute == comparingObj.awardInstitute
+                && baseObj.awardShortDescription == comparingObj.awardShortDescription){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            if(objType == "experience"){
+                if(baseObj.experienceInstitution == comparingObj.experienceInstitution && baseObj.experienceDesignation == comparingObj.experienceDesignation && baseObj.experienceFrom == comparingObj.experienceFrom
+                && baseObj.experienceTo == comparingObj.experienceTo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
         }
 
         private submitPublicationForm() {
-
-            this.convertToJson('publication')
+            let publicationObjects = this.ObjectDetectionForCRUDOperation("publication", this.$scope.previousPublicationInformation, this.$scope.entry.publication);
+            this.convertToJson('publication', publicationObjects)
                 .then((json: any) => {
                     this.publicationInformationService.savePublicationInformation(json)
                         .then((message: any) => {
-
+                        this.getPublicationInformation();
+                        this.enableViewMode('academic');
                         });
                 });
-            this.enableViewMode('academic');
         }
 
         private submitTrainingForm() {
-            this.convertToJson('training')
+            let trainingObjects = this.ObjectDetectionForCRUDOperation("training", this.$scope.previousTrainingInformation, this.$scope.entry.training);
+            this.convertToJson('training', trainingObjects)
                 .then((json: any) => {
                     this.trainingInformationService.saveTrainingInformation(json)
                         .then((message: any) => {
+                        this.getTrainingInformation();
+                        this.enableViewMode('training');
                         });
                 });
-            this.enableViewMode('training');
         }
 
         private submitAwardForm() {
-            this.convertToJson('award')
+            let awardObjects = this.ObjectDetectionForCRUDOperation("award", this.$scope.previousAwardInformation, this.$scope.entry.award);
+            this.convertToJson('award', awardObjects)
                 .then((json: any) => {
                     this.awardInformationService.saveAwardInformation(json)
                         .then((message: any) => {
+                        this.getAwardInformation();
+                        this.enableViewMode('award');
                         });
                 });
-            this.enableViewMode('award');
+
         }
 
         private submitExperienceForm() {
-            this.convertToJson('experience')
+            let experienceObjects = this.ObjectDetectionForCRUDOperation("experience", this.$scope.previousExperienceInformation, this.$scope.entry.experience);
+            this.convertToJson('experience', experienceObjects)
                 .then((json: any) => {
                     this.experienceInformationService.saveExperienceInformation(json)
                         .then((message: any) => {
-
+                        this.getExperienceInformation();
+                        this.enableViewMode('experience');
                         });
                 });
-            this.enableViewMode('experience');
         }
 
 
@@ -990,6 +1025,7 @@ module ums {
                 this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
                 this.$scope.entry.personal.permanentAddressThana = this.$scope.thanaMap[personalInformation[0].permanentAddressThana];
             }
+            this.$scope.previousPersonalInformation = angular.copy(this.$scope.entry.personal);
         }
 
         private getAcademicInformation() {
@@ -1008,6 +1044,7 @@ module ums {
         }
 
         private getPublicationInformation() {
+            this.$scope.entry.publication = Array<IPublicationInformationModel>();
             this.publicationInformationService.getPublicationInformation().then((publicationInformation: any) => {
                 this.$scope.data.totalRecord = publicationInformation.length;
                 this.setSavedValuesOfPublicationForm(publicationInformation);
@@ -1016,20 +1053,14 @@ module ums {
 
         private setSavedValuesOfPublicationForm(publicationInformation: any) {
             for (let i = 0; i < publicationInformation.length; i++) {
-                if(publicationInformation[i].status === "0") {
-                    this.$scope.borderColor = "red";
-                    this.$scope.entry.publication[i] = publicationInformation[i];
-                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
-                }
-                else{
-                    this.$scope.borderColor = "black";
-                    this.$scope.entry.publication[i] = publicationInformation[i];
-                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
-                }
+                this.$scope.entry.publication[i] = publicationInformation[i];
+                this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
             }
+            this.$scope.previousPublicationInformation = angular.copy(this.$scope.entry.publication);
         }
 
         private getTrainingInformation() {
+            this.$scope.entry.training = Array<ITrainingInformationModel>();
             this.trainingInformationService.getTrainingInformation().then((trainingInformation: any) => {
                 this.setSavedValuesOfTrainingForm(trainingInformation);
             });
@@ -1039,9 +1070,11 @@ module ums {
             for (let i = 0; i < trainingInformation.length; i++) {
                 this.$scope.entry.training[i] = trainingInformation[i];
             }
+            this.$scope.previousTrainingInformation = angular.copy(this.$scope.entry.training);
         }
 
         private getAwardInformation() {
+            this.$scope.entry.award = Array<IAwardInformationModel>();
             this.awardInformationService.getAwardInformation().then((awardInformation: any) => {
                 this.setSavedValuesOfAwardForm(awardInformation);
             });
@@ -1051,9 +1084,11 @@ module ums {
             for (let i = 0; i < awardInformation.length; i++) {
                 this.$scope.entry.award[i] = awardInformation[i];
             }
+            this.$scope.previousAwardInformation = angular.copy(this.$scope.entry.award);
         }
 
         private getExperienceInformation() {
+            this.$scope.entry.experience = Array<IExperienceInformationModel>();
             this.experienceInformationService.getExperienceInformation().then((experienceInformation: any) => {
                 this.setSavedValuesOfExperienceForm(experienceInformation);
             });
@@ -1063,6 +1098,7 @@ module ums {
             for (let i = 0; i < experienceInformation.length; i++) {
                 this.$scope.entry.experience[i] = experienceInformation[i];
             }
+            this.$scope.previousExperienceInformation = angular.copy(this.$scope.entry.experience);
         }
 
 

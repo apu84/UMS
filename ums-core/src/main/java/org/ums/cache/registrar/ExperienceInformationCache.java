@@ -37,4 +37,14 @@ public class ExperienceInformationCache extends
   public int deleteExperienceInformation(String pEmployeeId) {
     return getManager().deleteExperienceInformation(pEmployeeId);
   }
+
+  @Override
+  public int updateExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    return getManager().updateExperienceInformation(pMutableExperienceInformation);
+  }
+
+  @Override
+  public int deleteExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    return getManager().deleteExperienceInformation(pMutableExperienceInformation);
+  }
 }

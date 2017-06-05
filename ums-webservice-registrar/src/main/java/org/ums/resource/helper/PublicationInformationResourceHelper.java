@@ -94,25 +94,40 @@ public class PublicationInformationResourceHelper extends
 
   @Transactional
   public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    Employee employee = mEmployeeManager.get(userId);
-    mPublicationInformationManager.deletePublicationInformation(userId);
-
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-
     JsonArray publicationJsonArray = entries.getJsonObject(0).getJsonArray("publication");
     int sizeOfPublicationJsonArray = publicationJsonArray.size();
 
-    List<MutablePublicationInformation> mutablePublicationInformation = new ArrayList<>();
+    List<MutablePublicationInformation> createMutablePublicationInformation = new ArrayList<>();
+    List<MutablePublicationInformation> updateMutablePublicationInformation = new ArrayList<>();
+    List<MutablePublicationInformation> deleteMutablePublicationInformation = new ArrayList<>();
+
     for(int i = 0; i < sizeOfPublicationJsonArray; i++) {
       MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
       mPublicationInformationBuilder.build(publicationInformation, publicationJsonArray.getJsonObject(i), localCache);
-      mutablePublicationInformation.add(publicationInformation);
+      if(publicationJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(publicationJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          createMutablePublicationInformation.add(publicationInformation);
+        }
+        else if(publicationJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          updateMutablePublicationInformation.add(publicationInformation);
+        }
+      }
+      else {
+        deleteMutablePublicationInformation.add(publicationInformation);
+      }
     }
-    mApprovePublicationService.setNotification("dpreg", employee);
-    mPublicationInformationManager.savePublicationInformation(mutablePublicationInformation);
 
+    if(createMutablePublicationInformation.size() != 0) {
+      mPublicationInformationManager.savePublicationInformation(createMutablePublicationInformation);
+    }
+    if(updateMutablePublicationInformation.size() != 0) {
+      mPublicationInformationManager.updatePublicationInformation(updateMutablePublicationInformation);
+    }
+    if(deleteMutablePublicationInformation.size() != 0) {
+      mPublicationInformationManager.deletePublicationInformation(deleteMutablePublicationInformation);
+    }
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

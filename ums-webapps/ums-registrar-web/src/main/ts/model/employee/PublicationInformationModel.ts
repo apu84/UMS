@@ -18,5 +18,6 @@ module ums{
         appliedOn: string;
         actionTakenOn: string;
         rowNumber: number;
+        dbAction: string;
     }
 }

@@ -14,4 +14,8 @@ public interface ExperienceInformationManager extends
   List<ExperienceInformation> getEmployeeExperienceInformation(final String pEmployeeId);
 
   int deleteExperienceInformation(final String pEmployeeId);
+
+  int updateExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation);
+
+  int deleteExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation);
 }

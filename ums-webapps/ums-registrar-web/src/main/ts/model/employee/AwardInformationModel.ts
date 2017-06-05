@@ -6,5 +6,6 @@ module ums{
         awardInstitute: string;
         awardedYear: string;
         awardShortDescription: string;
+        dbAction: string;
     }
 }

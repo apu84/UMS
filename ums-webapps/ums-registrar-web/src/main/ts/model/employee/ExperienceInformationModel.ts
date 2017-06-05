@@ -6,5 +6,6 @@ module ums{
         experienceDesignation: string;
         experienceFrom: string;
         experienceTo: string;
+        dbAction: string;
     }
 }

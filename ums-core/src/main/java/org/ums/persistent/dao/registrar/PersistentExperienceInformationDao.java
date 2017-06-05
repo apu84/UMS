@@ -23,6 +23,10 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
 
   static String DELETE_ALL = "DELETE FROM EMP_EXPERIENCE_INFO";
 
+  static String UPDATE_ALL =
+      "UPDATE EMP_EXPERIENCE_INFO SET EXPERIENCE_INSTITUTE=?, EXPERIENCE_DESIGNATION=?, EXPERIENCE_FROM=?, EXPERIENCE_TO=?, LAST_MODIFIED="
+          + getLastModifiedSql() + " ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentExperienceInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -58,6 +62,37 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     String query = GET_ONE + " Where employee_id = ?";
     return mJdbcTemplate
         .query(query, new Object[] {employeeId}, new PersistentExperienceInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int updateExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    String query = UPDATE_ALL + "WHERE EMPLOYEE_ID = ? and ID = ? ";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableExperienceInformation)).length;
+  }
+
+  private List<Object[]> getUpdateParams(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(ExperienceInformation pExperienceInformation : pMutableExperienceInformation) {
+      params.add(new Object[] {pExperienceInformation.getExperienceInstitute(),
+          pExperienceInformation.getDesignation(), pExperienceInformation.getExperienceFromDate(),
+          pExperienceInformation.getExperienceToDate(), pExperienceInformation.getEmployeeId(),
+          pExperienceInformation.getId()});
+    }
+    return params;
+  }
+
+  @Override
+  public int deleteExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    String query = DELETE_ALL + " WHERE ID=? AND EMPLOYEE_ID=?";
+    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableExperienceInformation)).length;
+  }
+
+  private List<Object[]> getDeleteParams(List<MutableExperienceInformation> pMutableExperienceInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(ExperienceInformation pExperienceInformation : pMutableExperienceInformation) {
+      params.add(new Object[] {pExperienceInformation.getId(), pExperienceInformation.getEmployeeId()});
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<ExperienceInformation> {

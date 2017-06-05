@@ -40,7 +40,19 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
 
   @Override
   public void build(MutableAwardInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    if(pJsonObject.containsKey("dbAction")) {
+      if(pJsonObject.getString("dbAction").equals("Update")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      }
+      else if(pJsonObject.getString("dbAction").equals("Create")) {
+        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+      }
+    }
+    else {
+      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    }
     pMutable.setAwardName(pJsonObject.getString("awardName"));
     if(!pJsonObject.containsKey("awardInstitute")) {
       pMutable.setAwardInstitute("");

@@ -48,23 +48,40 @@ public class TrainingInformationResourceHelper extends
 
   @Transactional
   public Response saveTrainingInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    mTrainingInformationManager.deleteTrainingInformation(userId);
-
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-
     JsonArray trainingJsonArray = entries.getJsonObject(0).getJsonArray("training");
     int sizeOfTrainingJsonArray = trainingJsonArray.size();
 
-    List<MutableTrainingInformation> mutableTrainingInformation = new ArrayList<>();
+    List<MutableTrainingInformation> createMutableTrainingInformation = new ArrayList<>();
+    List<MutableTrainingInformation> updateMutableTrainingInformation = new ArrayList<>();
+    List<MutableTrainingInformation> deleteMutableTrainingInformation = new ArrayList<>();
+
     for(int i = 0; i < sizeOfTrainingJsonArray; i++) {
       MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
       mTrainingInformationBuilder.build(trainingInformation, trainingJsonArray.getJsonObject(i), localCache);
-      mutableTrainingInformation.add(trainingInformation);
+      if(trainingJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          createMutableTrainingInformation.add(trainingInformation);
+        }
+        else if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          updateMutableTrainingInformation.add(trainingInformation);
+        }
+      }
+      else {
+        deleteMutableTrainingInformation.add(trainingInformation);
+      }
     }
-    mTrainingInformationManager.saveTrainingInformation(mutableTrainingInformation);
 
+    if(createMutableTrainingInformation.size() != 0) {
+      mTrainingInformationManager.saveTrainingInformation(createMutableTrainingInformation);
+    }
+    if(updateMutableTrainingInformation.size() != 0) {
+      mTrainingInformationManager.updateTrainingInformation(updateMutableTrainingInformation);
+    }
+    if(deleteMutableTrainingInformation.size() != 0) {
+      mTrainingInformationManager.deleteTrainingInformation(deleteMutableTrainingInformation);
+    }
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

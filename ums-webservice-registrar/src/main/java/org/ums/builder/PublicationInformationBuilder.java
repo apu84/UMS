@@ -109,7 +109,21 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+
+    if(pJsonObject.containsKey("dbAction")) {
+      if(pJsonObject.getString("dbAction").equals("Update")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      }
+      else if(pJsonObject.getString("dbAction").equals("Create")) {
+        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+      }
+    }
+    else {
+      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    }
+
     pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
     if(!pJsonObject.containsKey("publicationInterestGenre")) {
       pMutable.setInterestGenre("");

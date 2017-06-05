@@ -47,22 +47,40 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
 
   @Transactional
   public Response saveAwardInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    mAwardInformationManager.deleteAwardInformation(userId);
-
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-
     JsonArray awardJsonArray = entries.getJsonObject(0).getJsonArray("award");
     int sizeOfAwardJsonArray = awardJsonArray.size();
 
-    List<MutableAwardInformation> mutableAwardInformation = new ArrayList<>();
+    List<MutableAwardInformation> createMutableAwardInformation = new ArrayList<>();
+    List<MutableAwardInformation> updateMutableAwardInformation = new ArrayList<>();
+    List<MutableAwardInformation> deleteMutableAwardInformation = new ArrayList<>();
+
     for(int i = 0; i < sizeOfAwardJsonArray; i++) {
       MutableAwardInformation awardInformation = new PersistentAwardInformation();
       mAwardInformationBuilder.build(awardInformation, awardJsonArray.getJsonObject(i), localCache);
-      mutableAwardInformation.add(awardInformation);
+      if(awardJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          createMutableAwardInformation.add(awardInformation);
+        }
+        else if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          updateMutableAwardInformation.add(awardInformation);
+        }
+      }
+      else {
+        deleteMutableAwardInformation.add(awardInformation);
+      }
     }
-    mAwardInformationManager.saveAwardInformation(mutableAwardInformation);
+
+    if(createMutableAwardInformation.size() != 0) {
+      mAwardInformationManager.saveAwardInformation(createMutableAwardInformation);
+    }
+    if(updateMutableAwardInformation.size() != 0) {
+      mAwardInformationManager.updateAwardInformation(updateMutableAwardInformation);
+    }
+    if(deleteMutableAwardInformation.size() != 0) {
+      mAwardInformationManager.deleteAwardInformation(deleteMutableAwardInformation);
+    }
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);

@@ -49,23 +49,40 @@ public class ExperienceInformationResourceHelper extends
 
   @Transactional
   public Response saveExperienceInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-    mExperienceInformationManager.deleteExperienceInformation(userId);
-
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-
     JsonArray experienceJsonArray = entries.getJsonObject(0).getJsonArray("experience");
     int sizeOfExperienceJsonArray = experienceJsonArray.size();
 
-    List<MutableExperienceInformation> mutableExperienceInformation = new ArrayList<>();
+    List<MutableExperienceInformation> createMutableExperienceInformation = new ArrayList<>();
+    List<MutableExperienceInformation> updateMutableExperienceInformation = new ArrayList<>();
+    List<MutableExperienceInformation> deleteMutableExperienceInformation = new ArrayList<>();
+
     for(int i = 0; i < sizeOfExperienceJsonArray; i++) {
       MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
       mExperienceInformationBuilder.build(experienceInformation, experienceJsonArray.getJsonObject(i), localCache);
-      mutableExperienceInformation.add(experienceInformation);
+      if(experienceJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          createMutableExperienceInformation.add(experienceInformation);
+        }
+        else if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          updateMutableExperienceInformation.add(experienceInformation);
+        }
+      }
+      else {
+        deleteMutableExperienceInformation.add(experienceInformation);
+      }
     }
-    mExperienceInformationManager.saveExperienceInformation(mutableExperienceInformation);
 
+    if(createMutableExperienceInformation.size() != 0) {
+      mExperienceInformationManager.saveExperienceInformation(createMutableExperienceInformation);
+    }
+    if(updateMutableExperienceInformation.size() != 0) {
+      mExperienceInformationManager.updateExperienceInformation(updateMutableExperienceInformation);
+    }
+    if(deleteMutableExperienceInformation.size() != 0) {
+      mExperienceInformationManager.deleteExperienceInformation(deleteMutableExperienceInformation);
+    }
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

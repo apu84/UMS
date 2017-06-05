@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.TrainingInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.immutable.registrar.TrainingInformation;
+import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
 import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
 import org.ums.persistent.model.registrar.PersistentTrainingInformation;
@@ -24,6 +25,10 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       "Select ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, LAST_MODIFIED From EMP_TRAINING_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_TRAINING_INFO";
+
+  static String UPDATE_ALL =
+      "UPDATE EMP_TRAINING_INFO SET TRAINING_NAME=?, TRAINING_INSTITUTE=?, TRAINING_FROM=?, TRAINING_TO=?, LAST_MODIFIED="
+          + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -59,6 +64,36 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
   public List<TrainingInformation> getEmployeeTrainingInformation(final String employeeId) {
     String query = GET_ONE + " Where employee_id = ?";
     return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentTrainingInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int updateTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
+    String query = UPDATE_ALL + " WHERE EMPLOYEE_ID = ? AND ID = ? ";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableTrainingInformation)).length;
+  }
+
+  private List<Object[]> getUpdateParams(List<MutableTrainingInformation> pMutableTrainingInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(TrainingInformation pTrainingInformation : pMutableTrainingInformation) {
+      params.add(new Object[] {pTrainingInformation.getTrainingName(), pTrainingInformation.getTrainingInstitute(),
+          pTrainingInformation.getTrainingFromDate(), pTrainingInformation.getTrainingToDate(),
+          pTrainingInformation.getEmployeeId(), pTrainingInformation.getId()});
+    }
+    return params;
+  }
+
+  @Override
+  public int deleteTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
+    String query = DELETE_ALL + " WHERE ID = ? AND EMPLOYEE_ID = ? ";
+    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableTrainingInformation)).length;
+  }
+
+  private List<Object[]> getDeleteParams(List<MutableTrainingInformation> pMutableTrainingInformation) {
+    List<Object[]> params = new ArrayList<>();
+    for(TrainingInformation pTrainingInformation : pMutableTrainingInformation) {
+      params.add(new Object[] {pTrainingInformation.getId(), pTrainingInformation.getEmployeeId()});
+    }
+    return params;
   }
 
   class RoleRowMapper implements RowMapper<TrainingInformation> {

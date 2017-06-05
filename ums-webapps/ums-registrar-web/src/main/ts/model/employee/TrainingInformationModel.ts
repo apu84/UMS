@@ -6,6 +6,6 @@ module ums{
         trainingInstitution: string;
         trainingFrom: string;
         trainingTo: string;
-        trainingDuration: string;
+        dbAction: string;
     }
 }
