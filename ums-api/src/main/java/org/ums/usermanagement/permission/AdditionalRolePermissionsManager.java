@@ -1,8 +1,6 @@
 package org.ums.usermanagement.permission;
 
 import org.ums.manager.ContentManager;
-import org.ums.usermanagement.permission.MutableAdditionalRolePermissions;
-import org.ums.usermanagement.permission.AdditionalRolePermissions;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
 
@@ -22,4 +20,6 @@ public interface AdditionalRolePermissionsManager extends
       final Date pFromDate, final Date pToDate);
 
   int removeExistingAdditionalRolePermissions(final String pUserId, final String pAssignedBy);
+
+  List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId);
 }

@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Notification;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.LeaveApplicationStatus;
@@ -17,6 +16,7 @@ import org.ums.manager.common.LmsApplicationManager;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.Notifier;
+import org.ums.usermanagement.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

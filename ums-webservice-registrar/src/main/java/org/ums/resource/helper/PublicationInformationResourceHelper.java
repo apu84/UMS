@@ -3,33 +3,28 @@ package org.ums.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.PublicationInformationBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
-import org.ums.enums.common.RoleType;
-import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EmployeeManager;
-import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PublicationInformationManager;
 import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.ApprovePublicationService;
+import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PublicationInformationResourceHelper extends

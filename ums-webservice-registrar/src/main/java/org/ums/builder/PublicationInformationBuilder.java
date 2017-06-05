@@ -1,15 +1,12 @@
 package org.ums.builder;
 
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
-import org.ums.enums.registrar.PublicationStatus;
-import org.ums.formatter.DateFormat;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

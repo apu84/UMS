@@ -1,13 +1,13 @@
 package org.ums.cache.common;
 
 import org.ums.cache.ContentCache;
-import org.ums.domain.model.immutable.Role;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsAppStatusManager;
+import org.ums.usermanagement.role.Role;
+import org.ums.usermanagement.user.User;
 
 import java.util.List;
 

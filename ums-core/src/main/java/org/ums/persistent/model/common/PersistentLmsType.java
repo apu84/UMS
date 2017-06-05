@@ -2,13 +2,13 @@ package org.ums.persistent.model.common;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.mutable.common.MutableLmsType;
 import org.ums.enums.common.DurationType;
 import org.ums.enums.common.EmployeeLeaveType;
 import org.ums.enums.common.SalaryType;
-import org.ums.manager.RoleManager;
 import org.ums.manager.common.LmsTypeManager;
+import org.ums.usermanagement.role.Role;
+import org.ums.usermanagement.role.RoleManager;
 
 /**
  * Created by Monjur-E-Morshed on 03-May-17.

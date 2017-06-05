@@ -60,7 +60,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public Record get(final Long pId) {
     String query = SELECT_ALL + " Where MFN = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentRecordDao.RecordRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentRecordDao.RecordRowMapper());
   }
 
   @Override
@@ -86,7 +86,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     pRecord.setMfn(id);
     mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-            .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
+        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
         pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),

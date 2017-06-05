@@ -10,7 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

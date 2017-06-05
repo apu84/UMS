@@ -4,25 +4,19 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.ums.builder.Builder;
 import org.ums.builder.PersonalInformationBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
-import org.ums.manager.ContentManager;
-import org.ums.manager.UserManager;
 import org.ums.manager.registrar.PersonalInformationManager;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
-import sun.util.resources.cldr.lag.LocaleNames_lag;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.List;
 
 @Component
 public class PersonalInformationResourceHelper extends

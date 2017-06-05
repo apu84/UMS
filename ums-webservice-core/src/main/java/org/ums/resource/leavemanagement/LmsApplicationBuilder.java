@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.UserManager;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

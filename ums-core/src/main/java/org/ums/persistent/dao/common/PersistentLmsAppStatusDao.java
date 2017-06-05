@@ -6,14 +6,14 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsAppStatusDaoDecorator;
-import org.ums.domain.model.immutable.Role;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.RoleType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
+import org.ums.usermanagement.role.Role;
+import org.ums.usermanagement.user.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

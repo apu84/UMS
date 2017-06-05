@@ -11,10 +11,10 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.TrainingInformation;
 import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
 import org.ums.manager.ContentManager;
-import org.ums.manager.UserManager;
 import org.ums.manager.registrar.TrainingInformationManager;
 import org.ums.persistent.model.registrar.PersistentTrainingInformation;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

@@ -5,9 +5,9 @@ import com.google.common.collect.Sets;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
+import org.ums.generator.IdGenerator;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
-import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
