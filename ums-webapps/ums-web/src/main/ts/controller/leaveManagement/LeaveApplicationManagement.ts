@@ -150,9 +150,13 @@ module ums {
       console.log("**************");
       console.log("In apply leave method");
       var foundOccurance: boolean = false;
+      var momentFromDate: any = moment(this.$scope.leaveApplication.fromDate).format("DD/MM/YYYY");
+      var momentToDate: any = moment(this.$scope.leaveApplication.toDate).format("DD/MM/YYYY");
+
       for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
-        if (moment(this.$scope.leaveApplication.fromDate).isBetween(this.$scope.pendingApplications[i].fromDate, this.$scope.pendingApplications[i].toDate)
-            || moment(this.$scope.leaveApplication.fromDate).isBetween(this.$scope.pendingApplications[i].fromDate, this.$scope.pendingApplications[i].toDate)) {
+        var momentFrom: any = moment(this.$scope.pendingApplications[i].fromDate).format("DD/MM/YYYY");
+        var momentTo: any = moment(this.$scope.pendingApplications[i].toDate).format("DD/MM/YYYY");
+        if (momentFromDate >= momentFrom && momentToDate >= momentFrom && momentFromDate <= momentTo && momentToDate <= momentTo) {
           foundOccurance = true;
           break;
         }
