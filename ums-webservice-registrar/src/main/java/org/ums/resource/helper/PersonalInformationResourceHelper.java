@@ -67,9 +67,10 @@ public class PersonalInformationResourceHelper extends
     MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
     LocalCache localeCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject jsonObject = entries.getJsonObject(0);
+    JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("personal");
     mBuilder.build(personalInformation, jsonObject, localeCache);
     mManager.update(personalInformation);
+    localeCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

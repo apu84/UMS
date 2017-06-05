@@ -17,6 +17,9 @@ public class MutablePersonalInformationResource extends Resource {
   @Autowired
   ResourceHelper<PersonalInformation, MutablePersonalInformation, String> mResourceHelper;
 
+  @Autowired
+  PersonalInformationResourceHelper mPersonalInformationResourceHelper;
+
   @POST
   @Path("/savePersonalInformation")
   public Response savePersonalInformation(final JsonObject pJsonObject) throws Exception {
@@ -27,7 +30,6 @@ public class MutablePersonalInformationResource extends Resource {
   @PUT
   @Path("/updatePersonalInformation")
   public Response updatePersonalInformation(final JsonObject pJsonObject) {
-    // return mResourceHelper.put(pJsonObject, mUriInfo);
-    return null;
+    return mPersonalInformationResourceHelper.updatePersonalInformation(pJsonObject, mUriInfo);
   }
 }

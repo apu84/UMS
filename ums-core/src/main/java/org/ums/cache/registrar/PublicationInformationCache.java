@@ -67,6 +67,6 @@ public class PublicationInformationCache extends
 
   @Override
   public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
-    return getManager().deletePublicationInformation(pMutablePublicationInformation);
+    return getManager().updatePublicationInformation(pMutablePublicationInformation);
   }
 }

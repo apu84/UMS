@@ -21,6 +21,10 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
 
   static String DELETE_ONE = "DELETE FROM EMP_PERSONAL_INFO ";
 
+  static String UPDATE_ONE =
+      "UPDATE EMP_PERSONAL_INFO SET FIRST_NAME = ?, LAST_NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, MOTHER_NAME = ?, NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = ?, NATIONAL_ID_CARD = ?, MARITAL_STATUS = ?, SPOUSE_NAME = ?, SPOUSE_NATIONAL_ID_CARD = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, PERSONAL_EMAIL = ?, MOBILE, PHONE = ?, PRE_ADD_HOUSE = ?, PRE_ADD_ROAD = ?, PRE_ADD_THANA = ?, PRE_ADD_DISTRICT = ?, PRE_ADD_ZIP = ?, PRE_ADD_DIVISION = ?, PRE_ADD_COUNTRY = ?, PER_ADD_HOUSE = ?, PER_ADD_ROAD = ?, PER_ADD_THANA = ?, PER_ADD_DISTRICT = ?, PER_ADD_ZIP = ?, PER_ADD_DIVISION = ?, PER_ADD_COUNTRY = ?, EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentPersonalInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -66,6 +70,34 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
         pMutablePersonalInformation.getEmergencyContactRelation(),
         pMutablePersonalInformation.getEmergencyContactPhone(),
         pMutablePersonalInformation.getEmergencyContactAddress()));
+  }
+
+  @Override
+  public int update(MutablePersonalInformation pMutablePersonalInformation) {
+    String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutablePersonalInformation.getFirstName(),
+        pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
+        pMutablePersonalInformation.getBloodGroup(), pMutablePersonalInformation.getFatherName(),
+        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationality(),
+        pMutablePersonalInformation.getReligion(), pMutablePersonalInformation.getDateOfBirth(),
+        pMutablePersonalInformation.getNationalId(), pMutablePersonalInformation.getMaritalStatus(),
+        pMutablePersonalInformation.getSpouseName(), pMutablePersonalInformation.getSpouseNationalId(),
+        pMutablePersonalInformation.getWebsite(), pMutablePersonalInformation.getOrganizationalEmail(),
+        pMutablePersonalInformation.getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(),
+        pMutablePersonalInformation.getPhoneNumber(), pMutablePersonalInformation.getPresentAddressHouse(),
+        pMutablePersonalInformation.getPresentAddressRoad(), pMutablePersonalInformation.getPresentAddressThana(),
+        pMutablePersonalInformation.getPresentAddressDistrict(), pMutablePersonalInformation.getPresentAddressZip(),
+        pMutablePersonalInformation.getPresentAddressDivision(),
+        pMutablePersonalInformation.getPresentAddressCountry(), pMutablePersonalInformation.getPermanentAddressHouse(),
+        pMutablePersonalInformation.getPermanentAddressRoad(), pMutablePersonalInformation.getPermanentAddressThana(),
+        pMutablePersonalInformation.getPermanentAddressDistrict(),
+        pMutablePersonalInformation.getPermanentAddressZip(),
+        pMutablePersonalInformation.getPermanentAddressDivision(),
+        pMutablePersonalInformation.getPermanentAddressCountry(),
+        pMutablePersonalInformation.getEmergencyContactName(),
+        pMutablePersonalInformation.getEmergencyContactRelation(),
+        pMutablePersonalInformation.getEmergencyContactPhone(),
+        pMutablePersonalInformation.getEmergencyContactAddress(), pMutablePersonalInformation.getId());
   }
 
   class RoleRowMapper implements RowMapper<PersonalInformation> {
