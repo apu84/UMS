@@ -2,19 +2,13 @@ package org.ums.persistent.dao.library;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.ums.decorator.library.ContributorDaoDecorator;
 import org.ums.decorator.library.RecordDaoDecorator;
 import org.ums.domain.model.dto.library.ImprintDto;
-import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
-import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Record;
-import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
 import org.ums.generator.IdGenerator;
-import org.ums.persistent.model.common.PersistentCountry;
 import org.ums.persistent.model.library.PersistentRecord;
 
 import java.sql.ResultSet;
@@ -66,7 +60,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public Record get(final Long pId) {
     String query = SELECT_ALL + " Where MFN = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentRecordDao.RecordRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentRecordDao.RecordRowMapper());
   }
 
   @Override
@@ -92,13 +86,14 @@ public class PersistentRecordDao extends RecordDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     pRecord.setMfn(id);
     mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
+            .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
         pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher()==null?Types.NULL:pRecord.getImprint().getPublisher().getId(),
-        pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
+            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(),
+        pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint().getPublisher().getId(), pRecord
+            .getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
             .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
             .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
             .getDocumentalist(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord

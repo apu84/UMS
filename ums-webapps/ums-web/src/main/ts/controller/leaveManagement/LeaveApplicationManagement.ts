@@ -29,6 +29,8 @@ module ums {
     updateLeaveType: Function;
     pageChanged: Function;
     setStatusModalContent: Function;
+    fromDateSelected: Function;
+    toDateSelected: Function;
 
   }
 
@@ -64,6 +66,7 @@ module ums {
       $scope.updateLeaveType = this.updateLeaveType.bind(this);
       $scope.pageChanged = this.pageChanged.bind(this);
       $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
+      $scope.fromDateSelected = this.fromDateSelected.bind(this);
 
 
       this.getLeaveTypes();
@@ -78,6 +81,20 @@ module ums {
         this.$scope.leaveTypes = leaveTypes;
         this.$scope.leaveType = this.$scope.leaveTypes[0];
       });
+    }
+
+    private fromDateSelected(fromDate: string) {
+      console.log("In the form date selected");
+      var momentFromDate: any = moment(fromDate, "DD/MM/YYYY");
+      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
+        var pendingFromDate: any = moment(this.$scope.pendingApplications[i].fromDate, "DD/MM/YYYY");
+        var pendingToDate: any = moment(this.$scope.pendingApplications[i].toDate, "DD/MM/YYYY");
+        if (moment(momentFromDate).isBetween(pendingFromDate, pendingToDate)) {
+          this.notify.error("Date overlap is not allowed");
+          this.$scope.leaveApplication.fromDate = "";
+          break;
+        }
+      }
     }
 
     private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
@@ -132,9 +149,20 @@ module ums {
     private applyLeave() {
       console.log("**************");
       console.log("In apply leave method");
+      var foundOccurance: boolean = false;
+      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
+        if (moment(this.$scope.leaveApplication.fromDate).isBetween(this.$scope.pendingApplications[i].fromDate, this.$scope.pendingApplications[i].toDate)
+            || moment(this.$scope.leaveApplication.fromDate).isBetween(this.$scope.pendingApplications[i].fromDate, this.$scope.pendingApplications[i].toDate)) {
+          foundOccurance = true;
+          break;
+        }
+      }
       if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
         this.notify.error("Please fill up all the fields");
-      } else {
+      } else if (foundOccurance) {
+        this.notify.error("Date overlapping is not allowed");
+      }
+      else {
         this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
           this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
             this.$scope.leaveApplication = <LmsApplication>{};
