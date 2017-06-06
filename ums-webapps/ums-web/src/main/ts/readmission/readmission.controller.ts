@@ -3,7 +3,9 @@ module ums {
     public static $inject = ['$scope', 'ReadmissionService'];
 
     constructor(private $scope: ng.IScope,
-                private readmissionService: ReadmissionService)
+                private readmissionService: ReadmissionService){
+
+    }
 
   }
   UMS.controller('ReadmissionController', ReadmissionController);

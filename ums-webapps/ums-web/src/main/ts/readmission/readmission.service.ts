@@ -17,7 +17,7 @@ module ums {
 
     public isReadmissionApplicable(): ng.IPromise < boolean > {
       return this.httpClient.get('readmission', HttpClient.MIME_TYPE_TEXT, (response: any) => {
-
+        return true;
       });
     }
   }
