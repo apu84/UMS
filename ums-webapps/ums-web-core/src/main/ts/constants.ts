@@ -523,7 +523,8 @@ module ums {
           {id: 4, name: "Waiting For VC's Approval"},
           {id: 5, name: "Rejected By Registrar"},
           {id: 6, name: "Rejected by VC"},
-          {id: 7, name: "Application Approved"}
+          {id: 7, name: "Application Approved"},
+          {id: 8, name: "All"}
         ],
         MARKS_SUBMISSION_STATUS: {
           NOT_SUBMITTED: 0,

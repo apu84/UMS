@@ -54,4 +54,16 @@ public class LmsAppStatusCache extends ContentCache<LmsAppStatus, MutableLmsAppS
   public LmsAppStatus getLatestStatusOfTheApplication(Long pApplicationId) {
     return getManager().getLatestStatusOfTheApplication(pApplicationId);
   }
+
+  @Override
+  public List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus, int pageNumber, int pageSize) {
+    return getManager().getAllApplications(pEmployeeId, pLeaveApplicationApprovalStatus, pageNumber, pageSize);
+  }
+
+  @Override
+  public List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus) {
+    return getManager().getAllApplications(pEmployeeId, pLeaveApplicationApprovalStatus);
+  }
 }

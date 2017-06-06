@@ -5,6 +5,8 @@
 module ums {
   interface ILeaveApplicationManagement extends ng.IScope {
     leaveTypes: Array<LmsType>;
+    leaveApprovalStatusList: Array<IConstants>;
+    leaveApprovalStatus: IConstants;
     leaveType: LmsType;
     leaveApplication: LmsApplication;
     remainingLeaves: Array<RemainingLmsLeave>;
@@ -17,10 +19,11 @@ module ums {
     totalItems: number;
     statusModal: LmsApplicationStatus;
     data: any;
+    employeeId: string;
 
 
     showStatusSection: boolean;
-
+    showHistorySection: boolean;
     save: Function;
     applyLeave: Function;
     fetchApplicationStatus: Function;
@@ -30,7 +33,16 @@ module ums {
     pageChanged: Function;
     setStatusModalContent: Function;
     dateChanged: Function;
+    showHistory: Function;
+    closeHistory: Function;
+    statusChanged: Function;
+    setResultPerPage: Function;
 
+  }
+
+  interface  IConstants {
+    id: number;
+    name: string;
   }
 
   class LeaveApplicationManagement {
@@ -52,6 +64,7 @@ module ums {
 
       $scope.leaveApplication = <LmsApplication>{};
       $scope.showStatusSection = false;
+      $scope.showHistorySection = false;
       $scope.data = {};
       $scope.data.totalLeaveDurationInDays = 0;
       $scope.pageNumber = 1;
@@ -67,7 +80,10 @@ module ums {
       $scope.pageChanged = this.pageChanged.bind(this);
       $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
       $scope.dateChanged = this.dateChanged.bind(this);
-
+      $scope.showHistory = this.showHistory.bind(this);
+      $scope.closeHistory = this.closeHistory.bind(this);
+      $scope.statusChanged = this.statusChanged.bind(this);
+      $scope.setResultPerPage = this.setResultPerPage.bind(this);
       this.initializeDatePickers();
 
       this.getLeaveTypes();
@@ -75,6 +91,44 @@ module ums {
       this.getPendingApplications();
     }
 
+    private showHistory() {
+      this.$scope.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
+      this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
+      console.log(this.$scope.leaveApprovalStatusList[8 - 1]);
+      console.log("leave approval status: " + this.$scope.leaveApprovalStatus);
+      this.$scope.pageNumber = 1;
+      this.$scope.itemsPerPage = 10;
+      this.getAllLeaveApplicationsForHistory();
+      this.$scope.showHistorySection = true;
+    }
+
+    private getAllLeaveApplicationsForHistory() {
+      this.$scope.pendingApplications = [];
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.$scope.employeeId, this.$scope.leaveApprovalStatus.id, this.$scope.pageNumber, this.$scope.itemsPerPage).then((leaveApplications) => {
+        this.$scope.pendingApplications = leaveApplications.statusList;
+        this.$scope.totalItems = leaveApplications.totalSize;
+        console.log(this.$scope.pendingApplications);
+      });
+    }
+
+    private closeHistory() {
+      this.$scope.showHistorySection = false;
+      this.$scope.pageNumber = 1;
+      this.$scope.itemsPerPage = 50;
+    }
+
+
+    private setResultPerPage(itemPerPage: number) {
+      this.$scope.itemsPerPage = itemPerPage;
+      if (itemPerPage > 0)
+        this.getAllLeaveApplicationsForHistory();
+    }
+
+
+    private statusChanged(leaveApplicationStatus: IConstants) {
+      this.$scope.leaveApprovalStatus = leaveApplicationStatus;
+      this.getAllLeaveApplicationsForHistory();
+    }
 
     private initializeDatePickers() {
       setTimeout(function () {
@@ -132,8 +186,7 @@ module ums {
       this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
         this.$scope.pendingApplications = pendingLeaves;
         this.$scope.totalItems = pendingLeaves.length;
-        console.log("Pending leaves");
-        console.log(pendingLeaves);
+        this.$scope.employeeId = angular.copy(this.$scope.pendingApplications[0].applicantsId);
       });
     }
 
@@ -202,10 +255,13 @@ module ums {
     }
 
     private pageChanged(currentPage: number) {
-      console.log("in the set current");
       //this.$scope.totalItems = this.$scope.applicationStatusList.length;
       this.$scope.pagination.currentPage = currentPage;
-      this.getRemainingLeaves();
+      if (this.$scope.showHistorySection) {
+        this.getAllLeaveApplicationsForHistory();
+      } else {
+        this.getRemainingLeaves();
+      }
     }
 
 

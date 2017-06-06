@@ -30,6 +30,15 @@ public class LmsAppStatusResource extends MutableLmsAppStatusResource {
   }
 
   @GET
+  @Path("/leaveApplications/employee/{employee-id}/status/{approval-status}/pageNumber/{page-number}/pageSize/{page-size}")
+  public JsonObject getAllLeaves(@PathParam("employee-id") String pEmployeeId,
+      @PathParam("page-number") int pageNumber, @PathParam("page-size") int pageSize,
+      @PathParam("approval-status") int pApprovalStatus, final @Context Request pRequest) {
+    return mHelper.getAllApplicationsOfEmployee(pEmployeeId, LeaveApplicationApprovalStatus.get(pApprovalStatus),
+        pageNumber, pageSize, mUriInfo);
+  }
+
+  @GET
   @Path("/leaveApplications/status/{status}/pageNumber/{page-number}/pageSize/{page-size}")
   public JsonObject getLeaveApplications(final @Context Request pRequest, @PathParam("status") int pStatus,
       @PathParam("page-number") int pageNumber, @PathParam("page-size") int pageSize) {

@@ -178,6 +178,99 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
   }
 
   @Override
+  public List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus, int pageNumber, int pageSize) {
+    String query = "";
+    if(pLeaveApplicationApprovalStatus.equals(LeaveApplicationApprovalStatus.ALL)) {
+      query =
+          "SELECT * "
+              + "FROM ( "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE (APP_ID, Action_status) IN ( "
+              + "           SELECT "
+              + "             ID, "
+              + "             APP_STATUS "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE LMS_APPLICATION.EMPLOYEE_ID=? and EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * "
+              + "                   " + pageSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * "
+              + pageSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsAppStatusRowMapper());
+    }
+    else {
+      query =
+          "SELECT * "
+              + "FROM ( "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE (APP_ID, Action_status) IN ( "
+              + "           SELECT "
+              + "             ID, "
+              + "             APP_STATUS "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE LMS_APPLICATION.EMPLOYEE_ID=? and app_status=? and EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a " + "  WHERE ROWNUM < ((" + pageNumber + " * "
+              + "                   " + pageSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * "
+              + pageSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pLeaveApplicationApprovalStatus.getId()},
+          new LmsAppStatusRowMapper());
+    }
+
+  }
+
+  @Override
+  public List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus) {
+    String query = "";
+
+    if(pLeaveApplicationApprovalStatus.equals(LeaveApplicationApprovalStatus.ALL)) {
+      query =
+          " "
+              + "  SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE (APP_ID, Action_status) IN ( "
+              + "           SELECT "
+              + "             ID, "
+              + "             APP_STATUS "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE LMS_APPLICATION.EMPLOYEE_ID = ? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a";
+      return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new LmsAppStatusRowMapper());
+    }
+    else {
+      query =
+          "SELECT "
+              + "    a.*, "
+              + "    ROWNUM row_number "
+              + "  FROM ( "
+              + "         SELECT * "
+              + "         FROM LMS_APP_STATUS "
+              + "         WHERE (APP_ID, Action_status) IN ( "
+              + "           SELECT "
+              + "             ID, "
+              + "             APP_STATUS "
+              + "           FROM LMS_APPLICATION, EMPLOYEES "
+              + "           WHERE LMS_APPLICATION.EMPLOYEE_ID = ? and APP_STATUS=? AND EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID "
+              + "         ) " + "         ORDER BY ACTION_TAKEN_ON) a";
+      return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pLeaveApplicationApprovalStatus.getId()},
+          new LmsAppStatusRowMapper());
+    }
+  }
+
+  @Override
   public List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationStatus, Role pRole,
       User pUser, int pageNumber, int pageSize) {
     String query = "";

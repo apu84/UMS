@@ -66,6 +66,24 @@ module ums {
       return defer.promise;
     }
 
+    public fetchAllLeaveApplicationsOfEmployeeWithPagination(employeeId: string, status: number, pageNumber: number, pageSize: number): ng.IPromise<any> {
+      var url = "lmsAppStatus/leaveApplications/employee/" + employeeId + "/status/" + status + "/pageNumber/" + pageNumber + "/pageSize/" + pageSize;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var lmsAppStatus: any = {};
+            lmsAppStatus.statusList = json.entries;
+            lmsAppStatus.totalSize = json.totalSize;
+            defer.resolve(lmsAppStatus);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting leave applications");
+          });
+
+      return defer.promise;
+    }
 
     public fetchLeaveApplicationsWithOutPagination(leaveApprovalStatus: number): ng.IPromise<any> {
       var url = "lmsAppStatus/leaveApplications/status/" + leaveApprovalStatus;

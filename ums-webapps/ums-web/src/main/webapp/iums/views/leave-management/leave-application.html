@@ -34,7 +34,14 @@
         <div class="panel-heading">Leave Application<span
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div data-ng-if="showStatusSection==false">
+            <div data-ng-if="showStatusSection==false && showHistorySection==false">
+                <div class="row">
+                    <div class="col-md-12" align="right">
+                        <span class="label label-info" style="cursor: pointer"
+                              data-ng-click="showHistory()">Histories</span>
+                    </div>
+                </div>
+                <br/>
                 <div class="row">
                     <div class="col-md-8">
                         <div data-ng-include=""
@@ -59,6 +66,17 @@
                     <div class="col-md-12">
                         <div class="well" align="right">
                             <button class="btn btn-danger" data-ng-click="closeStatusSection()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-ng-if="showHistorySection">
+                <div class="row"
+                     data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well" align="right">
+                            <button class="btn btn-dangeR" data-ng-click="closeHistory()">Close</button>
                         </div>
                     </div>
                 </div>

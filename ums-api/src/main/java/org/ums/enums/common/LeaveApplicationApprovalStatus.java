@@ -14,7 +14,8 @@ public enum LeaveApplicationApprovalStatus {
   WAITING_FOR_VC_APPROVAL(4, "Waiting For VC's Approval"),
   REJECTED_BY_REGISTRAR(5, "Application Rejected By Registrar"),
   REJECTED_BY_VC(6, "Application Rejected By VC"),
-  APPLICATION_APPROVED(7, "Application Approved");
+  APPLICATION_APPROVED(7, "Application Approved"),
+  ALL(8, "All Status");
 
   private String label;
   private int id;

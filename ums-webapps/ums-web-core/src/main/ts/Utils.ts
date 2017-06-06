@@ -61,6 +61,7 @@ module ums {
     static LEAVE_APPLICATION_REJECTED_BY_REGISTRAR = 5;
     static LEAVE_APPLICATION_REJECTED_BY_VC = 6;
     static LEAVE_APPLICATION_APPROVED = 7;
+    static LEAVE_APPLICATION_ALL = 8;
 
     /*
      * Role Types

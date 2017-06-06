@@ -106,6 +106,14 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     return getJsonObject(pUriInfo, appStatuses);
   }
 
+  public JsonObject getAllApplicationsOfEmployee(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus, int pageNumber, int pageSize, UriInfo pUriInfo) {
+    List<LmsAppStatus> appStatuses =
+        getContentManager().getAllApplications(pEmployeeId, pLeaveApplicationApprovalStatus, pageNumber, pageSize);
+    int statusSize = getContentManager().getAllApplications(pEmployeeId, pLeaveApplicationApprovalStatus).size();
+    return getJsonObjectWithTotalSize(pUriInfo, appStatuses, statusSize);
+  }
+
   public JsonObject getLeaveApplications(LeaveApplicationApprovalStatus pStatus, int pageNumber, int pageSize, UriInfo pUriInfo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<LmsAppStatus> statuses = new ArrayList<>();
@@ -120,16 +128,20 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
       statuses = getContentManager().getPendingApplications(pStatus, user.getPrimaryRole(), user, pageNumber, pageSize);
       statusSize = getContentManager().getPendingApplications(pStatus, user, user.getPrimaryRole()).size();
     }
+    return getJsonObjectWithTotalSize(pUriInfo, statuses, statusSize);
+  }
+
+  private JsonObject getJsonObjectWithTotalSize(UriInfo pUriInfo, List<LmsAppStatus> pStatuses, int pStatusSize) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (LmsAppStatus status : statuses) {
+    for(LmsAppStatus status : pStatuses) {
       JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
       getBuilder().build(objectBuilder, status, pUriInfo, localCache);
       children.add(objectBuilder);
     }
     object.add("entries", children);
-    object.add("totalSize", statusSize);
+    object.add("totalSize", pStatusSize);
     localCache.invalidate();
     return object.build();
   }

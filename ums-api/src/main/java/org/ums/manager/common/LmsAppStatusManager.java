@@ -17,6 +17,12 @@ public interface LmsAppStatusManager extends ContentManager<LmsAppStatus, Mutabl
 
   List<LmsAppStatus> getPendingApplications(String pEmployeeId);
 
+  List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus);
+
+  List<LmsAppStatus> getAllApplications(String pEmployeeId,
+      LeaveApplicationApprovalStatus pLeaveApplicationApprovalStatus, int pageNumber, int pageSize);
+
   List<LmsAppStatus> getPendingApplications(LeaveApplicationApprovalStatus pLeaveApplicationStatus, Role pRole,
       User pUser, int pageNumber, int pageSize);
 
