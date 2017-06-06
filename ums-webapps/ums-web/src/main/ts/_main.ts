@@ -203,6 +203,3 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
-
-/// <reference path='readmission/readmission.controller.ts'/>
-/// <reference path='readmission/readmission.service.ts'/>
