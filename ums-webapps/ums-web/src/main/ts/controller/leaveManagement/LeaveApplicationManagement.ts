@@ -99,7 +99,7 @@ module ums {
       var thisScope = this;
       setTimeout(function () {
         thisScope.getTotalDuration();
-      }, 500);
+      }, 200);
     }
 
 
@@ -113,21 +113,17 @@ module ums {
     }
 
     private getTotalDuration() {
-      console.log("In total duration");
-      console.log(this.$scope.leaveApplication.fromDate);
-      console.log(this.$scope.leaveApplication.toDate);
       if (this.$scope.leaveApplication.toDate != null && this.$scope.leaveApplication.fromDate != null) {
-        // var fromDate = new Date(this.$scope.leaveApplication.fromDate);
-        var fromDate: any = moment(this.$scope.leaveApplication.fromDate);
-        // var toDate = new Date(this.$scope.leaveApplication.toDate);
-        var toDate: any = moment(this.$scope.leaveApplication.toDate);
-        var timeDiff: any = toDate - fromDate;
-        console.log("***");
-        console.log(moment("22/06/2017").diff("12/06/2017", 'days'));
-        console.log(moment("12/06/2017"));
-        console.log(toDate.diff(fromDate, 'days', true));
+        var fromDateParts: any = this.$scope.leaveApplication.fromDate.split('-');
+        var fromDate = new Date(fromDateParts[2], fromDateParts[1], fromDateParts[0]);
 
-        this.$scope.data.totalLeaveDurationInDays = timeDiff;
+        var toDateParts: any = this.$scope.leaveApplication.toDate.split('-');
+        var toDate = new Date(toDateParts[2], toDateParts[1], toDateParts[0]);
+
+        var timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        this.$scope.leaveApplication.duration = diffDays;
+        this.$scope.$apply();
       }
     }
 
