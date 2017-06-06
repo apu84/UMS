@@ -96,8 +96,10 @@ module ums {
 
     private dateChanged() {
       console.log("In the date changed");
-      if (this.$scope.leaveApplication.fromDate != null && this.$scope.leaveApplication.toDate != null)
-        this.getTotalDuration();
+      var thisScope = this;
+      setTimeout(function () {
+        thisScope.getTotalDuration();
+      }, 500);
     }
 
 
@@ -112,6 +114,8 @@ module ums {
 
     private getTotalDuration() {
       console.log("In total duration");
+      console.log(this.$scope.leaveApplication.fromDate);
+      console.log(this.$scope.leaveApplication.toDate);
       if (this.$scope.leaveApplication.toDate != null && this.$scope.leaveApplication.fromDate != null) {
         // var fromDate = new Date(this.$scope.leaveApplication.fromDate);
         var fromDate: any = moment(this.$scope.leaveApplication.fromDate);
@@ -119,9 +123,9 @@ module ums {
         var toDate: any = moment(this.$scope.leaveApplication.toDate);
         var timeDiff: any = toDate - fromDate;
         console.log("***");
-        console.log(moment("12/06/2017").diff("22/06/2017", 'days'));
-        console.log(fromDate.diff(toDate, 'days'));
-        //  console.log(fromDate.diff(toDate));
+        console.log(moment("22/06/2017").diff("12/06/2017", 'days'));
+        console.log(moment("12/06/2017"));
+        console.log(toDate.diff(fromDate, 'days', true));
 
         this.$scope.data.totalLeaveDurationInDays = timeDiff;
       }
