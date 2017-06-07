@@ -1,0 +1,114 @@
+<!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+        <!--<div align="right">-->
+            <!--<i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton"></i>-->
+            <!--<i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton"></i>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
+    <div class="row">
+        <div class="col-md-1">
+            <label class="control-label">Sl.</label>
+        </div>
+        <div class="col-md-4">
+            <label class="control-label">Institution/Organization<span class='require' data-ng-show="showRequireSign">*</span></label>
+        </div>
+        <div class="col-md-2">
+            <label class="control-label">Designation<span class='require' data-ng-show="showRequireSign">*</span></label>
+        </div>
+        <div class="col-md-2">
+            <label class="control-label">From<span class='require' data-ng-show="showRequireSign">*</span></label>
+        </div>
+        <div class="col-md-2">
+            <label class="control-label">To<span class='require' data-ng-show="showRequireSign">*</span></label>
+        </div>
+        <div class="col-md-1">
+            <label class="control-label"></label>
+        </div>
+    </div>
+    <br />
+    <div data-ng-repeat="experience in entry.experience track by $index">
+        <div class="row">
+            <div class="col-md-1">
+                <label class="control-label"><b>{{$index + 1}}.</b></label>
+            </div>
+            <div class="col-md-4" data-ng-show="showExperienceInputDiv">
+                <input type="text"
+                       name="nExperienceInstitution{{$index}}"
+                       id="iExperienceInstitution{{$index}}"
+                       data-ng-model="experience.experienceInstitution"
+                       placeholder="Institution/Organization"
+                       class="form-control" required>
+            </div>
+            <div class="col-md-4" style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
+                <label class="control-label">{{experience.experienceInstitution}}</label>
+            </div>
+            <div class="col-md-2" data-ng-show="showExperienceInputDiv">
+                <input type="text"
+                       name="nExperienceDesignation{{$index}}"
+                       id="iExperienceDesignation{{$index}}"
+                       data-ng-model="experience.experienceDesignation"
+                       placeholder="Designation"
+                       class="form-control" required>
+            </div>
+            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
+                <label class="control-label">{{experience.experienceDesignation}}</label>
+            </div>
+            <div class="col-md-2" data-ng-show="showExperienceInputDiv">
+                <input type="text"
+                       name="nExperienceFrom{{$index}}"
+                       id="iExperienceFrom{{$index}}"
+                       data-ng-model="experience.experienceFrom"
+                       data-date-format="mm/yyyy"
+                       placeholder="MM/YYYY"
+                       autocomplete="off"
+                       class="modified-datepicker form-control" required>
+            </div>
+            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
+                <label class="control-label">{{experience.experienceFrom}}</label>
+            </div>
+            <div class="col-md-2" data-ng-show="showExperienceInputDiv">
+                <input type="text"
+                       name="nExperienceTo{{$index}}"
+                       id="iExperienceTo{{$index}}"
+                       data-ng-model="experience.experienceTo"
+                       data-date-format="mm/yyyy"
+                       placeholder="MM/YYYY"
+                       autocomplete="off"
+                       class="modified-datepicker form-control" required>
+            </div>
+            <div class="col-md-2" style="border-bottom: 1px dashed;" data-ng-show="showExperienceLabelDiv">
+                <label class="control-label">{{experience.experienceTo}}</label>
+            </div>
+            <div class='col-md-1' data-ng-show="showExperienceCrossIcon">
+                [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('experience' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+            </div>
+        </div>
+        <br />
+    </div>
+    <!--<div class="row">-->
+        <!--<div class="col-md-6" data-ng-show="showExperienceAddIcon">-->
+            <!--[ <a title="Add New Row" data-ng-click="addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
+        <!--</div>-->
+        <!--<div class="col-md-6"></div>-->
+    <!--</div>-->
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="text-center pal" data-ng-show="showExperienceAddIcon">
+                [ <a title="Add New Row" data-ng-click="addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-right pal">
+                <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('experience')" data-ng-show="showExperienceEditButton"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('experience')" data-ng-show="showExperienceCancelButton"><i class="fa fa-eye"></i>&nbsp;View</button>
+                <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disableExperienceSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
