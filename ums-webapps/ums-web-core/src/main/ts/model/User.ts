@@ -4,5 +4,6 @@ module ums {
     firstName: string;
     lastName: string;
     roleId: number;
+    employeeId: string;
   }
 }

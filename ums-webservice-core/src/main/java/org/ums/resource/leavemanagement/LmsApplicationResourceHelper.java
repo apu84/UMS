@@ -71,18 +71,22 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
-    application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
-    Long appId = new Long(0);
-    appId = getContentManager().create(application);
+    /*
+     * application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL
+     * );
+     * 
+     * appId = getContentManager().create(application);
+     */
 
-    inserIntoLeaveApplicationStatus(application, appId);
+    inserIntoLeaveApplicationStatus(application);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  private void inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication, Long pAppId) {
+  private void inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
+    Long pAppId = new Long(0);
     MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
     lmsAppStatus.setLmsApplicationId(pAppId);
     lmsAppStatus.setActionTakenOn(pApplication.getAppliedOn());
@@ -101,12 +105,17 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
         || user.getPrimaryRole().getId() == RoleType.REGISTRAR.getId()
         || user.getPrimaryRole().getId() == RoleType.LIBRARIAN.getId()) {
       lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
+      pApplication.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
       mLeaveManagementService.setNotification("vc", message);
     } else {
       lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
+      pApplication.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
 
       mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
+
+    pAppId = getContentManager().create(pApplication);
+    lmsAppStatus.setLmsApplicationId(pAppId);
 
     mLmsAppStatusManager.create(lmsAppStatus);
   }
