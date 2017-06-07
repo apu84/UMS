@@ -40,6 +40,8 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
           + " PUBLICATION_VOLUME = ?, JOURNAL_NAME = ?, COUNTRY = ?, STATUS = ?, PUBLICATION_PAGES = ?, APPLIED_ON = TO_DATE(?, 'DD/MM/YYYY'),"
           + " LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
+  static String PUBLICATION_LENGTH = "SELECT COUNT(*) FROM EMP_PUBLICATION_INFO ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentPublicationInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -121,6 +123,12 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     String query = UPDATE_ALL + " WHERE ID = ? and EMPLOYEE_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutablePublicationInformation)).length;
+  }
+
+  @Override
+  public int getLengthOfPublicationList(final String pEmployeeId, final String pPublicationStatus) {
+    String query = PUBLICATION_LENGTH + " WHERE EMPLOYEE_ID = ? AND STATUS = ? ";
+    return 0;
   }
 
   private List<Object[]> getUpdateParams(List<MutablePublicationInformation> pMutablePublicationInformation) {

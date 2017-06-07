@@ -2,10 +2,13 @@ module ums {
     interface IApprovePublication extends ng.IScope {
         showPendingPublicationDiv: boolean;
         showNoPendingPublicationListDiv: boolean;
+        showNothingDiv: boolean;
         showActionTakenDate: boolean;
         showActionButtons: boolean;
+        showRevertOptions: boolean;
 
         currentlySelectedEmployeeIndex: number;
+        currentPublicationIndex: number;
         totalPendingPublications: number;
 
         publicationListViewCategory: string;
@@ -23,7 +26,9 @@ module ums {
         pageChanged: Function;
         accept: Function;
         reject: Function;
-        changePublicationList: Function;
+        changePublicationViewCategory: Function;
+        revertPublicationStatusToPending: Function;
+        getPublicationIndex: Function;
     }
 
     interface IEmployee{
@@ -56,27 +61,31 @@ module ums {
             $scope.currentlySelectedEmployee = <IEmployee>{};
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
-            $scope.totalPendingPublications = 0;
-            $scope.data = { publicationListViewCategory: "", itemPerPage: 3, totalRecord: 5 };
+            $scope.totalPendingPublications = null;
+            $scope.data = { publicationListViewCategory: '0', itemPerPage: 1, totalRecord: null };
             $scope.showActionTakenDate = false;
             $scope.showActionButtons = true;
+            $scope.showNothingDiv = false;
+            $scope.showRevertOptions = false;
 
             $scope.resetTopBottomDivs = this.resetTopBottomDivs.bind(this);
             $scope.view = this.view.bind(this);
             $scope.accept = this.accept.bind(this);
             $scope.reject = this.reject.bind(this);
-            $scope.changePublicationList = this.changePublicationList.bind(this);
+            $scope.changePublicationViewCategory = this.changePublicationViewCategory.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
+            $scope.revertPublicationStatusToPending = this.revertPublicationStatusToPending.bind(this);
+            $scope.getPublicationIndex = this.getPublicationIndex.bind(this);
 
             this.fetchTeachersList();
 
         }
 
         private view(selectedEmployeeIndex: number){
-            const showPendingPublicationByDefault: string = '0';
+            this.$scope.data.publicationListViewCategory = '0';
             this.$scope.currentlySelectedEmployeeIndex = selectedEmployeeIndex;
             this.$scope.currentlySelectedEmployee = this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex];
-            this.getPublicationList(showPendingPublicationByDefault);
+            this.getPublicationList();
             $("#teachersListDiv").hide(10);
             $("#publicationListDiv").show(200);
             $("#topArrowDiv").show(200);
@@ -89,14 +98,28 @@ module ums {
             $("#teachersListDiv").show(200);
         }
 
-        private getPublicationList(publicationStatus: string){
-            this.$scope.data.totalRecord = 10;
-            this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
-                publicationStatus, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
-                    this.$scope.publications = publicationInformation;
-                    this.$scope.totalPendingPublications = this.$scope.publications.length;
+        private getPublicationList(){
+            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id, this.$scope.data.publicationListViewCategory)
+                .then((publicationForLength: any) => {
+                    this.$scope.data.totalRecord = publicationForLength.length;
+                    this.$scope.publications = Array<IPublicationInformationModel>();
+                    if(this.$scope.data.totalRecord == 0){
+                        console.log(this.$scope.data.totalRecord);
+                        this.$scope.showNothingDiv = true;
+                    }
+                    else {
+                        this.$scope.showNothingDiv = false;
+                        this.publicationWithPagination();
+                    }
                 });
-            console.log("totalItems: " + this.$scope.data.totalRecord);
+        }
+
+        private publicationWithPagination() {
+            this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
+                this.$scope.data.publicationListViewCategory, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
+                this.$scope.publications = publicationInformation;
+                this.$scope.totalPendingPublications = this.$scope.publications.length;
+            });
         }
 
         private fetchTeachersList(){
@@ -118,11 +141,23 @@ module ums {
             }
         }
 
+        private pending(index: number){
+            const rejectStatus: string = '0';
+            this.convertToJson(index, rejectStatus).then((json: any) => {
+                this.approvePublicationService.updatePublicationStatus(json)
+                    .then((message: any) => {
+                        this.getPublicationList();
+                        this.$scope.totalPendingPublications--;
+                    });
+            });
+        }
+
         private accept(index: number){
             const acceptStatus: string = '1';
             this.convertToJson(index, acceptStatus).then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
+                        this.getPublicationList();
                         this.$scope.totalPendingPublications--;
                     });
             });
@@ -133,30 +168,41 @@ module ums {
             this.convertToJson(index, rejectStatus).then((json: any) => {
                 this.approvePublicationService.updatePublicationStatus(json)
                     .then((message: any) => {
+                        this.getPublicationList();
                         this.$scope.totalPendingPublications--;
                     });
             });
         }
 
-        private changePublicationList() {
-            this.getPublicationList(this.$scope.data.publicationListViewCategory);
+        private changePublicationViewCategory() {
+            this.getPublicationList();
             this.modifyViewOnDifferentPublicationListCategory();
         }
 
         private modifyViewOnDifferentPublicationListCategory() {
             if (this.$scope.data.publicationListViewCategory == '1' || this.$scope.data.publicationListViewCategory == '2') {
-                this.$scope.showActionTakenDate = true;
                 this.$scope.showActionButtons = false;
+                this.$scope.showActionTakenDate = true;
+                this.$scope.showRevertOptions = true;
             }
             else {
-                this.$scope.showActionButtons = true;
                 this.$scope.showActionTakenDate = false;
+                this.$scope.showRevertOptions = false;
+                this.$scope.showActionButtons = true;
             }
         }
 
         private pageChanged(pageNumber: number){
             this.$scope.pagination.currentPage = pageNumber;
-            this.getPublicationList(this.$scope.publicationListViewCategory);
+            this.getPublicationList();
+        }
+
+        private getPublicationIndex(index: number){
+            this.$scope.currentPublicationIndex = index;
+        }
+
+        private revertPublicationStatusToPending(){
+            this.pending(this.$scope.currentPublicationIndex);
         }
 
         private convertToJson(index: number, status: string): ng.IPromise<any> {

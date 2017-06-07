@@ -288,13 +288,12 @@ module ums {
         }
 
         private initializeVariables() {
-            this.getCountry();
-            this.getDivision();
-            this.getDistrict();
-            this.getThana();
+            // this.getCountry();
+            // this.getDivision();
+            // this.getDistrict();
+            // this.getThana();
 
             this.createMap();
-
 
             this.enableViewMode('personal');
             this.enableViewMode('academic');
@@ -312,12 +311,12 @@ module ums {
             this.addDate();
             // this.changeNav('personal');
 
-            this.getPersonalInformation();
-            this.getAcademicInformation();
-            this.getAwardInformation();
+            // this.getPersonalInformation();
+            // this.getAcademicInformation();
+            // this.getAwardInformation();
             this.getPublicationInformation();
-            this.getExperienceInformation();
-            this.getTrainingInformation();
+            // this.getExperienceInformation();
+            // this.getTrainingInformation();
         }
 
         private enableViewMode(formName: string) {
@@ -886,14 +885,14 @@ module ums {
         private objectEqualityTest(objType: string, baseObj: any, comparingObj: any): boolean{
             if(objType == "personal"){
                 if(baseObj.firstName == comparingObj.firstName && baseObj.lastName == comparingObj.lastName && baseObj.fatherName == comparingObj.fatherName && baseObj.motherName == comparingObj.motherName
-                && baseObj.gender == comparingObj.gender && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
-                && baseObj.maritalStatus == comparingObj.maritalStatus && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
+                && baseObj.gender.name == comparingObj.gender.name && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
+                && baseObj.maritalStatus.name == comparingObj.maritalStatus.name && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
                 && baseObj.spouseNationalIdNo == comparingObj.spouseNationalIdNo && baseObj.personalWebsite == comparingObj.personalWebsite && baseObj.organizationalEmail == comparingObj.organizationalEmail
                 && baseObj.personalEmail == comparingObj.personalEmail && baseObj.mobile == comparingObj.mobile && baseObj.phone == comparingObj.phone && baseObj.presentAddressHouse == comparingObj.presentAddressHouse
-                && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana == comparingObj.presentAddressThana && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict == comparingObj.presentAddressDistrict
-                    && baseObj.presentAddressDivision == comparingObj.presentAddressDivision && baseObj.presentAddressCountry == comparingObj.presentAddressCountry && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
-                    baseObj.permanentAddressThana == comparingObj.permanentAddressThana && baseObj.permanentAddressPostOfficeNo == comparingObj.permanentAddressPostOfficeNo && baseObj.permanentAddressDistrict == comparingObj.permanentAddressDistrict && baseObj.permanentAddressDivision == comparingObj.permanentAddressDivision &&
-                    baseObj.permanentAddressCountry == comparingObj.permanentAddressCountry && baseObj.emergencyContactName == comparingObj.emergencyContactName && baseObj.emergencyContactRelation == comparingObj.emergencyContactRelation && baseObj.emergencyContactPhone == comparingObj.emergencyContactPhone &&
+                && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana.name == comparingObj.presentAddressThana.name && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict.name == comparingObj.presentAddressDistrict.name
+                    && baseObj.presentAddressDivision.name == comparingObj.presentAddressDivision.name && baseObj.presentAddressCountry.name == comparingObj.presentAddressCountry.name && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
+                    baseObj.permanentAddressThana.name == comparingObj.permanentAddressThana.name && baseObj.permanentAddressPostOfficeNo == comparingObj.permanentAddressPostOfficeNo && baseObj.permanentAddressDistrict.name == comparingObj.permanentAddressDistrict.name && baseObj.permanentAddressDivision.name == comparingObj.permanentAddressDivision.name &&
+                    baseObj.permanentAddressCountry.name == comparingObj.permanentAddressCountry.name && baseObj.emergencyContactName == comparingObj.emergencyContactName && baseObj.emergencyContactRelation.name == comparingObj.emergencyContactRelation.name && baseObj.emergencyContactPhone == comparingObj.emergencyContactPhone &&
                     baseObj.emergencyContactAddress == comparingObj.emergencyContactAddress){
                     return true;
                 }

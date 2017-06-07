@@ -57,4 +57,9 @@ public class PublicationInformationDaoDecorator extends
   public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
     return getManager().updatePublicationInformation(pMutablePublicationInformation);
   }
+
+  @Override
+  public int getLengthOfPublicationList(String pEmployeeId, String pPublicationStatus) {
+    return getManager().getLengthOfPublicationList(pEmployeeId, pPublicationStatus);
+  }
 }

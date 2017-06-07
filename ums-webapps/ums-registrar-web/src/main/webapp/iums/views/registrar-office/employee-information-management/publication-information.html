@@ -16,7 +16,7 @@
 
     <!--<div dir-paginate="publication in entry.publication | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">-->
     <div data-ng-repeat="publication in entry.publication track by $index">
-        <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1'}">
+        <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center pal">
@@ -229,7 +229,11 @@
     <!--</div>-->
 
     <div class="row">
-        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="text-left pal">
+                <a data-target="#modal-publication" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
+            </div>
+        </div>
         <div class="col-md-4">
             <div class="text-center pal" data-ng-show="showPublicationAddIcon">
                 [ <a title="Add New Row" data-ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
@@ -246,6 +250,24 @@
     </div>
 </form>
 
+<div id="modal-publication" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close">&times;</button>
+                <h4 id="modal-default-label" class="modal-title">Instructions</h4></div>
+            <div class="modal-body">
+                There are six different tabs.
+                This <span class="require"><storng>( * )</storng></span> represents Mandatory Fields
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--<h4><b>Waiting For Approval</b></h4>-->
 <!--<br />-->
 <!--<div class="row">-->
