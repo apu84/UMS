@@ -35,7 +35,6 @@ module ums{
                 service: new Array<IServiceInformationModel>()
             };
 
-            $scope.testData = this.testData.bind(this);
             $scope.submit = this.submit.bind(this);
             $scope.edit = this.edit.bind(this);
             $scope.addNewRow = this.addNewRow.bind(this);
@@ -44,23 +43,8 @@ module ums{
             $scope.showLabelDiv = true;
             this.addNewRow();
 
-            console.log("I am in EmployeeServiceInformation.ts");
+            console.log("I am in ServiceInformation.ts");
 
-        }
-
-        private testData() {
-            this.$scope.entry.service[0].employeeId = 1;
-            this.$scope.entry.service[0].employeeDesignation = 1;
-            this.$scope.entry.service[0].employeeEmploymentType = 1;
-            this.$scope.entry.service[0].employeeDepartment = 1;
-            this.$scope.entry.service[0].employeeJoiningDate = "01/11/2017";
-            this.$scope.entry.service[0].employeeContractualDate = "01/11/2017";
-            this.$scope.entry.service[0].employeeProbationDate = "01/11/2017";
-            this.$scope.entry.service[0].employeeJobPermanentDate = "01/11/2017";
-            this.$scope.entry.service[0].employeeExtensionNumber = 724;
-            this.$scope.entry.service[0].employeeShortName = "mmk";
-            this.$scope.entry.service[0].employeeRoomNumber = "6A03";
-            this.$scope.entry.service[0].employeeResignDate = "01/11/3017";
         }
 
         private submit(){
@@ -88,20 +72,23 @@ module ums{
 
         private addNewRow(){
             console.log("i am in addNewRow()");
-            var serviceEntry: IServiceInformationModel;
+            let serviceEntry: IServiceInformationModel;
             serviceEntry = {
-                employeeId: null,
-                employeeDesignation: null,
-                employeeEmploymentType: null,
-                employeeDepartment: null,
-                employeeJoiningDate: "",
-                employeeContractualDate: "",
-                employeeProbationDate: "",
-                employeeJobPermanentDate: "",
-                employeeExtensionNumber: null,
-                employeeResignDate: "",
-                employeeRoomNumber: "",
-                employeeShortName: ""
+                employeeId: "",
+                designation: "",
+                department: "",
+                academicInitial: "",
+                roomNo: "",
+                extNo: "",
+                areaOfInterest: "",
+                employmentType: "",
+                contractualStartDate: "",
+                contractualEndDate: "",
+                probationStartDate: "",
+                probationEndDate: "",
+                permanentStartDate: "",
+                currentStatus: "",
+                resignDate: ""
             };
 
             this.$scope.entry.service.push(serviceEntry);

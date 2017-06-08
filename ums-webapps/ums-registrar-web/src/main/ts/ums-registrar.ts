@@ -60,7 +60,7 @@ module ums {
         })
         .state('empServiceInfo', {
           url: "/empServiceInfo",
-          templateUrl: 'views/registrar-office/employee-information-management/employee-service-information.html',
+          templateUrl: 'views/registrar-office/employee-information-management/service-information.html',
           controller: 'EmployeeServiceInformation',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

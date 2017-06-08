@@ -90,7 +90,7 @@
 
 
 /// <reference path='controller/employee-information-management/EmployeeInformation.ts'/>
-/// <reference path='controller/employee-information-management/EmployeeServiceInformation.ts'/>
+/// <reference path='controller/employee-information-management/ServiceInformation.ts'/>
 /// <reference path='controller/meeting-management/Meeting.ts'/>
 /// <reference path='controller/approve-publication/ApprovePublication.ts'/>
 

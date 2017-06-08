@@ -309,14 +309,13 @@ module ums {
             this.addNewRow("experience");
 
             this.addDate();
-            // this.changeNav('personal');
 
-            // this.getPersonalInformation();
-            // this.getAcademicInformation();
-            // this.getAwardInformation();
+            this.getPersonalInformation();
+            this.getAcademicInformation();
+            this.getAwardInformation();
             this.getPublicationInformation();
-            // this.getExperienceInformation();
-            // this.getTrainingInformation();
+            this.getExperienceInformation();
+            this.getTrainingInformation();
         }
 
         private enableViewMode(formName: string) {

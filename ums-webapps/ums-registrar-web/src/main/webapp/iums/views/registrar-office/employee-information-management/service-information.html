@@ -1,0 +1,260 @@
+<div class="panel">
+    <div class="panel-heading">Service Information</div>
+
+    <div class="panel-body showPanel" style="min-height: 490px;">
+        <form name="nServiceForm" data-validate="" data-onvalidate="submitServiceForm">
+            <div data-ng-repeat="service in entry.service track by $index">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Organizational Id" for="iEmployeeId{{$index}}">Employee Id</label>
+                    <div class="col-md-8"  data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nEmployeeId{{$index}}"
+                               id="iEmployeeId{{$index}}"
+                               data-ng-model="service.employeeId"
+                               placeholder="Employee Id"
+                               class="form-control" disabled>
+                    </div>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control">{{service.employeeId}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Designation" for="iDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nDesignation{{$index}}"
+                               id="iDesignation{{$index}}"
+                               data-ng-model="service.designation"
+                               placeholder="Designation"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.designation}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iDepartment{{$index}}">Department/Office<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nDepartment{{$index}}"
+                               id="iDepartment{{$index}}"
+                               data-ng-model="service.department"
+                               placeholder="Department/Office"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.department}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Academic Initial / User Id" for="iShortName{{$index}}">Academic Initial<span class="require">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nShortName{{$index}}"
+                               id="iShortName{{$index}}"
+                               data-ng-model="service.academicInitial"
+                               placeholder="User Id/Academic Initial"
+                               class="form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.academicInitial}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Room No." for="iRoomNo{{$index}}">Room No/Location</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nRoomNo{{$index}}"
+                               id="iRoomNo{{$index}}"
+                               data-ng-model="service.roomNo"
+                               placeholder="Room No"
+                               class="form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.roomNo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Office Extension No." for="iExtNo{{$index}}">Extension Number</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="tel"
+                               name="nExtNo{{$index}}"
+                               id="iExtNo{{$index}}"
+                               data-ng-model="service.extNo"
+                               placeholder="Extension Number"
+                               class="form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.extNo}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employment Type For Employee" for="iAreaOfInterest{{$index}}">Area Of Interest<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nAreaOfInterest{{$index}}"
+                               id="iAreaOfInterest{{$index}}"
+                               data-ng-model="service.areaOfInterest"
+                               placeholder="Area Of Interest"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.areaOfInterest}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employment Type For Employee" for="iEmploymentType{{$index}}">Employment Type<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nEmploymentType{{$index}}"
+                               id="iEmploymentType{{$index}}"
+                               data-ng-model="service.employmentType"
+                               placeholder="Employment Type"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.employmentType}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Joining Date / Contractual Start Date" for="iJoiningDate{{$index}}">Joining/Contractual Start Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nJoiningDate{{$index}}"
+                               id="iJoiningDate{{$index}}"
+                               data-ng-model="service.contractualStartDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control" required>
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.contractualStartDate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Contractual Period Ending Date" for="iContractualEndDate{{$index}}">Contractual End Date</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nContractualEndDate{{$index}}"
+                               id="iContractualEndDate{{$index}}"
+                               data-ng-model="service.contractualEndDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.contractualEndDate}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationStartDate{{$index}}">Probation Start Date</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nProbationStartDate{{$index}}"
+                               id="iProbationStartDate{{$index}}"
+                               data-ng-model="service.probationStartDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.probationStartDate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationEndDate{{$index}}">Probation End Date</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nProbationEndDate{{$index}}"
+                               id="iProbationEndDate{{$index}}"
+                               data-ng-model="service.probationEndDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.probationEndDate}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Job Permanent Date" for="iJobPermanentDate{{$index}}">Permanent Start Date</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nJobPermanentDate{{$index}}"
+                               id="iJobPermanentDate{{$index}}"
+                               data-ng-model="service.permanentStartDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control">
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.permanentStartDate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" title="Employee's Resign Date" for="iJobTerminationDate{{$index}}">Job Termination Date</label>
+                    <div class="col-md-8" data-ng-show="showInputDiv">
+                        <input type="text"
+                               name="nJobTerminationDate{{$index}}"
+                               id="iJobTerminationDate{{$index}}"
+                               data-ng-model="service.resignDate"
+                               data-date-format="dd/mm/yyyy"
+                               placeholder="DD/MM/YYYY"
+                               autocomplete="off"
+                               class="datepicker-default form-control"/>
+                    </div>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showLabelDiv">
+                        <label class="control-label">{{service.resignDate}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-4" >
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center pal">
+                        [ <a title="Add New Row" data-ng-click="addNewRow()"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-right pal">
+                        <button type="button" title="Cancel" class="btn" data-ng-click="edit()">Edit</button>
+                        <button type="submit" title="Submit" class="btn btn-success" data-ng-click="submit()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
