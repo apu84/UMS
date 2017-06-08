@@ -10,6 +10,7 @@ module ums {
     leaveType: LmsType;
     leaveApplication: LmsApplication;
     remainingLeaves: Array<RemainingLmsLeave>;
+    remainingLeavesMap: any;
     pendingApplications: Array<LmsApplicationStatus>;
     pendingApplication: LmsApplicationStatus;
     applicationStatusList: Array<LmsApplicationStatus>;
@@ -173,6 +174,8 @@ module ums {
       this.leaveTypeService.fetchLeaveTypes().then((leaveTypes) => {
         this.$scope.leaveTypes = leaveTypes;
         this.$scope.leaveType = this.$scope.leaveTypes[0];
+        console.log("Leave types");
+        console.log(this.$scope.leaveTypes);
       });
     }
 
@@ -205,6 +208,9 @@ module ums {
         var timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         this.$scope.leaveApplication.duration = diffDays + 1;
+        if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
+          this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days left for the leave type");
+        }
         this.$scope.$apply();
       }
     }
@@ -222,8 +228,14 @@ module ums {
 
     private getRemainingLeaves() {
       this.$scope.remainingLeaves = [];
-      this.leaveApplicationService.fetchRemainingLeaves().then((leaves) => {
-        this.$scope.remainingLeaves = leaves;
+      this.$scope.remainingLeavesMap = {};
+      this.leaveApplicationService.fetchRemainingLeaves().then((leaves: Array<RemainingLmsLeave>) => {
+        for (var i = 0; i < leaves.length; i++) {
+          this.$scope.remainingLeaves.push(leaves[i]);
+          this.$scope.remainingLeavesMap[leaves[i].leaveTypeId] = this.$scope.remainingLeaves[i];
+        }
+        console.log("remaining leave map");
+        console.log(this.$scope.remainingLeavesMap);
       });
     }
 
@@ -251,18 +263,14 @@ module ums {
       var foundOccurance: boolean = false;
       var momentFromDate: any = moment(this.$scope.leaveApplication.fromDate).format("DD/MM/YYYY");
       var momentToDate: any = moment(this.$scope.leaveApplication.toDate).format("DD/MM/YYYY");
-
-      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
-        var momentFrom: any = moment(this.$scope.pendingApplications[i].fromDate).format("DD/MM/YYYY");
-        var momentTo: any = moment(this.$scope.pendingApplications[i].toDate).format("DD/MM/YYYY");
-        if (momentFromDate >= momentFrom && momentToDate >= momentFrom && momentFromDate <= momentTo && momentToDate <= momentTo) {
-          foundOccurance = true;
-          break;
-        }
-      }
+      foundOccurance = this.findIfThereIsAnyOvalapping(momentFromDate, momentToDate, foundOccurance);
       if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
         this.notify.error("Please fill up all the fields");
-      } else if (foundOccurance) {
+      }
+      else if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
+        this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days of the leave type");
+      }
+      else if (foundOccurance) {
         this.notify.error("Date overlapping is not allowed");
       }
       else {
@@ -274,6 +282,18 @@ module ums {
           });
         });
       }
+    }
+
+    private findIfThereIsAnyOvalapping(momentFromDate: any, momentToDate: any, foundOccurance: boolean) {
+      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
+        var momentFrom: any = moment(this.$scope.pendingApplications[i].fromDate).format("DD/MM/YYYY");
+        var momentTo: any = moment(this.$scope.pendingApplications[i].toDate).format("DD/MM/YYYY");
+        if (momentFromDate >= momentFrom && momentToDate >= momentFrom && momentFromDate <= momentTo && momentToDate <= momentTo) {
+          foundOccurance = true;
+          break;
+        }
+      }
+      return foundOccurance;
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
