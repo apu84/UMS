@@ -867,6 +867,12 @@ module ums {
           url: "/viewMail",
           templateUrl: 'views/common/mailbox/mail-view.html'
         })
+        .state('readmission', {
+          url: "/readmission",
+          controller: 'ReadmissionController',
+          controllerAs: 'vm',
+          templateUrl: ''
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",
