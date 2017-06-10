@@ -24,22 +24,22 @@ public class Readmission extends Resource {
 
   @GET
   public ReadmissionHelper.ReadmissionApplicationStatus getReadmissionStatus() throws Exception {
-    return mReadmissionHelper.readmissionApplicationStatus(getLoggedInUserId(),
-        getStudent().getCurrentEnrolledSemesterId());
+    return mReadmissionHelper.readmissionApplicationStatus(getLoggedInUserId(), getStudent()
+        .getCurrentEnrolledSemesterId());
   }
 
   @GET
   @Path("/application}")
   public JsonObject getReadmissionApplicationStatus() throws Exception {
-    return mReadmissionHelper.appliedReadmissionCourses(getLoggedInUserId(),
-        getStudent().getCurrentEnrolledSemesterId());
+    return mReadmissionHelper.appliedReadmissionCourses(getLoggedInUserId(), getStudent()
+        .getCurrentEnrolledSemesterId());
   }
 
   @GET
   @Path("/applicable-courses")
   public JsonObject getApplicableCourses() throws Exception {
-    return mReadmissionHelper.failedCoursesForApplication(getLoggedInUserId(),
-        getStudent().getCurrentEnrolledSemesterId());
+    return mReadmissionHelper.failedCoursesForApplication(getLoggedInUserId(), getStudent()
+        .getCurrentEnrolledSemesterId());
   }
 
   @POST

@@ -194,12 +194,19 @@
 /// <reference path='model/master_data/Student.ts'/>
 /// <reference path='model/master_data/Syllabus.ts'/>
 
-
-
-
 /// <reference path='directive/ContextMenuSeatplan.ts'/>
 /// <reference path='directive/CourseRegTypeLegend.ts'/>
 /// <reference path='directive/EmitLastRepeaterElement.ts'/>
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+
+/// <reference path='student/student.info.service.ts'/>
+
+/// <reference path='readmission/readmission.controller.ts'/>
+/// <reference path='readmission/readmission.service.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.response.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.service.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.controller.ts'/>
+/// <reference path='fee/installment/installment.setting.service.ts'/>
+/// <reference path='fee/payment/payment.service.ts'/>

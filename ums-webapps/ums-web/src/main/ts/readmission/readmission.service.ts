@@ -42,28 +42,36 @@ module ums {
     }
 
     public getReadmissionStatus(): ng.IPromise <string> {
-      return this.httpClient.get('readmission', HttpClient.MIME_TYPE_TEXT, (response: string) => {
-        return response;
+      let defer: ng.IDeferred<string> = this.$q.defer();
+      this.httpClient.get('readmission', HttpClient.MIME_TYPE_TEXT, (response: string) => {
+        defer.resolve(response);
       });
+      return defer.promise;
     }
 
     public getAppliedCourses(): ng.IPromise<ReadmissionCourse[]> {
-      return this.httpClient.get('readmission/application', HttpClient.MIME_TYPE_JSON,
+      let defer: ng.IDeferred<ReadmissionCourse[]> = this.$q.defer();
+      this.httpClient.get('readmission/application', HttpClient.MIME_TYPE_JSON,
           (response: ReadmissionCourseResponse) => response.entries);
+      return defer.promise;
     }
 
     public getApplicableCourse(): ng.IPromise<ReadmissionCourse[]> {
-      return this.httpClient.get('readmission/applicable-courses', HttpClient.MIME_TYPE_JSON,
+      let defer: ng.IDeferred<ReadmissionCourse[]> = this.$q.defer();
+      this.httpClient.get('readmission/applicable-courses', HttpClient.MIME_TYPE_JSON,
           (response: ReadmissionCourseResponse) => response.entries);
+      return defer.promise;
     }
 
     public apply(courses: ReadmissionCourse[]): ng.IPromise<string> {
+      let defer: ng.IDeferred<string> = this.$q.defer();
       this.httpClient.post('readmission/apply', {'entries': this.getSelectedCourses(courses)}, HttpClient.MIME_TYPE_JSON)
-          .success((response: string) => response)
+          .success((response: string) => defer.resolve(response))
           .error((data) => {
             this.notify.error(data);
-            return null;
+            defer.resolve(null);
           });
+      return defer.promise;
     }
 
     private getSelectedCourses(courses: ReadmissionCourse[]) {
