@@ -39,11 +39,13 @@
                        class="white-space-pre">{{s.comments}}</p>
                 </div>
                 <div data-ng-if="s.rowNumber%2!=0" style="background-color: navajowhite; padding:3%">
+
+                    <p disabled="true"
+                       class="white-space-pre">{{s.comments}}</p>
+                    
                     <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
                             class="label label-primary">
                         {{s.actionStatusLabel}}</label> </i></p>
-                    <p disabled="true"
-                       class="white-space-pre">{{s.comments}}</p>
                 </div>
 
             </a>

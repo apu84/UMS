@@ -13,7 +13,7 @@ module ums {
     statusModal: LmsApplicationStatus;
     pagination: any;
     user: User;
-    showStatusSection: boolean;
+    backgroundColor: string;
     disableApproveAndRejectButton: boolean;
     additionalRoles: Array<AdditionalRolePermissions>;
     pendingApplications: Array<LmsApplicationStatus>;
@@ -21,9 +21,15 @@ module ums {
     remainingLeaves: Array<RemainingLmsLeave>;
     approveOrRejectionComment: string;
     data: any;
+    applicantsId: string;
 
     approveButtonClicked: boolean;
     rejectButtonClicked: boolean;
+    showHistorySection: boolean;
+    showApprovalSection: boolean;
+    showStatusSection: boolean;
+    fromHistory: boolean;
+
 
 
     statusChanged: Function;
@@ -36,6 +42,8 @@ module ums {
     reject: Function;
     setStatusModalContent: Function;
     saveAction: Function;
+    showHistory: Function;
+    closeHistory: Function;
   }
 
   interface  IConstants {
@@ -66,6 +74,11 @@ module ums {
                 private commonservice: CommonService) {
 
       $scope.resultsPerPage = "3";
+      $scope.showApprovalSection = true;
+      $scope.backgroundColor = "white";
+      $scope.showHistorySection = false;
+      $scope.showStatusSection = false;
+      $scope.fromHistory = false;
       $scope.pagination = {};
       $scope.pagination.currentPage = 1;
       $scope.itemsPerPage = +$scope.resultsPerPage;
@@ -73,7 +86,6 @@ module ums {
       $scope.approveOrRejectionComment = "";
       $scope.data = {};
       $scope.pageNumber = 1;
-      $scope.showStatusSection = false;
       this.$scope.leaveApprovalStatusList = [];
       this.$scope.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[0];
@@ -88,9 +100,43 @@ module ums {
       $scope.saveAction = this.saveAction.bind(this);
       $scope.approve = this.approve.bind(this);
       $scope.reject = this.reject.bind(this);
+      $scope.showHistory = this.showHistory.bind(this);
+      $scope.closeHistory = this.closeHistory.bind(this);
       this.getLeaveApplications();
       this.getUsersInformation();
       this.getAdditionaPermissions();
+    }
+
+    private showHistory() {
+      this.$scope.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
+      this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
+      this.$scope.pageNumber = 1;
+      this.$scope.itemsPerPage = 10;
+      this.getAllLeaveApplicationsForHistory();
+      this.$scope.showHistorySection = true;
+      this.$scope.showStatusSection = false;
+      this.$scope.showApprovalSection = false;
+      this.$scope.backgroundColor = "#FAFAD2";
+
+    }
+
+    private closeHistory() {
+      this.$scope.showHistorySection = false;
+      this.$scope.showStatusSection = true;
+      this.$scope.showApprovalSection = false;
+      this.getUsersInformation();
+      this.$scope.backgroundColor = "white";
+    }
+
+
+    private getAllLeaveApplicationsForHistory() {
+      this.$scope.pendingApplications = [];
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.$scope.applicantsId, this.$scope.leaveApprovalStatus.id, this.$scope.pageNumber, this.$scope.itemsPerPage).then((leaveApplications) => {
+        this.$scope.pendingApplications = leaveApplications.statusList;
+        this.$scope.totalItems = leaveApplications.totalSize;
+        console.log("Histories...");
+        console.log(this.$scope.pendingApplications);
+      });
     }
 
     private approve() {
@@ -152,13 +198,23 @@ module ums {
 
     private statusChanged(leaveApplicationStatus: IConstants) {
       this.$scope.leaveApprovalStatus = leaveApplicationStatus;
-      this.getLeaveApplications();
+      if (this.$scope.showHistorySection) {
+        this.getAllLeaveApplicationsForHistory();
+      } else {
+        this.getLeaveApplications();
+      }
     }
 
 
     private closeStatusSection() {
       this.$scope.showStatusSection = false;
-      this.getLeaveApplications();
+      if (this.$scope.fromHistory == true && this.$scope.showHistorySection == true) {
+        this.showHistory();
+      } else {
+        this.$scope.showApprovalSection = true;
+        this.$scope.showHistorySection = false;
+        this.getLeaveApplications();
+      }
     }
 
     private setResultsPerPage(resultsPerPage: number) {
@@ -166,7 +222,6 @@ module ums {
         this.$scope.itemsPerPage = resultsPerPage;
         this.getLeaveApplications();
       }
-
     }
 
 
@@ -196,11 +251,18 @@ module ums {
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
+      if (this.$scope.showHistorySection == true) {
+        this.$scope.fromHistory = true;
+      } else {
+        this.$scope.fromHistory = false;
+      }
+      this.$scope.applicantsId = angular.copy(pendingApplication.applicantsId);
       this.$scope.pagination.currentPage = currentPage;
       this.$scope.showStatusSection = true;
+      this.$scope.showApprovalSection = false;
+      this.$scope.showHistorySection = false;
       this.$scope.pendingApplication = pendingApplication;
       this.$scope.applicationStatusList = [];
-
       this.$scope.approveButtonClicked = false;
       this.$scope.rejectButtonClicked = false;
 

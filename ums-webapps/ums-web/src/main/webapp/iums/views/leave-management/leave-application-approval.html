@@ -2,13 +2,19 @@
     <div class="panel">
         <div class="panel-heading">Leave Application Approval<span
                 class="subtitle"></span></div>
-        <div class="panel-body shadowPanel" style="min-height: 490px;">
+        <div class="panel-body shadowPanel" style="min-height: 490px;"
+             data-ng-style="'background-color':backgroundColor">
 
-            <div data-ng-if="!showStatusSection">
+            <div data-ng-if="showStatusSection==false && showApprovalSection==true && showHistorySection==false">
                 <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
             </div>
 
             <div data-ng-if="showStatusSection">
+                <div class="col-md-12" align="right">
+                    <span class="label label-info" style="cursor: pointer" data-ng-click="showHistory()">Applicant's History</span>
+                    <br/>
+                    <br/>
+                </div>
                 <div class="col-md-12" data-ng-include="'views/leave-management/leave-application-status.html'">
                 </div>
                 <div class="col-md-12">
@@ -59,6 +65,16 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+
+            <div data-ng-if="showHistorySection==true && showApprovalSection==false && showStatusSection==false">
+                <div class="col-md-12"><h2>Applicant's Histories</h2></div>
+                <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
+                <div class="col-md-12">
+                    <div class="well" align="right">
+                        <button class="btn btn-danger" data-ng-click="closeHistory()">Close</button>
+                    </div>
                 </div>
             </div>
 
