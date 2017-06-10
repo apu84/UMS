@@ -1,11 +1,5 @@
 module ums {
     interface IEmployeeInformation extends ng.IScope {
-        personalTab: boolean;
-        academicTab: boolean;
-        publicationTab: boolean;
-        trainingTab: boolean;
-        awardTab: boolean;
-        experienceTab: boolean;
 
         showPersonalInputDiv: boolean;
         showAcademicInputDiv: boolean;
@@ -21,47 +15,10 @@ module ums {
         showAwardLabelDiv: boolean;
         showExperienceLabelDiv: boolean;
 
-        showAcademicAddIcon: boolean;
-        showPublicationAddIcon: boolean;
-        showTrainingAddIcon: boolean;
-        showAwardAddIcon: boolean;
-        showExperienceAddIcon: boolean;
-
-        showAcademicCrossIcon: boolean;
-        showPublicationCrossIcon: boolean;
-        showTrainingCrossIcon: boolean;
-        showAwardCrossIcon: boolean;
-        showExperienceCrossIcon: boolean;
-
-        showRequireSign: boolean;
-        showPermanentAddressCheckbox: boolean;
         required: boolean;
 
         disablePresentAddressDropdown: boolean;
         disablePermanentAddressDropdown: boolean;
-        showSup: boolean;
-        showPublicationISSNDiv: boolean;
-
-        disablePersonalSubmitButton: boolean;
-        disableAcademicSubmitButton: boolean;
-        disablePublicationSubmitButton: boolean;
-        disableTrainingSubmitButton: boolean;
-        disableAwardSubmitButton: boolean;
-        disableExperienceSubmitButton: boolean;
-
-        showPersonalEditButton: boolean;
-        showAcademicEditButton: boolean;
-        showPublicationEditButton: boolean;
-        showTrainingEditButton: boolean;
-        showAwardEditButton: boolean;
-        showExperienceEditButton: boolean;
-
-        showPersonalCancelButton: boolean;
-        showAcademicCancelButton: boolean;
-        showPublicationCancelButton: boolean;
-        showTrainingCancelButton: boolean;
-        showAwardCancelButton: boolean;
-        showExperienceCancelButton: boolean;
 
         borderColor: string;
         supOptions: string;
@@ -80,9 +37,7 @@ module ums {
         thanaMap: any;
         data: any;
         pagination: any;
-        //$$childTail: any;
 
-        changeNav: Function;
         enableEditMode: Function;
         enableViewMode: Function;
         addNewRow: Function;
@@ -240,7 +195,7 @@ module ums {
             };
 
             $scope.data = {
-                supOptions: "",
+                supOptions: "1",
                 borderColor: "",
                 itemPerPage: 2,
                 totalRecord: 0
@@ -310,137 +265,65 @@ module ums {
 
             this.addDate();
 
-            this.getPersonalInformation();
-            this.getAcademicInformation();
-            this.getAwardInformation();
-            this.getPublicationInformation();
-            this.getExperienceInformation();
-            this.getTrainingInformation();
+            // this.getPersonalInformation();
+            // this.getAcademicInformation();
+            // this.getAwardInformation();
+            // this.getPublicationInformation();
+            // this.getExperienceInformation();
+            // this.getTrainingInformation();
         }
+
 
         private enableViewMode(formName: string) {
             if (formName === 'personal') {
                 this.$scope.showPersonalInputDiv = false;
-                this.$scope.showRequireSign = false;
-                this.$scope.showPermanentAddressCheckbox = false;
-                this.$scope.showSup = false;
-                this.$scope.showPersonalCancelButton = false;
-                this.$scope.disablePresentAddressDropdown = false;
-                this.$scope.disablePermanentAddressDropdown = false;
                 this.$scope.showPersonalLabelDiv = true;
-                this.$scope.showPersonalEditButton = true;
-                this.$scope.disablePersonalSubmitButton = true;
             }
             else if (formName === 'academic') {
                 this.$scope.showAcademicInputDiv = false;
-                this.$scope.showAcademicAddIcon = false;
-                this.$scope.showAcademicCrossIcon = false;
-                this.$scope.showRequireSign = false;
-                this.$scope.showAcademicCancelButton = false;
                 this.$scope.showAcademicLabelDiv = true;
-                this.$scope.showAcademicEditButton = true;
-                this.$scope.disableAcademicSubmitButton = true;
             }
             else if (formName === 'publication') {
                 this.$scope.showPublicationInputDiv = false;
-                this.$scope.showPublicationAddIcon = false;
-                this.$scope.showPublicationCrossIcon = false;
-                this.$scope.showPublicationCancelButton = false;
                 this.$scope.showPublicationLabelDiv = true;
-                this.$scope.showPublicationEditButton = true;
-                this.$scope.disablePublicationSubmitButton = true;
-                this.$scope.showPublicationISSNDiv = true;
             }
             else if (formName === 'training') {
                 this.$scope.showTrainingInputDiv = false;
-                this.$scope.showTrainingAddIcon = false;
-                this.$scope.showTrainingCrossIcon = false;
-                this.$scope.showTrainingCancelButton = false;
                 this.$scope.showTrainingLabelDiv = true;
-                this.$scope.showTrainingEditButton = true;
-                this.$scope.disableTrainingSubmitButton = true;
             }
             else if (formName === 'award') {
                 this.$scope.showAwardInputDiv = false;
-                this.$scope.showAwardAddIcon = false;
-                this.$scope.showAwardCrossIcon = false;
-                this.$scope.showAwardCancelButton = false;
                 this.$scope.showAwardLabelDiv = true;
-                this.$scope.showAwardEditButton = true;
-                this.$scope.disableAwardSubmitButton = true;
             }
             else if (formName === 'experience') {
                 this.$scope.showExperienceInputDiv = false;
-                this.$scope.showExperienceAddIcon = false;
-                this.$scope.showExperienceCrossIcon = false;
-                this.$scope.showExperienceCancelButton = false;
                 this.$scope.showExperienceLabelDiv = true;
-                this.$scope.showExperienceEditButton = true;
-                this.$scope.disableExperienceSubmitButton = true;
             }
         }
         private enableEditMode(formName: string) {
             if (formName === "personal") {
-                this.$scope.showPersonalInputDiv = true;
                 this.$scope.showPersonalLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showPermanentAddressCheckbox = true;
-                this.$scope.showSup = true;
-                this.$scope.disablePersonalSubmitButton = false;
-                this.$scope.showPersonalCancelButton = true;
-                this.$scope.showPersonalEditButton = false;
-                this.$scope.required = false;
+                this.$scope.showPersonalInputDiv = true;
             }
             else if (formName === "academic") {
-                this.$scope.showAcademicInputDiv = true;
                 this.$scope.showAcademicLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showAcademicAddIcon = true;
-                this.$scope.showAcademicCrossIcon = true;
-                this.$scope.showRequireSign = true;
-                this.$scope.disableAcademicSubmitButton = false;
-                this.$scope.showAcademicCancelButton = true;
-                this.$scope.showAcademicEditButton = false;
+                this.$scope.showAcademicInputDiv = true;
             }
             else if (formName === "publication") {
-                this.$scope.showPublicationInputDiv = true;
                 this.$scope.showPublicationLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showPublicationAddIcon = true;
-                this.$scope.showPublicationCrossIcon = true;
-                this.$scope.disablePublicationSubmitButton = false;
-                this.$scope.showPublicationCancelButton = true;
-                this.$scope.showPublicationEditButton = false;
+                this.$scope.showPublicationInputDiv = true;
             }
             else if (formName === "training") {
-                this.$scope.showTrainingInputDiv = true;
                 this.$scope.showTrainingLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showTrainingAddIcon = true;
-                this.$scope.showTrainingCrossIcon = true;
-                this.$scope.disableTrainingSubmitButton = false;
-                this.$scope.showTrainingCancelButton = true;
-                this.$scope.showTrainingEditButton = false;
+                this.$scope.showTrainingInputDiv = true;
             }
             else if (formName === "award") {
-                this.$scope.showAwardInputDiv = true;
                 this.$scope.showAwardLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showAwardAddIcon = true;
-                this.$scope.showAwardCrossIcon = true;
-                this.$scope.disableAwardSubmitButton = false;
-                this.$scope.showAwardCancelButton = true;
-                this.$scope.showAwardEditButton = false;
+                this.$scope.showAwardInputDiv = true;
             }
             else if (formName === "experience") {
-                this.$scope.showExperienceInputDiv = true;
                 this.$scope.showExperienceLabelDiv = false;
-                this.$scope.showRequireSign = true;
-                this.$scope.showExperienceAddIcon = true;
-                this.$scope.showExperienceCrossIcon = true;
-                this.$scope.disableExperienceSubmitButton = false;
-                this.$scope.showExperienceCancelButton = true;
-                this.$scope.showExperienceEditButton = false;
+                this.$scope.showExperienceInputDiv = true;
             }
         }
 

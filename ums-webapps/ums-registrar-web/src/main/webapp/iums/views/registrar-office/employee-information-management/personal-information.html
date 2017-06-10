@@ -7,7 +7,604 @@
     <!--</div>-->
 <!--</div>-->
 
-<form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
+<div data-ng-if="showPersonalInputDiv">
+    <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
+        <div class="customContainer">
+            <div class="box">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="center">
+                            <h5><b>General</b></h5>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nFirstName"
+                                   id="iFirstName"
+                                   data-ng-model="entry.personal.firstName"
+                                   placeholder="First Name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nLastName"
+                                   id="iLastName"
+                                   data-ng-model="entry.personal.lastName"
+                                   placeholder="Last Name"
+                                   class="form-control " required>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nGender"
+                                    id="iGender"
+                                    data-ng-model="entry.personal.gender"
+                                    data-ng-options="gender.name for gender in gender"
+                                    class="form-control" required>
+                                <option value="">Select Gender</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nFatherName"
+                                   id="iFatherName"
+                                   data-ng-model="entry.personal.fatherName"
+                                   placeholder="Father's Name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <select name="nBloodGroup"
+                                    id="iBloodGroup"
+                                    data-ng-model="entry.personal.bloodGroup"
+                                    data-ng-options="bloodGroup.name for bloodGroup in bloodGroups"
+                                    class="form-control" required>
+                                <option value="">Select Blood Group</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nMotherName"
+                                   id="iMotherName"
+                                   data-ng-model="entry.personal.motherName"
+                                   placeholder="Mother's Name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nNationality"
+                                    id="iNationality"
+                                    data-ng-model="entry.personal.nationality"
+                                    data-ng-options="nationality.name for nationality in nationalities"
+                                    class="form-control" required>
+                                <option value="">Select Nationality</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <select name="nReligion"
+                                    id="iReligion"
+                                    data-ng-model="entry.personal.religion"
+                                    data-ng-options="religion.name for religion in religions"
+                                    class="form-control" required>
+                                <option value="">Select Religion</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="iMaritalStatus"
+                                    id="iMaritalStatus"
+                                    data-ng-model="entry.personal.maritalStatus"
+                                    data-ng-options="maritalStatus.name for maritalStatus in maritalStatus"
+                                    class="form-control" required>
+                                <option value="">Select Marital Status</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's Name</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nSpouseName"
+                                   id="iSpouseName"
+                                   data-ng-model="entry.personal.spouseName"
+                                   placeholder="Spouse's Name"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nNationalId"
+                                   id="iNationalId"
+                                   data-ng-model="entry.personal.nationalIdNo"
+                                   placeholder="National Id Card No."
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nSpouseNationalId"
+                                   id="iSpouseNationalId"
+                                   data-ng-model="entry.personal.spouseNationalIdNo"
+                                   placeholder="Spouse's National Id Card Number"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nBirthDate"
+                                   id="iBirthDate"
+                                   data-ng-model="entry.personal.dateOfBirth"
+                                   data-date-format="dd/mm/yyyy"
+                                   placeholder="DD/MM/YYYY"
+                                   autocomplete="off"
+                                   class="datepicker-default form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Personal Website" for="iPersonalWebsite">Personal Website</label>
+                        <div class="col-md-8">
+                            <div class="input-icon">
+                                <i class="fa fa-external-link"></i>
+                                <input type="url"
+                                       name="nPersonalWebsite"
+                                       id="iPersonalWebsite"
+                                       data-ng-model="entry.personal.personalWebsite"
+                                       placeholder="Personal Website"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <hr />
+
+
+            <div class="box">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="center">
+                            <h5><b>Contact</b></h5>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
+                        <div class="col-md-8">
+                            <div class="input-icon">
+                                <i class="fa fa-envelope"></i>
+                                <input type="email"
+                                       name="nOrganizationalEmail"
+                                       id="iOrganizationalEmail"
+                                       data-ng-model="entry.personal.organizationalEmail"
+                                       placeholder="Organizational Email Address"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <div class="input-icon">
+                                <i class="fa fa-envelope"></i>
+                                <input type="email"
+                                       name="nPersonalEmail"
+                                       id="iPersonalEmail"
+                                       data-ng-model="entry.personal.personalEmail"
+                                       placeholder="Personal Email Address"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="tel"
+                                   name="nMobile"
+                                   id="iMobile"
+                                   data-ng-model="entry.personal.mobile"
+                                   placeholder="Mobile"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Employee's Phone No." for="iPhone">Phone</label>
+                        <div class="col-md-8">
+                            <input type="tel"
+                                   name="nPhone"
+                                   id="iPhone"
+                                   data-ng-model="entry.personal.phone"
+                                   placeholder="Phone"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-12"><b>Present Address:</b></label>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPresentAddressHouse"
+                                   id="iPresentAddressHouse"
+                                   data-ng-model="entry.personal.presentAddressHouse"
+                                   placeholder="House/Holding No."
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPresentAddressRoad"
+                                   id="iPresentAddressRoad"
+                                   data-ng-model="entry.personal.presentAddressRoad"
+                                   placeholder="Road/Street"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressCountry">Country<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPresentAddressCountry"
+                                    id="iPresentAddressCountry"
+                                    data-ng-model="entry.personal.presentAddressCountry"
+                                    data-ng-options="country.name for country in countries"
+                                    data-ng-change="changePresentAddressFields()"
+                                    class="form-control" required>
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPresentAddressDivision"
+                                    id="iPresentAddressDivision"
+                                    data-ng-model="entry.personal.presentAddressDivision"
+                                    data-ng-options="divisions.name for divisions in divisions"
+                                    data-ng-change="changePresentAddressDistrict()"
+                                    data-ng-disabled="disablePresentAddressDropdown"
+                                    class="form-control" requried="required">
+                                <option value="">Select Division</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPresentAddressDistrict"
+                                    id="iPresentAddressDistrict"
+                                    data-ng-model="entry.personal.presentAddressDistrict"
+                                    data-ng-options="districts.name for districts in presentAddressDistricts"
+                                    data-ng-change="changePresentAddressThana()"
+                                    data-ng-disabled="disablePresentAddressDropdown"
+                                    class="form-control" required="required">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPresentAddressPoliceStation"
+                                    id="iPresentAddressPoliceStation"
+                                    data-ng-model="entry.personal.presentAddressThana"
+                                    data-ng-options="thanas.name for thanas in presentAddressThanas"
+                                    data-ng-disabled="disablePresentAddressDropdown"
+                                    class="form-control" required="required">
+                                <option value="">Select Thana</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPresentAddressPostOffice"
+                                   id="iPresentAddressPostOffice"
+                                   data-ng-model="entry.personal.presentAddressPostOfficeNo"
+                                   placeholder="Police Post Office/Zip"
+                                   data-ng-disabled="disablePresentAddressDropdown"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br /><br />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="col-md-2"><b>Permanent Address:</b></label>
+                        <div class="col-md-6">
+                            <input type="checkbox" data-ng-click="sameAsPresentAddress()" />Same as present address
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPermanentAddressHouse"
+                                   id="iPermanentAddressHouse"
+                                   data-ng-model="entry.personal.permanentAddressHouse"
+                                   placeholder="House/Holding No."
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPermanentAddressRoad"
+                                   id="iPermanentAddressRoad"
+                                   data-ng-model="entry.personal.permanentAddressRoad"
+                                   placeholder="Road/Street"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPermanentAddressCountry"
+                                    id="iPermanentAddressCountry"
+                                    data-ng-model="entry.personal.permanentAddressCountry"
+                                    data-ng-options="country.name for country in countries"
+                                    data-ng-change="changePermanentAddressFields()"
+                                    class="form-control" required>
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPermanentAddressDivision"
+                                    id="iPermanentAddressDivision"
+                                    data-ng-model="entry.personal.permanentAddressDivision"
+                                    data-ng-options="division.name for division in divisions"
+                                    data-ng-change="changePermanentAddressDistrict()"
+                                    data-ng-disabled="disablePermanentAddressDropdown"
+                                    class="form-control" required="required">
+                                <option value="">Select Division</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPermanentAddressDistrict"
+                                    id="iPermanentAddressDistrict"
+                                    data-ng-model="entry.personal.permanentAddressDistrict"
+                                    data-ng-options="district.name for district in permanentAddressDistricts"
+                                    data-ng-change="changePermanentAddressThana()"
+                                    data-ng-disabled="disablePermanentAddressDropdown"
+                                    class="form-control" requried="required">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nPermanentAddressPoliceStation"
+                                    id="iPermanentAddressPoliceStation"
+                                    data-ng-model="entry.personal.permanentAddressThana"
+                                    data-ng-options="thana.name for thana in permanentAddressThanas"
+                                    data-ng-disabled="disablePermanentAddressDropdown"
+                                    class="form-control" required="required">
+                                <option value="">Select Thana</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nPermanentAddressPostOffice"
+                                   id="iPermanentAddressPostOffice"
+                                   data-ng-model="entry.personal.permanentAddressPostOfficeNo"
+                                   placeholder="Police Post Office/Zip"
+                                   data-ng-disabled="disablePermanentAddressDropdown"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br />
+            </div>
+            <hr />
+
+
+            <div class="box">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="center">
+                            <h5><b>Emergency Contact</b></h5>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="ndEmergencyContactName"
+                                   id="idEmergencyContactName"
+                                   data-ng-model="entry.personal.emergencyContactName"
+                                   placeholder="Name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select name="nEmergencyContactRelation"
+                                    id="iEmergencyContactRelation"
+                                    data-ng-model="entry.personal.emergencyContactRelation"
+                                    data-ng-options="relation.name for relation in relations"
+                                    class="form-control" required>
+                                <option value="">Select Relation</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nEmergencyContactPhone"
+                                   id="iEmergencyContactPhone"
+                                   data-ng-model="entry.personal.emergencyContactPhone"
+                                   placeholder="Phone"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address
+                            <sup>
+                                <select data-ng-model="data.supOptions" data-ng-change="fillEmergencyContactAddress()">
+                                    <option value="1">Default</option>
+                                    <option value="2">Present</option>
+                                    <option value="3">Permanent</option>
+                                </select>
+                            </sup>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nEmergencyContactAddress"
+                                   id="iEmergencyContactAddress"
+                                   data-ng-model="entry.personal.emergencyContactAddress"
+                                   placeholder="Address"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-left pal">
+                    <a data-target="#modal-personal" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right pal">
+                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div data-ng-if="showPersonalLabelDiv">
     <div class="customContainer">
         <div class="box">
             <div class="row">
@@ -20,30 +617,14 @@
             <br />
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nFirstName"
-                               id="iFirstName"
-                               data-ng-model="entry.personal.firstName"
-                               placeholder="First Name"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.firstName}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nLastName"
-                               id="iLastName"
-                               data-ng-model="entry.personal.lastName"
-                               placeholder="Last Name"
-                               class="form-control " required>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.lastName}}</label>
                     </div>
                 </div>
@@ -52,31 +633,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nGender"
-                                id="iGender"
-                                data-ng-model="entry.personal.gender"
-                                data-ng-options="gender.name for gender in gender"
-                                class="form-control" required>
-                            <option value="">Select Gender</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.gender.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nFatherName"
-                               id="iFatherName"
-                               data-ng-model="entry.personal.fatherName"
-                               placeholder="Father's Name"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.fatherName}}</label>
                     </div>
                 </div>
@@ -85,31 +649,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nBloodGroup"
-                                id="iBloodGroup"
-                                data-ng-model="entry.personal.bloodGroup"
-                                data-ng-options="bloodGroup.name for bloodGroup in bloodGroups"
-                                class="form-control" required>
-                            <option value="">Select Blood Group</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label"> {{entry.personal.bloodGroup.name}} </label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nMotherName"
-                               id="iMotherName"
-                               data-ng-model="entry.personal.motherName"
-                               placeholder="Mother's Name"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.motherName}}</label>
                     </div>
                 </div>
@@ -118,32 +665,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nNationality"
-                                id="iNationality"
-                                data-ng-model="entry.personal.nationality"
-                                data-ng-options="nationality.name for nationality in nationalities"
-                                class="form-control" required>
-                            <option value="">Select Nationality</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.nationality.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nReligion"
-                                id="iReligion"
-                                data-ng-model="entry.personal.religion"
-                                data-ng-options="religion.name for religion in religions"
-                                class="form-control" required>
-                            <option value="">Select Religion</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.religion.name}}</label>
                     </div>
                 </div>
@@ -152,31 +681,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="iMaritalStatus"
-                                id="iMaritalStatus"
-                                data-ng-model="entry.personal.maritalStatus"
-                                data-ng-options="maritalStatus.name for maritalStatus in maritalStatus"
-                                class="form-control" required>
-                            <option value="">Select Marital Status</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.maritalStatus.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's Name</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nSpouseName"
-                               id="iSpouseName"
-                               data-ng-model="entry.personal.spouseName"
-                               placeholder="Spouse's Name"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.spouseName}}</label>
                     </div>
                 </div>
@@ -186,29 +698,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nNationalId"
-                               id="iNationalId"
-                               data-ng-model="entry.personal.nationalIdNo"
-                               placeholder="National Id Card No."
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.nationalIdNo}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nSpouseNationalId"
-                               id="iSpouseNationalId"
-                               data-ng-model="entry.personal.spouseNationalIdNo"
-                               placeholder="Spouse's National Id Card Number"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed;" data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
                         <label class="control-label">{{entry.personal.spouseNationalIdNo}}</label>
                     </div>
                 </div>
@@ -217,35 +713,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nBirthDate"
-                               id="iBirthDate"
-                               data-ng-model="entry.personal.dateOfBirth"
-                               data-date-format="dd/mm/yyyy"
-                               placeholder="DD/MM/YYYY"
-                               autocomplete="off"
-                               class="datepicker-default form-control" required>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed;" data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
                         <label class="control-label">{{entry.personal.dateOfBirth}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Personal Website" for="iPersonalWebsite">Personal Website</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <div class="input-icon">
-                            <i class="fa fa-external-link"></i>
-                            <input type="url"
-                                   name="nPersonalWebsite"
-                                   id="iPersonalWebsite"
-                                   data-ng-model="entry.personal.personalWebsite"
-                                   placeholder="Personal Website"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.personalWebsite}}</label>
                     </div>
                 </div>
@@ -267,35 +742,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <div class="input-icon">
-                            <i class="fa fa-envelope"></i>
-                            <input type="email"
-                                   name="nOrganizationalEmail"
-                                   id="iOrganizationalEmail"
-                                   data-ng-model="entry.personal.organizationalEmail"
-                                   placeholder="Organizational Email Address"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.organizationalEmail}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <div class="input-icon">
-                            <i class="fa fa-envelope"></i>
-                            <input type="email"
-                                   name="nPersonalEmail"
-                                   id="iPersonalEmail"
-                                   data-ng-model="entry.personal.personalEmail"
-                                   placeholder="Personal Email Address"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.personalEmail}}</label>
                     </div>
                 </div>
@@ -304,30 +757,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile<span class='require' data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="tel"
-                               name="nMobile"
-                               id="iMobile"
-                               data-ng-model="entry.personal.mobile"
-                               placeholder="Mobile"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.mobile}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Phone No." for="iPhone">Phone</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="tel"
-                               name="nPhone"
-                               id="iPhone"
-                               data-ng-model="entry.personal.phone"
-                               placeholder="Phone"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.phone}}</label>
                     </div>
                 </div>
@@ -344,30 +781,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPresentAddressHouse"
-                               id="iPresentAddressHouse"
-                               data-ng-model="entry.personal.presentAddressHouse"
-                               placeholder="House/Holding No."
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPresentAddressRoad"
-                               id="iPresentAddressRoad"
-                               data-ng-model="entry.personal.presentAddressRoad"
-                               placeholder="Road/Street"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label"> {{entry.personal.presentAddressRoad}} </label>
                     </div>
                 </div>
@@ -376,35 +797,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressCountry">Country<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPresentAddressCountry"
-                                id="iPresentAddressCountry"
-                                data-ng-model="entry.personal.presentAddressCountry"
-                                data-ng-options="country.name for country in countries"
-                                data-ng-change="changePresentAddressFields()"
-                                class="form-control" required>
-                            <option value="">Select Country</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPresentAddressCountry">Country</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPresentAddressDivision"
-                                id="iPresentAddressDivision"
-                                data-ng-model="entry.personal.presentAddressDivision"
-                                data-ng-options="divisions.name for divisions in divisions"
-                                data-ng-change="changePresentAddressDistrict()"
-                                data-ng-disabled="disablePresentAddressDropdown"
-                                class="form-control" requried="required">
-                            <option value="">Select Division</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPresentAddressDivision">Division</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressDivision.name}}</label>
                     </div>
                 </div>
@@ -414,35 +814,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPresentAddressDistrict"
-                                id="iPresentAddressDistrict"
-                                data-ng-model="entry.personal.presentAddressDistrict"
-                                data-ng-options="districts.name for districts in presentAddressDistricts"
-                                data-ng-change="changePresentAddressThana()"
-                                data-ng-disabled="disablePresentAddressDropdown"
-                                class="form-control" required="required">
-                            <option value="">Select District</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPresentAddressDistrict">District</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPresentAddressPoliceStation"
-                                id="iPresentAddressPoliceStation"
-                                data-ng-model="entry.personal.presentAddressThana"
-                                data-ng-options="thanas.name for thanas in presentAddressThanas"
-                                data-ng-disabled="disablePresentAddressDropdown"
-                                class="form-control" required="required">
-                            <option value="">Select Thana</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressThana.name}}</label>
                     </div>
                 </div>
@@ -452,16 +831,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPresentAddressPostOffice"
-                               id="iPresentAddressPostOffice"
-                               data-ng-model="entry.personal.presentAddressPostOfficeNo"
-                               placeholder="Police Post Office/Zip"
-                               data-ng-disabled="disablePresentAddressDropdown"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.presentAddressPostOfficeNo}}</label>
                     </div>
                 </div>
@@ -472,39 +842,20 @@
             <div class="row">
                 <div class="col-md-12">
                     <label class="col-md-2"><b>Permanent Address:</b></label>
-                    <div class="col-md-6" data-ng-show="showPermanentAddressCheckbox">
-                        <input type="checkbox" data-ng-click="sameAsPresentAddress()" />Same as present address
-                    </div>
                 </div>
             </div>
             <br />
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPermanentAddressHouse"
-                               id="iPermanentAddressHouse"
-                               data-ng-model="entry.personal.permanentAddressHouse"
-                               placeholder="House/Holding No."
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPermanentAddressRoad"
-                               id="iPermanentAddressRoad"
-                               data-ng-model="entry.personal.permanentAddressRoad"
-                               placeholder="Road/Street"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label"> {{entry.personal.permanentAddressRoad}} </label>
                     </div>
                 </div>
@@ -513,35 +864,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPermanentAddressCountry"
-                                id="iPermanentAddressCountry"
-                                data-ng-model="entry.personal.permanentAddressCountry"
-                                data-ng-options="country.name for country in countries"
-                                data-ng-change="changePermanentAddressFields()"
-                                class="form-control" required>
-                            <option value="">Select Country</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPermanentAddressDivision"
-                                id="iPermanentAddressDivision"
-                                data-ng-model="entry.personal.permanentAddressDivision"
-                                data-ng-options="division.name for division in divisions"
-                                data-ng-change="changePermanentAddressDistrict()"
-                                data-ng-disabled="disablePermanentAddressDropdown"
-                                class="form-control" required="required">
-                            <option value="">Select Division</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressDivision.name}}</label>
                     </div>
                 </div>
@@ -551,35 +881,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPermanentAddressDistrict"
-                                id="iPermanentAddressDistrict"
-                                data-ng-model="entry.personal.permanentAddressDistrict"
-                                data-ng-options="district.name for district in permanentAddressDistricts"
-                                data-ng-change="changePermanentAddressThana()"
-                                data-ng-disabled="disablePermanentAddressDropdown"
-                                class="form-control" requried="required">
-                            <option value="">Select District</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nPermanentAddressPoliceStation"
-                                id="iPermanentAddressPoliceStation"
-                                data-ng-model="entry.personal.permanentAddressThana"
-                                data-ng-options="thana.name for thana in permanentAddressThanas"
-                                data-ng-disabled="disablePermanentAddressDropdown"
-                                class="form-control" required="required">
-                            <option value="">Select Thana</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressThana.name}}</label>
                     </div>
                 </div>
@@ -589,16 +898,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nPermanentAddressPostOffice"
-                               id="iPermanentAddressPostOffice"
-                               data-ng-model="entry.personal.permanentAddressPostOfficeNo"
-                               placeholder="Police Post Office/Zip"
-                               data-ng-disabled="disablePermanentAddressDropdown"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.permanentAddressPostOfficeNo}}</label>
                     </div>
                 </div>
@@ -620,31 +920,14 @@
             <br />
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="ndEmergencyContactName"
-                               id="idEmergencyContactName"
-                               data-ng-model="entry.personal.emergencyContactName"
-                               placeholder="Name"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.emergencyContactName}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <select name="nEmergencyContactRelation"
-                                id="iEmergencyContactRelation"
-                                data-ng-model="entry.personal.emergencyContactRelation"
-                                data-ng-options="relation.name for relation in relations"
-                                class="form-control" required>
-                            <option value="">Select Relation</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8" style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.emergencyContactRelation.name}}</label>
                     </div>
                 </div>
@@ -653,37 +936,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone<span class="require" data-ng-show="showRequireSign">*</span></label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nEmergencyContactPhone"
-                               id="iEmergencyContactPhone"
-                               data-ng-model="entry.personal.emergencyContactPhone"
-                               placeholder="Phone"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.emergencyContactPhone}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address<sup data-ng-show="showSup">
-                        <select data-ng-model="data.supOptions" data-ng-change="fillEmergencyContactAddress()">
-                            <option value="1" selected>Default</option>
-                            <option value="2">Present</option>
-                            <option value="3">Permanent</option>
-                        </select>
-                    </sup>
-                    </label>
-                    <div class="col-md-8" data-ng-show="showPersonalInputDiv">
-                        <input type="text"
-                               name="nEmergencyContactAddress"
-                               id="iEmergencyContactAddress"
-                               data-ng-model="entry.personal.emergencyContactAddress"
-                               placeholder="Address"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-8"  style="border-bottom: 1px dashed; " data-ng-show="showPersonalLabelDiv">
+                    <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed; ">
                         <label class="control-label">{{entry.personal.emergencyContactAddress}}</label>
                     </div>
                 </div>
@@ -694,20 +954,15 @@
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <div class="text-left pal">
-                <a data-target="#modal-personal" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
-            </div>
         </div>
         <div class="col-md-6">
             <div class="text-right pal">
                 <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton"><i class="fa fa-edit"></i>&nbsp;Edit</button>
-                <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton"><i class="fa fa-eye"></i>&nbsp;View</button>
-                <button type="submit" title="Submit" class="btn btn-success" data-ng-disabled="disablePersonalSubmitButton"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 <div id="modal-personal" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
      aria-hidden="true" class="modal fade">
