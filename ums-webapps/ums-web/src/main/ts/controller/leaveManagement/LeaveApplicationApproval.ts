@@ -102,7 +102,7 @@ module ums {
       $scope.reject = this.reject.bind(this);
       $scope.showHistory = this.showHistory.bind(this);
       $scope.closeHistory = this.closeHistory.bind(this);
-      this.getLeaveApplications();
+      //this.getLeaveApplications();
       this.getUsersInformation();
       this.getAdditionaPermissions();
     }
@@ -168,7 +168,8 @@ module ums {
       });
     }
 
-    private getUsersInformation() {
+    private getUsersInformation(): ng.IPromise<any> {
+      var defer = this.$q.defer();
       this.userService.fetchCurrentUserInfo().then((user) => {
         this.$scope.user = user;
         if (this.$scope.user.roleId == Utils.VC)
@@ -177,7 +178,13 @@ module ums {
           this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_WAITING_FOR_REGISTRARS_APPROVAL - 1];
         else
           this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_WAITING_FOR_HEADS_APPROVAL - 1];
+
+        this.fetchLeaveApplications();
+        defer.resolve(this.$scope.leaveApprovalStatus);
+
       });
+
+      return defer.promise;
     }
 
 
@@ -234,6 +241,10 @@ module ums {
 
 
     private getLeaveApplications() {
+      this.fetchLeaveApplications();
+    }
+
+    private fetchLeaveApplications() {
       this.$scope.pendingApplications = [];
       this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.$scope.leaveApprovalStatus.id, this.$scope.pagination.currentPage, this.$scope.itemsPerPage).then((apps) => {
         this.$scope.pendingApplications = apps.statusList;
