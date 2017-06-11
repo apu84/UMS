@@ -871,7 +871,13 @@ module ums {
           url: "/readmission",
           controller: 'ReadmissionController',
           controllerAs: 'vm',
-          templateUrl: ''
+          templateUrl: 'views/readmission/readmission.html'
+        })
+        .state('semesterFee', {
+          url: "/semesterFee",
+          controller: 'SemesterFeeController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/semesterfee/semester.fee.html'
         })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",

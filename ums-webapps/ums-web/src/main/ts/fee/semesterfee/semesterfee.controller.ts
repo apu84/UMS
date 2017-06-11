@@ -1,9 +1,9 @@
 module ums {
   export class SemesterFeeController {
     public static $inject = ['SemesterFeeService', 'PaymentService', 'StudentInfoService', 'notify'];
-    public NOT_WITHIN_SLOT: string = 'Not within admission slot';
-    public ADMITTED: string = 'Admission is completed';
-    public READMISSION_NOT_APPLIED: string = 'No readmission application found';
+    private NOT_WITHIN_SLOT: string = 'Not within admission slot';
+    private ADMITTED: string = 'Admission is completed';
+    private READMISSION_NOT_APPLIED: string = 'No readmission application found';
     public messageText: string;
     public payments: Payment[];
     public fee: SemesterFee[];
@@ -102,6 +102,7 @@ module ums {
                     (fee: SemesterFee[]) => {
                       this.fee = fee;
                       this.firstInstallment = true;
+                      this.regularPayment = false;
                     }
                 );
               }
@@ -195,6 +196,8 @@ module ums {
               (fee: SemesterFee[]) => {
                 this.fee = fee;
                 this.regularPayment = true;
+                this.secondInstallment = false;
+                this.firstInstallment = false;
               }
           );
         }
@@ -211,6 +214,7 @@ module ums {
               this.semesterFeeService.secondInstallment(semesterId).then(
                   (fee: SemesterFee[]) => {
                     this.fee = fee;
+                    this.regularPayment = false;
                     this.secondInstallment = true;
                   }
               );

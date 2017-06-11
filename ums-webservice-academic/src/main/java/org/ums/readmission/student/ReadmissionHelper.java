@@ -50,6 +50,7 @@ public class ReadmissionHelper {
       for(final ReadmissionApplication application : applications) {
         objectBuilder = Json.createObjectBuilder();
         objectBuilder.add("courseId", application.getCourseId());
+        objectBuilder.add("courseNo", application.getCourse().getNo());
         objectBuilder.add("courseTitle", application.getCourse().getTitle());
         objectBuilder.add("courseCrHr", application.getCourse().getCrHr());
         List<UGRegistrationResult> failed = failedCourses.get();
@@ -75,6 +76,7 @@ public class ReadmissionHelper {
       for(UGRegistrationResult result : failedCourses.get()) {
         objectBuilder = Json.createObjectBuilder();
         objectBuilder.add("courseId", result.getCourseId());
+        objectBuilder.add("courseNo", result.getCourse().getNo());
         objectBuilder.add("courseTitle", result.getCourse().getTitle());
         objectBuilder.add("courseCrHr", result.getCourse().getCrHr());
         objectBuilder.add("lastAppeared", result.getSemester().getName());
@@ -120,13 +122,16 @@ public class ReadmissionHelper {
             MutableReadmissionApplication application = new PersistentReadmissionApplication();
             application.setSemesterId(pSemesterId);
             application.setStudentId(pStudentId);
-            application.setCourseId(entries.getString(i));
+            application.setCourseId(entries.getJsonObject(i).getString("courseId"));
             application.setAppliedOn(new Date());
             application.setApplicationStatus(ReadmissionApplication.Status.APPLIED);
             applications.add(application);
           }
           mReadmissionApplicationManager.create(applications);
           return ReadmissionApplicationStatus.APPLIED;
+        }
+        else {
+          return ReadmissionApplicationStatus.NOT_TAKEN_MINIMUM_NO_OF_COURSE;
         }
       }
       else {
@@ -216,7 +221,7 @@ public class ReadmissionHelper {
         }
 
         for(int i = 0; i < entries.size(); i++) {
-          if(!containsCourse(entries.getString(i), semesterFailedCourses.get())) {
+          if(!containsCourse(entries.getJsonObject(i).getString("courseId"), semesterFailedCourses.get())) {
             return ReadmissionApplicationStatus.CONTAINS_INVALID_COURSE;
           }
         }
@@ -227,7 +232,7 @@ public class ReadmissionHelper {
 
   private boolean containsCourse(UGRegistrationResult pCourse, JsonArray pAppliedCourses) {
     for(int i = 0; i < pAppliedCourses.size(); i++) {
-      if(pCourse.getCourse().getId().equalsIgnoreCase(pAppliedCourses.getString(i))) {
+      if(pCourse.getCourse().getId().equalsIgnoreCase(pAppliedCourses.getJsonObject(i).getString("courseId"))) {
         return true;
       }
     }

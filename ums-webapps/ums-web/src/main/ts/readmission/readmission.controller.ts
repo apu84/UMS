@@ -4,6 +4,7 @@ module ums {
     public messageText: string;
     public courses: ReadmissionCourse[];
     public alreadyApplied: boolean = false;
+    public applyEnabled: boolean;
 
     constructor(private $scope: ng.IScope,
                 private readmissionService: ReadmissionService) {
@@ -28,10 +29,24 @@ module ums {
             break;
         }
       });
+
+      $scope.$watch(() => this.courses,
+          (newVal: ReadmissionCourse[]) => {
+            if (newVal && newVal.length > 0) {
+              for (let i = 0; i < newVal.length; i++) {
+                if (newVal[i].applied) {
+                  this.applyEnabled = true;
+                  return;
+                }
+              }
+            }
+            this.applyEnabled = false;
+          }, true);
     }
 
-    public apply(courses: ReadmissionCourse[]): void {
-      this.readmissionService.apply(courses).then((response: string) => {
+    public apply(): void {
+      this.messageText = '';
+      this.readmissionService.apply(this.courses).then((response: string) => {
         switch (response) {
           case this.readmissionService.responseMap.APPLIED:
             this.readmissionService.getAppliedCourses().then((courses: ReadmissionCourse[]) => {
@@ -49,7 +64,7 @@ module ums {
             this.messageText = 'Application contains invalid course/s';
             break;
           case this.readmissionService.responseMap.NOT_TAKEN_MINIMUM_NO_OF_COURSE:
-            this.messageText = 'You haven\'t taken minimum number of course/s' ;
+            this.messageText = 'You haven\'t taken minimum number of course/s';
             break;
           case this.readmissionService.responseMap.NOT_TAKEN_MINIMUM_NO_OF_LAST_SEMESTER_FAILED_COURSE:
             this.messageText = 'You have\'t taken minimum taken minimum number of failed courses from last semester';

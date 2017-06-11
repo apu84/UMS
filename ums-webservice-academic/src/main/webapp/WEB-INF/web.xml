@@ -79,7 +79,8 @@
         org.ums.filter.cors,
         org.ums.academic.resource,
         org.ums.academic.resource.student.gradesheet,
-        org.ums.readmission.student
+        org.ums.readmission.student,
+        org.ums.payment
         org.ums.report.resource,
         org.ums.resource,
         org.ums.response.type,

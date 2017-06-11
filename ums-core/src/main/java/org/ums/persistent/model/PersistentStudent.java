@@ -1,8 +1,13 @@
 package org.ums.persistent.model;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.enums.StudentStatus;
 import org.ums.manager.DepartmentManager;
@@ -10,8 +15,6 @@ import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 import org.ums.usermanagement.user.User;
-
-import java.util.Date;
 
 public class PersistentStudent implements MutableStudent {
   private static DepartmentManager sDepartmentManager;
@@ -446,7 +449,8 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Semester getCurrentEnrolledSemester() {
-    return mCurrentEnrolledSemester;
+    return mCurrentEnrolledSemester == null ? sSemesterManager.get(mCurrentEnrolledSemesterId) : sSemesterManager
+        .validate(mCurrentEnrolledSemester);
   }
 
   @Override

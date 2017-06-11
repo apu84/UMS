@@ -96,7 +96,7 @@ module ums {
 
     public payFee(semesterId: number): ng.IPromise<string> {
       let defer: ng.IDeferred<string> = this.$q.defer();
-      this.httpClient.post(`pay/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(`semester-fee/pay/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
           .success((response: string) => defer.resolve(response))
           .error((data: string) => {
             this.notify.error(data);
@@ -107,7 +107,7 @@ module ums {
 
     public payFirstInstallment(semesterId: number): ng.IPromise<string> {
       let defer: ng.IDeferred<string> = this.$q.defer();
-      this.httpClient.post(`pay/first-installment/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(`semester-fee/pay/first-installment/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
           .success((response: string) => defer.resolve(response))
           .error((data: string) => {
             this.notify.error(data);
@@ -118,7 +118,7 @@ module ums {
 
     public paySecondInstallment(semesterId: number): ng.IPromise<string> {
       let defer: ng.IDeferred<string> = this.$q.defer();
-      this.httpClient.post(`pay/second-installment/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(`semester-fee/pay/second-installment/${semesterId}`, {}, HttpClient.MIME_TYPE_JSON)
           .success((response: string) => defer.resolve(response))
           .error((data: string) => {
             this.notify.error(data);
@@ -128,5 +128,5 @@ module ums {
     }
   }
 
-  UMS.service("SemesterFeeService", SemesterFeeResponse);
+  UMS.service("SemesterFeeService", SemesterFeeService);
 }

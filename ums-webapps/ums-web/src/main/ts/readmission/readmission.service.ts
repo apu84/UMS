@@ -1,6 +1,7 @@
 module ums {
   export interface ReadmissionCourse {
     courseId: string;
+    courseNo: string;
     courseTitle: string;
     courseCrHr: string;
     lastAppeared: string;
@@ -24,7 +25,7 @@ module ums {
   }
 
   export class ReadmissionService {
-    public static $inject = ['HttpClient', 'notify'];
+    public static $inject = ['HttpClient', 'notify', '$q'];
     public responseMap: ReadmissionResponseMap = {
       APPLIED: 'APPLIED',
       ALLOWED: 'ALLOWED',
@@ -43,23 +44,21 @@ module ums {
 
     public getReadmissionStatus(): ng.IPromise <string> {
       let defer: ng.IDeferred<string> = this.$q.defer();
-      this.httpClient.get('readmission', HttpClient.MIME_TYPE_TEXT, (response: string) => {
-        defer.resolve(response);
-      });
+      this.httpClient.get('readmission/status', HttpClient.MIME_TYPE_JSON, (response: string) => defer.resolve(response));
       return defer.promise;
     }
 
     public getAppliedCourses(): ng.IPromise<ReadmissionCourse[]> {
       let defer: ng.IDeferred<ReadmissionCourse[]> = this.$q.defer();
       this.httpClient.get('readmission/application', HttpClient.MIME_TYPE_JSON,
-          (response: ReadmissionCourseResponse) => response.entries);
+          (response: ReadmissionCourseResponse) => defer.resolve(response.entries));
       return defer.promise;
     }
 
     public getApplicableCourse(): ng.IPromise<ReadmissionCourse[]> {
       let defer: ng.IDeferred<ReadmissionCourse[]> = this.$q.defer();
       this.httpClient.get('readmission/applicable-courses', HttpClient.MIME_TYPE_JSON,
-          (response: ReadmissionCourseResponse) => response.entries);
+          (response: ReadmissionCourseResponse) => defer.resolve(response.entries));
       return defer.promise;
     }
 
@@ -74,13 +73,14 @@ module ums {
       return defer.promise;
     }
 
-    private getSelectedCourses(courses: ReadmissionCourse[]) {
-      var selectedCourses = [];
-      for (var i = 0; i < courses.length; i++) {
+    private getSelectedCourses(courses: ReadmissionCourse[]): ReadmissionCourse[] {
+      let selectedCourses = [];
+      for (let i = 0; i < courses.length; i++) {
         if (courses[i].applied) {
           selectedCourses.push(courses[i]);
         }
       }
+      return selectedCourses;
     }
   }
 
