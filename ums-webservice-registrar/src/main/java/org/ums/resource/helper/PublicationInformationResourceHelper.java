@@ -72,6 +72,19 @@ public class PublicationInformationResourceHelper extends
     return toJson(pPublicationInformation, pUriInfo);
   }
 
+  public JsonObject getPublicationWithPagination(final int pPageNumber, final int pItemPerPage, final UriInfo pUriInfo) {
+    String pEmployeeId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+    List<PublicationInformation> pPublicationInformation = new ArrayList<>();
+    try {
+      pPublicationInformation =
+          mPublicationInformationManager
+              .getPublicationInformationWithPagination(pEmployeeId, pPageNumber, pItemPerPage);
+    } catch(EmptyResultDataAccessException e) {
+
+    }
+    return toJson(pPublicationInformation, pUriInfo);
+  }
+
   public JsonObject getPublicationInformation(final String pEmployeeId, final String pStatus, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {

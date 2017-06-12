@@ -106,6 +106,20 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   }
 
   @Override
+  public List<PublicationInformation> getPublicationInformationWithPagination(final String pEmployeeId,
+      final int pPageNumber, final int pItemPerPage) {
+    String query =
+        "SELECT ID, EMPLOYEE_ID, PUBLICATION_TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
+            + " to_char(DATE_OF_PUBLICATION,'dd/mm/yyyy') DATE_OF_PUBLICATION, PUBLICATION_TYPE, PUBLICATION_WEB_LINK, PUBLICATION_ISSN, PUBLICATION_ISSUE,"
+            + " PUBLICATION_VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PUBLICATION_PAGES, to_char(APPLIED_ON,'dd/mm/yyyy') APPLIED_ON, to_char(ACTION_TAKEN_ON,'dd/mm/yyyy') ACTION_TAKEN_ON, LAST_MODIFIED, row_number FROM ( SELECT a.*,ROWNUM row_number FROM ( "
+            + " SELECT * FROM EMP_PUBLICATION_INFO " + " WHERE EMPLOYEE_ID=? ORDER BY APPLIED_ON) a "
+            + "  WHERE ROWNUM < ((" + pPageNumber + " * " + pItemPerPage + ") + 1)) " + "WHERE row_number >= ((("
+            + pPageNumber + " - 1) * " + pItemPerPage + ") + 1)";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
+        new PersistentPublicationInformationDao.customRoleRowMapper());
+  }
+
+  @Override
   public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId, final String pStatus) {
     String query = GET_ONE + " Where employee_id=? and status=?";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId, pStatus},

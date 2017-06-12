@@ -23,6 +23,8 @@ module ums {
         borderColor: string;
         supOptions: string;
 
+        customItemPerPage: number;
+
         degreeNameMap: any;
         genderNameMap: any;
         religionNameMap: any;
@@ -68,6 +70,7 @@ module ums {
         getDistrictL: Function;
         getThana: Function;
         pageChanged: Function;
+        changeItemPerPage: Function;
 
         entry: IEntry;
         gender: Array<IGender>;
@@ -92,6 +95,7 @@ module ums {
         presentAddressThanas: Array<IThana>;
         permanentAddressThanas: Array<IThana>;
         allThanas: Array<IThana>;
+        paginatedPublication: Array<IPublicationInformationModel>;
     }
 
     export interface IGender {
@@ -198,7 +202,8 @@ module ums {
                 supOptions: "1",
                 borderColor: "",
                 itemPerPage: 2,
-                totalRecord: 0
+                totalRecord: 0,
+                customItemPerPage: null
             };
 
             $scope.pagination = {};
@@ -238,15 +243,16 @@ module ums {
             $scope.changePermanentAddressFields = this.changePermanentAddressFields.bind(this);
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
+            $scope.changeItemPerPage = this.changeItemPerPage.bind(this);
 
             this.initializeVariables();
         }
 
         private initializeVariables() {
-            // this.getCountry();
-            // this.getDivision();
-            // this.getDistrict();
-            // this.getThana();
+            this.getCountry();
+            this.getDivision();
+            this.getDistrict();
+            this.getThana();
 
             this.createMap();
 
@@ -265,12 +271,13 @@ module ums {
 
             this.addDate();
 
-            // this.getPersonalInformation();
-            // this.getAcademicInformation();
-            // this.getAwardInformation();
-            // this.getPublicationInformation();
-            // this.getExperienceInformation();
-            // this.getTrainingInformation();
+            this.getPersonalInformation();
+            this.getAcademicInformation();
+            this.getAwardInformation();
+            this.getPublicationInformation();
+            this.getPublicationInformationWithPagination();
+            this.getExperienceInformation();
+            this.getTrainingInformation();
         }
 
 
@@ -677,10 +684,10 @@ module ums {
             }
             else {
                 console.log("Not Empty");
-                if (this.objectEqualityTest("personal", this.$scope.previousPersonalInformation, this.$scope.entry.personal)) {
-                    this.notify.info("No Changes Detected");
-                }
-                else {
+                // if (this.objectEqualityTest("personal", this.$scope.previousPersonalInformation, this.$scope.entry.personal)) {
+                //     this.notify.info("No Changes Detected");
+                // }
+                // else {
                     console.log("Changes Detected");
                     this.convertToJson('personal', this.$scope.entry.personal)
                         .then((json: any) => {
@@ -690,7 +697,7 @@ module ums {
                                     this.enableViewMode('personal');
                                 });
                         });
-                }
+                // }
 
             }
         }
@@ -765,23 +772,23 @@ module ums {
         }
 
         private objectEqualityTest(objType: string, baseObj: any, comparingObj: any): boolean{
-            if(objType == "personal"){
-                if(baseObj.firstName == comparingObj.firstName && baseObj.lastName == comparingObj.lastName && baseObj.fatherName == comparingObj.fatherName && baseObj.motherName == comparingObj.motherName
-                && baseObj.gender.name == comparingObj.gender.name && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
-                && baseObj.maritalStatus.name == comparingObj.maritalStatus.name && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
-                && baseObj.spouseNationalIdNo == comparingObj.spouseNationalIdNo && baseObj.personalWebsite == comparingObj.personalWebsite && baseObj.organizationalEmail == comparingObj.organizationalEmail
-                && baseObj.personalEmail == comparingObj.personalEmail && baseObj.mobile == comparingObj.mobile && baseObj.phone == comparingObj.phone && baseObj.presentAddressHouse == comparingObj.presentAddressHouse
-                && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana.name == comparingObj.presentAddressThana.name && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict.name == comparingObj.presentAddressDistrict.name
-                    && baseObj.presentAddressDivision.name == comparingObj.presentAddressDivision.name && baseObj.presentAddressCountry.name == comparingObj.presentAddressCountry.name && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
-                    baseObj.permanentAddressThana.name == comparingObj.permanentAddressThana.name && baseObj.permanentAddressPostOfficeNo == comparingObj.permanentAddressPostOfficeNo && baseObj.permanentAddressDistrict.name == comparingObj.permanentAddressDistrict.name && baseObj.permanentAddressDivision.name == comparingObj.permanentAddressDivision.name &&
-                    baseObj.permanentAddressCountry.name == comparingObj.permanentAddressCountry.name && baseObj.emergencyContactName == comparingObj.emergencyContactName && baseObj.emergencyContactRelation.name == comparingObj.emergencyContactRelation.name && baseObj.emergencyContactPhone == comparingObj.emergencyContactPhone &&
-                    baseObj.emergencyContactAddress == comparingObj.emergencyContactAddress){
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
+            // if(objType == "personal"){
+            //     if(baseObj.firstName == comparingObj.firstName && baseObj.lastName == comparingObj.lastName && baseObj.fatherName == comparingObj.fatherName && baseObj.motherName == comparingObj.motherName
+            //     && baseObj.gender.name == comparingObj.gender.name && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
+            //     && baseObj.maritalStatus.name == comparingObj.maritalStatus.name && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
+            //     && baseObj.spouseNationalIdNo == comparingObj.spouseNationalIdNo && baseObj.personalWebsite == comparingObj.personalWebsite && baseObj.organizationalEmail == comparingObj.organizationalEmail
+            //     && baseObj.personalEmail == comparingObj.personalEmail && baseObj.mobile == comparingObj.mobile && baseObj.phone == comparingObj.phone && baseObj.presentAddressHouse == comparingObj.presentAddressHouse
+            //     && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana.name == comparingObj.presentAddressThana.name && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict.name == comparingObj.presentAddressDistrict.name
+            //         && baseObj.presentAddressDivision.name == comparingObj.presentAddressDivision.name && baseObj.presentAddressCountry.name == comparingObj.presentAddressCountry.name && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
+            //         baseObj.permanentAddressThana.name == comparingObj.permanentAddressThana.name && baseObj.permanentAddressPostOfficeNo == comparingObj.permanentAddressPostOfficeNo && baseObj.permanentAddressDistrict.name == comparingObj.permanentAddressDistrict.name && baseObj.permanentAddressDivision.name == comparingObj.permanentAddressDivision.name &&
+            //         baseObj.permanentAddressCountry.name == comparingObj.permanentAddressCountry.name && baseObj.emergencyContactName == comparingObj.emergencyContactName && baseObj.emergencyContactRelation.name == comparingObj.emergencyContactRelation.name && baseObj.emergencyContactPhone == comparingObj.emergencyContactPhone &&
+            //         baseObj.emergencyContactAddress == comparingObj.emergencyContactAddress){
+            //         return true;
+            //     }
+            //     else{
+            //         return false;
+            //     }
+            // }
             if(objType == "academic") {
                 if (baseObj.academicDegreeName.name == comparingObj.academicDegreeName.name && baseObj.academicInstitution == comparingObj.academicInstitution
                     && baseObj.academicPassingYear == comparingObj.academicPassingYear) {
@@ -838,7 +845,8 @@ module ums {
                     this.publicationInformationService.savePublicationInformation(json)
                         .then((message: any) => {
                         this.getPublicationInformation();
-                        this.enableViewMode('academic');
+                        this.getPublicationInformationWithPagination();
+                        this.enableViewMode('publication');
                         });
                 });
         }
@@ -897,14 +905,14 @@ module ums {
                 this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationality];
                 this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroup];
                 this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelation];
-                this.$scope.entry.personal.presentAddressCountry = this.$scope.countryMap[personalInformation[0].presentAddressCountry];
-                this.$scope.entry.personal.presentAddressDivision = this.$scope.divisionMap[personalInformation[0].presentAddressDivision];
-                this.$scope.entry.personal.presentAddressDistrict = this.$scope.districtMap[personalInformation[0].presentAddressDistrict];
-                this.$scope.entry.personal.presentAddressThana = this.$scope.thanaMap[personalInformation[0].presentAddressThana];
-                this.$scope.entry.personal.permanentAddressCountry = this.$scope.countryMap[personalInformation[0].permanentAddressCountry];
-                this.$scope.entry.personal.permanentAddressDivision = this.$scope.divisionMap[personalInformation[0].permanentAddressDivision];
-                this.$scope.entry.personal.permanentAddressDistrict = this.$scope.districtMap[personalInformation[0].permanentAddressDistrict];
-                this.$scope.entry.personal.permanentAddressThana = this.$scope.thanaMap[personalInformation[0].permanentAddressThana];
+                this.$scope.entry.personal.preAddressCountry = this.$scope.countryMap[personalInformation[0].preAddressCountry];
+                this.$scope.entry.personal.preAddressDivision = this.$scope.divisionMap[personalInformation[0].preAddressDivision];
+                this.$scope.entry.personal.preAddressDistrict = this.$scope.districtMap[personalInformation[0].preAddressDistrict];
+                this.$scope.entry.personal.preAddressThana = this.$scope.thanaMap[personalInformation[0].presentAddressThana];
+                this.$scope.entry.personal.perAddressCountry = this.$scope.countryMap[personalInformation[0].perAddressCountry];
+                this.$scope.entry.personal.perAddressDivision = this.$scope.divisionMap[personalInformation[0].perAddressDivision];
+                this.$scope.entry.personal.perAddressDistrict = this.$scope.districtMap[personalInformation[0].perAddressDistrict];
+                this.$scope.entry.personal.perAddressThana = this.$scope.thanaMap[personalInformation[0].perAddressThana];
             }
             this.$scope.previousPersonalInformation = angular.copy(this.$scope.entry.personal);
         }
@@ -926,6 +934,7 @@ module ums {
 
         private getPublicationInformation() {
             this.$scope.entry.publication = Array<IPublicationInformationModel>();
+            this.$scope.paginatedPublication = Array<IPublicationInformationModel>();
             this.publicationInformationService.getPublicationInformation().then((publicationInformation: any) => {
                 this.$scope.data.totalRecord = publicationInformation.length;
                 this.setSavedValuesOfPublicationForm(publicationInformation);
@@ -938,6 +947,20 @@ module ums {
                 this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
             }
             this.$scope.previousPublicationInformation = angular.copy(this.$scope.entry.publication);
+        }
+
+        private getPublicationInformationWithPagination(){
+            this.publicationInformationService.getPublicationInformationViewWithPagination(this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
+                this.$scope.paginatedPublication = publicationInformationWithPagination;
+                this.setSavedValuesOfPublicationFormWithPagination(publicationInformationWithPagination);
+            });
+        }
+
+        private setSavedValuesOfPublicationFormWithPagination(publicationInformation: any) {
+            for (let i = 0; i < publicationInformation.length; i++) {
+                this.$scope.paginatedPublication[i] = publicationInformation[i];
+                this.$scope.paginatedPublication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+            }
         }
 
         private getTrainingInformation() {
@@ -989,11 +1012,11 @@ module ums {
             let districtLength = this.$scope.allDistricts.length;
             let index = 0;
             for (let i = 0; i < districtLength; i++) {
-                if (this.$scope.entry.personal.presentAddressDivision.id === this.$scope.allDistricts[i].division_id) {
+                if (this.$scope.entry.personal.preAddressDivision.id === this.$scope.allDistricts[i].division_id) {
                     this.$scope.presentAddressDistricts[index++] = this.$scope.allDistricts[i];
                 }
             }
-            this.$scope.entry.personal.presentAddressDistrict = this.$scope.presentAddressDistricts[1];
+            this.$scope.entry.personal.preAddressDistrict = this.$scope.presentAddressDistricts[1];
         }
 
         private changePermanentAddressDistrict() {
@@ -1001,11 +1024,11 @@ module ums {
             let districtLength = this.$scope.allDistricts.length;
             let index = 0;
             for (let i = 0; i < districtLength; i++) {
-                if (this.$scope.entry.personal.permanentAddressDivision.id === this.$scope.allDistricts[i].division_id) {
+                if (this.$scope.entry.personal.perAddressDivision.id === this.$scope.allDistricts[i].division_id) {
                     this.$scope.permanentAddressDistricts[index++] = this.$scope.allDistricts[i];
                 }
             }
-            this.$scope.entry.personal.permanentAddressDistrict = this.$scope.permanentAddressDistricts[1];
+            this.$scope.entry.personal.perAddressDistrict = this.$scope.permanentAddressDistricts[1];
         }
 
         private changePresentAddressThana() {
@@ -1013,11 +1036,11 @@ module ums {
             let thanaLength = this.$scope.allThanas.length;
             let index = 0;
             for (let i = 0; i < thanaLength; i++) {
-                if (this.$scope.entry.personal.presentAddressDistrict.id === this.$scope.allThanas[i].district_id) {
+                if (this.$scope.entry.personal.preAddressDistrict.id === this.$scope.allThanas[i].district_id) {
                     this.$scope.presentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
             }
-            this.$scope.entry.personal.presentAddressThana = this.$scope.presentAddressThanas[0];
+            this.$scope.entry.personal.preAddressThana = this.$scope.presentAddressThanas[0];
         }
 
         private changePermanentAddressThana() {
@@ -1025,58 +1048,58 @@ module ums {
             let thanaLength = this.$scope.allThanas.length;
             let index = 0;
             for (let i = 0; i < thanaLength; i++) {
-                if (this.$scope.entry.personal.permanentAddressDistrict.id === this.$scope.allThanas[i].district_id) {
+                if (this.$scope.entry.personal.perAddressDistrict.id === this.$scope.allThanas[i].district_id) {
                     this.$scope.permanentAddressThanas[index++] = this.$scope.allThanas[i];
                 }
             }
-            this.$scope.entry.personal.permanentAddressThana = this.$scope.permanentAddressThanas[0];
+            this.$scope.entry.personal.perAddressThana = this.$scope.permanentAddressThanas[0];
         }
 
         private sameAsPresentAddress() {
-            this.$scope.entry.personal.permanentAddressHouse = this.$scope.entry.personal.presentAddressHouse;
-            this.$scope.entry.personal.permanentAddressRoad = this.$scope.entry.personal.presentAddressRoad;
-            this.$scope.entry.personal.permanentAddressCountry = this.$scope.entry.personal.presentAddressCountry;
-            if(this.$scope.entry.personal.presentAddressCountry.name === "Bangladesh"){
+            this.$scope.entry.personal.perAddressHouse = this.$scope.entry.personal.preAddressHouse;
+            this.$scope.entry.personal.perAddressRoad = this.$scope.entry.personal.preAddressRoad;
+            this.$scope.entry.personal.perAddressCountry = this.$scope.entry.personal.preAddressCountry;
+            if(this.$scope.entry.personal.preAddressCountry.name === "Bangladesh"){
                 this.changePermanentAddressFields();
             }
             else {
-                this.$scope.entry.personal.permanentAddressDivision = this.$scope.entry.personal.presentAddressDivision;
-                this.$scope.entry.personal.permanentAddressPostOfficeNo = this.$scope.entry.personal.presentAddressPostOfficeNo;
-                this.$scope.entry.personal.permanentAddressDistrict = this.$scope.entry.personal.presentAddressDistrict;
-                this.$scope.entry.personal.permanentAddressThana = this.$scope.entry.personal.presentAddressThana;
+                this.$scope.entry.personal.perAddressDivision = this.$scope.entry.personal.preAddressDivision;
+                this.$scope.entry.personal.perAddressPostOfficeNo = this.$scope.entry.personal.preAddressPostOfficeNo;
+                this.$scope.entry.personal.perAddressDistrict = this.$scope.entry.personal.preAddressDistrict;
+                this.$scope.entry.personal.perAddressThana = this.$scope.entry.personal.preAddressThana;
             }
         }
 
         private changePresentAddressFields() {
-            if (this.$scope.entry.personal.presentAddressCountry.name === "Bangladesh") {
+            if (this.$scope.entry.personal.preAddressCountry.name === "Bangladesh") {
                 this.$scope.required = true;
                 this.$scope.disablePresentAddressDropdown = false;
-                this.$scope.entry.personal.presentAddressDivision = this.$scope.divisions[0];
+                this.$scope.entry.personal.preAddressDivision = this.$scope.divisions[0];
                 this.changePresentAddressDistrict();
                 this.changePresentAddressThana();
             }
             else {
                 this.$scope.required = false;
                 this.$scope.disablePresentAddressDropdown = true;
-                this.$scope.entry.personal.presentAddressDivision = null;
-                this.$scope.entry.personal.presentAddressDistrict = null;
-                this.$scope.entry.personal.presentAddressThana = null;
-                this.$scope.entry.personal.presentAddressPostOfficeNo = "";
+                this.$scope.entry.personal.preAddressDivision = null;
+                this.$scope.entry.personal.preAddressDistrict = null;
+                this.$scope.entry.personal.preAddressThana = null;
+                this.$scope.entry.personal.preAddressPostOfficeNo = "";
             }
         }
 
         private changePermanentAddressFields() {
-            if (this.$scope.entry.personal.permanentAddressCountry.name === "Bangladesh") {
+            if (this.$scope.entry.personal.perAddressCountry.name === "Bangladesh") {
                 this.$scope.disablePermanentAddressDropdown = false;
                 this.changePermanentAddressDistrict();
                 this.changePermanentAddressThana();
             }
             else {
                 this.$scope.disablePermanentAddressDropdown = true;
-                this.$scope.entry.personal.permanentAddressDivision = null;
-                this.$scope.entry.personal.permanentAddressDistrict = null;
-                this.$scope.entry.personal.permanentAddressThana = null;
-                this.$scope.entry.personal.permanentAddressPostOfficeNo = "";
+                this.$scope.entry.personal.perAddressDivision = null;
+                this.$scope.entry.personal.perAddressDistrict = null;
+                this.$scope.entry.personal.perAddressThana = null;
+                this.$scope.entry.personal.perAddressPostOfficeNo = "";
             }
         }
 
@@ -1088,61 +1111,74 @@ module ums {
             let permanentAddressLine2;
             let permanentPostalCode;
 
-            if (this.$scope.entry.personal.presentAddressHouse === "" || this.$scope.entry.personal.presentAddressHouse === undefined) {
+            if (this.$scope.entry.personal.preAddressHouse === "" || this.$scope.entry.personal.preAddressHouse === undefined) {
                 presentAddressLine1 = "";
             }
             else {
-                presentAddressLine1 = this.$scope.entry.personal.presentAddressHouse;
+                presentAddressLine1 = this.$scope.entry.personal.preAddressHouse;
             }
 
-            if (this.$scope.entry.personal.presentAddressRoad === "" || this.$scope.entry.personal.presentAddressRoad === undefined) {
+            if (this.$scope.entry.personal.preAddressRoad === "" || this.$scope.entry.personal.preAddressRoad === undefined) {
                 presentAddressLine2 = "";
             }
             else {
-                presentAddressLine2 = this.$scope.entry.personal.presentAddressRoad;
+                presentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
             }
 
-            if (this.$scope.entry.personal.presentAddressPostOfficeNo === "" || this.$scope.entry.personal.presentAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.preAddressPostOfficeNo === "" || this.$scope.entry.personal.preAddressPostOfficeNo === undefined) {
                 presentPostalCode = "";
             }
             else {
-                presentPostalCode = this.$scope.entry.personal.presentAddressPostOfficeNo;
+                presentPostalCode = this.$scope.entry.personal.preAddressPostOfficeNo;
             }
 
-            if (this.$scope.entry.personal.permanentAddressHouse === "" || this.$scope.entry.personal.permanentAddressHouse === undefined) {
+            if (this.$scope.entry.personal.perAddressHouse === "" || this.$scope.entry.personal.perAddressHouse === undefined) {
                 permanentAddressLine1 = "";
             }
             else {
-                permanentAddressLine1 = this.$scope.entry.personal.presentAddressHouse;
+                permanentAddressLine1 = this.$scope.entry.personal.preAddressHouse;
             }
 
-            if (this.$scope.entry.personal.permanentAddressRoad === "" || this.$scope.entry.personal.permanentAddressRoad === undefined) {
+            if (this.$scope.entry.personal.perAddressRoad === "" || this.$scope.entry.personal.perAddressRoad === undefined) {
                 permanentAddressLine2 = "";
             }
             else {
-                permanentAddressLine2 = this.$scope.entry.personal.presentAddressRoad;
+                permanentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
             }
 
-            if (this.$scope.entry.personal.permanentAddressPostOfficeNo === "" || this.$scope.entry.personal.permanentAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.perAddressPostOfficeNo === "" || this.$scope.entry.personal.perAddressPostOfficeNo === undefined) {
                 permanentPostalCode = "";
             }
             else {
-                permanentPostalCode = this.$scope.entry.personal.permanentAddressPostOfficeNo;
+                permanentPostalCode = this.$scope.entry.personal.perAddressPostOfficeNo;
             }
 
             if (this.$scope.data.supOptions === "1") {
                 this.$scope.entry.personal.emergencyContactAddress = "";
             }
             else if (this.$scope.data.supOptions === "2") {
-                this.$scope.entry.personal.emergencyContactAddress = presentAddressLine1 + " " + presentAddressLine2 + " " + this.$scope.entry.personal.presentAddressThana.name + " " + this.$scope.entry.personal.presentAddressDistrict.name + " - " + presentPostalCode;
+                this.$scope.entry.personal.emergencyContactAddress = presentAddressLine1 + " " + presentAddressLine2 + " " + this.$scope.entry.personal.preAddressThana.name + " " + this.$scope.entry.personal.preAddressDistrict.name + " - " + presentPostalCode;
             }
             else if (this.$scope.data.supOptions === "3") {
-                this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.permanentAddressThana.name + " " + this.$scope.entry.personal.permanentAddressDistrict.name + " - " + permanentPostalCode;
+                this.$scope.entry.personal.emergencyContactAddress = permanentAddressLine1 + " " + permanentAddressLine2 + " " + this.$scope.entry.personal.perAddressThana.name + " " + this.$scope.entry.personal.perAddressDistrict.name + " - " + permanentPostalCode;
             }
         }
 
         private pageChanged(pageNumber: number){
             //this.getPublicationInformation(pageNumber);
+            this.$scope.pagination.currentPage = pageNumber;
+            this.getPublicationInformationWithPagination();
+        }
+
+        private changeItemPerPage(){
+            console.log(this.$scope.data.customItemPerPage);
+            if(this.$scope.data.customItemPerPage == "" || this.$scope.data.customItemPerPage == null) {
+                console.log("Null Field");
+            }
+            else{
+                this.$scope.data.itemPerPage = this.$scope.data.customItemPerPage;
+                this.getPublicationInformationWithPagination();
+            }
         }
     }
 

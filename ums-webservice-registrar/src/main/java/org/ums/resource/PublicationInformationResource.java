@@ -36,4 +36,11 @@ public class PublicationInformationResource extends MutablePublicationInformatio
         pItemPerPage, mUriInfo);
   }
 
+  @GET
+  @Path("/getPublicationInformation/pageNumber/{page}/ipp/{item-per-page}")
+  public JsonObject getPublicationForPagination(final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage) throws Exception {
+    return mPublicationInformationResourceHelper.getPublicationWithPagination(pPage, pItemPerPage, mUriInfo);
+  }
+
 }

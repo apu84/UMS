@@ -62,7 +62,7 @@ module ums {
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
             $scope.totalPendingPublications = null;
-            $scope.data = { publicationListViewCategory: '0', itemPerPage: 1, totalRecord: null };
+            $scope.data = { publicationListViewCategory: '0', itemPerPage: 3, totalRecord: null };
             $scope.showActionTakenDate = false;
             $scope.showActionButtons = true;
             $scope.showNothingDiv = false;

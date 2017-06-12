@@ -50,7 +50,11 @@ module ums{
         public getPersonalInformation(): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getPersonalInformation", HttpClient.MIME_TYPE_JSON,
-                (json: any) => {
+                (json: any, etag: string) => {
+                // console.log("json ...........");
+                // console.log(json);
+                // console.log("Json.entries");
+                // console.log(json.entries);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

@@ -46,6 +46,18 @@ module ums{
             return defer.promise;
         }
 
+        public getPublicationInformationViewWithPagination(pageNumber: number, itemPerPage: number): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.get(this.url+"/getPublicationInformation/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+            return defer.promise;
+        }
+
         public getSpecificTeacherPublicationInformation(employeeId: string, status: string): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getPublicationInformation/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,

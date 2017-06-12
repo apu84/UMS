@@ -213,16 +213,31 @@
     </form>
 </div>
 
-<!--<dir-pagination-controls boundary-links="true"-->
-<!--pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"-->
-<!--template-url="views\registrar-office\directive\dirPagination.tpl.html">-->
-<!--</dir-pagination-controls>-->
-
 <div data-ng-if="showPublicationLabelDiv">
-    <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
 
-        <!--<div dir-paginate="publication in entry.publication | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">-->
-        <div data-ng-repeat="publication in entry.publication track by $index">
+    <div class="row">
+        <div class="col-md-12">
+            <!--<label class="col-md-4 control-label" for="iItemsPerPage">Items Per Page</label>-->
+            <div class="col-md-4">
+                <input type="number"
+                           name="nItemsPerPage"
+                           id="iItemsPerPage"
+                           data-ng-model="data.customItemPerPage"
+                           data-ng-change="changeItemPerPage()"
+                           placeholder="Items Per Page"
+                           class="form-control">
+            </div>
+        </div>
+    </div>
+    <div align="center">
+        <dir-pagination-controls boundary-links="true"
+                                 pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
+                                 template-url="views\registrar-office\directive\dirPagination.tpl.html">
+        </dir-pagination-controls>
+    </div>
+
+    <div dir-paginate="publication in paginatedPublication | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
+        <!--<div data-ng-repeat="publication in entry.publication track by $index">-->
             <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
                 <div class="row">
                     <div class="col-md-12">
@@ -343,7 +358,14 @@
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+
+<div align="center">
+    <dir-pagination-controls boundary-links="true"
+                             pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
+                             template-url="views\registrar-office\directive\dirPagination.tpl.html">
+    </dir-pagination-controls>
+</div>
 </div>
 
 

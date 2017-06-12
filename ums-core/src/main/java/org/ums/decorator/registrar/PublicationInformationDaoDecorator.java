@@ -29,6 +29,12 @@ public class PublicationInformationDaoDecorator extends
   }
 
   @Override
+  public List<PublicationInformation> getPublicationInformationWithPagination(String pEmployeeId, int pPageNumber,
+      int pItemPerPage) {
+    return getManager().getPublicationInformationWithPagination(pEmployeeId, pPageNumber, pItemPerPage);
+  }
+
+  @Override
   public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId, String pStatus) {
     return getManager().getEmployeePublicationInformation(pEmployeeId, pStatus);
   }

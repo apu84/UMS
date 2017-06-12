@@ -296,7 +296,7 @@
                             <input type="text"
                                    name="nPresentAddressHouse"
                                    id="iPresentAddressHouse"
-                                   data-ng-model="entry.personal.presentAddressHouse"
+                                   data-ng-model="entry.personal.preAddressHouse"
                                    placeholder="House/Holding No."
                                    class="form-control" required>
                         </div>
@@ -307,7 +307,7 @@
                             <input type="text"
                                    name="nPresentAddressRoad"
                                    id="iPresentAddressRoad"
-                                   data-ng-model="entry.personal.presentAddressRoad"
+                                   data-ng-model="entry.personal.preAddressRoad"
                                    placeholder="Road/Street"
                                    class="form-control">
                         </div>
@@ -321,7 +321,7 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressCountry"
                                     id="iPresentAddressCountry"
-                                    data-ng-model="entry.personal.presentAddressCountry"
+                                    data-ng-model="entry.personal.preAddressCountry"
                                     data-ng-options="country.name for country in countries"
                                     data-ng-change="changePresentAddressFields()"
                                     class="form-control" required>
@@ -334,7 +334,7 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressDivision"
                                     id="iPresentAddressDivision"
-                                    data-ng-model="entry.personal.presentAddressDivision"
+                                    data-ng-model="entry.personal.preAddressDivision"
                                     data-ng-options="divisions.name for divisions in divisions"
                                     data-ng-change="changePresentAddressDistrict()"
                                     data-ng-disabled="disablePresentAddressDropdown"
@@ -353,7 +353,7 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressDistrict"
                                     id="iPresentAddressDistrict"
-                                    data-ng-model="entry.personal.presentAddressDistrict"
+                                    data-ng-model="entry.personal.preAddressDistrict"
                                     data-ng-options="districts.name for districts in presentAddressDistricts"
                                     data-ng-change="changePresentAddressThana()"
                                     data-ng-disabled="disablePresentAddressDropdown"
@@ -367,7 +367,7 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressPoliceStation"
                                     id="iPresentAddressPoliceStation"
-                                    data-ng-model="entry.personal.presentAddressThana"
+                                    data-ng-model="entry.personal.preAddressThana"
                                     data-ng-options="thanas.name for thanas in presentAddressThanas"
                                     data-ng-disabled="disablePresentAddressDropdown"
                                     class="form-control" required="required">
@@ -385,7 +385,7 @@
                             <input type="text"
                                    name="nPresentAddressPostOffice"
                                    id="iPresentAddressPostOffice"
-                                   data-ng-model="entry.personal.presentAddressPostOfficeNo"
+                                   data-ng-model="entry.personal.preAddressPostOfficeNo"
                                    placeholder="Police Post Office/Zip"
                                    data-ng-disabled="disablePresentAddressDropdown"
                                    class="form-control">
@@ -412,7 +412,7 @@
                             <input type="text"
                                    name="nPermanentAddressHouse"
                                    id="iPermanentAddressHouse"
-                                   data-ng-model="entry.personal.permanentAddressHouse"
+                                   data-ng-model="entry.personal.perAddressHouse"
                                    placeholder="House/Holding No."
                                    class="form-control" required>
                         </div>
@@ -423,7 +423,7 @@
                             <input type="text"
                                    name="nPermanentAddressRoad"
                                    id="iPermanentAddressRoad"
-                                   data-ng-model="entry.personal.permanentAddressRoad"
+                                   data-ng-model="entry.personal.perAddressRoad"
                                    placeholder="Road/Street"
                                    class="form-control">
                         </div>
@@ -437,7 +437,7 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressCountry"
                                     id="iPermanentAddressCountry"
-                                    data-ng-model="entry.personal.permanentAddressCountry"
+                                    data-ng-model="entry.personal.perAddressCountry"
                                     data-ng-options="country.name for country in countries"
                                     data-ng-change="changePermanentAddressFields()"
                                     class="form-control" required>
@@ -450,7 +450,7 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressDivision"
                                     id="iPermanentAddressDivision"
-                                    data-ng-model="entry.personal.permanentAddressDivision"
+                                    data-ng-model="entry.personal.perAddressDivision"
                                     data-ng-options="division.name for division in divisions"
                                     data-ng-change="changePermanentAddressDistrict()"
                                     data-ng-disabled="disablePermanentAddressDropdown"
@@ -469,7 +469,7 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressDistrict"
                                     id="iPermanentAddressDistrict"
-                                    data-ng-model="entry.personal.permanentAddressDistrict"
+                                    data-ng-model="entry.personal.perAddressDistrict"
                                     data-ng-options="district.name for district in permanentAddressDistricts"
                                     data-ng-change="changePermanentAddressThana()"
                                     data-ng-disabled="disablePermanentAddressDropdown"
@@ -483,7 +483,7 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressPoliceStation"
                                     id="iPermanentAddressPoliceStation"
-                                    data-ng-model="entry.personal.permanentAddressThana"
+                                    data-ng-model="entry.personal.perAddressThana"
                                     data-ng-options="thana.name for thana in permanentAddressThanas"
                                     data-ng-disabled="disablePermanentAddressDropdown"
                                     class="form-control" required="required">
@@ -501,7 +501,7 @@
                             <input type="text"
                                    name="nPermanentAddressPostOffice"
                                    id="iPermanentAddressPostOffice"
-                                   data-ng-model="entry.personal.permanentAddressPostOfficeNo"
+                                   data-ng-model="entry.personal.perAddressPostOfficeNo"
                                    placeholder="Police Post Office/Zip"
                                    data-ng-disabled="disablePermanentAddressDropdown"
                                    class="form-control">
@@ -783,13 +783,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressHouse}}</label>
+                        <label class="control-label">{{entry.personal.preAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.presentAddressRoad}} </label>
+                        <label class="control-label"> {{entry.personal.preAddressRoad}} </label>
                     </div>
                 </div>
             </div>
@@ -799,13 +799,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressCountry">Country</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressCountry.name}}</label>
+                        <label class="control-label">{{entry.personal.preAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressDivision">Division</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressDivision.name}}</label>
+                        <label class="control-label">{{entry.personal.preAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -816,13 +816,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressDistrict">District</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressDistrict.name}}</label>
+                        <label class="control-label">{{entry.personal.preAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressThana.name}}</label>
+                        <label class="control-label">{{entry.personal.preAddressThana.name}}</label>
                     </div>
                 </div>
             </div>
@@ -832,7 +832,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.presentAddressPostOfficeNo}}</label>
+                        <label class="control-label">{{entry.personal.preAddressPostOfficeNo}}</label>
                     </div>
                 </div>
                 <div class="col-md-6"></div>
@@ -850,13 +850,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressHouse}}</label>
+                        <label class="control-label">{{entry.personal.perAddressHouse}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.permanentAddressRoad}} </label>
+                        <label class="control-label"> {{entry.personal.perAddressRoad}} </label>
                     </div>
                 </div>
             </div>
@@ -866,13 +866,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressCountry.name}}</label>
+                        <label class="control-label">{{entry.personal.perAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressDivision.name}}</label>
+                        <label class="control-label">{{entry.personal.perAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -883,13 +883,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressDistrict.name}}</label>
+                        <label class="control-label">{{entry.personal.perAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressThana.name}}</label>
+                        <label class="control-label">{{entry.personal.perAddressThana.name}}</label>
                     </div>
                 </div>
             </div>
@@ -899,7 +899,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.permanentAddressPostOfficeNo}}</label>
+                        <label class="control-label">{{entry.personal.perAddressPostOfficeNo}}</label>
                     </div>
                 </div>
                 <div class="col-md-6"></div>

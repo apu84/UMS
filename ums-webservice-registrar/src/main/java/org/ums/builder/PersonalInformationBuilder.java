@@ -89,83 +89,83 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
       pBuilder.add("phone", "");
     }
 
-    pBuilder.add("presentAddressHouse", pReadOnly.getPresentAddressHouse());
+    pBuilder.add("preAddressHouse", pReadOnly.getPresentAddressHouse());
 
     if(pReadOnly.getPresentAddressRoad() != null) {
-      pBuilder.add("presentAddressRoad", pReadOnly.getPresentAddressRoad());
+      pBuilder.add("preAddressRoad", pReadOnly.getPresentAddressRoad());
     }
     else {
-      pBuilder.add("presentAddressRoad", "");
+      pBuilder.add("preAddressRoad", "");
     }
 
     if(pReadOnly.getPresentAddressThana() != null) {
-      pBuilder.add("presentAddressThana", pReadOnly.getPresentAddressThana());
+      pBuilder.add("preAddressThana", pReadOnly.getPresentAddressThana());
     }
     else {
-      pBuilder.add("presentAddressThana", "");
+      pBuilder.add("preAddressThana", "");
     }
 
     if(pReadOnly.getPresentAddressZip() != null) {
-      pBuilder.add("presentAddressPostOfficeNo", pReadOnly.getPresentAddressZip());
+      pBuilder.add("preAddressPostOfficeNo", pReadOnly.getPresentAddressZip());
     }
     else {
-      pBuilder.add("presentAddressPostOfficeNo", "");
+      pBuilder.add("preAddressPostOfficeNo", "");
     }
 
     if(pReadOnly.getPresentAddressDistrict() != null) {
-      pBuilder.add("presentAddressDistrict", pReadOnly.getPresentAddressDistrict());
+      pBuilder.add("preAddressDistrict", pReadOnly.getPresentAddressDistrict());
     }
     else {
-      pBuilder.add("presentAddressDistrict", "");
+      pBuilder.add("preAddressDistrict", "");
     }
 
     if(pReadOnly.getPresentAddressDivision() != null) {
-      pBuilder.add("presentAddressDivision", pReadOnly.getPresentAddressDivision());
+      pBuilder.add("preAddressDivision", pReadOnly.getPresentAddressDivision());
     }
     else {
-      pBuilder.add("presentAddressDivision", "");
+      pBuilder.add("preAddressDivision", "");
     }
 
-    pBuilder.add("presentAddressCountry", pReadOnly.getPresentAddressCountry());
+    pBuilder.add("preAddressCountry", pReadOnly.getPresentAddressCountry());
 
-    pBuilder.add("permanentAddressHouse", pReadOnly.getPermanentAddressHouse());
+    pBuilder.add("perAddressHouse", pReadOnly.getPermanentAddressHouse());
 
     if(pReadOnly.getPermanentAddressRoad() != null) {
-      pBuilder.add("permanentAddressRoad", pReadOnly.getPermanentAddressRoad());
+      pBuilder.add("perAddressRoad", pReadOnly.getPermanentAddressRoad());
     }
     else {
-      pBuilder.add("permanentAddressRoad", "");
+      pBuilder.add("perAddressRoad", "");
     }
 
     if(pReadOnly.getPresentAddressThana() != null) {
-      pBuilder.add("permanentAddressThana", pReadOnly.getPermanentAddressThana());
+      pBuilder.add("perAddressThana", pReadOnly.getPermanentAddressThana());
     }
     else {
-      pBuilder.add("permanentAddressThana", "");
+      pBuilder.add("perAddressThana", "");
     }
 
     if(pReadOnly.getPermanentAddressZip() != null) {
-      pBuilder.add("permanentAddressPostOfficeNo", pReadOnly.getPermanentAddressZip());
+      pBuilder.add("perAddressPostOfficeNo", pReadOnly.getPermanentAddressZip());
     }
     else {
-      pBuilder.add("permanentAddressPostOfficeNo", "");
+      pBuilder.add("perAddressPostOfficeNo", "");
     }
 
     if(pReadOnly.getPermanentAddressDistrict() != null) {
-      pBuilder.add("permanentAddressDistrict", pReadOnly.getPermanentAddressDistrict());
+      pBuilder.add("perAddressDistrict", pReadOnly.getPermanentAddressDistrict());
     }
     else {
-      pBuilder.add("permanentAddressDistrict", "");
+      pBuilder.add("perAddressDistrict", "");
     }
 
     if(pReadOnly.getPermanentAddressDivision() != null) {
-      pBuilder.add("permanentAddressDivision", pReadOnly.getPermanentAddressDivision());
+      pBuilder.add("perAddressDivision", pReadOnly.getPermanentAddressDivision());
     }
     else {
-      pBuilder.add("permanentAddressDivision", "");
+      pBuilder.add("perAddressDivision", "");
     }
 
-    pBuilder.add("permanentAddressCountry", pReadOnly.getPermanentAddressCountry());
+    pBuilder.add("perAddressCountry", pReadOnly.getPermanentAddressCountry());
 
     pBuilder.add("emergencyContactName", pReadOnly.getEmergencyContactName());
 
@@ -233,54 +233,54 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     else {
       pMutable.setPhoneNumber(pJsonObject.getString("phone"));
     }
-    pMutable.setPresentAddressHouse(pJsonObject.getString("presentAddressHouse"));
-    if(!pJsonObject.containsKey("presentAddressRoad")) {
+    pMutable.setPresentAddressHouse(pJsonObject.getString("preAddressHouse"));
+    if(!pJsonObject.containsKey("preAddressRoad")) {
       pMutable.setPresentAddressRoad("");
     }
     else {
-      pMutable.setPresentAddressRoad(pJsonObject.getString("presentAddressRoad"));
+      pMutable.setPresentAddressRoad(pJsonObject.getString("preAddressRoad"));
     }
-    if(!pJsonObject.containsKey("presentAddressPostOfficeNo")) {
+    if(!pJsonObject.containsKey("preAddressPostOfficeNo")) {
       pMutable.setPresentAddressZip("");
     }
     else {
-      pMutable.setPresentAddressZip(pJsonObject.getString("presentAddressPostOfficeNo"));
+      pMutable.setPresentAddressZip(pJsonObject.getString("preAddressPostOfficeNo"));
     }
-    if(pJsonObject.getJsonObject("presentAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPresentAddressThana(pJsonObject.getJsonObject("presentAddressThana").getString("name"));
-      pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("presentAddressDistrict").getString("name"));
-      pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("presentAddressDivision").getString("name"));
+    if(pJsonObject.getJsonObject("preAddressCountry").getString("name").equals("Bangladesh")) {
+      pMutable.setPresentAddressThana(pJsonObject.getJsonObject("preAddressThana").getString("name"));
+      pMutable.setPresentAddressDistrict(pJsonObject.getJsonObject("preAddressDistrict").getString("name"));
+      pMutable.setPresentAddressDivision(pJsonObject.getJsonObject("preAddressDivision").getString("name"));
     }
     else {
       pMutable.setPresentAddressThana("");
       pMutable.setPresentAddressDistrict("");
       pMutable.setPresentAddressDivision("");
     }
-    pMutable.setPresentAddressCountry(pJsonObject.getJsonObject("presentAddressCountry").getString("name"));
-    pMutable.setPermanentAddressHouse(pJsonObject.getString("permanentAddressHouse"));
-    if(!pJsonObject.containsKey("permanentAddressRoad")) {
+    pMutable.setPresentAddressCountry(pJsonObject.getJsonObject("preAddressCountry").getString("name"));
+    pMutable.setPermanentAddressHouse(pJsonObject.getString("perAddressHouse"));
+    if(!pJsonObject.containsKey("perAddressRoad")) {
       pMutable.setPermanentAddressRoad("");
     }
     else {
-      pMutable.setPermanentAddressRoad(pJsonObject.getString("permanentAddressRoad"));
+      pMutable.setPermanentAddressRoad(pJsonObject.getString("perAddressRoad"));
     }
-    if(!pJsonObject.containsKey("permanentAddressPostOfficeNo")) {
+    if(!pJsonObject.containsKey("perAddressPostOfficeNo")) {
       pMutable.setPermanentAddressZip("");
     }
     else {
-      pMutable.setPermanentAddressZip(pJsonObject.getString("permanentAddressPostOfficeNo"));
+      pMutable.setPermanentAddressZip(pJsonObject.getString("perAddressPostOfficeNo"));
     }
-    if(pJsonObject.getJsonObject("permanentAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("permanentAddressThana").getString("name"));
-      pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("permanentAddressDistrict").getString("name"));
-      pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("permanentAddressDivision").getString("name"));
+    if(pJsonObject.getJsonObject("perAddressCountry").getString("name").equals("Bangladesh")) {
+      pMutable.setPermanentAddressThana(pJsonObject.getJsonObject("perAddressThana").getString("name"));
+      pMutable.setPermanentAddressDistrict(pJsonObject.getJsonObject("perAddressDistrict").getString("name"));
+      pMutable.setPermanentAddressDivision(pJsonObject.getJsonObject("perAddressDivision").getString("name"));
     }
     else {
       pMutable.setPermanentAddressThana("");
       pMutable.setPermanentAddressDistrict("");
       pMutable.setPermanentAddressDivision("");
     }
-    pMutable.setPermanentAddressCountry(pJsonObject.getJsonObject("permanentAddressCountry").getString("name"));
+    pMutable.setPermanentAddressCountry(pJsonObject.getJsonObject("perAddressCountry").getString("name"));
     pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
     pMutable.setEmergencyContactRelation(pJsonObject.getJsonObject("emergencyContactRelation").getString("name"));
     pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));

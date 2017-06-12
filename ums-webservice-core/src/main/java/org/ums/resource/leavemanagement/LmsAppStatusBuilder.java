@@ -52,7 +52,7 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
      * pBuilder.add("applicationStatusLabel",
      * pReadOnly.getLmsApplication().getApplicationStatus().getLabel());
      */
-    if (pReadOnly.getRowNumber() != 0)
+    if(pReadOnly.getRowNumber() != 0)
       pBuilder.add("rowNumber", pReadOnly.getRowNumber());
     pBuilder.add("actionTakenOn", formatter.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("actionTakenBy", pReadOnly.getActionTakenBy().getId());
@@ -64,30 +64,31 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
 
   @Override
   public void build(MutableLmsAppStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutable.setId(Long.valueOf(pJsonObject.getInt("id")));
-    if (pJsonObject.containsKey("appId"))
+    if(pJsonObject.containsKey("appId"))
       pMutable.setLmsApplicationId(Long.valueOf(pJsonObject.getInt("appId")));
-    if (pJsonObject.containsKey("actionTakenOn")) {
+    if(pJsonObject.containsKey("actionTakenOn")) {
       SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
       try {
         pMutable.setActionTakenOn(formatter.parse(pJsonObject.getString("actionTakenOn")));
-      } catch (Exception e) {
+      } catch(Exception e) {
         mLogger.error(e.getMessage());
       }
-    } else {
+    }
+    else {
       pMutable.setActionTakenOn(new Date());
     }
-    if (pJsonObject.containsKey("actionTakenBy"))
+    if(pJsonObject.containsKey("actionTakenBy"))
       pMutable.setActionTakenById(pJsonObject.getString("actionTakenBy"));
     else {
       pMutable.setActionTakenById(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString())
           .getEmployeeId());
     }
 
-    if (pJsonObject.containsKey("comments"))
+    if(pJsonObject.containsKey("comments"))
       pMutable.setComments(pJsonObject.getString("comments"));
-    if (pJsonObject.containsKey("actionStatus"))
+    if(pJsonObject.containsKey("actionStatus"))
       pMutable.setActionStatus(LeaveApplicationApprovalStatus.get(pJsonObject.getInt("actionStatus")));
   }
 }

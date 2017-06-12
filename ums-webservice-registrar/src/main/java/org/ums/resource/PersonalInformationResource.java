@@ -13,8 +13,6 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 @Path("employee/personal")
-@Produces(Resource.MIME_TYPE_JSON)
-@Consumes(Resource.MIME_TYPE_JSON)
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
   @Autowired
@@ -23,6 +21,7 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
   @GET
   @Path("/getPersonalInformation")
   public JsonObject getPersonalInformation() {
-    return personalInformationResourceHelper.getPersonalInformation(mUriInfo);
+    JsonObject personalInfoJsonObj = personalInformationResourceHelper.getPersonalInformation(mUriInfo);
+    return personalInfoJsonObj;
   }
 }
