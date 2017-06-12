@@ -1,6 +1,7 @@
 module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute',
+    'ngAnimate',
     'ui.bootstrap',
     'ui.router',
     'oc.lazyLoad',

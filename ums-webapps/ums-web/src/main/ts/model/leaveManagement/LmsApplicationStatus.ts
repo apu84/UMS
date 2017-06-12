@@ -6,6 +6,7 @@ module ums {
     id: string;
     appId: string;
     applicantsId: string;
+    applicantsName: string;
     reason: string;
     appliedOn: string;
     fromDate: string;

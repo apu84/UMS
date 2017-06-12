@@ -131,7 +131,9 @@ module ums {
 
     private getAllLeaveApplicationsForHistory() {
       this.$scope.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.$scope.applicantsId, this.$scope.leaveApprovalStatus.id, this.$scope.pageNumber, this.$scope.itemsPerPage).then((leaveApplications) => {
+      console.log(this.$scope.pageNumber);
+      console.log(this.$scope.itemsPerPage);
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.$scope.applicantsId, this.$scope.leaveApprovalStatus.id, this.$scope.pagination.currentPage, this.$scope.itemsPerPage).then((leaveApplications) => {
         this.$scope.pendingApplications = leaveApplications.statusList;
         this.$scope.totalItems = leaveApplications.totalSize;
         console.log("Histories...");
@@ -254,11 +256,16 @@ module ums {
 
     private setCurrent(currentPage: number) {
       console.log("In set current");
+      this.$scope.pagination.currentPage = currentPage;
       this.$scope.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.$scope.leaveApprovalStatus.id, currentPage, this.$scope.itemsPerPage).then((apps) => {
-        this.$scope.pendingApplications = apps.statusList;
-        this.$scope.totalItems = apps.totalSize;
-      });
+      if (this.$scope.showHistorySection) {
+        this.getAllLeaveApplicationsForHistory();
+      } else {
+        this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.$scope.leaveApprovalStatus.id, currentPage, this.$scope.itemsPerPage).then((apps) => {
+          this.$scope.pendingApplications = apps.statusList;
+          this.$scope.totalItems = apps.totalSize;
+        });
+      }
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
