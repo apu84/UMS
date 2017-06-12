@@ -30,6 +30,13 @@ module ums {
           (response: PaymentResponse) => defer.resolve(response.entries));
       return defer.promise;
     }
+
+    public getCertificateFeePaymentStatus(): ng.IPromise<Payment[]> {
+      let defer: ng.IDeferred<Payment[]> = this.$q.defer();
+      this.httpClient.get(`certificate-fee`, HttpClient.MIME_TYPE_JSON,
+          (response: PaymentResponse) => defer.resolve(response.entries));
+      return defer.promise;
+    }
   }
 
   UMS.service("PaymentService", PaymentService);

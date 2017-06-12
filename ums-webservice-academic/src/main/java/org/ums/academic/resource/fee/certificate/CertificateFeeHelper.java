@@ -52,7 +52,7 @@ public class CertificateFeeHelper {
       Semester semester =
           (Semester) localCache.cache(studentRecord::getSemester, studentRecord.getSemesterId(), Semester.class);
       jsonObjectBuilder.add("semesterId", semester.getId());
-      jsonObjectBuilder.add("semester", semester.getName());
+      jsonObjectBuilder.add("semesterName", semester.getName());
       jsonObjectBuilder.add("year", studentRecord.getYear());
       jsonObjectBuilder.add("academicSemester", studentRecord.getAcademicSemester());
       entries.add(jsonObjectBuilder);
