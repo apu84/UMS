@@ -526,6 +526,24 @@ module ums {
           {id: 7, name: "Application Approved"},
           {id: 8, name: "All"}
         ],
+        departmentOffice: [
+          {id: '01', name: 'Department of Architecture'},
+          {id: '02', name: 'School of Business'},
+          {id: '03', name: 'Department of Civil Engineering'},
+          {id: '04', name: 'Department of Computer Science and Engineering'},
+          {id: '05', name: 'Department of Electrical and Electronic Engineering'},
+          {id: '06', name: 'Department of Textile Engineering'},
+          {id: '07', name: 'Department of Mechanical & Production Engineering'},
+          {id: 'AS', name: 'Department of Arts and Sciences'},
+          {id: '80', name: 'Office of the Registrar'},
+          {id: '81', name: 'Office of the Controller of Examinations'},
+          {id: '82', name: 'Office of the Treasurer'},
+          {id: '83', name: 'Engineering Office'},
+          {id: '84', name: "Office of the Advisor of Student's Welfare"},
+          {id: '85', name: 'Proctor Office'},
+          {id: '99', name: 'Office of VC'},
+          {id: '9999', name: 'All Departments'}
+        ],
         MARKS_SUBMISSION_STATUS: {
           NOT_SUBMITTED: 0,
           WAITING_FOR_SCRUTINY: 1,

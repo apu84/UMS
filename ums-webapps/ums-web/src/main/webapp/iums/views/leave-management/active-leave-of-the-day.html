@@ -1,0 +1,37 @@
+<div class="col-md-12">
+    <h1>Active Leaves</h1>
+</div>
+<div class="col-md-6">
+    <div class="form-group" align="right">
+        <label class="col-md-4 control-label">Department</label>
+        <div class="col-md-8">
+            <select
+                    class="form-control required"
+                    name="deptOffice"
+                    id="deptOffice"
+                    data-ng-options="l.name for l in deptOffices track by l.id"
+                    data-ng-model="deptOffice"
+                    data-ng-change="initializeDepartmentOffice(deptOffice)"
+            ></select>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="form-group" align="right">
+        <label class="col-md-4 control-label">Results per page</label>
+        <div class="col-md-8">
+            <input type="text"
+                   class="form-control required"
+                   id="resultsPerPage"
+                   data-ng-model="itemsPerPage"
+                   data-ng-change="setResultsPerPage(itemsPerPage)"
+            />
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="col-md-12">
+    <div data-ng-include="'views/leave-management/pending-leave-application.html'"></div>
+</div>

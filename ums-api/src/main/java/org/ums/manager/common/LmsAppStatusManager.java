@@ -2,6 +2,7 @@ package org.ums.manager.common;
 
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
+import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.ContentManager;
 import org.ums.usermanagement.role.Role;
@@ -30,4 +31,8 @@ public interface LmsAppStatusManager extends ContentManager<LmsAppStatus, Mutabl
       Role pRole);
 
   LmsAppStatus getLatestStatusOfTheApplication(Long pApplicationId);
+
+  List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType, int pageNumber, int totalSize);
+
+  List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType);
 }

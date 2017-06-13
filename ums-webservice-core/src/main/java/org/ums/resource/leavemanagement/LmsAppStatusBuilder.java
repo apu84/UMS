@@ -35,6 +35,7 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("appId", pReadOnly.getLmsApplication().getId().toString());
     pBuilder.add("applicantsId", pReadOnly.getLmsApplication().getEmployee().getId());
+    pBuilder.add("deptName", pReadOnly.getLmsApplication().getEmployee().getDepartment().getShortName());
     pBuilder.add("applicantsName", pReadOnly.getLmsApplication().getEmployee().getEmployeeName());
     pBuilder.add("reason", pReadOnly.getLmsApplication().getReason());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");

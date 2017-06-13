@@ -82,6 +82,26 @@ module ums {
 
 
     /*
+     * Department Offices
+     * */
+    static DEPT_MPE = '07';
+    static DEPT_TE = '06';
+    static DEPT_CE = '03';
+    static DEPT_EEE = '05';
+    static DEPT_CSE = '04';
+    static DEPT_BBA = '02';
+    static DEPT_ARC = '01';
+    static DEPT_COE = '81';
+    static DEPT_RO = '80';
+    static DEPT_TO = '82';
+    static DEPT_EO = '83';
+    static DEPT_AOSW = '84';
+    static DEPT_PO = '85';
+    static DEPT_AS = 'AS';
+    static DEPT_OVC = '99';
+    static DEPT_ALL = '9999';
+
+    /*
      * Present status during department selection
      *
      * */

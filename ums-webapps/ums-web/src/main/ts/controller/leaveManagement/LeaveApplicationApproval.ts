@@ -22,6 +22,8 @@ module ums {
     approveOrRejectionComment: string;
     data: any;
     applicantsId: string;
+    deptOffices: Array<IConstants>;
+    deptOffice: IConstants;
 
     approveButtonClicked: boolean;
     rejectButtonClicked: boolean;
@@ -29,10 +31,12 @@ module ums {
     showApprovalSection: boolean;
     showStatusSection: boolean;
     fromHistory: boolean;
-
+    activeLeaveSection: boolean;
+    fromActiveLeaveSection: boolean;
 
 
     statusChanged: Function;
+    showLeaveSection: Function;
     closeStatusSection: Function;
     fetchApplicationStatus: Function;
     pageChanged: Function;
@@ -44,10 +48,13 @@ module ums {
     saveAction: Function;
     showHistory: Function;
     closeHistory: Function;
+    showActiveLeaveSection: Function;
+    closeActiveLeaveSection: Function;
+    initializeDepartmentOffice: Function;
   }
 
   interface  IConstants {
-    id: number;
+    id: any;
     name: string;
   }
 
@@ -78,6 +85,8 @@ module ums {
       $scope.backgroundColor = "white";
       $scope.showHistorySection = false;
       $scope.showStatusSection = false;
+      $scope.activeLeaveSection = false;
+      $scope.fromActiveLeaveSection = false;
       $scope.fromHistory = false;
       $scope.pagination = {};
       $scope.pagination.currentPage = 1;
@@ -102,9 +111,63 @@ module ums {
       $scope.reject = this.reject.bind(this);
       $scope.showHistory = this.showHistory.bind(this);
       $scope.closeHistory = this.closeHistory.bind(this);
+      $scope.showActiveLeaveSection = this.showActiveLeaveSection.bind(this);
+      $scope.closeActiveLeaveSection = this.closeActiveLeaveSection.bind(this);
+      $scope.initializeDepartmentOffice = this.initializeDepartmentOffice.bind(this);
       //this.getLeaveApplications();
       this.getUsersInformation();
       this.getAdditionaPermissions();
+    }
+
+    private showActiveLeaveSection() {
+      this.$scope.activeLeaveSection = true;
+      this.$scope.showHistorySection = false;
+      this.$scope.showStatusSection = false;
+      this.$scope.showApprovalSection = false;
+      this.$scope.itemsPerPage = 10;
+      this.initializeDepartmentOffice().then((deptOffice: IConstants) => {
+        this.fetchActiveLeaves(deptOffice);
+      });
+    }
+
+    private fetchActiveLeaves(deptOffice: IConstants) {
+      this.$scope.pagination.currentPage = 1;
+      this.$scope.pendingApplications = [];
+      this.leaveApplicationStatusService.fetchLeaveApplicationsActiveOnTheDay(deptOffice.id, this.$scope.pagination.currentPage, this.$scope.itemsPerPage).then((apps) => {
+        this.$scope.pendingApplications = apps.statusList;
+        this.$scope.totalItems = apps.totalSize;
+        console.log("active leaves");
+        console.log(apps);
+      });
+    }
+
+    private closeActiveLeaveSection() {
+      this.$scope.activeLeaveSection = false;
+      this.$scope.showHistorySection = false;
+      this.$scope.showStatusSection = false;
+      this.$scope.showApprovalSection = true;
+      this.getLeaveApplications();
+    }
+
+    private initializeDepartmentOffice(deptOffice?: IConstants): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.$scope.deptOffices = [];
+      this.$scope.deptOffices = this.appConstants.departmentOffice;
+      if (deptOffice != null) {
+        this.$scope.deptOffice = deptOffice;
+        console.log("Dept office");
+        console.log(this.$scope.deptOffice);
+        this.fetchActiveLeaves(this.$scope.deptOffice);
+      }
+      else {
+        for (var i = 0; i < this.$scope.deptOffices.length; i++) {
+          if (this.$scope.deptOffices[i].id == Utils.DEPT_ALL)
+            this.$scope.deptOffice = this.$scope.deptOffices[i];
+        }
+      }
+
+      defer.resolve(this.$scope.deptOffice);
+      return defer.promise;
     }
 
     private showHistory() {
@@ -219,17 +282,32 @@ module ums {
       this.$scope.showStatusSection = false;
       if (this.$scope.fromHistory == true && this.$scope.showHistorySection == true) {
         this.showHistory();
-      } else {
+      }
+      else if (this.$scope.fromActiveLeaveSection == true) {
+        this.showActiveLeaveSection();
+      }
+      else {
         this.$scope.showApprovalSection = true;
         this.$scope.showHistorySection = false;
         this.getLeaveApplications();
       }
+
+
     }
 
     private setResultsPerPage(resultsPerPage: number) {
       if (resultsPerPage >= 1) {
         this.$scope.itemsPerPage = resultsPerPage;
-        this.getLeaveApplications();
+        if (this.$scope.showHistorySection) {
+          this.getAllLeaveApplicationsForHistory();
+          console.log("In the history section");
+        }
+        else if (this.$scope.activeLeaveSection) {
+          this.fetchActiveLeaves(this.$scope.deptOffice);
+          console.log("In the active leave section");
+        }
+        else
+          this.getLeaveApplications();
       }
     }
 
@@ -250,7 +328,7 @@ module ums {
       this.$scope.pendingApplications = [];
       this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.$scope.leaveApprovalStatus.id, this.$scope.pagination.currentPage, this.$scope.itemsPerPage).then((apps) => {
         this.$scope.pendingApplications = apps.statusList;
-        this.$scope.totalItems = apps.totalSize;
+        this.$scope.totalItems = this.$scope.pendingApplications.length > 0 ? apps.totalSize : 0;
       });
     }
 
@@ -274,11 +352,17 @@ module ums {
       } else {
         this.$scope.fromHistory = false;
       }
+      if (this.$scope.activeLeaveSection == true) {
+        this.$scope.fromActiveLeaveSection = true;
+      } else {
+        this.$scope.fromActiveLeaveSection = false;
+      }
       this.$scope.applicantsId = angular.copy(pendingApplication.applicantsId);
       this.$scope.pagination.currentPage = currentPage;
       this.$scope.showStatusSection = true;
       this.$scope.showApprovalSection = false;
       this.$scope.showHistorySection = false;
+      this.$scope.activeLeaveSection = false;
       this.$scope.pendingApplication = pendingApplication;
       this.$scope.applicationStatusList = [];
       this.$scope.approveButtonClicked = false;

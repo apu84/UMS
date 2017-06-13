@@ -7,6 +7,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
+import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.RoleType;
 import org.ums.manager.EmployeeManager;
@@ -98,6 +99,14 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  public JsonObject getActiveLeaveApplicationsOfTheDay(final DepartmentType pDepartmentType, int pageNumber,
+      int totalPage, UriInfo pUriInfo) {
+    List<LmsAppStatus> appStatuses =
+        getContentManager().getApplicationsApprovedOfTheDay(pDepartmentType, pageNumber, totalPage);
+    int totalSize = getContentManager().getApplicationsApprovedOfTheDay(pDepartmentType).size();
+    return getJsonObjectWithTotalSize(pUriInfo, appStatuses, totalSize);
   }
 
   public JsonObject getPendingApplicationsOfEmployee(UriInfo pUriInfo) {
