@@ -27,6 +27,12 @@ public class LmsApplicationDaoDecorator extends
 
   @Override
   public int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
-    return updateApplicationStatus(pApplicationid, pLeaveApplicationStatus);
+    return getManager().updateApplicationStatus(pApplicationid, pLeaveApplicationStatus);
+  }
+
+  @Override
+  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
+      String endDate) {
+    return getManager().getApprovedApplicationsWithinDateRange(pEmployeeId, startDate, endDate);
   }
 }

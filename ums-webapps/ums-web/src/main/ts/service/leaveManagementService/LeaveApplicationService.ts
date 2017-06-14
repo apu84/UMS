@@ -67,6 +67,23 @@ module ums {
       return defer.promise;
     }
 
+    public fetchApprovedLeavesWithDateRange(startDate: string, endDate: string): ng.IPromise<any> {
+      var url = "lmsApplication/approvedApplications";
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url + "/startDate/" + startDate + "/endDate/" + endDate, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var leaves: any = {};
+            leaves = json.entries;
+            defer.resolve(leaves);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting leave applications");
+          });
+
+      return defer.promise;
+    }
 
     public saveLeaveApplication(json: any): ng.IPromise<any> {
       console.log("json");

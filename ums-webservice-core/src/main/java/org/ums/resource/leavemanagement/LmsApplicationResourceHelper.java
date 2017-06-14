@@ -123,10 +123,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   public JsonObject getPendingLeavesOfEmployee(UriInfo pUriInfo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<LmsApplication> applications = getContentManager().getPendingLmsApplication(user.getEmployeeId());
+    return getJsonObject(pUriInfo, applications);
+  }
+
+  private JsonObject getJsonObject(UriInfo pUriInfo, List<LmsApplication> pApplications) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(LmsApplication application : applications) {
+    for(LmsApplication application : pApplications) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, application, pUriInfo, localCache);
       children.add(jsonObject);
@@ -181,6 +185,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
             (application.getToDate().getTime() - application.getFromDate().getTime()) / (1000 * 60 * 60 * 24);
       }
     return leavesTaken;
+  }
+
+  protected JsonObject getApprovedLeaveApplicationsWithinDateRange(String pStartDate, String pEndDate, UriInfo pUriInfo) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    List<LmsApplication> leaveApplications =
+        getContentManager().getApprovedApplicationsWithinDateRange(user.getEmployeeId(), pStartDate, pEndDate);
+    return getJsonObject(pUriInfo, leaveApplications);
   }
 
   private List<LmsType> getLeaveTypes() {
