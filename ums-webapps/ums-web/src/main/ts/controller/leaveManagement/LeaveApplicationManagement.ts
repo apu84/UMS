@@ -261,39 +261,41 @@ module ums {
       console.log("**************");
       console.log("In apply leave method");
       var foundOccurance: boolean = false;
-      var momentFromDate: any = moment(this.$scope.leaveApplication.fromDate).format("DD/MM/YYYY");
-      var momentToDate: any = moment(this.$scope.leaveApplication.toDate).format("DD/MM/YYYY");
-      foundOccurance = this.findIfThereIsAnyOvalapping(momentFromDate, momentToDate, foundOccurance);
-      if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
-        this.notify.error("Please fill up all the fields");
-      }
-      else if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
-        this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days of the leave type");
-      }
-      else if (foundOccurance) {
-        this.notify.error("Date overlapping is not allowed");
-      }
-      else {
-        this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
-          this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
-            this.$scope.leaveApplication = <LmsApplication>{};
-            this.$scope.leaveType = this.$scope.leaveTypes[0];
-            this.getPendingApplications();
+      this.findIfThereIsAnyOvalapping(foundOccurance).then((occuranceStatus: boolean) => {
+        foundOccurance = occuranceStatus;
+        if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
+          this.notify.error("Please fill up all the fields");
+        }
+        else if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
+          this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days of the leave type");
+        }
+        else if (foundOccurance) {
+          this.notify.error("Date overlapping is not allowed! Please check your approved applications in  pending leaves or histories.");
+        }
+        else {
+          this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
+            this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+              this.$scope.leaveApplication = <LmsApplication>{};
+              this.$scope.leaveType = this.$scope.leaveTypes[0];
+              this.getPendingApplications();
+            });
           });
-        });
-      }
+        }
+      });
+
     }
 
-    private findIfThereIsAnyOvalapping(momentFromDate: any, momentToDate: any, foundOccurance: boolean) {
-      for (var i = 0; i < this.$scope.pendingApplications.length; i++) {
-        var momentFrom: any = moment(this.$scope.pendingApplications[i].fromDate).format("DD/MM/YYYY");
-        var momentTo: any = moment(this.$scope.pendingApplications[i].toDate).format("DD/MM/YYYY");
-        if (momentFromDate >= momentFrom && momentToDate >= momentFrom && momentFromDate <= momentTo && momentToDate <= momentTo) {
+    private findIfThereIsAnyOvalapping(foundOccurance: boolean): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(this.$scope.leaveApplication.fromDate, this.$scope.leaveApplication.toDate).then((applications: any) => {
+        if (applications.length > 0)
           foundOccurance = true;
-          break;
-        }
-      }
-      return foundOccurance;
+        else
+          foundOccurance = false;
+
+        defer.resolve(foundOccurance);
+      });
+      return defer.promise;
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {

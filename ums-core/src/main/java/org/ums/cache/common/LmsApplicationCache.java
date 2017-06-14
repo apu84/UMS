@@ -40,4 +40,10 @@ public class LmsApplicationCache extends
   public int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
     return getManager().updateApplicationStatus(pApplicationid, pLeaveApplicationStatus);
   }
+
+  @Override
+  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
+      String endDate) {
+    return getManager().getApprovedApplicationsWithinDateRange(pEmployeeId, startDate, endDate);
+  }
 }

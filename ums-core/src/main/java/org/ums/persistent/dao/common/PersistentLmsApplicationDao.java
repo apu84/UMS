@@ -177,6 +177,19 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     return mJdbcTemplate.update(query, pLeaveApplicationStatus.getId(), pApplicationid);
   }
 
+  @Override
+  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
+      String endDate) {
+    String query =
+        "SELECT * "
+            + "FROM LMS_APPLICATION "
+            + "WHERE "
+            + "  EMPLOYEE_ID = ? AND APP_STATUS = 7 AND TO_DATE(?, 'DD-MM-YYYY') >= FROM_DATE AND TO_DATE(?, 'DD-MM-YYYY') <= TO_DATE "
+            + "  AND TO_DATE(?, 'DD-MM-YYYY') >= FROM_DATE AND TO_DATE(?, 'DD-MM-YYYY') <= TO_DATE";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId, startDate, startDate, endDate, endDate},
+        new LmsApplicationRowMapper());
+  }
+
   class LmsApplicationRowMapper implements RowMapper<LmsApplication> {
     @Override
     public LmsApplication mapRow(ResultSet rs, int rowNum) throws SQLException {

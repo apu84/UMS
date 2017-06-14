@@ -16,4 +16,6 @@ public interface LmsApplicationManager extends ContentManager<LmsApplication, Mu
   List<LmsApplication> getPendingLmsApplication(String pEmployeeId);
 
   int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus);
+
+  List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate, String endDate);
 }

@@ -33,4 +33,11 @@ public class LmsApplicationResource extends MutableLmsApplicationResource {
   public JsonObject getPendingLeavesOfEmployee(final @Context Request pRequest) throws Exception {
     return mHelper.getPendingLeavesOfEmployee(mUriInfo);
   }
+
+  @GET
+  @Path("/approvedApplications/startDate/{start-date}/endDate/{end-date}")
+  public JsonObject getApprovedApplicationsOfEmployeesWithinDateRange(@PathParam("start-date") String pStartDate,
+      @PathParam("end-date") String pEndDate, final @Context Request pRequest) {
+    return mHelper.getApprovedLeaveApplicationsWithinDateRange(pStartDate, pEndDate, mUriInfo);
+  }
 }
