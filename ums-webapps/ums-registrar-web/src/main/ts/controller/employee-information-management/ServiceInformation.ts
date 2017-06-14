@@ -2,17 +2,41 @@ module ums{
 
     interface IEmployeeServiceInformation extends ng.IScope{
         entry: IEntry;
-
-        showInputDiv: boolean;
-        showLabelDiv: boolean;
-        hideRequireSpan: boolean;
-        required: boolean;
-
         addNewRow: Function;
         deleteRow: Function;
-        testData: Function;
-        edit: Function;
-        submit: Function;
+
+        viewMode: boolean;
+        editMode: boolean;
+    }
+
+    export interface IDesignation {
+        id: number;
+        name: string;
+    }
+
+    export interface IDepartment{
+        id: number;
+        name: string;
+    }
+
+    export interface IRoomNo{
+        id: number;
+        name: string;
+    }
+
+    export interface IExtNo{
+        id: number;
+        name: number;
+    }
+
+    export interface IAreaOfInterest{
+        id: number;
+        name: string;
+    }
+
+    export interface IEmploymentType{
+        id: number;
+        name: string;
     }
 
     interface IEntry {
@@ -22,7 +46,6 @@ module ums{
     class EmployeeServiceInformation{
 
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeServiceInformationService'];
-
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
                     private $q: ng.IQService,
@@ -35,16 +58,12 @@ module ums{
                 service: new Array<IServiceInformationModel>()
             };
 
-            $scope.submit = this.submit.bind(this);
-            $scope.edit = this.edit.bind(this);
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
-            $scope.showInputDiv = false;
-            $scope.showLabelDiv = true;
+
+            $scope.viewMode = true;
+            $scope.editMode = false;
             this.addNewRow();
-
-            console.log("I am in ServiceInformation.ts");
-
         }
 
         private submit(){
@@ -57,17 +76,12 @@ module ums{
                 //             console.log(message);
                 //         });
                 // });
-            this.$scope.showInputDiv = false;
-            this.$scope.showLabelDiv = true;
-            this.$scope.required = true;
+
             //this.$scope.showPermanentAddressCheckbox = false;
 
         }
 
         private edit() {
-            this.$scope.showInputDiv = true;
-            this.$scope.showLabelDiv = false;
-            this.$scope.hideRequireSpan = false;
         }
 
         private addNewRow(){
@@ -75,13 +89,13 @@ module ums{
             let serviceEntry: IServiceInformationModel;
             serviceEntry = {
                 employeeId: "",
-                designation: "",
-                department: "",
+                designation: null,
+                department: null,
                 academicInitial: "",
-                roomNo: "",
-                extNo: "",
-                areaOfInterest: "",
-                employmentType: "",
+                roomNo: null,
+                extNo: null,
+                areaOfInterest: null,
+                employmentType: null,
                 contractualStartDate: "",
                 contractualEndDate: "",
                 probationStartDate: "",

@@ -1,13 +1,13 @@
 module ums{
     export interface IServiceInformationModel{
         employeeId: string;
-        designation: string;
-        department: string;
+        designation: IDesignation;
+        department: IDepartment;
         academicInitial: string;
-        roomNo: string;
-        extNo: string;
-        areaOfInterest: string;
-        employmentType: string;
+        roomNo: IRoomNo;
+        extNo: IExtNo;
+        areaOfInterest: IAreaOfInterest;
+        employmentType: IEmploymentType;
         contractualStartDate: string;
         contractualEndDate: string;
         probationStartDate: string;
