@@ -4,9 +4,26 @@ module ums{
         entry: IEntry;
         addNewRow: Function;
         deleteRow: Function;
+        getEmployees: Function;
+        getSelectedEmployee: Function;
+        showRightDiv: Function;
 
         viewMode: boolean;
         editMode: boolean;
+
+        departmentTypes: Array<IDepartment>;
+        employees: Array<IEmployee>;
+        employee: IEmployee;
+        department: IDepartment;
+
+    }
+
+    export interface IEmployee{
+        id: string;
+        employeeName: string;
+        deptOfficeId: string;
+        designation: number;
+        gender: string;
     }
 
     export interface IDesignation {
@@ -16,7 +33,9 @@ module ums{
 
     export interface IDepartment{
         id: number;
-        name: string;
+        longName: string;
+        shortName: string;
+        type: number;
     }
 
     export interface IRoomNo{
@@ -45,14 +64,15 @@ module ums{
 
     class EmployeeServiceInformation{
 
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeServiceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeService', 'serviceInformationService'];
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private employeeServiceInformationService: EmployeeServiceInformationService) {
+                    private employeeService: EmployeeService,
+                    private serviceInformationService: EmployeeServiceInformationService) {
 
             $scope.entry = {
                 service: new Array<IServiceInformationModel>()
@@ -60,10 +80,38 @@ module ums{
 
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
+            $scope.getEmployees = this.getEmployees.bind(this);
+            $scope.getSelectedEmployee = this.getSelectedEmployee.bind(this);
+            $scope.showRightDiv = this.showRightDiv.bind(this);
 
-            $scope.viewMode = true;
+            $scope.viewMode = false;
             $scope.editMode = false;
             this.addNewRow();
+            this.getLoggedUserInfo();
+            this.getDepartment();
+        }
+
+        private getLoggedUserInfo(){
+            this.employeeService.getLoggedEmployeeInfo().then((user: any) =>{
+            });
+        }
+
+        private getDepartment(){
+            this.serviceInformationService.getAllDepartment().then((dept: any)=> {
+                this.$scope.departmentTypes = dept;
+            });
+        }
+
+        private getEmployees(deptId: string){
+            console.log(deptId);
+            this.employeeService.getEmployees(deptId).then((employees: any) => {
+                console.log(employees);
+               this.$scope.employees = employees;
+            });
+        }
+
+        private getSelectedEmployee(){
+            console.log(this.$scope.employee);
         }
 
         private submit(){
@@ -79,6 +127,12 @@ module ums{
 
             //this.$scope.showPermanentAddressCheckbox = false;
 
+        }
+
+        private showRightDiv(){
+            Utils.expandRightDiv();
+            console.log("Am I really executing?");
+            this.$scope.viewMode = true;
         }
 
         private edit() {

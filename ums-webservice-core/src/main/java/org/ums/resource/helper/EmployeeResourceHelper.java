@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.resource.helper;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -16,8 +16,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.DepartmentResource;
-import org.ums.academic.resource.EmployeeResource;
+import org.ums.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
@@ -77,6 +76,13 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) {
     Employee employee = getSignedEmployeeInfo();
     List<Employee> employees = getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
+
+    return convertToJson(employees, pUriInfo);
+  }
+
+  public JsonObject getEmployees(final String pDepartmentId, final UriInfo pUriInfo) {
+    List<Employee> employees = new ArrayList<>();
+    employees = getContentManager().getEmployees(pDepartmentId);
 
     return convertToJson(employees, pUriInfo);
   }

@@ -22,7 +22,22 @@ module ums{
             return defer.promise;
         }
 
+        public getAllDepartment(): ng.IPromise<any>{
+            let url = "/ums-webservice-academic/academic/department/all";
+            let defer = this.$q.defer();
+
+            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+
+                    defer.resolve(json.entries);
+                }, (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.log(response);
+                });
+
+            return defer.promise;
+        }
+
     }
 
-    UMS.service("employeeServiceInformationService", EmployeeServiceInformationService);
+    UMS.service("serviceInformationService", EmployeeServiceInformationService);
 }

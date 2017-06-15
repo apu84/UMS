@@ -25,6 +25,7 @@
 
 
 /// <reference path='ums-registrar.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
@@ -95,7 +96,7 @@
 /// <reference path='controller/approve-publication/ApprovePublication.ts'/>
 
 
-/// <reference path='service/EmployeeServiceInformationService.ts'/>
+/// <reference path='service/ServiceInformationService.ts'/>
 /// <reference path='service/ApprovePublicationService.ts'/>
 /// <reference path='service/PersonalInformationService.ts'/>
 /// <reference path='service/AcademicInformationService.ts'/>

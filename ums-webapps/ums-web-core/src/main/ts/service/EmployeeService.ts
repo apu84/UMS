@@ -44,6 +44,21 @@ module ums{
 
       return defer.promise;
     }
+
+      public getEmployees(departmentId: string):ng.IPromise<any>{
+          var defer = this.$q.defer();
+          var employees:any={};
+          this.httpClient.get("academic/employee/employeeById/departmentId/" + departmentId,'application/json',
+              (json:any,etag:string)=>{
+                  defer.resolve(json.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+                  this.notify.error("Error in fetching employee data");
+              });
+
+          return defer.promise;
+      }
   }
 
   UMS.service("employeeService",EmployeeService);

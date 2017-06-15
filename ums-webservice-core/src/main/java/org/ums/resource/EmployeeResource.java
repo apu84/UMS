@@ -1,4 +1,4 @@
-package org.ums.academic.resource;
+package org.ums.resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -9,7 +9,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.EmployeeManager;
-import org.ums.resource.Resource;
 
 @Component
 @Path("academic/employee")
@@ -68,5 +67,11 @@ public class EmployeeResource extends MutableEmployeeResource {
   public JsonObject getEmployees(final @PathParam("publication-status") String pPublicationStatus,
       final @Context Request pRequest) {
     return mEmployeeResourceHelper.getEmployees(pPublicationStatus, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/employeeById/departmentId/{department-id}")
+  public JsonObject getEmployees(final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
+    return mEmployeeResourceHelper.getEmployees(pDepartmentId, mUriInfo);
   }
 }
