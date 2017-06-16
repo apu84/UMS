@@ -1267,12 +1267,6 @@ ID NUMBER,
 NAME VARCHAR2(25 BYTE)
 );
 
-
-CREATE TABLE MST_CONTRACT_TYPE(
-ID NUMBER,
-NAME VARCHAR2(25 BYTE)
-);
-
 //*********************************************************************************************************************
 
 

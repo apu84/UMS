@@ -236,4 +236,18 @@ public class CoreContext {
     thanaCache.setManager(new PersistentThanaDao(mTemplateFactory.getJdbcTemplate()));
     return thanaCache;
   }
+
+  @Bean
+  EmploymentTypeManager employmentTypeManager() {
+    EmploymentTypeCache employmentTypeCache = new EmploymentTypeCache(mCacheFactory.getCacheManager());
+    employmentTypeCache.setManager(new PersistentEmploymentTypeDao(mTemplateFactory.getJdbcTemplate()));
+    return employmentTypeCache;
+  }
+
+  @Bean
+  DesignationManager designationManager() {
+    DesignationCache designationCache = new DesignationCache(mCacheFactory.getCacheManager());
+    designationCache.setManager(new PersistentDesignationDao(mTemplateFactory.getJdbcTemplate()));
+    return designationCache;
+  }
 }

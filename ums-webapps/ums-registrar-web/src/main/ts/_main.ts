@@ -37,6 +37,10 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>

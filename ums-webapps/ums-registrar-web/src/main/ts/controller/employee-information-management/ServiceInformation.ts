@@ -7,15 +7,22 @@ module ums{
         getEmployees: Function;
         getSelectedEmployee: Function;
         showRightDiv: Function;
+        enableViewMode: Function;
+        enableEditMode: Function;
+        changeViewOnEmploymentSelection: Function;
 
         viewMode: boolean;
         editMode: boolean;
+        showRegularEmploymentDiv: boolean;
+        showContractEmploymentDiv: boolean;
 
         departmentTypes: Array<IDepartment>;
         employees: Array<IEmployee>;
         employee: IEmployee;
         department: IDepartment;
-
+        employmentTypes: Array<IEmploymentType>;
+        designations: Array<IDesignation>;
+        departments: Array<IDepartment>;
     }
 
     export interface IEmployee{
@@ -28,7 +35,7 @@ module ums{
 
     export interface IDesignation {
         id: number;
-        name: string;
+        designationName: string;
     }
 
     export interface IDepartment{
@@ -38,16 +45,6 @@ module ums{
         type: number;
     }
 
-    export interface IRoomNo{
-        id: number;
-        name: string;
-    }
-
-    export interface IExtNo{
-        id: number;
-        name: number;
-    }
-
     export interface IAreaOfInterest{
         id: number;
         name: string;
@@ -55,68 +52,115 @@ module ums{
 
     export interface IEmploymentType{
         id: number;
-        name: string;
+        type: string;
     }
 
     interface IEntry {
-        service: Array<IServiceInformationModel>;
+        basic: IServiceBasicInformationModel;
+        contractual: Array<IContractualModel>;
+        probation: Array<IProbationModel>;
+        permanent: Array<IPermanentModel>;
+        contract: Array<IContractModel>;
+        areaOfInterest: Array<IAreaOfInterestModel>;
     }
 
     class EmployeeServiceInformation{
 
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeService', 'serviceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'serviceInformationService', 'employmentTypeService', 'departmentService', 'designationService'];
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private employeeService: EmployeeService,
-                    private serviceInformationService: EmployeeServiceInformationService) {
+                    private serviceInformationService: EmployeeServiceInformationService,
+                    private employmentTypeService: EmploymentTypeService,
+                    private departmentService: DepartmentService,
+                    private designationService: DesignationService) {
 
             $scope.entry = {
-                service: new Array<IServiceInformationModel>()
+                basic: <IServiceBasicInformationModel> {},
+                contractual: Array<IContractualModel>(),
+                probation: Array<IProbationModel>(),
+                permanent: Array<IPermanentModel>(),
+                contract: Array<IContractModel>(),
+                areaOfInterest: Array<IAreaOfInterestModel>()
             };
-
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
-            $scope.getEmployees = this.getEmployees.bind(this);
-            $scope.getSelectedEmployee = this.getSelectedEmployee.bind(this);
+            // $scope.getEmployees = this.getEmployees.bind(this);
+            // $scope.getSelectedEmployee = this.getSelectedEmployee.bind(this);
             $scope.showRightDiv = this.showRightDiv.bind(this);
+            $scope.enableEditMode = this.enableEditMode.bind(this);
+            $scope.enableViewMode = this.enableViewMode.bind(this);
+            $scope.changeViewOnEmploymentSelection = this.changeViewOnEmploymentSelection.bind(this);
 
+            $scope.showRegularEmploymentDiv = false;
+            $scope.showContractEmploymentDiv = false;
             $scope.viewMode = false;
-            $scope.editMode = false;
-            this.addNewRow();
-            this.getLoggedUserInfo();
-            this.getDepartment();
+            $scope.editMode = true;
+
+            this.getEmploymentTypes();
+            this.getDepartments();
+            this.getDesignations();
+            //this.addNewRow("contract");
+            // this.getLoggedUserInfo();
+            // this.getDepartment();
+            this.addDate();
+            console.log("change me");
         }
 
-        private getLoggedUserInfo(){
-            this.employeeService.getLoggedEmployeeInfo().then((user: any) =>{
+        private getEmploymentTypes(){
+            this.$scope.employmentTypes = Array<IEmploymentType>();
+            this.employmentTypeService.getAll().then((types: any)=>{
+               console.log(types);
+               this.$scope.employmentTypes = types;
             });
         }
 
-        private getDepartment(){
-            this.serviceInformationService.getAllDepartment().then((dept: any)=> {
-                this.$scope.departmentTypes = dept;
+        private getDepartments(){
+            this.$scope.departments = Array<IDepartment>();
+            this.departmentService.getAll().then((types: any)=>{
+                console.log(types);
+                this.$scope.departments = types;
             });
         }
 
-        private getEmployees(deptId: string){
-            console.log(deptId);
-            this.employeeService.getEmployees(deptId).then((employees: any) => {
-                console.log(employees);
-               this.$scope.employees = employees;
+        private getDesignations(){
+            this.$scope.designations = Array<IDesignation>();
+            this.designationService.getAll().then((types: any)=>{
+                console.log(types);
+                this.$scope.designations = types;
             });
         }
 
-        private getSelectedEmployee(){
-            console.log(this.$scope.employee);
-        }
+        // private getLoggedUserInfo(){
+        //     this.userService.fetchCurrentUserInfo().then((user: any) =>{
+        //         console.log(user);
+        //     });
+        // }
+        //
+        // private getDepartment(){
+        //     this.serviceInformationService.getAllDepartment().then((dept: any)=> {
+        //         this.$scope.departmentTypes = dept;
+        //     });
+        // }
+        //
+        // private getEmployees(deptId: string){
+        //     console.log(deptId);
+        //     this.employeeService.getEmployees(deptId).then((employees: any) => {
+        //         console.log(employees);
+        //        this.$scope.employees = employees;
+        //     });
+        // }
+        //
+        // private getSelectedEmployee(){
+        //     console.log(this.$scope.employee);
+        // }
 
         private submit(){
             console.log("i am in submit()");
-            this.convertToJson();
+            //this.convertToJson();
                 // .then((json: any) => {
                 //     this.employeeServiceInformationService.saveServiceInformation(json)
                 //         .then((message: any) => {
@@ -138,56 +182,140 @@ module ums{
         private edit() {
         }
 
-        private addNewRow(){
-            console.log("i am in addNewRow()");
-            let serviceEntry: IServiceInformationModel;
-            serviceEntry = {
-                employeeId: "",
-                designation: null,
-                department: null,
-                academicInitial: "",
-                roomNo: null,
-                extNo: null,
-                areaOfInterest: null,
-                employmentType: null,
-                contractualStartDate: "",
-                contractualEndDate: "",
-                probationStartDate: "",
-                probationEndDate: "",
-                permanentStartDate: "",
-                currentStatus: "",
-                resignDate: ""
-            };
+        private addNewRow(divName: string){
+            console.log("addNewRow(): " + divName);
 
-            this.$scope.entry.service.push(serviceEntry);
-        }
+            if(divName == "contractual") {
+                let contractualEntry: IContractualModel;
+                contractualEntry = {
+                    designation: null,
+                    department: null,
+                    contractualStartDate: "",
+                    contractualEndDate: "",
+                    currentStatus: ""
+                };
 
-        private deleteRow(index: number) {
-            console.log("i am in deleteRow()");
-            this.$scope.entry.service.splice(index, 1);
-        }
-
-        private convertToJson() {
-            console.log("I am in convertToJSon()");
-            var defer = this.$q.defer();
-            var JsonObject = {};
-            var JsonArray = [];
-            var item: any = {};
-
-            var serviceInformation = new Array<IServiceInformationModel>();
-            for(var i = 0; i < this.$scope.entry.service.length; i++){
-                serviceInformation = this.$scope.entry.service;
+                this.$scope.entry.contractual.push(contractualEntry);
             }
-            item['service'] = serviceInformation;
+            else if(divName == "probation") {
+                let probationEntry: IProbationModel;
+                probationEntry = {
+                    designation: null,
+                    department: null,
+                    probationStartDate: "",
+                    probationEndDate: "",
+                    currentStatus: ""
+                };
 
-            JsonArray.push(item);
-            JsonObject['entries'] = JsonArray;
+                this.$scope.entry.probation.push(probationEntry);
+            }
+            else if(divName == "permanent") {
+                let permanentEntry: IPermanentModel;
+                permanentEntry = {
+                    designation: null,
+                    department: null,
+                    permanentStartDate: "",
+                    permanentEndDate: "",
+                    currentStatus: ""
+                };
 
-            console.log("My Json Data");
-            console.log(JsonObject);
+                this.$scope.entry.permanent.push(permanentEntry);
+            }
+            else if(divName == "contract") {
+                let contractEntry: IContractModel;
+                contractEntry = {
+                    designation: null,
+                    department: null,
+                    contractStartDate: "",
+                    contractEndDate: "",
+                    currentStatus: ""
+                };
 
-            defer.resolve(JsonObject);
-            return defer.promise;
+                this.$scope.entry.contract.push(contractEntry);
+            }
+            else if(divName == "areaOfInterest") {
+                let areaOfInterestEntry: IAreaOfInterestModel;
+                areaOfInterestEntry = {
+                    topic: null
+                };
+
+                this.$scope.entry.areaOfInterest.push(areaOfInterestEntry);
+            }
+        }
+
+        private deleteRow(divName: string, index: number) {
+            console.log("deleteRow()");
+            if(divName == "contractual") {
+                this.$scope.entry.contractual.splice(index, 1);
+            }
+            else if(divName == "probation"){
+                this.$scope.entry.probation.splice(index, 1);
+            }
+            else if(divName == "permanent"){
+                this.$scope.entry.permanent.splice(index, 1);
+            }
+            else if(divName == "contract"){
+                this.$scope.entry.contract.splice(index, 1);
+            }
+            else if(divName == "areaOfInterest"){
+                this.$scope.entry.areaOfInterest.splice(index, 1);
+            }
+        }
+
+        private enableEditMode(){
+            this.$scope.viewMode = false;
+            this.$scope.editMode = true;
+        }
+
+        private enableViewMode(){
+            this.$scope.editMode = false;
+            this.$scope.viewMode = true;
+        }
+
+        private changeViewOnEmploymentSelection(){
+            console.log(this.$scope.entry.basic.employmentType);
+
+            if(this.$scope.entry.basic.employmentType.id == 1){
+                this.$scope.showContractEmploymentDiv = false;
+                this.$scope.showRegularEmploymentDiv = true;
+            }
+            else{
+                this.$scope.showRegularEmploymentDiv = false;
+                this.$scope.showContractEmploymentDiv = true;
+            }
+
+        }
+
+        // private convertToJson() {
+        //     console.log("I am in convertToJSon()");
+        //     var defer = this.$q.defer();
+        //     var JsonObject = {};
+        //     var JsonArray = [];
+        //     var item: any = {};
+        //
+        //     var serviceInformation = new Array<IServiceInformationModel>();
+        //     for(var i = 0; i < this.$scope.entry.service.length; i++){
+        //         serviceInformation = this.$scope.entry.service;
+        //     }
+        //     item['service'] = serviceInformation;
+        //
+        //     JsonArray.push(item);
+        //     JsonObject['entries'] = JsonArray;
+        //
+        //     console.log("My Json Data");
+        //     console.log(JsonObject);
+        //
+        //     defer.resolve(JsonObject);
+        //     return defer.promise;
+        // }
+
+        private addDate(): void {
+            setTimeout(function () {
+                $('.datepicker-default').datepicker();
+                $('.datepicker-default').on('change', function () {
+                    $('.datepicker').hide();
+                });
+            }, 100);
         }
     }
 
