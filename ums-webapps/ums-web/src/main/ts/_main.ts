@@ -213,5 +213,7 @@
 /// <reference path='fee/certificate/certificate.fee.controller.ts'/>
 /// <reference path='fee/certificate/certificate.fee.service.ts'/>
 /// <reference path='fee/certificate/certificate.status.service.ts'/>
+/// <reference path='fee/dues/student.dues.service.ts'/>
+/// <reference path='fee/dues/student.dues.controller.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>

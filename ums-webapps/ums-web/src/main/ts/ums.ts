@@ -885,6 +885,12 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/fee/certificatefee/certificate.fee.html'
         })
+        .state('studentDues', {
+          url: "/studentDues",
+          controller: 'StudentDuesController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/dues/student.dues.html'
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",

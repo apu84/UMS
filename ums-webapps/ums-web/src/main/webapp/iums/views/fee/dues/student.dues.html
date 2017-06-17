@@ -1,0 +1,52 @@
+<div class="panel">
+    <div class="panel-heading">Dues/ Penalty</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-advanced">
+            <thead>
+            <tr>
+                <td width="15%">Dues/ Penalty type</td>
+                <td width="15%">Pay before</td>
+                <td width="10%">Amount</td>
+                <td width="20%">TransactionId</td>
+                <td width="10%">Payment status</td>
+                <td width="13%">Applied for payment</td>
+                <td width="13%">Payment received on</td>
+                <td width="4%">Select</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="due in vm.dues">
+                <td>
+                    {{::due.feeCategoryName}}
+                </td>
+                <td>
+                    {{::due.payBefore}}
+                </td>
+                <td>
+                    {{::due.amount}}/=
+                </td>
+                <td>
+                    {{due.transactionId}}
+                </td>
+                <td>
+                    {{due.transactionStatus}}
+                </td>
+                <td>
+                    {{due.appliedOn}}
+                </td>
+                <td>
+                    {{due.verifiedOn}}
+                </td>
+                <td>
+                    <input type="checkbox" name="selectedDues" data-ng-model="vm.selectedDues[due.id]" data-ng-if="!due.transactionId" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-right" style="margin-top:25px;">
+            <button type="button" class="btn btn-success" data-ng-click="vm.pay()" data-ng-if="vm.dues.length > 0"
+                    data-ng-disabled="!vm.selected || vm.selected.length == 0">Pay
+            </button>
+        </div>
+    </div>
+</div>
