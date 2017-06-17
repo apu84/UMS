@@ -10,6 +10,7 @@ module ums {
     feeTypeName: string;
     feeTypeDescription: string;
     lastModified: string;
+    semesterName: string;
   }
 
   interface PaymentResponse {
@@ -33,7 +34,7 @@ module ums {
 
     public getCertificateFeePaymentStatus(): ng.IPromise<Payment[]> {
       let defer: ng.IDeferred<Payment[]> = this.$q.defer();
-      this.httpClient.get(`certificate-fee`, HttpClient.MIME_TYPE_JSON,
+      this.httpClient.get(`student-payment/certificate-fee`, HttpClient.MIME_TYPE_JSON,
           (response: PaymentResponse) => defer.resolve(response.entries));
       return defer.promise;
     }

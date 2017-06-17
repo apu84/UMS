@@ -6,6 +6,10 @@ module ums {
     academicSemester: number;
   }
 
+  interface AttendedSemesterResponse {
+    entries: AttendedSemester[];
+  }
+
   export class CertificateFeeService {
     public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
     public static CERTIFICATE_FEE = 'CERTIFICATE_FEE';
@@ -34,16 +38,20 @@ module ums {
     public getAttendedSemesters(): ng.IPromise<AttendedSemester[]> {
       let defer: ng.IDeferred<AttendedSemester[]> = this.$q.defer();
       this.httpClient.get('certificate-fee/attended-semesters', HttpClient.MIME_TYPE_JSON,
-          (semesters: AttendedSemester[]) => defer.resolve(semesters));
+          (response: AttendedSemesterResponse) => defer.resolve(response.entries));
       return defer.promise;
     }
 
-    public apply(semesterId: number, categoryId: number): ng.IPromise<boolean> {
+    public apply(categoryId: number, semesterId?: number): ng.IPromise<boolean> {
+      let resourceUrl = semesterId ? `certificate-fee/apply/semester/${semesterId}/category/${categoryId}`
+          : `certificate-fee/apply/category/${categoryId}`;
       let defer: ng.IDeferred<boolean> = this.$q.defer();
-      this.httpClient.post(`/apply/semester/${semesterId}/category/${categoryId}`, {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(resourceUrl, {}, HttpClient.MIME_TYPE_JSON)
           .success(() => defer.resolve(true))
           .error(() => defer.resolve(false));
       return defer.promise;
     }
   }
+
+  UMS.service('CertificateFeeService', CertificateFeeService);
 }

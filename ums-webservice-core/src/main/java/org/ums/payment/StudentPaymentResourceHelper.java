@@ -59,8 +59,8 @@ class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, Mutabl
   }
 
   JsonObject getCertificateFeeStatus(String pStudentId, UriInfo pUriInfo) {
-    List<StudentPayment> payments =
-        mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.CERTIFICATE_FEE.getId());
+    FeeType feeType = mFeeTypeManager.get(FeeType.Types.CERTIFICATE_FEE.getId());
+    List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, feeType);
     return buildJsonResponse(payments, pUriInfo);
   }
 

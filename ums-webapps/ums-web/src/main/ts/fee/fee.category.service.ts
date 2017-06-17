@@ -4,6 +4,8 @@ module ums {
     feeTypeId: number;
     name: string;
     description: string;
+    id: string;
+    lastModified: string;
   }
 
   export class FeeCategoryService {

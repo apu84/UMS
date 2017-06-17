@@ -41,9 +41,12 @@ public class CertificateFeeHelper {
 
   JsonObject getAttendedSemesters(String pStudentId, UriInfo pUriInfo) {
     List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecord(pStudentId);
-    studentRecords =
-        studentRecords.stream().filter((studentRecord) -> studentRecord.getType() != StudentRecord.Type.DROPPED
-            || studentRecord.getType() != StudentRecord.Type.WITHDRAWN).collect(Collectors.toList());
+    studentRecords = studentRecords.stream()
+        .filter((studentRecord) -> (studentRecord.getType() != StudentRecord.Type.DROPPED
+            || studentRecord.getType() != StudentRecord.Type.WITHDRAWN)
+            && (studentRecord.getStatus() == StudentRecord.Status.PASSED
+                || studentRecord.getStatus() == StudentRecord.Status.FAILED))
+        .collect(Collectors.toList());
     JsonObjectBuilder builder = Json.createObjectBuilder();
     JsonArrayBuilder entries = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -61,7 +64,7 @@ public class CertificateFeeHelper {
     return builder.build();
   }
 
-  void applyForCertificate(String pFeeCategoryId, String pStudentId, Integer pForSemesterId, UriInfo pUriInfo) {
+  void applyForCertificate(String pFeeCategoryId, String pStudentId, Integer pForSemesterId) {
     FeeCategory category = mFeeCategoryManager.get(pFeeCategoryId);
     Student student = mStudentManager.get(pStudentId);
     List<UGFee> fees = mUGFeeManager
@@ -73,6 +76,25 @@ public class CertificateFeeHelper {
       payment.setFeeCategoryId(fee.getFeeCategoryId());
       payment.setStudentId(pStudentId);
       payment.setSemesterId(pForSemesterId);
+      payment.setAmount(fee.getAmount());
+      Date today = new Date();
+      payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
+      payment.create();
+    }
+  }
+
+  void applyForCertificate(String pFeeCategoryId, String pStudentId) {
+    FeeCategory category = mFeeCategoryManager.get(pFeeCategoryId);
+    Student student = mStudentManager.get(pStudentId);
+    List<UGFee> fees = mUGFeeManager
+        .getLatestFee(student.getProgram().getFacultyId(), student.getCurrentEnrolledSemesterId()).stream()
+        .filter((fee) -> fee.getFeeCategory().getId().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
+    if(fees.size() > 0) {
+      UGFee fee = fees.get(0);
+      MutableStudentPayment payment = new PersistentStudentPayment();
+      payment.setFeeCategoryId(fee.getFeeCategoryId());
+      payment.setStudentId(pStudentId);
+      payment.setSemesterId(student.getCurrentEnrolledSemesterId());
       payment.setAmount(fee.getAmount());
       Date today = new Date();
       payment.setTransactionValidTill(UmsUtils.addDay(today, 10));

@@ -26,7 +26,14 @@ public class CertificateFeeResource extends Resource {
   @Path("/apply/semester/{semesterId}/category/{categoryId}")
   public Response applyForCertificate(final @PathParam("semesterId") Integer pSemesterId,
       final @PathParam("categoryId") String pCategoryId) throws Exception {
-    mCertificateFeeHelper.applyForCertificate(pCategoryId, getLoggedInUserId(), pSemesterId, mUriInfo);
+    mCertificateFeeHelper.applyForCertificate(pCategoryId, getLoggedInUserId(), pSemesterId);
+    return Response.ok().build();
+  }
+
+  @POST
+  @Path("/apply/category/{categoryId}")
+  public Response applyForCertificate(final @PathParam("categoryId") String pCategoryId) throws Exception {
+    mCertificateFeeHelper.applyForCertificate(pCategoryId, getLoggedInUserId());
     return Response.ok().build();
   }
 }

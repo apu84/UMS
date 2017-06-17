@@ -31,5 +31,5 @@ module ums {
     }
   }
 
-  UMS.service('CertificateService', CertificateStatusService);
+  UMS.service('CertificateStatusService', CertificateStatusService);
 }
