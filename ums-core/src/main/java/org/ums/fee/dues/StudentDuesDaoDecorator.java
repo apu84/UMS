@@ -10,4 +10,9 @@ public class StudentDuesDaoDecorator extends
   public List<StudentDues> getByStudent(String pStudentId) {
     return getManager().getByStudent(pStudentId);
   }
+
+  @Override
+  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
+    return getManager().paginatedList(itemsPerPage, pageNumber, pFilterCriteria);
+  }
 }

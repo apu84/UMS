@@ -33,4 +33,6 @@ public interface MutableStudentDues extends StudentDues, Editable<Long>, Mutable
   void setUser(User pUser);
 
   void setUserId(String pUserId);
+
+  void setStatus(Status pStatus);
 }

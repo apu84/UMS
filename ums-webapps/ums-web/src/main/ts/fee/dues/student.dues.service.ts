@@ -18,10 +18,14 @@ module ums {
   }
 
   export class StudentDuesService {
-    public static $inject = ['$q', 'HttpClient'];
+    public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
+    public static DUES: string = "DUES";
+    public static PENALTY: string = "PENALTY";
 
     constructor(private $q: ng.IQService,
-                private httpClient: HttpClient) {
+                private httpClient: HttpClient,
+                private feeTypeService: FeeTypeService,
+                private feeCategoryService: FeeCategoryService) {
 
     }
 
@@ -37,6 +41,26 @@ module ums {
       this.httpClient.put('student-dues/payDues', {"entries": dues}, HttpClient.MIME_TYPE_JSON)
           .success(() => defer.resolve(true))
           .error(() => defer.resolve(false));
+      return defer.promise;
+    }
+
+    public getFeeCategories(): ng.IPromise<FeeCategory[]> {
+      let defer: ng.IDeferred<FeeCategory[]> = this.$q.defer();
+      this.feeTypeService.getFeeTypes().then((feeTypes: FeeType[]) => {
+        for (let i = 0; i < feeTypes.length; i++) {
+          if (feeTypes[i].name === StudentDuesService.DUES
+              || feeTypes[i].name === StudentDuesService.PENALTY) {
+            this.feeCategoryService.getFeeCategories(feeTypes[i].id).then(
+                (feeCategories: FeeCategory[]) => defer.resolve(feeCategories)
+            );
+          }
+        }
+      });
+      return defer.promise;
+    }
+
+    public listDues(): ng.IPromise<StudentDue[]> {
+      let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
       return defer.promise;
     }
   }
