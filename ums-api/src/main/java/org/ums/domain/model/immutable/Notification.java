@@ -28,6 +28,8 @@ public interface Notification extends Serializable, EditType<MutableNotification
     COURSE_MATERIAL("CM"),
     COURSE_ASSIGNMENT("CA"),
     GRADE_SUBMISSION("GS"),
+    CERTIFICATE("CERT");
+    GRADE_SUBMISSION("GS"),
     LEAVE_APPLICATION("LA"),
     APPROVE_PUBLICATION("AP");
 

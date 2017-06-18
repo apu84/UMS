@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.fee.*;
+import org.ums.fee.accounts.PaymentAccountMappingDao;
+import org.ums.fee.accounts.PaymentAccountsMappingManager;
+import org.ums.fee.accounts.PaymentStatusDao;
+import org.ums.fee.accounts.PaymentStatusManager;
+import org.ums.fee.certificate.CertificateNotification;
 import org.ums.fee.certificate.CertificateStatusDao;
 import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.dues.StudentDuesDao;
@@ -20,7 +25,11 @@ import org.ums.fee.semesterfee.InstallmentStatusDao;
 import org.ums.fee.semesterfee.InstallmentStatusManager;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.SemesterManager;
+import org.ums.message.MessageResource;
+import org.ums.services.NotificationGenerator;
 import org.ums.statistics.JdbcTemplateFactory;
+import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.user.UserManager;
 
 @Configuration
 public class FeeContext {
@@ -35,6 +44,18 @@ public class FeeContext {
 
   @Autowired
   SemesterManager mSemesterManager;
+
+  @Autowired
+  NotificationGenerator mNotificationGenerator;
+
+  @Autowired
+  MessageResource mMessageResource;
+
+  @Autowired
+  UserManager mUserManager;
+
+  @Autowired
+  RoleManager mRoleManager;
 
   @Bean
   FeeCategoryManager feeCategoryManager() {
@@ -77,7 +98,11 @@ public class FeeContext {
 
   @Bean
   CertificateStatusManager certificateStatusManager() {
-    return new CertificateStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    CertificateNotification notifier =
+        new CertificateNotification(mRoleManager, mUserManager, mNotificationGenerator, mMessageResource);
+    CertificateStatusDao dao = new CertificateStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    dao.setManager(notifier);
+    return dao;
   }
 
   @Bean
@@ -88,4 +113,13 @@ public class FeeContext {
     return studentPaymentDao;
   }
 
+  @Bean
+  PaymentAccountsMappingManager paymentAccountsMappingManager() {
+    return new PaymentAccountMappingDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  PaymentStatusManager paymentStatusManager() {
+    return new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
 }

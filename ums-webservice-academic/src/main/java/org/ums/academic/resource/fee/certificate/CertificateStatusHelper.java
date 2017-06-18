@@ -91,6 +91,9 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
       if(!hasUpdatedVersion(latest, updated)) {
         return Response.status(Response.Status.PRECONDITION_FAILED).build();
       }
+      updated.setFeeCategoryId(latest.getFeeCategoryId());
+      updated.setSemesterId(latest.getSemesterId());
+      updated.setStudentId(latest.getStudentId());
       mutableCertificateStatuses.add(updated);
     }
     mCertificateStatusManager.update(mutableCertificateStatuses);

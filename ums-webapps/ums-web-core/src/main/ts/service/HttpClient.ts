@@ -3,6 +3,7 @@ module ums {
   export class HttpClient {
     static MIME_TYPE_JSON: string = 'application/json';
     static MIME_TYPE_PDF: string = 'application/pdf';
+    static MIME_TYPE_TEXT: string = 'text/html';
     static CREDENTIAL_KEY = 'ums.token';
     static USER_KEY = 'ums.user';
 

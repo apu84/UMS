@@ -76,20 +76,11 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String payload() {
-        try {
-          User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-          return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath, pRootPath[1]);
-        } catch(Exception e) {
-          mLogger.error("Exception while looking for user: ", e);
-        }
-        return null;
+        User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+        return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath, pRootPath[1]);
       }
     };
-    try {
-      mNotificationGenerator.notify(notifier);
-    } catch(Exception e) {
-      mLogger.error("Failed to generate notification", e);
-    }
+    mNotificationGenerator.notify(notifier);
     return folder;
   }
 
@@ -148,13 +139,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
         return null;
       }
     };
-
-    try {
-      mNotificationGenerator.notify(notifier);
-    } catch(Exception e) {
-      mLogger.error("Failed to generate notification", e);
-    }
-
+    mNotificationGenerator.notify(notifier);
     return assignmentFolderResponse;
   }
 

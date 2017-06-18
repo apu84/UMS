@@ -50,6 +50,11 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(semester.getId())).build().toString());
 
+    Semester currentSemester = (Semester) pLocalCache.cache(() -> pStudent.getCurrentEnrolledSemester(),
+        pStudent.getCurrentEnrolledSemesterId(), Semester.class);
+    pBuilder.add("currentEnrolledSemesterId", currentSemester.getId());
+    pBuilder.add("currentEnrolledSemesterName", currentSemester.getName());
+
     Program program = (Program) pLocalCache.cache(() -> pStudent.getProgram(),
         pStudent.getProgramId(), Program.class);
     pBuilder.add("programId", program.getId());

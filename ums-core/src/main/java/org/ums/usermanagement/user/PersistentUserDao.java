@@ -4,10 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.ums.usermanagement.role.Role;
 
 public class PersistentUserDao extends UserDaoDecorator {
   static String SELECT_ALL =
@@ -101,6 +106,17 @@ public class PersistentUserDao extends UserDaoDecorator {
   public boolean exists(String pId) {
     String query = EXISTS + "WHERE USER_ID = ?";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
+  }
+
+  @Override
+  public List<User> getUsers(List<Role> pRoles) {
+    Set<Integer> roleIds = pRoles.stream().map(Role::getId).collect(Collectors.toSet());
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("roleIds", roleIds);
+    String query = SELECT_ALL + "WHERE ROLE_ID IN (:roleIds)";
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate =
+        new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+    return namedParameterJdbcTemplate.query(query, parameters, new UserRowMapper());
   }
 
   class UserRowMapper implements RowMapper<User> {
