@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.Validate;
@@ -21,10 +21,8 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.UGFee;
 import org.ums.fee.UGFeeManager;
-import org.ums.fee.dues.MutableStudentDues;
-import org.ums.fee.dues.PersistentStudentDues;
-import org.ums.fee.dues.StudentDues;
-import org.ums.fee.dues.StudentDuesManager;
+import org.ums.fee.certificate.CertificateStatus;
+import org.ums.fee.dues.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -114,6 +112,45 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     return Response.ok().build();
   }
 
+  JsonObject getDues(int itemsPerPage, int pageNumber, JsonObject pFilter, UriInfo pUriInfo) {
+    List<StudentDues> duesList =
+        mStudentDuesManager.paginatedList(itemsPerPage, pageNumber, buildFilterQuery(pFilter));
+    LocalCache cache = new LocalCache();
+    JsonArrayBuilder array = Json.createArrayBuilder();
+    duesList.forEach((due) -> {
+      array.add(toJson(due, pUriInfo, cache));
+    });
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    jsonObjectBuilder.add("entries", array);
+    addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    if(pageNumber > 1) {
+      addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
+    return jsonObjectBuilder.build();
+  }
+
+  private List<FilterCriteria> buildFilterQuery(JsonObject pFilter) {
+    List<FilterCriteria> filterCriteria = new ArrayList<>();
+    if(pFilter.containsKey("entries")) {
+      JsonArray entries = pFilter.getJsonArray("entries");
+      entries.forEach((entry) -> {
+        JsonObject filter = (JsonObject) entry;
+        filterCriteria.add(new FilterCriteria() {
+          @Override
+          public Criteria getCriteria() {
+            return Criteria.valueOf(filter.getString("key"));
+          }
+
+          @Override
+          public Object getValue() {
+            return filter.get("value");
+          }
+        });
+      });
+    }
+    return filterCriteria;
+  }
+
   private void validateDues(String studentId, StudentDues dues) {
     Assert.isTrue(dues.getStudentId().equalsIgnoreCase(studentId), "Invalid dues");
     Assert.isTrue(dues.getPayBefore().after(new Date()), "Expired date");
@@ -135,6 +172,14 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     payment.setAmount(pStudentDues.getAmount());
     payment.setTransactionValidTill(pStudentDues.getPayBefore());
     return payment;
+  }
+
+  private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
+      JsonObjectBuilder pJsonObjectBuilder) {
+    UriBuilder builder = pUriInfo.getBaseUriBuilder();
+    Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
+    builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
+    pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 
   @Override

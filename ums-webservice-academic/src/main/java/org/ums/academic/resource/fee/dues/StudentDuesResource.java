@@ -34,6 +34,14 @@ public class StudentDuesResource extends Resource {
   }
 
   @POST
+  @Path("/paginated")
+  public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
+      @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pJsonObject) throws Exception {
+    return mStudentDuesHelper.getDues(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1 : pageNumber,
+        pJsonObject, mUriInfo);
+  }
+
+  @POST
   public Response addDue(final JsonObject pJsonObject) throws Exception {
     return mStudentDuesHelper.post(pJsonObject, mUriInfo);
   }

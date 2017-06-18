@@ -6,10 +6,10 @@ import java.util.Date;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Student;
-import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeCategoryManager;
 import org.ums.manager.StudentManager;
+import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 public class PersistentStudentDues implements MutableStudentDues {
@@ -30,6 +30,7 @@ public class PersistentStudentDues implements MutableStudentDues {
   private Date mPayBefore;
   private User mUser;
   private String mUserId;
+  private Status mStatus;
   private String mLastModified;
 
   @Override
@@ -153,6 +154,16 @@ public class PersistentStudentDues implements MutableStudentDues {
   }
 
   @Override
+  public Status getStatus() {
+    return mStatus;
+  }
+
+  @Override
+  public void setStatus(Status pStatus) {
+    mStatus = pStatus;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -196,6 +207,7 @@ public class PersistentStudentDues implements MutableStudentDues {
     setAddedOn(pStudentDues.getAddedOn());
     setPayBefore(pStudentDues.getPayBefore());
     setUserId(pStudentDues.getUserId());
+    setStatus(pStudentDues.getStatus());
     setLastModified(pStudentDues.getLastModified());
   }
 

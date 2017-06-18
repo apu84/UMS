@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.generator.IdGenerator;
@@ -79,6 +80,20 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new DuesRowMapper());
   }
 
+  @Override
+  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
+    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilterCriteria);
+    int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemsPerPage - 1;
+    String query =
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + " WHERE " + queryBuilder.getQuery()
+            + " ORDER BY ADDED_ON DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+    List<Object> params = queryBuilder.getParameters();
+    params.add(startIndex);
+    params.add(endIndex);
+    return mJdbcTemplate.query(query, params.toArray(), new DuesRowMapper());
+  }
+
   private List<Object[]> getUpdateParamList(List<MutableStudentDues> pMutableStudentDues) {
     List<Object[]> params = new ArrayList<>();
     for(StudentDues dues : pMutableStudentDues) {
@@ -113,6 +128,38 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
       dues.setTransactionId(rs.getString("TRANSACTION_ID"));
       AtomicReference<StudentDues> reference = new AtomicReference<>(dues);
       return reference.get();
+    }
+  }
+
+  private class FilterQueryBuilder {
+    private List<String> filterList;
+    private List<Object> params;
+
+    FilterQueryBuilder(List<FilterCriteria> pFilterCriteria) {
+      filterList = new ArrayList<>();
+      params = new ArrayList<>();
+      pFilterCriteria.forEach((filterCriteria) -> {
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.STUDENT_ID) {
+          filterList.add(" STUDENT_ID = ? ");
+          params.add(filterCriteria.getValue());
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.DUE_STATUS) {
+          filterList.add(" STATUS = ? ");
+          params.add(filterCriteria.getValue());
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.DUE_TYPE) {
+          filterList.add(" FEE_CATEGORY = ? ");
+          params.add(filterCriteria.getValue());
+        }
+      });
+    }
+
+    public String getQuery() {
+      return filterList.size() > 0 ? StringUtils.join(filterList, " AND ") : "";
+    }
+
+    public List<Object> getParameters() {
+      return params;
     }
   }
 }
