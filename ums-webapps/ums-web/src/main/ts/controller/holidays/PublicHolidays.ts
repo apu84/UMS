@@ -6,8 +6,10 @@ module ums {
     user: User;
 
     enableEdit: boolean;
+    enableButton: boolean;
 
     dateChanged: Function;
+    save: Function;
   }
 
 
@@ -29,18 +31,21 @@ module ums {
       var number: any = number;
       var date = new Date;
       $scope.enableEdit = false;
+      $scope.enableButton = false;
       var year = date.getFullYear();
       $scope.data = {
         year: year
       };
 
       $scope.dateChanged = this.dateChanged.bind(this);
+      $scope.save = this.save.bind(this);
       this.getHolidays();
       this.getLoggedUsersInfo();
     }
 
 
     private dateChanged() {
+      this.$scope.enableButton = true;
       this.$timeout(() => {
         for (var i = 0; i < this.$scope.holidays.length; i++) {
           if (this.$scope.holidays[i].fromDate != "" && this.$scope.holidays[i].toDate != "") {
@@ -81,6 +86,11 @@ module ums {
       });
     }
 
+    private save() {
+      var entries: any = this.$scope.holidays;
+      console.log(JSON.stringify(entries));
+    }
+
     private getHolidayTypes() {
       this.$scope.holidayTypes = [];
       this.holidayTypeService.fetchAllHolidayTypes().then((holidayTypes: Array<HolidayType>) => {
@@ -101,6 +111,12 @@ module ums {
         console.log("Holidays");
         console.log(this.$scope.holidays);
       });
+    }
+
+    private convertToJson(): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      var jsonObject = [];
+      return null;
     }
 
   }
