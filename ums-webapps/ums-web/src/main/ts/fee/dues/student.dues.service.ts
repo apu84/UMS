@@ -13,6 +13,11 @@ module ums {
     verifiedOn: string;
   }
 
+  export interface Filter {
+    key: string;
+    value: any;
+  }
+
   interface StudentDuesResponse {
     entries: StudentDue[];
   }
@@ -21,6 +26,14 @@ module ums {
     public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
     public static DUES: string = "DUES";
     public static PENALTY: string = "PENALTY";
+    public filterCriteria: {label: string, value: string}[] = [
+      {label: "Student id", value: "STUDENT_ID"},
+      {label: "Student name", value: "STUDENT_NAME"},
+      {label: "Department", value: "DEPARTMENT"},
+      {label: "Semester", value: "ACADEMIC_SEMESTER"},
+      {label: "Due status", value: "DUE_STATUS"},
+      {label: "Due type", value: "DUE_TYPE"},
+    ];
 
     constructor(private $q: ng.IQService,
                 private httpClient: HttpClient,
@@ -59,8 +72,15 @@ module ums {
       return defer.promise;
     }
 
-    public listDues(): ng.IPromise<StudentDue[]> {
+    public listDues(url?: string, filters?: Filter[]): ng.IPromise<StudentDue[]> {
       let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
+      this.httpClient.post(url ? url : 'paginated', {"entries": filters}, HttpClient.MIME_TYPE_JSON)
+          .success((response) => {
+
+          })
+          .error(() => {
+
+          });
       return defer.promise;
     }
   }
