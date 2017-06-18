@@ -17,6 +17,17 @@ public class StudentDuesResource extends Resource {
   StudentDuesHelper mStudentDuesHelper;
 
   @GET
+  public JsonObject getDues() throws Exception {
+    return mStudentDuesHelper.getDues(getLoggedInUserId(), mUriInfo);
+  }
+
+  @PUT
+  @Path("/payDues")
+  public Response payDues(final JsonObject pJsonObject) {
+    return mStudentDuesHelper.payDues(getLoggedInUserId(), pJsonObject, mUriInfo);
+  }
+
+  @GET
   @Path("/{studentId}")
   public JsonObject getDues(final @PathParam("studentId") String pStudentId) throws Exception {
     return mStudentDuesHelper.getDues(pStudentId, mUriInfo);
@@ -25,12 +36,6 @@ public class StudentDuesResource extends Resource {
   @POST
   public Response addDue(final JsonObject pJsonObject) throws Exception {
     return mStudentDuesHelper.post(pJsonObject, mUriInfo);
-  }
-
-  @PUT
-  @Path("/{studentId}")
-  public Response payDues(final @PathParam("studentId") String pStudentId, final JsonObject pJsonObject) {
-    return mStudentDuesHelper.payDues(pStudentId, pJsonObject, mUriInfo);
   }
 
   @PUT

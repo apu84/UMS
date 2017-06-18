@@ -1,0 +1,67 @@
+<div class="panel">
+    <div class="panel-heading">Certificate</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-advanced">
+            <thead>
+            <tr>
+                <td width="35%">Certificate type</td>
+                <td width="35%">Select semester</td>
+                <td width="30%"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <select class="form-control"
+                            data-ng-model="vm.feeId"
+                            data-ng-options="certificateType.id as certificateType.description for certificateType in vm.certificateTypes"
+                            data-ng-change="vm.setSemesterVisibility()">
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control required" data-ng-model="vm.semesterId" data-ng-disabled="!vm.enableSemester">
+                        <option data-ng-repeat="semester in vm.attendedSemesters" value="{{semester.semesterId}}">
+                            {{semester.semesterName}} ({{semester.year}}/{{semester.academicSemester}})
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.apply()">Apply</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div data-ng-if="vm.payments">
+            <table class="table table-hover table-bordered table-advanced">
+                <thead>
+                <tr role="row" class="heading">
+                    <th width="20%" class="sorting">TransactionId</th>
+                    <th width="25%" class="sorting_asc">Certificate type</th>
+                    <th width="5%" class="sorting">Amount</th>
+                    <th width="10%" class="sorting">Applied on</th>
+                    <th width="10%" class="sorting_asc">Payment Status</th>
+                    <th width="10%" class="sorting_asc">Semester</th>
+                    <th width="10%" class="sorting_asc">Certificate Status</th>
+                    <th width="10%" class="sorting_asc">Processed on</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="payment in vm.payments">
+                    <td>{{::payment.transactionId}}</td>
+                    <td>{{::payment.feeCategory}}</td>
+                    <td>{{::payment.amount}}/=</td>
+                    <td>{{::payment.appliedOn}}</td>
+                    <td>{{::payment.status}}</td>
+                    <td>{{::payment.semesterName}}</td>
+                    <td>{{vm.certificatesStatus[payment.transactionId].status ?
+                        vm.certificatesStatus[payment.transactionId].status : 'N/A'}}
+                    </td>
+                    <td>{{vm.certificatesStatus[payment.transactionId].processedOn ?
+                        vm.certificatesStatus[payment.transactionId].processedOn : 'N/A'}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

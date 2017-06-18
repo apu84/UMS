@@ -116,7 +116,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
   private void validateDues(String studentId, StudentDues dues) {
     Assert.isTrue(dues.getStudentId().equalsIgnoreCase(studentId), "Invalid dues");
-    Assert.isTrue(dues.getPayBefore().before(new Date()), "Expired date");
+    Assert.isTrue(dues.getPayBefore().after(new Date()), "Expired date");
     if(!StringUtils.isEmpty(dues.getTransactionId())) {
       List<StudentPayment> payments = mStudentPaymentManager.getTransactionDetails(studentId, dues.getTransactionId());
       Assert.isTrue(payments.size() > 0, "Not valid transaction reference");

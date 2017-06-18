@@ -112,7 +112,7 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
 
   @Override
   public UGSemesterFeeResponse getAdmissionStatus(String pStudentId, Integer pSemesterId) {
-    return UGSemesterFeeResponse.ALLOWED;
+    return UGSemesterFeeResponse.REGULAR_ADMISSION;
   }
 
   @Override

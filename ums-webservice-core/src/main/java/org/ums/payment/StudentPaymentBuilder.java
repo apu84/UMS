@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -32,6 +33,8 @@ class StudentPaymentBuilder implements Builder<StudentPayment, MutableStudentPay
     pBuilder.add("feeTypeName", feeCategory.getType().getName());
     pBuilder.add("feeTypeDescription", feeCategory.getType().getDescription());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
+    Semester semester = (Semester) pLocalCache.cache(pReadOnly::getSemester, pReadOnly.getSemesterId(), Semester.class);
+    pBuilder.add("semesterName", semester.getName());
   }
 
   @Override

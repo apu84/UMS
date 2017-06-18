@@ -23,13 +23,14 @@ public class Readmission extends Resource {
   StudentManager mStudentManager;
 
   @GET
+  @Path("/status")
   public ReadmissionHelper.ReadmissionApplicationStatus getReadmissionStatus() throws Exception {
     return mReadmissionHelper.readmissionApplicationStatus(getLoggedInUserId(), getStudent()
         .getCurrentEnrolledSemesterId());
   }
 
   @GET
-  @Path("/application}")
+  @Path("/application")
   public JsonObject getReadmissionApplicationStatus() throws Exception {
     return mReadmissionHelper.appliedReadmissionCourses(getLoggedInUserId(), getStudent()
         .getCurrentEnrolledSemesterId());

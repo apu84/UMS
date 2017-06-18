@@ -1,0 +1,63 @@
+<div class="panel">
+    <div class="panel-heading">Semester fee</div>
+    <div class="panel-body">
+        <div ng-if="vm.messageText">
+            {{vm.messageText}}
+        </div>
+        <div class="spacer"></div>
+        <div data-ng-if="vm.installmentEnabled && !vm.payments">
+            <input type="radio" data-ng-click="vm.selectPaymentOption(0, vm.currentEnrolledSemester)" name="paymentOption"> Regular
+            <input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)" name="paymentOption"> Installment
+        </div>
+        <div data-ng-if="vm.fee && !vm.payments">
+            <table class="table table-hover table-bordered table-advanced">
+                <thead>
+                <tr role="row" class="heading">
+                    <th width="30%" class="sorting">Name</th>
+                    <th width="20%" class="sorting_asc">Amount (Taka)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="fee in vm.fee">
+                    <td>{{::fee.name}}</td>
+                    <td>{{::fee.amount}}/=</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-right" style="margin-top:25px;">
+                <button type="button" class="btn btn-success" data-ng-click="vm.pay()"
+                        data-ng-if="vm.regularPayment">Pay
+                </button>
+                <button type="button" class="btn btn-success" data-ng-click="vm.payFirstInstallment()"
+                        data-ng-if="vm.firstInstallment">Pay First Installment
+                </button>
+                <button type="button" class="btn btn-success" data-ng-click="vm.paySecondInstallment()"
+                        data-ng-if="vm.secondInstallment">Pay Second Installment
+                </button>
+            </div>
+        </div>
+
+        <div data-ng-if="vm.payments">
+            <table class="table table-hover table-bordered table-advanced">
+                <thead>
+                <tr role="row" class="heading">
+                    <th width="35%" class="sorting">TransactionId</th>
+                    <th width="35%" class="sorting_asc">Name</th>
+                    <th width="10%" class="sorting">Amount</th>
+                    <th width="10%" class="sorting">Applied on</th>
+                    <th width="10%" class="sorting_asc">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="payment in vm.payments">
+                    <td>{{::payment.transactionId}}</td>
+                    <td>{{::payment.feeCategory}}</td>
+                    <td>{{::payment.amount}}/=</td>
+                    <td>{{::payment.appliedOn}}</td>
+                    <td>{{::payment.status}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

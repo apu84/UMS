@@ -67,6 +67,18 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     return jsonObjectBuilder.build();
   }
 
+  JsonObject getCertificateStatus(String pStudentId, UriInfo pUriInfo) {
+    List<CertificateStatus> certificateStatusList = mCertificateStatusManager.getByStudent(pStudentId);
+    LocalCache cache = new LocalCache();
+    JsonArrayBuilder array = Json.createArrayBuilder();
+    certificateStatusList.forEach((certificate) -> {
+      array.add(toJson(certificate, pUriInfo, cache));
+    });
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    jsonObjectBuilder.add("entries", array);
+    return jsonObjectBuilder.build();
+  }
+
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
     UriBuilder builder = pUriInfo.getBaseUriBuilder();

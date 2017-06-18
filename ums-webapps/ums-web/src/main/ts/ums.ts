@@ -922,6 +922,30 @@ module ums {
           url: "/viewMail",
           templateUrl: 'views/common/mailbox/mail-view.html'
         })
+        .state('readmission', {
+          url: "/readmission",
+          controller: 'ReadmissionController',
+          controllerAs: 'vm',
+          templateUrl: 'views/readmission/readmission.html'
+        })
+        .state('semesterFee', {
+          url: "/semesterFee",
+          controller: 'SemesterFeeController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/semesterfee/semester.fee.html'
+        })
+        .state('certificateFee', {
+          url: "/certificateFee",
+          controller: 'CertificateFeeController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/certificatefee/certificate.fee.html'
+        })
+        .state('studentDues', {
+          url: "/studentDues",
+          controller: 'StudentDuesController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/dues/student.dues.html'
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",

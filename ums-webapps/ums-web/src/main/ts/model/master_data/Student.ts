@@ -36,5 +36,7 @@ module ums {
     sessionalSection:string;
     backgroundColor:string;
     text:string;
+    currentEnrolledSemesterId: number;
+    currentEnrolledSemesterName: string;
   }
 }

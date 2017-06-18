@@ -220,5 +220,19 @@
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
 
+/// <reference path='student/student.info.service.ts'/>
+
 /// <reference path='readmission/readmission.controller.ts'/>
 /// <reference path='readmission/readmission.service.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.response.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.service.ts'/>
+/// <reference path='fee/semesterfee/semesterfee.controller.ts'/>
+/// <reference path='fee/installment/installment.setting.service.ts'/>
+/// <reference path='fee/payment/payment.service.ts'/>
+/// <reference path='fee/certificate/certificate.fee.controller.ts'/>
+/// <reference path='fee/certificate/certificate.fee.service.ts'/>
+/// <reference path='fee/certificate/certificate.status.service.ts'/>
+/// <reference path='fee/dues/student.dues.service.ts'/>
+/// <reference path='fee/dues/student.dues.controller.ts'/>
+/// <reference path='fee/fee.category.service.ts'/>
+/// <reference path='fee/fee.type.service.ts'/>

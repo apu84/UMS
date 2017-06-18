@@ -19,13 +19,12 @@ public class InstallmentSettingResource extends Resource {
   InstallmentSettingsHelper mInstallmentSettingsHelper;
 
   @GET
-  @Path("/semester/{semester-id}")
+  @Path("/{semester-id}")
   public JsonObject getInstallmentSettings(@PathParam("semester-id") Integer pSemesterId) throws Exception {
     return mInstallmentSettingsHelper.getInstallmentSettings(pSemesterId, mUriInfo);
   }
 
   @POST
-  @Path("/semester/{semester-id}")
   public Response create(JsonObject pJsonObject) throws Exception {
     return mInstallmentSettingsHelper.post(pJsonObject, mUriInfo);
   }

@@ -1,0 +1,56 @@
+<div class="panel">
+    <div class="panel-heading">Readmission application</div>
+    <div class="panel-body">
+        <div ng-if="vm.messageText">
+            {{vm.messageText}}
+        </div>
+        <div data-ng-if="vm.alreadyApplied">
+            <table class="table table-hover table-bordered table-advanced">
+                <thead>
+                <tr role="row" class="heading">
+                    <th width="10%" class="sorting">CourseNo</th>
+                    <th width="30%" class="sorting_asc">Course Title</th>
+                    <th width="10%" class="sorting">CrHr</th>
+                    <th width="25%" class="sorting">Last appeared</th>
+                    <th width="25%" class="sorting">Applied on</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="course in vm.courses">
+                    <td>{{::course.courseNo}}</td>
+                    <td>{{::course.courseTitle}}</td>
+                    <td>{{::course.courseCrHr}}</td>
+                    <td>{{::course.lastAppeared}}</td>
+                    <td>{{::course.appliedOn}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div data-ng-if="!vm.alreadyApplied && vm.courses && vm.courses.length > 0">
+            <table class="table table-hover table-bordered table-advanced">
+                <thead>
+                <tr role="row" class="heading">
+                    <th width="10%" class="sorting">CourseNo</th>
+                    <th width="30%" class="sorting_asc">Course Title</th>
+                    <th width="10%" class="sorting">CrHr</th>
+                    <th width="25%" class="sorting">Last appeared</th>
+                    <th width="25%" class="sorting">Select</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="course in vm.courses">
+                    <td>{{::course.courseNo}}</td>
+                    <td>{{::course.courseTitle}}</td>
+                    <td>{{::course.courseCrHr}}</td>
+                    <td>{{::course.lastAppeared}}</td>
+                    <td><input type="checkbox" data-ng-model="course.applied" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-right" style="margin-top:25px;">
+                <button type="button" class="btn btn-success" data-ng-click="vm.apply()"
+                        data-ng-disabled="!vm.applyEnabled">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>

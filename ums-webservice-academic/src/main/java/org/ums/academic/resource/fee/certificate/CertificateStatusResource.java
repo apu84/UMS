@@ -32,6 +32,11 @@ public class CertificateStatusResource extends Resource {
         pageNumber == null ? 1 : pageNumber, status, mUriInfo);
   }
 
+  @GET
+  public JsonObject getCertificateStatus() throws Exception {
+    return mCertificateStatusHelper.getCertificateStatus(getLoggedInUserId(), mUriInfo);
+  }
+
   @PUT
   public Response updateCertificateStatus(JsonObject pJsonObject) throws Exception {
     return mCertificateStatusHelper.updateCertificateStatus(pJsonObject, mUriInfo);

@@ -195,7 +195,6 @@ public class PersistentStudentDues implements MutableStudentDues {
     setAmount(pStudentDues.getAmount());
     setAddedOn(pStudentDues.getAddedOn());
     setPayBefore(pStudentDues.getPayBefore());
-    setUser(pStudentDues.getUser());
     setUserId(pStudentDues.getUserId());
     setLastModified(pStudentDues.getLastModified());
   }

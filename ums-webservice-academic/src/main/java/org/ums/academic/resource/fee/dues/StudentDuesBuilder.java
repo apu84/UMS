@@ -45,6 +45,10 @@ public class StudentDuesBuilder implements Builder<StudentDues, MutableStudentDu
           mStudentPaymentManager.getTransactionDetails(pReadOnly.getStudentId(), pReadOnly.getTransactionId());
       pBuilder.add("transactionId", pReadOnly.getTransactionId());
       pBuilder.add("transactionStatus", payments.get(0).getStatus().toString());
+      pBuilder.add("appliedOn", mDateFormat.format(payments.get(0).getAppliedOn()));
+      if(payments.get(0).getVerifiedOn() != null) {
+        pBuilder.add("verifiedOn", mDateFormat.format(payments.get(0).getAppliedOn()));
+      }
     }
     pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
