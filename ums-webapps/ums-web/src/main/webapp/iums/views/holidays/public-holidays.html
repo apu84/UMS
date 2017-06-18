@@ -62,24 +62,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr data-ng-repeat="h in holidays">
+                    <tr data-ng-repeat="h in vm.holidays">
                         <td>{{h.holidayTypeName}}</td>
                         <td>
                             <div date-picker date-model="h.fromDate" date-format="dd/MM/yyyy"
-                                 disable="!enableEdit" date-changed="dateChanged()"></div>
+                                 disable="!vm.enableEdit" date-changed="vm.dateChanged()"></div>
                         </td>
                         <td>
-                            <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!enableEdit"
-                                 date-changed="dateChanged()"></div>
+                            <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!vm.enableEdit"
+                                 date-changed="vm.dateChanged()"></div>
                         </td>
                         <td>{{h.duration}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-12" align="right" data-ng-if="enableEdit">
+            <div class="col-md-12" align="right" data-ng-if="vm.enableEdit">
                 <div class="well">
-                    <button class="btn btn-success" data-ng-disabled="!enableButton" data-ng-click="save()">Save
+                    <button class="btn btn-success" data-ng-disabled="!vm.enableButton" data-ng-click="vm.save()">Save
                     </button>
                 </div>
             </div>

@@ -840,6 +840,7 @@ module ums {
         .state('publicHolidays', {
           url: "/publicHolidays",
           controller: 'PublicHolidays',
+          controllerAs: 'vm',
           templateUrl: 'views/holidays/public-holidays.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
