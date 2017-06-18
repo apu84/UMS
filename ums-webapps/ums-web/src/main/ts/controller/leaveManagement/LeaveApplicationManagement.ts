@@ -148,9 +148,10 @@ module ums {
 
 
     private setResultsPerPage(itemPerPage: number) {
-      this.$scope.itemsPerPage = itemPerPage;
-      if (itemPerPage > 0 && itemPerPage != null)
+      if (itemPerPage > 0 && itemPerPage != null) {
+        this.$scope.itemsPerPage = itemPerPage;
         this.getAllLeaveApplicationsForHistory();
+      }
     }
 
 

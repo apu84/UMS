@@ -837,6 +837,24 @@ module ums {
             }]
           }
         })
+        .state('publicHolidays', {
+          url: "/publicHolidays",
+          controller: 'PublicHolidays',
+          templateUrl: 'views/holidays/public-holidays.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('leaveApplication', {
           url: "/leaveApplication",
           controller: 'LeaveApplicationManagement',

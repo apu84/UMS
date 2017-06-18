@@ -1,9 +1,5 @@
-/**
- * Created by My Pc on 29-May-17.
- */
-
 module ums {
-  export class UserService {
+  export class HolidayTypeService {
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
     constructor(private appConstants: any, private httpClient: HttpClient,
@@ -12,22 +8,25 @@ module ums {
 
     }
 
-    public fetchCurrentUserInfo(): ng.IPromise<any> {
-      var url = "users/current";
+    public fetchAllHolidayTypes(): ng.IPromise<any> {
+      var url = "holidayType/all";
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json: any, etag: string) => {
-            var user: any = json;
-            defer.resolve(user);
+            var holidayTypes: any = {};
+            holidayTypes = json.entries;
+            defer.resolve(holidayTypes);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
-            this.notify.error("Error in getting user data");
+            console.error(response);
+            this.notify.error("Error in getting holiday types");
           });
 
       return defer.promise;
     }
+
   }
 
-  UMS.service("userService", UserService);
+  UMS.service("holidayTypeService", HolidayTypeService);
 }

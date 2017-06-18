@@ -37,6 +37,8 @@
 /// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationStatusService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveTypeService.ts'/>
+/// <reference path='./service/holidayService/HolidayTypeService.ts'/>
+/// <reference path='./service/holidayService/HolidaysService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 
 
@@ -50,6 +52,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationManagement.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationApproval.ts'/>
+/// <reference path='./controller/holidays/PublicHolidays.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
@@ -91,6 +94,8 @@
 /// <reference path='./model/leaveManagement/LmsApplicationStatus.ts'/>
 /// <reference path='./model/leaveManagement/LmsType.ts'/>
 /// <reference path='./model/leaveManagement/RemainingLmsLeave.ts'/>
+/// <reference path='./model/holidays/HolidayType.ts'/>
+/// <reference path='./model/holidays/Holidays.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>

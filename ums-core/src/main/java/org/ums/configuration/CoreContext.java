@@ -231,6 +231,20 @@ public class CoreContext {
   }
 
   @Bean
+  HolidayTypeManager holidayTypeManager() {
+    HolidayTypeCache holidayTypeCache = new HolidayTypeCache(mCacheFactory.getCacheManager());
+    holidayTypeCache.setManager(new PersistentHolidayTypeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return holidayTypeCache;
+  }
+
+  @Bean
+  HolidaysManager holidaysManager() {
+    HolidaysCache holidaysCache = new HolidaysCache(mCacheFactory.getCacheManager());
+    holidaysCache.setManager(new PersistentHolidaysDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return holidaysCache;
+  }
+
+  @Bean
   ThanaManager thanaManager() {
     ThanaCache thanaCache = new ThanaCache(mCacheFactory.getCacheManager());
     thanaCache.setManager(new PersistentThanaDao(mTemplateFactory.getJdbcTemplate()));

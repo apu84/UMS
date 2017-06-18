@@ -1,0 +1,89 @@
+<style>
+
+    thead {
+        background-color: #efefef;
+    }
+
+    .grid {
+        width: 750px;
+        height: 500px;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        height: 450px;
+    }
+
+    #header-fixed {
+        position: fixed;
+        top: 15px;
+    }
+
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
+    /*.animate-if {
+        background: white;
+    }*/
+
+    .animate-if.ng-enter, .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+</style>
+<div class="row" ng-cloak="" id="change-transitions">
+    <div class="panel">
+        <div class="panel-heading">Public Holidays<span
+                class="subtitle"></span></div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr align="center">
+                        <th>Name</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Duration (days)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="h in holidays">
+                        <td>{{h.holidayTypeName}}</td>
+                        <td>
+                            <div date-picker date-model="h.fromDate" date-format="dd/MM/yyyy"
+                                 disable="!enableEdit" date-changed="dateChanged()"></div>
+                        </td>
+                        <td>
+                            <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!enableEdit"
+                                 date-changed="dateChanged()"></div>
+                        </td>
+                        <td>{{h.duration}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" align="right" data-ng-if="enableEdit">
+                <div class="well">
+                    <button class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
