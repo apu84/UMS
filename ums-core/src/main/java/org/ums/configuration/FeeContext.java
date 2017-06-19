@@ -107,7 +107,7 @@ public class FeeContext {
 
   @Bean
   StudentPaymentManager studentPaymentManager() {
-    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager());
+    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager(), studentDuesManager());
     StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
     studentPaymentDao.setManager(postPaymentActions);
     return studentPaymentDao;

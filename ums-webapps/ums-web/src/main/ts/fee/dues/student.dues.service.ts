@@ -74,12 +74,13 @@ module ums {
 
     public listDues(url?: string, filters?: Filter[]): ng.IPromise<StudentDue[]> {
       let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
-      this.httpClient.post(url ? url : 'paginated', {"entries": filters}, HttpClient.MIME_TYPE_JSON)
-          .success((response) => {
-
+      this.httpClient.post(url ? url : 'paginated', filters ? {"entries": filters} : {}, HttpClient.MIME_TYPE_JSON)
+          .success((response: StudentDuesResponse) => {
+            defer.resolve(response.entries);
           })
-          .error(() => {
-
+          .error((error) => {
+            console.error(error);
+            defer.resolve([]);
           });
       return defer.promise;
     }

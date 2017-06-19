@@ -15,6 +15,7 @@ import org.ums.resource.Resource;
 public class StudentDuesResource extends Resource {
   @Autowired
   StudentDuesHelper mStudentDuesHelper;
+  private int mDefaultNoOfItems = 20;
 
   @GET
   public JsonObject getDues() throws Exception {
@@ -37,8 +38,8 @@ public class StudentDuesResource extends Resource {
   @Path("/paginated")
   public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
       @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pJsonObject) throws Exception {
-    return mStudentDuesHelper.getDues(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1 : pageNumber,
-        pJsonObject, mUriInfo);
+    return mStudentDuesHelper.getDues(itemsPerPage == null ? mDefaultNoOfItems : itemsPerPage, pageNumber == null ? 1
+        : pageNumber, pJsonObject, mUriInfo);
   }
 
   @POST
