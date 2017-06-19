@@ -215,20 +215,6 @@
 
 <div data-ng-if="showPublicationLabelDiv">
 
-    <div class="row">
-        <div class="col-md-12">
-            <!--<label class="col-md-4 control-label" for="iItemsPerPage">Items Per Page</label>-->
-            <div class="col-md-4">
-                <input type="number"
-                           name="nItemsPerPage"
-                           id="iItemsPerPage"
-                           data-ng-model="data.customItemPerPage"
-                           data-ng-change="changeItemPerPage()"
-                           placeholder="Items Per Page"
-                           class="form-control">
-            </div>
-        </div>
-    </div>
     <div align="center">
         <dir-pagination-controls boundary-links="true"
                                  pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"

@@ -1,17 +1,15 @@
 module ums{
-
   export class CountryService {
-
-
     public static $inject = ['HttpClient','$q','notify','$sce','$window','MessageFactory'];
-
-    constructor(private bHttpClient: HttpClient,
-                private b$q: ng.IQService, private bNotify: Notify,
-                private b$sce: ng.ISCEService, private b$window: ng.IWindowService, private bMessageFactory: MessageFactory) {
+    constructor(private HttpClient: HttpClient,
+                private $q: ng.IQService, private Notify: Notify,
+                private $sce: ng.ISCEService, private $window: ng.IWindowService, private MessageFactory: MessageFactory) {
     }
+
     public getCountryList(): ng.IPromise<any> {
-      var defer = this.b$q.defer();
-      this.bHttpClient.get("country/all", 'application/json',
+        let url = "country/all";
+      let defer = this.$q.defer();
+      this.HttpClient.get(url, 'application/json',
           (json: any, etag: string) => {
             defer.resolve(json);
           },
@@ -20,7 +18,6 @@ module ums{
           });
       return defer.promise;
     }
-
   }
   UMS.service("countryService",CountryService);
 }
