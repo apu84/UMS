@@ -86,7 +86,7 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + " WHERE " + queryBuilder.getQuery()
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
             + " ORDER BY ADDED_ON DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     List<Object> params = queryBuilder.getParameters();
     params.add(startIndex);
@@ -155,7 +155,7 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     }
 
     public String getQuery() {
-      return filterList.size() > 0 ? StringUtils.join(filterList, " AND ") : "";
+      return filterList.size() > 0 ? " WHERE " + StringUtils.join(filterList, " AND ") : "";
     }
 
     public List<Object> getParameters() {

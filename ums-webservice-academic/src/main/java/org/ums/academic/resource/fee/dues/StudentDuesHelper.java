@@ -21,7 +21,6 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.UGFee;
 import org.ums.fee.UGFeeManager;
-import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.dues.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
@@ -78,7 +77,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
   }
 
   @Transactional
-  Response payDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) {
+  public Response payDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) {
     Validate.notEmpty(pJsonObject.getJsonArray("entries"));
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
@@ -101,7 +100,8 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     return Response.ok().build();
   }
 
-  Response updateDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  @Transactional
+  public Response updateDues(String pStudentId, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     Validate.notEmpty(pJsonObject.getJsonArray("entries"));
     List<MutableStudentDues> updatedDues = readEntities(pJsonObject, PersistentStudentDues.class);
     List<StudentDues> latestDues = mStudentDuesManager.getByStudent(pStudentId);
@@ -113,8 +113,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
   }
 
   JsonObject getDues(int itemsPerPage, int pageNumber, JsonObject pFilter, UriInfo pUriInfo) {
-    List<StudentDues> duesList =
-        mStudentDuesManager.paginatedList(itemsPerPage, pageNumber, buildFilterQuery(pFilter));
+    List<StudentDues> duesList = mStudentDuesManager.paginatedList(itemsPerPage, pageNumber, buildFilterQuery(pFilter));
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     duesList.forEach((due) -> {
