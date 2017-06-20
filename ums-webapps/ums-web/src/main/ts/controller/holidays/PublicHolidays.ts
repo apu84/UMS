@@ -1,17 +1,4 @@
 module ums {
-  /* interface IPublicHolidays extends ng.IScope {
-   holidayTypes: Array<HolidayType>;
-   holidays: Array<Holidays>;
-   data: any;
-   user: User;
-
-   enableEdit: boolean;
-   enableButton: boolean;
-
-   dateChanged: Function;
-   save: Function;
-   }
-   */
 
   class PublicHolidays {
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', '$timeout', 'holidaysService', 'holidayTypeService', 'userService'];
@@ -22,6 +9,7 @@ module ums {
     public year: number;
     public user: User;
 
+    public showLoader: boolean;
     public enableEdit: boolean;
     public enableButton: boolean;
 
@@ -40,6 +28,7 @@ module ums {
       var date = new Date;
       this.enableEdit = false;
       this.enableButton = false;
+      this.showLoader = false;
       var year = date.getFullYear();
       this.year = year;
       this.data = {
@@ -84,11 +73,14 @@ module ums {
     private getHolidays() {
 
       this.holidays = [];
+      this.showLoader = true;
       this.holidaysService.fetchHolidaysByYear(this.year).then((holidays: Array<Holidays>) => {
         if (holidays.length == 0)
           this.getHolidayTypes();
         else
           this.holidays = holidays;
+
+        this.showLoader = false;
       });
     }
 
@@ -99,6 +91,9 @@ module ums {
         this.notify.error("Please fill up all the fields");
       else
         this.convertToJson().then((json) => {
+          this.holidaysService.saveHolidays(json);
+          this.enableButton = false;
+          //this.getHolidays();
         });
     }
 
@@ -122,9 +117,9 @@ module ums {
           holidays.holidayTypeName = holidayTypes[i].name;
           holidays.moonDependency = holidayTypes[i].moonDependency;
           holidays.year = this.year;
-          holidays.fromDate = "";
-          holidays.toDate = "";
-          holidays.duration = 0;
+          holidays.fromDate = "01-06-2017"; //todo remove the test cases
+          holidays.toDate = "02-06-2017";
+          holidays.duration = 2;
           this.holidays.push(holidays);
         }
 

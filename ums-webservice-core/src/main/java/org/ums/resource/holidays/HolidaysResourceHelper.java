@@ -7,14 +7,14 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.Holidays;
 import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.manager.common.HolidaysManager;
+import org.ums.persistent.model.common.PersistentHolidays;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +32,30 @@ public class HolidaysResourceHelper extends ResourceHelper<Holidays, MutableHoli
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
+  }
+
+  public Response saveOrUpdate(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    List<MutableHolidays> newHolidays = new ArrayList<>();
+    List<MutableHolidays> existingHolidays = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    LocalCache localCache = new LocalCache();
+    for(int i = 0; i < entries.size(); i++) {
+      PersistentHolidays persistentHolidays = new PersistentHolidays();
+      getBuilder().build(persistentHolidays, entries.getJsonObject(i), localCache);
+      if(persistentHolidays.getId() != null)
+        existingHolidays.add(persistentHolidays);
+      else
+        newHolidays.add(persistentHolidays);
+    }
+
+    if(existingHolidays.size() > 0)
+      getContentManager().update(existingHolidays);
+    else
+      getContentManager().create(newHolidays);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 
   public JsonObject getHolidaysByYear(int pYear, UriInfo pUriInfo) {

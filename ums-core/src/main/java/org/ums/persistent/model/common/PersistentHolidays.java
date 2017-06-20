@@ -7,6 +7,8 @@ import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.manager.common.HolidayTypeManager;
 import org.ums.manager.common.HolidaysManager;
 
+import java.util.Date;
+
 /**
  * Created by Monjur-E-Morshed on 15-Jun-17.
  */
@@ -25,8 +27,8 @@ public class PersistentHolidays implements MutableHolidays {
   private Long mHolidayTypeId;
   private HolidayType mHolidayType;
   private int mYear;
-  private String mFromDate;
-  private String mToDate;
+  private Date mFromDate;
+  private Date mToDate;
   private String mLastModified;
 
   public PersistentHolidays() {
@@ -103,22 +105,22 @@ public class PersistentHolidays implements MutableHolidays {
   }
 
   @Override
-  public String getFromDate() {
+  public Date getFromDate() {
     return mFromDate;
   }
 
   @Override
-  public void setFromDate(String pFromDate) {
+  public void setFromDate(Date pFromDate) {
     mFromDate = pFromDate;
   }
 
   @Override
-  public String getToDate() {
+  public Date getToDate() {
     return mToDate;
   }
 
   @Override
-  public void setToDate(String pToDate) {
+  public void setToDate(Date pToDate) {
     mToDate = pToDate;
   }
 }

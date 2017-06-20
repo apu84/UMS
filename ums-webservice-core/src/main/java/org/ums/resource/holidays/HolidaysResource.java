@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by Monjur-E-Morshed on 17-Jun-17.
@@ -22,4 +23,11 @@ public class HolidaysResource extends MutableHolidaysResource {
       throws Exception {
     return mHelper.getHolidaysByYear(pYear, mUriInfo);
   }
+
+  @GET
+  @Path("/saveOrUpdate")
+  public Response saveOrUpdateHolidays(final JsonObject pJsonObject, final @Context Request pRequest) throws Exception {
+    return mHelper.saveOrUpdate(pJsonObject, mUriInfo);
+  }
+
 }

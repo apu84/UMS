@@ -5,6 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.Holidays;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
+import java.util.Date;
+
 /**
  * Created by Monjur-E-Morshed on 15-Jun-17.
  */
@@ -14,8 +16,8 @@ public interface MutableHolidays extends Holidays, Editable<Long>, MutableLastMo
 
   void setYear(int pYear);
 
-  void setFromDate(String pFromDate);
+  void setFromDate(Date pFromDate);
 
-  void setToDate(String pToDate);
+  void setToDate(Date pToDate);
 
 }

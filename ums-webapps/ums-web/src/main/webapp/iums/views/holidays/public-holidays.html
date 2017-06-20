@@ -51,37 +51,44 @@
         <div class="panel-heading">Public Holidays<span
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div class="col-md-12">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr align="center">
-                        <th>Name</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Duration (days)</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr data-ng-repeat="h in vm.holidays">
-                        <td>{{h.holidayTypeName}}</td>
-                        <td>
-                            <div date-picker date-model="h.fromDate" date-format="dd/MM/yyyy"
-                                 disable="!vm.enableEdit" date-changed="vm.dateChanged()"></div>
-                        </td>
-                        <td>
-                            <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!vm.enableEdit"
-                                 date-changed="vm.dateChanged()"></div>
-                        </td>
-                        <td>{{h.duration}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-12" align="right" data-ng-if="vm.enableEdit">
-                <div class="well">
-                    <button class="btn btn-success" data-ng-disabled="!vm.enableButton" data-ng-click="vm.save()">Save
-                    </button>
+            <div data-ng-if="!vm.showLoader">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr align="center">
+                            <th>Name</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Duration (days)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="h in vm.holidays">
+                            <td>{{h.holidayTypeName}}</td>
+                            <td>
+                                <div date-picker date-model="h.fromDate" date-format="dd/MM/yyyy"
+                                     disable="!vm.enableEdit" date-changed="vm.dateChanged()"></div>
+                            </td>
+                            <td>
+                                <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!vm.enableEdit"
+                                     date-changed="vm.dateChanged()"></div>
+                            </td>
+                            <td>{{h.duration}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <div class="col-md-12" align="right" data-ng-if="vm.enableEdit">
+                    <div class="well">
+                        <button class="btn btn-success" data-ng-disabled="!vm.enableButton" data-ng-click="vm.save()">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div data-ng-if="vm.showLoader" align="center">
+                <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
             </div>
         </div>
 
