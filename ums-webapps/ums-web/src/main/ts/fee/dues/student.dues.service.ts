@@ -26,13 +26,13 @@ module ums {
     public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
     public static DUES: string = "DUES";
     public static PENALTY: string = "PENALTY";
-    public filterCriteria: {label: string, value: string}[] = [
+    public filterCriteria: { label: string, value: string }[] = [
       {label: "Student id", value: "STUDENT_ID"},
       {label: "Student name", value: "STUDENT_NAME"},
       {label: "Department", value: "DEPARTMENT"},
       {label: "Semester", value: "ACADEMIC_SEMESTER"},
       {label: "Due status", value: "DUE_STATUS"},
-      {label: "Due type", value: "DUE_TYPE"},
+      {label: "Due type", value: "DUE_TYPE"}
     ];
 
     constructor(private $q: ng.IQService,
