@@ -1264,8 +1264,28 @@ COMMIT;
 
 CREATE TABLE MST_EMPLOYMENT_TYPE(
 ID NUMBER,
-NAME VARCHAR2(25 BYTE)
+NAME VARCHAR2(25 BYTE),
+LAST_MODIFIED VARCHAR2(18 BYTE)
 );
+
+
+CREATE TABLE AREA_OF_INTERESTS(
+ID NUMBER PRIMARY KEY,
+NAME VARCHAR2(50 BYTE),
+LAST_MODIFIED VARCHAR2(18BYTE)
+);
+
+create sequence aoi_id_seq;
+
+create trigger trg_aoi_id
+before insert on AREA_OF_INTERESTS
+for each row
+begin
+   select aoi_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
 
 //*********************************************************************************************************************
 

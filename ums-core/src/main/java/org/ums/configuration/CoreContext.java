@@ -268,4 +268,11 @@ public class CoreContext {
     designationCache.setManager(new PersistentDesignationDao(mTemplateFactory.getJdbcTemplate()));
     return designationCache;
   }
+
+  @Bean
+  AreaOfInterestManager areaOfInterestManager() {
+    AreaOfInterestCache areaOfInterestCache = new AreaOfInterestCache(mCacheFactory.getCacheManager());
+    areaOfInterestCache.setManager(new PersistentAreaOfInterestDao(mTemplateFactory.getJdbcTemplate()));
+    return areaOfInterestCache;
+  }
 }

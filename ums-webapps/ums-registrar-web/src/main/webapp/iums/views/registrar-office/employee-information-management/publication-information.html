@@ -12,6 +12,7 @@
 <!--template-url="views\registrar-office\directive\dirPagination.tpl.html">-->
 <!--</dir-pagination-controls>-->
 
+
 <div data-ng-if="showPublicationInputDiv">
     <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
 
@@ -211,6 +212,8 @@
             </div>
         </div>
     </form>
+
+    <br />
 </div>
 
 <div data-ng-if="showPublicationLabelDiv">
@@ -224,186 +227,115 @@
 
     <div dir-paginate="publication in paginatedPublication | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
         <!--<div data-ng-repeat="publication in entry.publication track by $index">-->
-            <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="text-center pal">
-                            <b>{{$index + 1}}.</b>
-                        </div>
+        <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center pal">
+                        <b>{{$index + 1}}.</b>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationType{{$index}}">Publication Type</label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationType.name}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationISSN}}</label>
-                        </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationType{{$index}}">Publication Type</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationType.name}}</label>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationTitle{{$index}}">Publication Title</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationTitle}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationVolume{{$index}}">Volume</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationVolume}}</label>
-                        </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationISSN}}</label>
                     </div>
                 </div>
-                <br />
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationTitle{{$index}}">Publication Title</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationTitle}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationVolume{{$index}}">Volume</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationVolume}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iDateOfPublication{{$index}}">Date Of Publication</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.dateOfPublication}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationIssue{{$index}}">Issue</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationIssue}}</label>
-                        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iDateOfPublication{{$index}}">Date Of Publication</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.dateOfPublication}}</label>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationJournalName{{$index}}">Journal/Conference Name</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationJournalName}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationPage{{$index}}">Pages</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationPages}}</label>
-                        </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationIssue{{$index}}">Issue</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationIssue}}</label>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationWebLink}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationInterestGenre}}</label>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationCountry}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPublishername{{$index}}">Publisher Name</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publisherName}}</label>
-                        </div>
-                    </div>
-                </div>
-                <br />
             </div>
-            <hr />
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationJournalName{{$index}}">Journal/Conference Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationJournalName}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationPage{{$index}}">Pages</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationPages}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationWebLink}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publicationCountry}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-md-4 control-label" for="iPublishername{{$index}}">Publisher Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{publication.publisherName}}</label>
+                    </div>
+                </div>
+            </div>
+            <br />
         </div>
-        <!--<div class="row">-->
-        <!--<div class="col-md-6" data-ng-show="showPublicationAddIcon">-->
-        <!--[ <a title="Add New Row" data-ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-        <!--</div>-->
-        <!--<div class="col-md-6"></div>-->
-        <!--</div>-->
-
-        <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <div class="text-right pal">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
-                </div>
-            </div>
-        </div>
+        <hr />
     </div>
-
-<div align="center">
-    <dir-pagination-controls boundary-links="true"
-                             pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
-                             template-url="views\registrar-office\directive\dirPagination.tpl.html">
-    </dir-pagination-controls>
-</div>
-</div>
-
-
-<div id="modal-publication" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
-     aria-hidden="true" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true"
-                        class="close">&times;</button>
-                <h4 id="modal-default-label" class="modal-title">Instructions</h4></div>
-            <div class="modal-body">
-                There are six different tabs.
-                This <span class="require"><storng>( * )</storng></span> represents Mandatory Fields
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="text-right pal">
+                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
             </div>
         </div>
     </div>
 </div>
-<!--<h4><b>Waiting For Approval</b></h4>-->
-<!--<br />-->
-<!--<div class="row">-->
-<!--<div class="col-md-1">-->
-<!--<label><b>Sl.</b></label>-->
-<!--</div>-->
-<!--<div class="col-md-8">-->
-<!--<label><b>Publication Title</b></label>-->
-<!--</div>-->
-<!--<div class="col-md-2">-->
-<!--<label><b>Publication Type</b></label>-->
-<!--</div>-->
-<!--<div class="col-md-1">-->
-<!--<label><b>Status</b></label>-->
-<!--</div>-->
-<!--</div>-->
-<!--<br />-->
-<!--<div data-ng-repeat="waitingPublication in waitingForApprovalPublications track by $index">-->
-<!--<div class="row">-->
-<!--<div class="col-md-1">-->
-<!--<label><b>{{$index + 1}}</b></label>-->
-<!--</div>-->
-<!--<div class="col-md-8">-->
-<!--<label>{{waitingPublication.publicationTitle}}</label>-->
-<!--</div>-->
-<!--<div class="col-md-2">-->
-<!--<label>{{waitingPublication.publicationType.name}}</label>-->
-<!--</div>-->
-<!--<div class="col-md-1">-->
-<!--<label style="color: orangered">{{waitingPublication.status}}</label>-->
-<!--</div>-->
-<!--</div>-->
-<!--<hr />-->
-<!--</div>-->

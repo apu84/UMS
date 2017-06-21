@@ -40,8 +40,4 @@ module ums{
         permanentEndDate: string;
         currentStatus: string;
     }
-
-    export interface IAreaOfInterestModel{
-        topic: IAreaOfInterest;
-    }
 }

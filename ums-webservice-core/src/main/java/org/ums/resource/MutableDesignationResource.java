@@ -9,7 +9,4 @@ public class MutableDesignationResource extends Resource {
 
   @Autowired
   ResourceHelper<Designation, MutableDesignation, Integer> mHelper;
-
-  @Autowired
-  DesignationResourceHelper mResourceHelper;
 }

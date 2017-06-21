@@ -9,8 +9,4 @@ public class MutableEmploymentTypeResource extends Resource {
 
   @Autowired
   ResourceHelper<EmploymentType, MutableEmploymentType, Integer> mHelper;
-
-  @Autowired
-  EmploymentTypeResourceHelper mResourceHelper;
-
 }

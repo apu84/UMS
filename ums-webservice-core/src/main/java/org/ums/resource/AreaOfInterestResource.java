@@ -11,10 +11,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
 @Component
-@Path("employmentType")
+@Path("areaOfInterest")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class EmploymentTypeResource extends MutableEmploymentTypeResource {
+public class AreaOfInterestResource extends MutableAreaOfInterestResource {
 
   @GET
   @Path("/all")

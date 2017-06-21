@@ -41,6 +41,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>

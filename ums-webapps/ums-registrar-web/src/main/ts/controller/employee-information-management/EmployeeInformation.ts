@@ -22,6 +22,7 @@ module ums {
 
         borderColor: string;
         supOptions: string;
+        userAreaOfInterests: string;
 
         customItemPerPage: number;
 
@@ -71,6 +72,7 @@ module ums {
         getThana: Function;
         pageChanged: Function;
         changeItemPerPage: Function;
+        changeAreaOfInterest: Function;
 
         entry: IEntry;
         gender: Array<IGender>;
@@ -96,6 +98,14 @@ module ums {
         permanentAddressThanas: Array<IThana>;
         allThanas: Array<IThana>;
         paginatedPublication: Array<IPublicationInformationModel>;
+        arrayOfAreaOfInterest: Array<IAreaOfInterest>;
+        selectedAreaOfInterest: Array<IAreaOfInterest>;
+
+    }
+
+    export interface IAreaOfInterest{
+        id: number;
+        name: string;
     }
 
     export interface IGender {
@@ -170,7 +180,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService', 'areaOfInterestService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -187,7 +197,8 @@ module ums {
                     private publicationInformationService: PublicationInformationService,
                     private trainingInformationService: TrainingInformationService,
                     private awardInformationService: AwardInformationService,
-                    private experienceInformationService: ExperienceInformationService) {
+                    private experienceInformationService: ExperienceInformationService,
+                    private areaOfInterestService: AreaOfInterestService) {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -203,7 +214,9 @@ module ums {
                 borderColor: "",
                 itemPerPage: 2,
                 totalRecord: 0,
-                customItemPerPage: null
+                customItemPerPage: null,
+                selectedAreaOfInterest : Array<IAreaOfInterest>(),
+                userAreaOfInterests: ""
             };
 
             $scope.pagination = {};
@@ -244,8 +257,15 @@ module ums {
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
             $scope.changeItemPerPage = this.changeItemPerPage.bind(this);
+            $scope.changeAreaOfInterest = this.changeAreaOfInterest.bind(this);
 
             this.initializeVariables();
+        }
+
+        private changeAreaOfInterest(){
+            console.log("changed .................. ");
+            console.log(this.$scope.data.selectedAreaOfInterest);
+            this.$scope.data.userAreaOfInterests += this.$scope.data.selectedAreaOfInterest[this.$scope.data.selectedAreaOfInterest.length - 1].name + ", ";
         }
 
         private initializeVariables() {
@@ -253,6 +273,7 @@ module ums {
             this.getDivision();
             this.getDistrict();
             this.getThana();
+            this.getAreaOfInterest();
 
             this.createMap();
 
@@ -271,13 +292,20 @@ module ums {
 
             this.addDate();
 
-            this.getPersonalInformation();
-            this.getAcademicInformation();
-            this.getAwardInformation();
-            this.getPublicationInformation();
-            this.getPublicationInformationWithPagination();
-            this.getExperienceInformation();
-            this.getTrainingInformation();
+            // this.getPersonalInformation();
+            // this.getAcademicInformation();
+            // this.getAwardInformation();
+             this.getPublicationInformation();
+             this.getPublicationInformationWithPagination();
+            // this.getExperienceInformation();
+            // this.getTrainingInformation();
+        }
+
+        private getAreaOfInterest(){
+            let arrayOfAreaOfInterest = Array <IAreaOfInterest>();
+            this.areaOfInterestService.getAll().then((aoi: any)=>{
+               this.$scope.arrayOfAreaOfInterest = aoi;
+            });
         }
 
 
@@ -446,7 +474,7 @@ module ums {
                 item['academic'] = obj;
             }
 
-            else if (convertThis === "publication") {
+            else if (convertThis === "publication"){
                 item['publication'] = obj;
             }
 

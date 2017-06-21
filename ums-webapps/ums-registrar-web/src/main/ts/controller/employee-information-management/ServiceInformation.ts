@@ -45,11 +45,6 @@ module ums{
         type: number;
     }
 
-    export interface IAreaOfInterest{
-        id: number;
-        name: string;
-    }
-
     export interface IEmploymentType{
         id: number;
         type: string;
@@ -61,7 +56,6 @@ module ums{
         probation: Array<IProbationModel>;
         permanent: Array<IPermanentModel>;
         contract: Array<IContractModel>;
-        areaOfInterest: Array<IAreaOfInterestModel>;
     }
 
     class EmployeeServiceInformation{
@@ -83,8 +77,7 @@ module ums{
                 contractual: Array<IContractualModel>(),
                 probation: Array<IProbationModel>(),
                 permanent: Array<IPermanentModel>(),
-                contract: Array<IContractModel>(),
-                areaOfInterest: Array<IAreaOfInterestModel>()
+                contract: Array<IContractModel>()
             };
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
@@ -233,14 +226,14 @@ module ums{
 
                 this.$scope.entry.contract.push(contractEntry);
             }
-            else if(divName == "areaOfInterest") {
-                let areaOfInterestEntry: IAreaOfInterestModel;
-                areaOfInterestEntry = {
-                    topic: null
-                };
-
-                this.$scope.entry.areaOfInterest.push(areaOfInterestEntry);
-            }
+            // else if(divName == "areaOfInterest") {
+            //     let areaOfInterestEntry: IAreaOfInterestModel;
+            //     areaOfInterestEntry = {
+            //         topic: null
+            //     };
+            //
+            //     this.$scope.entry.areaOfInterest.push(areaOfInterestEntry);
+            // }
         }
 
         private deleteRow(divName: string, index: number) {
@@ -257,9 +250,9 @@ module ums{
             else if(divName == "contract"){
                 this.$scope.entry.contract.splice(index, 1);
             }
-            else if(divName == "areaOfInterest"){
-                this.$scope.entry.areaOfInterest.splice(index, 1);
-            }
+            // else if(divName == "areaOfInterest"){
+            //     this.$scope.entry.areaOfInterest.splice(index, 1);
+            // }
         }
 
         private enableEditMode(){
