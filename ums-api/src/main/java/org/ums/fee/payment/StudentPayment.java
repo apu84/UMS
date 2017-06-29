@@ -52,8 +52,9 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
     private static final Map<Integer, Status> lookup = new HashMap<>();
 
     static {
-      for(Status c : EnumSet.allOf(Status.class))
+      for(Status c : EnumSet.allOf(Status.class)) {
         lookup.put(c.getValue(), c);
+      }
     }
 
     private int typeCode;

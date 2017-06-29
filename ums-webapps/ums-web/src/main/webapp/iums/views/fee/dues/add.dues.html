@@ -1,1 +1,49 @@
+<div class="panel">
+    <div class="panel-heading">Dues/ Penalty</div>
+    <div class="panel-body">
+        <dues-filter data-filters="vm.filters"></dues-filter>
+        <table class="table table-hover table-bordered table-advanced">
+            <thead>
+            <tr>
+                <td width="4%">Student Id</td>
+                <td width="15%">Dues/ Penalty type</td>
+                <td width="15%">Pay before</td>
+                <td width="10%">Amount</td>
+                <td width="20%">TransactionId</td>
+                <td width="10%">Payment status</td>
+                <td width="13%">Applied for payment</td>
+                <td width="13%">Payment received on</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="due in vm.dues">
+                <td>
+                    {{::due.studentId}}
+                </td>
+                <td>
+                    {{::due.feeCategoryName}}
+                </td>
+                <td>
+                    {{::due.payBefore}}
+                </td>
+                <td>
+                    {{::due.amount}}/=
+                </td>
+                <td>
+                    {{due.transactionId}}
+                </td>
+                <td>
+                    {{due.transactionStatus}}
+                </td>
+                <td>
+                    {{due.appliedOn}}
+                </td>
+                <td>
+                    {{due.verifiedOn}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 

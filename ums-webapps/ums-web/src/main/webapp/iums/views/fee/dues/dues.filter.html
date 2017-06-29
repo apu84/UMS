@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="select2-container select2-container-multi form-control">
+            <ul class="select2-choices">
+                <li class="select2-search-choice ms-hover" data-ng-repeat="filter in vm.filters">
+                    <div>{{filter.label? filter.label : filter.value}}</div>
+                    <a href class="select2-search-choice-close" tabindex="-1"
+                       data-ng-click="vm.removeFilter(filter.key)"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6 text-right">
+        <select data-ng-model="vm.selectedFilter" data-ng-change="vm.reset()">
+            <option value="{{::criteria.value}}" data-ng-repeat="criteria in vm.filterCriteria">{{::criteria.label}}
+            </option>
+        </select>
+        <input data-ng-model="vm.selectedFilterValue.value" data-ng-if="vm.selectedFilter === 'STUDENT_ID'"/>
+        <dues-status data-status="vm.selectedFilterValue" data-ng-if="vm.selectedFilter === 'DUE_STATUS'"></dues-status>
+        <dues-categories data-category="vm.selectedFilterValue"
+                         data-ng-if="vm.selectedFilter === 'DUE_TYPE'"></dues-categories>
+        <button type="button" class="btn btn-success" data-ng-click="vm.addFilter()">Add Filter
+        </button>
+    </div>
+</div>
+
+
+

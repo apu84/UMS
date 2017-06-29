@@ -215,5 +215,9 @@
 /// <reference path='fee/certificate/certificate.status.service.ts'/>
 /// <reference path='fee/dues/student.dues.service.ts'/>
 /// <reference path='fee/dues/student.dues.controller.ts'/>
+/// <reference path='fee/dues/add.dues.controller.ts'/>
+/// <reference path='fee/dues/dues.filter.directive.ts'/>
+/// <reference path='fee/dues/dues.categories.directive.ts'/>
+/// <reference path='fee/dues/dues.status.directive.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>

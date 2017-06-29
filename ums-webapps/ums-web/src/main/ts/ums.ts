@@ -891,6 +891,19 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/fee/dues/student.dues.html'
         })
+        .state('addDues', {
+          url: "/addDues",
+          controller: 'AddDues',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/dues/add.dues.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/select2/select2-madmin.css']
+              });
+            }]
+          }
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",

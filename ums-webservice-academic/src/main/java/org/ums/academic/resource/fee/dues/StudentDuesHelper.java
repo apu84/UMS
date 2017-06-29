@@ -142,6 +142,12 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
           @Override
           public Object getValue() {
+            if(filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
+              return filter.getInt("value");
+            }
+            else if(filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
+              return filter.getString("value");
+            }
             return filter.get("value");
           }
         });

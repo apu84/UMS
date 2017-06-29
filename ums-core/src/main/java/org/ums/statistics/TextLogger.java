@@ -45,7 +45,6 @@ public class TextLogger implements QueryLogger {
   public void doLog() {
     List<String> loggerEntries = new ArrayList<>();
     synchronized(mLoggerEntries) {
-      String ml;
       while(!mLoggerEntries.isEmpty()) {
         loggerEntries.add(mLoggerEntries.poll());
       }
