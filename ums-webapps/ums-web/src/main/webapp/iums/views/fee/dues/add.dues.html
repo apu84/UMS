@@ -47,8 +47,11 @@
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success" data-ng-if="!editMode">
             <i class="fa fa-save"></i>&nbsp;Save
+        </button>
+        <button type="button" class="btn btn-success" data-ng-if="editMode">
+            <i class="fa fa-save"></i>&nbsp;Update
         </button>
     </div>
 </form>

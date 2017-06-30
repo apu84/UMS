@@ -24,6 +24,25 @@ module ums {
         templateUrl: 'views/fee/dues/add.dues.html',
         controller: AddDues,
         resolve: {
+          studentDue: () => undefined,
+          loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+            return $ocLazyLoad.load({
+              files: [
+                'vendors/bootstrap-datepicker/css/datepicker.css',
+                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+              ]
+            });
+          }]
+        }
+      });
+    }
+
+    public editDues(due: StudentDue): void {
+      this.$modal.open({
+        templateUrl: 'views/fee/dues/add.dues.html',
+        controller: AddDues,
+        resolve: {
+          studentDue: () => due,
           loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
             return $ocLazyLoad.load({
               files: [

@@ -5,7 +5,7 @@ module ums {
     feeCategoryId: string;
     feeCategoryName?: string;
     payBefore: string;
-    amount?: number;
+    amount?: string;
     lastModified?: string;
     transactionId?: string;
     transactionStatus?: string;
@@ -71,7 +71,8 @@ module ums {
 
     public listDues(filters: Filter[], url?: string): ng.IPromise<StudentDue[]> {
       let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
-      this.httpClient.post(url ? url : 'student-dues/paginated', filters ? {"entries": filters} : {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(url ? url : 'student-dues/paginated', filters ? {"entries": filters} : {},
+          HttpClient.MIME_TYPE_JSON)
           .success((response: StudentDuesResponse) => {
             defer.resolve(response.entries);
           })
@@ -84,6 +85,7 @@ module ums {
 
     public addDues(due: StudentDue): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
+      due.amount = due.amount + '';
       this.httpClient.post('student-dues', {"entries": [due]}, HttpClient.MIME_TYPE_JSON)
           .success(() => {
             defer.resolve(true);
@@ -92,6 +94,16 @@ module ums {
       return defer.promise;
     }
 
+    public updateDues(due: StudentDue): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      due.amount = due.amount + '';
+      this.httpClient.put(`student-dues/updateDues/${due.studentId}`, {"entries": [due]}, HttpClient.MIME_TYPE_JSON)
+          .success(() => {
+            defer.resolve(true);
+          })
+          .error(() => defer.resolve(false));
+      return defer.promise;
+    }
   }
 
   UMS.service('StudentDuesService', StudentDuesService);

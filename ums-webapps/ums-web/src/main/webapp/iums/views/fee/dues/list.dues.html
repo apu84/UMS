@@ -9,10 +9,10 @@
                 <td width="15%">Dues/ Penalty type</td>
                 <td width="15%">Pay before</td>
                 <td width="10%">Amount</td>
-                <td width="20%">TransactionId</td>
                 <td width="10%">Payment status</td>
                 <td width="13%">Applied for payment</td>
                 <td width="13%">Payment received on</td>
+                <td width="20%"></td>
             </tr>
             </thead>
             <tbody>
@@ -30,9 +30,6 @@
                     {{::due.amount}}/=
                 </td>
                 <td>
-                    {{due.transactionId}}
-                </td>
-                <td>
                     {{due.transactionStatus}}
                 </td>
                 <td>
@@ -40,6 +37,13 @@
                 </td>
                 <td>
                     {{due.verifiedOn}}
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.editDues(due)"
+                            data-ng-if="!due.transactionStatus">
+                        <i class="fa fa-plus-square-o"></i>
+                        Edit
+                    </button>
                 </td>
             </tr>
             </tbody>
