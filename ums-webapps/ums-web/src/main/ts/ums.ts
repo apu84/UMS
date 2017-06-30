@@ -891,11 +891,11 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/fee/dues/student.dues.html'
         })
-        .state('addDues', {
-          url: "/addDues",
-          controller: 'AddDues',
+        .state('listDues', {
+          url: "/listDues",
+          controller: 'ListDues',
           controllerAs: 'vm',
-          templateUrl: 'views/fee/dues/add.dues.html',
+          templateUrl: 'views/fee/dues/list.dues.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

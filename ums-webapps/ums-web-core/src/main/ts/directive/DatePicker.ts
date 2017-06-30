@@ -13,30 +13,16 @@ module ums {
     };
 
     public link = ($scope: any, element: any, attribute:any) => {
-
-      console.log("attributes");
-      console.log(attribute.disable);
-      console.log("scope");
-      console.log($scope);
-      if($scope.disable==true){
-        $('.datepicker').disableSelection();
+      if($scope.disable){
+        $(element).disableSelection();
       }
       this.$timeout(() => {
-
-        $('.datepicker-default').datepicker({
-          dateFormat:'dd/mm/yy'
-        });
-
-        $('.datepicker-default').on('change', function () {
-          $('.datepicker').hide();
-        });
-
+        $(element).datepicker();
+        // $('.datepicker-default').on('change', function () {
+        //   $('.datepicker').hide();
+        // });
       });
-
-
     };
-
-    public templateUrl:string="./views/directive/date-picker.html";
   }
   UMS.directive('datePicker', ['$timeout', ($timeout:ng.ITimeoutService) => new DatePicker($timeout)]);
 }

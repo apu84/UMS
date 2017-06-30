@@ -1,19 +1,21 @@
 module ums {
   export interface StudentDue {
-    id: string;
+    id?: string;
     studentId: string;
     feeCategoryId: string;
-    feeCategoryName: string;
+    feeCategoryName?: string;
     payBefore: string;
-    amount: number;
-    lastModified: string;
-    transactionId: string;
-    transactionStatus: string;
-    appliedOn: string;
-    verifiedOn: string;
+    amount?: number;
+    lastModified?: string;
+    transactionId?: string;
+    transactionStatus?: string;
+    appliedOn?: string;
+    verifiedOn?: string;
+    description?: string;
   }
 
   export interface Filter {
+    id?: number;
     key?: string;
     value?: any;
     label?: string;
@@ -79,6 +81,17 @@ module ums {
           });
       return defer.promise;
     }
+
+    public addDues(due: StudentDue): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      this.httpClient.post('student-dues', {"entries": [due]}, HttpClient.MIME_TYPE_JSON)
+          .success(() => {
+            defer.resolve(true);
+          })
+          .error(() => defer.resolve(false));
+      return defer.promise;
+    }
+
   }
 
   UMS.service('StudentDuesService', StudentDuesService);

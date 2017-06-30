@@ -29,15 +29,16 @@ module ums {
 
     public addFilter(): void {
       this.filters.push({
+        id: Math.round(Math.random() * 1000),
         key: this.selectedFilter,
         value: this.selectedFilterValue.value,
         label: this.selectedFilterValue.label
       });
     }
 
-    public removeFilter(removedFilter: string): void {
+    public removeFilter(removedFilterId: number): void {
       for (let i = 0; i < this.filters.length; i++) {
-        if (this.filters[i].key === removedFilter) {
+        if (this.filters[i].id === removedFilterId) {
           this.filters.splice(i, 1);
         }
       }

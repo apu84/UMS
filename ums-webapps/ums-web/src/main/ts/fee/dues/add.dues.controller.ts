@@ -1,24 +1,45 @@
 module ums {
+  interface AddDuesScope extends ng.IScope {
+    duesCategories: FeeCategory[];
+    ok: Function;
+    addDues: Function;
+    studentDue: StudentDue;
+  }
   export class AddDues {
-    public static $inject = ['$scope', 'StudentDuesService'];
-    public dues: StudentDue[];
-    public filters: Filter[] = [];
+    public static $inject = ['$scope', 'StudentDuesService', '$modalInstance'];
 
-    constructor($scope: ng.IScope, private studentDuesService: StudentDuesService) {
-      this.navigate();
-      $scope.$watch(() => this.filters, ()=> {
-        this.studentDuesService.listDues(this.filters).then((dues: StudentDue[]) => {
-          this.dues = dues;
-        });
-      }, true);
+    constructor(private $scope: AddDuesScope,
+                private studentDuesService: StudentDuesService,
+                private $modalInstance: any) {
+      this.initialize();
+      studentDuesService.getFeeCategories().then(
+          (feeCategories: FeeCategory[]) => {
+            this.$scope.duesCategories = feeCategories;
+          });
+      this.$scope.ok = this.ok.bind(this);
+      this.$scope.addDues = this.addDues.bind(this);
     }
 
-    public navigate(url?: string): void {
-      this.studentDuesService.listDues(this.filters, url).then((dues: StudentDue[]) => {
-        this.dues = dues;
+    public addDues(): void {
+      this.studentDuesService.addDues(this.$scope.studentDue).then((success) => {
+        if (success) {
+          this.initialize();
+        }
       });
     }
-  }
 
-  UMS.controller('AddDues', AddDues);
+    private ok(): void {
+      this.$modalInstance.dismiss('cancel');
+    }
+
+    private initialize(): void {
+      this.$scope.studentDue = {
+        studentId: undefined,
+        feeCategoryId: undefined,
+        payBefore: undefined,
+        amount: undefined,
+        description: undefined
+      };
+    }
+  }
 }
