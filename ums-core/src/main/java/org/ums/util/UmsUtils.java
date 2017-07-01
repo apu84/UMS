@@ -1,16 +1,14 @@
 package org.ums.util;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -87,16 +85,10 @@ public class UmsUtils {
     return formatter.format(date);
   }
 
-  public static Date convertToDate(String date, String dateFormat) {
-    DateTimeFormatter format = DateTimeFormatter.ofPattern(dateFormat, Locale.ENGLISH);
-    Date outputDate = new Date();
-    try {
-      LocalDate localDate = LocalDate.parse(date, format);
-      outputDate = java.sql.Date.valueOf(localDate);
-      return java.sql.Date.valueOf(localDate);
-    } catch(Exception e) {
-      return outputDate;
-    }
+  public static Date convertToDate(String dateStr, String dateFormat) throws Exception {
+    SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+    Date date = formatter.parse(dateStr);
+    return date;
   }
 
   /**
@@ -247,19 +239,18 @@ public class UmsUtils {
   public static String[] convertJsonStringToStringArray(String stringJsonArray, String propertyName) {
     List<String> strArr = new ArrayList<>();
     try {
-      String abc = "{\"entries\":" + stringJsonArray+ "}";
+      String abc = "{\"entries\":" + stringJsonArray + "}";
       JSONParser parser = new JSONParser();
       Object obj = parser.parse(abc);
 
       JSONObject filters = (JSONObject) obj;
       JSONArray rules = (JSONArray) filters.get("entries");
 
-      for(Object rule_ : rules) {
+      for (Object rule_ : rules) {
         JSONObject rule = (JSONObject) rule_;
         strArr.add((String) rule.get(propertyName));
       }
-    }
-    catch (Exception ex){
+    } catch (Exception ex) {
 
     }
 

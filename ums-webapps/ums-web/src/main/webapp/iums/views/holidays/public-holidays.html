@@ -48,7 +48,7 @@
 </style>
 <div class="row" ng-cloak="" id="change-transitions">
     <div class="panel">
-        <div class="panel-heading">Public Holidays<span
+        <div class="panel-heading">Public Holidays ({{vm.year}})<span
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
             <div data-ng-if="!vm.showLoader">
@@ -60,6 +60,7 @@
                             <th>From</th>
                             <th>To</th>
                             <th>Duration (days)</th>
+                            <th data-ng-if="vm.enableEdit">Enable</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -74,6 +75,10 @@
                                      date-changed="vm.dateChanged()"></div>
                             </td>
                             <td>{{h.duration}}</td>
+                            <td data-ng-if="vm.enableEdit">
+                                <div class="checkbox" align="center"><input type="checkbox"
+                                                                            data-ng-model="h.enable"></div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

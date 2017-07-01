@@ -20,4 +20,6 @@ public interface MutableHolidays extends Holidays, Editable<Long>, MutableLastMo
 
   void setToDate(Date pToDate);
 
+  void setEnableStatus(Holidays.HolidayEnableStatus pEnableStatus);
+
 }

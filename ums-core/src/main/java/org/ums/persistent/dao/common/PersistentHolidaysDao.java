@@ -21,10 +21,11 @@ public class PersistentHolidaysDao extends HolidaysDaoDecorator {
 
   String SELECT_ALL = "select * from mst_holidays";
   String INSERT_ONE =
-      " INSERT INTO MST_HOLIDAYS (ID, HOLIDAY_TYPE_ID, YEAR, FROM_DATE, TO_DATE,LAST_MODIFIED VALUES(?,?,?,?,?,"
+      " INSERT INTO MST_HOLIDAYS (ID, HOLIDAY_TYPE_ID, YEAR, FROM_DATE, TO_DATE, ENABLE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,"
           + getLastModifiedSql() + ")";
-  String UPDATE_ONE = "UPDATE MST_HOLIDAYS SET HOLIDAY_TYPE_ID=?, YEAR=?, FROM_DATE=?, TO_DATE=?, LAST_MODIFIED="
-      + getLastModifiedSql() + " WHERE ID=?";
+  String UPDATE_ONE =
+      "UPDATE MST_HOLIDAYS SET HOLIDAY_TYPE_ID=?, YEAR=?, FROM_DATE=?, TO_DATE=?, ENABLE=?, LAST_MODIFIED="
+          + getLastModifiedSql() + " WHERE ID=?";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -46,14 +47,14 @@ public class PersistentHolidaysDao extends HolidaysDaoDecorator {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         Holidays item = pMutableList.get(i);
-        Long id = mIdGenerator.getNumericId();
         ps.setLong(1, item.getHolidayType().getId());
         ps.setInt(2, item.getYear());
         java.sql.Date date = new java.sql.Date(item.getFromDate().getTime());
         ps.setDate(3, date);
         date = new java.sql.Date(item.getToDate().getTime());
         ps.setDate(4, date);
-        ps.setLong(5, id);
+        ps.setInt(5, item.getEnableStatus().getId());
+        ps.setLong(6, item.getId());
 
       }
 
@@ -79,6 +80,7 @@ public class PersistentHolidaysDao extends HolidaysDaoDecorator {
         ps.setDate(4, date);
         date = new java.sql.Date(item.getToDate().getTime());
         ps.setDate(5, date);
+        ps.setInt(6, item.getEnableStatus().getId());
       }
 
       @Override
@@ -98,6 +100,7 @@ public class PersistentHolidaysDao extends HolidaysDaoDecorator {
       persistentHolidays.setYear(rs.getInt("year"));
       persistentHolidays.setFromDate(rs.getDate("from_date"));
       persistentHolidays.setToDate(rs.getDate("to_date"));
+      persistentHolidays.setEnableStatus(Holidays.HolidayEnableStatus.get(rs.getInt("enable")));
       persistentHolidays.setLastModified(rs.getString("last_modified"));
       return persistentHolidays;
     }

@@ -3,6 +3,7 @@ package org.ums.persistent.model.common;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.common.HolidayType;
+import org.ums.domain.model.immutable.common.Holidays;
 import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.manager.common.HolidayTypeManager;
 import org.ums.manager.common.HolidaysManager;
@@ -29,6 +30,7 @@ public class PersistentHolidays implements MutableHolidays {
   private int mYear;
   private Date mFromDate;
   private Date mToDate;
+  private Holidays.HolidayEnableStatus mHolidayEnableStatus;
   private String mLastModified;
 
   public PersistentHolidays() {
@@ -41,7 +43,18 @@ public class PersistentHolidays implements MutableHolidays {
     mYear = pPersistentHolidays.getYear();
     mFromDate = pPersistentHolidays.getFromDate();
     mToDate = pPersistentHolidays.getToDate();
+    mHolidayEnableStatus = pPersistentHolidays.getEnableStatus();
     mLastModified = pPersistentHolidays.getLastModified();
+  }
+
+  @Override
+  public void setEnableStatus(HolidayEnableStatus pEnableStatus) {
+    mHolidayEnableStatus = pEnableStatus;
+  }
+
+  @Override
+  public HolidayEnableStatus getEnableStatus() {
+    return mHolidayEnableStatus;
   }
 
   @Override

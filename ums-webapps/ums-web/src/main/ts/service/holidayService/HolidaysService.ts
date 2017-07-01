@@ -53,7 +53,7 @@ module ums {
       var defer = this.$q.defer();
       var url = "holidays/save";
 
-      this.httpClient.put('holidays/save', json, 'application/json')
+      this.httpClient.post('holidays/save', json, 'application/json')
           .success(() => {
             defer.resolve("success");
             this.notify.success("Success");

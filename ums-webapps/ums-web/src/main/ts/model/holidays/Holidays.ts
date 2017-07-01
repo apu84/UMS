@@ -7,6 +7,7 @@ module ums {
     year: number;
     fromDate: string;
     toDate: string;
+    enable: boolean;
     duration: number;
   }
 }

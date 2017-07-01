@@ -8,6 +8,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.Holidays;
 import org.ums.domain.model.mutable.common.MutableHolidays;
+import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -36,19 +37,26 @@ public class HolidaysBuilder implements Builder<Holidays, MutableHolidays> {
     Format formatter = new SimpleDateFormat("dd-MM-YYYY");
     pBuilder.add("fromDate", formatter.format(pReadOnly.getFromDate()));
     pBuilder.add("toDate", formatter.format(pReadOnly.getToDate()));
+    long diff = pReadOnly.getToDate().getTime() - pReadOnly.getFromDate().getTime();
+    int duration = (int) (diff / (24 * 60 * 60 * 1000) + 1);
+    pBuilder.add("duration", duration);
+    pBuilder.add("enable", pReadOnly.getEnableStatus().getBoolValue());
   }
 
   @Override
   public void build(MutableHolidays pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
+    if(pJsonObject.containsKey("id"))
+      pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     pMutable.setHolidayTypeId(Long.valueOf(pJsonObject.getString("holidayTypeId")));
     pMutable.setYear(pJsonObject.getInt("year"));
     try {
-      pMutable.setFromDate(mDateFormat.parse(pJsonObject.getString("fromDate")));
-      pMutable.setToDate(mDateFormat.parse(pJsonObject.getString("toDate")));
+
+      pMutable.setFromDate(UmsUtils.convertToDate(pJsonObject.getString("fromDate"), "dd-MM-yyyy"));
+      pMutable.setToDate(UmsUtils.convertToDate(pJsonObject.getString("toDate"), "dd-MM-yyyy"));
     } catch(Exception e) {
       mLogger.error(e.getMessage());
     }
+    pMutable.setEnableStatus(Holidays.HolidayEnableStatus.get(pJsonObject.getInt("enable")));
 
   }
 }

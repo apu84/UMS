@@ -117,31 +117,32 @@ module ums {
           holidays.holidayTypeName = holidayTypes[i].name;
           holidays.moonDependency = holidayTypes[i].moonDependency;
           holidays.year = this.year;
-          holidays.fromDate = "01-06-2017"; //todo remove the test cases
-          holidays.toDate = "02-06-2017";
+          holidays.fromDate = "";
+          holidays.toDate = "";
           holidays.duration = 2;
           this.holidays.push(holidays);
         }
-
       });
     }
 
     private convertToJson(): ng.IPromise<any> {
       var defer = this.$q.defer();
+      var completeJson = {};
       var jsonObject = [];
-      var completeJson = [];
       for (var i = 0; i < this.holidays.length; i++) {
-        if (this.holidays[i].fromDate != '' && this.holidays[i].toDate != '') {
-          var item: any = {};
-          item['id'] = this.holidays[i].id;
-          item['holidayTypeId'] = this.holidays[i].holidayTypeId;
-          item['year'] = this.holidays[i].year;
-          item['fromDate'] = this.holidays[i].fromDate;
-          item['toDate'] = this.holidays[i].toDate;
-          jsonObject.push(item);
-        }
+        var item: any = {};
+        item['id'] = this.holidays[i].id;
+        item['holidayTypeId'] = this.holidays[i].holidayTypeId.toString();
+        item['year'] = this.holidays[i].year;
+        item['fromDate'] = this.holidays[i].fromDate;
+        item['toDate'] = this.holidays[i].toDate;
+        if (this.holidays[i].enable)
+          item['enable'] = 1;
+        else
+          item['enable'] = 0;
+        jsonObject.push(item);
       }
-      completeJson['entries'] = jsonObject;
+      completeJson["entries"] = jsonObject;
       defer.resolve(completeJson);
       return defer.promise;
     }
