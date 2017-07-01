@@ -7,12 +7,14 @@ module ums {
     editMode: boolean
   }
   export class AddDues {
-    public static $inject = ['$scope', 'StudentDuesService', '$modalInstance', 'studentDue'];
+    public static $inject = ['$scope', 'StudentDuesService', '$modalInstance', 'studentDue', 'notify', 'reload'];
 
     constructor(private $scope: AddDuesScope,
                 private studentDuesService: StudentDuesService,
                 private $modalInstance: any,
-                private studentDue: StudentDue) { console.log('studentDue', studentDue);
+                private studentDue: StudentDue,
+                private notify: Notify,
+                private reload: ReloadRef) {
       if (!studentDue) {
         this.initialize();
       }
@@ -30,7 +32,7 @@ module ums {
     }
 
     public addDues(): void {
-      if(this.$scope.editMode) {
+      if (this.$scope.editMode) {
         this.updateDues();
         return;
       }
@@ -47,6 +49,9 @@ module ums {
           this.initialize();
           this.$scope.editMode = false;
         }
+        else {
+          this.notify.error('Failed to update');
+        }
       });
     }
 
@@ -62,6 +67,7 @@ module ums {
         amount: undefined,
         description: undefined
       };
+      this.reload.reloadList = true;
     }
   }
 }

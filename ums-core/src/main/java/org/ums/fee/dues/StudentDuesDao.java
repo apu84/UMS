@@ -17,12 +17,12 @@ import com.google.common.collect.Lists;
 
 public class StudentDuesDao extends StudentDuesDaoDecorator {
   String SELECT_ALL = "SELECT ID, FEE_CATEGORY, DESCRIPTION, STUDENT_ID, AMOUNT, ADDED_ON, ADDED_BY, PAY_BEFORE, "
-      + "TRANSACTION_ID, LAST_MODIFIED FROM STUDENT_DUES ";
+      + "TRANSACTION_ID, STATUS, LAST_MODIFIED FROM STUDENT_DUES ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_DUES (ID, FEE_CATEGORY, DESCRIPTION, STUDENT_ID, AMOUNT, ADDED_ON, ADDED_BY, "
-          + "PAY_BEFORE, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, SYSDATE, ?, ?, " + getLastModifiedSql() + ")";
+          + "PAY_BEFORE, STATUS, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, SYSDATE, ?, ?, ?, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE STUDENT_DUES SET FEE_CATEGORY = ?, DESCRIPTION = ?, STUDENT_ID = ?,  AMOUNT = ?,"
-      + " ADDED_BY = ?, PAY_BEFORE = ?, TRANSACTION_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      + " ADDED_BY = ?, PAY_BEFORE = ?, TRANSACTION_ID = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM STUDENT_DUES ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -98,7 +98,7 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(StudentDues dues : pMutableStudentDues) {
       params.add(new Object[] {dues.getFeeCategoryId(), dues.getDescription(), dues.getStudentId(), dues.getAmount(),
-          dues.getUserId(), dues.getPayBefore(), dues.getTransactionId(), dues.getId()});
+          dues.getUserId(), dues.getPayBefore(), dues.getTransactionId(), dues.getStatus().getId(), dues.getId()});
     }
     return params;
   }
@@ -107,7 +107,7 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(StudentDues dues : pMutableStudentDues) {
       params.add(new Object[] {mIdGenerator.getNumericId(), dues.getFeeCategoryId(), dues.getDescription(),
-          dues.getStudentId(), dues.getAmount(), dues.getUserId(), dues.getPayBefore()});
+          dues.getStudentId(), dues.getAmount(), dues.getUserId(), dues.getPayBefore(), dues.getStatus().getId()});
     }
     return params;
   }
@@ -126,6 +126,7 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
       dues.setPayBefore(rs.getTimestamp("PAY_BEFORE"));
       dues.setLastModified(rs.getString("LAST_MODIFIED"));
       dues.setTransactionId(rs.getString("TRANSACTION_ID"));
+      dues.setStatus(StudentDues.Status.get(rs.getInt("STATUS")));
       AtomicReference<StudentDues> reference = new AtomicReference<>(dues);
       return reference.get();
     }

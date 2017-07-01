@@ -95,6 +95,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     StudentPayment payment = mStudentPaymentManager.get(paymentIds.get(0));
     mutableStudentDues.forEach((due) -> {
       due.setTransactionId(payment.getTransactionId());
+      due.setStatus(StudentDues.Status.APPLIED);
     });
     mStudentDuesManager.update(mutableStudentDues);
     return Response.ok().build();
