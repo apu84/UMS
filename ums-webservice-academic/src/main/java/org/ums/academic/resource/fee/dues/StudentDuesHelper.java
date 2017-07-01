@@ -12,6 +12,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.Validate;
+import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,7 +123,9 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    if(duesList.size() > 0) {
+      addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
     if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
@@ -182,9 +185,9 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
-    UriBuilder builder = pUriInfo.getBaseUriBuilder();
+    UriBuilder builder = new JerseyUriBuilder();
     Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
-    builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
+    builder.path(pUriInfo.getPath()).queryParam("pageNumber", nextPage).queryParam("itemsPerPage", itemsPerPage);
     pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 

@@ -21,8 +21,10 @@ module ums {
     label?: string;
   }
 
-  interface StudentDuesResponse {
+  export interface StudentDuesResponse {
     entries: StudentDue[];
+    next: string;
+    previous: string;
   }
 
   export class StudentDuesService {
@@ -69,16 +71,16 @@ module ums {
       return defer.promise;
     }
 
-    public listDues(filters: Filter[], url?: string): ng.IPromise<StudentDue[]> {
-      let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
+    public listDues(filters: Filter[], url?: string): ng.IPromise<StudentDuesResponse> {
+      let defer: ng.IDeferred<StudentDuesResponse> = this.$q.defer();
       this.httpClient.post(url ? url : 'student-dues/paginated', filters ? {"entries": filters} : {},
           HttpClient.MIME_TYPE_JSON)
           .success((response: StudentDuesResponse) => {
-            defer.resolve(response.entries);
+            defer.resolve(response);
           })
           .error((error) => {
             console.error(error);
-            defer.resolve([]);
+            defer.resolve(undefined);
           });
       return defer.promise;
     }

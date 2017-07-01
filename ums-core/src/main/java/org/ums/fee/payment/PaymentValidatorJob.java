@@ -16,7 +16,7 @@ public class PaymentValidatorJob implements PaymentValidator {
     mStudentPaymentManager = pStudentPaymentManager;
   }
 
-  @Scheduled(fixedDelay = 15000, initialDelay = 60000)
+  @Scheduled(fixedDelay = 120000, initialDelay = 240000)
   @Transactional
   public void validatePayments() {
     List<StudentPayment> payments = mStudentPaymentManager.getToExpirePayments();

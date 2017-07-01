@@ -8,6 +8,7 @@ module ums {
     public dues: StudentDue[];
     public filters: Filter[] = [];
     public reloadReference: ReloadRef = {reloadList: false};
+    public nextLink: string;
 
     constructor($scope: ng.IScope, private studentDuesService: StudentDuesService, private $modal: any) {
       this.navigate();
@@ -23,8 +24,14 @@ module ums {
     }
 
     public navigate(url?: string): void {
-      this.studentDuesService.listDues(this.filters, url).then((dues: StudentDue[]) => {
-        this.dues = dues;
+      this.studentDuesService.listDues(this.filters, url).then((dues: StudentDuesResponse) => {
+        if(this.dues && this.dues.length > 0) {
+          this.dues.push.apply(dues.entries);
+        }
+        else {
+          this.dues = dues.entries;
+        }
+        this.nextLink = dues.next;
         this.reloadReference.reloadList = false;
       });
     }
