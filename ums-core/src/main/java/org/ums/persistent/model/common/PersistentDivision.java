@@ -15,16 +15,16 @@ public class PersistentDivision implements MutableDivision {
     sDivisionManager = applicationContext.getBean("divisionManager", DivisionManager.class);
   }
 
-  private String mId;
-  private String mDivisionId;
+  private Integer mId;
   private String mDivisionName;
   private String mLastModified;
 
   public PersistentDivision() {}
 
   public PersistentDivision(PersistentDivision pPersistentDivision) {
-    mDivisionId = pPersistentDivision.getDivisionId();
+    mId = pPersistentDivision.getId();
     mDivisionName = pPersistentDivision.getDivisionName();
+    mLastModified = pPersistentDivision.getLastModified();
   }
 
   @Override
@@ -33,7 +33,7 @@ public class PersistentDivision implements MutableDivision {
   }
 
   @Override
-  public String create() {
+  public Integer create() {
     return sDivisionManager.create(this);
   }
 
@@ -53,12 +53,12 @@ public class PersistentDivision implements MutableDivision {
   }
 
   @Override
-  public String getId() {
+  public Integer getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Integer pId) {
     mId = pId;
   }
 
@@ -68,18 +68,8 @@ public class PersistentDivision implements MutableDivision {
   }
 
   @Override
-  public void setDivisionId(String pDivisionId) {
-    mDivisionId = pDivisionId;
-  }
-
-  @Override
   public void setDivisionName(String pDivisionName) {
     mDivisionName = pDivisionName;
-  }
-
-  @Override
-  public String getDivisionId() {
-    return mDivisionId;
   }
 
   @Override

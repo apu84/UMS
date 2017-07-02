@@ -6,16 +6,16 @@ import org.ums.domain.model.mutable.common.MutableThana;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.ThanaManager;
 
-public class ThanaCache extends ContentCache<Thana, MutableThana, String, ThanaManager> implements ThanaManager {
+public class ThanaCache extends ContentCache<Thana, MutableThana, Integer, ThanaManager> implements ThanaManager {
 
-  CacheManager<Thana, String> mCacheManager;
+  CacheManager<Thana, Integer> mCacheManager;
 
-  public ThanaCache(CacheManager<Thana, String> pCacheManager) {
+  public ThanaCache(CacheManager<Thana, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Thana, String> getCacheManager() {
+  protected CacheManager<Thana, Integer> getCacheManager() {
     return mCacheManager;
   }
 }

@@ -20,7 +20,7 @@ public class PersistentDivisionDao extends DivisionDaoDecorator {
   }
 
   @Override
-  public Division get(final String pId) {
+  public Division get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentDivisionDao.DivisionRowMapper());
   }
@@ -35,7 +35,7 @@ public class PersistentDivisionDao extends DivisionDaoDecorator {
     @Override
     public Division mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentDivision division = new PersistentDivision();
-      division.setDivisionId(resultSet.getString("division_id"));
+      division.setId(resultSet.getInt("division_id"));
       division.setDivisionName(resultSet.getString("division_name"));
       return division;
     }

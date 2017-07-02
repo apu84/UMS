@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class DistrictResourceHelper extends ResourceHelper<District, MutableDistrict, String> {
+public class DistrictResourceHelper extends ResourceHelper<District, MutableDistrict, Integer> {
 
   @Autowired
   private DistrictManager mDistrictManager;
@@ -29,7 +29,7 @@ public class DistrictResourceHelper extends ResourceHelper<District, MutableDist
   }
 
   @Override
-  protected ContentManager<District, MutableDistrict, String> getContentManager() {
+  protected ContentManager<District, MutableDistrict, Integer> getContentManager() {
     return mDistrictManager;
   }
 

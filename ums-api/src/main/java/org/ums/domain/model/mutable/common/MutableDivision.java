@@ -5,9 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.Division;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableDivision extends Division, Editable<String>, MutableLastModifier, MutableIdentifier<String> {
-
-  void setDivisionId(final String pDivisionId);
+public interface MutableDivision extends Division, Editable<Integer>, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setDivisionName(final String pDivisionName);
+
 }

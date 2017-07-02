@@ -14,9 +14,8 @@ public class PersistentThana implements MutableThana {
     sThanaManager = applicationContext.getBean("thanaManager", ThanaManager.class);
   }
 
-  private String mId;
-  private String mThanaId;
-  private String mDistrictId;
+  private Integer mId;
+  private Integer mDistrictId;
   private String mThanaName;
   private String mLastModified;
 
@@ -24,9 +23,9 @@ public class PersistentThana implements MutableThana {
 
   public PersistentThana(final PersistentThana pPersistentThana) {
     mId = pPersistentThana.getId();
-    mThanaId = pPersistentThana.getThanaId();
     mDistrictId = pPersistentThana.getDistrictId();
     mThanaName = pPersistentThana.getThanaName();
+    mLastModified = pPersistentThana.getLastModified();
   }
 
   @Override
@@ -35,7 +34,7 @@ public class PersistentThana implements MutableThana {
   }
 
   @Override
-  public String create() {
+  public Integer create() {
     return sThanaManager.create(this);
   }
 
@@ -55,12 +54,12 @@ public class PersistentThana implements MutableThana {
   }
 
   @Override
-  public String getId() {
+  public Integer getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Integer pId) {
     mId = pId;
   }
 
@@ -70,12 +69,7 @@ public class PersistentThana implements MutableThana {
   }
 
   @Override
-  public void setThanaId(String pThanaId) {
-    mThanaId = pThanaId;
-  }
-
-  @Override
-  public void setDistrictId(String pDistrictId) {
+  public void setDistrictId(Integer pDistrictId) {
     mDistrictId = pDistrictId;
   }
 
@@ -85,12 +79,7 @@ public class PersistentThana implements MutableThana {
   }
 
   @Override
-  public String getThanaId() {
-    return mThanaId;
-  }
-
-  @Override
-  public String getDistrictId() {
+  public Integer getDistrictId() {
     return mDistrictId;
   }
 

@@ -5,6 +5,6 @@ import org.ums.domain.model.immutable.common.Thana;
 import org.ums.domain.model.mutable.common.MutableThana;
 import org.ums.manager.common.ThanaManager;
 
-public class ThanaDaoDecorator extends ContentDaoDecorator<Thana, MutableThana, String, ThanaManager> implements
+public class ThanaDaoDecorator extends ContentDaoDecorator<Thana, MutableThana, Integer, ThanaManager> implements
     ThanaManager {
 }

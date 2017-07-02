@@ -14,9 +14,8 @@ public class PersistentDistrict implements MutableDistrict {
     sDistrictManager = applicationContext.getBean("districtManager", DistrictManager.class);
   }
 
-  private String mId;
-  private String mDistrictId;
-  private String mDivisionId;
+  private Integer mId;
+  private Integer mDivisionId;
   private String mDistrictName;
   private String mLastModified;
 
@@ -24,9 +23,9 @@ public class PersistentDistrict implements MutableDistrict {
 
   public PersistentDistrict(final PersistentDistrict pPersistentDistrict) {
     mId = pPersistentDistrict.getId();
-    mDistrictId = pPersistentDistrict.getDistrictId();
     mDivisionId = pPersistentDistrict.getDivisionId();
     mDistrictName = pPersistentDistrict.getDistrictName();
+    mLastModified = pPersistentDistrict.getLastModified();
   }
 
   @Override
@@ -35,7 +34,7 @@ public class PersistentDistrict implements MutableDistrict {
   }
 
   @Override
-  public String create() {
+  public Integer create() {
     return sDistrictManager.create(this);
   }
 
@@ -55,12 +54,12 @@ public class PersistentDistrict implements MutableDistrict {
   }
 
   @Override
-  public String getId() {
+  public Integer getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Integer pId) {
     mId = pId;
   }
 
@@ -70,12 +69,7 @@ public class PersistentDistrict implements MutableDistrict {
   }
 
   @Override
-  public void setDistrictId(String pDistrictId) {
-    mDistrictId = pDistrictId;
-  }
-
-  @Override
-  public void setDivisionId(String pDivisionId) {
+  public void setDivisionId(Integer pDivisionId) {
     mDivisionId = pDivisionId;
   }
 
@@ -85,12 +79,7 @@ public class PersistentDistrict implements MutableDistrict {
   }
 
   @Override
-  public String getDistrictId() {
-    return mDistrictId;
-  }
-
-  @Override
-  public String getDivisionId() {
+  public Integer getDivisionId() {
     return mDivisionId;
   }
 

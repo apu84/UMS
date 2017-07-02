@@ -7,11 +7,9 @@ import org.ums.domain.model.mutable.common.MutableThana;
 
 import java.io.Serializable;
 
-public interface Thana extends Serializable, LastModifier, EditType<MutableThana>, Identifier<String> {
+public interface Thana extends Serializable, LastModifier, EditType<MutableThana>, Identifier<Integer> {
 
-  String getThanaId();
-
-  String getDistrictId();
+  Integer getDistrictId();
 
   String getThanaName();
 }

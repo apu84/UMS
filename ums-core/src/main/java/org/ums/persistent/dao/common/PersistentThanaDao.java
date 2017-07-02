@@ -13,7 +13,7 @@ import java.util.List;
 
 public class PersistentThanaDao extends ThanaDaoDecorator {
 
-  static String SELECT_ALL = "Select THANAID, DISTRICTID, THANA_NAME From MST_THANA ";
+  static String SELECT_ALL = "Select THANA_ID, DISTRICT_ID, THANA_NAME From MST_THANA ";
 
   private JdbcTemplate mJbdcTemplate;
 
@@ -31,8 +31,8 @@ public class PersistentThanaDao extends ThanaDaoDecorator {
     @Override
     public Thana mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentThana thana = new PersistentThana();
-      thana.setThanaId(resultSet.getString("thanaid"));
-      thana.setDistrictId(resultSet.getString("districtid"));
+      thana.setId(resultSet.getInt("thana_id"));
+      thana.setDistrictId(resultSet.getInt("district_id"));
       thana.setThanaName(resultSet.getString("thana_name"));
       return thana;
     }

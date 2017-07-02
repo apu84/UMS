@@ -14,7 +14,7 @@ public class DistrictBuilder implements Builder<District, MutableDistrict> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, District pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getDistrictId());
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("division_id", pReadOnly.getDivisionId());
     pBuilder.add("name", pReadOnly.getDistrictName());
     pBuilder.add("lastModified", pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());

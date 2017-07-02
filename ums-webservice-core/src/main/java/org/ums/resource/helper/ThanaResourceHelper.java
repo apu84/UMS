@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class ThanaResourceHelper extends ResourceHelper<Thana, MutableThana, String> {
+public class ThanaResourceHelper extends ResourceHelper<Thana, MutableThana, Integer> {
 
   @Autowired
   private ThanaManager mThanaManager;
@@ -29,7 +29,7 @@ public class ThanaResourceHelper extends ResourceHelper<Thana, MutableThana, Str
   }
 
   @Override
-  protected ContentManager<Thana, MutableThana, String> getContentManager() {
+  protected ContentManager<Thana, MutableThana, Integer> getContentManager() {
     return mThanaManager;
   }
 

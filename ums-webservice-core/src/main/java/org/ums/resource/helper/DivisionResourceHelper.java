@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class DivisionResourceHelper extends ResourceHelper<Division, MutableDivision, String> {
+public class DivisionResourceHelper extends ResourceHelper<Division, MutableDivision, Integer> {
 
   @Autowired
   private DivisionManager mDivisionManager;
@@ -30,7 +30,7 @@ public class DivisionResourceHelper extends ResourceHelper<Division, MutableDivi
   }
 
   @Override
-  protected ContentManager<Division, MutableDivision, String> getContentManager() {
+  protected ContentManager<Division, MutableDivision, Integer> getContentManager() {
     return mDivisionManager;
   }
 

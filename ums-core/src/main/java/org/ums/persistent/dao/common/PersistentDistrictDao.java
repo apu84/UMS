@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PersistentDistrictDao extends DistrictDaoDecorator {
 
-  static String SELECT_ALL = "Select DIST_ID, DIVISION_ID, DIST_NAME From MST_DISTRICT ";
+  static String SELECT_ALL = "Select DISTRICT_ID, DIVISION_ID, DIST_NAME From MST_DISTRICT ";
 
   private JdbcTemplate mJbdcTemplate;
 
@@ -30,11 +30,10 @@ public class PersistentDistrictDao extends DistrictDaoDecorator {
     @Override
     public District mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentDistrict district = new PersistentDistrict();
-      district.setDistrictId(resultSet.getString("dist_id"));
-      district.setDivisionId(resultSet.getString("division_id"));
+      district.setId(resultSet.getInt("district_id"));
+      district.setDivisionId(resultSet.getInt("division_id"));
       district.setDistrictName(resultSet.getString("dist_name"));
       return district;
-
     }
   }
 }

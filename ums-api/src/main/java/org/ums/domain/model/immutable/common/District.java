@@ -7,11 +7,9 @@ import org.ums.domain.model.mutable.common.MutableDistrict;
 
 import java.io.Serializable;
 
-public interface District extends Serializable, LastModifier, EditType<MutableDistrict>, Identifier<String> {
+public interface District extends Serializable, LastModifier, EditType<MutableDistrict>, Identifier<Integer> {
 
-  String getDistrictId();
-
-  String getDivisionId();
+  Integer getDivisionId();
 
   String getDistrictName();
 }

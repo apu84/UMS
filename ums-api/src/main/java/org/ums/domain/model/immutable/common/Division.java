@@ -7,9 +7,8 @@ import org.ums.domain.model.mutable.common.MutableDivision;
 
 import java.io.Serializable;
 
-public interface Division extends Serializable, LastModifier, EditType<MutableDivision>, Identifier<String> {
-
-  String getDivisionId();
+public interface Division extends Serializable, LastModifier, EditType<MutableDivision>, Identifier<Integer> {
 
   String getDivisionName();
+
 }

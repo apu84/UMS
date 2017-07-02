@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 public class DivisionBuilder implements Builder<Division, MutableDivision> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Division pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getDivisionId());
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getDivisionName());
   }
 

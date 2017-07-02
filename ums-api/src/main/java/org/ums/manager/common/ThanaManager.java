@@ -5,5 +5,5 @@ import org.ums.domain.model.mutable.common.MutableCountry;
 import org.ums.domain.model.mutable.common.MutableThana;
 import org.ums.manager.ContentManager;
 
-public interface ThanaManager extends ContentManager<Thana, MutableThana, String> {
+public interface ThanaManager extends ContentManager<Thana, MutableThana, Integer> {
 }

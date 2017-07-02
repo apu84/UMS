@@ -5,10 +5,9 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.District;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableDistrict extends District, Editable<String>, MutableLastModifier, MutableIdentifier<String> {
-  void setDistrictId(final String pDistrictId);
+public interface MutableDistrict extends District, Editable<Integer>, MutableLastModifier, MutableIdentifier<Integer> {
 
-  void setDivisionId(final String pDivisionId);
+  void setDivisionId(final Integer pDivisionId);
 
   void setDistrictName(final String pDistrictName);
 }

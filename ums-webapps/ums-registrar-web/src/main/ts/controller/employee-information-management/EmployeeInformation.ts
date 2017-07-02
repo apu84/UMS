@@ -284,21 +284,15 @@ module ums {
             this.enableViewMode('award');
             this.enableViewMode('experience');
 
-            this.addNewRow("academic");
-            this.addNewRow("publication");
-            this.addNewRow("training");
-            this.addNewRow("award");
-            this.addNewRow("experience");
+            this.getPersonalInformation();
+            this.getAcademicInformation();
+            this.getAwardInformation();
+            this.getPublicationInformation();
+            this.getPublicationInformationWithPagination();
+            this.getExperienceInformation();
+            this.getTrainingInformation();
 
             this.addDate();
-
-            // this.getPersonalInformation();
-            // this.getAcademicInformation();
-            // this.getAwardInformation();
-             this.getPublicationInformation();
-             this.getPublicationInformationWithPagination();
-            // this.getExperienceInformation();
-            // this.getTrainingInformation();
         }
 
         private getAreaOfInterest(){
@@ -307,7 +301,6 @@ module ums {
                this.$scope.arrayOfAreaOfInterest = aoi;
             });
         }
-
 
         private enableViewMode(formName: string) {
             if (formName === 'personal') {
