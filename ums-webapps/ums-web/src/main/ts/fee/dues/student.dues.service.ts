@@ -1,21 +1,24 @@
 module ums {
   export interface StudentDue {
-    id: string;
+    id?: string;
     studentId: string;
     feeCategoryId: string;
-    feeCategoryName: string;
+    feeCategoryName?: string;
     payBefore: string;
-    amount: number;
-    lastModified: string;
-    transactionId: string;
-    transactionStatus: string;
-    appliedOn: string;
-    verifiedOn: string;
+    amount?: string;
+    lastModified?: string;
+    transactionId?: string;
+    transactionStatus?: string;
+    appliedOn?: string;
+    verifiedOn?: string;
+    description?: string;
   }
 
   export interface Filter {
-    key: string;
-    value: any;
+    id?: number;
+    key?: string;
+    value?: any;
+    label?: string;
   }
 
   interface StudentDuesResponse {
@@ -26,14 +29,6 @@ module ums {
     public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
     public static DUES: string = "DUES";
     public static PENALTY: string = "PENALTY";
-    public filterCriteria: { label: string, value: string }[] = [
-      {label: "Student id", value: "STUDENT_ID"},
-      {label: "Student name", value: "STUDENT_NAME"},
-      {label: "Department", value: "DEPARTMENT"},
-      {label: "Semester", value: "ACADEMIC_SEMESTER"},
-      {label: "Due status", value: "DUE_STATUS"},
-      {label: "Due type", value: "DUE_TYPE"}
-    ];
 
     constructor(private $q: ng.IQService,
                 private httpClient: HttpClient,
@@ -59,22 +54,25 @@ module ums {
 
     public getFeeCategories(): ng.IPromise<FeeCategory[]> {
       let defer: ng.IDeferred<FeeCategory[]> = this.$q.defer();
+      let promises: ng.IPromise<FeeCategory[]>[] = [];
       this.feeTypeService.getFeeTypes().then((feeTypes: FeeType[]) => {
         for (let i = 0; i < feeTypes.length; i++) {
-          if (feeTypes[i].name === StudentDuesService.DUES
-              || feeTypes[i].name === StudentDuesService.PENALTY) {
-            this.feeCategoryService.getFeeCategories(feeTypes[i].id).then(
-                (feeCategories: FeeCategory[]) => defer.resolve(feeCategories)
-            );
+          if (feeTypes[i].name === StudentDuesService.PENALTY
+              || feeTypes[i].name === StudentDuesService.DUES) {
+            promises.push(this.feeCategoryService.getFeeCategories(feeTypes[i].id));
           }
         }
+        this.$q.all(promises).then((data) => {
+          defer.resolve(data[0].concat(data[1]));
+        });
       });
       return defer.promise;
     }
 
-    public listDues(url?: string, filters?: Filter[]): ng.IPromise<StudentDue[]> {
+    public listDues(filters: Filter[], url?: string): ng.IPromise<StudentDue[]> {
       let defer: ng.IDeferred<StudentDue[]> = this.$q.defer();
-      this.httpClient.post(url ? url : 'paginated', filters ? {"entries": filters} : {}, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(url ? url : 'student-dues/paginated', filters ? {"entries": filters} : {},
+          HttpClient.MIME_TYPE_JSON)
           .success((response: StudentDuesResponse) => {
             defer.resolve(response.entries);
           })
@@ -82,6 +80,28 @@ module ums {
             console.error(error);
             defer.resolve([]);
           });
+      return defer.promise;
+    }
+
+    public addDues(due: StudentDue): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      due.amount = due.amount + '';
+      this.httpClient.post('student-dues', {"entries": [due]}, HttpClient.MIME_TYPE_JSON)
+          .success(() => {
+            defer.resolve(true);
+          })
+          .error(() => defer.resolve(false));
+      return defer.promise;
+    }
+
+    public updateDues(due: StudentDue): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      due.amount = due.amount + '';
+      this.httpClient.put(`student-dues/updateDues/${due.studentId}`, {"entries": [due]}, HttpClient.MIME_TYPE_JSON)
+          .success(() => {
+            defer.resolve(true);
+          })
+          .error(() => defer.resolve(false));
       return defer.promise;
     }
   }

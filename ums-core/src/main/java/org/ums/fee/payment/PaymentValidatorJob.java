@@ -5,21 +5,20 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
-public class PaymentValidatorJob {
+public class PaymentValidatorJob implements PaymentValidator {
   private static final Logger mLogger = LoggerFactory.getLogger(PaymentValidatorJob.class);
+  private StudentPaymentManager mStudentPaymentManager;
 
-  @Autowired
-  StudentPaymentManager mStudentPaymentManager;
+  public PaymentValidatorJob(StudentPaymentManager pStudentPaymentManager) {
+    mStudentPaymentManager = pStudentPaymentManager;
+  }
 
-  @Scheduled(fixedDelay = 300000, initialDelay = 60000)
+  @Scheduled(fixedDelay = 15000, initialDelay = 60000)
   @Transactional
-  void validatePayments() {
+  public void validatePayments() {
     List<StudentPayment> payments = mStudentPaymentManager.getToExpirePayments();
     if(mLogger.isDebugEnabled()) {
       mLogger.debug(String.format("Found total %d payments to expire", payments.size()));

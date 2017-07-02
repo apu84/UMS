@@ -95,6 +95,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     StudentPayment payment = mStudentPaymentManager.get(paymentIds.get(0));
     mutableStudentDues.forEach((due) -> {
       due.setTransactionId(payment.getTransactionId());
+      due.setStatus(StudentDues.Status.APPLIED);
     });
     mStudentDuesManager.update(mutableStudentDues);
     return Response.ok().build();
@@ -142,6 +143,12 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
           @Override
           public Object getValue() {
+            if(filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
+              return filter.getInt("value");
+            }
+            else if(filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
+              return filter.getString("value");
+            }
             return filter.get("value");
           }
         });
