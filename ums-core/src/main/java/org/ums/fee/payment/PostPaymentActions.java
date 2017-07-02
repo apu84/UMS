@@ -48,7 +48,8 @@ public class PostPaymentActions extends StudentPaymentDaoDecorator {
 
   private void postProcessDues(List<StudentDues> duesForStudent, StudentPayment payment) {
     List<MutableStudentDues> studentDues = duesForStudent.stream()
-        .filter((due) -> due.getTransactionId().equalsIgnoreCase(payment.getTransactionId())).map((due) -> {
+        .filter((due) -> !StringUtils.isEmpty(due.getTransactionId())
+            && due.getTransactionId().equalsIgnoreCase(payment.getTransactionId())).map((due) -> {
           MutableStudentDues mutableStudentDues = due.edit();
           if(payment.getStatus() == StudentPayment.Status.RECEIVED) {
             mutableStudentDues.setStatus(StudentDues.Status.PAID);

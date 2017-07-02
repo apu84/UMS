@@ -16,11 +16,13 @@ import org.ums.generator.IdGenerator;
 import com.google.common.collect.Lists;
 
 public class PaymentStatusDao extends PaymentStatusDaoDecorator {
-  String SELECT_ALL = "SELECT ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, PAYMENT_COMPLETE, RECEIVED_ON, "
-      + "COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, LAST_MODIFIED FROM PAYMENT_STATUS ";
-  String INSERT_ALL = "INSERT INTO PAYMENT_STATUS (ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, PAYMENT_COMPLETE, "
-      + "RECEIVED_ON, COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "
-      + getLastModifiedSql() + ") ";
+  String SELECT_ALL =
+      "SELECT ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, RECEIPT_NO, PAYMENT_COMPLETE, RECEIVED_ON, "
+          + "COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, LAST_MODIFIED FROM PAYMENT_STATUS ";
+  String INSERT_ALL =
+      "INSERT INTO PAYMENT_STATUS (ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, PAYMENT_COMPLETE, "
+          + "RECEIVED_ON, COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, RECEIPT_NO, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+          + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE PAYMENT_STATUS SET PAYMENT_COMPLETE = ?, COMPLETED_ON = ?, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM PAYMENT_STATUS ";
@@ -60,7 +62,7 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getAccount(), pMutable.getTransactionId(), pMutable
         .getMethodOfPayment().getId(), pMutable.isPaymentComplete(), pMutable.getReceivedOn(), pMutable
-        .getCompletedOn(), pMutable.getAmount(), pMutable.getPaymentDetails());
+        .getCompletedOn(), pMutable.getAmount(), pMutable.getPaymentDetails(), pMutable.getReceiptNo());
     return id;
   }
 
@@ -147,6 +149,7 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
       status.setCompletedOn(rs.getTimestamp("COMPLETED_ON"));
       status.setAmount(new BigDecimal(rs.getDouble("AMOUNT")));
       status.setPaymentDetails(rs.getString("PAYMENT_DETAILS"));
+      status.setReceiptNo(rs.getString("RECEIPT_NO"));
       status.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<PaymentStatus> reference = new AtomicReference<>(status);
       return reference.get();

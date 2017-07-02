@@ -75,45 +75,59 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setTransactionId(latestPayment.getTransactionId());
       payments.add(payment);
       latestPayments.add(latestPayment);
-      amount = amount.add(latestPayment.getAmount());
     }
 
     validatePayment(pStudentId, latestPayments, payments);
     mStudentPaymentManager.update(payments);
 
-    Validate.notNull(pJsonObject.get("paymentMethod"));
+    Validate.notNull(pJsonObject.get("methodOfPayment"));
+    Validate.notNull(pJsonObject.get("receiptNo"));
     String paymentDetails = null;
     if(pJsonObject.containsKey("paymentDetails")) {
       paymentDetails = pJsonObject.getString("paymentDetails");
     }
     // Taking into consideration only one of payment entry, as this would be a part of same
     // transaction
-    updatePaymentStatus(latestPayments.get(0), pJsonObject.getInt("paymentMethod"), paymentDetails, pStudentId, amount);
+    updatePaymentStatus(latestPayments, Integer.parseInt(pJsonObject.getString("methodOfPayment")), pJsonObject.getString("receiptNo"),
+        paymentDetails, pStudentId);
     return Response.ok().build();
   }
 
-  private void updatePaymentStatus(StudentPayment pStudentPayment, int pPaymentMethod, String pPaymentDetails,
-      String pStudentId, BigDecimal pAmount) {
+  private void updatePaymentStatus(List<StudentPayment> pStudentPayments, int pPaymentMethod, String receiptNo,
+      String pPaymentDetails, String pStudentId) {
     int faculty = mStudentManager.get(pStudentId).getProgram().getFacultyId();
-    List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
-        .filter((mapping) -> mapping.getFeeTypeId().intValue() == pStudentPayment.getFeeTypeId()
-            && mapping.getFacultyId() == faculty)
-        .collect(Collectors.toList());
-    if(mappings.size() > 0) {
-      MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
-      paymentStatus.setAccount(mappings.get(0).getAccount());
-      paymentStatus.setTransactionId(pStudentPayment.getTransactionId());
-      PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
-      paymentStatus.setMethodOfPayment(paymentMethod);
-      paymentStatus.setReceivedOn(new Date());
-      if(paymentMethod == PaymentStatus.PaymentMethod.CASH || paymentMethod == PaymentStatus.PaymentMethod.PAYORDER) {
-        paymentStatus.setPaymentComplete(true);
-        paymentStatus.setCompletedOn(new Date());
+    Map<Integer, List<StudentPayment>> feeTypePaymentMap =
+        pStudentPayments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
+
+    for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+      List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
+          .filter((mapping) -> mapping.getFeeTypeId().intValue() == feeTypeId && mapping.getFacultyId() == faculty)
+          .collect(Collectors.toList());
+      if(mappings.size() > 0) {
+        Map<String, List<StudentPayment>> transactionPaymentMap =
+            feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
+        for(String transactionId : transactionPaymentMap.keySet()) {
+          MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
+          paymentStatus.setAccount(mappings.get(0).getAccount());
+          paymentStatus.setTransactionId(transactionId);
+          PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
+          paymentStatus.setMethodOfPayment(paymentMethod);
+          paymentStatus.setReceivedOn(new Date());
+          if(paymentMethod == PaymentStatus.PaymentMethod.CASH
+              || paymentMethod == PaymentStatus.PaymentMethod.PAYORDER) {
+            paymentStatus.setPaymentComplete(true);
+            paymentStatus.setCompletedOn(new Date());
+          }
+          paymentStatus.setPaymentDetails(pPaymentDetails);
+          List<StudentPayment> payments = transactionPaymentMap.get(transactionId);
+          paymentStatus.setAmount(payments.stream().map(StudentPayment::getAmount)
+              .reduce(BigDecimal.ZERO, BigDecimal::add));
+          paymentStatus.setReceiptNo(receiptNo);
+          paymentStatus.create();
+        }
       }
-      paymentStatus.setPaymentDetails(pPaymentDetails);
-      paymentStatus.setAmount(pAmount);
-      paymentStatus.create();
     }
+
   }
 
   JsonObject getStudentPayments(String pStudentId, UriInfo pUriInfo) throws Exception {
@@ -177,7 +191,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
 
     Map<String, List<StudentPayment>> paymentMap =
         latestPayments.stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
-    Validate.isTrue(paymentMap.keySet().size() == 1);
+    // Validate.isTrue(paymentMap.keySet().size() == 1);
 
     List<StudentPayment> desiredTransactionPayments =
         mStudentPaymentManager.getTransactionDetails(pStudentId, paymentMap.keySet().iterator().next());

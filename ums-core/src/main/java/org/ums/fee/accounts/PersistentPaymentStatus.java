@@ -1,10 +1,10 @@
 package org.ums.fee.accounts;
 
-import org.springframework.context.ApplicationContext;
-import org.ums.context.AppContext;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import org.springframework.context.ApplicationContext;
+import org.ums.context.AppContext;
 
 public class PersistentPaymentStatus implements MutablePaymentStatus {
 
@@ -19,6 +19,7 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
   private String mLastModified;
   private BigDecimal mAmount;
   private String mPaymentDetails;
+  private String mReceiptNo;
 
   @Override
   public Long getId() {
@@ -111,6 +112,16 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
   }
 
   @Override
+  public String getReceiptNo() {
+    return mReceiptNo;
+  }
+
+  @Override
+  public void setReceiptNo(String pReceiptNo) {
+    mReceiptNo = pReceiptNo;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -150,6 +161,7 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
     setPaymentComplete(pPaymentStatus.isPaymentComplete());
     setReceivedOn(pPaymentStatus.getReceivedOn());
     setCompletedOn(pPaymentStatus.getCompletedOn());
+    setReceiptNo(pPaymentStatus.getReceiptNo());
     setLastModified(pPaymentStatus.getLastModified());
   }
 

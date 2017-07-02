@@ -29,6 +29,8 @@ public interface PaymentStatus extends Serializable, EditType<MutablePaymentStat
 
   String getPaymentDetails();
 
+  String getReceiptNo();
+
   enum PaymentMethod {
     CASH(1, "CASH"),
     PAYORDER(2, "PAYORDER"),

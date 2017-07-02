@@ -25,4 +25,6 @@ public interface MutablePaymentStatus extends PaymentStatus, Editable<Long>, Mut
   void setAmount(BigDecimal pAmount);
 
   void setPaymentDetails(String pPaymentDetails);
+
+  void setReceiptNo(String pReceiptNo);
 }

@@ -30,6 +30,13 @@ module ums {
     studentId: string;
   }
 
+  export interface ReceivedPayment{
+    methodOfPayment: string;
+    receiptNo: string;
+    paymentDetails?: string;
+    entries: ReceivePayment[];
+  }
+
   export class ReceivePaymentService {
     public static $inject = ['$q', 'HttpClient'];
 
@@ -52,9 +59,9 @@ module ums {
       return defer.promise;
     }
 
-    public receivePayment(studentId: string, payments: ReceivePayment[]): ng.IPromise<boolean> {
+    public receivePayment(studentId: string, payments: ReceivedPayment): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
-      this.httpClient.post(`/ums-webservice-bank/receive-payment/${studentId}`, {'entries': payments},
+      this.httpClient.post(`/ums-webservice-bank/receive-payment/${studentId}`, payments,
           HttpClient.MIME_TYPE_JSON)
           .success(() => defer.resolve(true))
           .error(() => defer.resolve(false));

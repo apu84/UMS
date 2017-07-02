@@ -34,6 +34,7 @@ module ums {
       this.receivePaymentService.getPaymentsByStudent(this.studentId)
           .then((payments: PaymentFeeTypeGroup[]) => {
             this.appliedPayments = payments;
+            this.reloadReference.reloadList = false;
           });
     }
 
@@ -52,8 +53,10 @@ module ums {
         resolve: {
           selectedPaymentsGroup: () => this.selectedPaymentsGroup,
           selectedReceivePayment: () => selectedReceivePayment,
+          studentId: () => this.studentId,
           reload: () => this.reloadReference
-        }
+        },
+        size: 'lg'
       });
     }
   }
