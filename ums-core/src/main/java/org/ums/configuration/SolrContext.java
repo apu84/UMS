@@ -1,8 +1,10 @@
 package org.ums.configuration;
 
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -45,6 +47,13 @@ public class SolrContext {
 
   @Autowired
   LibraryContext mLibraryContext;
+
+  @Autowired
+  @Qualifier("backendSecurityManager")
+  SecurityManager mSecurityManager;
+
+  @Autowired
+  UMSConfiguration mUMSConfiguration;
 
   @Bean
   public SolrClient solrClient() {
@@ -97,7 +106,8 @@ public class SolrContext {
 
   @Bean
   ConsumeIndex consumeIndex() throws Exception {
-    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager());
+    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager(),
+        mSecurityManager, mUMSConfiguration);
   }
 
   @Bean

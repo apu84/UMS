@@ -904,6 +904,12 @@ module ums {
             }]
           }
         })
+        .state('receivePayment', {
+          url: "/receivePayment",
+          controller: 'ReceivePaymentController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/bank/receive-payment.html'
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",

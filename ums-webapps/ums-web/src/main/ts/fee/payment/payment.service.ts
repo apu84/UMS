@@ -11,6 +11,7 @@ module ums {
     feeTypeDescription: string;
     lastModified: string;
     semesterName: string;
+    studentId: string;
   }
 
   interface PaymentResponse {

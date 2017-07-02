@@ -25,7 +25,7 @@ module ums {
 
     public navigate(url?: string): void {
       this.studentDuesService.listDues(this.filters, url).then((dues: StudentDuesResponse) => {
-        if(this.dues && this.dues.length > 0) {
+        if(url && this.dues && this.dues.length > 0) {
           this.dues.push.apply(dues.entries);
         }
         else {

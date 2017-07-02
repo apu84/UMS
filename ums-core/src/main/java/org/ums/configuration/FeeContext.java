@@ -1,6 +1,8 @@
 package org.ums.configuration;
 
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
@@ -54,6 +56,13 @@ public class FeeContext {
 
   @Autowired
   RoleManager mRoleManager;
+
+  @Autowired
+  @Qualifier("backendSecurityManager")
+  SecurityManager mSecurityManager;
+
+  @Autowired
+  UMSConfiguration mUMSConfiguration;
 
   @Bean
   FeeCategoryManager feeCategoryManager() {
@@ -123,6 +132,6 @@ public class FeeContext {
 
   @Bean
   PaymentValidator paymentValidator() {
-    return new PaymentValidatorJob(studentPaymentManager());
+    return new PaymentValidatorJob(studentPaymentManager(), mSecurityManager, mUMSConfiguration);
   }
 }

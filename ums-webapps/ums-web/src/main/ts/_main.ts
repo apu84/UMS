@@ -222,3 +222,6 @@
 /// <reference path='fee/dues/add.dues.controller.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>
+/// <reference path='fee/bank/receive.payment.controller.ts'/>
+/// <reference path='fee/bank/receive.payment.service.ts'/>
+/// <reference path='fee/bank/payment.confirmation.ts'/>

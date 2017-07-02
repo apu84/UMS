@@ -124,11 +124,29 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
         payments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
     for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+      JsonObjectBuilder feeTypeObject = Json.createObjectBuilder();
       FeeType feeType = mFeeTypeManager.get(feeTypeId);
-      JsonObject typeWiseJson = buildJsonResponse(feeTypePaymentMap.get(feeTypeId), pUriInfo);
-      objectBuilder.add(feeType.getDescription(), typeWiseJson);
+      feeTypeObject.add("feeType", feeType.getId());
+      feeTypeObject.add("feeTypeName", feeType.getName());
+      feeTypeObject.add("feeTypeDescription", feeType.getDescription());
+
+      JsonArrayBuilder transactionsArrayBuilder = Json.createArrayBuilder();
+      Map<String, List<StudentPayment>> transactionPaymentMap =
+          feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
+      for(String transactionId : transactionPaymentMap.keySet()) {
+        JsonObjectBuilder transactionObjectBuilder = Json.createObjectBuilder();
+        JsonObject transactionWiseJson = buildJsonResponse(transactionPaymentMap.get(transactionId), pUriInfo);
+        transactionObjectBuilder.add("id", transactionId);
+        transactionObjectBuilder.add("entries", transactionWiseJson.getJsonArray("entries"));
+        transactionsArrayBuilder.add(transactionObjectBuilder);
+      }
+      feeTypeObject.add("transactions", transactionsArrayBuilder);
+      arrayBuilder.add(feeTypeObject);
     }
+    objectBuilder.add("entries", arrayBuilder);
     return objectBuilder.build();
   }
 
