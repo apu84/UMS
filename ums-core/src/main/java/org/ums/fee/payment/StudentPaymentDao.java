@@ -79,7 +79,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
 
   @Override
   public List<StudentPayment> getToExpirePayments() {
-    String query = SELECT_ALL + "WHERE TRANSACTION_VALID_TILL <= SYSDATE";
+    String query = SELECT_ALL + "WHERE TRANSACTION_VALID_TILL <= SYSDATE AND STATUS = 0";
     return mJdbcTemplate.query(query, new StudentPaymentRowMapper());
   }
 

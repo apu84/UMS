@@ -88,7 +88,7 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
     List<M> mutables = new ArrayList<>();
     for(JsonValue value : entries) {
       JsonObject entry = (JsonObject) value;
-      M mutable = mutableInstanceType.getConstructor(String.class).newInstance();
+      M mutable = mutableInstanceType.getConstructor().newInstance();
       getBuilder().build(mutable, entry, localCache);
       mutables.add(mutable);
     }

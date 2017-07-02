@@ -16,9 +16,7 @@ import org.ums.fee.dues.StudentDuesDao;
 import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.latefee.LateFeeDao;
 import org.ums.fee.latefee.LateFeeManager;
-import org.ums.fee.payment.PostPaymentActions;
-import org.ums.fee.payment.StudentPaymentDao;
-import org.ums.fee.payment.StudentPaymentManager;
+import org.ums.fee.payment.*;
 import org.ums.fee.semesterfee.InstallmentSettingsDao;
 import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusDao;
@@ -121,5 +119,10 @@ public class FeeContext {
   @Bean
   PaymentStatusManager paymentStatusManager() {
     return new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  PaymentValidator paymentValidator() {
+    return new PaymentValidatorJob(studentPaymentManager());
   }
 }

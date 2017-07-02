@@ -73,5 +73,7 @@ public class StudentDuesBuilder implements Builder<StudentDues, MutableStudentDu
     if(pJsonObject.containsKey("lastModified")) {
       pMutable.setLastModified(pJsonObject.getString("lastModified"));
     }
+
+    pMutable.setStatus(StudentDues.Status.NOT_PAID);
   }
 }
