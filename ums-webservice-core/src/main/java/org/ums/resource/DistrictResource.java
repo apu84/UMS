@@ -16,12 +16,9 @@ import javax.ws.rs.Produces;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class DistrictResource extends MutableDistrictResource {
 
-  @Autowired
-  DistrictResourceHelper mDistrictResourceHelper;
-
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    return mDistrictResourceHelper.getAll(mUriInfo);
+    return mHelper.getAll(mUriInfo);
   }
 }

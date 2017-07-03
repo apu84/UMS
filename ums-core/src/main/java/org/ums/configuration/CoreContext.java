@@ -270,6 +270,41 @@ public class CoreContext {
   }
 
   @Bean
+  BloodGroupManager bloodGroupManager() {
+    BloodGroupCache bloodGroupCache = new BloodGroupCache(mCacheFactory.getCacheManager());
+    bloodGroupCache.setManager(new PersistentBloodGroupDao(mTemplateFactory.getJdbcTemplate()));
+    return bloodGroupCache;
+  }
+
+  @Bean
+  NationalityManager nationalityManager() {
+    NationalityCache nationalityCache = new NationalityCache(mCacheFactory.getCacheManager());
+    nationalityCache.setManager(new PersistentNationalityDao(mTemplateFactory.getJdbcTemplate()));
+    return nationalityCache;
+  }
+
+  @Bean
+  ReligionManager religionManager() {
+    ReligionCache religionCache = new ReligionCache(mCacheFactory.getCacheManager());
+    religionCache.setManager(new PersistentReligionDao(mTemplateFactory.getJdbcTemplate()));
+    return religionCache;
+  }
+
+  @Bean
+  RelationTypeManager relationType() {
+    RelationTypeCache relationTypeCache = new RelationTypeCache(mCacheFactory.getCacheManager());
+    relationTypeCache.setManager(new PersistentRelationTypeDao(mTemplateFactory.getJdbcTemplate()));
+    return relationTypeCache;
+  }
+
+  @Bean
+  MaritalStatusManager maritalStatusManager() {
+    MaritalStatusCache maritalStatusCache = new MaritalStatusCache(mCacheFactory.getCacheManager());
+    maritalStatusCache.setManager(new PersistentMaritalStatusDao(mTemplateFactory.getJdbcTemplate()));
+    return maritalStatusCache;
+  }
+
+  @Bean
   AreaOfInterestManager areaOfInterestManager() {
     AreaOfInterestCache areaOfInterestCache = new AreaOfInterestCache(mCacheFactory.getCacheManager());
     areaOfInterestCache.setManager(new PersistentAreaOfInterestDao(mTemplateFactory.getJdbcTemplate()));

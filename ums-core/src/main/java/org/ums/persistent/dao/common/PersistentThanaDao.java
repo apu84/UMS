@@ -13,18 +13,24 @@ import java.util.List;
 
 public class PersistentThanaDao extends ThanaDaoDecorator {
 
-  static String SELECT_ALL = "Select THANA_ID, DISTRICT_ID, THANA_NAME From MST_THANA ";
+  static String SELECT_ALL = "SELECT THANA_ID, DISTRICT_ID, THANA_NAME FROM MST_THANA ";
 
-  private JdbcTemplate mJbdcTemplate;
+  private JdbcTemplate mJdbcTemplate;
 
   public PersistentThanaDao(final JdbcTemplate pJdbcTemplate) {
-    mJbdcTemplate = pJdbcTemplate;
+    mJdbcTemplate = pJdbcTemplate;
+  }
+
+  @Override
+  public Thana get(final Integer pId) {
+    String query = SELECT_ALL + " WHERE THANA_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentThanaDao.ThanaRowMapper());
   }
 
   @Override
   public List<Thana> getAll() {
     String query = SELECT_ALL;
-    return mJbdcTemplate.query(query, new PersistentThanaDao.ThanaRowMapper());
+    return mJdbcTemplate.query(query, new PersistentThanaDao.ThanaRowMapper());
   }
 
   class ThanaRowMapper implements RowMapper<Thana> {

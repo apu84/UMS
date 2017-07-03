@@ -7,6 +7,6 @@ import org.ums.domain.model.mutable.common.MutableThana;
 public class MutableThanaResource extends Resource {
 
   @Autowired
-  ResourceHelper<Thana, MutableThana, Integer> mThanaResourceHelper;
+  ResourceHelper<Thana, MutableThana, Integer> mHelper;
 
 }

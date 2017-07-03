@@ -1,9 +1,6 @@
 package org.ums.resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.resource.helper.DivisionResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -12,10 +9,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 @Component
-@Path("division")
+@Path("religion")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class DivisionResource extends MutableDivisionResource {
+public class ReligionResource extends MutableReligionResource {
 
   @GET
   @Path("/all")

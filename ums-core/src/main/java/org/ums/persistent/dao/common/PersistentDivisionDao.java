@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PersistentDivisionDao extends DivisionDaoDecorator {
-  static String SELECT_ALL = "Select DIVISION_ID, DIVISION_NAME FROM MST_DIVISION";
+  static String SELECT_ALL = "SELECT DIVISION_ID, DIVISION_NAME FROM MST_DIVISION";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -21,7 +21,7 @@ public class PersistentDivisionDao extends DivisionDaoDecorator {
 
   @Override
   public Division get(final Integer pId) {
-    String query = SELECT_ALL + " Where Id = ?";
+    String query = SELECT_ALL + " WHERE DIVISION_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentDivisionDao.DivisionRowMapper());
   }
 

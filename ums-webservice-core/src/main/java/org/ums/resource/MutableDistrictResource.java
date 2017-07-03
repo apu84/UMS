@@ -7,6 +7,6 @@ import org.ums.domain.model.mutable.common.MutableDistrict;
 public class MutableDistrictResource extends Resource {
 
   @Autowired
-  ResourceHelper<District, MutableDistrict, Integer> mDistrictResourceHelper;
+  ResourceHelper<District, MutableDistrict, Integer> mHelper;
 
 }

@@ -16,12 +16,9 @@ import javax.ws.rs.Produces;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ThanaResource extends MutableThanaResource {
 
-  @Autowired
-  ThanaResourceHelper mThanaResourceHelper;
-
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    return mThanaResourceHelper.getAll(mUriInfo);
+    return mHelper.getAll(mUriInfo);
   }
 }

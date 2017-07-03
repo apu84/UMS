@@ -12,18 +12,24 @@ import java.util.List;
 
 public class PersistentDistrictDao extends DistrictDaoDecorator {
 
-  static String SELECT_ALL = "Select DISTRICT_ID, DIVISION_ID, DIST_NAME From MST_DISTRICT ";
+  static String SELECT_ALL = "SELECT DISTRICT_ID, DIVISION_ID, DIST_NAME FROM MST_DISTRICT ";
 
-  private JdbcTemplate mJbdcTemplate;
+  private JdbcTemplate mJdbcTemplate;
 
   public PersistentDistrictDao(final JdbcTemplate pJdbcTemplate) {
-    mJbdcTemplate = pJdbcTemplate;
+    mJdbcTemplate = pJdbcTemplate;
+  }
+
+  @Override
+  public District get(final Integer pId) {
+    String query = SELECT_ALL + " WHERE DISTRICT_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentDistrictDao.DistrictRowMapper());
   }
 
   @Override
   public List<District> getAll() {
     String query = SELECT_ALL;
-    return mJbdcTemplate.query(query, new PersistentDistrictDao.DistrictRowMapper());
+    return mJdbcTemplate.query(query, new PersistentDistrictDao.DistrictRowMapper());
   }
 
   class DistrictRowMapper implements RowMapper<District> {

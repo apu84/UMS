@@ -7,6 +7,6 @@ import org.ums.domain.model.mutable.common.MutableDivision;
 public class MutableDivisionResource extends Resource {
 
   @Autowired
-  ResourceHelper<Division, MutableDivision, Integer> mDivisionResourceHelper;
+  ResourceHelper<Division, MutableDivision, Integer> mHelper;
 
 }
