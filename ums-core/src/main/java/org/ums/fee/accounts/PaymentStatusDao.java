@@ -6,11 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.StringUtils;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
@@ -83,48 +81,17 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(PaymentStatusFilter filter, int itemsPerPage, int pageNumber) {
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
+    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilterCriteria);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
-    FilterQueryParam filterQueryParam = buildFilterQuery(filter, startIndex, endIndex);
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + filterQueryParam.getQuery()
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
             + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
-    return mJdbcTemplate.query(query, filterQueryParam.getParams(), new PaymentStatusRowMapper());
-  }
-
-  private FilterQueryParam buildFilterQuery(PaymentStatusFilter pStatusFilter, int startIndex, int endIndex) {
-    List<String> filter = new ArrayList<>();
-    List<Object> filterParams = new ArrayList<>();
-    if(pStatusFilter.getReceivedStart() != null) {
-      filter.add("RECEIVED_ON >= ?");
-      filterParams.add(pStatusFilter.getReceivedStart());
-    }
-    if(pStatusFilter.getReceivedEnd() != null) {
-      filter.add("RECEIVED_ON <= ?");
-      filterParams.add(pStatusFilter.getReceivedEnd());
-    }
-    if(!StringUtils.isEmpty(pStatusFilter.isPaymentCompleted())) {
-      filter.add("PAYMENT_COMPLETE = ?");
-      filterParams.add(!pStatusFilter.isPaymentCompleted().equalsIgnoreCase("no"));
-    }
-    if(pStatusFilter.getPaymentMethod() != null) {
-      filter.add("METHOD_OF_PAYMENT = ?");
-      filterParams.add(pStatusFilter.getPaymentMethod().getId());
-    }
-    if(!StringUtils.isEmpty(pStatusFilter.getTransactionId())) {
-      filter.add("TRANSACTION_ID = ?");
-      filterParams.add(pStatusFilter.getTransactionId());
-    }
-    if(!StringUtils.isEmpty(pStatusFilter.getAccount())) {
-      filter.add("ACCOUNT = ?");
-      filterParams.add(pStatusFilter.getAccount());
-    }
-    filterParams.add(startIndex);
-    filterParams.add(endIndex);
-    String WHERE_CLAUSE = filter.size() > 0 ? " WHERE " : "";
-    return new FilterQueryParam(WHERE_CLAUSE + filter.stream().map(x -> x).collect(Collectors.joining(" AND ")),
-        filterParams.toArray());
+    List<Object> params = queryBuilder.getParameters();
+    params.add(startIndex);
+    params.add(endIndex);
+    return mJdbcTemplate.query(query, params.toArray(), new PaymentStatusRowMapper());
   }
 
   private List<Object[]> getUpdateParamList(List<MutablePaymentStatus> pMutablePaymentStatuse) {
@@ -156,20 +123,41 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     }
   }
 
-  class FilterQueryParam {
-    private String query;
-    private Object[] params;
+  private class FilterQueryBuilder {
+    private List<String> filterList;
+    private List<Object> params;
 
-    FilterQueryParam(String pQuery, Object[] pParams) {
-      query = pQuery;
-      params = pParams;
+    FilterQueryBuilder(List<FilterCriteria> pFilterCriteria) {
+      filterList = new ArrayList<>();
+      params = new ArrayList<>();
+      pFilterCriteria.forEach((filterCriteria) -> {
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.RECEIVED_START) {
+          filterList.add("RECEIVED_ON >= ?");
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.RECEIVED_END) {
+          filterList.add("RECEIVED_ON <= ? ");
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.PAYMENT_COMPLETED) {
+          filterList.add("PAYMENT_COMPLETE = ?");
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.METHOD_OF_PAYMENT) {
+          filterList.add("METHOD_OF_PAYMENT = ?");
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.TRANSACTION_ID) {
+          filterList.add("TRANSACTION_ID = ?");
+        }
+        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.ACCOUNT) {
+          filterList.add("ACCOUNT = ?");
+        }
+        params.add(filterCriteria.getValue());
+      });
     }
 
     public String getQuery() {
-      return query;
+      return filterList.size() > 0 ? " WHERE " + org.apache.commons.lang.StringUtils.join(filterList, " AND ") : "";
     }
 
-    public Object[] getParams() {
+    public List<Object> getParameters() {
       return params;
     }
   }

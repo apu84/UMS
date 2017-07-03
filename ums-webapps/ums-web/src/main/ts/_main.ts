@@ -225,3 +225,6 @@
 /// <reference path='fee/bank/receive.payment.controller.ts'/>
 /// <reference path='fee/bank/receive.payment.service.ts'/>
 /// <reference path='fee/bank/payment.confirmation.ts'/>
+/// <reference path='fee/bank/payment.status.service.ts'/>
+/// <reference path='fee/bank/payment.status.controller.ts'/>
+/// <reference path='fee/bank/payment.status.filter.directive.ts'/>

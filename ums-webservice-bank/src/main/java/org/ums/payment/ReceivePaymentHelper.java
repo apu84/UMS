@@ -88,8 +88,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     }
     // Taking into consideration only one of payment entry, as this would be a part of same
     // transaction
-    updatePaymentStatus(latestPayments, Integer.parseInt(pJsonObject.getString("methodOfPayment")), pJsonObject.getString("receiptNo"),
-        paymentDetails, pStudentId);
+    updatePaymentStatus(latestPayments, Integer.parseInt(pJsonObject.getString("methodOfPayment")),
+        pJsonObject.getString("receiptNo"), paymentDetails, pStudentId);
     return Response.ok().build();
   }
 

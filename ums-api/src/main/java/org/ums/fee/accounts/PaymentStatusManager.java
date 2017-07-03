@@ -9,5 +9,5 @@ public interface PaymentStatusManager extends ContentManager<PaymentStatus, Muta
 
   List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber);
 
-  List<PaymentStatus> paginatedList(PaymentStatusFilter filter, int itemsPerPage, int pageNumber);
+  List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria);
 }

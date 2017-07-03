@@ -18,7 +18,7 @@ public class PaymentStatusDaoDecorator extends
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(PaymentStatusFilter filter, int itemsPerPage, int pageNumber) {
-    return getManager().paginatedList(filter, itemsPerPage, pageNumber);
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
+    return getManager().paginatedList(itemsPerPage, pageNumber, pFilterCriteria);
   }
 }

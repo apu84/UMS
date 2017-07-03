@@ -1,8 +1,9 @@
 module ums {
   export interface SelectedFilterValue {
     label?: string;
-    value?: string | number;
+    value?: string | number | boolean;
   }
+
   export class DuesFilterDirective {
     public bindToController: boolean = true;
     public controller: any = DuesFilterController;

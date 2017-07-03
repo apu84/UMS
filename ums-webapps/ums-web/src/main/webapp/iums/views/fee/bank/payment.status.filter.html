@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="select2-container select2-container-multi form-control">
+            <ul class="select2-choices">
+                <li class="select2-search-choice ms-hover" data-ng-repeat="filter in vm.filters">
+                    <div>{{filter.label}} : {{filter.labelValue}}</div>
+                    <a href class="select2-search-choice-close" tabindex="-1"
+                       data-ng-click="vm.removeFilter(filter.id)"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                <select class="form-control" data-ng-model="vm.selectedFilter" data-ng-change="vm.reset()">
+                    <option value="{{::criteria.value}}" data-ng-repeat="criteria in vm.filterCriteria">
+                        {{::criteria.label}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <input type="text" data-date-format="dd/mm/yyyy"
+                       placeholder="DD/MM/YYYY" class="datepicker-default form-control"
+                       autocomplete="off" data-date-picker
+                       data-ng-model="vm.selectedFilterValue.value"
+                       data-ng-if="vm.selectedFilter === 'RECEIVED_START'"/>
+                <input type="text" data-date-format="dd/mm/yyyy"
+                       placeholder="DD/MM/YYYY" class="datepicker-default form-control"
+                       autocomplete="off" data-date-picker
+                       data-ng-model="vm.selectedFilterValue.value" data-ng-if="vm.selectedFilter === 'RECEIVED_END'"/>
+                <input class="form-control" data-ng-model="vm.selectedFilterValue.value"
+                       data-ng-if="vm.selectedFilter === 'TRANSACTION_ID'"/>
+                <input class="form-control" data-ng-model="vm.selectedFilterValue.value"
+                       data-ng-if="vm.selectedFilter === 'ACCOUNT'"/>
+                <select class="form-control" ng-model="vm.selectedFilterValue.value"
+                        data-ng-if="vm.selectedFilter === 'PAYMENT_COMPLETED'"
+                        data-ng-options="o.value as o.label for o in vm.paymentCompletedOptions"
+                        data-ng-change="vm.selectOption(vm.paymentCompletedOptions)">
+                </select>
+                <select class="form-control" data-ng-model="vm.selectedFilterValue.value"
+                        data-ng-if="vm.selectedFilter === 'METHOD_OF_PAYMENT'"
+                        data-ng-options="o.value as o.label for o in vm.methodOfPaymentOptions"
+                        data-ng-change="vm.selectOption(vm.methodOfPaymentOptions)">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-success" data-ng-click="vm.addFilter()">Add Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

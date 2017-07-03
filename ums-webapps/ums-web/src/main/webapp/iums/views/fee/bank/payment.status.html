@@ -1,0 +1,66 @@
+<div class="panel">
+    <div class="panel-heading">Payments</div>
+    <div class="panel-body">
+        <payment-status-filter data-filters="vm.filters"></payment-status-filter>
+        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <td width="15%">Transaction Id</td>
+                <td width="15%">Account</td>
+                <td width="15%">Method of payment</td>
+                <td width="10%">Receipt no.</td>
+                <td width="10%">Payment details</td>
+                <td width="10%">Amount</td>
+                <td width="10%">Receive on</td>
+                <td width="10%">Completed on</td>
+                <td width="5%"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="paymentStatus in vm.paymentStatusList">
+                <td>
+                    {{::paymentStatus.transactionId}}
+                </td>
+                <td>
+                    {{::paymentStatus.account}}
+                </td>
+                <td>
+                    {{::paymentStatus.methodOfPayment}}
+                </td>
+                <td>
+                    {{::paymentStatus.receiptNo}}/=
+                </td>
+                <td>
+                    {{paymentStatus.paymentDetails}}
+                </td>
+                <td>
+                    {{paymentStatus.amount}}
+                </td>
+                <td>
+                    {{paymentStatus.receivedOn}}
+                </td>
+                <td>
+                    {{paymentStatus.completedOn}}
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.edit(paymentStatus)"
+                            data-ng-if="paymentStatus.paymentCompleted === 'no'">
+                        <i class="fa fa-plus-square-o"></i>
+                        Edit
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-right">
+                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
+                        Next >>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

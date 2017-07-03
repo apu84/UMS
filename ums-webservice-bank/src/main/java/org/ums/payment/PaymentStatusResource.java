@@ -15,21 +15,22 @@ import org.ums.resource.Resource;
 public class PaymentStatusResource extends Resource {
   @Autowired
   PaymentStatusHelper mPaymentStatusHelper;
+  private int mDefaultNoOfItems = 20;
 
   @GET
   @Path("/paginated")
   public JsonObject getPaymentStatus(@QueryParam("pageNumber") Integer pageNumber,
       @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
-    return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1
-        : pageNumber, mUriInfo);
+    return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? mDefaultNoOfItems : itemsPerPage,
+        pageNumber == null ? 1 : pageNumber, mUriInfo);
   }
 
   @POST
   @Path("/paginated/filtered")
   public JsonObject getFilteredPaymentStatus(@QueryParam("pageNumber") Integer pageNumber,
       @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pFilter) throws Exception {
-    return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? 0 : itemsPerPage, pageNumber == null ? 1
-        : pageNumber, pFilter, mUriInfo);
+    return mPaymentStatusHelper.getReceivedPayments(itemsPerPage == null ? mDefaultNoOfItems : itemsPerPage,
+        pageNumber == null ? 1 : pageNumber, pFilter, mUriInfo);
   }
 
   @PUT

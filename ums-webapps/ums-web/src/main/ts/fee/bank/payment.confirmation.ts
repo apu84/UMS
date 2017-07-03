@@ -1,5 +1,5 @@
 module ums {
-  interface MethodOfPaymentOption {
+  export interface MethodOfPaymentOption {
     label: string;
     value: string;
   }

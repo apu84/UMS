@@ -10,12 +10,15 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
+import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.accounts.*;
+import org.ums.fee.accounts.FilterCriteria;
+import org.ums.fee.dues.*;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
@@ -56,7 +59,7 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
 
   JsonObject getReceivedPayments(int pItemsPerPage, int pPageNumber, JsonObject pFilter, UriInfo pUriInfo) {
     List<PaymentStatus> paymentStatusList =
-        mPaymentStatusManager.paginatedList(buildFilter(pFilter), pItemsPerPage, pPageNumber);
+        mPaymentStatusManager.paginatedList(pItemsPerPage, pPageNumber, buildFilterQuery(pFilter));
     return buildList(paymentStatusList, pItemsPerPage, pPageNumber, pUriInfo);
   }
 
@@ -99,32 +102,45 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
 
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
-    UriBuilder builder = pUriInfo.getBaseUriBuilder();
+    UriBuilder builder = new JerseyUriBuilder();
     Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
-    builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
+    builder.path(pUriInfo.getPath()).queryParam("pageNumber", nextPage).queryParam("itemsPerPage", itemsPerPage);
     pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 
-  private PaymentStatusFilter buildFilter(JsonObject pJsonObject) {
-    PaymentStatusFilterImpl filter = new PaymentStatusFilterImpl();
-    if(pJsonObject.containsKey("receivedStart")) {
-      filter.setReceivedStart(mDateFormat.parse(pJsonObject.getString("receivedStart")));
+  private List<FilterCriteria> buildFilterQuery(JsonObject pFilter) {
+    List<FilterCriteria> filterCriteria = new ArrayList<>();
+    if(pFilter.containsKey("entries")) {
+      JsonArray entries = pFilter.getJsonArray("entries");
+      entries.forEach((entry) -> {
+        JsonObject filter = (JsonObject) entry;
+        filterCriteria.add(new FilterCriteria() {
+          @Override
+          public Criteria getCriteria() {
+            return Criteria.valueOf(filter.getString("key"));
+          }
+
+          @Override
+          public Object getValue() {
+            if(filter.getString("key").equalsIgnoreCase("RECEIVED_START")
+                || filter.getString("key").equalsIgnoreCase("RECEIVED_END")) {
+              return mDateFormat.parse(filter.getString("value"));
+            }
+            else if(filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
+              return filter.getInt("value");
+            }
+            else if(filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
+              return filter.getString("value");
+            }
+            else if(filter.get("value").getValueType() == JsonValue.ValueType.TRUE
+                || filter.get("value").getValueType() == JsonValue.ValueType.FALSE) {
+              return filter.getBoolean("value");
+            }
+            return filter.get("value");
+          }
+        });
+      });
     }
-    if(pJsonObject.containsKey("receivedEnd")) {
-      filter.setReceivedEnd(mDateFormat.parse(pJsonObject.getString("receivedEnd")));
-    }
-    if(pJsonObject.containsKey("transactionId")) {
-      filter.setTransactionId(pJsonObject.getString("transactionId"));
-    }
-    if(pJsonObject.containsKey("account")) {
-      filter.setAccount(pJsonObject.getString("account"));
-    }
-    if(pJsonObject.containsKey("paymentCompleted")) {
-      filter.setPaymentCompleted(pJsonObject.getString("paymentCompleted"));
-    }
-    if(pJsonObject.containsKey("methodOfPayment")) {
-      filter.setPaymentMethod(PaymentStatus.PaymentMethod.get(pJsonObject.getInt("methodOfPayment")));
-    }
-    return filter;
+    return filterCriteria;
   }
 }

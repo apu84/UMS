@@ -31,6 +31,7 @@ public class PaymentStatusBuilder implements Builder<PaymentStatus, MutablePayme
     pBuilder.add("paymentDetails",
         StringUtils.isEmpty(pReadOnly.getPaymentDetails()) ? "" : pReadOnly.getPaymentDetails());
     pBuilder.add("amount", pReadOnly.getAmount());
+    pBuilder.add("receiptNo", pReadOnly.getReceiptNo());
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
