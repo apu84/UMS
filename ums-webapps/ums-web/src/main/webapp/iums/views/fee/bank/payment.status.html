@@ -28,13 +28,13 @@
                     {{::paymentStatus.methodOfPayment}}
                 </td>
                 <td>
-                    {{::paymentStatus.receiptNo}}/=
+                    {{::paymentStatus.receiptNo}}
                 </td>
                 <td>
                     {{paymentStatus.paymentDetails}}
                 </td>
                 <td>
-                    {{paymentStatus.amount}}
+                    {{paymentStatus.amount}}/=
                 </td>
                 <td>
                     {{paymentStatus.receivedOn}}
@@ -43,17 +43,19 @@
                     {{paymentStatus.completedOn}}
                 </td>
                 <td>
-                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.edit(paymentStatus)"
-                            data-ng-if="paymentStatus.paymentCompleted === 'no'">
-                        <i class="fa fa-plus-square-o"></i>
-                        Edit
-                    </button>
+                    <input type="checkbox" data-ng-model="vm.selectedPayments[paymentStatus.id]"
+                            data-ng-if="!paymentStatus.paymentCompleted"/>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success" data-ng-click="vm.concludePayment()" data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
+                    Conclude
+                </button>
+            </div>
+            <div class="col-md-6">
                 <div class="text-right">
                     <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
                         Next >>

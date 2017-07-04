@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <button type="button" data-ng-click="ok()" aria-hidden="true"
+            class="close">&times;</button>
+    <h4 class="modal-title">Confirm</h4>
+</div>
+<form action="" class="form-horizontal" data-validate="" data-onvalidate="concludePayment">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+                    <thead>
+                    <tr>
+                        <td width="15%">Transaction Id</td>
+                        <td width="15%">Account</td>
+                        <td width="15%">Method of payment</td>
+                        <td width="10%">Receipt no.</td>
+                        <td width="10%">Payment details</td>
+                        <td width="10%">Amount</td>
+                        <td width="10%">Receive on</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="paymentStatus in paymentStatusList">
+                        <td>
+                            {{::paymentStatus.transactionId}}
+                        </td>
+                        <td>
+                            {{::paymentStatus.account}}
+                        </td>
+                        <td>
+                            {{::paymentStatus.methodOfPayment}}
+                        </td>
+                        <td>
+                            {{::paymentStatus.receiptNo}}/=
+                        </td>
+                        <td>
+                            {{paymentStatus.paymentDetails}}
+                        </td>
+                        <td>
+                            {{paymentStatus.amount}}
+                        </td>
+                        <td>
+                            {{paymentStatus.receivedOn}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <label for="completedOn" class="col-md-2">Completed on</label>
+            <div class="col-md-3 text-right">
+                <input id="completedOn" type="text" data-date-format="dd/mm/yyyy"
+                       placeholder="DD/MM/YYYY" class="datepicker-default form-control"
+                       autocomplete="off" data-date-picker
+                       data-ng-model="completedOn.value"/>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-ng-click="ok()">Close</button>
+        <button type="button" class="btn btn-success" data-ng-disabled="!completedOn.value || completedOn.value == ''">Receive
+        </button>
+    </div>
+</form>
+
+

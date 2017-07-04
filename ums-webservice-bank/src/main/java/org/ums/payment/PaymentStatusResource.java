@@ -34,6 +34,7 @@ public class PaymentStatusResource extends Resource {
   }
 
   @PUT
+  @Path("/conclude-payment")
   public Response receivePayments(JsonObject pJsonObject) throws Exception {
     return mPaymentStatusHelper.updatePaymentStatus(pJsonObject);
   }

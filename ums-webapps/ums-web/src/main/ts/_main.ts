@@ -228,3 +228,4 @@
 /// <reference path='fee/bank/payment.status.service.ts'/>
 /// <reference path='fee/bank/payment.status.controller.ts'/>
 /// <reference path='fee/bank/payment.status.filter.directive.ts'/>
+/// <reference path='fee/bank/conclude.payment.ts'/>

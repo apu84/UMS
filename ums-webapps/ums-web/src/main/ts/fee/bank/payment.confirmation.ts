@@ -54,6 +54,7 @@ module ums {
       this.receivePaymentService.receivePayment(this.studentId, this.$scope.receiveParams)
           .then((result) => {
             if (result) {
+              this.ok();
               this.reload.reloadList = true;
             }
             else {

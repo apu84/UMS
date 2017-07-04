@@ -49,6 +49,17 @@ module ums {
           });
       return defer.promise;
     }
+
+    public concludePayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      this.httpClient.put(`/ums-webservice-bank/payment-status/conclude-payment`, {
+            "entries": payments
+          },
+          HttpClient.MIME_TYPE_JSON)
+          .success(() => defer.resolve(true))
+          .error(() => defer.resolve(false));
+      return defer.promise;
+    }
   }
 
   UMS.service('PaymentStatusService', PaymentStatusService);
