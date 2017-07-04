@@ -97,7 +97,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   class RoleRowMapper implements RowMapper<AcademicInformation> {
     @Override
     public AcademicInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
+      PersistentAcademicInformation academicInformation = new PersistentAcademicInformation();
       academicInformation.setId(resultSet.getInt("id"));
       academicInformation.setEmployeeId(resultSet.getString("employee_id"));
       academicInformation.setDegreeName(resultSet.getString("degree_name"));

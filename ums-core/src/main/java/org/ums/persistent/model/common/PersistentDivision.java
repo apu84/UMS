@@ -2,7 +2,6 @@ package org.ums.persistent.model.common;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.common.Division;
 import org.ums.domain.model.mutable.common.MutableDivision;
 import org.ums.manager.common.DivisionManager;
 

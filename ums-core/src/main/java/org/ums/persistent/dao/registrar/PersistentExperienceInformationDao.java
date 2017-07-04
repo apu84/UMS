@@ -99,7 +99,7 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
 
     @Override
     public ExperienceInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
+      PersistentExperienceInformation experienceInformation = new PersistentExperienceInformation();
       experienceInformation.setId(resultSet.getInt("id"));
       experienceInformation.setEmployeeId(resultSet.getString("employee_id"));
       experienceInformation.setExperienceInstitute(resultSet.getString("experience_institute"));

@@ -149,7 +149,7 @@ module ums {
     }
 
     export interface IDivision {
-        id: string;
+        id: number;
         name: string;
     }
 
@@ -159,14 +159,14 @@ module ums {
     }
 
     export interface IDistrict {
-        id: string;
-        division_id: string;
+        id: number;
+        division_id: number;
         name: string;
     }
 
     export interface IThana {
-        id: string;
-        district_id: string;
+        id: number;
+        district_id: number;
         name: string;
     }
 
@@ -180,7 +180,10 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService', 'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService', 'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService', 'areaOfInterestService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService',
+            'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService',
+            'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService',
+            'areaOfInterestService', 'bloodGroupService', 'nationalityService', 'religionService', 'relationTypeService', 'maritalStatusService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -198,7 +201,12 @@ module ums {
                     private trainingInformationService: TrainingInformationService,
                     private awardInformationService: AwardInformationService,
                     private experienceInformationService: ExperienceInformationService,
-                    private areaOfInterestService: AreaOfInterestService) {
+                    private areaOfInterestService: AreaOfInterestService,
+                    private bloodGroupService: BloodGroupService,
+                    private nationalityService: NationalityService,
+                    private religionService: ReligionService,
+                    private relationTypeService: RelationTypeService,
+                    private maritalStatusService: MaritalStatusService) {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -223,17 +231,22 @@ module ums {
             $scope.pagination.currentPage = 1;
 
             $scope.gender = this.registrarConstants.genderTypes;
-            $scope.religions = this.registrarConstants.religionTypes;
-            $scope.nationalities = this.registrarConstants.nationalityTypes;
-            $scope.bloodGroups = this.registrarConstants.bloodGroupTypes;
-            $scope.maritalStatus = this.registrarConstants.maritalStatuses;
+            // $scope.religions = this.registrarConstants.religionTypes;
+            // $scope.nationalities = this.registrarConstants.nationalityTypes;
+            // $scope.bloodGroups = this.registrarConstants.bloodGroupTypes;
+            // $scope.maritalStatus = this.registrarConstants.maritalStatuses;
+            // $scope.relations = this.registrarConstants.relationTypes;
             $scope.publicationTypes = this.registrarConstants.publicationTypes;
             $scope.degreeNames = this.registrarConstants.degreeTypes;
-            $scope.relations = this.registrarConstants.relationTypes;
             $scope.countries = Array<ICountry>();
             $scope.divisions = Array<IDivision>();
             $scope.allDistricts = Array<IDistrict>();
             $scope.allThanas = Array<IThana>();
+            $scope.bloodGroups = Array<IBloodGroup>();
+            $scope.religions = Array<IRelation>();
+            $scope.nationalities = Array<INationality>();
+            $scope.maritalStatus = Array<IMaritalStatus>();
+            $scope.relations = Array<IRelation>();
 
             // $scope.changeNav = this.changeNav.bind(this);
             $scope.testData = this.testData.bind(this);
@@ -269,6 +282,11 @@ module ums {
         }
 
         private initializeVariables() {
+            this.getBloodGroupList();
+            this.getNationalityList();
+            this.getRelationTypeList();
+            this.getMaritalStatusList();
+            this.getReligionList();
             this.getCountry();
             this.getDivision();
             this.getDistrict();
@@ -520,6 +538,46 @@ module ums {
             }, 100);
         }
 
+        private getBloodGroupList(){
+            this.bloodGroupService.getBloodGroupList().then((bloodGroups: any) => {
+                this.$scope.bloodGroups = bloodGroups;
+                console.log("this.$scope.bloodGroups: ");
+                console.log(this.$scope.bloodGroups);
+            });
+        }
+
+        private getNationalityList(){
+            this.nationalityService.getNationalityList().then((nationalities: any) => {
+                this.$scope.nationalities = nationalities;
+                console.log("this.$scope.nationalities: ");
+                console.log(this.$scope.nationalities);
+            });
+        }
+
+        private getReligionList(){
+            this.religionService.getReligionList().then((religions: any) => {
+                this.$scope.religions = religions;
+                console.log("this.$scope.religions: ");
+                console.log(this.$scope.religions);
+            });
+        }
+
+        private getRelationTypeList(){
+            this.relationTypeService.getRelationTypeList().then((relations: any) => {
+                this.$scope.relations = relations;
+                console.log("this.$scope.relations: ");
+                console.log(this.$scope.relations);
+            });
+        }
+
+        private getMaritalStatusList(){
+            this.maritalStatusService.getMaritalStatusList().then((maritalStatus: any) => {
+               this.$scope.maritalStatus = maritalStatus;
+               console.log("this.$scope.maritalStatus: ");
+               console.log(this.$scope.maritalStatus);
+            });
+        }
+
         private getCountry() {
             this.$scope.countryMap = {};
 
@@ -573,12 +631,12 @@ module ums {
         private createMap() {
             this.$scope.degreeNameMap = {};
             this.$scope.genderNameMap = {};
-            this.$scope.religionNameMap = {};
-            this.$scope.nationalityMap = {};
-            this.$scope.bloodGroupMap = {};
-            this.$scope.martialStatusMap = {};
+            // this.$scope.religionNameMap = {};
+            // this.$scope.nationalityMap = {};
+            // this.$scope.bloodGroupMap = {};
+            // this.$scope.martialStatusMap = {};
+            // this.$scope.relationMap = {};
             this.$scope.publicationTypeMap = {};
-            this.$scope.relationMap = {};
 
             for (let i = 0; i < this.$scope.degreeNames.length; i++) {
                 this.$scope.degreeNameMap[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
@@ -586,23 +644,23 @@ module ums {
             for (let i = 0; i < this.$scope.gender.length; i++) {
                 this.$scope.genderNameMap[this.$scope.gender[i].id] = this.$scope.gender[i];
             }
-            for (let i = 0; i < this.$scope.religions.length; i++) {
-                this.$scope.religionNameMap[this.$scope.religions[i].name] = this.$scope.religions[i];
-            }
-            for (let i = 0; i < this.$scope.nationalities.length; i++) {
-                this.$scope.nationalityMap[this.$scope.nationalities[i].name] = this.$scope.nationalities[i];
-            }
-            for (let i = 0; i < this.$scope.bloodGroups.length; i++) {
-                this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].name] = this.$scope.bloodGroups[i];
-            }
-            for (let i = 0; i < this.$scope.maritalStatus.length; i++) {
-                this.$scope.martialStatusMap[this.$scope.maritalStatus[i].name] = this.$scope.maritalStatus[i];
-            }
+            // for (let i = 0; i < this.$scope.religions.length; i++) {
+            //     this.$scope.religionNameMap[this.$scope.religions[i].name] = this.$scope.religions[i];
+            // }
+            // for (let i = 0; i < this.$scope.nationalities.length; i++) {
+            //     this.$scope.nationalityMap[this.$scope.nationalities[i].name] = this.$scope.nationalities[i];
+            // }
+            // for (let i = 0; i < this.$scope.bloodGroups.length; i++) {
+            //     this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].name] = this.$scope.bloodGroups[i];
+            // }
+            // for (let i = 0; i < this.$scope.maritalStatus.length; i++) {
+            //     this.$scope.martialStatusMap[this.$scope.maritalStatus[i].name] = this.$scope.maritalStatus[i];
+            // }
+            // for (let i = 0; i < this.$scope.relations.length; i++) {
+            //     this.$scope.relationMap[this.$scope.relations[i].name] = this.$scope.relations[i];
+            // }
             for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
                 this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
-            }
-            for (let i = 0; i < this.$scope.relations.length; i++) {
-                this.$scope.relationMap[this.$scope.relations[i].name] = this.$scope.relations[i];
             }
         }
 

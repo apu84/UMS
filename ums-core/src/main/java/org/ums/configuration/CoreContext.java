@@ -291,7 +291,7 @@ public class CoreContext {
   }
 
   @Bean
-  RelationTypeManager relationType() {
+  RelationTypeManager relationTypeManager() {
     RelationTypeCache relationTypeCache = new RelationTypeCache(mCacheFactory.getCacheManager());
     relationTypeCache.setManager(new PersistentRelationTypeDao(mTemplateFactory.getJdbcTemplate()));
     return relationTypeCache;

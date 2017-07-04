@@ -13,16 +13,33 @@ import java.sql.SQLException;
 public class PersistentPersonalInformationDao extends PersonalInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,TO_DATE(?, 'DD/MM/YYYY'), ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?, "
-          + getLastModifiedSql() + ")";
+      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME,"
+          + " NATIONALITY, RELIGION, DATE_OF_BIRTH, NID_NO, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NID_NO, "
+          + "WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_LINE2, PRE_ADD_THANA, "
+          + "PRE_ADD_DISTRICT, PRE_ADD_POST_CODE, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_LINE1, PER_ADD_LINE2, PER_ADD_THANA, "
+          + "PER_ADD_DISTRICT, PER_ADD_POST_CODE, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, "
+          + "EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,?, "
+          + "? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?, " + getLastModifiedSql()
+          + ")";
 
   static String GET_ONE =
-      "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, to_char(DATE_OF_BIRTH, 'dd/mm/yyyy') DATE_OF_BIRTH, NATIONAL_ID_CARD, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NATIONAL_ID_CARD, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_ROAD, PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_ZIP, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_HOUSE, PER_ADD_ROAD, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_ZIP, PER_ADD_DIVISION, PER_ADD_COUNTRY, EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED FROM EMP_PERSONAL_INFO ";
+      "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, "
+          + "DATE_OF_BIRTH, NID_NO, MARITAL_STATUS, SPOUSE_NAME, "
+          + "SPOUSE_NID_NO, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_HOUSE, PRE_ADD_LINE2, "
+          + "PRE_ADD_THANA, PRE_ADD_DISTRICT, PRE_ADD_POST_CODE, PRE_ADD_DIVISION, PRE_ADD_COUNTRY, PER_ADD_LINE1, "
+          + "PER_ADD_LINE2, PER_ADD_THANA, PER_ADD_DISTRICT, PER_ADD_POST_CODE, PER_ADD_DIVISION, PER_ADD_COUNTRY, "
+          + "EMERGENCY_NAME, EMERGENCY_RELATION, EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED FROM EMP_PERSONAL_INFO ";
 
   static String DELETE_ONE = "DELETE FROM EMP_PERSONAL_INFO ";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_PERSONAL_INFO SET FIRST_NAME = ?, LAST_NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, MOTHER_NAME = ?, NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = TO_DATE(?, 'DD/MM/YYYY'), NATIONAL_ID_CARD = ?, MARITAL_STATUS = ?, SPOUSE_NAME = ?, SPOUSE_NATIONAL_ID_CARD = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, PERSONAL_EMAIL = ?, MOBILE = ?, PHONE = ?, PRE_ADD_HOUSE = ?, PRE_ADD_ROAD = ?, PRE_ADD_THANA = ?, PRE_ADD_DISTRICT = ?, PRE_ADD_ZIP = ?, PRE_ADD_DIVISION = ?, PRE_ADD_COUNTRY = ?, PER_ADD_HOUSE = ?, PER_ADD_ROAD = ?, PER_ADD_THANA = ?, PER_ADD_DISTRICT = ?, PER_ADD_ZIP = ?, PER_ADD_DIVISION = ?, PER_ADD_COUNTRY = ?, EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
+      "UPDATE EMP_PERSONAL_INFO SET FIRST_NAME = ?, LAST_NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, "
+          + "MOTHER_NAME = ?, NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = ?, NID_NO = ?, "
+          + "MARITAL_STATUS = ?, SPOUSE_NAME = ?, SPOUSE_NID_NO = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, "
+          + "PERSONAL_EMAIL = ?, MOBILE = ?, PHONE = ?, PRE_ADD_HOUSE = ?, PRE_ADD_LINE2 = ?, PRE_ADD_THANA = ?, "
+          + "PRE_ADD_DISTRICT = ?, PRE_ADD_POST_CODE = ?, PRE_ADD_DIVISION = ?, PRE_ADD_COUNTRY = ?, PER_ADD_LINE1 = ?, "
+          + "PER_ADD_LINE2 = ?, PER_ADD_THANA = ?, PER_ADD_DISTRICT = ?, PER_ADD_POST_CODE = ?, PER_ADD_DIVISION = ?, PER_ADD_COUNTRY = ?, "
+          + "EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -104,43 +121,43 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
 
     @Override
     public PersonalInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+      PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
       personalInformation.setId(resultSet.getString("employee_id"));
       personalInformation.setFirstName(resultSet.getString("first_name"));
       personalInformation.setLastName(resultSet.getString("last_name"));
       personalInformation.setGender(resultSet.getString("gender"));
-      personalInformation.setBloodGroup(resultSet.getString("blood_group"));
+      personalInformation.setBloodGroupId(resultSet.getInt("blood_group"));
       personalInformation.setFatherName(resultSet.getString("father_name"));
       personalInformation.setMotherName(resultSet.getString("mother_name"));
-      personalInformation.setNationality(resultSet.getString("nationality"));
-      personalInformation.setReligion(resultSet.getString("religion"));
-      personalInformation.setDateOfBirth(resultSet.getString("date_of_birth"));
-      personalInformation.setNationalId(resultSet.getString("national_id_card"));
-      personalInformation.setMaritalStatus(resultSet.getString("marital_status"));
+      personalInformation.setNationalityId(resultSet.getInt("nationality"));
+      personalInformation.setReligionId(resultSet.getInt("religion"));
+      personalInformation.setDateOfBirth(resultSet.getDate("date_of_birth"));
+      personalInformation.setNationalId(resultSet.getInt("NID_NO"));
+      personalInformation.setMaritalStatusId(resultSet.getInt("marital_status"));
       personalInformation.setSpouseName(resultSet.getString("spouse_name"));
-      personalInformation.setSpouseNationalId(resultSet.getString("spouse_national_id_card"));
+      personalInformation.setSpouseNationalId(resultSet.getInt("SPOUSE_NID_NO"));
       personalInformation.setWebsite(resultSet.getString("website"));
       personalInformation.setOrganizationalEmail(resultSet.getString("organizational_email"));
       personalInformation.setPersonalEmail(resultSet.getString("personal_email"));
-      personalInformation.setMobileNumber(resultSet.getString("mobile"));
-      personalInformation.setPhoneNumber(resultSet.getString("phone"));
-      personalInformation.setPresentAddressHouse(resultSet.getString("pre_add_house"));
-      personalInformation.setPresentAddressRoad(resultSet.getString("pre_add_road"));
-      personalInformation.setPresentAddressThana(resultSet.getString("pre_add_thana"));
-      personalInformation.setPresentAddressDistrict(resultSet.getString("pre_add_district"));
-      personalInformation.setPresentAddressZip(resultSet.getString("pre_add_zip"));
-      personalInformation.setPresentAddressDivision(resultSet.getString("pre_add_division"));
-      personalInformation.setPresentAddressCountry(resultSet.getString("pre_add_country"));
-      personalInformation.setPermanentAddressHouse(resultSet.getString("per_add_house"));
-      personalInformation.setPermanentAddressRoad(resultSet.getString("per_add_road"));
-      personalInformation.setPermanentAddressThana(resultSet.getString("per_add_thana"));
-      personalInformation.setPermanentAddressDistrict(resultSet.getString("per_add_district"));
-      personalInformation.setPermanentAddressZip(resultSet.getString("per_add_zip"));
-      personalInformation.setPermanentAddressDivision(resultSet.getString("per_add_division"));
-      personalInformation.setPermanentAddressCountry(resultSet.getString("per_add_country"));
+      personalInformation.setMobileNumber(resultSet.getInt("mobile"));
+      personalInformation.setPhoneNumber(resultSet.getInt("phone"));
+      personalInformation.setPresentAddressHouse(resultSet.getString("PRE_ADD_LINE1"));
+      personalInformation.setPresentAddressRoad(resultSet.getString("PRE_ADD_LINE2"));
+      personalInformation.setPresentAddressThanaId(resultSet.getInt("pre_add_thana"));
+      personalInformation.setPresentAddressDistrictId(resultSet.getInt("pre_add_district"));
+      personalInformation.setPresentAddressZip(resultSet.getInt("PRE_ADD_POST_CODE"));
+      personalInformation.setPresentAddressDivisionId(resultSet.getInt("pre_add_division"));
+      personalInformation.setPresentAddressCountryId(resultSet.getInt("pre_add_country"));
+      personalInformation.setPermanentAddressHouse(resultSet.getString("PER_ADD_LINE1"));
+      personalInformation.setPermanentAddressRoad(resultSet.getString("PER_ADD_LINE2"));
+      personalInformation.setPermanentAddressThanaId(resultSet.getInt("per_add_thana"));
+      personalInformation.setPermanentAddressDistrictId(resultSet.getInt("per_add_district"));
+      personalInformation.setPermanentAddressZip(resultSet.getInt("PER_ADD_POST_CODE"));
+      personalInformation.setPermanentAddressDivisionId(resultSet.getInt("per_add_division"));
+      personalInformation.setPermanentAddressCountryId(resultSet.getInt("per_add_country"));
       personalInformation.setEmergencyContactName(resultSet.getString("emergency_name"));
-      personalInformation.setEmergencyContactRelation(resultSet.getString("emergency_relation"));
-      personalInformation.setEmergencyContactPhone(resultSet.getString("emergency_phone"));
+      personalInformation.setEmergencyContactRelationId(resultSet.getInt("emergency_relation"));
+      personalInformation.setEmergencyContactPhone(resultSet.getInt("emergency_phone"));
       personalInformation.setEmergencyContactAddress(resultSet.getString("emergency_address"));
       personalInformation.setLastModified(resultSet.getString("last_modified"));
       return personalInformation;

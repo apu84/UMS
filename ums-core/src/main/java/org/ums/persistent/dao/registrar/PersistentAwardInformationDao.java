@@ -95,7 +95,7 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   class RoleRowMapper implements RowMapper<AwardInformation> {
     @Override
     public AwardInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableAwardInformation awardInformation = new PersistentAwardInformation();
+      PersistentAwardInformation awardInformation = new PersistentAwardInformation();
       awardInformation.setId(resultSet.getInt("id"));
       awardInformation.setEmployeeId(resultSet.getString("employee_id"));
       awardInformation.setAwardName(resultSet.getString("award_name"));

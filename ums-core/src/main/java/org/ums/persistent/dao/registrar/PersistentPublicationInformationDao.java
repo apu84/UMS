@@ -180,7 +180,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
 
     @Override
     public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutablePublicationInformation publicationInformation = new PersistentPublicationInformation();
+      PersistentPublicationInformation publicationInformation = new PersistentPublicationInformation();
       publicationInformation.setId(resultSet.getInt("id"));
       publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
       publicationInformation.setPublicationTitle(resultSet.getString("publication_title"));

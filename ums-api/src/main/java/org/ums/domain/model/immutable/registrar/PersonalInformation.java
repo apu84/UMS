@@ -3,9 +3,11 @@ package org.ums.domain.model.immutable.registrar;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface PersonalInformation extends Serializable, EditType<MutablePersonalInformation>, Identifier<String>,
     LastModifier {
@@ -16,25 +18,25 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getGender();
 
-  String getBloodGroup();
+  BloodGroup getBloodGroup();
 
   String getFatherName();
 
   String getMotherName();
 
-  String getNationality();
+  Nationality getNationality();
 
-  String getReligion();
+  Religion getReligion();
 
-  String getDateOfBirth();
+  Date getDateOfBirth();
 
-  String getNationalId();
+  Integer getNationalId();
 
-  String getMaritalStatus();
+  MaritalStatus getMaritalStatus();
 
   String getSpouseName();
 
-  String getSpouseNationalId();
+  Integer getSpouseNationalId();
 
   String getWebsite();
 
@@ -42,44 +44,43 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getPersonalEmail();
 
-  String getMobileNumber();
+  Integer getMobileNumber();
 
-  String getPhoneNumber();
+  Integer getPhoneNumber();
 
   String getPresentAddressHouse();
 
   String getPresentAddressRoad();
 
-  String getPresentAddressThana();
+  Country getPresentAddressCountry();
 
-  String getPresentAddressDistrict();
+  Division getPresentAddressDivision();
 
-  String getPresentAddressZip();
+  District getPresentAddressDistrict();
 
-  String getPresentAddressDivision();
+  Thana getPresentAddressThana();
 
-  String getPresentAddressCountry();
+  Integer getPresentAddressZip();
 
   String getPermanentAddressHouse();
 
   String getPermanentAddressRoad();
 
-  String getPermanentAddressThana();
+  Country getPermanentAddressCountry();
 
-  String getPermanentAddressDistrict();
+  Division getPermanentAddressDivision();
 
-  String getPermanentAddressZip();
+  District getPermanentAddressDistrict();
 
-  String getPermanentAddressDivision();
+  Thana getPermanentAddressThana();
 
-  String getPermanentAddressCountry();
+  Integer getPermanentAddressZip();
 
   String getEmergencyContactName();
 
-  String getEmergencyContactRelation();
+  RelationType getEmergencyContactRelation();
 
-  String getEmergencyContactPhone();
+  Integer getEmergencyContactPhone();
 
   String getEmergencyContactAddress();
-
 }

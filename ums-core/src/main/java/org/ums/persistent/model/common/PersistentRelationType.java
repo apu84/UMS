@@ -1,5 +1,6 @@
 package org.ums.persistent.model.common;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.common.MutableRelationType;

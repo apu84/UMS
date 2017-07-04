@@ -2,55 +2,90 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
+import org.ums.manager.common.*;
 import org.ums.manager.registrar.PersonalInformationManager;
+
+import java.util.Date;
 
 public class PersistentPersonalInformation implements MutablePersonalInformation {
 
   private static PersonalInformationManager sPersonalInformationManager;
+  private static BloodGroupManager sBloodGroupManager;
+  private static NationalityManager sNationalityManager;
+  private static ReligionManager sReligionManager;
+  private static MaritalStatusManager sMaritalStatusManager;
+  private static RelationTypeManager sRelationTypeManager;
+  private static CountryManager sCountryManager;
+  private static DivisionManager sDivisionManager;
+  private static DistrictManager sDistrictManager;
+  private static ThanaManager sThanaManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sPersonalInformationManager =
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
+    sBloodGroupManager = applicationContext.getBean("bloodGroupManager", BloodGroupManager.class);
+    sNationalityManager = applicationContext.getBean("nationalityManager", NationalityManager.class);
+    sReligionManager = applicationContext.getBean("religionManager", ReligionManager.class);
+    sMaritalStatusManager = applicationContext.getBean("maritalStatusManager", MaritalStatusManager.class);
+    sRelationTypeManager = applicationContext.getBean("relationTypeManager", RelationTypeManager.class);
+    sCountryManager = applicationContext.getBean("countryManager", CountryManager.class);
+    sDivisionManager = applicationContext.getBean("divisionManager", DivisionManager.class);
+    sDistrictManager = applicationContext.getBean("districtManager", DistrictManager.class);
+    sThanaManager = applicationContext.getBean("thanaManager", ThanaManager.class);
   }
 
   private String mId;
   private String mFirstName;
   private String mLastName;
   private String mGender;
-  private String mBloodGroup;
+  private BloodGroup mBloodGroup;
+  private Integer mBloodGroupId;
   private String mFatherName;
   private String mMotherName;
-  private String mNationality;
-  private String mReligion;
-  private String mDateOfBirth;
-  private String mNationalId;
-  private String mMaritalStatus;
+  private Nationality mNationality;
+  private Integer mNationalityId;
+  private Religion mReligion;
+  private Integer mReligionId;
+  private Date mDateOfBirth;
+  private Integer mNationalId;
+  private MaritalStatus mMaritalStatus;
+  private Integer mMaritalStatusId;
   private String mSpouseName;
-  private String mSpouseNationalId;
+  private Integer mSpouseNationalId;
   private String mWebsite;
   private String mOrganizationalEmail;
   private String mPersonalEmail;
-  private String mMobileNumber;
-  private String mPhoneNumber;
+  private Integer mMobileNumber;
+  private Integer mPhoneNumber;
   private String mPresentAddressHouse;
   private String mPresentAddressRoad;
-  private String mPresentAddressThana;
-  private String mPresentAddressDistrict;
-  private String mPresentAddressZip;
-  private String mPresentAddressDivision;
-  private String mPresentAddressCountry;
+  private Country mPresentAddressCountry;
+  private Integer mPresentAddressCountryId;
+  private Division mPresentAddressDivision;
+  private Integer mPresentAddressDivisionId;
+  private District mPresentAddressDistrict;
+  private Integer mPresentAddressDistrictId;
+  private Thana mPresentAddressThana;
+  private Integer mPresentAddressThanaId;
+  private Integer mPresentAddressZip;
   private String mPermanentAddressHouse;
   private String mPermanentAddressRoad;
-  private String mPermanentAddressThana;
-  private String mPermanentAddressDistrict;
-  private String mPermanentAddressZip;
-  private String mPermanentAddressDivision;
-  private String mPermanentAddressCountry;
+  private Country mPermanentAddressCountry;
+  private Integer mPermanentAddressCountryId;
+  private Division mPermanentAddressDivision;
+  private Integer mPermanentAddressDivisionId;
+  private District mPermanentAddressDistrict;
+  private Integer mPermanentAddressDistrictId;
+  private Thana mPermanentAddressThana;
+  private Integer mPermanentAddressThanaId;
+  private Integer mPermanentAddressZip;
   private String mEmergencyContactName;
-  private String mEmergencyContactRelation;
-  private String mEmergencyContactPhone;
+  private RelationType mEmergencyContactRelation;
+  private Integer mEmergencyContactRelationId;
+  private Integer mEmergencyContactPhone;
   private String mEmergencyContactAddress;
   private String mLastModified;
 
@@ -62,13 +97,17 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mLastName = pPersistentPersonalInformation.getLastName();
     mGender = pPersistentPersonalInformation.getGender();
     mBloodGroup = pPersistentPersonalInformation.getBloodGroup();
+    mBloodGroupId = pPersistentPersonalInformation.getBloodGroupId();
     mFatherName = pPersistentPersonalInformation.getFatherName();
     mMotherName = pPersistentPersonalInformation.getMotherName();
     mNationality = pPersistentPersonalInformation.getNationality();
+    mNationalityId = pPersistentPersonalInformation.getNationalityId();
     mReligion = pPersistentPersonalInformation.getReligion();
+    mReligionId = pPersistentPersonalInformation.getReligionId();
     mDateOfBirth = pPersistentPersonalInformation.getDateOfBirth();
     mNationalId = pPersistentPersonalInformation.getNationalId();
     mMaritalStatus = pPersistentPersonalInformation.getMaritalStatus();
+    mMaritalStatusId = pPersistentPersonalInformation.getMaritalStatusId();
     mSpouseName = pPersistentPersonalInformation.getSpouseName();
     mSpouseNationalId = pPersistentPersonalInformation.getSpouseNationalId();
     mWebsite = pPersistentPersonalInformation.getWebsite();
@@ -79,19 +118,28 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mPresentAddressHouse = pPersistentPersonalInformation.getPresentAddressHouse();
     mPresentAddressRoad = pPersistentPersonalInformation.getPresentAddressRoad();
     mPresentAddressThana = pPersistentPersonalInformation.getPresentAddressThana();
+    mPresentAddressThanaId = pPersistentPersonalInformation.getPresentAddressThanaId();
     mPresentAddressDistrict = pPersistentPersonalInformation.getPresentAddressDistrict();
+    mPresentAddressDistrictId = pPersistentPersonalInformation.getPresentAddressDistrictId();
     mPresentAddressZip = pPersistentPersonalInformation.getPresentAddressZip();
     mPresentAddressDivision = pPersistentPersonalInformation.getPresentAddressDivision();
+    mPresentAddressDivisionId = pPersistentPersonalInformation.getPresentAddressDivisionId();
     mPresentAddressCountry = pPersistentPersonalInformation.getPresentAddressCountry();
+    mPresentAddressCountryId = pPersistentPersonalInformation.getPresentAddressCountryId();
     mPermanentAddressHouse = pPersistentPersonalInformation.getPermanentAddressHouse();
     mPermanentAddressRoad = pPersistentPersonalInformation.getPermanentAddressRoad();
     mPermanentAddressThana = pPersistentPersonalInformation.getPermanentAddressThana();
+    mPermanentAddressThanaId = pPersistentPersonalInformation.getPermanentAddressThanaId();
     mPermanentAddressDistrict = pPersistentPersonalInformation.getPermanentAddressDistrict();
+    mPermanentAddressDistrictId = pPersistentPersonalInformation.getPermanentAddressDistrictId();
     mPermanentAddressZip = pPersistentPersonalInformation.getPermanentAddressZip();
     mPermanentAddressDivision = pPersistentPersonalInformation.getPermanentAddressDivision();
+    mPermanentAddressDivisionId = pPersistentPersonalInformation.getPermanentAddressDivisionId();
     mPermanentAddressCountry = pPersistentPersonalInformation.getPermanentAddressCountry();
+    mPermanentAddressCountryId = pPersistentPersonalInformation.getPermanentAddressCountryId();
     mEmergencyContactName = pPersistentPersonalInformation.getEmergencyContactName();
     mEmergencyContactRelation = pPersistentPersonalInformation.getEmergencyContactRelation();
+    mEmergencyContactRelationId = pPersistentPersonalInformation.getEmergencyContactRelationId();
     mEmergencyContactPhone = pPersistentPersonalInformation.getEmergencyContactPhone();
     mEmergencyContactAddress = pPersistentPersonalInformation.getEmergencyContactAddress();
     mLastModified = pPersistentPersonalInformation.getLastModified();
@@ -153,7 +201,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setBloodGroup(String pBloodGroup) {
+  public void setBloodGroup(BloodGroup pBloodGroup) {
     mBloodGroup = pBloodGroup;
   }
 
@@ -168,27 +216,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setNationality(String pNationality) {
+  public void setNationality(Nationality pNationality) {
     mNationality = pNationality;
   }
 
   @Override
-  public void setReligion(String pReligion) {
+  public void setReligion(Religion pReligion) {
     mReligion = pReligion;
   }
 
   @Override
-  public void setDateOfBirth(String pDateOfBirth) {
+  public void setDateOfBirth(Date pDateOfBirth) {
     mDateOfBirth = pDateOfBirth;
   }
 
   @Override
-  public void setNationalId(String pNationalId) {
+  public void setNationalId(Integer pNationalId) {
     mNationalId = pNationalId;
   }
 
   @Override
-  public void setMaritalStatus(String pMaritalStatus) {
+  public void setMaritalStatus(MaritalStatus pMaritalStatus) {
     mMaritalStatus = pMaritalStatus;
   }
 
@@ -198,7 +246,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setSpouseNationalId(String pSpouseNationalId) {
+  public void setSpouseNationalId(Integer pSpouseNationalId) {
     mSpouseNationalId = pSpouseNationalId;
   }
 
@@ -218,12 +266,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setMobileNumber(String pMobileNumber) {
+  public void setMobileNumber(Integer pMobileNumber) {
     mMobileNumber = pMobileNumber;
   }
 
   @Override
-  public void setPhoneNumber(String pPhoneNumber) {
+  public void setPhoneNumber(Integer pPhoneNumber) {
     mPhoneNumber = pPhoneNumber;
   }
 
@@ -238,27 +286,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPresentAddressThana(String pPresentAddressThana) {
+  public void setPresentAddressThana(Thana pPresentAddressThana) {
     mPresentAddressThana = pPresentAddressThana;
   }
 
   @Override
-  public void setPresentAddressDistrict(String pPresentAddressDistrict) {
+  public void setPresentAddressDistrict(District pPresentAddressDistrict) {
     mPresentAddressDistrict = pPresentAddressDistrict;
   }
 
   @Override
-  public void setPresentAddressZip(String pPresentAddressZip) {
+  public void setPresentAddressZip(Integer pPresentAddressZip) {
     mPresentAddressZip = pPresentAddressZip;
   }
 
   @Override
-  public void setPresentAddressDivision(String pPresentAddressDivision) {
+  public void setPresentAddressDivision(Division pPresentAddressDivision) {
     mPresentAddressDivision = pPresentAddressDivision;
   }
 
   @Override
-  public void setPresentAddressCountry(String pPresentAddressHouseCountry) {
+  public void setPresentAddressCountry(Country pPresentAddressHouseCountry) {
     mPresentAddressCountry = pPresentAddressHouseCountry;
   }
 
@@ -273,27 +321,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPermanentAddressThana(String pPermanentAddressThana) {
+  public void setPermanentAddressThana(Thana pPermanentAddressThana) {
     mPermanentAddressThana = pPermanentAddressThana;
   }
 
   @Override
-  public void setPermanentAddressDistrict(String pPermanentAddressDistrict) {
+  public void setPermanentAddressDistrict(District pPermanentAddressDistrict) {
     mPermanentAddressDistrict = pPermanentAddressDistrict;
   }
 
   @Override
-  public void setPermanentAddressZip(String pPermanentAddressZip) {
+  public void setPermanentAddressZip(Integer pPermanentAddressZip) {
     mPermanentAddressZip = pPermanentAddressZip;
   }
 
   @Override
-  public void setPermanentAddressDivision(String pPermanentAddressDivision) {
+  public void setPermanentAddressDivision(Division pPermanentAddressDivision) {
     mPermanentAddressDivision = pPermanentAddressDivision;
   }
 
   @Override
-  public void setPermanentAddressCountry(String pPermanentAddressCountry) {
+  public void setPermanentAddressCountry(Country pPermanentAddressCountry) {
     mPermanentAddressCountry = pPermanentAddressCountry;
   }
 
@@ -303,12 +351,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setEmergencyContactRelation(String pEmergencyContactRelation) {
+  public void setEmergencyContactRelation(RelationType pEmergencyContactRelation) {
     mEmergencyContactRelation = pEmergencyContactRelation;
   }
 
   @Override
-  public void setEmergencyContactPhone(String pEmergencyContactPhone) {
+  public void setEmergencyContactPhone(Integer pEmergencyContactPhone) {
     mEmergencyContactPhone = pEmergencyContactPhone;
   }
 
@@ -333,7 +381,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getBloodGroup() {
+  public BloodGroup getBloodGroup() {
     return mBloodGroup;
   }
 
@@ -348,27 +396,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getNationality() {
+  public Nationality getNationality() {
     return mNationality;
   }
 
   @Override
-  public String getReligion() {
+  public Religion getReligion() {
     return mReligion;
   }
 
   @Override
-  public String getDateOfBirth() {
+  public Date getDateOfBirth() {
     return mDateOfBirth;
   }
 
   @Override
-  public String getNationalId() {
+  public Integer getNationalId() {
     return mNationalId;
   }
 
   @Override
-  public String getMaritalStatus() {
+  public MaritalStatus getMaritalStatus() {
     return mMaritalStatus;
   }
 
@@ -378,7 +426,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getSpouseNationalId() {
+  public Integer getSpouseNationalId() {
     return mSpouseNationalId;
   }
 
@@ -398,12 +446,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getMobileNumber() {
+  public Integer getMobileNumber() {
     return mMobileNumber;
   }
 
   @Override
-  public String getPhoneNumber() {
+  public Integer getPhoneNumber() {
     return mPhoneNumber;
   }
 
@@ -418,27 +466,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getPresentAddressThana() {
+  public Thana getPresentAddressThana() {
     return mPresentAddressThana;
   }
 
   @Override
-  public String getPresentAddressDistrict() {
+  public District getPresentAddressDistrict() {
     return mPresentAddressDistrict;
   }
 
   @Override
-  public String getPresentAddressZip() {
+  public Integer getPresentAddressZip() {
     return mPresentAddressZip;
   }
 
   @Override
-  public String getPresentAddressDivision() {
+  public Division getPresentAddressDivision() {
     return mPresentAddressDivision;
   }
 
   @Override
-  public String getPresentAddressCountry() {
+  public Country getPresentAddressCountry() {
     return mPresentAddressCountry;
   }
 
@@ -453,27 +501,27 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getPermanentAddressThana() {
+  public Thana getPermanentAddressThana() {
     return mPermanentAddressThana;
   }
 
   @Override
-  public String getPermanentAddressDistrict() {
+  public District getPermanentAddressDistrict() {
     return mPermanentAddressDistrict;
   }
 
   @Override
-  public String getPermanentAddressZip() {
+  public Integer getPermanentAddressZip() {
     return mPermanentAddressZip;
   }
 
   @Override
-  public String getPermanentAddressDivision() {
+  public Division getPermanentAddressDivision() {
     return mPermanentAddressDivision;
   }
 
   @Override
-  public String getPermanentAddressCountry() {
+  public Country getPermanentAddressCountry() {
     return mPermanentAddressCountry;
   }
 
@@ -483,12 +531,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getEmergencyContactRelation() {
+  public RelationType getEmergencyContactRelation() {
     return mEmergencyContactRelation;
   }
 
   @Override
-  public String getEmergencyContactPhone() {
+  public Integer getEmergencyContactPhone() {
     return mEmergencyContactPhone;
   }
 
@@ -496,4 +544,109 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   public String getEmergencyContactAddress() {
     return mEmergencyContactAddress;
   }
+
+  public void setBloodGroupId(Integer pBloodGroupId) {
+    mBloodGroupId = pBloodGroupId;
+  }
+
+  public void setNationalityId(Integer pNationalityId) {
+    mNationalityId = pNationalityId;
+  }
+
+  public void setReligionId(Integer pReligionId) {
+    mReligionId = pReligionId;
+  }
+
+  public void setEmergencyContactRelationId(Integer pEmergencyContactRelationId) {
+    mEmergencyContactRelationId = pEmergencyContactRelationId;
+  }
+
+  public void setMaritalStatusId(Integer pMaritalStatusId) {
+    mMaritalStatusId = pMaritalStatusId;
+  }
+
+  public void setPresentAddressCountryId(Integer pPresentAddressCountryId) {
+    mPresentAddressCountryId = pPresentAddressCountryId;
+  }
+
+  public void setPresentAddressDivisionId(Integer pPresentAddressDivisionId) {
+    mPresentAddressDivisionId = pPresentAddressDivisionId;
+  }
+
+  public void setPresentAddressDistrictId(Integer pPresentAddressDistrictId) {
+    mPresentAddressDistrictId = pPresentAddressDistrictId;
+  }
+
+  public void setPresentAddressThanaId(Integer pPresentAddressThanaId) {
+    mPresentAddressThanaId = pPresentAddressThanaId;
+  }
+
+  public void setPermanentAddressCountryId(Integer pPermanentAddressCountryId) {
+    mPermanentAddressCountryId = pPermanentAddressCountryId;
+  }
+
+  public void setPermanentAddressDivisionId(Integer pPermanentAddressDivisionId) {
+    mPermanentAddressDivisionId = pPermanentAddressDivisionId;
+  }
+
+  public void setPermanentAddressDistrictId(Integer pPermanentAddressDistrictId) {
+    mPermanentAddressDistrictId = pPermanentAddressDistrictId;
+  }
+
+  public void setPermanentAddressThanaId(Integer pPermanentAddressThanaId) {
+    mPermanentAddressThanaId = pPermanentAddressThanaId;
+  }
+
+  public Integer getBloodGroupId() {
+    return mBloodGroupId;
+  }
+
+  public Integer getNationalityId() {
+    return mNationalityId;
+  }
+
+  public Integer getReligionId() {
+    return mReligionId;
+  }
+
+  public Integer getMaritalStatusId() {
+    return mMaritalStatusId;
+  }
+
+  public Integer getEmergencyContactRelationId() {
+    return mEmergencyContactRelationId;
+  }
+
+  public Integer getPresentAddressCountryId() {
+    return mPresentAddressCountryId;
+  }
+
+  public Integer getPresentAddressDivisionId() {
+    return mPresentAddressDivisionId;
+  }
+
+  public Integer getPresentAddressDistrictId() {
+    return mPresentAddressDistrictId;
+  }
+
+  public Integer getPresentAddressThanaId() {
+    return mPresentAddressThanaId;
+  }
+
+  public Integer getPermanentAddressCountryId() {
+    return mPermanentAddressCountryId;
+  }
+
+  public Integer getPermanentAddressDivisionId() {
+    return mPermanentAddressDivisionId;
+  }
+
+  public Integer getPermanentAddressDistrictId() {
+    return mPermanentAddressDistrictId;
+  }
+
+  public Integer getPermanentAddressThanaId() {
+    return mPermanentAddressThanaId;
+  }
+
 }

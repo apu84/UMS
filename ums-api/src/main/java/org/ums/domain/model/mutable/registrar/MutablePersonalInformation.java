@@ -2,8 +2,11 @@ package org.ums.domain.model.mutable.registrar;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
+
+import java.util.Date;
 
 public interface MutablePersonalInformation extends PersonalInformation, Editable<String>, MutableIdentifier<String>,
     MutableLastModifier {
@@ -14,25 +17,25 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setGender(final String pGender);
 
-  void setBloodGroup(final String pBloodGroup);
+  void setBloodGroup(final BloodGroup pBloodGroup);
 
   void setFatherName(final String pFatherName);
 
   void setMotherName(final String pMotherName);
 
-  void setNationality(final String pNationality);
+  void setNationality(final Nationality pNationality);
 
-  void setReligion(final String pReligion);
+  void setReligion(final Religion pReligion);
 
-  void setDateOfBirth(final String pDateOfBirth);
+  void setDateOfBirth(final Date pDateOfBirth);
 
-  void setNationalId(final String pNationalId);
+  void setNationalId(final Integer pNationalId);
 
-  void setMaritalStatus(final String pMaritalStatus);
+  void setMaritalStatus(final MaritalStatus pMaritalStatus);
 
   void setSpouseName(final String pSpouseName);
 
-  void setSpouseNationalId(final String pSpouseNationalId);
+  void setSpouseNationalId(final Integer pSpouseNationalId);
 
   void setWebsite(final String pWebsite);
 
@@ -40,43 +43,43 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPersonalEmail(final String pPersonalEmail);
 
-  void setMobileNumber(final String pMobileNumber);
+  void setMobileNumber(final Integer pMobileNumber);
 
-  void setPhoneNumber(final String pPhoneNumber);
+  void setPhoneNumber(final Integer pPhoneNumber);
 
   void setPresentAddressHouse(final String pPresentAddressHouse);
 
   void setPresentAddressRoad(final String pPresentAddressRoad);
 
-  void setPresentAddressThana(final String pPresentAddressThana);
+  void setPresentAddressCountry(final Country pPresentAddressHouseCountry);
 
-  void setPresentAddressDistrict(final String pPresentAddressDistrict);
+  void setPresentAddressDivision(final Division pPresentAddressDivision);
 
-  void setPresentAddressZip(final String pPresentAddressZip);
+  void setPresentAddressDistrict(final District pPresentAddressDistrict);
 
-  void setPresentAddressDivision(final String pPresentAddressDivision);
+  void setPresentAddressThana(final Thana pPresentAddressThana);
 
-  void setPresentAddressCountry(final String pPresentAddressHouseCountry);
+  void setPresentAddressZip(final Integer pPresentAddressZip);
 
   void setPermanentAddressHouse(final String pPermanentAddressHouse);
 
   void setPermanentAddressRoad(final String pPermanentAddressRoad);
 
-  void setPermanentAddressThana(final String pPermanentAddressThana);
+  void setPermanentAddressCountry(final Country pPermanentAddressCountry);
 
-  void setPermanentAddressDistrict(final String pPermanentAddressDistrict);
+  void setPermanentAddressDivision(final Division pPermanentAddressDivision);
 
-  void setPermanentAddressZip(final String pPermanentAddressZip);
+  void setPermanentAddressDistrict(final District pPermanentAddressDistrict);
 
-  void setPermanentAddressDivision(final String pPermanentAddressDivision);
+  void setPermanentAddressThana(final Thana pPermanentAddressThana);
 
-  void setPermanentAddressCountry(final String pPermanentAddressCountry);
+  void setPermanentAddressZip(final Integer pPermanentAddressZip);
 
   void setEmergencyContactName(final String pEmergencyContactName);
 
-  void setEmergencyContactRelation(final String pEmergencyContactRelation);
+  void setEmergencyContactRelation(final RelationType pEmergencyContactRelation);
 
-  void setEmergencyContactPhone(final String pEmergencyContactPhone);
+  void setEmergencyContactPhone(final Integer pEmergencyContactPhone);
 
   void setEmergencyContactAddress(final String pEmergencyContactAddress);
 }

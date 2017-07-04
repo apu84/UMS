@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PersistentRelationTypeDao extends RelationTypeDaoDecorator {
 
-  static String SELECT_ALL = "SELECT ID, NAME FROM MST_RELATION_TYPE";
+  static String SELECT_ALL = "SELECT ID,NAME FROM MST_RELATION_TYPE";
 
   private JdbcTemplate mJdbcTemplate;
 
