@@ -22,14 +22,14 @@ module ums {
         preAddressHouse: string;
         preAddressRoad: string;
         preAddressThana: IThana;
-        preAddressPostOfficeNo: string;
+        preAddressPostOfficeNo: number;
         preAddressDistrict: IDistrict;
         preAddressDivision: IDivision;
         preAddressCountry: ICountry;
         perAddressHouse: string;
         perAddressRoad: string;
         perAddressThana: IThana;
-        perAddressPostOfficeNo: string;
+        perAddressPostOfficeNo: number;
         perAddressDistrict: IDistrict;
         perAddressDivision: IDivision;
         perAddressCountry: ICountry;

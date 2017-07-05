@@ -18,25 +18,33 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getGender();
 
+  Integer getBloodGroupId();
+
   BloodGroup getBloodGroup();
 
   String getFatherName();
 
   String getMotherName();
 
+  Integer getNationalityId();
+
   Nationality getNationality();
+
+  Integer getReligionId();
 
   Religion getReligion();
 
   Date getDateOfBirth();
 
-  Integer getNationalId();
+  String getNationalId();
+
+  Integer getMaritalStatusId();
 
   MaritalStatus getMaritalStatus();
 
   String getSpouseName();
 
-  Integer getSpouseNationalId();
+  String getSpouseNationalId();
 
   String getWebsite();
 
@@ -44,19 +52,27 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getPersonalEmail();
 
-  Integer getMobileNumber();
+  String getMobileNumber();
 
-  Integer getPhoneNumber();
+  String getPhoneNumber();
 
   String getPresentAddressHouse();
 
   String getPresentAddressRoad();
 
+  Integer getPresentAddressCountryId();
+
   Country getPresentAddressCountry();
+
+  Integer getPresentAddressDivisionId();
 
   Division getPresentAddressDivision();
 
+  Integer getPresentAddressDistrictId();
+
   District getPresentAddressDistrict();
+
+  Integer getPresentAddressThanaId();
 
   Thana getPresentAddressThana();
 
@@ -66,11 +82,19 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getPermanentAddressRoad();
 
+  Integer getPermanentAddressCountryId();
+
   Country getPermanentAddressCountry();
+
+  Integer getPermanentAddressDivisionId();
 
   Division getPermanentAddressDivision();
 
+  Integer getPermanentAddressDistrictId();
+
   District getPermanentAddressDistrict();
+
+  Integer getPermanentAddressThanaId();
 
   Thana getPermanentAddressThana();
 
@@ -78,9 +102,11 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getEmergencyContactName();
 
+  Integer getEmergencyContactRelationId();
+
   RelationType getEmergencyContactRelation();
 
-  Integer getEmergencyContactPhone();
+  String getEmergencyContactPhone();
 
   String getEmergencyContactAddress();
 }

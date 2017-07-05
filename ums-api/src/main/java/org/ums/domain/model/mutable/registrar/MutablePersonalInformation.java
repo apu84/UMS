@@ -17,25 +17,33 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setGender(final String pGender);
 
+  void setBloodGroupId(final Integer pBloodGroupId);
+
   void setBloodGroup(final BloodGroup pBloodGroup);
 
   void setFatherName(final String pFatherName);
 
   void setMotherName(final String pMotherName);
 
+  void setNationalityId(final Integer pNationalityId);
+
   void setNationality(final Nationality pNationality);
+
+  void setReligionId(final Integer pReligionId);
 
   void setReligion(final Religion pReligion);
 
   void setDateOfBirth(final Date pDateOfBirth);
 
-  void setNationalId(final Integer pNationalId);
+  void setNationalId(final String pNationalId);
+
+  void setMaritalStatusId(final Integer pMaritalStatusId);
 
   void setMaritalStatus(final MaritalStatus pMaritalStatus);
 
   void setSpouseName(final String pSpouseName);
 
-  void setSpouseNationalId(final Integer pSpouseNationalId);
+  void setSpouseNationalId(final String pSpouseNationalId);
 
   void setWebsite(final String pWebsite);
 
@@ -43,19 +51,27 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPersonalEmail(final String pPersonalEmail);
 
-  void setMobileNumber(final Integer pMobileNumber);
+  void setMobileNumber(final String pMobileNumber);
 
-  void setPhoneNumber(final Integer pPhoneNumber);
+  void setPhoneNumber(final String pPhoneNumber);
 
   void setPresentAddressHouse(final String pPresentAddressHouse);
 
   void setPresentAddressRoad(final String pPresentAddressRoad);
 
+  void setPresentAddressCountryId(final Integer pPresentAddressCountryId);
+
   void setPresentAddressCountry(final Country pPresentAddressHouseCountry);
+
+  void setPresentAddressDivisionId(final Integer pPresentAddressDivisionId);
 
   void setPresentAddressDivision(final Division pPresentAddressDivision);
 
+  void setPresentAddressDistrictId(final Integer pPresentAddressDistrictId);
+
   void setPresentAddressDistrict(final District pPresentAddressDistrict);
+
+  void setPresentAddressThanaId(final Integer pPresentAddressThanaId);
 
   void setPresentAddressThana(final Thana pPresentAddressThana);
 
@@ -65,11 +81,19 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPermanentAddressRoad(final String pPermanentAddressRoad);
 
+  void setPermanentAddressCountryId(final Integer pPermanentAddressCountryId);
+
   void setPermanentAddressCountry(final Country pPermanentAddressCountry);
+
+  void setPermanentAddressDivisionId(final Integer pPermanentAddressDivisionId);
 
   void setPermanentAddressDivision(final Division pPermanentAddressDivision);
 
+  void setPermanentAddressDistrictId(final Integer pPermanentAddressDistrictId);
+
   void setPermanentAddressDistrict(final District pPermanentAddressDistrict);
+
+  void setPermanentAddressThanaId(final Integer pPermanentAddressThanaId);
 
   void setPermanentAddressThana(final Thana pPermanentAddressThana);
 
@@ -77,9 +101,11 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setEmergencyContactName(final String pEmergencyContactName);
 
+  void setEmergencyContactRelationId(final Integer pEmergencyContactRelationId);
+
   void setEmergencyContactRelation(final RelationType pEmergencyContactRelation);
 
-  void setEmergencyContactPhone(final Integer pEmergencyContactPhone);
+  void setEmergencyContactPhone(final String pEmergencyContactPhone);
 
   void setEmergencyContactAddress(final String pEmergencyContactAddress);
 }

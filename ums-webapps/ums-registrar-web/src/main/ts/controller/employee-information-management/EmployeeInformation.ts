@@ -750,7 +750,6 @@ module ums {
         private submitPersonalForm() {
 
             if (this.isEmpty(this.$scope.previousPersonalInformation)) {
-                console.log("object empty");
                 // Save operation will go here.
                 this.convertToJson('personal', this.$scope.entry.personal)
                     .then((json: any) => {
@@ -770,14 +769,13 @@ module ums {
                     console.log("Changes Detected");
                     this.convertToJson('personal', this.$scope.entry.personal)
                         .then((json: any) => {
-                            this.personalInformationService.updatePersonalInformation(json)
+                            this.personalInformationService.savePersonalInformation(json)
                                 .then((message: any) => {
                                     this.getPersonalInformation();
                                     this.enableViewMode('personal');
                                 });
                         });
                 // }
-
             }
         }
 
@@ -1163,7 +1161,7 @@ module ums {
                 this.$scope.entry.personal.preAddressDivision = null;
                 this.$scope.entry.personal.preAddressDistrict = null;
                 this.$scope.entry.personal.preAddressThana = null;
-                this.$scope.entry.personal.preAddressPostOfficeNo = "";
+                this.$scope.entry.personal.preAddressPostOfficeNo = null;
             }
         }
 
@@ -1178,7 +1176,7 @@ module ums {
                 this.$scope.entry.personal.perAddressDivision = null;
                 this.$scope.entry.personal.perAddressDistrict = null;
                 this.$scope.entry.personal.perAddressThana = null;
-                this.$scope.entry.personal.perAddressPostOfficeNo = "";
+                this.$scope.entry.personal.perAddressPostOfficeNo = null;
             }
         }
 
@@ -1204,7 +1202,7 @@ module ums {
                 presentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
             }
 
-            if (this.$scope.entry.personal.preAddressPostOfficeNo === "" || this.$scope.entry.personal.preAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.preAddressPostOfficeNo == null || this.$scope.entry.personal.preAddressPostOfficeNo === undefined) {
                 presentPostalCode = "";
             }
             else {
@@ -1225,7 +1223,7 @@ module ums {
                 permanentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
             }
 
-            if (this.$scope.entry.personal.perAddressPostOfficeNo === "" || this.$scope.entry.personal.perAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.perAddressPostOfficeNo == null || this.$scope.entry.personal.perAddressPostOfficeNo === undefined) {
                 permanentPostalCode = "";
             }
             else {

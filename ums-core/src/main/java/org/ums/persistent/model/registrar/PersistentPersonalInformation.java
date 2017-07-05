@@ -50,16 +50,16 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Religion mReligion;
   private Integer mReligionId;
   private Date mDateOfBirth;
-  private Integer mNationalId;
+  private String mNationalId;
   private MaritalStatus mMaritalStatus;
   private Integer mMaritalStatusId;
   private String mSpouseName;
-  private Integer mSpouseNationalId;
+  private String mSpouseNationalId;
   private String mWebsite;
   private String mOrganizationalEmail;
   private String mPersonalEmail;
-  private Integer mMobileNumber;
-  private Integer mPhoneNumber;
+  private String mMobileNumber;
+  private String mPhoneNumber;
   private String mPresentAddressHouse;
   private String mPresentAddressRoad;
   private Country mPresentAddressCountry;
@@ -85,7 +85,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private String mEmergencyContactName;
   private RelationType mEmergencyContactRelation;
   private Integer mEmergencyContactRelationId;
-  private Integer mEmergencyContactPhone;
+  private String mEmergencyContactPhone;
   private String mEmergencyContactAddress;
   private String mLastModified;
 
@@ -231,7 +231,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setNationalId(Integer pNationalId) {
+  public void setNationalId(String pNationalId) {
     mNationalId = pNationalId;
   }
 
@@ -246,7 +246,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setSpouseNationalId(Integer pSpouseNationalId) {
+  public void setSpouseNationalId(String pSpouseNationalId) {
     mSpouseNationalId = pSpouseNationalId;
   }
 
@@ -266,12 +266,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setMobileNumber(Integer pMobileNumber) {
+  public void setMobileNumber(String pMobileNumber) {
     mMobileNumber = pMobileNumber;
   }
 
   @Override
-  public void setPhoneNumber(Integer pPhoneNumber) {
+  public void setPhoneNumber(String pPhoneNumber) {
     mPhoneNumber = pPhoneNumber;
   }
 
@@ -356,7 +356,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setEmergencyContactPhone(Integer pEmergencyContactPhone) {
+  public void setEmergencyContactPhone(String pEmergencyContactPhone) {
     mEmergencyContactPhone = pEmergencyContactPhone;
   }
 
@@ -411,7 +411,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getNationalId() {
+  public String getNationalId() {
     return mNationalId;
   }
 
@@ -426,7 +426,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getSpouseNationalId() {
+  public String getSpouseNationalId() {
     return mSpouseNationalId;
   }
 
@@ -446,12 +446,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getMobileNumber() {
+  public String getMobileNumber() {
     return mMobileNumber;
   }
 
   @Override
-  public Integer getPhoneNumber() {
+  public String getPhoneNumber() {
     return mPhoneNumber;
   }
 
@@ -536,7 +536,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getEmergencyContactPhone() {
+  public String getEmergencyContactPhone() {
     return mEmergencyContactPhone;
   }
 
@@ -545,106 +545,132 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     return mEmergencyContactAddress;
   }
 
+  @Override
   public void setBloodGroupId(Integer pBloodGroupId) {
     mBloodGroupId = pBloodGroupId;
   }
 
+  @Override
   public void setNationalityId(Integer pNationalityId) {
     mNationalityId = pNationalityId;
   }
 
+  @Override
   public void setReligionId(Integer pReligionId) {
     mReligionId = pReligionId;
   }
 
+  @Override
   public void setEmergencyContactRelationId(Integer pEmergencyContactRelationId) {
     mEmergencyContactRelationId = pEmergencyContactRelationId;
   }
 
+  @Override
   public void setMaritalStatusId(Integer pMaritalStatusId) {
     mMaritalStatusId = pMaritalStatusId;
   }
 
+  @Override
   public void setPresentAddressCountryId(Integer pPresentAddressCountryId) {
     mPresentAddressCountryId = pPresentAddressCountryId;
   }
 
+  @Override
   public void setPresentAddressDivisionId(Integer pPresentAddressDivisionId) {
     mPresentAddressDivisionId = pPresentAddressDivisionId;
   }
 
+  @Override
   public void setPresentAddressDistrictId(Integer pPresentAddressDistrictId) {
     mPresentAddressDistrictId = pPresentAddressDistrictId;
   }
 
+  @Override
   public void setPresentAddressThanaId(Integer pPresentAddressThanaId) {
     mPresentAddressThanaId = pPresentAddressThanaId;
   }
 
+  @Override
   public void setPermanentAddressCountryId(Integer pPermanentAddressCountryId) {
     mPermanentAddressCountryId = pPermanentAddressCountryId;
   }
 
+  @Override
   public void setPermanentAddressDivisionId(Integer pPermanentAddressDivisionId) {
     mPermanentAddressDivisionId = pPermanentAddressDivisionId;
   }
 
+  @Override
   public void setPermanentAddressDistrictId(Integer pPermanentAddressDistrictId) {
     mPermanentAddressDistrictId = pPermanentAddressDistrictId;
   }
 
+  @Override
   public void setPermanentAddressThanaId(Integer pPermanentAddressThanaId) {
     mPermanentAddressThanaId = pPermanentAddressThanaId;
   }
 
+  @Override
   public Integer getBloodGroupId() {
     return mBloodGroupId;
   }
 
+  @Override
   public Integer getNationalityId() {
     return mNationalityId;
   }
 
+  @Override
   public Integer getReligionId() {
     return mReligionId;
   }
 
+  @Override
   public Integer getMaritalStatusId() {
     return mMaritalStatusId;
   }
 
+  @Override
   public Integer getEmergencyContactRelationId() {
     return mEmergencyContactRelationId;
   }
 
+  @Override
   public Integer getPresentAddressCountryId() {
     return mPresentAddressCountryId;
   }
 
+  @Override
   public Integer getPresentAddressDivisionId() {
     return mPresentAddressDivisionId;
   }
 
+  @Override
   public Integer getPresentAddressDistrictId() {
     return mPresentAddressDistrictId;
   }
 
+  @Override
   public Integer getPresentAddressThanaId() {
     return mPresentAddressThanaId;
   }
 
+  @Override
   public Integer getPermanentAddressCountryId() {
     return mPermanentAddressCountryId;
   }
 
+  @Override
   public Integer getPermanentAddressDivisionId() {
     return mPermanentAddressDivisionId;
   }
 
+  @Override
   public Integer getPermanentAddressDistrictId() {
     return mPermanentAddressDistrictId;
   }
 
+  @Override
   public Integer getPermanentAddressThanaId() {
     return mPermanentAddressThanaId;
   }
