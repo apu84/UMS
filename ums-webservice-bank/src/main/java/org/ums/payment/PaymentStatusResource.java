@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.ums.resource.Resource;
 import org.ums.resource.filter.FilterItem;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -21,7 +22,7 @@ public class PaymentStatusResource extends Resource {
 
   @GET
   @Path("/filters")
-  public List<FilterItem> getFilters() throws Exception {
+  public JsonArray getFilters() throws Exception {
     return mPaymentStatusHelper.getFilterItems();
   }
 

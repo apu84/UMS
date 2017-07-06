@@ -1,5 +1,7 @@
 package org.ums.academic.resource.fee.dues;
 
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -40,7 +42,7 @@ public class StudentDuesResource extends Resource {
 
   @GET
   @Path("/filters")
-  public List<FilterItem> getFilters() throws Exception {
+  public JsonArray getFilters() throws Exception {
     return mStudentDuesHelper.getFilterItems();
   }
 

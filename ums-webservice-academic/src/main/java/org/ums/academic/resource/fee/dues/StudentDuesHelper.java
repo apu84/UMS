@@ -21,12 +21,14 @@ import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.*;
-import org.ums.fee.dues.*;
+import org.ums.fee.dues.MutableStudentDues;
+import org.ums.fee.dues.PersistentStudentDues;
+import org.ums.fee.dues.StudentDues;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
-import org.ums.filter.ListFilter;
 import org.ums.manager.ContentManager;
 import org.ums.manager.StudentManager;
 import org.ums.resource.ResourceHelper;
@@ -51,10 +53,6 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
   private List<FilterItem> mFilterItems;
 
-  public StudentDuesHelper() {
-    mFilterItems = buildFilter();
-  }
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     Validate.notNull(pJsonObject);
@@ -62,11 +60,11 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     LocalCache cache = new LocalCache();
     List<MutableStudentDues> duesList = new ArrayList<>();
 
-    for (int i = 0; i < entries.size(); i++) {
+    for(int i = 0; i < entries.size(); i++) {
       MutableStudentDues dues = new PersistentStudentDues();
       getBuilder().build(dues, entries.getJsonObject(i), cache);
       // If no amount is passed on
-      if (dues.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+      if(dues.getAmount().compareTo(BigDecimal.ZERO) == 0) {
         List<UGFee> fees = mUGFeeManager
             .getLatestFee(dues.getStudent().getProgram().getFaculty().getId(),
                 dues.getStudent().getCurrentEnrolledSemesterId())
@@ -77,7 +75,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
       duesList.add(dues);
     }
 
-    if (duesList.size() > 0) {
+    if(duesList.size() > 0) {
       getContentManager().create(duesList);
     }
     return Response.ok().build();
@@ -94,7 +92,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<MutableStudentDues> mutableStudentDues = new ArrayList<>();
-    for (int i = 0; i < entries.size(); i++) {
+    for(int i = 0; i < entries.size(); i++) {
       Long id = Long.parseLong(entries.getString(i));
       StudentDues dues = mStudentDuesManager.get(id);
       validateDues(pStudentId, dues);
@@ -134,17 +132,20 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    if (duesList.size() > 0) {
+    if(duesList.size() > 0) {
       addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
-    if (pageNumber > 1) {
+    if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
   }
 
-  public List<FilterItem> getFilterItems() {
-    return mFilterItems;
+  JsonArray getFilterItems() {
+    if(mFilterItems == null) {
+      mFilterItems = buildFilter();
+    }
+    return getFilterJson(mFilterItems);
   }
 
   private List<FilterItem> buildFilter() {
@@ -154,7 +155,7 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
         FilterItem.Type.INPUT));
 
     FilterItem status =
-        new FilterItem("Due status", StudentDuesManager.FilterCriteria.STUDENT_ID.toString(), FilterItem.Type.SELECT);
+        new FilterItem("Due status", StudentDuesManager.FilterCriteria.DUE_STATUS.toString(), FilterItem.Type.SELECT);
     status.addOption("Not paid", 0);
     status.addOption("Applied", 1);
     status.addOption("Paid", 2);
@@ -166,10 +167,12 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
       if(feeType.getName().equalsIgnoreCase(FeeType.Types.PENALTY.name())
           || feeType.getName().equalsIgnoreCase(FeeType.Types.DUES.name())) {
         for(FeeCategory category : mFeeCategoryManager.getFeeCategories(feeType.getId())) {
-          type.addOption(category.getId(), category.getDescription());
+          type.addOption(category.getDescription(), category.getId());
         }
       }
     }
+    filters.add(type);
+
     return filters;
   }
 

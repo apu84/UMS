@@ -1,5 +1,16 @@
 package org.ums.resource;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.json.*;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
@@ -7,16 +18,9 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.Identifier;
 import org.ums.filter.ListFilter;
 import org.ums.filter.ListFilterImpl;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
-
-import javax.json.*;
-import javax.ws.rs.core.EntityTag;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
+import org.ums.resource.filter.FilterItem;
 
 public abstract class ResourceHelper<R extends EditType<M> & Identifier, M extends Editable & Identifier, I> {
 
@@ -146,23 +150,57 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
       entries.forEach((entry) -> {
         JsonObject filter = (JsonObject) entry;
         Object value = null;
-        if (filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
-          value = filter.getInt("value");
+        if(!StringUtils.isEmpty(filter.getJsonObject("filter").getString("type"))
+            && filter.getJsonObject("filter").getString("type").equalsIgnoreCase("date")) {
+          value = getDateFormatter().parse(filter.getJsonObject("value").getString("value"));
         }
-        else if (filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
-          value = filter.getString("value");
+        else if(filter.getJsonObject("value").get("value").getValueType() == JsonValue.ValueType.NUMBER) {
+          value = filter.getJsonObject("value").getInt("value");
         }
-        else if(filter.get("value").getValueType() == JsonValue.ValueType.TRUE
-            || filter.get("value").getValueType() == JsonValue.ValueType.FALSE) {
-          value = filter.getBoolean("value");
+        else if(filter.getJsonObject("value").get("value").getValueType() == JsonValue.ValueType.STRING) {
+          value = filter.getJsonObject("value").getString("value");
+        }
+        else if(filter.getJsonObject("value").get("value").getValueType() == JsonValue.ValueType.TRUE
+            || filter.getJsonObject("value").get("value").getValueType() == JsonValue.ValueType.FALSE) {
+          value = filter.getJsonObject("value").getBoolean("value");
         }
         else {
-          filter.get("value");
+          filter.getJsonObject("value").get("value");
         }
-        filterCriteria.add(new ListFilterImpl(filter.getString("name"), value));
+        filterCriteria.add(new ListFilterImpl(filter.getJsonObject("filter").getString("value"), value));
       });
     }
     return filterCriteria;
+  }
+
+  protected JsonArray getFilterJson(List<FilterItem> pFilterItems) {
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+    pFilterItems.forEach((pFilterItem) -> {
+      JsonObjectBuilder filter = Json.createObjectBuilder();
+      filter.add("label", pFilterItem.getLabel());
+      filter.add("value", pFilterItem.getValue());
+      filter.add("type", pFilterItem.getType().toString().toLowerCase());
+      if(pFilterItem.getOptions().size() > 0) {
+        JsonArrayBuilder options = Json.createArrayBuilder();
+        pFilterItem.getOptions().forEach((pFilterItemOption) -> {
+          JsonObjectBuilder option = Json.createObjectBuilder();
+          option.add("label", pFilterItemOption.getLabel());
+          if(pFilterItemOption.getValue() instanceof Integer) {
+            option.add("value", (Integer) pFilterItemOption.getValue());
+          }
+          else if(pFilterItemOption.getValue() instanceof Boolean) {
+            option.add("value", (Boolean) pFilterItemOption.getValue());
+          }
+          else if(pFilterItemOption.getValue() instanceof String) {
+            option.add("value", (String) pFilterItemOption.getValue());
+          }
+          options.add(option);
+        });
+        filter.add("options", options);
+      }
+      arrayBuilder.add(filter);
+    });
+    return arrayBuilder.build();
   }
 
   public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
@@ -173,4 +211,7 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
 
   protected abstract String getETag(R pReadonly);
 
+  protected DateFormat getDateFormatter() {
+    return null;
+  }
 }

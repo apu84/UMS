@@ -11,7 +11,7 @@ public abstract class AbstractFilterQueryBuilder {
 
   public AbstractFilterQueryBuilder(List<ListFilter> pFilter) {
     pFilter.forEach((filter) -> {
-      getQueryString(filter);
+      filterList.add(getQueryString(filter));
       params.add(filter.getFilterValue());
     });
   }

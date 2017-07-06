@@ -42,24 +42,13 @@ public class FilterItem {
     DATE
   }
 
-  class FilterItemOption {
-    private String mId;
+  public class FilterItemOption {
     private String mLabel;
     private Object mValue;
-
-    FilterItemOption(String pLabel, Object pValue, String pId) {
-      mId = pId;
-      mLabel = pLabel;
-      mValue = pValue;
-    }
 
     FilterItemOption(String pLabel, Object pValue) {
       mLabel = pLabel;
       mValue = pValue;
-    }
-
-    public String getId() {
-      return mId;
     }
 
     public String getLabel() {

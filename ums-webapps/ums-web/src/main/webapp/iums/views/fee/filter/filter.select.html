@@ -1,0 +1,4 @@
+<select class="form-control" data-ng-model="vm.selectedFilterValue"
+        data-ng-options="o.value as o.label for o in vm.filter.options"
+        data-ng-change="vm.setFilterValue()">
+</select>

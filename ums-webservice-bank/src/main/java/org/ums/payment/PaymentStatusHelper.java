@@ -36,10 +36,6 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
 
   private List<FilterItem> mFilterItems;
 
-  public PaymentStatusHelper() {
-    mFilterItems = buildFilter();
-  }
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     throw new NotImplementedException();
@@ -108,8 +104,11 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     return Response.ok().build();
   }
 
-  public List<FilterItem> getFilterItems() {
-    return mFilterItems;
+  JsonArray getFilterItems() {
+    if(mFilterItems == null) {
+      mFilterItems = buildFilter();
+    }
+    return getFilterJson(mFilterItems);
   }
 
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
@@ -147,5 +146,10 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     filters.add(mop);
 
     return filters;
+  }
+
+  @Override
+  protected DateFormat getDateFormatter() {
+    return mDateFormat;
   }
 }

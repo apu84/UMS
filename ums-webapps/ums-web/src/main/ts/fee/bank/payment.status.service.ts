@@ -50,6 +50,14 @@ module ums {
       return defer.promise;
     }
 
+    public getFilters(): ng.IPromise<Filter[]> {
+      let defer: ng.IDeferred<Filter[]> = this.$q.defer();
+      this.httpClient.get('/ums-webservice-bank/payment-status/filters', HttpClient.MIME_TYPE_JSON, (filters: Filter[])=> {
+        defer.resolve(filters);
+      });
+      return defer.promise;
+    }
+
     public concludePayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
       this.httpClient.put(`/ums-webservice-bank/payment-status/conclude-payment`, {

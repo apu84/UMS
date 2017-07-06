@@ -2,7 +2,8 @@ module ums {
   export class PaymentStatusController {
     public static $inject = ['$scope', 'PaymentStatusService', 'notify', '$modal'];
     public nextLink: string;
-    public filters: PaymentStatusFilter[] = [];
+    public filters: Filter[];
+    public selectedFilters: SelectedFilter[] = [];
     public paymentStatusList: PaymentStatus[];
     public selectedPayments: {[id: string]: boolean} = {};
     public selectedPaymentIds: string[];
@@ -14,9 +15,13 @@ module ums {
                 private notify: Notify,
                 private $modal: any) {
       this.navigate();
-      $scope.$watch(() => this.filters, ()=> {
-        this.navigate();
-      }, true);
+      this.paymentStatusService.getFilters().then((filters: Filter[]) => {
+        this.filters = filters;
+
+        $scope.$watch(() => this.selectedFilters, ()=> {
+          this.navigate();
+        }, true);
+      });
 
       this.$scope.$watch(()=> {
         return this.selectedPayments;
@@ -64,7 +69,7 @@ module ums {
     }
 
     public navigate(url?: string): void {
-      this.paymentStatusService.getPaymentStatus(this.filters, url).then((status: PaymentStatusResponse) => {
+      this.paymentStatusService.getPaymentStatus(this.selectedFilters, url).then((status: PaymentStatusResponse) => {
         if (url && this.paymentStatusList && this.paymentStatusList.length > 0) {
           this.paymentStatusList.push.apply(status.entries);
         }
