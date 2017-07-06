@@ -1,0 +1,66 @@
+<div class="panel">
+    <div class="panel-heading">Dues/ Penalty</div>
+    <div class="panel-body">
+        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
+        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <td width="4%">Student Id</td>
+                <td width="15%">Transaction Id</td>
+                <td width="15%">Transaction status</td>
+                <td width="10%">Certificate type</td>
+                <td width="10%">Semester</td>
+                <td width="13%">Status</td>
+                <td width="13%">Processed on</td>
+                <td width="20%"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="certificate in vm.certificateStatusList">
+                <td>
+                    {{::certificate.studentId}}
+                </td>
+                <td>
+                    {{::certificate.transactionId}}
+                </td>
+                <td>
+                    {{::certificate.transactionStatus}}
+                </td>
+                <td>
+                    {{::certificate.certificateType}}/=
+                </td>
+                <td>
+                    {{certificate.semesterName}}
+                </td>
+                <td>
+                    {{certificate.status}}
+                </td>
+                <td>
+                    {{certificate.processedOn}}
+                </td>
+                <td>
+                    <input type="checkbox" data-ng-model="vm.selectedCertificates[certificate.id]"
+                           data-ng-if="certificate.status !== 'PROCESSED'"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success" data-ng-click="vm.process()"
+                        data-ng-if="vm.selectedCertificateIds && vm.selectedCertificateIds.length > 0">
+                    Process
+                </button>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <button type="button" class="btn btn-success text-right"
+                            data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
+                        Next >>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

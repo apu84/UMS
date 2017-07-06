@@ -217,6 +217,7 @@
 /// <reference path='fee/dues/student.dues.controller.ts'/>
 /// <reference path='fee/dues/list.dues.controller.ts'/>
 /// <reference path='fee/dues/add.dues.controller.ts'/>
+/// <reference path='fee/certificate/certificate.status.controller.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>
 /// <reference path='fee/bank/receive.payment.controller.ts'/>

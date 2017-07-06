@@ -96,7 +96,7 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
         "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
-            + " WHERE STATUS = ? ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     List<Object> params = queryBuilder.getParameters();
     params.add(startIndex);
     params.add(endIndex);

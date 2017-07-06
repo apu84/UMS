@@ -883,7 +883,20 @@ module ums {
           url: "/certificateFee",
           controller: 'CertificateFeeController',
           controllerAs: 'vm',
-          templateUrl: 'views/fee/certificatefee/certificate.fee.html'
+          templateUrl: 'views/fee/certificate/certificate.fee.html'
+        })
+        .state('certificateStatus', {
+          url: "/certificateStatus",
+          controller: 'CertificateStatusController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/certificate/certificate.status.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/select2/select2-madmin.css']
+              });
+            }]
+          }
         })
         .state('studentDues', {
           url: "/studentDues",
