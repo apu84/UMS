@@ -1,13 +1,5 @@
 package org.ums.payment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
@@ -16,12 +8,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.fee.accounts.*;
-import org.ums.fee.accounts.FilterCriteria;
-import org.ums.fee.dues.*;
+import org.ums.fee.accounts.MutablePaymentStatus;
+import org.ums.fee.accounts.PaymentStatus;
+import org.ums.fee.accounts.PaymentStatusManager;
+import org.ums.fee.accounts.PersistentPaymentStatus;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.resource.filter.FilterItem;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePaymentStatus, Long> {
@@ -31,6 +33,12 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
   PaymentStatusBuilder mPaymentStatusBuilder;
   @Autowired
   DateFormat mDateFormat;
+
+  private List<FilterItem> mFilterItems;
+
+  public PaymentStatusHelper() {
+    mFilterItems = buildFilter();
+  }
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -100,6 +108,10 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     return Response.ok().build();
   }
 
+  public List<FilterItem> getFilterItems() {
+    return mFilterItems;
+  }
+
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
     UriBuilder builder = new JerseyUriBuilder();
@@ -108,39 +120,32 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 
-  private List<FilterCriteria> buildFilterQuery(JsonObject pFilter) {
-    List<FilterCriteria> filterCriteria = new ArrayList<>();
-    if(pFilter.containsKey("entries")) {
-      JsonArray entries = pFilter.getJsonArray("entries");
-      entries.forEach((entry) -> {
-        JsonObject filter = (JsonObject) entry;
-        filterCriteria.add(new FilterCriteria() {
-          @Override
-          public Criteria getCriteria() {
-            return Criteria.valueOf(filter.getString("key"));
-          }
+  private List<FilterItem> buildFilter() {
+    List<FilterItem> filters = new ArrayList<>();
 
-          @Override
-          public Object getValue() {
-            if(filter.getString("key").equalsIgnoreCase("RECEIVED_START")
-                || filter.getString("key").equalsIgnoreCase("RECEIVED_END")) {
-              return mDateFormat.parse(filter.getString("value"));
-            }
-            else if(filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
-              return filter.getInt("value");
-            }
-            else if(filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
-              return filter.getString("value");
-            }
-            else if(filter.get("value").getValueType() == JsonValue.ValueType.TRUE
-                || filter.get("value").getValueType() == JsonValue.ValueType.FALSE) {
-              return filter.getBoolean("value");
-            }
-            return filter.get("value");
-          }
-        });
-      });
-    }
-    return filterCriteria;
+    filters.add(new FilterItem("Start", PaymentStatusManager.FilterCriteria.RECEIVED_START.toString(),
+        FilterItem.Type.DATE));
+    filters
+        .add(new FilterItem("End", PaymentStatusManager.FilterCriteria.RECEIVED_END.toString(), FilterItem.Type.DATE));
+    filters.add(new FilterItem("Transaction Id", PaymentStatusManager.FilterCriteria.TRANSACTION_ID.toString(),
+        FilterItem.Type.INPUT));
+    filters
+        .add(new FilterItem("Account", PaymentStatusManager.FilterCriteria.ACCOUNT.toString(), FilterItem.Type.INPUT));
+    FilterItem status =
+        new FilterItem("Payment Status", PaymentStatusManager.FilterCriteria.PAYMENT_COMPLETED.toString(),
+            FilterItem.Type.SELECT);
+    status.addOption("Completed", true);
+    status.addOption("Not Completed", false);
+    filters.add(status);
+
+    FilterItem mop =
+        new FilterItem("Method of payment", PaymentStatusManager.FilterCriteria.METHOD_OF_PAYMENT.toString(),
+            FilterItem.Type.SELECT);
+    mop.addOption("Cash", 1);
+    mop.addOption("Payorder", 2);
+    mop.addOption("Cheque", 3);
+    filters.add(mop);
+
+    return filters;
   }
 }

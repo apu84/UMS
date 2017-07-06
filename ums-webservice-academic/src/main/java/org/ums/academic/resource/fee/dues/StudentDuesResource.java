@@ -6,7 +6,11 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.filter.ListFilter;
 import org.ums.resource.Resource;
+import org.ums.resource.filter.FilterItem;
+
+import java.util.List;
 
 @Component
 @Path("/student-dues")
@@ -32,6 +36,12 @@ public class StudentDuesResource extends Resource {
   @Path("/{studentId}")
   public JsonObject getDues(final @PathParam("studentId") String pStudentId) throws Exception {
     return mStudentDuesHelper.getDues(pStudentId, mUriInfo);
+  }
+
+  @GET
+  @Path("/filters")
+  public List<FilterItem> getFilters() throws Exception {
+    return mStudentDuesHelper.getFilterItems();
   }
 
   @POST

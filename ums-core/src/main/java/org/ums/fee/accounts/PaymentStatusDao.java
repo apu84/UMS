@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.filter.AbstractFilterQueryBuilder;
+import org.ums.filter.ListFilter;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
@@ -81,8 +83,8 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
-    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilterCriteria);
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
@@ -123,42 +125,32 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     }
   }
 
-  private class FilterQueryBuilder {
-    private List<String> filterList;
-    private List<Object> params;
-
-    FilterQueryBuilder(List<FilterCriteria> pFilterCriteria) {
-      filterList = new ArrayList<>();
-      params = new ArrayList<>();
-      pFilterCriteria.forEach((filterCriteria) -> {
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.RECEIVED_START) {
-          filterList.add("RECEIVED_ON >= ?");
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.RECEIVED_END) {
-          filterList.add("RECEIVED_ON <= ? ");
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.PAYMENT_COMPLETED) {
-          filterList.add("PAYMENT_COMPLETE = ?");
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.METHOD_OF_PAYMENT) {
-          filterList.add("METHOD_OF_PAYMENT = ?");
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.TRANSACTION_ID) {
-          filterList.add("TRANSACTION_ID = ?");
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.ACCOUNT) {
-          filterList.add("ACCOUNT = ?");
-        }
-        params.add(filterCriteria.getValue());
-      });
+  private class FilterQueryBuilder extends AbstractFilterQueryBuilder {
+    FilterQueryBuilder(List<ListFilter> pFilters) {
+      super(pFilters);
     }
 
-    public String getQuery() {
-      return filterList.size() > 0 ? " WHERE " + org.apache.commons.lang.StringUtils.join(filterList, " AND ") : "";
-    }
-
-    public List<Object> getParameters() {
-      return params;
+    @Override
+    protected String getQueryString(ListFilter pFilter) {
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.RECEIVED_START.toString())) {
+        return "RECEIVED_ON >= ?";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.RECEIVED_END.toString())) {
+        return "RECEIVED_ON <= ? ";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.PAYMENT_COMPLETED.toString())) {
+        return "PAYMENT_COMPLETE = ?";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.METHOD_OF_PAYMENT.toString())) {
+        return "METHOD_OF_PAYMENT = ?";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.TRANSACTION_ID.toString())) {
+        return "TRANSACTION_ID = ?";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.ACCOUNT.toString())) {
+        return "ACCOUNT = ?";
+      }
+      return "";
     }
   }
 }

@@ -5,6 +5,8 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.Identifier;
+import org.ums.filter.ListFilter;
+import org.ums.filter.ListFilterImpl;
 import org.ums.manager.ContentManager;
 
 import javax.json.*;
@@ -135,6 +137,32 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
     localCache.invalidate();
 
     return Response.noContent().build();
+  }
+
+  protected List<ListFilter> buildFilterQuery(JsonObject pFilter) {
+    List<ListFilter> filterCriteria = new ArrayList<>();
+    if(pFilter.containsKey("entries")) {
+      JsonArray entries = pFilter.getJsonArray("entries");
+      entries.forEach((entry) -> {
+        JsonObject filter = (JsonObject) entry;
+        Object value = null;
+        if (filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
+          value = filter.getInt("value");
+        }
+        else if (filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
+          value = filter.getString("value");
+        }
+        else if(filter.get("value").getValueType() == JsonValue.ValueType.TRUE
+            || filter.get("value").getValueType() == JsonValue.ValueType.FALSE) {
+          value = filter.getBoolean("value");
+        }
+        else {
+          filter.get("value");
+        }
+        filterCriteria.add(new ListFilterImpl(filter.getString("name"), value));
+      });
+    }
+    return filterCriteria;
   }
 
   public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;

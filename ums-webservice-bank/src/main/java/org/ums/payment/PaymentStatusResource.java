@@ -1,12 +1,14 @@
 package org.ums.payment;
 
-import javax.json.JsonObject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.resource.Resource;
+import org.ums.resource.filter.FilterItem;
+
+import javax.json.JsonObject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Component
 @Path("/payment-status")
@@ -16,6 +18,12 @@ public class PaymentStatusResource extends Resource {
   @Autowired
   PaymentStatusHelper mPaymentStatusHelper;
   private int mDefaultNoOfItems = 20;
+
+  @GET
+  @Path("/filters")
+  public List<FilterItem> getFilters() throws Exception {
+    return mPaymentStatusHelper.getFilterItems();
+  }
 
   @GET
   @Path("/paginated")
