@@ -1,5 +1,6 @@
 package org.ums.academic.resource.fee.certificate;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -15,21 +16,20 @@ import org.ums.resource.Resource;
 public class CertificateStatusResource extends Resource {
   @Autowired
   CertificateStatusHelper mCertificateStatusHelper;
+  private int mDefaultNoOfItems = 20;
 
-  @GET
+  @POST
   @Path("/paginated")
   public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
-      @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
-    return mCertificateStatusHelper.getCertificateStatus(itemsPerPage == null ? 0 : itemsPerPage,
-        pageNumber == null ? 1 : pageNumber, mUriInfo);
+      @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pJsonObject) throws Exception {
+    return mCertificateStatusHelper.getFilteredCertificateStatus(itemsPerPage == null ? mDefaultNoOfItems
+        : itemsPerPage, pageNumber == null ? 1 : pageNumber, pJsonObject, mUriInfo);
   }
 
   @GET
-  @Path("/filtered/{status}")
-  public JsonObject getCertificateStatus(@PathParam("status") Integer status,
-      @QueryParam("pageNumber") Integer pageNumber, @QueryParam("itemsPerPage") Integer itemsPerPage) throws Exception {
-    return mCertificateStatusHelper.getFilteredCertificateStatus(itemsPerPage == null ? 0 : itemsPerPage,
-        pageNumber == null ? 1 : pageNumber, status, mUriInfo);
+  @Path("/filters")
+  public JsonArray getFilters() throws Exception {
+    return mCertificateStatusHelper.getFilterItems();
   }
 
   @GET
