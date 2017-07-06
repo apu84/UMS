@@ -224,7 +224,6 @@
 /// <reference path='fee/bank/payment.confirmation.ts'/>
 /// <reference path='fee/bank/payment.status.service.ts'/>
 /// <reference path='fee/bank/payment.status.controller.ts'/>
-/// <reference path='fee/bank/payment.status.filter.directive.ts'/>
 /// <reference path='fee/bank/conclude.payment.ts'/>
 /// <reference path='fee/filter/filter.model.ts'/>
 /// <reference path='fee/filter/list.filter.directive.ts'/>
