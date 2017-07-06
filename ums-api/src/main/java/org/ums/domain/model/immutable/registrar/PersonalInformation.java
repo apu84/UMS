@@ -36,7 +36,7 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Date getDateOfBirth();
 
-  String getNationalId();
+  String getNidNo();
 
   Integer getMaritalStatusId();
 
@@ -44,7 +44,7 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getSpouseName();
 
-  String getSpouseNationalId();
+  String getSpouseNidNo();
 
   String getWebsite();
 
@@ -56,9 +56,9 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getPhoneNumber();
 
-  String getPresentAddressHouse();
+  String getPresentAddressLine1();
 
-  String getPresentAddressRoad();
+  String getPresentAddressLine2();
 
   Integer getPresentAddressCountryId();
 
@@ -76,11 +76,11 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Thana getPresentAddressThana();
 
-  Integer getPresentAddressZip();
+  String getPresentAddressPostCode();
 
-  String getPermanentAddressHouse();
+  String getPermanentAddressLine1();
 
-  String getPermanentAddressRoad();
+  String getPermanentAddressLine2();
 
   Integer getPermanentAddressCountryId();
 
@@ -98,7 +98,7 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Thana getPermanentAddressThana();
 
-  Integer getPermanentAddressZip();
+  String getPermanentAddressPostCode();
 
   String getEmergencyContactName();
 

@@ -541,40 +541,30 @@ module ums {
         private getBloodGroupList(){
             this.bloodGroupService.getBloodGroupList().then((bloodGroups: any) => {
                 this.$scope.bloodGroups = bloodGroups;
-                console.log("this.$scope.bloodGroups: ");
-                console.log(this.$scope.bloodGroups);
             });
         }
 
         private getNationalityList(){
             this.nationalityService.getNationalityList().then((nationalities: any) => {
                 this.$scope.nationalities = nationalities;
-                console.log("this.$scope.nationalities: ");
-                console.log(this.$scope.nationalities);
             });
         }
 
         private getReligionList(){
             this.religionService.getReligionList().then((religions: any) => {
                 this.$scope.religions = religions;
-                console.log("this.$scope.religions: ");
-                console.log(this.$scope.religions);
             });
         }
 
         private getRelationTypeList(){
             this.relationTypeService.getRelationTypeList().then((relations: any) => {
                 this.$scope.relations = relations;
-                console.log("this.$scope.relations: ");
-                console.log(this.$scope.relations);
             });
         }
 
         private getMaritalStatusList(){
             this.maritalStatusService.getMaritalStatusList().then((maritalStatus: any) => {
                this.$scope.maritalStatus = maritalStatus;
-               console.log("this.$scope.maritalStatus: ");
-               console.log(this.$scope.maritalStatus);
             });
         }
 
@@ -708,10 +698,10 @@ module ums {
             this.$scope.entry.personal.religion = this.$scope.religions[1];
             this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
             this.$scope.entry.personal.spouseName = "";
-            this.$scope.entry.personal.nationalIdNo = "19952641478954758";
-            this.$scope.entry.personal.spouseNationalIdNo = "";
+            this.$scope.entry.personal.nidNo = "19952641478954758";
+            this.$scope.entry.personal.spouseNidNo = "";
             this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
-            this.$scope.entry.personal.personalWebsite = "https://www.kawsur.com";
+            this.$scope.entry.personal.website = "https://www.kawsur.com";
             this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
             this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
             this.$scope.entry.personal.mobile = "+8801672494863";
@@ -852,8 +842,8 @@ module ums {
             // if(objType == "personal"){
             //     if(baseObj.firstName == comparingObj.firstName && baseObj.lastName == comparingObj.lastName && baseObj.fatherName == comparingObj.fatherName && baseObj.motherName == comparingObj.motherName
             //     && baseObj.gender.name == comparingObj.gender.name && baseObj.dateOfBirth == comparingObj.dateOfBirth && baseObj.nationality.name == comparingObj.nationality.name && baseObj.religion.name == comparingObj.religion.name
-            //     && baseObj.maritalStatus.name == comparingObj.maritalStatus.name && baseObj.spouseName == comparingObj.spouseName && baseObj.nationalIdNo == comparingObj.nationalIdNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
-            //     && baseObj.spouseNationalIdNo == comparingObj.spouseNationalIdNo && baseObj.personalWebsite == comparingObj.personalWebsite && baseObj.organizationalEmail == comparingObj.organizationalEmail
+            //     && baseObj.maritalStatus.name == comparingObj.maritalStatus.name && baseObj.spouseName == comparingObj.spouseName && baseObj.nidNo == comparingObj.nidNo && baseObj.bloodGroup.name == comparingObj.bloodGroup.name
+            //     && baseObj.spouseNidNo == comparingObj.spouseNidNo && baseObj.website == comparingObj.website && baseObj.organizationalEmail == comparingObj.organizationalEmail
             //     && baseObj.personalEmail == comparingObj.personalEmail && baseObj.mobile == comparingObj.mobile && baseObj.phone == comparingObj.phone && baseObj.presentAddressHouse == comparingObj.presentAddressHouse
             //     && baseObj.presentAddressRoad == comparingObj.presentAddressRoad && baseObj.presentAddressThana.name == comparingObj.presentAddressThana.name && baseObj.presentAddressPostOfficeNo == comparingObj.presentAddressPostOfficeNo && baseObj.presentAddressDistrict.name == comparingObj.presentAddressDistrict.name
             //         && baseObj.presentAddressDivision.name == comparingObj.presentAddressDivision.name && baseObj.presentAddressCountry.name == comparingObj.presentAddressCountry.name && baseObj.permanentAddressHouse == comparingObj.permanentAddressHouse && baseObj.permanentAddressRoad == comparingObj.permanentAddressRoad &&
@@ -968,6 +958,8 @@ module ums {
 
         private getPersonalInformation() {
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
+                console.log("PersonalInformation: ------------>> ");
+                console.log(personalInformation);
                 this.setSavedValuesOfPersonalForm(personalInformation);
             });
         }
@@ -1133,15 +1125,15 @@ module ums {
         }
 
         private sameAsPresentAddress() {
-            this.$scope.entry.personal.perAddressHouse = this.$scope.entry.personal.preAddressHouse;
-            this.$scope.entry.personal.perAddressRoad = this.$scope.entry.personal.preAddressRoad;
+            this.$scope.entry.personal.perAddressLine1 = this.$scope.entry.personal.preAddressLine1;
+            this.$scope.entry.personal.perAddressLine2 = this.$scope.entry.personal.preAddressLine2;
             this.$scope.entry.personal.perAddressCountry = this.$scope.entry.personal.preAddressCountry;
             if(this.$scope.entry.personal.preAddressCountry.name === "Bangladesh"){
                 this.changePermanentAddressFields();
             }
             else {
                 this.$scope.entry.personal.perAddressDivision = this.$scope.entry.personal.preAddressDivision;
-                this.$scope.entry.personal.perAddressPostOfficeNo = this.$scope.entry.personal.preAddressPostOfficeNo;
+                this.$scope.entry.personal.perAddressPostCode = this.$scope.entry.personal.preAddressPostCode;
                 this.$scope.entry.personal.perAddressDistrict = this.$scope.entry.personal.preAddressDistrict;
                 this.$scope.entry.personal.perAddressThana = this.$scope.entry.personal.preAddressThana;
             }
@@ -1161,7 +1153,7 @@ module ums {
                 this.$scope.entry.personal.preAddressDivision = null;
                 this.$scope.entry.personal.preAddressDistrict = null;
                 this.$scope.entry.personal.preAddressThana = null;
-                this.$scope.entry.personal.preAddressPostOfficeNo = null;
+                this.$scope.entry.personal.preAddressPostCode = null;
             }
         }
 
@@ -1176,7 +1168,7 @@ module ums {
                 this.$scope.entry.personal.perAddressDivision = null;
                 this.$scope.entry.personal.perAddressDistrict = null;
                 this.$scope.entry.personal.perAddressThana = null;
-                this.$scope.entry.personal.perAddressPostOfficeNo = null;
+                this.$scope.entry.personal.perAddressPostCode = null;
             }
         }
 
@@ -1188,46 +1180,46 @@ module ums {
             let permanentAddressLine2;
             let permanentPostalCode;
 
-            if (this.$scope.entry.personal.preAddressHouse === "" || this.$scope.entry.personal.preAddressHouse === undefined) {
+            if (this.$scope.entry.personal.preAddressLine1 === "" || this.$scope.entry.personal.preAddressLine1 === undefined) {
                 presentAddressLine1 = "";
             }
             else {
-                presentAddressLine1 = this.$scope.entry.personal.preAddressHouse;
+                presentAddressLine1 = this.$scope.entry.personal.preAddressLine1;
             }
 
-            if (this.$scope.entry.personal.preAddressRoad === "" || this.$scope.entry.personal.preAddressRoad === undefined) {
+            if (this.$scope.entry.personal.preAddressLine2 === "" || this.$scope.entry.personal.preAddressLine2 === undefined) {
                 presentAddressLine2 = "";
             }
             else {
-                presentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
+                presentAddressLine2 = this.$scope.entry.personal.preAddressLine2;
             }
 
-            if (this.$scope.entry.personal.preAddressPostOfficeNo == null || this.$scope.entry.personal.preAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.preAddressPostCode == null || this.$scope.entry.personal.preAddressPostCode === undefined) {
                 presentPostalCode = "";
             }
             else {
-                presentPostalCode = this.$scope.entry.personal.preAddressPostOfficeNo;
+                presentPostalCode = this.$scope.entry.personal.preAddressPostCode;
             }
 
-            if (this.$scope.entry.personal.perAddressHouse === "" || this.$scope.entry.personal.perAddressHouse === undefined) {
+            if (this.$scope.entry.personal.perAddressLine1 === "" || this.$scope.entry.personal.perAddressLine1 === undefined) {
                 permanentAddressLine1 = "";
             }
             else {
-                permanentAddressLine1 = this.$scope.entry.personal.preAddressHouse;
+                permanentAddressLine1 = this.$scope.entry.personal.preAddressLine1;
             }
 
-            if (this.$scope.entry.personal.perAddressRoad === "" || this.$scope.entry.personal.perAddressRoad === undefined) {
+            if (this.$scope.entry.personal.perAddressLine2 === "" || this.$scope.entry.personal.perAddressLine2 === undefined) {
                 permanentAddressLine2 = "";
             }
             else {
-                permanentAddressLine2 = this.$scope.entry.personal.preAddressRoad;
+                permanentAddressLine2 = this.$scope.entry.personal.preAddressLine2;
             }
 
-            if (this.$scope.entry.personal.perAddressPostOfficeNo == null || this.$scope.entry.personal.perAddressPostOfficeNo === undefined) {
+            if (this.$scope.entry.personal.perAddressPostCode == null || this.$scope.entry.personal.perAddressPostCode === undefined) {
                 permanentPostalCode = "";
             }
             else {
-                permanentPostalCode = this.$scope.entry.personal.perAddressPostOfficeNo;
+                permanentPostalCode = this.$scope.entry.personal.perAddressPostCode;
             }
 
             if (this.$scope.data.supOptions === "1") {

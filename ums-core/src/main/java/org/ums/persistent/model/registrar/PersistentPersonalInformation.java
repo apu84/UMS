@@ -50,18 +50,18 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Religion mReligion;
   private Integer mReligionId;
   private Date mDateOfBirth;
-  private String mNationalId;
+  private String mNidNo;
   private MaritalStatus mMaritalStatus;
   private Integer mMaritalStatusId;
   private String mSpouseName;
-  private String mSpouseNationalId;
+  private String mSpouseNidNo;
   private String mWebsite;
   private String mOrganizationalEmail;
   private String mPersonalEmail;
   private String mMobileNumber;
   private String mPhoneNumber;
-  private String mPresentAddressHouse;
-  private String mPresentAddressRoad;
+  private String mPresentAddressLine1;
+  private String mPresentAddressLine2;
   private Country mPresentAddressCountry;
   private Integer mPresentAddressCountryId;
   private Division mPresentAddressDivision;
@@ -70,9 +70,9 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Integer mPresentAddressDistrictId;
   private Thana mPresentAddressThana;
   private Integer mPresentAddressThanaId;
-  private Integer mPresentAddressZip;
-  private String mPermanentAddressHouse;
-  private String mPermanentAddressRoad;
+  private String mPresentAddressPostCode;
+  private String mPermanentAddressLine1;
+  private String mPermanentAddressLine2;
   private Country mPermanentAddressCountry;
   private Integer mPermanentAddressCountryId;
   private Division mPermanentAddressDivision;
@@ -81,7 +81,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Integer mPermanentAddressDistrictId;
   private Thana mPermanentAddressThana;
   private Integer mPermanentAddressThanaId;
-  private Integer mPermanentAddressZip;
+  private String mPermanentAddressPostCode;
   private String mEmergencyContactName;
   private RelationType mEmergencyContactRelation;
   private Integer mEmergencyContactRelationId;
@@ -105,38 +105,38 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mReligion = pPersistentPersonalInformation.getReligion();
     mReligionId = pPersistentPersonalInformation.getReligionId();
     mDateOfBirth = pPersistentPersonalInformation.getDateOfBirth();
-    mNationalId = pPersistentPersonalInformation.getNationalId();
+    mNidNo = pPersistentPersonalInformation.getNidNo();
     mMaritalStatus = pPersistentPersonalInformation.getMaritalStatus();
     mMaritalStatusId = pPersistentPersonalInformation.getMaritalStatusId();
     mSpouseName = pPersistentPersonalInformation.getSpouseName();
-    mSpouseNationalId = pPersistentPersonalInformation.getSpouseNationalId();
+    mSpouseNidNo = pPersistentPersonalInformation.getSpouseNidNo();
     mWebsite = pPersistentPersonalInformation.getWebsite();
     mOrganizationalEmail = pPersistentPersonalInformation.getOrganizationalEmail();
     mPersonalEmail = pPersistentPersonalInformation.getPersonalEmail();
     mMobileNumber = pPersistentPersonalInformation.getMobileNumber();
     mPhoneNumber = pPersistentPersonalInformation.getPhoneNumber();
-    mPresentAddressHouse = pPersistentPersonalInformation.getPresentAddressHouse();
-    mPresentAddressRoad = pPersistentPersonalInformation.getPresentAddressRoad();
-    mPresentAddressThana = pPersistentPersonalInformation.getPresentAddressThana();
-    mPresentAddressThanaId = pPersistentPersonalInformation.getPresentAddressThanaId();
-    mPresentAddressDistrict = pPersistentPersonalInformation.getPresentAddressDistrict();
-    mPresentAddressDistrictId = pPersistentPersonalInformation.getPresentAddressDistrictId();
-    mPresentAddressZip = pPersistentPersonalInformation.getPresentAddressZip();
-    mPresentAddressDivision = pPersistentPersonalInformation.getPresentAddressDivision();
-    mPresentAddressDivisionId = pPersistentPersonalInformation.getPresentAddressDivisionId();
+    mPresentAddressLine1 = pPersistentPersonalInformation.getPresentAddressLine1();
+    mPresentAddressLine2 = pPersistentPersonalInformation.getPresentAddressLine2();
     mPresentAddressCountry = pPersistentPersonalInformation.getPresentAddressCountry();
     mPresentAddressCountryId = pPersistentPersonalInformation.getPresentAddressCountryId();
-    mPermanentAddressHouse = pPersistentPersonalInformation.getPermanentAddressHouse();
-    mPermanentAddressRoad = pPersistentPersonalInformation.getPermanentAddressRoad();
-    mPermanentAddressThana = pPersistentPersonalInformation.getPermanentAddressThana();
-    mPermanentAddressThanaId = pPersistentPersonalInformation.getPermanentAddressThanaId();
-    mPermanentAddressDistrict = pPersistentPersonalInformation.getPermanentAddressDistrict();
-    mPermanentAddressDistrictId = pPersistentPersonalInformation.getPermanentAddressDistrictId();
-    mPermanentAddressZip = pPersistentPersonalInformation.getPermanentAddressZip();
-    mPermanentAddressDivision = pPersistentPersonalInformation.getPermanentAddressDivision();
-    mPermanentAddressDivisionId = pPersistentPersonalInformation.getPermanentAddressDivisionId();
+    mPresentAddressDivision = pPersistentPersonalInformation.getPresentAddressDivision();
+    mPresentAddressDivisionId = pPersistentPersonalInformation.getPresentAddressDivisionId();
+    mPresentAddressDistrict = pPersistentPersonalInformation.getPresentAddressDistrict();
+    mPresentAddressDistrictId = pPersistentPersonalInformation.getPresentAddressDistrictId();
+    mPresentAddressThana = pPersistentPersonalInformation.getPresentAddressThana();
+    mPresentAddressThanaId = pPersistentPersonalInformation.getPresentAddressThanaId();
+    mPresentAddressPostCode = pPersistentPersonalInformation.getPresentAddressPostCode();
+    mPermanentAddressLine1 = pPersistentPersonalInformation.getPermanentAddressLine1();
+    mPermanentAddressLine1 = pPersistentPersonalInformation.getPermanentAddressLine2();
     mPermanentAddressCountry = pPersistentPersonalInformation.getPermanentAddressCountry();
     mPermanentAddressCountryId = pPersistentPersonalInformation.getPermanentAddressCountryId();
+    mPermanentAddressDivision = pPersistentPersonalInformation.getPermanentAddressDivision();
+    mPermanentAddressDivisionId = pPersistentPersonalInformation.getPermanentAddressDivisionId();
+    mPermanentAddressDistrict = pPersistentPersonalInformation.getPermanentAddressDistrict();
+    mPermanentAddressDistrictId = pPersistentPersonalInformation.getPermanentAddressDistrictId();
+    mPermanentAddressThana = pPersistentPersonalInformation.getPermanentAddressThana();
+    mPermanentAddressThanaId = pPersistentPersonalInformation.getPermanentAddressThanaId();
+    mPermanentAddressPostCode = pPersistentPersonalInformation.getPermanentAddressPostCode();
     mEmergencyContactName = pPersistentPersonalInformation.getEmergencyContactName();
     mEmergencyContactRelation = pPersistentPersonalInformation.getEmergencyContactRelation();
     mEmergencyContactRelationId = pPersistentPersonalInformation.getEmergencyContactRelationId();
@@ -231,8 +231,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setNationalId(String pNationalId) {
-    mNationalId = pNationalId;
+  public void setNidNo(String pNidNo) {
+    mNidNo = pNidNo;
   }
 
   @Override
@@ -246,8 +246,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setSpouseNationalId(String pSpouseNationalId) {
-    mSpouseNationalId = pSpouseNationalId;
+  public void setSpouseNidNo(String pSpouseNidNo) {
+    mSpouseNidNo = pSpouseNidNo;
   }
 
   @Override
@@ -276,13 +276,13 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPresentAddressHouse(String pPresentAddressHouse) {
-    mPresentAddressHouse = pPresentAddressHouse;
+  public void setPresentAddressLine1(String pPresentAddressLine1) {
+    mPresentAddressLine1 = pPresentAddressLine1;
   }
 
   @Override
-  public void setPresentAddressRoad(String pPresentAddressRoad) {
-    mPresentAddressRoad = pPresentAddressRoad;
+  public void setPresentAddressLine2(String pPresentAddressLine2) {
+    mPresentAddressLine2 = pPresentAddressLine2;
   }
 
   @Override
@@ -296,8 +296,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPresentAddressZip(Integer pPresentAddressZip) {
-    mPresentAddressZip = pPresentAddressZip;
+  public void setPresentAddressPostCode(String pPresentAddressPostCode) {
+    mPresentAddressPostCode = pPresentAddressPostCode;
   }
 
   @Override
@@ -311,13 +311,13 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPermanentAddressHouse(String pPermanentAddressHouse) {
-    mPermanentAddressHouse = pPermanentAddressHouse;
+  public void setPermanentAddressLine1(String pPermanentAddressLine1) {
+    mPermanentAddressLine1 = pPermanentAddressLine1;
   }
 
   @Override
-  public void setPermanentAddressRoad(String pPermanentAddressRoad) {
-    mPermanentAddressRoad = pPermanentAddressRoad;
+  public void setPermanentAddressLine2(String pPermanentAddressLine2) {
+    mPermanentAddressLine2 = pPermanentAddressLine2;
   }
 
   @Override
@@ -331,8 +331,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setPermanentAddressZip(Integer pPermanentAddressZip) {
-    mPermanentAddressZip = pPermanentAddressZip;
+  public void setPermanentAddressPostCode(String pPermanentAddressPostCode) {
+    mPermanentAddressPostCode = pPermanentAddressPostCode;
   }
 
   @Override
@@ -411,8 +411,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getNationalId() {
-    return mNationalId;
+  public String getNidNo() {
+    return mNidNo;
   }
 
   @Override
@@ -426,8 +426,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getSpouseNationalId() {
-    return mSpouseNationalId;
+  public String getSpouseNidNo() {
+    return mSpouseNidNo;
   }
 
   @Override
@@ -456,13 +456,13 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getPresentAddressHouse() {
-    return mPresentAddressHouse;
+  public String getPresentAddressLine1() {
+    return mPresentAddressLine1;
   }
 
   @Override
-  public String getPresentAddressRoad() {
-    return mPresentAddressRoad;
+  public String getPresentAddressLine2() {
+    return mPresentAddressLine2;
   }
 
   @Override
@@ -476,8 +476,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getPresentAddressZip() {
-    return mPresentAddressZip;
+  public String getPresentAddressPostCode() {
+    return mPresentAddressPostCode;
   }
 
   @Override
@@ -491,13 +491,13 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public String getPermanentAddressHouse() {
-    return mPermanentAddressHouse;
+  public String getPermanentAddressLine1() {
+    return mPermanentAddressLine1;
   }
 
   @Override
-  public String getPermanentAddressRoad() {
-    return mPermanentAddressRoad;
+  public String getPermanentAddressLine2() {
+    return mPermanentAddressLine2;
   }
 
   @Override
@@ -511,8 +511,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Integer getPermanentAddressZip() {
-    return mPermanentAddressZip;
+  public String getPermanentAddressPostCode() {
+    return mPermanentAddressPostCode;
   }
 
   @Override

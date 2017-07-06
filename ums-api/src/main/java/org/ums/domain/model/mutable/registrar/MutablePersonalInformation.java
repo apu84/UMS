@@ -35,7 +35,7 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setDateOfBirth(final Date pDateOfBirth);
 
-  void setNationalId(final String pNationalId);
+  void setNidNo(final String pNidNo);
 
   void setMaritalStatusId(final Integer pMaritalStatusId);
 
@@ -43,7 +43,7 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setSpouseName(final String pSpouseName);
 
-  void setSpouseNationalId(final String pSpouseNationalId);
+  void setSpouseNidNo(final String pSpouseNidNo);
 
   void setWebsite(final String pWebsite);
 
@@ -55,9 +55,9 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPhoneNumber(final String pPhoneNumber);
 
-  void setPresentAddressHouse(final String pPresentAddressHouse);
+  void setPresentAddressLine1(final String pPresentAddressLine1);
 
-  void setPresentAddressRoad(final String pPresentAddressRoad);
+  void setPresentAddressLine2(final String pPresentAddressLine2);
 
   void setPresentAddressCountryId(final Integer pPresentAddressCountryId);
 
@@ -75,11 +75,11 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPresentAddressThana(final Thana pPresentAddressThana);
 
-  void setPresentAddressZip(final Integer pPresentAddressZip);
+  void setPresentAddressPostCode(final String pPresentAddressPostCode);
 
-  void setPermanentAddressHouse(final String pPermanentAddressHouse);
+  void setPermanentAddressLine1(final String pPermanentAddressLine1);
 
-  void setPermanentAddressRoad(final String pPermanentAddressRoad);
+  void setPermanentAddressLine2(final String pPermanentAddressLine2);
 
   void setPermanentAddressCountryId(final Integer pPermanentAddressCountryId);
 
@@ -97,7 +97,7 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setPermanentAddressThana(final Thana pPermanentAddressThana);
 
-  void setPermanentAddressZip(final Integer pPermanentAddressZip);
+  void setPermanentAddressPostCode(final String pPermanentAddressPostCode);
 
   void setEmergencyContactName(final String pEmergencyContactName);
 

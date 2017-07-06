@@ -4,8 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.common.MaritalStatus;
-import org.ums.domain.model.immutable.common.Nationality;
+import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
 import org.ums.formatter.DateFormat;
@@ -14,10 +13,8 @@ import org.ums.persistent.model.common.*;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.usermanagement.user.UserManager;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
+import javax.management.relation.Relation;
 import javax.ws.rs.core.UriInfo;
 
 @Component
@@ -56,75 +53,66 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   @Autowired
   ThanaManager mThanaManager;
 
+  @Autowired
+  NationalityBuilder mNationalityBuilder;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, PersonalInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-
-    PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
-
-    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-
-    pBuilder.add("employeeId", pReadOnly.getId());
-
-    pBuilder.add("firstName", pReadOnly.getFirstName());
-
-    pBuilder.add("lastName", pReadOnly.getLastName());
-
-    pBuilder.add("fatherName", pReadOnly.getFatherName());
-
-    pBuilder.add("motherName", pReadOnly.getMotherName());
-
-    pBuilder.add("gender", pReadOnly.getGender());
-
-    pBuilder.add("dateOfBirth", mDateFormat.format(pReadOnly.getDateOfBirth()));
-
-    // System.out.println(pReadOnly.getNationalityId());
     //
-    // System.out.println(mNationalityManager.get(99));
-
-    // pBuilder.add("nationality", (JsonObjectBuilder)
-    // mNationalityManager.get(personalInformation.getNationalityId()));
+    // PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
     //
+    // pBuilder.add("employeeId", pReadOnly.getId());
+    //
+    // pBuilder.add("firstName", pReadOnly.getFirstName());
+    //
+    // pBuilder.add("lastName", pReadOnly.getLastName());
+    //
+    // pBuilder.add("fatherName", pReadOnly.getFatherName());
+    //
+    // pBuilder.add("motherName", pReadOnly.getMotherName());
+    //
+    // pBuilder.add("gender", pReadOnly.getGender());
+    //
+    // pBuilder.add("dateOfBirth", mDateFormat.format(pReadOnly.getDateOfBirth()));
+    //
+    // pBuilder.add("nationality", jsonObjectBuilder);
+
     // pBuilder.add("religion", (JsonObjectBuilder)
     // mReligionManager.get(personalInformation.getReligionId()));
     //
     // pBuilder.add("maritalStatus",
     // (JsonObjectBuilder) mMaritalStatusManager.get(personalInformation.getMaritalStatusId()));
     //
-    // if(pReadOnly.getSpouseName() != null) {
+    // if (pReadOnly.getSpouseName() != null) {
     // pBuilder.add("spouseName", pReadOnly.getSpouseName());
-    // }
-    // else {
+    // } else {
     // pBuilder.add("spouseName", "");
     // }
     //
-    // if(pReadOnly.getNationalId() != null) {
-    // pBuilder.add("nationalIdNo", pReadOnly.getNationalId());
-    // }
-    // else {
-    // pBuilder.add("nationalIdNo", "");
+    // if (pReadOnly.getNidNo() != null) {
+    // pBuilder.add("nidNo", pReadOnly.getNidNo());
+    // } else {
+    // pBuilder.add("nidNo", "");
     // }
     //
     // pBuilder.add("bloodGroup", (JsonObjectBuilder)
     // mBloodGroupManager.get(personalInformation.getBloodGroupId()));
     //
-    // if(pReadOnly.getSpouseNationalId() != null) {
-    // pBuilder.add("spouseNationalIdNo", pReadOnly.getSpouseNationalId());
-    // }
-    // else {
-    // pBuilder.add("spouseNationalIdNo", "");
-    // }
-    //
-    // if(pReadOnly.getWebsite() != null) {
-    // pBuilder.add("personalWebsite", pReadOnly.getWebsite());
-    // }
-    // else {
-    // pBuilder.add("personalWebsite", "");
+    // if (pReadOnly.getSpouseNidNo() != null) {
+    // pBuilder.add("spouseNidNo", pReadOnly.getSpouseNidNo());
+    // } else {
+    // pBuilder.add("spouseNidNo", "");
     // }
     //
-    // if(pReadOnly.getOrganizationalEmail() != null) {
+    // if (pReadOnly.getWebsite() != null) {
+    // pBuilder.add("website", pReadOnly.getWebsite());
+    // } else {
+    // pBuilder.add("website", "");
+    // }
+    //
+    // if (pReadOnly.getOrganizationalEmail() != null) {
     // pBuilder.add("organizationalEmail", pReadOnly.getOrganizationalEmail());
-    // }
-    // else {
+    // } else {
     // pBuilder.add("organizationalEmail", "");
     // }
     //
@@ -132,95 +120,84 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     //
     // pBuilder.add("mobile", pReadOnly.getMobileNumber());
     //
-    // if(pReadOnly.getPhoneNumber() != null) {
+    // if (pReadOnly.getPhoneNumber() != null) {
     // pBuilder.add("phone", pReadOnly.getPhoneNumber());
-    // }
-    // else {
+    // } else {
     // pBuilder.add("phone", "");
     // }
     //
-    // pBuilder.add("preAddressHouse", pReadOnly.getPresentAddressHouse());
+    // pBuilder.add("preAddressLine1", pReadOnly.getPresentAddressLine1());
     //
-    // if(pReadOnly.getPresentAddressRoad() != null) {
-    // pBuilder.add("preAddressRoad", pReadOnly.getPresentAddressRoad());
-    // }
-    // else {
-    // pBuilder.add("preAddressRoad", "");
+    // if (pReadOnly.getPresentAddressLine2() != null) {
+    // pBuilder.add("preAddressLine2", pReadOnly.getPresentAddressLine2());
+    // } else {
+    // pBuilder.add("preAddressLine2", "");
     // }
     //
-    // if(pReadOnly.getPresentAddressThana() != null) {
+    // if (pReadOnly.getPresentAddressThana() != null) {
     // pBuilder.add("preAddressThana",
     // (JsonObjectBuilder) mThanaManager.get(personalInformation.getPresentAddressThanaId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("preAddressThana", "");
     // }
     //
-    // if(pReadOnly.getPresentAddressZip() != null) {
-    // pBuilder.add("preAddressPostOfficeNo", pReadOnly.getPresentAddressZip());
-    // }
-    // else {
-    // pBuilder.add("preAddressPostOfficeNo", "");
+    // if (pReadOnly.getPresentAddressPostCode() != null) {
+    // pBuilder.add("preAddressPostCode", pReadOnly.getPresentAddressPostCode());
+    // } else {
+    // pBuilder.add("preAddressPostCode", "");
     // }
     //
-    // if(pReadOnly.getPresentAddressDistrict() != null) {
+    // if (pReadOnly.getPresentAddressDistrict() != null) {
     // pBuilder.add("preAddressDistrict",
     // (JsonObjectBuilder) mDistrictManager.get(personalInformation.getPresentAddressDistrictId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("preAddressDistrict", "");
     // }
     //
-    // if(pReadOnly.getPresentAddressDivision() != null) {
+    // if (pReadOnly.getPresentAddressDivision() != null) {
     // pBuilder.add("preAddressDivision",
     // (JsonObjectBuilder) mDivisionManager.get(personalInformation.getPresentAddressDivisionId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("preAddressDivision", "");
     // }
     //
     // pBuilder.add("preAddressCountry",
     // (JsonObjectBuilder) mCountryManager.get(personalInformation.getPresentAddressCountryId()));
     //
-    // pBuilder.add("perAddressHouse", pReadOnly.getPermanentAddressHouse());
+    // pBuilder.add("perAddressLine1", pReadOnly.getPermanentAddressLine1());
     //
-    // if(pReadOnly.getPermanentAddressRoad() != null) {
-    // pBuilder.add("perAddressRoad", pReadOnly.getPermanentAddressRoad());
-    // }
-    // else {
-    // pBuilder.add("perAddressRoad", "");
+    // if (pReadOnly.getPermanentAddressLine2() != null) {
+    // pBuilder.add("preAddressLine2", pReadOnly.getPermanentAddressLine2());
+    // } else {
+    // pBuilder.add("preAddressLine2", "");
     // }
     //
-    // if(pReadOnly.getPresentAddressThana() != null) {
+    // if (pReadOnly.getPresentAddressThana() != null) {
     // pBuilder.add("perAddressThana",
     // (JsonObjectBuilder) mThanaManager.get(personalInformation.getPermanentAddressThanaId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("perAddressThana", "");
     // }
     //
-    // if(pReadOnly.getPermanentAddressZip() != null) {
-    // pBuilder.add("perAddressPostOfficeNo", pReadOnly.getPermanentAddressZip());
-    // }
-    // else {
-    // pBuilder.add("perAddressPostOfficeNo", "");
+    // if (pReadOnly.getPermanentAddressPostCode() != null) {
+    // pBuilder.add("perAddressPostCode", pReadOnly.getPermanentAddressPostCode());
+    // } else {
+    // pBuilder.add("perAddressPostCode", "");
     // }
     //
-    // if(pReadOnly.getPermanentAddressDistrict() != null) {
+    // if (pReadOnly.getPermanentAddressDistrict() != null) {
     // pBuilder.add("perAddressDistrict",
     // (JsonObjectBuilder)
     // mDistrictManager.get(personalInformation.getPermanentAddressDistrictId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("perAddressDistrict", "");
     // }
     //
-    // if(pReadOnly.getPermanentAddressDivision() != null) {
+    // if (pReadOnly.getPermanentAddressDivision() != null) {
     // pBuilder.add("perAddressDivision",
     // (JsonObjectBuilder)
     // mDivisionManager.get(personalInformation.getPermanentAddressDivisionId()));
-    // }
-    // else {
+    // } else {
     // pBuilder.add("perAddressDivision", "");
     // }
     //
@@ -235,42 +212,15 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     //
     // pBuilder.add("emergencyContactPhone", pReadOnly.getEmergencyContactPhone());
     //
-    // if(pReadOnly.getEmergencyContactAddress() != null) {
+    // if (pReadOnly.getEmergencyContactAddress() != null) {
     // pBuilder.add("emergencyContactAddress", pReadOnly.getEmergencyContactAddress());
-    // }
-    // else {
+    // } else {
     // pBuilder.add("emergencyContactAddress", "");
     // }
   }
 
   @Override
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    PersistentNationality persistentNationality = new PersistentNationality();
-    PersistentMaritalStatus persistentMaritalStatus = new PersistentMaritalStatus();
-    PersistentBloodGroup persistentBloodGroup = new PersistentBloodGroup();
-    PersistentReligion persistentReligion = new PersistentReligion();
-    PersistentRelationType persistentRelationType = new PersistentRelationType();
-    PersistentCountry prePersistentCountry = new PersistentCountry();
-    PersistentDivision prePersistentDivision = new PersistentDivision();
-    PersistentDistrict prePersistentDistrict = new PersistentDistrict();
-    PersistentThana prePersistentThana = new PersistentThana();
-    PersistentCountry perPersistentCountry = new PersistentCountry();
-    PersistentDivision perPersistentDivision = new PersistentDivision();
-    PersistentDistrict perPersistentDistrict = new PersistentDistrict();
-    PersistentThana perPersistentThana = new PersistentThana();
-    persistentNationality.setId(pJsonObject.getJsonObject("nationality").getInt("id"));
-    persistentMaritalStatus.setId(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
-    persistentBloodGroup.setId(pJsonObject.getJsonObject("bloodGroup").getInt("id"));
-    persistentReligion.setId(pJsonObject.getJsonObject("religion").getInt("id"));
-    persistentRelationType.setId(pJsonObject.getJsonObject("emergencyContactRelation").getInt("id"));
-    prePersistentCountry.setId(pJsonObject.getJsonObject("preAddressCountry").getInt("id"));
-    prePersistentDivision.setId(pJsonObject.getJsonObject("preAddressDivision").getInt("id"));
-    prePersistentDistrict.setId(pJsonObject.getJsonObject("preAddressDistrict").getInt("id"));
-    prePersistentThana.setId(pJsonObject.getJsonObject("preAddressThana").getInt("id"));
-    perPersistentCountry.setId(pJsonObject.getJsonObject("perAddressCountry").getInt("id"));
-    perPersistentDivision.setId(pJsonObject.getJsonObject("perAddressDivision").getInt("id"));
-    perPersistentDistrict.setId(pJsonObject.getJsonObject("perAddressDistrict").getInt("id"));
-    perPersistentThana.setId(pJsonObject.getJsonObject("perAddressThana").getInt("id"));
 
     pMutable.setId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setFirstName(pJsonObject.getString("firstName"));
@@ -279,104 +229,73 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setMotherName(pJsonObject.getString("motherName"));
     pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
     pMutable.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
-    pMutable.setNationality(persistentNationality);
-    pMutable.setReligion(persistentReligion);
-    pMutable.setMaritalStatus(persistentMaritalStatus);
-    if(!pJsonObject.containsKey("spouseName")) {
-      pMutable.setSpouseName("");
-    }
-    else {
-      pMutable.setSpouseName(pJsonObject.getString("spouseName"));
-    }
-    if(!pJsonObject.containsKey("nationalId")) {
-      pMutable.setNationalId("");
-    }
-    else {
-      pMutable.setNationalId(pJsonObject.getString("nationalIdNo"));
-    }
-    pMutable.setBloodGroup(persistentBloodGroup);
-    if(!pJsonObject.containsKey("spouseNationalIdNo")) {
-      pMutable.setSpouseNationalId("");
-    }
-    else {
-      pMutable.setSpouseNationalId(pJsonObject.getString("spouseNationalIdNo"));
-    }
-    if(!pJsonObject.containsKey("personalWebsite")) {
-      pMutable.setWebsite("");
-    }
-    else {
-      pMutable.setWebsite(pJsonObject.getString("personalWebsite"));
-    }
-    if(!pJsonObject.containsKey("organizationalEmail")) {
-      pMutable.setOrganizationalEmail("");
-    }
-    else {
-      pMutable.setOrganizationalEmail(pJsonObject.getString("organizationalEmail"));
-    }
+    Nationality nationality = mNationalityManager.get(pJsonObject.getJsonObject("nationality").getInt("id"));
+    pMutable.setNationality(nationality);
+    Religion religion = mReligionManager.get(pJsonObject.getJsonObject("religion").getInt("id"));
+    pMutable.setReligion(religion);
+    MaritalStatus maritalStatus = mMaritalStatusManager.get(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
+    pMutable.setMaritalStatus(maritalStatus);
+    pMutable.setSpouseName(pJsonObject.containsKey("spouseName") ? pJsonObject.getString("spouseName") : "");
+    pMutable.setNidNo(pJsonObject.containsKey("nationalId") ? pJsonObject.getString("nidNo") : "");
+    BloodGroup bloodGroup = mBloodGroupManager.get(pJsonObject.getJsonObject("bloodGroup").getInt("id"));
+    pMutable.setBloodGroup(bloodGroup);
+    pMutable.setSpouseNidNo(pJsonObject.containsKey("spouseNidNo") ? pJsonObject.getString("spouseNidNo") : "");
+    pMutable.setWebsite(pJsonObject.containsKey("website") ? pJsonObject.getString("website") : "");
+    pMutable.setOrganizationalEmail(pJsonObject.containsKey("organizationalEmail") ? pJsonObject
+        .getString("organizationalEmail") : "");
     pMutable.setPersonalEmail(pJsonObject.getString("personalEmail"));
     pMutable.setMobileNumber(pJsonObject.getString("mobile"));
-    if(!pJsonObject.containsKey("phone")) {
-      pMutable.setPhoneNumber("");
-    }
-    else {
-      pMutable.setPhoneNumber(pJsonObject.getString("phone"));
-    }
-    pMutable.setPresentAddressHouse(pJsonObject.getString("preAddressHouse"));
-    if(!pJsonObject.containsKey("preAddressRoad")) {
-      pMutable.setPresentAddressRoad("");
-    }
-    else {
-      pMutable.setPresentAddressRoad(pJsonObject.getString("preAddressRoad"));
-    }
-    if(!pJsonObject.containsKey("preAddressPostOfficeNo")) {
-      pMutable.setPresentAddressZip(null);
-    }
-    else {
-      pMutable.setPresentAddressZip(pJsonObject.getInt("preAddressPostOfficeNo"));
-    }
+    pMutable.setPhoneNumber(pJsonObject.containsKey("phone") ? pJsonObject.getString("phone") : "");
+    pMutable.setPresentAddressLine1(pJsonObject.getString("preAddressLine1"));
+    pMutable.setPresentAddressLine2(pJsonObject.containsKey("preAddressLine2") ? pJsonObject
+        .getString("preAddressLine2") : "");
+    Country presentCountry = mCountryManager.get(pJsonObject.getJsonObject("preAddressCountry").getInt("id"));
+    pMutable.setPresentAddressCountry(presentCountry);
     if(pJsonObject.getJsonObject("preAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPresentAddressThana(prePersistentThana);
-      pMutable.setPresentAddressDistrict(prePersistentDistrict);
-      pMutable.setPresentAddressDivision(prePersistentDivision);
+      Division presentDivision = mDivisionManager.get(pJsonObject.getJsonObject("preAddressDivision").getInt("id"));
+      District presentDistrict = mDistrictManager.get(pJsonObject.getJsonObject("preAddressDistrict").getInt("id"));
+      Thana presentThana = mThanaManager.get(pJsonObject.getJsonObject("preAddressThana").getInt("id"));
+      pMutable.setPresentAddressThana(presentThana);
+      pMutable.setPresentAddressDistrict(presentDistrict);
+      pMutable.setPresentAddressDivision(presentDivision);
+      pMutable.setPresentAddressPostCode(pJsonObject.containsKey("preAddressPostCode") ? pJsonObject
+          .getString("preAddressPostCode") : "");
     }
     else {
       pMutable.setPresentAddressThana(null);
       pMutable.setPresentAddressDistrict(null);
       pMutable.setPresentAddressDivision(null);
+      pMutable.setPresentAddressPostCode("");
     }
-    pMutable.setPresentAddressCountry(prePersistentCountry);
-    pMutable.setPermanentAddressHouse(pJsonObject.getString("perAddressHouse"));
-    if(!pJsonObject.containsKey("perAddressRoad")) {
-      pMutable.setPermanentAddressRoad("");
-    }
-    else {
-      pMutable.setPermanentAddressRoad(pJsonObject.getString("perAddressRoad"));
-    }
-    if(!pJsonObject.containsKey("perAddressPostOfficeNo")) {
-      pMutable.setPermanentAddressZip(null);
-    }
-    else {
-      pMutable.setPermanentAddressZip(pJsonObject.getInt("perAddressPostOfficeNo"));
-    }
+    pMutable.setPermanentAddressLine1(pJsonObject.getString("perAddressLine1"));
+    pMutable.setPermanentAddressLine2(pJsonObject.containsKey("preAddressLine2") ? pJsonObject
+        .getString("preAddressLine2") : "");
+    Country permanentCountry = mCountryManager.get(pJsonObject.getJsonObject("perAddressCountry").getInt("id"));
+    pMutable.setPermanentAddressCountry(permanentCountry);
     if(pJsonObject.getJsonObject("perAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPermanentAddressThana(perPersistentThana);
-      pMutable.setPermanentAddressDistrict(perPersistentDistrict);
-      pMutable.setPermanentAddressDivision(perPersistentDivision);
+      Division permanentDivision = mDivisionManager.get(pJsonObject.getJsonObject("perAddressDivision").getInt("id"));
+      District permanentDistrict = mDistrictManager.get(pJsonObject.getJsonObject("perAddressDistrict").getInt("id"));
+      Thana permanentThana = mThanaManager.get(pJsonObject.getJsonObject("perAddressThana").getInt("id"));
+      pMutable.setPermanentAddressThana(permanentThana);
+      pMutable.setPermanentAddressDistrict(permanentDistrict);
+      pMutable.setPermanentAddressDivision(permanentDivision);
+      pMutable.setPermanentAddressPostCode(pJsonObject.containsKey("perAddressPostCode") ? pJsonObject
+          .getString("perAddressPostCode") : "");
     }
     else {
       pMutable.setPermanentAddressThana(null);
       pMutable.setPermanentAddressDistrict(null);
       pMutable.setPermanentAddressDivision(null);
+      pMutable.setPermanentAddressPostCode("");
     }
-    pMutable.setPermanentAddressCountry(perPersistentCountry);
+
     pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
-    pMutable.setEmergencyContactRelation(persistentRelationType);
+    RelationType relationType =
+        mRelationTypeManager.get(pJsonObject.getJsonObject("emergencyContactRelation").getInt("id"));
+
+    pMutable.setEmergencyContactRelation(relationType);
     pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));
-    if(!pJsonObject.containsKey("emergencyContactAddress")) {
-      pMutable.setEmergencyContactAddress("");
-    }
-    else {
-      pMutable.setEmergencyContactAddress(pJsonObject.getString("emergencyContactAddress"));
-    }
+    pMutable.setEmergencyContactAddress(pJsonObject.containsKey("emergencyContactAddress") ? pJsonObject
+        .getString("emergencyContactAddress") : "");
   }
 }
