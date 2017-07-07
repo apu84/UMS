@@ -209,6 +209,7 @@
 /// <reference path='fee/semesterfee/semesterfee.service.ts'/>
 /// <reference path='fee/semesterfee/semesterfee.controller.ts'/>
 /// <reference path='fee/installment/installment.setting.service.ts'/>
+/// <reference path='fee/installment/installment.setting.controller.ts'/>
 /// <reference path='fee/payment/payment.service.ts'/>
 /// <reference path='fee/certificate/certificate.fee.controller.ts'/>
 /// <reference path='fee/certificate/certificate.fee.service.ts'/>

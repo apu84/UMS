@@ -1,0 +1,81 @@
+<div class="row" id="topArrowDiv">
+    <div class="col-md-2 col-md-offset-5">
+        <center>
+            <i class="fa fa-chevron-down" aria-hidden="true" onclick="resetTopBottomDivs()"
+               style="cursor: pointer;"></i>
+        </center>
+    </div>
+</div>
+
+<div class="row" id="courseSelectionDiv">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <div class="form-horizontal">
+                <div class="form-body pal">
+                    <div data-program-selector="" data-model="vm.semesterSelector"></div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" data-ng-click="vm.findSetting()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Semester installment setting</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="make-switch switch-large has-switch" data-ng-if="vm.installmentSetting">
+                            <div class="switch-animate switch-on">
+                                <input type="checkbox" checked="checked" data-ng-model="vm.installmentSetting.enabled"/>
+                                <span data-ng-if="vm.installmentSetting.enabled">Enabled</span>
+                                <span data-ng-if="!vm.installmentSetting.enabled">Disabled</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-repeat="dateSetting in vm.dateSettings">
+                    <div class="col-md-12">
+                        <b>{{dateSetting.admissionTypeLabel}}</b>
+                        <div class="row" data-ng-repeat="entry in dateSetting.entries">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12"><h5> {{entry.typeName}} </h5></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        Start: {{entry.start}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        End: {{entry.end}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function resetTopBottomDivs() {
+        $("#topArrowDiv").hide(10);
+        $("#courseSelectionDiv").show(200);
+    }
+</script>
+
+
+
+
+
+

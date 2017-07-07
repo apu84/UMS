@@ -10,4 +10,9 @@ public class LateFeeDaoDecorator extends ContentDaoDecorator<LateFee, MutableLat
   public List<LateFee> getLateFees(Integer pSemesterId) {
     return getManager().getLateFees(pSemesterId);
   }
+
+  @Override
+  public List<LateFee> getLateFees(Integer pSemesterId, LateFee.AdmissionType pAdmissionType) {
+    return getManager().getLateFees(pSemesterId, pAdmissionType);
+  }
 }

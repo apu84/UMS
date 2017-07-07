@@ -77,6 +77,12 @@ public class LateFeeDao extends LateFeeDaoDecorator {
     return params;
   }
 
+  @Override
+  public List<LateFee> getLateFees(Integer pSemesterId, LateFee.AdmissionType pAdmissionType) {
+    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? AND ADMISSION_TYPE = ?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pAdmissionType.getId()}, new LateFeeRowMapper());
+  }
+
   class LateFeeRowMapper implements RowMapper<LateFee> {
     @Override
     public LateFee mapRow(ResultSet rs, int rowNum) throws SQLException {

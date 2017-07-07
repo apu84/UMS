@@ -18,7 +18,7 @@ import org.ums.persistent.model.PersistentParameterSetting;
 public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator {
 
   static String SELECT_ALL =
-      "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID,TO_CHAR(START_DATE,'DD/MM/YYYY') START_DATE,TO_CHAR(END_DATE,'DD/MM/YYYY') END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING";
+      "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID, START_DATE, END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING";
   static String INSERT_ONE =
       "INSERT INTO MST_PARAMETER_SETTING(PS_ID, SEMESTER_ID,PARAMETER_ID,START_DATE,END_DATE,LAST_MODIFIED)"
           + "VALUES(?, ?,?,to_date(?,'DD/MM/YYYY'),to_date(?,'DD/MM/YYYY')," + getLastModifiedSql() + ")";

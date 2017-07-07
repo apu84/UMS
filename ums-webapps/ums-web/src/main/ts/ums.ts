@@ -940,6 +940,22 @@ module ums {
             }]
           }
         })
+        .state('installmentSetting', {
+          url: "/installmentSetting",
+          controller: 'InstallmentSettingController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/installment-setting/installment.setting.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                ]
+              });
+            }]
+          }
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",
