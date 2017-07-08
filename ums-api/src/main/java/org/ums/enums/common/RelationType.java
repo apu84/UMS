@@ -28,7 +28,7 @@ public enum RelationType {
   SisterInLaw(21, "Sister-in-law"),
   Son(22, "Son"),
   SonInLaw(23, "Son-in-law"),
-  Others(24, "Others");
+  Others(99, "Others");
 
   private String label;
   private Integer id;

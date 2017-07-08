@@ -14,7 +14,7 @@ public class EmploymentTypeBuilder implements Builder<EmploymentType, MutableEmp
   @Override
   public void build(JsonObjectBuilder pBuilder, EmploymentType pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("type", pReadOnly.getType());
+    pBuilder.add("name", pReadOnly.getType());
   }
 
   @Override

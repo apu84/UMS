@@ -14,7 +14,7 @@ public class DesignationBuilder implements Builder<Designation, MutableDesignati
   @Override
   public void build(JsonObjectBuilder pBuilder, Designation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("designationName", pReadOnly.getDesignationName());
+    pBuilder.add("name", pReadOnly.getDesignationName());
   }
 
   @Override

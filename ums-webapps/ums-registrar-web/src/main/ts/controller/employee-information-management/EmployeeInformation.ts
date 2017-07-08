@@ -824,49 +824,23 @@ module ums {
 
 
         private getPersonalInformation() {
-            console.log("I am changed");
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
                 if (personalInformation.length > 0) {
                     this.$scope.entry.personal = personalInformation[0];
+                    this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
                     this.$scope.entry.personal.religion = this.$scope.religionMap[personalInformation[0].religionId];
-                    console.log(personalInformation[0].religionId);
-                    console.log(this.$scope.entry.personal.religion);
                     this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatusId];
-                    console.log(personalInformation[0].maritalStatusId);
-                    console.log(this.$scope.entry.personal.maritalStatus);
                     this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
-                    console.log(personalInformation[0].religionId);
-                    console.log(this.$scope.entry.personal.gender);
                     this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationalityId];
-                    console.log(personalInformation[0].nationalityId);
-                    console.log(this.$scope.entry.personal.nationality);
                     this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroupId];
-                    console.log(personalInformation[0].bloodGroupId);
-                    console.log(this.$scope.entry.personal.bloodGroup);
                     this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelationId];
-                    console.log(personalInformation[0].emergencyContactRelationId);
-                    console.log(this.$scope.entry.personal.emergencyContactRelation);
                     this.$scope.entry.personal.preAddressCountry = this.$scope.countries[personalInformation[0].preAddressCountryId];
-                    console.log(personalInformation[0].preAddressCountryId);
-                    console.log(this.$scope.entry.personal.preAddressCountry);
                     this.$scope.entry.personal.preAddressDivision = this.$scope.divisions[personalInformation[0].preAddressDivisionId];
-                    console.log(personalInformation[0].preAddressDivisionId);
-                    console.log(this.$scope.entry.personal.preAddressDivision);
                     this.$scope.entry.personal.preAddressDistrict = this.$scope.allDistricts[personalInformation[0].preAddressDistrictId];
-                    console.log(personalInformation[0].preAddressDistrictId);
-                    console.log(this.$scope.entry.personal.preAddressDistrict);
                     this.$scope.entry.personal.preAddressThana = this.$scope.allThanas[personalInformation[0].preAddressThanaId];
-                    console.log(personalInformation[0].preAddressThanaId);
-                    console.log(this.$scope.entry.personal.preAddressThana );
                     this.$scope.entry.personal.perAddressCountry = this.$scope.countries[personalInformation[0].perAddressCountryId];
-                    console.log(personalInformation[0].perAddressCountryId);
-                    console.log(this.$scope.entry.personal.perAddressCountry);
                     this.$scope.entry.personal.perAddressDivision = this.$scope.divisions[personalInformation[0].perAddressDivisionId];
-                    console.log(personalInformation[0].perAddressDivisionId);
-                    console.log(this.$scope.entry.personal.perAddressDivision);
                     this.$scope.entry.personal.perAddressDistrict = this.$scope.allDistricts[personalInformation[0].perAddressDistrictId];
-                    console.log(personalInformation[0].perAddressDistrictId);
-                    console.log(this.$scope.entry.personal.perAddressDistrict);
                     this.$scope.entry.personal.perAddressThana = this.$scope.allThanas[personalInformation[0].perAddressThanaId];
                 }
                 this.$scope.previousPersonalInformation = angular.copy(this.$scope.entry.personal);

@@ -2,627 +2,116 @@
     fieldset {
         border: 1px solid grey;
         width: auto;
-        padding-left: 1%;
-        padding-right: 1%;
-        padding-top: 1%;
-        padding-bottom: 1%;
     }
-
     legend {
         border: 1px solid grey;
         color: #4d4b4b;
         font-size: 100%;
-        text-align: left;
-        width: 20%;
+        text-align: center;
+        width: auto;
         font-weight: bold;
-        padding-left: 1%;
+        padding: 0.2%;
     }
 </style>
 
 <div class="panel">
     <div class="panel-heading">Service Information</div>
     <div class="panel-body showPanel" style="min-height: 490px;">
-        <div data-ng-if="editMode">
-            <form name="nServiceForm" data-validate="" data-onvalidate="submitServiceForm">
-                <!--<fieldset>-->
-                    <!--<legend>Basic: </legend>-->
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employee's Organizational Id" for="iEmployeeId">Employee Id</label>
-                            <div class="col-md-8" >
-                                <input type="text"
-                                       name="nEmployeeId"
-                                       id="iEmployeeId"
-                                       data-ng-model="entry.basic.employeeId"
-                                       placeholder="Employee Id"
-                                       class="form-control" disabled>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employee's Academic Initial / User Id" for="iShortName">Academic Initial<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nShortName"
-                                       id="iShortName"
-                                       data-ng-model="entry.basic.academicInitial"
-                                       placeholder="User Id/Academic Initial"
-                                       class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employee's Room No." for="iRoomNo">Room No.</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nRoomNo"
-                                       id="iRoomNo"
-                                       data-ng-model="entry.basic.roomNo"
-                                       class="form-control" required>
-                                </input>
-                            </div>
+        <div data-ng-repeat="service in entry.serviceInfo track by $index">
+            <fieldset>
+                <legend align="center">Designation: <select name="nDesignation{{$index}}"
+                                                            id="iDesignation{{$index}}"
+                                                            data-ng-model="service.designation"
+                                                            data-ng-options="designation.name for designation in designations track by designation.id" required>
+                    <option value="">Select Designations</option>
+                </select>
+                    <span>
+                         <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow(this, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
+                    </span>
+                </legend>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="col-md-4">Employment Type:</label>
+                        <div class="col-md-8">
+                            <select name="nEmploymentType{{$index}}"
+                                    id="iEmploymentType{{$index}}"
+                                    data-ng-model="service.employmentType"
+                                    data-ng-options="employmentType.name for employmentType in employmentTypes track by employmentType.id"
+                                    class="form-control" required>
+                                <option value="">Select Category</option>
+                            </select>
                         </div>
                     </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employee's Office Extension No." for="iExtNo">Ext No.</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nExtNo"
-                                       id="iExtNo"
-                                       data-ng-model="entry.basic.extNo"
-                                       class="form-control" required>
-                                </input>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employment Type For Employee" for="iJoiningDate">Joining Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nJoiningDate"
-                                       id="iJoiningDate"
-                                       data-ng-model="entry.basic.joiningDate"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       class="datepicker-default form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employment Type For Employee" for="iEmploymentType">Employment Type<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                            <div class="col-md-8">
-                                <select name="nEmploymentType"
-                                        id="iEmploymentType"
-                                        data-ng-model="entry.basic.employmentType"
-                                        data-ng-options="employment.type for employment in employmentTypes track by employment.id"
-                                        data-ng-change="changeViewOnEmploymentSelection()"
-                                        class="form-control" required>
-                                    <option value="" disabled>Select Employment No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-md-4 control-label" title="Employee's Resign Date" for="iJobTerminationDate">Resinged Date</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nJobTerminationDate"
-                                       id="iJobTerminationDate"
-                                       data-ng-model="entry.basic.resignDate"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       class="datepicker-default form-control"/>
-                            </div>
-                        </div>
-                    </div>
-                <!--</fieldset>-->
+                </div>
                 <br />
-
-                <div data-ng-if="showRegularEmploymentDiv">
-                    <fieldset>
-                        <legend>Contractual Period: [ <a title="Add New Row" data-ng-click="addNewRow('contractual')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]</legend>
-                        <div data-ng-repeat="contractual in entry.contractual track by $index">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Designation" for="iContractualDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nContractualDesignation{{$index}}"
-                                            id="iContractualDesignation{{$index}}"
-                                            data-ng-model="contractual.designation"
-                                                data-ng-options="designation.designationName for designation in designations track by designation.id"
+                {{serivce}}
+                <div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="col-md-4">Period:</label>
+                                <div class="col-md-8">
+                                    <select name="nPeriod{{$index}}"
+                                            id="iPeriod{{$index}}"
+                                            data-ng-model="interval.interval"
+                                            data-ng-options="serviceInterval.name for serviceInterval in serviceIntervals track by serviceInterval.id"
                                             class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
+                                        <option value="">Select Category</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iContractualDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nContractualDepartment{{$index}}"
-                                                id="iContractualDepartment{{$index}}"
-                                                data-ng-model="contractual.department"
-                                                data-ng-options="department.longName for department in departments track by department.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Department No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Contractual Start Date" for="iContractualStartDate{{$index}}">Start Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nContractualStartDate{{$index}}"
-                                               id="iContractualStartDate{{$index}}"
-                                               data-ng-model="contractual.contractualStartDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Contractual Period Ending Date" for="iContractualEndDate{{$index}}">End Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nContractualEndDate{{$index}}"
-                                               id="iContractualEndDate{{$index}}"
-                                               data-ng-model="contractual.contractualEndDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-8">
-                                </div>
-                                <div class="col-md-4">
-                                    <div align="right">
-                                        <input type="checkbox"> Current Service
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-md-4 control-label">Start Date</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nStartDate{{$index}}"
+                                       id="iStartDate{{$index}}"
+                                       data-ng-model="interval.startDate"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       autocomplete="off"
+                                       class="datepicker-default form-control" required>
                             </div>
                         </div>
-                    </fieldset>
-                    <br />
-
-                    <fieldset>
-                        <legend>Probation Period: [ <a title="Add New Row" data-ng-click="addNewRow('probation')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]</legend>
-                        <div data-ng-repeat="probation in entry.probation track by $index">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Designation" for="iProbationDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nProbationDesignation{{$index}}"
-                                                id="iProbationDesignation{{$index}}"
-                                                data-ng-model="probation.designation"
-                                                data-ng-options="designation.designationName for designation in designations track by designation.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iProbationDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nProbationDepartment{{$index}}"
-                                                id="iProbationDepartment{{$index}}"
-                                                data-ng-model="probation.department"
-                                                data-ng-options="department.longName for department in departments track by department.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationStartDate{{$index}}">Start Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nProbationStartDate{{$index}}"
-                                               id="iProbationStartDate{{$index}}"
-                                               data-ng-model="probation.probationStartDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationEndDate{{$index}}">End Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nProbationEndDate{{$index}}"
-                                               id="iProbationEndDate{{$index}}"
-                                               data-ng-model="probation.probationEndDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-8">
-                                </div>
-                                <div class="col-md-4">
-                                    <div align="right">
-                                        <input type="checkbox"> Current Service
-                                    </div>
-                                </div>
+                        <div class="col-md-3">
+                            <label class="col-md-4 control-label">End Date</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nEndDate{{$index}}"
+                                       id="iEndDate{{$index}}"
+                                       data-ng-model="interval.endDate"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       autocomplete="off"
+                                       class="datepicker-default form-control" required>
                             </div>
                         </div>
-                    </fieldset>
-                    <br />
-
-                    <fieldset>
-                        <legend>Permanent Period: [ <a title="Add New Row" data-ng-click="addNewRow('permanent')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]</legend>
-                        <div data-ng-repeat="permanent in entry.permanent track by $index">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Designation" for="iPermanentnDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nPermanentDesignation{{$index}}"
-                                                id="iPermanentnDesignation{{$index}}"
-                                                data-ng-model="permanent.designation"
-                                                data-ng-options="designation.designationName for designation in designations track by designation.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iPermanentDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nProbationDepartment{{$index}}"
-                                                id="iPermanentDepartment{{$index}}"
-                                                data-ng-model="permanent.department"
-                                                data-ng-options="department.longName for department in departments track by department.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Job Permanent Date" for="iJobPermanentStartDate{{$index}}">Start Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nJobPermanentStartDate{{$index}}"
-                                               id="iJobPermanentStartDate{{$index}}"
-                                               data-ng-model="permanent.permanentStartDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Job Permanent Date" for="iJobPermanentEndDate{{$index}}">End Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nJobPermanentEndDate{{$index}}"
-                                               id="iJobPermanentEndDate{{$index}}"
-                                               data-ng-model="permanent.permanentEndDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-8">
-                                </div>
-                                <div class="col-md-4">
-                                    <div align="right">
-                                        <input type="checkbox"> Current Service
-                                    </div>
-                                </div>
+                        <div class="col-md-3">
+                            <label class="col-md-4 control-label">Exp End Date</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExpEndDate{{$index}}"
+                                       id="iExpEndDate{{$index}}"
+                                       data-ng-model="interval.expEndDate"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       autocomplete="off"
+                                       class="datepicker-default form-control" required>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
-
-                <br />
-                <div  data-ng-if="showContractEmploymentDiv">
-                    <fieldset>
-                        <legend>Contract Period: [ <a title="Add New Row" data-ng-click="addNewRow('contract')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]</legend>
-                        <div data-ng-repeat="contract in entry.contract track by $index">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Designation" for="iContractDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nContractDesignation{{$index}}"
-                                                id="iContractDesignation{{$index}}"
-                                                data-ng-model="contract.designation"
-                                                data-ng-options="designation.designationName for designation in designations track by designation.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iContractDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <select name="nContractDepartment{{$index}}"
-                                                id="iContractDepartment{{$index}}"
-                                                data-ng-model="contract.department"
-                                                data-ng-options="department.longName for department in departments track by department.id"
-                                                class="form-control" required>
-                                            <option value="" disabled>Select Designation No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Contractual Start Date" for="iContractStartDate{{$index}}">Start Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nContractStartDate{{$index}}"
-                                               id="iContractStartDate{{$index}}"
-                                               data-ng-model="contract.contractualStartDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-4 control-label" title="Employee's Contractual Period Ending Date" for="iContractEndDate{{$index}}">End Date</label>
-                                    <div class="col-md-8">
-                                        <input type="text"
-                                               name="nContractEndDate{{$index}}"
-                                               id="iContractEndDate{{$index}}"
-                                               data-ng-model="contract.contractualEndDate"
-                                               data-date-format="dd/mm/yyyy"
-                                               placeholder="DD/MM/YYYY"
-                                               autocomplete="off"
-                                               class="datepicker-default form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-8">
-                                </div>
-                                <div class="col-md-4">
-                                    <div align="right">
-                                        <input type="checkbox"> Current Service
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="text-right pal">
-                            <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode()"><i class="fa fa-eye"></i>&nbsp;View</button>
-                            <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                        <div class="col-md-1">
+                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow(this, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                         </div>
                     </div>
+                    <div class="text-center pal">
+                        [ <a title="Add New Row" data-ng-click="addNewRow('serviceDetails')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    </div>
                 </div>
-            </form>
+            </fieldset>
+            <br />
         </div>
-
-
-
-
-
-
-
-
-        <div data-ng-if="viewMode">
-            <!--<fieldset>-->
-                <!--<legend>Basic: </legend>-->
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employee's Organizational Id" for="iEmployeeId">Employee Id</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                            <label class="control">{{entry.basic.employeeId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employee's Academic Initial / User Id" for="iShortName">Academic Initial<span class="require">*</span></label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{entry.basic.academicInitial}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employee's Room No." for="iRoomNo">Room No.</label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                            <label class="control-label">{{entry.basic.roomNo}}</label>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employee's Office Extension No." for="iExtNo">Ext No.</label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                            <label class="control-label">{{entry.basic.extNo}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employment Type For Employee" for="iJoiningDate">Joining Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                            <label class="control-label">{{entry.basic.joiningDate}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employment Type For Employee" for="iEmploymentType">Employment Type<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                            <label class="control-label">{{entry.basic.employmentType}}</label>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="col-md-4 control-label" title="Employee's Resign Date" for="iJobTerminationDate">Resinged Date</label>
-                        <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                            <label class="control-label">{{entry.basic.resignDate}}</label>
-                        </div>
-                    </div>
-                </div>
-            <!--</fieldset>-->
-            <br />
-
-            <div data-ng-if="showRegularEmploymentDiv">
-                <fieldset>
-                    <legend>Contractual Period:</legend>
-                    <div data-ng-repeat="contractual in entry.contractual track by $index">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Designation" for="iContractualDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contractual.desingation}}</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iContractualDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{contractual.department}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Contractual Start Date" for="iContractualStartDate{{$index}}">Start Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contractual.contractualStartDate}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Contractual Period Ending Date" for="iContractualEndDate{{$index}}">End Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contractual.contractualEndDate}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                </fieldset>
-                <br />
-
-                <fieldset>
-                    <legend>Probation Period:</legend>
-                    <div data-ng-repeat="probation in entry.probation track by $index">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Designation" for="iProbationDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{probation.designation}}</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iProbationDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{probation.department}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationStartDate{{$index}}">Start Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{probation.probationStartDate}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Probational Period Start Date" for="iProbationEndDate{{$index}}">End Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{probation.probationEndDate}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                </fieldset>
-                <br />
-
-                <fieldset>
-                    <legend>Permanent Period:</legend>
-                    <div data-ng-repeat="permanent in entry.permanent track by $index">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Designation" for="iPermanentnDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{permanent.designation}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iPermanentDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{permanent.department}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Job Permanent Date" for="iJobPermanentStartDate{{$index}}">Start Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{permanent.permanentStartDate}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Job Permanent Date" for="iJobPermanentEndDate{{$index}}">End Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{permanent.permanentEndDate}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                </fieldset>
-            </div>
-
-            <br />
-            <div data-ng-if="showContractEmploymentDiv">
-                <fieldset>
-                    <legend>Contract Period:</legend>
-                    <div data-ng-repeat="contract in entry.contract track by $index">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Designation" for="iContractDesignation{{$index}}">Designation<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contract.designation}}</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employees Department or Office Name" for="iContractualDepartment{{$index}}">Department<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{contract.department}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Contractual Start Date" for="iContractualStartDate{{$index}}">Start Date<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contract.contractualStartDate}}</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-md-4 control-label" title="Employee's Contractual Period Ending Date" for="iContractualEndDate{{$index}}">End Date</label>
-                                <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{contract.contractualEndDate}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                </fieldset>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="text-right pal">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode()"><i class="fa fa-edit"></i>&nbsp;Edit</button>
-                    </div>
-                </div>
-            </div>
+        <div class="text-center pal">
+            [ <a title="Add New Row" data-ng-click="addNewRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
         </div>
+        <br />
     </div>
 </div>

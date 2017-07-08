@@ -1,43 +1,23 @@
 module ums{
-    export interface IServiceBasicInformationModel{
+    export interface IServiceInformationModel{
         employeeId: string;
-        academicInitial: string;
+        designation: ICommon;
+        employmentType: ICommon;
+        designationId: number;
+        employmentTypeId: number;
+        joiningDate: string;
+        resignDate: string;
         roomNo: string;
         extNo: string;
-        joiningDate: string;
-        employmentType: IEmploymentType;
-        resignDate: string;
+        academicInitial: string;
+        intervalDetails: Array<IServiceDetailsModel>;
     }
 
-    export interface IContractModel{
-        designation: IDesignation;
-        department: IDepartment;
-        contractStartDate: string;
-        contractEndDate: string;
-        currentStatus: string;
-    }
-
-    export interface IContractualModel{
-        designation: IDesignation;
-        department: IDepartment;
-        contractualStartDate: string;
-        contractualEndDate: string;
-        currentStatus: string;
-    }
-
-    export interface IProbationModel{
-        designation: IDesignation;
-        department: IDepartment;
-        probationStartDate: string;
-        probationEndDate: string;
-        currentStatus: string;
-    }
-
-    export interface IPermanentModel{
-        designation: IDesignation;
-        department: IDepartment;
-        permanentStartDate: string;
-        permanentEndDate: string;
-        currentStatus: string;
+    export interface IServiceDetailsModel{
+        interval: ICommon;
+        intervalId: number;
+        startDate: string;
+        endDate: string;
+        expEndDate: string;
     }
 }
