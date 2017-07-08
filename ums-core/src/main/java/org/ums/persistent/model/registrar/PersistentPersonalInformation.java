@@ -4,6 +4,8 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
+import org.ums.enums.common.*;
+import org.ums.enums.common.RelationType;
 import org.ums.manager.common.*;
 import org.ums.manager.registrar.PersonalInformationManager;
 
@@ -12,11 +14,11 @@ import java.util.Date;
 public class PersistentPersonalInformation implements MutablePersonalInformation {
 
   private static PersonalInformationManager sPersonalInformationManager;
-  private static BloodGroupManager sBloodGroupManager;
-  private static NationalityManager sNationalityManager;
-  private static ReligionManager sReligionManager;
-  private static MaritalStatusManager sMaritalStatusManager;
-  private static RelationTypeManager sRelationTypeManager;
+  // private static BloodGroupManager sBloodGroupManager;
+  // private static NationalityManager sNationalityManager;
+  // private static ReligionManager sReligionManager;
+  // private static MaritalStatusManager sMaritalStatusManager;
+  // private static RelationTypeManager sRelationTypeManager;
   private static CountryManager sCountryManager;
   private static DivisionManager sDivisionManager;
   private static DistrictManager sDistrictManager;
@@ -26,11 +28,15 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sPersonalInformationManager =
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
-    sBloodGroupManager = applicationContext.getBean("bloodGroupManager", BloodGroupManager.class);
-    sNationalityManager = applicationContext.getBean("nationalityManager", NationalityManager.class);
-    sReligionManager = applicationContext.getBean("religionManager", ReligionManager.class);
-    sMaritalStatusManager = applicationContext.getBean("maritalStatusManager", MaritalStatusManager.class);
-    sRelationTypeManager = applicationContext.getBean("relationTypeManager", RelationTypeManager.class);
+    // sBloodGroupManager = applicationContext.getBean("bloodGroupManager",
+    // BloodGroupManager.class);
+    // sNationalityManager = applicationContext.getBean("nationalityManager",
+    // NationalityManager.class);
+    // sReligionManager = applicationContext.getBean("religionManager", ReligionManager.class);
+    // sMaritalStatusManager = applicationContext.getBean("maritalStatusManager",
+    // MaritalStatusManager.class);
+    // sRelationTypeManager = applicationContext.getBean("relationTypeManager",
+    // RelationTypeManager.class);
     sCountryManager = applicationContext.getBean("countryManager", CountryManager.class);
     sDivisionManager = applicationContext.getBean("divisionManager", DivisionManager.class);
     sDistrictManager = applicationContext.getBean("districtManager", DistrictManager.class);
@@ -41,17 +47,17 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private String mFirstName;
   private String mLastName;
   private String mGender;
-  private BloodGroup mBloodGroup;
+  private BloodGroupType mBloodGroup;
   private Integer mBloodGroupId;
   private String mFatherName;
   private String mMotherName;
-  private Nationality mNationality;
+  private NationalityType mNationality;
   private Integer mNationalityId;
-  private Religion mReligion;
+  private ReligionType mReligion;
   private Integer mReligionId;
   private Date mDateOfBirth;
   private String mNidNo;
-  private MaritalStatus mMaritalStatus;
+  private MaritalStatusType mMaritalStatus;
   private Integer mMaritalStatusId;
   private String mSpouseName;
   private String mSpouseNidNo;
@@ -201,7 +207,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setBloodGroup(BloodGroup pBloodGroup) {
+  public void setBloodGroup(BloodGroupType pBloodGroup) {
     mBloodGroup = pBloodGroup;
   }
 
@@ -216,12 +222,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setNationality(Nationality pNationality) {
+  public void setNationality(NationalityType pNationality) {
     mNationality = pNationality;
   }
 
   @Override
-  public void setReligion(Religion pReligion) {
+  public void setReligion(ReligionType pReligion) {
     mReligion = pReligion;
   }
 
@@ -236,7 +242,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setMaritalStatus(MaritalStatus pMaritalStatus) {
+  public void setMaritalStatus(MaritalStatusType pMaritalStatus) {
     mMaritalStatus = pMaritalStatus;
   }
 
@@ -381,7 +387,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public BloodGroup getBloodGroup() {
+  public BloodGroupType getBloodGroup() {
     return mBloodGroup;
   }
 
@@ -396,12 +402,12 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public Nationality getNationality() {
+  public NationalityType getNationality() {
     return mNationality;
   }
 
   @Override
-  public Religion getReligion() {
+  public ReligionType getReligion() {
     return mReligion;
   }
 
@@ -416,7 +422,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public MaritalStatus getMaritalStatus() {
+  public MaritalStatusType getMaritalStatus() {
     return mMaritalStatus;
   }
 

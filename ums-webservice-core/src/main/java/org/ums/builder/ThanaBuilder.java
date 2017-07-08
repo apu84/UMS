@@ -15,8 +15,8 @@ public class ThanaBuilder implements Builder<Thana, MutableThana> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Thana pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("district_id", pReadOnly.getDistrictId());
     pBuilder.add("name", pReadOnly.getThanaName());
+    pBuilder.add("foreign_id", pReadOnly.getDistrictId());
     pBuilder.add("lastModified", pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
   }
 

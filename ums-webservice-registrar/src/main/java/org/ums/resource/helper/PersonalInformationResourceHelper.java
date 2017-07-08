@@ -23,13 +23,13 @@ public class PersonalInformationResourceHelper extends
     ResourceHelper<PersonalInformation, MutablePersonalInformation, String> {
 
   @Autowired
-  PersonalInformationManager mManager;
+  private PersonalInformationManager mManager;
 
   @Autowired
-  PersonalInformationBuilder mBuilder;
+  private PersonalInformationBuilder mBuilder;
 
   @Autowired
-  UserManager userManager;
+  private UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
     String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();

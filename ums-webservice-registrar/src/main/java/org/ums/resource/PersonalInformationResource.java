@@ -15,13 +15,9 @@ import javax.ws.rs.core.UriInfo;
 @Path("employee/personal")
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
-  @Autowired
-  PersonalInformationResourceHelper personalInformationResourceHelper;
-
   @GET
   @Path("/getPersonalInformation")
   public JsonObject getPersonalInformation() {
-    JsonObject personalInfoJsonObj = personalInformationResourceHelper.getPersonalInformation(mUriInfo);
-    return personalInfoJsonObj;
+    return mResourceHelper.getPersonalInformation(mUriInfo);
   }
 }

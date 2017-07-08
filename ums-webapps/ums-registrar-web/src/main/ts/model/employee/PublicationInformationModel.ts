@@ -6,7 +6,7 @@ module ums{
         publicationInterestGenre: string;
         publisherName: string;
         dateOfPublication: string;
-        publicationType: IPublicationType;
+        publicationType: ICommon;
         publicationWebLink: string;
         publicationISSN: string;
         publicationIssue: String;

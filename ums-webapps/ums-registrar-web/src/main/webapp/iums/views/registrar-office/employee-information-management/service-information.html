@@ -400,37 +400,6 @@
                     </fieldset>
                 </div>
                 <br />
-
-
-                <fieldset>
-                    <legend>Area of Interest: &nbsp;&nbsp; [ <a title="Add New Row" data-ng-click="addNewRow('areaOfInterest')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]</legend>
-                    <div data-ng-repeat="areaOfInterest in entry.areaOfInterest track by $index">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-md-5 control-label" title="View Order" for="iAreaOfInterest{{$index}}">View Order</label>
-                                <div class="col-md-7"  style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">1</label>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <label class="col-md-2 control-label" title="Employment Type For Employee" for="iAreaOfInterest{{$index}}">Area Of Interest<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                                <div class="col-md-10">
-                                    <select name="nAreaOfInterest{{$index}}"
-                                            id="iAreaOfInterest{{$index}}"
-                                            data-ng-model="areaOfInterest.name"
-                                            data-ng-options=""
-                                            class="form-control" required>
-                                        <option value="" disabled>Select Area Of Interest</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('areaOfInterest' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <br />
                 <div class="row">
                     <div class="col-md-12">
                         <div class="text-right pal">
@@ -646,30 +615,6 @@
                     </div>
                 </fieldset>
             </div>
-            <br />
-
-
-            <fieldset>
-                <legend>Area of Interest:</legend>
-                <div data-ng-repeat="areaOfInterest in entry.areaOfInterest track by $index">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="col-md-5 control-label" title="View Order" for="iAreaOfInterest{{$index}}">View Order</label>
-                            <div class="col-md-7"  style="border-bottom: 1px dashed; ">
-                                <label class="control-label">1</label>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <label class="col-md-2 control-label" title="Employment Type For Employee" for="iAreaOfInterest{{$index}}">Area Of Interest<span class="require" data-ng-hide="hideRequireSpan">*</span></label>
-                            <div class="col-md-10"  style="border-bottom: 1px dashed; ">
-                                <label class="control-label">{{areaOfInterest.name}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
             <br />
             <div class="row">
                 <div class="col-md-12">

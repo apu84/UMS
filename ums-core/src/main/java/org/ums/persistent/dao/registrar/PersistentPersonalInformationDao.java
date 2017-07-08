@@ -50,14 +50,14 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
 
   @Override
   public PersonalInformation get(final String pId) {
-    String query = GET_ONE + "Where employee_id = ?";
+    String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate
         .queryForObject(query, new Object[] {pId}, new PersistentPersonalInformationDao.RoleRowMapper());
   }
 
   @Override
   public int delete(final MutablePersonalInformation pMutablePersonalInformation) {
-    String query = DELETE_ONE + "WHERE EMPLOYEE_ID = ?";
+    String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutablePersonalInformation.getId());
   }
 

@@ -35,26 +35,10 @@ module ums{
             return defer.promise;
         }
 
-        // public getPersonalInformation(): ng.IPromise<any> {
-        //     let defer = this.$q.defer();
-        //     this.httpClient.get(this.url+"/getPersonalInformation/33333", HttpClient.MIME_TYPE_JSON,
-        //         (json: any) => {
-        //             defer.resolve(json.entries);
-        //         },
-        //         (response: ng.IHttpPromiseCallbackArg<any>) => {
-        //             console.log(response);
-        //         });
-        //     return defer.promise;
-        // }
-
         public getPersonalInformation(): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getPersonalInformation", HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
-                // console.log("json ...........");
-                // console.log(json);
-                // console.log("Json.entries");
-                // console.log(json.entries);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

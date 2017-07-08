@@ -5,6 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.common.*;
+import org.ums.enums.common.RelationType;
 
 import java.util.Date;
 
@@ -19,7 +21,7 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setBloodGroupId(final Integer pBloodGroupId);
 
-  void setBloodGroup(final BloodGroup pBloodGroup);
+  void setBloodGroup(final BloodGroupType pBloodGroup);
 
   void setFatherName(final String pFatherName);
 
@@ -27,11 +29,11 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setNationalityId(final Integer pNationalityId);
 
-  void setNationality(final Nationality pNationality);
+  void setNationality(final NationalityType pNationality);
 
   void setReligionId(final Integer pReligionId);
 
-  void setReligion(final Religion pReligion);
+  void setReligion(final ReligionType pReligion);
 
   void setDateOfBirth(final Date pDateOfBirth);
 
@@ -39,7 +41,7 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
 
   void setMaritalStatusId(final Integer pMaritalStatusId);
 
-  void setMaritalStatus(final MaritalStatus pMaritalStatus);
+  void setMaritalStatus(final MaritalStatusType pMaritalStatus);
 
   void setSpouseName(final String pSpouseName);
 

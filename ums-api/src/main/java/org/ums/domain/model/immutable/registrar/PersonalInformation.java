@@ -5,6 +5,8 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.common.*;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
+import org.ums.enums.common.*;
+import org.ums.enums.common.RelationType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +22,7 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Integer getBloodGroupId();
 
-  BloodGroup getBloodGroup();
+  BloodGroupType getBloodGroup();
 
   String getFatherName();
 
@@ -28,11 +30,11 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Integer getNationalityId();
 
-  Nationality getNationality();
+  NationalityType getNationality();
 
   Integer getReligionId();
 
-  Religion getReligion();
+  ReligionType getReligion();
 
   Date getDateOfBirth();
 
@@ -40,7 +42,7 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   Integer getMaritalStatusId();
 
-  MaritalStatus getMaritalStatus();
+  MaritalStatusType getMaritalStatus();
 
   String getSpouseName();
 
