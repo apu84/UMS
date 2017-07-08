@@ -21,9 +21,9 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
       "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID, START_DATE, END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING";
   static String INSERT_ONE =
       "INSERT INTO MST_PARAMETER_SETTING(PS_ID, SEMESTER_ID,PARAMETER_ID,START_DATE,END_DATE,LAST_MODIFIED)"
-          + "VALUES(?, ?,?,to_date(?,'DD/MM/YYYY'),to_date(?,'DD/MM/YYYY')," + getLastModifiedSql() + ")";
+          + "VALUES(?, ?,?,?,?," + getLastModifiedSql() + ")";
   static String UPDATE_ONE =
-      "UPDATE MST_PARAMETER_SETTING SET SEMESTER_ID=?, PARAMETER_ID=?, START_DATE = to_date(?,'DD/MM/YYYY'), END_DATE = to_date(?,'DD/MM/YYYY'), LAST_MODIFIED="
+      "UPDATE MST_PARAMETER_SETTING SET SEMESTER_ID=?, PARAMETER_ID=?, START_DATE = ?, END_DATE = ?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_PARAMETER_SETTING ";
   static String ORDER_BY = " ORDER BY PS_ID";
@@ -49,18 +49,9 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
-  public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
-    String query =
-        "SELECT PS.PS_ID,PS.SEMESTER_ID,PS.PARAMETER_ID,PS.START_DATE,"
-            + "PS.END_DATE ,PS.LAST_MODIFIED FROM MST_PARAMETER_SETTING PS , MST_PARAMETER P"
-            + " WHERE P.PARAMETER=? AND PS.SEMESTER_ID=?  and P.PARAMETER_ID=PS.PARAMETER_ID";
+  public ParameterSetting getBySemesterAndParameterId(String parameter, int semesterId) {
+    String query = SELECT_ALL + " WHERE PARAMETER_ID = ? AND SEMESTER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {parameter, semesterId}, new ParameterSettingRowMapper());
-  }
-
-  @Override
-  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
-    String query = SELECT_ALL + " WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {parameterId, semesterId}, new ParameterSettingRowMapper());
   }
 
   @Override
@@ -96,7 +87,7 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
       PersistentParameterSetting parameterSetting = new PersistentParameterSetting();
       parameterSetting.setId(pResultSet.getLong("PS_ID"));
       parameterSetting.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
-      parameterSetting.setParameterId(pResultSet.getLong("PARAMETER_ID"));
+      parameterSetting.setParameterId(pResultSet.getString("PARAMETER_ID"));
       parameterSetting.setStartDate(pResultSet.getTimestamp("START_DATE"));
       parameterSetting.setEndDate(pResultSet.getTimestamp("END_DATE"));
       parameterSetting.setLastModified(pResultSet.getString("LAST_MODIFIED"));

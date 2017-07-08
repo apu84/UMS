@@ -17,7 +17,7 @@ public class PersistentParameter implements MutableParameter {
     sParameterManager = applicationContext.getBean("parameterManager", ParameterManager.class);
   }
 
-  private Long mId;
+  private String mId;
   private String mParameter;
   private String mShortDescription;
   private String mLongDescription;
@@ -87,12 +87,12 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public Long getId() {
+  public String getId() {
     return mId;
   }
 
   @Override
-  public Long create() {
+  public String create() {
     return sParameterManager.create(this);
   }
 
@@ -107,7 +107,7 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public void setId(Long pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 

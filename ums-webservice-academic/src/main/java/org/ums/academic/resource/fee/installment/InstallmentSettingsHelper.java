@@ -29,6 +29,7 @@ import org.ums.fee.semesterfee.MutableInstallmentSettings;
 import org.ums.fee.semesterfee.PersistentInstallmentSettings;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ParameterManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.persistent.model.PersistentParameterSetting;
 import org.ums.resource.ResourceHelper;
@@ -43,6 +44,9 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
 
   @Autowired
   ParameterSettingManager mParameterSettingManager;
+
+  @Autowired
+  ParameterManager mParameterManager;
 
   @Autowired
   LateFeeManager mLateFeeManager;
@@ -99,22 +103,24 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
   public Response dateSetting(Integer pSemesterId, JsonArray pJsonArray) {
     pJsonArray.forEach((admissionTypeObject) -> {
       JsonObject admissionType = (JsonObject) admissionTypeObject;
-      if(admissionType.getString("admissionType").equalsIgnoreCase("regular")) {
-        JsonArray entries = admissionType.getJsonArray("entries");
-        entries.forEach((installmentJsonObject) -> {
-          updateParameterSettings(pSemesterId, (JsonObject) installmentJsonObject);
-        });
-      }
+      JsonArray entries = admissionType.getJsonArray("entries");
+      entries.forEach((installmentJsonObject) -> {
+        updateParameterSettings(pSemesterId, (JsonObject) installmentJsonObject);
+      });
     });
     return Response.ok().build();
   }
 
   private void updateParameterSettings(Integer pSemesterId, JsonObject installmentJson) {
-    Assert.isTrue(StringUtils.isEmpty(installmentJson.getString("start")), "Required installment start date");
-    Assert.isTrue(StringUtils.isEmpty(installmentJson.getString("end")), "Required installment end date");
-    Parameter.ParameterName parameterName = Parameter.ParameterName.get(installmentJson.getInt("typeId"));
-    ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId(parameterName.getLabel(), pSemesterId);
+    Assert.isTrue(!StringUtils.isEmpty(installmentJson.getString("start")), "Required installment start date");
+    Assert.isTrue(!StringUtils.isEmpty(installmentJson.getString("end")), "Required installment end date");
+    Parameter.ParameterName parameterName = Parameter.ParameterName.get(installmentJson.getString("typeId"));
+    ParameterSetting parameterSetting = null;
+    try {
+      parameterSetting = mParameterSettingManager.getBySemesterAndParameterId(parameterName.getId(), pSemesterId);
+    } catch(Exception e) {
+
+    }
     if(parameterSetting != null) {
       MutableParameterSetting mutableParameterSetting = parameterSetting.edit();
       mutableParameterSetting.setStartDate(mDateFormat.parse(installmentJson.getString("start")));
@@ -126,6 +132,7 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
       mutableParameterSetting.setSemesterId(pSemesterId);
       mutableParameterSetting.setStartDate(mDateFormat.parse(installmentJson.getString("start")));
       mutableParameterSetting.setEndDate(mDateFormat.parse(installmentJson.getString("end")));
+      mutableParameterSetting.setParameter(mParameterManager.get(parameterName.getId()));
       mutableParameterSetting.create();
     }
 
@@ -141,9 +148,9 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
       List<MutableLateFee> mutableLateFees = new ArrayList<>();
       installmentJson.getJsonArray("lateFee").forEach((lateFeeObject) -> {
         JsonObject fee = (JsonObject) lateFeeObject;
-        Assert.isTrue(StringUtils.isEmpty(fee.getString("start")), "Required late fee start date");
-        Assert.isTrue(StringUtils.isEmpty(fee.getString("end")), "Required late fee end date");
-        Assert.isTrue(StringUtils.isEmpty(fee.getString("fee")), "Required late fee amount");
+        Assert.isTrue(!StringUtils.isEmpty(fee.getString("start")), "Required late fee start date");
+        Assert.isTrue(!StringUtils.isEmpty(fee.getString("end")), "Required late fee end date");
+        Assert.isTrue(!StringUtils.isEmpty(fee.getString("fee")), "Required late fee amount");
         MutableLateFee mutableLateFee = new PersistentLateFee();
         mutableLateFee.setSemesterId(pSemesterId);
         mutableLateFee.setFrom(mDateFormat.parse(fee.getString("start")));
@@ -152,7 +159,7 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
         mutableLateFee.setAdmissionType(admissionType);
         mutableLateFees.add(mutableLateFee);
       });
-      mLateFeeManager.update(mutableLateFees);
+      mLateFeeManager.create(mutableLateFees);
     }
   }
 
@@ -169,8 +176,7 @@ public class InstallmentSettingsHelper extends ResourceHelper<InstallmentSetting
     installment.add("lateFeeType", pAdmissionType.getId());
     ParameterSetting parameterSetting = null;
     try {
-      parameterSetting =
-          mParameterSettingManager.getBySemesterAndParameterId(pParameterName.getId().intValue(), pSemesterId);
+      parameterSetting = mParameterSettingManager.getBySemesterAndParameterId(pParameterName.getId(), pSemesterId);
     } catch(Exception e) {
 
     }

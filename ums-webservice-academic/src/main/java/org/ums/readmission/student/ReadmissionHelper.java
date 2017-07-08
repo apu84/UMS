@@ -186,8 +186,8 @@ public class ReadmissionHelper {
 
   private boolean withinReadmissionApplicationSlot(Integer pSemesterId) {
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId(
-            Parameter.ParameterName.APPLICATION_READMISSION.getLabel(), pSemesterId);
+        mParameterSettingManager.getBySemesterAndParameterId(Parameter.ParameterName.APPLICATION_READMISSION.getId(),
+            pSemesterId);
     Date now = new Date();
     return parameterSetting.getStartDate().before(now) && parameterSetting.getEndDate().after(now);
   }

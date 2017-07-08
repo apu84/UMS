@@ -22,15 +22,16 @@ public class InstallmentSettingsBuilder implements Builder<InstallmentSettings, 
     pBuilder.add("semesterId", semester.getId());
     pBuilder.add("enabled", pReadOnly.isEnabled());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
+    pBuilder.add("id", pReadOnly.getId().toString());
   }
 
   @Override
   public void build(MutableInstallmentSettings pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject);
-    Validate.notEmpty(pJsonObject.getString("semesterId"));
-    Validate.notEmpty(pJsonObject.getString("enabled"));
-    pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
-    pMutable.setEnabled(Boolean.parseBoolean(pJsonObject.getString("enabled")));
+    Validate.notNull(pJsonObject.getInt("semesterId"));
+    Validate.notNull(pJsonObject.getBoolean("enabled"));
+    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    pMutable.setEnabled(pJsonObject.getBoolean("enabled"));
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }

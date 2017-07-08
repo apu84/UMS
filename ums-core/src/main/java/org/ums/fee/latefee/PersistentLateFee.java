@@ -128,8 +128,8 @@ public class PersistentLateFee implements MutableLateFee {
     setFrom(pLateFee.getFrom());
     setTo(pLateFee.getTo());
     setFee(pLateFee.getFee());
-    setSemester(pLateFee.getSemester());
     setSemesterId(pLateFee.getSemesterId());
+    setAdmissionType(pLateFee.getAdmissionType());
     setLastModified(pLateFee.getLastModified());
   }
 

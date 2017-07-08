@@ -22,7 +22,7 @@ import java.net.URI;
  * Created by My Pc on 3/13/2016.
  */
 @Component
-public class ParameterResourceHelper extends ResourceHelper<Parameter, MutableParameter, Long> {
+public class ParameterResourceHelper extends ResourceHelper<Parameter, MutableParameter, String> {
 
   @Autowired
   private ParameterManager mManager;
@@ -43,7 +43,7 @@ public class ParameterResourceHelper extends ResourceHelper<Parameter, MutablePa
   }
 
   @Override
-  public ContentManager<Parameter, MutableParameter, Long> getContentManager() {
+  public ContentManager<Parameter, MutableParameter, String> getContentManager() {
     return mManager;
   }
 

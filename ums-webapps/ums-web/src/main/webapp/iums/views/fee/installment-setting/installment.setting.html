@@ -1,16 +1,4 @@
-<div class="row" id="topArrowDiv">
-    <div class="col-md-2 col-md-offset-5">
-        <center>
-            <i class="fa fa-chevron-down" aria-hidden="true" onclick="resetTopBottomDivs()"
-               style="cursor: pointer;"></i>
-        </center>
-    </div>
-</div>
-
-<div class="row" id="courseSelectionDiv">
-    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-cx"></i></i>
-    </div>
+<div class="row">
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select </h3>
@@ -31,48 +19,121 @@
         <div class="panel">
             <div class="panel-heading">Semester installment setting</div>
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="make-switch switch-large has-switch" data-ng-if="vm.installmentSetting">
-                            <div class="switch-animate switch-on">
-                                <input type="checkbox" checked="checked" data-ng-model="vm.installmentSetting.enabled"/>
-                                <span data-ng-if="vm.installmentSetting.enabled">Enabled</span>
-                                <span data-ng-if="!vm.installmentSetting.enabled">Disabled</span></div>
+                <form action="" data-validate="" data-onvalidate="updateSetting">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="make-switch switch-large has-switch" data-ng-if="vm.installmentSetting">
+                                <div class="switch-animate switch-on">
+                                    <input type="checkbox" checked="checked"
+                                           data-ng-model="vm.installmentSetting.enabled"/>
+                                    <span data-ng-if="vm.installmentSetting.enabled">Enabled</span>
+                                    <span data-ng-if="!vm.installmentSetting.enabled">Disabled</span></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" data-ng-repeat="dateSetting in vm.dateSettings">
-                    <div class="col-md-12">
-                        <b>{{dateSetting.admissionTypeLabel}}</b>
-                        <div class="row" data-ng-repeat="entry in dateSetting.entries">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12"><h5> {{entry.typeName}} </h5></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        Start: {{entry.start}}
+                    <div class="row" data-ng-repeat="dateSetting in vm.dateSettings" style="margin-top: 20px">
+                        <div class="col-md-12 panel">
+                            <div class="panel-heading" style="padding: 5px;">{{dateSetting.admissionTypeLabel}}</div>
+                            <div class="row horizontal-form" data-ng-repeat="entry in dateSetting.entries">
+                                <div class="col-md-12 form-boy pal">
+                                    <div class="row">
+                                        <div class="col-md-10"><h4> {{entry.typeName}} </h4></div>
+                                        <div class="col-md-2 text-right">
+                                            <a href="javascript:void(0);" data-ng-click="entry.edit=true"
+                                               data-ng-if="!entry.edit"
+                                               class="btn btn-red"><i class="fa fa-edit"></i></a>
+                                            <a href="javascript:void(0);"
+                                               data-ng-if="entry.edit"
+                                               data-ng-click="vm.findDateSetting()"
+                                               class="btn btn-red"
+                                               title="Reset"><i class="fa fa-undo"></i></a>
+                                            <a href="javascript:void(0);" class="btn btn-green" data-ng-if="entry.edit"
+                                               data-ng-click="vm.addLateFee(entry)" title="Add late fee">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        End: {{entry.end}}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Start <span
+                                                        class="require">*</span></label>
+                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       class="datepicker-default form-control form-required"
+                                                       autocomplete="off" data-date-picker
+                                                       data-ng-model="entry.start" data-ng-disabled="!entry.edit" required/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">End <span class="require">*</span></label>
+                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       class="datepicker-default form-control form-required"
+                                                       autocomplete="off" data-date-picker
+                                                       data-ng-model="entry.end" data-ng-disabled="!entry.edit" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" data-ng-if="entry.lateFee">
+                                        <div class="col-md-12">
+                                            <h4>Late fee for {{entry.typeName}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row" data-ng-repeat="lateFee in entry.lateFee">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Start <span
+                                                        class="require">*</span></label>
+                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       class="datepicker-default form-control form-required"
+                                                       autocomplete="off" data-date-picker
+                                                       data-ng-model="lateFee.start" data-ng-disabled="!entry.edit" required/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">End <span class="require">*</span></label>
+                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       class="datepicker-default form-control form-required"
+                                                       autocomplete="off" data-date-picker
+                                                       data-ng-model="lateFee.end" data-ng-disabled="!entry.edit" required/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Fee <span class="require">*</span></label>
+                                                <input class="form-control form-required" data-ng-model="lateFee.fee"
+                                                       data-ng-disabled="!entry.edit"
+                                                       ng-model-options="{ debounce: 250 }" required/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" style="padding-top: 23px">
+                                            <a href="javascript:void(0);" class="btn btn-red" data-ng-if="entry.edit"
+                                               data-ng-click="vm.removeLateFee(entry, $index)" title="Delete fee">
+                                                <i class="fa fa-minus"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-success pull-right"
+                                    data-ng-if="vm.enableSaveButton">Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    function resetTopBottomDivs() {
-        $("#topArrowDiv").hide(10);
-        $("#courseSelectionDiv").show(200);
-    }
-</script>
 
 
 

@@ -12,7 +12,7 @@ import org.ums.generator.IdGenerator;
 
 public class InstallmentSettingsDao extends InstallmentSettingsDaoDecorator {
   String SELECT_ALL = "SELECT ID, SEMESTER_ID, IS_ENABLED, LAST_MODIFIED FROM INSTALLMENT_SETTINGS ";
-  String INSERT_ALL = "INSERT INTO INSTALLMENT_SETTINGS(ID, SEMESTER_ID, IS_ENABLED, LAST_MODIFIED) VALUES (?,?, "
+  String INSERT_ALL = "INSERT INTO INSTALLMENT_SETTINGS(ID, SEMESTER_ID, IS_ENABLED, LAST_MODIFIED) VALUES (?, ?, ?,"
       + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE INSTALLMENT_SETTINGS SET SEMESTER_ID = ?, IS_ENABLED = ? ";
   String DELETE_ALL = "DELETE FROM INSTALLMENT_SETTINGS ";
@@ -40,14 +40,13 @@ public class InstallmentSettingsDao extends InstallmentSettingsDaoDecorator {
   @Override
   public int update(MutableInstallmentSettings pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, new Object[] {pMutable.getSemesterId(), pMutable.isEnabled(), pMutable.getId()},
-        new InstallmentSettingsRowMapper());
+    return mJdbcTemplate.update(query, new Object[] {pMutable.getSemesterId(), pMutable.isEnabled(), pMutable.getId()});
   }
 
   @Override
   public int delete(MutableInstallmentSettings pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, new Object[] {pMutable.getId()}, new InstallmentSettingsRowMapper());
+    return mJdbcTemplate.update(query, new Object[] {pMutable.getId()});
   }
 
   @Override

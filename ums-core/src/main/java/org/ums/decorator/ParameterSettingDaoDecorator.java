@@ -18,12 +18,7 @@ public class ParameterSettingDaoDecorator extends
   }
 
   @Override
-  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
+  public ParameterSetting getBySemesterAndParameterId(String parameterId, int semesterId) {
     return getManager().getBySemesterAndParameterId(parameterId, semesterId);
-  }
-
-  @Override
-  public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
-    return getManager().getByParameterAndSemesterId(parameter, semesterId);
   }
 }

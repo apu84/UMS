@@ -23,7 +23,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
   boolean withInSlot(Parameter.ParameterName parameterName, LateFee.AdmissionType pLateFeeFor, Integer pSemesterId) {
     Date today = new Date();
     ParameterSetting semesterAdmissionDate =
-        getParameterSettingManager().getByParameterAndSemesterId(parameterName.getLabel(), pSemesterId);
+        getParameterSettingManager().getBySemesterAndParameterId(parameterName.getId(), pSemesterId);
     if(semesterAdmissionDate.getStartDate().before(today) && semesterAdmissionDate.getEndDate().after(today)) {
       return true;
     }
@@ -127,7 +127,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
 
   private Date getTransactionValidTill(Parameter.ParameterName pParameterName, Integer pSemesterId) {
     ParameterSetting parameterSetting =
-        getParameterSettingManager().getByParameterAndSemesterId(pParameterName.getLabel(), pSemesterId);
+        getParameterSettingManager().getBySemesterAndParameterId(pParameterName.getId(), pSemesterId);
     return parameterSetting.getEndDate();
   }
 
