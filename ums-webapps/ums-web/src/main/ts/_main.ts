@@ -20,6 +20,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
@@ -200,6 +201,7 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/date.range.picker.ts'/>
 
 /// <reference path='student/student.info.service.ts'/>
 

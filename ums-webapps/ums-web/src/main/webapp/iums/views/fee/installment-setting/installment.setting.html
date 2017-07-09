@@ -54,26 +54,30 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <!--<div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Start <span
                                                         class="require">*</span></label>
-                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                <input type="text" data-date-format="dd/mm/yyyy" name="start"
                                                        placeholder="DD/MM/YYYY"
-                                                       class="datepicker-default form-control form-required"
+                                                       class="datepicker-default form-control required"
                                                        autocomplete="off" data-date-picker
-                                                       data-ng-model="entry.start" data-ng-disabled="!entry.edit" required/>
+                                                       data-ng-disabled="!entry.edit"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">End <span class="require">*</span></label>
-                                                <input type="text" data-date-format="dd/mm/yyyy"
+                                                <input type="text" data-date-format="dd/mm/yyyy" name="end"
                                                        placeholder="DD/MM/YYYY"
-                                                       class="datepicker-default form-control form-required"
+                                                       class="datepicker-default form-control required"
                                                        autocomplete="off" data-date-picker
                                                        data-ng-model="entry.end" data-ng-disabled="!entry.edit" required/>
                                             </div>
+                                        </div>-->
+                                        <div class="col-md-12">
+                                            <div data-date-range-picker data-from="entry.start" data-to="entry.end"
+                                                 data-disabled="!entry.edit" data-required="true"></div>
                                         </div>
                                     </div>
                                     <div class="row" data-ng-if="entry.lateFee">
@@ -82,36 +86,25 @@
                                         </div>
                                     </div>
                                     <div class="row" data-ng-repeat="lateFee in entry.lateFee">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="control-label">Start <span
-                                                        class="require">*</span></label>
-                                                <input type="text" data-date-format="dd/mm/yyyy"
-                                                       placeholder="DD/MM/YYYY"
-                                                       class="datepicker-default form-control form-required"
-                                                       autocomplete="off" data-date-picker
-                                                       data-ng-model="lateFee.start" data-ng-disabled="!entry.edit" required/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="control-label">End <span class="require">*</span></label>
-                                                <input type="text" data-date-format="dd/mm/yyyy"
-                                                       placeholder="DD/MM/YYYY"
-                                                       class="datepicker-default form-control form-required"
-                                                       autocomplete="off" data-date-picker
-                                                       data-ng-model="lateFee.end" data-ng-disabled="!entry.edit" required/>
-                                            </div>
+                                        <div class="col-md-8">
+                                            <div data-date-range-picker data-from="lateFee.start" data-to="lateFee.end"
+                                                 data-disabled="!entry.edit" data-required="true"></div>
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Fee <span class="require">*</span></label>
-                                                <input class="form-control form-required" data-ng-model="lateFee.fee"
-                                                       data-ng-disabled="!entry.edit"
-                                                       ng-model-options="{ debounce: 250 }" required/>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <label class="control-label clearfix">Fee<span class="require">*</span></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input class="form-control required number" name="fee-{{$index}}"
+                                                           placeholder="Fee"
+                                                           data-ng-model="lateFee.fee"
+                                                           data-ng-disabled="!entry.edit"
+                                                           data-ng-model-options="{ debounce: 250 }"/>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1" style="padding-top: 23px">
+                                        <div class="col-md-1">
                                             <a href="javascript:void(0);" class="btn btn-red" data-ng-if="entry.edit"
                                                data-ng-click="vm.removeLateFee(entry, $index)" title="Delete fee">
                                                 <i class="fa fa-minus"></i>

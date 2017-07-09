@@ -1,0 +1,11 @@
+<div class="input-group input-daterange">
+    <div>
+        <input type="text" name="startdate-{{vm.id}}" data-ng-model="vm.from" class="form-control"
+               data-ng-class="{'required': vm.required}" data-ng-disabled="vm.disabled"/>
+    </div>
+    <span class="input-group-addon">to</span>
+    <div>
+        <input type="text" name="enddate-{{vm.id}}" data-ng-model="vm.to" class="form-control"
+               data-ng-class="{'required': vm.required}" data-ng-disabled="vm.disabled"/>
+    </div>
+</div>
