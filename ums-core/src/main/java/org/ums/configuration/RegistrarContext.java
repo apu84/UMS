@@ -76,4 +76,13 @@ public class RegistrarContext {
     return trainingInformationCache;
   }
 
+  @Bean
+  AreaOfInterestInformationManager areaOfInterestInformationManager() {
+    AreaOfInterestInformationCache areaOfInterestInformationCache =
+        new AreaOfInterestInformationCache(mCacheFactory.getCacheManager());
+    areaOfInterestInformationCache.setManager(new PersistentAreaOfInterestInformationDao(mTemplateFactory
+        .getJdbcTemplate()));
+    return areaOfInterestInformationCache;
+  }
+
 }

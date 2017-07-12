@@ -4,11 +4,17 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.builder.AreaOfInterestInformationBuilder;
 import org.ums.builder.PersonalInformationBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.registrar.AreaOfInterestInformation;
 import org.ums.domain.model.immutable.registrar.PersonalInformation;
+import org.ums.domain.model.mutable.registrar.MutableAreaOfInterestInformation;
 import org.ums.domain.model.mutable.registrar.MutablePersonalInformation;
+import org.ums.manager.registrar.AreaOfInterestInformationManager;
 import org.ums.manager.registrar.PersonalInformationManager;
+import org.ums.persistent.model.registrar.PersistentAreaOfInterestInformation;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
@@ -17,6 +23,8 @@ import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PersonalInformationResourceHelper extends
@@ -29,39 +37,23 @@ public class PersonalInformationResourceHelper extends
   private PersonalInformationBuilder mBuilder;
 
   @Autowired
+  private AreaOfInterestInformationManager mAreaOfInterestInformationManager;
+
+  @Autowired
+  private AreaOfInterestInformationBuilder mAreaOfInterestInformationBuilder;
+
+  @Autowired
   private UserManager userManager;
 
   public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
     PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
-      personalInformation = mManager.get(userId);
+      personalInformation =
+          mManager.get(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
-      // Do nothing
     }
-
     return buildJson(personalInformation, pUriInfo);
   }
-
-  // @Transactional
-  // public Response create(JsonObject pJsonObject, UriInfo pUriInfo) {
-  //
-  // String userId =
-  // userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
-  // // getContentManager().delete(userId);
-  //
-  // LocalCache localCache = new LocalCache();
-  // JsonArray entries = pJsonObject.getJsonArray("entries");
-  //
-  // MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-  // JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-  // mBuilder.build(personalInformation, personalJsonObject, localCache);
-  // mManager.create(personalInformation);
-  //
-  // Response.ResponseBuilder builder = Response.created(null);
-  // builder.status(Response.Status.CREATED);
-  // return builder.build();
-  // }
 
   public Response updatePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
@@ -76,6 +68,35 @@ public class PersonalInformationResourceHelper extends
     return builder.build();
   }
 
+  @Override
+  @Transactional
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
+    getBuilder().build(mutablePersonalInformation, personalJsonObject, localCache);
+    mutablePersonalInformation.create();
+
+    JsonArray areaOfInterestJsonArray = personalJsonObject.getJsonArray("areaOfInterests");
+    int sizeOfAreaOfInterestJsonArraySize = areaOfInterestJsonArray.size();
+    List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation = new ArrayList<>();
+    for(int i = 0; i < sizeOfAreaOfInterestJsonArraySize; i++) {
+      MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
+      mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation,
+          areaOfInterestJsonArray.getJsonObject(i), localCache);
+      pMutableAreaOfInterestInformation.add(mutableAreaOfInterestInformation);
+    }
+    mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(userManager.get(
+        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    mAreaOfInterestInformationManager.saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   private JsonObject buildJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -86,22 +107,6 @@ public class PersonalInformationResourceHelper extends
     jsonObject.add("entries", children);
     localCache.invalidate();
     return jsonObject.build();
-  }
-
-  @Override
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
-    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    getBuilder().build(mutablePersonalInformation, personalJsonObject, localCache);
-    mutablePersonalInformation.create();
-
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-
-    return builder.build();
   }
 
   @Override

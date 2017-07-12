@@ -592,9 +592,8 @@
                             <label class="control-label">Area Of Interests: </label>
                         </div>
                         <div class="col-md-10">
-                            <select data-ng-model="data.selectedAreaOfInterest"
+                            <select data-ng-model="entry.personal.areaOfInterests"
                                     data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"
-                                    data-ng-change="changeAreaOfInterest()"
                                     class="select2-multi-value form-control"
                                     multiple="multiple">
                             </select>
@@ -976,7 +975,7 @@
                         <label class="control-label">Area Of Interests: </label>
                     </div>
                     <div class="col-md-10" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{data.userAreaOfInterests}}</label>
+                        <label class="control-label">{{entry.personal.areaOfInterests}}</label>
                     </div>
                 </div>
             </div>

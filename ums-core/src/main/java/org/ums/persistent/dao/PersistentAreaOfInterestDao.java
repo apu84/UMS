@@ -21,6 +21,12 @@ public class PersistentAreaOfInterestDao extends AreaOfInterestDaoDecorator {
   }
 
   @Override
+  public AreaOfInterest get(final Integer pId) {
+    String query = SELECT_ALL + " WHERE ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAreaOfInterestDao.RoleRowMapper());
+  }
+
+  @Override
   public List<AreaOfInterest> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new PersistentAreaOfInterestDao.RoleRowMapper());
@@ -34,7 +40,6 @@ public class PersistentAreaOfInterestDao extends AreaOfInterestDaoDecorator {
       persistentAreaOfInterest.setId(resultSet.getInt("id"));
       persistentAreaOfInterest.seTAreaOfInterest(resultSet.getString("name"));
       persistentAreaOfInterest.setLastModified(resultSet.getString("last_modified"));
-
       return persistentAreaOfInterest;
     }
   }

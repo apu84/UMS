@@ -52,7 +52,7 @@ module ums{
             });
         }
 
-        private addNewRow(parameter: string) {
+        private addNewRow(parameter: string, index?: number) {
             if(parameter == "serviceInfo") {
                 let serviceEntry: IServiceInformationModel;
                 serviceEntry = {
@@ -66,12 +66,12 @@ module ums{
                     roomNo: "",
                     extNo: "",
                     academicInitial: "",
-                    intervalDetails: null
+                    intervalDetails: Array<IServiceDetailsModel>()
                 };
                 this.$scope.entry.serviceInfo.push(serviceEntry);
             }
+
             else if(parameter == "serviceDetails") {
-                console.log("May b I am here");
                 let serviceDetailsEntry: IServiceDetailsModel;
                 serviceDetailsEntry = {
                     interval: null,
@@ -80,7 +80,8 @@ module ums{
                     endDate: "",
                     expEndDate: ""
                 };
-                this.$scope.entry.serviceInfo[0].intervalDetails.push(serviceDetailsEntry);
+                this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
+                console.log(this.$scope.entry.serviceInfo);
             }
             this.addDate();
         }

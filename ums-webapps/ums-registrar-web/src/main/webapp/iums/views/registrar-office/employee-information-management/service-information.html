@@ -44,8 +44,7 @@
                     </div>
                 </div>
                 <br />
-                {{serivce}}
-                <div>
+                <div data-ng-repeat="interval in service.intervalDetails track by $index">
                     <div class="row">
                         <div class="col-md-2">
                             <label class="col-md-4">Period:</label>
@@ -102,9 +101,9 @@
                             [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow(this, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                         </div>
                     </div>
-                    <div class="text-center pal">
-                        [ <a title="Add New Row" data-ng-click="addNewRow('serviceDetails')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-                    </div>
+                </div>
+                <div class="text-center pal">
+                    [ <a title="Add New Row" data-ng-click="addNewRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
             </fieldset>
             <br />

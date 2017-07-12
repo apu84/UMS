@@ -82,10 +82,6 @@ module ums {
         previousAwardInformation: Array<IAwardInformationModel>;
         previousExperienceInformation: Array<IExperienceInformationModel>;
     }
-    export interface IGender {
-        id: string;
-        name: string;
-    }
     export interface ICommon{
         id: number;
         name: string;
@@ -104,7 +100,7 @@ module ums {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService',
             'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService',
             'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService',
-            'areaOfInterestService', 'bloodGroupService', 'nationalityService', 'religionService', 'relationTypeService', 'maritalStatusService'];
+            'areaOfInterestService', 'bloodGroupService', 'nationalityService', 'religionService', 'relationTypeService', 'maritalStatusService', 'areaOfInterestInformationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -127,7 +123,8 @@ module ums {
                     private nationalityService: NationalityService,
                     private religionService: ReligionService,
                     private relationTypeService: RelationTypeService,
-                    private maritalStatusService: MaritalStatusService) {
+                    private maritalStatusService: MaritalStatusService,
+                    private areaOfInterestInformationService: AreaOfInterestInformationService) {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -143,9 +140,7 @@ module ums {
                 borderColor: "",
                 itemPerPage: 2,
                 totalRecord: 0,
-                customItemPerPage: null,
-                selectedAreaOfInterest : Array<ICommon>(),
-                userAreaOfInterests: ""
+                customItemPerPage: null
             };
 
             $scope.pagination = {};
@@ -196,20 +191,17 @@ module ums {
             this.getInitialParameters();
             this.setViewModeInitially();
             this.getPreviousFormValues();
+
+            console.log("Hello I am updated");
         }
 
-        private getInitialParameters() {
-            // this.getBloodGroupList();
-            // this.getNationalityList();
-            // this.getRelationTypeList();
-            // this.getMaritalStatusList();
-            // this.getReligionList();
+        private getInitialParameters(){
             this.getCountry();
             this.getDivision();
-            this.getDistrict();
-            this.getThana();
-            this.getAreaOfInterest();
-            this.createMap();
+             this.getDistrict();
+             this.getThana();
+             this.getAreaOfInterest();
+             this.createMap();
         }
 
         private setViewModeInitially() {
@@ -221,7 +213,7 @@ module ums {
             this.enableViewMode('experience');
         }
 
-        private getPreviousFormValues(){
+        private getPreviousFormValues() {
             this.getPersonalInformation();
             this.getAcademicInformation();
             this.getAwardInformation();
@@ -229,17 +221,18 @@ module ums {
             this.getPublicationInformationWithPagination();
             this.getExperienceInformation();
             this.getTrainingInformation();
+
         }
 
         private changeAreaOfInterest(){
-            console.log("changed .................. ");
-            console.log(this.$scope.data.selectedAreaOfInterest);
             this.$scope.data.userAreaOfInterests += this.$scope.data.selectedAreaOfInterest[this.$scope.data.selectedAreaOfInterest.length - 1].name + ", ";
         }
 
-        private getAreaOfInterest(){
+        private getAreaOfInterest() : any{
             this.areaOfInterestService.getAll().then((aoi: any)=>{
                this.$scope.arrayOfAreaOfInterest = aoi;
+                console.log(this.$scope.arrayOfAreaOfInterest);
+                return aoi;
             });
         }
 
@@ -402,6 +395,8 @@ module ums {
 
             if (convertThis === "personal") {
                 item['personal'] = obj;
+                console.log("Here -------->");
+                console.log(item);
             }
 
             else if (convertThis === "academic") {
@@ -461,61 +456,35 @@ module ums {
             }, 100);
         }
 
-        private getBloodGroupList(){
-            this.bloodGroupService.getBloodGroupList().then((bloodGroups: any) => {
-                this.$scope.bloodGroups = bloodGroups;
-            });
-        }
-
-        private getNationalityList(){
-            this.nationalityService.getNationalityList().then((nationalities: any) => {
-                this.$scope.nationalities = nationalities;
-            });
-        }
-
-        private getReligionList(){
-            this.religionService.getReligionList().then((religions: any) => {
-                this.$scope.religions = religions;
-            });
-        }
-
-        private getRelationTypeList(){
-            this.relationTypeService.getRelationTypeList().then((relations: any) => {
-                this.$scope.relations = relations;
-            });
-        }
-
-        private getMaritalStatusList(){
-            this.maritalStatusService.getMaritalStatusList().then((maritalStatus: any) => {
-                this.$scope.maritalStatus = maritalStatus;
-            });
-        }
-
-        private getCountry() {
+        private getCountry(): any {
             this.countryService.getCountryList().then((country: any) => {
                 this.$scope.countries = country.entries;
+                return country;
             });
         }
 
-        private getDivision() {
+        private getDivision(): any{
             this.divisionService.getDivisionList().then((division: any) => {
                 this.$scope.divisions = division.entries;
+                return division;
             });
         }
 
-        private getDistrict() {
+        private getDistrict(): any {
             this.districtService.getDistrictList().then((district: any) => {
                 this.$scope.presentAddressDistricts = district.entries;
                 this.$scope.permanentAddressDistricts = district.entries;
                 this.$scope.allDistricts = district.entries;
+                return district;
             });
         }
 
-        private getThana() {
+        private getThana() : any{
             this.thanaService.getThanaList().then((thana: any) => {
                 this.$scope.presentAddressThanas = thana.entries;
                 this.$scope.permanentAddressThanas = thana.entries;
                 this.$scope.allThanas = thana.entries;
+                return thana;
             });
         }
 
@@ -825,6 +794,14 @@ module ums {
 
         private getPersonalInformation() {
             this.personalInformationService.getPersonalInformation().then((personalInformation: any) => {
+
+                this.areaOfInterestInformationService.getAreaOfInterestInformation(personalInformation[0].employeeId).then((aoiInfo: any)=>{
+                    for(let i = 0; i < aoiInfo.length; i++){
+                        console.log("LOL");
+                        this.$scope.entry.personal.areaOfInterests[i].areaOfInterest = this.$scope.arrayOfAreaOfInterest[aoiInfo[i].areaOfInterestId];
+                    }
+                });
+
                 if (personalInformation.length > 0) {
                     this.$scope.entry.personal = personalInformation[0];
                     this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];

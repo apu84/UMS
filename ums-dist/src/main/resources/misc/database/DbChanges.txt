@@ -1285,6 +1285,25 @@ begin
 end;
 /
 
+CREATE TABLE EMP_AOI_INFO(
+ID NUMBER PRIMARY KEY,
+EMPLOYEE_ID VARCHAR2(8 BYTE),
+AOI_ID NUMBER,
+LAST_MODIFIED(18 BYTE)
+);
+
+create sequence emp_aoi_info_id_seq;
+
+CREATE TRIGGER TRG_EMP_AOI_INFO_ID
+before insert ON DB_IUMS.EMP_AOI_INFO
+for each row
+begin
+   select emp_aoi_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
+
 //*********************************************************************************************************************
 
 
