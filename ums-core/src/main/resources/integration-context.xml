@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
+
+
+  <integration:gateway
+      service-interface="org.ums.integration.FileWriterGateway"
+      default-request-channel="ftpChannel"></integration:gateway>
+
+  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
+    <property name="host" value="localhost"/>
+    <property name="port" value="21"/>
+    <property name="username" value="iums"/>
+    <property name="password" value="austig100"/>
+  </bean>
+
+  <ftp:outbound-gateway
+      session-factory="ftpClientFactory"
+      request-channel="ftpChannel"
+      command="get"
+      command-options="-stream"
+      expression="payload"
+      reply-channel="outputChannel">
+
+  </ftp:outbound-gateway>
+
+
+  <bean id="mp" class="org.ums.integration.MessagePrinter"/>
+  <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
+
+  <integration:channel id="outputChannel"/>
+  <integration:channel id="inputChannel"/>
+  <integration:channel id="ftpChannel"/>
+
+</beans>
