@@ -1304,6 +1304,29 @@ begin
 end;
 /
 
+CREATE TABLE DB_IUMS.EMP_SERVICE_INFO
+(
+  ID                NUMBER PRIMARY KEY,
+  EMPLOYEE_ID       VARCHAR2(8 BYTE),
+  DESIGNATION       NUMBER,
+  JOINING_DATE      DATE,
+  RESIGN_DATE       DATE,
+  STATUS            NUMBER,
+  LAST_MODIFIED     VARCHAR2(18 BYTE),
+  ROOM_NO           VARCHAR2(15 BYTE),
+  EXT_NO            VARCHAR2(6 BYTE),
+  ACADEMIC_INITIAL  VARCHAR2(25 BYTE)
+);
+
+CREATE TABLE DB_IUMS.EMP_SERVICE_DETAILS
+(
+  ID               NUMBER PRIMARY KEY,
+  EMPLOYMENT_TYPE  NUMBER,
+  START_DATE       DATE,
+  END_DATE         DATE,
+  SERVICE_ID       NUMBER
+);
+
 //*********************************************************************************************************************
 
 

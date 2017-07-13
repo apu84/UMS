@@ -10,107 +10,259 @@
         text-align: center;
         width: auto;
         font-weight: bold;
-        padding: 0.2%;
+        padding: 1%;
     }
 </style>
 
 <div class="panel">
     <div class="panel-heading">Service Information</div>
     <div class="panel-body showPanel" style="min-height: 490px;">
-        <div data-ng-repeat="service in entry.serviceInfo track by $index">
-            <fieldset>
-                <legend align="center">Designation: <select name="nDesignation{{$index}}"
-                                                            id="iDesignation{{$index}}"
-                                                            data-ng-model="service.designation"
-                                                            data-ng-options="designation.name for designation in designations track by designation.id" required>
-                    <option value="">Select Designations</option>
-                </select>
-                    <span>
-                         <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow(this, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
-                    </span>
-                </legend>
-                <div class="row">
-                    <div class="col-md-3">
-                        <label class="col-md-4">Employment Type:</label>
-                        <div class="col-md-8">
-                            <select name="nEmploymentType{{$index}}"
-                                    id="iEmploymentType{{$index}}"
-                                    data-ng-model="service.employmentType"
-                                    data-ng-options="employmentType.name for employmentType in employmentTypes track by employmentType.id"
-                                    class="form-control" required>
-                                <option value="">Select Category</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div data-ng-repeat="interval in service.intervalDetails track by $index">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label class="col-md-4">Period:</label>
+        <div data-ng-if="showInputDiv">
+            <form data-validate="" data-onvalidate="submit">
+                <div data-ng-repeat="service in entry.serviceInfo track by $index">
+                    <fieldset>
+                        <legend align="center">Designation: <select name="nDesignation{{$index}}"
+                                                                    id="iDesignation{{$index}}"
+                                                                    data-ng-model="service.designation"
+                                                                    data-ng-options="designation.name for designation in designations track by designation.id" required>
+                            <option value="">Select Designations</option>
+                        </select>
+                            <span>
+                                 <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceInfo', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
+                            </span>
+                        </legend>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="col-md-4">Employment:</label>
                                 <div class="col-md-8">
-                                    <select name="nPeriod{{$index}}"
-                                            id="iPeriod{{$index}}"
-                                            data-ng-model="interval.interval"
-                                            data-ng-options="serviceInterval.name for serviceInterval in serviceIntervals track by serviceInterval.id"
+                                    <select name="nEmploymentType{{$index}}"
+                                            id="iEmploymentType{{$index}}"
+                                            data-ng-model="service.employmentType"
+                                            data-ng-options="employmentType.name for employmentType in employmentTypes track by employmentType.id"
                                             class="form-control" required>
                                         <option value="">Select Category</option>
                                     </select>
                                 </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="col-md-4 control-label">Start Date</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nStartDate{{$index}}"
-                                       id="iStartDate{{$index}}"
-                                       data-ng-model="interval.startDate"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       class="datepicker-default form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-md-4">Joining Date:</label>
+                                <div class="col-md-8">
+                                    <input name="nJoiningDate{{$index}}"
+                                            id="iJoiningDate{{$index}}"
+                                            data-ng-model="service.joiningDate"
+                                            data-date-format="dd/mm/yyyy"
+                                            placeholder="DD/MM/YYYY"
+                                            autocomplete="off"
+                                            class="datepicker-default form-control" required>
+                                        <option value="">Select Category</option>
+                                    </input>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-md-4">Resign Date:</label>
+                                <div class="col-md-8">
+                                    <input name="nResignDate{{$index}}"
+                                            id="iResignDate{{$index}}"
+                                            data-ng-model="service.resignDate"
+                                            data-date-format="dd/mm/yyyy"
+                                            placeholder="DD/MM/YYYY"
+                                            autocomplete="off"
+                                            class="datepicker-default form-control">
+                                        <option value="">Select Category</option>
+                                    </input>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="col-md-4 control-label">End Date</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nEndDate{{$index}}"
-                                       id="iEndDate{{$index}}"
-                                       data-ng-model="interval.endDate"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       class="datepicker-default form-control" required>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="col-md-4 control-label">Room No.</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nRoomNo{{$index}}"
+                                           id="iRoomNo{{$index}}"
+                                           data-ng-model="service.roomNo"
+                                           placeholder="Room No"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-md-4 control-label">PABX/Ext No.</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nExtNo{{$index}}"
+                                           id="iExtNo{{$index}}"
+                                           data-ng-model="service.extNo"
+                                           placeholder="Ext No"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-md-4 control-label">Academic Initial</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nAcademicInitial{{$index}}"
+                                           id="iAcademicInitial{{$index}}"
+                                           data-ng-model="service.academicInitial"
+                                           placeholder="Academic Initial"
+                                           class="form-control">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="col-md-4 control-label">Exp End Date</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nExpEndDate{{$index}}"
-                                       id="iExpEndDate{{$index}}"
-                                       data-ng-model="interval.expEndDate"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       class="datepicker-default form-control" required>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Sl.</th>
+                                                <th>Period</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
+                                            <tr>
+                                                <td>{{$index + 1}}</td>
+                                                <td><select name="nPeriod{{$index}}"
+                                                            id="iPeriod{{$index}}"
+                                                            data-ng-model="interval.interval"
+                                                            data-ng-options="serviceInterval.name for serviceInterval in serviceIntervals track by serviceInterval.id"
+                                                            class="form-control" required>
+                                                    <option value="">Select Category</option>
+                                                </select></td>
+                                                <td><input type="text"
+                                                           name="nStartDate{{$index}}"
+                                                           id="iStartDate{{$index}}"
+                                                           data-ng-model="interval.startDate"
+                                                           data-date-format="dd/mm/yyyy"
+                                                           placeholder="DD/MM/YYYY"
+                                                           autocomplete="off"
+                                                           class="datepicker-default form-control" required></td>
+                                                <td><input type="text"
+                                                           name="nEndDate{{$index}}"
+                                                           id="iEndDate{{$index}}"
+                                                           data-ng-model="interval.endDate"
+                                                           data-date-format="dd/mm/yyyy"
+                                                           placeholder="DD/MM/YYYY"
+                                                           autocomplete="off"
+                                                           class="datepicker-default form-control" required></td>
+                                                <td>[ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceDetails', $parent.$index, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-1">
-                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow(this, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        <div class="text-center pal">
+                            [ <a title="Add New Row" data-ng-click="addNewRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        </div>
+                    </fieldset>
+                    <br />
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="center">
+                            [ <a title="Add New Row" data-ng-click="addNewRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        </div>
+                        <div align="right">
+                            <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                         </div>
                     </div>
                 </div>
-                <div class="text-center pal">
-                    [ <a title="Add New Row" data-ng-click="addNewRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+            </form>
+        </div>
+
+
+
+
+
+        <div data-ng-if="showLabelDiv">
+            <div data-ng-repeat="service in entry.serviceInfo track by $index">
+                <fieldset>
+                    <legend align="center">Designation: {{service.designation}}</legend>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="col-md-4">Employment:</label>
+                            <div class="col-md-8">
+                                {{service.employmentType}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-md-4">Joining Date:</label>
+                            <div class="col-md-8">
+                                {{service.joiningDate}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-md-4">Resign Date:</label>
+                            <div class="col-md-8">
+                                {{service.resignDate}}
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="col-md-4 control-label">Room No.</label>
+                            <div class="col-md-8">
+                                {{service.roomNo}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-md-4 control-label">PABX/Ext No.</label>
+                            <div class="col-md-8">
+                                {{service.extNo}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-md-4 control-label">Academic Initial</label>
+                            <div class="col-md-8">
+                                {{service.academicInitial}}
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Sl.</th>
+                                            <th>Period</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
+                                        <tr>
+                                            <td>{{$index + 1}}</td>
+                                            <td>{{interval.interval}}</td>
+                                            <td>{{interval.startDate}}</td>
+                                            <td>{{interval.endDate}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="submit" title="Submit" data-ng-click="enableEditMode()" class="btn btn-success"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
-            </fieldset>
-            <br />
+            </div>
         </div>
-        <div class="text-center pal">
-            [ <a title="Add New Row" data-ng-click="addNewRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-        </div>
-        <br />
     </div>
 </div>

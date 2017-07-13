@@ -6,8 +6,13 @@ module ums{
         employmentTypes: Array<ICommon>;
         serviceIntervals: Array<ICommon>;
 
+        showInputDiv: boolean;
+        showLabelDiv: boolean;
+
         addNewRow: Function;
         deleteRow: Function;
+        submit: Function;
+        enableEditMode: Function;
     }
 
     interface IEntry{
@@ -27,6 +32,9 @@ module ums{
                     private departmentService: DepartmentService,
                     private designationService: DesignationService) {
 
+            $scope.showInputDiv = false;
+            $scope.showLabelDiv = true;
+
             $scope.entry = {
                 serviceInfo: Array<IServiceInformationModel>()
             };
@@ -35,9 +43,12 @@ module ums{
 
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow =this.deleteRow.bind(this);
+            $scope.submit = this.submit.bind(this);
+            $scope.enableEditMode = this.enableEditMode.bind(this);
             this.getEmploymentTypes();
             this.getDesignationTypes();
             this.addDate();
+            console.log("I am really changing");
         }
 
         private getEmploymentTypes(){
@@ -50,6 +61,15 @@ module ums{
             this.designationService.getAll().then((designations: any) => {
                this.$scope.designations = designations;
             });
+        }
+
+        private submit(): void{
+            this.notify.success("I got the submit command");
+        }
+
+        private enableEditMode(): void{
+            this.$scope.showLabelDiv = false;
+            this.$scope.showInputDiv = true;
         }
 
         private addNewRow(parameter: string, index?: number) {
@@ -70,7 +90,6 @@ module ums{
                 };
                 this.$scope.entry.serviceInfo.push(serviceEntry);
             }
-
             else if(parameter == "serviceDetails") {
                 let serviceDetailsEntry: IServiceDetailsModel;
                 serviceDetailsEntry = {
@@ -86,8 +105,14 @@ module ums{
             this.addDate();
         }
 
-        private deleteRow(parameter: any, index: number) {
-            this.$scope.entry.serviceInfo.splice(index, 1);
+        private deleteRow(parameter: any, parentIndex: number, index: number) {
+            console.log(parentIndex + " <--->  " + index);
+            if(parameter == "serviceInfo") {
+                this.$scope.entry.serviceInfo.splice(index, 1);
+            }
+            else if(parameter == "serviceDetails"){
+                this.$scope.entry.serviceInfo[parentIndex].intervalDetails.splice(index, 1);
+            }
         }
 
         private addDate(): void {
