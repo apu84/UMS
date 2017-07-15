@@ -14,6 +14,10 @@ module ums {
     studentId: string;
   }
 
+  export interface PaymentGroup {
+    [key: string] : Payment[];
+  }
+
   interface PaymentResponse {
     entries: Payment[];
   }

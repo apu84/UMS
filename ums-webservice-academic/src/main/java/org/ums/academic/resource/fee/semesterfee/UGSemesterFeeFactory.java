@@ -1,6 +1,7 @@
 package org.ums.academic.resource.fee.semesterfee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.manager.StudentRecordManager;
@@ -8,6 +9,7 @@ import org.ums.manager.StudentRecordManager;
 @Component
 class UGSemesterFeeFactory {
   @Autowired
+  @Qualifier("UGRegularSemesterFee")
   private UGRegularSemesterFee mUGRegularSemesterFee;
 
   @Autowired

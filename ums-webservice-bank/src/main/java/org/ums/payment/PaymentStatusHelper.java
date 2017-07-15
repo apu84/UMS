@@ -98,6 +98,7 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
       Validate.isTrue(paymentStatus.getLastModified().equals(latestPayment.getLastModified()));
       Validate.isTrue(!latestPayment.isPaymentComplete());
       paymentStatus.setPaymentComplete(true);
+      paymentStatus.setTransactionId(latestPayment.getTransactionId());
       paymentStatusList.add(paymentStatus);
     }
     mPaymentStatusManager.update(paymentStatusList);

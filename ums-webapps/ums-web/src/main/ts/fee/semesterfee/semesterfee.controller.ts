@@ -5,7 +5,7 @@ module ums {
     private ADMITTED: string = 'Admission is completed';
     private READMISSION_NOT_APPLIED: string = 'No readmission application found';
     public messageText: string;
-    public payments: Payment[];
+    public payments: PaymentGroup;
     public fee: SemesterFee[];
     public installmentEnabled: boolean = false;
     public currentEnrolledSemester: number;
@@ -23,6 +23,7 @@ module ums {
             switch (response) {
               case SemesterFeeResponse.responseType.ADMITTED :
                 this.messageText = this.ADMITTED;
+                this.showPaymentStatus(student.currentEnrolledSemesterId);
                 break;
               case SemesterFeeResponse.responseType.ALLOWED:
                 this.admissionFee(student.currentEnrolledSemesterId);
@@ -32,6 +33,7 @@ module ums {
                 break;
               case SemesterFeeResponse.responseType.NOT_WITHIN_SLOT:
                 this.messageText = this.NOT_WITHIN_SLOT;
+                this.showPaymentStatus(student.currentEnrolledSemesterId);
                 break;
             }
           });
@@ -91,6 +93,7 @@ module ums {
     }
 
     public selectPaymentOption(option: number, semesterId: number) {
+      this.messageText = '';
       if (option === 0) {
         this.admissionNoInstallment(semesterId);
       }
@@ -220,15 +223,27 @@ module ums {
               );
             }
             else {
-              this.messageText = this.NOT_WITHIN_SLOT;
+              this.messageText = 'Your first installment for semester fee is paid. Second installment payment slot has not started yet or already over.';
+              this.studentService.getStudent().then((student: Student) => {
+                if (student && student.currentEnrolledSemesterId) {
+                  this.showPaymentStatus(student.currentEnrolledSemesterId);
+                }
+              });
             }
-          }
-      );
+          });
     }
 
     private showPaymentStatus(semesterId: number): void {
       this.paymentService.getSemesterFeePaymentStatus(semesterId).then((payments: Payment[]) => {
-        this.payments = payments;
+        let paymentGroup: PaymentGroup = {};
+        this.payments = payments.reduce((group: PaymentGroup, payment) => {
+          if (!group[payment.transactionId]) {
+            group[payment.transactionId] = []
+          }
+          group[payment.transactionId].push(payment);
+          return group;
+        }, paymentGroup);
+        console.log(this.payments);
       });
     }
   }

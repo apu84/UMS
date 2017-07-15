@@ -54,7 +54,8 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
   @Override
   public int update(List<MutablePaymentStatus> pMutableList) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
+    mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList));
+    return super.update(pMutableList);
   }
 
   @Override
@@ -63,7 +64,8 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getAccount(), pMutable.getTransactionId(), pMutable
         .getMethodOfPayment().getId(), pMutable.isPaymentComplete(), pMutable.getReceivedOn(), pMutable
         .getCompletedOn(), pMutable.getAmount(), pMutable.getPaymentDetails(), pMutable.getReceiptNo());
-    return id;
+    pMutable.setId(id);
+    return super.create(pMutable);
   }
 
   @Override

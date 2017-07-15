@@ -16,5 +16,7 @@ public interface StudentPaymentManager extends ContentManager<StudentPayment, Mu
 
   List<StudentPayment> getTransactionDetails(String pStudentId, String pTransactionId);
 
+  List<StudentPayment> getTransactionDetails(String pTransactionId);
+
   List<StudentPayment> getPayments(String pStudentId);
 }

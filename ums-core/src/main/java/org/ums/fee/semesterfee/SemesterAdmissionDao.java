@@ -19,7 +19,7 @@ public class SemesterAdmissionDao extends SemesterAdmissionStatusDaoDecorator {
   String SELECT_ALL = "SELECT ID, STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED FROM SEMESTER_ADMISSION_STATUS ";
   String INSERT_ALL =
       "INSERT INTO SEMESTER_ADMISSION_STATUS (ID, STUDENT_ID, SEMESTER_ID, IS_ADMITTED, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
+          + "VALUES(?, ?, ?, ?, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE SEMESTER_ADMISSION_STATUS SET IS_ADMITTED = ?, LAST_MODIFIED = " + getLastModifiedSql()
       + " ";
   String DELETE_ALL = "DELETE FROM SEMESTER_ADMISSION_STATUS ";

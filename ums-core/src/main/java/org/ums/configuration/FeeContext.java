@@ -114,7 +114,8 @@ public class FeeContext {
 
   @Bean
   StudentPaymentManager studentPaymentManager() {
-    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager(), studentDuesManager());
+    PostStudentPaymentActions postPaymentActions =
+        new PostStudentPaymentActions(studentDuesManager(), installmentStatusManager());
     StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
     studentPaymentDao.setManager(postPaymentActions);
     return studentPaymentDao;
@@ -127,7 +128,11 @@ public class FeeContext {
 
   @Bean
   PaymentStatusManager paymentStatusManager() {
-    return new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    PostPaymentActions postPaymentActions =
+        new PostPaymentActions(certificateStatusManager(), installmentStatusManager(), studentPaymentManager());
+    PaymentStatusDao paymentStatusDao = new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    paymentStatusDao.setManager(postPaymentActions);
+    return paymentStatusDao;
   }
 
   @Bean

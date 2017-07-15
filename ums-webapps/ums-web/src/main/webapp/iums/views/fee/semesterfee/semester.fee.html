@@ -6,8 +6,10 @@
         </div>
         <div class="spacer"></div>
         <div data-ng-if="vm.installmentEnabled && !vm.payments">
-            <input type="radio" data-ng-click="vm.selectPaymentOption(0, vm.currentEnrolledSemester)" name="paymentOption"> Regular
-            <input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)" name="paymentOption"> Installment
+            <input type="radio" data-ng-click="vm.selectPaymentOption(0, vm.currentEnrolledSemester)"
+                   name="paymentOption"> Regular
+            <input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)"
+                   name="paymentOption"> Installment
         </div>
         <div data-ng-if="vm.fee && !vm.payments">
             <table class="table table-hover table-bordered table-advanced">
@@ -38,7 +40,7 @@
         </div>
 
         <div data-ng-if="vm.payments">
-            <table class="table table-hover table-bordered table-advanced">
+            <table class="table table-hover table-bordered table-advanced" data-ng-repeat="(transactionId,payments) in vm.payments">
                 <thead>
                 <tr role="row" class="heading">
                     <th width="35%" class="sorting">TransactionId</th>
@@ -49,12 +51,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="payment in vm.payments">
-                    <td>{{::payment.transactionId}}</td>
-                    <td>{{::payment.feeCategory}}</td>
-                    <td>{{::payment.amount}}/=</td>
-                    <td>{{::payment.appliedOn}}</td>
-                    <td>{{::payment.status}}</td>
+                <tr data-ng-repeat="payment in vm.payments[transactionId]">
+                    <td  class="sorting" style="padding: 10px"
+                        rowspan="{{vm.payments[transactionId].length}}" data-ng-if="$index === 0">
+                        {{transactionId}}
+                    </td>
+                    <td style="padding: 10px;">{{::payment.feeCategory}}</td>
+                    <td style="padding: 10px">{{::payment.amount}}/=</td>
+                    <td  style="padding: 10px" rowspan="{{vm.payments[transactionId].length}}"
+                        data-ng-if="$index === 0">{{::payment.appliedOn}}
+                    </td>
+                    <td style="padding: 10px" rowspan="{{vm.payments[transactionId].length}}"
+                        data-ng-if="$index === 0">{{::payment.status}}
+                    </td>
                 </tr>
                 </tbody>
             </table>

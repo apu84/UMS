@@ -34,7 +34,7 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
     APPLICATION_SEMESTER_WITHDRAW("9"),
     APPLICATION_CCI("10"),
     APPLICATION_READMISSION("11"),
-    REGUALR_ADMISSION("12"),
+    REGULAR_ADMISSION("12"),
     REGULAR_FIRST_INSTALLMENT("13"),
     REGULAR_SECOND_INSTALLMENT("14"),
     READMISSION("15"),
