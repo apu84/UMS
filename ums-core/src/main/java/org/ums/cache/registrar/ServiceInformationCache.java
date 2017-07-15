@@ -24,12 +24,22 @@ public class ServiceInformationCache extends
   }
 
   @Override
-  public int saveServiceInformation(List<MutableServiceInformation> pMutableEmployeeInformation) {
-    return getManager().saveServiceInformation(pMutableEmployeeInformation);
+  public int saveServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+    return getManager().saveServiceInformation(pMutableServiceInformation);
   }
 
   @Override
-  public List<ServiceInformation> getServiceInformation(int pEmployeeId) {
+  public List<ServiceInformation> getServiceInformation(String pEmployeeId) {
     return getManager().getServiceInformation(pEmployeeId);
+  }
+
+  @Override
+  public int updateServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+    return getManager().updateServiceInformation(pMutableServiceInformation);
+  }
+
+  @Override
+  public int deleteServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+    return getManager().deleteServiceInformation(pMutableServiceInformation);
   }
 }

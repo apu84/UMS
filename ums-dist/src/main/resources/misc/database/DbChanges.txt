@@ -1289,7 +1289,7 @@ CREATE TABLE EMP_AOI_INFO(
 ID NUMBER PRIMARY KEY,
 EMPLOYEE_ID VARCHAR2(8 BYTE),
 AOI_ID NUMBER,
-LAST_MODIFIED(18 BYTE)
+LAST_MODIFIED VARCHAR2(18 BYTE)
 );
 
 create sequence emp_aoi_info_id_seq;
@@ -1307,25 +1307,51 @@ end;
 CREATE TABLE DB_IUMS.EMP_SERVICE_INFO
 (
   ID                NUMBER PRIMARY KEY,
-  EMPLOYEE_ID       VARCHAR2(8 BYTE),
-  DESIGNATION       NUMBER,
-  JOINING_DATE      DATE,
+  EMPLOYEE_ID       VARCHAR2(8 BYTE) NOT NULL,
+  DEPARTMENT        VARCHAR2(2 BYTE) NOT NULL,
+  DESIGNATION       NUMBER NOT NULL,
+  EMPLOYMENT        NUMBER NOT NULL,
+  JOINING_DATE      DATE NOT NULL,
   RESIGN_DATE       DATE,
-  STATUS            NUMBER,
-  LAST_MODIFIED     VARCHAR2(18 BYTE),
   ROOM_NO           VARCHAR2(15 BYTE),
   EXT_NO            VARCHAR2(6 BYTE),
-  ACADEMIC_INITIAL  VARCHAR2(25 BYTE)
+  ACADEMIC_INITIAL  VARCHAR2(25 BYTE),
+  STATUS            NUMBER,     //1 = CURRENT 2=OLD
+  LAST_MODIFIED     VARCHAR2(18 BYTE)
 );
+
+create sequence emp_service_info_id_seq;
+
+CREATE TRIGGER TRG_EMP_SERVICE_INFO_ID
+before insert ON DB_IUMS.EMP_SERVICE_INFO
+for each row
+begin
+   select emp_service_info_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
 
 CREATE TABLE DB_IUMS.EMP_SERVICE_DETAILS
 (
-  ID               NUMBER PRIMARY KEY,
-  EMPLOYMENT_TYPE  NUMBER,
-  START_DATE       DATE,
-  END_DATE         DATE,
-  SERVICE_ID       NUMBER
+  ID                NUMBER PRIMARY KEY,
+  EMPLOYMENT_PERIOD NUMBER NOT NULL,
+  START_DATE        DATE NOT NULL,
+  END_DATE          DATE,
+  SERVICE_ID        NUMBER NOT NULL
 );
+
+create sequence emp_service_details_id_seq;
+
+CREATE TRIGGER TRG_EMP_SERVICE_DETAILS_ID
+before insert ON DB_IUMS.EMP_SERVICE_DETAILS
+for each row
+begin
+   select emp_service_details_id_seq.nextval
+   into :new.id
+   from dual;
+end;
+/
 
 //*********************************************************************************************************************
 

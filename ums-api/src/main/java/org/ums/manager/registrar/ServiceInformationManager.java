@@ -9,7 +9,11 @@ import java.util.List;
 public interface ServiceInformationManager extends
     ContentManager<ServiceInformation, MutableServiceInformation, Integer> {
 
-  int saveServiceInformation(final List<MutableServiceInformation> pMutableEmployeeInformation);
+  int saveServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
 
-  List<ServiceInformation> getServiceInformation(final int pEmployeeId);
+  List<ServiceInformation> getServiceInformation(final String pEmployeeId);
+
+  int updateServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
+
+  int deleteServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
 }

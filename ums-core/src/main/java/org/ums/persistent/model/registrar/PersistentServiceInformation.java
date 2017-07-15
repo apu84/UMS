@@ -2,50 +2,59 @@ package org.ums.persistent.model.registrar;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Designation;
+import org.ums.domain.model.immutable.EmploymentType;
 import org.ums.domain.model.immutable.registrar.ServiceInformation;
 import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
 import org.ums.manager.registrar.ServiceInformationManager;
 
+import java.util.Date;
+
 public class PersistentServiceInformation implements MutableServiceInformation {
 
-  private static ServiceInformationManager sEmployeeInformationManager;
+  private static ServiceInformationManager sServiceInformationManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sEmployeeInformationManager =
-        applicationContext.getBean("employeeInformationManager", ServiceInformationManager.class);
+    sServiceInformationManager =
+        applicationContext.getBean("serviceInformationManager", ServiceInformationManager.class);
   }
 
   private int mId;
-  private int mEmployeeId;
-  private int mEmploymentType;
-  private int mDesignation;
-  private int mDeptOffice;
-  private String mJoiningDate;
-  private String mJobContractualDate;
-  private String mJobProbationDate;
-  private String mJobPermanentDate;
-  private String mJobTerminationDate;
-  private int mExtNo;
-  private String mShortName;
+  private String mEmployeeId;
+  private Department mDepartment;
+  private String mDepartmentId;
+  private Designation mDesignation;
+  private int mDesignationId;
+  private EmploymentType mEmployment;
+  private int mEmploymentId;
+  private Date mJoiningDate;
+  private Date mResignDate;
   private String mRoomNo;
+  private String mExtNo;
+  private String mAcademicInitial;
+  private int mCurrentStatus;
   private String mLastModified;
 
   public PersistentServiceInformation() {}
 
   public PersistentServiceInformation(PersistentServiceInformation pPersistentServiceInformation) {
+    mId = pPersistentServiceInformation.getId();
     mEmployeeId = pPersistentServiceInformation.getEmployeeId();
-    mEmploymentType = pPersistentServiceInformation.getEmploymentType();
+    mDepartment = pPersistentServiceInformation.getDepartment();
+    mDepartmentId = pPersistentServiceInformation.getDepartmentId();
     mDesignation = pPersistentServiceInformation.getDesignation();
-    mDeptOffice = pPersistentServiceInformation.getDeptOffice();
+    mDesignationId = pPersistentServiceInformation.getDesignationId();
+    mEmployment = pPersistentServiceInformation.getEmployment();
+    mEmploymentId = pPersistentServiceInformation.getEmploymentId();
     mJoiningDate = pPersistentServiceInformation.getJoiningDate();
-    mJobContractualDate = pPersistentServiceInformation.getJobContractualDate();
-    mJobProbationDate = pPersistentServiceInformation.getJobProbationDate();
-    mJobPermanentDate = pPersistentServiceInformation.getJobPermanentDate();
-    mJobTerminationDate = pPersistentServiceInformation.getJobTerminationDate();
-    mExtNo = pPersistentServiceInformation.getExtNo();
-    mShortName = pPersistentServiceInformation.getShortName();
+    mResignDate = pPersistentServiceInformation.getResignDate();
     mRoomNo = pPersistentServiceInformation.getRoomNo();
+    mExtNo = pPersistentServiceInformation.getExtNo();
+    mAcademicInitial = pPersistentServiceInformation.getAcademicInitial();
+    mCurrentStatus = pPersistentServiceInformation.getCurrentStatus();
+    mLastModified = pPersistentServiceInformation.getLastModified();
   }
 
   @Override
@@ -55,17 +64,17 @@ public class PersistentServiceInformation implements MutableServiceInformation {
 
   @Override
   public Integer create() {
-    return sEmployeeInformationManager.create(this);
+    return sServiceInformationManager.create(this);
   }
 
   @Override
   public void update() {
-    sEmployeeInformationManager.update(this);
+    sServiceInformationManager.update(this);
   }
 
   @Override
   public void delete() {
-    sEmployeeInformationManager.delete(this);
+    sServiceInformationManager.delete(this);
   }
 
   @Override
@@ -89,58 +98,48 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   }
 
   @Override
-  public void setEmployeeId(int pEmployeeId) {
+  public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
   }
 
   @Override
-  public void setEmploymentType(int pEmploymentType) {
-    mEmploymentType = pEmploymentType;
+  public void setDepartment(Department pDepartment) {
+    mDepartment = pDepartment;
   }
 
   @Override
-  public void setDesignation(int pDesignation) {
+  public void setDepartmentId(String pDepartmentId) {
+    mDepartmentId = pDepartmentId;
+  }
+
+  @Override
+  public void setDesignation(Designation pDesignation) {
     mDesignation = pDesignation;
   }
 
   @Override
-  public void setDeptOffice(int pDeptOffice) {
-    mDeptOffice = pDeptOffice;
+  public void setDesignationId(int pDesignationId) {
+    mDesignationId = pDesignationId;
   }
 
   @Override
-  public void setJoiningDate(String pJoiningDate) {
+  public void setEmployment(EmploymentType pEmployment) {
+    mEmployment = pEmployment;
+  }
+
+  @Override
+  public void setEmploymentId(int pEmploymentId) {
+    mEmploymentId = pEmploymentId;
+  }
+
+  @Override
+  public void setJoiningDate(Date pJoiningDate) {
     mJoiningDate = pJoiningDate;
   }
 
   @Override
-  public void setJobPermanentDate(String pJobPermanentDate) {
-    mJobPermanentDate = pJobPermanentDate;
-  }
-
-  @Override
-  public void setJobContractualDate(String pJobContractualDate) {
-    mJobContractualDate = pJobContractualDate;
-  }
-
-  @Override
-  public void setJobProbationDate(String pJobProbationDate) {
-    mJobProbationDate = pJobProbationDate;
-  }
-
-  @Override
-  public void setJobTerminationDate(String pJobTerminationDate) {
-    mJobTerminationDate = pJobTerminationDate;
-  }
-
-  @Override
-  public void setExtNo(int pExtNo) {
-    mExtNo = pExtNo;
-  }
-
-  @Override
-  public void setShortName(String pShortName) {
-    mShortName = pShortName;
+  public void setResignDate(Date pResignDate) {
+    mResignDate = pResignDate;
   }
 
   @Override
@@ -149,62 +148,82 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   }
 
   @Override
-  public int getEmployeeId() {
+  public void setExtNo(String pExtNo) {
+    mExtNo = pExtNo;
+  }
+
+  @Override
+  public void setAcademicInitial(String pAcademicInitial) {
+    mAcademicInitial = pAcademicInitial;
+  }
+
+  @Override
+  public void setCurrentStatus(int pCurrentStatus) {
+    mCurrentStatus = pCurrentStatus;
+  }
+
+  @Override
+  public String getEmployeeId() {
     return mEmployeeId;
   }
 
   @Override
-  public int getEmploymentType() {
-    return mEmploymentType;
+  public Department getDepartment() {
+    return mDepartment;
   }
 
   @Override
-  public int getDesignation() {
+  public String getDepartmentId() {
+    return mDepartmentId;
+  }
+
+  @Override
+  public Designation getDesignation() {
     return mDesignation;
   }
 
   @Override
-  public int getDeptOffice() {
-    return mDeptOffice;
+  public int getDesignationId() {
+    return mDesignationId;
   }
 
   @Override
-  public String getJoiningDate() {
+  public EmploymentType getEmployment() {
+    return mEmployment;
+  }
+
+  @Override
+  public int getEmploymentId() {
+    return mEmploymentId;
+  }
+
+  @Override
+  public Date getJoiningDate() {
     return mJoiningDate;
   }
 
   @Override
-  public String getJobPermanentDate() {
-    return mJobPermanentDate;
-  }
-
-  @Override
-  public String getJobContractualDate() {
-    return mJobContractualDate;
-  }
-
-  @Override
-  public String getJobProbationDate() {
-    return mJobProbationDate;
-  }
-
-  @Override
-  public String getJobTerminationDate() {
-    return mJobTerminationDate;
-  }
-
-  @Override
-  public int getExtNo() {
-    return mExtNo;
-  }
-
-  @Override
-  public String getShortName() {
-    return mShortName;
+  public Date getResignDate() {
+    return mResignDate;
   }
 
   @Override
   public String getRoomNo() {
     return mRoomNo;
+  }
+
+  @Override
+  public String getExtNo() {
+    return mExtNo;
+  }
+
+  @Override
+  public String getAcademicInitial() {
+    return mAcademicInitial;
+  }
+
+  @Override
+  public int getCurrentStatus() {
+    return mCurrentStatus;
   }
 }

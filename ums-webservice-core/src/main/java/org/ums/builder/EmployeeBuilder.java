@@ -79,14 +79,14 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getEmployeeName());
     pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignation()).getLabel());
-    if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
-      pBuilder.add("employmentType", "Permanent");
-    else if(pReadOnly.getEmploymentType().equals(EmploymentType.CONTRACTUAL.getLabel()))
-      pBuilder.add("employmentType", "Contractual");
-    else if(pReadOnly.getEmploymentType().equals(EmploymentType.PROVISIONAL.getLabel()))
-      pBuilder.add("employmentType", "Provisional");
-    else if(pReadOnly.getEmploymentType().equals(EmploymentType.PARTTIME.getLabel()))
-      pBuilder.add("employmentType", "Part Time");
+    // if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
+    // pBuilder.add("employmentType", "Permanent");
+    // else if(pReadOnly.getEmploymentType().equals(EmploymentType.CONTRACTUAL.getLabel()))
+    // pBuilder.add("employmentType", "Contractual");
+    // else if(pReadOnly.getEmploymentType().equals(EmploymentType.PROVISIONAL.getLabel()))
+    // pBuilder.add("employmentType", "Provisional");
+    // else if(pReadOnly.getEmploymentType().equals(EmploymentType.PARTTIME.getLabel()))
+    // pBuilder.add("employmentType", "Part Time");
     pBuilder.add("department", pReadOnly.getDepartment().getLongName());
   }
 }

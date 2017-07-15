@@ -1,9 +1,12 @@
 module ums{
     export interface IServiceInformationModel{
+        id: number;
         employeeId: string;
+        department: ICommon;
+        departmentId: string;
         designation: ICommon;
-        employmentType: ICommon;
         designationId: number;
+        employmentType: ICommon;
         employmentTypeId: number;
         joiningDate: string;
         resignDate: string;
@@ -18,6 +21,5 @@ module ums{
         intervalId: number;
         startDate: string;
         endDate: string;
-        expEndDate: string;
     }
 }

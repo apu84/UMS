@@ -25,7 +25,7 @@
                                                                     id="iDesignation{{$index}}"
                                                                     data-ng-model="service.designation"
                                                                     data-ng-options="designation.name for designation in designations track by designation.id" required>
-                            <option value="">Select Designations</option>
+                            <option value="">Select Designation</option>
                         </select>
                             <span>
                                  <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceInfo', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
@@ -40,7 +40,7 @@
                                             data-ng-model="service.employmentType"
                                             data-ng-options="employmentType.name for employmentType in employmentTypes track by employmentType.id"
                                             class="form-control" required>
-                                        <option value="">Select Category</option>
+                                        <option value="">Select Employment Type</option>
                                     </select>
                                 </div>
                             </div>
@@ -54,7 +54,6 @@
                                             placeholder="DD/MM/YYYY"
                                             autocomplete="off"
                                             class="datepicker-default form-control" required>
-                                        <option value="">Select Category</option>
                                     </input>
                                 </div>
                             </div>
@@ -68,7 +67,6 @@
                                             placeholder="DD/MM/YYYY"
                                             autocomplete="off"
                                             class="datepicker-default form-control">
-                                        <option value="">Select Category</option>
                                     </input>
                                 </div>
                             </div>
@@ -127,13 +125,20 @@
                                             <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
                                             <tr>
                                                 <td>{{$index + 1}}</td>
-                                                <td><select name="nPeriod{{$index}}"
-                                                            id="iPeriod{{$index}}"
+                                                <td><div data-ng-if="service.employmentType.name=='Regular'"><select name="nRegularPeriod{{$index}}"
+                                                            id="iRegularPeriod{{$index}}"
                                                             data-ng-model="interval.interval"
-                                                            data-ng-options="serviceInterval.name for serviceInterval in serviceIntervals track by serviceInterval.id"
+                                                            data-ng-options="serviceInterval.name for serviceInterval in serviceRegularIntervals track by serviceInterval.id"
                                                             class="form-control" required>
                                                     <option value="">Select Category</option>
-                                                </select></td>
+                                                </select></div>
+                                                    <div data-ng-if="service.employmentType.name!='Regular'"><select name="nCOntractPeriod{{$index}}"
+                                                                                                                                id="iContractPeriod{{$index}}"
+                                                                                                                                data-ng-model="interval.interval"
+                                                                                                                                data-ng-options="serviceInterval.name for serviceInterval in serviceContractIntervals track by serviceInterval.id"
+                                                                                                                                class="form-control" required>
+                                                    <option value="">Select Category</option>
+                                                </select></div></td>
                                                 <td><input type="text"
                                                            name="nStartDate{{$index}}"
                                                            id="iStartDate{{$index}}"
@@ -149,6 +154,7 @@
                                                            data-date-format="dd/mm/yyyy"
                                                            placeholder="DD/MM/YYYY"
                                                            autocomplete="off"
+                                                           data-ng-disabled="interval.interval.name==='Permanent'"
                                                            class="datepicker-default form-control" required></td>
                                                 <td>[ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceDetails', $parent.$index, $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</td>
                                             </tr>
@@ -184,24 +190,24 @@
         <div data-ng-if="showLabelDiv">
             <div data-ng-repeat="service in entry.serviceInfo track by $index">
                 <fieldset>
-                    <legend align="center">Designation: {{service.designation}}</legend>
+                    <legend align="center">Designation:<label class="control-label"><b>{{service.designation.name}}</b></label></legend>
                     <div class="row">
                         <div class="col-md-4">
                             <label class="col-md-4">Employment:</label>
-                            <div class="col-md-8">
-                                {{service.employmentType}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.employmentType.name}}</b></label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-md-4">Joining Date:</label>
-                            <div class="col-md-8">
-                                {{service.joiningDate}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.joiningDate}}</b></label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-md-4">Resign Date:</label>
-                            <div class="col-md-8">
-                                {{service.resignDate}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.resignDate}}</b></label>
                             </div>
                         </div>
                     </div>
@@ -209,20 +215,20 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label class="col-md-4 control-label">Room No.</label>
-                            <div class="col-md-8">
-                                {{service.roomNo}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.roomNo}}</b></label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-md-4 control-label">PABX/Ext No.</label>
-                            <div class="col-md-8">
-                                {{service.extNo}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.extNo}}</b></label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-md-4 control-label">Academic Initial</label>
-                            <div class="col-md-8">
-                                {{service.academicInitial}}
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{service.academicInitial}}</b></label>
                             </div>
                         </div>
                     </div>
@@ -242,10 +248,10 @@
                                         </thead>
                                         <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
                                         <tr>
-                                            <td>{{$index + 1}}</td>
-                                            <td>{{interval.interval}}</td>
-                                            <td>{{interval.startDate}}</td>
-                                            <td>{{interval.endDate}}</td>
+                                            <td>{{$index + 1}}<label class="control-label"><b>{{$index + 1}}.</b></label></td>
+                                            <td><label class="control-label"><b>{{interval.interval.name}}</b></label></td>
+                                            <td><label class="control-label"><b>{{interval.startDate}}</b></label></td>
+                                            <td><label class="control-label"><b>{{interval.endDate}}</b></label></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -256,11 +262,11 @@
                 </fieldset>
                 <br />
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div align="right">
-                    <button type="submit" title="Submit" data-ng-click="enableEditMode()" class="btn btn-success"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="right">
+                        <button type="submit" title="Submit" data-ng-click="enableEditMode()" class="btn btn-success"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    </div>
                 </div>
             </div>
         </div>

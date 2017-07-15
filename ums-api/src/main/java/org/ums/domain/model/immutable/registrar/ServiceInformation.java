@@ -3,34 +3,40 @@ package org.ums.domain.model.immutable.registrar;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Designation;
+import org.ums.domain.model.immutable.EmploymentType;
 import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface ServiceInformation extends Serializable, EditType<MutableServiceInformation>, Identifier<Integer>,
     LastModifier {
 
-  int getEmployeeId();
+  String getEmployeeId();
 
-  int getEmploymentType();
+  Department getDepartment();
 
-  int getDesignation();
+  String getDepartmentId();
 
-  int getDeptOffice();
+  Designation getDesignation();
 
-  String getJoiningDate();
+  int getDesignationId();
 
-  String getJobPermanentDate();
+  EmploymentType getEmployment();
 
-  String getJobContractualDate();
+  int getEmploymentId();
 
-  String getJobProbationDate();
+  Date getJoiningDate();
 
-  String getJobTerminationDate();
-
-  int getExtNo();
-
-  String getShortName();
+  Date getResignDate();
 
   String getRoomNo();
+
+  String getExtNo();
+
+  String getAcademicInitial();
+
+  int getCurrentStatus();
 }

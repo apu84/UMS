@@ -1,10 +1,10 @@
 module ums{
-
     interface IEmployeeServiceInformation extends ng.IScope{
         entry: IEntry;
         designations: Array<ICommon>;
         employmentTypes: Array<ICommon>;
-        serviceIntervals: Array<ICommon>;
+        serviceRegularIntervals: Array<ICommon>;
+        serviceContractIntervals: Array<ICommon>;
 
         showInputDiv: boolean;
         showLabelDiv: boolean;
@@ -13,6 +13,7 @@ module ums{
         deleteRow: Function;
         submit: Function;
         enableEditMode: Function;
+        changePeriodValues: Function;
     }
 
     interface IEntry{
@@ -34,21 +35,27 @@ module ums{
 
             $scope.showInputDiv = false;
             $scope.showLabelDiv = true;
-
             $scope.entry = {
                 serviceInfo: Array<IServiceInformationModel>()
             };
-
-            $scope.serviceIntervals = this.registrarConstants.servicePeriods;
-
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow =this.deleteRow.bind(this);
             $scope.submit = this.submit.bind(this);
             $scope.enableEditMode = this.enableEditMode.bind(this);
-            this.getEmploymentTypes();
+
             this.getDesignationTypes();
+            this.getEmploymentTypes();
+            this.getServiceIntervals();
             this.addDate();
-            console.log("I am really changing");
+        }
+
+        private getServiceIntervals() {
+            this.$scope.serviceRegularIntervals = Array<ICommon>();
+            this.$scope.serviceContractIntervals = Array<ICommon>();
+            this.$scope.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[0]);
+            this.$scope.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
+            this.$scope.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[2]);
+            this.$scope.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
         private getEmploymentTypes(){
@@ -64,7 +71,9 @@ module ums{
         }
 
         private submit(): void{
-            this.notify.success("I got the submit command");
+            this.notify.success("I got the submit");
+            this.$scope.showInputDiv = false;
+            this.$scope.showLabelDiv = true;
         }
 
         private enableEditMode(): void{
@@ -76,7 +85,10 @@ module ums{
             if(parameter == "serviceInfo") {
                 let serviceEntry: IServiceInformationModel;
                 serviceEntry = {
+                    id: null,
                     employeeId: "",
+                    department: null,
+                    departmentId: null,
                     designation: null,
                     employmentType: null,
                     designationId: null,
@@ -96,8 +108,7 @@ module ums{
                     interval: null,
                     intervalId: null,
                     startDate: "",
-                    endDate: "",
-                    expEndDate: ""
+                    endDate: ""
                 };
                 this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
                 console.log(this.$scope.entry.serviceInfo);
@@ -106,7 +117,6 @@ module ums{
         }
 
         private deleteRow(parameter: any, parentIndex: number, index: number) {
-            console.log(parentIndex + " <--->  " + index);
             if(parameter == "serviceInfo") {
                 this.$scope.entry.serviceInfo.splice(index, 1);
             }

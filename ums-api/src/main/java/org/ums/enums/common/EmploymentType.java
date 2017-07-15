@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EmploymentType {
-  PERMANENT(1, "1"),
-  CONTRACTUAL(2, "2"),
-  PROVISIONAL(3, "3"),
-  PARTTIME(4, "4");
+  REGULAR(1, "Regular"),
+  CONTRACT(2, "Contract"),
+  ADD_HOC(3, "Add-Hoc"),
+  PART_TIME(4, "Part-Time(PT)"),
+  PART_TIME_FULL_LOAD(5, "Part-Time Full Load(PTFL)");
 
   private String label;
   private int id;
