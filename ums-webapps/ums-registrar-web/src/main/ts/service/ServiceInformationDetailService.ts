@@ -1,17 +1,17 @@
 module ums{
-    export class AcademicInformationService{
+    export class ServiceInformationDetailService{
         public static $inject = ['registrarConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
-        url:string = "employee/academic";
+        url:string = "employee/serviceDetail";
 
         constructor(private registrarConstants: any, private httpClient: HttpClient,
                     private $q: ng.IQService, private notify: Notify,
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
-        public saveAcademicInformation(json: any): ng.IPromise<any> {
+        public saveServiceInformationDetail(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.url+"/saveAcademicInformation", json, 'application/json')
+            this.httpClient.post(this.url+"/saveServiceInformationDetail", json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");
@@ -22,9 +22,9 @@ module ums{
             return defer.promise;
         }
 
-        public getAcademicInformation(): ng.IPromise<any> {
+        public getServiceInformationDetail(): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.url+"/getAcademicInformation", HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getServiceInformationDetail", HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -35,5 +35,5 @@ module ums{
         }
     }
 
-    UMS.service("academicInformationService", AcademicInformationService);
+    UMS.service("serviceInformationDetailService", ServiceInformationDetailService);
 }

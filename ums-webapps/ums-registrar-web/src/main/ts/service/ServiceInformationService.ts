@@ -1,6 +1,8 @@
 module ums{
-    export class EmployeeServiceInformationService{
+    export class ServiceInformationService{
         public static $inject = ['registrarConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
+
+        url:string = "employee/service";
 
         constructor(private registrarConstants: any, private httpClient: HttpClient,
                     private $q: ng.IQService, private notify: Notify,
@@ -8,10 +10,8 @@ module ums{
         }
 
         public saveServiceInformation(json: any): ng.IPromise<any> {
-            console.log("I am in saveServiceInformation() service.ts file");
-            var url = "registrar/employee/saveServiceInformation";
-            var defer = this.$q.defer();
-            this.httpClient.post(url, json, 'application/json')
+            let defer = this.$q.defer();
+            this.httpClient.post(this.url+"/saveServiceInformation", json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");
@@ -22,22 +22,18 @@ module ums{
             return defer.promise;
         }
 
-        public getAllDepartment(): ng.IPromise<any>{
-            let url = "/ums-webservice-academic/academic/department/all";
+        public getServiceInformation(): ng.IPromise<any> {
             let defer = this.$q.defer();
-
-            this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getServiceInformation", HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
-
                     defer.resolve(json.entries);
-                }, (response: ng.IHttpPromiseCallbackArg<any>) => {
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.log(response);
                 });
-
             return defer.promise;
         }
-
     }
 
-    UMS.service("serviceInformationService", EmployeeServiceInformationService);
+    UMS.service("serviceInformationService", ServiceInformationService);
 }

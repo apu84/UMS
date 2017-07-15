@@ -13,13 +13,16 @@ module ums{
         roomNo: string;
         extNo: string;
         academicInitial: string;
+        dbAction: string;
         intervalDetails: Array<IServiceDetailsModel>;
     }
 
     export interface IServiceDetailsModel{
+        id: number;
         interval: ICommon;
         intervalId: number;
         startDate: string;
         endDate: string;
+        serviceId: number;
     }
 }

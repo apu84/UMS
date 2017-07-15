@@ -395,8 +395,6 @@ module ums {
 
             if (convertThis === "personal") {
                 item['personal'] = obj;
-                console.log("Here -------->");
-                console.log(item);
             }
 
             else if (convertThis === "academic") {

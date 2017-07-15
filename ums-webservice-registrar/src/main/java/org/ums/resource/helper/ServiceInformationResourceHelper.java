@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.ServiceInformationBuilder;
+import org.ums.builder.ServiceInformationDetailBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.ServiceInformation;
 import org.ums.domain.model.mutable.registrar.*;
@@ -32,13 +33,19 @@ public class ServiceInformationResourceHelper extends
   private static final Logger mLogger = LoggerFactory.getLogger(ServiceInformationResourceHelper.class);
 
   @Autowired
-  UserManager mUserManager;
+  private UserManager mUserManager;
 
   @Autowired
-  ServiceInformationManager mManager;
+  private ServiceInformationManager mManager;
 
   @Autowired
-  ServiceInformationBuilder mBuilder;
+  private ServiceInformationBuilder mBuilder;
+
+  @Autowired
+  private ServiceInformationDetailManager mServiceInformationDetailManager;
+
+  @Autowired
+  private ServiceInformationDetailBuilder mServiceInformationDetailBuilder;
 
   public JsonObject getServiceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<ServiceInformation> pServiceInformation = new ArrayList<>();
@@ -48,12 +55,35 @@ public class ServiceInformationResourceHelper extends
               .getEmployeeId());
     } catch(EmptyResultDataAccessException e) {
     }
-
     return toJson(pServiceInformation, pUriInfo);
   }
 
+  @Transactional
   public Response saveOrUpdateServiceInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonArray serviceJsonArray = entries.getJsonObject(0).getJsonArray("service");
+    int sizeOfServiceJsonArray = serviceJsonArray.size();
+
+    List<MutableServiceInformation> createMutableServiceInformation = new ArrayList<>();
+    for(int i = 0; i < sizeOfServiceJsonArray; i++) {
+      MutableServiceInformation mutableServiceInformation = new PersistentServiceInformation();
+      mBuilder.build(mutableServiceInformation, serviceJsonArray.getJsonObject(i), localCache);
+      createMutableServiceInformation.add(mutableServiceInformation);
+    }
+    mManager.saveServiceInformation(createMutableServiceInformation);
+
+    JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(0).getJsonArray("intervalDetails");
+    int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
+    List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
+    for(int i = 0; i < sizeOfServiceDetailsJsonArray; i++) {
+      MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+      mServiceInformationDetailBuilder.build(mutableServiceInformationDetail, serviceDetailJsonArray.getJsonObject(i),
+          localCache);
+      pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+    }
+    mServiceInformationDetailManager.saveServiceInformationDetail(pMutableServiceInformationDetail);
+
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

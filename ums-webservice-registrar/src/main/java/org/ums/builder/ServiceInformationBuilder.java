@@ -56,12 +56,13 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
   @Override
   public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setEmployeeId(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getString("departmentId")));
-    pMutable.setDesignation(mDesignationManager.get(pJsonObject.getInt("designationId")));
-    pMutable.setEmployment(mEmploymentTypeManager.get(pJsonObject.getInt("employmentType")));
+    pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));
+    pMutable.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt("id")));
+    pMutable.setEmployment(mEmploymentTypeManager.get(pJsonObject.getJsonObject("employmentType").getInt("id")));
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
-    pMutable.setResignDate(pJsonObject.containsKey("resignDate") ? mDateFormat.parse(pJsonObject
-        .getString("resignDate")) : null);
+    pMutable
+        .setResignDate(pJsonObject.containsKey("resignDate") ? pJsonObject.getString("resignDate").equals("") ? null
+            : mDateFormat.parse(pJsonObject.getString("resignDate")) : null);
     pMutable.setRoomNo(pJsonObject.containsKey("roomNo") ? pJsonObject.getString("roomNo") : "");
     pMutable.setExtNo(pJsonObject.containsKey("extNo") ? pJsonObject.getString("extNo") : "");
     pMutable.setAcademicInitial(pJsonObject.containsKey("academicInitial") ? pJsonObject.getString("academicInitial")

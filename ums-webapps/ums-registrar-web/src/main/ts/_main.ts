@@ -107,6 +107,7 @@
 
 
 /// <reference path='service/ServiceInformationService.ts'/>
+/// <reference path='service/ServiceInformationDetailService.ts'/>
 /// <reference path='service/ApprovePublicationService.ts'/>
 /// <reference path='service/PersonalInformationService.ts'/>
 /// <reference path='service/AcademicInformationService.ts'/>

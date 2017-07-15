@@ -1,5 +1,7 @@
 package org.ums.resource.helper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -17,6 +19,8 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ServiceInformationDetailResourceHelper extends
     ResourceHelper<ServiceInformationDetail, MutableServiceInformationDetail, Integer> {
+
+  private static final Logger mLogger = LoggerFactory.getLogger(ServiceInformationResourceHelper.class);
 
   @Autowired
   private ServiceInformationDetailManager mManager;

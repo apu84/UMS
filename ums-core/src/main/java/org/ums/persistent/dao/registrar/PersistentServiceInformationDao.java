@@ -19,7 +19,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
 
   static String INSERT_ONE = "INSERT INTO EMP_SERVICE_INFO (EMPLOYEE_ID, DEPARTMENT, DESIGNATION, "
       + " EMPLOYMENT, JOINING_DATE, RESIGN_DATE, ROOM_NO, EXT_NO, ACADEMIC_INITIAL, STATUS, LAST_MODIFIED) "
-      + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?" + getLastModifiedSql() + ")";
+      + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   static String GET_ONE = "SELECT ID, EMPLOYEE_ID, DEPARTMENT, DESIGNATION, EMPLOYMENT, JOINING_DATE, RESIGN_DATE, "
       + "ROOM_NO, EXT_NO, ACADEMIC_INITIAL, STATUS FROM EMP_SERVICE_INFO ";
@@ -46,10 +46,12 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
   private List<Object[]> getServiceInformationInsertParams(List<MutableServiceInformation> pMutableServiceInformation) {
     List<Object[]> params = new ArrayList<>();
     for(ServiceInformation serviceInformation : pMutableServiceInformation) {
-      params.add(new Object[] {serviceInformation.getEmployeeId(), serviceInformation.getDepartment(),
-          serviceInformation.getDesignation(), serviceInformation.getEmployment(), serviceInformation.getJoiningDate(),
-          serviceInformation.getResignDate(), serviceInformation.getRoomNo(), serviceInformation.getExtNo(),
-          serviceInformation.getAcademicInitial()});
+      params
+          .add(new Object[] {serviceInformation.getEmployeeId(), serviceInformation.getDepartment().getId(),
+              serviceInformation.getDesignation().getId(), serviceInformation.getEmployment().getId(),
+              serviceInformation.getJoiningDate(), serviceInformation.getResignDate(), serviceInformation.getRoomNo(),
+              serviceInformation.getExtNo(), serviceInformation.getAcademicInitial(),
+              serviceInformation.getCurrentStatus()});
 
     }
     return params;
@@ -70,9 +72,10 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
   private List<Object[]> getServiceInformationUpdateParams(List<MutableServiceInformation> pMutableServiceInformation) {
     List<Object[]> params = new ArrayList<>();
     for(ServiceInformation serviceInformation : pMutableServiceInformation) {
-      params.add(new Object[] {serviceInformation.getDepartment(), serviceInformation.getDesignation(),
-          serviceInformation.getEmployment(), serviceInformation.getJoiningDate(), serviceInformation.getResignDate(),
-          serviceInformation.getRoomNo(), serviceInformation.getExtNo(), serviceInformation.getAcademicInitial()});
+      params.add(new Object[] {serviceInformation.getDepartment().getId(), serviceInformation.getDesignation().getId(),
+          serviceInformation.getEmployment().getId(), serviceInformation.getJoiningDate(),
+          serviceInformation.getResignDate(), serviceInformation.getRoomNo(), serviceInformation.getExtNo(),
+          serviceInformation.getAcademicInitial()});
 
     }
     return params;
@@ -95,19 +98,19 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
   class RoleRowMapper implements RowMapper<ServiceInformation> {
     @Override
     public ServiceInformation mapRow(ResultSet resultSet, int i) throws SQLException {
-      PersistentServiceInformation employeeInformation = new PersistentServiceInformation();
-      employeeInformation.setId(resultSet.getInt("ID"));
-      employeeInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
-      employeeInformation.setDepartmentId(resultSet.getString("DEPARTMENT"));
-      employeeInformation.setDesignationId(resultSet.getInt("DESIGNATION"));
-      employeeInformation.setEmploymentId(resultSet.getInt("EMPLOYMENT"));
-      employeeInformation.setJoiningDate(resultSet.getDate("JOINING_DATE"));
-      employeeInformation.setResignDate(resultSet.getDate("RESIGN_DATE"));
-      employeeInformation.setRoomNo(resultSet.getString("ROOM_NO"));
-      employeeInformation.setExtNo(resultSet.getString("EXT_NO"));
-      employeeInformation.setAcademicInitial(resultSet.getString("ACADEMIC_INITIAL"));
-      employeeInformation.setCurrentStatus(resultSet.getInt("STATUS"));
-      return employeeInformation;
+      PersistentServiceInformation persistentServiceInformation = new PersistentServiceInformation();
+      persistentServiceInformation.setId(resultSet.getInt("ID"));
+      persistentServiceInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+      persistentServiceInformation.setDepartmentId(resultSet.getString("DEPARTMENT"));
+      persistentServiceInformation.setDesignationId(resultSet.getInt("DESIGNATION"));
+      persistentServiceInformation.setEmploymentId(resultSet.getInt("EMPLOYMENT"));
+      persistentServiceInformation.setJoiningDate(resultSet.getDate("JOINING_DATE"));
+      persistentServiceInformation.setResignDate(resultSet.getDate("RESIGN_DATE"));
+      persistentServiceInformation.setRoomNo(resultSet.getString("ROOM_NO"));
+      persistentServiceInformation.setExtNo(resultSet.getString("EXT_NO"));
+      persistentServiceInformation.setAcademicInitial(resultSet.getString("ACADEMIC_INITIAL"));
+      persistentServiceInformation.setCurrentStatus(resultSet.getInt("STATUS"));
+      return persistentServiceInformation;
     }
   }
 }

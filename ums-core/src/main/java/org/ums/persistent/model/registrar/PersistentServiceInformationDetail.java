@@ -3,7 +3,10 @@ package org.ums.persistent.model.registrar;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.registrar.MutableServiceInformationDetail;
+import org.ums.enums.common.EmploymentPeriod;
 import org.ums.manager.registrar.ServiceInformationDetailManager;
+
+import java.util.Date;
 
 public class PersistentServiceInformationDetail implements MutableServiceInformationDetail {
 
@@ -16,12 +19,22 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   private int mId;
+  private EmploymentPeriod mEmploymentPeriod;
+  private int mEmploymentPeriodId;
+  private Date mStartDate;
+  private Date mEndDate;
+  private int mServiceId;
   private String mLastModified;
 
   public PersistentServiceInformationDetail() {}
 
   public PersistentServiceInformationDetail(PersistentServiceInformationDetail pPersistentServiceInformationDetail) {
     mId = pPersistentServiceInformationDetail.getId();
+    mEmploymentPeriod = pPersistentServiceInformationDetail.getEmploymentPeriod();
+    mEmploymentPeriodId = pPersistentServiceInformationDetail.getEmploymentPeriodId();
+    mStartDate = pPersistentServiceInformationDetail.getStartDate();
+    mEndDate = pPersistentServiceInformationDetail.getEndDate();
+    mServiceId = pPersistentServiceInformationDetail.getServiceId();
     mLastModified = pPersistentServiceInformationDetail.getLastModified();
   }
 
@@ -63,5 +76,55 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public void setEmploymentPeriod(EmploymentPeriod pEmploymentPeriod) {
+    mEmploymentPeriod = pEmploymentPeriod;
+  }
+
+  @Override
+  public void setEmploymentPeriodId(int pEmploymentPeriodId) {
+    mEmploymentPeriodId = pEmploymentPeriodId;
+  }
+
+  @Override
+  public void setStartDate(Date pStartDate) {
+    mStartDate = pStartDate;
+  }
+
+  @Override
+  public void setEndDate(Date pEndDate) {
+    mEndDate = pEndDate;
+  }
+
+  @Override
+  public void setServiceId(int pServiceId) {
+    mServiceId = pServiceId;
+  }
+
+  @Override
+  public EmploymentPeriod getEmploymentPeriod() {
+    return mEmploymentPeriod;
+  }
+
+  @Override
+  public int getEmploymentPeriodId() {
+    return mEmploymentPeriodId;
+  }
+
+  @Override
+  public Date getStartDate() {
+    return mStartDate;
+  }
+
+  @Override
+  public Date getEndDate() {
+    return mEndDate;
+  }
+
+  @Override
+  public int getServiceId() {
+    return mServiceId;
   }
 }

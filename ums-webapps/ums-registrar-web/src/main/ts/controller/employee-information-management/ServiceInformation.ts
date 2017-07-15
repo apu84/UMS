@@ -5,6 +5,8 @@ module ums{
         employmentTypes: Array<ICommon>;
         serviceRegularIntervals: Array<ICommon>;
         serviceContractIntervals: Array<ICommon>;
+        departments: Array<IDepartment>;
+        previousServiceInformation: Array<IServiceInformationModel>;
 
         showInputDiv: boolean;
         showLabelDiv: boolean;
@@ -16,22 +18,33 @@ module ums{
         changePeriodValues: Function;
     }
 
+    interface  IDepartment{
+        id: string;
+        shortName: string;
+        longName: string;
+        type: string;
+    }
+
     interface IEntry{
         serviceInfo: Array<IServiceInformationModel>;
     }
 
     class EmployeeServiceInformation{
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'serviceInformationService', 'employmentTypeService', 'departmentService', 'designationService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce',
+            'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService', 'departmentService', 'designationService', 'userService'];
+
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private serviceInformationService: EmployeeServiceInformationService,
+                    private serviceInformationService: ServiceInformationService,
+                    private serviceInformationDetailService: ServiceInformationDetailService,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private userService: UserService) {
 
             $scope.showInputDiv = false;
             $scope.showLabelDiv = true;
@@ -43,13 +56,15 @@ module ums{
             $scope.submit = this.submit.bind(this);
             $scope.enableEditMode = this.enableEditMode.bind(this);
 
+            this.getDepartment();
             this.getDesignationTypes();
             this.getEmploymentTypes();
             this.getServiceIntervals();
+            this.getServiceInformation();
             this.addDate();
         }
 
-        private getServiceIntervals() {
+        private getServiceIntervals(): void {
             this.$scope.serviceRegularIntervals = Array<ICommon>();
             this.$scope.serviceContractIntervals = Array<ICommon>();
             this.$scope.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[0]);
@@ -58,22 +73,38 @@ module ums{
             this.$scope.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        private getEmploymentTypes(){
+        private getDepartment(): void{
+            this.departmentService.getAll().then((departments: any) => {
+               this.$scope.departments = departments;
+            });
+        }
+
+        private getEmploymentTypes(): void{
             this.employmentTypeService.getAll().then((employmentTypes: any)=>{
                this.$scope.employmentTypes = employmentTypes;
             });
         }
 
-        private getDesignationTypes(){
+        private getDesignationTypes(): void{
             this.designationService.getAll().then((designations: any) => {
                this.$scope.designations = designations;
             });
         }
 
         private submit(): void{
-            this.notify.success("I got the submit");
-            this.$scope.showInputDiv = false;
-            this.$scope.showLabelDiv = true;
+            this.getServiceInformation();
+            this.convertToJson().then((json: any) =>{
+               this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
+                   this.$scope.showInputDiv = false;
+                   this.$scope.showLabelDiv = true;
+               });
+            });
+        }
+
+        private getServiceInformation(): void{
+            this.serviceInformationService.getServiceInformation().then((services: any) =>{
+               console.log(services);
+            });
         }
 
         private enableEditMode(): void{
@@ -81,7 +112,7 @@ module ums{
             this.$scope.showInputDiv = true;
         }
 
-        private addNewRow(parameter: string, index?: number) {
+        private addNewRow(parameter: string, index?: number): void {
             if(parameter == "serviceInfo") {
                 let serviceEntry: IServiceInformationModel;
                 serviceEntry = {
@@ -98,6 +129,7 @@ module ums{
                     roomNo: "",
                     extNo: "",
                     academicInitial: "",
+                    dbAction: "",
                     intervalDetails: Array<IServiceDetailsModel>()
                 };
                 this.$scope.entry.serviceInfo.push(serviceEntry);
@@ -105,24 +137,37 @@ module ums{
             else if(parameter == "serviceDetails") {
                 let serviceDetailsEntry: IServiceDetailsModel;
                 serviceDetailsEntry = {
+                    id: null,
                     interval: null,
                     intervalId: null,
                     startDate: "",
-                    endDate: ""
+                    endDate: "",
+                    serviceId: null
                 };
                 this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
-                console.log(this.$scope.entry.serviceInfo);
             }
             this.addDate();
         }
 
-        private deleteRow(parameter: any, parentIndex: number, index: number) {
+        private deleteRow(parameter: any, parentIndex: number, index: number): void{
             if(parameter == "serviceInfo") {
                 this.$scope.entry.serviceInfo.splice(index, 1);
             }
             else if(parameter == "serviceDetails"){
                 this.$scope.entry.serviceInfo[parentIndex].intervalDetails.splice(index, 1);
             }
+        }
+
+        private convertToJson(): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            let JsonArray = [];
+            let item: any = {};
+            item['service'] = this.$scope.entry.serviceInfo;
+            JsonArray.push(item);
+            JsonObject['entries'] = JsonArray;
+            defer.resolve(JsonObject);
+            return defer.promise;
         }
 
         private addDate(): void {
