@@ -55,13 +55,23 @@ public class PostPaymentActions extends PaymentStatusDaoDecorator {
     }
 
     List<MutableCertificateStatus> certificateStatusList = new ArrayList<>();
+    List<MutableStudentPayment> payments = new ArrayList<>();
     studentPayments.forEach((payment) -> {
       if(paymentStatus.isPaymentComplete()) {
+        if(payment.getStatus() != StudentPayment.Status.RECEIVED) {
+          MutableStudentPayment mutableStudentPayment = payment.edit();
+          mutableStudentPayment.setStatus(StudentPayment.Status.RECEIVED);
+          payments.add(mutableStudentPayment);
+        }
         if(containsCertificate(payment.getFeeCategory())) {
           certificateStatusList.add(certificateStatus(payment));
         }
       }
     });
+
+    if(!payments.isEmpty()) {
+      mStudentPaymentManager.update(payments);
+    }
 
     if(!certificateStatusList.isEmpty()) {
       mCertificateStatusManager.create(certificateStatusList);

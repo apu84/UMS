@@ -37,7 +37,9 @@ public class PaymentValidatorJob implements PaymentValidator {
       List<MutableStudentPayment> mutablePayments =
           payments.stream().map(payment -> payment.edit()).collect(Collectors.toList());
       mutablePayments.forEach(payment -> payment.setStatus(StudentPayment.Status.EXPIRED));
-      mStudentPaymentManager.update(mutablePayments);
+      if(!mutablePayments.isEmpty()) {
+        mStudentPaymentManager.update(mutablePayments);
+      }
     }
   }
 

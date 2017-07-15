@@ -63,7 +63,15 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
     LocalCache cache = new LocalCache();
-    BigDecimal amount = new BigDecimal(0);
+
+    Validate.notNull(pJsonObject.get("methodOfPayment"));
+    int mop = Integer.parseInt(pJsonObject.getString("methodOfPayment"));
+    Validate.notNull(pJsonObject.get("receiptNo"));
+    String receiptNo = pJsonObject.getString("receiptNo");
+    String paymentDetails = null;
+    if(pJsonObject.containsKey("paymentDetails")) {
+      paymentDetails = pJsonObject.getString("paymentDetails");
+    }
 
     for(JsonValue entry : entries) {
       MutableStudentPayment payment = new PersistentStudentPayment();
@@ -73,23 +81,19 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
+      if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
+        payment.setStatus(StudentPayment.Status.RECEIVED);
+      }
+      else {
+        payment.setStatus(latestPayment.getStatus());
+      }
       payments.add(payment);
       latestPayments.add(latestPayment);
     }
 
     validatePayment(pStudentId, latestPayments, payments);
     mStudentPaymentManager.update(payments);
-
-    Validate.notNull(pJsonObject.get("methodOfPayment"));
-    Validate.notNull(pJsonObject.get("receiptNo"));
-    String paymentDetails = null;
-    if(pJsonObject.containsKey("paymentDetails")) {
-      paymentDetails = pJsonObject.getString("paymentDetails");
-    }
-    // Taking into consideration only one of payment entry, as this would be a part of same
-    // transaction
-    updatePaymentStatus(latestPayments, Integer.parseInt(pJsonObject.getString("methodOfPayment")),
-        pJsonObject.getString("receiptNo"), paymentDetails, pStudentId);
+    updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);
     return Response.ok().build();
   }
 
@@ -113,8 +117,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
           PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
           paymentStatus.setMethodOfPayment(paymentMethod);
           paymentStatus.setReceivedOn(new Date());
-          if(paymentMethod == PaymentStatus.PaymentMethod.CASH
-              || paymentMethod == PaymentStatus.PaymentMethod.PAYORDER) {
+          if(paymentMethod == PaymentStatus.PaymentMethod.CASH) {
             paymentStatus.setPaymentComplete(true);
             paymentStatus.setCompletedOn(new Date());
           }
@@ -133,7 +136,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   JsonObject getStudentPayments(String pStudentId, UriInfo pUriInfo) throws Exception {
     Validate.notNull(pStudentId);
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId).stream()
-        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED).collect(Collectors.toList());
+        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED && payment.getVerifiedOn() == null)
+        .collect(Collectors.toList());
     Map<Integer, List<StudentPayment>> feeTypePaymentMap =
         payments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
 
