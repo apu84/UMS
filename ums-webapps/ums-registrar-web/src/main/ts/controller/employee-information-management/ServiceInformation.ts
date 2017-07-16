@@ -31,7 +31,7 @@ module ums{
 
     class EmployeeServiceInformation{
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce',
-            'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService', 'departmentService', 'designationService', 'userService'];
+            'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService', 'departmentService', 'designationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
@@ -43,8 +43,7 @@ module ums{
                     private serviceInformationDetailService: ServiceInformationDetailService,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService,
-                    private userService: UserService) {
+                    private designationService: DesignationService) {
 
             $scope.showInputDiv = false;
             $scope.showLabelDiv = true;

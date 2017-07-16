@@ -1,182 +1,134 @@
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-        <!--<div align="right">-->
-            <!--<i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('award')" data-ng-show="showAwardEditButton"></i>-->
-            <!--<i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('award')" data-ng-show="showAwardCancelButton"></i>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+<style>
+    .row{
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+</style>
 <div data-ng-if="showAwardInputDiv">
-    <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
+    <div class="container-fluid">
+        <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
+            <div data-ng-repeat="award in entry.award track by $index">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center pal">
+                            <b>{{$index + 1}}.</b>
+                            <span>
+                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('award', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="iAwardName{{$index}}"
+                                   id="iAwardName{{$index}}"
+                                   data-ng-model="award.awardName"
+                                   placeholder="Award/Honor Name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span class='require'>*</span></label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nAwardedYear{{$index}}"
+                                   id="iAwardedYear{{$index}}"
+                                   data-ng-model="award.awardedYear"
+                                   data-date-format="yyyy"
+                                   placeholder="YYYY"
+                                   autocomplete="off"
+                                   class="custom-datepicker form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nAwardInstitute{{$index}}"
+                                   id="iAwardInstitute{{$index}}"
+                                   data-ng-model="award.awardInstitute"
+                                   placeholder="Institution"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 control-label" for="iShortDescription{{$index}}">Short Description</label>
+                        <div class="col-md-8">
+                                <textarea type="text"
+                                          name="nShortDescription{{$index}}"
+                                          id="iShortDescription{{$index}}"
+                                          data-ng-model="award.awardShortDescription"
+                                          placeholder="Short Description"
+                                          class="form-control">
+                                </textarea>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+            <div class="row">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                </div>
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div data-ng-if="showAwardLabelDiv">
+    <div class="container-fluid">
         <div data-ng-repeat="award in entry.award track by $index">
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center pal">
                         <b>{{$index + 1}}.</b>
-                        <span>
-                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('award', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
-                        </span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span class='require'>*</span></label>
-                    <div class="col-md-8">
-                        <input type="text"
-                               name="iAwardName{{$index}}"
-                               id="iAwardName{{$index}}"
-                               data-ng-model="award.awardName"
-                               placeholder="Award/Honor Name"
-                               class="form-control" required>
+                    <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name</label>
+                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{award.awardName}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span class='require'>*</span></label>
-                    <div class="col-md-8">
-                        <input type="text"
-                               name="nAwardedYear{{$index}}"
-                               id="iAwardedYear{{$index}}"
-                               data-ng-model="award.awardedYear"
-                               data-date-format="yyyy"
-                               placeholder="YYYY"
-                               autocomplete="off"
-                               class="custom-datepicker form-control" required>
+                    <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year</label>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{award.awardedYear}}</label>
                     </div>
                 </div>
             </div>
-            <br />
-
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
-                    <div class="col-md-8">
-                        <input type="text"
-                               name="nAwardInstitute{{$index}}"
-                               id="iAwardInstitute{{$index}}"
-                               data-ng-model="award.awardInstitute"
-                               placeholder="Institution"
-                               class="form-control">
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{award.awardInstitute}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iShortDescription{{$index}}">Short Description</label>
-                    <div class="col-md-8">
-                            <textarea type="text"
-                                      name="nShortDescription{{$index}}"
-                                      id="iShortDescription{{$index}}"
-                                      data-ng-model="award.awardShortDescription"
-                                      placeholder="Short Description"
-                                      class="form-control">
-                            </textarea>
+                    <div class="col-md-8"  style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{award.awardShortDescription}}</label>
                     </div>
                 </div>
             </div>
             <hr />
         </div>
-        <!--<div class="row">-->
-            <!--<div class="col-md-6" data-ng-show="showAwardAddIcon">-->
-                <!--[ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-            <!--</div>-->
-            <!--<div class="col-md-6"></div>-->
-        <!--</div>-->
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="text-left pal">
-                    <a data-target="#modal-award" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="text-center pal">
-                    [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="text-right pal">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')"><i class="fa fa-eye"></i>&nbsp;View</button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div data-ng-if="showAwardLabelDiv">
-    <div data-ng-repeat="award in entry.award track by $index">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-center pal">
-                    <b>{{$index + 1}}.</b>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name</label>
-                <div class="col-md-8" style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{award.awardName}}</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year</label>
-                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{award.awardedYear}}</label>
-                </div>
-            </div>
-        </div>
-        <br />
-
-        <div class="row">
-            <div class="col-md-6">
-                <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
-                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{award.awardInstitute}}</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <label class="col-md-4 control-label" for="iShortDescription{{$index}}">Short Description</label>
-                <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{award.awardShortDescription}}</label>
-                </div>
-            </div>
-        </div>
-        <hr />
-    </div>
-    <!--<div class="row">-->
-    <!--<div class="col-md-6" data-ng-show="showAwardAddIcon">-->
-    <!--[ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-    <!--</div>-->
-    <!--<div class="col-md-6"></div>-->
-    <!--</div>-->
-
-    <div class="row">
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-            <div class="text-right pal">
+            <div align="right">
                 <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('award')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="modal-award" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
-     aria-hidden="true" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true"
-                        class="close">&times;</button>
-                <h4 id="modal-default-label" class="modal-title">Instructions</h4></div>
-            <div class="modal-body">
-                There are six different tabs.
-                This <span class="require"><storng>( * )</storng></span> represents Mandatory Fields
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
             </div>
         </div>
     </div>

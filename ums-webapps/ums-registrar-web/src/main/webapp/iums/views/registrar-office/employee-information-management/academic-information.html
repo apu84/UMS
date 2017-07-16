@@ -1,93 +1,81 @@
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-        <!--<div align="right">-->
-            <!--<i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('academic')" data-ng-show="showAcademicEditButton"></i>-->
-            <!--<i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('academic')" data-ng-show="showAcademicCancelButton"></i>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
+<style>
+    .row{
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+</style>
 <div data-ng-if="showAcademicInputDiv">
     <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
-        <div class="row">
-            <div class="col-md-1">
-                <label class="control-label">Sl.</label>
-            </div>
-            <div class="col-md-2">
-                <label class="control-label">Degree<span class='require'>*</span></label>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label">Institution<span class='require'>*</span></label>
-            </div>
-            <div class="col-md-2">
-                <label class="control-label">Passing Year<span class='require'>*</span></label>
-            </div>
-            <div class="col-md-1">
-                <label class="control-label"></label>
-            </div>
-        </div>
-        <br />
-
-        <div data-ng-repeat="academic in entry.academic track by $index">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-md-1">
-                    <label class="control-label"><b>{{$index + 1}}.</b></label>
+                    <label class="control-label">Sl.</label>
                 </div>
                 <div class="col-md-2">
-                    <select name="nAcademicDegree{{$index}}"
-                            id="iAcademicDegree{{$index}}"
-                            data-ng-model="academic.academicDegreeName"
-                            data-ng-options="degreeName.name for degreeName in degreeNames"
-                            class="form-control" required>
-                        <option value="">Select Degree</option>
-                    </select>
+                    <div align="center">
+                        <label class="control-label">Degree<span class='require'>*</span></label>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <input type="text"
-                           name="nAcademicInstitution{{$index}}"
-                           id="iAcademicInstitution {{$index}}"
-                           data-ng-model="academic.academicInstitution"
-                           placeholder="Institution"
-                           class="form-control" required>
+                    <div align="center">
+                        <label class="control-label">Institution<span class='require'>*</span></label>
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="text"
-                           name="nPassingYear{{$index}}"
-                           id="iPassingYear{{$index}}"
-                           data-ng-model="academic.academicPassingYear"
-                           data-date-format="yyyy"
-                           placeholder="YYYY"
-                           autocomplete="off"
-                           class="custom-datepicker form-control" required>
+                    <div align="center">
+                        <label class="control-label">Passing Year<span class='require'>*</span></label>
+                    </div>
                 </div>
                 <div class="col-md-1">
-                    [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                    <div align="center">
+                        <label class="control-label"></label>
+                    </div>
                 </div>
             </div>
-            <br />
-        </div>
-        <hr />
-
-        <!--<div class="row">-->
-            <!--<div class="col-md-6" data-ng-show="showAcademicAddIcon">-->
-                <!--[ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-            <!--</div>-->
-            <!--<div class="col-m-6"></div>-->
-        <!--</div>-->
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="text-left pal">
-                    <a data-target="#modal-academic" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
+            <div data-ng-repeat="academic in entry.academic track by $index">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label class="control-label"><b>{{$index + 1}}.</b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="nAcademicDegree{{$index}}"
+                                id="iAcademicDegree{{$index}}"
+                                data-ng-model="academic.academicDegreeName"
+                                data-ng-options="degreeName.name for degreeName in degreeNames"
+                                class="form-control" required>
+                            <option value="">Select Degree</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text"
+                               name="nAcademicInstitution{{$index}}"
+                               id="iAcademicInstitution {{$index}}"
+                               data-ng-model="academic.academicInstitution"
+                               placeholder="Institution"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text"
+                               name="nPassingYear{{$index}}"
+                               id="iPassingYear{{$index}}"
+                               data-ng-model="academic.academicPassingYear"
+                               data-date-format="yyyy"
+                               placeholder="YYYY"
+                               autocomplete="off"
+                               class="custom-datepicker form-control" required>
+                    </div>
+                    <div class="col-md-1">
+                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="text-center pal">
+            <hr />
+
+            <div class="row">
+                <div align="center">
                     [ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="text-right pal">
+                <div align="right">
                     <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('academic')"><i class="fa fa-eye"></i>&nbsp;View</button>
                     <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                 </div>
@@ -97,78 +85,56 @@
 </div>
 
 <div data-ng-if="showAcademicLabelDiv">
-    <div class="row">
-        <div class="col-md-1">
-            <label class="control-label">Sl.</label>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">Degree</label>
-        </div>
-        <div class="col-md-6">
-            <label class="control-label">Institution</label>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">Passing Year</label>
-        </div>
-        <div class="col-md-1">
-            <label class="control-label"></label>
-        </div>
-    </div>
-    <br />
-
-    <div data-ng-repeat="academic in entry.academic track by $index">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
-                <label class="control-label"><b>{{$index + 1}}.</b></label>
+                <label class="control-label">Sl.</label>
             </div>
-            <div class="col-md-2" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{academic.academicDegreeName.name}}</label>
+            <div class="col-md-2">
+                <div align="center">
+                    <label class="control-label">Degree</label>
+                </div>
             </div>
-            <div class="col-md-6"  style="border-bottom: 1px dashed;">
-                <label class="control-label">{{academic.academicInstitution}}</label>
+            <div class="col-md-6">
+                <div align="center">
+                    <label class="control-label">Institution</label>
+                </div>
             </div>
-            <div class="col-md-2" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{academic.academicPassingYear}}</label>
+            <div class="col-md-2">
+                <div align="center">
+                    <label class="control-label">Passing Year</label>
+                </div>
             </div>
-        </div>
-        <br />
-    </div>
-    <hr />
-
-    <!--<div class="row">-->
-    <!--<div class="col-md-6" data-ng-show="showAcademicAddIcon">-->
-    <!--[ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-    <!--</div>-->
-    <!--<div class="col-m-6"></div>-->
-    <!--</div>-->
-
-    <div class="row">
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-            <div class="text-right pal">
-                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+            <div class="col-md-1">
+                <label class="control-label"></label>
             </div>
         </div>
-    </div>
-</div>
-
-<div id="modal-academic" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
-     aria-hidden="true" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true"
-                        class="close">&times;</button>
-                <h4 id="modal-default-label" class="modal-title">Instructions</h4></div>
-            <div class="modal-body">
-                There are six different tabs.
-                This <span class="require"><storng>( * )</storng></span> represents Mandatory Fields
+        <div data-ng-repeat="academic in entry.academic track by $index">
+            <div class="row">
+                <div class="col-md-1">
+                    <label class="control-label"><b>{{$index + 1}}.</b></label>
+                </div>
+                <div class="col-md-2">
+                    <div style="border-bottom: 1px dashed;" align="center">
+                        <label class="control-label">{{academic.academicDegreeName.name}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="border-bottom: 1px dashed;" align="center">
+                        <label class="control-label">{{academic.academicInstitution}}</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="border-bottom: 1px dashed;" align="center">
+                        <label class="control-label">{{academic.academicPassingYear}}</label>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+        </div>
+        <hr />
+        <div class="row">
+            <div align="right">
+                <button id="btnEdit" type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
             </div>
         </div>
     </div>

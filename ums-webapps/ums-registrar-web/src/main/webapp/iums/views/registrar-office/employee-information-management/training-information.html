@@ -1,35 +1,135 @@
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-        <!--<div align="right">-->
-            <!--<i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('training')" data-ng-show="showTrainingEditButton"></i>-->
-            <!--<i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('training')" data-ng-show="showTrainingCancelButton"></i>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
+<style>
+    .row{
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+</style>
 <div data-ng-if="showTrainingInputDiv">
-    <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
+    <div class="container-fluid">
+        <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
+            <div class="row">
+                <div class="col-md-1">
+                    <label class="control-label">Sl.</label>
+                </div>
+                <div class="col-md-2">
+                    <div align="center">
+                        <label class="control-label">Training Name<span class='require'>*</span></label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div align="center">
+                        <label class="control-label">Training Institution/Organization Name<span class='require'>*</span></label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div align="center">
+                        <label class="control-label">From<span class='require'>*</span></label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div align="center">
+                        <label class="control-label">To<span class='require'>*</span></label>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div align="center">
+                        <label class="control-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-repeat="training in entry.training track by $index">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label class="control-label"><b>{{$index + 1}}.</b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text"
+                               name="nTrainingName{{$index}}"
+                               id="iTrainingName{{$index}}"
+                               data-ng-model="training.trainingName"
+                               placeholder="Training Name"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text"
+                               name="nTrainingInstitution{{$index}}"
+                               id="iTrainingInstitution{{$index}}"
+                               data-ng-model="training.trainingInstitution"
+                               placeholder="Training Institution/Organization Name"
+                               class="form-control" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text"
+                               name="nTrainingFrom{{$index}}"
+                               id="iTrainingFrom{{$index}}"
+                               data-ng-model="training.trainingFrom"
+                               data-date-format="mm/yyyy"
+                               placeholder="MM/YYYY"
+                               autocomplete="off"
+                               class="modified-datepicker form-control " required/>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text"
+                               name="nTrainingTo{{$index}}"
+                               id="iTrainingTo{{$index}}"
+                               data-ng-model="training.trainingTo"
+                               data-date-format="mm/yyyy"
+                               placeholder="MM/YYYY"
+                               autocomplete="off"
+                               class="modified-datepicker form-control " required/>
+                    </div>
+                    <div class="col-md-1">
+                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                </div>
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div data-ng-if="showTrainingLabelDiv">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
                 <label class="control-label">Sl.</label>
             </div>
             <div class="col-md-2">
-                <label class="control-label">Training Name<span class='require'>*</span></label>
+                <div align="center">
+                    <label class="control-label">Training Name</label>
+                </div>
             </div>
             <div class="col-md-4">
-                <label class="control-label">Training Institution/Organization Name<span class='require'>*</span></label>
+                <div align="center">
+                    <label class="control-label">Training Institution/Organization Name</label>
+                </div>
             </div>
             <div class="col-md-2">
-                <label class="control-label">From<span class='require'>*</span></label>
+                <div align="center">
+                    <label class="control-label">From</label>
+                </div>
             </div>
             <div class="col-md-2">
-                <label class="control-label">To<span class='require'>*</span></label>
+                <div align="center">
+                    <label class="control-label">To</label>
+                </div>
             </div>
             <div class="col-md-1">
-                <label class="control-label"></label>
+                <div align="center">
+                    <label class="control-label"></label>
+                </div>
             </div>
         </div>
-        <br />
 
         <div data-ng-repeat="training in entry.training track by $index">
             <div class="row">
@@ -37,158 +137,34 @@
                     <label class="control-label"><b>{{$index + 1}}.</b></label>
                 </div>
                 <div class="col-md-2">
-                    <input type="text"
-                           name="nTrainingName{{$index}}"
-                           id="iTrainingName{{$index}}"
-                           data-ng-model="training.trainingName"
-                           placeholder="Training Name"
-                           class="form-control" required>
+                    <div align="center" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{training.trainingName}}</label>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <input type="text"
-                           name="nTrainingInstitution{{$index}}"
-                           id="iTrainingInstitution{{$index}}"
-                           data-ng-model="training.trainingInstitution"
-                           placeholder="Training Institution/Organization Name"
-                           class="form-control" required>
+                    <div align="center" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{training.trainingInstitution}}</label>
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="text"
-                           name="nTrainingFrom{{$index}}"
-                           id="iTrainingFrom{{$index}}"
-                           data-ng-model="training.trainingFrom"
-                           data-date-format="mm/yyyy"
-                           placeholder="MM/YYYY"
-                           autocomplete="off"
-                           class="modified-datepicker form-control " required/>
+                    <div align="center" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{training.trainingFrom}}</label>
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="text"
-                           name="nTrainingTo{{$index}}"
-                           id="iTrainingTo{{$index}}"
-                           data-ng-model="training.trainingTo"
-                           data-date-format="mm/yyyy"
-                           placeholder="MM/YYYY"
-                           autocomplete="off"
-                           class="modified-datepicker form-control " required/>
+                    <div align="center" style="border-bottom: 1px dashed;">
+                        <label class="control-label">{{training.trainingTo}}</label>
+                    </div>
                 </div>
                 <div class="col-md-1">
-                    [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                 </div>
             </div>
-            <br/>
         </div>
         <hr />
 
-        <!--<div class="row">-->
-            <!--<div class="col-md-6" data-ng-show="showTrainingAddIcon">-->
-                <!--[ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-            <!--</div>-->
-            <!--<div class="col-md-6"></div>-->
-        <!--</div>-->
-
         <div class="row">
-            <div class="col-md-4">
-                <div class="text-left pal">
-                    <a data-target="#modal-training" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="text-center pal">
-                    [ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="text-right pal">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')"><i class="fa fa-eye"></i>&nbsp;View</button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div data-ng-if="showTrainingLabelDiv">
-    <div class="row">
-        <div class="col-md-1">
-            <label class="control-label">Sl.</label>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">Training Name</label>
-        </div>
-        <div class="col-md-4">
-            <label class="control-label">Training Institution/Organization Name</label>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">From</label>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">To</label>
-        </div>
-        <div class="col-md-1">
-            <label class="control-label"></label>
-        </div>
-    </div>
-    <br />
-
-    <div data-ng-repeat="training in entry.training track by $index">
-        <div class="row">
-            <div class="col-md-1">
-                <label class="control-label"><b>{{$index + 1}}.</b></label>
-            </div>
-            <div class="col-md-2" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{training.trainingName}}</label>
-            </div>
-            <div class="col-md-4" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{training.trainingInstitution}}</label>
-            </div>
-            <div class="col-md-2" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{training.trainingFrom}}</label>
-            </div>
-            <div class="col-md-2" style="border-bottom: 1px dashed;">
-                <label class="control-label">{{training.trainingTo}}</label>
-            </div>
-            <div class="col-md-1">
-            </div>
-        </div>
-        <br/>
-    </div>
-    <hr />
-
-    <!--<div class="row">-->
-    <!--<div class="col-md-6" data-ng-show="showTrainingAddIcon">-->
-    <!--[ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]-->
-    <!--</div>-->
-    <!--<div class="col-md-6"></div>-->
-    <!--</div>-->
-
-    <div class="row">
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-            <div class="text-right pal">
+            <div align="right">
                 <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('training')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="modal-training" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
-     aria-hidden="true" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true"
-                        class="close">&times;</button>
-                <h4 id="modal-default-label" class="modal-title">Instructions</h4></div>
-            <div class="modal-body">
-                There are six different tabs.
-                This <span class="require"><storng>( * )</storng></span> represents Mandatory Fields
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
             </div>
         </div>
     </div>

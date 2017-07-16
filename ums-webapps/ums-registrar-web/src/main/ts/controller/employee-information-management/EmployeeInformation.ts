@@ -56,7 +56,7 @@ module ums {
         changeItemPerPage: Function;
         changeAreaOfInterest: Function;
         entry: IEntry;
-        gender: Array<IGender>;
+        genderTypes: Array<IGender>;
         maritalStatus: Array<ICommon>;
         religions: Array<ICommon>;
         nationalities: Array<ICommon>;
@@ -155,7 +155,7 @@ module ums {
             $scope.nationalities = Array<ICommon>();
             $scope.maritalStatus = Array<ICommon>();
             $scope.relations = Array<ICommon>();
-            $scope.gender = this.registrarConstants.genderTypes;
+            $scope.genderTypes = this.registrarConstants.genderTypes;
             $scope.publicationTypes = this.registrarConstants.publicationTypes;
             $scope.degreeNames = this.registrarConstants.degreeTypes;
             $scope.bloodGroups = this.registrarConstants.bloodGroupTypes;
@@ -498,8 +498,8 @@ module ums {
             for (let i = 0; i < this.$scope.degreeNames.length; i++) {
                 this.$scope.degreeNameMap[this.$scope.degreeNames[i].name] = this.$scope.degreeNames[i];
             }
-            for (let i = 0; i < this.$scope.gender.length; i++) {
-                this.$scope.genderNameMap[this.$scope.gender[i].id] = this.$scope.gender[i];
+            for (let i = 0; i < this.$scope.genderTypes.length; i++) {
+                this.$scope.genderNameMap[this.$scope.genderTypes[i].id] = this.$scope.genderTypes[i];
             }
             for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
                 this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
@@ -526,7 +526,7 @@ module ums {
             this.$scope.entry.personal.lastName = "Mir Md.";
             this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
             this.$scope.entry.personal.motherName = "Mst Hosne Ara";
-            this.$scope.entry.personal.gender = this.$scope.gender[1];
+            this.$scope.entry.personal.gender = this.$scope.genderTypes[1];
             this.$scope.entry.personal.dateOfBirth = "20/10/1995";
             this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
             this.$scope.entry.personal.religion = this.$scope.religions[1];
