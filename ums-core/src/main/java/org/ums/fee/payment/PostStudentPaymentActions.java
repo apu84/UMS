@@ -1,6 +1,6 @@
 package org.ums.fee.payment;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,44 +29,49 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
 
   @Override
   public int update(List<MutableStudentPayment> pMutableList) {
-    Map<String, List<StudentPayment>> studentPaymentGroup =
-        pMutableList.stream().collect(Collectors.groupingBy(payment -> payment.getStudentId()));
+    if(!pMutableList.stream().allMatch((payment) -> payment.getStatus() == StudentPayment.Status.VERIFIED)) {
+      Map<String, List<StudentPayment>> studentPaymentGroup =
+          pMutableList.stream().collect(Collectors.groupingBy(payment -> payment.getStudentId()));
 
-    studentPaymentGroup.keySet().forEach((studentId) -> {
-      List<StudentDues> duesForStudent = mStudentDuesManager.getByStudent(studentId);
+      studentPaymentGroup.keySet().forEach((studentId) -> {
+        List<StudentDues> duesForStudent = mStudentDuesManager.getByStudent(studentId);
 
-      Map<Integer, List<StudentPayment>> feeTypeGroup = studentPaymentGroup.get(studentId).stream()
-          .collect(Collectors.groupingBy(payment -> payment.getFeeCategory().getType().getId()));
-      feeTypeGroup.keySet().forEach((feeTypeId) -> {
-        if(containsDues(feeTypeId) && !duesForStudent.isEmpty()) {
-          postProcessDues(duesForStudent, feeTypeGroup.get(feeTypeId));
-        }
+        Map<Integer, List<StudentPayment>> feeTypeGroup = studentPaymentGroup.get(studentId).stream()
+            .collect(Collectors.groupingBy(payment -> payment.getFeeCategory().getType().getId()));
+        feeTypeGroup.keySet().forEach((feeTypeId) -> {
+          if(containsDues(feeTypeId) && !duesForStudent.isEmpty()) {
+            postProcessDues(duesForStudent, feeTypeGroup.get(feeTypeId));
+          }
 
-        if(containsSemesterFee(feeTypeId)) {
-          postProcessSemesterFee(feeTypeGroup.get(feeTypeId));
-        }
+          if(containsSemesterFee(feeTypeId)) {
+            postProcessSemesterFee(feeTypeGroup.get(feeTypeId));
+          }
+        });
       });
-    });
+    }
     return pMutableList.size();
   }
 
   private void postProcessDues(List<StudentDues> duesForStudent, List<StudentPayment> payments) {
-    List<MutableStudentDues> selectedDues = new ArrayList<>();
+    Map<String, List<MutableStudentDues>> selectedDues = new HashMap<>();
     payments.forEach((payment) -> {
-      List<MutableStudentDues> studentDues = duesForStudent.stream().filter(
-          (due) -> !StringUtils.isEmpty(due.getTransactionId()) && due.getTransactionId()
-              .equalsIgnoreCase(payment.getTransactionId())).map((due) -> {
-        MutableStudentDues mutableStudentDues = due.edit();
-        if(payment.getStatus() == StudentPayment.Status.EXPIRED) {
-          mutableStudentDues.setTransactionId(StringUtils.EMPTY);
-          mutableStudentDues.setStatus(StudentDues.Status.NOT_PAID);
-        }
-        return mutableStudentDues;
-      }).collect(Collectors.toList());
-      selectedDues.addAll(studentDues);
+      if(!selectedDues.containsKey(payment.getTransactionId())) {
+        List<MutableStudentDues> studentDues =
+            duesForStudent.stream().filter((due) -> !StringUtils.isEmpty(due.getTransactionId())
+                && due.getTransactionId().equalsIgnoreCase(payment.getTransactionId())).map((due) -> {
+                  MutableStudentDues mutableStudentDues = due.edit();
+                  if(payment.getStatus() == StudentPayment.Status.EXPIRED) {
+                    mutableStudentDues.setTransactionId(StringUtils.EMPTY);
+                    mutableStudentDues.setStatus(StudentDues.Status.NOT_PAID);
+                  }
+                  return mutableStudentDues;
+                }).collect(Collectors.toList());
+        selectedDues.put(payment.getTransactionId(), studentDues);
+      }
     });
     if(!selectedDues.isEmpty()) {
-      mStudentDuesManager.update(selectedDues);
+      mStudentDuesManager
+          .update(selectedDues.values().stream().flatMap((duesList) -> duesList.stream()).collect(Collectors.toList()));
     }
   }
 

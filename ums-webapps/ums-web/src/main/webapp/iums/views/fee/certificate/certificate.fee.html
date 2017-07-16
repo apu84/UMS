@@ -36,13 +36,14 @@
                 <thead>
                 <tr role="row" class="heading">
                     <th width="20%" class="sorting">TransactionId</th>
-                    <th width="25%" class="sorting_asc">Certificate type</th>
+                    <th width="20%" class="sorting_asc">Certificate type</th>
                     <th width="5%" class="sorting">Amount</th>
                     <th width="10%" class="sorting">Applied on</th>
                     <th width="10%" class="sorting_asc">Payment Status</th>
                     <th width="10%" class="sorting_asc">Semester</th>
                     <th width="10%" class="sorting_asc">Certificate Status</th>
                     <th width="10%" class="sorting_asc">Processed on</th>
+                    <th width="5%" class="sorting_asc"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,6 +59,11 @@
                     </td>
                     <td>{{vm.certificatesStatus[payment.transactionId].processedOn ?
                         vm.certificatesStatus[payment.transactionId].processedOn : 'N/A'}}
+                    </td>
+                    <td>
+                        <img src="images/pdf_square.png" class="download_tooltip ng-scope"
+                                style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                                data-ng-click="vm.receipt(payment.transactionId)">
                     </td>
                 </tr>
                 </tbody>

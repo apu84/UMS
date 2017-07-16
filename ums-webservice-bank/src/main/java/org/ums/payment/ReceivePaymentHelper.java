@@ -82,10 +82,10 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
       if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
-        payment.setStatus(StudentPayment.Status.RECEIVED);
+        payment.setStatus(StudentPayment.Status.VERIFIED);
       }
       else {
-        payment.setStatus(latestPayment.getStatus());
+        payment.setStatus(StudentPayment.Status.RECEIVED);
       }
       payments.add(payment);
       latestPayments.add(latestPayment);
@@ -130,13 +130,12 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
         }
       }
     }
-
   }
 
   JsonObject getStudentPayments(String pStudentId, UriInfo pUriInfo) throws Exception {
     Validate.notNull(pStudentId);
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId).stream()
-        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED && payment.getVerifiedOn() == null)
+        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED)
         .collect(Collectors.toList());
     Map<Integer, List<StudentPayment>> feeTypePaymentMap =
         payments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));

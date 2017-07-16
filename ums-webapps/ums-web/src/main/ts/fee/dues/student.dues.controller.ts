@@ -1,11 +1,12 @@
 module ums {
   export class StudentDuesController {
-    public static $inject = ['$scope', 'StudentDuesService'];
+    public static $inject = ['$scope', 'StudentDuesService', 'FeeReportService'];
     public dues: StudentDue[];
     public selectedDues: {[key: string]: boolean};
     public selected: string[];
 
-    constructor(private $scope: ng.IScope, private studentDuesService: StudentDuesService) {
+    constructor(private $scope: ng.IScope, private studentDuesService: StudentDuesService,
+                private feeReportService: FeeReportService) {
       this.listDues();
       this.$scope.$watch(()=> {
         return this.selectedDues;
@@ -30,6 +31,10 @@ module ums {
             }
           }
       );
+    }
+
+    public receipt(transactionId: string): void {
+      this.feeReportService.receipt(transactionId);
     }
 
     private listDues(): void {

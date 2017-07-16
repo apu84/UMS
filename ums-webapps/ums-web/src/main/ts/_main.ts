@@ -231,3 +231,4 @@
 /// <reference path='fee/bank/conclude.payment.ts'/>
 /// <reference path='fee/filter/filter.model.ts'/>
 /// <reference path='fee/filter/list.filter.directive.ts'/>
+/// <reference path='fee/report/report.service.ts'/>

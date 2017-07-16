@@ -58,9 +58,9 @@ public class PostPaymentActions extends PaymentStatusDaoDecorator {
     List<MutableStudentPayment> payments = new ArrayList<>();
     studentPayments.forEach((payment) -> {
       if(paymentStatus.isPaymentComplete()) {
-        if(payment.getStatus() != StudentPayment.Status.RECEIVED) {
+        if(payment.getStatus() == StudentPayment.Status.RECEIVED) {
           MutableStudentPayment mutableStudentPayment = payment.edit();
-          mutableStudentPayment.setStatus(StudentPayment.Status.RECEIVED);
+          mutableStudentPayment.setStatus(StudentPayment.Status.VERIFIED);
           payments.add(mutableStudentPayment);
         }
         if(containsCertificate(payment.getFeeCategory())) {
@@ -94,7 +94,8 @@ public class PostPaymentActions extends PaymentStatusDaoDecorator {
   }
 
   private boolean containsAdmissionFee(List<StudentPayment> pPayments) {
-    return pPayments.stream().allMatch((payment) -> payment.getFeeCategory().getType().getId() == FeeType.Types.SEMESTER_FEE.getId());
+    return pPayments.stream()
+        .allMatch((payment) -> payment.getFeeCategory().getType().getId() == FeeType.Types.SEMESTER_FEE.getId());
   }
 
   private void postProcessAdmissionFee(List<StudentPayment> pStudentPayments) {

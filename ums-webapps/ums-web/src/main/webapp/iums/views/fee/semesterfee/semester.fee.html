@@ -43,11 +43,12 @@
             <table class="table table-hover table-bordered table-advanced" data-ng-repeat="(transactionId,payments) in vm.payments">
                 <thead>
                 <tr role="row" class="heading">
-                    <th width="35%" class="sorting">TransactionId</th>
-                    <th width="35%" class="sorting_asc">Name</th>
+                    <th width="33%" class="sorting">TransactionId</th>
+                    <th width="33%" class="sorting_asc">Name</th>
                     <th width="10%" class="sorting">Amount</th>
                     <th width="10%" class="sorting">Applied on</th>
                     <th width="10%" class="sorting_asc">Status</th>
+                    <th width="4%" class="sorting_asc"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -63,6 +64,13 @@
                     </td>
                     <td style="padding: 10px" rowspan="{{vm.payments[transactionId].length}}"
                         data-ng-if="$index === 0">{{::payment.status}}
+                    </td>
+                    <td style="padding: 10px" rowspan="{{vm.payments[transactionId].length}}"
+                        data-ng-if="$index === 0">
+                        <img
+                             src="images/pdf_square.png" class="download_tooltip ng-scope"
+                             style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                             data-ng-click="vm.receipt(transactionId)">
                     </td>
                 </tr>
                 </tbody>

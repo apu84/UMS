@@ -1,6 +1,6 @@
 module ums {
   export class SemesterFeeController {
-    public static $inject = ['SemesterFeeService', 'PaymentService', 'StudentInfoService', 'notify'];
+    public static $inject = ['SemesterFeeService', 'PaymentService', 'StudentInfoService', 'notify', 'FeeReportService'];
     private NOT_WITHIN_SLOT: string = 'Not within admission slot';
     private ADMITTED: string = 'Admission is completed';
     private READMISSION_NOT_APPLIED: string = 'No readmission application found';
@@ -16,7 +16,8 @@ module ums {
     constructor(private semesterFeeService: SemesterFeeService,
                 private paymentService: PaymentService,
                 private studentService: StudentInfoService,
-                private notify: Notify) {
+                private notify: Notify,
+                private feeReportService: FeeReportService) {
       studentService.getStudent().then((student: Student) => {
         if (student && student.currentEnrolledSemesterId) {
           semesterFeeService.getSemesterFeeStatus(student.currentEnrolledSemesterId).then((response: string) => {
@@ -243,8 +244,11 @@ module ums {
           group[payment.transactionId].push(payment);
           return group;
         }, paymentGroup);
-        console.log(this.payments);
       });
+    }
+
+    public receipt(transactionId: string): void {
+      this.feeReportService.receipt(transactionId);
     }
   }
 
