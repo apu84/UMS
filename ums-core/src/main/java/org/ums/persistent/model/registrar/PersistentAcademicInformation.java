@@ -3,6 +3,7 @@ package org.ums.persistent.model.registrar;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
+import org.ums.enums.common.AcademicDegreeType;
 import org.ums.manager.registrar.AcademicInformationManager;
 
 public class PersistentAcademicInformation implements MutableAcademicInformation {
@@ -17,9 +18,10 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
 
   private int mId;
   private String mEmployeeId;
-  private String mDegreeName;
-  private String mDegreeInstitute;
-  private String mDegreePassingYear;
+  private AcademicDegreeType mDegree;
+  private int mDegreeId;
+  private String mInstitute;
+  private int mPassingYear;
   private String mLastModified;
 
   public PersistentAcademicInformation() {}
@@ -27,9 +29,10 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   public PersistentAcademicInformation(PersistentAcademicInformation pPersistentAcademicInformation) {
     mId = pPersistentAcademicInformation.getId();
     mEmployeeId = pPersistentAcademicInformation.getEmployeeId();
-    mDegreeName = pPersistentAcademicInformation.getDegreeName();
-    mDegreeInstitute = pPersistentAcademicInformation.getDegreeInstitute();
-    mDegreePassingYear = pPersistentAcademicInformation.getDegreePassingYear();
+    mDegree = pPersistentAcademicInformation.getDegree();
+    mDegreeId = pPersistentAcademicInformation.getDegreeId();
+    mInstitute = pPersistentAcademicInformation.getInstitute();
+    mPassingYear = pPersistentAcademicInformation.getPassingYear();
     mLastModified = pPersistentAcademicInformation.getLastModified();
   }
 
@@ -79,18 +82,23 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public void setDegreeName(String pDegreeName) {
-    mDegreeName = pDegreeName;
+  public void setDegree(AcademicDegreeType pDegree) {
+    mDegree = pDegree;
   }
 
   @Override
-  public void setDegreeInstitute(String pDegreeInstitute) {
-    mDegreeInstitute = pDegreeInstitute;
+  public void setDegreeId(int pDegreeId) {
+    mDegreeId = pDegreeId;
   }
 
   @Override
-  public void setDegreePassingYear(String pDegreePassingYear) {
-    mDegreePassingYear = pDegreePassingYear;
+  public void setInstitute(String pInstitute) {
+    mInstitute = pInstitute;
+  }
+
+  @Override
+  public void setPassingYear(int pPassingYear) {
+    mPassingYear = pPassingYear;
   }
 
   @Override
@@ -99,17 +107,22 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public String getDegreeName() {
-    return mDegreeName;
+  public AcademicDegreeType getDegree() {
+    return mDegree;
   }
 
   @Override
-  public String getDegreeInstitute() {
-    return mDegreeInstitute;
+  public int getDegreeId() {
+    return mDegreeId;
   }
 
   @Override
-  public String getDegreePassingYear() {
-    return mDegreePassingYear;
+  public String getInstitute() {
+    return mInstitute;
+  }
+
+  @Override
+  public int getPassingYear() {
+    return mPassingYear;
   }
 }

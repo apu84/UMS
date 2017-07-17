@@ -731,9 +731,11 @@ module ums {
                 degreeTypes: [
                     {id: 1, name: "SSC"},
                     {id: 2, name: "HSC"},
-                    {id: 3, name: "Bachelor"},
-                    {id: 4, name: "Master's"},
-                    {id: 5, name: "PhD"}
+                    {id: 3, name: "O-Level"},
+                    {id: 4, name: "A-Level"},
+                    {id: 5, name: "Bachelor"},
+                    {id: 6, name: "Master's"},
+                    {id: 7, name: "PhD"}
                 ],
                 relationTypes: [
                     {id: 1, name: "Spouse"},

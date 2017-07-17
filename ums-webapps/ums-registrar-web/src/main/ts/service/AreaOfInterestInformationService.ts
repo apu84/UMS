@@ -23,7 +23,6 @@ module ums{
         }
 
         public getAreaOfInterestInformation(employeeId: string): ng.IPromise<any> {
-            console.log("I am here may be");
             let defer = this.$q.defer();
             this.httpClient.get(this.url+"/getAreaOfInterestInformation/"+employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {

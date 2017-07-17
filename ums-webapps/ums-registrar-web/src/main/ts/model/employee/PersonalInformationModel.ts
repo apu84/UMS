@@ -54,13 +54,8 @@ module ums {
         areaOfInterests: Array<IAreaOfInterestInformationModel>;
     }
 
-    export interface IAreaOfInterestInformationModel{
+    export interface IAreaOfInterestInformationModel {
         areaOfInterest: ICommon;
         areaOfInterestId: number;
-    }
-
-    export interface IGender {
-        id: string;
-        name: string;
     }
 }

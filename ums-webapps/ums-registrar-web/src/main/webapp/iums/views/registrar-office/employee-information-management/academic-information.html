@@ -1,12 +1,6 @@
-<style>
-    .row{
-        padding-top: 1px;
-        padding-bottom: 1px;
-    }
-</style>
 <div data-ng-if="showAcademicInputDiv">
-    <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
-        <div class="container-fluid">
+    <div class="container-fluid">
+        <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label">Sl.</label>
@@ -40,7 +34,7 @@
                     <div class="col-md-2">
                         <select name="nAcademicDegree{{$index}}"
                                 id="iAcademicDegree{{$index}}"
-                                data-ng-model="academic.academicDegreeName"
+                                data-ng-model="academic.degree"
                                 data-ng-options="degreeName.name for degreeName in degreeNames"
                                 class="form-control" required>
                             <option value="">Select Degree</option>
@@ -50,15 +44,15 @@
                         <input type="text"
                                name="nAcademicInstitution{{$index}}"
                                id="iAcademicInstitution {{$index}}"
-                               data-ng-model="academic.academicInstitution"
+                               data-ng-model="academic.institution"
                                placeholder="Institution"
                                class="form-control" required>
                     </div>
                     <div class="col-md-2">
-                        <input type="text"
+                        <input type="number"
                                name="nPassingYear{{$index}}"
                                id="iPassingYear{{$index}}"
-                               data-ng-model="academic.academicPassingYear"
+                               data-ng-model="academic.passingYear"
                                data-date-format="yyyy"
                                placeholder="YYYY"
                                autocomplete="off"
@@ -80,8 +74,8 @@
                     <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <div data-ng-if="showAcademicLabelDiv">
@@ -116,17 +110,17 @@
                 </div>
                 <div class="col-md-2">
                     <div style="border-bottom: 1px dashed;" align="center">
-                        <label class="control-label">{{academic.academicDegreeName.name}}</label>
+                        <label class="control-label">{{academic.degree.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div style="border-bottom: 1px dashed;" align="center">
-                        <label class="control-label">{{academic.academicInstitution}}</label>
+                        <label class="control-label">{{academic.institution}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div style="border-bottom: 1px dashed;" align="center">
-                        <label class="control-label">{{academic.academicPassingYear}}</label>
+                        <label class="control-label">{{academic.passingYear}}</label>
                     </div>
                 </div>
             </div>

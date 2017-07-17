@@ -53,6 +53,11 @@ public class AcademicInformationResourceHelper extends
     JsonArray academicJsonArray = entries.getJsonObject(0).getJsonArray("academic");
     int sizeOfAcademicJsonArray = academicJsonArray.size();
 
+    // JsonObject previousInfo = getAcademicInformation(pUriInfo);
+    // JsonArray previousEntries = previousInfo.getJsonArray("entries");
+    //
+    // System.out.println(previousInfo.equals(pJsonObject));
+
     List<MutableAcademicInformation> createMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> updateMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> deleteMutableAcademicInformation = new ArrayList<>();
@@ -91,13 +96,11 @@ public class AcademicInformationResourceHelper extends
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
     for(AcademicInformation academicInformation : pAcademicInformation) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, academicInformation, pUriInfo, localCache);
       children.add(jsonObject);
     }
-
     object.add("entries", children);
     localCache.invalidate();
     return object.build();

@@ -4,6 +4,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
+import org.ums.enums.common.AcademicDegreeType;
 
 import java.io.Serializable;
 
@@ -12,9 +13,11 @@ public interface AcademicInformation extends Serializable, EditType<MutableAcade
 
   String getEmployeeId();
 
-  String getDegreeName();
+  AcademicDegreeType getDegree();
 
-  String getDegreeInstitute();
+  int getDegreeId();
 
-  String getDegreePassingYear();
+  String getInstitute();
+
+  int getPassingYear();
 }

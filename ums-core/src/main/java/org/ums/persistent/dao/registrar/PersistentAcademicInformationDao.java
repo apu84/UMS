@@ -17,14 +17,14 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,?, ?,"
+      "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, DEGREE_NAME, DEGREE_INSTITUTE, DEGREE_PASSING_YEAR, LAST_MODIFIED From EMP_ACADEMIC_INFO ";
+      "Select ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED From EMP_ACADEMIC_INFO ";
 
   static String UPDATE_ALL =
-      "UPDATE EMP_ACADEMIC_INFO SET DEGREE_NAME = ?, DEGREE_INSTITUTE = ?, DEGREE_PASSING_YEAR = ?, LAST_MODIFIED ="
+      "UPDATE EMP_ACADEMIC_INFO SET DEGREE = ?, INSTITUTE = ?, PASSING_YEAR = ?, LAST_MODIFIED ="
           + getLastModifiedSql() + " ";
 
   static String DELETE_ALL = "DELETE FROM EMP_ACADEMIC_INFO ";
@@ -51,8 +51,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation academicInformation : pMutableAcademicInformation) {
-      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegreeName(),
-          academicInformation.getDegreeInstitute(), academicInformation.getDegreePassingYear()});
+      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegree().getId(),
+          academicInformation.getInstitute(), academicInformation.getPassingYear()});
 
     }
     return params;
@@ -73,9 +73,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   private List<Object[]> getUpdateParams(List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation pAcademicInformation : pMutableAcademicInformation) {
-      params.add(new Object[] {pAcademicInformation.getDegreeName(), pAcademicInformation.getDegreeInstitute(),
-          pAcademicInformation.getDegreePassingYear(), pAcademicInformation.getEmployeeId(),
-          pAcademicInformation.getId()});
+      params.add(new Object[] {pAcademicInformation.getDegree().getId(), pAcademicInformation.getInstitute(),
+          pAcademicInformation.getPassingYear(), pAcademicInformation.getEmployeeId(), pAcademicInformation.getId()});
     }
     return params;
   }
@@ -98,12 +97,12 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     @Override
     public AcademicInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentAcademicInformation academicInformation = new PersistentAcademicInformation();
-      academicInformation.setId(resultSet.getInt("id"));
-      academicInformation.setEmployeeId(resultSet.getString("employee_id"));
-      academicInformation.setDegreeName(resultSet.getString("degree_name"));
-      academicInformation.setDegreeInstitute(resultSet.getString("degree_institute"));
-      academicInformation.setDegreePassingYear(resultSet.getString("degree_passing_year"));
-      academicInformation.setLastModified(resultSet.getString("last_modified"));
+      academicInformation.setId(resultSet.getInt("ID"));
+      academicInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+      academicInformation.setDegreeId(resultSet.getInt("DEGREE"));
+      academicInformation.setInstitute(resultSet.getString("INSTITUTE"));
+      academicInformation.setPassingYear(resultSet.getInt("PASSING_YEAR"));
+      academicInformation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return academicInformation;
     }
   }

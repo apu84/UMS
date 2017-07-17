@@ -104,6 +104,7 @@
 /// <reference path='controller/employee-information-management/ServiceInformation.ts'/>
 /// <reference path='controller/meeting-management/Meeting.ts'/>
 /// <reference path='controller/approve-publication/ApprovePublication.ts'/>
+/// <reference path='controller/employee-information-management/RegistrarEmployeeView.ts'/>
 
 
 /// <reference path='service/ServiceInformationService.ts'/>

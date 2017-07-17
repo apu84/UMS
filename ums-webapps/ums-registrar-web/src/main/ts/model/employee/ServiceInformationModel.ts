@@ -10,9 +10,6 @@ module ums{
         employmentTypeId: number;
         joiningDate: string;
         resignDate: string;
-        roomNo: string;
-        extNo: string;
-        academicInitial: string;
         dbAction: string;
         intervalDetails: Array<IServiceDetailsModel>;
     }

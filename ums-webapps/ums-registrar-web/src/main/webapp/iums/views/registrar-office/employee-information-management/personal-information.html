@@ -1,24 +1,23 @@
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-        <!--<div align="right">-->
-            <!--<i class="fa fa-edit " title="Edit" class="btn" data-ng-click="enableEditMode('personal')" data-ng-show="showPersonalEditButton"></i>-->
-            <!--<i class="fa fa-eye " title="View Mode" class="btn" data-ng-click="enableViewMode('personal')" data-ng-show="showPersonalCancelButton"></i>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-<div data-ng-show="showPersonalInputDiv">
-    <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
-        <div class="customContainer">
+<style>
+    .container-fluid:hover .box{
+        opacity: 0.90;
+    }
+    .container-fluid .box:hover{
+        /*background: whitesmoke;*/
+        color: black;
+        opacity: 1;
+    }
+</style>
+<div data-ng-if="showPersonalInputDiv">
+    <div class="container-fluid">
+        <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
             <div class="box">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div align="center">
-                            <h5><b>General</b></h5>
-                        </div>
+                    <div align="center">
+                        <h4>General</h4>
                     </div>
                 </div>
-                <br />
+
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require'>*</span></label>
@@ -43,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -70,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -97,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -125,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -152,7 +151,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -178,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -209,20 +208,18 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
             </div>
             <hr />
 
 
             <div class="box">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div align="center">
-                            <h5><b>Contact</b></h5>
-                        </div>
+                    <div align="center">
+                        <h4>Contact</h4>
                     </div>
                 </div>
-                <br />
+
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
@@ -253,7 +250,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -279,7 +276,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -287,7 +284,7 @@
                     </div>
                     <div class="col-md-6"></div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -313,7 +310,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -344,7 +341,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
 
                 <div class="row">
@@ -376,7 +373,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -393,7 +390,7 @@
                     </div>
                     <div class="col-md-6"></div>
                 </div>
-                <br /><br />
+
 
                 <div class="row">
                     <div class="col-md-12">
@@ -403,7 +400,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -423,13 +420,13 @@
                             <input type="text"
                                    name="nPermanentAddressRoad"
                                    id="iPermanentAddressRoad"
-                                   data-ng-model="entry.personal.preAddressLine2"
+                                   data-ng-model="entry.personal.perAddressLine2"
                                    placeholder="Road/Street"
                                    class="form-control">
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -460,7 +457,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
 
                 <div class="row">
@@ -492,7 +489,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -509,20 +506,18 @@
                     </div>
                     <div class="col-md-6"></div>
                 </div>
-                <br />
+
             </div>
             <hr />
 
 
             <div class="box">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div align="center">
-                            <h5><b>Emergency Contact</b></h5>
-                        </div>
+                    <div align="center">
+                        <h4><b>Emergency Contact</b></h4>
                     </div>
                 </div>
-                <br />
+
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require">*</span></label>
@@ -548,7 +543,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -582,56 +577,30 @@
                         </div>
                     </div>
                 </div>
-                <br />
+
             </div>
             <hr />
-            <div class="box">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-2">
-                            <label class="control-label">Area Of Interests: </label>
-                        </div>
-                        <div class="col-md-10">
-                            <select data-ng-model="entry.personal.areaOfInterests"
-                                    data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"
-                                    class="select2-multi-value form-control"
-                                    multiple="multiple">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr />
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="text-left pal">
-                    <a data-target="#modal-personal" data-toggle="modal" style="cursor: pointer"><b><u>See Instructions</u></b></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="text-right pal">
-                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+            <div class="row">
+                <div align="right">
+                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData('personal')">Test Data</button>
                     <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')"><i class="fa fa-eye"></i>&nbsp;View</button>
                     <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
-
-<div data-ng-show="showPersonalLabelDiv">
-    <div class="customContainer">
+ 
+<div data-ng-if="showPersonalLabelDiv">
+    <div class="container-fluid">
         <div class="box">
             <div class="row">
-                <div class="col-md-12">
-                    <div align="center">
-                        <h5><b>General</b></h5>
-                    </div>
+                <div align="center">
+                    <h4>General</h4>
                 </div>
             </div>
-            <br />
+
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name</label>
@@ -646,7 +615,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -662,7 +631,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -678,7 +647,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -694,7 +663,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -710,7 +679,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -726,7 +695,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -742,20 +711,18 @@
                     </div>
                 </div>
             </div>
-            <br />
+
         </div>
         <hr />
 
 
         <div class="box">
             <div class="row">
-                <div class="col-md-12">
-                    <div align="center">
-                        <h5><b>Contact</b></h5>
-                    </div>
+                <div align="center">
+                    <h4>Contact</h4>
                 </div>
             </div>
-            <br />
+
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
@@ -770,7 +737,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -786,7 +753,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -794,7 +761,7 @@
                 </div>
                 <div class="col-md-6"></div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -810,7 +777,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -826,7 +793,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
 
             <div class="row">
@@ -843,7 +810,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -854,14 +821,14 @@
                 </div>
                 <div class="col-md-6"></div>
             </div>
-            <br /><br />
+
 
             <div class="row">
                 <div class="col-md-12">
                     <label class="col-md-2"><b>Permanent Address:</b></label>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -873,11 +840,11 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.preAddressLine2}} </label>
+                        <label class="control-label"> {{entry.personal.perAddressLine2}} </label>
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -893,7 +860,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
 
             <div class="row">
@@ -910,7 +877,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -921,20 +888,18 @@
                 </div>
                 <div class="col-md-6"></div>
             </div>
-            <br />
+
         </div>
         <hr />
 
 
         <div class="box">
             <div class="row">
-                <div class="col-md-12">
-                    <div align="center">
-                        <h5><b>Emergency Contact</b></h5>
-                    </div>
+                <div align="center">
+                    <h4>Emergency Contact</h4>
                 </div>
             </div>
-            <br />
+
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name</label>
@@ -949,7 +914,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -965,29 +930,12 @@
                     </div>
                 </div>
             </div>
-            <br />
-        </div>
-        <hr />
-        <div class="box">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-2">
-                        <label class="control-label">Area Of Interests: </label>
-                    </div>
-                    <div class="col-md-10" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{entry.personal.areaOfInterests}}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
         </div>
-        <div class="col-md-6">
-            <div class="text-right pal">
+        <hr />
+
+        <div class="row">
+            <div align="right">
                 <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
                 <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
             </div>
@@ -996,11 +944,6 @@
 </div>
 
 
-<script type="text/javascript">
-    $(".select2-multi-value").select2({
-        placeholder: "Your Interested Area",
-        allowClear: true
-    });
-</script>
+
 
 

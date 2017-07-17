@@ -18,7 +18,7 @@ module ums{
         changePeriodValues: Function;
     }
 
-    interface  IDepartment{
+    export interface IDepartment{
         id: string;
         shortName: string;
         longName: string;
@@ -125,9 +125,6 @@ module ums{
                     employmentTypeId: null,
                     joiningDate: "",
                     resignDate: "",
-                    roomNo: "",
-                    extNo: "",
-                    academicInitial: "",
                     dbAction: "",
                     intervalDetails: Array<IServiceDetailsModel>()
                 };
