@@ -428,7 +428,8 @@ public class FeeReceipt {
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-    paragraph = new Paragraph("In words: Taka " + NumberToWords.convert(getTotalAmount().longValue()) +" only" , infoFont);
+    paragraph =
+        new Paragraph("In words: Taka " + NumberToWords.convert(getTotalAmount().longValue()) + " only", infoFont);
     paragraph.setAlignment(Element.ALIGN_LEFT);
     cell.addElement(paragraph);
     cell.setColspan(2);
