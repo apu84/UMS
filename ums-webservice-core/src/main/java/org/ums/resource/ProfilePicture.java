@@ -6,7 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
 import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
@@ -17,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.InputStream;
 
 @Component
@@ -36,18 +42,29 @@ public class ProfilePicture extends Resource {
   @Autowired
   MessageManipulator mMessageManipulator;
 
+  ApplicationContext applicationContext = AppContext.getApplicationContext();
+
+  MessageChannel ftpChannel = applicationContext.getBean("ftpChannel", MessageChannel.class);
+
   @GET
   public Response get(final @Context Request pRequest) {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if(subject != null) {
+    if (subject != null) {
       userId = subject.getPrincipal().toString();
     }
-    InputStream imageData;
+    InputStream imageData = null;
 
     imageData = mGateway.read("files/user.png");
+
+    final File file = new File("G:/love2.jpg");
+    // this.mGateway.write("love.jpg", file);
+    Message<File> messageA = MessageBuilder.withPayload(file).build();
+    ftpChannel.send(messageA);
+
+
     try {
-    } catch(Exception fl) {
+    } catch (Exception fl) {
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();
     }

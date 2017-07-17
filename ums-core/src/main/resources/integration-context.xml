@@ -29,6 +29,14 @@
 
   </ftp:outbound-gateway>
 
+  <ftp:outbound-channel-adapter
+      session-factory="ftpClientFactory"
+      channel="ftpChannel"
+      remote-directory="files"
+      remote-filename-generator-expression="headers['fileName']">
+
+  </ftp:outbound-channel-adapter>
+
 
   <bean id="mp" class="org.ums.integration.MessageManipulator"/>
   <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
