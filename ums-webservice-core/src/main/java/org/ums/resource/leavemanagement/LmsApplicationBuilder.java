@@ -40,8 +40,8 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     pBuilder.add("leaveTypeName", pReadOnly.getLmsType().getName());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");
     pBuilder.add("appliedOn", formatter.format(pReadOnly.getAppliedOn()));
-    pBuilder.add("getFromDate", formatter.format(pReadOnly.getFromDate()));
-    pBuilder.add("getToDate", formatter.format(pReadOnly.getToDate()));
+    pBuilder.add("fromDate", formatter.format(pReadOnly.getFromDate()));
+    pBuilder.add("toDate", formatter.format(pReadOnly.getToDate()));
     long diff = pReadOnly.getToDate().getTime() - pReadOnly.getFromDate().getTime();
     int duration = (int) (diff / (24 * 60 * 60 * 1000) + 1);
     pBuilder.add("duration", duration);

@@ -30,7 +30,7 @@
   </ftp:outbound-gateway>
 
 
-  <bean id="mp" class="org.ums.integration.MessagePrinter"/>
+  <bean id="mp" class="org.ums.integration.MessageManipulator"/>
   <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
 
   <integration:channel id="outputChannel"/>

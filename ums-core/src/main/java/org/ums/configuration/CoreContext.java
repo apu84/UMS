@@ -221,6 +221,13 @@ public class CoreContext {
   }
 
   @Bean
+  AttachmentManager attachmentManager() {
+    AttachmentCache attachmentCache = new AttachmentCache(mCacheFactory.getCacheManager());
+    attachmentCache.setManager(new PersistentAttachmentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return attachmentCache;
+  }
+
+  @Bean
   LmsApplicationManager lmsApplicationManager() {
     LmsApplicationCache lmsApplicationCache = new LmsApplicationCache(mCacheFactory.getCacheManager());
     lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

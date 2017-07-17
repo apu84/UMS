@@ -12,6 +12,7 @@ import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.*;
 import org.ums.manager.EmployeeManager;
+import org.ums.manager.common.AttachmentManager;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.manager.common.LmsTypeManager;
@@ -64,6 +65,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   @Autowired
   private AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
+  @Autowired
+  private AttachmentManager mAttachmentManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -71,13 +75,6 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
-    /*
-     * application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL
-     * );
-     * 
-     * appId = getContentManager().create(application);
-     */
-
     inserIntoLeaveApplicationStatus(application);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);

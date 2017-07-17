@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.integration.FileWriterGateway;
-import org.ums.integration.MessagePrinter;
+import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
 
 import javax.ws.rs.GET;
@@ -34,7 +34,7 @@ public class ProfilePicture extends Resource {
   private FileWriterGateway mGateway;
 
   @Autowired
-  MessagePrinter mMessagePrinter;
+  MessageManipulator mMessageManipulator;
 
   @GET
   public Response get(final @Context Request pRequest) {

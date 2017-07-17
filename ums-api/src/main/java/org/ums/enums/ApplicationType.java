@@ -12,7 +12,8 @@ public enum ApplicationType {
   CLEARANCE(2),
   CARRY(3),
   SPECIAL_CARRY(4),
-  IMPROVEMENT(5);
+  IMPROVEMENT(5),
+  LEAVE(6);
 
   private static final Map<Integer, ApplicationType> Lookup = new HashMap<>();
 
