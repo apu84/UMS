@@ -29,9 +29,10 @@
 
   </ftp:outbound-gateway>
 
+  <integration:channel id="lmsChannel"/>
   <ftp:outbound-channel-adapter
       session-factory="ftpClientFactory"
-      channel="ftpChannel"
+      channel="lmsChannel"
       remote-directory="files/lms"
       auto-create-directory="true"
       remote-filename-generator-expression="headers['fileName']">

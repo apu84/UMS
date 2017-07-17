@@ -44,26 +44,27 @@ public class ProfilePicture extends Resource {
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  MessageChannel ftpChannel = applicationContext.getBean("ftpChannel", MessageChannel.class);
+  MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
 
   @GET
   public Response get(final @Context Request pRequest) {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
+    if(subject != null) {
       userId = subject.getPrincipal().toString();
     }
     InputStream imageData = null;
 
     imageData = mGateway.read("files/user.png");
 
-    final File file = new File("G:/love.jpg");
+    File file = new File("G:/shorna.jpg");
+
     // this.mGateway.write("love.jpg", file);
     Message<File> messageA = MessageBuilder.withPayload(file).build();
-    ftpChannel.send(messageA);
+    lmsChannel.send(messageA);
 
     try {
-    } catch (Exception fl) {
+    } catch(Exception fl) {
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();
     }
