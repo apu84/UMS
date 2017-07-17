@@ -195,6 +195,7 @@
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
 /// <reference path='model/LoggedInUser.ts'/>
 /// <reference path='model/CourseTeacherModel.ts'/>
+/// <reference path='model/Attachment.ts'/>
 /// <reference path='model/ExamRoutineModel.ts'/>
 /// <reference path='model/GenericModel.ts'/>
 /// <reference path='model/NewStudentModel.ts'/>

@@ -15,22 +15,23 @@
 </style>
 <div class="col-md-8">
     <div class="col-md-12"><h3>Application Status</h3></div>
-    <div class="col-md-4"><p>Applied On:<b> {{pendingApplication.appliedOn}}</b></p></div>
-    <div class="col-md-4"><p>From <b>{{pendingApplication.fromDate}}</b> to <b>{{pendingApplication.toDate}}</b></p>
+    <div class="col-md-4"><p>Applied On:<b> {{vm.pendingApplication.appliedOn}}</b></p></div>
+    <div class="col-md-4"><p>From <b>{{vm.pendingApplication.fromDate}}</b> to <b>{{vm.pendingApplication.toDate}}</b>
+    </p>
     </div>
-    <div class="col-md-4"><p>Duration: <b>{{pendingApplication.duration}}</b> days</p></div>
+    <div class="col-md-4"><p>Duration: <b>{{vm.pendingApplication.duration}}</b> days</p></div>
     <div class="col-md-12">Reason</div>
     <div class="col-md-12">
         <div>
         <textarea disabled="true" class="form-control col-md-8" rows="10"
                   class="col-md-12"
-                  style="cursor: auto; background-color: floralwhite">{{pendingApplication.reason}}</textarea>
+                  style="cursor: auto; background-color: floralwhite">{{vm.pendingApplication.reason}}</textarea>
         </div>
     </div>
     <div class="col-md-12">
         <h2>Status</h2>
         <ul class="list-group">
-            <a class="list-group-item" data-ng-repeat="s in applicationStatusList">
+            <a class="list-group-item" data-ng-repeat="s in vm.applicationStatusList">
                 <div data-ng-if="s.rowNumber%2==0" style="background-color: lightgoldenrodyellow;padding: 3%">
                     <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
                             class="label label-primary">
@@ -42,7 +43,7 @@
 
                     <p disabled="true"
                        class="white-space-pre">{{s.comments}}</p>
-                    
+
                     <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
                             class="label label-primary">
                         {{s.actionStatusLabel}}</label> </i></p>
@@ -67,7 +68,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="s in applicationStatusList" style="cursor: pointer;" data-toggle="modal"
+        <tr data-ng-repeat="s in vm.applicationStatusList" style="cursor: pointer;" data-toggle="modal"
             data-target="#myModal" data-ng-click="setStatusModalContent(s)">
             <td>{{s.appliedOn}}</td>
             <td>{{s.actionTakenByName}}</td>

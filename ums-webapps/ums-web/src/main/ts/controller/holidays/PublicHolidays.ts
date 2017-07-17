@@ -24,7 +24,7 @@ module ums {
                 private holidayTypeService: HolidayTypeService,
                 private userService: UserService) {
 
-      var number: any = number;
+      var number: any = 0;
       var date = new Date;
       this.enableEdit = false;
       this.enableButton = false;
