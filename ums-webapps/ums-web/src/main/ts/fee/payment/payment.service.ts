@@ -43,6 +43,22 @@ module ums {
           (response: PaymentResponse) => defer.resolve(response.entries));
       return defer.promise;
     }
+
+    public getPaymentHistory(): ng.IPromise<PaymentGroup> {
+      let defer: ng.IDeferred<PaymentGroup> = this.$q.defer();
+      this.httpClient.get(`student-payment/all`, HttpClient.MIME_TYPE_JSON,
+          (response: PaymentResponse) => {
+            let paymentGroup: PaymentGroup = {};
+            defer.resolve(response.entries.reduce((group: PaymentGroup, payment) => {
+              if (!group[payment.transactionId]) {
+                group[payment.transactionId] = []
+              }
+              group[payment.transactionId].push(payment);
+              return group;
+            }, paymentGroup));
+          });
+      return defer.promise;
+    }
   }
 
   UMS.service("PaymentService", PaymentService);

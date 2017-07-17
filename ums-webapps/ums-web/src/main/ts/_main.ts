@@ -232,3 +232,4 @@
 /// <reference path='fee/filter/filter.model.ts'/>
 /// <reference path='fee/filter/list.filter.directive.ts'/>
 /// <reference path='fee/report/report.service.ts'/>
+/// <reference path='fee/payment/student.payment.history.controller.ts'/>

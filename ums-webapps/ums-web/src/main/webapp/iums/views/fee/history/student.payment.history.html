@@ -1,0 +1,53 @@
+<div class="panel">
+    <div class="panel-heading">Payments history</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered table-advanced table-striped">
+                    <tr data-ng-repeat="(transactionId, payments) in vm.paymentHistory">
+                        <td>{{::transactionId}}</td>
+                        <td style="padding: 0">
+                            <table class="course-teacher-inner"
+                                   style="border-collapse: collapse;">
+                                <thead>
+                                <tr>
+                                    <td style="padding:10px;border-top: none;width: 25%">
+                                        <b>Type</b></td>
+                                    <td style="padding:10px;border-top: none;width: 20%"><b>Applied
+                                        On</b></td>
+                                    <td style="padding:10px;border-top: none;width: 20%"><b>Amount (BDT)</b>
+                                    </td>
+                                    <td style="padding:10px;border-top: none;width: 20%">Status</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="payment in payments">
+                                    <td style="padding:10px">
+                                        {{payment.feeCategory}}
+                                    </td>
+                                    <td style="padding:10px">
+                                        {{payment.appliedOn}}
+                                    </td>
+                                    <td style="padding:10px">
+                                        {{payment.amount}}/=
+                                    </td>
+                                    <td style="padding:10px">
+                                        {{payment.status}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td style="padding: 0">
+                            <img
+                                    src="images/pdf_square.png" class="download_tooltip ng-scope"
+                                    style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                                    data-ng-click="vm.receipt(transactionId)">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

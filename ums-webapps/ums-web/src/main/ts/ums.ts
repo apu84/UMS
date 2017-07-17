@@ -956,6 +956,12 @@ module ums {
             }]
           }
         })
+        .state('paymentHistory', {
+          url: "/payment-history",
+          controller: 'StudentPaymentHistory',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/history/student.payment.history.html'
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",
