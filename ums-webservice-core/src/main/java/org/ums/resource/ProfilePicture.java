@@ -57,11 +57,10 @@ public class ProfilePicture extends Resource {
 
     imageData = mGateway.read("files/user.png");
 
-    final File file = new File("G:/love2.jpg");
+    final File file = new File("G:/love.jpg");
     // this.mGateway.write("love.jpg", file);
     Message<File> messageA = MessageBuilder.withPayload(file).build();
     ftpChannel.send(messageA);
-
 
     try {
     } catch (Exception fl) {

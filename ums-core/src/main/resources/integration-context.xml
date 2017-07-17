@@ -32,7 +32,8 @@
   <ftp:outbound-channel-adapter
       session-factory="ftpClientFactory"
       channel="ftpChannel"
-      remote-directory="files"
+      remote-directory="files/lms"
+      auto-create-directory="true"
       remote-filename-generator-expression="headers['fileName']">
 
   </ftp:outbound-channel-adapter>
