@@ -82,9 +82,10 @@ module ums {
     public fromHistorySection: boolean;
 
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
+    public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
 
     constructor(private appConstants: any,
+                private $scope: ng.IScope,
                 private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private notify: Notify,
@@ -120,6 +121,23 @@ module ums {
       this.getUsersInformation();
     }
 
+
+    private removeFile(file: any) {
+
+      console.log("In the remove file");
+      console.log("The parameter");
+      console.log(file);
+      for (var i = 0; i < this.files.length; i++) {
+        if (this.files[i].name === file.name) {
+          console.log("Found an occurance");
+          console.log(this.files[i]);
+          this.files[i].splice(i, 1);
+        }
+        break;
+      }
+
+      console.log(this.files);
+    }
 
     private fileInserted() {
 
@@ -246,7 +264,11 @@ module ums {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days left for the leave type");
         }
 
+        this.$scope.$apply();
+
       }
+
+
     }
 
     private getPendingApplications() {
@@ -357,6 +379,28 @@ module ums {
     }
 
 
+    /*private convertToBinary():ng.IPromise<any>{
+     var binaryFiles: Array<any>=[];
+     let defer = this.$q.defer();
+     if (this.files.length > 0) {
+     for (var i = 0; i < this.files.length; i++) {
+
+
+     let binaryValue: any = {};
+     let reader = new FileReader();
+     reader.readAsDataURL(this.files[i]);
+
+     reader.onload = () => {
+     var dataUrl = reader.result;
+     binaryValue = dataUrl;
+
+     console.log(dataUrl);
+     };
+
+
+     }
+     }
+     }*/
     private convertToJson(appType: number): ng.IPromise<any> {
       let application: LmsApplication = this.leaveApplication;
       let defer = this.$q.defer();
@@ -373,6 +417,37 @@ module ums {
       item['appStatus'] = appType;
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
+
+      let jsonFileObject = [];
+      if (this.files.length > 0) {
+        for (var i = 0; i < this.files.length; i++) {
+          let fileItem: any = {};
+          let formData: FormData = new FormData();
+          formData.append("uploadFile", this.files[i], this.files[i].name);
+
+          let binaryValue: any = {};
+          let reader = new FileReader();
+
+
+          reader.readAsDataURL(this.files[i]);
+          console.log(reader.result);
+          console.log("file value");
+          console.log(this.files[i].value);
+          reader.onload = () => {
+            var dataUrl = reader.result;
+            binaryValue = dataUrl;
+            fileItem['file'] = dataUrl;
+            // console.log(dataUrl);
+
+          };
+
+          fileItem['fileName'] = this.files[i].name;
+          jsonFileObject.push(fileItem);
+        }
+      }
+      completeJson["fileEntries"] = jsonFileObject;
+      console.log("Complete json");
+      console.log(completeJson);
       defer.resolve(completeJson);
       return defer.promise;
     }
