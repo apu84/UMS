@@ -68,6 +68,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ProfilePicture.ts'/>

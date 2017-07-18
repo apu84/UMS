@@ -72,8 +72,8 @@ module ums {
     public employeeId: string;
     public user: User;
     public fileAttachments: Array<Attachment> = [];
-    public file: any = {};
-
+    public files: any = {};
+    public filesCopy: any = {};
 
     public showStatusSection: boolean;
     public showHistorySection: boolean;
@@ -82,7 +82,7 @@ module ums {
     public fromHistorySection: boolean;
 
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'fileManagerConfig'];
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -97,8 +97,7 @@ module ums {
                 private leaveTypeService: LeaveTypeService,
                 private leaveApplicationService: LeaveApplicationService,
                 private leaveApplicationStatusService: LeaveApplicationStatusService,
-                private userService: UserService,
-                private fileManagerConfig: any) {
+                private userService: UserService) {
 
       this.leaveApplication = <LmsApplication>{};
       this.showStatusSection = false;
@@ -122,9 +121,17 @@ module ums {
     }
 
 
-    private fileInserted(file: any) {
-      console.log("Here I am");
-      console.log(file);
+    private fileInserted() {
+
+      console.log("In the file insertion");
+
+      for (var i = 0; i < this.files.length; i++) {
+        var file: any = angular.copy(this.files[i]);
+        this.filesCopy.push(file);
+      }
+
+      this.files = {};
+
     }
 
 
@@ -139,7 +146,7 @@ module ums {
 
     private showHistory() {
       console.log("Showing file");
-      console.log(this.file);
+      console.log(this.files);
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
       console.log(this.leaveApprovalStatusList[8 - 1]);

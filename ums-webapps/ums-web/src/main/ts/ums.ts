@@ -864,7 +864,7 @@ module ums {
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 
-              return $ocLazyLoad.load(['FileManagerApp'], {
+              return $ocLazyLoad.load({
                 files: [
 
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
