@@ -962,6 +962,12 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/fee/history/student.payment.history.html'
         })
+        .state('payment-status', {
+          url: "/payment-status",
+          controller: 'PaymentStatusList',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/payment/payment.status.html'
+        })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",
         //   controller: "StudentGradeSheet",

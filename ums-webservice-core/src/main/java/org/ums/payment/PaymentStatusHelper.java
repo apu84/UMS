@@ -1,17 +1,14 @@
 package org.ums.payment;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.Validate;
 import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.accounts.MutablePaymentStatus;
 import org.ums.fee.accounts.PaymentStatus;
 import org.ums.fee.accounts.PaymentStatusManager;
-import org.ums.fee.accounts.PersistentPaymentStatus;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
@@ -27,11 +24,11 @@ import java.util.List;
 @Component
 public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePaymentStatus, Long> {
   @Autowired
-  PaymentStatusManager mPaymentStatusManager;
+  protected PaymentStatusManager mPaymentStatusManager;
   @Autowired
-  PaymentStatusBuilder mPaymentStatusBuilder;
+  protected DateFormat mDateFormat;
   @Autowired
-  DateFormat mDateFormat;
+  private PaymentStatusBuilder mPaymentStatusBuilder;
 
   private List<FilterItem> mFilterItems;
 
@@ -82,28 +79,6 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
       addLink("previous", pPageNumber, pItemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
-  }
-
-  @Transactional
-  public Response updatePaymentStatus(JsonObject pJsonObject, PaymentStatus.Status pStatus) {
-    Validate.notEmpty(pJsonObject);
-    Validate.notEmpty(pJsonObject.getJsonArray("entries"));
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    List<MutablePaymentStatus> paymentStatusList = new ArrayList<>();
-    for(JsonValue entry : entries) {
-      MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
-      getBuilder().build(paymentStatus, (JsonObject) entry, null);
-      PaymentStatus latestPayment = mPaymentStatusManager.get(paymentStatus.getId());
-      Validate.isTrue(paymentStatus.getLastModified().equals(latestPayment.getLastModified()));
-      Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.VERIFIED
-          && latestPayment.getStatus() != PaymentStatus.Status.REJECTED);
-      Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.RECEIVED);
-      paymentStatus.setStatus(pStatus);
-      paymentStatus.setTransactionId(latestPayment.getTransactionId());
-      paymentStatusList.add(paymentStatus);
-    }
-    mPaymentStatusManager.update(paymentStatusList);
-    return Response.ok().build();
   }
 
   JsonArray getFilterItems() {
