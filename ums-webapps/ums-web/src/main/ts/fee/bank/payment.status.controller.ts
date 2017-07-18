@@ -1,4 +1,8 @@
 module ums {
+  export interface ConcludeStatus {
+    accepted: boolean;
+  }
+
   export class PaymentStatusController {
     public static $inject = ['$scope', 'PaymentStatusService', 'notify', '$modal'];
     public nextLink: string;
@@ -9,6 +13,7 @@ module ums {
     public selectedPaymentIds: string[];
     public selectedPaymentStatus: PaymentStatus[];
     public reloadReference: ReloadRef = {reloadList: false};
+    public concludeStatus: ConcludeStatus = {accepted: undefined};
 
     constructor(private $scope: ng.IScope,
                 private paymentStatusService: PaymentStatusService,
@@ -43,7 +48,8 @@ module ums {
       }, true);
     }
 
-    public concludePayment(): void {
+    public concludePayment(accepted: boolean): void {
+      this.concludeStatus.accepted = accepted;
       this.selectedPaymentStatus
           = this.paymentStatusList.filter((payment: PaymentStatus)=> {
         return this.selectedPaymentIds.indexOf(payment.id) >= 0;
@@ -54,6 +60,7 @@ module ums {
         controller: ConcludePayment,
         resolve: {
           selectedPaymentStatus: () => this.selectedPaymentStatus,
+          concludeStatus: this.concludeStatus,
           reload: () => this.reloadReference,
           loadMyCtrl: ['$ocLazyLoad', ($ocLazyLoad) => {
             return $ocLazyLoad.load({

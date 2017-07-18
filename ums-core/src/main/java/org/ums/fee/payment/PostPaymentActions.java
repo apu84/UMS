@@ -50,14 +50,15 @@ public class PostPaymentActions extends PaymentStatusDaoDecorator {
     List<StudentPayment> studentPayments =
         mStudentPaymentManager.getTransactionDetails(paymentStatus.getTransactionId());
 
-    if(containsAdmissionFee(studentPayments)) {
+    if(containsAdmissionFee(studentPayments)
+        && paymentStatus.getStatus() == PaymentStatus.Status.VERIFIED) {
       postProcessAdmissionFee(studentPayments);
     }
 
     List<MutableCertificateStatus> certificateStatusList = new ArrayList<>();
     List<MutableStudentPayment> payments = new ArrayList<>();
     studentPayments.forEach((payment) -> {
-      if(paymentStatus.isPaymentComplete()) {
+      if(paymentStatus.getStatus() == PaymentStatus.Status.VERIFIED) {
         if(payment.getStatus() == StudentPayment.Status.RECEIVED) {
           MutableStudentPayment mutableStudentPayment = payment.edit();
           mutableStudentPayment.setStatus(StudentPayment.Status.VERIFIED);
@@ -65,6 +66,13 @@ public class PostPaymentActions extends PaymentStatusDaoDecorator {
         }
         if(containsCertificate(payment.getFeeCategory())) {
           certificateStatusList.add(certificateStatus(payment));
+        }
+      }
+      else if (paymentStatus.getStatus() == PaymentStatus.Status.REJECTED) {
+        if(payment.getStatus() == StudentPayment.Status.RECEIVED) {
+          MutableStudentPayment mutableStudentPayment = payment.edit();
+          mutableStudentPayment.setStatus(StudentPayment.Status.REJECTED);
+          payments.add(mutableStudentPayment);
         }
       }
     });

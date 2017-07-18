@@ -13,7 +13,7 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
   private String mAccount;
   private String mTransactionId;
   private PaymentMethod mMethodOfPayment;
-  private boolean mPaymentComplete;
+  private Status mStatus;
   private Date mReceivedOn;
   private Date mCompletedOn;
   private String mLastModified;
@@ -62,13 +62,13 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
   }
 
   @Override
-  public boolean isPaymentComplete() {
-    return mPaymentComplete;
+  public void setStatus(Status pStatus) {
+    mStatus = pStatus;
   }
 
   @Override
-  public void setPaymentComplete(boolean pPaymentComplete) {
-    this.mPaymentComplete = pPaymentComplete;
+  public Status getStatus() {
+    return mStatus;
   }
 
   @Override
@@ -158,7 +158,7 @@ public class PersistentPaymentStatus implements MutablePaymentStatus {
     setAccount(pPaymentStatus.getAccount());
     setTransactionId(pPaymentStatus.getTransactionId());
     setMethodOfPayment(pPaymentStatus.getMethodOfPayment());
-    setPaymentComplete(pPaymentStatus.isPaymentComplete());
+    setStatus(pPaymentStatus.getStatus());
     setReceivedOn(pPaymentStatus.getReceivedOn());
     setCompletedOn(pPaymentStatus.getCompletedOn());
     setReceiptNo(pPaymentStatus.getReceiptNo());

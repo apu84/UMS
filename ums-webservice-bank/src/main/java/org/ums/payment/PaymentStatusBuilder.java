@@ -24,7 +24,7 @@ public class PaymentStatusBuilder implements Builder<PaymentStatus, MutablePayme
     pBuilder.add("transactionId", pReadOnly.getTransactionId());
     pBuilder.add("account", pReadOnly.getAccount());
     pBuilder.add("methodOfPayment", pReadOnly.getMethodOfPayment().getLabel());
-    pBuilder.add("paymentCompleted", pReadOnly.isPaymentComplete());
+    pBuilder.add("status", pReadOnly.getStatus().getLabel());
     pBuilder.add("receivedOn", mDateFormat.format(pReadOnly.getReceivedOn()));
     pBuilder.add("completedOn", pReadOnly.getCompletedOn() != null ? mDateFormat.format(pReadOnly.getCompletedOn())
         : "");

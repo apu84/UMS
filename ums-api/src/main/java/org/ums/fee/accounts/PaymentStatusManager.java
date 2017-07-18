@@ -18,6 +18,6 @@ public interface PaymentStatusManager extends ContentManager<PaymentStatus, Muta
     ACCOUNT,
     METHOD_OF_PAYMENT,
     TRANSACTION_ID,
-    PAYMENT_COMPLETED
+    PAYMENT_STATUS
   }
 }

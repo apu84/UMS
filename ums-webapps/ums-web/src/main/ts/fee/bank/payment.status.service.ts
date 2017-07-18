@@ -9,7 +9,7 @@ module ums {
     amount: number;
     receivedOn: string;
     completedOn: string;
-    paymentCompleted: string;
+    status: string;
     lastModified;
   }
 
@@ -36,8 +36,8 @@ module ums {
     }
 
     public getPaymentStatus(filters: PaymentStatusFilter[], url?: string): ng.IPromise<PaymentStatusResponse> {
-      let defer: ng.IDeferred<PaymentStatusResponse> = this.$q.defer();
-      this.httpClient.post(url ? '/ums-webservice-bank/' + url : '/ums-webservice-bank/payment-status/paginated/filtered',
+      const defer: ng.IDeferred<PaymentStatusResponse> = this.$q.defer();
+      this.httpClient.post(url ? `/ums-webservice-bank/${url}` : '/ums-webservice-bank/payment-status/paginated/filtered',
           filters ? {"entries": filters} : {},
           HttpClient.MIME_TYPE_JSON)
           .success((response: PaymentStatusResponse) => {
@@ -51,7 +51,7 @@ module ums {
     }
 
     public getFilters(): ng.IPromise<Filter[]> {
-      let defer: ng.IDeferred<Filter[]> = this.$q.defer();
+      const defer: ng.IDeferred<Filter[]> = this.$q.defer();
       this.httpClient.get('/ums-webservice-bank/payment-status/filters', HttpClient.MIME_TYPE_JSON, (filters: Filter[])=> {
         defer.resolve(filters);
       });
@@ -59,8 +59,19 @@ module ums {
     }
 
     public concludePayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
-      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      const defer: ng.IDeferred<boolean> = this.$q.defer();
       this.httpClient.put(`/ums-webservice-bank/payment-status/conclude-payment`, {
+            "entries": payments
+          },
+          HttpClient.MIME_TYPE_JSON)
+          .success(() => defer.resolve(true))
+          .error(() => defer.resolve(false));
+      return defer.promise;
+    }
+
+    public rejectPayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
+      const defer: ng.IDeferred<boolean> = this.$q.defer();
+      this.httpClient.put(`/ums-webservice-bank/payment-status/reject-payment`, {
             "entries": payments
           },
           HttpClient.MIME_TYPE_JSON)

@@ -16,7 +16,7 @@ public interface MutablePaymentStatus extends PaymentStatus, Editable<Long>, Mut
 
   void setMethodOfPayment(PaymentMethod pMethodOfPayment);
 
-  void setPaymentComplete(boolean pPaymentComplete);
+  void setStatus(Status pStatus);
 
   void setReceivedOn(Date pReceivedOn);
 

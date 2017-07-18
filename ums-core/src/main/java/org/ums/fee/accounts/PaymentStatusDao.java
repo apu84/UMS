@@ -16,15 +16,14 @@ import org.ums.generator.IdGenerator;
 import com.google.common.collect.Lists;
 
 public class PaymentStatusDao extends PaymentStatusDaoDecorator {
-  String SELECT_ALL =
-      "SELECT ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, RECEIPT_NO, PAYMENT_COMPLETE, RECEIVED_ON, "
-          + "COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, LAST_MODIFIED FROM PAYMENT_STATUS ";
+  String SELECT_ALL = "SELECT ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, RECEIPT_NO, STATUS, RECEIVED_ON, "
+      + "COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, LAST_MODIFIED FROM PAYMENT_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO PAYMENT_STATUS (ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, PAYMENT_COMPLETE, "
+      "INSERT INTO PAYMENT_STATUS (ID, ACCOUNT, TRANSACTION_ID, METHOD_OF_PAYMENT, STATUS, "
           + "RECEIVED_ON, COMPLETED_ON, AMOUNT, PAYMENT_DETAILS, RECEIPT_NO, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE PAYMENT_STATUS SET PAYMENT_COMPLETE = ?, COMPLETED_ON = ?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+  String UPDATE_ALL = "UPDATE PAYMENT_STATUS SET STATUS = ?, COMPLETED_ON = ?, LAST_MODIFIED = " + getLastModifiedSql()
+      + " ";
   String DELETE_ALL = "DELETE FROM PAYMENT_STATUS ";
 
   JdbcTemplate mJdbcTemplate;
@@ -62,7 +61,7 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
   public Long create(MutablePaymentStatus pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getAccount(), pMutable.getTransactionId(), pMutable
-        .getMethodOfPayment().getId(), pMutable.isPaymentComplete(), pMutable.getReceivedOn(), pMutable
+        .getMethodOfPayment().getId(), pMutable.getStatus().getId(), pMutable.getReceivedOn(), pMutable
         .getCompletedOn(), pMutable.getAmount(), pMutable.getPaymentDetails(), pMutable.getReceiptNo());
     pMutable.setId(id);
     return super.create(pMutable);
@@ -102,7 +101,7 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(PaymentStatus paymentStatus : pMutablePaymentStatuse) {
       params
-          .add(new Object[] {paymentStatus.isPaymentComplete(), paymentStatus.getCompletedOn(), paymentStatus.getId()});
+          .add(new Object[] {paymentStatus.getStatus().getId(), paymentStatus.getCompletedOn(), paymentStatus.getId()});
     }
     return params;
   }
@@ -115,7 +114,7 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
       status.setAccount(rs.getString("ACCOUNT"));
       status.setTransactionId(rs.getString("TRANSACTION_ID"));
       status.setMethodOfPayment(PaymentStatus.PaymentMethod.get(rs.getInt("METHOD_OF_PAYMENT")));
-      status.setPaymentComplete(rs.getBoolean("PAYMENT_COMPLETE"));
+      status.setStatus(PaymentStatus.Status.get(rs.getInt("STATUS")));
       status.setReceivedOn(rs.getTimestamp("RECEIVED_ON"));
       status.setCompletedOn(rs.getTimestamp("COMPLETED_ON"));
       status.setAmount(new BigDecimal(rs.getDouble("AMOUNT")));
@@ -140,8 +139,8 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
       if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.RECEIVED_END.toString())) {
         return "RECEIVED_ON <= ? ";
       }
-      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.PAYMENT_COMPLETED.toString())) {
-        return "PAYMENT_COMPLETE = ?";
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.PAYMENT_STATUS.toString())) {
+        return "STATUS = ?";
       }
       if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.METHOD_OF_PAYMENT.toString())) {
         return "METHOD_OF_PAYMENT = ?";

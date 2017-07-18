@@ -12,7 +12,6 @@ import org.ums.fee.accounts.MutablePaymentStatus;
 import org.ums.fee.accounts.PaymentStatus;
 import org.ums.fee.accounts.PaymentStatusManager;
 import org.ums.fee.accounts.PersistentPaymentStatus;
-import org.ums.fee.dues.StudentDuesManager;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
@@ -68,7 +67,7 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
   }
 
   private JsonObject buildList(List<PaymentStatus> paymentStatusList, int pItemsPerPage, int pPageNumber,
-      UriInfo pUriInfo) {
+                               UriInfo pUriInfo) {
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     paymentStatusList.forEach((pPaymentStatus) -> {
@@ -76,17 +75,17 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    if(paymentStatusList.size() > 0) {
+    if (paymentStatusList.size() > 0) {
       addLink("next", pPageNumber, pItemsPerPage, pUriInfo, jsonObjectBuilder);
     }
-    if(pPageNumber > 1) {
+    if (pPageNumber > 1) {
       addLink("previous", pPageNumber, pItemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
   }
 
   @Transactional
-  public Response updatePaymentStatus(JsonObject pJsonObject) {
+  public Response updatePaymentStatus(JsonObject pJsonObject, PaymentStatus.Status pStatus) {
     Validate.notEmpty(pJsonObject);
     Validate.notEmpty(pJsonObject.getJsonArray("entries"));
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -96,8 +95,10 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
       getBuilder().build(paymentStatus, (JsonObject) entry, null);
       PaymentStatus latestPayment = mPaymentStatusManager.get(paymentStatus.getId());
       Validate.isTrue(paymentStatus.getLastModified().equals(latestPayment.getLastModified()));
-      Validate.isTrue(!latestPayment.isPaymentComplete());
-      paymentStatus.setPaymentComplete(true);
+      Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.VERIFIED
+          && latestPayment.getStatus() != PaymentStatus.Status.REJECTED);
+      Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.RECEIVED);
+      paymentStatus.setStatus(pStatus);
       paymentStatus.setTransactionId(latestPayment.getTransactionId());
       paymentStatusList.add(paymentStatus);
     }
@@ -132,10 +133,11 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     filters
         .add(new FilterItem("Account", PaymentStatusManager.FilterCriteria.ACCOUNT.toString(), FilterItem.Type.INPUT));
     FilterItem status =
-        new FilterItem("Payment Status", PaymentStatusManager.FilterCriteria.PAYMENT_COMPLETED.toString(),
+        new FilterItem("Payment Status", PaymentStatusManager.FilterCriteria.PAYMENT_STATUS.toString(),
             FilterItem.Type.SELECT);
-    status.addOption("Completed", true);
-    status.addOption("Not Completed", false);
+    status.addOption(PaymentStatus.Status.VERIFIED.getLabel(), PaymentStatus.Status.VERIFIED.getId());
+    status.addOption(PaymentStatus.Status.RECEIVED.getLabel(), PaymentStatus.Status.RECEIVED.getId());
+    status.addOption(PaymentStatus.Status.REJECTED.getLabel(), PaymentStatus.Status.REJECTED.getId());
     filters.add(status);
 
     FilterItem mop =

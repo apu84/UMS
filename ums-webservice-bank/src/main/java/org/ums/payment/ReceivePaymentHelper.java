@@ -118,8 +118,11 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
           paymentStatus.setMethodOfPayment(paymentMethod);
           paymentStatus.setReceivedOn(new Date());
           if(paymentMethod == PaymentStatus.PaymentMethod.CASH) {
-            paymentStatus.setPaymentComplete(true);
+            paymentStatus.setStatus(PaymentStatus.Status.VERIFIED);
             paymentStatus.setCompletedOn(new Date());
+          }
+          else {
+            paymentStatus.setStatus(PaymentStatus.Status.RECEIVED);
           }
           paymentStatus.setPaymentDetails(pPaymentDetails);
           List<StudentPayment> payments = transactionPaymentMap.get(transactionId);

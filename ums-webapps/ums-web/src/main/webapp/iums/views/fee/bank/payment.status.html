@@ -9,7 +9,7 @@
                 <td width="15%">Account</td>
                 <td width="15%">Method of payment</td>
                 <td width="10%">Receipt no.</td>
-                <td width="10%">Payment details</td>
+                <td width="10%">Status</td>
                 <td width="10%">Amount</td>
                 <td width="10%">Receive on</td>
                 <td width="10%">Completed on</td>
@@ -31,7 +31,7 @@
                     {{::paymentStatus.receiptNo}}
                 </td>
                 <td>
-                    {{paymentStatus.paymentDetails}}
+                    {{paymentStatus.status}}
                 </td>
                 <td>
                     {{paymentStatus.amount}}/=
@@ -44,20 +44,31 @@
                 </td>
                 <td>
                     <input type="checkbox" data-ng-model="vm.selectedPayments[paymentStatus.id]"
-                            data-ng-if="!paymentStatus.paymentCompleted"/>
+                            data-ng-if="paymentStatus.status !== 'Verified' && paymentStatus.status !== 'Rejected'"/>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="row">
-            <div class="col-md-6">
-                <button type="button" class="btn btn-success" data-ng-click="vm.concludePayment()" data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
-                    Conclude
+            <div class="col-md-3">
+                <button type="button" class="btn btn-success" data-ng-click="vm.concludePayment(true)"
+                        data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
+                    Accept
                 </button>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-2">
+                &nbsp;
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-warn" data-ng-click="vm.concludePayment(false)"
+                        data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
+                    Reject
+                </button>
+            </div>
+            <div class="col-md-4">
                 <div class="text-right">
-                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
+                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)"
+                            data-ng-if="vm.nextLink">
                         Next >>
                     </button>
                 </div>

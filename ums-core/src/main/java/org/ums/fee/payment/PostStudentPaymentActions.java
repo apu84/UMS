@@ -60,7 +60,8 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
             duesForStudent.stream().filter((due) -> !StringUtils.isEmpty(due.getTransactionId())
                 && due.getTransactionId().equalsIgnoreCase(payment.getTransactionId())).map((due) -> {
                   MutableStudentDues mutableStudentDues = due.edit();
-                  if(payment.getStatus() == StudentPayment.Status.EXPIRED) {
+                  if(payment.getStatus() == StudentPayment.Status.EXPIRED
+                      || payment.getStatus() == StudentPayment.Status.REJECTED) {
                     mutableStudentDues.setTransactionId(StringUtils.EMPTY);
                     mutableStudentDues.setStatus(StudentDues.Status.NOT_PAID);
                   }
@@ -80,8 +81,9 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
         mInstallmentStatusManager.getInstallmentStatus(payments.get(0).getStudentId(), payments.get(0).getSemesterId());
     if(!installmentStatuses.isEmpty()) {
       boolean isExpired = payments.stream().allMatch((payment) -> payment.getStatus() == StudentPayment.Status.EXPIRED);
+      boolean isRejected = payments.stream().allMatch((payment) -> payment.getStatus() == StudentPayment.Status.REJECTED);
       installmentStatuses.forEach((status) -> {
-        if(!status.isPaymentCompleted() && isExpired) {
+        if(!status.isPaymentCompleted() && (isExpired || isRejected)) {
           MutableInstallmentStatus mutableStatus = status.edit();
           mutableStatus.delete();
         }
