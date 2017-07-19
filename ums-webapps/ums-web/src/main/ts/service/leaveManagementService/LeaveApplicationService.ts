@@ -103,6 +103,19 @@ module ums {
       return defer.promise;
     }
 
+    public uploadFile(file: any, id: string): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      var url = "lmsApplication/upload/id/" + id + "/files/" + file;
+      this.httpClient.post(url, file, 'application/json')
+          .success((response) => {
+            defer.resolve(response);
+          }).error((data) => {
+        console.error(data);
+      });
+
+      return defer.promise;
+    }
+
 
   }
 

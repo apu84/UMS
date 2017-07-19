@@ -3,50 +3,12 @@
  */
 
 module ums {
-  /* interface ILeaveApplicationManagement extends ng.IScope {
-   leaveTypes: Array<LmsType>;
-   leaveApprovalStatusList: Array<IConstants>;
-   leaveApprovalStatus: IConstants;
-   leaveType: LmsType;
-   leaveApplication: LmsApplication;
-   remainingLeaves: Array<RemainingLmsLeave>;
-   remainingLeavesMap: any;
-   pendingApplications: Array<LmsApplicationStatus>;
-   pendingApplication: LmsApplicationStatus;
-   applicationStatusList: Array<LmsApplicationStatus>;
-   itemsPerPage: number;
-   pageNumber: number;
-   pagination: any;
-   totalItems: number;
-   statusModal: LmsApplicationStatus;
-   data: any;
-   employeeId: string;
-   user: User;
+  interface ILeaveApplicationManagement extends ng.IScope {
 
+    fileInserted: Function;
+  }
 
-   showStatusSection: boolean;
-   showHistorySection: boolean;
-   showApplicationSection: boolean;
-   fromPendingApplicationSection: boolean;
-   fromHistorySection: boolean;
-
-   save: Function;
-   applyLeave: Function;
-   fetchApplicationStatus: Function;
-   closeStatusSection: Function;
-   getTotalDuration: Function;
-   updateLeaveType: Function;
-   pageChanged: Function;
-   setStatusModalContent: Function;
-   dateChanged: Function;
-   showHistory: Function;
-   closeHistory: Function;
-   statusChanged: Function;
-   setResultsPerPage: Function;
-
-   }*/
-
-  interface  IConstants {
+  interface IConstants {
     id: number;
     name: string;
   }
@@ -85,7 +47,7 @@ module ums {
     public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
 
     constructor(private appConstants: any,
-                private $scope: ng.IScope,
+                private $scope: ILeaveApplicationManagement,
                 private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private notify: Notify,
@@ -113,8 +75,9 @@ module ums {
       this.pagination.currentPage = 1;
       this.itemsPerPage = 50;
 
-      this.initializeDatePickers();
+      $scope.fileInserted = this.fileInserted.bind(this);
 
+      this.initializeDatePickers();
       this.getLeaveTypes();
       this.getRemainingLeaves();
       this.getPendingApplications();
@@ -139,16 +102,11 @@ module ums {
       console.log(this.files);
     }
 
-    private fileInserted() {
+    private fileInserted(event) {
 
       console.log("In the file insertion");
 
-      for (var i = 0; i < this.files.length; i++) {
-        var file: any = angular.copy(this.files[i]);
-        this.filesCopy.push(file);
-      }
-
-      this.files = {};
+      console.log(event);
 
     }
 
@@ -165,6 +123,8 @@ module ums {
     private showHistory() {
       console.log("Showing file");
       console.log(this.files);
+
+      this.leaveApplicationService.uploadFile(this.files, '1');
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
       console.log(this.leaveApprovalStatusList[8 - 1]);
@@ -425,21 +385,7 @@ module ums {
           let formData: FormData = new FormData();
           formData.append("uploadFile", this.files[i], this.files[i].name);
 
-          let binaryValue: any = {};
-          let reader = new FileReader();
-
-
-          reader.readAsDataURL(this.files[i]);
-          console.log(reader.result);
-          console.log("file value");
-          console.log(this.files[i].value);
-          reader.onload = () => {
-            var dataUrl = reader.result;
-            binaryValue = dataUrl;
-            fileItem['file'] = dataUrl;
-            // console.log(dataUrl);
-
-          };
+          fileItem['file'] = formData;
 
           fileItem['fileName'] = this.files[i].name;
           jsonFileObject.push(fileItem);
