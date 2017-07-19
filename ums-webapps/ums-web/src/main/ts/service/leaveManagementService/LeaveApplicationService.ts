@@ -93,8 +93,10 @@ module ums {
       console.log("Found json");
       console.log(json);
       this.httpClient.post(url, json, 'application/json')
-          .success(() => {
-            defer.resolve("success");
+          .success((response) => {
+
+            defer.resolve(response.entries);
+
             this.notify.success("Success");
           }).error((data) => {
         defer.resolve("error");

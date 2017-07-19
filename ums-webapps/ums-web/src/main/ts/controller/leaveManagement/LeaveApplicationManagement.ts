@@ -36,6 +36,7 @@ module ums {
     public fileAttachments: Array<Attachment> = [];
     public files: any = {};
     public filesCopy: any = {};
+    public appId: string = "";
 
     public showStatusSection: boolean;
     public showHistorySection: boolean;
@@ -120,13 +121,21 @@ module ums {
       });
     }
 
+    private saveAttachments(id: string) {
+      for (var i = 0; i < this.files.length; i++) {
+        this.getFormData(this.files[i], id).then((formData) => {
+          this.leaveApplicationService.uploadFile(formData);
+        });
+
+      }
+      
+      this.files = {};
+    }
+
     private showHistory() {
       console.log("Showing file");
       console.log(this.files);
 
-      this.getFormData().then((formData) => {
-        this.leaveApplicationService.uploadFile(formData);
-      })
 
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
@@ -261,6 +270,9 @@ module ums {
     private save() {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+
+          console.log("Save message");
+          console.log(message);
           this.leaveApplication = <LmsApplication>{};
           this.leaveType = this.leaveTypes[0];
           this.data.totalLeaveDurationInDays = 0;
@@ -294,6 +306,9 @@ module ums {
         else {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+
+              this.appId = message[0].id;
+              this.saveAttachments(message[0].id);
               this.leaveApplication = <LmsApplication>{};
               this.leaveType = this.leaveTypes[0];
               this.getPendingApplications();
@@ -365,11 +380,12 @@ module ums {
      }
      }*/
 
-    private getFormData(): ng.IPromise<any> {
+    private getFormData(file, id): ng.IPromise<any> {
       var formData = new FormData();
-      formData.append('files', this.files[0]);
+      formData.append('files', file);
       console.log(this.files[0].name);
-      formData.append('name', "biodata.pdf");
+      formData.append('name', file.name);
+      formData.append("id", id);
       console.log(formData);
       var defer = this.$q.defer();
       defer.resolve(formData);
@@ -394,23 +410,6 @@ module ums {
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
 
-      let jsonFileObject = [];
-      if (this.files.length > 0) {
-        for (var i = 0; i < this.files.length; i++) {
-          let fileItem: any = {};
-          let formData: FormData = new FormData();
-          formData.append("uploadFile", this.files[i], this.files[i].name);
-
-          fileItem['file'] = formData;
-
-          fileItem['fileName'] = this.files[i].name;
-          jsonFileObject.push(fileItem);
-        }
-      }
-      completeJson["fileEntries"] = jsonFileObject;
-      completeJson['file'] = this.files[0];
-      console.log("Complete json");
-      console.log(completeJson);
       defer.resolve(completeJson);
       return defer.promise;
     }
