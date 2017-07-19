@@ -30,18 +30,15 @@ public class AreaOfInterestInformationResourceHelper extends
     ResourceHelper<AreaOfInterestInformation, MutableAreaOfInterestInformation, String> {
 
   @Autowired
-  AreaOfInterestInformationManager mAreaOfInterestInformationManager;
+  AreaOfInterestInformationManager mManager;
 
   @Autowired
-  AreaOfInterestInformationBuilder mAreaOfInterestInformationBuilder;
+  AreaOfInterestInformationBuilder mBuilder;
 
-  @Autowired
-  UserManager userManager;
-
-  public JsonObject getAreaOfInterestInformation(final String userId, final UriInfo pUriInfo) {
+  public JsonObject getAreaOfInterestInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<AreaOfInterestInformation> pAreaOfInterestInformation = new ArrayList<>();
     try {
-      pAreaOfInterestInformation = mAreaOfInterestInformationManager.getAreaOfInterestInformation(userId);
+      pAreaOfInterestInformation = mManager.getAreaOfInterestInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
     return toJson(pAreaOfInterestInformation, pUriInfo);
@@ -53,24 +50,16 @@ public class AreaOfInterestInformationResourceHelper extends
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonArray areaOfInterestJsonArray = entries.getJsonObject(0).getJsonArray("areaOfInterest");
     int sizeOfAreaOfInterestJsonArray = areaOfInterestJsonArray.size();
-
     List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation = new ArrayList<>();
-
     for(int i = 0; i < sizeOfAreaOfInterestJsonArray; i++) {
       MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-      mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation,
-          areaOfInterestJsonArray.getJsonObject(i), localCache);
+      mBuilder.build(mutableAreaOfInterestInformation, areaOfInterestJsonArray.getJsonObject(i), localCache);
       pMutableAreaOfInterestInformation.add(mutableAreaOfInterestInformation);
     }
-    mAreaOfInterestInformationManager.saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
-
+    mManager.saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
-  }
-
-  public int deleteAreaOfInterestInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    return 0;
   }
 
   private JsonObject toJson(List<AreaOfInterestInformation> pAreaOfInterestInformation, UriInfo pUriInfo) {
@@ -96,12 +85,12 @@ public class AreaOfInterestInformationResourceHelper extends
 
   @Override
   protected ContentManager<AreaOfInterestInformation, MutableAreaOfInterestInformation, String> getContentManager() {
-    return mAreaOfInterestInformationManager;
+    return mManager;
   }
 
   @Override
   protected Builder<AreaOfInterestInformation, MutableAreaOfInterestInformation> getBuilder() {
-    return mAreaOfInterestInformationBuilder;
+    return mBuilder;
   }
 
   @Override

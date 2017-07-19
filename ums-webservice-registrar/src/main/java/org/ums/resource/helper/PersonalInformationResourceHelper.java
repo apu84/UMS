@@ -36,20 +36,10 @@ public class PersonalInformationResourceHelper extends
   @Autowired
   private PersonalInformationBuilder mBuilder;
 
-  @Autowired
-  private AreaOfInterestInformationManager mAreaOfInterestInformationManager;
-
-  @Autowired
-  private AreaOfInterestInformationBuilder mAreaOfInterestInformationBuilder;
-
-  @Autowired
-  private UserManager userManager;
-
-  public JsonObject getPersonalInformation(final UriInfo pUriInfo) {
+  public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
-      personalInformation =
-          mManager.get(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+      personalInformation = mManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
     return buildJson(personalInformation, pUriInfo);
@@ -77,20 +67,6 @@ public class PersonalInformationResourceHelper extends
     JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
     getBuilder().build(mutablePersonalInformation, personalJsonObject, localCache);
     mutablePersonalInformation.create();
-
-    JsonArray areaOfInterestJsonArray = personalJsonObject.getJsonArray("areaOfInterests");
-    int sizeOfAreaOfInterestJsonArraySize = areaOfInterestJsonArray.size();
-    List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation = new ArrayList<>();
-    for(int i = 0; i < sizeOfAreaOfInterestJsonArraySize; i++) {
-      MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-      mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation,
-          areaOfInterestJsonArray.getJsonObject(i), localCache);
-      pMutableAreaOfInterestInformation.add(mutableAreaOfInterestInformation);
-    }
-    mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(userManager.get(
-        SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    mAreaOfInterestInformationManager.saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
-
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);

@@ -17,9 +17,6 @@ import java.util.Date;
 @Component
 public class PublicationInformationBuilder implements Builder<PublicationInformation, MutablePublicationInformation> {
 
-  @Autowired
-  UserManager userManager;
-
   Date date = new Date();
   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
   String mDate = sdf.format(date);
@@ -116,7 +113,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
         pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
     }
     else {

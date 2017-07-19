@@ -51,11 +51,5 @@ module ums {
         emergencyContactRelationId: number
         emergencyContactPhone: string;
         emergencyContactAddress: string;
-        areaOfInterests: Array<IAreaOfInterestInformationModel>;
-    }
-
-    export interface IAreaOfInterestInformationModel {
-        areaOfInterest: ICommon;
-        areaOfInterestId: number;
     }
 }

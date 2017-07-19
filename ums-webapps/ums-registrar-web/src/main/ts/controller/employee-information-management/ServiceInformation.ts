@@ -31,7 +31,7 @@ module ums{
 
     class EmployeeServiceInformation{
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce',
-            'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService', 'departmentService', 'designationService'];
+            'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService', 'departmentService', 'designationService', 'cRUDDetectionService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeServiceInformation,
@@ -43,7 +43,8 @@ module ums{
                     private serviceInformationDetailService: ServiceInformationDetailService,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private cRUDDetectionService: CRUDDetectionService) {
 
             $scope.showInputDiv = false;
             $scope.showLabelDiv = true;
@@ -91,7 +92,7 @@ module ums{
         }
 
         private submit(): void{
-            this.getServiceInformation();
+            //let serviceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, this.$scope.entry.serviceInfo);
             this.convertToJson().then((json: any) =>{
                this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
                    this.$scope.showInputDiv = false;

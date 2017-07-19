@@ -1,9 +1,9 @@
 module ums{
     export interface IAdditionalInformationModel{
-        id: number;
         employeeId: string;
         roomNo: string;
-        extNo: string;
+        extNo: number;
         academicInitial: string;
+        areaOfInterestInformation: Array<IAreaOfInterestInformationModel>;
     }
 }

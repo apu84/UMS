@@ -22,9 +22,9 @@ module ums{
             return defer.promise;
         }
 
-        public getPublicationInformation(): ng.IPromise<any> {
+        public getPublicationInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.url+"/getPublicationInformation", HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getPublicationInformation/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -46,9 +46,9 @@ module ums{
             return defer.promise;
         }
 
-        public getPublicationInformationViewWithPagination(pageNumber: number, itemPerPage: number): ng.IPromise<any> {
+        public getPublicationInformationViewWithPagination(employeeId: string, pageNumber: number, itemPerPage: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.url+"/getPublicationInformation/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getPublicationInformation/employeeId/"+ employeeId + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },

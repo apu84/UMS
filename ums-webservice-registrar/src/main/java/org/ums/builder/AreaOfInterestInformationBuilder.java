@@ -20,9 +20,6 @@ public class AreaOfInterestInformationBuilder implements
   @Autowired
   AreaOfInterestManager mAreaOfInterestManager;
 
-  @Autowired
-  UserManager mUserManager;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, AreaOfInterestInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
@@ -31,7 +28,7 @@ public class AreaOfInterestInformationBuilder implements
 
   @Override
   public void build(MutableAreaOfInterestInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setEmployeeId(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setAreaOfInterest(mAreaOfInterestManager.get(pJsonObject.getInt("id")));
   }
 }

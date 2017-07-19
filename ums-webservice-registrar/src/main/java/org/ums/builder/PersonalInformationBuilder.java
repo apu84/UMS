@@ -23,9 +23,6 @@ import javax.ws.rs.core.UriInfo;
 public class PersonalInformationBuilder implements Builder<PersonalInformation, MutablePersonalInformation> {
 
   @Autowired
-  private UserManager userManager;
-
-  @Autowired
   private DateFormat mDateFormat;
 
   @Autowired
@@ -103,7 +100,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   @Override
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
-    pMutable.setId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    pMutable.setId(pJsonObject.getString("employeeId"));
     pMutable.setFirstName(pJsonObject.getString("firstName"));
     pMutable.setLastName(pJsonObject.getString("lastName"));
     pMutable.setFatherName(pJsonObject.getString("fatherName"));

@@ -14,8 +14,9 @@ import javax.ws.rs.core.Request;
 public class AwardInformationResource extends MutableAwardInformationResource {
 
   @GET
-  @Path("/getAwardInformation")
-  public JsonObject getAwardInformation(final @Context Request pRequest) throws Exception {
-    return mAwardInformationResourceHelper.getAwardInformation(mUriInfo);
+  @Path("/getAwardInformation/employeeId/{employee-id}")
+  public JsonObject getAwardInformation(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest) throws Exception {
+    return mAwardInformationResourceHelper.getAwardInformation(pEmployeeId, mUriInfo);
   }
 }

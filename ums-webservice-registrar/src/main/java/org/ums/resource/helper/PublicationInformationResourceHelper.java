@@ -45,14 +45,10 @@ public class PublicationInformationResourceHelper extends
   @Autowired
   EmployeeManager mEmployeeManager;
 
-  @Autowired
-  UserManager userManager;
-
-  public JsonObject getPublicationInformation(final UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  public JsonObject getPublicationInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {
-      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(userId);
+      pPublicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -72,8 +68,8 @@ public class PublicationInformationResourceHelper extends
     return toJson(pPublicationInformation, pUriInfo);
   }
 
-  public JsonObject getPublicationWithPagination(final int pPageNumber, final int pItemPerPage, final UriInfo pUriInfo) {
-    String pEmployeeId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  public JsonObject getPublicationWithPagination(final String pEmployeeId, final int pPageNumber,
+      final int pItemPerPage, final UriInfo pUriInfo) {
     List<PublicationInformation> pPublicationInformation = new ArrayList<>();
     try {
       pPublicationInformation =

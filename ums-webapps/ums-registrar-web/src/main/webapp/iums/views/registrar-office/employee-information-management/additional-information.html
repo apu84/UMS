@@ -7,7 +7,7 @@
                         <label class="control-label">Area Of Interests: </label>
                     </div>
                     <div class="col-md-10">
-                        <select data-ng-model="entry.personal.areaOfInterests"
+                        <select data-ng-model="entry.additional.areaOfInterestInformation"
                                 data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"
                                 class="select2-multi-value form-control"
                                 multiple="multiple">
@@ -22,7 +22,7 @@
                         <input type="text"
                                name="nRoomNo{{$index}}"
                                id="iRoomNo{{$index}}"
-                               data-ng-model="service.roomNo"
+                               data-ng-model="entry.additional.roomNo"
                                placeholder="Room No"
                                class="form-control">
                     </div>
@@ -30,10 +30,10 @@
                 <div class="col-md-4">
                     <label class="col-md-4 control-label">PABX/Ext No.</label>
                     <div class="col-md-8">
-                        <input type="text"
+                        <input type="number"
                                name="nExtNo{{$index}}"
                                id="iExtNo{{$index}}"
-                               data-ng-model="service.extNo"
+                               data-ng-model="entry.additional.extNo"
                                placeholder="Ext No"
                                class="form-control">
                     </div>
@@ -44,17 +44,19 @@
                         <input type="text"
                                name="nAcademicInitial{{$index}}"
                                id="iAcademicInitial{{$index}}"
-                               data-ng-model="service.academicInitial"
+                               data-ng-model="entry.additional.academicInitial"
                                placeholder="Academic Initial"
                                class="form-control">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div align="right">
-                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('additional')"><i class="fa fa-eye"></i>&nbsp;View</button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                <div class="col-md-12">
+                    <div align="right">
+                        <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('additional')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -69,7 +71,7 @@
                     <label class="control-label">Area Of Interests: </label>
                 </div>
                 <div class="col-md-10" style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{entry.personal.areaOfInterests}}</label>
+                    <label class="control-label">{{entry.additional.areaOfInterest}}</label>
                 </div>
             </div>
         </div>
@@ -77,26 +79,28 @@
             <div class="col-md-4">
                 <label class="col-md-4 control-label">Room No.</label>
                 <div class="col-md-8" style="border-bottom: 1px dashed;">
-                    <label class="control-label"><b>{{service.roomNo}}</b></label>
+                    <label class="control-label"><b>{{entry.additional.roomNo}}</b></label>
                 </div>
             </div>
             <div class="col-md-4">
                 <label class="col-md-4 control-label">PABX/Ext No.</label>
                 <div class="col-md-8" style="border-bottom: 1px dashed;">
-                    <label class="control-label"><b>{{service.extNo}}</b></label>
+                    <label class="control-label"><b>{{entry.additional.extNo}}</b></label>
                 </div>
             </div>
             <div class="col-md-4">
                 <label class="col-md-4 control-label">Academic Initial</label>
                 <div class="col-md-8" style="border-bottom: 1px dashed;">
-                    <label class="control-label"><b>{{service.academicInitial}}</b></label>
+                    <label class="control-label"><b>{{entry.additional.academicInitial}}</b></label>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div align="right">
-                <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('additional')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('additional')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                </div>
             </div>
         </div>
     </div>

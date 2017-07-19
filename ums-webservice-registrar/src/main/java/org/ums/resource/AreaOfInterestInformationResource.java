@@ -15,8 +15,8 @@ import javax.ws.rs.core.Request;
 public class AreaOfInterestInformationResource extends MutableAreaOfInterestInformationResource {
 
   @GET
-  @Path("/getAreaOfInterestInformation/{userId}")
-  public JsonObject getAreaOfInterestInformation(final @PathParam("userId") String pEmployeeId,
+  @Path("/getAreaOfInterestInformation/employeeId/{employee-id}")
+  public JsonObject getAreaOfInterestInformation(final @PathParam("employee-id") String pEmployeeId,
       final @Context Request pRequest) throws Exception {
     return mResourceHelper.getAreaOfInterestInformation(pEmployeeId, mUriInfo);
   }

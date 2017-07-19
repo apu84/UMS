@@ -32,15 +32,10 @@ public class ExperienceInformationResourceHelper extends
   @Autowired
   ExperienceInformationBuilder mExperienceInformationBuilder;
 
-  @Autowired
-  UserManager userManager;
-
-  public JsonObject getExperienceInformation(final UriInfo pUriInfo) {
-
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  public JsonObject getExperienceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
     try {
-      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(userId);
+      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }

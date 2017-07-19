@@ -21,11 +21,4 @@ public class MutableAreaOfInterestInformationResource extends Resource {
   public Response saveAreaOfInformation(final JsonObject pJsonObject) {
     return mResourceHelper.saveAreaOfInterestInformation(pJsonObject, mUriInfo);
   }
-
-  @DELETE
-  @Path("/deleteAreaOfInterestInformation")
-  public int deleteAreaOfInformation(final JsonObject pJsonObject) {
-    return mResourceHelper.deleteAreaOfInterestInformation(pJsonObject, mUriInfo);
-  }
-
 }

@@ -20,11 +20,11 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/ckeditor.d.ts'/>
-
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 
-
 /// <reference path='ums-registrar.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
@@ -32,12 +32,12 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
@@ -91,11 +91,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApi.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApiImpl.ts'/>
 
-/// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
+/// <reference path='../../../../ums-web/src/main/ts/model/master_data/Employee.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
-
 
 /// <reference path='data.ts'/>
 
@@ -118,6 +116,8 @@
 /// <reference path='service/ExperienceInformationService.ts'/>
 /// <reference path='service/PagerService.ts'/>
 /// <reference path='service/AreaOfInterestInformationService.ts'/>
+/// <reference path='service/CRUDDetectionService.ts'/>
+/// <reference path='service/AdditionalInformationService.ts'/>
 
 /// <reference path='model/employee/AcademicInformationModel.ts' />
 /// <reference path='model/employee/AwardInformationModel.ts' />
@@ -126,6 +126,8 @@
 /// <reference path='model/employee/PersonalInformationModel.ts' />
 /// <reference path='model/employee/PublicationInformationModel.ts' />
 /// <reference path='model/employee/TrainingInformationModel.ts' />
+/// <reference path='model/employee/AreaOfInterestModel.ts' />
+/// <reference path='model/employee/AdditionalInformationModel.ts' />
 
 
 

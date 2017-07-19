@@ -15,8 +15,9 @@ import javax.ws.rs.core.Request;
 public class AcademicInformationResource extends MutableAcademicInformationResource {
 
   @GET
-  @Path("/getAcademicInformation")
-  public JsonObject getAcademicInformation(final @Context Request pRequest) throws Exception {
-    return mAcademicInformationResourceHelper.getAcademicInformation(mUriInfo);
+  @Path("/getAcademicInformation/employeeId/{employee-id}")
+  public JsonObject getAcademicInformation(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest) throws Exception {
+    return mAcademicInformationResourceHelper.getAcademicInformation(pEmployeeId, mUriInfo);
   }
 }

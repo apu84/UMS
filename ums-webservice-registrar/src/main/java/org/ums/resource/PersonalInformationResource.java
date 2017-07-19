@@ -1,5 +1,6 @@
 package org.ums.resource;
 
+import org.apache.solr.client.solrj.impl.LBHttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.resource.helper.PersonalInformationResourceHelper;
@@ -16,8 +17,9 @@ import javax.ws.rs.core.UriInfo;
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
   @GET
-  @Path("/getPersonalInformation")
-  public JsonObject getPersonalInformation() {
-    return mResourceHelper.getPersonalInformation(mUriInfo);
+  @Path("/getPersonalInformation/employeeId/{employee-id}")
+  public JsonObject getPersonalInformation(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest) {
+    return mResourceHelper.getPersonalInformation(pEmployeeId, mUriInfo);
   }
 }

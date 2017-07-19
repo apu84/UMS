@@ -14,10 +14,6 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class ExperienceInformationBuilder implements Builder<ExperienceInformation, MutableExperienceInformation> {
-
-  @Autowired
-  UserManager userManager;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, ExperienceInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
@@ -37,7 +33,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
         pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
     }
     else {

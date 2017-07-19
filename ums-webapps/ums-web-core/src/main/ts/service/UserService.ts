@@ -4,9 +4,9 @@
 
 module ums {
   export class UserService {
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
+    public static $inject = ['HttpClient', '$q', 'notify', '$sce', '$window'];
 
-    constructor(private appConstants: any, private httpClient: HttpClient,
+    constructor(private httpClient: HttpClient,
                 private $q: ng.IQService, private notify: Notify,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
 
@@ -16,7 +16,7 @@ module ums {
       var url = "users/current";
       var defer = this.$q.defer();
 
-      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+      this.httpClient.get(url, 'application/json',
           (json: any, etag: string) => {
             var user: any = json;
             defer.resolve(user);

@@ -51,7 +51,7 @@
                             <select name="nGender"
                                     id="iGender"
                                     data-ng-model="entry.personal.gender"
-                                    data-ng-options="gender.name for gender in gender"
+                                    data-ng-options="gender.name for gender in genderTypes"
                                     class="form-control" required>
                                 <option value="">Select Gender</option>
                             </select>
@@ -581,10 +581,12 @@
             </div>
             <hr />
             <div class="row">
-                <div align="right">
-                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData('personal')">Test Data</button>
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')"><i class="fa fa-eye"></i>&nbsp;View</button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                <div class="col-md-12">
+                    <div align="right">
+                        <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData('personal')">Test Data</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -935,9 +937,11 @@
         <hr />
 
         <div class="row">
-            <div align="right">
-                <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                </div>
             </div>
         </div>
     </div>

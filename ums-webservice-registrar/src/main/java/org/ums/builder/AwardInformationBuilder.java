@@ -15,9 +15,6 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class AwardInformationBuilder implements Builder<AwardInformation, MutableAwardInformation> {
 
-  @Autowired
-  UserManager userManager;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, AwardInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
@@ -46,7 +43,7 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
         pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
     }
     else {

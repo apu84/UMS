@@ -15,9 +15,10 @@ import javax.ws.rs.core.Request;
 public class PublicationInformationResource extends MutablePublicationInformationResource {
 
   @GET
-  @Path("/getPublicationInformation")
-  public JsonObject getPublicationInformation(final @Context Request pRequest) throws Exception {
-    return mPublicationInformationResourceHelper.getPublicationInformation(mUriInfo);
+  @Path("/getPublicationInformation/employeeId/{employee-id}")
+  public JsonObject getPublicationInformation(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest) throws Exception {
+    return mPublicationInformationResourceHelper.getPublicationInformation(pEmployeeId, mUriInfo);
   }
 
   @GET
@@ -37,10 +38,12 @@ public class PublicationInformationResource extends MutablePublicationInformatio
   }
 
   @GET
-  @Path("/getPublicationInformation/pageNumber/{page}/ipp/{item-per-page}")
-  public JsonObject getPublicationForPagination(final @Context Request pRequest,
-      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage) throws Exception {
-    return mPublicationInformationResourceHelper.getPublicationWithPagination(pPage, pItemPerPage, mUriInfo);
+  @Path("/getPublicationInformation/employeeId/{employee-id}/pageNumber/{page}/ipp/{item-per-page}")
+  public JsonObject getPublicationForPagination(final @PathParam("employee-id") String pEmployeeId,
+      final @Context Request pRequest, final @PathParam("item-per-page") int pItemPerPage,
+      final @PathParam("page") int pPage) throws Exception {
+    return mPublicationInformationResourceHelper.getPublicationWithPagination(pEmployeeId, pPage, pItemPerPage,
+        mUriInfo);
   }
 
 }

@@ -32,14 +32,10 @@ public class AcademicInformationResourceHelper extends
   @Autowired
   AcademicInformationBuilder mAcademicInformationBuilder;
 
-  @Autowired
-  UserManager userManager;
-
-  public JsonObject getAcademicInformation(final UriInfo pUriInfo) {
-    String userId = userManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId();
+  public JsonObject getAcademicInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation = new ArrayList<>();
     try {
-      pAcademicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(userId);
+      pAcademicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -52,12 +48,6 @@ public class AcademicInformationResourceHelper extends
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonArray academicJsonArray = entries.getJsonObject(0).getJsonArray("academic");
     int sizeOfAcademicJsonArray = academicJsonArray.size();
-
-    // JsonObject previousInfo = getAcademicInformation(pUriInfo);
-    // JsonArray previousEntries = previousInfo.getJsonArray("entries");
-    //
-    // System.out.println(previousInfo.equals(pJsonObject));
-
     List<MutableAcademicInformation> createMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> updateMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> deleteMutableAcademicInformation = new ArrayList<>();
