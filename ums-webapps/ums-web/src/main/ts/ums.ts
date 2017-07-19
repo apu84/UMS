@@ -966,7 +966,18 @@ module ums {
           url: "/payment-status",
           controller: 'PaymentStatusList',
           controllerAs: 'vm',
-          templateUrl: 'views/fee/payment/payment.status.html'
+          templateUrl: 'views/fee/payment-status/payment.status.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                ]
+              });
+            }]
+          }
         })
         // .state('studentGradeSheet', {
         //   url: "/studentGradeSheet",

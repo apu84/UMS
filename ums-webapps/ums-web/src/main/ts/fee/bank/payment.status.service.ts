@@ -10,6 +10,7 @@ module ums {
     receivedOn: string;
     completedOn: string;
     status: string;
+    statusId: number;
     lastModified;
   }
 
@@ -60,7 +61,7 @@ module ums {
 
     public concludePayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
       const defer: ng.IDeferred<boolean> = this.$q.defer();
-      this.httpClient.put(`/ums-webservice-bank/payment-status/conclude-payment`, {
+      this.httpClient.put(`/ums-webservice-bank/update-payment-status/conclude-payment`, {
             "entries": payments
           },
           HttpClient.MIME_TYPE_JSON)
@@ -71,7 +72,7 @@ module ums {
 
     public rejectPayments(payments: PaymentStatus[]): ng.IPromise<boolean> {
       const defer: ng.IDeferred<boolean> = this.$q.defer();
-      this.httpClient.put(`/ums-webservice-bank/payment-status/reject-payment`, {
+      this.httpClient.put(`/ums-webservice-bank/update-payment-status/reject-payment`, {
             "entries": payments
           },
           HttpClient.MIME_TYPE_JSON)

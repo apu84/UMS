@@ -2,6 +2,7 @@ package org.ums.payment;
 
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -16,10 +17,11 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component("MutablePaymentStatusHelper")
 public class MutablePaymentStatusHelper extends PaymentStatusHelper {
   @Autowired
-  PaymentStatusBuilder mMutablePaymentStatusBuilder;
+  @Qualifier("MutablePaymentStatusBuilder")
+  MutablePaymentStatusBuilder mMutablePaymentStatusBuilder;
 
   @Override
   protected Builder<PaymentStatus, MutablePaymentStatus> getBuilder() {
@@ -39,7 +41,7 @@ public class MutablePaymentStatusHelper extends PaymentStatusHelper {
       Validate.isTrue(paymentStatus.getLastModified().equals(latestPayment.getLastModified()));
       Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.VERIFIED
           && latestPayment.getStatus() != PaymentStatus.Status.REJECTED);
-      Validate.isTrue(latestPayment.getStatus() != PaymentStatus.Status.RECEIVED);
+      Validate.isTrue(latestPayment.getStatus() == PaymentStatus.Status.RECEIVED);
       paymentStatus.setStatus(pStatus);
       paymentStatus.setTransactionId(latestPayment.getTransactionId());
       paymentStatusList.add(paymentStatus);

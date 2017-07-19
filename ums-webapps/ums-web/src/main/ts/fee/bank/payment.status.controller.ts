@@ -13,7 +13,7 @@ module ums {
     public selectedPaymentIds: string[];
     public selectedPaymentStatus: PaymentStatus[];
     public reloadReference: ReloadRef = {reloadList: false};
-    public concludeStatus: ConcludeStatus = {accepted: undefined};
+    public concludeStatus: ConcludeStatus = {accepted: false};
 
     constructor(private $scope: ng.IScope,
                 private paymentStatusService: PaymentStatusService,
@@ -60,8 +60,8 @@ module ums {
         controller: ConcludePayment,
         resolve: {
           selectedPaymentStatus: () => this.selectedPaymentStatus,
-          concludeStatus: this.concludeStatus,
           reload: () => this.reloadReference,
+          concludeStatus: () => this.concludeStatus,
           loadMyCtrl: ['$ocLazyLoad', ($ocLazyLoad) => {
             return $ocLazyLoad.load({
               files: [

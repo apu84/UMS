@@ -14,7 +14,7 @@ import org.ums.fee.accounts.MutablePaymentStatus;
 import org.ums.fee.accounts.PaymentStatus;
 import org.ums.formatter.DateFormat;
 
-@Component
+@Component("MutablePaymentStatusBuilder")
 public class MutablePaymentStatusBuilder extends PaymentStatusBuilder {
   @Override
   public void build(MutablePaymentStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {

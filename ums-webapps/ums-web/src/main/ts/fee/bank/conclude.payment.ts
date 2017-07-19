@@ -11,7 +11,7 @@ module ums {
   }
   export class ConcludePayment {
     public static $inject = ['$scope', '$modalInstance', 'PaymentStatusService', 'notify',
-      'selectedPaymentStatus', 'reload', 'accepted'];
+      'selectedPaymentStatus', 'reload', 'concludeStatus'];
 
     constructor(private $scope: ConcludePaymentScope,
                 private $modalInstance: any,

@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     <input type="checkbox" data-ng-model="vm.selectedPayments[paymentStatus.id]"
-                            data-ng-if="paymentStatus.status !== 'Verified' && paymentStatus.status !== 'Rejected'"/>
+                            data-ng-if="paymentStatus.statusId === 0"/>
                 </td>
             </tr>
             </tbody>

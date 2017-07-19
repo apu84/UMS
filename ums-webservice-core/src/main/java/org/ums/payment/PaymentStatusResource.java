@@ -1,6 +1,7 @@
 package org.ums.payment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.resource.Resource;
 
@@ -14,6 +15,7 @@ import javax.ws.rs.*;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class PaymentStatusResource extends Resource {
   @Autowired
+  @Qualifier("PaymentStatusHelper")
   private PaymentStatusHelper mPaymentStatusHelper;
   protected int mDefaultNoOfItems = 20;
 

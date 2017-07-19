@@ -3,6 +3,7 @@ package org.ums.payment;
 import org.apache.commons.lang.NotImplementedException;
 import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -21,13 +22,14 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component("PaymentStatusHelper")
 public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePaymentStatus, Long> {
   @Autowired
   protected PaymentStatusManager mPaymentStatusManager;
   @Autowired
   protected DateFormat mDateFormat;
   @Autowired
+  @Qualifier("PaymentStatusBuilder")
   private PaymentStatusBuilder mPaymentStatusBuilder;
 
   private List<FilterItem> mFilterItems;
