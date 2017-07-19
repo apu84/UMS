@@ -6,9 +6,9 @@
                     class="form-control required"
                     name="leaveType"
                     id="leaveType"
-                    data-ng-options="l.name for l in leaveApprovalStatusList track by l.id"
-                    data-ng-model="leaveApprovalStatus"
-                    data-ng-change="statusChanged(leaveApprovalStatus)"
+                    data-ng-options="l.name for l in vm.leaveApprovalStatusList track by l.id"
+                    data-ng-model="vm.leaveApprovalStatus"
+                    data-ng-change="vm.statusChanged(leaveApprovalStatus)"
             ></select>
         </div>
     </div>
@@ -21,8 +21,8 @@
             <input type="text"
                    class="form-control required"
                    id="resultsPerPage"
-                   data-ng-model="itemsPerPage"
-                   data-ng-change="setResultsPerPage(itemsPerPage)"
+                   data-ng-model="vm.itemsPerPage"
+                   data-ng-change="vm.setResultsPerPage(itemsPerPage)"
             />
         </div>
     </div>

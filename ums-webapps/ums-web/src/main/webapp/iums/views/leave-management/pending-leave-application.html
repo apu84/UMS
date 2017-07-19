@@ -21,10 +21,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr dir-paginate="p in pendingApplications | itemsPerPage: itemsPerPage" current-page="pagination.currentPage"
+    <tr dir-paginate="p in vm.pendingApplications | itemsPerPage: itemsPerPage" current-page="pagination.currentPage"
         total-items="totalItems"
         pagination-id="leaveApplication"
-        data-ng-click="fetchApplicationStatus(p, pagination.currentPage)"
+        data-ng-click="vm.fetchApplicationStatus(p, pagination.currentPage)"
         style="cursor: pointer;">
         <td>{{p.rowNumber}}</td>
         <td>{{p.appliedOn}}</td>

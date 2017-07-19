@@ -68,6 +68,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ProfilePicture.ts'/>
@@ -195,6 +196,7 @@
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
 /// <reference path='model/LoggedInUser.ts'/>
 /// <reference path='model/CourseTeacherModel.ts'/>
+/// <reference path='model/Attachment.ts'/>
 /// <reference path='model/ExamRoutineModel.ts'/>
 /// <reference path='model/GenericModel.ts'/>
 /// <reference path='model/NewStudentModel.ts'/>

@@ -3,48 +3,48 @@
  */
 
 module ums {
-  interface ILeaveApplicationManagement extends ng.IScope {
-    leaveTypes: Array<LmsType>;
-    leaveApprovalStatusList: Array<IConstants>;
-    leaveApprovalStatus: IConstants;
-    leaveType: LmsType;
-    leaveApplication: LmsApplication;
-    remainingLeaves: Array<RemainingLmsLeave>;
-    remainingLeavesMap: any;
-    pendingApplications: Array<LmsApplicationStatus>;
-    pendingApplication: LmsApplicationStatus;
-    applicationStatusList: Array<LmsApplicationStatus>;
-    itemsPerPage: number;
-    pageNumber: number;
-    pagination: any;
-    totalItems: number;
-    statusModal: LmsApplicationStatus;
-    data: any;
-    employeeId: string;
-    user: User;
+  /* interface ILeaveApplicationManagement extends ng.IScope {
+   leaveTypes: Array<LmsType>;
+   leaveApprovalStatusList: Array<IConstants>;
+   leaveApprovalStatus: IConstants;
+   leaveType: LmsType;
+   leaveApplication: LmsApplication;
+   remainingLeaves: Array<RemainingLmsLeave>;
+   remainingLeavesMap: any;
+   pendingApplications: Array<LmsApplicationStatus>;
+   pendingApplication: LmsApplicationStatus;
+   applicationStatusList: Array<LmsApplicationStatus>;
+   itemsPerPage: number;
+   pageNumber: number;
+   pagination: any;
+   totalItems: number;
+   statusModal: LmsApplicationStatus;
+   data: any;
+   employeeId: string;
+   user: User;
 
 
-    showStatusSection: boolean;
-    showHistorySection: boolean;
-    showApplicationSection: boolean;
-    fromPendingApplicationSection: boolean;
-    fromHistorySection: boolean;
+   showStatusSection: boolean;
+   showHistorySection: boolean;
+   showApplicationSection: boolean;
+   fromPendingApplicationSection: boolean;
+   fromHistorySection: boolean;
 
-    save: Function;
-    applyLeave: Function;
-    fetchApplicationStatus: Function;
-    closeStatusSection: Function;
-    getTotalDuration: Function;
-    updateLeaveType: Function;
-    pageChanged: Function;
-    setStatusModalContent: Function;
-    dateChanged: Function;
-    showHistory: Function;
-    closeHistory: Function;
-    statusChanged: Function;
-    setResultsPerPage: Function;
+   save: Function;
+   applyLeave: Function;
+   fetchApplicationStatus: Function;
+   closeStatusSection: Function;
+   getTotalDuration: Function;
+   updateLeaveType: Function;
+   pageChanged: Function;
+   setStatusModalContent: Function;
+   dateChanged: Function;
+   showHistory: Function;
+   closeHistory: Function;
+   statusChanged: Function;
+   setResultsPerPage: Function;
 
-  }
+   }*/
 
   interface  IConstants {
     id: number;
@@ -52,11 +52,41 @@ module ums {
   }
 
   class LeaveApplicationManagement {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
+
+    public leaveTypes: Array<LmsType>;
+    public leaveApprovalStatusList: Array<IConstants>;
+    public leaveApprovalStatus: IConstants;
+    public leaveType: LmsType;
+    public leaveApplication: LmsApplication;
+    public remainingLeaves: Array<RemainingLmsLeave>;
+    public remainingLeavesMap: any;
+    public pendingApplications: Array<LmsApplicationStatus>;
+    public pendingApplication: LmsApplicationStatus;
+    public applicationStatusList: Array<LmsApplicationStatus>;
+    public itemsPerPage: number;
+    public pageNumber: number;
+    public pagination: any;
+    public totalItems: number;
+    public statusModal: LmsApplicationStatus;
+    public data: any;
+    public employeeId: string;
+    public user: User;
+    public fileAttachments: Array<Attachment> = [];
+    public files: any = {};
+    public filesCopy: any = {};
+
+    public showStatusSection: boolean;
+    public showHistorySection: boolean;
+    public showApplicationSection: boolean;
+    public fromPendingApplicationSection: boolean;
+    public fromHistorySection: boolean;
+
+
+    public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
 
     constructor(private appConstants: any,
+                private $scope: ng.IScope,
                 private httpClient: HttpClient,
-                private $scope: ILeaveApplicationManagement,
                 private $q: ng.IQService,
                 private notify: Notify,
                 private $sce: ng.ISCEService,
@@ -70,31 +100,19 @@ module ums {
                 private leaveApplicationStatusService: LeaveApplicationStatusService,
                 private userService: UserService) {
 
-      $scope.leaveApplication = <LmsApplication>{};
-      $scope.showStatusSection = false;
-      $scope.showHistorySection = false;
-      $scope.fromHistorySection = false;
-      $scope.fromPendingApplicationSection = true;
-      $scope.showApplicationSection = true;
-      $scope.data = {};
-      $scope.data.totalLeaveDurationInDays = 0;
-      $scope.pageNumber = 1;
-      $scope.pagination = {};
-      $scope.pagination.currentPage = 1;
-      $scope.itemsPerPage = 50;
-      $scope.save = this.save.bind(this);
-      $scope.applyLeave = this.applyLeave.bind(this);
-      $scope.fetchApplicationStatus = this.fetchApplicationStatus.bind(this);
-      $scope.closeStatusSection = this.closeStatusSection.bind(this);
-      $scope.getTotalDuration = this.getTotalDuration.bind(this);
-      $scope.updateLeaveType = this.updateLeaveType.bind(this);
-      $scope.pageChanged = this.pageChanged.bind(this);
-      $scope.setStatusModalContent = this.setStatusModalContent.bind(this);
-      $scope.dateChanged = this.dateChanged.bind(this);
-      $scope.showHistory = this.showHistory.bind(this);
-      $scope.closeHistory = this.closeHistory.bind(this);
-      $scope.statusChanged = this.statusChanged.bind(this);
-      $scope.setResultsPerPage = this.setResultsPerPage.bind(this);
+      this.leaveApplication = <LmsApplication>{};
+      this.showStatusSection = false;
+      this.showHistorySection = false;
+      this.fromHistorySection = false;
+      this.fromPendingApplicationSection = true;
+      this.showApplicationSection = true;
+      this.data = {};
+      this.data.totalLeaveDurationInDays = 0;
+      this.pageNumber = 1;
+      this.pagination = {};
+      this.pagination.currentPage = 1;
+      this.itemsPerPage = 50;
+
       this.initializeDatePickers();
 
       this.getLeaveTypes();
@@ -104,59 +122,92 @@ module ums {
     }
 
 
+    private removeFile(file: any) {
+
+      console.log("In the remove file");
+      console.log("The parameter");
+      console.log(file);
+      for (var i = 0; i < this.files.length; i++) {
+        if (this.files[i].name === file.name) {
+          console.log("Found an occurance");
+          console.log(this.files[i]);
+          this.files[i].splice(i, 1);
+        }
+        break;
+      }
+
+      console.log(this.files);
+    }
+
+    private fileInserted() {
+
+      console.log("In the file insertion");
+
+      for (var i = 0; i < this.files.length; i++) {
+        var file: any = angular.copy(this.files[i]);
+        this.filesCopy.push(file);
+      }
+
+      this.files = {};
+
+    }
+
+
     private getUsersInformation() {
       this.userService.fetchCurrentUserInfo().then((user) => {
-        this.$scope.user = user;
-        this.$scope.employeeId = this.$scope.employeeId;
+        this.user = user;
+        this.employeeId = this.employeeId;
         console.log("Users....");
         console.log(user);
       });
     }
 
     private showHistory() {
-      this.$scope.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
-      this.$scope.leaveApprovalStatus = this.$scope.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
-      console.log(this.$scope.leaveApprovalStatusList[8 - 1]);
-      console.log("leave approval status: " + this.$scope.leaveApprovalStatus);
-      this.$scope.pageNumber = 1;
-      this.$scope.itemsPerPage = 10;
+      console.log("Showing file");
+      console.log(this.files);
+      this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
+      this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
+      console.log(this.leaveApprovalStatusList[8 - 1]);
+      console.log("leave approval status: " + this.leaveApprovalStatus);
+      this.pageNumber = 1;
+      this.itemsPerPage = 10;
       this.getAllLeaveApplicationsForHistory();
-      this.$scope.showHistorySection = true;
-      this.$scope.showApplicationSection = false;
-      this.$scope.fromHistorySection = true;
-      this.$scope.fromPendingApplicationSection = false;
+      this.showHistorySection = true;
+      this.showApplicationSection = false;
+      this.fromHistorySection = true;
+      this.fromPendingApplicationSection = false;
     }
 
     private getAllLeaveApplicationsForHistory() {
-      this.$scope.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.$scope.user.employeeId, this.$scope.leaveApprovalStatus.id, this.$scope.pageNumber, this.$scope.itemsPerPage).then((leaveApplications) => {
-        this.$scope.pendingApplications = leaveApplications.statusList;
-        this.$scope.totalItems = leaveApplications.totalSize;
-        console.log(this.$scope.pendingApplications);
+      this.pendingApplications = [];
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
+        this.pendingApplications = leaveApplications.statusList;
+        this.totalItems = leaveApplications.totalSize;
+        console.log(this.pendingApplications);
       });
     }
 
     private closeHistory() {
-      this.$scope.showHistorySection = false;
-      this.$scope.pageNumber = 1;
-      this.$scope.itemsPerPage = 50;
-      this.$scope.showApplicationSection = true;
-      this.$scope.fromHistorySection = false;
-      this.$scope.fromPendingApplicationSection = true;
+      this.showHistorySection = false;
+      this.pageNumber = 1;
+      this.itemsPerPage = 50;
+      this.showApplicationSection = true;
+      this.fromHistorySection = false;
+      this.fromPendingApplicationSection = true;
       this.getPendingApplications();
     }
 
 
     private setResultsPerPage(itemPerPage: number) {
       if (itemPerPage > 0 && itemPerPage != null) {
-        this.$scope.itemsPerPage = itemPerPage;
+        this.itemsPerPage = itemPerPage;
         this.getAllLeaveApplicationsForHistory();
       }
     }
 
 
     private statusChanged(leaveApplicationStatus: IConstants) {
-      this.$scope.leaveApprovalStatus = leaveApplicationStatus;
+      this.leaveApprovalStatus = leaveApplicationStatus;
       this.getAllLeaveApplicationsForHistory();
     }
 
@@ -170,19 +221,19 @@ module ums {
     }
 
     private getLeaveTypes() {
-      this.$scope.leaveTypes = [];
-      this.$scope.leaveType = <LmsType>{};
+      this.leaveTypes = [];
+      this.leaveType = <LmsType>{};
       this.leaveTypeService.fetchLeaveTypes().then((leaveTypes) => {
-        this.$scope.leaveTypes = leaveTypes;
-        this.$scope.leaveType = this.$scope.leaveTypes[0];
+        this.leaveTypes = leaveTypes;
+        this.leaveType = this.leaveTypes[0];
         console.log("Leave types");
-        console.log(this.$scope.leaveTypes);
+        console.log(this.leaveTypes);
       });
     }
 
     private dateChanged() {
       console.log("In the date changed");
-      var thisScope = this;
+      let thisScope = this;
       setTimeout(function () {
         thisScope.getTotalDuration();
       }, 200);
@@ -190,85 +241,89 @@ module ums {
 
 
     private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
-      this.$scope.statusModal = lmsApplicationStatus;
+      this.statusModal = lmsApplicationStatus;
     }
 
 
     private updateLeaveType(lmsType: LmsType) {
-      this.$scope.leaveType = lmsType;
+      this.leaveType = lmsType;
     }
 
     private getTotalDuration() {
-      if (this.$scope.leaveApplication.toDate != null && this.$scope.leaveApplication.fromDate != null) {
-        var fromDateParts: any = this.$scope.leaveApplication.fromDate.split('-');
-        var fromDate = new Date(fromDateParts[2], fromDateParts[1], fromDateParts[0]);
+      if (this.leaveApplication.toDate != null && this.leaveApplication.fromDate != null) {
+        let fromDateParts: any = this.leaveApplication.fromDate.split('-');
+        let fromDate = new Date(fromDateParts[2], fromDateParts[1], fromDateParts[0]);
 
-        var toDateParts: any = this.$scope.leaveApplication.toDate.split('-');
-        var toDate = new Date(toDateParts[2], toDateParts[1], toDateParts[0]);
+        let toDateParts: any = this.leaveApplication.toDate.split('-');
+        let toDate = new Date(toDateParts[2], toDateParts[1], toDateParts[0]);
 
-        var timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
-        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        this.$scope.leaveApplication.duration = diffDays + 1;
-        if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
-          this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days left for the leave type");
+        let timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
+        let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        this.leaveApplication.duration = diffDays + 1;
+        if (this.remainingLeavesMap[this.leaveType.id].daysLeft < this.leaveApplication.duration) {
+          this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days left for the leave type");
         }
+
         this.$scope.$apply();
+
       }
+
+
     }
 
     private getPendingApplications() {
-      this.$scope.pendingApplications = [];
+      this.pendingApplications = [];
       this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
-        this.$scope.pendingApplications = pendingLeaves;
+        this.pendingApplications = pendingLeaves;
         console.log("Pending leaves...");
         console.log(pendingLeaves);
-        this.$scope.totalItems = pendingLeaves.length;
-        //this.$scope.employeeId = angular.copy(this.$scope.pendingApplications[0].applicantsId);
+        this.totalItems = pendingLeaves.length;
+        //this.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
       });
     }
 
     private getRemainingLeaves() {
-      this.$scope.remainingLeaves = [];
-      this.$scope.remainingLeavesMap = {};
+      this.remainingLeaves = [];
+      this.remainingLeavesMap = {};
       this.leaveApplicationService.fetchRemainingLeaves().then((leaves: Array<RemainingLmsLeave>) => {
-        for (var i = 0; i < leaves.length; i++) {
-          this.$scope.remainingLeaves.push(leaves[i]);
-          this.$scope.remainingLeavesMap[leaves[i].leaveTypeId] = this.$scope.remainingLeaves[i];
+        for (let i = 0; i < leaves.length; i++) {
+          this.remainingLeaves.push(leaves[i]);
+          this.remainingLeavesMap[leaves[i].leaveTypeId] = this.remainingLeaves[i];
         }
         console.log("remaining leave map");
-        console.log(this.$scope.remainingLeavesMap);
+        console.log(this.remainingLeavesMap);
       });
     }
 
     private save() {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
-          this.$scope.leaveApplication = <LmsApplication>{};
-          this.$scope.leaveType = this.$scope.leaveTypes[0];
-          this.$scope.data.totalLeaveDurationInDays = 0;
+          this.leaveApplication = <LmsApplication>{};
+          this.leaveType = this.leaveTypes[0];
+          this.data.totalLeaveDurationInDays = 0;
         });
       });
     }
 
     private closeStatusSection() {
-      this.$scope.showStatusSection = false;
-      if (this.$scope.fromHistorySection)
-        this.$scope.showHistorySection = true;
+      this.showStatusSection = false;
+      if (this.fromHistorySection)
+        this.showHistorySection = true;
       else
-        this.$scope.showApplicationSection = true;
+        this.showApplicationSection = true;
     }
 
     private applyLeave() {
       console.log("**************");
       console.log("In apply leave method");
-      var foundOccurance: boolean = false;
+      let foundOccurance: boolean = false;
       this.findIfThereIsAnyOvalapping(foundOccurance).then((occuranceStatus: boolean) => {
         foundOccurance = occuranceStatus;
-        if (this.$scope.leaveApplication.fromDate == null || this.$scope.leaveApplication.toDate == null || this.$scope.leaveApplication.reason == null) {
+        if (this.leaveApplication.fromDate == null || this.leaveApplication.toDate == null || this.leaveApplication.reason == null) {
           this.notify.error("Please fill up all the fields");
         }
-        else if (this.$scope.remainingLeavesMap[this.$scope.leaveType.id].daysLeft < this.$scope.leaveApplication.duration) {
-          this.notify.error("Please select proper duration, you don't have " + this.$scope.leaveApplication.duration + " days of the leave type");
+        else if (this.remainingLeavesMap[this.leaveType.id].daysLeft < this.leaveApplication.duration) {
+          this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days of the leave type");
         }
         else if (foundOccurance) {
           this.notify.error("Date overlapping is not allowed! Please check your approved applications in  pending leaves or histories.");
@@ -276,8 +331,8 @@ module ums {
         else {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
-              this.$scope.leaveApplication = <LmsApplication>{};
-              this.$scope.leaveType = this.$scope.leaveTypes[0];
+              this.leaveApplication = <LmsApplication>{};
+              this.leaveType = this.leaveTypes[0];
               this.getPendingApplications();
             });
           });
@@ -287,8 +342,8 @@ module ums {
     }
 
     private findIfThereIsAnyOvalapping(foundOccurance: boolean): ng.IPromise<any> {
-      var defer = this.$q.defer();
-      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(this.$scope.leaveApplication.fromDate, this.$scope.leaveApplication.toDate).then((applications: any) => {
+      let defer = this.$q.defer();
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(this.leaveApplication.fromDate, this.leaveApplication.toDate).then((applications: any) => {
         if (applications.length > 0)
           foundOccurance = true;
         else
@@ -300,22 +355,22 @@ module ums {
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
-      this.$scope.pagination.currentPage = currentPage;
-      this.$scope.showStatusSection = true;
-      this.$scope.showHistorySection = false;
-      this.$scope.showApplicationSection = false;
-      this.$scope.pendingApplication = pendingApplication;
-      this.$scope.applicationStatusList = [];
+      this.pagination.currentPage = currentPage;
+      this.showStatusSection = true;
+      this.showHistorySection = false;
+      this.showApplicationSection = false;
+      this.pendingApplication = pendingApplication;
+      this.applicationStatusList = [];
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
-        this.$scope.applicationStatusList = statusList;
+        this.applicationStatusList = statusList;
       });
     }
 
     private pageChanged(currentPage: number) {
       console.log("current page: " + currentPage);
-      this.$scope.pagination.currentPage = currentPage;
-      this.$scope.pageNumber = currentPage;
-      if (this.$scope.showHistorySection) {
+      this.pagination.currentPage = currentPage;
+      this.pageNumber = currentPage;
+      if (this.showHistorySection) {
         this.getAllLeaveApplicationsForHistory();
       } else {
         this.getRemainingLeaves();
@@ -324,22 +379,75 @@ module ums {
     }
 
 
+    /*private convertToBinary():ng.IPromise<any>{
+     var binaryFiles: Array<any>=[];
+     let defer = this.$q.defer();
+     if (this.files.length > 0) {
+     for (var i = 0; i < this.files.length; i++) {
+
+
+     let binaryValue: any = {};
+     let reader = new FileReader();
+     reader.readAsDataURL(this.files[i]);
+
+     reader.onload = () => {
+     var dataUrl = reader.result;
+     binaryValue = dataUrl;
+
+     console.log(dataUrl);
+     };
+
+
+     }
+     }
+     }*/
     private convertToJson(appType: number): ng.IPromise<any> {
-      var application: LmsApplication = this.$scope.leaveApplication;
-      var defer = this.$q.defer();
-      var completeJson = {};
-      var jsonObject = [];
+      let application: LmsApplication = this.leaveApplication;
+      let defer = this.$q.defer();
+      let completeJson = {};
+      let jsonObject = [];
       console.log("Lms application");
-      var item: any = {};
+      let item: any = {};
       item['id'] = application.id;
       item['employeeId'] = application.employeeId;
-      item['typeId'] = this.$scope.leaveType.id;
+      item['typeId'] = this.leaveType.id;
       item['fromDate'] = application.fromDate;
       item['toDate'] = application.toDate;
       item['reason'] = application.reason;
       item['appStatus'] = appType;
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
+
+      let jsonFileObject = [];
+      if (this.files.length > 0) {
+        for (var i = 0; i < this.files.length; i++) {
+          let fileItem: any = {};
+          let formData: FormData = new FormData();
+          formData.append("uploadFile", this.files[i], this.files[i].name);
+
+          let binaryValue: any = {};
+          let reader = new FileReader();
+
+
+          reader.readAsDataURL(this.files[i]);
+          console.log(reader.result);
+          console.log("file value");
+          console.log(this.files[i].value);
+          reader.onload = () => {
+            var dataUrl = reader.result;
+            binaryValue = dataUrl;
+            fileItem['file'] = dataUrl;
+            // console.log(dataUrl);
+
+          };
+
+          fileItem['fileName'] = this.files[i].name;
+          jsonFileObject.push(fileItem);
+        }
+      }
+      completeJson["fileEntries"] = jsonFileObject;
+      console.log("Complete json");
+      console.log(completeJson);
       defer.resolve(completeJson);
       return defer.promise;
     }

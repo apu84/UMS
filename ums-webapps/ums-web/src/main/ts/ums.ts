@@ -859,11 +859,14 @@ module ums {
         .state('leaveApplication', {
           url: "/leaveApplication",
           controller: 'LeaveApplicationManagement',
+          controllerAs: 'vm',
           templateUrl: 'views/leave-management/leave-application.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+
               return $ocLazyLoad.load({
                 files: [
+
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
@@ -877,6 +880,7 @@ module ums {
         .state('leaveApproval', {
           url: "/leaveApproval",
           controller: 'LeaveApplicationApproval',
+          controllerAs: 'vm',
           templateUrl: 'views/leave-management/leave-application-approval.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

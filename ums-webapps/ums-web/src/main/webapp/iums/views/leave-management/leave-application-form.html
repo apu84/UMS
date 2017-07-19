@@ -1,4 +1,4 @@
-<form action="" class="form-horizontal" data-validate="" data-onvalidate="getProgramsAndStatistics">
+<form action="" class="form-horizontal" data-validate="" data-onvalidate="vm.getProgramsAndStatistics">
     <div class="form-body pal">
         <div class="form-group">
             <label class="col-md-2 control-label">Leave Type</label>
@@ -7,9 +7,9 @@
                         class="form-control required"
                         name="leaveType"
                         id="leaveType"
-                        data-ng-options="leaveType.name for leaveType in leaveTypes track by leaveType.id"
-                        data-ng-model="$parent.leaveType"
-                        data-ng-change="updateLeaveType(leaveType)"
+                        data-ng-options="leaveType.name for leaveType in vm.leaveTypes track by leaveType.id"
+                        data-ng-model="vm.leaveType"
+                        data-ng-change="vm.updateLeaveType(leaveType)"
                 ></select>
             </div>
             <div class="col-md-6"></div>
@@ -17,16 +17,16 @@
         <div class="form-group">
             <label class="col-md-2 control-label">From</label>
             <div class="col-md-4">
-                <div date-picker date-model="leaveApplication.fromDate" date-format="dd/MM/YYYY"
-                     disable="false" date-changed="dateChanged()"></div>
+                <div date-picker date-model="vm.leaveApplication.fromDate" date-format="dd/MM/YYYY"
+                     disable="false" date-changed="vm.dateChanged()"></div>
             </div>
             <div class="col-md-6"></div>
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">To</label>
             <div class="col-md-4">
-                <div date-picker date-model="leaveApplication.toDate" date-format="dd/MM/YYYY"
-                     disable="false" date-changed="dateChanged()"></div>
+                <div date-picker date-model="vm.leaveApplication.toDate" date-format="dd/MM/YYYY"
+                     disable="false" date-changed="vm.dateChanged()"></div>
             </div>
             <div class="col-md-6"></div>
         </div>
@@ -34,7 +34,7 @@
             <label class="col-md-2 control-label" for="duration">Duration(days)</label>
             <div class="col-md-4" align="center">
                 <input type="text" class="form-control" id="duration" data-ng-disabled="true"
-                       data-ng-model="leaveApplication.duration">
+                       data-ng-model="vm.leaveApplication.duration">
             </div>
 
             <div class="col-md-6"></div>
@@ -42,7 +42,7 @@
 
         <div class="form-group">
             <label for="comment" class="col-md-4">Reason</label>
-            <textarea class="form-control " data-ng-model="leaveApplication.reason" rows="10"
+            <textarea class="form-control " data-ng-model="vm.leaveApplication.reason" rows="10"
                       style="padding: 2%; border-color: darkslateblue;"
                       id="comment"></textarea>
         </div>

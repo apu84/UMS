@@ -6,9 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
-import org.ums.integration.MessagePrinter;
+import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
 
 import javax.ws.rs.GET;
@@ -17,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.InputStream;
 
 @Component
@@ -34,7 +40,11 @@ public class ProfilePicture extends Resource {
   private FileWriterGateway mGateway;
 
   @Autowired
-  MessagePrinter mMessagePrinter;
+  MessageManipulator mMessageManipulator;
+
+  ApplicationContext applicationContext = AppContext.getApplicationContext();
+
+  MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
 
   @GET
   public Response get(final @Context Request pRequest) {
@@ -43,9 +53,16 @@ public class ProfilePicture extends Resource {
     if(subject != null) {
       userId = subject.getPrincipal().toString();
     }
-    InputStream imageData;
+    InputStream imageData = null;
 
     imageData = mGateway.read("files/user.png");
+
+    File file = new File("G:/shorna.jpg");
+
+    // this.mGateway.write("love.jpg", file);
+    Message<File> messageA = MessageBuilder.withPayload(file).build();
+    lmsChannel.send(messageA);
+
     try {
     } catch(Exception fl) {
       mLogger.error(fl.getMessage());

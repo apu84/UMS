@@ -25,10 +25,10 @@
         <div class="panel-body shadowPanel" style="min-height: 490px;"
              data-ng-style="'background-color':backgroundColor">
 
-            <div data-ng-if="showStatusSection==false && showApprovalSection==true && showHistorySection==false && activeLeaveSection==false"
+            <div data-ng-if="vm.showStatusSection==false && vm.showApprovalSection==true && vm.showHistorySection==false && vm.activeLeaveSection==false"
                  class="animate-if" data-value="fadeInLeftBig">
                 <div class="col-md-12" align="right">
-                    <button class="btn btn-xs btn-success" data-ng-click="showActiveLeaveSection()">Active Leave
+                    <button class="btn btn-xs btn-success" data-ng-click="vm.showActiveLeaveSection()">Active Leave
                     </button>
                     <br>
                     <br>
@@ -36,9 +36,9 @@
                 <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
             </div>
 
-            <div data-ng-if="showStatusSection && activeLeaveSection==false" class="animate-if">
+            <div data-ng-if="vm.showStatusSection && vm.activeLeaveSection==false" class="animate-if">
                 <div class="col-md-12" align="right">
-                    <span class="label label-info" style="cursor: pointer" data-ng-click="showHistory()">Applicant's History</span>
+                    <span class="label label-info" style="cursor: pointer" data-ng-click="vm.showHistory()">Applicant's History</span>
                     <br/>
                     <br/>
                 </div>
@@ -46,13 +46,13 @@
                 </div>
                 <div class="col-md-12">
                     <div class="well" align="right">
-                        <button class="btn btn-danger" data-ng-disabled="disableApproveAndRejectButton"
-                                data-toggle="modal" data-target="#actionModal" data-ng-click="approve()">Approve
+                        <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
+                                data-toggle="modal" data-target="#actionModal" data-ng-click="vm.approve()">Approve
                         </button>
-                        <button class="btn btn-danger" data-ng-disabled="disableApproveAndRejectButton"
-                                data-toggle="modal" data-target="#actionModal" data-ng-click="reject()">Reject
+                        <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
+                                data-toggle="modal" data-target="#actionModal" data-ng-click="vm.reject()">Reject
                         </button>
-                        <button class="btn btn-danger" data-ng-click="closeStatusSection()">Close</button>
+                        <button class="btn btn-danger" data-ng-click="vm.closeStatusSection()">Close</button>
                     </div>
 
 
@@ -74,7 +74,7 @@
                                                     <textarea class="form-control"
                                                               rows="10"
                                                               id="comment"
-                                                              data-ng-model="data.comment"></textarea>
+                                                              data-ng-model="vm.data.comment"></textarea>
                                                 </div>
                                             </div>
 
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal"
-                                            data-ng-click="saveAction()">Submit & Close
+                                            data-ng-click="vm.saveAction()">Submit & Close
                                     </button>
                                 </div>
                             </div>
@@ -95,22 +95,22 @@
                 </div>
             </div>
 
-            <div data-ng-if="showHistorySection==true && showApprovalSection==false && showStatusSection==false && activeLeaveSection==false"
+            <div data-ng-if="vm.showHistorySection==true && vm.showApprovalSection==false && vm.showStatusSection==false && vm.activeLeaveSection==false"
                  class="animate-if">
                 <div class="col-md-12"><h2>Applicant's Histories</h2></div>
                 <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
                 <div class="col-md-12">
                     <div class="well" align="right">
-                        <button class="btn btn-danger" data-ng-click="closeHistory()">Close</button>
+                        <button class="btn btn-danger" data-ng-click="vm.closeHistory()">Close</button>
                     </div>
                 </div>
             </div>
 
-            <div data-ng-if="activeLeaveSection==true && showHistorySection==false&& showApprovalSection==false && showStatusSection==false">
+            <div data-ng-if="vm.activeLeaveSection==true && vm.showHistorySection==false&& vm.showApprovalSection==false && vm.showStatusSection==false">
                 <div data-ng-include="'views/leave-management/active-leave-of-the-day.html'"></div>
                 <div class="col-md-12" align="right">
                     <div class="well">
-                        <button class="btn btn-danger" data-ng-click="closeActiveLeaveSection()">Close</button>
+                        <button class="btn btn-danger" data-ng-click="vm.closeActiveLeaveSection()">Close</button>
                     </div>
                 </div>
             </div>

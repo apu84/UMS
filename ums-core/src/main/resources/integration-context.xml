@@ -29,8 +29,18 @@
 
   </ftp:outbound-gateway>
 
+  <integration:channel id="lmsChannel"/>
+  <ftp:outbound-channel-adapter
+      session-factory="ftpClientFactory"
+      channel="lmsChannel"
+      remote-directory="files/lms"
+      auto-create-directory="true"
+      remote-filename-generator-expression="headers['fileName']">
 
-  <bean id="mp" class="org.ums.integration.MessagePrinter"/>
+  </ftp:outbound-channel-adapter>
+
+
+  <bean id="mp" class="org.ums.integration.MessageManipulator"/>
   <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
 
   <integration:channel id="outputChannel"/>
