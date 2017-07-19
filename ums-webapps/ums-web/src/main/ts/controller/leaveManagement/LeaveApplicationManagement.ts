@@ -124,7 +124,10 @@ module ums {
       console.log("Showing file");
       console.log(this.files);
 
-      this.leaveApplicationService.uploadFile(this.files, '1');
+      this.getFormData().then((formData) => {
+        this.leaveApplicationService.uploadFile(formData);
+      })
+
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
       console.log(this.leaveApprovalStatusList[8 - 1]);
@@ -361,6 +364,19 @@ module ums {
      }
      }
      }*/
+
+    private getFormData(): ng.IPromise<any> {
+      var formData = new FormData();
+      formData.append('files', this.files[0]);
+      console.log(this.files[0].name);
+      formData.append('name', "biodata.pdf");
+      console.log(formData);
+      var defer = this.$q.defer();
+      defer.resolve(formData);
+      return defer.promise;
+
+    }
+
     private convertToJson(appType: number): ng.IPromise<any> {
       let application: LmsApplication = this.leaveApplication;
       let defer = this.$q.defer();
@@ -392,11 +408,13 @@ module ums {
         }
       }
       completeJson["fileEntries"] = jsonFileObject;
+      completeJson['file'] = this.files[0];
       console.log("Complete json");
       console.log(completeJson);
       defer.resolve(completeJson);
       return defer.promise;
     }
+
 
   }
 

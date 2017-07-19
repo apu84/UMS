@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Created by Monjur-E-Morshed on 14-May-17.
@@ -30,10 +30,10 @@ public class MutableLmsApplicationResource extends Resource {
   }
 
   @POST
-  @Path("/upload/id/{id}/files/{files}")
+  @Path("/upload")
   @Consumes({MediaType.MULTIPART_FORM_DATA})
-  public Response uploadFile(@FormDataParam("files") List<File> pFileList, @FormDataParam("id") String id) {
-    return mHelper.uploadFile(pFileList, id, mUriInfo);
+  public Response uploadFile(@FormDataParam("files") File pInputStream, @FormDataParam("id") String id) throws IOException {
+    return mHelper.uploadFile(pInputStream, id, mUriInfo);
   }
 
 }
