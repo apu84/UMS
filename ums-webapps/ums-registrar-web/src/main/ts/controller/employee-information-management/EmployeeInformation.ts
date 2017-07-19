@@ -17,6 +17,10 @@ module ums {
         required: boolean;
         disablePresentAddressDropdown: boolean;
         disablePermanentAddressDropdown: boolean;
+        showFilteredEmployeeList: boolean;
+        showEmployeeInformation: boolean;
+        showSelectPanel: boolean;
+        showTableData: boolean;
         borderColor: string;
         supOptions: string;
         userAreaOfInterests: string;
@@ -58,6 +62,7 @@ module ums {
         fillEmergencyContactAddress: Function;
         pageChanged: Function;
         changeItemPerPage: Function;
+        view: Function;
         entry: IEntry;
         genderTypes: Array<IGender>;
         maritalStatus: Array<ICommon>;
@@ -84,16 +89,18 @@ module ums {
         previousAwardInformation: Array<IAwardInformationModel>;
         previousExperienceInformation: Array<IExperienceInformationModel>;
         userId: string;
+        userRoleId: number;
         allUser: Array<Employee>;
 
 
         changedUserId: string;
+        filterData: string;
         searchBy: string;
-        userName: string;
+        changedUserName: string;
         showSearchByUserId: boolean;
         showSearchByUserName: boolean;
         showSearchByDepartment: boolean;
-        department: IDepartment;
+        changedDepartment: IDepartment;
         departments: Array<IDepartment>;
         getSearchFields: Function;
         getEmployeeInformation: Function;
@@ -147,7 +154,11 @@ module ums {
                 itemPerPage: 2,
                 totalRecord: 0,
                 customItemPerPage: null,
-                changedUserId: ""
+                changedUserId: "",
+                changedUserName: "",
+                searchBy: "",
+                changedDepartment: null,
+                filterData: ""
             };
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
@@ -182,12 +193,20 @@ module ums {
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
             $scope.changeItemPerPage = this.changeItemPerPage.bind(this);
-
             $scope.getSearchFields = this.getSearchFields.bind(this);
             $scope.getEmployeeInformation = this.getEmployeeInformation.bind(this);
+            $scope.view = this.view.bind(this);
 
             this.initialization();
             this.addDate();
+        }
+
+        private view(user: any): void{
+            this.$scope.userId = user.id;
+            this.$scope.showFilteredEmployeeList = false;
+            this.$scope.showEmployeeInformation = true;
+            this.getPreviousFormValues();
+            this.setViewModeInitially();
         }
 
         private getAllUser(): ng.IPromise<any>{
@@ -207,32 +226,51 @@ module ums {
         }
 
         private getSearchFields(): void{
-            if(this.$scope.searchBy == "1"){
+            console.log(this.$scope.data.searchBy);
+            if(this.$scope.data.searchBy == "1"){
                 this.$scope.showSearchByUserName = false;
                 this.$scope.showSearchByDepartment = false;
+                this.$scope.showFilteredEmployeeList = false;
                 this.$scope.showSearchByUserId = true;
-                this.initializeSelect2("iUserId", this.$scope.allUser, "Enter Employee ID");
-            } else if(this.$scope.searchBy == "2"){
+                this.$scope.showEmployeeInformation = true;
+                this.setViewModeInitially();
+            } else if(this.$scope.data.searchBy == "2"){
                 this.$scope.showSearchByUserId = false;
                 this.$scope.showSearchByDepartment = false;
+                this.$scope.showEmployeeInformation = false;
                 this.$scope.showSearchByUserName = true;
-            } else if(this.$scope.searchBy == "3"){
-                this.getDepartment();
+                this.$scope.showFilteredEmployeeList = true;
+            } else if(this.$scope.data.searchBy == "3"){
                 this.$scope.showSearchByUserId = false;
                 this.$scope.showSearchByUserName = false;
+                this.$scope.showEmployeeInformation = false;
+                this.$scope.showFilteredEmployeeList = true;
                 this.$scope.showSearchByDepartment = true;
             }
         }
 
         private getEmployeeInformation(): void{
-            console.log("this.$scope.changedUserId Is: " + this.$scope.data.changedUserId);
-            if(this.$scope.data.changedUserId == "" || this.$scope.data.changedUserId == null) {
-                this.notify.error("Id Not Found");
-            }
-            else {
-                Utils.expandRightDiv();
+            if(this.$scope.data.searchBy == "1"){
                 this.$scope.userId = this.$scope.data.changedUserId;
-                this.getPreviousFormValues();
+                if(this.$scope.userId == "" || this.$scope.userId == null){
+                    this.notify.error("Empty or Null Id");
+                }
+                else {
+                    Utils.expandRightDiv();
+                    this.getPreviousFormValues();
+                    this.setViewModeInitially();
+                }
+            } else if (this.$scope.data.searchBy == "2"){
+                Utils.expandRightDiv();
+                if(this.$scope.data.changedUserName != null || this.$scope.data.changedUserName != ""){
+                    this.$scope.showTableData = true;
+                }
+                else{
+                    this.$scope.showTableData = false;
+                }
+                this.$scope.data.filterData = this.$scope.data.changedUserName;
+            } else if (this.$scope.data.searchBy == "3"){
+                Utils.expandRightDiv();
             }
         }
 
@@ -240,6 +278,7 @@ module ums {
         private initialization() {
             this.getUser().then((user: any) => {
                 this.$scope.userId = user.employeeId;
+                this.$scope.userRoleId = user.roleId;
                 this.getAllUser().then((users: any) => {
                     this.$scope.allUser = users;
                     this.getCountry().then((countries: any) => {
@@ -257,8 +296,18 @@ module ums {
                                     this.getAreaOfInterest().then((aois: any) => {
                                         this.$scope.arrayOfAreaOfInterest = aois;
                                         this.createMap();
-                                        this.getPreviousFormValues();
-                                        this.setViewModeInitially();
+                                        if(this.$scope.userRoleId != 82) {
+                                            this.$scope.showSelectPanel = false;
+                                            this.$scope.showFilteredEmployeeList = false;
+                                            this.$scope.showEmployeeInformation = true;
+                                            this.getPreviousFormValues();
+                                            this.setViewModeInitially();
+                                        }
+                                        else{
+                                            this.$scope.showSelectPanel = true;
+                                            this.$scope.showFilteredEmployeeList = false;
+                                            this.$scope.showEmployeeInformation = true;
+                                        }
                                     });
                                 });
                             });
@@ -287,7 +336,6 @@ module ums {
         }
 
         private getPreviousFormValues() {
-            this.notify.success(this.$scope.userId);
             this.getPersonalInformation(this.$scope.userId);
             this.getAcademicInformation(this.$scope.userId);
             this.getAwardInformation(this.$scope.userId);
@@ -295,7 +343,7 @@ module ums {
             this.getPublicationInformationWithPagination(this.$scope.userId);
             this.getExperienceInformation(this.$scope.userId);
             this.getTrainingInformation(this.$scope.userId);
-            this.getAdditionalInformation(this.$scope.userId);
+            //this.getAdditionalInformation(this.$scope.userId);
 
         }
 
@@ -896,8 +944,8 @@ module ums {
             }, 100);
         }
 
-        private initializeSelect2(selectBoxId, ids, placeHolderText) {
-            let data = ids;
+        private initializeSelect2(selectBoxId, users, placeHolderText) {
+            let data = users;
             $("#" + selectBoxId).select2({
                 minimumInputLength: 0,
                 query: function (options) {
@@ -908,6 +956,7 @@ module ums {
                         if (!options.context) {
                             let term = options.term.toLowerCase();
                             options.context = data.filter(function (metric: any) {
+                                console.log(options.context);
                                 return ( metric.id.indexOf(term) !== -1 );
                             });
                         }

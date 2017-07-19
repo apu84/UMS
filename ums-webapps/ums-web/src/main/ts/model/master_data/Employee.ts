@@ -2,6 +2,7 @@ module ums{
   export interface Employee{
     id:string;
     employeeName:string;
+    text?: string;
     designation:number;
     employmentType:string;
     deptOfficeId:string;

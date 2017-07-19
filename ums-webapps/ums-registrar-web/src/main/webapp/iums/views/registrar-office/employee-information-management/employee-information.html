@@ -8,71 +8,105 @@
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i>
     </div>
-    <div class="panel panel-green" id="leftDiv">
-        <div class="panel-heading">
-            <h3 class="panel-title">Select</h3>
-        </div>
-        <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getEmployeeInformation">
-                <div class="form-body pal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Search By</label>
-                        <div class="col-md-8">
-                            <select name="nSearchBy" id="iSearchBy" data-ng-model="searchBy" data-ng-change="getSearchFields()" class="form-control required">
-                                <option value="">Select Search Type</option>
-                                <option value="1">User Id</option>
-                                <option value="2">User Name</option>
-                                <option value="3">Department</option>
-                            </select>
-
-                        </div>
-                    </div>
-                    <div data-ng-if="showSearchByUserId">
+    <div data-ng-if="showSelectPanel">
+        <div class="panel panel-green" id="leftDiv">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select</h3>
+            </div>
+            <div class="panel-body pan">
+                <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getEmployeeInformation">
+                    <div class="form-body pal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label">User Id</label>
+                            <label class="col-md-4 control-label">Search By</label>
                             <div class="col-md-8">
-                                <input type="text"
-                                       name="nUserId"
-                                       id="iUserId"
-                                       data-ng-model="data.changedUserId"
-                                       class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div data-ng-if="showSearchByUserName">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">User Name</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nUserName"
-                                       id="iUserName"
-                                       data-ng-model="userName"
-                                       class="form-control required" >
-                            </div>
-                        </div>
-                    </div>
-                    <div data-ng-if="showSearchByDepartment">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Department</label>
-                            <div class="col-md-8">
-                                <select class="form-control required"
-                                        name="nDepartment"
-                                        id="iDepartment"
-                                        data-ng-options="department.longName for department in departments track by department.id"
-                                        data-ng-model="department"
-                                >
+                                <select name="nSearchBy" id="iSearchBy" data-ng-model="data.searchBy" data-ng-change="getSearchFields()" class="form-control required">
+                                    <option value="">Select Search Type</option>
+                                    <option value="1">User Id</option>
+                                    <option value="2">User Name</option>
+                                    <option value="3">Department</option>
                                 </select>
                             </div>
                         </div>
+                        <div data-ng-if="showSearchByUserId">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">User Id</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nUserId"
+                                           id="iUserId"
+                                           data-ng-model="data.changedUserId"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-if="showSearchByUserName">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">User Name</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nUserName"
+                                           id="iUserName"
+                                           data-ng-model="data.changedUserName"
+                                           class="form-control required" >
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-if="showSearchByDepartment">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Department</label>
+                                <div class="col-md-8">
+                                    <select class="form-control required"
+                                            name="nDepartment"
+                                            id="iDepartment"
+                                            data-ng-options="department.longName for department in departments track by department.id"
+                                            data-ng-model="data.changedDepartment"
+                                    >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success">Search</button>
-                </div>
-            </form>
+                    <div class="form-actions text-right pal">
+                        <button type="button" class="btn btn-success">Search</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    <div id="rightDiv">
+
+    <div id="rightDiv" data-ng-if="showFilteredEmployeeList">
+        <div class="panel">
+            <div class="panel-heading">Search Employee By : {{data.searchBy}}<span class="subtitle"></span></div>
+            <div class="panel-body pan">
+                <div class="panel-body shadowPanel"  style="min-height: 490px;">
+                    <div data-ng-show="showTableData">
+                        <table class="table table-bordered">
+                            <thead class="heading well">
+                            <tr>
+                                <th>Sl.</th>
+                                <th >Teacher Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="user in allUser | filter: data.filterData ">
+                                <td>{{$index + 1}}.</td>
+                                <td>{{user.employeeName}}</td>
+                                <td>{{user.designation}}</td>
+                                <td>{{user.deptOfficeId}}</td>
+                                <td><button type="button" class="btn btn-default" data-ng-click="view(user)">View</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </d>
+        </div>
+    </div>
+
+    <div id="rightDiv1" data-ng-if="showEmployeeInformation">
         <ul id="iTab" class="nav nav-tabs nav-justified">
             <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
             <li><a href="employee-information.html#academic" title="Click to open academic tab" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
@@ -82,38 +116,29 @@
             <li><a href="employee-information.html#experience" title="Click to open experience tab" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
             <li><a href="employee-information.html#additional" title="Click to open experience tab" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
         </ul>
-
-
         <div id="iTabContent" class="tab-content responsive">
-
             <div id="personal" class="tab-pane fade in active" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/personal-information.html'"></div>
             </div>
-
             <div id="academic" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/academic-information.html'"></div>
             </div>
-
             <div id="publication" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/publication-information.html'"></div>
             </div>
-
             <div id="training" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/training-information.html'"></div>
             </div>
-
             <div id="award" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/award-information.html'"></div>
             </div>
-
             <div id="experience" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/experience-information.html'"></div>
             </div>
-
             <div id="additional" class="tab-pane fade" style="min-height: 490px;">
                 <div data-ng-include="src='views/registrar-office/employee-information-management/additional-information.html'"></div>
             </div>
-
         </div>
     </div>
 </div>
+

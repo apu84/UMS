@@ -23,25 +23,27 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("text", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getEmployeeName());
     pBuilder.add("designation", pReadOnly.getDesignation());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());
     pBuilder.add("deptOfficeId", pReadOnly.getDepartment().getId());
-    pBuilder.add("fatherName", pReadOnly.getFatherName());
-    pBuilder.add("motherName", pReadOnly.getMotherName());
-    pBuilder.add("birthDate", mDateFormat.format(pReadOnly.getBirthDate()));
+    pBuilder.add("fatherName", pReadOnly.getFatherName() == null ? "" : pReadOnly.getFatherName());
+    pBuilder.add("motherName", pReadOnly.getMotherName() == null ? "" : pReadOnly.getMotherName());
+    pBuilder.add("birthDate", pReadOnly.getBirthDate() == null ? null : mDateFormat.format(pReadOnly.getBirthDate()));
     pBuilder.add("gender", pReadOnly.getGender());
     pBuilder.add("bloodGroup", pReadOnly.getBloodGroup());
-    pBuilder.add("presentAddress", pReadOnly.getPresentAddress());
-    pBuilder.add("permanentAddress", pReadOnly.getPermanentAddress());
-    pBuilder.add("mobileNumber", pReadOnly.getMobileNumber());
-    pBuilder.add("phoneNumber", pReadOnly.getPhoneNumber());
+    pBuilder.add("presentAddress", pReadOnly.getPresentAddress() == null ? "" : pReadOnly.getPresentAddress());
+    pBuilder.add("permanentAddress", pReadOnly.getPermanentAddress() == null ? "" : pReadOnly.getPermanentAddress());
+    pBuilder.add("mobileNumber", pReadOnly.getMobileNumber() == null ? "" : pReadOnly.getMobileNumber());
+    pBuilder.add("phoneNumber", pReadOnly.getPhoneNumber() == null ? "" : pReadOnly.getPhoneNumber());
     pBuilder.add("emailAddress", pReadOnly.getEmailAddress() == null ? "-" : pReadOnly.getEmailAddress());
-    pBuilder.add("joiningDate", mDateFormat.format(pReadOnly.getJoiningDate()));
+    pBuilder.add("joiningDate",
+        pReadOnly.getJoiningDate() == null ? null : mDateFormat.format(pReadOnly.getJoiningDate()));
     pBuilder.add("jobPermanentDate",
         pReadOnly.getJobPermanentDate() == null ? "-" : mDateFormat.format(pReadOnly.getJobPermanentDate()));
     pBuilder.add("status", pReadOnly.getStatus());
-    pBuilder.add("shortName", pReadOnly.getShortName());
+    pBuilder.add("shortName", pReadOnly.getShortName() == null ? "" : pReadOnly.getShortName());
     pBuilder.add("self",
         pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString())
             .build().toString());
