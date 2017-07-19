@@ -93,11 +93,27 @@ module ums {
       console.log("Found json");
       console.log(json);
       this.httpClient.post(url, json, 'application/json')
-          .success(() => {
-            defer.resolve("success");
+          .success((response) => {
+
+            defer.resolve(response.entries);
+
             this.notify.success("Success");
           }).error((data) => {
         defer.resolve("error");
+      });
+
+      return defer.promise;
+    }
+
+    public uploadFile(formData: any): ng.IPromise<any> {
+      var defer = this.$q.defer();
+
+      var url = "lmsApplication/upload";
+      this.httpClient.post(url, formData, undefined)
+          .success((response) => {
+            defer.resolve(response);
+          }).error((data) => {
+        console.error(data);
       });
 
       return defer.promise;

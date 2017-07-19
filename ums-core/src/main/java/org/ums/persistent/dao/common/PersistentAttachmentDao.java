@@ -79,8 +79,11 @@ public class PersistentAttachmentDao extends AttachmentDaoDecorator {
 
   @Override
   public Long create(MutableAttachment pMutable) {
+    Long id = mIdGenerator.getNumericId();
     String query = INSERT_ONE;
-    return super.create(pMutable);
+    mJdbcTemplate.update(query, id, pMutable.getApplicationType().getValue(), pMutable.getApplicationId().toString(),
+        pMutable.getFileName());
+    return id;
   }
 
   @Override

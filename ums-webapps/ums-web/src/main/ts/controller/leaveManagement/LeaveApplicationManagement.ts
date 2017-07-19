@@ -3,50 +3,12 @@
  */
 
 module ums {
-  /* interface ILeaveApplicationManagement extends ng.IScope {
-   leaveTypes: Array<LmsType>;
-   leaveApprovalStatusList: Array<IConstants>;
-   leaveApprovalStatus: IConstants;
-   leaveType: LmsType;
-   leaveApplication: LmsApplication;
-   remainingLeaves: Array<RemainingLmsLeave>;
-   remainingLeavesMap: any;
-   pendingApplications: Array<LmsApplicationStatus>;
-   pendingApplication: LmsApplicationStatus;
-   applicationStatusList: Array<LmsApplicationStatus>;
-   itemsPerPage: number;
-   pageNumber: number;
-   pagination: any;
-   totalItems: number;
-   statusModal: LmsApplicationStatus;
-   data: any;
-   employeeId: string;
-   user: User;
+  interface ILeaveApplicationManagement extends ng.IScope {
 
+    fileInserted: Function;
+  }
 
-   showStatusSection: boolean;
-   showHistorySection: boolean;
-   showApplicationSection: boolean;
-   fromPendingApplicationSection: boolean;
-   fromHistorySection: boolean;
-
-   save: Function;
-   applyLeave: Function;
-   fetchApplicationStatus: Function;
-   closeStatusSection: Function;
-   getTotalDuration: Function;
-   updateLeaveType: Function;
-   pageChanged: Function;
-   setStatusModalContent: Function;
-   dateChanged: Function;
-   showHistory: Function;
-   closeHistory: Function;
-   statusChanged: Function;
-   setResultsPerPage: Function;
-
-   }*/
-
-  interface  IConstants {
+  interface IConstants {
     id: number;
     name: string;
   }
@@ -74,6 +36,7 @@ module ums {
     public fileAttachments: Array<Attachment> = [];
     public files: any = {};
     public filesCopy: any = {};
+    public appId: string = "";
 
     public showStatusSection: boolean;
     public showHistorySection: boolean;
@@ -85,7 +48,7 @@ module ums {
     public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
 
     constructor(private appConstants: any,
-                private $scope: ng.IScope,
+                private $scope: ILeaveApplicationManagement,
                 private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private notify: Notify,
@@ -113,8 +76,9 @@ module ums {
       this.pagination.currentPage = 1;
       this.itemsPerPage = 50;
 
-      this.initializeDatePickers();
+      $scope.fileInserted = this.fileInserted.bind(this);
 
+      this.initializeDatePickers();
       this.getLeaveTypes();
       this.getRemainingLeaves();
       this.getPendingApplications();
@@ -139,16 +103,11 @@ module ums {
       console.log(this.files);
     }
 
-    private fileInserted() {
+    private fileInserted(event) {
 
       console.log("In the file insertion");
 
-      for (var i = 0; i < this.files.length; i++) {
-        var file: any = angular.copy(this.files[i]);
-        this.filesCopy.push(file);
-      }
-
-      this.files = {};
+      console.log(event);
 
     }
 
@@ -162,9 +121,22 @@ module ums {
       });
     }
 
+    private saveAttachments(id: string) {
+      for (var i = 0; i < this.files.length; i++) {
+        this.getFormData(this.files[i], id).then((formData) => {
+          this.leaveApplicationService.uploadFile(formData);
+        });
+
+      }
+      
+      this.files = {};
+    }
+
     private showHistory() {
       console.log("Showing file");
       console.log(this.files);
+
+
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[Utils.LEAVE_APPLICATION_ALL - 1];
       console.log(this.leaveApprovalStatusList[8 - 1]);
@@ -298,6 +270,9 @@ module ums {
     private save() {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+
+          console.log("Save message");
+          console.log(message);
           this.leaveApplication = <LmsApplication>{};
           this.leaveType = this.leaveTypes[0];
           this.data.totalLeaveDurationInDays = 0;
@@ -331,6 +306,9 @@ module ums {
         else {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
+
+              this.appId = message[0].id;
+              this.saveAttachments(message[0].id);
               this.leaveApplication = <LmsApplication>{};
               this.leaveType = this.leaveTypes[0];
               this.getPendingApplications();
@@ -401,6 +379,20 @@ module ums {
      }
      }
      }*/
+
+    private getFormData(file, id): ng.IPromise<any> {
+      var formData = new FormData();
+      formData.append('files', file);
+      console.log(this.files[0].name);
+      formData.append('name', file.name);
+      formData.append("id", id);
+      console.log(formData);
+      var defer = this.$q.defer();
+      defer.resolve(formData);
+      return defer.promise;
+
+    }
+
     private convertToJson(appType: number): ng.IPromise<any> {
       let application: LmsApplication = this.leaveApplication;
       let defer = this.$q.defer();
@@ -418,39 +410,10 @@ module ums {
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
 
-      let jsonFileObject = [];
-      if (this.files.length > 0) {
-        for (var i = 0; i < this.files.length; i++) {
-          let fileItem: any = {};
-          let formData: FormData = new FormData();
-          formData.append("uploadFile", this.files[i], this.files[i].name);
-
-          let binaryValue: any = {};
-          let reader = new FileReader();
-
-
-          reader.readAsDataURL(this.files[i]);
-          console.log(reader.result);
-          console.log("file value");
-          console.log(this.files[i].value);
-          reader.onload = () => {
-            var dataUrl = reader.result;
-            binaryValue = dataUrl;
-            fileItem['file'] = dataUrl;
-            // console.log(dataUrl);
-
-          };
-
-          fileItem['fileName'] = this.files[i].name;
-          jsonFileObject.push(fileItem);
-        }
-      }
-      completeJson["fileEntries"] = jsonFileObject;
-      console.log("Complete json");
-      console.log(completeJson);
       defer.resolve(completeJson);
       return defer.promise;
     }
+
 
   }
 

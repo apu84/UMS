@@ -67,10 +67,9 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     try {
 
-      if(pJsonObject.containsKey("getFromDate"))
-        pMutable.setFromDate(formatter.parse(pJsonObject.getString("getFromDate")));
-      if(pJsonObject.containsKey("getToDate"))
-        pMutable.setToDate(formatter.parse(pJsonObject.getString("getToDate")));
+      pMutable.setFromDate(formatter.parse(pJsonObject.getString("fromDate")));
+
+      pMutable.setToDate(formatter.parse(pJsonObject.getString("toDate")));
     } catch(Exception e) {
 
     }

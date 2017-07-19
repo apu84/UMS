@@ -3,9 +3,10 @@ package org.ums.resource.leavemanagement;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.context.AppContext;
@@ -14,12 +15,14 @@ import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
+import org.ums.enums.ApplicationType;
 import org.ums.enums.common.*;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.AttachmentManager;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.manager.common.LmsTypeManager;
+import org.ums.persistent.model.common.PersistentAttachment;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 import org.ums.resource.ResourceHelper;
@@ -33,7 +36,9 @@ import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -77,38 +82,54 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
 
-  @Transactional
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    return null;
+  }
+
+  public JsonObject saveApplication(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
-    inserIntoLeaveApplicationStatus(application);
+    Long appId = inserIntoLeaveApplicationStatus(application);
 
-    JsonArray fileEntries = pJsonObject.getJsonArray("fileEntries");
-    List<File> files = new ArrayList<>();
-    for (int i = 0; i < fileEntries.size(); i++) {
-      JsonObject fileJsonObject = fileEntries.getJsonObject(0);
-      String fileStr = fileJsonObject.getString("file");
-      System.out.println(fileStr);
-      /*InputStream inputStream = new ByteArrayInputStream(fileStr.getBytes());
-      File file = new File(fileJsonObject.getString("fileName"));
-      OutputStream fileOutputStream = new FileOutputStream(file);
-      IOUtils.copy(inputStream, fileOutputStream);
-      fileOutputStream.close();
-      Message<File> messageA = MessageBuilder.withPayload(file).build();
-      lmsChannel.send(messageA);*/
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 
-    }
+    jsonObjectBuilder.add("id", appId);
+    children.add(jsonObjectBuilder);
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public Response uploadFile(final File pInputStream, final String id, final String name, final UriInfo pUriInfo)
+      throws IOException {
+
+    File newFile = new File(pInputStream.getParent(), name);
+    Files.move(pInputStream.toPath(), newFile.toPath());
+
+    Message<File> messageA = MessageBuilder.withPayload(newFile).build();
+    lmsChannel.send(messageA);
+
+    PersistentAttachment attachment = new PersistentAttachment();
+    attachment.setApplicationType(ApplicationType.LEAVE);
+    attachment.setApplicationId(id);
+    attachment.setFileName(name);
+    mAttachmentManager.create(attachment);
+    // FileUtils.cleanDirectory(new File("H:/Apache/apache-tomcat-7.0.47/temp"));
+
+    System.gc();
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  private void inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
+  private Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
     Long pAppId = new Long(0);
     MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
     lmsAppStatus.setLmsApplicationId(pAppId);
@@ -141,6 +162,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     lmsAppStatus.setLmsApplicationId(pAppId);
 
     mLmsAppStatusManager.create(lmsAppStatus);
+    return pAppId;
   }
 
   public JsonObject getPendingLeavesOfEmployee(UriInfo pUriInfo) {
