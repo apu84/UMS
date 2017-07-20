@@ -45,7 +45,7 @@ module ums {
     public fromHistorySection: boolean;
 
 
-    public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService'];
+    public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService'];
 
     constructor(private appConstants: any,
                 private $scope: ILeaveApplicationManagement,
@@ -61,7 +61,8 @@ module ums {
                 private leaveTypeService: LeaveTypeService,
                 private leaveApplicationService: LeaveApplicationService,
                 private leaveApplicationStatusService: LeaveApplicationStatusService,
-                private userService: UserService) {
+                private userService: UserService,
+                private attachmentService: AttachmentService) {
 
       this.leaveApplication = <LmsApplication>{};
       this.showStatusSection = false;
@@ -128,7 +129,7 @@ module ums {
         });
 
       }
-      
+
       this.files = {};
     }
 
@@ -211,6 +212,9 @@ module ums {
       }, 200);
     }
 
+    private downloadAttachment(file: Attachment) {
+      this.attachmentService.downloadFile(file.id, file.fileName);
+    }
 
     private setStatusModalContent(lmsApplicationStatus: LmsApplicationStatus) {
       this.statusModal = lmsApplicationStatus;
@@ -339,6 +343,12 @@ module ums {
       this.showApplicationSection = false;
       this.pendingApplication = pendingApplication;
       this.applicationStatusList = [];
+
+      this.attachmentService.fetchAttachments(Utils.APPLICATION_TYPE_LEAVE.toString(), pendingApplication.appId).then((attachments) => {
+        this.fileAttachments = [];
+        this.fileAttachments = attachments;
+      });
+
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
         this.applicationStatusList = statusList;
       });

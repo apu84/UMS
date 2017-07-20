@@ -30,6 +30,16 @@ module ums {
      */
     static EXAM_TYPE_REGULAR: number = 1;
     static EXAM_TYPE_CCI: number = 2;
+
+    /*
+    * Application Type
+    * */
+    static APPLICATION_TYPE_REGULAR: number = 1;
+    static APPLICATION_TYPE_CLEARANCE: number = 2;
+    static APPLICATION_TYPE_CARRY: number = 3;
+    static APPLICATION_TYPE_SPECIAL_CARRY: number = 4;
+    static APPLICATION_TYPE_IMPROVEMENT: number = 5;
+    static APPLICATION_TYPE_LEAVE: number = 6;
     /*
      * Course Type*/
     static COURSE_TYPE_THEORY: number = 1;
@@ -176,7 +186,7 @@ module ums {
      var index = findIndexByKeyValue(studentsArray, "name", "tanmay");
      alert(index);
      */
-    public static  findIndexByProperty(arrayToSearch: Array<any>, property, valueToSearch) {
+    public static findIndexByProperty(arrayToSearch: Array<any>, property, valueToSearch) {
       for (var i = 0; i < arrayToSearch.length; i++) {
         if (arrayToSearch[i][property] == valueToSearch) {
           return i;
@@ -185,12 +195,12 @@ module ums {
       return null;
     }
 
-    public static  arrayMaxIndex(array: Array<any>): number {
+    public static arrayMaxIndex(array: Array<any>): number {
       var val: number = 0;
       if (array.length != 0)
         val = Math.max.apply(Math, array.map(function (o) {
-              return o.index;
-            })) + 1;
+          return o.index;
+        })) + 1;
       return val;
     }
 
@@ -218,7 +228,7 @@ module ums {
     /**
      * Get Id from location Header URL
      */
-    public static  getIdFromUrl(url: string): string {
+    public static getIdFromUrl(url: string): string {
       var resourceUrl = url;
       var startIndex = url.lastIndexOf('/') + 1;
       var lastIndex = resourceUrl.length;

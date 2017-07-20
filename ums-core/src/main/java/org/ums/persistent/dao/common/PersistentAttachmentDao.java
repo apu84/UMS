@@ -32,8 +32,9 @@ public class PersistentAttachmentDao extends AttachmentDaoDecorator {
   }
 
   private String SELECT_ALL = "select * from attachments";
-  private String INSERT_ONE = "insert into attachments(id,type,type_id,file_name,last_modified) values(?,?,?,?,"
-      + getLastModifiedSql() + ")";
+  private String INSERT_ONE =
+      "insert into attachments(id,type,type_id,file_name, server_file_name,last_modified) values(?,?,?,?,?,"
+          + getLastModifiedSql() + ")";
 
   @Override
   public List<Attachment> getAll() {
@@ -42,11 +43,13 @@ public class PersistentAttachmentDao extends AttachmentDaoDecorator {
 
   @Override
   public Attachment get(Long pId) {
-    return super.get(pId);
+    String query = SELECT_ALL + " where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new AttachmentRowMapper());
   }
 
   @Override
   public List<Attachment> getAttachments(ApplicationType pApplicationType, String pApplicationId) {
+    int typeId = pApplicationType.getValue();
     String query = SELECT_ALL + " where type=? and type_id=?";
     return mJdbcTemplate.query(query, new Object[] {pApplicationType.getValue(), pApplicationId},
         new AttachmentRowMapper());
@@ -82,7 +85,7 @@ public class PersistentAttachmentDao extends AttachmentDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     String query = INSERT_ONE;
     mJdbcTemplate.update(query, id, pMutable.getApplicationType().getValue(), pMutable.getApplicationId().toString(),
-        pMutable.getFileName());
+        pMutable.getFileName(), pMutable.getServerFileName());
     return id;
   }
 
@@ -120,6 +123,7 @@ public class PersistentAttachmentDao extends AttachmentDaoDecorator {
       attachment.setApplicationType(ApplicationType.get(rs.getInt("type")));
       attachment.setApplicationId(rs.getString("type_id"));
       attachment.setFileName(rs.getString("file_name"));
+      attachment.setServerFileName(rs.getString("server_file_name"));
       attachment.setLastModified(rs.getString("last_modified"));
       return attachment;
     }
