@@ -1,4 +1,8 @@
 module ums {
+  export interface ReloadRef {
+    reloadList: boolean;
+  }
+
   export class ReceivePaymentController {
     public static $inject = ['$scope', 'ReceivePaymentService', '$modal'];
     public studentId: string = '160105001';

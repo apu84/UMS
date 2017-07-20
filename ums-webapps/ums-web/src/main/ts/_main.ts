@@ -89,6 +89,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/filter.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/payment-status/payment.status.model.ts'/>
 /// <reference path='ums.ts'/>
 /// <reference path='data.ts'/>
 
@@ -223,14 +225,8 @@
 /// <reference path='fee/certificate/certificate.status.controller.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>
-/// <reference path='fee/bank/receive.payment.controller.ts'/>
-/// <reference path='fee/bank/receive.payment.service.ts'/>
-/// <reference path='fee/bank/payment.confirmation.ts'/>
-/// <reference path='fee/bank/payment.status.service.ts'/>
-/// <reference path='fee/bank/payment.status.controller.ts'/>
-/// <reference path='fee/bank/conclude.payment.ts'/>
-/// <reference path='fee/filter/filter.model.ts'/>
 /// <reference path='fee/filter/list.filter.directive.ts'/>
 /// <reference path='fee/report/report.service.ts'/>
 /// <reference path='fee/payment/student.payment.history.controller.ts'/>
 /// <reference path='fee/payment/payment.status.controller.ts'/>
+/// <reference path='fee/payment/payment.status.service.ts'/>

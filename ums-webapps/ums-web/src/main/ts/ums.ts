@@ -917,29 +917,6 @@ module ums {
             }]
           }
         })
-        .state('receivePayment', {
-          url: "/receivePayment",
-          controller: 'ReceivePaymentController',
-          controllerAs: 'vm',
-          templateUrl: 'views/fee/bank/receive.payment.html'
-        })
-        .state('paymentStatus', {
-          url: "/paymentStatus",
-          controller: 'PaymentStatusController',
-          controllerAs: 'vm',
-          templateUrl: 'views/fee/bank/payment.status.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/select2/select2-madmin.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
-                ]
-              });
-            }]
-          }
-        })
         .state('installmentSetting', {
           url: "/installmentSetting",
           controller: 'InstallmentSettingController',
