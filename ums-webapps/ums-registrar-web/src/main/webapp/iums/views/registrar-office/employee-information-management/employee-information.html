@@ -91,7 +91,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="user in allUser | filter: data.filterData ">
+                            <tr data-ng-repeat="user in allUser | filter: {employeeName: data.filterData} ">
                                 <td>{{$index + 1}}.</td>
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.designation}}</td>
@@ -102,11 +102,11 @@
                         </table>
                     </div>
                 </div>
-            </d>
+            </div>
         </div>
     </div>
 
-    <div id="rightDiv1" data-ng-if="showEmployeeInformation">
+    <div id="rightDiv" data-ng-if="showEmployeeInformation">
         <ul id="iTab" class="nav nav-tabs nav-justified">
             <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
             <li><a href="employee-information.html#academic" title="Click to open academic tab" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>

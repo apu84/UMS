@@ -251,6 +251,8 @@ module ums {
 
         private getEmployeeInformation(): void{
             if(this.$scope.data.searchBy == "1"){
+                this.$scope.showFilteredEmployeeList = false;
+                this.$scope.showEmployeeInformation = true;
                 this.$scope.userId = this.$scope.data.changedUserId;
                 if(this.$scope.userId == "" || this.$scope.userId == null){
                     this.notify.error("Empty or Null Id");
@@ -262,6 +264,8 @@ module ums {
                 }
             } else if (this.$scope.data.searchBy == "2"){
                 Utils.expandRightDiv();
+                this.$scope.showEmployeeInformation = false;
+                this.$scope.showFilteredEmployeeList = true;
                 if(this.$scope.data.changedUserName != null || this.$scope.data.changedUserName != ""){
                     this.$scope.showTableData = true;
                 }
@@ -271,6 +275,8 @@ module ums {
                 this.$scope.data.filterData = this.$scope.data.changedUserName;
             } else if (this.$scope.data.searchBy == "3"){
                 Utils.expandRightDiv();
+                this.$scope.showEmployeeInformation = false;
+                this.$scope.showFilteredEmployeeList = true;
             }
         }
 
@@ -296,17 +302,19 @@ module ums {
                                     this.getAreaOfInterest().then((aois: any) => {
                                         this.$scope.arrayOfAreaOfInterest = aois;
                                         this.createMap();
+                                        console.log(this.$scope.userId + " outer " + this.$scope.userRoleId);
+                                        this.notify.success(this.$scope.userId + " outer " + this.$scope.userRoleId);
                                         if(this.$scope.userRoleId != 82) {
                                             this.$scope.showSelectPanel = false;
                                             this.$scope.showFilteredEmployeeList = false;
-                                            this.$scope.showEmployeeInformation = true;
                                             this.getPreviousFormValues();
+                                            this.$scope.showEmployeeInformation = true;
                                             this.setViewModeInitially();
                                         }
                                         else{
+                                            this.$scope.showEmployeeInformation = false;
                                             this.$scope.showSelectPanel = true;
-                                            this.$scope.showFilteredEmployeeList = false;
-                                            this.$scope.showEmployeeInformation = true;
+                                            this.$scope.showFilteredEmployeeList = true;
                                         }
                                     });
                                 });
@@ -568,18 +576,18 @@ module ums {
         }
 
         private submitAdditionalForm(): void {
-            this.$scope.entry.additional[0].employeeId = this.$scope.userId;
+            this.$scope.entry.additional.employeeId = this.$scope.userId;
             console.log(this.$scope.entry.additional );
-            for (let i = 0; i < this.$scope.entry.additional.areaOfInterestInformation.length; i++) {
-                this.$scope.entry.additional.areaOfInterestInformation[i].employeeId = this.$scope.userId;
-            }
+
             this.convertToJson('additional', this.$scope.entry.additional)
                 .then((json: any) => {
-                    this.additionalInformationService.saveAdditionalInformation(json)
-                        .then((message: any) => {
-                            this.getAreaOfInterestInformation(this.$scope.userId);
-                            this.enableViewMode('additional');
-                        });
+                    // this.additionalInformationService.saveAdditionalInformation(json)
+                    //     .then((message: any) => {
+                    //         this.getAreaOfInterestInformation(this.$scope.userId);
+                    //         this.enableViewMode('additional');
+                    //     });
+                    this.getAreaOfInterestInformation(this.$scope.userId);
+                           this.enableViewMode('additional');
                 });
         }
 
@@ -684,6 +692,7 @@ module ums {
 
         private getAdditionalInformation(userId: string) {
             this.$scope.entry.additional = <IAdditionalInformationModel>{};
+            this.$scope.entry.additional.areaOfInterestInformation = Array<IAreaOfInterestInformationModel>();
             this.additionalInformationService.getAdditionalInformation(userId).then((additional: any) => {
                 this.$scope.entry.additional = additional;
                 this.getAreaOfInterestInformation(userId);
@@ -909,6 +918,7 @@ module ums {
                 item['experience'] = obj;
             } else if (convertThis === "additional") {
                 item['additional'] = obj;
+                console.log(obj);
             }
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;

@@ -115,31 +115,15 @@ module ums{
         private addNewRow(parameter: string, index?: number): void {
             if(parameter == "serviceInfo") {
                 let serviceEntry: IServiceInformationModel;
-                serviceEntry = {
-                    id: null,
-                    employeeId: "",
-                    department: null,
-                    departmentId: null,
-                    designation: null,
-                    employmentType: null,
-                    designationId: null,
-                    employmentTypeId: null,
-                    joiningDate: "",
-                    resignDate: "",
-                    dbAction: "",
-                    intervalDetails: Array<IServiceDetailsModel>()
+                serviceEntry = {id: null, employeeId: "", department: null, departmentId: null, designation: null, employmentType: null, designationId: null, employmentTypeId: null,
+                    joiningDate: "", resignDate: "", dbAction: "", intervalDetails: Array<IServiceDetailsModel>()
                 };
                 this.$scope.entry.serviceInfo.push(serviceEntry);
             }
             else if(parameter == "serviceDetails") {
                 let serviceDetailsEntry: IServiceDetailsModel;
                 serviceDetailsEntry = {
-                    id: null,
-                    interval: null,
-                    intervalId: null,
-                    startDate: "",
-                    endDate: "",
-                    serviceId: null
+                    id: null, interval: null, intervalId: null, startDate: "", endDate: "", serviceId: null
                 };
                 this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
             }
