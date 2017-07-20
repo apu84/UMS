@@ -22,6 +22,7 @@ public class PersistentAttachment implements MutableAttachment {
   private ApplicationType mApplicationType;
   private String mApplicationId;
   private String mFileName;
+  private String mServerFilename;
   private String mLastModified;
 
   public PersistentAttachment() {
@@ -33,7 +34,18 @@ public class PersistentAttachment implements MutableAttachment {
     mApplicationType = pPersistentAttachment.getApplicationType();
     mApplicationId = pPersistentAttachment.getApplicationId();
     mFileName = pPersistentAttachment.getFileName();
+    mServerFilename = pPersistentAttachment.getServerFileName();
     mLastModified = pPersistentAttachment.getLastModified();
+  }
+
+  @Override
+  public void setServerFileName(String pServerFileName) {
+    mServerFilename = pServerFileName;
+  }
+
+  @Override
+  public String getServerFileName() {
+    return mServerFilename;
   }
 
   @Override

@@ -19,4 +19,6 @@ public interface Attachment extends Serializable, LastModifier, EditType<Mutable
 
   String getFileName();
 
+  String getServerFileName();
+
 }

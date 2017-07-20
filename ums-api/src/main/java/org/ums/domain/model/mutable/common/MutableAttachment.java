@@ -15,4 +15,6 @@ public interface MutableAttachment extends Attachment, Editable<Long>, MutableLa
   void setApplicationId(String pApplicationId);
 
   void setFileName(String pFileName);
+
+  void setServerFileName(String pServerFileName);
 }

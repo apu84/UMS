@@ -39,6 +39,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -99,7 +102,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 
-    jsonObjectBuilder.add("id", appId);
+    jsonObjectBuilder.add("id", appId.toString());
     children.add(jsonObjectBuilder);
     object.add("entries", children);
     localCache.invalidate();
@@ -108,8 +111,11 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   public Response uploadFile(final File pInputStream, final String id, final String name, final UriInfo pUriInfo)
       throws IOException {
-
-    File newFile = new File(pInputStream.getParent(), name);
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    String serverFilename = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + name;
+    serverFilename.replaceAll("-", "");
+    serverFilename.replaceAll(":", "");
+    File newFile = new File(pInputStream.getParent(), serverFilename);
     Files.move(pInputStream.toPath(), newFile.toPath());
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
@@ -119,6 +125,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     attachment.setApplicationType(ApplicationType.LEAVE);
     attachment.setApplicationId(id);
     attachment.setFileName(name);
+    attachment.setServerFileName("files/lms/" + serverFilename);
     mAttachmentManager.create(attachment);
     // FileUtils.cleanDirectory(new File("H:/Apache/apache-tomcat-7.0.47/temp"));
 
@@ -214,12 +221,34 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       jsonObject.add("leaveTypeId", lmsType.getId());
       jsonObject.add("leaveName", lmsType.getName());
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
-      jsonObject.add("daysLeft", applicationMap.get(lmsType.getId()) != null ? (lmsType.getMaxDuration() - leavesTaken) : lmsType.getMaxDuration());
+
+      jsonObject.add("daysLeft", applicationMap.get(lmsType.getId()) != null ? getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken) : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
       children.add(jsonObject);
     }
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+
+  private String getDateOutputModifiedFormat(int duration) {
+    int periodNumber = duration;
+
+    Period period = Period.ofDays(duration);
+    String days = "";
+    if (periodNumber > (365)) {
+      int year = periodNumber / 365;
+      int month = (periodNumber % 365) / 30;
+      int day = ((periodNumber % 365) % 30);
+      days = year + " year/s, " + month + " month/s," + day + " day/s";
+    } else if (periodNumber > 30) {
+      int month = periodNumber / 30;
+      int day = (periodNumber % 30);
+      days = month + " month/s," + day + " day/s";
+    } else {
+      days = period.getDays() + " day/s";
+    }
+    return days;
   }
 
   private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) {

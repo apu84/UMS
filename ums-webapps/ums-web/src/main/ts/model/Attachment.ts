@@ -5,8 +5,8 @@ module ums {
   export interface Attachment {
     id: string,
     type: number,
-    typeId: string;
+    applicationId: string;
     fileName: string;
-    file: any
+    serverFileName: string;
   }
 }

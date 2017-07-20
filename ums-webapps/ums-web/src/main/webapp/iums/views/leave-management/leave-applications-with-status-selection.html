@@ -6,9 +6,9 @@
                     class="form-control required"
                     name="leaveType"
                     id="leaveType"
-                    data-ng-options="l.name for l in vm.leaveApprovalStatusList track by l.id"
+                    data-ng-options="L.name for L in vm.leaveApprovalStatusList track by L.id"
                     data-ng-model="vm.leaveApprovalStatus"
-                    data-ng-change="vm.statusChanged(leaveApprovalStatus)"
+                    data-ng-change="vm.statusChanged(vm.leaveApprovalStatus)"
             ></select>
         </div>
     </div>
@@ -22,7 +22,7 @@
                    class="form-control required"
                    id="resultsPerPage"
                    data-ng-model="vm.itemsPerPage"
-                   data-ng-change="vm.setResultsPerPage(itemsPerPage)"
+                   data-ng-change="vm.setResultsPerPage(vm.itemsPerPage)"
             />
         </div>
     </div>
