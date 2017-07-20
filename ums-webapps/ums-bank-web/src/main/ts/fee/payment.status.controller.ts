@@ -56,7 +56,7 @@ module ums {
       });
 
       this.$modal.open({
-        templateUrl: 'views/fee/bank/conclude.payment.html',
+        templateUrl: 'views/fee/conclude.payment.html',
         controller: ConcludePayment,
         resolve: {
           selectedPaymentStatus: () => this.selectedPaymentStatus,

@@ -47,7 +47,7 @@ module ums {
           url: "/receive",
           controller: 'ReceivePaymentController',
           controllerAs: 'vm',
-          templateUrl: 'views/bank/receive.payment.html'
+          templateUrl: 'views/fee/receive.payment.html'
         })
         .state('payments', {
           url: "/payments",

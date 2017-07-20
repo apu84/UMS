@@ -48,7 +48,8 @@
             </div>
         </div>
         <div class="row">
-            <label for="completedOn" class="col-md-2">Completed on</label>
+            <label for="completedOn" class="col-md-2" data-ng-if="concludeStatus.accepted">Completed on</label>
+            <label for="completedOn" class="col-md-2" data-ng-if="!concludeStatus.accepted">Rejected on</label>
             <div class="col-md-3 text-right">
                 <input id="completedOn" type="text" data-date-format="dd/mm/yyyy"
                        placeholder="DD/MM/YYYY" class="datepicker-default form-control"

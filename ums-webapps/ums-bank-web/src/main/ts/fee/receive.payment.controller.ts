@@ -52,7 +52,7 @@ module ums {
       this.selectedPaymentsGroup = this.receivePaymentService.groupPayments(selectedReceivePayment);
 
       this.$modal.open({
-        templateUrl: 'views/fee/bank/payment.confirmation.html',
+        templateUrl: 'views/fee/payment.confirmation.html',
         controller: PaymentConfirmation,
         resolve: {
           selectedPaymentsGroup: () => this.selectedPaymentsGroup,
