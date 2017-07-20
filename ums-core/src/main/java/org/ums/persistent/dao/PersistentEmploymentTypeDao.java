@@ -21,6 +21,13 @@ public class PersistentEmploymentTypeDao extends EmploymentTypeDaoDecorator {
   }
 
   @Override
+  public EmploymentType get(final Integer pEmploymentId) {
+    String query = SELECT_ALL + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmploymentId},
+        new PersistentEmploymentTypeDao.RoleRowMapper());
+  }
+
+  @Override
   public List<EmploymentType> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new PersistentEmploymentTypeDao.RoleRowMapper());

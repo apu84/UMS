@@ -21,7 +21,7 @@ public class PersistentServiceInformation implements MutableServiceInformation {
         applicationContext.getBean("serviceInformationManager", ServiceInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private Department mDepartment;
   private String mDepartmentId;
@@ -31,10 +31,6 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   private int mEmploymentId;
   private Date mJoiningDate;
   private Date mResignDate;
-  private String mRoomNo;
-  private String mExtNo;
-  private String mAcademicInitial;
-  private int mCurrentStatus;
   private String mLastModified;
 
   public PersistentServiceInformation() {}
@@ -50,10 +46,6 @@ public class PersistentServiceInformation implements MutableServiceInformation {
     mEmploymentId = pPersistentServiceInformation.getEmploymentId();
     mJoiningDate = pPersistentServiceInformation.getJoiningDate();
     mResignDate = pPersistentServiceInformation.getResignDate();
-    mRoomNo = pPersistentServiceInformation.getRoomNo();
-    mExtNo = pPersistentServiceInformation.getExtNo();
-    mAcademicInitial = pPersistentServiceInformation.getAcademicInitial();
-    mCurrentStatus = pPersistentServiceInformation.getCurrentStatus();
     mLastModified = pPersistentServiceInformation.getLastModified();
   }
 
@@ -63,7 +55,7 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sServiceInformationManager.create(this);
   }
 
@@ -83,12 +75,12 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -143,26 +135,6 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   }
 
   @Override
-  public void setRoomNo(String pRoomNo) {
-    mRoomNo = pRoomNo;
-  }
-
-  @Override
-  public void setExtNo(String pExtNo) {
-    mExtNo = pExtNo;
-  }
-
-  @Override
-  public void setAcademicInitial(String pAcademicInitial) {
-    mAcademicInitial = pAcademicInitial;
-  }
-
-  @Override
-  public void setCurrentStatus(int pCurrentStatus) {
-    mCurrentStatus = pCurrentStatus;
-  }
-
-  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -205,25 +177,5 @@ public class PersistentServiceInformation implements MutableServiceInformation {
   @Override
   public Date getResignDate() {
     return mResignDate;
-  }
-
-  @Override
-  public String getRoomNo() {
-    return mRoomNo;
-  }
-
-  @Override
-  public String getExtNo() {
-    return mExtNo;
-  }
-
-  @Override
-  public String getAcademicInitial() {
-    return mAcademicInitial;
-  }
-
-  @Override
-  public int getCurrentStatus() {
-    return mCurrentStatus;
   }
 }

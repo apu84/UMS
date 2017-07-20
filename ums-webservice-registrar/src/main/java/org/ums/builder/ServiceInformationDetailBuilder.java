@@ -4,13 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.registrar.ServiceInformationDetail;
+import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
 import org.ums.domain.model.mutable.registrar.MutableServiceInformationDetail;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.formatter.DateFormat;
+import org.ums.manager.registrar.ServiceInformationDetailManager;
+import org.ums.manager.registrar.ServiceInformationManager;
 
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
+import javax.print.attribute.standard.JobSheets;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ServiceInformationDetailBuilder implements
@@ -18,6 +23,9 @@ public class ServiceInformationDetailBuilder implements
 
   @Autowired
   DateFormat mDateFormat;
+
+  @Autowired
+  ServiceInformationManager mServiceInformationManager;
 
   private EmploymentPeriod mEmploymentPeriod;
 
@@ -32,11 +40,14 @@ public class ServiceInformationDetailBuilder implements
   }
 
   @Override
-  public void build(MutableServiceInformationDetail pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+  public void build(MutableServiceInformationDetail pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {}
+
+  public void serviceInformationDetailBuilder(MutableServiceInformationDetail pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache, Long pServiceId) {
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
-    pMutable
-        .setEndDate(pJsonObject.containsKey("endDate") ? mDateFormat.parse(pJsonObject.getString("endDate")) : null);
-    pMutable.setServiceId(pJsonObject.getInt("serviceId"));
+    pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
+        : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
+    pMutable.setServiceId(pServiceId);
   }
 }

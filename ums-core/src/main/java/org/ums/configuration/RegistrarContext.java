@@ -42,7 +42,8 @@ public class RegistrarContext {
   @Bean
   ServiceInformationManager serviceInformationManager() {
     ServiceInformationCache serviceInformationCache = new ServiceInformationCache(mCacheFactory.getCacheManager());
-    serviceInformationCache.setManager(new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate()));
+    serviceInformationCache.setManager(new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return serviceInformationCache;
   }
 

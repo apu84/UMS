@@ -11,7 +11,7 @@ import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface ServiceInformation extends Serializable, EditType<MutableServiceInformation>, Identifier<Integer>,
+public interface ServiceInformation extends Serializable, EditType<MutableServiceInformation>, Identifier<Long>,
     LastModifier {
 
   String getEmployeeId();
@@ -31,12 +31,4 @@ public interface ServiceInformation extends Serializable, EditType<MutableServic
   Date getJoiningDate();
 
   Date getResignDate();
-
-  String getRoomNo();
-
-  String getExtNo();
-
-  String getAcademicInitial();
-
-  int getCurrentStatus();
 }

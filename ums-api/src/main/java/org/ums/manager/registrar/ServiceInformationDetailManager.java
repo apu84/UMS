@@ -11,7 +11,7 @@ public interface ServiceInformationDetailManager extends
 
   int saveServiceInformationDetail(final List<MutableServiceInformationDetail> pMutableServiceInformationDetail);
 
-  List<ServiceInformationDetail> getServiceInformationDetail(final int pServiceId);
+  List<ServiceInformationDetail> getServiceInformationDetail(final Long pServiceId);
 
   int updateServiceInformationDetail(final List<MutableServiceInformationDetail> pMutableServiceInformationDetail);
 

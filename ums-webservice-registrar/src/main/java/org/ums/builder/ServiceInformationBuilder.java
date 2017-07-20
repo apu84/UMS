@@ -11,12 +11,17 @@ import org.ums.formatter.DateFormat;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.DesignationManager;
 import org.ums.manager.EmploymentTypeManager;
+import org.ums.manager.registrar.ServiceInformationDetailManager;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.naming.ldap.PagedResultsControl;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ServiceInformationBuilder implements Builder<ServiceInformation, MutableServiceInformation> {
@@ -36,6 +41,12 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
   @Autowired
   private EmploymentTypeManager mEmploymentTypeManager;
 
+  @Autowired
+  ServiceInformationDetailManager mServiceInformationDetailManager;
+
+  @Autowired
+  ServiceInformationDetailBuilder mServiceInformationDetailBuilder;
+
   private EmploymentPeriod mEmploymentPeriod;
 
   @Override
@@ -47,10 +58,15 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
     pBuilder.add("employmentId", pReadOnly.getEmploymentId());
     pBuilder.add("joiningDate", mDateFormat.format(pReadOnly.getJoiningDate()));
     pBuilder.add("resignDate", pReadOnly.getResignDate() == null ? "" : mDateFormat.format(pReadOnly.getResignDate()));
-    pBuilder.add("roomNo", pReadOnly.getRoomNo() == null ? "" : pReadOnly.getRoomNo());
-    pBuilder.add("extNo", pReadOnly.getExtNo() == null ? "" : pReadOnly.getExtNo());
-    pBuilder.add("academicInitial", pReadOnly.getAcademicInitial() == null ? "" : pReadOnly.getAcademicInitial());
-    pBuilder.add("status", pReadOnly.getCurrentStatus());
+    List<ServiceInformationDetail> serviceInformationDetails = new ArrayList<>();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    serviceInformationDetails = mServiceInformationDetailManager.getServiceInformationDetail(pReadOnly.getId());
+    for(ServiceInformationDetail serviceInformationDetail : serviceInformationDetails) {
+      JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+      mServiceInformationDetailBuilder.build(jsonObjectBuilder, serviceInformationDetail, pUriInfo, pLocalCache);
+      children.add(jsonObjectBuilder);
+    }
+    pBuilder.add("intervals", children);
   }
 
   @Override
@@ -63,10 +79,5 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
     pMutable
         .setResignDate(pJsonObject.containsKey("resignDate") ? pJsonObject.getString("resignDate").equals("") ? null
             : mDateFormat.parse(pJsonObject.getString("resignDate")) : null);
-    pMutable.setRoomNo(pJsonObject.containsKey("roomNo") ? pJsonObject.getString("roomNo") : "");
-    pMutable.setExtNo(pJsonObject.containsKey("extNo") ? pJsonObject.getString("extNo") : "");
-    pMutable.setAcademicInitial(pJsonObject.containsKey("academicInitial") ? pJsonObject.getString("academicInitial")
-        : "");
-    pMutable.setCurrentStatus(0);
   }
 }

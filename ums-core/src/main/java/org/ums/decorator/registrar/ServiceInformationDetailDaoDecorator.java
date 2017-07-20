@@ -18,7 +18,7 @@ public class ServiceInformationDetailDaoDecorator
   }
 
   @Override
-  public List<ServiceInformationDetail> getServiceInformationDetail(int pServiceId) {
+  public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
     return getManager().getServiceInformationDetail(pServiceId);
   }
 

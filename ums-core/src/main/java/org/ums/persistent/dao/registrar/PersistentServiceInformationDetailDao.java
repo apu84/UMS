@@ -16,7 +16,7 @@ import java.util.List;
 public class PersistentServiceInformationDetailDao extends ServiceInformationDetailDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_SERVICE_DETAIL (EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID, LAST_MODIFIED)_VALUES (?, ?, ?, ?, "
+      "INSERT INTO EMP_SERVICE_DETAIL (EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
   static String GET_ONE = "SELECT ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID FROM EMP_SERVICE_DETAIL ";
@@ -43,16 +43,16 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
       List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
     List<Object[]> params = new ArrayList<>();
     for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
-      params.add(new Object[] {serviceInformationDetail.getId(),
-          serviceInformationDetail.getEmploymentPeriod().getId(), serviceInformationDetail.getStartDate(),
-          serviceInformationDetail.getEndDate(), serviceInformationDetail.getServiceId()});
+      params.add(new Object[] {serviceInformationDetail.getEmploymentPeriod().getId(),
+          serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
+          serviceInformationDetail.getServiceId()});
 
     }
     return params;
   }
 
   @Override
-  public List<ServiceInformationDetail> getServiceInformationDetail(int pServiceId) {
+  public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
     String query = GET_ONE + " WHERE SERVICE_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pServiceId},
         new PersistentServiceInformationDetailDao.RoleRowMapper());
@@ -99,7 +99,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
       persistentServiceInformationDetail.setEmploymentPeriodId(resultSet.getInt("EMPLOYMENT_PERIOD"));
       persistentServiceInformationDetail.setStartDate(resultSet.getDate("START_DATE"));
       persistentServiceInformationDetail.setEndDate(resultSet.getDate("END_DATE"));
-      persistentServiceInformationDetail.setServiceId(resultSet.getInt("SERVICE_ID"));
+      persistentServiceInformationDetail.setServiceId(resultSet.getLong("SERVICE_ID"));
       return persistentServiceInformationDetail;
     }
   }

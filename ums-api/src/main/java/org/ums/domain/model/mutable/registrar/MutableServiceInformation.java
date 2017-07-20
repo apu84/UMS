@@ -10,7 +10,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 
 import java.util.Date;
 
-public interface MutableServiceInformation extends ServiceInformation, Editable<Integer>, MutableIdentifier<Integer>,
+public interface MutableServiceInformation extends ServiceInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);
@@ -30,12 +30,4 @@ public interface MutableServiceInformation extends ServiceInformation, Editable<
   void setJoiningDate(final Date pJoiningDate);
 
   void setResignDate(final Date pResignDate);
-
-  void setRoomNo(final String pRoomNo);
-
-  void setExtNo(final String pExtNo);
-
-  void setAcademicInitial(final String pAcademicInitial);
-
-  void setCurrentStatus(final int pCurrentStatus);
 }

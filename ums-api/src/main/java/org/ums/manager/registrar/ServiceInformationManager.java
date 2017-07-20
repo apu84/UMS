@@ -6,14 +6,13 @@ import org.ums.manager.ContentManager;
 
 import java.util.List;
 
-public interface ServiceInformationManager extends
-    ContentManager<ServiceInformation, MutableServiceInformation, Integer> {
+public interface ServiceInformationManager extends ContentManager<ServiceInformation, MutableServiceInformation, Long> {
 
-  int saveServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
+  Long saveServiceInformation(final MutableServiceInformation pMutableServiceInformation);
 
   List<ServiceInformation> getServiceInformation(final String pEmployeeId);
 
-  int updateServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
+  int updateServiceInformation(final MutableServiceInformation pMutableServiceInformation);
 
-  int deleteServiceInformation(final List<MutableServiceInformation> pMutableServiceInformation);
+  int deleteServiceInformation(final MutableServiceInformation pMutableServiceInformation);
 }

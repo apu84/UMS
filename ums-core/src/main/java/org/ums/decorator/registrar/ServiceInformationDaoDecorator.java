@@ -8,10 +8,11 @@ import org.ums.manager.registrar.ServiceInformationManager;
 import java.util.List;
 
 public class ServiceInformationDaoDecorator extends
-    ContentDaoDecorator<ServiceInformation, MutableServiceInformation, Integer, ServiceInformationManager> implements
+    ContentDaoDecorator<ServiceInformation, MutableServiceInformation, Long, ServiceInformationManager> implements
     ServiceInformationManager {
+
   @Override
-  public int saveServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public Long saveServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().saveServiceInformation(pMutableServiceInformation);
   }
 
@@ -21,12 +22,12 @@ public class ServiceInformationDaoDecorator extends
   }
 
   @Override
-  public int updateServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public int updateServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().updateServiceInformation(pMutableServiceInformation);
   }
 
   @Override
-  public int deleteServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public int deleteServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().deleteServiceInformation(pMutableServiceInformation);
   }
 }

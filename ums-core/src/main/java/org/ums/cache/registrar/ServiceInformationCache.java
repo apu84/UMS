@@ -9,22 +9,22 @@ import org.ums.manager.registrar.ServiceInformationManager;
 import java.util.List;
 
 public class ServiceInformationCache extends
-    ContentCache<ServiceInformation, MutableServiceInformation, Integer, ServiceInformationManager> implements
+    ContentCache<ServiceInformation, MutableServiceInformation, Long, ServiceInformationManager> implements
     ServiceInformationManager {
 
-  private CacheManager<ServiceInformation, Integer> mCacheManager;
+  private CacheManager<ServiceInformation, Long> mCacheManager;
 
-  public ServiceInformationCache(CacheManager<ServiceInformation, Integer> pCacheManager) {
+  public ServiceInformationCache(CacheManager<ServiceInformation, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<ServiceInformation, Integer> getCacheManager() {
+  protected CacheManager<ServiceInformation, Long> getCacheManager() {
     return mCacheManager;
   }
 
   @Override
-  public int saveServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public Long saveServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().saveServiceInformation(pMutableServiceInformation);
   }
 
@@ -34,12 +34,12 @@ public class ServiceInformationCache extends
   }
 
   @Override
-  public int updateServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public int updateServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().updateServiceInformation(pMutableServiceInformation);
   }
 
   @Override
-  public int deleteServiceInformation(List<MutableServiceInformation> pMutableServiceInformation) {
+  public int deleteServiceInformation(MutableServiceInformation pMutableServiceInformation) {
     return getManager().deleteServiceInformation(pMutableServiceInformation);
   }
 }

@@ -19,5 +19,5 @@ public interface MutableServiceInformationDetail extends ServiceInformationDetai
 
   void setEndDate(final Date pEndDate);
 
-  void setServiceId(final int pServiceId);
+  void setServiceId(final Long pServiceId);
 }

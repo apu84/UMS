@@ -23,7 +23,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   private int mEmploymentPeriodId;
   private Date mStartDate;
   private Date mEndDate;
-  private int mServiceId;
+  private Long mServiceId;
   private String mLastModified;
 
   public PersistentServiceInformationDetail() {}
@@ -99,7 +99,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   @Override
-  public void setServiceId(int pServiceId) {
+  public void setServiceId(Long pServiceId) {
     mServiceId = pServiceId;
   }
 
@@ -124,7 +124,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   @Override
-  public int getServiceId() {
+  public Long getServiceId() {
     return mServiceId;
   }
 }

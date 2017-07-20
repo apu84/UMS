@@ -28,7 +28,7 @@ import java.util.List;
 
 @Component
 public class ServiceInformationResourceHelper extends
-    ResourceHelper<ServiceInformation, MutableServiceInformation, Integer> {
+    ResourceHelper<ServiceInformation, MutableServiceInformation, Long> {
 
   private static final Logger mLogger = LoggerFactory.getLogger(ServiceInformationResourceHelper.class);
 
@@ -65,24 +65,23 @@ public class ServiceInformationResourceHelper extends
     JsonArray serviceJsonArray = entries.getJsonObject(0).getJsonArray("service");
     int sizeOfServiceJsonArray = serviceJsonArray.size();
 
-    List<MutableServiceInformation> createMutableServiceInformation = new ArrayList<>();
     for(int i = 0; i < sizeOfServiceJsonArray; i++) {
+      Long serviceId;
       MutableServiceInformation mutableServiceInformation = new PersistentServiceInformation();
       mBuilder.build(mutableServiceInformation, serviceJsonArray.getJsonObject(i), localCache);
-      createMutableServiceInformation.add(mutableServiceInformation);
-    }
-    mManager.saveServiceInformation(createMutableServiceInformation);
+      serviceId = mManager.saveServiceInformation(mutableServiceInformation);
 
-    JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(0).getJsonArray("intervalDetails");
-    int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
-    List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
-    for(int i = 0; i < sizeOfServiceDetailsJsonArray; i++) {
-      MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
-      mServiceInformationDetailBuilder.build(mutableServiceInformationDetail, serviceDetailJsonArray.getJsonObject(i),
-          localCache);
-      pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+      JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
+      int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
+      List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
+      for(int j = 0; j < sizeOfServiceDetailsJsonArray; j++) {
+        MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+        mServiceInformationDetailBuilder.serviceInformationDetailBuilder(mutableServiceInformationDetail,
+            serviceDetailJsonArray.getJsonObject(j), localCache, serviceId);
+        pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+      }
+      mServiceInformationDetailManager.saveServiceInformationDetail(pMutableServiceInformationDetail);
     }
-    mServiceInformationDetailManager.saveServiceInformationDetail(pMutableServiceInformationDetail);
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -109,7 +108,7 @@ public class ServiceInformationResourceHelper extends
   }
 
   @Override
-  protected ContentManager<ServiceInformation, MutableServiceInformation, Integer> getContentManager() {
+  protected ContentManager<ServiceInformation, MutableServiceInformation, Long> getContentManager() {
     return mManager;
   }
 

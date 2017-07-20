@@ -20,5 +20,5 @@ public interface ServiceInformationDetail extends Serializable, EditType<Mutable
 
   Date getEndDate();
 
-  int getServiceId();
+  Long getServiceId();
 }

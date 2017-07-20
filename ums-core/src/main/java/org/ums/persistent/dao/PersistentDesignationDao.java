@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import jdk.nashorn.internal.objects.annotations.Where;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.DesignationDaoDecorator;
@@ -18,6 +19,13 @@ public class PersistentDesignationDao extends DesignationDaoDecorator {
 
   public PersistentDesignationDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
+  }
+
+  @Override
+  public Designation get(final Integer pDesignationId) {
+    String query = SELECT_ALL + " WHERE DESIGNATION_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pDesignationId},
+        new PersistentDesignationDao.RoleRowMapper());
   }
 
   @Override
