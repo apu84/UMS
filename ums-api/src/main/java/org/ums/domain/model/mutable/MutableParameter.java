@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.Parameter;
 /**
  * Created by My Pc on 3/13/2016.
  */
-public interface MutableParameter extends Parameter, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
+public interface MutableParameter extends Parameter, Editable<String>, MutableLastModifier, MutableIdentifier<String> {
   void setParameter(String pParameter);
 
   void setShortDescription(String pShortDescription);

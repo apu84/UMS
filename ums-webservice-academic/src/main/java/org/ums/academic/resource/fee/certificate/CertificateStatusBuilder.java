@@ -59,7 +59,7 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
   public void build(MutableCertificateStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject.getString("id"));
     pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-    pMutable.setStatus(CertificateStatus.Status.get(pJsonObject.getInt("status")));
+    pMutable.setStatus(CertificateStatus.Status.PROCESSED);
     pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

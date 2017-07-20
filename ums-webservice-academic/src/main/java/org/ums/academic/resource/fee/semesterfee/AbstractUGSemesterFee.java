@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang.Validate;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.immutable.ParameterSetting;
@@ -23,7 +24,8 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
   boolean withInSlot(Parameter.ParameterName parameterName, LateFee.AdmissionType pLateFeeFor, Integer pSemesterId) {
     Date today = new Date();
     ParameterSetting semesterAdmissionDate =
-        getParameterSettingManager().getByParameterAndSemesterId(parameterName.getLabel(), pSemesterId);
+        getParameterSettingManager().getBySemesterAndParameterId(parameterName.getId(), pSemesterId);
+    Validate.notNull(semesterAdmissionDate, "Dates not found for " + parameterName.toString());
     if(semesterAdmissionDate.getStartDate().before(today) && semesterAdmissionDate.getEndDate().after(today)) {
       return true;
     }
@@ -48,11 +50,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
     List<StudentPayment> payments =
         getStudentPaymentManager().getPayments(pStudentId, pSemesterId,
             getFeeTypeManager().get(FeeType.Types.SEMESTER_FEE.getId()));
-    if(payments.size() > 0) {
-      StudentPayment payment = payments.get(0);
-      return payment.getStatus() == StudentPayment.Status.APPLIED;
-    }
-    return false;
+    return payments.stream().anyMatch((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED);
   }
 
   public UGSemesterFeeResponse getInstallmentStatus(Integer pSemesterId) {
@@ -127,7 +125,8 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
 
   private Date getTransactionValidTill(Parameter.ParameterName pParameterName, Integer pSemesterId) {
     ParameterSetting parameterSetting =
-        getParameterSettingManager().getByParameterAndSemesterId(pParameterName.getLabel(), pSemesterId);
+        getParameterSettingManager().getBySemesterAndParameterId(pParameterName.getId(), pSemesterId);
+    Validate.notNull(parameterSetting, "Dates not found for " + pParameterName.toString());
     return parameterSetting.getEndDate();
   }
 

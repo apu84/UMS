@@ -6,6 +6,6 @@ import org.ums.domain.model.mutable.MutableParameter;
 /**
  * Created by My Pc on 3/13/2016.
  */
-public interface ParameterManager extends ContentManager<Parameter, MutableParameter, Long> {
+public interface ParameterManager extends ContentManager<Parameter, MutableParameter, String> {
 
 }

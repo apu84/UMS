@@ -943,7 +943,20 @@ module ums {
           url: "/certificateFee",
           controller: 'CertificateFeeController',
           controllerAs: 'vm',
-          templateUrl: 'views/fee/certificatefee/certificate.fee.html'
+          templateUrl: 'views/fee/certificate/certificate.fee.html'
+        })
+        .state('certificateStatus', {
+          url: "/certificateStatus",
+          controller: 'CertificateStatusController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/certificate/certificate.status.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/select2/select2-madmin.css']
+              });
+            }]
+          }
         })
         .state('studentDues', {
           url: "/studentDues",
@@ -960,6 +973,45 @@ module ums {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/select2/select2-madmin.css']
+              });
+            }]
+          }
+        })
+        .state('installmentSetting', {
+          url: "/installmentSetting",
+          controller: 'InstallmentSettingController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/installment-setting/installment.setting.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('paymentHistory', {
+          url: "/payment-history",
+          controller: 'StudentPaymentHistory',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/history/student.payment.history.html'
+        })
+        .state('payment-status', {
+          url: "/payment-status",
+          controller: 'PaymentStatusList',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/payment-status/payment.status.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                ]
               });
             }]
           }

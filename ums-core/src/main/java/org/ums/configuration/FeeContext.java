@@ -1,6 +1,8 @@
 package org.ums.configuration;
 
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
@@ -55,6 +57,13 @@ public class FeeContext {
   @Autowired
   RoleManager mRoleManager;
 
+  @Autowired
+  @Qualifier("backendSecurityManager")
+  SecurityManager mSecurityManager;
+
+  @Autowired
+  UMSConfiguration mUMSConfiguration;
+
   @Bean
   FeeCategoryManager feeCategoryManager() {
     FeeCategoryCache feeCategoryCache = new FeeCategoryCache(mCacheFactory.getCacheManager());
@@ -105,7 +114,8 @@ public class FeeContext {
 
   @Bean
   StudentPaymentManager studentPaymentManager() {
-    PostPaymentActions postPaymentActions = new PostPaymentActions(certificateStatusManager(), studentDuesManager());
+    PostStudentPaymentActions postPaymentActions =
+        new PostStudentPaymentActions(studentDuesManager(), installmentStatusManager());
     StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
     studentPaymentDao.setManager(postPaymentActions);
     return studentPaymentDao;
@@ -118,11 +128,15 @@ public class FeeContext {
 
   @Bean
   PaymentStatusManager paymentStatusManager() {
-    return new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    PostPaymentActions postPaymentActions =
+        new PostPaymentActions(certificateStatusManager(), installmentStatusManager(), studentPaymentManager());
+    PaymentStatusDao paymentStatusDao = new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    paymentStatusDao.setManager(postPaymentActions);
+    return paymentStatusDao;
   }
 
   @Bean
   PaymentValidator paymentValidator() {
-    return new PaymentValidatorJob(studentPaymentManager());
+    return new PaymentValidatorJob(studentPaymentManager(), mSecurityManager, mUMSConfiguration);
   }
 }

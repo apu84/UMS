@@ -135,6 +135,12 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper());
   }
 
+  @Override
+  public List<StudentPayment> getTransactionDetails(String pTransactionId) {
+    String query = SELECT_ALL + "WHERE TRANSACTION_ID = ? " + ORDER_BY;
+    return mJdbcTemplate.query(query, new Object[] {pTransactionId}, new StudentPaymentRowMapper());
+  }
+
   class StudentPaymentRowMapper implements RowMapper<StudentPayment> {
     @Override
     public StudentPayment mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -13,7 +13,7 @@ import org.ums.domain.model.mutable.MutableParameter;
 /**
  * Created by My Pc on 3/13/2016.
  */
-public interface Parameter extends Serializable, LastModifier, EditType<MutableParameter>, Identifier<Long> {
+public interface Parameter extends Serializable, LastModifier, EditType<MutableParameter>, Identifier<String> {
   String getParameter();
 
   String getShortDescription();
@@ -23,34 +23,32 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
   int getType();
 
   enum ParameterName {
-    ORIENTATION(1L, "orientation"),
-    CLASS_BF_MIDTERM(2L, "cls_bf_mid"),
-    MIDTERM_BREAK(3L, "midterm_break"),
-    CLASS_AFTER_MIDTERM(4L, "cls_af_mid"),
-    FAREWELL(5L, "farewell"),
-    PL(6L, "pre_leave"),
-    EXAM_RESULT(7L, "ex_res"),
-    CCI(8L, "clr_imp_co"),
-    APPLICATION_SEMESTER_WITHDRAW(9L, "application_semester_withdraw"),
-    APPLICATION_CCI(10L, "application_cci"),
-    APPLICATION_READMISSION(11L, "application_readmission"),
-    REGUALR_ADMISSION(12L, "semester_admission"),
-    REGULAR_FIRST_INSTALLMENT(13L, "first_installment_for_regular_admission"),
-    REGULAR_SECOND_INSTALLMENT(14L, "second_installment_for_regular_admission"),
-    READMISSION(15L, "readmission"),
-    READMISSION_FIRST_INSTALLMENT(16L, "first_installment_for_readmission"),
-    READMISSION_SECOND_INSTALLMENT(17L, "second_installment_for_readmission"),
-    NONE(0L, "");
+    ORIENTATION("1"),
+    CLASS_BF_MIDTERM("2"),
+    MIDTERM_BREAK("3"),
+    CLASS_AFTER_MIDTERM("4"),
+    FAREWELL("5"),
+    PL("6"),
+    EXAM_RESULT("7"),
+    CCI("8"),
+    APPLICATION_SEMESTER_WITHDRAW("9"),
+    APPLICATION_CCI("10"),
+    APPLICATION_READMISSION("11"),
+    REGULAR_ADMISSION("12"),
+    REGULAR_FIRST_INSTALLMENT("13"),
+    REGULAR_SECOND_INSTALLMENT("14"),
+    READMISSION("15"),
+    READMISSION_FIRST_INSTALLMENT("16"),
+    READMISSION_SECOND_INSTALLMENT("17"),
+    NONE("0");
 
-    private String label;
-    private Long id;
+    private String id;
 
-    ParameterName(long id, String label) {
+    ParameterName(String id) {
       this.id = id;
-      this.label = label;
     }
 
-    private static final Map<Long, ParameterName> lookup = new HashMap<>();
+    private static final Map<String, ParameterName> lookup = new HashMap<>();
 
     static {
       for(ParameterName c : EnumSet.allOf(ParameterName.class)) {
@@ -58,17 +56,12 @@ public interface Parameter extends Serializable, LastModifier, EditType<MutableP
       }
     }
 
-    public static ParameterName get(final int pId) {
+    public static ParameterName get(final String pId) {
       return lookup.get(pId);
     }
 
-    public String getLabel() {
-      return this.label;
-    }
-
-    public Long getId() {
+    public String getId() {
       return this.id;
     }
-
   }
 }

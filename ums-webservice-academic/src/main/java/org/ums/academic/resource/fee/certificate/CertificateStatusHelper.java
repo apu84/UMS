@@ -15,12 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeType;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.certificate.MutableCertificateStatus;
 import org.ums.fee.certificate.PersistentCertificateStatus;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.resource.filter.FilterItem;
 
 @Component
 public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, MutableCertificateStatus, Long> {
@@ -28,6 +32,8 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
   CertificateStatusBuilder mCertificateStatusBuilder;
   @Autowired
   CertificateStatusManager mCertificateStatusManager;
+
+  private List<FilterItem> mFilterItems;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -50,9 +56,9 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     return jsonObjectBuilder.build();
   }
 
-  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, Integer status, UriInfo pUriInfo) {
+  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, JsonObject pJsonObject, UriInfo pUriInfo) {
     List<CertificateStatus> certificateStatusList =
-        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, CertificateStatus.Status.get(status));
+        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject));
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     certificateStatusList.forEach((certificate) -> {
@@ -61,6 +67,9 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
     addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    if(certificateStatusList.size() > 0) {
+      addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
     if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
@@ -83,7 +92,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
       JsonObjectBuilder pJsonObjectBuilder) {
     UriBuilder builder = pUriInfo.getBaseUriBuilder();
     Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
-    builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
+    builder.path(pUriInfo.getPath()).queryParam("pageNumber", nextPage).queryParam("itemsPerPage", itemsPerPage);
     pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 
@@ -125,5 +134,27 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
   @Override
   protected String getETag(CertificateStatus pReadonly) {
     return pReadonly.getLastModified();
+  }
+
+  JsonArray getFilterItems() {
+    if(mFilterItems == null) {
+      mFilterItems = buildFilter();
+    }
+    return getFilterJson(mFilterItems);
+  }
+
+  private List<FilterItem> buildFilter() {
+    List<FilterItem> filters = new ArrayList<>();
+
+    filters.add(new FilterItem("Student Id", CertificateStatusManager.FilterCriteria.STUDENT_ID.toString(),
+        FilterItem.Type.INPUT));
+
+    FilterItem status =
+        new FilterItem("Status", CertificateStatusManager.FilterCriteria.STATUS.toString(), FilterItem.Type.SELECT);
+    status.addOption("Applied", 1);
+    status.addOption("Processed", 2);
+    filters.add(status);
+
+    return filters;
   }
 }

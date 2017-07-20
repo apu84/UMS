@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="select2-container select2-container-multi form-control">
+            <ul class="select2-choices">
+                <li class="select2-search-choice ms-hover" data-ng-repeat="selectedFilter in vm.selectedFilters">
+                    <div>{{selectedFilter.filter.label}} : {{selectedFilter.value.label?
+                        selectedFilter.value.label : selectedFilter.value.value}}
+                    </div>
+                    <a href class="select2-search-choice-close" tabindex="-1"
+                       data-ng-click="vm.removeFilter(selectedFilter.id)"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                <select class="form-control" data-ng-model="vm.selectedFilter" data-ng-change="vm.setFilter()">
+                    <option value="{{::filter.value}}" data-ng-repeat="filter in vm.filters">
+                        {{::filter.label}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-5" data-ng-include="'views/fee/filter/filter.'+ vm.filter.type +'.html'" data-ng-if="vm.filter.type">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-success" data-ng-click="vm.addFilter()">Add Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -3,6 +3,7 @@ package org.ums.fee.dues;
 import java.util.List;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.filter.ListFilter;
 
 public class StudentDuesDaoDecorator extends
     ContentDaoDecorator<StudentDues, MutableStudentDues, Long, StudentDuesManager> implements StudentDuesManager {
@@ -12,7 +13,7 @@ public class StudentDuesDaoDecorator extends
   }
 
   @Override
-  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
-    return getManager().paginatedList(itemsPerPage, pageNumber, pFilterCriteria);
+  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+    return getManager().paginatedList(itemsPerPage, pageNumber, pFilters);
   }
 }

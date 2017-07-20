@@ -27,7 +27,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   private Semester mSemester;
   private Integer mSemesterId;
   private Parameter mParameter;
-  private Long mParameterId;
+  private String mParameterId;
   private Date mStartDate;
   private Date mEndDate;
   private String mLastModified;
@@ -55,11 +55,11 @@ public class PersistentParameterSetting implements MutableParameterSetting {
     mSemesterId = pSemesterId;
   }
 
-  public Long getParameterId() {
+  public String getParameterId() {
     return mParameterId;
   }
 
-  public void setParameterId(Long pParameterId) {
+  public void setParameterId(String pParameterId) {
     mParameterId = pParameterId;
   }
 

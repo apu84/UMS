@@ -20,6 +20,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
@@ -110,6 +111,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/filter.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/payment-status/payment.status.model.ts'/>
 /// <reference path='ums.ts'/>
 /// <reference path='data.ts'/>
 
@@ -221,6 +224,7 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/date.range.picker.ts'/>
 
 /// <reference path='student/student.info.service.ts'/>
 
@@ -230,6 +234,7 @@
 /// <reference path='fee/semesterfee/semesterfee.service.ts'/>
 /// <reference path='fee/semesterfee/semesterfee.controller.ts'/>
 /// <reference path='fee/installment/installment.setting.service.ts'/>
+/// <reference path='fee/installment/installment.setting.controller.ts'/>
 /// <reference path='fee/payment/payment.service.ts'/>
 /// <reference path='fee/certificate/certificate.fee.controller.ts'/>
 /// <reference path='fee/certificate/certificate.fee.service.ts'/>
@@ -237,9 +242,12 @@
 /// <reference path='fee/dues/student.dues.service.ts'/>
 /// <reference path='fee/dues/student.dues.controller.ts'/>
 /// <reference path='fee/dues/list.dues.controller.ts'/>
-/// <reference path='fee/dues/dues.filter.directive.ts'/>
-/// <reference path='fee/dues/dues.categories.directive.ts'/>
-/// <reference path='fee/dues/dues.status.directive.ts'/>
 /// <reference path='fee/dues/add.dues.controller.ts'/>
+/// <reference path='fee/certificate/certificate.status.controller.ts'/>
 /// <reference path='fee/fee.category.service.ts'/>
 /// <reference path='fee/fee.type.service.ts'/>
+/// <reference path='fee/filter/list.filter.directive.ts'/>
+/// <reference path='fee/report/report.service.ts'/>
+/// <reference path='fee/payment/student.payment.history.controller.ts'/>
+/// <reference path='fee/payment/payment.status.controller.ts'/>
+/// <reference path='fee/payment/payment.status.service.ts'/>

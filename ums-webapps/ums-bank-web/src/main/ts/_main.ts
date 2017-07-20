@@ -81,8 +81,18 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApi.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApiImpl.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/filter.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/payment-status/payment.status.model.ts'/>
+
 /// <reference path='data.ts'/>
 /// <reference path='controller/admission/AdmissionFee.ts'/>
+/// <reference path='fee/conclude.payment.ts'/>
+/// <reference path='fee/payment.confirmation.ts'/>
+/// <reference path='fee/payment.status.controller.ts'/>
+/// <reference path='fee/receive.payment.controller.ts'/>
+/// <reference path='fee/receive.payment.service.ts'/>
+/// <reference path='fee/payment.status.service.ts'/>
+
 
 
 

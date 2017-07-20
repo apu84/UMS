@@ -9,12 +9,10 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.immutable.ApplicationCCI;
-import org.ums.domain.model.immutable.ParameterSetting;
-import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.UGRegistrationResult;
+import org.ums.domain.model.immutable.*;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.UGRegistrationResultManager;
@@ -40,7 +38,8 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
       List<UGRegistrationResult> results, Student pStudent) {
     Date date = new Date();
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId("application_cci", pStudent.getSemesterId());
+        mParameterSettingManager.getBySemesterAndParameterId(Parameter.ParameterName.APPLICATION_CCI.getId(),
+            pStudent.getSemesterId());
     Timestamp currentTimestamp = new Timestamp(date.getTime());
 
     Date startDate, endDate;
