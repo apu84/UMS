@@ -238,7 +238,7 @@ module ums {
         let timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
         let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         this.leaveApplication.duration = diffDays + 1;
-        if (this.remainingLeavesMap[this.leaveType.id].daysLeft < this.leaveApplication.duration) {
+        if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days left for the leave type");
         }
 
@@ -264,11 +264,13 @@ module ums {
       this.remainingLeaves = [];
       this.remainingLeavesMap = {};
       this.leaveApplicationService.fetchRemainingLeaves().then((leaves: Array<RemainingLmsLeave>) => {
+
         for (let i = 0; i < leaves.length; i++) {
           this.remainingLeaves.push(leaves[i]);
           this.remainingLeavesMap[leaves[i].leaveTypeId] = this.remainingLeaves[i];
         }
         console.log("remaining leave map");
+        console.log(leaves);
         console.log(this.remainingLeavesMap);
       });
     }
@@ -304,7 +306,7 @@ module ums {
         if (this.leaveApplication.fromDate == null || this.leaveApplication.toDate == null || this.leaveApplication.reason == null) {
           this.notify.error("Please fill up all the fields");
         }
-        else if (this.remainingLeavesMap[this.leaveType.id].daysLeft < this.leaveApplication.duration) {
+        else if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days of the leave type");
         }
         else if (foundOccurance) {

@@ -5,6 +5,7 @@ module ums {
   export interface RemainingLmsLeave {
     leaveTypeId: number;
     leaveName: string;
-    daysLeft: number;
+    daysLeft: string;
+    daysLeftNumber: number;
   }
 }

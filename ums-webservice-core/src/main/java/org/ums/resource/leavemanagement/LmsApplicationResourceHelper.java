@@ -250,7 +250,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
       jsonObject.add("daysLeft", applicationMap.get(lmsType.getId()) != null ? getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken) : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
-      children.add(jsonObject);
+        jsonObject.add("daysLeftNumber", applicationMap.get(lmsType.getId()) != null ? lmsType.getMaxDuration() - leavesTaken : lmsType.getMaxDuration());
+
+        children.add(jsonObject);
     }
     object.add("entries", children);
     localCache.invalidate();
