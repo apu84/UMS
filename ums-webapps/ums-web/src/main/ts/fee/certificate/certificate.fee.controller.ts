@@ -1,6 +1,6 @@
 module ums {
   export class CertificateFeeController {
-    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService'];
+    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService'];
     public attendedSemesters: AttendedSemester[];
     public certificateTypes: FeeCategory[];
     public payments: Payment[];
@@ -12,7 +12,8 @@ module ums {
 
     constructor(private certificateFeeService: CertificateFeeService,
                 private paymentService: PaymentService,
-                private certificateStatusService: CertificateStatusService) {
+                private certificateStatusService: CertificateStatusService,
+                private feeReportService: FeeReportService) {
       this.certificateFeeService.getFeeCategories().then(
           (feeCategories: FeeCategory[]) => {
             this.certificateTypes = feeCategories;
@@ -63,6 +64,9 @@ module ums {
           });
     }
 
+    public receipt(transactionId: string): void {
+      this.feeReportService.receipt(transactionId);
+    }
   }
 
   UMS.controller('CertificateFeeController', CertificateFeeController);

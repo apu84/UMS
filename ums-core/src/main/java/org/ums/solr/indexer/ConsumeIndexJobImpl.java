@@ -8,11 +8,15 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.Query;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.configuration.UMSConfiguration;
 import org.ums.lock.LockManager;
 import org.ums.lock.MutableLock;
 import org.ums.lock.PersistentLock;
@@ -30,46 +34,53 @@ public class ConsumeIndexJobImpl implements ConsumeIndex {
   private IndexConsumerManager mIndexConsumerManager;
   private LockManager mLockManager;
   private EntityResolverFactory mEntityResolverFactory;
+  private SecurityManager mSecurityManager;
+  private UMSConfiguration mUMSConfiguration;
 
   public ConsumeIndexJobImpl(IndexManager pIndexManager, IndexConsumerManager pIndexConsumerManager,
-      EntityResolverFactory pEntityResolverFactory, LockManager pLockManager) {
+      EntityResolverFactory pEntityResolverFactory, LockManager pLockManager, SecurityManager pSecurityManager,
+      UMSConfiguration pUMSConfiguration) {
     mIndexManager = pIndexManager;
     mIndexConsumerManager = pIndexConsumerManager;
     mEntityResolverFactory = pEntityResolverFactory;
     mLockManager = pLockManager;
+    mSecurityManager = pSecurityManager;
+    mUMSConfiguration = pUMSConfiguration;
   }
 
   @Override
-  @Scheduled(fixedDelay = 30000, initialDelay = 60000)
+  @Scheduled(fixedDelay = 30000, initialDelay = 240000)
   @Transactional
   public void consume() {
-    // acquire lock
-    MutableLock lock = new PersistentLock();
-    lock.setId("indexLock");
-    mLockManager.create(lock);
+    if(login()) {
+      // acquire lock
+      MutableLock lock = new PersistentLock();
+      lock.setId("indexLock");
+      mLockManager.create(lock);
 
-    List<String> endpoints = getEndPoints();
-    if(endpoints.size() > 0) {
-      String host = endpoints.get(0).split(":")[0];
-      String port = endpoints.get(0).split(":")[1];
-      MutableIndexConsumer consumer;
-      if(!mIndexConsumerManager.exists(host, port)) {
-        createNewIndexConsumer(host, port);
-      }
-      IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
-      consumer = indexConsumer.edit();
-
-      List<Index> indexList = mIndexManager.after(consumer.getHead());
-      if(indexList.size() > 0) {
-        // SOLR index
-        for(Index index : indexList) {
-          mEntityResolverFactory.resolve(index);
+      List<String> endpoints = getEndPoints();
+      if(endpoints.size() > 0) {
+        String host = endpoints.get(0).split(":")[0];
+        String port = endpoints.get(0).split(":")[1];
+        MutableIndexConsumer consumer;
+        if(!mIndexConsumerManager.exists(host, port)) {
+          createNewIndexConsumer(host, port);
         }
-        consumer.setHead(indexList.get(indexList.size() - 1).getModified());
+        IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
+        consumer = indexConsumer.edit();
+
+        List<Index> indexList = mIndexManager.after(consumer.getHead());
+        if(indexList.size() > 0) {
+          // SOLR index
+          for(Index index : indexList) {
+            mEntityResolverFactory.resolve(index);
+          }
+          consumer.setHead(indexList.get(indexList.size() - 1).getModified());
+        }
+        consumer.update();
       }
-      consumer.update();
+      mLockManager.delete(lock);
     }
-    mLockManager.delete(lock);
   }
 
   private void createNewIndexConsumer(String pHost, String pPort) {
@@ -106,5 +117,21 @@ public class ConsumeIndexJobImpl implements ConsumeIndex {
       mLogger.error("Exception while getting server address", e);
     }
     return endPoints;
+  }
+
+  private boolean login() {
+    SecurityUtils.setSecurityManager(mSecurityManager);
+    Subject subject = SecurityUtils.getSubject();
+    UsernamePasswordToken token =
+        new UsernamePasswordToken(mUMSConfiguration.getBackendUser(), mUMSConfiguration.getBackendUserPassword());
+
+    try {
+      // Authenticate the subject
+      subject.login(token);
+      return true;
+    } catch(Exception e) {
+      mLogger.error("Exception while login using back end user ", e);
+    }
+    return false;
   }
 }

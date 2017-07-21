@@ -47,6 +47,7 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
     RECEIVED(1),
     REJECTED(2),
     EXPIRED(3),
+    VERIFIED(4),
     APPLIED(0);
 
     private static final Map<Integer, Status> lookup = new HashMap<>();

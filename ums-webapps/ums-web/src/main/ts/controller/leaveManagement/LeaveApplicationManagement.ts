@@ -206,6 +206,8 @@ module ums {
 
     private dateChanged() {
       console.log("In the date changed");
+        console.log(this.leaveApplication.fromDate);
+        console.log(this.leaveApplication.toDate);
       let thisScope = this;
       setTimeout(function () {
         thisScope.getTotalDuration();
@@ -275,11 +277,12 @@ module ums {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
-          console.log("Save message");
-          console.log(message);
-          this.leaveApplication = <LmsApplication>{};
-          this.leaveType = this.leaveTypes[0];
-          this.data.totalLeaveDurationInDays = 0;
+          if(message.message==null){
+              this.leaveApplication = <LmsApplication>{};
+              this.leaveType = this.leaveTypes[0];
+              this.data.totalLeaveDurationInDays = 0;
+          }
+
         });
       });
     }
@@ -311,11 +314,18 @@ module ums {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
-              this.appId = message[0].id;
-              this.saveAttachments(message[0].id);
-              this.leaveApplication = <LmsApplication>{};
-              this.leaveType = this.leaveTypes[0];
-              this.getPendingApplications();
+                console.log("********");
+                console.log(message);
+                if(message[0].message==""){
+                    this.appId = message[0].id;
+                    this.saveAttachments(message[0].id);
+                    this.leaveApplication = <LmsApplication>{};
+                    this.leaveType = this.leaveTypes[0];
+                    this.getPendingApplications();
+                }else{
+                    this.leaveApplication = <LmsApplication>{};
+                }
+
             });
           });
         }

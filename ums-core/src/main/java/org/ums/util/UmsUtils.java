@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -262,5 +265,10 @@ public class UmsUtils {
     LocalDateTime localDateTime = pDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     localDateTime = localDateTime.plusDays(noOfDayToAdd);
     return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
 }

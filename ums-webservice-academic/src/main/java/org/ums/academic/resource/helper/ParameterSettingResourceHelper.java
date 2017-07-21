@@ -69,7 +69,7 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     return object.build();
   }
 
-  public JsonObject getByParameterIdAndSemesterId(final int pParameterId, final int pSemesterId,
+  public JsonObject getByParameterIdAndSemesterId(final String pParameterId, final int pSemesterId,
       final Request pRequest, final UriInfo pUriInfo) {
     ParameterSetting parameterSettings = getContentManager().getBySemesterAndParameterId(pParameterId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -88,7 +88,7 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     ParameterSetting parameterSettings =
-        getContentManager().getByParameterAndSemesterId(parameter, student.getSemester().getId());
+        getContentManager().getBySemesterAndParameterId(parameter, student.getSemester().getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 
-class PersistentSemesterAdmissionStatus implements MutableSemesterAdmissionStatus {
+public class PersistentSemesterAdmissionStatus implements MutableSemesterAdmissionStatus {
 
   private static SemesterManager sSemesterManager;
   private static StudentManager sStudentManager;

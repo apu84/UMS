@@ -41,7 +41,7 @@ public class PersistentParameterDao extends ParameterDaoDecorator {
   }
 
   @Override
-  public Parameter get(Long pId) {
+  public Parameter get(String pId) {
     String query = SELECT_ALL + " WHERE PARAMETER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterRowMapper());
   }
@@ -59,20 +59,12 @@ public class PersistentParameterDao extends ParameterDaoDecorator {
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
-  @Override
-  public Long create(MutableParameter pMutable) {
-    Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getParameter(), pMutable.getShortDescription(),
-        pMutable.getLongDescription(), pMutable.getType());
-    return id;
-  }
-
   class ParameterRowMapper implements RowMapper<Parameter> {
     @Override
     public Parameter mapRow(ResultSet pResultSet, int pI) throws SQLException {
 
       PersistentParameter parameter = new PersistentParameter();
-      parameter.setId(pResultSet.getLong("PARAMETER_ID"));
+      parameter.setId(pResultSet.getString("PARAMETER_ID"));
       parameter.setParameter(pResultSet.getString("PARAMETER"));
       parameter.setShortDescription(pResultSet.getString("SHORT_DESCRIPTION"));
       parameter.setLongDescription(pResultSet.getString("LONG_DESCRIPTION"));

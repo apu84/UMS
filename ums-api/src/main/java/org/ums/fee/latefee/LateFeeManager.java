@@ -6,4 +6,6 @@ import org.ums.manager.ContentManager;
 
 public interface LateFeeManager extends ContentManager<LateFee, MutableLateFee, Long> {
   List<LateFee> getLateFees(final Integer pSemesterId);
+
+  List<LateFee> getLateFees(final Integer pSemesterId, LateFee.AdmissionType pAdmissionType);
 }

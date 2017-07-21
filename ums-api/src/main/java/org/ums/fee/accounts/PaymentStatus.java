@@ -19,7 +19,7 @@ public interface PaymentStatus extends Serializable, EditType<MutablePaymentStat
 
   PaymentMethod getMethodOfPayment();
 
-  boolean isPaymentComplete();
+  Status getStatus();
 
   Date getReceivedOn();
 
@@ -28,6 +28,8 @@ public interface PaymentStatus extends Serializable, EditType<MutablePaymentStat
   BigDecimal getAmount();
 
   String getPaymentDetails();
+
+  String getReceiptNo();
 
   enum PaymentMethod {
     CASH(1, "CASH"),
@@ -51,6 +53,40 @@ public interface PaymentStatus extends Serializable, EditType<MutablePaymentStat
     }
 
     public static PaymentMethod get(final int pId) {
+      return lookup.get(pId);
+    }
+
+    public String getLabel() {
+      return this.label;
+    }
+
+    public int getId() {
+      return this.id;
+    }
+  }
+
+  enum Status {
+    VERIFIED(1, "Received & Verified"),
+    REJECTED(2, "Rejected"),
+    RECEIVED(0, "Received");
+
+    private String label;
+    private int id;
+
+    Status(int id, String label) {
+      this.id = id;
+      this.label = label;
+    }
+
+    private static final Map<Integer, Status> lookup = new HashMap<>();
+
+    static {
+      for(Status c : EnumSet.allOf(Status.class)) {
+        lookup.put(c.getId(), c);
+      }
+    }
+
+    public static Status get(final int pId) {
       return lookup.get(pId);
     }
 

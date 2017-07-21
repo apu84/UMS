@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
+import org.ums.enums.common.LeaveCategories;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.usermanagement.role.Role;
@@ -77,5 +78,11 @@ public class LmsAppStatusCache extends ContentCache<LmsAppStatus, MutableLmsAppS
   @Override
   public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType) {
     return getManager().getApplicationsApprovedOfTheDay(pDepartmentType);
+  }
+
+  @Override
+  public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
+      LeaveCategories pLeaveCategories, int pageNumber, int totalSize) {
+    return getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories, pageNumber, totalSize);
   }
 }

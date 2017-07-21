@@ -12,6 +12,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.Validate;
+import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,11 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.fee.UGFee;
-import org.ums.fee.UGFeeManager;
-import org.ums.fee.dues.*;
+import org.ums.fee.*;
+import org.ums.fee.dues.MutableStudentDues;
+import org.ums.fee.dues.PersistentStudentDues;
+import org.ums.fee.dues.StudentDues;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -29,6 +32,7 @@ import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.StudentManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.resource.filter.FilterItem;
 
 @Component
 public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStudentDues, Long> {
@@ -42,6 +46,12 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
   private StudentManager mStudentManager;
   @Autowired
   private StudentPaymentManager mStudentPaymentManager;
+  @Autowired
+  private FeeCategoryManager mFeeCategoryManager;
+  @Autowired
+  private FeeTypeManager mFeeTypeManager;
+
+  private List<FilterItem> mFilterItems;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -122,39 +132,48 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    if(duesList.size() > 0) {
+      addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
     if(pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
   }
 
-  private List<FilterCriteria> buildFilterQuery(JsonObject pFilter) {
-    List<FilterCriteria> filterCriteria = new ArrayList<>();
-    if(pFilter.containsKey("entries")) {
-      JsonArray entries = pFilter.getJsonArray("entries");
-      entries.forEach((entry) -> {
-        JsonObject filter = (JsonObject) entry;
-        filterCriteria.add(new FilterCriteria() {
-          @Override
-          public Criteria getCriteria() {
-            return Criteria.valueOf(filter.getString("key"));
-          }
-
-          @Override
-          public Object getValue() {
-            if(filter.get("value").getValueType() == JsonValue.ValueType.NUMBER) {
-              return filter.getInt("value");
-            }
-            else if(filter.get("value").getValueType() == JsonValue.ValueType.STRING) {
-              return filter.getString("value");
-            }
-            return filter.get("value");
-          }
-        });
-      });
+  JsonArray getFilterItems() {
+    if(mFilterItems == null) {
+      mFilterItems = buildFilter();
     }
-    return filterCriteria;
+    return getFilterJson(mFilterItems);
+  }
+
+  private List<FilterItem> buildFilter() {
+    List<FilterItem> filters = new ArrayList<>();
+
+    filters.add(new FilterItem("Student Id", StudentDuesManager.FilterCriteria.STUDENT_ID.toString(),
+        FilterItem.Type.INPUT));
+
+    FilterItem status =
+        new FilterItem("Due status", StudentDuesManager.FilterCriteria.DUE_STATUS.toString(), FilterItem.Type.SELECT);
+    status.addOption("Not paid", 0);
+    status.addOption("Applied", 1);
+    status.addOption("Paid", 2);
+    filters.add(status);
+
+    FilterItem type =
+        new FilterItem("Due type", StudentDuesManager.FilterCriteria.DUE_TYPE.toString(), FilterItem.Type.SELECT);
+    for(FeeType feeType : mFeeTypeManager.getAll()) {
+      if(feeType.getName().equalsIgnoreCase(FeeType.Types.PENALTY.name())
+          || feeType.getName().equalsIgnoreCase(FeeType.Types.DUES.name())) {
+        for(FeeCategory category : mFeeCategoryManager.getFeeCategories(feeType.getId())) {
+          type.addOption(category.getDescription(), category.getId());
+        }
+      }
+    }
+    filters.add(type);
+
+    return filters;
   }
 
   private void validateDues(String studentId, StudentDues dues) {
@@ -182,9 +201,9 @@ public class StudentDuesHelper extends ResourceHelper<StudentDues, MutableStuden
 
   private void addLink(String direction, Integer pCurrentPage, Integer itemsPerPage, UriInfo pUriInfo,
       JsonObjectBuilder pJsonObjectBuilder) {
-    UriBuilder builder = pUriInfo.getBaseUriBuilder();
+    UriBuilder builder = new JerseyUriBuilder();
     Integer nextPage = direction.equalsIgnoreCase("next") ? pCurrentPage + 1 : pCurrentPage - 1;
-    builder.path(pUriInfo.getPath()).queryParam("page", nextPage).queryParam("itemsPerPage", itemsPerPage);
+    builder.path(pUriInfo.getPath()).queryParam("pageNumber", nextPage).queryParam("itemsPerPage", itemsPerPage);
     pJsonObjectBuilder.add(direction, builder.build().toString());
   }
 

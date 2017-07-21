@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.services.academic.SeatPlanServiceImpl;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -15,8 +17,11 @@ public class UncaughtExceptionMapper extends Throwable implements javax.ws.rs.ex
   @Override
   public Response toResponse(Throwable e) {
     mLogger.error("Uncaught exception: ", e);
-    return Response
-        .status(new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage()))
-        .type(MediaType.APPLICATION_JSON_TYPE).build();
+    CustomReasonPhraseExceptionStatusType error =
+        new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+    JsonObjectBuilder errorObject = Json.createObjectBuilder();
+    errorObject.add("reason", error.getReasonPhrase());
+    return Response.status(error.getStatusCode()).entity(errorObject.build()).type(MediaType.APPLICATION_JSON_TYPE)
+        .build();
   }
 }

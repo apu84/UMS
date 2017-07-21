@@ -5,18 +5,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.immutable.Student;
 import org.ums.fee.*;
 import org.ums.fee.latefee.LateFee;
 import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.StudentPaymentManager;
-import org.ums.fee.semesterfee.InstallmentSettingsManager;
-import org.ums.fee.semesterfee.InstallmentStatusManager;
-import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
+import org.ums.fee.semesterfee.*;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.StudentManager;
-import org.ums.manager.StudentRecordManager;
 
 @Component
 class UGRegularSemesterFee extends AbstractUGSemesterFee {
@@ -101,7 +99,7 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Override
   public boolean withInAdmissionSlot(Integer pSemesterId) {
     UGSemesterFeeResponse installmentStatus = getInstallmentStatus(pSemesterId);
-    return withInSlot(Parameter.ParameterName.REGUALR_ADMISSION, LateFee.AdmissionType.REGULAR_ADMISSION, pSemesterId)
+    return withInSlot(Parameter.ParameterName.REGULAR_ADMISSION, LateFee.AdmissionType.REGULAR_ADMISSION, pSemesterId)
         || (installmentStatus == UGSemesterFeeResponse.INSTALLMENT_AVAILABLE && (withinFirstInstallmentSlot(pSemesterId) || withinSecondInstallmentSlot(pSemesterId)));
   }
 
@@ -119,23 +117,45 @@ class UGRegularSemesterFee extends AbstractUGSemesterFee {
   public UGSemesterFeeResponse pay(String pStudentId, Integer pSemesterId) {
     // TODO: Validate payment request
     return !withInAdmissionSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        getFee(pStudentId, pSemesterId), Parameter.ParameterName.REGUALR_ADMISSION, pStudentId, pSemesterId);
+        getFee(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_ADMISSION, pStudentId, pSemesterId);
   }
 
   @Override
   public UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
     // TODO: Validate payment request
-    return !withinFirstInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_FIRST_INSTALLMENT, pStudentId,
-        pSemesterId);
+    if(!withinFirstInstallmentSlot(pSemesterId)) {
+      return UGSemesterFeeResponse.NOT_WITHIN_SLOT;
+    }
+    else {
+      MutableInstallmentStatus installmentStatus = new PersistentInstallmentStatus();
+      installmentStatus.setInstallmentOrder(1);
+      installmentStatus.setStudentId(pStudentId);
+      installmentStatus.setSemesterId(pSemesterId);
+      installmentStatus.setPaymentCompleted(false);
+      installmentStatus.create();
+
+      return payFee(firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_FIRST_INSTALLMENT,
+          pStudentId, pSemesterId);
+    }
   }
 
   @Override
   public UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
     // TODO: Validate payment request
-    return !withinSecondInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_SECOND_INSTALLMENT, pStudentId,
-        pSemesterId);
+    if(!withinSecondInstallmentSlot(pSemesterId)) {
+      return UGSemesterFeeResponse.NOT_WITHIN_SLOT;
+    }
+    else {
+      MutableInstallmentStatus installmentStatus = new PersistentInstallmentStatus();
+      installmentStatus.setInstallmentOrder(2);
+      installmentStatus.setStudentId(pStudentId);
+      installmentStatus.setSemesterId(pSemesterId);
+      installmentStatus.setPaymentCompleted(false);
+      installmentStatus.create();
+
+      return payFee(secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.REGULAR_SECOND_INSTALLMENT,
+          pStudentId, pSemesterId);
+    }
   }
 
   @Override

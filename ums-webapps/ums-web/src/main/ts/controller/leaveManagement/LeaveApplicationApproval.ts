@@ -11,7 +11,10 @@ module ums {
 
   class LeaveApplicationApproval {
 
-    public leaveApprovalStatusList: Array<IConstants>;
+      public leaveTypes: Array<LmsType>;
+      public leaveType: LmsType;
+
+      public leaveApprovalStatusList: Array<IConstants>;
     public leaveApprovalStatus: IConstants;
     public fileAttachments: Array<Attachment> = [];
     public itemsPerPage: number;
@@ -86,7 +89,20 @@ module ums {
       //this.getLeaveApplications();
       this.getUsersInformation();
       this.getAdditionaPermissions();
+      this.getLeaveTypes();
+
     }
+
+      private getLeaveTypes() {
+        console.log("*********");
+          this.leaveTypes = [];
+          this.leaveType = <LmsType>{};
+          this.leaveTypeService.fetchLeaveTypes().then((leaveTypes) => {
+              this.leaveTypes = leaveTypes;
+              this.leaveType = this.leaveTypes[0];
+
+          });
+      }
 
     private showActiveLeaveSection() {
       this.activeLeaveSection = true;
@@ -99,15 +115,26 @@ module ums {
       });
     }
 
+    private updateLeaveType(leaveType: LmsType){
+        this.leaveType = leaveType;
+        this.fetchActiveLeaves(this.deptOffice);
+    }
+
     private fetchActiveLeaves(deptOffice: IConstants) {
-      this.pagination.currentPage = 1;
-      this.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchLeaveApplicationsActiveOnTheDay(deptOffice.id, this.pagination.currentPage, this.itemsPerPage).then((apps) => {
-        this.pendingApplications = apps.statusList;
-        this.totalItems = apps.totalSize;
-        console.log("active leaves");
-        console.log(apps);
-      });
+        if(this.leaveType!=null){
+            this.pagination.currentPage = 1;
+            this.pendingApplications = [];
+
+            console.log("Want to see leave type");
+            console.log(this.leaveType);
+            this.leaveApplicationStatusService.fetchLeaveApplicationsActiveOnTheDay(deptOffice.id,+this.leaveType.id, this.pagination.currentPage, this.itemsPerPage).then((apps) => {
+                this.pendingApplications = apps.statusList;
+                this.totalItems = apps.totalSize;
+                console.log("active leaves");
+                console.log(apps);
+            });
+        }
+
     }
 
     private closeActiveLeaveSection() {

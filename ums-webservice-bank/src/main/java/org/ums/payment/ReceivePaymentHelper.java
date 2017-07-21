@@ -63,7 +63,15 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
     LocalCache cache = new LocalCache();
-    BigDecimal amount = new BigDecimal(0);
+
+    Validate.notNull(pJsonObject.get("methodOfPayment"));
+    int mop = Integer.parseInt(pJsonObject.getString("methodOfPayment"));
+    Validate.notNull(pJsonObject.get("receiptNo"));
+    String receiptNo = pJsonObject.getString("receiptNo");
+    String paymentDetails = null;
+    if(pJsonObject.containsKey("paymentDetails")) {
+      paymentDetails = pJsonObject.getString("paymentDetails");
+    }
 
     for(JsonValue entry : entries) {
       MutableStudentPayment payment = new PersistentStudentPayment();
@@ -73,62 +81,92 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
+      if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
+        payment.setStatus(StudentPayment.Status.VERIFIED);
+      }
+      else {
+        payment.setStatus(StudentPayment.Status.RECEIVED);
+      }
       payments.add(payment);
       latestPayments.add(latestPayment);
-      amount = amount.add(latestPayment.getAmount());
     }
 
     validatePayment(pStudentId, latestPayments, payments);
     mStudentPaymentManager.update(payments);
-
-    Validate.notNull(pJsonObject.get("paymentMethod"));
-    String paymentDetails = null;
-    if(pJsonObject.containsKey("paymentDetails")) {
-      paymentDetails = pJsonObject.getString("paymentDetails");
-    }
-    // Taking into consideration only one of payment entry, as this would be a part of same
-    // transaction
-    updatePaymentStatus(latestPayments.get(0), pJsonObject.getInt("paymentMethod"), paymentDetails, pStudentId, amount);
+    updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);
     return Response.ok().build();
   }
 
-  private void updatePaymentStatus(StudentPayment pStudentPayment, int pPaymentMethod, String pPaymentDetails,
-      String pStudentId, BigDecimal pAmount) {
+  private void updatePaymentStatus(List<StudentPayment> pStudentPayments, int pPaymentMethod, String receiptNo,
+      String pPaymentDetails, String pStudentId) {
     int faculty = mStudentManager.get(pStudentId).getProgram().getFacultyId();
-    List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
-        .filter((mapping) -> mapping.getFeeTypeId().intValue() == pStudentPayment.getFeeTypeId()
-            && mapping.getFacultyId() == faculty)
-        .collect(Collectors.toList());
-    if(mappings.size() > 0) {
-      MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
-      paymentStatus.setAccount(mappings.get(0).getAccount());
-      paymentStatus.setTransactionId(pStudentPayment.getTransactionId());
-      PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
-      paymentStatus.setMethodOfPayment(paymentMethod);
-      paymentStatus.setReceivedOn(new Date());
-      if(paymentMethod == PaymentStatus.PaymentMethod.CASH || paymentMethod == PaymentStatus.PaymentMethod.PAYORDER) {
-        paymentStatus.setPaymentComplete(true);
-        paymentStatus.setCompletedOn(new Date());
+    Map<Integer, List<StudentPayment>> feeTypePaymentMap =
+        pStudentPayments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
+
+    for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+      List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
+          .filter((mapping) -> mapping.getFeeTypeId().intValue() == feeTypeId && mapping.getFacultyId() == faculty)
+          .collect(Collectors.toList());
+      if(mappings.size() > 0) {
+        Map<String, List<StudentPayment>> transactionPaymentMap =
+            feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
+        for(String transactionId : transactionPaymentMap.keySet()) {
+          MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
+          paymentStatus.setAccount(mappings.get(0).getAccount());
+          paymentStatus.setTransactionId(transactionId);
+          PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
+          paymentStatus.setMethodOfPayment(paymentMethod);
+          paymentStatus.setReceivedOn(new Date());
+          if(paymentMethod == PaymentStatus.PaymentMethod.CASH) {
+            paymentStatus.setStatus(PaymentStatus.Status.VERIFIED);
+            paymentStatus.setCompletedOn(new Date());
+          }
+          else {
+            paymentStatus.setStatus(PaymentStatus.Status.RECEIVED);
+          }
+          paymentStatus.setPaymentDetails(pPaymentDetails);
+          List<StudentPayment> payments = transactionPaymentMap.get(transactionId);
+          paymentStatus.setAmount(payments.stream().map(StudentPayment::getAmount)
+              .reduce(BigDecimal.ZERO, BigDecimal::add));
+          paymentStatus.setReceiptNo(receiptNo);
+          paymentStatus.create();
+        }
       }
-      paymentStatus.setPaymentDetails(pPaymentDetails);
-      paymentStatus.setAmount(pAmount);
-      paymentStatus.create();
     }
   }
 
   JsonObject getStudentPayments(String pStudentId, UriInfo pUriInfo) throws Exception {
     Validate.notNull(pStudentId);
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId).stream()
-        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED).collect(Collectors.toList());
+        .filter((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED)
+        .collect(Collectors.toList());
     Map<Integer, List<StudentPayment>> feeTypePaymentMap =
         payments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
     for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+      JsonObjectBuilder feeTypeObject = Json.createObjectBuilder();
       FeeType feeType = mFeeTypeManager.get(feeTypeId);
-      JsonObject typeWiseJson = buildJsonResponse(feeTypePaymentMap.get(feeTypeId), pUriInfo);
-      objectBuilder.add(feeType.getDescription(), typeWiseJson);
+      feeTypeObject.add("feeType", feeType.getId());
+      feeTypeObject.add("feeTypeName", feeType.getName());
+      feeTypeObject.add("feeTypeDescription", feeType.getDescription());
+
+      JsonArrayBuilder transactionsArrayBuilder = Json.createArrayBuilder();
+      Map<String, List<StudentPayment>> transactionPaymentMap =
+          feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
+      for(String transactionId : transactionPaymentMap.keySet()) {
+        JsonObjectBuilder transactionObjectBuilder = Json.createObjectBuilder();
+        JsonObject transactionWiseJson = buildJsonResponse(transactionPaymentMap.get(transactionId), pUriInfo);
+        transactionObjectBuilder.add("id", transactionId);
+        transactionObjectBuilder.add("entries", transactionWiseJson.getJsonArray("entries"));
+        transactionsArrayBuilder.add(transactionObjectBuilder);
+      }
+      feeTypeObject.add("transactions", transactionsArrayBuilder);
+      arrayBuilder.add(feeTypeObject);
     }
+    objectBuilder.add("entries", arrayBuilder);
     return objectBuilder.build();
   }
 
@@ -159,7 +197,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
 
     Map<String, List<StudentPayment>> paymentMap =
         latestPayments.stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
-    Validate.isTrue(paymentMap.keySet().size() == 1);
+    // Validate.isTrue(paymentMap.keySet().size() == 1);
 
     List<StudentPayment> desiredTransactionPayments =
         mStudentPaymentManager.getTransactionDetails(pStudentId, paymentMap.keySet().iterator().next());

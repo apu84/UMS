@@ -27,7 +27,7 @@ public class ParameterBuilder implements Builder<Parameter, MutableParameter> {
 
   @Override
   public void build(MutableParameter pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    pMutable.setId(pJsonObject.getString("id"));
     pMutable.setParameter(pJsonObject.getString("parameter"));
     pMutable.setShortDescription(pJsonObject.getString("shortDescription"));
     pMutable.setLongDescription(pJsonObject.getString("longDescription"));

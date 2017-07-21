@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
+import org.ums.enums.common.LeaveCategories;
 import org.ums.enums.common.RoleType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
@@ -420,6 +421,53 @@ public class PersistentLmsAppStatusDao extends LmsAppStatusDaoDecorator {
               + pageNumber + " * " + totalSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * "
               + totalSize + ") + 1)";
       return mJdbcTemplate.query(query, new Object[] {pDepartmentType.getId()}, new LmsAppStatusRowMapper());
+    }
+  }
+
+  @Override
+  public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
+      LeaveCategories pLeaveCategories, int pageNumber, int totalSize) {
+    String query = "";
+    if(pDepartmentType.equals(DepartmentType.ALL)) {
+      query =
+          "SELECT * "
+              + "FROM (SELECT "
+              + "        a.*, "
+              + "        ROWNUM row_number "
+              + "      FROM (SELECT * "
+              + "            FROM LMS_APP_STATUS "
+              + "            WHERE (APP_ID, ACTION_STATUS) IN (SELECT "
+              + "                                                LMS_APPLICATION.ID AS APP_ID, "
+              + "                                                LMS_APPLICATION.APP_STATUS "
+              + "                                              FROM LMS_APPLICATION, EMPLOYEES "
+              + "                                              WHERE "
+              + "                                                EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID AND APP_STATUS = 7 AND LMS_APPLICATION.TYPE_ID=? "
+              + "                                                AND sysdate >= FROM_DATE AND "
+              + "                                                sysdate <= TO_DATE)) a " + "      WHERE ROWNUM < (("
+              + pageNumber + " * " + totalSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * "
+              + totalSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pLeaveCategories.getId()}, new LmsAppStatusRowMapper());
+    }
+    else {
+      query =
+          "SELECT * "
+              + "FROM (SELECT "
+              + "        a.*, "
+              + "        ROWNUM row_number "
+              + "      FROM (SELECT * "
+              + "            FROM LMS_APP_STATUS "
+              + "            WHERE (APP_ID, ACTION_STATUS) IN (SELECT "
+              + "                                                LMS_APPLICATION.ID AS APP_ID, "
+              + "                                                LMS_APPLICATION.APP_STATUS "
+              + "                                              FROM LMS_APPLICATION, EMPLOYEES "
+              + "                                              WHERE "
+              + "                                                EMPLOYEES.EMPLOYEE_ID = LMS_APPLICATION.EMPLOYEE_ID and EMPLOYEES.DEPT_OFFICE=? AND APP_STATUS = 7 AND LMS_APPLICATION_TYPE_ID=? "
+              + "                                                AND sysdate >= FROM_DATE AND "
+              + "                                                sysdate <= TO_DATE)) a " + "      WHERE ROWNUM < (("
+              + pageNumber + " * " + totalSize + ") + 1)) " + "WHERE row_number >= (((" + pageNumber + " - 1) * "
+              + totalSize + ") + 1)";
+      return mJdbcTemplate.query(query, new Object[] {pDepartmentType.getId(), pLeaveCategories.getId()},
+          new LmsAppStatusRowMapper());
     }
   }
 

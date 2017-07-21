@@ -16,6 +16,8 @@ public interface ParameterSetting extends Serializable, LastModifier, EditType<M
 
   Parameter getParameter();
 
+  String getParameterId();
+
   Date getStartDate();
 
   Date getEndDate();

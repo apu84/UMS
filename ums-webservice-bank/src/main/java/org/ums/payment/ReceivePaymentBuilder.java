@@ -15,6 +15,5 @@ class ReceivePaymentBuilder extends StudentPaymentBuilder {
     Validate.notEmpty(pJsonObject.getString("id"));
     pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     pMutable.setLastModified(pJsonObject.getString("lastModified"));
-    pMutable.setStatus(StudentPayment.Status.RECEIVED);
   }
 }

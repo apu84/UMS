@@ -25,5 +25,7 @@ public interface Constants {
   // Application Labels
   public static final String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
   public static final String University_InitCap = "Ahsanullah University of Science and Technology";
+  public static final String University_Address = "141-142 Love Road, Tejgaon Industrial Area, Dhaka-1208";
+  public static final String ONE_BANK = "One Bank Ltd.";
 
 }

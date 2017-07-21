@@ -73,4 +73,9 @@ class StudentPaymentResourceHelper extends ResourceHelper<StudentPayment, Mutabl
     List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId, FeeType.Types.PENALTY.getId());
     return buildJsonResponse(payments, pUriInfo);
   }
+
+  JsonObject getByStudent(String pStudentId, UriInfo pUriInfo) {
+    List<StudentPayment> payments = mStudentPaymentManager.getPayments(pStudentId);
+    return buildJsonResponse(payments, pUriInfo);
+  }
 }

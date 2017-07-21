@@ -42,4 +42,9 @@ public class StudentPaymentResource extends Resource {
     return mStudentPaymentResourceHelper.getPenaltyStatus(getLoggedInUserId(), mUriInfo);
   }
 
+  @GET
+  @Path("/all")
+  public JsonObject getByStudent() throws Exception {
+    return mStudentPaymentResourceHelper.getByStudent(getLoggedInUserId(), mUriInfo);
+  }
 }

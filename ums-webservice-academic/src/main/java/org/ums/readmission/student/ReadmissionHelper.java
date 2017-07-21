@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.json.*;
 
+import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.*;
@@ -186,8 +187,9 @@ public class ReadmissionHelper {
 
   private boolean withinReadmissionApplicationSlot(Integer pSemesterId) {
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getByParameterAndSemesterId(
-            Parameter.ParameterName.APPLICATION_READMISSION.getLabel(), pSemesterId);
+        mParameterSettingManager.getBySemesterAndParameterId(Parameter.ParameterName.APPLICATION_READMISSION.getId(),
+            pSemesterId);
+    Validate.notNull(parameterSetting, "Dates not found for " + Parameter.ParameterName.APPLICATION_READMISSION);
     Date now = new Date();
     return parameterSetting.getStartDate().before(now) && parameterSetting.getEndDate().after(now);
   }

@@ -6,14 +6,20 @@ module ums {
   export class ListDues {
     public static $inject = ['$scope', 'StudentDuesService', '$modal'];
     public dues: StudentDue[];
-    public filters: Filter[] = [];
+    public filters: Filter[];
+    public selectedFilters: SelectedFilter[] = [];
     public reloadReference: ReloadRef = {reloadList: false};
+    public nextLink: string;
 
     constructor($scope: ng.IScope, private studentDuesService: StudentDuesService, private $modal: any) {
       this.navigate();
-      $scope.$watch(() => this.filters, ()=> {
-        this.navigate();
-      }, true);
+      this.studentDuesService.getFilters().then((filters: Filter[]) => {
+        this.filters = filters;
+
+        $scope.$watch(() => this.selectedFilters, ()=> {
+          this.navigate();
+        }, true);
+      });
 
       $scope.$watch(() => this.reloadReference, (newVal: ReloadRef) => {
         if (newVal.reloadList) {
@@ -23,8 +29,14 @@ module ums {
     }
 
     public navigate(url?: string): void {
-      this.studentDuesService.listDues(this.filters, url).then((dues: StudentDue[]) => {
-        this.dues = dues;
+      this.studentDuesService.listDues(this.selectedFilters, url).then((dues: StudentDuesResponse) => {
+        if (url && this.dues && this.dues.length > 0) {
+          this.dues.push.apply(dues.entries);
+        }
+        else {
+          this.dues = dues.entries;
+        }
+        this.nextLink = dues.next;
         this.reloadReference.reloadList = false;
       });
     }

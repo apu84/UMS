@@ -43,5 +43,28 @@ module ums {
           templateUrl: 'views/admission/admission-fee.html',
           controller: 'AdmissionFee'
         })
+        .state('receive', {
+          url: "/receive",
+          controller: 'ReceivePaymentController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/receive.payment.html'
+        })
+        .state('payments', {
+          url: "/payments",
+          controller: 'PaymentStatusController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/payment.status.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                ]
+              });
+            }]
+          }
+        })
   });
 }

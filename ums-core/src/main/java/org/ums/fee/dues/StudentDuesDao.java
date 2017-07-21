@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.filter.AbstractFilterQueryBuilder;
+import org.ums.filter.ListFilter;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
@@ -81,8 +83,8 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
   }
 
   @Override
-  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<FilterCriteria> pFilterCriteria) {
-    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilterCriteria);
+  public List<StudentDues> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
@@ -132,35 +134,23 @@ public class StudentDuesDao extends StudentDuesDaoDecorator {
     }
   }
 
-  private class FilterQueryBuilder {
-    private List<String> filterList;
-    private List<Object> params;
-
-    FilterQueryBuilder(List<FilterCriteria> pFilterCriteria) {
-      filterList = new ArrayList<>();
-      params = new ArrayList<>();
-      pFilterCriteria.forEach((filterCriteria) -> {
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.STUDENT_ID) {
-          filterList.add(" STUDENT_ID = ? ");
-          params.add(filterCriteria.getValue());
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.DUE_STATUS) {
-          filterList.add(" STATUS = ? ");
-          params.add(filterCriteria.getValue());
-        }
-        if(filterCriteria.getCriteria() == FilterCriteria.Criteria.DUE_TYPE) {
-          filterList.add(" FEE_CATEGORY = ? ");
-          params.add(filterCriteria.getValue());
-        }
-      });
+  private class FilterQueryBuilder extends AbstractFilterQueryBuilder {
+    FilterQueryBuilder(List<ListFilter> pFilters) {
+      super(pFilters);
     }
 
-    public String getQuery() {
-      return filterList.size() > 0 ? " WHERE " + StringUtils.join(filterList, " AND ") : "";
-    }
-
-    public List<Object> getParameters() {
-      return params;
+    @Override
+    protected String getQueryString(ListFilter pFilter) {
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.STUDENT_ID.toString())) {
+        return " STUDENT_ID = ? ";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.DUE_STATUS.toString())) {
+        return " STATUS = ? ";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.DUE_TYPE.toString())) {
+        return " FEE_CATEGORY = ? ";
+      }
+      return "";
     }
   }
 }

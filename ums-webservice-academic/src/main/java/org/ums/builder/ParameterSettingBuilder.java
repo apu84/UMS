@@ -40,7 +40,7 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutable.setSemester(semester);
     PersistentParameter parameter = new PersistentParameter();
-    parameter.setId(Long.parseLong(pJsonObject.getString("parameterId")));
+    parameter.setId(pJsonObject.getString("parameterId"));
     pMutable.setParameter(parameter);
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));

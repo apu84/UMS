@@ -39,6 +39,10 @@
                 </td>
                 <td>
                     <input type="checkbox" name="selectedDues" data-ng-model="vm.selectedDues[due.id]" data-ng-if="!due.transactionId" />
+                    <img  data-ng-if="due.transactionId"
+                            src="images/pdf_square.png" class="download_tooltip ng-scope"
+                            style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                            data-ng-click="vm.receipt(due.transactionId)">
                 </td>
             </tr>
             </tbody>

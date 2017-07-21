@@ -16,6 +16,8 @@ public interface MutableParameterSetting extends ParameterSetting, Editable<Long
 
   void setParameter(Parameter pParameter);
 
+  void setParameterId(String pParameterId);
+
   void setStartDate(Date pStartDate);
 
   void setEndDate(Date pEndDate);

@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.filter.AbstractFilterQueryBuilder;
+import org.ums.filter.ListFilter;
 import org.ums.generator.IdGenerator;
 
 import com.google.common.collect.Lists;
@@ -88,15 +90,17 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   }
 
   @Override
-  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber,
-      CertificateStatus.Status pStatus) {
+  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+    FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL
-            + " WHERE STATUS = ? ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
-    return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), startIndex, endIndex},
-        new CertificateStatusRowMapper());
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
+            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+    List<Object> params = queryBuilder.getParameters();
+    params.add(startIndex);
+    params.add(endIndex);
+    return mJdbcTemplate.query(query, params.toArray(), new CertificateStatusRowMapper());
   }
 
   @Override
@@ -139,6 +143,23 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
       status.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<CertificateStatus> reference = new AtomicReference<>(status);
       return reference.get();
+    }
+  }
+
+  private class FilterQueryBuilder extends AbstractFilterQueryBuilder {
+    FilterQueryBuilder(List<ListFilter> pFilters) {
+      super(pFilters);
+    }
+
+    @Override
+    protected String getQueryString(ListFilter pFilter) {
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.STUDENT_ID.toString())) {
+        return " STUDENT_ID = ? ";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.STATUS.toString())) {
+        return " STATUS = ? ";
+      }
+      return "";
     }
   }
 }

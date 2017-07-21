@@ -9,7 +9,7 @@
                         id="leaveType"
                         data-ng-options="leaveType.name for leaveType in vm.leaveTypes track by leaveType.id"
                         data-ng-model="vm.leaveType"
-                        data-ng-change="vm.updateLeaveType(leaveType)"
+                        data-ng-change="vm.updateLeaveType(vm.leaveType)"
                 ></select>
             </div>
             <div class="col-md-6"></div>

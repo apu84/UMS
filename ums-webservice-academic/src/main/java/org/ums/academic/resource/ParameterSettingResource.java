@@ -47,7 +47,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
   @GET
   @Path(("/parameter/{parameterId}/semester/{semesterId}"))
   public JsonObject getByParameterIdAndSemester(final @Context Request pRequest,
-      final @PathParam("parameterId") Integer pParameterId, final @PathParam("semesterId") Integer pSemesterId) {
+      final @PathParam("parameterId") String pParameterId, final @PathParam("semesterId") Integer pSemesterId) {
     return mResourceHelper.getByParameterIdAndSemesterId(pParameterId, pSemesterId, pRequest, mUriInfo);
   }
 
