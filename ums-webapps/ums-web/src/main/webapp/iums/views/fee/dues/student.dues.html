@@ -1,9 +1,13 @@
 <div class="panel">
     <div class="panel-heading">Dues/ Penalty</div>
     <div class="panel-body">
-        <table class="table table-hover table-bordered table-advanced">
+        <div class="note note-info" data-ng-if="vm.dues.length===0">
+            <h3>No penalty or dues available</h3>
+        </div>
+
+        <table class="table table-hover table-bordered table-advanced table-striped" data-ng-if="vm.dues.length > 0">
             <thead>
-            <tr>
+            <tr class="heading">
                 <td width="15%">Dues/ Penalty type</td>
                 <td width="15%">Pay before</td>
                 <td width="10%">Amount</td>
@@ -48,8 +52,8 @@
             </tbody>
         </table>
         <div class="text-right" style="margin-top:25px;">
-            <button type="button" class="btn btn-success" data-ng-click="vm.pay()" data-ng-if="vm.dues.length > 0"
-                    data-ng-disabled="!vm.selected || vm.selected.length == 0">Pay
+            <button type="button" class="btn btn-success" data-ng-click="vm.pay()"
+                    data-ng-if="vm.selected && vm.selected.length > 0">Pay
             </button>
         </div>
     </div>
