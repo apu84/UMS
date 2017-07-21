@@ -83,6 +83,12 @@ public class LmsAppStatusCache extends ContentCache<LmsAppStatus, MutableLmsAppS
   @Override
   public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
       LeaveCategories pLeaveCategories, int pageNumber, int totalSize) {
-    return getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories, pageNumber, totalSize);
+    return getManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories, pageNumber, totalSize);
+  }
+
+  @Override
+  public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
+      LeaveCategories pLeaveCategories) {
+    return getManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories);
   }
 }

@@ -38,27 +38,30 @@ public class AttachmentResource extends Resource {
   @GET
   @Path("/applicationType/{application-type}/applicationId/{application-id}")
   public JsonObject getAttachments(@PathParam("application-type") String pApplicationType,
-                                   @PathParam("application-id") String pApplicationId) {
+      @PathParam("application-id") String pApplicationId) {
     return mHelper.getAttachment(ApplicationType.get(Integer.parseInt(pApplicationType)), pApplicationId, mUriInfo);
   }
 
   @GET
   @Path("/downloadFile/attachmentId/{attachment-id}")
-  public StreamingOutput get(@PathParam("attachment-id") String pAttachmentId) throws Exception {
+  public InputStream get(@PathParam("attachment-id") String pAttachmentId) throws Exception {
 
-    return new StreamingOutput() {
+    /*
+     * return new StreamingOutput() {
+     * 
+     * @Override public void write(OutputStream pOutputStream) throws IOException,
+     * WebApplicationException {
+     * 
+     * Attachment attachment = mAttachmentManager.get(Long.parseLong(pAttachmentId)); String
+     * fileName = attachment.getServerFileName(); InputStream inputStream =
+     * mGateWay.read(attachment.getServerFileName()); IOUtils.copy(inputStream, pOutputStream);
+     * 
+     * } };
+     */
 
-      @Override
-      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-
-        Attachment attachment = mAttachmentManager.get(Long.parseLong(pAttachmentId));
-        String fileName = attachment.getServerFileName();
-        InputStream inputStream = mGateWay.read(attachment.getServerFileName());
-        IOUtils.copy(inputStream, pOutputStream);
-
-      }
-    };
-
-
+    Attachment attachment = mAttachmentManager.get(Long.parseLong(pAttachmentId));
+    String fileName = attachment.getServerFileName();
+    InputStream inputStream = mGateWay.read(attachment.getServerFileName());
+    return inputStream;
   }
 }

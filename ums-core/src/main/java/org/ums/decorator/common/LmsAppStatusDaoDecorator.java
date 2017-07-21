@@ -73,4 +73,10 @@ public class LmsAppStatusDaoDecorator extends
   public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType) {
     return getManager().getApplicationsApprovedOfTheDay(pDepartmentType);
   }
+
+  @Override
+  public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
+      LeaveCategories pLeaveCategories) {
+    return getManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories);
+  }
 }

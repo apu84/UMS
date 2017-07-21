@@ -154,6 +154,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     mAttachmentManager.create(attachment);
     // FileUtils.cleanDirectory(new File("H:/Apache/apache-tomcat-7.0.47/temp"));
 
+    pInputStream.deleteOnExit();
+    newFile.deleteOnExit();
     System.gc();
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
