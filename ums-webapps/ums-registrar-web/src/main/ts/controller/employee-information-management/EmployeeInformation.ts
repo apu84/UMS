@@ -89,6 +89,7 @@ module ums {
         previousTrainingInformation: Array<ITrainingInformationModel>;
         previousAwardInformation: Array<IAwardInformationModel>;
         previousExperienceInformation: Array<IExperienceInformationModel>;
+        aoiText: string;
         userId: string;
         userRoleId: number;
         allUser: Array<Employee>;
@@ -159,7 +160,8 @@ module ums {
                 changedUserName: "",
                 searchBy: "",
                 changedDepartment: null,
-                filterData: ""
+                filterData: "",
+                aoiText: ""
             };
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
@@ -679,20 +681,17 @@ module ums {
             });
         }
 
-        private getAreaOfInterestInformation(userId: string) {
-            // this.$scope.entry.additional.areaOfInterestInformation = Array<IAreaOfInterestInformationModel>();
-            this.areaOfInterestInformationService.getAreaOfInterestInformation(userId).then((aoiInformation: any) => {
-                for (let i = 0; i < aoiInformation.length; i++) {
-                    // this.$scope.entry.additional.areaOfInterestInformation[i] = aoiInformation[i];
-                    // this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[aoiInformation[i].areaOfInterestId];
-                }
-            });
-        }
-
         private getAdditionalInformation(userId: string) {
             this.$scope.entry.additional = <IAdditionalInformationModel>{};
+            this.$scope.entry.additional.areaOfInterestInformation = Array<ICommon>();
             this.additionalInformationService.getAdditionalInformation(userId).then((additional: any) => {
                 this.$scope.entry.additional = additional[0];
+                console.log(additional[0]);
+                if(additional[0].areaOfInterestInformation.length != null) {
+                    for (let i = 0; i < additional[0].areaOfInterestInformation.length; i++) {
+                        this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[additional[0].areaOfInterestInformation[i].id];
+                    }
+                }
             });
         }
 

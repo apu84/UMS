@@ -8,9 +8,12 @@ module ums{
         }
 
         public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any): any {
+            let baseArrayOfObjectsLength: number = 0;
             let copyOfComparingArrayOfObjects: any;
             copyOfComparingArrayOfObjects = angular.copy(comparingObject);
-            let baseArrayOfObjectsLength: number = baseObject.length;
+            if(baseObject.length == null) {
+                let baseArrayOfObjectsLength: number = baseObject.length;
+            }
             let comparingArrayOfObjectsLength: number = copyOfComparingArrayOfObjects.length;
             let flag: number = 0;
             for (let i = 0; i < baseArrayOfObjectsLength; i++) {
@@ -42,6 +45,7 @@ module ums{
         }
 
         public objectEqualityTest(baseObj: any, comparingObj: any): boolean{
+            console.log(angular.equals(baseObj, comparingObj));
             return angular.equals(baseObj, comparingObj);
         }
 

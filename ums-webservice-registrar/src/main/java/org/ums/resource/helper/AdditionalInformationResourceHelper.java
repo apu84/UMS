@@ -64,20 +64,19 @@ public class AdditionalInformationResourceHelper extends
     mManager.deleteAdditionalInformation(mutableAdditionalInformation);
     mManager.saveAdditionalInformation(mutableAdditionalInformation);
 
-    // List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformations = new ArrayList<>();
-    // JsonArray aoiJsonArray =
-    // additionalJsonArray.getJsonObject(0).getJsonArray("areaOfInterestInformation");
-    // int sizeOfAoiJsonArray = aoiJsonArray.size();
-    // for(int i = 0; i < sizeOfAoiJsonArray; i++) {
-    // MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new
-    // PersistentAreaOfInterestInformation();
-    // mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation,
-    // aoiJsonArray.getJsonObject(0),
-    // localCache);
-    // mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
-    // }
-    // mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(additionalJsonArray.getJsonObject(0).getString(
-    // "employeeId"));
+    List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformations = new ArrayList<>();
+    JsonArray aoiJsonArray = additionalJsonObject.getJsonArray("areaOfInterestInformation");
+    int sizeOfAoiJsonArray = aoiJsonArray.size();
+    if(sizeOfAoiJsonArray > 0) {
+      for(int i = 0; i < sizeOfAoiJsonArray; i++) {
+        MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
+        mAreaOfInterestInformationBuilder.aoiBuilder(mutableAreaOfInterestInformation, aoiJsonArray.getJsonObject(0),
+            localCache, mutableAdditionalInformation);
+        mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
+      }
+      mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(mutableAdditionalInformation.getId());
+      mAreaOfInterestInformationManager.saveAreaOfInterestInformation(mutableAreaOfInterestInformations);
+    }
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

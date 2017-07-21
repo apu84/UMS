@@ -4,6 +4,6 @@ module ums{
         roomNo: string;
         extNo: string;
         academicInitial: string;
-        // areaOfInterestInformation: Array<IAreaOfInterestInformationModel>;
+        areaOfInterestInformation: Array<ICommon>;
     }
 }

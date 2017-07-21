@@ -76,7 +76,7 @@ module ums{
                         this.$scope.employmentTypes = employmentTypes;
                         this.createMap();
                         this.getServiceIntervals();
-                        this.getServiceInformation();
+                        //this.getServiceInformation();
                     });
                 });
             });
@@ -105,10 +105,10 @@ module ums{
                 let serviceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, this.$scope.entry.serviceInfo);
                 this.convertToJson(serviceObjects).then((json: any) => {
                     console.log(json);
-                    this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
-                        this.$scope.showInputDiv = false;
-                        this.$scope.showLabelDiv = true;
-                    });
+                    // this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
+                    //     this.$scope.showInputDiv = false;
+                    //     this.$scope.showLabelDiv = true;
+                    // });
                 });
             }
         }
