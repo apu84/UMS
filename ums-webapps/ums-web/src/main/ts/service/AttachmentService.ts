@@ -29,13 +29,15 @@ module ums {
     public downloadFile(attachmentId: string, fileName: string): void {
       var contentType: string = UmsUtil.getFileContentType("pdf");
 
+
       this.httpClient.get('attachment/downloadFile/attachmentId/' + attachmentId, undefined, (data: any, etag: string) => {
 
-        console.log(data);
-        UmsUtil.writeFileContent(data, undefined, fileName);
+        /*var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+        this.$window.open(fileURL);*/
+        UmsUtil.writeFileContent(data, contentType, fileName);
       }, (response: any) => {
         console.error(response);
-      });
+      }, 'arraybuffer');
     }
 
 

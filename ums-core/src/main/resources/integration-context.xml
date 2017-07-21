@@ -16,7 +16,7 @@
     <property name="host" value="localhost"/>
     <property name="port" value="21"/>
     <property name="username" value="iums"/>
-    <property name="password" value="ig100"/>
+    <property name="password" value="austig100"/>
   </bean>
 
   <ftp:outbound-gateway

@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
@@ -22,7 +20,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.InputStream;
 
 @Component
@@ -57,11 +54,12 @@ public class ProfilePicture extends Resource {
 
     imageData = mGateway.read("files/user.png");
 
-    File file = new File("G:/shorna.jpg");
-
-    // this.mGateway.write("love.jpg", file);
-    Message<File> messageA = MessageBuilder.withPayload(file).build();
-    lmsChannel.send(messageA);
+    /*
+     * File file = new File("G:/shorna.jpg");
+     * 
+     * // this.mGateway.write("love.jpg", file); Message<File> messageA =
+     * MessageBuilder.withPayload(file).build(); lmsChannel.send(messageA);
+     */
 
     try {
     } catch(Exception fl) {
