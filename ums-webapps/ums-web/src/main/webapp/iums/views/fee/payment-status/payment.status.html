@@ -2,7 +2,7 @@
     <div class="panel-heading">Payments</div>
     <div class="panel-body">
         <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
-        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
             <tr>
                 <td width="15%">Transaction Id</td>
@@ -43,9 +43,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="pull-right">
-                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)"
+                    <button type="button" class="btn btn-default btn-outlined" data-ng-click="vm.navigate(vm.nextLink)"
                             data-ng-if="vm.nextLink">
-                        Next >>
+                        Next&nbsp;<i class="fa fa-arrow-circle-o-right"></i>
                     </button>
                 </div>
             </div>

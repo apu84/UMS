@@ -29,10 +29,9 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
 
   @Override
   public int update(List<MutableStudentPayment> pMutableList) {
+    Map<String, List<StudentPayment>> studentPaymentGroup =
+        pMutableList.stream().collect(Collectors.groupingBy(StudentPayment::getStudentId));
     if(!pMutableList.stream().allMatch((payment) -> payment.getStatus() == StudentPayment.Status.VERIFIED)) {
-      Map<String, List<StudentPayment>> studentPaymentGroup =
-          pMutableList.stream().collect(Collectors.groupingBy(payment -> payment.getStudentId()));
-
       studentPaymentGroup.keySet().forEach((studentId) -> {
         List<StudentDues> duesForStudent = mStudentDuesManager.getByStudent(studentId);
 
@@ -45,6 +44,18 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
 
           if(containsSemesterFee(feeTypeId)) {
             postProcessSemesterFee(feeTypeGroup.get(feeTypeId));
+          }
+        });
+      });
+    }
+    else if(pMutableList.stream().allMatch((payment) -> payment.getStatus() == StudentPayment.Status.VERIFIED)) {
+      studentPaymentGroup.keySet().forEach((studentId) -> {
+        List<StudentDues> duesForStudent = mStudentDuesManager.getByStudent(studentId);
+        Map<Integer, List<StudentPayment>> feeTypeGroup = studentPaymentGroup.get(studentId).stream()
+            .collect(Collectors.groupingBy(payment -> payment.getFeeCategory().getType().getId()));
+        feeTypeGroup.keySet().forEach((feeTypeId) -> {
+          if(containsDues(feeTypeId) && !duesForStudent.isEmpty()) {
+            postProcessDues(duesForStudent, feeTypeGroup.get(feeTypeId));
           }
         });
       });
@@ -64,6 +75,9 @@ public class PostStudentPaymentActions extends StudentPaymentDaoDecorator {
                       || payment.getStatus() == StudentPayment.Status.REJECTED) {
                     mutableStudentDues.setTransactionId(StringUtils.EMPTY);
                     mutableStudentDues.setStatus(StudentDues.Status.NOT_PAID);
+                  }
+                  else if(payment.getStatus() == StudentPayment.Status.VERIFIED) {
+                    mutableStudentDues.setStatus(StudentDues.Status.PAID);
                   }
                   return mutableStudentDues;
                 }).collect(Collectors.toList());

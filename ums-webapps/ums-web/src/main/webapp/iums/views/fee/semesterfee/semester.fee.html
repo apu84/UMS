@@ -1,17 +1,17 @@
 <div class="panel">
     <div class="panel-heading">Semester fee</div>
     <div class="panel-body">
-        <div ng-if="vm.messageText">
-            {{vm.messageText}}
-        </div>
         <div class="spacer"></div>
-        <div data-ng-if="vm.installmentEnabled && !vm.payments">
+        <div data-ng-if="vm.installmentEnabled && !vm.payments" style="margin-bottom: 5px;">
             <input type="radio" data-ng-click="vm.selectPaymentOption(0, vm.currentEnrolledSemester)"
                    name="paymentOption"> Regular
             <input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)"
                    name="paymentOption"> Installment
         </div>
-        <div data-ng-if="vm.fee && !vm.payments">
+        <div ng-if="vm.messageText">
+            <div class="alert alert-danger">{{vm.messageText}}</div>
+        </div>
+        <div data-ng-if="vm.fee && !vm.payments && !vm.messageText">
             <table class="table table-hover table-bordered table-advanced">
                 <thead>
                 <tr role="row" class="heading">
