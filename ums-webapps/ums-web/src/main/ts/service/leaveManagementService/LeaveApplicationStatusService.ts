@@ -67,8 +67,8 @@ module ums {
     }
 
 
-    public fetchLeaveApplicationsActiveOnTheDay(deptId: string, pageNumber: number, pageSize: number): ng.IPromise<any> {
-      var url = "lmsAppStatus/activeLeave/deptId/" + deptId + "/pageNumber/" + pageNumber + "/pageSize/" + pageSize;
+    public fetchLeaveApplicationsActiveOnTheDay(deptId: string, leaveType:number, pageNumber: number, pageSize: number): ng.IPromise<any> {
+      var url = "lmsAppStatus/activeLeave/deptId/" + deptId +"/type/"+leaveType+ "/pageNumber/" + pageNumber + "/pageSize/" + pageSize;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,

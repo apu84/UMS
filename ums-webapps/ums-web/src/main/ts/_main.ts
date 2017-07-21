@@ -66,7 +66,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/UITab.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/MainNavigation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
+/// <reference path='./directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>

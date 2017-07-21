@@ -41,7 +41,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -96,17 +98,40 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
-    Long appId = inserIntoLeaveApplicationStatus(application);
-
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    Long appId = new Long(1L);
+    String ouputMessage = checkApplicationType(application);
+    if(ouputMessage.equals("")) {
+      appId = inserIntoLeaveApplicationStatus(application);
+      jsonObjectBuilder.add("id", appId.toString());
+      jsonObjectBuilder.add("message", ouputMessage);
+    }
+    else {
+      jsonObjectBuilder.add("message", ouputMessage);
+    }
 
-    jsonObjectBuilder.add("id", appId.toString());
     children.add(jsonObjectBuilder);
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  private String checkApplicationType(PersistentLmsApplication application) {
+    String outputMessage = "";
+    if(application.getLmsType().getId() == LeaveCategories.STUDY_LEAVE_ON_WITHOUT_PAY.getId()) {
+      LocalDate fromDate = application.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate toDate = application.getToDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      Period period = Period.between(fromDate, toDate);
+      int year = period.getYears();
+      int month = period.getMonths();
+      int day = period.getDays();
+      if(period.getYears() >= 1 && month >= 1)
+        return outputMessage = "Study leave must be renewed every one year";
+
+    }
+    return outputMessage;
   }
 
   public Response uploadFile(final File pInputStream, final String id, final String name, final UriInfo pUriInfo)
@@ -182,7 +207,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (LmsApplication application : pApplications) {
+    for(LmsApplication application : pApplications) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().build(jsonObject, application, pUriInfo, localCache);
       children.add(jsonObject);
@@ -230,22 +255,23 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return object.build();
   }
 
-
   private String getDateOutputModifiedFormat(int duration) {
     int periodNumber = duration;
 
     Period period = Period.ofDays(duration);
     String days = "";
-    if (periodNumber > (365)) {
+    if(periodNumber > (365)) {
       int year = periodNumber / 365;
       int month = (periodNumber % 365) / 30;
       int day = ((periodNumber % 365) % 30);
       days = year + " year/s, " + month + " month/s," + day + " day/s";
-    } else if (periodNumber > 30) {
+    }
+    else if(periodNumber > 30) {
       int month = periodNumber / 30;
       int day = (periodNumber % 30);
       days = month + " month/s," + day + " day/s";
-    } else {
+    }
+    else {
       days = period.getDays() + " day/s";
     }
     return days;
@@ -253,8 +279,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) {
     int leavesTaken = 0;
-    if (pApplicationMap.get(lmsType.getId()) != null)
-      for (LmsApplication application : pApplicationMap.get(lmsType.getId())) {
+    if(pApplicationMap.get(lmsType.getId()) != null)
+      for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
         leavesTaken +=
             (application.getToDate().getTime() - application.getFromDate().getTime()) / (1000 * 60 * 60 * 24);
       }
@@ -273,13 +299,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<LmsType> lmsTypes = new ArrayList<>();
     Employee employee =
         mEmployeeManager.get(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    if (employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if (employee.getGender().equals("M"))
+    if(employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
+      if(employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
-    } else {
-      if (employee.getGender().equals("M"))
+    }
+    else {
+      if(employee.getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

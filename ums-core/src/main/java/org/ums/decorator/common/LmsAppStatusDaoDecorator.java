@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.common.LmsAppStatus;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
+import org.ums.enums.common.LeaveCategories;
 import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
@@ -60,6 +61,12 @@ public class LmsAppStatusDaoDecorator extends
   public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType, int pageNumber,
       int totalSize) {
     return getManager().getApplicationsApprovedOfTheDay(pDepartmentType, pageNumber, totalSize);
+  }
+
+  @Override
+  public List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType,
+      LeaveCategories pLeaveCategories, int pageNumber, int totalSize) {
+    return getManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories, pageNumber, totalSize);
   }
 
   @Override
