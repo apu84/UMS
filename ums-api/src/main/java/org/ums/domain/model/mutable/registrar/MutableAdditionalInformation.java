@@ -10,7 +10,7 @@ public interface MutableAdditionalInformation extends AdditionalInformation, Edi
 
   void setRoomNo(final String pRoomNo);
 
-  void setExtNo(final int pExtNo);
+  void setExtNo(final String pExtNo);
 
   void setAcademicInitial(final String pAcademicInitial);
 }

@@ -18,10 +18,6 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
 
   static String GET_ONE = "SELECT EMPLOYEE_ID, ROOM_NO, EXT_NO, ACADEMIC_INITIAL FROM EMP_ADDITIONAL_INFO ";
 
-  static String UPDATE_ONE =
-      "UPDATE EMP_ADDITIONAL_INFO SET ROOM_NO = ?, EXT_NO = ?, ACADEMIC_INITIAL = ?, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
-
   static String DELETE_ONE = "DELETE FROM EMP_ADDITIONAL_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -46,8 +42,8 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
   }
 
   @Override
-  public int updateAdditionalInformation(MutableAdditionalInformation pMutableAdditionalInformation) {
-    String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ?";
+  public int deleteAdditionalInformation(MutableAdditionalInformation pMutableAdditionalInformation) {
+    String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutableAdditionalInformation.getId());
   }
 
@@ -58,7 +54,7 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
       PersistentAdditionalInformation persistentAdditionalInformation = new PersistentAdditionalInformation();
       persistentAdditionalInformation.setId(resultSet.getString("EMPLOYEE_ID"));
       persistentAdditionalInformation.setRoomNo(resultSet.getString("ROOM_NO"));
-      persistentAdditionalInformation.setExtNo(resultSet.getInt("EXT_NO"));
+      persistentAdditionalInformation.setExtNo(resultSet.getString("EXT_NO"));
       persistentAdditionalInformation.setAcademicInitial(resultSet.getString("ACADEMIC_INITIAL"));
       return persistentAdditionalInformation;
     }

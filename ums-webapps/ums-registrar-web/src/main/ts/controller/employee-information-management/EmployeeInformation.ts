@@ -37,6 +37,7 @@ module ums {
         districtMap: any;
         thanaMap: any;
         publicationTypeMap: any;
+        departmentMap: any;
         aoiMap: any;
         data: any;
         pagination: any;
@@ -217,14 +218,6 @@ module ums {
             return defer.promise;
         }
 
-        private getDepartment(): void{
-            this.$scope.departments = Array<IDepartment>();
-            this.departmentService.getAll().then((departments: any)=> {
-                this.$scope.departments = departments;
-                console.log(this.$scope.departments);
-            });
-        }
-
         private getSearchFields(): void{
             console.log(this.$scope.data.searchBy);
             if(this.$scope.data.searchBy == "1"){
@@ -285,38 +278,42 @@ module ums {
             this.getUser().then((user: any) => {
                 this.$scope.userId = user.employeeId;
                 this.$scope.userRoleId = user.roleId;
-                this.getAllUser().then((users: any) => {
-                    this.$scope.allUser = users;
-                    this.getCountry().then((countries: any) => {
-                        this.$scope.countries = countries;
-                        this.getDivision().then((divisions: any) => {
-                            this.$scope.divisions = divisions;
-                            this.getDistrict().then((districts: any) => {
-                                this.$scope.presentAddressDistricts = districts;
-                                this.$scope.permanentAddressDistricts = districts;
-                                this.$scope.allDistricts = districts;
-                                this.getThana().then((thanas: any) => {
-                                    this.$scope.presentAddressThanas = thanas;
-                                    this.$scope.permanentAddressThanas = thanas;
-                                    this.$scope.allThanas = thanas;
-                                    this.getAreaOfInterest().then((aois: any) => {
-                                        this.$scope.arrayOfAreaOfInterest = aois;
-                                        this.createMap();
-                                        console.log(this.$scope.userId + " outer " + this.$scope.userRoleId);
-                                        this.notify.success(this.$scope.userId + " outer " + this.$scope.userRoleId);
-                                        if(this.$scope.userRoleId != 82) {
-                                            this.$scope.showSelectPanel = false;
-                                            this.$scope.showFilteredEmployeeList = false;
-                                            this.getPreviousFormValues();
-                                            this.$scope.showEmployeeInformation = true;
-                                            this.setViewModeInitially();
-                                        }
-                                        else{
-                                            this.$scope.showEmployeeInformation = false;
-                                            this.$scope.showSelectPanel = true;
-                                            this.$scope.showFilteredEmployeeList = true;
-                                        }
-                                    });
+                if (this.$scope.userRoleId == 82) {
+                    this.getAllUser().then((users: any) => {
+                        this.$scope.allUser = users;
+                    });
+                    this.departmentService.getAll().then((departments: any) => {
+                        this.$scope.departments = departments;
+                    });
+                }
+                this.getCountry().then((countries: any) => {
+                    this.$scope.countries = countries;
+                    this.getDivision().then((divisions: any) => {
+                        this.$scope.divisions = divisions;
+                        this.getDistrict().then((districts: any) => {
+                            this.$scope.presentAddressDistricts = districts;
+                            this.$scope.permanentAddressDistricts = districts;
+                            this.$scope.allDistricts = districts;
+                            this.getThana().then((thanas: any) => {
+                                this.$scope.presentAddressThanas = thanas;
+                                this.$scope.permanentAddressThanas = thanas;
+                                this.$scope.allThanas = thanas;
+                                this.getAreaOfInterest().then((aois: any) => {
+                                    this.$scope.arrayOfAreaOfInterest = aois;
+                                    this.createMap();
+                                    if (this.$scope.userRoleId != 82) {
+                                        this.$scope.showSelectPanel = false;
+                                        this.$scope.showFilteredEmployeeList = false;
+                                        this.getPreviousFormValues();
+                                        this.$scope.showEmployeeInformation = true;
+                                        this.setViewModeInitially();
+                                    }
+                                    else {
+                                        this.$scope.showEmployeeInformation = false;
+                                        this.$scope.showSelectPanel = true;
+                                        this.$scope.showFilteredEmployeeList = true;
+                                    }
+
                                 });
                             });
                         });
@@ -351,7 +348,7 @@ module ums {
             this.getPublicationInformationWithPagination(this.$scope.userId);
             this.getExperienceInformation(this.$scope.userId);
             this.getTrainingInformation(this.$scope.userId);
-            //this.getAdditionalInformation(this.$scope.userId);
+            this.getAdditionalInformation(this.$scope.userId);
 
         }
 
@@ -399,6 +396,7 @@ module ums {
             this.$scope.districtMap = {};
             this.$scope.thanaMap = {};
             this.$scope.aoiMap = {};
+            this.$scope.departmentMap = {};
 
             for (let i = 0; i < this.$scope.degreeNames.length; i++) {
                 this.$scope.degreeNameMap[this.$scope.degreeNames[i].id] = this.$scope.degreeNames[i];
@@ -438,6 +436,11 @@ module ums {
             }
             for (let i = 0; i < this.$scope.arrayOfAreaOfInterest.length; i++) {
                 this.$scope.aoiMap[this.$scope.arrayOfAreaOfInterest[i].id] = this.$scope.arrayOfAreaOfInterest[i];
+            }
+            if(this.$scope.userRoleId == 82) {
+                for (let i = 0; i < this.$scope.departments.length; i++) {
+                    this.$scope.departmentMap[this.$scope.departments[i].id] = this.$scope.departments[i];
+                }
             }
         }
 
@@ -577,17 +580,13 @@ module ums {
 
         private submitAdditionalForm(): void {
             this.$scope.entry.additional.employeeId = this.$scope.userId;
-            console.log(this.$scope.entry.additional );
-
             this.convertToJson('additional', this.$scope.entry.additional)
                 .then((json: any) => {
-                    // this.additionalInformationService.saveAdditionalInformation(json)
-                    //     .then((message: any) => {
-                    //         this.getAreaOfInterestInformation(this.$scope.userId);
-                    //         this.enableViewMode('additional');
-                    //     });
-                    this.getAreaOfInterestInformation(this.$scope.userId);
-                           this.enableViewMode('additional');
+                    this.additionalInformationService.saveAdditionalInformation(json)
+                        .then((message: any) => {
+                            this.getAdditionalInformation(this.$scope.userId);
+                            this.enableViewMode('additional');
+                        });
                 });
         }
 
@@ -681,21 +680,19 @@ module ums {
         }
 
         private getAreaOfInterestInformation(userId: string) {
-            this.$scope.entry.additional.areaOfInterestInformation = Array<IAreaOfInterestInformationModel>();
+            // this.$scope.entry.additional.areaOfInterestInformation = Array<IAreaOfInterestInformationModel>();
             this.areaOfInterestInformationService.getAreaOfInterestInformation(userId).then((aoiInformation: any) => {
                 for (let i = 0; i < aoiInformation.length; i++) {
-                    this.$scope.entry.additional.areaOfInterestInformation[i] = aoiInformation[i];
-                    this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[aoiInformation[i].areaOfInterestId];
+                    // this.$scope.entry.additional.areaOfInterestInformation[i] = aoiInformation[i];
+                    // this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[aoiInformation[i].areaOfInterestId];
                 }
             });
         }
 
         private getAdditionalInformation(userId: string) {
             this.$scope.entry.additional = <IAdditionalInformationModel>{};
-            this.$scope.entry.additional.areaOfInterestInformation = Array<IAreaOfInterestInformationModel>();
             this.additionalInformationService.getAdditionalInformation(userId).then((additional: any) => {
-                this.$scope.entry.additional = additional;
-                this.getAreaOfInterestInformation(userId);
+                this.$scope.entry.additional = additional[0];
             });
         }
 
@@ -918,7 +915,6 @@ module ums {
                 item['experience'] = obj;
             } else if (convertThis === "additional") {
                 item['additional'] = obj;
-                console.log(obj);
             }
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;

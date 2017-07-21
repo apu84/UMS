@@ -76,31 +76,28 @@
 
     <div id="rightDiv" data-ng-if="showFilteredEmployeeList">
         <div class="panel">
-            <div class="panel-heading">Search Employee By : {{data.searchBy}}<span class="subtitle"></span></div>
+            <div class="panel-heading">Search Employee By : <span data-ng-if="data.searchBy=='1'">User Id</span><span data-ng-if="data.searchBy=='2'">User Name</span><span data-ng-if="data.searchBy=='3'">Department</span>&nbsp;&nbsp; Total: {{filterd.length}}<span class="subtitle"></span></div>
             <div class="panel-body pan">
                 <div class="panel-body shadowPanel"  style="min-height: 490px;">
-                    <div data-ng-show="showTableData">
                         <table class="table table-bordered">
                             <thead class="heading well">
                             <tr>
                                 <th>Sl.</th>
                                 <th >Teacher Name</th>
-                                <th>Designation</th>
                                 <th>Department</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="user in allUser | filter: {employeeName: data.filterData} ">
+                            <tr data-ng-repeat="user in filterd = (allUser | filter: {employeeName: data.changedUserName})">
                                 <td>{{$index + 1}}.</td>
                                 <td>{{user.employeeName}}</td>
-                                <td>{{user.designation}}</td>
                                 <td>{{user.deptOfficeId}}</td>
                                 <td><button type="button" class="btn btn-default" data-ng-click="view(user)">View</button></td>
                             </tr>
                             </tbody>
                         </table>
-                    </div>
+
                 </div>
             </div>
         </div>

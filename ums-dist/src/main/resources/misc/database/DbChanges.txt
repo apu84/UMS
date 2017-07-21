@@ -1354,6 +1354,15 @@ begin
 end;
 /
 
+CREATE TABLE DB_IUMS.EMP_ADDITIONAL_INFO
+(
+  EMPLOYEE_ID       VARCHAR2(8 BYTE),
+  ROOM_NO           VARCHAR2(15 BYTE),
+  EXT_NO            VARCHAR2(6 BYTE),
+  ACADEMIC_INITIAL  VARCHAR2(25 BYTE),
+  LAST_MODIFIED     VARCHAR2(18 BYTE)
+);
+
 //*********************************************************************************************************************
 
 

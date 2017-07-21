@@ -6,13 +6,13 @@
                     <div class="col-md-2">
                         <label class="control-label">Area Of Interests: </label>
                     </div>
-                    <div class="col-md-10">
-                        <select data-ng-model="entry.additional.areaOfInterestInformation"
-                                data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"
-                                class="select2-multi-value form-control"
-                                multiple="multiple">
-                        </select>
-                    </div>
+                    <!--<div class="col-md-10">-->
+                        <!--<select data-ng-model="entry.additional.areaOfInterestInformation"-->
+                                <!--data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"-->
+                                <!--class="select2-multi-value form-control"-->
+                                <!--multiple="multiple">-->
+                        <!--</select>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="row">
@@ -30,7 +30,7 @@
                 <div class="col-md-4">
                     <label class="col-md-4 control-label">PABX/Ext No.</label>
                     <div class="col-md-8">
-                        <input type="number"
+                        <input type="text"
                                name="nExtNo{{$index}}"
                                id="iExtNo{{$index}}"
                                data-ng-model="entry.additional.extNo"
@@ -71,7 +71,7 @@
                     <label class="control-label">Area Of Interests: </label>
                 </div>
                 <div class="col-md-10" style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{entry.additional.areaOfInterest}}</label>
+                    <!--<label class="control-label">{{entry.additional.areaOfInterest}}</label>-->
                 </div>
             </div>
         </div>

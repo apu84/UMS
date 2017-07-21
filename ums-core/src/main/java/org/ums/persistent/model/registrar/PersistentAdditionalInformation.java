@@ -17,7 +17,7 @@ public class PersistentAdditionalInformation implements MutableAdditionalInforma
   }
   private String mId;
   private String mRoomNo;
-  private int mExtNo;
+  private String mExtNo;
   private String mAcademicInitial;
   private String mLastModified;
 
@@ -77,7 +77,7 @@ public class PersistentAdditionalInformation implements MutableAdditionalInforma
   }
 
   @Override
-  public void setExtNo(int pExtNo) {
+  public void setExtNo(String pExtNo) {
     mExtNo = pExtNo;
   }
 
@@ -92,7 +92,7 @@ public class PersistentAdditionalInformation implements MutableAdditionalInforma
   }
 
   @Override
-  public int getExtNo() {
+  public String getExtNo() {
     return mExtNo;
   }
 

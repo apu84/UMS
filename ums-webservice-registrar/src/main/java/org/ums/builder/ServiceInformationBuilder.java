@@ -51,7 +51,7 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
 
   @Override
   public void build(JsonObjectBuilder pBuilder, ServiceInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("departmentId", pReadOnly.getDepartmentId());
     pBuilder.add("designationId", pReadOnly.getDesignationId());
@@ -66,11 +66,26 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
       mServiceInformationDetailBuilder.build(jsonObjectBuilder, serviceInformationDetail, pUriInfo, pLocalCache);
       children.add(jsonObjectBuilder);
     }
-    pBuilder.add("intervals", children);
+    pBuilder.add("intervalDetails", children);
   }
 
   @Override
   public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    if(pJsonObject.containsKey("dbAction")) {
+      if(pJsonObject.getString("dbAction").equals("Update")) {
+        System.out.println("in update");
+        System.out.println(Long.valueOf(pJsonObject.getInt("id")));
+        pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      }
+      else if(pJsonObject.getString("dbAction").equals("Create")) {
+        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      }
+    }
+    else {
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    }
     pMutable.setEmployeeId(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));
     pMutable.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt("id")));

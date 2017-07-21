@@ -58,21 +58,24 @@ public class AdditionalInformationResourceHelper extends
   public Response saveAdditionalInformation(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonArray additionalJsonArray = entries.getJsonObject(0).getJsonArray("additional");
+    JsonObject additionalJsonObject = entries.getJsonObject(0).getJsonObject("additional");
     MutableAdditionalInformation mutableAdditionalInformation = new PersistentAdditionalInformation();
-    mBuilder.build(mutableAdditionalInformation, additionalJsonArray.getJsonObject(0), localCache);
-    // mManager.deleteAdditionalInformation(mutableAdditionalInformation);
+    mBuilder.build(mutableAdditionalInformation, additionalJsonObject, localCache);
+    mManager.deleteAdditionalInformation(mutableAdditionalInformation);
     mManager.saveAdditionalInformation(mutableAdditionalInformation);
 
-    List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformations = new ArrayList<>();
-    JsonArray aoiJsonArray = additionalJsonArray.getJsonObject(0).getJsonArray("areaOfInterestInformation");
-    int sizeOfAoiJsonArray = aoiJsonArray.size();
-    for(int i = 0; i < sizeOfAoiJsonArray; i++) {
-      MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-      mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation, aoiJsonArray.getJsonObject(0),
-          localCache);
-      mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
-    }
+    // List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformations = new ArrayList<>();
+    // JsonArray aoiJsonArray =
+    // additionalJsonArray.getJsonObject(0).getJsonArray("areaOfInterestInformation");
+    // int sizeOfAoiJsonArray = aoiJsonArray.size();
+    // for(int i = 0; i < sizeOfAoiJsonArray; i++) {
+    // MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new
+    // PersistentAreaOfInterestInformation();
+    // mAreaOfInterestInformationBuilder.build(mutableAreaOfInterestInformation,
+    // aoiJsonArray.getJsonObject(0),
+    // localCache);
+    // mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
+    // }
     // mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(additionalJsonArray.getJsonObject(0).getString(
     // "employeeId"));
     Response.ResponseBuilder builder = Response.created(null);

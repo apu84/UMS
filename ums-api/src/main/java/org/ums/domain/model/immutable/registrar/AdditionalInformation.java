@@ -12,7 +12,7 @@ public interface AdditionalInformation extends Serializable, EditType<MutableAdd
 
   String getRoomNo();
 
-  int getExtNo();
+  String getExtNo();
 
   String getAcademicInitial();
 }

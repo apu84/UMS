@@ -69,18 +69,47 @@ public class ServiceInformationResourceHelper extends
       Long serviceId;
       MutableServiceInformation mutableServiceInformation = new PersistentServiceInformation();
       mBuilder.build(mutableServiceInformation, serviceJsonArray.getJsonObject(i), localCache);
-      serviceId = mManager.saveServiceInformation(mutableServiceInformation);
-
-      JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
-      int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
-      List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
-      for(int j = 0; j < sizeOfServiceDetailsJsonArray; j++) {
-        MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
-        mServiceInformationDetailBuilder.serviceInformationDetailBuilder(mutableServiceInformationDetail,
-            serviceDetailJsonArray.getJsonObject(j), localCache, serviceId);
-        pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+      if(serviceJsonArray.getJsonObject(i).containsKey("dbAction")) {
+        if(serviceJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
+          serviceId = mManager.saveServiceInformation(mutableServiceInformation);
+          JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
+          int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
+          List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
+          for(int j = 0; j < sizeOfServiceDetailsJsonArray; j++) {
+            MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+            mServiceInformationDetailBuilder.serviceInformationDetailBuilder(mutableServiceInformationDetail,
+                serviceDetailJsonArray.getJsonObject(j), localCache, serviceId);
+            pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+          }
+          mServiceInformationDetailManager.saveServiceInformationDetail(pMutableServiceInformationDetail);
+        }
+        else if(serviceJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
+          mManager.updateServiceInformation(mutableServiceInformation);
+          JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
+          int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
+          List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
+          for(int j = 0; j < sizeOfServiceDetailsJsonArray; j++) {
+            MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+            mServiceInformationDetailBuilder.build(mutableServiceInformationDetail,
+                serviceDetailJsonArray.getJsonObject(j), localCache);
+            pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+          }
+          mServiceInformationDetailManager.updateServiceInformationDetail(pMutableServiceInformationDetail);
+        }
+        else {
+          mManager.deleteServiceInformation(mutableServiceInformation);
+          JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
+          int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();
+          List<MutableServiceInformationDetail> pMutableServiceInformationDetail = new ArrayList<>();
+          for(int j = 0; j < sizeOfServiceDetailsJsonArray; j++) {
+            MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+            mServiceInformationDetailBuilder.build(mutableServiceInformationDetail,
+                serviceDetailJsonArray.getJsonObject(j), localCache);
+            pMutableServiceInformationDetail.add(mutableServiceInformationDetail);
+          }
+          mServiceInformationDetailManager.deleteServiceInformationDetail(pMutableServiceInformationDetail);
+        }
       }
-      mServiceInformationDetailManager.saveServiceInformationDetail(pMutableServiceInformationDetail);
     }
 
     Response.ResponseBuilder builder = Response.created(null);
