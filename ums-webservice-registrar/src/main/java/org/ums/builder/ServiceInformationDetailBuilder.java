@@ -46,7 +46,7 @@ public class ServiceInformationDetailBuilder implements
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
         : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
-    pMutable.setServiceId(Long.parseLong(pJsonObject.getString("serviceId")));
+    pMutable.setServiceId(Long.valueOf(pJsonObject.getString("serviceId")));
   }
 
   public void serviceInformationDetailBuilder(MutableServiceInformationDetail pMutable, JsonObject pJsonObject,

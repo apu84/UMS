@@ -29,20 +29,17 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
         pMutable.setId(pJsonObject.getInt("id"));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
-    }
-    else {
-      pMutable.setId(pJsonObject.getInt("id"));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+      }
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      pMutable.setTrainingName(pJsonObject.getString("trainingName"));
+      pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
+      pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));
+      pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
     }
-    pMutable.setTrainingName(pJsonObject.getString("trainingName"));
-    pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
-    pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));
-    pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
-
   }
 }

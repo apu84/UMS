@@ -62,9 +62,14 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
         else if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
           updateMutableAwardInformation.add(awardInformation);
         }
+        else if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
+          deleteMutableAwardInformation.add(awardInformation);
+        }
       }
       else {
-        deleteMutableAwardInformation.add(awardInformation);
+        Response.ResponseBuilder builder = Response.created(null);
+        builder.status(Response.Status.NOT_MODIFIED);
+        return builder.build();
       }
     }
 

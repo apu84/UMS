@@ -33,19 +33,17 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
         pMutable.setId(pJsonObject.getInt("id"));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
-    }
-    else {
-      pMutable.setId(pJsonObject.getInt("id"));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+      }
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    }
-    pMutable.setDegree(mAcademicDegreeType.get(pJsonObject.getJsonObject("degree").getInt("id")));
-    pMutable.setInstitute(pJsonObject.getString("institution"));
-    pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
+      pMutable.setDegree(mAcademicDegreeType.get(pJsonObject.getJsonObject("degree").getInt("id")));
+      pMutable.setInstitute(pJsonObject.getString("institution"));
+      pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
 
+    }
   }
 }

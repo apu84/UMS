@@ -40,29 +40,27 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
         pMutable.setId(pJsonObject.getInt("id"));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
-    }
-    else {
-      pMutable.setId(pJsonObject.getInt("id"));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+      }
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    }
-    pMutable.setAwardName(pJsonObject.getString("awardName"));
-    if(!pJsonObject.containsKey("awardInstitute")) {
-      pMutable.setAwardInstitute("");
-    }
-    else {
-      pMutable.setAwardInstitute(pJsonObject.getString("awardInstitute"));
-    }
-    pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
-    if(!pJsonObject.containsKey("awardShortDescription")) {
-      pMutable.setAwardShortDescription("");
-    }
-    else {
-      pMutable.setAwardShortDescription(pJsonObject.getString("awardShortDescription"));
+      pMutable.setAwardName(pJsonObject.getString("awardName"));
+      if(!pJsonObject.containsKey("awardInstitute")) {
+        pMutable.setAwardInstitute("");
+      }
+      else {
+        pMutable.setAwardInstitute(pJsonObject.getString("awardInstitute"));
+      }
+      pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
+      if(!pJsonObject.containsKey("awardShortDescription")) {
+        pMutable.setAwardShortDescription("");
+      }
+      else {
+        pMutable.setAwardShortDescription(pJsonObject.getString("awardShortDescription"));
+      }
     }
   }
 }

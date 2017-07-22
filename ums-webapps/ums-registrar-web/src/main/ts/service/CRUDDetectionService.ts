@@ -7,45 +7,42 @@ module ums{
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
-        public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any): any {
-            let baseArrayOfObjectsLength: number = 0;
-            let copyOfComparingArrayOfObjects: any;
-            copyOfComparingArrayOfObjects = angular.copy(comparingObject);
-            if(baseObject.length == null) {
-                let baseArrayOfObjectsLength: number = baseObject.length;
-            }
-            let comparingArrayOfObjectsLength: number = copyOfComparingArrayOfObjects.length;
+        public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            let comparingObjects: any = angular.copy(comparingObject);
+            let baseObjectsLength: number = baseObject.length;
+            let comparingObjectsLength: number = comparingObjects.length;
             let flag: number = 0;
-            for (let i = 0; i < baseArrayOfObjectsLength; i++) {
-                for (let j = 0; j < comparingArrayOfObjectsLength; j++) {
-                    if (baseObject[i].id == copyOfComparingArrayOfObjects[j].id) {
-                        if (this.objectEqualityTest(baseObject[i], copyOfComparingArrayOfObjects[i]) == true) {
-                            copyOfComparingArrayOfObjects[i].dbAction = "No Change";
-                        } else {
-                            copyOfComparingArrayOfObjects[i].dbAction = "Update";
+            for (let i = 0; i < baseObjectsLength; i++) {
+                for (let j = 0; j < comparingObjectsLength; j++) {
+                    if (this.objectEqualityTest(baseObject[i], comparingObjects[j]) == true) {
+                        comparingObjects[j].dbAction = "No Change";
+                        baseObject[i].dbAction = "No Change";
+                    }
+                }
+            }
+            for(let i = 0; i < baseObjectsLength; i++){
+                for(let j = 0; j < comparingObjectsLength; j++){
+                    if(this.objectEqualityTest(baseObject[i], comparingObjects[j]) == false){
+                        if(comparingObjects[j].dbAction == "" || comparingObjects[j].dbAction == undefined){
+                            comparingObjects[j].dbAction = "Update";
+                            baseObject[i].dbAction = "Update"
                         }
-                        flag = 1;
-                        break;
-                    }
-                    else {
-                        flag = 0;
                     }
                 }
-                if (flag == 0) {
-                    flag = 0;
-                    copyOfComparingArrayOfObjects.push(baseObject[i]);
+            }
+            for(let i = 0; i < baseObjectsLength; i++){
+                if(baseObject[i].dbAction == "" || baseObject[i].dbAction == undefined){
+                    baseObject[i].dbAction = "Delete";
+                    console.log(baseObject[i]);
+                    comparingObjects.push(baseObject[i]);
                 }
             }
-            for (let i = 0; i < comparingArrayOfObjectsLength; i++) {
-                if (copyOfComparingArrayOfObjects[i].id == null) {
-                    copyOfComparingArrayOfObjects[i].dbAction = "Create";
-                }
-            }
-            return copyOfComparingArrayOfObjects;
+            defer.resolve(comparingObjects);
+            return defer.promise;
         }
 
-        public objectEqualityTest(baseObj: any, comparingObj: any): boolean{
-            console.log(angular.equals(baseObj, comparingObj));
+        private objectEqualityTest(baseObj: any, comparingObj: any): boolean{
             return angular.equals(baseObj, comparingObj);
         }
 

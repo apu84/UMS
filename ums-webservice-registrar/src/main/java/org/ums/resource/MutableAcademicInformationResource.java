@@ -10,11 +10,11 @@ import javax.ws.rs.core.Response;
 public class MutableAcademicInformationResource extends Resource {
 
   @Autowired
-  AcademicInformationResourceHelper mAcademicInformationResourceHelper;
+  AcademicInformationResourceHelper mHelper;
 
   @POST
   @Path("/saveAcademicInformation")
   public Response saveAcademicInformation(final JsonObject pJsonObject) {
-    return mAcademicInformationResourceHelper.saveAcademicInformation(pJsonObject, mUriInfo);
+    return mHelper.saveAcademicInformation(pJsonObject, mUriInfo);
   }
 }

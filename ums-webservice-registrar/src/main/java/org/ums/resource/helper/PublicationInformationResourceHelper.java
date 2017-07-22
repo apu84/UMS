@@ -122,9 +122,14 @@ public class PublicationInformationResourceHelper extends
         else if(publicationJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
           updateMutablePublicationInformation.add(publicationInformation);
         }
+        else if(publicationJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
+          deleteMutablePublicationInformation.add(publicationInformation);
+        }
       }
       else {
-        deleteMutablePublicationInformation.add(publicationInformation);
+        Response.ResponseBuilder builder = Response.created(null);
+        builder.status(Response.Status.NOT_MODIFIED);
+        return builder.build();
       }
     }
 

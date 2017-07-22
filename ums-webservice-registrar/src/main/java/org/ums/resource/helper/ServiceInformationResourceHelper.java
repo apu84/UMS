@@ -33,9 +33,6 @@ public class ServiceInformationResourceHelper extends
   private static final Logger mLogger = LoggerFactory.getLogger(ServiceInformationResourceHelper.class);
 
   @Autowired
-  private UserManager mUserManager;
-
-  @Autowired
   private ServiceInformationManager mManager;
 
   @Autowired
@@ -50,9 +47,7 @@ public class ServiceInformationResourceHelper extends
   public JsonObject getServiceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<ServiceInformation> pServiceInformation = new ArrayList<>();
     try {
-      pServiceInformation =
-          mManager.getServiceInformation(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString())
-              .getEmployeeId());
+      pServiceInformation = mManager.getServiceInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
     return toJson(pServiceInformation, pUriInfo);
@@ -96,7 +91,7 @@ public class ServiceInformationResourceHelper extends
           }
           mServiceInformationDetailManager.updateServiceInformationDetail(pMutableServiceInformationDetail);
         }
-        else {
+        else if(serviceJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
           mManager.deleteServiceInformation(mutableServiceInformation);
           JsonArray serviceDetailJsonArray = serviceJsonArray.getJsonObject(i).getJsonArray("intervalDetails");
           int sizeOfServiceDetailsJsonArray = serviceDetailJsonArray.size();

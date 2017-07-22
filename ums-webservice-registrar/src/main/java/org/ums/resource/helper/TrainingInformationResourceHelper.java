@@ -63,9 +63,14 @@ public class TrainingInformationResourceHelper extends
         else if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
           updateMutableTrainingInformation.add(trainingInformation);
         }
+        else if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
+          deleteMutableTrainingInformation.add(trainingInformation);
+        }
       }
       else {
-        deleteMutableTrainingInformation.add(trainingInformation);
+        Response.ResponseBuilder builder = Response.created(null);
+        builder.status(Response.Status.NOT_MODIFIED);
+        return builder.build();
       }
     }
 

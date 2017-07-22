@@ -27,15 +27,15 @@ public class AcademicInformationResourceHelper extends
     ResourceHelper<AcademicInformation, MutableAcademicInformation, Integer> {
 
   @Autowired
-  AcademicInformationManager mAcademicInformationManager;
+  AcademicInformationManager mManager;
 
   @Autowired
-  AcademicInformationBuilder mAcademicInformationBuilder;
+  AcademicInformationBuilder mBuilder;
 
   public JsonObject getAcademicInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     List<AcademicInformation> pAcademicInformation = new ArrayList<>();
     try {
-      pAcademicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+      pAcademicInformation = mManager.getEmployeeAcademicInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -54,7 +54,7 @@ public class AcademicInformationResourceHelper extends
 
     for(int i = 0; i < sizeOfAcademicJsonArray; i++) {
       MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
-      mAcademicInformationBuilder.build(academicInformation, academicJsonArray.getJsonObject(i), localCache);
+      mBuilder.build(academicInformation, academicJsonArray.getJsonObject(i), localCache);
       if(academicJsonArray.getJsonObject(i).containsKey("dbAction")) {
         if(academicJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
           createMutableAcademicInformation.add(academicInformation);
@@ -62,20 +62,25 @@ public class AcademicInformationResourceHelper extends
         else if(academicJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
           updateMutableAcademicInformation.add(academicInformation);
         }
+        else if(academicJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
+          deleteMutableAcademicInformation.add(academicInformation);
+        }
       }
       else {
-        deleteMutableAcademicInformation.add(academicInformation);
+        Response.ResponseBuilder builder = Response.created(null);
+        builder.status(Response.Status.NOT_MODIFIED);
+        return builder.build();
       }
     }
 
     if(createMutableAcademicInformation.size() != 0) {
-      mAcademicInformationManager.saveAcademicInformation(createMutableAcademicInformation);
+      mManager.saveAcademicInformation(createMutableAcademicInformation);
     }
     if(updateMutableAcademicInformation.size() != 0) {
-      mAcademicInformationManager.updateAcademicInformation(updateMutableAcademicInformation);
+      mManager.updateAcademicInformation(updateMutableAcademicInformation);
     }
     if(deleteMutableAcademicInformation.size() != 0) {
-      mAcademicInformationManager.deleteAcademicInformation(deleteMutableAcademicInformation);
+      mManager.deleteAcademicInformation(deleteMutableAcademicInformation);
     }
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -103,12 +108,12 @@ public class AcademicInformationResourceHelper extends
 
   @Override
   protected ContentManager<AcademicInformation, MutableAcademicInformation, Integer> getContentManager() {
-    return mAcademicInformationManager;
+    return mManager;
   }
 
   @Override
   protected Builder<AcademicInformation, MutableAcademicInformation> getBuilder() {
-    return mAcademicInformationBuilder;
+    return mBuilder;
   }
 
   @Override

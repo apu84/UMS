@@ -38,7 +38,7 @@ public class AttachmentResource extends Resource {
   @GET
   @Path("/applicationType/{application-type}/applicationId/{application-id}")
   public JsonObject getAttachments(@PathParam("application-type") String pApplicationType,
-                                   @PathParam("application-id") String pApplicationId) {
+      @PathParam("application-id") String pApplicationId) {
     return mHelper.getAttachment(ApplicationType.get(Integer.parseInt(pApplicationType)), pApplicationId, mUriInfo);
   }
 
@@ -58,7 +58,6 @@ public class AttachmentResource extends Resource {
 
       }
     };
-
 
   }
 }

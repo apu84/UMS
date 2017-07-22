@@ -102,20 +102,20 @@ module ums{
                 this.notify.error("You can empty only one resign date");
             }
             else {
-                let serviceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, this.$scope.entry.serviceInfo);
-                this.convertToJson(serviceObjects).then((json: any) => {
-                    console.log(json);
+                // let serviceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, this.$scope.entry.serviceInfo);
+                // this.convertToJson(serviceObjects).then((json: any) => {
+                //     console.log(json);
                     // this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
                     //     this.$scope.showInputDiv = false;
                     //     this.$scope.showLabelDiv = true;
                     // });
-                });
+              //  });
             }
         }
 
         private getServiceInformation(): void{
             this.$scope.entry.serviceInfo = Array<IServiceInformationModel>();
-            this.serviceInformationService.getServiceInformation().then((services: any) =>{
+            this.serviceInformationService.getServiceInformation("33333").then((services: any) =>{
                for(let i = 0; i < services.length; i++){
                    this.$scope.entry.serviceInfo[i] = services[i];
                    this.$scope.entry.serviceInfo[i].department = this.$scope.departmentMap[services[i].departmentId];

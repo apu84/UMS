@@ -27,9 +27,6 @@ import java.util.List;
 public class ServiceInformationBuilder implements Builder<ServiceInformation, MutableServiceInformation> {
 
   @Autowired
-  private UserManager mUserManager;
-
-  @Autowired
   private DateFormat mDateFormat;
 
   @Autowired
@@ -73,20 +70,15 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
   public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
-        System.out.println("in update");
-        System.out.println(Long.valueOf(pJsonObject.getInt("id")));
         pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
     }
-    else {
-      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    else if(pJsonObject.getString("dbAction").equals("Delete")) {
+      pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
     }
-    pMutable.setEmployeeId(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));
     pMutable.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt("id")));
     pMutable.setEmployment(mEmploymentTypeManager.get(pJsonObject.getJsonObject("employmentType").getInt("id")));

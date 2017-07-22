@@ -30,19 +30,17 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
         pMutable.setId(pJsonObject.getInt("id"));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
-    }
-    else {
-      pMutable.setId(pJsonObject.getInt("id"));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+      }
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+      pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
+      pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
+      pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));
+      pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
     }
-    pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
-    pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
-    pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));
-    pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
   }
 }

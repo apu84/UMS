@@ -17,13 +17,8 @@ module ums {
         required: boolean;
         disablePresentAddressDropdown: boolean;
         disablePermanentAddressDropdown: boolean;
-        showFilteredEmployeeList: boolean;
-        showEmployeeInformation: boolean;
-        showSelectPanel: boolean;
-        showTableData: boolean;
         borderColor: string;
         supOptions: string;
-        userAreaOfInterests: string;
         customItemPerPage: number;
         degreeNameMap: any;
         genderNameMap: any;
@@ -37,7 +32,6 @@ module ums {
         districtMap: any;
         thanaMap: any;
         publicationTypeMap: any;
-        departmentMap: any;
         aoiMap: any;
         data: any;
         pagination: any;
@@ -63,9 +57,8 @@ module ums {
         fillEmergencyContactAddress: Function;
         pageChanged: Function;
         changeItemPerPage: Function;
-        view: Function;
         entry: IEntry;
-        genderTypes: Array<IGender>;
+        genders: Array<IGender>;
         maritalStatus: Array<ICommon>;
         religions: Array<ICommon>;
         nationalities: Array<ICommon>;
@@ -89,23 +82,23 @@ module ums {
         previousTrainingInformation: Array<ITrainingInformationModel>;
         previousAwardInformation: Array<IAwardInformationModel>;
         previousExperienceInformation: Array<IExperienceInformationModel>;
-        aoiText: string;
         userId: string;
-        userRoleId: number;
-        allUser: Array<Employee>;
 
 
-        changedUserId: string;
-        filterData: string;
-        searchBy: string;
-        changedUserName: string;
-        showSearchByUserId: boolean;
-        showSearchByUserName: boolean;
-        showSearchByDepartment: boolean;
-        changedDepartment: IDepartment;
+        showServiceInputDiv: boolean;
+        showServiceLabelDiv: boolean;
+        showServiceEditButton: boolean;
+        designationMap: any;
+        departmentMap: any;
+        employmentMap: any;
+        employmentPeriodMap: any;
+        designations: Array<ICommon>;
+        employmentTypes: Array<ICommon>;
+        serviceIntervals: Array<ICommon>;
+        serviceRegularIntervals: Array<ICommon>;
+        serviceContractIntervals: Array<ICommon>;
         departments: Array<IDepartment>;
-        getSearchFields: Function;
-        getEmployeeInformation: Function;
+        previousServiceInformation: Array<IServiceInformationModel>;
     }
     export interface IGender {
         id: string;
@@ -116,6 +109,12 @@ module ums {
         name: string;
         foreign_id: number;
     }
+    export interface IDepartment{
+        id: string;
+        shortName: string;
+        longName: string;
+        type: string;
+    }
     export interface IEntry {
         personal: IPersonalInformationModel;
         academic: Array<IAcademicInformationModel>;
@@ -124,22 +123,24 @@ module ums {
         award: Array<IAwardInformationModel>;
         experience: Array<IExperienceInformationModel>;
         additional: IAdditionalInformationModel;
+        serviceInfo: Array<IServiceInformationModel>;
     }
 
     class EmployeeInformation {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce','countryService',
             'divisionService', 'districtService', 'thanaService', 'personalInformationService', 'academicInformationService',
             'publicationInformationService', 'trainingInformationService', 'awardInformationService', 'experienceInformationService',
-            'areaOfInterestService', 'bloodGroupService', 'nationalityService', 'religionService', 'relationTypeService', 'maritalStatusService', 'areaOfInterestInformationService', 'additionalInformationService', 'userService', 'cRUDDetectionService', 'departmentService', 'employeeService'];
+            'areaOfInterestService', 'areaOfInterestInformationService', 'additionalInformationService', 'userService', 'cRUDDetectionService', 'serviceInformationService', 'serviceInformationDetailService', 'employmentTypeService',
+            'departmentService', 'designationService'];
 
         constructor(private registrarConstants: any, private $scope: IEmployeeInformation, private $q: ng.IQService, private notify: Notify,
                     private $window: ng.IWindowService, private $sce: ng.ISCEService, private countryService: CountryService,
                     private divisionService: DivisionService, private districtService: DistrictService, private thanaService: ThanaService, private personalInformationService: PersonalInformationService,
                     private academicInformationService: AcademicInformationService, private publicationInformationService: PublicationInformationService, private trainingInformationService: TrainingInformationService,
-                    private awardInformationService: AwardInformationService, private experienceInformationService: ExperienceInformationService, private areaOfInterestService: AreaOfInterestService, private bloodGroupService: BloodGroupService, private nationalityService: NationalityService,
-                    private religionService: ReligionService, private relationTypeService: RelationTypeService, private maritalStatusService: MaritalStatusService,
-                    private areaOfInterestInformationService: AreaOfInterestInformationService, private additionalInformationService: AdditionalInformationService, private userService: UserService, private cRUDDetectionService: CRUDDetectionService, private departmentService: DepartmentService,
-                    private employeeService: EmployeeService) {
+                    private awardInformationService: AwardInformationService, private experienceInformationService: ExperienceInformationService, private areaOfInterestService: AreaOfInterestService,
+                    private areaOfInterestInformationService: AreaOfInterestInformationService, private additionalInformationService: AdditionalInformationService, private userService: UserService, private cRUDDetectionService: CRUDDetectionService,
+                    private serviceInformationService: ServiceInformationService, private serviceInformationDetailService: ServiceInformationDetailService, private employmentTypeService: EmploymentTypeService,
+                    private departmentService: DepartmentService, private designationService: DesignationService) {
 
             $scope.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -148,24 +149,20 @@ module ums {
                 training: Array<ITrainingInformationModel>(),
                 award: Array<IAwardInformationModel>(),
                 experience: Array<IExperienceInformationModel>(),
-                additional: <IAdditionalInformationModel> {}
+                additional: <IAdditionalInformationModel> {},
+                serviceInfo: Array<IServiceInformationModel>()
             };
             $scope.data = {
                 supOptions: "1",
                 borderColor: "",
                 itemPerPage: 2,
                 totalRecord: 0,
-                customItemPerPage: null,
-                changedUserId: "",
-                changedUserName: "",
-                searchBy: "",
-                changedDepartment: null,
-                filterData: "",
-                aoiText: ""
+                customItemPerPage: null
             };
+            $scope.showServiceEditButton = false;
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
-            $scope.genderTypes = this.registrarConstants.genderTypes;
+            $scope.genders = this.registrarConstants.genderTypes;
             $scope.publicationTypes = this.registrarConstants.publicationTypes;
             $scope.degreeNames = this.registrarConstants.degreeTypes;
             $scope.bloodGroups = this.registrarConstants.bloodGroupTypes;
@@ -173,6 +170,7 @@ module ums {
             $scope.religions = this.registrarConstants.religionTypes;
             $scope.relations = this.registrarConstants.relationTypes;
             $scope.nationalities = this.registrarConstants.nationalityTypes;
+            $scope.serviceIntervals = registrarConstants.servicePeriods;
 
             $scope.testData = this.testData.bind(this);
             $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
@@ -196,140 +194,46 @@ module ums {
             $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
             $scope.pageChanged = this.pageChanged.bind(this);
             $scope.changeItemPerPage = this.changeItemPerPage.bind(this);
-            $scope.getSearchFields = this.getSearchFields.bind(this);
-            $scope.getEmployeeInformation = this.getEmployeeInformation.bind(this);
-            $scope.view = this.view.bind(this);
 
             this.initialization();
             this.addDate();
         }
 
-        private view(user: any): void{
-            this.$scope.userId = user.id;
-            this.$scope.showFilteredEmployeeList = false;
-            this.$scope.showEmployeeInformation = true;
-            this.getPreviousFormValues();
-            this.setViewModeInitially();
-        }
-
-        private getAllUser(): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.employeeService.getAll().then((users: any)=>{
-                defer.resolve(users);
-            });
-            return defer.promise;
-        }
-
-        private getSearchFields(): void{
-            console.log(this.$scope.data.searchBy);
-            if(this.$scope.data.searchBy == "1"){
-                this.$scope.showSearchByUserName = false;
-                this.$scope.showSearchByDepartment = false;
-                this.$scope.showFilteredEmployeeList = false;
-                this.$scope.showSearchByUserId = true;
-                this.$scope.showEmployeeInformation = true;
-                this.setViewModeInitially();
-            } else if(this.$scope.data.searchBy == "2"){
-                this.$scope.showSearchByUserId = false;
-                this.$scope.showSearchByDepartment = false;
-                this.$scope.showEmployeeInformation = false;
-                this.$scope.showSearchByUserName = true;
-                this.$scope.showFilteredEmployeeList = true;
-            } else if(this.$scope.data.searchBy == "3"){
-                this.$scope.showSearchByUserId = false;
-                this.$scope.showSearchByUserName = false;
-                this.$scope.showEmployeeInformation = false;
-                this.$scope.showFilteredEmployeeList = true;
-                this.$scope.showSearchByDepartment = true;
-            }
-        }
-
-        private getEmployeeInformation(): void{
-            if(this.$scope.data.searchBy == "1"){
-                this.$scope.showFilteredEmployeeList = false;
-                this.$scope.showEmployeeInformation = true;
-                this.$scope.userId = this.$scope.data.changedUserId;
-                if(this.$scope.userId == "" || this.$scope.userId == null){
-                    this.notify.error("Empty or Null Id");
-                }
-                else {
-                    Utils.expandRightDiv();
-                    this.getPreviousFormValues();
-                    this.setViewModeInitially();
-                }
-            } else if (this.$scope.data.searchBy == "2"){
-                Utils.expandRightDiv();
-                this.$scope.showEmployeeInformation = false;
-                this.$scope.showFilteredEmployeeList = true;
-                if(this.$scope.data.changedUserName != null || this.$scope.data.changedUserName != ""){
-                    this.$scope.showTableData = true;
-                }
-                else{
-                    this.$scope.showTableData = false;
-                }
-                this.$scope.data.filterData = this.$scope.data.changedUserName;
-            } else if (this.$scope.data.searchBy == "3"){
-                Utils.expandRightDiv();
-                this.$scope.showEmployeeInformation = false;
-                this.$scope.showFilteredEmployeeList = true;
-            }
-        }
-
-
         private initialization() {
-            this.getUser().then((user: any) => {
+            this.userService.fetchCurrentUserInfo().then((user: any) => {
                 this.$scope.userId = user.employeeId;
-                this.$scope.userRoleId = user.roleId;
-                if (this.$scope.userRoleId == 82) {
-                    this.getAllUser().then((users: any) => {
-                        this.$scope.allUser = users;
-                    });
-                    this.departmentService.getAll().then((departments: any) => {
-                        this.$scope.departments = departments;
-                    });
-                }
-                this.getCountry().then((countries: any) => {
-                    this.$scope.countries = countries;
-                    this.getDivision().then((divisions: any) => {
-                        this.$scope.divisions = divisions;
-                        this.getDistrict().then((districts: any) => {
-                            this.$scope.presentAddressDistricts = districts;
-                            this.$scope.permanentAddressDistricts = districts;
-                            this.$scope.allDistricts = districts;
-                            this.getThana().then((thanas: any) => {
-                                this.$scope.presentAddressThanas = thanas;
-                                this.$scope.permanentAddressThanas = thanas;
-                                this.$scope.allThanas = thanas;
-                                this.getAreaOfInterest().then((aois: any) => {
+                this.countryService.getCountryList().then((countries: any) => {
+                    this.$scope.countries = countries.entries;
+                    this.divisionService.getDivisionList().then((divisions: any) => {
+                        this.$scope.divisions = divisions.entries;
+                        this.districtService.getDistrictList().then((districts: any) => {
+                            this.$scope.presentAddressDistricts = districts.entries;
+                            this.$scope.permanentAddressDistricts = districts.entries;
+                            this.$scope.allDistricts = districts.entries;
+                            this.thanaService.getThanaList().then((thanas: any) => {
+                                this.$scope.presentAddressThanas = thanas.entries;
+                                this.$scope.permanentAddressThanas = thanas.entries;
+                                this.$scope.allThanas = thanas.entries;
+                                this.areaOfInterestService.getAll().then((aois: any) => {
                                     this.$scope.arrayOfAreaOfInterest = aois;
-                                    this.createMap();
-                                    if (this.$scope.userRoleId != 82) {
-                                        this.$scope.showSelectPanel = false;
-                                        this.$scope.showFilteredEmployeeList = false;
-                                        this.getPreviousFormValues();
-                                        this.$scope.showEmployeeInformation = true;
-                                        this.setViewModeInitially();
-                                    }
-                                    else {
-                                        this.$scope.showEmployeeInformation = false;
-                                        this.$scope.showSelectPanel = true;
-                                        this.$scope.showFilteredEmployeeList = true;
-                                    }
-
+                                    this.departmentService.getAll().then((departments: any) => {
+                                        this.$scope.departments = departments;
+                                        this.designationService.getAll().then((designations: any) => {
+                                            this.$scope.designations = designations;
+                                            this.employmentTypeService.getAll().then((employmentTypes: any) => {
+                                                this.$scope.employmentTypes = employmentTypes;
+                                                this.createMap();
+                                                this.getPreviousFormValues(this.$scope.userId);
+                                                this.setViewModeInitially();
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });
                     });
                 });
             });
-        }
-
-        private getUser(): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                defer.resolve(user);
-            });
-            return defer.promise;
         }
 
         private setViewModeInitially() {
@@ -340,48 +244,19 @@ module ums {
             this.enableViewMode('award');
             this.enableViewMode('experience');
             this.enableViewMode('additional');
+            this.enableViewMode('service');
         }
 
-        private getPreviousFormValues() {
-            this.getPersonalInformation(this.$scope.userId);
-            this.getAcademicInformation(this.$scope.userId);
-            this.getAwardInformation(this.$scope.userId);
-            this.getPublicationInformation(this.$scope.userId);
-            this.getPublicationInformationWithPagination(this.$scope.userId);
-            this.getExperienceInformation(this.$scope.userId);
-            this.getTrainingInformation(this.$scope.userId);
-            this.getAdditionalInformation(this.$scope.userId);
-
-        }
-
-        private getAreaOfInterest() : ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.areaOfInterestService.getAll().then((aoi: any)=>{defer.resolve(aoi);});
-            return defer.promise;
-        }
-
-        private getCountry(): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.countryService.getCountryList().then((countries: any) => {defer.resolve(countries.entries);});
-            return defer.promise;
-        }
-
-        private getDivision(): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.divisionService.getDivisionList().then((divisions: any) => { defer.resolve(divisions.entries);});
-            return defer.promise;
-        }
-
-        private getDistrict(): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.districtService.getDistrictList().then((districts: any) => { defer.resolve(districts.entries);});
-            return defer.promise;
-        }
-
-        private getThana() : ng.IPromise<any>{
-            let defer = this.$q.defer();
-            this.thanaService.getThanaList().then((thanas: any) => {defer.resolve(thanas.entries);});
-            return defer.promise;
+        private getPreviousFormValues(userId: string) {
+            this.getPersonalInformation(userId);
+            this.getAcademicInformation(userId);
+            this.getAwardInformation(userId);
+            this.getPublicationInformation(userId);
+            this.getPublicationInformationWithPagination(userId);
+            this.getExperienceInformation(userId);
+            this.getTrainingInformation(userId);
+            this.getAdditionalInformation(userId);
+            this.getServiceInformation(userId);
         }
 
         private createMap() {
@@ -398,13 +273,16 @@ module ums {
             this.$scope.districtMap = {};
             this.$scope.thanaMap = {};
             this.$scope.aoiMap = {};
+            this.$scope.designationMap = {};
             this.$scope.departmentMap = {};
+            this.$scope.employmentMap = {};
+            this.$scope.employmentPeriodMap = {};
 
             for (let i = 0; i < this.$scope.degreeNames.length; i++) {
                 this.$scope.degreeNameMap[this.$scope.degreeNames[i].id] = this.$scope.degreeNames[i];
             }
-            for (let i = 0; i < this.$scope.genderTypes.length; i++) {
-                this.$scope.genderNameMap[this.$scope.genderTypes[i].id] = this.$scope.genderTypes[i];
+            for (let i = 0; i < this.$scope.genders.length; i++) {
+                this.$scope.genderNameMap[this.$scope.genders[i].id] = this.$scope.genders[i];
             }
             for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
                 this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
@@ -439,10 +317,17 @@ module ums {
             for (let i = 0; i < this.$scope.arrayOfAreaOfInterest.length; i++) {
                 this.$scope.aoiMap[this.$scope.arrayOfAreaOfInterest[i].id] = this.$scope.arrayOfAreaOfInterest[i];
             }
-            if(this.$scope.userRoleId == 82) {
-                for (let i = 0; i < this.$scope.departments.length; i++) {
-                    this.$scope.departmentMap[this.$scope.departments[i].id] = this.$scope.departments[i];
-                }
+            for (let i = 0; i < this.$scope.designations.length; i++) {
+                this.$scope.designationMap[this.$scope.designations[i].id] = this.$scope.designations[i];
+            }
+            for (let i = 0; i < this.$scope.departments.length; i++) {
+                this.$scope.departmentMap[this.$scope.departments[i].id] = this.$scope.departments[i];
+            }
+            for (let i = 0; i < this.$scope.employmentTypes.length; i++) {
+                this.$scope.employmentMap[this.$scope.employmentTypes[i].id] = this.$scope.employmentTypes[i];
+            }
+            for (let i = 0; i < this.$scope.serviceIntervals.length; i++) {
+                this.$scope.employmentPeriodMap[this.$scope.serviceIntervals[i].id] = this.$scope.serviceIntervals[i];
             }
         }
 
@@ -452,7 +337,7 @@ module ums {
                 this.$scope.entry.personal.lastName = "Mir Md.";
                 this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
                 this.$scope.entry.personal.motherName = "Mst Hosne Ara";
-                this.$scope.entry.personal.gender = this.$scope.genderTypes[1];
+                this.$scope.entry.personal.gender = this.$scope.genders[1];
                 this.$scope.entry.personal.dateOfBirth = "20/10/1995";
                 this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
                 this.$scope.entry.personal.religion = this.$scope.religions[1];
@@ -470,7 +355,6 @@ module ums {
                 this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
                 this.$scope.entry.personal.emergencyContactPhone = "01898889851";
             } else if (formName == "academic") {
-
                 this.$scope.entry.academic[0].degree.name = "Bachelor";
                 this.$scope.entry.academic[0].institution = "American International University-Bangladesh";
                 this.$scope.entry.academic[0].passingYear = 2011;
@@ -521,63 +405,70 @@ module ums {
         }
 
         private submitAcademicForm(): void {
-            let academicObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAcademicInformation, this.$scope.entry.academic);
-            this.convertToJson('academic', academicObjects).then((json: any) => {
-                this.academicInformationService.saveAcademicInformation(json)
-                    .then((message: any) => {
-                        this.getAcademicInformation(this.$scope.userId);
-                        this.enableViewMode('academic');
-                    });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAcademicInformation, this.$scope.entry.academic).then((academicObjects:any)=>{
+                this.convertToJson('academic', academicObjects).then((json: any) => {
+                    this.academicInformationService.saveAcademicInformation(json)
+                        .then((message: any) => {
+                            this.getAcademicInformation(this.$scope.userId);
+                            this.enableViewMode('academic');
+                        });
+                });
             });
         }
 
         private submitPublicationForm(): void {
-            let publicationObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousPublicationInformation, this.$scope.entry.publication);
-            this.convertToJson('publication', publicationObjects)
-                .then((json: any) => {
-                    this.publicationInformationService.savePublicationInformation(json)
-                        .then((message: any) => {
-                            this.getPublicationInformation(this.$scope.userId);
-                            this.getPublicationInformationWithPagination(this.$scope.userId);
-                            this.enableViewMode('publication');
-                        });
-                });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousPublicationInformation, this.$scope.entry.publication).then((publicationObjects: any) => {
+                this.convertToJson('publication', publicationObjects)
+                    .then((json: any) => {
+                        this.publicationInformationService.savePublicationInformation(json)
+                            .then((message: any) => {
+                                this.getPublicationInformation(this.$scope.userId);
+                                this.getPublicationInformationWithPagination(this.$scope.userId);
+                                this.enableViewMode('publication');
+                            });
+                    });
+            });
         }
 
         private submitTrainingForm(): void {
-            let trainingObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousTrainingInformation, this.$scope.entry.training);
-            this.convertToJson('training', trainingObjects)
-                .then((json: any) => {
-                    this.trainingInformationService.saveTrainingInformation(json)
-                        .then((message: any) => {
-                            this.getTrainingInformation(this.$scope.userId);
-                            this.enableViewMode('training');
-                        });
-                });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousTrainingInformation, this.$scope.entry.training).then((trainingObjects: any)=>{
+                this.convertToJson('training', trainingObjects)
+                    .then((json: any) => {
+                    console.log(json);
+                        this.trainingInformationService.saveTrainingInformation(json)
+                            .then((message: any) => {
+                                this.getTrainingInformation(this.$scope.userId);
+                                this.enableViewMode('training');
+                            });
+                    });
+            });
         }
 
         private submitAwardForm(): void {
-            let awardObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, this.$scope.entry.award);
-            this.convertToJson('award', awardObjects)
-                .then((json: any) => {
-                    this.awardInformationService.saveAwardInformation(json)
-                        .then((message: any) => {
-                            this.getAwardInformation(this.$scope.userId);
-                            this.enableViewMode('award');
-                        });
-                });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, this.$scope.entry.award).then((awardObjects: any)=>{
+                this.convertToJson('award', awardObjects)
+                    .then((json: any) => {
+                        this.awardInformationService.saveAwardInformation(json)
+                            .then((message: any) => {
+                                this.getAwardInformation(this.$scope.userId);
+                                this.enableViewMode('award');
+                            });
+                    });
+            });
+
         }
 
         private submitExperienceForm(): void {
-            let experienceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousExperienceInformation, this.$scope.entry.experience);
-            this.convertToJson('experience', experienceObjects)
-                .then((json: any) => {
-                    this.experienceInformationService.saveExperienceInformation(json)
-                        .then((message: any) => {
-                            this.getExperienceInformation(this.$scope.userId);
-                            this.enableViewMode('experience');
-                        });
-                });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousExperienceInformation, this.$scope.entry.experience).then((experienceObjects: any)=>{
+                this.convertToJson('experience', experienceObjects)
+                    .then((json: any) => {
+                        this.experienceInformationService.saveExperienceInformation(json)
+                            .then((message: any) => {
+                                this.getExperienceInformation(this.$scope.userId);
+                                this.enableViewMode('experience');
+                            });
+                    });
+            });
         }
 
         private submitAdditionalForm(): void {
@@ -600,7 +491,7 @@ module ums {
                     this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
                     this.$scope.entry.personal.religion = this.$scope.religionMap[personalInformation[0].religionId];
                     this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatusId];
-                    this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].gender];
+                    this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
                     this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationalityId];
                     this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroupId];
                     this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelationId];
@@ -692,6 +583,23 @@ module ums {
                         this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[additional[0].areaOfInterestInformation[i].id];
                     }
                 }
+            });
+        }
+
+        private getServiceInformation(userId: string): void{
+            this.$scope.entry.serviceInfo = Array<IServiceInformationModel>();
+            this.serviceInformationService.getServiceInformation(userId).then((services: any) =>{
+                for(let i = 0; i < services.length; i++){
+                    this.$scope.entry.serviceInfo[i] = services[i];
+                    this.$scope.entry.serviceInfo[i].department = this.$scope.departmentMap[services[i].departmentId];
+                    this.$scope.entry.serviceInfo[i].designation = this.$scope.designationMap[services[i].designationId];
+                    this.$scope.entry.serviceInfo[i].employmentType = this.$scope.employmentMap[services[i].employmentId];
+                    for(let j = 0; j < services[i].intervalDetails.length; j++) {
+                        this.$scope.entry.serviceInfo[i].intervalDetails[j] = services[i].intervalDetails[j];
+                        this.$scope.entry.serviceInfo[i].intervalDetails[j].interval = this.$scope.employmentPeriodMap[services[i].intervalDetails[j].intervalId];
+                    }
+                }
+                this.$scope.previousServiceInformation = angular.copy(this.$scope.entry.serviceInfo);
             });
         }
 
@@ -830,6 +738,9 @@ module ums {
             } else if(formName === 'additional'){
                 this.$scope.showAdditionalInputDiv = false;
                 this.$scope.showAdditionalLabelDiv = true;
+            } else if(formName === 'service'){
+                this.$scope.showServiceInputDiv = false;
+                this.$scope.showServiceLabelDiv = true;
             }
         }
         private enableEditMode(formName: string) {
@@ -860,24 +771,24 @@ module ums {
         private addNewRow(divName: string) {
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
-                academicEntry = {id: null, employeeId: this.$scope.userId, degree: null, degreeId: null, institution: "", passingYear: null, dbAction: ""};
+                academicEntry = {id: null, employeeId: this.$scope.userId, degree: null, degreeId: null, institution: "", passingYear: null, dbAction: "Create"};
                 this.$scope.entry.academic.push(academicEntry);
             } else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
                 publicationEntry = {id: null, employeeId: this.$scope.userId, publicationTitle: "", publicationType: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
-                    publicationVolume: "", publicationJournalName: "", publicationCountry: "", status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: ""};
+                    publicationVolume: "", publicationJournalName: "", publicationCountry: "", status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
                 this.$scope.entry.publication.push(publicationEntry);
             } else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;
-                trainingEntry = {id: null, employeeId: this.$scope.userId, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", dbAction: ""};
+                trainingEntry = {id: null, employeeId: this.$scope.userId, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", dbAction: "Create"};
                 this.$scope.entry.training.push(trainingEntry);
             } else if (divName === 'award') {
                 let awardEntry: IAwardInformationModel;
-                awardEntry = {id: null, employeeId: this.$scope.userId, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: "", dbAction: ""};
+                awardEntry = {id: null, employeeId: this.$scope.userId, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: "", dbAction: "Create"};
                 this.$scope.entry.award.push(awardEntry);
             } else if (divName === 'experience') {
                 let experienceEntry: IExperienceInformationModel;
-                experienceEntry = {id: null, employeeId: this.$scope.userId, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "", dbAction: ""};
+                experienceEntry = {id: null, employeeId: this.$scope.userId, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "", dbAction: "Create"};
                 this.$scope.entry.experience.push(experienceEntry);
             }
             this.addDate();
@@ -947,34 +858,6 @@ module ums {
                     $('.datepicker').hide();
                 });
             }, 100);
-        }
-
-        private initializeSelect2(selectBoxId, users, placeHolderText) {
-            let data = users;
-            $("#" + selectBoxId).select2({
-                minimumInputLength: 0,
-                query: function (options) {
-                    let pageSize = 100;
-                    let startIndex = (options.page - 1) * pageSize;
-                    let filteredData = data;
-                    if (options.term && options.term.length > 0) {
-                        if (!options.context) {
-                            let term = options.term.toLowerCase();
-                            options.context = data.filter(function (metric: any) {
-                                console.log(options.context);
-                                return ( metric.id.indexOf(term) !== -1 );
-                            });
-                        }
-                        filteredData = options.context;
-                    }
-                    options.callback({
-                        context: filteredData,
-                        results: filteredData.slice(startIndex, startIndex + pageSize),
-                        more: (startIndex + pageSize) < filteredData.length
-                    });
-                },
-                placeholder: placeHolderText
-            });
         }
     }
     UMS.controller("EmployeeInformation", EmployeeInformation);

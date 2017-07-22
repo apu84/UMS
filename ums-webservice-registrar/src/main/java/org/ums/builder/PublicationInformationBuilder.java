@@ -110,78 +110,76 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
         pMutable.setId(pJsonObject.getInt("id"));
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
-        pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
       }
-    }
-    else {
-      pMutable.setId(pJsonObject.getInt("id"));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(pJsonObject.getInt("id"));
+      }
       pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    }
 
-    pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
-    if(!pJsonObject.containsKey("publicationInterestGenre")) {
-      pMutable.setInterestGenre("");
+      pMutable.setPublicationTitle(pJsonObject.getString("publicationTitle"));
+      if(!pJsonObject.containsKey("publicationInterestGenre")) {
+        pMutable.setInterestGenre("");
+      }
+      else {
+        pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
+      }
+      if(!pJsonObject.containsKey("publisherName")) {
+        pMutable.setPublisherName("");
+      }
+      else {
+        pMutable.setPublisherName(pJsonObject.getString("publisherName"));
+      }
+      if(!pJsonObject.containsKey("publicationWebLink")) {
+        pMutable.setPublicationWebLink("");
+      }
+      else {
+        pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
+      }
+      if(!pJsonObject.containsKey("publicationISSN")) {
+        pMutable.setPublicationISSN("");
+      }
+      else {
+        pMutable.setPublicationISSN(pJsonObject.getString("publicationISSN"));
+      }
+      if(!pJsonObject.containsKey("publicationIssue")) {
+        pMutable.setPublicationIssue("");
+      }
+      else {
+        pMutable.setPublicationIssue(pJsonObject.getString("publicationIssue"));
+      }
+      if(!pJsonObject.containsKey("publicationVolume")) {
+        pMutable.setPublicationVolume("");
+      }
+      else {
+        pMutable.setPublicationVolume(pJsonObject.getString("publicationVolume"));
+      }
+      if(!pJsonObject.containsKey("publicationJournalName")) {
+        pMutable.setPublicationJournalName("");
+      }
+      else {
+        pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
+      }
+      if(!pJsonObject.containsKey("publicationCountry")) {
+        pMutable.setPublicationCountry("");
+      }
+      else {
+        pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
+      }
+      if(!pJsonObject.containsKey("publicationPages")) {
+        pMutable.setPublicationPages("");
+      }
+      else {
+        pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
+      }
+      pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
+      pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
+      // pMutable.setPublicationStatus(pJsonObject.getString("status"));
+      pMutable.setAppliedOn(mDate);
+      pMutable.setPublicationStatus("0");
+      pMutable.setActionTakenOn("");
     }
-    else {
-      pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
-    }
-    if(!pJsonObject.containsKey("publisherName")) {
-      pMutable.setPublisherName("");
-    }
-    else {
-      pMutable.setPublisherName(pJsonObject.getString("publisherName"));
-    }
-    if(!pJsonObject.containsKey("publicationWebLink")) {
-      pMutable.setPublicationWebLink("");
-    }
-    else {
-      pMutable.setPublicationWebLink(pJsonObject.getString("publicationWebLink"));
-    }
-    if(!pJsonObject.containsKey("publicationISSN")) {
-      pMutable.setPublicationISSN("");
-    }
-    else {
-      pMutable.setPublicationISSN(pJsonObject.getString("publicationISSN"));
-    }
-    if(!pJsonObject.containsKey("publicationIssue")) {
-      pMutable.setPublicationIssue("");
-    }
-    else {
-      pMutable.setPublicationIssue(pJsonObject.getString("publicationIssue"));
-    }
-    if(!pJsonObject.containsKey("publicationVolume")) {
-      pMutable.setPublicationVolume("");
-    }
-    else {
-      pMutable.setPublicationVolume(pJsonObject.getString("publicationVolume"));
-    }
-    if(!pJsonObject.containsKey("publicationJournalName")) {
-      pMutable.setPublicationJournalName("");
-    }
-    else {
-      pMutable.setPublicationJournalName(pJsonObject.getString("publicationJournalName"));
-    }
-    if(!pJsonObject.containsKey("publicationCountry")) {
-      pMutable.setPublicationCountry("");
-    }
-    else {
-      pMutable.setPublicationCountry(pJsonObject.getString("publicationCountry"));
-    }
-    if(!pJsonObject.containsKey("publicationPages")) {
-      pMutable.setPublicationPages("");
-    }
-    else {
-      pMutable.setPublicationPages(pJsonObject.getString("publicationPages"));
-    }
-    pMutable.setDateOfPublication(pJsonObject.getString("dateOfPublication"));
-    pMutable.setPublicationType(pJsonObject.getJsonObject("publicationType").getString("name"));
-    // pMutable.setPublicationStatus(pJsonObject.getString("status"));
-    pMutable.setAppliedOn(mDate);
-    pMutable.setPublicationStatus("0");
-    pMutable.setActionTakenOn("");
   }
 
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,

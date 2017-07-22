@@ -22,9 +22,9 @@ module ums{
             return defer.promise;
         }
 
-        public getServiceInformation(): ng.IPromise<any> {
+        public getServiceInformation(userId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.url+"/getServiceInformation/employeeId/33333", HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.url+"/getServiceInformation/employeeId/" + userId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },

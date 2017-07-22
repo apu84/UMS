@@ -63,9 +63,14 @@ public class ExperienceInformationResourceHelper extends
         else if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
           updateMutableExperienceInformation.add(experienceInformation);
         }
+        else if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
+          deleteMutableExperienceInformation.add(experienceInformation);
+        }
       }
       else {
-        deleteMutableExperienceInformation.add(experienceInformation);
+        Response.ResponseBuilder builder = Response.created(null);
+        builder.status(Response.Status.NOT_MODIFIED);
+        return builder.build();
       }
     }
 

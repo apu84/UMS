@@ -18,6 +18,6 @@ public class AcademicInformationResource extends MutableAcademicInformationResou
   @Path("/getAcademicInformation/employeeId/{employee-id}")
   public JsonObject getAcademicInformation(final @PathParam("employee-id") String pEmployeeId,
       final @Context Request pRequest) throws Exception {
-    return mAcademicInformationResourceHelper.getAcademicInformation(pEmployeeId, mUriInfo);
+    return mHelper.getAcademicInformation(pEmployeeId, mUriInfo);
   }
 }
