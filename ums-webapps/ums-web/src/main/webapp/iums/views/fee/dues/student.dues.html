@@ -2,20 +2,20 @@
     <div class="panel-heading">Dues/ Penalty</div>
     <div class="panel-body">
         <div class="note note-info" data-ng-if="vm.dues.length===0">
-            <h3>No penalty or dues available</h3>
+            <h4>No penalty or dues available</h4>
         </div>
 
         <table class="table table-hover table-bordered table-advanced table-striped" data-ng-if="vm.dues.length > 0">
             <thead>
             <tr class="heading">
-                <td width="15%">Dues/ Penalty type</td>
-                <td width="15%">Pay before</td>
-                <td width="10%">Amount</td>
-                <td width="20%">TransactionId</td>
-                <td width="10%">Payment status</td>
-                <td width="13%">Applied for payment</td>
-                <td width="13%">Payment received on</td>
-                <td width="4%">Select</td>
+                <td width="15%"><b>Dues/ Penalty type</b></td>
+                <td width="15%"><b>Pay before</b></td>
+                <td width="10%"><b>Amount</b></td>
+                <td width="20%"><b>TransactionId</b></td>
+                <td width="10%"><b>Payment status</b></td>
+                <td width="13%"><b>Applied for payment</b></td>
+                <td width="13%"><b>Payment received on</b></td>
+                <td width="4%"><b>Select</b></td>
             </tr>
             </thead>
             <tbody>
@@ -53,7 +53,7 @@
         </table>
         <div class="text-right" style="margin-top:25px;">
             <button type="button" class="btn btn-success" data-ng-click="vm.pay()"
-                    data-ng-if="vm.selected && vm.selected.length > 0">Pay
+                    data-ng-if="vm.selected && vm.selected.length > 0">Generate Fee Receipt
             </button>
         </div>
     </div>

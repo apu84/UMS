@@ -3,13 +3,14 @@
     <div class="panel-body">
         <div class="spacer"></div>
         <div data-ng-if="vm.installmentEnabled && !vm.payments" style="margin-bottom: 5px;">
+            <h4>Payment option</h4>
             <input type="radio" data-ng-click="vm.selectPaymentOption(0, vm.currentEnrolledSemester)"
                    name="paymentOption"> Regular
-            <input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)"
+            &nbsp;&nbsp;<input type="radio" data-ng-click="vm.selectPaymentOption(1, vm.currentEnrolledSemester)"
                    name="paymentOption"> Installment
         </div>
         <div ng-if="vm.messageText">
-            <div class="alert alert-danger">{{vm.messageText}}</div>
+            <div class="alert alert-danger"><h4>{{vm.messageText}}</h4></div>
         </div>
         <div data-ng-if="vm.fee && !vm.payments && !vm.messageText">
             <table class="table table-hover table-bordered table-advanced">
@@ -24,17 +25,21 @@
                     <td>{{::fee.name}}</td>
                     <td>{{::fee.amount}}/=</td>
                 </tr>
+                <tr>
+                    <td class="text-right">Total</td>
+                    <td>{{vm.total(vm.fee)}}/=</td>
+                </tr>
                 </tbody>
             </table>
             <div class="text-right" style="margin-top:25px;">
                 <button type="button" class="btn btn-success" data-ng-click="vm.pay()"
-                        data-ng-if="vm.regularPayment">Pay
+                        data-ng-if="vm.regularPayment">Generate Fee Receipt
                 </button>
                 <button type="button" class="btn btn-success" data-ng-click="vm.payFirstInstallment()"
-                        data-ng-if="vm.firstInstallment">Pay First Installment
+                        data-ng-if="vm.firstInstallment">Generate Fee Receipt for First Installment
                 </button>
                 <button type="button" class="btn btn-success" data-ng-click="vm.paySecondInstallment()"
-                        data-ng-if="vm.secondInstallment">Pay Second Installment
+                        data-ng-if="vm.secondInstallment">Generate Fee Receipt for Second Installment
                 </button>
             </div>
         </div>
@@ -72,6 +77,10 @@
                              style="position: relative;cursor: pointer;margin-bottom: 10px;"
                              data-ng-click="vm.receipt(transactionId)">
                     </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">Total</td>
+                    <td colspan="4">{{vm.totalPayment(vm.payments[transactionId])}}/=</td>
                 </tr>
                 </tbody>
             </table>
