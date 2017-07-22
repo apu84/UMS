@@ -70,7 +70,7 @@ public class AdditionalInformationResourceHelper extends
     if(sizeOfAoiJsonArray > 0) {
       for(int i = 0; i < sizeOfAoiJsonArray; i++) {
         MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-        mAreaOfInterestInformationBuilder.aoiBuilder(mutableAreaOfInterestInformation, aoiJsonArray.getJsonObject(0),
+        mAreaOfInterestInformationBuilder.aoiBuilder(mutableAreaOfInterestInformation, aoiJsonArray.getInt(i),
             localCache, mutableAdditionalInformation);
         mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
       }

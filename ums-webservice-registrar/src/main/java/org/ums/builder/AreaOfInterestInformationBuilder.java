@@ -33,9 +33,9 @@ public class AreaOfInterestInformationBuilder implements
     pMutable.setAreaOfInterest(mAreaOfInterestManager.get(pJsonObject.getInt("id")));
   }
 
-  public void aoiBuilder(MutableAreaOfInterestInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache,
+  public void aoiBuilder(MutableAreaOfInterestInformation pMutable, int aoiId, LocalCache pLocalCache,
       MutableAdditionalInformation mutableAdditionalInformation) {
     pMutable.setEmployeeId(mutableAdditionalInformation.getId());
-    pMutable.setAreaOfInterest(mAreaOfInterestManager.get(pJsonObject.getInt("id")));
+    pMutable.setAreaOfInterest(mAreaOfInterestManager.get(aoiId));
   }
 }

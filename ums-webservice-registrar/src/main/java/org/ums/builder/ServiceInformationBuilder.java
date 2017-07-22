@@ -70,13 +70,13 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
   public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("dbAction")) {
       if(pJsonObject.getString("dbAction").equals("Update")) {
-        pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
+        pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
       }
     }
     else if(pJsonObject.getString("dbAction").equals("Delete")) {
-      pMutable.setId(Long.valueOf(pJsonObject.getString("id")));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));

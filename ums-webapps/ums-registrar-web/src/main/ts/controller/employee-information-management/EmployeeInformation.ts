@@ -571,17 +571,19 @@ module ums {
                 this.$scope.previousExperienceInformation = angular.copy(this.$scope.entry.experience);
             });
         }
-
-        private getAdditionalInformation(userId: string) {
+        private getAdditionalInformation(userId: string) { console.log('.....................',userId);
             this.$scope.entry.additional = <IAdditionalInformationModel>{};
-            this.$scope.entry.additional.areaOfInterestInformation = Array<ICommon>();
+            this.$scope.entry.additional.areaOfInterestInformation = [];
             this.additionalInformationService.getAdditionalInformation(userId).then((additional: any) => {
+                console.log(additional);
                 this.$scope.entry.additional = additional[0];
-                console.log(additional[0]);
-                if(additional[0].areaOfInterestInformation.length != null) {
+                if(additional[0].areaOfInterestInformation) {
                     for (let i = 0; i < additional[0].areaOfInterestInformation.length; i++) {
-                        this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[additional[0].areaOfInterestInformation[i].id];
+                        this.$scope.entry.additional.areaOfInterestInformation[i] = additional[0].areaOfInterestInformation[i].id;
+
                     }
+                    console.log('>>',this.$scope.entry.additional.areaOfInterestInformation);
+
                 }
             });
         }

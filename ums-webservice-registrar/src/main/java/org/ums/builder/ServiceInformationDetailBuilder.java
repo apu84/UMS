@@ -13,6 +13,7 @@ import org.ums.manager.registrar.ServiceInformationManager;
 
 import javax.json.*;
 import javax.print.attribute.standard.JobSheets;
+import javax.validation.constraints.Null;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +47,14 @@ public class ServiceInformationDetailBuilder implements
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
         : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
-    pMutable.setServiceId(Long.valueOf(pJsonObject.getString("serviceId")));
+    pMutable.setServiceId(Long.parseLong(pJsonObject.getString("serviceId")));
   }
 
   public void serviceInformationDetailBuilder(MutableServiceInformationDetail pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache, Long pServiceId) {
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
-    pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
+    pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").equals("") ? null
         : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
     pMutable.setServiceId(pServiceId);
   }

@@ -7,10 +7,18 @@
                         <label class="control-label">Area Of Interests: </label>
                     </div>
                     <div class="col-md-10">
-                        <select data-ng-model="entry.additional.areaOfInterestInformation"
-                                data-ng-options="areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"
-                                class="select2-multi-value form-control"
-                                multiple="multiple">
+                        <!--<select data-ng-model="entry.additional.areaOfInterestInformation" id="aoi"-->
+                                <!--data-ng-options="areaOfInterest.id as areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest"-->
+                                <!--class="select2-multi-value form-control"-->
+                                <!--multiple="multiple">-->
+                        <!--</select>-->
+                      {{entry.additional.areaOfInterestInformation}} >> {{arrayOfAreaOfInterest}}
+                        <select multiple="multiple"
+                                data-style="btn-white"
+                                data-select="select-picker"
+                                class="form-control" data-ng-model="entry.additional.areaOfInterestInformation"
+                                style="width:50px;"
+                                data-ng-options="areaOfInterest.name as areaOfInterest.name for areaOfInterest in arrayOfAreaOfInterest">
                         </select>
                     </div>
                 </div>
@@ -82,7 +90,7 @@
                     <label class="control-label">Area Of Interests: </label>
                 </div>
                 <div class="col-md-10" style="border-bottom: 1px dashed;">
-                    <label class="control-label">{{entry.additional.areaOfInterest}}</label>
+                    <label class="control-label">{{entry.additional.areaOfInterestInformation}}</label>
                 </div>
             </div>
         </div>

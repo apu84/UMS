@@ -116,6 +116,9 @@ module ums {
         addNewServiceDetailsRow: Function;
         submitServiceForm: Function;
         view: Function;
+
+
+        test: string;
     }
     export interface IGender {
         id: string;
@@ -179,7 +182,9 @@ module ums {
                 changedUserName: "",
                 searchBy: "",
                 changedDepartment: null,
-                filterData: ""
+                filterData: "",
+                userId: "",
+                test: ""
             };
             $scope.pagination = {};
             $scope.pagination.currentPage = 1;
@@ -267,7 +272,9 @@ module ums {
         }
 
         private view(user: any): void{
-            this.$scope.userId = user.id;
+            console.log(user);
+            this.$scope.data.userId = user.id;
+            console.log(this.$scope.data.userId);
             this.$scope.showFilteredEmployeeList = false;
             this.$scope.showEmployeeInformation = true;
             this.getPreviousFormValues(user.employeeId);
@@ -309,16 +316,17 @@ module ums {
 
         private getEmployeeInformation(): void{
             if(this.$scope.data.searchBy == "1"){
-                if(this.$scope.data.changedUserId == true) {
+                console.log(this.$scope.data.changedUserId);
+                if(this.findUser() == true) {
+                    this.$scope.data.userId = this.$scope.data.changedUserId;
                     this.$scope.showFilteredEmployeeList = false;
                     this.$scope.showEmployeeInformation = true;
-                    this.$scope.userId = this.$scope.data.changedUserId;
-                    if (this.$scope.userId == "" || this.$scope.userId == null) {
+                    if (this.$scope.data.userId == "" || this.$scope.data.userId == null) {
                         this.notify.error("Empty or Null Id");
                     }
                     else {
                         Utils.expandRightDiv();
-                        this.getPreviousFormValues(this.$scope.userId);
+                        this.getPreviousFormValues(this.$scope.data.userId);
                         this.setViewModeInitially();
                     }
                 }
@@ -343,10 +351,10 @@ module ums {
             }
         }
 
-        private findUser(id: string): boolean{
+        private findUser(): boolean{
             let length = this.$scope.allUser.length;
             for(let i = 0; i < length; i++){
-                if(this.$scope.allUser[i].employeeName == id){
+                if(this.$scope.allUser[i].id == this.$scope.data.changedUserId){
                     return true;
                 }
             }
@@ -503,18 +511,18 @@ module ums {
         }
 
         private submitPersonalForm(): void {
-            this.$scope.entry.personal.employeeId = this.$scope.userId;
+            this.$scope.entry.personal.employeeId = this.$scope.data.userId;
             if (this.cRUDDetectionService.isObjectEmpty(this.$scope.previousPersonalInformation)) {
                 this.convertToJson('personal', this.$scope.entry.personal).then((json: any) => {
                     this.personalInformationService.savePersonalInformation(json).then((message: any) => {
-                        this.getPersonalInformation(this.$scope.userId);
+                        this.getPersonalInformation(this.$scope.data.userId);
                         this.enableViewMode('personal');
                     });
                 });
             } else {
                 this.convertToJson('personal', this.$scope.entry.personal).then((json: any) => {
                     this.personalInformationService.updatePersonalInformation(json).then((message: any) => {
-                        this.getPersonalInformation(this.$scope.userId);
+                        this.getPersonalInformation(this.$scope.data.userId);
                         this.enableViewMode('personal');
                     });
                 });
@@ -526,7 +534,7 @@ module ums {
                 this.convertToJson('academic', academicObjects).then((json: any) => {
                     this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
-                            this.getAcademicInformation(this.$scope.userId);
+                            this.getAcademicInformation(this.$scope.data.userId);
                             this.enableViewMode('academic');
                         });
                 });
@@ -539,8 +547,8 @@ module ums {
                     .then((json: any) => {
                         this.publicationInformationService.savePublicationInformation(json)
                             .then((message: any) => {
-                                this.getPublicationInformation(this.$scope.userId);
-                                this.getPublicationInformationWithPagination(this.$scope.userId);
+                                this.getPublicationInformation(this.$scope.data.userId);
+                                this.getPublicationInformationWithPagination(this.$scope.data.userId);
                                 this.enableViewMode('publication');
                             });
                     });
@@ -554,7 +562,7 @@ module ums {
                         console.log(json);
                         this.trainingInformationService.saveTrainingInformation(json)
                             .then((message: any) => {
-                                this.getTrainingInformation(this.$scope.userId);
+                                this.getTrainingInformation(this.$scope.data.userId);
                                 this.enableViewMode('training');
                             });
                     });
@@ -567,7 +575,7 @@ module ums {
                     .then((json: any) => {
                         this.awardInformationService.saveAwardInformation(json)
                             .then((message: any) => {
-                                this.getAwardInformation(this.$scope.userId);
+                                this.getAwardInformation(this.$scope.data.userId);
                                 this.enableViewMode('award');
                             });
                     });
@@ -581,7 +589,7 @@ module ums {
                     .then((json: any) => {
                         this.experienceInformationService.saveExperienceInformation(json)
                             .then((message: any) => {
-                                this.getExperienceInformation(this.$scope.userId);
+                                this.getExperienceInformation(this.$scope.data.userId);
                                 this.enableViewMode('experience');
                             });
                     });
@@ -589,12 +597,12 @@ module ums {
         }
 
         private submitAdditionalForm(): void {
-            this.$scope.entry.additional.employeeId = this.$scope.userId;
+            this.$scope.entry.additional.employeeId = this.$scope.data.userId;
             this.convertToJson('additional', this.$scope.entry.additional)
                 .then((json: any) => {
                     this.additionalInformationService.saveAdditionalInformation(json)
                         .then((message: any) => {
-                            this.getAdditionalInformation(this.$scope.userId);
+                            this.getAdditionalInformation(this.$scope.data.userId);
                             this.enableViewMode('additional');
                         });
                 });
@@ -610,20 +618,23 @@ module ums {
             if (countEmptyResignDate > 1) {
                 this.notify.error("You can empty only one resign date");
             } else {
-                let serviceObjects = this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, this.$scope.entry.serviceInfo);
-                this.convertToJson('service', serviceObjects).then((json: any) => {
-                    console.log(json);
-                    this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
-                        this.getServiceInformation(this.$scope.userId);
-                        this.enableViewMode("service");
+                this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, this.$scope.entry.serviceInfo).then((serviceObjects) => {
+                    this.convertToJson('service', serviceObjects).then((json: any) => {
+                        console.log(json);
+                        this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
+                            console.log(this.$scope.data.userId);
+                            this.getServiceInformation(this.$scope.data.userId);
+                            this.enableViewMode("service");
+                        });
                     });
+
                 });
             }
         }
 
         private getPersonalInformation(userId: string) {
             this.$scope.entry.personal = <IPersonalInformationModel>{};
-            this.personalInformationService.getPersonalInformation(userId).then((personalInformation: any) => {
+            this.personalInformationService.getPersonalInformation(this.$scope.data.userId).then((personalInformation: any) => {
                 if (personalInformation.length > 0) {
                     this.$scope.entry.personal = personalInformation[0];
                     this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
@@ -648,7 +659,7 @@ module ums {
 
         private getAcademicInformation(userId: string) {
             this.$scope.entry.academic = Array<IAcademicInformationModel>();
-            this.academicInformationService.getAcademicInformation(userId).then((academicInformation: any) => {
+            this.academicInformationService.getAcademicInformation(this.$scope.data.userId).then((academicInformation: any) => {
                 for (let i = 0; i < academicInformation.length; i++) {
                     this.$scope.entry.academic[i] = academicInformation[i];
                     this.$scope.entry.academic[i].degree = this.$scope.degreeNameMap[academicInformation[i].degreeId];
@@ -659,7 +670,7 @@ module ums {
 
         private getPublicationInformation(userId: string) {
             this.$scope.entry.publication = Array<IPublicationInformationModel>();
-            this.publicationInformationService.getPublicationInformation(userId).then((publicationInformation: any) => {
+            this.publicationInformationService.getPublicationInformation(this.$scope.data.userId).then((publicationInformation: any) => {
                 this.$scope.data.totalRecord = publicationInformation.length;
                 for (let i = 0; i < publicationInformation.length; i++) {
                     this.$scope.entry.publication[i] = publicationInformation[i];
@@ -671,7 +682,7 @@ module ums {
 
         private getPublicationInformationWithPagination(userId: string){
             this.$scope.entry.publication = Array<IPublicationInformationModel>();
-            this.publicationInformationService.getPublicationInformationViewWithPagination(userId, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
+            this.publicationInformationService.getPublicationInformationViewWithPagination(this.$scope.data.userId, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
                 this.$scope.paginatedPublication = publicationInformationWithPagination;
                 for (let i = 0; i < publicationInformationWithPagination.length; i++) {
                     this.$scope.paginatedPublication[i] = publicationInformationWithPagination[i];
@@ -682,7 +693,7 @@ module ums {
 
         private getTrainingInformation(userId: string) {
             this.$scope.entry.training = Array<ITrainingInformationModel>();
-            this.trainingInformationService.getTrainingInformation(userId).then((trainingInformation: any) => {
+            this.trainingInformationService.getTrainingInformation(this.$scope.data.userId).then((trainingInformation: any) => {
                 for (let i = 0; i < trainingInformation.length; i++) {
                     this.$scope.entry.training[i] = trainingInformation[i];
                 }
@@ -692,7 +703,7 @@ module ums {
 
         private getAwardInformation(userId: string) {
             this.$scope.entry.award = Array<IAwardInformationModel>();
-            this.awardInformationService.getAwardInformation(userId).then((awardInformation: any) => {
+            this.awardInformationService.getAwardInformation(this.$scope.data.userId).then((awardInformation: any) => {
                 for (let i = 0; i < awardInformation.length; i++) {
                     this.$scope.entry.award[i] = awardInformation[i];
                 }
@@ -702,7 +713,7 @@ module ums {
 
         private getExperienceInformation(userId: string) {
             this.$scope.entry.experience = Array<IExperienceInformationModel>();
-            this.experienceInformationService.getExperienceInformation(userId).then((experienceInformation: any) => {
+            this.experienceInformationService.getExperienceInformation(this.$scope.data.userId).then((experienceInformation: any) => {
                 for (let i = 0; i < experienceInformation.length; i++) {
                     this.$scope.entry.experience[i] = experienceInformation[i];
                 }
@@ -710,23 +721,26 @@ module ums {
             });
         }
 
-        private getAdditionalInformation(userId: string) {
+        private getAdditionalInformation(userId: string) { console.log('.....................');
             this.$scope.entry.additional = <IAdditionalInformationModel>{};
-            this.$scope.entry.additional.areaOfInterestInformation = Array<ICommon>();
-            this.additionalInformationService.getAdditionalInformation(userId).then((additional: any) => {
+            this.$scope.entry.additional.areaOfInterestInformation = [];
+            this.additionalInformationService.getAdditionalInformation(this.$scope.data.userId).then((additional: any) => {
                 this.$scope.entry.additional = additional[0];
-                console.log(additional[0]);
-                if(additional[0].areaOfInterestInformation.length != null) {
+                if(additional[0].areaOfInterestInformation) {
                     for (let i = 0; i < additional[0].areaOfInterestInformation.length; i++) {
-                        this.$scope.entry.additional.areaOfInterestInformation[i] = this.$scope.aoiMap[additional[0].areaOfInterestInformation[i].id];
+                        this.$scope.entry.additional.areaOfInterestInformation[i] = additional[0].areaOfInterestInformation[i].id;
+                        // $('#aoi').val(this.$scope.entry.additional.areaOfInterestInformation[i].id+'').trigger('change');
                     }
+                    console.log('>>',this.$scope.entry.additional.areaOfInterestInformation);
+
                 }
             });
         }
 
         private getServiceInformation(userId: string): void{
+            console.log(this.$scope.data.userId);
             this.$scope.entry.serviceInfo = Array<IServiceInformationModel>();
-            this.serviceInformationService.getServiceInformation(userId).then((services: any) =>{
+            this.serviceInformationService.getServiceInformation(this.$scope.data.userId).then((services: any) =>{
                 for(let i = 0; i < services.length; i++){
                     this.$scope.entry.serviceInfo[i] = services[i];
                     this.$scope.entry.serviceInfo[i].department = this.$scope.departmentMap[services[i].departmentId];
@@ -738,6 +752,7 @@ module ums {
                     }
                 }
                 this.$scope.previousServiceInformation = angular.copy(this.$scope.entry.serviceInfo);
+                console.log(this.$scope.previousServiceInformation);
             });
         }
 
@@ -844,14 +859,14 @@ module ums {
 
         private pageChanged(pageNumber: number){
             this.$scope.pagination.currentPage = pageNumber;
-            this.getPublicationInformationWithPagination(this.$scope.userId);
+            this.getPublicationInformationWithPagination(this.$scope.data.userId);
         }
 
         private changeItemPerPage(){
             if(this.$scope.data.customItemPerPage == "" || this.$scope.data.customItemPerPage == null) {}
             else{
                 this.$scope.data.itemPerPage = this.$scope.data.customItemPerPage;
-                this.getPublicationInformationWithPagination(this.$scope.userId);
+                this.getPublicationInformationWithPagination(this.$scope.data.userId);
             }
         }
         private enableViewMode(formName: string) {
@@ -946,29 +961,29 @@ module ums {
         private addNewRow(divName: string) {
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
-                academicEntry = {id: null, employeeId: this.$scope.userId, degree: null, degreeId: null, institution: "", passingYear: null, dbAction: "Create"};
+                academicEntry = {id: null, employeeId: this.$scope.data.userId, degree: null, degreeId: null, institution: "", passingYear: null, dbAction: "Create"};
                 this.$scope.entry.academic.push(academicEntry);
             } else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
-                publicationEntry = {id: null, employeeId: this.$scope.userId, publicationTitle: "", publicationType: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
+                publicationEntry = {id: null, employeeId: this.$scope.data.userId, publicationTitle: "", publicationType: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
                     publicationVolume: "", publicationJournalName: "", publicationCountry: "", status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
                 this.$scope.entry.publication.push(publicationEntry);
             } else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;
-                trainingEntry = {id: null, employeeId: this.$scope.userId, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", dbAction: "Create"};
+                trainingEntry = {id: null, employeeId: this.$scope.data.userId, trainingName: "", trainingInstitution: "", trainingFrom: "", trainingTo: "", dbAction: "Create"};
                 this.$scope.entry.training.push(trainingEntry);
             } else if (divName === 'award') {
                 let awardEntry: IAwardInformationModel;
-                awardEntry = {id: null, employeeId: this.$scope.userId, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: "", dbAction: "Create"};
+                awardEntry = {id: null, employeeId: this.$scope.data.userId, awardName: "", awardInstitute: "", awardedYear: "", awardShortDescription: "", dbAction: "Create"};
                 this.$scope.entry.award.push(awardEntry);
             } else if (divName === 'experience') {
                 let experienceEntry: IExperienceInformationModel;
-                experienceEntry = {id: null, employeeId: this.$scope.userId, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "", dbAction: "Create"};
+                experienceEntry = {id: null, employeeId: this.$scope.data.userId, experienceInstitution: "", experienceDesignation: "", experienceFrom: "", experienceTo: "", dbAction: "Create"};
                 this.$scope.entry.experience.push(experienceEntry);
             } else if(divName = 'service'){
                 let serviceEntry: IServiceInformationModel;
-                serviceEntry = {id: null, employeeId: "", department: null, departmentId: null, designation: null, employmentType: null, designationId: null, employmentId: null,
-                    joiningDate: "", resignDate: "", dbAction: "", intervalDetails: Array<IServiceDetailsModel>()};
+                serviceEntry = {id: null, employeeId: this.$scope.data.userId, department: null, departmentId: null, designation: null, employmentType: null, designationId: null, employmentId: null,
+                    joiningDate: "", resignDate: "", dbAction: "Create", intervalDetails: Array<IServiceDetailsModel>()};
                 this.$scope.entry.serviceInfo.push(serviceEntry);
             }
             this.addDate();

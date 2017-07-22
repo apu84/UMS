@@ -207,7 +207,7 @@ module ums{
                 employmentId: null,
                 joiningDate: "",
                 resignDate: "",
-                dbAction: "",
+                dbAction: "Create",
                 intervalDetails: Array<IServiceDetailsModel>()
             };
             this.$scope.entry.serviceInfo.push(serviceEntry);
