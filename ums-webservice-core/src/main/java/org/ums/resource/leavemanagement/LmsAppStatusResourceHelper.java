@@ -106,7 +106,7 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
       final LeaveCategories pLeaveCategories, int pageNumber, int totalPage, UriInfo pUriInfo) {
     List<LmsAppStatus> appStatuses =
         getContentManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories, pageNumber, totalPage);
-    int totalSize = getContentManager().getApplicationsApprovedOfTheDay(pDepartmentType).size();
+    int totalSize = getContentManager().getApplicationsApprovedOfTheDay(pDepartmentType, pLeaveCategories).size();
     return getJsonObjectWithTotalSize(pUriInfo, appStatuses, totalSize);
   }
 

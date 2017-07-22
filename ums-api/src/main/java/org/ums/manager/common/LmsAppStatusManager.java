@@ -39,4 +39,7 @@ public interface LmsAppStatusManager extends ContentManager<LmsAppStatus, Mutabl
       int pageNumber, int totalSize);
 
   List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType);
+
+  List<LmsAppStatus> getApplicationsApprovedOfTheDay(DepartmentType pDepartmentType, LeaveCategories pLeaveCategories);
+
 }

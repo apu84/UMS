@@ -1,7 +1,7 @@
 <div align="right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="leaveApplication"
-                             on-page-change="pageChanged(newPageNumber)"
+                             on-page-change="vm.pageChanged(vm.pagination.currentPage)"
                              template-url="views\leave-management\dirPagination.html"></dir-pagination-controls>
 </div>
 
