@@ -119,7 +119,7 @@ module ums {
           holidays.year = this.year;
           holidays.fromDate = "";
           holidays.toDate = "";
-          holidays.duration = 2;
+          holidays.duration = 0;
           this.holidays.push(holidays);
         }
       });
@@ -148,5 +148,6 @@ module ums {
     }
 
   }
+
   UMS.controller("PublicHolidays", PublicHolidays);
 }
