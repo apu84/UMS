@@ -9,10 +9,11 @@ import org.ums.manager.StudentRecordManager;
 @Component
 class UGSemesterFeeFactory {
   @Autowired
-  @Qualifier("UGRegularSemesterFee")
+  @Qualifier("RegularSemesterFee")
   private UGRegularSemesterFee mUGRegularSemesterFee;
 
   @Autowired
+  @Qualifier("ReadmissionFee")
   private UGReadmissionFee mUGReadmissionFee;
 
   @Autowired
