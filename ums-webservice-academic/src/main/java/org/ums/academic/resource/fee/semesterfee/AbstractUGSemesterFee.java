@@ -90,7 +90,7 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
   }
 
   @Transactional
-  public UGSemesterFeeResponse payFee(UGFees fees, Parameter.ParameterName pType, String pStudentId, Integer pSemesterId) {
+  UGSemesterFeeResponse payFee(UGFees fees, Parameter.ParameterName pType, String pStudentId, Integer pSemesterId) {
     Optional<LateFee> lateFee = fees.getUGLateFee();
     Date transactionValid = lateFee.isPresent() ? lateFee.get().getTo() : getTransactionValidTill(pType, pSemesterId);
     List<MutableStudentPayment> payments = new ArrayList<>();

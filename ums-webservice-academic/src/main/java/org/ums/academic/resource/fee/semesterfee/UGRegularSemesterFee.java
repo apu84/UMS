@@ -16,7 +16,7 @@ import org.ums.fee.semesterfee.*;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.StudentManager;
 
-@Component("RegularSemesterFee")
+@Component
 class UGRegularSemesterFee extends AbstractUGSemesterFee {
   @Autowired
   StudentPaymentManager mStudentPaymentManager;
