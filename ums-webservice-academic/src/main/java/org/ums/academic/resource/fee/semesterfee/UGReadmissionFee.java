@@ -25,7 +25,7 @@ import org.ums.manager.StudentRecordManager;
 import org.ums.readmission.ReadmissionApplication;
 import org.ums.readmission.ReadmissionApplicationManager;
 
-@Component
+@Component("UGReadmissionFee")
 class UGReadmissionFee extends AbstractUGSemesterFee {
   @Autowired
   StudentPaymentManager mStudentPaymentManager;
