@@ -285,7 +285,7 @@ module ums {
                 this.$scope.genderNameMap[this.$scope.genders[i].id] = this.$scope.genders[i];
             }
             for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
-                this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].name] = this.$scope.publicationTypes[i];
+                this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].id] = this.$scope.publicationTypes[i];
             }
             for (let i = 0; i < this.$scope.religions.length; i++) {
                 this.$scope.religionMap[this.$scope.religions[i].id] = this.$scope.religions[i];
@@ -405,7 +405,7 @@ module ums {
         }
 
         private submitAcademicForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAcademicInformation, this.$scope.entry.academic).then((academicObjects:any)=>{
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAcademicInformation, angular.copy(this.$scope.entry.academic)).then((academicObjects:any)=>{
                 this.convertToJson('academic', academicObjects).then((json: any) => {
                     this.academicInformationService.saveAcademicInformation(json)
                         .then((message: any) => {
@@ -417,7 +417,7 @@ module ums {
         }
 
         private submitPublicationForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousPublicationInformation, this.$scope.entry.publication).then((publicationObjects: any) => {
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousPublicationInformation, angular.copy(this.$scope.entry.publication)).then((publicationObjects: any) => {
                 this.convertToJson('publication', publicationObjects)
                     .then((json: any) => {
                         this.publicationInformationService.savePublicationInformation(json)
@@ -431,7 +431,7 @@ module ums {
         }
 
         private submitTrainingForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousTrainingInformation, this.$scope.entry.training).then((trainingObjects: any)=>{
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousTrainingInformation, angular.copy(this.$scope.entry.training)).then((trainingObjects: any)=>{
                 this.convertToJson('training', trainingObjects)
                     .then((json: any) => {
                     console.log(json);
@@ -445,7 +445,7 @@ module ums {
         }
 
         private submitAwardForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, this.$scope.entry.award).then((awardObjects: any)=>{
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, angular.copy(this.$scope.entry.award)).then((awardObjects: any)=>{
                 this.convertToJson('award', awardObjects)
                     .then((json: any) => {
                         this.awardInformationService.saveAwardInformation(json)
@@ -459,7 +459,7 @@ module ums {
         }
 
         private submitExperienceForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousExperienceInformation, this.$scope.entry.experience).then((experienceObjects: any)=>{
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousExperienceInformation, angular.copy(this.$scope.entry.experience)).then((experienceObjects: any)=>{
                 this.convertToJson('experience', experienceObjects)
                     .then((json: any) => {
                         this.experienceInformationService.saveExperienceInformation(json)
@@ -515,6 +515,7 @@ module ums {
                     this.$scope.entry.academic[i] = academicInformation[i];
                     this.$scope.entry.academic[i].degree = this.$scope.degreeNameMap[academicInformation[i].degreeId];
                 }
+            }).then(() => {
                 this.$scope.previousAcademicInformation = angular.copy(this.$scope.entry.academic);
             });
         }
@@ -525,7 +526,9 @@ module ums {
                 this.$scope.data.totalRecord = publicationInformation.length;
                 for (let i = 0; i < publicationInformation.length; i++) {
                     this.$scope.entry.publication[i] = publicationInformation[i];
-                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationType];
+                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationTypeId];
+                    this.$scope.entry.publication[i].publicationCountry = this.$scope.countryMap[publicationInformation[i].publicationCountryId];
+
                 }
                 this.$scope.previousPublicationInformation = angular.copy(this.$scope.entry.publication);
             });
@@ -537,7 +540,8 @@ module ums {
                 this.$scope.paginatedPublication = publicationInformationWithPagination;
                 for (let i = 0; i < publicationInformationWithPagination.length; i++) {
                     this.$scope.paginatedPublication[i] = publicationInformationWithPagination[i];
-                    this.$scope.paginatedPublication[i].publicationType = this.$scope.publicationTypeMap[publicationInformationWithPagination[i].publicationType];
+                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformationWithPagination[i].publicationTypeId];
+                    this.$scope.entry.publication[i].publicationCountry = this.$scope.countryMap[publicationInformationWithPagination[i].publicationCountryId]
                 }
             });
         }
@@ -777,8 +781,8 @@ module ums {
                 this.$scope.entry.academic.push(academicEntry);
             } else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
-                publicationEntry = {id: null, employeeId: this.$scope.userId, publicationTitle: "", publicationType: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
-                    publicationVolume: "", publicationJournalName: "", publicationCountry: "", status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
+                publicationEntry = {id: null, employeeId: this.$scope.userId, publicationTitle: "", publicationType: null, publicationTypeId: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
+                    publicationVolume: "", publicationJournalName: "", publicationCountry: null, publicationCountryId: null, status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
                 this.$scope.entry.publication.push(publicationEntry);
             } else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;

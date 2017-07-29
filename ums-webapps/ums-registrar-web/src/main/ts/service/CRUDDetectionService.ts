@@ -9,41 +9,34 @@ module ums{
 
         public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            let comparingObjects: any = angular.copy(comparingObject);
             let baseObjectsLength: number = baseObject.length;
-            let comparingObjectsLength: number = comparingObjects.length;
-            let flag: number = 0;
+            let comparingObjectsLength: number = comparingObject.length;
             for (let i = 0; i < baseObjectsLength; i++) {
                 for (let j = 0; j < comparingObjectsLength; j++) {
-                    if (this.objectEqualityTest(baseObject[i], comparingObjects[j]) == true) {
-                        comparingObjects[j].dbAction = "No Change";
+                    if (angular.equals(baseObject[i], comparingObject[j])) {
+                        comparingObject[j].dbAction = "No Change";
                         baseObject[i].dbAction = "No Change";
                     }
                 }
             }
             for(let i = 0; i < baseObjectsLength; i++){
                 for(let j = 0; j < comparingObjectsLength; j++){
-                    if(this.objectEqualityTest(baseObject[i], comparingObjects[j]) == false){
-                        if(comparingObjects[j].dbAction == "" || comparingObjects[j].dbAction == undefined){
-                            comparingObjects[j].dbAction = "Update";
+                    if(angular.equals(baseObject[i], comparingObject[j]) == false){
+                        if(baseObject[i].dbAction == "" && comparingObject[j].dbAction == ""){
+                            comparingObject[j].dbAction = "Update";
                             baseObject[i].dbAction = "Update"
                         }
                     }
                 }
             }
             for(let i = 0; i < baseObjectsLength; i++){
-                if(baseObject[i].dbAction == "" || baseObject[i].dbAction == undefined){
+                if(baseObject[i].dbAction == ""){
                     baseObject[i].dbAction = "Delete";
-                    console.log(baseObject[i]);
-                    comparingObjects.push(baseObject[i]);
+                    comparingObject.push(baseObject[i]);
                 }
             }
-            defer.resolve(comparingObjects);
+            defer.resolve(comparingObject);
             return defer.promise;
-        }
-
-        private objectEqualityTest(baseObj: any, comparingObj: any): boolean{
-            return angular.equals(baseObj, comparingObj);
         }
 
         public isObjectEmpty(obj: Object): boolean {

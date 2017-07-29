@@ -21,5 +21,6 @@ module ums{
         startDate: string;
         endDate: string;
         serviceId: string;
+        dbAction: string;
     }
 }

@@ -1,44 +1,53 @@
 package org.ums.domain.model.mutable.registrar;
 
+import org.apache.poi.ss.formula.functions.Count;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.common.PublicationType;
+
+import java.util.Date;
 
 public interface MutablePublicationInformation extends PublicationInformation, Editable<Integer>,
     MutableIdentifier<Integer>, MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);
 
-  void setPublicationTitle(final String pPublicationTitle);
+  void setTitle(final String pTitle);
 
   void setInterestGenre(final String pInterestGenre);
 
   void setPublisherName(final String pPublisherName);
 
-  void setDateOfPublication(final String pDateOfPublication);
+  void setDateOfPublication(final Date pDateOfPublication);
 
-  void setPublicationType(final String pPublicationType);
+  void setType(final PublicationType pType);
 
-  void setPublicationWebLink(final String pPublicationWebLink);
+  void setTypeId(final int pTypeId);
 
-  void setPublicationISSN(final String pPublicationISSN);
+  void setWebLink(final String pWebLink);
 
-  void setPublicationIssue(final String pPublicationIssue);
+  void setISSN(final String pISSN);
 
-  void setPublicationVolume(final String pPublicationVolume);
+  void setIssue(final String pIssue);
 
-  void setPublicationJournalName(final String pPublicationJournalName);
+  void setVolume(final String pVolume);
 
-  void setPublicationCountry(final String pPublicationCountry);
+  void setJournalName(final String pJournalName);
 
-  void setPublicationPages(final String pPublicationPages);
+  void setCountry(final Country pCountry);
 
-  void setPublicationStatus(final String pPublicationStatus);
+  void setCountryId(final int pCountryId);
 
-  void setAppliedOn(final String pAppliedOn);
+  void setPages(final String pPages);
 
-  void setActionTakenOn(final String pActionTakenOn);
+  void setStatus(final String pStatus);
+
+  void setAppliedOn(final Date pAppliedOn);
+
+  void setActionTakenOn(final Date pActionTakenOn);
 
   void setRowNumber(final int pRowNumber);
 }

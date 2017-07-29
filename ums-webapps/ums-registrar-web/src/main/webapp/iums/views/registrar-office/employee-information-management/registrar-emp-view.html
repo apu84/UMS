@@ -83,6 +83,7 @@
                         <thead class="heading well">
                         <tr>
                             <th>Sl.</th>
+                            <th>Employee Id</th>
                             <th >Teacher Name</th>
                             <th>Department</th>
                             <th>Action</th>
@@ -91,6 +92,7 @@
                         <tbody>
                             <tr data-ng-repeat="user in (filterd = (allUser | filter: {employeeName: data.changedUserName}))">
                                 <td>{{$index + 1}}.</td>
+                                <td>{{user.id}}</td>
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
                                 <td><button type="button" class="btn btn-default" data-ng-click="view(user)">View</button></td>

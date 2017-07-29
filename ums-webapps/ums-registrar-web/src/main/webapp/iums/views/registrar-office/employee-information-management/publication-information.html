@@ -151,14 +151,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country</label>
+                            <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country<span class='require'>*</span></label>
                             <div class="col-md-8">
-                                <input type="text"
-                                       name="nPublicationCountry{{$index}}"
-                                       id="iPublicationCountry{{$index}}"
-                                       data-ng-model="publication.publicationCountry"
-                                       placeholder="Volume"
-                                       class="form-control">
+                                <select name="nPublicationCountry{{$index}}"
+                                        id="iPublicationCountry{{$index}}"
+                                        data-ng-model="publication.publicationCountry"
+                                        data-ng-options="country.name for country in countries"
+                                        class="form-control" required>
+                                    <option value="">Select Country</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -282,7 +283,7 @@
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" for="iPublicationCountry{{$index}}">Country</label>
                         <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label">{{publication.publicationCountry}}</label>
+                            <label class="control-label">{{publication.publicationCountry.name}}</label>
                         </div>
                     </div>
                     <div class="col-md-6">

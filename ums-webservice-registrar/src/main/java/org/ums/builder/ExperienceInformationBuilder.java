@@ -23,24 +23,18 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pBuilder.add("experienceDesignation", pReadOnly.getDesignation());
     pBuilder.add("experienceFrom", pReadOnly.getExperienceFromDate());
     pBuilder.add("experienceTo", pReadOnly.getExperienceToDate());
+    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableExperienceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if(pJsonObject.containsKey("dbAction")) {
-      if(pJsonObject.getString("dbAction").equals("Update")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      else if(pJsonObject.getString("dbAction").equals("Create")) {
-      }
-      else if(pJsonObject.getString("dbAction").equals("Delete")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-      pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
-      pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
-      pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));
-      pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
-    }
+    pMutable
+        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
+            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
+    pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
+    pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));
+    pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
   }
 }

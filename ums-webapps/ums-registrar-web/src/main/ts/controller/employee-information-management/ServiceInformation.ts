@@ -189,7 +189,7 @@ module ums{
         private addNewServiceDetailsRow(index: number) {
             let serviceDetailsEntry: IServiceDetailsModel;
             serviceDetailsEntry = {
-                id: null, interval: null, intervalId: null, startDate: "", endDate: "", serviceId: null
+                id: null, interval: null, intervalId: null, startDate: "", endDate: "", serviceId: null, dbAction: "Create"
             };
             this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
         }

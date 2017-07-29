@@ -25,25 +25,18 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pBuilder.add("degreeId", pReadOnly.getDegreeId());
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
+    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableAcademicInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
-    if(pJsonObject.containsKey("dbAction")) {
-      if(pJsonObject.getString("dbAction").equals("Update")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      else if(pJsonObject.getString("dbAction").equals("Create")) {
-      }
-      else if(pJsonObject.getString("dbAction").equals("Delete")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-      pMutable.setDegree(mAcademicDegreeType.get(pJsonObject.getJsonObject("degree").getInt("id")));
-      pMutable.setInstitute(pJsonObject.getString("institution"));
-      pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
-
-    }
+    pMutable
+        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
+            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setDegree(mAcademicDegreeType.get(pJsonObject.getJsonObject("degree").getInt("id")));
+    pMutable.setInstitute(pJsonObject.getString("institution"));
+    pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
   }
 }

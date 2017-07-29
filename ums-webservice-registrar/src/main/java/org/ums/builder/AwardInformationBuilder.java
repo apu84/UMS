@@ -20,47 +20,24 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("awardName", pReadOnly.getAwardName());
-    if(pReadOnly.getAwardInstitute() != null) {
-      pBuilder.add("awardInstitute", pReadOnly.getAwardInstitute());
-    }
-    else {
-      pBuilder.add("awardInstitute", "");
-    }
+    pBuilder.add("awardInstitute", pReadOnly.getAwardInstitute() == null ? "" : pReadOnly.getAwardInstitute());
     pBuilder.add("awardedYear", pReadOnly.getAwardedYear());
-    if(pReadOnly.getAwardShortDescription() != null) {
-      pBuilder.add("awardShortDescription", pReadOnly.getAwardShortDescription());
-    }
-    else {
-      pBuilder.add("awardShortDescription", "");
-    }
+    pBuilder.add("awardShortDescription",
+        pReadOnly.getAwardShortDescription() == null ? "" : pReadOnly.getAwardShortDescription());
+    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableAwardInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if(pJsonObject.containsKey("dbAction")) {
-      if(pJsonObject.getString("dbAction").equals("Update")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      else if(pJsonObject.getString("dbAction").equals("Create")) {
-      }
-      else if(pJsonObject.getString("dbAction").equals("Delete")) {
-        pMutable.setId(pJsonObject.getInt("id"));
-      }
-      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-      pMutable.setAwardName(pJsonObject.getString("awardName"));
-      if(!pJsonObject.containsKey("awardInstitute")) {
-        pMutable.setAwardInstitute("");
-      }
-      else {
-        pMutable.setAwardInstitute(pJsonObject.getString("awardInstitute"));
-      }
-      pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
-      if(!pJsonObject.containsKey("awardShortDescription")) {
-        pMutable.setAwardShortDescription("");
-      }
-      else {
-        pMutable.setAwardShortDescription(pJsonObject.getString("awardShortDescription"));
-      }
-    }
+    pMutable
+        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
+            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setAwardName(pJsonObject.getString("awardName"));
+    pMutable
+        .setAwardInstitute(pJsonObject.containsKey("awardInstitute") ? pJsonObject.getString("awardInstitute") : "");
+    pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
+    pMutable.setAwardShortDescription(pJsonObject.containsKey("awardShortDescription") ? pJsonObject
+        .getString("awardShortDescription") : "");
   }
 }

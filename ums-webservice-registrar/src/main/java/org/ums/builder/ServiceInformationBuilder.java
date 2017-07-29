@@ -64,6 +64,8 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
       children.add(jsonObjectBuilder);
     }
     pBuilder.add("intervalDetails", children);
+
+    pBuilder.add("dbAction", "");
   }
 
   @Override

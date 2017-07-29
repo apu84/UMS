@@ -3,44 +3,51 @@ package org.ums.domain.model.immutable.registrar;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.enums.common.PublicationType;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface PublicationInformation extends Serializable, EditType<MutablePublicationInformation>,
     Identifier<Integer>, LastModifier {
 
   String getEmployeeId();
 
-  String getPublicationTitle();
+  String getTitle();
 
   String getInterestGenre();
 
   String getPublisherName();
 
-  String getDateOfPublication();
+  Date getDateOfPublication();
 
-  String getPublicationType();
+  PublicationType getType();
 
-  String getPublicationWebLink();
+  int getTypeId();
 
-  String getPublicationISSN();
+  String getWebLink();
 
-  String getPublicationIssue();
+  String getISSN();
 
-  String getPublicationVolume();
+  String getIssue();
 
-  String getPublicationJournalName();
+  String getVolume();
 
-  String getPublicationCountry();
+  String getJournalName();
 
-  String getPublicationPages();
+  Country getCountry();
 
-  String getPublicationStatus();
+  int getCountryId();
 
-  String getAppliedOn();
+  String getPages();
 
-  String getActionTakenOn();
+  String getStatus();
+
+  Date getAppliedOn();
+
+  Date getActionTakenOn();
 
   int getRowNumber();
 }

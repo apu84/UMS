@@ -38,11 +38,11 @@ public class ServiceInformationDetailBuilder implements
     pBuilder.add("startDate", mDateFormat.format(pReadOnly.getStartDate()));
     pBuilder.add("endDate", pReadOnly.getEndDate() == null ? "" : mDateFormat.format(pReadOnly.getEndDate()));
     pBuilder.add("serviceId", pReadOnly.getServiceId().toString());
+    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableServiceInformationDetail pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
@@ -52,6 +52,9 @@ public class ServiceInformationDetailBuilder implements
 
   public void serviceInformationDetailBuilder(MutableServiceInformationDetail pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache, Long pServiceId) {
+    if(pJsonObject.getString("dbAction").equals("Update") || pJsonObject.getString("dbAction").equals("Delete")) {
+      pMutable.setId(pJsonObject.getInt("id"));
+    }
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").equals("") ? null

@@ -7,12 +7,14 @@ module ums{
         publisherName: string;
         dateOfPublication: string;
         publicationType: ICommon;
+        publicationTypeId: number;
         publicationWebLink: string;
         publicationISSN: string;
         publicationIssue: String;
         publicationVolume: string;
         publicationJournalName: string;
-        publicationCountry: string;
+        publicationCountry: ICommon;
+        publicationCountryId: number;
         status: string;
         publicationPages: String;
         appliedOn: string;
