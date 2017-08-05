@@ -34,7 +34,10 @@ public class ServiceInformationDetailBuilder implements
   public void build(JsonObjectBuilder pBuilder, ServiceInformationDetail pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("intervalId", pReadOnly.getEmploymentPeriodId());
+    JsonObjectBuilder intervalBuilder = Json.createObjectBuilder();
+    intervalBuilder.add("id", pReadOnly.getEmploymentPeriodId()).add("name",
+        mEmploymentPeriod.get(pReadOnly.getEmploymentPeriodId()).getLabel());
+    pBuilder.add("interval", intervalBuilder);
     pBuilder.add("startDate", mDateFormat.format(pReadOnly.getStartDate()));
     pBuilder.add("endDate", pReadOnly.getEndDate() == null ? "" : mDateFormat.format(pReadOnly.getEndDate()));
     pBuilder.add("serviceId", pReadOnly.getServiceId().toString());

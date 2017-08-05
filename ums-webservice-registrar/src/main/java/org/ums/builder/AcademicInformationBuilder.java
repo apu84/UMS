@@ -22,7 +22,10 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
 
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
-    pBuilder.add("degreeId", pReadOnly.getDegreeId());
+    JsonObjectBuilder degreeBuilder = Json.createObjectBuilder();
+    degreeBuilder.add("id", pReadOnly.getDegreeId()).add("name",
+        mAcademicDegreeType.get(pReadOnly.getDegreeId()).getLabel());
+    pBuilder.add("degree", degreeBuilder);
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
     pBuilder.add("dbAction", "");
@@ -35,7 +38,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
             .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    pMutable.setDegree(mAcademicDegreeType.get(pJsonObject.getJsonObject("degree").getInt("id")));
+    pMutable.setDegreeId(pJsonObject.getJsonObject("degree").getInt("id"));
     pMutable.setInstitute(pJsonObject.getString("institution"));
     pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
   }

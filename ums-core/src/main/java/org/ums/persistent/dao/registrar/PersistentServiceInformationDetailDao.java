@@ -60,7 +60,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
 
   @Override
   public int updateServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYMENT_PERIOD = ? AND SERVICE_ID = ?";
+    String query = UPDATE_ONE + " WHERE ID = ? AND SERVICE_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getServiceInformationDetailUpdateParams(pMutableServiceInformationDetail)).length;
   }
 
@@ -70,8 +70,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
     for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
       params.add(new Object[] {serviceInformationDetail.getEmploymentPeriod().getId(),
           serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
-          serviceInformationDetail.getId(), serviceInformationDetail.getEmploymentPeriod().getId(),
-          serviceInformationDetail.getServiceId()});
+          serviceInformationDetail.getId(), serviceInformationDetail.getServiceId()});
 
     }
     return params;

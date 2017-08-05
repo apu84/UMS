@@ -37,7 +37,6 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   @Autowired
   private ThanaManager mThanaManager;
 
-  @Autowired
   private NationalityBuilder mNationalityBuilder;
 
   private NationalityType mNationalityType;
@@ -57,14 +56,33 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pBuilder.add("lastName", pReadOnly.getLastName());
     pBuilder.add("fatherName", pReadOnly.getFatherName());
     pBuilder.add("motherName", pReadOnly.getMotherName());
-    pBuilder.add("genderId", pReadOnly.getGender());
+    JsonObjectBuilder genderBuilder = Json.createObjectBuilder();
+    if(pReadOnly.getGender().equals("M")) {
+      genderBuilder.add("id", pReadOnly.getGender()).add("name", "Male");
+    }
+    else {
+      genderBuilder.add("id", pReadOnly.getGender()).add("name", "Female");
+    }
+    pBuilder.add("gender", genderBuilder);
     pBuilder.add("dateOfBirth", mDateFormat.format(pReadOnly.getDateOfBirth()));
-    pBuilder.add("nationalityId", pReadOnly.getNationalityId());
-    pBuilder.add("religionId", pReadOnly.getReligionId());
-    pBuilder.add("maritalStatusId", pReadOnly.getMaritalStatusId());
+    JsonObjectBuilder nationalityBuilder = Json.createObjectBuilder();
+    nationalityBuilder.add("id", pReadOnly.getNationalityId()).add("name",
+        mNationalityType.get(pReadOnly.getNationalityId()).getLabel());
+    pBuilder.add("nationality", nationalityBuilder);
+    JsonObjectBuilder religionBuilder = Json.createObjectBuilder();
+    religionBuilder.add("id", pReadOnly.getReligionId()).add("name",
+        mReligionType.get(pReadOnly.getReligionId()).getLabel());
+    pBuilder.add("religion", religionBuilder);
+    JsonObjectBuilder maritalStatusBuilder = Json.createObjectBuilder();
+    maritalStatusBuilder.add("id", pReadOnly.getMaritalStatusId()).add("name",
+        mMaritalStatusType.get(pReadOnly.getMaritalStatusId()).getLabel());
+    pBuilder.add("maritalStatus", maritalStatusBuilder);
     pBuilder.add("spouseName", pReadOnly.getSpouseName() == null ? "" : pReadOnly.getSpouseName());
     pBuilder.add("nidNo", pReadOnly.getNidNo() == null ? "" : pReadOnly.getNidNo());
-    pBuilder.add("bloodGroupId", pReadOnly.getBloodGroupId());
+    JsonObjectBuilder bloodGroupBuilder = Json.createObjectBuilder();
+    bloodGroupBuilder.add("id", pReadOnly.getBloodGroupId()).add("name",
+        mBloodGroupType.get(pReadOnly.getBloodGroupId()).getLabel());
+    pBuilder.add("bloodGroup", bloodGroupBuilder);
     pBuilder.add("spouseNidNo", pReadOnly.getSpouseNidNo() == null ? "" : pReadOnly.getSpouseNidNo());
     pBuilder.add("website", pReadOnly.getWebsite() == null ? "" : pReadOnly.getWebsite());
     pBuilder.add("organizationalEmail",
@@ -75,23 +93,64 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pBuilder.add("preAddressLine1", pReadOnly.getPresentAddressLine1());
     pBuilder.add("preAddressLine2",
         pReadOnly.getPresentAddressLine2() == null ? "" : pReadOnly.getPresentAddressLine2());
-    pBuilder.add("preAddressCountryId", pReadOnly.getPresentAddressCountryId());
-    pBuilder.add("preAddressDivisionId", pReadOnly.getPresentAddressDivisionId());
-    pBuilder.add("preAddressDistrictId", pReadOnly.getPresentAddressDistrictId());
-    pBuilder.add("preAddressThanaId", pReadOnly.getPresentAddressThanaId());
+    JsonObjectBuilder presentCountryBuilder = Json.createObjectBuilder();
+    presentCountryBuilder.add("id", pReadOnly.getPresentAddressCountryId()).add("name",
+        mCountryManager.get(pReadOnly.getPresentAddressCountryId()).getName());
+    pBuilder.add("preAddressCountry", presentCountryBuilder);
+    if(mCountryManager.get(pReadOnly.getPresentAddressCountryId()).getName().equals("Bangladesh")) {
+      JsonObjectBuilder presentDivisionBuilder = Json.createObjectBuilder();
+      presentDivisionBuilder.add("id", pReadOnly.getPresentAddressDivisionId()).add("name",
+          mDivisionManager.get(pReadOnly.getPresentAddressDivisionId()).getDivisionName());
+      pBuilder.add("preAddressDivision", presentDivisionBuilder);
+      JsonObjectBuilder presentDistrictBuilder = Json.createObjectBuilder();
+      presentDistrictBuilder.add("id", pReadOnly.getPresentAddressDistrictId()).add("name",
+          mDistrictManager.get(pReadOnly.getPresentAddressDistrictId()).getDistrictName());
+      pBuilder.add("preAddressDistrict", presentDistrictBuilder);
+      JsonObjectBuilder presentThanaBuilder = Json.createObjectBuilder();
+      presentThanaBuilder.add("id", pReadOnly.getPresentAddressThanaId()).add("name",
+          mThanaManager.get(pReadOnly.getPresentAddressThanaId()).getThanaName());
+      pBuilder.add("preAddressThana", presentThanaBuilder);
+    }
+    else {
+      pBuilder.add("preAddressDivision", JsonValue.NULL);
+      pBuilder.add("preAddressDistrict", JsonValue.NULL);
+      pBuilder.add("preAddressThana", JsonValue.NULL);
+    }
     pBuilder.add("preAddressPostCode",
         pReadOnly.getPresentAddressPostCode() == null ? "" : pReadOnly.getPresentAddressPostCode());
     pBuilder.add("perAddressLine1", pReadOnly.getPermanentAddressLine1());
     pBuilder.add("perAddressLine2",
         pReadOnly.getPermanentAddressLine2() == null ? "" : pReadOnly.getPermanentAddressLine2());
-    pBuilder.add("perAddressCountryId", pReadOnly.getPermanentAddressCountryId());
-    pBuilder.add("perAddressDivisionId", pReadOnly.getPermanentAddressDivisionId());
-    pBuilder.add("perAddressDistrictId", pReadOnly.getPermanentAddressDistrictId());
-    pBuilder.add("perAddressThanaId", pReadOnly.getPermanentAddressThanaId());
+    JsonObjectBuilder permanentCountryBuilder = Json.createObjectBuilder();
+    permanentCountryBuilder.add("id", pReadOnly.getPermanentAddressCountryId()).add("name",
+        mCountryManager.get(pReadOnly.getPermanentAddressCountryId()).getName());
+    pBuilder.add("perAddressCountry", permanentCountryBuilder);
+    if(mCountryManager.get(pReadOnly.getPermanentAddressCountryId()).getName().equals("Bangladesh")) {
+      JsonObjectBuilder permanentDivisionBuilder = Json.createObjectBuilder();
+      permanentDivisionBuilder.add("id", pReadOnly.getPermanentAddressDivisionId()).add("name",
+          mDivisionManager.get(pReadOnly.getPermanentAddressDivisionId()).getDivisionName());
+      pBuilder.add("perAddressDivision", permanentDivisionBuilder);
+      JsonObjectBuilder permanentDistrictBuilder = Json.createObjectBuilder();
+      permanentDistrictBuilder.add("id", pReadOnly.getPermanentAddressDistrictId()).add("name",
+          mDistrictManager.get(pReadOnly.getPermanentAddressDistrictId()).getDistrictName());
+      pBuilder.add("perAddressDistrict", permanentDistrictBuilder);
+      JsonObjectBuilder permanentThanaBuilder = Json.createObjectBuilder();
+      permanentThanaBuilder.add("id", pReadOnly.getPermanentAddressThanaId()).add("name",
+          mThanaManager.get(pReadOnly.getPermanentAddressThanaId()).getThanaName());
+      pBuilder.add("perAddressThana", permanentThanaBuilder);
+    }
+    else {
+      pBuilder.add("perAddressDivision", JsonValue.NULL);
+      pBuilder.add("perAddressDistrict", JsonValue.NULL);
+      pBuilder.add("perAddressThana", JsonValue.NULL);
+    }
     pBuilder.add("perAddressPostCode",
         pReadOnly.getPermanentAddressPostCode() == null ? "" : pReadOnly.getPermanentAddressPostCode());
     pBuilder.add("emergencyContactName", pReadOnly.getEmergencyContactName());
-    pBuilder.add("emergencyContactRelationId", pReadOnly.getEmergencyContactRelationId());
+    JsonObjectBuilder relationBuilder = Json.createObjectBuilder();
+    relationBuilder.add("id", pReadOnly.getEmergencyContactRelationId()).add("name",
+        mRelationType.get(pReadOnly.getEmergencyContactRelationId()).getLabel());
+    pBuilder.add("emergencyContactRelation", relationBuilder);
     pBuilder.add("emergencyContactPhone", pReadOnly.getEmergencyContactPhone());
     pBuilder.add("emergencyContactAddress",
         pReadOnly.getEmergencyContactAddress() == null ? "" : pReadOnly.getEmergencyContactAddress());
@@ -107,12 +166,12 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setMotherName(pJsonObject.getString("motherName"));
     pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));
     pMutable.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
-    pMutable.setNationality(mNationalityType.get(pJsonObject.getJsonObject("nationality").getInt("id")));
-    pMutable.setReligion(mReligionType.get(pJsonObject.getJsonObject("religion").getInt("id")));
-    pMutable.setMaritalStatus(mMaritalStatusType.get(pJsonObject.getJsonObject("maritalStatus").getInt("id")));
+    pMutable.setNationalityId(pJsonObject.getJsonObject("nationality").getInt("id"));
+    pMutable.setReligionId(pJsonObject.getJsonObject("religion").getInt("id"));
+    pMutable.setMaritalStatusId(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
     pMutable.setSpouseName(pJsonObject.containsKey("spouseName") ? pJsonObject.getString("spouseName") : "");
     pMutable.setNidNo(pJsonObject.containsKey("nationalId") ? pJsonObject.getString("nidNo") : "");
-    pMutable.setBloodGroup(mBloodGroupType.get(pJsonObject.getJsonObject("bloodGroup").getInt("id")));
+    pMutable.setBloodGroupId(pJsonObject.getJsonObject("bloodGroup").getInt("id"));
     pMutable.setSpouseNidNo(pJsonObject.containsKey("spouseNidNo") ? pJsonObject.getString("spouseNidNo") : "");
     pMutable.setWebsite(pJsonObject.containsKey("website") ? pJsonObject.getString("website") : "");
     pMutable.setOrganizationalEmail(pJsonObject.containsKey("organizationalEmail") ? pJsonObject
@@ -123,13 +182,11 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setPresentAddressLine1(pJsonObject.getString("preAddressLine1"));
     pMutable.setPresentAddressLine2(pJsonObject.containsKey("preAddressLine2") ? pJsonObject
         .getString("preAddressLine2") : "");
-    pMutable.setPresentAddressCountry(mCountryManager.get(pJsonObject.getJsonObject("preAddressCountry").getInt("id")));
+    pMutable.setPresentAddressCountryId(pJsonObject.getJsonObject("preAddressCountry").getInt("id"));
     if(pJsonObject.getJsonObject("preAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPresentAddressDivision(mDivisionManager.get(pJsonObject.getJsonObject("preAddressDivision").getInt(
-          "id")));
-      pMutable.setPresentAddressDistrict(mDistrictManager.get(pJsonObject.getJsonObject("preAddressDistrict").getInt(
-          "id")));
-      pMutable.setPresentAddressThana(mThanaManager.get(pJsonObject.getJsonObject("preAddressThana").getInt("id")));
+      pMutable.setPresentAddressDivisionId(pJsonObject.getJsonObject("preAddressDivision").getInt("id"));
+      pMutable.setPresentAddressDistrictId(pJsonObject.getJsonObject("preAddressDistrict").getInt("id"));
+      pMutable.setPresentAddressThanaId(pJsonObject.getJsonObject("preAddressThana").getInt("id"));
       pMutable.setPresentAddressPostCode(pJsonObject.containsKey("preAddressPostCode") ? pJsonObject
           .getString("preAddressPostCode") : "");
     }
@@ -142,14 +199,11 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setPermanentAddressLine1(pJsonObject.getString("perAddressLine1"));
     pMutable.setPermanentAddressLine2(pJsonObject.containsKey("preAddressLine2") ? pJsonObject
         .getString("preAddressLine2") : "");
-    pMutable.setPermanentAddressCountry(mCountryManager
-        .get(pJsonObject.getJsonObject("perAddressCountry").getInt("id")));
+    pMutable.setPermanentAddressCountryId(pJsonObject.getJsonObject("perAddressCountry").getInt("id"));
     if(pJsonObject.getJsonObject("perAddressCountry").getString("name").equals("Bangladesh")) {
-      pMutable.setPermanentAddressDivision(mDivisionManager.get(pJsonObject.getJsonObject("perAddressDivision").getInt(
-          "id")));
-      pMutable.setPermanentAddressDistrict(mDistrictManager.get(pJsonObject.getJsonObject("perAddressDistrict").getInt(
-          "id")));
-      pMutable.setPermanentAddressThana(mThanaManager.get(pJsonObject.getJsonObject("perAddressThana").getInt("id")));
+      pMutable.setPermanentAddressDivisionId(pJsonObject.getJsonObject("perAddressDivision").getInt("id"));
+      pMutable.setPermanentAddressDistrictId(pJsonObject.getJsonObject("perAddressDistrict").getInt("id"));
+      pMutable.setPermanentAddressThanaId(pJsonObject.getJsonObject("perAddressThana").getInt("id"));
       pMutable.setPermanentAddressPostCode(pJsonObject.containsKey("perAddressPostCode") ? pJsonObject
           .getString("perAddressPostCode") : "");
     }
@@ -161,8 +215,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     }
 
     pMutable.setEmergencyContactName(pJsonObject.getString("emergencyContactName"));
-    pMutable.setEmergencyContactRelation(mRelationType.get(pJsonObject.getJsonObject("emergencyContactRelation")
-        .getInt("id")));
+    pMutable.setEmergencyContactRelationId(pJsonObject.getJsonObject("emergencyContactRelation").getInt("id"));
     pMutable.setEmergencyContactPhone(pJsonObject.getString("emergencyContactPhone"));
     pMutable.setEmergencyContactAddress(pJsonObject.containsKey("emergencyContactAddress") ? pJsonObject
         .getString("emergencyContactAddress") : "");

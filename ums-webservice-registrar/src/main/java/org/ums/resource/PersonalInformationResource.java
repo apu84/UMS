@@ -20,6 +20,6 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
   @Path("/getPersonalInformation/employeeId/{employee-id}")
   public JsonObject getPersonalInformation(final @PathParam("employee-id") String pEmployeeId,
       final @Context Request pRequest) {
-    return mResourceHelper.getPersonalInformation(pEmployeeId, mUriInfo);
+    return mHelper.getPersonalInformation(pEmployeeId, mUriInfo);
   }
 }

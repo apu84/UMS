@@ -18,6 +18,7 @@ import org.ums.persistent.model.registrar.PersistentAreaOfInterestInformation;
 import org.ums.persistent.model.registrar.PersistentPersonalInformation;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -39,7 +40,7 @@ public class PersonalInformationResourceHelper extends
   public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
     PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
-      personalInformation = mManager.get(pEmployeeId);
+      personalInformation = mManager.getPersonalInformation(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
     return buildJson(personalInformation, pUriInfo);
@@ -51,7 +52,20 @@ public class PersonalInformationResourceHelper extends
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("personal");
     mBuilder.build(personalInformation, jsonObject, localeCache);
-    mManager.update(personalInformation);
+    mManager.updatePersonalInformation(personalInformation);
+    localeCache.invalidate();
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
+    LocalCache localeCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("personal");
+    mBuilder.build(personalInformation, jsonObject, localeCache);
+    mManager.savePersonalInformation(personalInformation);
     localeCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -59,18 +73,8 @@ public class PersonalInformationResourceHelper extends
   }
 
   @Override
-  @Transactional
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
-    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject personalJsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    getBuilder().build(mutablePersonalInformation, personalJsonObject, localCache);
-    mutablePersonalInformation.create();
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
+    throw new NotImplementedException();
   }
 
   private JsonObject buildJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo) {

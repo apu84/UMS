@@ -32,7 +32,7 @@
                                 <select name="nPublicationType{{$index}}"
                                         id="iPublicationType{{$index}}"
                                         data-ng-model="publication.publicationType"
-                                        data-ng-options="publicationType.name for publicationType in publicationTypes"
+                                        data-ng-options="publicationType.name for publicationType in publicationTypes track by publicationType.id"
                                         data-ng-change="changeFieldsByPublicationType($index)"
                                         class="form-control" required>
                                     <option value="">Select Publication Type</option>
@@ -156,7 +156,7 @@
                                 <select name="nPublicationCountry{{$index}}"
                                         id="iPublicationCountry{{$index}}"
                                         data-ng-model="publication.publicationCountry"
-                                        data-ng-options="country.name for country in countries"
+                                        data-ng-options="country.name for country in countries track by country.id"
                                         class="form-control" required>
                                     <option value="">Select Country</option>
                                 </select>

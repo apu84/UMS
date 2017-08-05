@@ -50,9 +50,18 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
   public void build(JsonObjectBuilder pBuilder, ServiceInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
-    pBuilder.add("departmentId", pReadOnly.getDepartmentId());
-    pBuilder.add("designationId", pReadOnly.getDesignationId());
-    pBuilder.add("employmentId", pReadOnly.getEmploymentId());
+    JsonObjectBuilder departmentBuilder = Json.createObjectBuilder();
+    departmentBuilder.add("id", pReadOnly.getDepartmentId()).add("name",
+        mDepartmentManager.get(pReadOnly.getDepartmentId()).getLongName());
+    pBuilder.add("department", departmentBuilder);
+    JsonObjectBuilder designationBuilder = Json.createObjectBuilder();
+    designationBuilder.add("id", pReadOnly.getDesignationId()).add("name",
+        mDesignationManager.get(pReadOnly.getDesignationId()).getDesignationName());
+    pBuilder.add("designation", designationBuilder);
+    JsonObjectBuilder employmentBuilder = Json.createObjectBuilder();
+    employmentBuilder.add("id", pReadOnly.getEmploymentId()).add("name",
+        mEmploymentTypeManager.get(pReadOnly.getEmploymentId()).getType());
+    pBuilder.add("employmentType", employmentBuilder);
     pBuilder.add("joiningDate", mDateFormat.format(pReadOnly.getJoiningDate()));
     pBuilder.add("resignDate", pReadOnly.getResignDate() == null ? "" : mDateFormat.format(pReadOnly.getResignDate()));
     List<ServiceInformationDetail> serviceInformationDetails = new ArrayList<>();

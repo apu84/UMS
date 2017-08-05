@@ -20,18 +20,6 @@ module ums {
         borderColor: string;
         supOptions: string;
         customItemPerPage: number;
-        degreeNameMap: any;
-        genderNameMap: any;
-        religionMap: any;
-        nationalityMap: any;
-        bloodGroupMap: any;
-        martialStatusMap: any;
-        relationMap: any;
-        countryMap: any;
-        divisionMap: any;
-        districtMap: any;
-        thanaMap: any;
-        publicationTypeMap: any;
         aoiMap: any;
         data: any;
         pagination: any;
@@ -97,10 +85,6 @@ module ums {
         showEmployeeInformation: boolean;
         showSelectPanel: boolean;
         showTableData: boolean;
-        designationMap: any;
-        departmentMap: any;
-        employmentMap: any;
-        employmentPeriodMap: any;
         changedDepartment: IDepartment;
         allUser: Array<Employee>;
         designations: Array<ICommon>;
@@ -116,7 +100,6 @@ module ums {
         addNewServiceDetailsRow: Function;
         submitServiceForm: Function;
         view: Function;
-
 
         test: string;
     }
@@ -385,74 +368,10 @@ module ums {
         }
 
         private createMap() {
-            this.$scope.degreeNameMap = {};
-            this.$scope.genderNameMap = {};
-            this.$scope.publicationTypeMap = {};
-            this.$scope.religionMap = {};
-            this.$scope.nationalityMap = {};
-            this.$scope.bloodGroupMap = {};
-            this.$scope.martialStatusMap = {};
-            this.$scope.relationMap = {};
-            this.$scope.countryMap = {};
-            this.$scope.divisionMap = {};
-            this.$scope.districtMap = {};
-            this.$scope.thanaMap = {};
             this.$scope.aoiMap = {};
-            this.$scope.designationMap = {};
-            this.$scope.departmentMap = {};
-            this.$scope.employmentMap = {};
-            this.$scope.employmentPeriodMap = {};
 
-            for (let i = 0; i < this.$scope.degreeNames.length; i++) {
-                this.$scope.degreeNameMap[this.$scope.degreeNames[i].id] = this.$scope.degreeNames[i];
-            }
-            for (let i = 0; i < this.$scope.genders.length; i++) {
-                this.$scope.genderNameMap[this.$scope.genders[i].id] = this.$scope.genders[i];
-            }
-            for (let i = 0; i < this.$scope.publicationTypes.length; i++) {
-                this.$scope.publicationTypeMap[this.$scope.publicationTypes[i].id] = this.$scope.publicationTypes[i];
-            }
-            for (let i = 0; i < this.$scope.religions.length; i++) {
-                this.$scope.religionMap[this.$scope.religions[i].id] = this.$scope.religions[i];
-            }
-            for (let i = 0; i < this.$scope.nationalities.length; i++) {
-                this.$scope.nationalityMap[this.$scope.nationalities[i].id] = this.$scope.nationalities[i];
-            }
-            for (let i = 0; i < this.$scope.bloodGroups.length; i++) {
-                this.$scope.bloodGroupMap[this.$scope.bloodGroups[i].id] = this.$scope.bloodGroups[i];
-            }
-            for (let i = 0; i < this.$scope.maritalStatus.length; i++) {
-                this.$scope.martialStatusMap[this.$scope.maritalStatus[i].id] = this.$scope.maritalStatus[i];
-            }
-            for (let i = 0; i < this.$scope.relations.length; i++) {
-                this.$scope.relationMap[this.$scope.relations[i].id] = this.$scope.relations[i];
-            }
-            for (let i = 0; i < this.$scope.countries.length; i++) {
-                this.$scope.countryMap[this.$scope.countries[i].id] = this.$scope.countries[i];
-            }
-            for (let i = 0; i < this.$scope.divisions.length; i++) {
-                this.$scope.divisionMap[this.$scope.divisions[i].id] = this.$scope.divisions[i];
-            }
-            for (let i = 0; i < this.$scope.allDistricts.length; i++) {
-                this.$scope.districtMap[this.$scope.allDistricts[i].id] = this.$scope.allDistricts[i];
-            }
-            for (let i = 0; i < this.$scope.allThanas.length; i++) {
-                this.$scope.thanaMap[this.$scope.allThanas[i].id] = this.$scope.allThanas[i];
-            }
             for (let i = 0; i < this.$scope.arrayOfAreaOfInterest.length; i++) {
                 this.$scope.aoiMap[this.$scope.arrayOfAreaOfInterest[i].id] = this.$scope.arrayOfAreaOfInterest[i];
-            }
-            for (let i = 0; i < this.$scope.designations.length; i++) {
-                this.$scope.designationMap[this.$scope.designations[i].id] = this.$scope.designations[i];
-            }
-            for (let i = 0; i < this.$scope.departments.length; i++) {
-                this.$scope.departmentMap[this.$scope.departments[i].id] = this.$scope.departments[i];
-            }
-            for (let i = 0; i < this.$scope.employmentTypes.length; i++) {
-                this.$scope.employmentMap[this.$scope.employmentTypes[i].id] = this.$scope.employmentTypes[i];
-            }
-            for (let i = 0; i < this.$scope.serviceIntervals.length; i++) {
-                this.$scope.employmentPeriodMap[this.$scope.serviceIntervals[i].id] = this.$scope.serviceIntervals[i];
             }
         }
 
@@ -618,19 +537,10 @@ module ums {
             if (countEmptyResignDate > 1) {
                 this.notify.error("You can empty only one resign date");
             } else {
-                this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation, angular.copy(this.$scope.entry.serviceInfo)).then((serviceObjects) => {
-                    for(let i = 0; i < serviceObjects.length; i++) {
-                        this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousServiceInformation[i].intervalDetails, angular.copy(this.$scope.entry.serviceInfo[i].intervalDetails)).then((serviceDetailObjects) => {
-                            serviceObjects[i].intervalDetails = serviceDetailObjects;
-                        });
-                        console.log(i);
-                        console.log(serviceObjects[i]);
-                    }
+                this.cRUDDetectionService.ObjectDetectionForServiceObjects(this.$scope.previousServiceInformation, angular.copy(this.$scope.entry.serviceInfo)).then((serviceObjects) => {
                     this.convertToJson('service', serviceObjects).then((json: any) => {
-                        console.log("changed");
                         console.log(json);
                         this.serviceInformationService.saveServiceInformation(json).then((message: any) => {
-                            console.log(this.$scope.data.userId);
                             this.getServiceInformation(this.$scope.data.userId);
                             this.enableViewMode("service");
                         });
@@ -640,92 +550,79 @@ module ums {
         }
 
         private getPersonalInformation(userId: string) {
-            this.$scope.entry.personal = <IPersonalInformationModel>{};
-            this.personalInformationService.getPersonalInformation(this.$scope.data.userId).then((personalInformation: any) => {
+            this.$scope.entry.personal = null;
+            this.personalInformationService.getPersonalInformation(userId).then((personalInformation: any) => {
                 if (personalInformation.length > 0) {
                     this.$scope.entry.personal = personalInformation[0];
-                    this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
-                    this.$scope.entry.personal.religion = this.$scope.religionMap[personalInformation[0].religionId];
-                    this.$scope.entry.personal.maritalStatus = this.$scope.martialStatusMap[personalInformation[0].maritalStatusId];
-                    this.$scope.entry.personal.gender = this.$scope.genderNameMap[personalInformation[0].genderId];
-                    this.$scope.entry.personal.nationality = this.$scope.nationalityMap[personalInformation[0].nationalityId];
-                    this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroupMap[personalInformation[0].bloodGroupId];
-                    this.$scope.entry.personal.emergencyContactRelation = this.$scope.relationMap[personalInformation[0].emergencyContactRelationId];
-                    this.$scope.entry.personal.preAddressCountry = this.$scope.countryMap[personalInformation[0].preAddressCountryId];
-                    this.$scope.entry.personal.preAddressDivision = this.$scope.divisionMap[personalInformation[0].preAddressDivisionId];
-                    this.$scope.entry.personal.preAddressDistrict = this.$scope.districtMap[personalInformation[0].preAddressDistrictId];
-                    this.$scope.entry.personal.preAddressThana = this.$scope.thanaMap[personalInformation[0].preAddressThanaId];
-                    this.$scope.entry.personal.perAddressCountry = this.$scope.countryMap[personalInformation[0].perAddressCountryId];
-                    this.$scope.entry.personal.perAddressDivision = this.$scope.divisionMap[personalInformation[0].perAddressDivisionId];
-                    this.$scope.entry.personal.perAddressDistrict = this.$scope.districtMap[personalInformation[0].perAddressDistrictId];
-                    this.$scope.entry.personal.perAddressThana = this.$scope.thanaMap[personalInformation[0].perAddressThanaId];
                 }
+            }).then(() => {
                 this.$scope.previousPersonalInformation = angular.copy(this.$scope.entry.personal);
             });
         }
 
         private getAcademicInformation(userId: string) {
-            this.$scope.entry.academic = Array<IAcademicInformationModel>();
-            this.academicInformationService.getAcademicInformation(this.$scope.data.userId).then((academicInformation: any) => {
+            this.$scope.entry.academic = [];
+            this.academicInformationService.getAcademicInformation(userId).then((academicInformation: any) => {
                 for (let i = 0; i < academicInformation.length; i++) {
                     this.$scope.entry.academic[i] = academicInformation[i];
-                    this.$scope.entry.academic[i].degree = this.$scope.degreeNameMap[academicInformation[i].degreeId];
                 }
+            }).then(() => {
                 this.$scope.previousAcademicInformation = angular.copy(this.$scope.entry.academic);
             });
         }
 
         private getPublicationInformation(userId: string) {
-            this.$scope.entry.publication = Array<IPublicationInformationModel>();
-            this.publicationInformationService.getPublicationInformation(this.$scope.data.userId).then((publicationInformation: any) => {
+            this.$scope.entry.publication = [];
+            this.publicationInformationService.getPublicationInformation(userId).then((publicationInformation: any) => {
                 this.$scope.data.totalRecord = publicationInformation.length;
                 for (let i = 0; i < publicationInformation.length; i++) {
                     this.$scope.entry.publication[i] = publicationInformation[i];
-                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformation[i].publicationTypeId];
-                    this.$scope.entry.publication[i].publicationCountry = this.$scope.countryMap[publicationInformation[i].publicationCountryId]
                 }
+            }).then(()=> {
                 this.$scope.previousPublicationInformation = angular.copy(this.$scope.entry.publication);
             });
         }
 
         private getPublicationInformationWithPagination(userId: string){
-            this.$scope.entry.publication = Array<IPublicationInformationModel>();
-            this.publicationInformationService.getPublicationInformationViewWithPagination(this.$scope.data.userId, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
+            this.$scope.entry.publication = [];
+            this.publicationInformationService.getPublicationInformationViewWithPagination(userId, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
                 this.$scope.paginatedPublication = publicationInformationWithPagination;
                 for (let i = 0; i < publicationInformationWithPagination.length; i++) {
                     this.$scope.paginatedPublication[i] = publicationInformationWithPagination[i];
-                    this.$scope.entry.publication[i].publicationType = this.$scope.publicationTypeMap[publicationInformationWithPagination[i].publicationTypeId];
-                    this.$scope.entry.publication[i].publicationCountry = this.$scope.countryMap[publicationInformationWithPagination[i].publicationCountryId]
                 }
             });
         }
 
+
         private getTrainingInformation(userId: string) {
-            this.$scope.entry.training = Array<ITrainingInformationModel>();
-            this.trainingInformationService.getTrainingInformation(this.$scope.data.userId).then((trainingInformation: any) => {
+            this.$scope.entry.training = [];
+            this.trainingInformationService.getTrainingInformation(userId).then((trainingInformation: any) => {
                 for (let i = 0; i < trainingInformation.length; i++) {
                     this.$scope.entry.training[i] = trainingInformation[i];
                 }
+            }).then(()=>{
                 this.$scope.previousTrainingInformation = angular.copy(this.$scope.entry.training);
             });
         }
 
         private getAwardInformation(userId: string) {
-            this.$scope.entry.award = Array<IAwardInformationModel>();
-            this.awardInformationService.getAwardInformation(this.$scope.data.userId).then((awardInformation: any) => {
+            this.$scope.entry.award = [];
+            this.awardInformationService.getAwardInformation(userId).then((awardInformation: any) => {
                 for (let i = 0; i < awardInformation.length; i++) {
                     this.$scope.entry.award[i] = awardInformation[i];
                 }
+            }).then(() =>{
                 this.$scope.previousAwardInformation = angular.copy(this.$scope.entry.award);
             });
         }
 
         private getExperienceInformation(userId: string) {
-            this.$scope.entry.experience = Array<IExperienceInformationModel>();
-            this.experienceInformationService.getExperienceInformation(this.$scope.data.userId).then((experienceInformation: any) => {
+            this.$scope.entry.experience = [];
+            this.experienceInformationService.getExperienceInformation(userId).then((experienceInformation: any) => {
                 for (let i = 0; i < experienceInformation.length; i++) {
                     this.$scope.entry.experience[i] = experienceInformation[i];
                 }
+            }).then(() => {
                 this.$scope.previousExperienceInformation = angular.copy(this.$scope.entry.experience);
             });
         }
@@ -748,20 +645,16 @@ module ums {
 
         private getServiceInformation(userId: string): void{
             console.log(this.$scope.data.userId);
-            this.$scope.entry.serviceInfo = Array<IServiceInformationModel>();
+            this.$scope.entry.serviceInfo = [];
             this.serviceInformationService.getServiceInformation(this.$scope.data.userId).then((services: any) =>{
                 for(let i = 0; i < services.length; i++){
                     this.$scope.entry.serviceInfo[i] = services[i];
-                    this.$scope.entry.serviceInfo[i].department = this.$scope.departmentMap[services[i].departmentId];
-                    this.$scope.entry.serviceInfo[i].designation = this.$scope.designationMap[services[i].designationId];
-                    this.$scope.entry.serviceInfo[i].employmentType = this.$scope.employmentMap[services[i].employmentId];
                     for(let j = 0; j < services[i].intervalDetails.length; j++) {
                         this.$scope.entry.serviceInfo[i].intervalDetails[j] = services[i].intervalDetails[j];
-                        this.$scope.entry.serviceInfo[i].intervalDetails[j].interval = this.$scope.employmentPeriodMap[services[i].intervalDetails[j].intervalId];
                     }
                 }
+            }).then(()=>{
                 this.$scope.previousServiceInformation = angular.copy(this.$scope.entry.serviceInfo);
-                console.log(this.$scope.previousServiceInformation);
             });
         }
 
@@ -962,7 +855,7 @@ module ums {
 
         private addNewServiceDetailsRow(index: number) {
             let serviceDetailsEntry: IServiceDetailsModel;
-            serviceDetailsEntry = {id: null, interval: null, intervalId: null, startDate: "", endDate: "", serviceId: null, dbAction: "Create"};
+            serviceDetailsEntry = {id: null, interval: null, startDate: "", endDate: "", serviceId: null, dbAction: "Create"};
             this.$scope.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
             this.addDate();
         }
@@ -970,12 +863,12 @@ module ums {
         private addNewRow(divName: string) {
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
-                academicEntry = {id: null, employeeId: this.$scope.data.userId, degree: null, degreeId: null, institution: "", passingYear: null, dbAction: "Create"};
+                academicEntry = {id: null, employeeId: this.$scope.data.userId, degree: null, institution: "", passingYear: null, dbAction: "Create"};
                 this.$scope.entry.academic.push(academicEntry);
             } else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
-                publicationEntry = {id: null, employeeId: this.$scope.data.userId, publicationTitle: "", publicationType: null, publicationTypeId: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
-                    publicationVolume: "", publicationJournalName: "", publicationCountry: null, publicationCountryId: null, status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
+                publicationEntry = {id: null, employeeId: this.$scope.data.userId, publicationTitle: "", publicationType: null, publicationInterestGenre: "", publicationWebLink: "", publisherName: "", dateOfPublication: "", publicationISSN: "", publicationIssue: "",
+                    publicationVolume: "", publicationJournalName: "", publicationCountry: null, status: "", publicationPages: "", appliedOn: "", actionTakenOn: "", rowNumber: null, dbAction: "Create"};
                 this.$scope.entry.publication.push(publicationEntry);
             } else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;
@@ -991,7 +884,7 @@ module ums {
                 this.$scope.entry.experience.push(experienceEntry);
             } else if(divName = 'service'){
                 let serviceEntry: IServiceInformationModel;
-                serviceEntry = {id: null, employeeId: this.$scope.data.userId, department: null, departmentId: null, designation: null, employmentType: null, designationId: null, employmentId: null,
+                serviceEntry = {id: null, employeeId: this.$scope.data.userId, department: null, designation: null, employmentType: null,
                     joiningDate: "", resignDate: "", dbAction: "Create", intervalDetails: Array<IServiceDetailsModel>()};
                 this.$scope.entry.serviceInfo.push(serviceEntry);
             }

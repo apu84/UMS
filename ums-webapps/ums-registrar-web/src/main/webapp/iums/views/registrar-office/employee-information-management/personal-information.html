@@ -51,7 +51,7 @@
                             <select name="nGender"
                                     id="iGender"
                                     data-ng-model="entry.personal.gender"
-                                    data-ng-options="gender.name for gender in genders"
+                                    data-ng-options="gender.name for gender in genders track by gender.id"
                                     class="form-control" required>
                                 <option value="">Select Gender</option>
                             </select>
@@ -78,7 +78,7 @@
                             <select name="nBloodGroup"
                                     id="iBloodGroup"
                                     data-ng-model="entry.personal.bloodGroup"
-                                    data-ng-options="bloodGroup.name for bloodGroup in bloodGroups"
+                                    data-ng-options="bloodGroup.name for bloodGroup in bloodGroups track by bloodGroup.id"
                                     class="form-control" required>
                                 <option value="">Select Blood Group</option>
                             </select>
@@ -105,7 +105,7 @@
                             <select name="nNationality"
                                     id="iNationality"
                                     data-ng-model="entry.personal.nationality"
-                                    data-ng-options="nationality.name for nationality in nationalities"
+                                    data-ng-options="nationality.name for nationality in nationalities  track by nationality.id"
                                     class="form-control" required>
                                 <option value="">Select Nationality</option>
                             </select>
@@ -117,7 +117,7 @@
                             <select name="nReligion"
                                     id="iReligion"
                                     data-ng-model="entry.personal.religion"
-                                    data-ng-options="religion.name for religion in religions"
+                                    data-ng-options="religion.name for religion in religions track by religion.id"
                                     class="form-control" required>
                                 <option value="">Select Religion</option>
                             </select>
@@ -133,7 +133,7 @@
                             <select name="iMaritalStatus"
                                     id="iMaritalStatus"
                                     data-ng-model="entry.personal.maritalStatus"
-                                    data-ng-options="maritalStatus.name for maritalStatus in maritalStatus"
+                                    data-ng-options="maritalStatus.name for maritalStatus in maritalStatus track by maritalStatus.id"
                                     class="form-control" required>
                                 <option value="">Select Marital Status</option>
                             </select>
@@ -319,7 +319,7 @@
                             <select name="nPresentAddressCountry"
                                     id="iPresentAddressCountry"
                                     data-ng-model="entry.personal.preAddressCountry"
-                                    data-ng-options="country.name for country in countries"
+                                    data-ng-options="country.name for country in countries track by country.id"
                                     data-ng-change="changePresentAddressFields()"
                                     class="form-control">
                                 <option value="">Select Country</option>
@@ -332,7 +332,7 @@
                             <select name="nPresentAddressDivision"
                                     id="iPresentAddressDivision"
                                     data-ng-model="entry.personal.preAddressDivision"
-                                    data-ng-options="divisions.name for divisions in divisions"
+                                    data-ng-options="division.name for division in divisions track by division.id"
                                     data-ng-change="changePresentAddressDistrict()"
                                     data-ng-disabled="disablePresentAddressDropdown"
                                     class="form-control" requried="required">
@@ -351,7 +351,7 @@
                             <select name="nPresentAddressDistrict"
                                     id="iPresentAddressDistrict"
                                     data-ng-model="entry.personal.preAddressDistrict"
-                                    data-ng-options="districts.name for districts in presentAddressDistricts"
+                                    data-ng-options="district.name for district in presentAddressDistricts track by district.id"
                                     data-ng-change="changePresentAddressThana()"
                                     data-ng-disabled="disablePresentAddressDropdown"
                                     class="form-control" required="required">
@@ -365,7 +365,7 @@
                             <select name="nPresentAddressPoliceStation"
                                     id="iPresentAddressPoliceStation"
                                     data-ng-model="entry.personal.preAddressThana"
-                                    data-ng-options="thanas.name for thanas in presentAddressThanas"
+                                    data-ng-options="thana.name for thana in presentAddressThanas track by thana.id"
                                     data-ng-disabled="disablePresentAddressDropdown"
                                     class="form-control" required="required">
                                 <option value="">Select Thana</option>
@@ -435,7 +435,7 @@
                             <select name="nPermanentAddressCountry"
                                     id="iPermanentAddressCountry"
                                     data-ng-model="entry.personal.perAddressCountry"
-                                    data-ng-options="country.name for country in countries"
+                                    data-ng-options="country.name for country in countries track by country.id"
                                     data-ng-change="changePermanentAddressFields()"
                                     class="form-control" required>
                                 <option value="">Select Country</option>
@@ -448,7 +448,7 @@
                             <select name="nPermanentAddressDivision"
                                     id="iPermanentAddressDivision"
                                     data-ng-model="entry.personal.perAddressDivision"
-                                    data-ng-options="division.name for division in divisions"
+                                    data-ng-options="division.name for division in divisions track by division.id"
                                     data-ng-change="changePermanentAddressDistrict()"
                                     data-ng-disabled="disablePermanentAddressDropdown"
                                     class="form-control" required="required">
@@ -467,7 +467,7 @@
                             <select name="nPermanentAddressDistrict"
                                     id="iPermanentAddressDistrict"
                                     data-ng-model="entry.personal.perAddressDistrict"
-                                    data-ng-options="district.name for district in permanentAddressDistricts"
+                                    data-ng-options="district.name for district in permanentAddressDistricts track by district.id"
                                     data-ng-change="changePermanentAddressThana()"
                                     data-ng-disabled="disablePermanentAddressDropdown"
                                     class="form-control" requried="required">
@@ -481,7 +481,7 @@
                             <select name="nPermanentAddressPoliceStation"
                                     id="iPermanentAddressPoliceStation"
                                     data-ng-model="entry.personal.perAddressThana"
-                                    data-ng-options="thana.name for thana in permanentAddressThanas"
+                                    data-ng-options="thana.name for thana in permanentAddressThanas track by thana.id"
                                     data-ng-disabled="disablePermanentAddressDropdown"
                                     class="form-control" required="required">
                                 <option value="">Select Thana</option>
@@ -536,7 +536,7 @@
                             <select name="nEmergencyContactRelation"
                                     id="iEmergencyContactRelation"
                                     data-ng-model="entry.personal.emergencyContactRelation"
-                                    data-ng-options="relation.name for relation in relations"
+                                    data-ng-options="relation.name for relation in relations track by relation.id"
                                     class="form-control" required>
                                 <option value="">Select Relation</option>
                             </select>

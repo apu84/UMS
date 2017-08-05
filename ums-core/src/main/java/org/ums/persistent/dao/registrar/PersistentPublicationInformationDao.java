@@ -67,7 +67,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     for(PublicationInformation publicationInformation : pMutablePublicationInformation) {
       params.add(new Object[] {publicationInformation.getEmployeeId(), publicationInformation.getTitle(),
           publicationInformation.getInterestGenre(), publicationInformation.getPublisherName(),
-          publicationInformation.getDateOfPublication(), publicationInformation.getType().getId(),
+          publicationInformation.getDateOfPublication(), publicationInformation.getTypeId(),
           publicationInformation.getWebLink(), publicationInformation.getISSN(), publicationInformation.getIssue(),
           publicationInformation.getVolume(), publicationInformation.getJournalName(),
           publicationInformation.getCountry().getId(), publicationInformation.getStatus(),
@@ -144,8 +144,8 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     for(PublicationInformation pPublicationInformation : pMutablePublicationInformation) {
       params.add(new Object[] {pPublicationInformation.getTitle(), pPublicationInformation.getInterestGenre(),
           pPublicationInformation.getPublisherName(), pPublicationInformation.getDateOfPublication(),
-          pPublicationInformation.getType().getId(), pPublicationInformation.getWebLink(),
-          pPublicationInformation.getISSN(), pPublicationInformation.getIssue(), pPublicationInformation.getVolume(),
+          pPublicationInformation.getTypeId(), pPublicationInformation.getWebLink(), pPublicationInformation.getISSN(),
+          pPublicationInformation.getIssue(), pPublicationInformation.getVolume(),
           pPublicationInformation.getJournalName(), pPublicationInformation.getCountry().getId(),
           pPublicationInformation.getStatus(), pPublicationInformation.getPages(),
           pPublicationInformation.getAppliedOn(), pPublicationInformation.getId(),

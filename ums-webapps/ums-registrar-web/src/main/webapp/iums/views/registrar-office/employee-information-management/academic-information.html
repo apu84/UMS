@@ -35,7 +35,7 @@
                         <select name="nAcademicDegree{{$index}}"
                                 id="iAcademicDegree{{$index}}"
                                 data-ng-model="academic.degree"
-                                data-ng-options="degreeName.name for degreeName in degreeNames"
+                                data-ng-options="degreeName.name for degreeName in degreeNames track by degreeName.id"
                                 class="form-control" required>
                             <option value="">Select Degree</option>
                         </select>

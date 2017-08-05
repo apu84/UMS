@@ -49,82 +49,75 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   }
 
   @Override
-  public PersonalInformation get(final String pId) {
+  public PersonalInformation getPersonalInformation(final String pId) {
     String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate
         .queryForObject(query, new Object[] {pId}, new PersistentPersonalInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int delete(final MutablePersonalInformation pMutablePersonalInformation) {
+  public int deletePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation) {
     String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutablePersonalInformation.getId());
   }
 
   @Override
-  public String create(MutablePersonalInformation pMutablePersonalInformation) {
+  public int savePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
     String query = INSERT_ONE;
-    return String.valueOf(mJdbcTemplate.update(query, pMutablePersonalInformation.getId(), pMutablePersonalInformation
-        .getFirstName(), pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
-        pMutablePersonalInformation.getBloodGroup().getId(), pMutablePersonalInformation.getFatherName(),
-        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationality().getId(),
-        pMutablePersonalInformation.getReligion().getId(), pMutablePersonalInformation.getDateOfBirth(),
-        pMutablePersonalInformation.getNidNo(), pMutablePersonalInformation.getMaritalStatus().getId(),
+    return mJdbcTemplate.update(query, pMutablePersonalInformation.getId(), pMutablePersonalInformation.getFirstName(),
+        pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
+        pMutablePersonalInformation.getBloodGroupId(), pMutablePersonalInformation.getFatherName(),
+        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationalityId(),
+        pMutablePersonalInformation.getReligionId(), pMutablePersonalInformation.getDateOfBirth(),
+        pMutablePersonalInformation.getNidNo(), pMutablePersonalInformation.getMaritalStatusId(),
         pMutablePersonalInformation.getSpouseName(), pMutablePersonalInformation.getSpouseNidNo(),
         pMutablePersonalInformation.getWebsite(), pMutablePersonalInformation.getOrganizationalEmail(),
         pMutablePersonalInformation.getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(),
         pMutablePersonalInformation.getPhoneNumber(), pMutablePersonalInformation.getPresentAddressLine1(),
-        pMutablePersonalInformation.getPresentAddressLine2(),
-        pMutablePersonalInformation.getPresentAddressCountry() == null ? null : pMutablePersonalInformation
-            .getPresentAddressCountry().getId(), pMutablePersonalInformation.getPresentAddressDivision() == null ? null
-            : pMutablePersonalInformation.getPresentAddressDivision().getId(), pMutablePersonalInformation
-            .getPresentAddressDistrict() == null ? null : pMutablePersonalInformation.getPresentAddressDistrict()
-            .getId(), pMutablePersonalInformation.getPresentAddressThana() == null ? null : pMutablePersonalInformation
-            .getPresentAddressThana().getId(), pMutablePersonalInformation.getPresentAddressPostCode(),
+        pMutablePersonalInformation.getPresentAddressLine2(), pMutablePersonalInformation.getPresentAddressCountryId(),
+        pMutablePersonalInformation.getPresentAddressDivisionId(),
+        pMutablePersonalInformation.getPresentAddressDistrictId(),
+        pMutablePersonalInformation.getPresentAddressThanaId(),
+        pMutablePersonalInformation.getPresentAddressPostCode(),
         pMutablePersonalInformation.getPermanentAddressLine1(), pMutablePersonalInformation.getPermanentAddressLine2(),
-        pMutablePersonalInformation.getPermanentAddressCountry() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressCountry().getId(),
-        pMutablePersonalInformation.getPermanentAddressDivision() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressDivision().getId(),
-        pMutablePersonalInformation.getPermanentAddressDistrict() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressDistrict().getId(),
-        pMutablePersonalInformation.getPermanentAddressThana() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressThana().getId(), pMutablePersonalInformation.getPermanentAddressPostCode(),
-        pMutablePersonalInformation.getEmergencyContactName(), pMutablePersonalInformation
-            .getEmergencyContactRelation().getId(), pMutablePersonalInformation.getEmergencyContactPhone(),
-        pMutablePersonalInformation.getEmergencyContactAddress()));
+        pMutablePersonalInformation.getPermanentAddressCountryId(),
+        pMutablePersonalInformation.getPermanentAddressDivisionId(),
+        pMutablePersonalInformation.getPermanentAddressDistrictId(),
+        pMutablePersonalInformation.getPermanentAddressThanaId(),
+        pMutablePersonalInformation.getPermanentAddressPostCode(),
+        pMutablePersonalInformation.getEmergencyContactName(),
+        pMutablePersonalInformation.getEmergencyContactRelationId(),
+        pMutablePersonalInformation.getEmergencyContactPhone(),
+        pMutablePersonalInformation.getEmergencyContactAddress());
   }
 
   @Override
-  public int update(MutablePersonalInformation pMutablePersonalInformation) {
+  public int updatePersonalInformation(MutablePersonalInformation pMutablePersonalInformation) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutablePersonalInformation.getFirstName(), pMutablePersonalInformation
-        .getLastName(), pMutablePersonalInformation.getGender(), pMutablePersonalInformation.getBloodGroup().getId(),
-        pMutablePersonalInformation.getFatherName(), pMutablePersonalInformation.getMotherName(),
-        pMutablePersonalInformation.getNationality().getId(), pMutablePersonalInformation.getReligion().getId(),
-        pMutablePersonalInformation.getDateOfBirth(), pMutablePersonalInformation.getNidNo(),
-        pMutablePersonalInformation.getMaritalStatus().getId(), pMutablePersonalInformation.getSpouseName(),
-        pMutablePersonalInformation.getSpouseNidNo(), pMutablePersonalInformation.getWebsite(),
-        pMutablePersonalInformation.getOrganizationalEmail(), pMutablePersonalInformation.getPersonalEmail(),
-        pMutablePersonalInformation.getMobileNumber(), pMutablePersonalInformation.getPhoneNumber(),
-        pMutablePersonalInformation.getPresentAddressLine1(), pMutablePersonalInformation.getPresentAddressLine2(),
-        pMutablePersonalInformation.getPresentAddressCountry() == null ? null : pMutablePersonalInformation
-            .getPresentAddressCountry().getId(), pMutablePersonalInformation.getPresentAddressDivision() == null ? null
-            : pMutablePersonalInformation.getPresentAddressDivision().getId(), pMutablePersonalInformation
-            .getPresentAddressDistrict() == null ? null : pMutablePersonalInformation.getPresentAddressDistrict()
-            .getId(), pMutablePersonalInformation.getPresentAddressThana() == null ? null : pMutablePersonalInformation
-            .getPresentAddressThana().getId(), pMutablePersonalInformation.getPresentAddressPostCode(),
+    return mJdbcTemplate.update(query, pMutablePersonalInformation.getFirstName(),
+        pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
+        pMutablePersonalInformation.getBloodGroupId(), pMutablePersonalInformation.getFatherName(),
+        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationalityId(),
+        pMutablePersonalInformation.getReligionId(), pMutablePersonalInformation.getDateOfBirth(),
+        pMutablePersonalInformation.getNidNo(), pMutablePersonalInformation.getMaritalStatusId(),
+        pMutablePersonalInformation.getSpouseName(), pMutablePersonalInformation.getSpouseNidNo(),
+        pMutablePersonalInformation.getWebsite(), pMutablePersonalInformation.getOrganizationalEmail(),
+        pMutablePersonalInformation.getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(),
+        pMutablePersonalInformation.getPhoneNumber(), pMutablePersonalInformation.getPresentAddressLine1(),
+        pMutablePersonalInformation.getPresentAddressLine2(), pMutablePersonalInformation.getPresentAddressCountryId(),
+        pMutablePersonalInformation.getPresentAddressDivisionId(),
+        pMutablePersonalInformation.getPresentAddressDistrictId(),
+        pMutablePersonalInformation.getPresentAddressThanaId(),
+        pMutablePersonalInformation.getPresentAddressPostCode(),
         pMutablePersonalInformation.getPermanentAddressLine1(), pMutablePersonalInformation.getPermanentAddressLine2(),
-        pMutablePersonalInformation.getPermanentAddressCountry() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressCountry().getId(),
-        pMutablePersonalInformation.getPermanentAddressDivision() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressDivision().getId(),
-        pMutablePersonalInformation.getPermanentAddressDistrict() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressDistrict().getId(),
-        pMutablePersonalInformation.getPermanentAddressThana() == null ? null : pMutablePersonalInformation
-            .getPermanentAddressThana().getId(), pMutablePersonalInformation.getPermanentAddressPostCode(),
-        pMutablePersonalInformation.getEmergencyContactName(), pMutablePersonalInformation
-            .getEmergencyContactRelation().getId(), pMutablePersonalInformation.getEmergencyContactPhone(),
+        pMutablePersonalInformation.getPermanentAddressCountryId(),
+        pMutablePersonalInformation.getPermanentAddressDivisionId(),
+        pMutablePersonalInformation.getPermanentAddressDistrictId(),
+        pMutablePersonalInformation.getPermanentAddressThanaId(),
+        pMutablePersonalInformation.getPermanentAddressPostCode(),
+        pMutablePersonalInformation.getEmergencyContactName(),
+        pMutablePersonalInformation.getEmergencyContactRelationId(),
+        pMutablePersonalInformation.getEmergencyContactPhone(),
         pMutablePersonalInformation.getEmergencyContactAddress(), pMutablePersonalInformation.getId());
   }
 

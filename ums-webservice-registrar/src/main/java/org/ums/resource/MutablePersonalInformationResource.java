@@ -16,20 +16,17 @@ import javax.ws.rs.core.Response;
 public class MutablePersonalInformationResource extends Resource {
 
   @Autowired
-  ResourceHelper<PersonalInformation, MutablePersonalInformation, String> mHelper;
-
-  @Autowired
-  PersonalInformationResourceHelper mResourceHelper;
+  PersonalInformationResourceHelper mHelper;
 
   @POST
   @Path("/savePersonalInformation")
   public Response savePersonalInformation(final JsonObject pJsonObject) throws Exception {
-    return mHelper.post(pJsonObject, mUriInfo);
+    return mHelper.savePersonalInformation(pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path("/updatePersonalInformation")
   public Response updatePersonalInformation(final JsonObject pJsonObject) {
-    return mResourceHelper.updatePersonalInformation(pJsonObject, mUriInfo);
+    return mHelper.updatePersonalInformation(pJsonObject, mUriInfo);
   }
 }

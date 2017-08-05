@@ -51,7 +51,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation academicInformation : pMutableAcademicInformation) {
-      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegree().getId(),
+      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegreeId(),
           academicInformation.getInstitute(), academicInformation.getPassingYear()});
 
     }
@@ -73,7 +73,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   private List<Object[]> getUpdateParams(List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation pAcademicInformation : pMutableAcademicInformation) {
-      params.add(new Object[] {pAcademicInformation.getDegree().getId(), pAcademicInformation.getInstitute(),
+      params.add(new Object[] {pAcademicInformation.getDegreeId(), pAcademicInformation.getInstitute(),
           pAcademicInformation.getPassingYear(), pAcademicInformation.getEmployeeId(), pAcademicInformation.getId()});
     }
     return params;
