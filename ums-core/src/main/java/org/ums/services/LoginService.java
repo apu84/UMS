@@ -4,6 +4,7 @@ import org.apache.shiro.authc.credential.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.usermanagement.user.User;
@@ -39,6 +40,7 @@ public class LoginService {
   MessageResource mMessageResource;
 
   @Autowired
+  @Qualifier("dummyEmail")
   private String dummyEmail;
 
   public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId, final String pEmailAddress,

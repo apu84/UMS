@@ -69,6 +69,7 @@
         <include>org.springframework.kafka:spring-kafka</include>
         <include>org.aspectj:aspectjrt</include>
         <include>org.aspectj:aspectjweaver</include>
+        <include>io.jsonwebtoken:jjwt</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>
@@ -101,6 +102,14 @@
     <dependencySet>
       <includes>
         <include>org.ums:ums-webservice-registrar</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
+
+    <dependencySet>
+      <includes>
+        <include>org.ums:auth-server</include>
       </includes>
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>

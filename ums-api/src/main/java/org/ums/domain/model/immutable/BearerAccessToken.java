@@ -13,4 +13,6 @@ public interface BearerAccessToken extends Serializable, Identifier<String>, Edi
   String getUserId();
 
   Date getLastAccessTime();
+
+  String getRefreshToken();
 }

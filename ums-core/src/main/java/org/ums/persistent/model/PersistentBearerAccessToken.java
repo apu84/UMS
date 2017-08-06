@@ -1,11 +1,11 @@
 package org.ums.persistent.model;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
-
-import java.util.Date;
 
 public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   private static BearerAccessTokenManager sBearerAccessTokenManager;
@@ -17,6 +17,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
 
   private String mId;
   private String mUserId;
+  private String mRefreshToken;
   private Date mLastAccessTime;
   private String mLastModified;
 
@@ -41,6 +42,16 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   @Override
   public String getUserId() {
     return mUserId;
+  }
+
+  @Override
+  public void setRefreshToken(String pRefreshToken) {
+    mRefreshToken = pRefreshToken;
+  }
+
+  @Override
+  public String getRefreshToken() {
+    return mRefreshToken;
   }
 
   @Override

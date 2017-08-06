@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:common.properties</value>
+                <value>${UMS_CONFIG}/common.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="saltBytes" class="org.apache.shiro.util.SimpleByteSource">
+        <constructor-arg value="${authentication.salt}"/>
+    </bean>
+
+    <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
+        <property name="hashAlgorithmName" value="SHA-512"/>
+        <property name="hashIterations" value="1024"/>
+        <property name="generatePublicSalt" value="true"/>
+        <property name="privateSalt" ref="saltBytes"/>
+    </bean>
+
+    <bean id="hashFormat" class="org.apache.shiro.crypto.hash.format.Shiro1CryptFormat"/>
+
+    <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService">
+        <property name="hashService" ref="hashService"/>
+        <property name="hashFormat" ref="hashFormat"/>
+    </bean>
+
+    <bean id="credentialsMatcher" class="org.ums.credentials.RetryLimitHashedCredentialsMatcher">
+        <property name="passwordService" ref="passwordService"/>
+    </bean>
+
+    <bean id="userRealm" class="org.ums.realm.UserRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="false"/>
+        <property name="salt" value="${authentication.salt}"/>
+        <!--<property name="authenticationCachingEnabled" value="true"/>-->
+        <!--<property name="authenticationCacheName" value="authenticationCache"/>-->
+        <!--<property name="authorizationCachingEnabled" value="true"/>-->
+        <!--<property name="authorizationCacheName" value="authorizationCache"/>-->
+    </bean>
+    
+    <bean id="tokenRealm" class="org.ums.realm.TokenRealm"/>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realms">
+            <list>
+                <ref bean="tokenRealm"/>
+                <ref bean="userRealm"/>
+            </list>
+        </property>
+<!--        <property name="sessionManager" ref="sessionManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>-->
+    </bean>
+
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <bean id="authenticationFilter" class="org.ums.filter.LoginFilter">
+        <property name="loginUrl" value="/login"/>
+    </bean>
+
+    <bean id="logout" class="org.ums.filter.LogoutFilter">
+        <property name="redirectUrl" value="/postLogout"/>
+    </bean>
+
+    <bean id="tokenFilter" class="org.ums.filter.TokenFilter">
+        <property name="signingKey" value="${authentication.token.signing.key}"/>
+    </bean>
+
+    <bean id="sessionFilter" class="org.ums.filter.SessionFilter">
+        <property name="signingKey" value="${authentication.token.signing.key}"/>
+    </bean>
+
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="filters">
+            <util:map>
+                <entry key="authc" value-ref="authenticationFilter"/>
+            </util:map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                / = anon
+                /login = noSessionCreation,authc
+                /logout = tokenFilter,logout
+
+                /authorize=anon
+                /userInfo=anon
+                /postLogout=anon
+
+                /** = tokenFilter,sessionFilter,user
+            </value>
+        </property>
+    </bean>
+
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>

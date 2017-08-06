@@ -14,6 +14,8 @@ import org.ums.manager.*;
 import org.ums.manager.common.*;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.*;
+import org.ums.security.JWTBuilder;
+import org.ums.security.TokenBuilder;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -59,6 +61,18 @@ public class CoreContext {
   @Autowired
   @Lazy
   EmployeeRepository mEmployeeRepository;
+
+  @Autowired
+  @Qualifier("accessTokenExpiration")
+  Integer mAccessTokenExpiration;
+
+  @Autowired
+  @Qualifier("refreshTokenExpiration")
+  Integer mRefreshTokenExpiration;
+
+  @Autowired
+  @Qualifier("tokenSigningKey")
+  String mTokenSigningKey;
 
   @Bean
   @Lazy
@@ -121,7 +135,7 @@ public class CoreContext {
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {
     BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
-    bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
+    bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate(), tokeBuilder()));
     return bearerAccessTokenCache;
   }
 
@@ -316,5 +330,10 @@ public class CoreContext {
     AreaOfInterestCache areaOfInterestCache = new AreaOfInterestCache(mCacheFactory.getCacheManager());
     areaOfInterestCache.setManager(new PersistentAreaOfInterestDao(mTemplateFactory.getJdbcTemplate()));
     return areaOfInterestCache;
+  }
+
+  @Bean
+  TokenBuilder tokeBuilder() {
+    return new JWTBuilder(mTokenSigningKey, mAccessTokenExpiration, mRefreshTokenExpiration);
   }
 }

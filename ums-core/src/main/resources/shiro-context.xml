@@ -44,9 +44,7 @@
     <!--<property name="authenticationCachingEnabled" value="true"/>-->
   </bean>
 
-  <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm">
-    <property name="logoutUri" value="/logout"/>
-  </bean>
+  <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm"/>
 
 <!--
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
@@ -135,5 +133,16 @@
     <constructor-arg type="java.lang.String" value="${session.timeoutInterval}"/>
   </bean>
 
+  <bean id="tokenSigningKey" class="java.lang.String">
+    <constructor-arg type="java.lang.String" value="${authentication.token.signing.key}"/>
+  </bean>
+
+  <bean id="accessTokenExpiration" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${access.token.expiration}"/>
+  </bean>
+
+  <bean id="refreshTokenExpiration" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${refresh.token.expiration}"/>
+  </bean>
 
 </beans>

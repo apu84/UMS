@@ -11,4 +11,6 @@ public interface MutableBearerAccessToken extends Editable<String>, BearerAccess
   void setUserId(final String pUserId);
 
   void setLastAccessedTime(final Date pDate);
+
+  void setRefreshToken(final String pRefreshToken);
 }
