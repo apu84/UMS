@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
 @Component
 @Path("/profilePicture")
@@ -39,6 +41,9 @@ public class ProfilePicture extends Resource {
   @Autowired
   MessageManipulator mMessageManipulator;
 
+  @Autowired
+  private KafkaTemplate<String, String> mKafkaTemplate;
+
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
   MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
@@ -53,6 +58,7 @@ public class ProfilePicture extends Resource {
     InputStream imageData = null;
 
     imageData = mGateway.read("files/user.png");
+    mKafkaTemplate.send("ums_logger", "method:get(request) " + getUserId() + getClassName() + getUserRoles());
 
     /*
      * File file = new File("G:/shorna.jpg");
@@ -68,5 +74,25 @@ public class ProfilePicture extends Resource {
     }
 
     return Response.ok(imageData).build();
+  }
+
+  private String getClassName() {
+    String className = this.getClass().toString();
+    className.replaceAll("\\s", "");
+
+    return "class:ProfilePicture" + " ";
+  }
+
+  private String getUserId() {
+    return "userid:" + SecurityUtils.getSubject().getPrincipal().toString() + " ";
+  }
+
+  private String getUserRoles() {
+    return "userroles:" + SecurityUtils.getSubject().getPrincipal().toString() + " ";
+  }
+
+  private String getTimeStamp() {
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    return "timestamp:" + timestamp.getTime() + " ";
   }
 }
