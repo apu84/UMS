@@ -33,7 +33,6 @@
                                         id="iPublicationType{{$index}}"
                                         data-ng-model="publication.publicationType"
                                         data-ng-options="publicationType.name for publicationType in publicationTypes track by publicationType.id"
-                                        data-ng-change="changeFieldsByPublicationType($index)"
                                         class="form-control" required>
                                     <option value="">Select Publication Type</option>
                                 </select>
@@ -198,7 +197,7 @@
         <div align="center">
             <dir-pagination-controls boundary-links="true"
                                      pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
-                                     template-url="views\registrar-office\directive\dirPagination.tpl.html">
+                                     template-url="views\directive\dirPagination.tpl.html">
             </dir-pagination-controls>
         </div>
 

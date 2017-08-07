@@ -1,5 +1,5 @@
 module ums {
-    interface IApprovePublication extends ng.IScope {
+    interface IEmployeePublication extends ng.IScope {
         showPendingPublicationDiv: boolean;
         showNoPendingPublicationListDiv: boolean;
         showNothingDiv: boolean;
@@ -42,11 +42,11 @@ module ums {
         // roomNo: string;
     }
 
-    class ApprovePublication {
+    class EmployeePublication {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'publicationInformationService', 'approvePublicationService', 'pagerService'];
 
         constructor(private registrarConstants: any,
-                    private $scope: IApprovePublication,
+                    private $scope: IEmployeePublication,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private $window: ng.IWindowService,
@@ -223,5 +223,5 @@ module ums {
 
     }
 
-    UMS.controller("ApprovePublication", ApprovePublication);
+    UMS.controller("EmployeePublication", EmployeePublication);
 }

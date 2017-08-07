@@ -17,7 +17,7 @@ module ums {
     baseUriProvider.setServicePath('/ums-webservice-registrar/');
   }]);
 
-  UMS.constant("registrarConstants", Constants.RegistrarConstant());
+  UMS.constant("registrarConstants", Constants.RegistrarConstant()); 
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.otherwise("/userHome");
@@ -35,50 +35,10 @@ module ums {
             }]
           }
         })
-        .state('empInfo', {
-          url: "/empInfo",
-          templateUrl: 'views/registrar-office/employee-information-management/employee-information.html',
-          controller: 'EmployeeInformation',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/select2/select2-madmin.css',
-                  'vendors/bootstrap-select/bootstrap-select.min.css',
-                  'vendors/multi-select/css/multi-select-madmin.css',
-                  'vendors/select2/select2.min.js',
-                  'vendors/bootstrap-select/bootstrap-select.min.js',
-                  'vendors/multi-select/js/jquery.multi-select.js',
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-                ]
-              });
-            }]
-          }
-        })
-        .state('empServiceInfo', {
-          url: "/empServiceInfo",
-          templateUrl: 'views/registrar-office/employee-information-management/service-information.html',
-          controller: 'EmployeeServiceInformation',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                    'vendors/select2/select2-madmin.css',
-                    'vendors/multi-select/css/multi-select-madmin.css',
-                    'vendors/select2/select2.min.js',
-                    'vendors/multi-select/js/jquery.multi-select.js'
-                ]
-              });
-            }]
-          }
-        })
-        .state('viewEmpInfo', {
-            url: "/viewEmpInfo",
-            templateUrl: 'views/registrar-office/employee-information-management/registrar-emp-view.html',
-            controller: 'RegistrarEmployeeView',
+        .state('profile', {
+            url: "/profile",
+            templateUrl: 'views/eim/employee-profile.html',
+            controller: 'EmployeeProfile',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -98,39 +58,106 @@ module ums {
                 }]
             }
         })
-        .state('meetingMS', {
-          url: "/meetingMS",
-          templateUrl: 'views/registrar-office/meeting-management/meeting.html',
-          controller: 'Meeting',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/ckeditor/ckeditor.js',
-                  'vendors/select2/select2-madmin.css',
-                  'vendors/bootstrap-select/bootstrap-select.min.css',
-                  'vendors/multi-select/css/multi-select-madmin.css',
-                  'vendors/select2/select2.min.js',
-                  'vendors/bootstrap-select/bootstrap-select.min.js',
-                  'vendors/multi-select/js/jquery.multi-select.js',
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-                ]
-              });
-            }]
-          }
-        })
-        .state('approvePublication', {
-            url: "/approvePublication",
-            templateUrl: 'views/registrar-office/approve-publication.html',
-            controller: 'ApprovePublication',
+        .state('employeeInformation', {
+            url: "/employeeInformation",
+            templateUrl: 'views/eim/employee-information.html',
+            controller: 'EmployeeInformation',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         files: [
-                            'vendors/ckeditor/ckeditor.js',
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/multi-select/js/jquery.multi-select.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('employeePublication', {
+            url: "/employeePublication",
+            templateUrl: 'views/employee-publication/employee-publication.html',
+            controller: 'EmployeePublication',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/multi-select/js/jquery.multi-select.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('meetingSchedule', {
+          url: "/meetingSchedule",
+          templateUrl: 'views/meeting-management/meeting-schedule.html',
+          controller: 'MeetingSchedule',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/multi-select/js/jquery.multi-select.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('agendaAndResolution', {
+            url: "/agendaAndResolution",
+            templateUrl: 'views/meeting-management/agenda-resolution.html',
+            controller: 'AgendaAndResolution',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/multi-select/js/jquery.multi-select.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('meetingSearch', {
+            url: "/meetingSearch",
+            templateUrl: 'views/meeting-management/meeting-meeting-search.html',
+            controller: 'MeetingSearch',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
                             'vendors/select2/select2-madmin.css',
                             'vendors/bootstrap-select/bootstrap-select.min.css',
                             'vendors/multi-select/css/multi-select-madmin.css',
@@ -149,11 +176,6 @@ module ums {
         .state('logout', {
           url: "/logout",
           controller: 'Logout'
-        })
-        .state('admissionFee', {
-          url: "/admissionFee",
-          templateUrl: 'views/admission/admission-fee.html',
-          controller: 'AdmissionFee'
         })
   });
 }

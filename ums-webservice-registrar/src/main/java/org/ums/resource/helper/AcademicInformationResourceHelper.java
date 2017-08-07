@@ -47,12 +47,11 @@ public class AcademicInformationResourceHelper extends
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonArray academicJsonArray = entries.getJsonObject(0).getJsonArray("academic");
-    int sizeOfAcademicJsonArray = academicJsonArray.size();
     List<MutableAcademicInformation> createMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> updateMutableAcademicInformation = new ArrayList<>();
     List<MutableAcademicInformation> deleteMutableAcademicInformation = new ArrayList<>();
 
-    for(int i = 0; i < sizeOfAcademicJsonArray; i++) {
+    for(int i = 0; i < academicJsonArray.size(); i++) {
       MutableAcademicInformation academicInformation = new PersistentAcademicInformation();
       mBuilder.build(academicInformation, academicJsonArray.getJsonObject(i), localCache);
       if(academicJsonArray.getJsonObject(i).containsKey("dbAction")) {

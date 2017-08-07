@@ -79,6 +79,18 @@ module ums{
                                     }
                                 }
                             }
+
+                            // for(let m = 0; m < baseObject[i].intervalDetails.length; m++){
+                            //     for(let n = 0; n < comparingObject[j].intervalDetails.length; n++){
+                            //         if(baseObject[i].intervalDetails[m].id == comparingObject[j].intervalDetails[n].id){
+                            //         }
+                            //         else if(n == comparingObject[j].intervalDetails.length - 1 && baseObject[i].intervalDetails[m].id != comparingObject[j].intervalDetails[n].id){
+                            //             baseObject[i].intervalDetails[m].dbAction = "Delete";
+                            //             comparingObject[j].intervalDetails.push(baseObject[i]);
+                            //         }
+                            //     }
+                            // }
+
                             for(let m = 0; m < baseObject[i].intervalDetails.length; m++) {
                                 for (let n = 0; n < comparingObject[j].intervalDetails.length; n++) {
                                     if (angular.equals(baseObject[i].intervalDetails[m], comparingObject[j].intervalDetails[n]) == false) {

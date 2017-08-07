@@ -1,0 +1,92 @@
+<div class="panel">
+    <div class="panel-body shadowPanel">
+        <div class="row">
+            <div class="col-md-12">
+                <h5><b>Agenda:</b></h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>Agenda No.</label>
+                <input type="text" class="form-control" data-ng-model="modelAgendaNo"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Agenda</label>
+                <div data-ng-show="showTextAreaAgendaDiv">
+                    <textarea class="form-control" style="resize:none" data-ng-model="modelAgendaDescription"/>
+                </div>
+                <div data-ng-show="showInlineCKEditorAgendaDiv">
+                    <textarea id="inlineCKEditor" class="form-control"/>
+                </div>
+                <div data-ng-show="showInlineCKEditorLinkButtonDiv">
+                    Need Editor? <a data-ng-click="switchTextareaToCKEditor()">Click Me!</a>
+                </div>
+                <div data-ng-show="showHideInlineCKEditorLinkButtonDiv">
+                    <a data-ng-click="switchCKEditorToTextarea()">Hide Editor</a>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div>
+            <div>
+                <div data-ng-show="showCKEditorDiv">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5><b>Resolution:</b></h5>
+                        </div>
+                    </div>
+                    <textarea id="CKEditor" class="form-control"></textarea>
+                </div>
+                <br />
+                <div>
+                    <!--<a href="">(<span class="glyphicon glyphicon-plus" style="color: #00a775"></span>) Add New</a>-->
+                    <button type="submit" class="btn btn-success" data-ng-click="clickToSaveCKEditorDataBtn()" style="float: right">Submit</button>
+                    <button type="submit" class="btn btn-default" data-ng-click="clickToHideCKEditor()" data-ng-show="showHideCKEditorBtn" style="float:right">Hide Editor</button>
+                    <button type="submit" class="btn btn-default" data-ng-click="clickToResetCKEditor()" data-ng-show="showResetCKEditorBtn" style="float:right">Reset Editor</button>
+                    <button type="submit" class="btn btn-default" data-ng-click="clickToShowCKEditor()" data-ng-show="showCKEditorBtn" style="float:right">Add Resolution</button>
+                </div>
+            </div>
+        </div>
+        <br /><br /><br />
+        <div data-ng-show="showAgendaAndResolutionListDiv">
+            <div class="row">
+                <div>
+                    <div class="col-md-2">
+                        <label><b>Agenda No.</b></label>
+                    </div>
+                    <div class="col-md-3">
+                        <label><b>Agenda Description</b></label>
+                    </div>
+                    <div class="col-md-5">
+                        <label><b>Resolution</b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <label><b>Action</b></label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div data-ng-repeat="agenda in agendaDescription">
+                <div class="row">
+                    <div class="col-md-2">
+                        {{$index+1}}. {{agenda.agendaNo}}
+                    </div>
+                    <div class="col-md-3">
+                        {{agenda.agendaDescription}}
+                    </div>
+                    <div class="col-md-5">
+                        <!--<div class="col-md-6 white-space-pre">-->
+                        {{agenda.resolution}}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-default" data-nd-click="editAgendaRow()">Edit</button>
+                        <button type="submit" class="btn btn-default" data-ng-click="deleteAgendaRow(agenda)">Delete</button>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>

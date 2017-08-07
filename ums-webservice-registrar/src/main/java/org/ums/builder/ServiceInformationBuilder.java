@@ -85,9 +85,9 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
       }
       else if(pJsonObject.getString("dbAction").equals("Create")) {
       }
-    }
-    else if(pJsonObject.getString("dbAction").equals("Delete")) {
-      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+      else if(pJsonObject.getString("dbAction").equals("Delete")) {
+        pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+      }
     }
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));

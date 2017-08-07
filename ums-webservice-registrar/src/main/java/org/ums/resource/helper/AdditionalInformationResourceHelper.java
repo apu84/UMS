@@ -64,17 +64,17 @@ public class AdditionalInformationResourceHelper extends
     mManager.deleteAdditionalInformation(mutableAdditionalInformation);
     mManager.saveAdditionalInformation(mutableAdditionalInformation);
 
+    mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(mutableAdditionalInformation.getId());
     List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformations = new ArrayList<>();
     JsonArray aoiJsonArray = additionalJsonObject.getJsonArray("areaOfInterestInformation");
     int sizeOfAoiJsonArray = aoiJsonArray.size();
     if(sizeOfAoiJsonArray > 0) {
       for(int i = 0; i < sizeOfAoiJsonArray; i++) {
         MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-        mAreaOfInterestInformationBuilder.aoiBuilder(mutableAreaOfInterestInformation, aoiJsonArray.getInt(i),
+        mAreaOfInterestInformationBuilder.aoiBuilder(mutableAreaOfInterestInformation, aoiJsonArray.getJsonObject(i),
             localCache, mutableAdditionalInformation);
         mutableAreaOfInterestInformations.add(mutableAreaOfInterestInformation);
       }
-      mAreaOfInterestInformationManager.deleteAreaOfInterestInformation(mutableAdditionalInformation.getId());
       mAreaOfInterestInformationManager.saveAreaOfInterestInformation(mutableAreaOfInterestInformations);
     }
     Response.ResponseBuilder builder = Response.created(null);

@@ -1082,7 +1082,7 @@ CREATE TABLE DB_IUMS.EMP_PUBLICATION_INFO
   APPLIED_ON           DATE,
   ACTION_TAKEN_ON      DATE,
   LAST_MODIFIED        VARCHAR2(18 BYTE)
-)
+);
 
 create sequence emp_publication_info_id_seq;
 
@@ -1106,7 +1106,7 @@ CREATE TABLE DB_IUMS.EMP_TRAINING_INFO
   TRAINING_FROM       VARCHAR2(50 BYTE),
   TRAINING_TO         VARCHAR2(50 BYTE),
   LAST_MODIFIED       VARCHAR2(18 BYTE)
-)
+);
 
 create sequence emp_training_info_id_seq;
 
@@ -1130,7 +1130,7 @@ CREATE TABLE DB_IUMS.EMP_AWARD_INFO
   AWARDED_YEAR             NUMBER,
   AWARD_SHORT_DESCRIPTION  VARCHAR2(100 BYTE),
   LAST_MODIFIED            VARCHAR2(18 BYTE)
-)
+);
 
 create sequence emp_award_info_id_seq;
 
@@ -1154,7 +1154,7 @@ CREATE TABLE DB_IUMS.EMP_EXPERIENCE_INFO
   EXPERIENCE_FROM         VARCHAR2(30 BYTE),
   EXPERIENCE_TO           VARCHAR2(30 BYTE),
   LAST_MODIFIED           VARCHAR2(18 BYTE)
-)
+);
 
 create sequence emp_experience_info_id_seq;
 
