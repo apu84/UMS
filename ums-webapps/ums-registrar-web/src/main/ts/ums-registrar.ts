@@ -108,6 +108,7 @@ module ums {
           url: "/meetingSchedule",
           templateUrl: 'views/meeting-management/meeting-schedule.html',
           controller: 'MeetingSchedule',
+            controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -131,6 +132,7 @@ module ums {
             url: "/agendaAndResolution",
             templateUrl: 'views/meeting-management/agenda-resolution.html',
             controller: 'AgendaAndResolution',
+            controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -152,7 +154,7 @@ module ums {
         })
         .state('meetingSearch', {
             url: "/meetingSearch",
-            templateUrl: 'views/meeting-management/meeting-meeting-search.html',
+            templateUrl: 'views/meeting-management/meeting-search.html',
             controller: 'MeetingSearch',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

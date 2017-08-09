@@ -768,6 +768,14 @@ module ums {
                     {id: 2, name: "Probation"},
                     {id: 3, name: "Permanent"},
                     {id: 4, name: "Contract"}
+                ],
+                meetingTypes: [
+                    {id: null, name: "Select Meeting Type"},
+                    {id: 10, name: "Board Of Trustees Meeting"},
+                    {id: 20, name: "Syndicate Meeting"},
+                    {id: 30, name: "Finance Committee Meeting"},
+                    {id: 40, name: "Academic Council Meeting"},
+                    {id: 50, name: "Heads Meeting Meeting"}
                 ]
             }
         }

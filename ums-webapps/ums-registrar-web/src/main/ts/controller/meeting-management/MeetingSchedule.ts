@@ -1,249 +1,163 @@
 module ums{
-
-    interface IMeetingSchedule extends ng.IScope{
-
-        showScheduleAndMeetingDiv: boolean;
-        showAgendaAndResolutionDiv: boolean;
-        showSearchDiv: boolean;
-        changeNav: Function;
-        //ArrangeMeeting.ts
-        meetingMembers: string;
-        selectedMembers: string;
-        selectedMemberList: Function;
-        saveAndPrepareAgenda: Function;
-        saveScheduleAndMembers: Function;
-
-
-
-        //InsertResolution.ts
-        showCKEditorDiv: boolean;
-        showCKEditorBtn: boolean;
-        showHideCKEditorBtn: boolean;
-        showResetCKEditorBtn: boolean;
-        showTextAreaAgendaDiv: boolean;
-        showInlineCKEditorAgendaDiv: boolean;
-        showInlineCKEditorLinkButtonDiv: boolean;
-        showHideInlineCKEditorLinkButtonDiv: boolean;
-        showAgendaAndResolutionListDiv: boolean;
-        modelAgendaNo: string;
-        modelAgendaDescription: string;
-        agendaDescription: Array<IAgendaDescription>;
-        clickToSaveCKEditorDataBtn: Function;
-        clickToShowCKEditor: Function;
-        clickToHideCKEditor: Function;
-        clickToResetCKEditor: Function;
-        switchTextareaToCKEditor: Function;
-        switchCKEditorToTextarea: Function;
-        editAgendaRow: Function;
-        deleteAgendaRow: Function;
-        send: Function;
-
-
+    interface IMeetingScheduleModel{
+        type: IConstants,
+        refNo: string;
+        date: string;
+        time: string;
+        room: string;
     }
-
-
-
-    //InsertResolution.ts
-    interface IAgendaDescription{
-        agendaNo: string;
-        agendaDescription: string;
-        resolution: string;
+    interface IMeetingMemberModel{
+        name: string;
+        designation: string;
+        email: string;
+        contactNo: string;
+        memberOf: number;
+    }
+    interface IConstants{
+        id: number;
+        name: string;
     }
 
     class MeetingSchedule{
-        constructor(private registrarConstants: any,
-                    private $scope: IMeetingSchedule,
-                    private $q: ng.IQService,
-                    private notify: Notify,
-                    private $window: ng.IWindowService,
-                    private $sce: ng.ISCEService) {
-            console.log("I am in searchMeeting.ts 1");
+        public static $inject = ['registrarConstants', 'notify'];
+        private prepareMeetingModel: { meetingSchedule: IMeetingScheduleModel; meetingMember: IMeetingMemberModel[]; };
+        private meetingTypes: Array<IConstants> = [];
+        private meetingMembers: Array<IMeetingMemberModel> = [];
+        private selectedMembers: Array<IMeetingMemberModel> = [];
 
-            $scope.showScheduleAndMeetingDiv = true;
-            $scope.showAgendaAndResolutionDiv = false;
-            $scope.showSearchDiv = false;
+        constructor(private registrarConstants: any, private notify: Notify) {
 
-            $scope.changeNav = this.changeNav.bind(this);
-
-
-            //ArrangeMeeting.ts
-            this.addDate();
-            $scope.selectedMemberList = this.selectedMemberList.bind(this);
-            $scope.saveAndPrepareAgenda = this.saveAndPrepareAgenda.bind(this);
-            $scope.saveScheduleAndMembers = this.saveScheduleAndMembers.bind(this);
-
-
-
-
-            //InsertResolution.ts
-            CKEDITOR.replace('CKEditor');
-            CKEDITOR.replace('inlineCKEditor');
-            CKEDITOR.disableAutoInline = true;
-            CKEDITOR.config.resize_enabled = false;
-            CKEDITOR.instances['CKEditor'].setData("");
-            CKEDITOR.config.removePlugins = 'elementspath';
-
-            $scope.showCKEditorDiv = false;
-            $scope.showCKEditorBtn = true;
-            $scope.showHideCKEditorBtn = false;
-            $scope.showResetCKEditorBtn = false;
-            $scope.showAgendaAndResolutionListDiv = false;
-            $scope.showTextAreaAgendaDiv = true;
-            $scope.showInlineCKEditorAgendaDiv = false;
-            $scope.showInlineCKEditorLinkButtonDiv = true;
-            $scope.showHideInlineCKEditorLinkButtonDiv = false;
-
-            $scope.agendaDescription = [];
-
-            $scope.clickToSaveCKEditorDataBtn = this.clickToSaveCKEditorDataBtn.bind(this);
-            $scope.clickToShowCKEditor = this.clickToShowCKEditor.bind(this);
-            $scope.clickToHideCKEditor = this.clickToHideCKEditor.bind(this);
-            $scope.clickToResetCKEditor = this.clickToResetCKEditor.bind(this);
-            $scope.switchTextareaToCKEditor = this.switchTextareaToCKEditor.bind(this);
-            $scope.switchCKEditorToTextarea = this.switchCKEditorToTextarea.bind(this);
-            $scope.editAgendaRow = this.editAgendaRow.bind(this);
-            $scope.deleteAgendaRow = this.deleteAgendaRow.bind(this);
-            $scope.send = this.send.bind(this);
-
-            console.log("I am in searchMeeting.ts");
+            this.meetingTypes = registrarConstants.meetingTypes;
+            this.prepareMeetingModel = {
+                meetingSchedule: <IMeetingScheduleModel>{},
+                meetingMember: Array<IMeetingMemberModel>()
+            };
         }
 
-        private changeNav(nav: number){
-
-            console.log("I am in ChangeNav()");
-
-            this.$scope.showAgendaAndResolutionDiv = false;
-            this.$scope.showSearchDiv = false;
-            this.$scope.showScheduleAndMeetingDiv = false;
-
-            if(nav == 1){
-                console.log("I am in nav 1");
-                this.$scope.showScheduleAndMeetingDiv = true;
+        private getMembers(): void{
+            if(this.prepareMeetingModel.meetingSchedule.type.id == 10){
+                this.meetingMembers = this.getBoardOfTrusteeMembers();
             }
-            else if(nav == 2){
-                console.log("I am in nav 2");
-                this.$scope.showAgendaAndResolutionDiv = true;
+            else if(this.prepareMeetingModel.meetingSchedule.type.id == 20){
+                this.meetingMembers = this.getSyndicateMembers();
             }
-            else if(nav == 3){
-                console.log("I am in nav 3");
-                this.$scope.showSearchDiv = true;
+            else if(this.prepareMeetingModel.meetingSchedule.type.id == 30){
+                this.meetingMembers = this.getFinanceCommitteeMembers();
             }
-        }
-
-
-
-        //ArrangeMeeting.ts
-        private addDate(): void {
-            setTimeout(function () {
-                $('.datepicker-default').datepicker();
-                $('.datepicker-default').on('change', function () {
-                    $('.datepicker').hide();
-                });
-            }, 100);
-        }
-
-        private selectedMemberList() {
-            console.log("I am in selectedMemberList()");
-            console.log(this.$scope.selectedMembers);
-
-        }
-
-        private saveAndPrepareAgenda(){
-            console.log("I am in saveAndPrepareAgenda()");
-            this.$scope.changeNav(2);
-            this.notify.success("Data Saved");
-        }
-
-        private saveScheduleAndMembers(){
-            console.log("I am in saveScheduleAndMembers()");
-            this.notify.success("Data Saved");
-        }
-
-
-
-
-
-        //InsertResolution.ts
-        private clickToSaveCKEditorDataBtn(){
-            console.log("I am in clickToSaveCKEditorDataBtn()");
-            this.$scope.showAgendaAndResolutionListDiv = true;
-            if(CKEDITOR.instances['CKEditor'].getData() == ""){
-                console.log("Data Empty");
+            else if(this.prepareMeetingModel.meetingSchedule.type.id == 40){
+                this.meetingMembers = this.getAcademicCouncilMembers();
+            }
+            else if(this.prepareMeetingModel.meetingSchedule.type.id == 50){
+                this.meetingMembers = this.getHeadsMeetingMembers();
             }
             else{
-                console.log("Data Not Empty");
+                this.meetingMembers = [];
+                this.notify.error("Please Select A Meeting Type");
             }
+        }
 
-            var obj: IAgendaDescription = <IAgendaDescription>{};
-            obj.agendaNo = this.$scope.modelAgendaNo;
-            if(this.$scope.modelAgendaDescription == '' || this.$scope.modelAgendaDescription == null){
-                obj.agendaDescription = CKEDITOR.instances['inlineCKEditor'].getData();
+        private getBoardOfTrusteeMembers(): Array<IMeetingMemberModel>{
+            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 10},
+                {name: "BOT 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 10},
+                {name: "BOT 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 10},
+                {name: "BOT 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 10},
+                {name: "BOT 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 10},
+                {name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 40},
+                {name: "Academic Council Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 40},
+                {name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 40},
+                {name: "Academic Council Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 40},
+                {name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 40},
+                {name: "Academic Council Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 40}];
+        }
+
+        private getSyndicateMembers(): Array<IMeetingMemberModel>{
+            return [{name: "kawsur", designation: "ABC", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 20},
+                {name: "Syndicate 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 4", designation: "Member", email: "JKL@aust.edu", contactNo: "", memberOf: 20},
+                {name: "kawsur", designation: "ABC", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 20},
+                {name: "Syndicate 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 4", designation: "Member", email: "JKL@aust.edu", contactNo: "", memberOf: 20},
+                {name: "kawsur", designation: "ABC", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 20},
+                {name: "Syndicate 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 20},
+                {name: "Syndicate 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 20}];
+        }
+
+        private getFinanceCommitteeMembers(): Array<IMeetingMemberModel>{
+            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 30},
+                {name: "Finance Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 30},
+                {name: "Finance Member 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 30},
+                {name: "Finance Member 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 30},
+                {name: "Finance Member 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 30}];
+        }
+
+        private getAcademicCouncilMembers(): Array<IMeetingMemberModel>{
+            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 40},
+                {name: "Academic Council Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 40},
+                {name: "Academic Council Member 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 40}];
+        }
+
+        private getHeadsMeetingMembers(): Array<IMeetingMemberModel>{
+            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 50},
+                {name: "Head 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 50},
+                {name: "Head 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 50},
+                {name: "Head 3", designation: "Member", email: "GHI@aust.edu", contactNo: "", memberOf: 50},
+                {name: "Head 4", designation: "Member-Secretary", email: "JKL@aust.edu", contactNo: "", memberOf: 50}];
+        }
+
+        private sendInvitationWithoutAgenda(): void{
+
+        }
+
+        private saveAndPrepareAgenda(): any {
+            console.log("I am changing the controller");
+            return 'ui-serf="views/meeting-management/agenda-resolution.html"';
+        }
+
+        private saveScheduleAndMembers(): void{
+
+        }
+
+        private toggleAll(): void{
+            if (this.selectedMembers.length === this.meetingMembers.length) {
+                this.selectedMembers = [];
+            } else if (this.selectedMembers.length === 0 || this.selectedMembers.length > 0) {
+                this.selectedMembers = this.meetingMembers.slice(0);
             }
-            else if(CKEDITOR.instances['inlineCKEditor'].getData() == ''){
-                obj.agendaDescription = this.$scope.modelAgendaDescription;
+        }
+
+        private isChecked(): number{
+            return this.selectedMembers.length = this.meetingMembers.length;
+        }
+
+        private exists(item): boolean{
+            return this.selectedMembers.indexOf(item) > -1;
+        }
+
+        private toggleSelection(item): void{
+            let idx = this.selectedMembers.indexOf(item);
+            if (idx > -1) {
+                this.selectedMembers.splice(idx, 1);
             }
             else {
-                obj.agendaDescription = this.$scope.modelAgendaDescription;
+                this.selectedMembers.push(item);
             }
-            obj.resolution = CKEDITOR.instances['CKEditor'].getData();
-            this.$scope.agendaDescription.push(obj);
-
-            CKEDITOR.instances['CKEditor'].setData("");
-            CKEDITOR.instances['inlineCKEditor'].setData("");
-            this.$scope.modelAgendaNo = "";
-            this.$scope.modelAgendaDescription = "";
-        }
-
-        private clickToShowCKEditor(){
-            console.log("I am in clickToShowCKEditor()");
-            this.$scope.showCKEditorBtn = false;
-            this.$scope.showCKEditorDiv = true;
-            this.$scope.showHideCKEditorBtn = true;
-            this.$scope.showResetCKEditorBtn = true;
-        }
-
-        private clickToHideCKEditor(){
-            console.log("I am in clickToHideCKEditor()");
-            this.$scope.showCKEditorDiv = false;
-            this.$scope.showHideCKEditorBtn = false;
-            this.$scope.showResetCKEditorBtn = false;
-            this.$scope.showCKEditorBtn = true;
-        }
-
-        private clickToResetCKEditor(){
-            console.log("I am in clickToResetCKEditor()");
-            CKEDITOR.instances['CKEditor'].setData("");
-        }
-
-        private switchTextareaToCKEditor(){
-            console.log("I am in switchTextareaToCKEditor()");
-            this.$scope.showTextAreaAgendaDiv = false;
-            this.$scope.showInlineCKEditorLinkButtonDiv = false;
-            this.$scope.showInlineCKEditorAgendaDiv = true;
-            this.$scope.showHideInlineCKEditorLinkButtonDiv = true;
-        }
-
-        private switchCKEditorToTextarea(){
-            console.log("I am in switchCKEditorToTextarea()");
-            this.$scope.showInlineCKEditorAgendaDiv = false;
-            this.$scope.showHideInlineCKEditorLinkButtonDiv = false;
-            this.$scope.showInlineCKEditorLinkButtonDiv = true;
-            this.$scope.showTextAreaAgendaDiv = true;
-
-            CKEDITOR.instances['inlineCKEditor'].setData("");
-        }
-
-        private editAgendaRow(){
-            console.log("I am in editAgendaRow()");
-        }
-
-        private deleteAgendaRow(agenda: IAgendaDescription){
-            console.log("I am in deleteAgendaRow()");
-        }
-
-        private send(){
-            console.log("I am in send()");
-            this.notify.success("Meeting Proposal Sent");
         }
 
     }

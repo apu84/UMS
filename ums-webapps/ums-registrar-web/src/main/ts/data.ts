@@ -5,12 +5,14 @@
   var $this:any = $.fn.Data;
 
   $.fn.Data.pages = {
-    '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
-    '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
-    '/empInfo': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
-    '/empServiceInfo': {title: 'Employee Service Information', 'breadcrumb': ['Employee Service Information']},
-    '/meetingMS': {title: 'Meeting Management', 'breadcrumb': ['Meeting Management']},
-      '/approvePublication': {title: 'Approve Publication', 'breadcrumb': ['Approve Publication']}
+      '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
+      '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
+      '/profile': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/employeeInformation': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
+      '/meetingSchedule': {title: 'Meeting Management', 'breadcrumb': ['Meeting Schedule & Invite Members']},
+      '/agendaAndResolution': {title: 'Meeting Management', 'breadcrumb': ['Prepare Agenda & Resolution']},
+      '/meetingSearch': {title: 'Meeting Management', 'breadcrumb': ['Search']}
+
   };
 
 
