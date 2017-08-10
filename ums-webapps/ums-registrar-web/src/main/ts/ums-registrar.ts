@@ -113,16 +113,8 @@ module ums {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         files: [
-                            'vendors/select2/select2-madmin.css',
-                            'vendors/bootstrap-select/bootstrap-select.min.css',
-                            'vendors/multi-select/css/multi-select-madmin.css',
-                            'vendors/select2/select2.min.js',
-                            'vendors/bootstrap-select/bootstrap-select.min.js',
-                            'vendors/multi-select/js/jquery.multi-select.js',
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
                             'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
                         ]
                     });
                 }]
@@ -137,16 +129,8 @@ module ums {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         files: [
-                            'vendors/select2/select2-madmin.css',
-                            'vendors/bootstrap-select/bootstrap-select.min.css',
-                            'vendors/multi-select/css/multi-select-madmin.css',
-                            'vendors/select2/select2.min.js',
-                            'vendors/bootstrap-select/bootstrap-select.min.js',
-                            'vendors/multi-select/js/jquery.multi-select.js',
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                            'vendors/ckeditor/ckeditor.js',
+                            'vendors/ckeditor/styles.js'
                         ]
                     });
                 }]
