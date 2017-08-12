@@ -1,6 +1,8 @@
 package org.ums.filter;
 
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 class FilterUtil {
   static String getAuthToken(HttpServletRequest pHttpRequest) {
@@ -9,5 +11,10 @@ class FilterUtil {
       return null;
     }
     return jwt.substring(jwt.indexOf(" ")).trim();
+  }
+
+  static boolean sendUnauthorized(ServletResponse response) {
+    ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    return false;
   }
 }

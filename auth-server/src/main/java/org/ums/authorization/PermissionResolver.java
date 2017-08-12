@@ -1,17 +1,16 @@
-package org.ums.security.authorization;
-
-import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.PermissionResolver;
-import org.apache.shiro.authz.permission.RolePermissionResolver;
-import org.apache.shiro.authz.permission.WildcardPermissionResolver;
+package org.ums.authorization;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class UMSRolePermissionResolver implements RolePermissionResolver {
-  private PermissionResolver permissionResolver = new WildcardPermissionResolver();
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 
-  public void setPermissionResolver(PermissionResolver permissionResolver) {
+public class PermissionResolver implements RolePermissionResolver {
+  private org.apache.shiro.authz.permission.PermissionResolver permissionResolver = new WildcardPermissionResolver();
+
+  public void setPermissionResolver(org.apache.shiro.authz.permission.PermissionResolver permissionResolver) {
     this.permissionResolver = permissionResolver;
   }
 

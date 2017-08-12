@@ -7,11 +7,6 @@ import java.util.Set;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.realm.AuthorizingRealm;
 
-/**
- * @author <a href="mailto:apu@escenic.com">Md. Moshlehuddin Mazumder</a>
- * @author last modified by $Author$
- * @version $Revision$ $Date$
- */
 public class RolePermissionResolver extends RoleDaoDecorator {
   private AuthorizingRealm mAuthorizingRealm;
 

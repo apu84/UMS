@@ -11,7 +11,6 @@ import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 public class UserRealm extends AuthorizingRealm {
-
   @Autowired
   private UserManager mUserManager;
   private String mSalt;
@@ -26,18 +25,21 @@ public class UserRealm extends AuthorizingRealm {
 
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-    String username = (String) principals.getPrimaryPrincipal();
-    SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-    return authorizationInfo;
+    return new SimpleAuthorizationInfo();
   }
 
   @Override
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-    String username = (String) token.getPrincipal();
-    User user = mUserManager.get(username);
+    String userId = (String) token.getPrincipal();
+    User user = getUser(userId);
+    return new SimpleAuthenticationInfo(user.getId(), user.getPassword(), ByteSource.Util.bytes(mSalt), getName());
+  }
+
+  User getUser(String pUserId) throws UnknownAccountException {
+    User user = mUserManager.get(pUserId);
     if(user == null) {
       throw new UnknownAccountException();
     }
-    return new SimpleAuthenticationInfo(user.getId(), user.getPassword(), ByteSource.Util.bytes(mSalt), getName());
+    return user;
   }
 }

@@ -70,31 +70,18 @@ public class TokenRealm extends AuthorizingRealm {
     return new SimpleAuthenticationInfo(userId, credentials, getName());
   }
 
-  // TODO: Move this method to a common place so both the realm can use same authorization base
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
-    // null usernames are invalid
-    if(principals == null) {
-      throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
-    }
-    SimpleAuthorizationInfo info = null;
     String token = (String) getAvailablePrincipal(principals);
-    try {
-      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
-      User user = mUserManager.get(bearerAccessToken.getUserId());
-      info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
-
-      Set<String> permissions = new HashSet<>();
-
-      for(Permission permission : rolePermissions) {
-        permissions.addAll(permission.getPermissions());
-      }
-
-      info.setStringPermissions(permissions);
-    } catch(Exception e) {
-      throw new AuthorizationException("Invalid access token", e);
+    BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
+    User user = mUserManager.get(bearerAccessToken.getUserId());
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
+    List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+    Set<String> permissions = new HashSet<>();
+    for(Permission permission : rolePermissions) {
+      permissions.addAll(permission.getPermissions());
     }
+    info.setStringPermissions(permissions);
     return info;
   }
 

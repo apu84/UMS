@@ -5,8 +5,8 @@ import java.util.Date;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import org.ums.manager.BearerAccessTokenManager;
 public class SessionFilter extends PathMatchingFilter {
   private static final Logger mLogger = LoggerFactory.getLogger(SessionFilter.class);
   @Autowired
-  private BearerAccessTokenManager mBearerAccessTokenManager;
+  protected BearerAccessTokenManager mBearerAccessTokenManager;
   private String mSigningKey;
   @Autowired
   private Integer sessionTimeout = 15;
@@ -27,6 +27,7 @@ public class SessionFilter extends PathMatchingFilter {
 
   @Override
   protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+    boolean continueFilterChain = true;
     String jwt = FilterUtil.getAuthToken((HttpServletRequest) request);
     BearerAccessToken dbToken = mBearerAccessTokenManager.getByAccessToken(jwt).get(0);
 
@@ -37,15 +38,14 @@ public class SessionFilter extends PathMatchingFilter {
     if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
       MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
       mutableBearerAccessToken.update();
-      return true;
     }
     else if(diffMinutes > sessionTimeout) {
+      continueFilterChain = FilterUtil.sendUnauthorized(response);
       if(mLogger.isDebugEnabled()) {
         mLogger.debug("Expired access token: " + dbToken.getId());
       }
-      throw new AuthenticationException("Expired token");
     }
-    return false;
+    return continueFilterChain;
   }
 
   public String getSigningKey() {
