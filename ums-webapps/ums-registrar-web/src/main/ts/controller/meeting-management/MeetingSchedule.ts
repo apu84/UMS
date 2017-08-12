@@ -1,6 +1,7 @@
 module ums{
     interface IMeetingScheduleModel{
         type: IConstants,
+        meetingNo: number;
         refNo: string;
         date: string;
         time: string;

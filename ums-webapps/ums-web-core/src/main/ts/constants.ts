@@ -770,7 +770,6 @@ module ums {
                     {id: 4, name: "Contract"}
                 ],
                 meetingTypes: [
-                    {id: null, name: "Select Meeting Type"},
                     {id: 10, name: "Board Of Trustees Meeting"},
                     {id: 20, name: "Syndicate Meeting"},
                     {id: 30, name: "Finance Committee Meeting"},

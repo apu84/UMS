@@ -8,16 +8,19 @@ module ums{
         agendaNo: string;
         agenda: string;
         resolution: string;
+        showExpandButton: boolean;
     }
     class AgendaAndResolution{
         public static $inject = ['registrarConstants', 'notify'];
-        private meetingTypes: Array<IConstants> = [];
-        private meetingNumbers: Array<number> = [];
+        private meetingTypes: IConstants[] = [];
+        private meetingNumbers: number[] = [];
         private meetingType: IConstants = null;
         private showEditorForAgenda: boolean = false;
         private showEditorForResolution: boolean = false;
         private showAgendaAndResolutionDiv: boolean = false;
         private showResolutionDiv: boolean = true;
+        private showMasterExpandButton: boolean = true;
+        private showContent: boolean = false;
         private agendaAndResolutions: IAgendaAndResolution[];
 
         constructor(private registrarConstants: any,
@@ -33,18 +36,19 @@ module ums{
                 this.notify.error("Select A Meeting Type");
             }
             else {
-                this.meetingNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+                this.meetingNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             }
         }
 
         private getAgendaResolution(): void{
-            this.agendaAndResolutions = [{id: 1, agendaNo: "BOT 1", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""},
-                {id: 2, agendaNo: "BOT 2", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""},
-                {id: 3, agendaNo: "BOT 3", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""},
-                {id: 4, agendaNo: "BOT 4", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""},
-                {id: 5, agendaNo: "BOT 5", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""},
-                {id: 6, agendaNo: "BOT 6", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: ""}];
+            this.agendaAndResolutions = [{id: 1, agendaNo: "BOT 1", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
+                {id: 2, agendaNo: "BOT 2", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
+                {id: 3, agendaNo: "BOT 3", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
+                {id: 4, agendaNo: "BOT 4", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
+                {id: 5, agendaNo: "BOT 5", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
+                {id: 6, agendaNo: "BOT 6", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true}];
             Utils.expandRightDiv();
+            this.showContent = true;
         }
 
         private toggleEditor(type: string, param: string): void{
@@ -81,6 +85,30 @@ module ums{
             }
             else{
                 this.showResolutionDiv = false;
+            }
+        }
+
+        private toggleExpand(param: string, index: number): void{
+            if(param == "hide"){
+                this.agendaAndResolutions[index].showExpandButton = false;
+            }
+            else{
+                this.agendaAndResolutions[index].showExpandButton = true;
+            }
+        }
+
+        private toggleExpandAll(param: string): void{
+            if(param === "hide"){
+                this.showMasterExpandButton = false;
+                for(let i = 0; i < this.agendaAndResolutions.length; i++){
+                    this.agendaAndResolutions[i].showExpandButton = false;
+                }
+            }
+            else{
+                this.showMasterExpandButton = true;for(let i = 0; i < this.agendaAndResolutions.length; i++){
+                    this.agendaAndResolutions[i].showExpandButton = true;
+                }
+
             }
         }
 

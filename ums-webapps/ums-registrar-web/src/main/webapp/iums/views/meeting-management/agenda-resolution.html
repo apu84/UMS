@@ -19,7 +19,7 @@
             <h3 class="panel-title">Select</h3>
         </div>
         <div class="panel-body pan">
-            <form class="form-horizontal" data-validate="" data-onvalidate="vm.getAgendaResolution">
+            <form class="form-horizontal" data-validate="" data-onvalidate="">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Meeting Type</label>
@@ -30,6 +30,7 @@
                                     data-ng-options="type.name for type in vm.meetingTypes track by type.id"
                                     data-ng-change="vm.getMeetingNumber()"
                                     class="form-control" required>
+                                <option value="">Select Meeting Type</option>
                             </select>
                         </div>
                     </div>
@@ -41,12 +42,13 @@
                                     data-ng-model="vm.meetingNumber"
                                     data-ng-options="meetingNumber for meetingNumber in vm.meetingNumbers track by meetingNumber.id"
                                     class="form-control" required>
+                                <option value="">Select Meeting No.</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success">Search</button>
+                    <button type="submit" class="btn btn-success" data-ng-click="vm.getAgendaResolution()">Search</button>
                 </div>
             </form>
         </div>
@@ -56,96 +58,34 @@
         <div class="panel">
             <div class="panel-body shadowPanel" style="min-height:490px;">
                 <div class="control-fluid">
-                    <fieldset>
-                        <legend>Agenda & Resolution</legend>
-                        <div data-ng-show="vm.showAgendaAndResolutionDiv">
-                            <div class="well">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Agenda No.</label>
-                                        <input type="text" data-ng-model="vm.agendaNo">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div align="left">
-                                            <label>Agenda</label>
+                    <div data-ng-show="vm.showContent">
+                        <fieldset>
+                            <legend>Create Agenda & Resolution</legend>
+                            <div data-ng-show="vm.showAgendaAndResolutionDiv">
+                                <div class="well">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Agenda No.</label>
+                                            <input type="text" data-ng-model="vm.agendaNo">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div align="right">
-                                            <div data-ng-show="!vm.showEditorForAgenda">
-                                                <button type="button"
-                                                        data-ng-click="vm.toggleEditor('agenda','editor')"
-                                                        class="btn btn-default btn-xs">Editor
-                                                </button>
-                                            </div>
-                                            <div data-ng-show="vm.showEditorForAgenda">
-                                                <button type="button"
-                                                        data-ng-click="vm.toggleEditor('agenda','text')"
-                                                        class="btn btn-default btn-xs">Back
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div data-ng-show="!vm.showEditorForAgenda">
-                                        <div class="col-md-12">
-                                            <textarea style="resize:none"
-                                                      data-ng-model="vm.agenda"
-                                                      class="form-control">
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div data-ng-show="vm.showEditorForAgenda">
-                                        <div class="col-md-12">
-                                            <textarea id="CKEditorForAgenda"
-                                                      data-ng-model="vm.Resolution"
-                                                      class="form-control">
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div align="right">
-                                            <div data-ng-show="vm.showResolutionDiv">
-                                                <button type="button"
-                                                        data-ng-click="vm.toggleResolutionDiv('hide')"
-                                                        class="btn btn-default btn-xs">Hide Resolution
-                                                </button>
-                                            </div>
-                                            <div data-ng-show="!vm.showResolutionDiv">
-                                                <button type="button"
-                                                        data-ng-click="vm.toggleResolutionDiv('show')"
-                                                        class="btn btn-default btn-xs">Show Resolution
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div data-ng-show="vm.showResolutionDiv">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div align="left">
-                                                <label>Resolution</label>
+                                                <label>Agenda</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div align="right">
-                                                <div data-ng-show="!vm.showEditorForResolution">
+                                                <div data-ng-show="!vm.showEditorForAgenda">
                                                     <button type="button"
-                                                            data-ng-click="vm.toggleEditor('resolution','editor')"
+                                                            data-ng-click="vm.toggleEditor('agenda','editor')"
                                                             class="btn btn-default btn-xs">Editor
                                                     </button>
                                                 </div>
-                                                <div data-ng-show="vm.showEditorForResolution">
+                                                <div data-ng-show="vm.showEditorForAgenda">
                                                     <button type="button"
-                                                            data-ng-click="vm.toggleEditor('resolution', 'text')"
+                                                            data-ng-click="vm.toggleEditor('agenda','text')"
                                                             class="btn btn-default btn-xs">Back
                                                     </button>
                                                 </div>
@@ -153,64 +93,152 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div data-ng-show="!vm.showEditorForResolution">
+                                        <div data-ng-show="!vm.showEditorForAgenda">
                                             <div class="col-md-12">
                                                 <textarea style="resize:none"
-                                                          data-ng-model="vm.resolution"
+                                                          data-ng-model="vm.agenda"
                                                           class="form-control">
                                                 </textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div data-ng-show="vm.showEditorForResolution">
+                                        <div data-ng-show="vm.showEditorForAgenda">
                                             <div class="col-md-12">
-                                                <textarea id="CKEditorForResolution"
-                                                          data-ng-model="vm.resolution"
+                                                <textarea id="CKEditorForAgenda"
+                                                          data-ng-model="vm.Resolution"
                                                           class="form-control">
                                                 </textarea>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div align="right">
+                                                <div data-ng-show="vm.showResolutionDiv">
+                                                    <button type="button"
+                                                            data-ng-click="vm.toggleResolutionDiv('hide')"
+                                                            class="btn btn-default btn-xs">Hide Resolution
+                                                    </button>
+                                                </div>
+                                                <div data-ng-show="!vm.showResolutionDiv">
+                                                    <button type="button"
+                                                            data-ng-click="vm.toggleResolutionDiv('show')"
+                                                            class="btn btn-default btn-xs">Show Resolution
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div data-ng-show="vm.showResolutionDiv">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div align="left">
+                                                    <label>Resolution</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div align="right">
+                                                    <div data-ng-show="!vm.showEditorForResolution">
+                                                        <button type="button"
+                                                                data-ng-click="vm.toggleEditor('resolution','editor')"
+                                                                class="btn btn-default btn-xs">Editor
+                                                        </button>
+                                                    </div>
+                                                    <div data-ng-show="vm.showEditorForResolution">
+                                                        <button type="button"
+                                                                data-ng-click="vm.toggleEditor('resolution', 'text')"
+                                                                class="btn btn-default btn-xs">Back
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div data-ng-show="!vm.showEditorForResolution">
+                                                <div class="col-md-12">
+                                                    <textarea style="resize:none"
+                                                              data-ng-model="vm.resolution"
+                                                              class="form-control">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div data-ng-show="vm.showEditorForResolution">
+                                                <div class="col-md-12">
+                                                    <textarea id="CKEditorForResolution"
+                                                              data-ng-model="vm.resolution"
+                                                              class="form-control">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div align="right">
+                                    <div data-ng-show="!vm.showAgendaAndResolutionDiv">
+                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default">Create</button>
+                                    </div>
+                                    <div data-ng-show="vm.showAgendaAndResolutionDiv">
+                                        <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
+                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </fieldset>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div align="right">
-                                <div data-ng-show="!vm.showAgendaAndResolutionDiv">
-                                    <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default">Create</button>
-                                </div>
-                                <div data-ng-show="vm.showAgendaAndResolutionDiv">
-                                    <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
-                                    <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
+                        <fieldset>
+                            <legend>Preview</legend>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div align="right">
+                                        <div data-ng-show="vm.showMasterExpandButton">
+                                            <button type="button" class="btn btn-white" data-ng-click="vm.toggleExpandAll('hide')">Expand All</button>
+                                        </div>
+                                        <div data-ng-show="!vm.showMasterExpandButton">
+                                            <button type="button" class="btn btn-default" data-ng-click="vm.toggleExpandAll('expand')">Hide</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div data-ng-repeat="agendaResolution in vm.agendaAndResolutions track by $index">
+                                <div class="well">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <span><b>No: &nbsp;&nbsp;</b></span><label>{{agendaResolution.agendaNo}}</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div align="right">
+                                                <div data-ng-show="agendaResolution.showExpandButton">
+                                                    <button type="button" class="btn btn-blue btn-xs" data-ng-click="vm.toggleExpand('hide' , $index)">Expand Resolution</button>
+                                                </div>
+                                                <div data-ng-show="!agendaResolution.showExpandButton">
+                                                    <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.toggleExpand('expand', $index)">Hide Resolution</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span><b>Agenda: &nbsp;&nbsp;</b></span><label>{{agendaResolution.agenda}}</label>
+                                        </div>
+                                    </div>
+                                    <div data-ng-show="!agendaResolution.showExpandButton">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span><b>Resolution: &nbsp;&nbsp;</b></span><label>{{agendaResolution.resolution}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
-                    <fieldset>
-                        <legend></legend>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
-                                <thead class="well">
-                                <th>Sl.</th>
-                                <th>Agenda No.</th>
-                                <th>Agenda</th>
-                                <th>Resolution</th>
-                                <th>Action</th>
-                                <tbody data-ng-repeat="agendaAndResolution in vm.agendaAndResolutions track by $index">
-                                <tr>
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{agendaAndResolution.id}}</td>
-                                    <td>{{agendaAndResolution.agenda}}</td>
-                                    <td>{{agendaAndResolution.resolution}}</td>
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </fieldset>
                 </div>
             </div>
         </div>
