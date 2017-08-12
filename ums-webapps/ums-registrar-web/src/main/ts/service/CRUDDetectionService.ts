@@ -7,7 +7,7 @@ module ums{
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
-        public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any): ng.IPromise<any> {
+        public ObjectDetectionForCRUDOperation(baseObject: any, comparingObject: any, deletedObjects?: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let baseObjectsLength: number = baseObject.length;
             let comparingObjectsLength: number = comparingObject.length;
@@ -19,9 +19,12 @@ module ums{
                     }
                 }
             }
+            for(let i = 0; i < deletedObjects.length; i++){
+                comparingObject.push(deletedObjects[i]);
+            }
             for(let i = 0; i < baseObjectsLength; i++){
                 for(let j = 0; j < comparingObjectsLength; j++){
-                    if(angular.equals(baseObject[i], comparingObject[j]) == false){
+                    if(!angular.equals(baseObject[i], comparingObject[j])){
                         if(baseObject[i].dbAction == "" && comparingObject[j].dbAction == ""){
                             comparingObject[j].dbAction = "Update";
                             baseObject[i].dbAction = "Update"
@@ -29,12 +32,12 @@ module ums{
                     }
                 }
             }
-            for(let i = 0; i < baseObjectsLength; i++){
-                if(baseObject[i].dbAction == ""){
-                    baseObject[i].dbAction = "Delete";
-                    comparingObject.push(baseObject[i]);
-                }
-            }
+            // for(let i = 0; i < baseObjectsLength; i++){
+            //     if(baseObject[i].dbAction == ""){
+            //         baseObject[i].dbAction = "Delete";
+            //         comparingObject.push(baseObject[i]);
+            //     }
+            // }
             defer.resolve(comparingObject);
             return defer.promise;
         }
@@ -47,7 +50,7 @@ module ums{
             return true;
         }
 
-        public ObjectDetectionForServiceObjects(baseObject: any, comparingObject: any): ng.IPromise<any> {
+        public ObjectDetectionForServiceObjects(baseObject: any, comparingObject: any, serviceDeletedObjects?: any, intervalDeletedObjects?: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let baseObjectsLength: number = baseObject.length;
             let comparingObjectsLength: number = comparingObject.length;
@@ -56,68 +59,31 @@ module ums{
                     if (angular.equals(baseObject[i], comparingObject[j])) {
                         comparingObject[j].dbAction = "No Change";
                         baseObject[i].dbAction = "No Change";
-
-                        for(let k = 0; k < comparingObject[j].intervalDetails.length; k++){
+                        for(let k = 0; k < comparingObject[j].intervalDetails.length; k++) {
                             comparingObject[j].intervalDetails[k].dbAction = "No Change";
                             baseObject[j].intervalDetails[k].dbAction = "No Change";
                         }
                     }
                 }
             }
+            for(let i = 0; i < serviceDeletedObjects.length; i++){
+                for(let k = 0; k < serviceDeletedObjects[i].intervalDetails.length; k++){
+                    serviceDeletedObjects[i].intervalDetails[k].dbAction = "Delete";
+                }
+                comparingObject.push(serviceDeletedObjects[i]);
+            }
             for(let i = 0; i < baseObjectsLength; i++){
                 for(let j = 0; j < comparingObjectsLength; j++){
-                    if(angular.equals(baseObject[i], comparingObject[j]) == false){
-                        if(baseObject[i].dbAction == "" && comparingObject[j].dbAction == ""){
+                    if(!angular.equals(baseObject[i], comparingObject[j])){
+                        if(comparingObject[j].dbAction == ""){
                             comparingObject[j].dbAction = "Update";
                             baseObject[i].dbAction = "Update";
 
-                            for(let m = 0; m < baseObject[i].intervalDetails.length; m++) {
-                                for (let n = 0; n < comparingObject[j].intervalDetails.length; n++) {
-                                    if (angular.equals(baseObject[i].intervalDetails[m], comparingObject[j].intervalDetails[n])) {
-                                        comparingObject[j].intervalDetails[n].dbAction = "No Change";
-                                        baseObject[i].intervalDetails[m].dbAction = "No Change";
-                                    }
-                                }
-                            }
-
-                            // for(let m = 0; m < baseObject[i].intervalDetails.length; m++){
-                            //     for(let n = 0; n < comparingObject[j].intervalDetails.length; n++){
-                            //         if(baseObject[i].intervalDetails[m].id == comparingObject[j].intervalDetails[n].id){
-                            //         }
-                            //         else if(n == comparingObject[j].intervalDetails.length - 1 && baseObject[i].intervalDetails[m].id != comparingObject[j].intervalDetails[n].id){
-                            //             baseObject[i].intervalDetails[m].dbAction = "Delete";
-                            //             comparingObject[j].intervalDetails.push(baseObject[i]);
-                            //         }
-                            //     }
-                            // }
-
-                            for(let m = 0; m < baseObject[i].intervalDetails.length; m++) {
-                                for (let n = 0; n < comparingObject[j].intervalDetails.length; n++) {
-                                    if (angular.equals(baseObject[i].intervalDetails[m], comparingObject[j].intervalDetails[n]) == false) {
-                                        if(baseObject[i].intervalDetails[m].dbAction == "" && comparingObject[j].intervalDetails[n].dbAction == "") {
-                                            comparingObject[j].intervalDetails[n].dbAction = "Update";
-                                            baseObject[i].intervalDetails[m].dbAction = "Update";
-                                        }
-                                    }
-                                }
-                            }
-                            for(let m = 0; m < baseObject[i].intervalDetails.length; m++){
-                                if(baseObject[i].intervalDetails[m].dbAction == ""){
-                                    baseObject[i].intervalDetails[m].dbAction = "Delete";
-                                    comparingObject[j].intervalDetails.push(baseObject[i]);
-                                }
-                            }
+                            this.ObjectDetectionForCRUDOperation(baseObject[i].intervalDetails, comparingObject[j].intervalDetails, intervalDeletedObjects).then((obj: any)=>{
+                                comparingObject[j].intervalDetails = obj;
+                            });
                         }
                     }
-                }
-            }
-            for(let i = 0; i < baseObjectsLength; i++){
-                if(baseObject[i].dbAction == ""){
-                    baseObject[i].dbAction = "Delete";
-                    for(let k = 0; k < baseObject[i].intervalDetails.length; k++){
-                        baseObject[i].intervalDetails[k].dbAction = "Delete";
-                    }
-                    comparingObject.push(baseObject[i]);
                 }
             }
             defer.resolve(comparingObject);

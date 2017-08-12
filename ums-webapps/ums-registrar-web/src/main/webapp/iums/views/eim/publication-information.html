@@ -18,7 +18,7 @@
 <div data-ng-if="showPublicationInputDiv">
     <div class="container-fluid">
         <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
-            <div data-ng-repeat="publication in entry.publication track by $index">
+            <div data-ng-repeat="publication in entry.publication">
                 <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
                     <div class="row">
                         <div align="center">
@@ -205,7 +205,7 @@
             <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
                 <div class="row">
                     <div align="center">
-                        <b>{{$index + 1}}.</b>
+                        <b>{{publication.rowNumber}}.</b>
                     </div>
                 </div>
                 <div class="row">
@@ -294,6 +294,12 @@
                 </div>
             </div>
             <hr />
+        </div>
+        <div align="center">
+            <dir-pagination-controls boundary-links="true"
+                                     pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
+                                     template-url="views\directive\dirPagination.tpl.html">
+            </dir-pagination-controls>
         </div>
         <div class="row">
             <div class="col-md-12">
