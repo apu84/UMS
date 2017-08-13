@@ -11,14 +11,14 @@
     <div class="panel-body shadowPanel" style="min-height: 490px;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <fieldset>
                         <legend>Schedule</legend>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">Type</label>
+                            <div class="col-md-4">
+                                <label class="control-label">Meeting Type</label>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <select data-ng-model="vm.prepareMeetingModel.meetingSchedule.type"
                                         data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
                                         data-ng-change="vm.getMembers()"
@@ -27,10 +27,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">No.</label>
+                            <div class="col-md-4">
+                                <label class="control-label">Meeting No.</label>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <input type="number"
                                        data-ng-model="vm.prepareMeetingModel.meetingSchedule.meetingNo"
                                        class="form-control"
@@ -38,10 +38,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="control-label">Ref No.</label>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <input type="text"
                                        data-ng-model="vm.prepareMeetingModel.meetingSchedule.refNo"
                                        class="form-control"
@@ -49,36 +49,26 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">Date</label>
+                            <div class="col-md-4">
+                                <label class="control-label">Date & Time</label>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <div class="input-icon right" >
                                     <i class="fa fa-calendar"></i>
                                     <input type="text"
-                                           data-ng-model="vm.prepareMeetingModel.meetingSchedule.date"
-                                           data-date-format="dd/mm/yyyy"
-                                           placeholder="DD/MM/YYYY"
-                                           class="datepicker-default form-control"
-                                           autocomplete="off"/>
+                                           id="datetimepicker-default"
+                                           data-ng-model="vm.dateValue"
+                                           data-datetime-format="MM/DD/YYYY H:MM A"
+                                           class="form-control"
+                                           autocomplete="off">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">Time</label>
+                            <div class="col-md-4">
+                                <label class="control-label">Room / Place</label>
                             </div>
-                            <div class="col-md-9">
-                                <input type="time"
-                                       data-ng-model="vm.prepareMeetingModel.meetingSchedule.time"
-                                       class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">Room</label>
-                            </div>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <input type="text"
                                        data-ng-model="vm.prepareMeetingModel.meetingSchedule.room"
                                        class="form-control"
@@ -88,7 +78,7 @@
                     </fieldset>
                 </div>
                 <div class="col-md-1"></div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <fieldset>
                         <legend>Member Invitation</legend>
                         <div class="table-responsive">
@@ -124,8 +114,7 @@
             <div class="row">
                 <div align="right">
                     <button type="button" class="btn btn-default" data-ng-click="vm.sendInvitationWithoutAgenda()">Send Invitation Without Agenda</button>
-                    <button type="button" class="btn btn-default" data-ng-click="vm.saveAndPrepareAgenda()">Save & Prepare Agenda</button>
-                    <button type="button" class="btn btn-success" data-ng-click="vm.saveScheduleAndMembers()">Save</button>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.save()">Save</button>
                 </div>
             </div>
         </div>

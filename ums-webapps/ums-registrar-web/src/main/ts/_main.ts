@@ -21,6 +21,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/ckeditor.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
 /// <reference path='ums-registrar.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>

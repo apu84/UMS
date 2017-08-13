@@ -36,6 +36,7 @@ public class PersistentSchedule implements MutableSchedule {
     mMeetingType = pPersistentSchedule.getMeetingType();
     mMeetingTypeId = pPersistentSchedule.getMeetingTypeId();
     mMeetingNo = pPersistentSchedule.getMeetingNo();
+    mMeetingRefNo = pPersistentSchedule.getMeetingRefNo();
     mMeetingDate = pPersistentSchedule.getMeetingDate();
     mMeetingTime = pPersistentSchedule.getMeetingTime();
     mMeetingRoomNo = pPersistentSchedule.getMeetingRoomNo();

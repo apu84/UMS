@@ -1,9 +1,12 @@
 module ums{
+    interface IAgendaAndResolution extends ng.IScope{
+        getAgendaResolution: Function;
+    }
     interface IConstants{
         id: number;
         name: string;
     }
-    interface IAgendaAndResolution{
+    interface IAgendaResolution{
         id: number;
         agendaNo: string;
         agenda: string;
@@ -11,7 +14,7 @@ module ums{
         showExpandButton: boolean;
     }
     class AgendaAndResolution{
-        public static $inject = ['registrarConstants', 'notify'];
+        public static $inject = ['registrarConstants', '$scope', 'notify'];
         private meetingTypes: IConstants[] = [];
         private meetingNumbers: number[] = [];
         private meetingType: IConstants = null;
@@ -21,10 +24,13 @@ module ums{
         private showResolutionDiv: boolean = true;
         private showMasterExpandButton: boolean = true;
         private showContent: boolean = false;
-        private agendaAndResolutions: IAgendaAndResolution[];
+        private agendaAndResolutions: IAgendaResolution[];
 
         constructor(private registrarConstants: any,
+                    private $scope: IAgendaAndResolution,
                     private notify: Notify) {
+
+            $scope.getAgendaResolution = this.getAgendaResolution.bind(this);
 
             this.meetingTypes = registrarConstants.meetingTypes;
             CKEDITOR.replace('CKEditorForAgenda');

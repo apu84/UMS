@@ -113,8 +113,8 @@ module ums {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         files: [
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                            'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
                         ]
                     });
                 }]

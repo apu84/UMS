@@ -19,7 +19,7 @@
             <h3 class="panel-title">Select</h3>
         </div>
         <div class="panel-body pan">
-            <form class="form-horizontal" data-validate="" data-onvalidate="">
+            <form class="form-horizontal" data-validate="" data-onvalidate="getAgendaResolution">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Meeting Type</label>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="submit" class="btn btn-success" data-ng-click="vm.getAgendaResolution()">Search</button>
+                    <button type="submit" class="btn btn-success">Search</button>
                 </div>
             </form>
         </div>
@@ -183,7 +183,7 @@
                             <div class="col-md-12">
                                 <div align="right">
                                     <div data-ng-show="!vm.showAgendaAndResolutionDiv">
-                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default">Create</button>
+                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default btn-xs">Create</button>
                                     </div>
                                     <div data-ng-show="vm.showAgendaAndResolutionDiv">
                                         <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
@@ -198,10 +198,10 @@
                                 <div class="col-md-12">
                                     <div align="right">
                                         <div data-ng-show="vm.showMasterExpandButton">
-                                            <button type="button" class="btn btn-white" data-ng-click="vm.toggleExpandAll('hide')">Expand All</button>
+                                            <button type="button" class="btn btn-white btn-xs" data-ng-click="vm.toggleExpandAll('hide')">Expand All</button>
                                         </div>
                                         <div data-ng-show="!vm.showMasterExpandButton">
-                                            <button type="button" class="btn btn-default" data-ng-click="vm.toggleExpandAll('expand')">Hide</button>
+                                            <button type="button" class="btn btn-pink btn-xs" data-ng-click="vm.toggleExpandAll('expand')">Hide</button>
                                         </div>
                                     </div>
                                 </div>

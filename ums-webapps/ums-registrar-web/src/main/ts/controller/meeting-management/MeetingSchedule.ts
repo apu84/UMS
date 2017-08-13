@@ -3,8 +3,7 @@ module ums{
         type: IConstants,
         meetingNo: number;
         refNo: string;
-        date: string;
-        time: string;
+        datetime: string;
         room: string;
     }
     interface IMeetingMemberModel{
@@ -20,19 +19,26 @@ module ums{
     }
 
     class MeetingSchedule{
-        public static $inject = ['registrarConstants', 'notify'];
+        public static $inject = ['registrarConstants', '$q', 'notify', '$scope'];
         private prepareMeetingModel: { meetingSchedule: IMeetingScheduleModel; meetingMember: IMeetingMemberModel[]; };
         private meetingTypes: Array<IConstants> = [];
         private meetingMembers: Array<IMeetingMemberModel> = [];
         private selectedMembers: Array<IMeetingMemberModel> = [];
+        private dateValue = ""
 
-        constructor(private registrarConstants: any, private notify: Notify) {
+        constructor(private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
+                    private $scope: ng.IScope) {
 
             this.meetingTypes = registrarConstants.meetingTypes;
             this.prepareMeetingModel = {
                 meetingSchedule: <IMeetingScheduleModel>{},
                 meetingMember: Array<IMeetingMemberModel>()
             };
+            this.addDate();
+
+            $scope.$watch(() => this.dateValue, (newValue, oldValue) => {
+                console.log(newValue, oldValue);
+            });
         }
 
         private getMembers(): void{
@@ -126,13 +132,11 @@ module ums{
 
         }
 
-        private saveAndPrepareAgenda(): any {
-            console.log("I am changing the controller");
-            return 'ui-serf="views/meeting-management/agenda-resolution.html"';
-        }
-
-        private saveScheduleAndMembers(): void{
-
+        private save(): void {
+            this.convertToJson().then((response: any) => {
+                console.log(this.prepareMeetingModel.meetingSchedule.datetime);
+                console.log(response);
+            });
         }
 
         private toggleAll(): void{
@@ -161,6 +165,27 @@ module ums{
             }
         }
 
+        private convertToJson(): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            JsonObject['meetingType'] = this.prepareMeetingModel.meetingSchedule.type;
+            JsonObject['meetingNo'] = this.prepareMeetingModel.meetingSchedule.meetingNo;
+            JsonObject['meetingRefNo'] = this.prepareMeetingModel.meetingSchedule.refNo;
+            JsonObject['meetingDate'] = this.prepareMeetingModel.meetingSchedule.datetime;
+            JsonObject['meetingRoom'] = this.prepareMeetingModel.meetingSchedule.room;
+            defer.resolve(JsonObject);
+            return defer.promise;
+        }
+
+        private addDate(): void {
+            setTimeout(function () {
+                $('#datetimepicker-default').datetimepicker({});
+                $('#datetimepicker-default').blur(function (e) {
+                    console.log(e);
+                    console.log($(this).val());
+                });
+            }, 100);
+        }
     }
 
     UMS.controller("MeetingSchedule", MeetingSchedule);
