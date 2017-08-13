@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
  */
 public class MutableHolidaysResource extends Resource {
 
-  private static final Logger mLogger = LoggerFactory.getLogger(MutableHolidaysResource.class);
+  protected static final Logger mLogger = LoggerFactory.getLogger(MutableHolidaysResource.class);
 
   @Autowired
   HolidaysResourceHelper mHelper;
