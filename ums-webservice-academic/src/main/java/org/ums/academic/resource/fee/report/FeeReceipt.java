@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.ums.fee.accounts.PaymentAccountsMapping;
 import org.ums.fee.accounts.PaymentAccountsMappingManager;
 import org.ums.fee.payment.StudentPayment;
+import org.ums.formatter.DateFormat;
 import org.ums.util.Constants;
 import org.ums.util.NumberToWords;
 
@@ -24,6 +25,8 @@ public class FeeReceipt {
   private static final Logger mLogger = LoggerFactory.getLogger(FeeReceipt.class);
   @Autowired
   private PaymentAccountsMappingManager mPaymentAccountsMappingManager;
+  @Autowired
+  DateFormat mDateFormat;
 
   private Font universityNameFont, infoFont, tableFont, underLineFont;
   private java.util.List<StudentPayment> mPaymentList;
@@ -43,6 +46,8 @@ public class FeeReceipt {
       accountNo = mappings.get(0).getAccount();
     }
 
+    String transactionValidTill = mDateFormat.format(pPaymentList.get(0).getTransactionValidTill());
+
     universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
     infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
     tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 8.5f);
@@ -59,34 +64,44 @@ public class FeeReceipt {
 
     PdfPTable mainTable = new PdfPTable(3);
     mainTable.setWidthPercentage(100);
-    mainTable.getDefaultCell().setLeading(10, 0);
+    mainTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+    PdfPTable receiptTable = new PdfPTable(1);
+    receiptTable.setWidthPercentage(80);
 
     PdfPCell cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
-    buildReceipt(cell, "Bank part");
-    mainTable.addCell(cell);
+    buildReceipt(cell, "Bank part", transactionValidTill);
+    receiptTable.addCell(cell);
+    mainTable.addCell(receiptTable);
 
+    receiptTable = new PdfPTable(1);
+    receiptTable.setWidthPercentage(80);
     cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
-    buildReceipt(cell, "University part");
-    mainTable.addCell(cell);
+    buildReceipt(cell, "University part", transactionValidTill);
+    receiptTable.addCell(cell);
+    mainTable.addCell(receiptTable);
 
+    receiptTable = new PdfPTable(1);
+    receiptTable.setWidthPercentage(80);
     cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
-    buildReceipt(cell, "Student part");
-    mainTable.addCell(cell);
+    buildReceipt(cell, "Student part",  transactionValidTill);
+    receiptTable.addCell(cell);
+    mainTable.addCell(receiptTable);
 
     document.add(mainTable);
     document.close();
     baos.writeTo(pOutputStream);
   }
 
-  private void buildReceipt(PdfPCell mainCell, String title) {
+  private void buildReceipt(PdfPCell mainCell, String title, String pTransactionValidTill) {
     mainCell.addElement(header());
-    mainCell.addElement(top(title));
+    mainCell.addElement(top(title, pTransactionValidTill));
     mainCell.addElement(paymentBreakdown());
     mainCell.addElement(bankUse());
   }
@@ -124,7 +139,7 @@ public class FeeReceipt {
     return header;
   }
 
-  private PdfPTable top(String title) {
+  private PdfPTable top(String title, String pTransactionValidTill) {
     PdfPTable top = new PdfPTable(1);
     top.setWidthPercentage(100);
 
@@ -140,7 +155,7 @@ public class FeeReceipt {
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-    Paragraph paragraph = new Paragraph("Fee Receipt", infoFont);
+    Paragraph paragraph = new Paragraph("Fee Receipt", underLineFont);
     paragraph.setAlignment(Element.ALIGN_LEFT);
     cell.addElement(paragraph);
     dateTable.addCell(cell);
@@ -154,16 +169,25 @@ public class FeeReceipt {
     cell.addElement(paragraph);
     dateTable.addCell(cell);
 
-    topCell.addElement(dateTable);
-    top.addCell(topCell);
-
-    topCell = new PdfPCell();
-    topCell.setBorder(Rectangle.NO_BORDER);
-    topCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    topCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph(title, infoFont);
-    paragraph.setAlignment(Element.ALIGN_CENTER);
-    topCell.addElement(paragraph);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    dateTable.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    paragraph = new Paragraph("Receipt valid till: " + pTransactionValidTill, infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    dateTable.addCell(cell);
+
+    topCell.addElement(dateTable);
     top.addCell(topCell);
 
     topCell = new PdfPCell();
@@ -227,7 +251,7 @@ public class FeeReceipt {
     breakDownCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     breakDownCell.setVerticalAlignment(Element.ALIGN_TOP);
     breakDownCell.setColspan(2);
-    breakDownCell.setMinimumHeight(135f);
+    breakDownCell.setMinimumHeight(100f);
 
     PdfPTable paymentTable = new PdfPTable(1);
     paymentTable.setWidthPercentage(100);
@@ -332,7 +356,6 @@ public class FeeReceipt {
     paragraph.setAlignment(Element.ALIGN_LEFT);
     breakDownCell.addElement(paragraph);
     breakDownCell.setColspan(3);
-    breakDownCell.setPaddingBottom(20f);
     breakdown.addCell(breakDownCell);
 
     breakDownCell = new PdfPCell();

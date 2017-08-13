@@ -83,6 +83,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/filter.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/fee/payment-status/payment.status.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/list.filter.directive.ts'/>
 
 /// <reference path='data.ts'/>
 /// <reference path='controller/admission/AdmissionFee.ts'/>

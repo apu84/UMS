@@ -51,25 +51,25 @@
         </table>
         <div class="row">
             <div class="col-md-3">
-                <button type="button" class="btn btn-success" data-ng-click="vm.concludePayment(true)"
-                        data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
-                    Accept
-                </button>
+                <a href="javascript:void(0);" class="btn btn-success"
+                   data-ng-click="vm.concludePayment(true)"
+                   data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
+                    <i class="fa fa-check-circle-o"></i>&nbsp;Verified</a>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
             </div>
             <div class="col-md-3">
-                <button type="button" class="btn btn-warn" data-ng-click="vm.concludePayment(false)"
-                        data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
-                    Reject
-                </button>
+                <a href="javascript:void(0);" class="btn btn-warning"
+                   data-ng-click="vm.concludePayment(false)"
+                   data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
+                    <i class="fa fa-ban"></i>&nbsp;Reject</a>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="text-right">
-                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)"
+                    <button type="button" class="btn btn-defaut btn-outlined" data-ng-click="vm.navigate(vm.nextLink)"
                             data-ng-if="vm.nextLink">
-                        Next >>
+                        Next&nbsp;<i class="fa fa-arrow-circle-o-right"></i>
                     </button>
                 </div>
             </div>

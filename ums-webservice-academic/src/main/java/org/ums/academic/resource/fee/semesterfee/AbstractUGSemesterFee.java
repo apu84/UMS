@@ -50,7 +50,8 @@ abstract class AbstractUGSemesterFee implements UGSemesterFee {
     List<StudentPayment> payments =
         getStudentPaymentManager().getPayments(pStudentId, pSemesterId,
             getFeeTypeManager().get(FeeType.Types.SEMESTER_FEE.getId()));
-    return payments.stream().anyMatch((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED);
+    return payments.stream().anyMatch((payment) -> payment.getStatus() == StudentPayment.Status.APPLIED
+        || payment.getStatus() == StudentPayment.Status.RECEIVED);
   }
 
   public UGSemesterFeeResponse getInstallmentStatus(Integer pSemesterId) {

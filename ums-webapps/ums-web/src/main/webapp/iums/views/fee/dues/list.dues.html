@@ -2,16 +2,16 @@
     <div class="panel-heading">Dues/ Penalty</div>
     <div class="panel-body">
         <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
-        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
-            <tr>
-                <td width="4%">Student Id</td>
-                <td width="15%">Dues/ Penalty type</td>
-                <td width="15%">Pay before</td>
-                <td width="10%">Amount</td>
-                <td width="10%">Payment status</td>
-                <td width="13%">Applied for payment</td>
-                <td width="13%">Payment received on</td>
+            <tr class="heading">
+                <td width="4%"><b>Student Id</b></td>
+                <td width="15%"><b>Dues/ Penalty type</b></td>
+                <td width="15%"><b>Pay before</b></td>
+                <td width="10%"><b>Amount</b></td>
+                <td width="10%"><b>Payment status</b></td>
+                <td width="13%"><b>Applied for payment</b></td>
+                <td width="13%"><b>Payment received on</b></td>
                 <td width="20%"></td>
             </tr>
             </thead>
@@ -50,13 +50,12 @@
         </table>
         <div class="row">
             <div class="col-md-6">
-                <button type="button" class="btn btn-success" data-ng-click="vm.addDues()">Add Dues
-                </button>
+                <a href="javascript:void(0);"  data-ng-click="vm.addDues()" class="btn btn-grey"><i class="fa fa-plus-square"></i></a>
             </div>
             <div class="col-md-6">
                 <div class="text-right">
-                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
-                        Next >>
+                    <button type="button" class="btn btn-default btn-outlined" data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
+                        Next&nbsp;<i class="fa fa-arrow-circle-o-right"></i>
                     </button>
                 </div>
             </div>

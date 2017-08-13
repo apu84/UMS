@@ -1,18 +1,18 @@
 <div class="panel">
-    <div class="panel-heading">Dues/ Penalty</div>
+    <div class="panel-heading">Application for Certificate</div>
     <div class="panel-body">
         <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
-        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
-            <tr>
-                <td width="4%">Student Id</td>
-                <td width="15%">Transaction Id</td>
-                <td width="15%">Transaction status</td>
-                <td width="10%">Certificate type</td>
-                <td width="10%">Semester</td>
-                <td width="13%">Status</td>
-                <td width="13%">Processed on</td>
-                <td width="20%"></td>
+            <tr class="heading" role="row">
+                <td width="10%"><b>Student Id</b></td>
+                <td width="15%"><b>Transaction Id</b></td>
+                <td width="15%"><b>Transaction status</b></td>
+                <td width="10%"><b>Certificate type</b></td>
+                <td width="10%"><b>Semester</b></td>
+                <td width="13%"><b>Status</b></td>
+                <td width="13%"><b>Processed on</b></td>
+                <td width="14%"></td>
             </tr>
             </thead>
             <tbody>
@@ -47,16 +47,15 @@
         </table>
         <div class="row">
             <div class="col-md-6">
-                <button type="button" class="btn btn-success" data-ng-click="vm.process()"
-                        data-ng-if="vm.selectedCertificateIds && vm.selectedCertificateIds.length > 0">
-                    Process
-                </button>
+                <a href="javascript:void(0);"  data-ng-click="vm.process()"
+                   data-ng-if="vm.selectedCertificateIds && vm.selectedCertificateIds.length > 0"
+                   class="btn btn-grey"><i class="fa fa-bolt"></i></a>
             </div>
             <div class="col-md-6">
                 <div class="text-right">
-                    <button type="button" class="btn btn-success text-right"
+                    <button type="button" class="btn btn-default btn-outlined"
                             data-ng-click="vm.navigate(vm.nextLink)" data-ng-if="vm.nextLink">
-                        Next >>
+                        Next&nbsp;<i class="fa fa-arrow-circle-o-right"></i>
                     </button>
                 </div>
             </div>

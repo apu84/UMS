@@ -1,6 +1,7 @@
 package org.ums.security.bearertoken;
 
-import com.google.common.collect.Sets;
+import java.util.*;
+
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,15 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
-import org.ums.usermanagement.permission.Permission;
-import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
-import org.ums.usermanagement.user.MutableUser;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.manager.ContentManager;
+import org.ums.usermanagement.permission.Permission;
 import org.ums.usermanagement.permission.PermissionManager;
+import org.ums.usermanagement.user.MutableUser;
+import org.ums.usermanagement.user.User;
 
-import java.util.*;
+import com.google.common.collect.Sets;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
@@ -65,23 +66,17 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     public PrincipalCollection getPrincipals() {
       RealmSecurityManager manager = (RealmSecurityManager) SecurityUtils.getSecurityManager();
       SimplePrincipalCollection ret = new SimplePrincipalCollection();
-      try {
-        for(Realm realm : manager.getRealms()) {
-          if(realm instanceof ProfileRealm) {
-            String userId = token.getUserId();
-            if(((ProfileRealm) realm).accountExists(userId)) {
-              ret.add(userId, realm.getName());
-            }
+      for(Realm realm : manager.getRealms()) {
+        if(realm instanceof ProfileRealm) {
+          String userId = token.getUserId();
+          if(((ProfileRealm) realm).accountExists(userId)) {
+            ret.add(userId, realm.getName());
           }
         }
-        ret.add(token.getId(), getName());
-      } catch(Exception e) {
-        e.printStackTrace();
       }
-
+      ret.add(token.getId(), getName());
       return ret;
     }
-
   }
 
   public BearerTokenAuthenticatingRealm() {
@@ -128,13 +123,8 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       long diffMinutes = diff / (60 * 1000);
 
       if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
-        try {
-          MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
-          mutableBearerAccessToken.update();
-        } catch(Exception e) {
-          throw new AuthenticationException("Failed to update token", e);
-        }
-
+        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+        mutableBearerAccessToken.update();
       }
       else if(diffMinutes > sessionTimeout) {
         if(mLogger.isDebugEnabled()) {

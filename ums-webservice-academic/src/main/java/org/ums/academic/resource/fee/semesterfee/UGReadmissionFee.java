@@ -17,10 +17,7 @@ import org.ums.fee.*;
 import org.ums.fee.latefee.LateFee;
 import org.ums.fee.latefee.LateFeeManager;
 import org.ums.fee.payment.StudentPaymentManager;
-import org.ums.fee.semesterfee.InstallmentSettingsManager;
-import org.ums.fee.semesterfee.InstallmentStatusManager;
-import org.ums.fee.semesterfee.SemesterAdmissionStatus;
-import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
+import org.ums.fee.semesterfee.*;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
@@ -191,17 +188,39 @@ class UGReadmissionFee extends AbstractUGSemesterFee {
   @Override
   public UGSemesterFeeResponse payFirstInstallment(String pStudentId, Integer pSemesterId) {
     // TODO: Validate payment request
-    return !withinFirstInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_FIRST_INSTALLMENT, pStudentId,
-        pSemesterId);
+    if(withinFirstInstallmentSlot(pSemesterId)) {
+      MutableInstallmentStatus installmentStatus = new PersistentInstallmentStatus();
+      installmentStatus.setInstallmentOrder(1);
+      installmentStatus.setStudentId(pStudentId);
+      installmentStatus.setSemesterId(pSemesterId);
+      installmentStatus.setPaymentCompleted(false);
+      installmentStatus.create();
+
+      return payFee(firstInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_FIRST_INSTALLMENT,
+          pStudentId, pSemesterId);
+    }
+    else {
+      return UGSemesterFeeResponse.NOT_WITHIN_SLOT;
+    }
   }
 
   @Override
   public UGSemesterFeeResponse paySecondInstallment(String pStudentId, Integer pSemesterId) {
     // TODO: Validate payment request
-    return !withinSecondInstallmentSlot(pSemesterId) ? UGSemesterFeeResponse.NOT_WITHIN_SLOT : payFee(
-        secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_SECOND_INSTALLMENT, pStudentId,
-        pSemesterId);
+    if(withinSecondInstallmentSlot(pSemesterId)) {
+      MutableInstallmentStatus installmentStatus = new PersistentInstallmentStatus();
+      installmentStatus.setInstallmentOrder(2);
+      installmentStatus.setStudentId(pStudentId);
+      installmentStatus.setSemesterId(pSemesterId);
+      installmentStatus.setPaymentCompleted(false);
+      installmentStatus.create();
+
+      return payFee(secondInstallment(pStudentId, pSemesterId), Parameter.ParameterName.READMISSION_SECOND_INSTALLMENT,
+          pStudentId, pSemesterId);
+    }
+    else {
+      return UGSemesterFeeResponse.NOT_WITHIN_SLOT;
+    }
   }
 
   private Optional<UGFee> dropFee(String pStudentId, Integer pSemesterId) {
