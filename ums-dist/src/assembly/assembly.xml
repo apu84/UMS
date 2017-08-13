@@ -64,6 +64,8 @@
         <include>org.springframework.data:spring-data-solr</include>
         <include>com.itextpdf:itextpdf</include>
         <include>org.springframework.kafka:spring-kafka</include>
+        <include>org.aspectj:aspectjrt</include>
+        <include>org.aspectj:aspectjweaver</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

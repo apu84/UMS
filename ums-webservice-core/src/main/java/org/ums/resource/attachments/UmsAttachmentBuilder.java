@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 20-Jul-17.
  */
 @Component
-public class AttachmentBuilder implements Builder<Attachment, MutableAttachment> {
+public class UmsAttachmentBuilder implements Builder<Attachment, MutableAttachment> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Attachment pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
