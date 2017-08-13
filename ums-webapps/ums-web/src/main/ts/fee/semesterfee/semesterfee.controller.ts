@@ -118,6 +118,22 @@ module ums {
       }
     }
 
+    public total(fees: SemesterFee[]): number {
+      let total: number = 0;
+      for (let i = 0; i < fees.length; i++) {
+        total += parseInt(fees[i].amount);
+      }
+      return total;
+    }
+
+    public totalPayment(fees: Payment[]): number {
+      let total: number = 0;
+      for (let i = 0; i < fees.length; i++) {
+        total += parseInt(fees[i].amount);
+      }
+      return total;
+    }
+
     private admissionFee(semesterId: number): void {
       this.semesterFeeService.getSemesterInstallmentStatus(semesterId).then(
           (semesterInstallmentStatus: string) => {

@@ -2,16 +2,16 @@
     <div class="panel-heading">Payments</div>
     <div class="panel-body">
         <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
-        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
             <tr>
-                <td width="15%">Transaction Id</td>
-                <td width="15%">Account</td>
-                <td width="15%">Method of payment</td>
-                <td width="10%">Status</td>
-                <td width="10%">Amount</td>
-                <td width="10%">Receive on</td>
-                <td width="10%">Verified on</td>
+                <td width="15%"><b>Transaction Id</b></td>
+                <td width="15%"><b>Account</b></td>
+                <td width="15%"><b>Method of payment</b></td>
+                <td width="10%"><b>Status</b></td>
+                <td width="10%"><b>Amount</b></td>
+                <td width="10%"><b>Receive on</b></td>
+                <td width="10%"><b>Verified on</b></td>
             </tr>
             </thead>
             <tbody>
@@ -43,9 +43,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="pull-right">
-                    <button type="button" class="btn btn-success text-right" data-ng-click="vm.navigate(vm.nextLink)"
+                    <button type="button" class="btn btn-default btn-outlined" data-ng-click="vm.navigate(vm.nextLink)"
                             data-ng-if="vm.nextLink">
-                        Next >>
+                        Next&nbsp;<i class="fa fa-arrow-circle-o-right"></i>
                     </button>
                 </div>
             </div>

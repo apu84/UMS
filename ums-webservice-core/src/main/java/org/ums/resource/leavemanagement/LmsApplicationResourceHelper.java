@@ -153,7 +153,6 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     attachment.setServerFileName("files/lms/" + serverFilename);
     mAttachmentManager.create(attachment);
     // FileUtils.cleanDirectory(new File("H:/Apache/apache-tomcat-7.0.47/temp"));
-
     pInputStream.deleteOnExit();
     newFile.deleteOnExit();
     System.gc();
@@ -250,9 +249,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
       jsonObject.add("daysLeft", applicationMap.get(lmsType.getId()) != null ? getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken) : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
-        jsonObject.add("daysLeftNumber", applicationMap.get(lmsType.getId()) != null ? lmsType.getMaxDuration() - leavesTaken : lmsType.getMaxDuration());
+      jsonObject.add("daysLeftNumber", applicationMap.get(lmsType.getId()) != null ? lmsType.getMaxDuration() - leavesTaken : lmsType.getMaxDuration());
 
-        children.add(jsonObject);
+      children.add(jsonObject);
     }
     object.add("entries", children);
     localCache.invalidate();

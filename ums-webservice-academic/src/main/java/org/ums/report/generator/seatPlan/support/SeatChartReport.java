@@ -72,7 +72,7 @@ public class SeatChartReport {
         mSeatPlanGroupManager.getBySemesterGroupAndType(pSemesterId, groupNo, type);
     java.util.List<ExamRoutineDto> examRoutines = mExamRoutineManager.getExamRoutine(pSemesterId, type);
     java.util.List<SeatPlan> seatPlans;
-    if(groupNo == 0) {
+    if(groupNo <= 0) {
       seatPlans = mSeatPlanManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, groupNo, type, examDate);
     }
     else {
@@ -82,7 +82,7 @@ public class SeatChartReport {
     java.util.List<UGRegistrationResult> ugRegistrationResults = new ArrayList<>();
     Map<String, Course> studentCourseMap = new HashMap<>();
     Map<String, CourseRegType> studentCourseRegType = new HashMap<>();
-    if(groupNo == 0) {
+    if(groupNo <= 0) {
       ugRegistrationResults = mUGRegistrationResultManager.getCCI(pSemesterId, examDate);
       for(UGRegistrationResult ug : ugRegistrationResults) {
         studentCourseMap.put(ug.getStudentId() + ug.getCourse().getId(), ug.getCourse());
@@ -219,7 +219,9 @@ public class SeatChartReport {
           Map<String, String> deptWithDeptNameMap = new HashMap<>();
           Map<String, String> deptWithYearSemesterMap = new HashMap<>();
 
+          int ccCounter = 0;
           for(int i = 1; i <= (room.getTotalRow() + 1); i++) {
+            ccCounter += 1;
             for(int j = 1; j <= room.getTotalColumn(); j++) {
 
               /*
@@ -244,7 +246,7 @@ public class SeatChartReport {
                 Program program;
                 String dept;
                 String deptName;
-                if(groupNo == 0) {
+                if(groupNo <= 0) {
                   int year = studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear();
                   int semester = studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
                   dept =
@@ -262,7 +264,7 @@ public class SeatChartReport {
 
                 }
                 String yearSemester = "";
-                if(groupNo == 0) {
+                if(groupNo <= 0) {
                   yearSemester =
                       studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear() + "/"
                           + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getSemester();
@@ -273,7 +275,7 @@ public class SeatChartReport {
                 if(deptList.size() == 0) {
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
-                  if(groupNo == 0) {
+                  if(groupNo <= 0) {
                     if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                       studentList.add(student.getId() + "(C)");
                     }
@@ -302,7 +304,7 @@ public class SeatChartReport {
                   for(String deptOfTheList : deptList) {
                     if(deptOfTheList.equals(dept)) {
                       java.util.List<String> studentList = deptStudentListMap.get(dept);
-                      if(groupNo == 0) {
+                      if(groupNo <= 0) {
                         if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                           studentList.add(student.getId() + "(C)");
                         }
@@ -330,7 +332,7 @@ public class SeatChartReport {
                   if(foundInTheList == false) {
                     deptList.add(dept);
                     java.util.List<String> studentList = new ArrayList<>();
-                    if(groupNo == 0) {
+                    if(groupNo <= 0) {
                       if(studentCourseRegType.get(student.getId() + seatPlan.getCourse().getId()).getId() == 3) {
                         studentList.add(student.getId() + "(C)");
                       }
@@ -541,7 +543,7 @@ public class SeatChartReport {
                 PdfPCell lowerCell = new PdfPCell();
 
                 String upperPart = "";
-                if(groupNo == 0) {
+                if(groupNo <= 0) {
                   upperPart =
                       program.getShortName().replace("B.Sc in ", "") + " "
                           + studentCourseMap.get(student.getId() + seatPlan.getCourse().getId()).getYear() + "/"
@@ -595,7 +597,7 @@ public class SeatChartReport {
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
                 String upperPart = "";
-                if(groupNo == 0) {
+                if(groupNo <= 0) {
                   upperPart =
                       program2.getShortName().replace("B.Sc in ", "") + " "
                           + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getYear() + "/"
@@ -603,9 +605,14 @@ public class SeatChartReport {
                 }
                 else {
                   upperPart =
-                      program2.getShortName().replace("B.Sc in ", "") + " "
-                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getYear() + "/"
-                          + studentCourseMap.get(student2.getId() + seatPlan2.getCourse().getId()).getSemester();
+                      program2.getShortName().replace("B.Sc in ", "") + " " + student2.getCurrentYear() + "/"
+                          + student2.getCurrentAcademicSemester();
+                  /*
+                   * upperPart = program2.getShortName().replace("B.Sc in ", "") + " " +
+                   * studentCourseMap.get(student2.getId() + student2.getCurrentYear() + "/" +
+                   * studentCourseMap.get(student2.getId() +
+                   * seatPlan2.getCourse().getId()).getSemester();
+                   */
                 }
 
                 Paragraph upperParagraph =

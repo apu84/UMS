@@ -264,12 +264,12 @@
       <scope>compile</scope>
     </dependency>
 
-<!--    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.26</version>
-      <scope>compile</scope>
-    </dependency>-->
+    <!--    <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.26</version>
+          <scope>compile</scope>
+        </dependency>-->
 
     <!--Oracle jdbc driver-->
     <dependency>
@@ -474,6 +474,25 @@
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-solr</artifactId>
       <version>${spring-data-solr}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+      <version>1.2.2.RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>RELEASE</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

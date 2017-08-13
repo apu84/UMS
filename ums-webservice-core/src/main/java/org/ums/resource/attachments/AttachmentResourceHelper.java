@@ -23,10 +23,10 @@ import java.util.List;
 public class AttachmentResourceHelper extends ResourceHelper<Attachment, MutableAttachment, Long> {
 
   @Autowired
-  private AttachmentManager mAttachmentManager;
+  AttachmentManager mAttachmentManager;
 
   @Autowired
-  private AttachmentBuilder mBuilder;
+  UmsAttachmentBuilder attachmentBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -64,7 +64,7 @@ public class AttachmentResourceHelper extends ResourceHelper<Attachment, Mutable
 
   @Override
   protected Builder<Attachment, MutableAttachment> getBuilder() {
-    return mBuilder;
+    return attachmentBuilder;
   }
 
   @Override

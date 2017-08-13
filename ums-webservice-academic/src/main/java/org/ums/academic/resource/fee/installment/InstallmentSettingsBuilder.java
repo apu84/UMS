@@ -28,9 +28,15 @@ public class InstallmentSettingsBuilder implements Builder<InstallmentSettings, 
   @Override
   public void build(MutableInstallmentSettings pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject);
-    Validate.notNull(pJsonObject.getInt("semesterId"));
+    int semesterId;
+    try {
+      semesterId = pJsonObject.getInt("semesterId");
+    } catch(Exception e) {
+      semesterId = Integer.parseInt(pJsonObject.getString("semesterId"));
+    }
+    // Validate.notNull(pJsonObject.getInt("semesterId"));
     Validate.notNull(pJsonObject.getBoolean("enabled"));
-    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    pMutable.setSemesterId(semesterId);
     pMutable.setEnabled(pJsonObject.getBoolean("enabled"));
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Long.parseLong(pJsonObject.getString("id")));

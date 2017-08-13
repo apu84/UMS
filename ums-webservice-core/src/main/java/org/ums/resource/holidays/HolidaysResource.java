@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -19,8 +20,8 @@ public class HolidaysResource extends MutableHolidaysResource {
 
   @GET
   @Path("/year/{year}")
-  public JsonObject getHolidaysByYear(final @PathParam("year") int pYear, final @Context Request pRequest)
-      throws Exception {
+  public JsonObject getHolidaysByYear(final @PathParam("year") int pYear, final @Context Request pRequest,
+                                      @HeaderParam("user-agent") String userAgent) throws Exception {
     return mHelper.getHolidaysByYear(pYear, mUriInfo);
   }
 
