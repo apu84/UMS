@@ -43,7 +43,7 @@ module ums {
     }
 
     class EmployeePublication {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'publicationInformationService', 'approvePublicationService', 'pagerService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeInformationService', 'approvePublicationService', 'pagerService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeePublication,
@@ -51,7 +51,7 @@ module ums {
                     private notify: Notify,
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
-                    private publicationInformationService: PublicationInformationService,
+                    private employeeInformationService: EmployeeInformationService,
                     private approvePublicationService: ApprovePublicationService,
                     private pagerService: PagerService) {
 
@@ -99,7 +99,7 @@ module ums {
         }
 
         private getPublicationList(){
-            this.publicationInformationService.getSpecificTeacherPublicationInformation(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id, this.$scope.data.publicationListViewCategory)
+            this.employeeInformationService.getSpecificTeacherPublicationInformation(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id, this.$scope.data.publicationListViewCategory)
                 .then((publicationForLength: any) => {
                     this.$scope.data.totalRecord = publicationForLength.length;
                     this.$scope.publications = Array<IPublicationInformationModel>();
@@ -115,7 +115,7 @@ module ums {
         }
 
         private publicationWithPagination() {
-            this.publicationInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
+            this.employeeInformationService.getPublicationInformationWithPagination(this.$scope.employees[this.$scope.currentlySelectedEmployeeIndex].id,
                 this.$scope.data.publicationListViewCategory, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformation: any) => {
                 this.$scope.publications = publicationInformation;
                 this.$scope.totalPendingPublications = this.$scope.publications.length;

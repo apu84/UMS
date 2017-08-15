@@ -18,7 +18,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
         applicationContext.getBean("serviceInformationDetailManager", ServiceInformationDetailManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private EmploymentPeriod mEmploymentPeriod;
   private int mEmploymentPeriodId;
   private Date mStartDate;
@@ -44,7 +44,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sServiceInformationDetailManager.create(this);
   }
 
@@ -64,12 +64,12 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

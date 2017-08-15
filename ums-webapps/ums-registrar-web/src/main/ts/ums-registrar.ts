@@ -39,6 +39,7 @@ module ums {
             url: "/profile",
             templateUrl: 'views/eim/employee-profile.html',
             controller: 'EmployeeProfile',
+            controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -62,6 +63,7 @@ module ums {
             url: "/employeeInformation",
             templateUrl: 'views/eim/employee-information.html',
             controller: 'EmployeeInformation',
+            controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({

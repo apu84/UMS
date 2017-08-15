@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public interface ServiceInformationDetail extends Serializable, EditType<MutableServiceInformationDetail>,
-    Identifier<Integer>, LastModifier {
+    Identifier<Long>, LastModifier {
 
   EmploymentPeriod getEmploymentPeriod();
 

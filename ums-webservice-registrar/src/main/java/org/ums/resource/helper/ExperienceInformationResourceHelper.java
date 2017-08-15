@@ -24,7 +24,7 @@ import java.util.List;
 
 @Component
 public class ExperienceInformationResourceHelper extends
-    ResourceHelper<ExperienceInformation, MutableExperienceInformation, Integer> {
+    ResourceHelper<ExperienceInformation, MutableExperienceInformation, Long> {
 
   @Autowired
   ExperienceInformationManager mExperienceInformationManager;
@@ -110,7 +110,7 @@ public class ExperienceInformationResourceHelper extends
   }
 
   @Override
-  protected ContentManager<ExperienceInformation, MutableExperienceInformation, Integer> getContentManager() {
+  protected ContentManager<ExperienceInformation, MutableExperienceInformation, Long> getContentManager() {
     return mExperienceInformationManager;
   }
 

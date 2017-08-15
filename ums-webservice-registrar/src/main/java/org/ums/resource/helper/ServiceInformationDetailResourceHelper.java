@@ -18,7 +18,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class ServiceInformationDetailResourceHelper extends
-    ResourceHelper<ServiceInformationDetail, MutableServiceInformationDetail, Integer> {
+    ResourceHelper<ServiceInformationDetail, MutableServiceInformationDetail, Long> {
 
   private static final Logger mLogger = LoggerFactory.getLogger(ServiceInformationResourceHelper.class);
 
@@ -34,7 +34,7 @@ public class ServiceInformationDetailResourceHelper extends
   }
 
   @Override
-  protected ContentManager<ServiceInformationDetail, MutableServiceInformationDetail, Integer> getContentManager() {
+  protected ContentManager<ServiceInformationDetail, MutableServiceInformationDetail, Long> getContentManager() {
     return mManager;
   }
 

@@ -24,7 +24,7 @@ import java.util.List;
 
 @Component
 public class TrainingInformationResourceHelper extends
-    ResourceHelper<TrainingInformation, MutableTrainingInformation, Integer> {
+    ResourceHelper<TrainingInformation, MutableTrainingInformation, Long> {
 
   @Autowired
   TrainingInformationManager mTrainingInformationManager;
@@ -109,7 +109,7 @@ public class TrainingInformationResourceHelper extends
   }
 
   @Override
-  protected ContentManager<TrainingInformation, MutableTrainingInformation, Integer> getContentManager() {
+  protected ContentManager<TrainingInformation, MutableTrainingInformation, Long> getContentManager() {
     return mTrainingInformationManager;
   }
 

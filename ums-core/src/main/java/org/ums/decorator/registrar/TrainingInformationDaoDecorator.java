@@ -8,7 +8,7 @@ import org.ums.manager.registrar.TrainingInformationManager;
 import java.util.List;
 
 public class TrainingInformationDaoDecorator extends
-    ContentDaoDecorator<TrainingInformation, MutableTrainingInformation, Integer, TrainingInformationManager> implements
+    ContentDaoDecorator<TrainingInformation, MutableTrainingInformation, Long, TrainingInformationManager> implements
     TrainingInformationManager {
 
   @Override

@@ -6,7 +6,7 @@ import org.ums.manager.ContentManager;
 
 import java.util.List;
 
-public interface AwardInformationManager extends ContentManager<AwardInformation, MutableAwardInformation, Integer> {
+public interface AwardInformationManager extends ContentManager<AwardInformation, MutableAwardInformation, Long> {
 
   int saveAwardInformation(final List<MutableAwardInformation> pMutableAwardInformation);
 

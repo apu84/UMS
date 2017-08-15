@@ -33,7 +33,7 @@ public class ServiceInformationDetailBuilder implements
   @Override
   public void build(JsonObjectBuilder pBuilder, ServiceInformationDetail pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     JsonObjectBuilder intervalBuilder = Json.createObjectBuilder();
     intervalBuilder.add("id", pReadOnly.getEmploymentPeriodId()).add("name",
         mEmploymentPeriod.get(pReadOnly.getEmploymentPeriodId()).getLabel());
@@ -56,7 +56,7 @@ public class ServiceInformationDetailBuilder implements
   public void serviceInformationDetailBuilder(MutableServiceInformationDetail pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache, Long pServiceId) {
     if(pJsonObject.getString("dbAction").equals("Update") || pJsonObject.getString("dbAction").equals("Delete")) {
-      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));

@@ -7,6 +7,7 @@ import org.ums.decorator.registrar.AcademicInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.AcademicInformation;
 import org.ums.domain.model.mutable.MutableAdmissionCertificatesOfStudent;
 import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentAcademicInformation;
 
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,?, ?,"
+      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,? ,?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
@@ -30,9 +31,11 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   static String DELETE_ALL = "DELETE FROM EMP_ACADEMIC_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentAcademicInformationDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentAcademicInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -51,9 +54,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       List<MutableAcademicInformation> pMutableAcademicInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation academicInformation : pMutableAcademicInformation) {
-      params.add(new Object[] {academicInformation.getEmployeeId(), academicInformation.getDegreeId(),
-          academicInformation.getInstitute(), academicInformation.getPassingYear()});
-
+      params.add(new Object[] {mIdGenerator.getNumericId(), academicInformation.getEmployeeId(),
+          academicInformation.getDegreeId(), academicInformation.getInstitute(), academicInformation.getPassingYear()});
     }
     return params;
   }
@@ -97,7 +99,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     @Override
     public AcademicInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentAcademicInformation academicInformation = new PersistentAcademicInformation();
-      academicInformation.setId(resultSet.getInt("ID"));
+      academicInformation.setId(resultSet.getLong("ID"));
       academicInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
       academicInformation.setDegreeId(resultSet.getInt("DEGREE"));
       academicInformation.setInstitute(resultSet.getString("INSTITUTE"));

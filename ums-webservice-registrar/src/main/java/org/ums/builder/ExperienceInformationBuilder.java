@@ -17,7 +17,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
   @Override
   public void build(JsonObjectBuilder pBuilder, ExperienceInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("experienceInstitution", pReadOnly.getExperienceInstitute());
     pBuilder.add("experienceDesignation", pReadOnly.getDesignation());
@@ -30,7 +30,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
   public void build(MutableExperienceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
     pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));

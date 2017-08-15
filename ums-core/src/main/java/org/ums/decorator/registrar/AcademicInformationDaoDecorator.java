@@ -8,7 +8,7 @@ import org.ums.manager.registrar.AcademicInformationManager;
 import java.util.List;
 
 public class AcademicInformationDaoDecorator extends
-    ContentDaoDecorator<AcademicInformation, MutableAcademicInformation, Integer, AcademicInformationManager> implements
+    ContentDaoDecorator<AcademicInformation, MutableAcademicInformation, Long, AcademicInformationManager> implements
     AcademicInformationManager {
   @Override
   public int saveAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {

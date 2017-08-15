@@ -8,7 +8,7 @@ import org.ums.manager.registrar.ExperienceInformationManager;
 import java.util.List;
 
 public class ExperienceInformationDaoDecorator extends
-    ContentDaoDecorator<ExperienceInformation, MutableExperienceInformation, Integer, ExperienceInformationManager>
+    ContentDaoDecorator<ExperienceInformation, MutableExperienceInformation, Long, ExperienceInformationManager>
     implements ExperienceInformationManager {
 
   @Override

@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 public class TrainingInformationBuilder implements Builder<TrainingInformation, MutableTrainingInformation> {
   @Override
   public void build(JsonObjectBuilder pBuilder, TrainingInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("trainingName", pReadOnly.getTrainingName());
     pBuilder.add("trainingInstitution", pReadOnly.getTrainingInstitute());
@@ -29,7 +29,7 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
   public void build(MutableTrainingInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTrainingName(pJsonObject.getString("trainingName"));
     pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));

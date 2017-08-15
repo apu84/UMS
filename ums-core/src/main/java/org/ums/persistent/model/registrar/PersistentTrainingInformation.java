@@ -15,7 +15,7 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
         applicationContext.getBean("trainingInformationManager", TrainingInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private String mTrainingName;
   private String mTrainingInstitute;
@@ -41,7 +41,7 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sTrainingInformationManager.create(this);
   }
 
@@ -61,12 +61,12 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

@@ -10,8 +10,8 @@ import org.ums.enums.common.PublicationType;
 
 import java.util.Date;
 
-public interface MutablePublicationInformation extends PublicationInformation, Editable<Integer>,
-    MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutablePublicationInformation extends PublicationInformation, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);
 

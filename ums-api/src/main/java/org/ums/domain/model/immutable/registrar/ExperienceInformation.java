@@ -7,8 +7,8 @@ import org.ums.domain.model.mutable.registrar.MutableExperienceInformation;
 
 import java.io.Serializable;
 
-public interface ExperienceInformation extends Serializable, EditType<MutableExperienceInformation>,
-    Identifier<Integer>, LastModifier {
+public interface ExperienceInformation extends Serializable, EditType<MutableExperienceInformation>, Identifier<Long>,
+    LastModifier {
 
   String getEmployeeId();
 

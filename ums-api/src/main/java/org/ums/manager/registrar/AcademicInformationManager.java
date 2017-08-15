@@ -7,7 +7,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface AcademicInformationManager extends
-    ContentManager<AcademicInformation, MutableAcademicInformation, Integer> {
+    ContentManager<AcademicInformation, MutableAcademicInformation, Long> {
 
   int saveAcademicInformation(final List<MutableAcademicInformation> pMutableAcademicInformation);
 

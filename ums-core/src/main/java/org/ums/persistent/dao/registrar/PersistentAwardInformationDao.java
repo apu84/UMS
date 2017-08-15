@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.AwardInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentAwardInformation;
 
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ import java.util.List;
 public class PersistentAwardInformationDao extends AwardInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_AWARD_INFO (EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED) VALUES (? ,? ,?, ?, ?,"
+      "INSERT INTO EMP_AWARD_INFO (ID, EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED) VALUES (?, ? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
@@ -28,9 +29,11 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentAwardInformationDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentAwardInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -48,8 +51,8 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   private List<Object[]> getEmployeeAwardInformationParams(List<MutableAwardInformation> pMutableAwardInformation) {
     List<Object[]> params = new ArrayList<>();
     for(AwardInformation awardInformation : pMutableAwardInformation) {
-      params.add(new Object[] {awardInformation.getEmployeeId(), awardInformation.getAwardName(),
-          awardInformation.getAwardInstitute(), awardInformation.getAwardedYear(),
+      params.add(new Object[] {mIdGenerator.getNumericId(), awardInformation.getEmployeeId(),
+          awardInformation.getAwardName(), awardInformation.getAwardInstitute(), awardInformation.getAwardedYear(),
           awardInformation.getAwardShortDescription()});
 
     }
@@ -96,11 +99,11 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
     @Override
     public AwardInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentAwardInformation awardInformation = new PersistentAwardInformation();
-      awardInformation.setId(resultSet.getInt("id"));
+      awardInformation.setId(resultSet.getLong("id"));
       awardInformation.setEmployeeId(resultSet.getString("employee_id"));
       awardInformation.setAwardName(resultSet.getString("award_name"));
       awardInformation.setAwardInstitute(resultSet.getString("institution"));
-      awardInformation.setAwardedYear(resultSet.getString("awarded_year"));
+      awardInformation.setAwardedYear(resultSet.getInt("awarded_year"));
       awardInformation.setAwardShortDescription(resultSet.getString("award_short_description"));
       awardInformation.setLastModified(resultSet.getString("last_modified"));
       return awardInformation;

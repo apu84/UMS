@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.ExperienceInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.ExperienceInformation;
 import org.ums.domain.model.mutable.registrar.MutableExperienceInformation;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentExperienceInformation;
 
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ import java.util.List;
 public class PersistentExperienceInformationDao extends ExperienceInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_EXPERIENCE_INFO (EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED) VALUES (?,?,?,?,?,"
+      "INSERT INTO EMP_EXPERIENCE_INFO (ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED) VALUES (?,?,?,?,?,?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
@@ -28,9 +29,11 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentExperienceInformationDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentExperienceInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -49,9 +52,9 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
       List<MutableExperienceInformation> pMutableExperienceInformation) {
     List<Object[]> params = new ArrayList<>();
     for(ExperienceInformation experienceInformation : pMutableExperienceInformation) {
-      params.add(new Object[] {experienceInformation.getEmployeeId(), experienceInformation.getExperienceInstitute(),
-          experienceInformation.getDesignation(), experienceInformation.getExperienceFromDate(),
-          experienceInformation.getExperienceToDate()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), experienceInformation.getEmployeeId(),
+          experienceInformation.getExperienceInstitute(), experienceInformation.getDesignation(),
+          experienceInformation.getExperienceFromDate(), experienceInformation.getExperienceToDate()});
 
     }
     return params;
@@ -100,7 +103,7 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     @Override
     public ExperienceInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentExperienceInformation experienceInformation = new PersistentExperienceInformation();
-      experienceInformation.setId(resultSet.getInt("id"));
+      experienceInformation.setId(resultSet.getLong("id"));
       experienceInformation.setEmployeeId(resultSet.getString("employee_id"));
       experienceInformation.setExperienceInstitute(resultSet.getString("experience_institute"));
       experienceInformation.setDesignation(resultSet.getString("experience_designation"));

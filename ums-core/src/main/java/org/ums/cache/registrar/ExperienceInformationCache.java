@@ -8,43 +8,5 @@ import org.ums.manager.registrar.ExperienceInformationManager;
 
 import java.util.List;
 
-public class ExperienceInformationCache extends
-    ContentCache<ExperienceInformation, MutableExperienceInformation, Integer, ExperienceInformationManager> implements
-    ExperienceInformationManager {
-
-  private CacheManager<ExperienceInformation, Integer> mCacheManager;
-
-  public ExperienceInformationCache(CacheManager<ExperienceInformation, Integer> pCacheManager) {
-    mCacheManager = pCacheManager;
-  }
-
-  @Override
-  protected CacheManager<ExperienceInformation, Integer> getCacheManager() {
-    return mCacheManager;
-  }
-
-  @Override
-  public int saveExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    return getManager().saveExperienceInformation(pMutableExperienceInformation);
-  }
-
-  @Override
-  public List<ExperienceInformation> getEmployeeExperienceInformation(String pEmployeeId) {
-    return getManager().getEmployeeExperienceInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deleteExperienceInformation(String pEmployeeId) {
-    return getManager().deleteExperienceInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updateExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    return getManager().updateExperienceInformation(pMutableExperienceInformation);
-  }
-
-  @Override
-  public int deleteExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    return getManager().deleteExperienceInformation(pMutableExperienceInformation);
-  }
+public class ExperienceInformationCache {
 }

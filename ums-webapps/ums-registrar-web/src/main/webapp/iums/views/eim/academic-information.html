@@ -1,4 +1,4 @@
-<div data-ng-if="showAcademicInputDiv">
+<div data-ng-show="vm.showAcademicInputDiv">
     <div class="container-fluid">
         <form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
             <div class="row">
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div data-ng-repeat="academic in entry.academic track by $index">
+            <div data-ng-repeat="academic in vm.entry.academic track by $index">
                 <div class="row">
                     <div class="col-md-1">
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -35,7 +35,7 @@
                         <select name="nAcademicDegree{{$index}}"
                                 id="iAcademicDegree{{$index}}"
                                 data-ng-model="academic.degree"
-                                data-ng-options="degreeName.name for degreeName in degreeNames track by degreeName.id"
+                                data-ng-options="degreeName.name for degreeName in vm.degreeNames track by degreeName.id"
                                 class="form-control" required>
                             <option value="">Select Degree</option>
                         </select>
@@ -53,13 +53,12 @@
                                name="nPassingYear{{$index}}"
                                id="iPassingYear{{$index}}"
                                data-ng-model="academic.passingYear"
-                               data-date-format="yyyy"
                                placeholder="YYYY"
                                autocomplete="off"
-                               class="custom-datepicker form-control" required>
+                               class="form-control" required>
                     </div>
                     <div class="col-md-1">
-                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('academic' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                     </div>
                 </div>
             </div>
@@ -68,10 +67,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div align="center">
-                        [ <a title="Add New Row" data-ng-click="addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('academic')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                     </div>
                     <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('academic')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAcademicInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
@@ -80,7 +79,7 @@
     </div>
 </div>
 
-<div data-ng-if="showAcademicLabelDiv">
+<div data-ng-show="!vm.showAcademicInputDiv">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
@@ -105,7 +104,7 @@
                 <label class="control-label"></label>
             </div>
         </div>
-        <div data-ng-repeat="academic in entry.academic track by $index">
+        <div data-ng-repeat="academic in vm.entry.academic track by $index">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -131,7 +130,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button id="btnEdit" type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('academic')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button id="btnEdit" type="button" title="Cancel" class="btn" data-ng-click="vm.showAcademicInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

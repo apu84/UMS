@@ -6,6 +6,7 @@ import org.ums.decorator.registrar.PublicationInformationDaoDecorator;
 import org.ums.domain.model.immutable.registrar.PublicationInformation;
 import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
 import org.ums.enums.registrar.PublicationStatus;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentPublicationInformation;
 
 import java.sql.ResultSet;
@@ -15,10 +16,12 @@ import java.util.List;
 
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
 
-  static String INSERT_ONE = "INSERT INTO EMP_PUBLICATION_INFO (EMPLOYEE_ID, TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
-      + " DATE_OF_PUBLICATION, TYPE, WEB_LINK, ISSN, ISSUE,"
-      + " VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PAGES, APPLIED_ON, ACTION_TAKEN_ON,"
-      + " LAST_MODIFIED) VALUES (? ,? ,?, ?, ?, " + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  static String INSERT_ONE =
+      "INSERT INTO EMP_PUBLICATION_INFO (ID, EMPLOYEE_ID, TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
+          + " DATE_OF_PUBLICATION, TYPE, WEB_LINK, ISSN, ISSUE,"
+          + " VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PAGES, APPLIED_ON, ACTION_TAKEN_ON,"
+          + " LAST_MODIFIED) VALUES (?, ? ,? ,?, ?, ?, " + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql()
+          + ")";
 
   static String GET_ONE = "SELECT ID, EMPLOYEE_ID, TITLE, INTEREST_GENRE, PUBLISHER_NAME, "
       + " DATE_OF_PUBLICATION, TYPE, WEB_LINK," + " ISSN, ISSUE, VOLUME, JOURNAL_NAME, COUNTRY, STATUS, "
@@ -37,9 +40,11 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   static String PUBLICATION_LENGTH = "SELECT COUNT(*) FROM EMP_PUBLICATION_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentPublicationInformationDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentPublicationInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -174,7 +179,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     @Override
     public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentPublicationInformation publicationInformation = new PersistentPublicationInformation();
-      publicationInformation.setId(resultSet.getInt("id"));
+      publicationInformation.setId(resultSet.getLong("id"));
       publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
       publicationInformation.setTitle(resultSet.getString("title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
@@ -202,7 +207,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     @Override
     public PublicationInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentPublicationInformation publicationInformation = new PersistentPublicationInformation();
-      publicationInformation.setId(resultSet.getInt("id"));
+      publicationInformation.setId(resultSet.getLong("id"));
       publicationInformation.setEmployeeId(resultSet.getString("employee_id"));
       publicationInformation.setTitle(resultSet.getString("title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));

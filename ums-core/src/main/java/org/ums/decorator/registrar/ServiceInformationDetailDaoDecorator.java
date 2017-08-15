@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ServiceInformationDetailDaoDecorator
     extends
-    ContentDaoDecorator<ServiceInformationDetail, MutableServiceInformationDetail, Integer, ServiceInformationDetailManager>
+    ContentDaoDecorator<ServiceInformationDetail, MutableServiceInformationDetail, Long, ServiceInformationDetailManager>
     implements ServiceInformationDetailManager {
 
   @Override

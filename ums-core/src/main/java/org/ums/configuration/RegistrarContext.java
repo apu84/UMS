@@ -27,80 +27,51 @@ public class RegistrarContext {
 
   @Bean
   AcademicInformationManager academicInformationManager() {
-    AcademicInformationCache academicInformationCache = new AcademicInformationCache(mCacheFactory.getCacheManager());
-    academicInformationCache.setManager(new PersistentAcademicInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return academicInformationCache;
+    return new PersistentAcademicInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   AwardInformationManager awardInformationManager() {
-    AwardInformationCache awardInformationCache = new AwardInformationCache(mCacheFactory.getCacheManager());
-    awardInformationCache.setManager(new PersistentAwardInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return awardInformationCache;
+    return new PersistentAwardInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   ServiceInformationManager serviceInformationManager() {
-    ServiceInformationCache serviceInformationCache = new ServiceInformationCache(mCacheFactory.getCacheManager());
-    serviceInformationCache.setManager(new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
-    return serviceInformationCache;
+    return new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   ServiceInformationDetailManager serviceInformationDetailManager() {
-    ServiceInformationDetailCache serviceInformationDetailCache =
-        new ServiceInformationDetailCache(mCacheFactory.getCacheManager());
-    serviceInformationDetailCache.setManager(new PersistentServiceInformationDetailDao(mTemplateFactory
-        .getJdbcTemplate()));
-    return serviceInformationDetailCache;
+    return new PersistentServiceInformationDetailDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   ExperienceInformationManager experienceInformationManager() {
-    ExperienceInformationCache experienceInformationCache =
-        new ExperienceInformationCache(mCacheFactory.getCacheManager());
-    experienceInformationCache.setManager(new PersistentExperienceInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return experienceInformationCache;
+    return new PersistentExperienceInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   PersonalInformationManager personalInformationManager() {
-    PersonalInformationCache personalInformationCache = new PersonalInformationCache(mCacheFactory.getCacheManager());
-    personalInformationCache.setManager(new PersistentPersonalInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return personalInformationCache;
+    return new PersistentPersonalInformationDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean
   PublicationInformationManager publicationInformationManager() {
-    PublicationInformationCache publicationInformationCache =
-        new PublicationInformationCache(mCacheFactory.getCacheManager());
-    publicationInformationCache.setManager(new PersistentPublicationInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return publicationInformationCache;
+    return new PersistentPublicationInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   TrainingInformationManager trainingInformationManager() {
-    TrainingInformationCache trainingInformationCache = new TrainingInformationCache(mCacheFactory.getCacheManager());
-    trainingInformationCache.setManager(new PersistentTrainingInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return trainingInformationCache;
+    return new PersistentTrainingInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   AreaOfInterestInformationManager areaOfInterestInformationManager() {
-    AreaOfInterestInformationCache areaOfInterestInformationCache =
-        new AreaOfInterestInformationCache(mCacheFactory.getCacheManager());
-    areaOfInterestInformationCache.setManager(new PersistentAreaOfInterestInformationDao(mTemplateFactory
-        .getJdbcTemplate()));
-    return areaOfInterestInformationCache;
+    return new PersistentAreaOfInterestInformationDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean
   AdditionalInformationManager additionalInformationManager() {
-    AdditionalInformationCache additionalInformationCache =
-        new AdditionalInformationCache(mCacheFactory.getCacheManager());
-    additionalInformationCache.setManager(new PersistentAdditionalInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return additionalInformationCache;
+    return new PersistentAdditionalInformationDao(mTemplateFactory.getJdbcTemplate());
   }
-
 }

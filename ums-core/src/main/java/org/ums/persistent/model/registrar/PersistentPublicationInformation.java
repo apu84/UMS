@@ -19,7 +19,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
         applicationContext.getBean("publicationInformationManager", PublicationInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private String mTitle;
   private String mInterestGenre;
@@ -72,7 +72,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sPublicationInformationManager.create(this);
   }
 
@@ -92,12 +92,12 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

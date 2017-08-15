@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public interface PublicationInformation extends Serializable, EditType<MutablePublicationInformation>,
-    Identifier<Integer>, LastModifier {
+    Identifier<Long>, LastModifier {
 
   String getEmployeeId();
 

@@ -1,33 +1,5 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope {
-        showPersonalInputDiv: boolean;
-        showAcademicInputDiv: boolean;
-        showPublicationInputDiv: boolean;
-        showTrainingInputDiv: boolean;
-        showAwardInputDiv: boolean;
-        showExperienceInputDiv: boolean;
-        showPersonalLabelDiv: boolean;
-        showAcademicLabelDiv: boolean;
-        showPublicationLabelDiv: boolean;
-        showTrainingLabelDiv: boolean;
-        showAwardLabelDiv: boolean;
-        showExperienceLabelDiv: boolean;
-        showAdditionalInputDiv: boolean;
-        showAdditionalLabelDiv: boolean;
-        required: boolean;
-        disablePresentAddressDropdown: boolean;
-        disablePermanentAddressDropdown: boolean;
-        borderColor: string;
-        supOptions: string;
-        customItemPerPage: number;
-        aoiMap: any;
-        data: any;
-        pagination: any;
-        enableEditMode: Function;
-        enableViewMode: Function;
-        addNewRow: Function;
-        deleteRow: Function;
-        testData: Function;
+    interface IEmployeeProfile extends ng.IScope{
         submitPersonalForm: Function;
         submitAcademicForm: Function;
         submitPublicationForm: Function;
@@ -35,115 +7,100 @@ module ums {
         submitAwardForm: Function;
         submitExperienceForm: Function;
         submitAdditionalForm: Function;
-        sameAsPresentAddress: Function;
-        changePresentAddressDistrict: Function;
-        changePresentAddressThana: Function;
-        changePermanentAddressDistrict: Function;
-        changePermanentAddressThana: Function;
-        changePresentAddressFields: Function;
-        changePermanentAddressFields: Function;
-        fillEmergencyContactAddress: Function;
-        pageChanged: Function;
-        changeItemPerPage: Function;
-        entry: IEntry;
-        genders: Array<IGender>;
-        maritalStatus: Array<ICommon>;
-        religions: Array<ICommon>;
-        nationalities: Array<ICommon>;
-        degreeNames: Array<ICommon>;
-        bloodGroups: Array<ICommon>;
-        publicationTypes: Array<ICommon>;
-        relations: Array<ICommon>;
-        countries: Array<ICommon>;
-        divisions: Array<ICommon>;
-        presentAddressDistricts: Array<ICommon>;
-        permanentAddressDistricts: Array<ICommon>;
-        allDistricts: Array<ICommon>;
-        presentAddressThanas: Array<ICommon>;
-        permanentAddressThanas: Array<ICommon>;
-        allThanas: Array<ICommon>;
-        arrayOfAreaOfInterest: Array<ICommon>;
-        paginatedPublication: Array<IPublicationInformationModel>;
-        previousPersonalInformation: IPersonalInformationModel;
-        previousAcademicInformation: Array<IAcademicInformationModel>;
-        previousPublicationInformation: Array<IPublicationInformationModel>;
-        previousTrainingInformation: Array<ITrainingInformationModel>;
-        previousAwardInformation: Array<IAwardInformationModel>;
-        previousExperienceInformation: Array<IExperienceInformationModel>;
-        deleteAcademicObjects: Array<IAcademicInformationModel>;
-        deletedPublicationObjects: Array<IPublicationInformationModel>;
-        deletedTrainingObjects: Array<ITrainingInformationModel>;
-        deletedAwardObjects: Array<IAwardInformationModel>;
-        deletedExperienceObjects: Array<IExperienceInformationModel>;
-        userId: string;
-
-
-        showServiceInputDiv: boolean;
-        showServiceLabelDiv: boolean;
-        showServiceEditButton: boolean;
-        designations: Array<ICommon>;
-        employmentTypes: Array<ICommon>;
-        serviceIntervals: Array<ICommon>;
-        serviceRegularIntervals: Array<ICommon>;
-        serviceContractIntervals: Array<ICommon>;
-        departments: Array<IDepartment>;
-    }
-    export interface IGender {
-        id: string;
-        name: string;
-    }
-    export interface ICommon{
-        id: number;
-        name: string;
-        foreign_id: number;
-    }
-    export interface IDepartment{
-        id: string;
-        shortName: string;
-        longName: string;
-        type: string;
-    }
-    export interface IEntry {
-        personal: IPersonalInformationModel;
-        academic: Array<IAcademicInformationModel>;
-        publication: Array<IPublicationInformationModel>;
-        training: Array<ITrainingInformationModel>;
-        award: Array<IAwardInformationModel>;
-        experience: Array<IExperienceInformationModel>;
-        additional: IAdditionalInformationModel;
-        serviceInfo: Array<IServiceInformationModel>;
     }
 
     class EmployeeProfile {
-        public static $inject = ['registrarConstants', '$scope', '$q',
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
-            'personalInformationService', 'academicInformationService', 'publicationInformationService',
-            'trainingInformationService', 'awardInformationService', 'experienceInformationService',
-            'areaOfInterestService', 'areaOfInterestInformationService', 'additionalInformationService',
-            'userService', 'cRUDDetectionService', 'serviceInformationService', 'serviceInformationDetailService'];
+            'employeeInformationService','areaOfInterestService', 'userService',
+            'cRUDDetectionService'];
+
+        private entry: {
+            personal: IPersonalInformationModel,
+            academic: IAcademicInformationModel[],
+            publication: IPublicationInformationModel[],
+            training: ITrainingInformationModel[],
+            award: IAwardInformationModel[],
+            experience: IExperienceInformationModel[],
+            additional: IAdditionalInformationModel,
+            serviceInfo: IServiceInformationModel[]
+        };
+        private personal: boolean = true;
+        private academic: boolean = false;
+        private publication: boolean = false;
+        private training: boolean = false;
+        private award: boolean = false;
+        private experience: boolean = false;
+        private additional: boolean = false;
+        private service: boolean = false;
+        private showPersonalInputDiv: boolean = false;
+        private showAcademicInputDiv: boolean = false;
+        private showPublicationInputDiv: boolean = false;
+        private showTrainingInputDiv: boolean = false;
+        private showAwardInputDiv: boolean = false;
+        private showExperienceInputDiv: boolean = false;
+        private showAdditionalInputDiv: boolean = false;
+        private required: boolean = false;
+        private disablePresentAddressDropdown: boolean = false;
+        private disablePermanentAddressDropdown: boolean = false;
+        private showServiceEditButton: boolean = false;
+        private data: any;
+        private itemPerPage: number = 2;
+        private currentPage: number = 1;
+        private totalRecord: number = 0;
+        private genders: IGender[] = [];
+        private maritalStatus: ICommon[] = [];
+        private religions: ICommon[] = [];
+        private nationalities: ICommon[] = [];
+        private degreeNames: ICommon[] = [];
+        private bloodGroups: ICommon[] = [];
+        private publicationTypes: ICommon[] = [];
+        private relations: ICommon[] = [];
+        private countries: ICommon[] = [];
+        private divisions: ICommon[] = [];
+        private presentAddressDistricts: ICommon[] = [];
+        private permanentAddressDistricts: ICommon[] = [];
+        private allDistricts: ICommon[] = [];
+        private presentAddressThanas: ICommon[] = [];
+        private permanentAddressThanas: ICommon[] = [];
+        private allThanas: ICommon[] = [];
+        private arrayOfAreaOfInterest: ICommon[] = [];
+        private paginatedPublication: IPublicationInformationModel[];
+        private previousPersonalInformation: IPersonalInformationModel;
+        private previousAcademicInformation: IAcademicInformationModel[];
+        private previousPublicationInformation: IPublicationInformationModel[];
+        private previousTrainingInformation: ITrainingInformationModel[];
+        private previousAwardInformation: IAwardInformationModel[];
+        private previousExperienceInformation: IExperienceInformationModel[];
+        private academicDeletedObjects: IAcademicInformationModel[];
+        private publicationDeletedObjects: IPublicationInformationModel[];
+        private trainingDeletedObjects: ITrainingInformationModel[];
+        private awardDeletedObjects: IAwardInformationModel[];
+        private experienceDeletedObjects: IExperienceInformationModel[];
+        private userId: string = "";
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
+                    private notify: Notify,
                     private countryService: CountryService,
                     private divisionService: DivisionService,
                     private districtService: DistrictService,
                     private thanaService: ThanaService,
-                    private personalInformationService: PersonalInformationService,
-                    private academicInformationService: AcademicInformationService,
-                    private publicationInformationService: PublicationInformationService,
-                    private trainingInformationService: TrainingInformationService,
-                    private awardInformationService: AwardInformationService,
-                    private experienceInformationService: ExperienceInformationService,
+                    private employeeInformationService: EmployeeInformationService,
                     private areaOfInterestService: AreaOfInterestService,
-                    private areaOfInterestInformationService: AreaOfInterestInformationService,
-                    private additionalInformationService: AdditionalInformationService,
                     private userService: UserService,
-                    private cRUDDetectionService: CRUDDetectionService,
-                    private serviceInformationService: ServiceInformationService,
-                    private serviceInformationDetailService: ServiceInformationDetailService) {
+                    private cRUDDetectionService: CRUDDetectionService) {
 
-            $scope.entry = {
+            $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
+            $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
+            $scope.submitPublicationForm = this.submitPublicationForm.bind(this);
+            $scope.submitTrainingForm = this.submitTrainingForm.bind(this);
+            $scope.submitAwardForm = this.submitAwardForm.bind(this);
+            $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
+            $scope.submitAdditionalForm = this.submitAdditionalForm.bind(this);
+
+            this.entry = {
                 personal: <IPersonalInformationModel> {},
                 academic: Array<IAcademicInformationModel>(),
                 publication: Array<IPublicationInformationModel>(),
@@ -153,72 +110,40 @@ module ums {
                 additional: <IAdditionalInformationModel> {},
                 serviceInfo: Array<IServiceInformationModel>()
             };
-            $scope.data = {
+
+            this.data = {
                 supOptions: "1",
-                borderColor: "",
-                itemPerPage: 2,
-                totalRecord: 0,
-                customItemPerPage: null
+                borderColor: ""
             };
-            $scope.showServiceEditButton = false;
-            $scope.pagination = {};
-            $scope.pagination.currentPage = 1;
-            $scope.genders = this.registrarConstants.genderTypes;
-            $scope.publicationTypes = this.registrarConstants.publicationTypes;
-            $scope.degreeNames = this.registrarConstants.degreeTypes;
-            $scope.bloodGroups = this.registrarConstants.bloodGroupTypes;
-            $scope.maritalStatus = this.registrarConstants.maritalStatuses;
-            $scope.religions = this.registrarConstants.religionTypes;
-            $scope.relations = this.registrarConstants.relationTypes;
-            $scope.nationalities = this.registrarConstants.nationalityTypes;
-            $scope.serviceIntervals = registrarConstants.servicePeriods;
-
-            $scope.testData = this.testData.bind(this);
-            $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
-            $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
-            $scope.submitPublicationForm = this.submitPublicationForm.bind(this);
-            $scope.submitTrainingForm = this.submitTrainingForm.bind(this);
-            $scope.submitAwardForm = this.submitAwardForm.bind(this);
-            $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
-            $scope.submitAdditionalForm = this.submitAdditionalForm.bind(this);
-            $scope.enableEditMode = this.enableEditMode.bind(this);
-            $scope.enableViewMode = this.enableViewMode.bind(this);
-            $scope.addNewRow = this.addNewRow.bind(this);
-            $scope.deleteRow = this.deleteRow.bind(this);
-            $scope.sameAsPresentAddress = this.sameAsPresentAddress.bind(this);
-            $scope.changePresentAddressDistrict = this.changePresentAddressDistrict.bind(this);
-            $scope.changePresentAddressThana = this.changePresentAddressThana.bind(this);
-            $scope.changePermanentAddressDistrict = this.changePermanentAddressDistrict.bind(this);
-            $scope.changePermanentAddressThana = this.changePermanentAddressThana.bind(this);
-            $scope.changePresentAddressFields = this.changePresentAddressFields.bind(this);
-            $scope.changePermanentAddressFields = this.changePermanentAddressFields.bind(this);
-            $scope.fillEmergencyContactAddress = this.fillEmergencyContactAddress.bind(this);
-            $scope.pageChanged = this.pageChanged.bind(this);
-            $scope.changeItemPerPage = this.changeItemPerPage.bind(this);
-
+            this.genders = this.registrarConstants.genderTypes;
+            this.publicationTypes = this.registrarConstants.publicationTypes;
+            this.degreeNames = this.registrarConstants.degreeTypes;
+            this.bloodGroups = this.registrarConstants.bloodGroupTypes;
+            this.maritalStatus = this.registrarConstants.maritalStatuses;
+            this.religions = this.registrarConstants.religionTypes;
+            this.relations = this.registrarConstants.relationTypes;
+            this.nationalities = this.registrarConstants.nationalityTypes;
             this.initialization();
-            this.addDate();
         }
 
         private initialization() {
             this.userService.fetchCurrentUserInfo().then((user: any) => {
-                this.$scope.userId = user.employeeId;
+                this.userId = user.employeeId;
                 this.countryService.getCountryList().then((countries: any) => {
-                    this.$scope.countries = countries.entries;
+                    this.countries = countries.entries;
                     this.divisionService.getDivisionList().then((divisions: any) => {
-                        this.$scope.divisions = divisions.entries;
+                        this.divisions = divisions.entries;
                         this.districtService.getDistrictList().then((districts: any) => {
-                            this.$scope.presentAddressDistricts = districts.entries;
-                            this.$scope.permanentAddressDistricts = districts.entries;
-                            this.$scope.allDistricts = districts.entries;
+                            this.presentAddressDistricts = districts.entries;
+                            this.permanentAddressDistricts = districts.entries;
+                            this.allDistricts = districts.entries;
                             this.thanaService.getThanaList().then((thanas: any) => {
-                                this.$scope.presentAddressThanas = thanas.entries;
-                                this.$scope.permanentAddressThanas = thanas.entries;
-                                this.$scope.allThanas = thanas.entries;
+                                this.presentAddressThanas = thanas.entries;
+                                this.permanentAddressThanas = thanas.entries;
+                                this.allThanas = thanas.entries;
                                 this.areaOfInterestService.getAll().then((aois: any) => {
-                                    this.$scope.arrayOfAreaOfInterest = aois;
-                                    this.getPreviousFormValues();
-                                    this.setViewModeInitially();
+                                    this.arrayOfAreaOfInterest = aois;
+                                    this.showTab("personal");
                                 });
                             });
                         });
@@ -227,440 +152,430 @@ module ums {
             });
         }
 
-        private setViewModeInitially() {
-            this.enableViewMode('personal');
-            this.enableViewMode('academic');
-            this.enableViewMode('publication');
-            this.enableViewMode('training');
-            this.enableViewMode('award');
-            this.enableViewMode('experience');
-            this.enableViewMode('additional');
-            this.enableViewMode('service');
-        }
-
-        private getPreviousFormValues() {
-            this.getPersonalInformation();
-            this.getAcademicInformation();
-            this.getAwardInformation();
-            this.getPublicationInformation();
-            this.getPublicationInformationWithPagination();
-            this.getExperienceInformation();
-            this.getTrainingInformation();
-            this.getAdditionalInformation();
-            this.getServiceInformation();
-        }
-
-        private testData(formName: string): void {
-            if (formName == "personal") {
-                this.$scope.entry.personal.firstName = "Kawsur";
-                this.$scope.entry.personal.lastName = "Mir Md.";
-                this.$scope.entry.personal.fatherName = "Mir Abdul Aziz";
-                this.$scope.entry.personal.motherName = "Mst Hosne Ara";
-                this.$scope.entry.personal.gender = this.$scope.genders[1];
-                this.$scope.entry.personal.dateOfBirth = "20/10/1995";
-                this.$scope.entry.personal.nationality = this.$scope.nationalities[1];
-                this.$scope.entry.personal.religion = this.$scope.religions[1];
-                this.$scope.entry.personal.maritalStatus = this.$scope.maritalStatus[1];
-                this.$scope.entry.personal.spouseName = "";
-                this.$scope.entry.personal.nidNo = "19952641478954758";
-                this.$scope.entry.personal.spouseNidNo = "";
-                this.$scope.entry.personal.bloodGroup = this.$scope.bloodGroups[1];
-                this.$scope.entry.personal.website = "https://www.kawsur.com";
-                this.$scope.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
-                this.$scope.entry.personal.personalEmail = "kawsurilu@yahoo.com";
-                this.$scope.entry.personal.mobile = "+8801672494863";
-                this.$scope.entry.personal.phone = "none";
-                this.$scope.entry.personal.emergencyContactName = "None";
-                this.$scope.entry.personal.emergencyContactRelation = this.$scope.relations[0];
-                this.$scope.entry.personal.emergencyContactPhone = "01898889851";
+        private showTab(formName: string){
+            if (formName === "personal") {
+                this.getPersonalInformation();
+                this.academic = false;
+                this.publication = false;
+                this.training = false;
+                this.award = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = false;
+                this.personal = true;
             }
+            else if (formName === "academic") {
+                this.getAcademicInformation();
+                this.personal = false;
+                this.publication = false;
+                this.training = false;
+                this.award = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = false;
+                this.academic = true;
+            }
+            else if (formName === "publication") {
+                this.getPublicationInformation();
+                this.personal = false;
+                this.academic = false;
+                this.training = false;
+                this.award = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = false;
+                this.publication = true;
+            }
+            else if (formName === "training") {
+                this.getTrainingInformation();
+                this.personal = false;
+                this.academic = false;
+                this.publication = false;
+                this.award = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = false;
+                this.training = true;
+            }
+            else if (formName === "award") {
+                this.getAwardInformation();
+                this.personal = false;
+                this.academic = false;
+                this.publication = false;
+                this.training = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = false;
+                this.award = true;
+            }
+            else if (formName === "experience") {
+                this.getExperienceInformation();
+                this.personal = false;
+                this.academic = false;
+                this.publication = false;
+                this.training = false;
+                this.award = false;
+                this.additional = false;
+                this.service = false;
+                this.experience = true;
+            }
+            else if(formName === 'additional'){
+                this.getAdditionalInformation();
+                this.personal = false;
+                this.academic = false;
+                this.publication = false;
+                this.training = false;
+                this.award = false;
+                this.experience = false;
+                this.service = false;
+                this.additional = true;
+            }
+            else if(formName === 'service'){
+                this.getServiceInformation();
+                this.personal = false;
+                this.academic = false;
+                this.publication = false;
+                this.training = false;
+                this.award = false;
+                this.experience = false;
+                this.additional = false;
+                this.service = true;
+            }
+        }
+
+        private testData(): void {
+            this.entry.personal.firstName = "Kawsur";
+            this.entry.personal.lastName = "Mir Md.";
+            this.entry.personal.fatherName = "Mir Abdul Aziz";
+            this.entry.personal.motherName = "Mst Hosne Ara";
+            this.entry.personal.gender = this.genders[1];
+            this.entry.personal.dateOfBirth = "20/10/1995";
+            this.entry.personal.nationality = this.nationalities[1];
+            this.entry.personal.religion = this.religions[1];
+            this.entry.personal.maritalStatus = this.maritalStatus[1];
+            this.entry.personal.spouseName = "";
+            this.entry.personal.nidNo = "19952641478954758";
+            this.entry.personal.spouseNidNo = "";
+            this.entry.personal.bloodGroup = this.bloodGroups[1];
+            this.entry.personal.website = "https://www.kawsur.com";
+            this.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
+            this.entry.personal.personalEmail = "kawsurilu@yahoo.com";
+            this.entry.personal.mobile = "+8801672494863";
+            this.entry.personal.phone = "none";
+            this.entry.personal.emergencyContactName = "None";
+            this.entry.personal.emergencyContactRelation = this.relations[0];
+            this.entry.personal.emergencyContactPhone = "01898889851";
         }
 
         private submitPersonalForm(): void {
-            this.$scope.entry.personal.employeeId = this.$scope.userId;
-            if (this.cRUDDetectionService.isObjectEmpty(this.$scope.previousPersonalInformation)) {
-                this.convertToJson('personal', this.$scope.entry.personal).then((json: any) => {
-                    this.personalInformationService.savePersonalInformation(json).then((message: any) => {
-                        this.getPersonalInformation();
-                        this.enableViewMode('personal');
+            this.entry.personal.employeeId = this.userId;
+            if (this.cRUDDetectionService.isObjectEmpty(this.previousPersonalInformation)) {
+                this.convertToJson('personal', this.entry.personal)
+                    .then((json: any) => {
+                        this.employeeInformationService.savePersonalInformation(json)
+                            .then((message: any) => {
+                                this.getPersonalInformation();
+                                this.showPersonalInputDiv = false;
+                            });
                     });
-                });
             }
             else {
-                this.convertToJson('personal', this.$scope.entry.personal).then((json: any) => {
-                    this.personalInformationService.updatePersonalInformation(json).then((message: any) => {
-                        this.getPersonalInformation();
-                        this.enableViewMode('personal');
+                this.convertToJson('personal', this.entry.personal)
+                    .then((json: any) => {
+                        this.employeeInformationService.updatePersonalInformation(json)
+                            .then((message: any) => {
+                                this.getPersonalInformation();
+                                this.showPersonalInputDiv = false;
+                            });
                     });
-                });
             }
         }
 
         private submitAcademicForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAcademicInformation, angular.copy(this.$scope.entry.academic), this.$scope.deleteAcademicObjects)
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAcademicInformation, angular.copy(this.entry.academic), this.academicDeletedObjects)
                 .then((academicObjects:any)=>{
-                    this.convertToJson('academic', academicObjects).then((json: any) => {
-                        this.academicInformationService.saveAcademicInformation(json)
-                            .then((message: any) => {
-                                this.getAcademicInformation();
-                                this.enableViewMode('academic');
-                            });
-                    });
+                    this.convertToJson('academic', academicObjects)
+                        .then((json: any) => {
+                            this.employeeInformationService.saveAcademicInformation(json)
+                                .then((message: any) => {
+                                    this.getAcademicInformation();
+                                    this.showAcademicInputDiv = false;
+                                });
+                        });
                 });
         }
 
         private submitPublicationForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousPublicationInformation, angular.copy(this.$scope.entry.publication), this.$scope.deletedPublicationObjects).then((publicationObjects: any) => {
-                this.convertToJson('publication', publicationObjects)
-                    .then((json: any) => {
-                        this.publicationInformationService.savePublicationInformation(json)
-                            .then((message: any) => {
-                                this.getPublicationInformation();
-                                this.getPublicationInformationWithPagination();
-                                this.enableViewMode('publication');
-                            });
-                    });
-            });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousPublicationInformation, angular.copy(this.entry.publication), this.publicationDeletedObjects)
+                .then((publicationObjects: any) => {
+                    this.convertToJson('publication', publicationObjects)
+                        .then((json: any) => {
+                            this.employeeInformationService.savePublicationInformation(json)
+                                .then((message: any) => {
+                                    this.getPublicationInformation();
+                                    this.getPublicationInformationWithPagination();
+                                    this.showPublicationInputDiv = false;
+                                });
+                        });
+                });
         }
 
         private submitTrainingForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousTrainingInformation, angular.copy(this.$scope.entry.training), this.$scope.deletedTrainingObjects).then((trainingObjects: any)=>{
-                this.convertToJson('training', trainingObjects)
-                    .then((json: any) => {
-                        this.trainingInformationService.saveTrainingInformation(json)
-                            .then((message: any) => {
-                                this.getTrainingInformation();
-                                this.enableViewMode('training');
-                            });
-                    });
-            });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousTrainingInformation, angular.copy(this.entry.training), this.trainingDeletedObjects)
+                .then((trainingObjects: any)=>{
+                    this.convertToJson('training', trainingObjects)
+                        .then((json: any) => {
+                            this.employeeInformationService.saveTrainingInformation(json)
+                                .then((message: any) => {
+                                    this.getTrainingInformation();
+                                    this.showTrainingInputDiv = false;
+                                });
+                        });
+                });
         }
 
         private submitAwardForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousAwardInformation, angular.copy(this.$scope.entry.award), this.$scope.deletedAwardObjects).then((awardObjects: any)=>{
-                this.convertToJson('award', awardObjects)
-                    .then((json: any) => {
-                        this.awardInformationService.saveAwardInformation(json)
-                            .then((message: any) => {
-                                this.getAwardInformation();
-                                this.enableViewMode('award');
-                            });
-                    });
-            });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAwardInformation, angular.copy(this.entry.award), this.awardDeletedObjects)
+                .then((awardObjects: any)=>{
+                    this.convertToJson('award', awardObjects)
+                        .then((json: any) => {
+                            this.employeeInformationService.saveAwardInformation(json)
+                                .then((message: any) => {
+                                    this.getAwardInformation();
+                                    this.showAwardInputDiv = false;
+                                });
+                        });
+                });
 
         }
 
         private submitExperienceForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.$scope.previousExperienceInformation, angular.copy(this.$scope.entry.experience), this.$scope.deletedExperienceObjects).then((experienceObjects: any)=>{
-                this.convertToJson('experience', experienceObjects)
-                    .then((json: any) => {
-                        this.experienceInformationService.saveExperienceInformation(json)
-                            .then((message: any) => {
-                                this.getExperienceInformation();
-                                this.enableViewMode('experience');
-                            });
-                    });
-            });
+            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousExperienceInformation, angular.copy(this.entry.experience), this.experienceDeletedObjects)
+                .then((experienceObjects: any)=>{
+                    this.convertToJson('experience', experienceObjects)
+                        .then((json: any) => {
+                            this.employeeInformationService.saveExperienceInformation(json)
+                                .then((message: any) => {
+                                    this.getExperienceInformation();
+                                    this.showExperienceInputDiv = false;
+                                });
+                        });
+                });
         }
 
-
         private submitAdditionalForm(): void {
-            this.$scope.entry.additional.employeeId = this.$scope.userId;
-            this.convertToJson('additional', this.$scope.entry.additional)
+            this.entry.additional.employeeId = this.userId;
+            this.convertToJson('additional', this.entry.additional)
                 .then((json: any) => {
-                    this.additionalInformationService.saveAdditionalInformation(json)
+                    this.employeeInformationService.saveAdditionalInformation(json)
                         .then((message: any) => {
                             this.getAdditionalInformation();
-                            this.enableViewMode('additional');
+                            this.showAdditionalInputDiv = false;
                         });
                 });
         }
 
         private getPersonalInformation() {
-            this.$scope.entry.personal = <IPersonalInformationModel>{};
-
-            this.personalInformationService.getPersonalInformation(this.$scope.userId)
-                .then((personalInformation: any) => {
-                    if (personalInformation.length > 0) {
-                        this.$scope.entry.personal = personalInformation[0];
-                    }
-                }).then(() => {
-                this.$scope.previousPersonalInformation = angular.copy(this.$scope.entry.personal);
+            this.entry.personal = <IPersonalInformationModel>{};
+            this.employeeInformationService.getPersonalInformation(this.userId).then((personalInformation: any) => {
+                if (personalInformation.length > 0) {
+                    this.entry.personal = personalInformation[0];
+                }
+            }).then(() => {
+                this.previousPersonalInformation = angular.copy(this.entry.personal);
             });
         }
 
         private getAcademicInformation() {
-            this.$scope.entry.academic = [];
-            this.$scope.previousAcademicInformation = [];
-            this.$scope.deleteAcademicObjects = [];
-
-            this.academicInformationService.getAcademicInformation(this.$scope.userId)
-                .then((academicInformation: any) => {
-                    this.$scope.entry.academic = academicInformation;
-                }).then(() => {
-                this.$scope.previousAcademicInformation = angular.copy(this.$scope.entry.academic);
+            this.entry.academic = [];
+            this.academicDeletedObjects = [];
+            this.employeeInformationService.getAcademicInformation(this.userId).then((academicInformation: any) => {
+                    this.entry.academic = academicInformation;
+            }).then(() => {
+                this.previousAcademicInformation = angular.copy(this.entry.academic);
             });
         }
 
         private getPublicationInformation() {
-            this.$scope.entry.publication = [];
-            this.$scope.previousPublicationInformation = [];
-            this.$scope.deletedPublicationObjects = [];
-
-            this.publicationInformationService.getPublicationInformation(this.$scope.userId)
-                .then((publicationInformation: any) => {
-                    this.$scope.data.totalRecord = publicationInformation.length;
-                    this.$scope.entry.publication = publicationInformation;
-                }).then(()=> {
-                this.$scope.previousPublicationInformation = angular.copy(this.$scope.entry.publication);
+            this.entry.publication = [];
+            this.publicationDeletedObjects = [];
+            this.employeeInformationService.getPublicationInformation(this.userId).then((publicationInformation: any) => {
+                this.data.totalRecord = publicationInformation.length;
+                this.entry.publication = publicationInformation;
+            }).then(() => {
+                this.previousPublicationInformation = angular.copy(this.entry.publication);
             });
         }
 
         private getPublicationInformationWithPagination(){
-            this.$scope.entry.publication = [];
-            this.publicationInformationService.getPublicationInformationViewWithPagination(this.$scope.userId, this.$scope.pagination.currentPage, this.$scope.data.itemPerPage).then((publicationInformationWithPagination: any) => {
-                this.$scope.paginatedPublication = publicationInformationWithPagination;
+            this.paginatedPublication = [];
+            this.employeeInformationService.getPublicationInformationViewWithPagination(this.userId, this.currentPage, this.itemPerPage).then((publicationInformationWithPagination: any) => {
+                this.paginatedPublication = publicationInformationWithPagination;
             });
         }
 
-
         private getTrainingInformation() {
-            this.$scope.entry.training = [];
-            this.$scope.previousTrainingInformation = [];
-            this.$scope.deletedTrainingObjects = [];
-
-            this.trainingInformationService.getTrainingInformation(this.$scope.userId).then((trainingInformation: any) => {
-                this.$scope.entry.training = trainingInformation;
+            this.entry.training = [];
+            this.trainingDeletedObjects = [];
+            this.employeeInformationService.getTrainingInformation(this.userId).then((trainingInformation: any) => {
+                    this.entry.training = trainingInformation;
             }).then(()=>{
-                this.$scope.previousTrainingInformation = angular.copy(this.$scope.entry.training);
+                this.previousTrainingInformation = angular.copy(this.entry.training);
             });
         }
 
         private getAwardInformation() {
-            this.$scope.entry.award = [];
-            this.$scope.previousAwardInformation = [];
-            this.$scope.deletedAwardObjects = [];
-
-            this.awardInformationService.getAwardInformation(this.$scope.userId).then((awardInformation: any) => {
-                this.$scope.entry.award = awardInformation;
+            this.entry.award = [];
+            this.awardDeletedObjects = [];
+            this.employeeInformationService.getAwardInformation(this.userId).then((awardInformation: any) => {
+                    this.entry.award = awardInformation;
             }).then(() =>{
-                this.$scope.previousAwardInformation = angular.copy(this.$scope.entry.award);
+                this.previousAwardInformation = angular.copy(this.entry.award);
             });
         }
 
         private getExperienceInformation() {
-            this.$scope.entry.experience = [];
-            this.$scope.previousExperienceInformation = [];
-            this.$scope.deletedExperienceObjects = [];
-
-            this.experienceInformationService.getExperienceInformation(this.$scope.userId).then((experienceInformation: any) => {
-                this.$scope.entry.experience = experienceInformation;
+            this.entry.experience = [];
+            this.experienceDeletedObjects = [];
+            this.employeeInformationService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
+                    this.entry.experience = experienceInformation;
             }).then(() => {
-                this.$scope.previousExperienceInformation = angular.copy(this.$scope.entry.experience);
+                this.previousExperienceInformation = angular.copy(this.entry.experience);
             });
         }
-
         private getAdditionalInformation() {
-            this.$scope.entry.additional = null;
-            this.additionalInformationService.getAdditionalInformation(this.$scope.userId).then((additional: any) => {
-                this.$scope.entry.additional = additional[0];
+            this.entry.additional = <IAdditionalInformationModel>{};
+            this.employeeInformationService.getAdditionalInformation(this.userId).then((additional: any) => {
+                this.entry.additional = additional[0];
             });
         }
 
         private getServiceInformation(): void {
-            this.$scope.entry.serviceInfo = [];
-            this.serviceInformationService.getServiceInformation(this.$scope.userId).then((services: any) => {
-                this.$scope.entry.serviceInfo = services;
-            });
+            this.entry.serviceInfo = [];
+            this.employeeInformationService.getServiceInformation(this.userId).then((services: any) => {
+                this.entry.serviceInfo = services;
+            })
         }
 
         private changePresentAddressDistrict() {
-            this.$scope.presentAddressDistricts = [];
-            let districtLength = this.$scope.allDistricts.length;
+            this.presentAddressDistricts = [];
+            let districtLength = this.allDistricts.length;
             let index = 0;
-
             for (let i = 0; i < districtLength; i++) {
-                if (this.$scope.entry.personal.preAddressDivision.id === this.$scope.allDistricts[i].foreign_id) {
-                    this.$scope.presentAddressDistricts[index++] = this.$scope.allDistricts[i];
+                if (this.entry.personal.preAddressDivision.id === this.allDistricts[i].foreign_id) {
+                    this.presentAddressDistricts[index++] = this.allDistricts[i];
                 }
             }
         }
 
         private changePermanentAddressDistrict() {
-            this.$scope.permanentAddressDistricts = [];
-            let districtLength = this.$scope.allDistricts.length;
+            this.permanentAddressDistricts = [];
+            let districtLength = this.allDistricts.length;
             let index = 0;
-
             for (let i = 0; i < districtLength; i++) {
-                if (this.$scope.entry.personal.perAddressDivision.id === this.$scope.allDistricts[i].foreign_id) {
-                    this.$scope.permanentAddressDistricts[index++] = this.$scope.allDistricts[i];
+                if (this.entry.personal.perAddressDivision.id === this.allDistricts[i].foreign_id) {
+                    this.permanentAddressDistricts[index++] = this.allDistricts[i];
                 }
             }
         }
 
         private changePresentAddressThana() {
-            this.$scope.presentAddressThanas = [];
-            let thanaLength = this.$scope.allThanas.length;
+            this.presentAddressThanas = [];
+            let thanaLength = this.allThanas.length;
             let index = 0;
-
             for (let i = 0; i < thanaLength; i++) {
-                if (this.$scope.entry.personal.preAddressDistrict.id === this.$scope.allThanas[i].foreign_id) {
-                    this.$scope.presentAddressThanas[index++] = this.$scope.allThanas[i];
+                if (this.entry.personal.preAddressDistrict.id === this.allThanas[i].foreign_id) {
+                    this.presentAddressThanas[index++] = this.allThanas[i];
                 }
             }
         }
 
         private changePermanentAddressThana() {
-            this.$scope.permanentAddressThanas = [];
-            let thanaLength = this.$scope.allThanas.length;
+            this.permanentAddressThanas = [];
+            let thanaLength = this.allThanas.length;
             let index = 0;
-
             for (let i = 0; i < thanaLength; i++) {
-                if (this.$scope.entry.personal.perAddressDistrict.id === this.$scope.allThanas[i].foreign_id) {
-                    this.$scope.permanentAddressThanas[index++] = this.$scope.allThanas[i];
+                if (this.entry.personal.perAddressDistrict.id === this.allThanas[i].foreign_id) {
+                    this.permanentAddressThanas[index++] = this.allThanas[i];
                 }
             }
         }
 
         private sameAsPresentAddress() {
-            this.$scope.entry.personal.perAddressLine1 = this.$scope.entry.personal.preAddressLine1;
-            this.$scope.entry.personal.perAddressLine2 = this.$scope.entry.personal.preAddressLine2;
-            this.$scope.entry.personal.perAddressCountry = this.$scope.entry.personal.preAddressCountry;
-            this.$scope.entry.personal.perAddressDivision = this.$scope.entry.personal.preAddressDivision;
-            this.$scope.entry.personal.perAddressDistrict = this.$scope.entry.personal.preAddressDistrict;
-            this.$scope.entry.personal.perAddressThana = this.$scope.entry.personal.preAddressThana;
-            this.$scope.entry.personal.perAddressPostCode = this.$scope.entry.personal.preAddressPostCode;
+            this.entry.personal.perAddressLine1 = this.entry.personal.preAddressLine1;
+            this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
+            this.entry.personal.perAddressCountry = this.entry.personal.preAddressCountry;
+            this.entry.personal.perAddressDivision = this.entry.personal.preAddressDivision;
+            this.entry.personal.perAddressDistrict = this.entry.personal.preAddressDistrict;
+            this.entry.personal.perAddressThana = this.entry.personal.preAddressThana;
+            this.entry.personal.perAddressPostCode = this.entry.personal.preAddressPostCode;
             this.changePermanentAddressFields();
         }
 
         private changePresentAddressFields() {
-            if (this.$scope.entry.personal.preAddressCountry.name === "Bangladesh") {
-                this.$scope.required = true;
-                this.$scope.disablePresentAddressDropdown = false;
+            if (this.entry.personal.preAddressCountry.name === "Bangladesh") {
+                this.required = true;
+                this.disablePresentAddressDropdown = false;
                 this.changePresentAddressDistrict();
                 this.changePresentAddressThana();
             }
             else {
-                this.$scope.required = false;
-                this.$scope.disablePresentAddressDropdown = true;
-                this.$scope.entry.personal.preAddressDivision = null;
-                this.$scope.entry.personal.preAddressDistrict = null;
-                this.$scope.entry.personal.preAddressThana = null;
-                this.$scope.entry.personal.preAddressPostCode = null;
+                this.required = false;
+                this.disablePresentAddressDropdown = true;
+                this.entry.personal.preAddressDivision = null;
+                this.entry.personal.preAddressDistrict = null;
+                this.entry.personal.preAddressThana = null;
+                this.entry.personal.preAddressPostCode = null;
             }
         }
 
         private changePermanentAddressFields() {
-            if (this.$scope.entry.personal.perAddressCountry.name === "Bangladesh") {
-                this.$scope.disablePermanentAddressDropdown = false;
+            if (this.entry.personal.perAddressCountry.name === "Bangladesh") {
+                this.disablePermanentAddressDropdown = false;
                 this.changePermanentAddressDistrict();
                 this.changePermanentAddressThana();
             }
             else {
-                this.$scope.disablePermanentAddressDropdown = true;
-                this.$scope.entry.personal.perAddressDivision = null;
-                this.$scope.entry.personal.perAddressDistrict = null;
-                this.$scope.entry.personal.perAddressThana = null;
-                this.$scope.entry.personal.perAddressPostCode = null;
+                this.disablePermanentAddressDropdown = true;
+                this.entry.personal.perAddressDivision = null;
+                this.entry.personal.perAddressDistrict = null;
+                this.entry.personal.perAddressThana = null;
+                this.entry.personal.perAddressPostCode = null;
             }
         }
 
         private fillEmergencyContactAddress() {
-            if (this.$scope.data.supOptions === "1") {
-                this.$scope.entry.personal.emergencyContactAddress = "";
+            if (this.data.supOptions === "1") {
+                this.entry.personal.emergencyContactAddress = "";
             }
-            else if (this.$scope.data.supOptions === "2") {
-                this.$scope.entry.personal.emergencyContactAddress =
-                    this.$scope.entry.personal.preAddressLine1 == null ? "" : this.$scope.entry.personal.preAddressLine1
-                    + " " + this.$scope.entry.personal.preAddressLine2 == null ? "" : this.$scope.entry.personal.preAddressLine2
-                    + " " + this.$scope.entry.personal.preAddressThana.name == null ? "" : this.$scope.entry.personal.preAddressThana.name
-                    + " " + this.$scope.entry.personal.preAddressDistrict.name == null ? "" : this.$scope.entry.personal.preAddressDistrict.name
-                    + " - " + this.$scope.entry.personal.preAddressPostCode == null ? "" : this.$scope.entry.personal.preAddressPostCode;
+            else if (this.data.supOptions === "2") {
+                this.entry.personal.emergencyContactAddress =
+                    this.entry.personal.preAddressLine1 == null ? "" : this.entry.personal.preAddressLine1
+                    + " " + this.entry.personal.preAddressLine2 == null ? "" : this.entry.personal.preAddressLine2
+                    + " " + this.entry.personal.preAddressThana.name == null ? "" : this.entry.personal.preAddressThana.name
+                    + " " + this.entry.personal.preAddressDistrict.name == null ? "" : this.entry.personal.preAddressDistrict.name
+                    + " - " + this.entry.personal.preAddressPostCode == null ? "" : this.entry.personal.preAddressPostCode;
             }
-            else if (this.$scope.data.supOptions === "3") {
-                this.$scope.entry.personal.emergencyContactAddress =
-                    this.$scope.entry.personal.perAddressLine1 == null ? "" : this.$scope.entry.personal.perAddressLine1
-                    + " " + this.$scope.entry.personal.perAddressLine2 == null ? "" : this.$scope.entry.personal.perAddressLine2
-                    + " " + this.$scope.entry.personal.perAddressThana.name == null ? "" : this.$scope.entry.personal.perAddressThana.name
-                    + " " + this.$scope.entry.personal.perAddressDistrict.name == null ? "" : this.$scope.entry.personal.perAddressDistrict.name
-                    + " - " + this.$scope.entry.personal.perAddressPostCode == null ? "" : this.$scope.entry.personal.perAddressPostCode;
+            else if (this.data.supOptions === "3") {
+                this.entry.personal.emergencyContactAddress =
+                    this.entry.personal.perAddressLine1 == null ? "" : this.entry.personal.perAddressLine1
+                    + " " + this.entry.personal.perAddressLine2 == null ? "" : this.entry.personal.perAddressLine2
+                    + " " + this.entry.personal.perAddressThana.name == null ? "" : this.entry.personal.perAddressThana.name
+                    + " " + this.entry.personal.perAddressDistrict.name == null ? "" : this.entry.personal.perAddressDistrict.name
+                    + " - " + this.entry.personal.perAddressPostCode == null ? "" : this.entry.personal.perAddressPostCode;
             }
         }
 
         private pageChanged(pageNumber: number){
-            this.$scope.pagination.currentPage = pageNumber;
+            this.currentPage = pageNumber;
             this.getPublicationInformationWithPagination();
         }
 
         private changeItemPerPage(){
-            if(this.$scope.data.customItemPerPage == "" || this.$scope.data.customItemPerPage == null) {}
+            if(this.data.customItemPerPage == "" || this.data.customItemPerPage == null) {}
             else{
-                this.$scope.data.itemPerPage = this.$scope.data.customItemPerPage;
+                this.data.itemPerPage = this.data.customItemPerPage;
                 this.getPublicationInformationWithPagination();
-            }
-        }
-        private enableViewMode(formName: string) {
-            if (formName === 'personal') {
-                this.$scope.showPersonalInputDiv = false;
-                this.$scope.showPersonalLabelDiv = true;
-            }
-            else if (formName === 'academic') {
-                this.$scope.showAcademicInputDiv = false;
-                this.$scope.showAcademicLabelDiv = true;
-            }
-            else if (formName === 'publication') {
-                this.$scope.showPublicationInputDiv = false;
-                this.$scope.showPublicationLabelDiv = true;
-            }
-            else if (formName === 'training') {
-                this.$scope.showTrainingInputDiv = false;
-                this.$scope.showTrainingLabelDiv = true;
-            }
-            else if (formName === 'award') {
-                this.$scope.showAwardInputDiv = false;
-                this.$scope.showAwardLabelDiv = true;
-            }
-            else if (formName === 'experience') {
-                this.$scope.showExperienceInputDiv = false;
-                this.$scope.showExperienceLabelDiv = true;
-            }
-            else if(formName === 'additional'){
-                this.$scope.showAdditionalInputDiv = false;
-                this.$scope.showAdditionalLabelDiv = true;
-            }
-            else if(formName === 'service'){
-                this.$scope.showServiceInputDiv = false;
-                this.$scope.showServiceLabelDiv = true;
-            }
-        }
-        private enableEditMode(formName: string) {
-            if (formName === "personal") {
-                this.$scope.showPersonalLabelDiv = false;
-                this.$scope.showPersonalInputDiv = true;
-            }
-            else if (formName === "academic") {
-                this.$scope.showAcademicLabelDiv = false;
-                this.$scope.showAcademicInputDiv = true;
-            }
-            else if (formName === "publication") {
-                this.$scope.showPublicationLabelDiv = false;
-                this.$scope.showPublicationInputDiv = true;
-            }
-            else if (formName === "training") {
-                this.$scope.showTrainingLabelDiv = false;
-                this.$scope.showTrainingInputDiv = true;
-            }
-            else if (formName === "award") {
-                this.$scope.showAwardLabelDiv = false;
-                this.$scope.showAwardInputDiv = true;
-            }
-            else if (formName === "experience") {
-                this.$scope.showExperienceLabelDiv = false;
-                this.$scope.showExperienceInputDiv = true;
-            }
-            else if(formName === 'additional'){
-                this.$scope.showAdditionalLabelDiv = false;
-                this.$scope.showAdditionalInputDiv = true;
             }
         }
 
@@ -668,20 +583,20 @@ module ums {
             if (divName === 'academic') {
                 let academicEntry: IAcademicInformationModel;
                 academicEntry = {
-                    id: null,
-                    employeeId: this.$scope.userId,
+                    id: "",
+                    employeeId: this.userId,
                     degree: null,
                     institution: "",
                     passingYear: null,
                     dbAction: "Create"
                 };
-                this.$scope.entry.academic.push(academicEntry);
+                this.entry.academic.push(academicEntry);
             }
             else if (divName === 'publication') {
                 let publicationEntry: IPublicationInformationModel;
                 publicationEntry = {
-                    id: null,
-                    employeeId: this.$scope.userId,
+                    id: "",
+                    employeeId: this.userId,
                     publicationTitle: "",
                     publicationType: null,
                     publicationInterestGenre: "",
@@ -700,85 +615,84 @@ module ums {
                     rowNumber: null,
                     dbAction: "Create"
                 };
-                this.$scope.entry.publication.push(publicationEntry);
+                this.entry.publication.push(publicationEntry);
             }
             else if (divName === 'training') {
                 let trainingEntry: ITrainingInformationModel;
                 trainingEntry = {
-                    id: null,
-                    employeeId: this.$scope.userId,
+                    id: "",
+                    employeeId: this.userId,
                     trainingName: "",
                     trainingInstitution: "",
                     trainingFrom: "",
                     trainingTo: "",
                     dbAction: "Create"
                 };
-                this.$scope.entry.training.push(trainingEntry);
+                this.entry.training.push(trainingEntry);
             }
             else if (divName === 'award') {
                 let awardEntry: IAwardInformationModel;
                 awardEntry = {
-                    id: null,
-                    employeeId: this.$scope.userId,
+                    id: "",
+                    employeeId: this.userId,
                     awardName: "",
                     awardInstitute: "",
-                    awardedYear: "",
+                    awardedYear: null,
                     awardShortDescription: "",
                     dbAction: "Create"
                 };
-                this.$scope.entry.award.push(awardEntry);
+                this.entry.award.push(awardEntry);
             }
             else if (divName === 'experience') {
                 let experienceEntry: IExperienceInformationModel;
                 experienceEntry = {
-                    id: null,
-                    employeeId: this.$scope.userId,
+                    id: "",
+                    employeeId: this.userId,
                     experienceInstitution: "",
                     experienceDesignation: "",
                     experienceFrom: "",
                     experienceTo: "",
                     dbAction: "Create"
                 };
-                this.$scope.entry.experience.push(experienceEntry);
+                this.entry.experience.push(experienceEntry);
             }
-            this.addDate();
         }
 
-        private deleteRow(divName: string, index: number) {
+        private deleteRow(divName: string, index: number, parentIndex?: number) {
             if (divName === 'academic') {
-                if(this.$scope.entry.academic[index].id != null){
-                    this.$scope.entry.academic[index].dbAction = "Delete";
-                    this.$scope.deleteAcademicObjects.push(this.$scope.entry.academic[index]);
+                if(this.entry.academic[index].id != ""){
+                    this.entry.academic[index].dbAction = "Delete";
+                    this.academicDeletedObjects.push(this.entry.academic[index]);
                 }
-                this.$scope.entry.academic.splice(index, 1);
+                this.entry.academic.splice(index, 1);
             }
             else if (divName === 'publication') {
-                if(this.$scope.entry.publication[index].id != null){
-                    this.$scope.entry.publication[index].dbAction = "Delete";
-                    this.$scope.deletedPublicationObjects.push(this.$scope.entry.publication[index]);
+                if(this.entry.publication[index].id != ""){
+                    this.entry.publication[index].dbAction = "Delete";
+                    this.publicationDeletedObjects.push(this.entry.publication[index]);
                 }
-                this.$scope.entry.publication.splice(index, 1);
+                this.entry.publication.splice(index, 1);
             }
             else if (divName === 'training') {
-                if(this.$scope.entry.training[index].id != null){
-                    this.$scope.entry.training[index].dbAction = "Delete";
-                    this.$scope.deletedTrainingObjects.push(this.$scope.entry.training[index]);
+                if(this.entry.training[index].id != ""){
+                    this.entry.training[index].dbAction = "Delete";
+                    this.trainingDeletedObjects.push(this.entry.training[index]);
                 }
-                this.$scope.entry.training.splice(index, 1);
+                this.entry.training.splice(index, 1);
             }
             else if (divName === 'award') {
-                if(this.$scope.entry.award[index].id != null){
-                    this.$scope.entry.award[index].dbAction = "Delete";
-                    this.$scope.deletedAwardObjects.push(this.$scope.entry.award[index]);
+                if(this.entry.award[index].id != ""){
+                    this.entry.award[index].dbAction = "Delete";
+                    this.awardDeletedObjects.push(this.entry.award[index]);
                 }
-                this.$scope.entry.award.splice(index, 1);
+                this.entry.award.splice(index, 1);
             }
             else if (divName === 'experience') {
-                if(this.$scope.entry.experience[index].id != null){
-                    this.$scope.entry.experience[index].dbAction = "Delete";
-                    this.$scope.deletedExperienceObjects.push(this.$scope.entry.experience[index]);
+                if(this.entry.experience[index].id != ""){
+                    this.entry.experience[index].dbAction = "Delete";
+                    this.experienceDeletedObjects.push(this.entry.experience[index]);
                 }
-                this.$scope.entry.experience.splice(index, 1);
+                this.entry.experience.splice(index, 1);
             }
         }
 
@@ -787,7 +701,6 @@ module ums {
             let JsonObject = {};
             let JsonArray = [];
             let item: any = {};
-
             if (convertThis === "personal") {
                 item['personal'] = obj;
             }
@@ -809,38 +722,10 @@ module ums {
             else if (convertThis === "additional") {
                 item['additional'] = obj;
             }
-
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;
             defer.resolve(JsonObject);
             return defer.promise;
-        }
-
-        private addDate(): void {
-            setTimeout(function () {
-                $('.datepicker-default').datepicker();
-                $('.datepicker-default').on('change', function () {
-                    $('.datepicker').hide();
-                });
-            }, 100);
-            setTimeout(function () {
-                $('.modified-datepicker').datepicker({
-                    // startView: 1,
-                    // minViewMode: 1
-                });
-                $('.modified-datepicker').on('change', function () {
-                    $('.datepicker').hide();
-                });
-            }, 100);
-            setTimeout(function () {
-                $('.custom-datepicker').datepicker({
-                    // startView: 2,
-                    // minViewMode: 2
-                });
-                $('.custom-datepicker').on('change', function () {
-                    $('.datepicker').hide();
-                });
-            }, 100);
         }
     }
     UMS.controller("EmployeeProfile", EmployeeProfile);

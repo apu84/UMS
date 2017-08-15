@@ -7,7 +7,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface ServiceInformationDetailManager extends
-    ContentManager<ServiceInformationDetail, MutableServiceInformationDetail, Integer> {
+    ContentManager<ServiceInformationDetail, MutableServiceInformationDetail, Long> {
 
   int saveServiceInformationDetail(final List<MutableServiceInformationDetail> pMutableServiceInformationDetail);
 

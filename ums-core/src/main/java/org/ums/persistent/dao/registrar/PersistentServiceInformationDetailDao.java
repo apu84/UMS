@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.registrar.ServiceInformationDetailDaoDecorator;
 import org.ums.domain.model.immutable.registrar.ServiceInformationDetail;
 import org.ums.domain.model.mutable.registrar.MutableServiceInformationDetail;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentServiceInformationDetail;
 
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.List;
 public class PersistentServiceInformationDetailDao extends ServiceInformationDetailDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_SERVICE_DETAIL (EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
+      "INSERT INTO EMP_SERVICE_DETAIL (ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
   static String GET_ONE = "SELECT ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID FROM EMP_SERVICE_DETAIL ";
@@ -28,9 +29,11 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
   static String DELETE_ONE = "DELETE FROM EMP_SERVICE_DETAIL ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentServiceInformationDetailDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentServiceInformationDetailDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -43,7 +46,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
       List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
     List<Object[]> params = new ArrayList<>();
     for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
-      params.add(new Object[] {serviceInformationDetail.getEmploymentPeriod().getId(),
+      params.add(new Object[] {mIdGenerator.getNumericId(), serviceInformationDetail.getEmploymentPeriod().getId(),
           serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
           serviceInformationDetail.getServiceId()});
 
@@ -96,7 +99,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
     @Override
     public ServiceInformationDetail mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentServiceInformationDetail persistentServiceInformationDetail = new PersistentServiceInformationDetail();
-      persistentServiceInformationDetail.setId(resultSet.getInt("ID"));
+      persistentServiceInformationDetail.setId(resultSet.getLong("ID"));
       persistentServiceInformationDetail.setEmploymentPeriodId(resultSet.getInt("EMPLOYMENT_PERIOD"));
       persistentServiceInformationDetail.setStartDate(resultSet.getDate("START_DATE"));
       persistentServiceInformationDetail.setEndDate(resultSet.getDate("END_DATE"));

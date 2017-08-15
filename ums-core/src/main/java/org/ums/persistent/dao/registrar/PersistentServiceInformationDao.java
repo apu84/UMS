@@ -35,7 +35,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentServiceInformationDao(final JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentServiceInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }

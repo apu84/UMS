@@ -15,16 +15,14 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class AcademicInformationBuilder implements Builder<AcademicInformation, MutableAcademicInformation> {
 
-  AcademicDegreeType mAcademicDegreeType;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, AcademicInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     JsonObjectBuilder degreeBuilder = Json.createObjectBuilder();
     degreeBuilder.add("id", pReadOnly.getDegreeId()).add("name",
-        mAcademicDegreeType.get(pReadOnly.getDegreeId()).getLabel());
+        AcademicDegreeType.get(pReadOnly.getDegreeId()).getLabel());
     pBuilder.add("degree", degreeBuilder);
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
@@ -36,7 +34,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
 
     pMutable
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeId(pJsonObject.getJsonObject("degree").getInt("id"));
     pMutable.setInstitute(pJsonObject.getString("institution"));

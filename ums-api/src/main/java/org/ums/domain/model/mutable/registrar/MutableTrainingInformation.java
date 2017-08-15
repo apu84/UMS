@@ -5,7 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.registrar.TrainingInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableTrainingInformation extends TrainingInformation, Editable<Integer>, MutableIdentifier<Integer>,
+public interface MutableTrainingInformation extends TrainingInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);

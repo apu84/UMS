@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.registrar.AcademicInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.common.AcademicDegreeType;
 
-public interface MutableAcademicInformation extends AcademicInformation, Editable<Integer>, MutableIdentifier<Integer>,
+public interface MutableAcademicInformation extends AcademicInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);

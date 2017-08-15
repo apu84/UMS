@@ -14,22 +14,22 @@
     }
 </style>
 
-<div data-ng-if="showServiceInputDiv">
+<div data-ng-show="vm.showServiceInputDiv">
     <form data-validate="" data-onvalidate="submitServiceForm">
-        <div data-ng-repeat="service in entry.serviceInfo track by $index">
+        <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
             <fieldset>
                 <legend align="center"><span>Department: <select name="nDepartment{{$index}}"
                                                            id="iDepartment{{$index}}"
                                                            data-ng-model="service.department"
-                                                           data-ng-options="department.longName for department in departments track by department.id" required>
+                                                           data-ng-options="department.longName for department in vm.departments track by department.id" required>
                     <option value="">Select Department</option></select></span>
                     <span>Designation: <select name="nDesignation{{$index}}"
                                                             id="iDesignation{{$index}}"
                                                             data-ng-model="service.designation"
-                                                            data-ng-options="designation.name for designation in designations track by designation.id" required>
+                                                            data-ng-options="designation.name for designation in vm.designations track by designation.id" required>
                         <option value="">Select Designation</option></select></span>
                     <span>
-                         <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceInfo', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
+                         <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceInfo', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
                     </span>
                 </legend>
                 <div class="row">
@@ -39,7 +39,7 @@
                             <select name="nEmploymentType{{$index}}"
                                     id="iEmploymentType{{$index}}"
                                     data-ng-model="service.employmentType"
-                                    data-ng-options="employmentType.name for employmentType in employmentTypes track by employmentType.id"
+                                    data-ng-options="employmentType.name for employmentType in vm.employmentTypes track by employmentType.id"
                                     class="form-control" required>
                                 <option value="">Select Employment Type</option>
                             </select>
@@ -91,17 +91,17 @@
                                     <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
                                     <tr>
                                         <td>{{$index + 1}}</td>
-                                        <td><div data-ng-if="service.employmentType.name=='Regular'"><select name="nRegularPeriod{{$index}}"
+                                        <td><div data-ng-show="service.employmentType.name=='Regular'"><select name="nRegularPeriod{{$index}}"
                                                     id="iRegularPeriod{{$index}}"
                                                     data-ng-model="interval.interval"
-                                                    data-ng-options="serviceInterval.name for serviceInterval in serviceRegularIntervals track by serviceInterval.id"
+                                                    data-ng-options="serviceInterval.name for serviceInterval in vm.serviceRegularIntervals track by serviceInterval.id"
                                                     class="form-control" required>
                                             <option value="">Select Category</option>
                                         </select></div>
-                                            <div data-ng-if="service.employmentType.name!='Regular'"><select name="nCOntractPeriod{{$index}}"
+                                            <div data-ng-show="service.employmentType.name!='Regular'"><select name="nCOntractPeriod{{$index}}"
                                                                                                                         id="iContractPeriod{{$index}}"
                                                                                                                         data-ng-model="interval.interval"
-                                                                                                                        data-ng-options="serviceInterval.name for serviceInterval in serviceContractIntervals track by serviceInterval.id"
+                                                                                                                        data-ng-options="serviceInterval.name for serviceInterval in vm.serviceContractIntervals track by serviceInterval.id"
                                                                                                                         class="form-control" required>
                                             <option value="">Select Category</option>
                                         </select></div></td>
@@ -121,7 +121,7 @@
                                                    placeholder="DD/MM/YYYY"
                                                    autocomplete="off"
                                                    class="datepicker-default form-control"></td>
-                                        <td>[ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('serviceDetails', $index, $parent.$index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</td>
+                                        <td>[ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceDetails', $index, $parent.$index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <div class="text-center pal">
-                    [ <a title="Add New Row" data-ng-click="addNewServiceRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
             </fieldset>
             <hr>
@@ -138,9 +138,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div align="center">
-                    [ <a title="Add New Row" data-ng-click="addNewServiceRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
                 <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showServiceInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                     <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                 </div>
             </div>
@@ -149,8 +150,8 @@
 </div>
 
 
-<div data-ng-if="showServiceLabelDiv">
-    <div data-ng-repeat="service in entry.serviceInfo track by $index">
+<div data-ng-show="!vm.showServiceInputDiv">
+    <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
         <fieldset>
             <legend align="center">Department:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label> & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label></legend>
             <div class="row">
@@ -204,11 +205,11 @@
         </fieldset>
         <hr>
     </div>
-    <div data-ng-if="showServiceEditButton">
+    <div data-ng-show="vm.showServiceEditButton">
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="submit" title="Submit" data-ng-click="enableEditMode('service')" class="btn btn-success"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="submit" title="Submit" data-ng-click="vm.showServiceInputDiv=true" class="btn btn-default"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

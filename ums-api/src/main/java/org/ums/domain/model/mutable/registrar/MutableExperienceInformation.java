@@ -5,8 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.registrar.ExperienceInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableExperienceInformation extends ExperienceInformation, Editable<Integer>,
-    MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableExperienceInformation extends ExperienceInformation, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);
 

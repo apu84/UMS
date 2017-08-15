@@ -1,4 +1,4 @@
-<div data-ng-if="showTrainingInputDiv">
+<div data-ng-show="vm.showTrainingInputDiv">
     <div class="container-fluid">
         <form name="nTrainingForm" data-validate="" data-onvalidate="submitTrainingForm">
             <div class="row">
@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <div data-ng-repeat="training in entry.training track by $index">
+            <div data-ng-repeat="training in vm.entry.training track by $index">
                 <div class="row">
                     <div class="col-md-1">
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -58,23 +58,21 @@
                                name="nTrainingFrom{{$index}}"
                                id="iTrainingFrom{{$index}}"
                                data-ng-model="training.trainingFrom"
-                               data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control " required/>
+                               class="form-control" required/>
                     </div>
                     <div class="col-md-2">
                         <input type="text"
                                name="nTrainingTo{{$index}}"
                                id="iTrainingTo{{$index}}"
                                data-ng-model="training.trainingTo"
-                               data-date-format="mm/yyyy"
                                placeholder="MM/YYYY"
                                autocomplete="off"
-                               class="modified-datepicker form-control " required/>
+                               class="form-control" required/>
                     </div>
                     <div class="col-md-1">
-                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('training' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                     </div>
                 </div>
             </div>
@@ -82,10 +80,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div align="center">
-                        [ <a title="Add New Row" data-ng-click="addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('training')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                     </div>
                     <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('training')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showTrainingInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
@@ -94,7 +92,7 @@
     </div>
 </div>
 
-<div data-ng-if="showTrainingLabelDiv">
+<div data-ng-show="!vm.showTrainingInputDiv">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
@@ -127,7 +125,7 @@
             </div>
         </div>
 
-        <div data-ng-repeat="training in entry.training track by $index">
+        <div data-ng-repeat="training in vm.entry.training track by $index">
             <div class="row">
                 <div class="col-md-1">
                     <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -161,7 +159,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('training')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showTrainingInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

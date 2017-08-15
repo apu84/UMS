@@ -5,7 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.registrar.AwardInformation;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableAwardInformation extends AwardInformation, Editable<Integer>, MutableIdentifier<Integer>,
+public interface MutableAwardInformation extends AwardInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setEmployeeId(final String pEmployeeId);
@@ -14,7 +14,7 @@ public interface MutableAwardInformation extends AwardInformation, Editable<Inte
 
   void setAwardInstitute(final String pAwardInstitute);
 
-  void setAwardedYear(final String pAwardedYear);
+  void setAwardedYear(final int pAwardedYear);
 
   void setAwardShortDescription(final String pAwardShortDescription);
 }

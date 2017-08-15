@@ -24,7 +24,7 @@ import java.util.List;
 
 @Component
 public class AcademicInformationResourceHelper extends
-    ResourceHelper<AcademicInformation, MutableAcademicInformation, Integer> {
+    ResourceHelper<AcademicInformation, MutableAcademicInformation, Long> {
 
   @Autowired
   AcademicInformationManager mManager;
@@ -106,7 +106,7 @@ public class AcademicInformationResourceHelper extends
   }
 
   @Override
-  protected ContentManager<AcademicInformation, MutableAcademicInformation, Integer> getContentManager() {
+  protected ContentManager<AcademicInformation, MutableAcademicInformation, Long> getContentManager() {
     return mManager;
   }
 

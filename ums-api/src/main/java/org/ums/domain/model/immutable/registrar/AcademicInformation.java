@@ -8,7 +8,7 @@ import org.ums.enums.common.AcademicDegreeType;
 
 import java.io.Serializable;
 
-public interface AcademicInformation extends Serializable, EditType<MutableAcademicInformation>, Identifier<Integer>,
+public interface AcademicInformation extends Serializable, EditType<MutableAcademicInformation>, Identifier<Long>,
     LastModifier {
 
   String getEmployeeId();

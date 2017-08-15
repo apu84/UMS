@@ -13,11 +13,11 @@ public class PersistentAwardInformation implements MutableAwardInformation {
     sAwardInformationManager = applicationContext.getBean("awardInformationManager", AwardInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private String mAwardName;
   private String mAwardInstitute;
-  private String mAwardedYear;
+  private int mAwardedYear;
   private String mAwardShortDescription;
   private String mLastModified;
 
@@ -39,7 +39,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sAwardInformationManager.create(this);
   }
 
@@ -59,12 +59,12 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -89,7 +89,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public void setAwardedYear(String pAwardedYear) {
+  public void setAwardedYear(int pAwardedYear) {
     mAwardedYear = pAwardedYear;
   }
 
@@ -114,7 +114,7 @@ public class PersistentAwardInformation implements MutableAwardInformation {
   }
 
   @Override
-  public String getAwardedYear() {
+  public int getAwardedYear() {
     return mAwardedYear;
   }
 

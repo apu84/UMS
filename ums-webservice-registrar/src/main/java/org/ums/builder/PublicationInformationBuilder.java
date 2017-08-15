@@ -37,7 +37,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
   @Override
   public void build(JsonObjectBuilder pBuilder, PublicationInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("publicationTitle", pReadOnly.getTitle());
     pBuilder.add("publicationInterestGenre", pReadOnly.getInterestGenre() == null ? "" : pReadOnly.getInterestGenre());
@@ -75,7 +75,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
 
     pMutable
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.containsKey("publicationInterestGenre") ? pJsonObject
@@ -103,7 +103,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
 
   public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache) {
-    pMutable.setId(pJsonObject.getInt("id"));
+    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));

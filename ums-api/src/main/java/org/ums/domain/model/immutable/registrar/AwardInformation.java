@@ -7,7 +7,7 @@ import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 
 import java.io.Serializable;
 
-public interface AwardInformation extends Serializable, EditType<MutableAwardInformation>, Identifier<Integer>,
+public interface AwardInformation extends Serializable, EditType<MutableAwardInformation>, Identifier<Long>,
     LastModifier {
 
   String getEmployeeId();
@@ -16,7 +16,7 @@ public interface AwardInformation extends Serializable, EditType<MutableAwardInf
 
   String getAwardInstitute();
 
-  String getAwardedYear();
+  int getAwardedYear();
 
   String getAwardShortDescription();
 }

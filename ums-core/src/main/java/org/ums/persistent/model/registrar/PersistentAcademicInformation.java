@@ -16,7 +16,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
         applicationContext.getBean("academicInformationManager", AcademicInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private AcademicDegreeType mDegree;
   private int mDegreeId;
@@ -42,7 +42,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sAcademicInformationManager.create(this);
   }
 
@@ -62,12 +62,12 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

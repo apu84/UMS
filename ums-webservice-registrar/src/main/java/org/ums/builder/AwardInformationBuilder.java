@@ -17,7 +17,7 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
 
   @Override
   public void build(JsonObjectBuilder pBuilder, AwardInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     pBuilder.add("awardName", pReadOnly.getAwardName());
     pBuilder.add("awardInstitute", pReadOnly.getAwardInstitute() == null ? "" : pReadOnly.getAwardInstitute());
@@ -31,12 +31,12 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
   public void build(MutableAwardInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable
         .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? pJsonObject.getInt("id") : 0 : 0);
+            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setAwardName(pJsonObject.getString("awardName"));
     pMutable
         .setAwardInstitute(pJsonObject.containsKey("awardInstitute") ? pJsonObject.getString("awardInstitute") : "");
-    pMutable.setAwardedYear(pJsonObject.getString("awardedYear"));
+    pMutable.setAwardedYear(pJsonObject.getInt("awardedYear"));
     pMutable.setAwardShortDescription(pJsonObject.containsKey("awardShortDescription") ? pJsonObject
         .getString("awardShortDescription") : "");
   }

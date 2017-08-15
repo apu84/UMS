@@ -8,7 +8,7 @@ import org.ums.manager.registrar.PublicationInformationManager;
 import java.util.List;
 
 public class PublicationInformationDaoDecorator extends
-    ContentDaoDecorator<PublicationInformation, MutablePublicationInformation, Integer, PublicationInformationManager>
+    ContentDaoDecorator<PublicationInformation, MutablePublicationInformation, Long, PublicationInformationManager>
     implements PublicationInformationManager {
 
   @Override

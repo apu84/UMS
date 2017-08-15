@@ -7,7 +7,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface ExperienceInformationManager extends
-    ContentManager<ExperienceInformation, MutableExperienceInformation, Integer> {
+    ContentManager<ExperienceInformation, MutableExperienceInformation, Long> {
 
   int saveExperienceInformation(final List<MutableExperienceInformation> pMutableExperienceInformation);
 

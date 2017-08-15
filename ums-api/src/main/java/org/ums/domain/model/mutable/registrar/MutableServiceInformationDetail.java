@@ -8,8 +8,8 @@ import org.ums.enums.common.EmploymentPeriod;
 
 import java.util.Date;
 
-public interface MutableServiceInformationDetail extends ServiceInformationDetail, Editable<Integer>,
-    MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableServiceInformationDetail extends ServiceInformationDetail, Editable<Long>,
+    MutableIdentifier<Long>, MutableLastModifier {
 
   void setEmploymentPeriod(final EmploymentPeriod pEmploymentPeriod);
 

@@ -28,7 +28,7 @@ import java.util.List;
 
 @Component
 public class PublicationInformationResourceHelper extends
-    ResourceHelper<PublicationInformation, MutablePublicationInformation, Integer> {
+    ResourceHelper<PublicationInformation, MutablePublicationInformation, Long> {
 
   @Autowired
   PublicationInformationManager mPublicationInformationManager;
@@ -181,7 +181,7 @@ public class PublicationInformationResourceHelper extends
   }
 
   @Override
-  protected ContentManager<PublicationInformation, MutablePublicationInformation, Integer> getContentManager() {
+  protected ContentManager<PublicationInformation, MutablePublicationInformation, Long> getContentManager() {
     return mPublicationInformationManager;
   }
 

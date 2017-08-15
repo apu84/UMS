@@ -8,6 +8,7 @@ import org.ums.domain.model.immutable.registrar.TrainingInformation;
 import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
 import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
 import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.registrar.PersistentTrainingInformation;
 
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.util.List;
 public class PersistentTrainingInformationDao extends TrainingInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_TRAINING_INFO (EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, LAST_MODIFIED) VALUES (? ,? ,?, ?, ?,"
+      "INSERT INTO EMP_TRAINING_INFO (ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, LAST_MODIFIED) VALUES (?, ? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
@@ -31,9 +32,11 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentTrainingInformationDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentTrainingInformationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -52,9 +55,9 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       List<MutableTrainingInformation> pMutableTrainingInformation) {
     List<Object[]> params = new ArrayList<>();
     for(TrainingInformation trainingInformation : pMutableTrainingInformation) {
-      params.add(new Object[] {trainingInformation.getEmployeeId(), trainingInformation.getTrainingName(),
-          trainingInformation.getTrainingInstitute(), trainingInformation.getTrainingFromDate(),
-          trainingInformation.getTrainingToDate()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), trainingInformation.getEmployeeId(),
+          trainingInformation.getTrainingName(), trainingInformation.getTrainingInstitute(),
+          trainingInformation.getTrainingFromDate(), trainingInformation.getTrainingToDate()});
 
     }
     return params;
@@ -101,7 +104,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
     @Override
     public TrainingInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentTrainingInformation trainingInformation = new PersistentTrainingInformation();
-      trainingInformation.setId(resultSet.getInt("id"));
+      trainingInformation.setId(resultSet.getLong("id"));
       trainingInformation.setEmployeeId(resultSet.getString("employee_id"));
       trainingInformation.setTrainingName(resultSet.getString("training_name"));
       trainingInformation.setTrainingInstitute(resultSet.getString("training_institute"));

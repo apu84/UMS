@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AwardInformationResourceHelper extends ResourceHelper<AwardInformation, MutableAwardInformation, Integer> {
+public class AwardInformationResourceHelper extends ResourceHelper<AwardInformation, MutableAwardInformation, Long> {
 
   @Autowired
   AwardInformationManager mAwardInformationManager;
@@ -110,7 +110,7 @@ public class AwardInformationResourceHelper extends ResourceHelper<AwardInformat
   }
 
   @Override
-  protected ContentManager<AwardInformation, MutableAwardInformation, Integer> getContentManager() {
+  protected ContentManager<AwardInformation, MutableAwardInformation, Long> getContentManager() {
     return mAwardInformationManager;
   }
 

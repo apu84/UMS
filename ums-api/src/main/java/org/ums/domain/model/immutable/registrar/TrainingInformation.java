@@ -7,7 +7,7 @@ import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
 
 import java.io.Serializable;
 
-public interface TrainingInformation extends Serializable, EditType<MutableTrainingInformation>, Identifier<Integer>,
+public interface TrainingInformation extends Serializable, EditType<MutableTrainingInformation>, Identifier<Long>,
     LastModifier {
 
   String getEmployeeId();

@@ -8,7 +8,7 @@
         opacity: 1;
     }
 </style>
-<div data-ng-if="showPersonalInputDiv">
+<div data-ng-show="vm.showPersonalInputDiv">
     <div class="container-fluid">
         <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
             <div class="box">
@@ -25,7 +25,7 @@
                             <input type="text"
                                    name="nFirstName"
                                    id="iFirstName"
-                                   data-ng-model="entry.personal.firstName"
+                                   data-ng-model="vm.entry.personal.firstName"
                                    placeholder="First Name"
                                    class="form-control" required>
                         </div>
@@ -36,7 +36,7 @@
                             <input type="text"
                                    name="nLastName"
                                    id="iLastName"
-                                   data-ng-model="entry.personal.lastName"
+                                   data-ng-model="vm.entry.personal.lastName"
                                    placeholder="Last Name"
                                    class="form-control " required>
                         </div>
@@ -50,8 +50,8 @@
                         <div class="col-md-8">
                             <select name="nGender"
                                     id="iGender"
-                                    data-ng-model="entry.personal.gender"
-                                    data-ng-options="gender.name for gender in genders track by gender.id"
+                                    data-ng-model="vm.entry.personal.gender"
+                                    data-ng-options="gender.name for gender in vm.genders track by gender.id"
                                     class="form-control" required>
                                 <option value="">Select Gender</option>
                             </select>
@@ -63,7 +63,7 @@
                             <input type="text"
                                    name="nFatherName"
                                    id="iFatherName"
-                                   data-ng-model="entry.personal.fatherName"
+                                   data-ng-model="vm.entry.personal.fatherName"
                                    placeholder="Father's Name"
                                    class="form-control" required>
                         </div>
@@ -77,8 +77,8 @@
                         <div class="col-md-8">
                             <select name="nBloodGroup"
                                     id="iBloodGroup"
-                                    data-ng-model="entry.personal.bloodGroup"
-                                    data-ng-options="bloodGroup.name for bloodGroup in bloodGroups track by bloodGroup.id"
+                                    data-ng-model="vm.entry.personal.bloodGroup"
+                                    data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
                                     class="form-control" required>
                                 <option value="">Select Blood Group</option>
                             </select>
@@ -90,7 +90,7 @@
                             <input type="text"
                                    name="nMotherName"
                                    id="iMotherName"
-                                   data-ng-model="entry.personal.motherName"
+                                   data-ng-model="vm.entry.personal.motherName"
                                    placeholder="Mother's Name"
                                    class="form-control" required>
                         </div>
@@ -104,8 +104,8 @@
                         <div class="col-md-8">
                             <select name="nNationality"
                                     id="iNationality"
-                                    data-ng-model="entry.personal.nationality"
-                                    data-ng-options="nationality.name for nationality in nationalities  track by nationality.id"
+                                    data-ng-model="vm.entry.personal.nationality"
+                                    data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
                                     class="form-control" required>
                                 <option value="">Select Nationality</option>
                             </select>
@@ -116,8 +116,8 @@
                         <div class="col-md-8">
                             <select name="nReligion"
                                     id="iReligion"
-                                    data-ng-model="entry.personal.religion"
-                                    data-ng-options="religion.name for religion in religions track by religion.id"
+                                    data-ng-model="vm.entry.personal.religion"
+                                    data-ng-options="religion.name for religion in vm.religions track by religion.id"
                                     class="form-control" required>
                                 <option value="">Select Religion</option>
                             </select>
@@ -132,8 +132,8 @@
                         <div class="col-md-8">
                             <select name="iMaritalStatus"
                                     id="iMaritalStatus"
-                                    data-ng-model="entry.personal.maritalStatus"
-                                    data-ng-options="maritalStatus.name for maritalStatus in maritalStatus track by maritalStatus.id"
+                                    data-ng-model="vm.entry.personal.maritalStatus"
+                                    data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
                                     class="form-control" required>
                                 <option value="">Select Marital Status</option>
                             </select>
@@ -145,7 +145,7 @@
                             <input type="text"
                                    name="nSpouseName"
                                    id="iSpouseName"
-                                   data-ng-model="entry.personal.spouseName"
+                                   data-ng-model="vm.entry.personal.spouseName"
                                    placeholder="Spouse's Name"
                                    class="form-control">
                         </div>
@@ -160,7 +160,7 @@
                             <input type="text"
                                    name="nNationalId"
                                    id="iNationalId"
-                                   data-ng-model="entry.personal.nidNo"
+                                   data-ng-model="vm.entry.personal.nidNo"
                                    placeholder="National Id Card No."
                                    class="form-control">
                         </div>
@@ -171,7 +171,7 @@
                             <input type="text"
                                    name="nSpouseNationalId"
                                    id="iSpouseNationalId"
-                                   data-ng-model="entry.personal.spouseNidNo"
+                                   data-ng-model="vm.entry.personal.spouseNidNo"
                                    placeholder="Spouse's National Id Card Number"
                                    class="form-control">
                         </div>
@@ -186,11 +186,12 @@
                             <input type="text"
                                    name="nBirthDate"
                                    id="iBirthDate"
-                                   data-ng-model="entry.personal.dateOfBirth"
+                                   data-ng-model="vm.entry.personal.dateOfBirth"
+                                   data-provide="datepicker"
                                    data-date-format="dd/mm/yyyy"
                                    placeholder="DD/MM/YYYY"
                                    autocomplete="off"
-                                   class="datepicker-default form-control" required>
+                                   class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -201,7 +202,7 @@
                                 <input type="url"
                                        name="nPersonalWebsite"
                                        id="iPersonalWebsite"
-                                       data-ng-model="entry.personal.website"
+                                       data-ng-model="vm.entry.personal.website"
                                        placeholder="Personal Website"
                                        class="form-control">
                             </div>
@@ -229,7 +230,7 @@
                                 <input type="email"
                                        name="nOrganizationalEmail"
                                        id="iOrganizationalEmail"
-                                       data-ng-model="entry.personal.organizationalEmail"
+                                       data-ng-model="vm.entry.personal.organizationalEmail"
                                        placeholder="Organizational Email Address"
                                        class="form-control">
                             </div>
@@ -243,7 +244,7 @@
                                 <input type="email"
                                        name="nPersonalEmail"
                                        id="iPersonalEmail"
-                                       data-ng-model="entry.personal.personalEmail"
+                                       data-ng-model="vm.entry.personal.personalEmail"
                                        placeholder="Personal Email Address"
                                        class="form-control" required>
                             </div>
@@ -259,7 +260,7 @@
                             <input type="tel"
                                    name="nMobile"
                                    id="iMobile"
-                                   data-ng-model="entry.personal.mobile"
+                                   data-ng-model="vm.entry.personal.mobile"
                                    placeholder="Mobile"
                                    class="form-control" required>
                         </div>
@@ -270,7 +271,7 @@
                             <input type="tel"
                                    name="nPhone"
                                    id="iPhone"
-                                   data-ng-model="entry.personal.phone"
+                                   data-ng-model="vm.entry.personal.phone"
                                    placeholder="Phone"
                                    class="form-control">
                         </div>
@@ -293,7 +294,7 @@
                             <input type="text"
                                    name="nPresentAddressHouse"
                                    id="iPresentAddressHouse"
-                                   data-ng-model="entry.personal.preAddressLine1"
+                                   data-ng-model="vm.entry.personal.preAddressLine1"
                                    placeholder="House/Holding No."
                                    class="form-control" required>
                         </div>
@@ -304,7 +305,7 @@
                             <input type="text"
                                    name="nPresentAddressRoad"
                                    id="iPresentAddressRoad"
-                                   data-ng-model="entry.personal.preAddressLine2"
+                                   data-ng-model="vm.entry.personal.preAddressLine2"
                                    placeholder="Road/Street"
                                    class="form-control">
                         </div>
@@ -318,9 +319,9 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressCountry"
                                     id="iPresentAddressCountry"
-                                    data-ng-model="entry.personal.preAddressCountry"
-                                    data-ng-options="country.name for country in countries track by country.id"
-                                    data-ng-change="changePresentAddressFields()"
+                                    data-ng-model="vm.entry.personal.preAddressCountry"
+                                    data-ng-options="country.name for country in vm.countries track by country.id"
+                                    data-ng-change="vm.changePresentAddressFields()"
                                     class="form-control">
                                 <option value="">Select Country</option>
                             </select>
@@ -331,11 +332,11 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressDivision"
                                     id="iPresentAddressDivision"
-                                    data-ng-model="entry.personal.preAddressDivision"
-                                    data-ng-options="division.name for division in divisions track by division.id"
-                                    data-ng-change="changePresentAddressDistrict()"
-                                    data-ng-disabled="disablePresentAddressDropdown"
-                                    class="form-control" requried="required">
+                                    data-ng-model="vm.entry.personal.preAddressDivision"
+                                    data-ng-options="division.name for division in vm.divisions track by division.id"
+                                    data-ng-change="vm.changePresentAddressDistrict()"
+                                    data-ng-disabled="vm.disablePresentAddressDropdown"
+                                    class="form-control" requried="vm.required">
                                 <option value="">Select Division</option>
                             </select>
                         </div>
@@ -350,11 +351,11 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressDistrict"
                                     id="iPresentAddressDistrict"
-                                    data-ng-model="entry.personal.preAddressDistrict"
-                                    data-ng-options="district.name for district in presentAddressDistricts track by district.id"
-                                    data-ng-change="changePresentAddressThana()"
-                                    data-ng-disabled="disablePresentAddressDropdown"
-                                    class="form-control" required="required">
+                                    data-ng-model="vm.entry.personal.preAddressDistrict"
+                                    data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
+                                    data-ng-change="vm.changePresentAddressThana()"
+                                    data-ng-disabled="vm.disablePresentAddressDropdown"
+                                    class="form-control" required="vm.required">
                                 <option value="">Select District</option>
                             </select>
                         </div>
@@ -364,10 +365,10 @@
                         <div class="col-md-8">
                             <select name="nPresentAddressPoliceStation"
                                     id="iPresentAddressPoliceStation"
-                                    data-ng-model="entry.personal.preAddressThana"
-                                    data-ng-options="thana.name for thana in presentAddressThanas track by thana.id"
-                                    data-ng-disabled="disablePresentAddressDropdown"
-                                    class="form-control" required="required">
+                                    data-ng-model="vm.entry.personal.preAddressThana"
+                                    data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
+                                    data-ng-disabled="vm.disablePresentAddressDropdown"
+                                    class="form-control" required="vm.required">
                                 <option value="">Select Thana</option>
                             </select>
                         </div>
@@ -382,9 +383,9 @@
                             <input type="text"
                                    name="nPresentAddressPostOffice"
                                    id="iPresentAddressPostOffice"
-                                   data-ng-model="entry.personal.preAddressPostCode"
+                                   data-ng-model="vm.entry.personal.preAddressPostCode"
                                    placeholder="Police Post Office/Zip"
-                                   data-ng-disabled="disablePresentAddressDropdown"
+                                   data-ng-disabled="vm.disablePresentAddressDropdown"
                                    class="form-control">
                         </div>
                     </div>
@@ -396,7 +397,7 @@
                     <div class="col-md-12">
                         <label class="col-md-2"><b>Permanent Address:</b></label>
                         <div class="col-md-6">
-                            <input type="checkbox" data-ng-click="sameAsPresentAddress()" />Same as present address
+                            <input type="checkbox" data-ng-click="vm.sameAsPresentAddress()" />Same as present address
                         </div>
                     </div>
                 </div>
@@ -409,7 +410,7 @@
                             <input type="text"
                                    name="nPermanentAddressHouse"
                                    id="iPermanentAddressHouse"
-                                   data-ng-model="entry.personal.perAddressLine1"
+                                   data-ng-model="vm.entry.personal.perAddressLine1"
                                    placeholder="House/Holding No."
                                    class="form-control" required>
                         </div>
@@ -420,7 +421,7 @@
                             <input type="text"
                                    name="nPermanentAddressRoad"
                                    id="iPermanentAddressRoad"
-                                   data-ng-model="entry.personal.perAddressLine2"
+                                   data-ng-model="vm.entry.personal.perAddressLine2"
                                    placeholder="Road/Street"
                                    class="form-control">
                         </div>
@@ -434,9 +435,9 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressCountry"
                                     id="iPermanentAddressCountry"
-                                    data-ng-model="entry.personal.perAddressCountry"
-                                    data-ng-options="country.name for country in countries track by country.id"
-                                    data-ng-change="changePermanentAddressFields()"
+                                    data-ng-model="vm.entry.personal.perAddressCountry"
+                                    data-ng-options="country.name for country in vm.countries track by country.id"
+                                    data-ng-change="vm.changePermanentAddressFields()"
                                     class="form-control" required>
                                 <option value="">Select Country</option>
                             </select>
@@ -447,11 +448,11 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressDivision"
                                     id="iPermanentAddressDivision"
-                                    data-ng-model="entry.personal.perAddressDivision"
-                                    data-ng-options="division.name for division in divisions track by division.id"
-                                    data-ng-change="changePermanentAddressDistrict()"
-                                    data-ng-disabled="disablePermanentAddressDropdown"
-                                    class="form-control" required="required">
+                                    data-ng-model="vm.entry.personal.perAddressDivision"
+                                    data-ng-options="division.name for division in vm.divisions track by division.id"
+                                    data-ng-change="vm.changePermanentAddressDistrict()"
+                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                    class="form-control" required="vm.required">
                                 <option value="">Select Division</option>
                             </select>
                         </div>
@@ -466,11 +467,11 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressDistrict"
                                     id="iPermanentAddressDistrict"
-                                    data-ng-model="entry.personal.perAddressDistrict"
-                                    data-ng-options="district.name for district in permanentAddressDistricts track by district.id"
-                                    data-ng-change="changePermanentAddressThana()"
-                                    data-ng-disabled="disablePermanentAddressDropdown"
-                                    class="form-control" requried="required">
+                                    data-ng-model="vm.entry.personal.perAddressDistrict"
+                                    data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
+                                    data-ng-change="vm.changePermanentAddressThana()"
+                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                    class="form-control" requried="vm.required">
                                 <option value="">Select District</option>
                             </select>
                         </div>
@@ -480,10 +481,10 @@
                         <div class="col-md-8">
                             <select name="nPermanentAddressPoliceStation"
                                     id="iPermanentAddressPoliceStation"
-                                    data-ng-model="entry.personal.perAddressThana"
-                                    data-ng-options="thana.name for thana in permanentAddressThanas track by thana.id"
-                                    data-ng-disabled="disablePermanentAddressDropdown"
-                                    class="form-control" required="required">
+                                    data-ng-model="vm.entry.personal.perAddressThana"
+                                    data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
+                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                    class="form-control" required="vm.required">
                                 <option value="">Select Thana</option>
                             </select>
                         </div>
@@ -498,9 +499,9 @@
                             <input type="text"
                                    name="nPermanentAddressPostOffice"
                                    id="iPermanentAddressPostOffice"
-                                   data-ng-model="entry.personal.perAddressPostCode"
+                                   data-ng-model="vm.entry.personal.perAddressPostCode"
                                    placeholder="Police Post Office/Zip"
-                                   data-ng-disabled="disablePermanentAddressDropdown"
+                                   data-ng-disabled="vm.disablePermanentAddressDropdown"
                                    class="form-control">
                         </div>
                     </div>
@@ -525,7 +526,7 @@
                             <input type="text"
                                    name="ndEmergencyContactName"
                                    id="idEmergencyContactName"
-                                   data-ng-model="entry.personal.emergencyContactName"
+                                   data-ng-model="vm.entry.personal.emergencyContactName"
                                    placeholder="Name"
                                    class="form-control" required>
                         </div>
@@ -535,8 +536,8 @@
                         <div class="col-md-8">
                             <select name="nEmergencyContactRelation"
                                     id="iEmergencyContactRelation"
-                                    data-ng-model="entry.personal.emergencyContactRelation"
-                                    data-ng-options="relation.name for relation in relations track by relation.id"
+                                    data-ng-model="vm.entry.personal.emergencyContactRelation"
+                                    data-ng-options="relation.name for relation in vm.relations track by relation.id"
                                     class="form-control" required>
                                 <option value="">Select Relation</option>
                             </select>
@@ -552,7 +553,7 @@
                             <input type="text"
                                    name="nEmergencyContactPhone"
                                    id="iEmergencyContactPhone"
-                                   data-ng-model="entry.personal.emergencyContactPhone"
+                                   data-ng-model="vm.entry.personal.emergencyContactPhone"
                                    placeholder="Phone"
                                    class="form-control" required>
                         </div>
@@ -560,7 +561,7 @@
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address
                             <sup>
-                                <select data-ng-model="data.supOptions" data-ng-change="fillEmergencyContactAddress()">
+                                <select data-ng-model="data.supOptions" data-ng-change="vm.fillEmergencyContactAddress()">
                                     <option value="1">Default</option>
                                     <option value="2">Present</option>
                                     <option value="3">Permanent</option>
@@ -571,7 +572,7 @@
                             <input type="text"
                                    name="nEmergencyContactAddress"
                                    id="iEmergencyContactAddress"
-                                   data-ng-model="entry.personal.emergencyContactAddress"
+                                   data-ng-model="vm.entry.personal.emergencyContactAddress"
                                    placeholder="Address"
                                    class="form-control">
                         </div>
@@ -583,8 +584,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div align="right">
-                        <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData('personal')">Test Data</button>
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('personal')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="button" title="Test Data" class="btn btn-default" data-ng-click="vm.testData()">Test Data</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPersonalInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
@@ -594,7 +595,7 @@
 </div>
 
  
-<div data-ng-if="showPersonalLabelDiv">
+<div data-ng-show="!vm.showPersonalInputDiv">
     <div class="container-fluid">
         <div class="box">
             <div class="row">
@@ -607,13 +608,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.firstName}}</label>
+                        <label class="control-label">{{vm.entry.personal.firstName}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.lastName}}</label>
+                        <label class="control-label">{{vm.entry.personal.lastName}}</label>
                     </div>
                 </div>
             </div>
@@ -623,13 +624,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.gender.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.gender.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.fatherName}}</label>
+                        <label class="control-label">{{vm.entry.personal.fatherName}}</label>
                     </div>
                 </div>
             </div>
@@ -639,13 +640,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.bloodGroup.name}} </label>
+                        <label class="control-label"> {{vm.entry.personal.bloodGroup.name}} </label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.motherName}}</label>
+                        <label class="control-label">{{vm.entry.personal.motherName}}</label>
                     </div>
                 </div>
             </div>
@@ -655,13 +656,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.nationality.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.nationality.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.religion.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.religion.name}}</label>
                     </div>
                 </div>
             </div>
@@ -671,13 +672,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.maritalStatus.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.maritalStatus.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's Name</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.spouseName}}</label>
+                        <label class="control-label">{{vm.entry.personal.spouseName}}</label>
                     </div>
                 </div>
             </div>
@@ -687,13 +688,13 @@
                 <div class="col-md-6">
                     <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.nidNo}}</label>
+                        <label class="control-label">{{vm.entry.personal.nidNo}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{entry.personal.spouseNidNo}}</label>
+                        <label class="control-label">{{vm.entry.personal.spouseNidNo}}</label>
                     </div>
                 </div>
             </div>
@@ -703,13 +704,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{entry.personal.dateOfBirth}}</label>
+                        <label class="control-label">{{vm.entry.personal.dateOfBirth}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Personal Website" for="iPersonalWebsite">Personal Website</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.website}}</label>
+                        <label class="control-label">{{vm.entry.personal.website}}</label>
                     </div>
                 </div>
             </div>
@@ -729,13 +730,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.organizationalEmail}}</label>
+                        <label class="control-label">{{vm.entry.personal.organizationalEmail}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.personalEmail}}</label>
+                        <label class="control-label">{{vm.entry.personal.personalEmail}}</label>
                     </div>
                 </div>
             </div>
@@ -745,13 +746,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.mobile}}</label>
+                        <label class="control-label">{{vm.entry.personal.mobile}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Employee's Phone No." for="iPhone">Phone</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.phone}}</label>
+                        <label class="control-label">{{vm.entry.personal.phone}}</label>
                     </div>
                 </div>
             </div>
@@ -769,13 +770,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressLine1}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressLine1}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.preAddressLine2}} </label>
+                        <label class="control-label"> {{vm.entry.personal.preAddressLine2}} </label>
                     </div>
                 </div>
             </div>
@@ -785,13 +786,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressCountry">Country</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressCountry.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressDivision">Division</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressDivision.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -802,13 +803,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressDistrict">District</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressDistrict.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressThana.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressThana.name}}</label>
                     </div>
                 </div>
             </div>
@@ -818,7 +819,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.preAddressPostCode}}</label>
+                        <label class="control-label">{{vm.entry.personal.preAddressPostCode}}</label>
                     </div>
                 </div>
                 <div class="col-md-6"></div>
@@ -836,13 +837,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressLine1}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressLine1}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label"> {{entry.personal.perAddressLine2}} </label>
+                        <label class="control-label"> {{vm.entry.personal.perAddressLine2}} </label>
                     </div>
                 </div>
             </div>
@@ -852,13 +853,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressCountry.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressCountry.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressDivision.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressDivision.name}}</label>
                     </div>
                 </div>
             </div>
@@ -869,13 +870,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressDistrict.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressDistrict.name}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressThana.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressThana.name}}</label>
                     </div>
                 </div>
             </div>
@@ -885,7 +886,7 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.perAddressPostCode}}</label>
+                        <label class="control-label">{{vm.entry.personal.perAddressPostCode}}</label>
                     </div>
                 </div>
                 <div class="col-md-6"></div>
@@ -906,13 +907,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.emergencyContactName}}</label>
+                        <label class="control-label">{{vm.entry.personal.emergencyContactName}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation</label>
                     <div class="col-md-8" style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.emergencyContactRelation.name}}</label>
+                        <label class="control-label">{{vm.entry.personal.emergencyContactRelation.name}}</label>
                     </div>
                 </div>
             </div>
@@ -922,13 +923,13 @@
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.emergencyContactPhone}}</label>
+                        <label class="control-label">{{vm.entry.personal.emergencyContactPhone}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address</label>
                     <div class="col-md-8"  style="border-bottom: 1px dashed; ">
-                        <label class="control-label">{{entry.personal.emergencyContactAddress}}</label>
+                        <label class="control-label">{{vm.entry.personal.emergencyContactAddress}}</label>
                     </div>
                 </div>
             </div>
@@ -939,8 +940,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Test Data" class="btn btn-default" data-ng-click="testData()">Test Data</button>
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('personal')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPersonalInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

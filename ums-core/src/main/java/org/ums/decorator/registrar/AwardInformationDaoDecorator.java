@@ -8,7 +8,7 @@ import org.ums.manager.registrar.AwardInformationManager;
 import java.util.List;
 
 public class AwardInformationDaoDecorator extends
-    ContentDaoDecorator<AwardInformation, MutableAwardInformation, Integer, AwardInformationManager> implements
+    ContentDaoDecorator<AwardInformation, MutableAwardInformation, Long, AwardInformationManager> implements
     AwardInformationManager {
 
   @Override

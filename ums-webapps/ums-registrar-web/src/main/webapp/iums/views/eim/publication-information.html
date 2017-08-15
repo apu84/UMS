@@ -15,14 +15,14 @@
     }
 </style>
 
-<div data-ng-if="showPublicationInputDiv">
+<div data-ng-show="vm.showPublicationInputDiv">
     <div class="container-fluid">
         <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
-            <div data-ng-repeat="publication in entry.publication">
+            <div data-ng-repeat="publication in vm.entry.publication track by $index">
                 <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
                     <div class="row">
                         <div align="center">
-                            <b>{{$index + 1}}.</b>[ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('publication', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                            <b>{{$index + 1}}.</b>[ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('publication', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                         </div>
                     </div>
                     <div class="row">
@@ -32,7 +32,7 @@
                                 <select name="nPublicationType{{$index}}"
                                         id="iPublicationType{{$index}}"
                                         data-ng-model="publication.publicationType"
-                                        data-ng-options="publicationType.name for publicationType in publicationTypes track by publicationType.id"
+                                        data-ng-options="publicationType.name for publicationType in vm.publicationTypes track by publicationType.id"
                                         class="form-control" required>
                                     <option value="">Select Publication Type</option>
                                 </select>
@@ -82,6 +82,7 @@
                                        name="nDateOfPublication{{$index}}"
                                        id="iDateOfPublication{{$index}}"
                                        data-ng-model="publication.dateOfPublication"
+                                       data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy"
                                        placeholder="DD/MM/YYYY"
                                        autocomplete="off"
@@ -155,7 +156,7 @@
                                 <select name="nPublicationCountry{{$index}}"
                                         id="iPublicationCountry{{$index}}"
                                         data-ng-model="publication.publicationCountry"
-                                        data-ng-options="country.name for country in countries track by country.id"
+                                        data-ng-options="country.name for country in vm.countries track by country.id"
                                         class="form-control" required>
                                     <option value="">Select Country</option>
                                 </select>
@@ -180,10 +181,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div align="center">
-                        [ <a title="Add New Row" data-ng-click="addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('publication')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                     </div>
                     <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('publication')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPublicationInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
@@ -192,7 +193,7 @@
     </div>
 </div>
 
-<div data-ng-if="showPublicationLabelDiv">
+<div data-ng-show="!vm.showPublicationInputDiv">
     <div class="container-fluid">
         <div align="center">
             <dir-pagination-controls boundary-links="true"
@@ -200,8 +201,7 @@
                                      template-url="views\directive\dirPagination.tpl.html">
             </dir-pagination-controls>
         </div>
-
-        <div dir-paginate="publication in paginatedPublication | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="iPagination">
+        <div dir-paginate="publication in vm.paginatedPublication | itemsPerPage: vm.itemPerPage" current-page="vm.currentPage" total-items="vm.totalRecord" pagination-id="iPagination">
             <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
                 <div class="row">
                     <div align="center">
@@ -295,16 +295,10 @@
             </div>
             <hr />
         </div>
-        <div align="center">
-            <dir-pagination-controls boundary-links="true"
-                                     pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
-                                     template-url="views\directive\dirPagination.tpl.html">
-            </dir-pagination-controls>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('publication')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPublicationInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

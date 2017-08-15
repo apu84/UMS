@@ -8,18 +8,18 @@
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i>
     </div>
-    <div data-ng-if="showSelectPanel">
+    <div data-ng-show="vm.showSelectPanel">
         <div class="panel panel-green" id="leftDiv">
             <div class="panel-heading">
                 <h3 class="panel-title">Select</h3>
             </div>
             <div class="panel-body pan">
-                <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getEmployeeInformation">
+                <form action="" class="form-horizontal" data-validate="" data-onvalidate="getEmployeeInformation">
                     <div class="form-body pal">
                         <div class="form-group">
                             <label class="col-md-4 control-label">Search By</label>
                             <div class="col-md-8">
-                                <select name="nSearchBy" id="iSearchBy" data-ng-model="data.searchBy" data-ng-change="getSearchFields()" class="form-control required">
+                                <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.data.searchBy" data-ng-change="vm.getSearchFields()" class="form-control required">
                                     <option value="">Select Search Type</option>
                                     <option value="1">User Id</option>
                                     <option value="2">User Name</option>
@@ -27,39 +27,39 @@
                                 </select>
                             </div>
                         </div>
-                        <div data-ng-if="showSearchByUserId">
+                        <div data-ng-show="vm.showSearchByUserId">
                             <div class="form-group">
                                 <label class="col-md-4 control-label">User Id</label>
                                 <div class="col-md-8">
                                     <input type="text"
                                            name="nUserId"
                                            id="iUserId"
-                                           data-ng-model="data.changedUserId"
+                                           data-ng-model="vm.data.changedUserId"
                                            class="form-control">
                                 </div>
                             </div>
                         </div>
-                        <div data-ng-if="showSearchByUserName">
+                        <div data-ng-show="vm.showSearchByUserName">
                             <div class="form-group">
                                 <label class="col-md-4 control-label">User Name</label>
                                 <div class="col-md-8">
                                     <input type="text"
                                            name="nUserName"
                                            id="iUserName"
-                                           data-ng-model="data.changedUserName"
+                                           data-ng-model="vm.data.changedUserName"
                                            class="form-control required" >
                                 </div>
                             </div>
                         </div>
-                        <div data-ng-if="showSearchByDepartment">
+                        <div data-ng-show="vm.showSearchByDepartment">
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Department</label>
                                 <div class="col-md-8">
                                     <select class="form-control required"
                                             name="nDepartment"
                                             id="iDepartment"
-                                            data-ng-options="department.longName for department in departments track by department.id"
-                                            data-ng-model="data.changedDepartment"
+                                            data-ng-options="department.longName for department in vm.departments track by department.id"
+                                            data-ng-model="vm.data.changedDepartment"
                                     >
                                     </select>
                                 </div>
@@ -74,9 +74,9 @@
         </div>
     </div>
 
-    <div id="rightDiv" data-ng-if="showFilteredEmployeeList">
+    <div id="rightDiv" data-ng-show="vm.showFilteredEmployeeList">
         <div class="panel">
-            <div class="panel-heading">Search Employee By : <span data-ng-if="data.searchBy=='1'">User Id</span><span data-ng-if="data.searchBy=='2'">User Name</span><span data-ng-if="data.searchBy=='3'">Department</span>&nbsp;&nbsp; Total: {{filterd.length}}<span class="subtitle"></span></div>
+            <div class="panel-heading">Search Employee By : <span data-ng-show="vm.data.searchBy=='1'">User Id</span><span data-ng-show="vm.data.searchBy=='2'">User Name</span><span data-ng-show="vm.data.searchBy=='3'">Department</span>&nbsp;&nbsp; Total: {{vm.filterd.length}}<span class="subtitle"></span></div>
             <div class="panel-body pan">
                 <div class="panel-body shadowPanel"  style="min-height: 490px;">
                     <table class="table table-bordered">
@@ -90,12 +90,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="user in (filterd = (allUser | filter: {employeeName: data.changedUserName}))">
+                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {employeeName: vm.data.changedUserName}))">
                                 <td>{{$index + 1}}.</td>
                                 <td>{{user.id}}</td>
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
-                                <td><button type="button" class="btn btn-default" data-ng-click="view(user)">View</button></td>
+                                <td><button type="button" class="btn btn-default" data-ng-click="vm.view(user)">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,43 +105,42 @@
         </div>
     </div>
 
-    <div id="rightDiv" data-ng-if="showEmployeeInformation">
+    <div id="rightDiv" data-ng-show="vm.showEmployeeInformation">
         <ul id="iTab" class="nav nav-tabs nav-justified">
-            <li class="active"><a href="employee-information.html#personal" title="Click to open personal tab" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
-            <li><a href="employee-information.html#academic" title="Click to open academic tab" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
-            <li><a href="employee-information.html#publication" title="Click to open publication tab" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
-            <li><a href="employee-information.html#training" title="Click to open training tab" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
-            <li><a href="employee-information.html#award" title="Click to open award/honor tab" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
-            <li><a href="employee-information.html#experience" title="Click to open experience tab" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
-            <li><a href="employee-information.html#additional" title="Click to open experience tab" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
-            <li><a href="employee-information.html#service" title="Click to open Service tab" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
+            <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
+            <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
+            <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+            <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
+            <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
+            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
+            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
+            <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
         </ul>
         <div id="iTabContent" class="tab-content responsive">
-            <div id="personal" class="tab-pane fade in active" style="min-height: 490px;">
+            <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/personal-information.html'"></div>
             </div>
-            <div id="academic" class="tab-pane fade" style="min-height: 490px;">
+            <div id="academic" data-ng-show="vm.academic" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/academic-information.html'"></div>
             </div>
-            <div id="publication" class="tab-pane fade" style="min-height: 490px;">
+            <div id="publication" data-ng-show="vm.publication" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/publication-information.html'"></div>
             </div>
-            <div id="training" class="tab-pane fade" style="min-height: 490px;">
+            <div id="training" data-ng-show="vm.training" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/training-information.html'"></div>
             </div>
-            <div id="award" class="tab-pane fade" style="min-height: 490px;">
+            <div id="award" data-ng-show="vm.award" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/award-information.html'"></div>
             </div>
-            <div id="experience" class="tab-pane fade" style="min-height: 490px;">
+            <div id="experience" data-ng-show="vm.experience" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/experience-information.html'"></div>
             </div>
-            <div id="additional" class="tab-pane fade" style="min-height: 490px;">
+            <div id="additional" data-ng-show="vm.additional" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/additional-information.html'"></div>
             </div>
-            <div id="service" class="tab-pane fade" style="min-height: 490px;">
+            <div id="service" data-ng-show="vm.service" style="min-height: 490px;">
                 <div data-ng-include="src='views/eim/service-information.html'"></div>
             </div>
         </div>
     </div>
 </div>
-

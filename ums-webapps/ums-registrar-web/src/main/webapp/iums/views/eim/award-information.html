@@ -1,13 +1,13 @@
-<div data-ng-if="showAwardInputDiv">
+<div data-ng-show="vm.showAwardInputDiv">
     <div class="container-fluid">
         <form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
-            <div data-ng-repeat="award in entry.award track by $index">
+            <div data-ng-repeat="award in vm.entry.award track by $index">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="text-center pal">
                             <b>{{$index + 1}}.</b>
                             <span>
-                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="deleteRow('award', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('award', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                             </span>
                         </div>
                     </div>
@@ -27,14 +27,13 @@
                     <div class="col-md-6">
                         <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span class='require'>*</span></label>
                         <div class="col-md-8">
-                            <input type="text"
+                            <input type="number"
                                    name="nAwardedYear{{$index}}"
                                    id="iAwardedYear{{$index}}"
                                    data-ng-model="award.awardedYear"
-                                   data-date-format="yyyy"
                                    placeholder="YYYY"
                                    autocomplete="off"
-                                   class="custom-datepicker form-control" required>
+                                   class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -69,10 +68,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div align="center">
-                        [ <a title="Add New Row" data-ng-click="addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('award')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                     </div>
                     <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="enableViewMode('award')"><i class="fa fa-eye"></i>&nbsp;View</button>
+                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAwardInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
                 </div>
@@ -81,9 +80,9 @@
     </div>
 </div>
 
-<div data-ng-if="showAwardLabelDiv">
+<div data-ng-show="!vm.showAwardInputDiv">
     <div class="container-fluid">
-        <div data-ng-repeat="award in entry.award track by $index">
+        <div data-ng-repeat="award in vm.entry.award track by $index">
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center pal">
@@ -125,7 +124,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="enableEditMode('award')"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAwardInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
         applicationContext.getBean("experienceInformationManager", ExperienceInformationManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mEmployeeId;
   private String mExperienceInstitute;
   private String mDesignation;
@@ -41,8 +41,7 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public Integer create() {
-
+  public Long create() {
     return sExperienceInformationManager.create(this);
   }
 
@@ -62,12 +61,12 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

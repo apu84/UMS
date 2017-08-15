@@ -7,7 +7,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface TrainingInformationManager extends
-    ContentManager<TrainingInformation, MutableTrainingInformation, Integer> {
+    ContentManager<TrainingInformation, MutableTrainingInformation, Long> {
 
   int saveTrainingInformation(final List<MutableTrainingInformation> pMutableTrainingInformation);
 

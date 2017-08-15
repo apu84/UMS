@@ -7,7 +7,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface PublicationInformationManager extends
-    ContentManager<PublicationInformation, MutablePublicationInformation, Integer> {
+    ContentManager<PublicationInformation, MutablePublicationInformation, Long> {
 
   int savePublicationInformation(final List<MutablePublicationInformation> pMutablePublicationInformation);
 

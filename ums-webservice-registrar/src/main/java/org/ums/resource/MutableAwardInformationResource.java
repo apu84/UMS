@@ -20,10 +20,4 @@ public class MutableAwardInformationResource extends Resource {
   public Response saveServiceInformation(final JsonObject pJsonObject) {
     return mAwardInformationResourceHelper.saveAwardInformation(pJsonObject, mUriInfo);
   }
-
-  @DELETE
-  @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSupplier(final @PathParam("object-id") Integer pObjectId) throws Exception {
-    return mAwardInformationResourceHelper.delete(pObjectId);
-  }
 }
