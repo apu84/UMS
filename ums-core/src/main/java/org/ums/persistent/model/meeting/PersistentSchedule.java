@@ -8,6 +8,7 @@ import org.ums.manager.meeting.ScheduleManager;
 import org.ums.persistent.model.PersistentTaskStatus;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class PersistentSchedule implements MutableSchedule {
@@ -19,13 +20,12 @@ public class PersistentSchedule implements MutableSchedule {
     sScheduleManager = applicationContext.getBean("scheduleManager", ScheduleManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private MeetingType mMeetingType;
   private int mMeetingTypeId;
   private int mMeetingNo;
   private String mMeetingRefNo;
-  private Date mMeetingDate;
-  private Time mMeetingTime;
+  private Timestamp mMeetingDateTime;
   private String mMeetingRoomNo;
   private String mLastModified;
 
@@ -37,8 +37,7 @@ public class PersistentSchedule implements MutableSchedule {
     mMeetingTypeId = pPersistentSchedule.getMeetingTypeId();
     mMeetingNo = pPersistentSchedule.getMeetingNo();
     mMeetingRefNo = pPersistentSchedule.getMeetingRefNo();
-    mMeetingDate = pPersistentSchedule.getMeetingDate();
-    mMeetingTime = pPersistentSchedule.getMeetingTime();
+    mMeetingDateTime = pPersistentSchedule.getMeetingDateTime();
     mMeetingRoomNo = pPersistentSchedule.getMeetingRoomNo();
     mLastModified = pPersistentSchedule.getLastModified();
   }
@@ -49,7 +48,7 @@ public class PersistentSchedule implements MutableSchedule {
   }
 
   @Override
-  public Integer create() {
+  public Long create() {
     return sScheduleManager.create(this);
   }
 
@@ -64,7 +63,7 @@ public class PersistentSchedule implements MutableSchedule {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -74,7 +73,7 @@ public class PersistentSchedule implements MutableSchedule {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -104,13 +103,8 @@ public class PersistentSchedule implements MutableSchedule {
   }
 
   @Override
-  public void setMeetingDate(Date pMeetingDate) {
-    mMeetingDate = pMeetingDate;
-  }
-
-  @Override
-  public void setMeetingTime(Time pMeetingTime) {
-    mMeetingTime = pMeetingTime;
+  public void setMeetingDateTime(Timestamp pMeetingDateTime) {
+    mMeetingDateTime = pMeetingDateTime;
   }
 
   @Override
@@ -139,13 +133,8 @@ public class PersistentSchedule implements MutableSchedule {
   }
 
   @Override
-  public Date getMeetingDate() {
-    return mMeetingDate;
-  }
-
-  @Override
-  public Time getMeetingTime() {
-    return mMeetingTime;
+  public Timestamp getMeetingDateTime() {
+    return mMeetingDateTime;
   }
 
   @Override

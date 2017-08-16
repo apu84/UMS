@@ -5,11 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.cache.common.DivisionCache;
+import org.ums.cache.meeting.ScheduleCache;
 import org.ums.cache.registrar.*;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.common.DivisionManager;
+import org.ums.manager.meeting.ScheduleManager;
 import org.ums.manager.registrar.*;
 import org.ums.persistent.dao.common.PersistentDivisionDao;
+import org.ums.persistent.dao.meeting.PersistentScheduleDao;
 import org.ums.persistent.dao.registrar.*;
 import org.ums.statistics.JdbcTemplateFactory;
 
@@ -73,5 +76,12 @@ public class RegistrarContext {
   @Bean
   AdditionalInformationManager additionalInformationManager() {
     return new PersistentAdditionalInformationDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  ScheduleManager scheduleManager() {
+    ScheduleCache scheduleCache = new ScheduleCache(mCacheFactory.getCacheManager());
+    scheduleCache.setManager(new PersistentScheduleDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return scheduleCache;
   }
 }

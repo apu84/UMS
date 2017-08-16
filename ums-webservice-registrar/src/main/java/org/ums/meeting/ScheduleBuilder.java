@@ -9,6 +9,7 @@ import org.ums.domain.model.mutable.meeting.MutableSchedule;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.sql.Timestamp;
 
 @Component
 public class ScheduleBuilder implements Builder<Schedule, MutableSchedule> {
@@ -19,6 +20,10 @@ public class ScheduleBuilder implements Builder<Schedule, MutableSchedule> {
 
   @Override
   public void build(MutableSchedule pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-
+    pMutable.setMeetingTypeId(pJsonObject.getJsonObject("meetingType").getInt("id"));
+    pMutable.setMeetingNo(pJsonObject.getInt("meetingNo"));
+    pMutable.setMeetingRefNo(pJsonObject.getString("meetingRefNo"));
+    pMutable.setMeetingDateTime(Timestamp.valueOf(pJsonObject.getString("meetingDateTime")));
+    pMutable.setMeetingRoomNo(pJsonObject.getString("meetingRoom"));
   }
 }

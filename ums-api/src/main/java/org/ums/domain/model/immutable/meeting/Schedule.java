@@ -7,10 +7,9 @@ import org.ums.domain.model.mutable.meeting.MutableSchedule;
 import org.ums.enums.meeting.MeetingType;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.util.Date;
+import java.sql.Timestamp;
 
-public interface Schedule extends Serializable, EditType<MutableSchedule>, Identifier<Integer>, LastModifier {
+public interface Schedule extends Serializable, EditType<MutableSchedule>, Identifier<Long>, LastModifier {
 
   MeetingType getMeetingType();
 
@@ -20,9 +19,7 @@ public interface Schedule extends Serializable, EditType<MutableSchedule>, Ident
 
   String getMeetingRefNo();
 
-  Date getMeetingDate();
-
-  Time getMeetingTime();
+  Timestamp getMeetingDateTime();
 
   String getMeetingRoomNo();
 

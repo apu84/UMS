@@ -22,6 +22,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/ckeditor.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datetimepicker.d.ts'/>
 
 /// <reference path='ums-registrar.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
@@ -101,14 +102,15 @@
 /// <reference path='controller/eim/EmployeeProfile.ts'/>
 /// <reference path='controller/eim/EmployeeInformation.ts'/>
 /// <reference path='controller/employee-publication/EmployeePublication.ts'/>
-/// <reference path='controller/meeting-management/AgendaAndResolution.ts'/>
-/// <reference path='controller/meeting-management/MeetingSchedule.ts'/>
-/// <reference path='controller/meeting-management/MeetingSearch.ts'/>
+/// <reference path='controller/meeting/AgendaAndResolution.ts'/>
+/// <reference path='controller/meeting/MeetingSchedule.ts'/>
+/// <reference path='controller/meeting/MeetingSearch.ts'/>
 
 /// <reference path='service/ApprovePublicationService.ts'/>
 /// <reference path='service/PagerService.ts'/>
 /// <reference path='service/CRUDDetectionService.ts'/>
 /// <reference path='service/EmployeeInformationService.ts'/>
+/// <reference path='service/MeetingService.ts'/>
 
 /// <reference path='model/EmployeeInformationModel.ts' />
 

@@ -7,9 +7,10 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.meeting.MeetingType;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
-public interface MutableSchedule extends Schedule, Editable<Integer>, MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableSchedule extends Schedule, Editable<Long>, MutableIdentifier<Long>, MutableLastModifier {
 
   void setMeetingType(final MeetingType pMeetingType);
 
@@ -19,9 +20,7 @@ public interface MutableSchedule extends Schedule, Editable<Integer>, MutableIde
 
   void setMeetingRefNo(final String pMeetingRefNo);
 
-  void setMeetingDate(final Date pMeetingDate);
-
-  void setMeetingTime(final Time pMeetingTime);
+  void setMeetingDateTime(final Timestamp pMeetingDateTime);
 
   void setMeetingRoomNo(final String pMeetingRoomNo);
 }
