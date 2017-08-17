@@ -28,8 +28,6 @@ public class EmailService {
   @Autowired
   private JavaMailSender mailSender;
   @Autowired
-  private PasswordService mPasswordService;
-  @Autowired
   private VelocityEngine velocityEngine;
 
   private User user;

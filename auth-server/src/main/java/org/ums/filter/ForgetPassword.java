@@ -7,6 +7,7 @@ import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.manager.EmployeeManager;
 import org.ums.message.MessageResource;
+import org.ums.services.EmailService;
 import org.ums.token.TokenBuilder;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
@@ -29,6 +30,9 @@ public class ForgetPassword extends AbstractPathMatchingFilter {
 
   @Autowired
   TokenBuilder mTokenBuilder;
+
+  @Autowired
+  EmailService mEmailService;
 
   @Override
   protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
@@ -56,7 +60,8 @@ public class ForgetPassword extends AbstractPathMatchingFilter {
 
     if(user != null) {
       MutableUser mutableUser = user.edit();
-      mutableUser.setPasswordResetToken(mTokenBuilder.passwordResetToken());
+      String prToken = mTokenBuilder.passwordResetToken(user.getId());
+      mutableUser.setPasswordResetToken(prToken);
       mutableUser.setPasswordTokenGenerateDateTime(new Date());
       mutableUser.update();
     }

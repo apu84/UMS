@@ -37,10 +37,10 @@ public class JWTBuilder implements TokenBuilder {
   }
 
   @Override
-  public String passwordResetToken() {
+  public String passwordResetToken(String pUser) {
     Calendar refreshTokenExpiration = Calendar.getInstance();
     refreshTokenExpiration.add(Calendar.HOUR, mPasswordResetTokenExpiration);
-    return Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
+    return Jwts.builder().setSubject(pUser)
         .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
   }
 }

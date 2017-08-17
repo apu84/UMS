@@ -5,5 +5,5 @@ public interface TokenBuilder {
 
   String refreshToken();
 
-  String passwordResetToken();
+  String passwordResetToken(String pUser);
 }
