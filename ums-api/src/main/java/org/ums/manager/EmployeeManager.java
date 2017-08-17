@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String> {
 
-  boolean existenceByEmail(final String pEmailAddress);
+  boolean emailExists(final String pEmailAddress);
 
   Employee getByEmail(final String pEmailAddress);
 

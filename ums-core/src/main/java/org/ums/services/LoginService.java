@@ -1,6 +1,7 @@
 package org.ums.services;
 
 import org.apache.shiro.authc.credential.PasswordService;
+import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,14 @@ import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
 import org.ums.util.Constants;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class LoginService {
+public class LoginService extends PathMatchingFilter {
 
   private static Logger mLogger = LoggerFactory.getLogger(LoginService.class);
 
@@ -43,6 +46,11 @@ public class LoginService {
   @Qualifier("dummyEmail")
   private String dummyEmail;
 
+  @Override
+  protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+    return false;
+  }
+
   public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId, final String pEmailAddress,
       final String pRecoverBy) {
     String token = UUID.randomUUID().toString();
@@ -56,7 +64,7 @@ public class LoginService {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("user.not.exists"));
     }
-    else if(pRecoverBy.equals("byEmailAddress") && (!mEmployeeManager.existenceByEmail(pEmailAddress))) {
+    else if(pRecoverBy.equals("byEmailAddress") && (!mEmployeeManager.emailExists(pEmailAddress))) {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("email.not.exists"));
     }

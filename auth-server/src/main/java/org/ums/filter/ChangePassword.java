@@ -1,22 +1,21 @@
 package org.ums.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordService;
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.BearerAccessToken;
@@ -28,7 +27,14 @@ import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
-public class ChangePassword extends PathMatchingFilter {
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class ChangePassword extends AbstractPathMatchingFilter {
   private static final Logger mLogger = LoggerFactory.getLogger(ChangePassword.class);
 
   @Autowired
@@ -43,35 +49,50 @@ public class ChangePassword extends PathMatchingFilter {
   @Autowired
   TokenBuilder mTokenBuilder;
 
+  @Autowired
+  @Qualifier("plainPasswordMatcher")
+  CredentialsMatcher mPlainPasswordMatcher;
+
+  @Autowired
+  @Qualifier("credentialsMatcher")
+  CredentialsMatcher mCredentialsMatcher;
+
+  private String mSalt;
+
   @Override
   protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-    String content = IOUtils.toString(request.getInputStream());
-    JSONParser parser = new JSONParser();
-    JSONObject requestJson = (JSONObject) parser.parse(content);
+    JSONObject requestJson = getRequestJson((HttpServletRequest) request);
 
     String currentPassword = requestJson.get("currentPassword").toString();
     String newPassword = requestJson.get("newPassword").toString();
     String confirmNewPassword = requestJson.get("confirmNewPassword").toString();
 
-    if(StringUtils.isEmpty(currentPassword) || StringUtils.isEmpty(newPassword)
+    if (StringUtils.isEmpty(currentPassword) || StringUtils.isEmpty(newPassword)
         || StringUtils.isEmpty(confirmNewPassword) || !newPassword.equals(confirmNewPassword)) {
-      ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-      return false;
+      return sendError("Confirm password doesn't match", response);
     }
 
-    Subject loggedInUser = SecurityUtils.getSubject();
-    String userName = loggedInUser.getPrincipal().toString();
-    User currentUser = mUserManager.get(userName);
+    User currentUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    boolean newUser = currentUser.getTemporaryPassword() != null;
+    AuthenticationToken token = new UsernamePasswordToken(currentUser.getId(), currentPassword);;
+    AuthenticationInfo authenticationInfo;
 
-    if(currentUser.getTemporaryPassword() != null) {
-      if(String.valueOf(String.valueOf(currentUser.getTemporaryPassword())).equals(currentPassword)) {
-        return responseNewToken(changePassword(currentUser, newPassword), response);
-      }
+    if (newUser) {
+      authenticationInfo
+          = new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getTemporaryPassword(), "newUserRealm");
     }
-    else if(mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
+    else {
+      authenticationInfo
+          = new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getPassword(), ByteSource.Util.bytes(mSalt),
+          "userRealm");
+    }
+
+    if (getCredentialsMatcher(newUser).doCredentialsMatch(token, authenticationInfo)) {
       return responseNewToken(changePassword(currentUser, newPassword), response);
     }
-    return super.preHandle(request, response);
+    else {
+      return sendError("Current password doesn't match", response);
+    }
   }
 
   @Transactional
@@ -95,9 +116,17 @@ public class ChangePassword extends PathMatchingFilter {
   private boolean responseNewToken(BearerAccessToken newToken, ServletResponse pResponse) throws IOException {
     pResponse.setContentType("application/json");
     PrintWriter out = pResponse.getWriter();
-    out.print(String.format("{\"token\": \"Bearer %s\", \"refreshToken\": \"Bearer %s\"}", newToken.getId(),
+    out.print(String.format("{\"accessToken\": \"Bearer %s\", \"refreshToken\": \"Bearer %s\"}", newToken.getId(),
         newToken.getRefreshToken()));
     out.flush();
     return false;
+  }
+
+  private CredentialsMatcher getCredentialsMatcher(boolean newUser) {
+    return newUser ? mPlainPasswordMatcher : mCredentialsMatcher;
+  }
+
+  public void setSalt(String pSalt) {
+    mSalt = pSalt;
   }
 }

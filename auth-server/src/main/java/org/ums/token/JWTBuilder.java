@@ -11,11 +11,13 @@ public class JWTBuilder implements TokenBuilder {
   private String mTokenSigningKey;
   private int mAccessTokenExpiration;
   private int mRefreshTokenExpiration;
+  private int mPasswordResetTokenExpiration;
 
-  public JWTBuilder(String pSigningKey, int pAccessTokenExpiration, int pRefreshTokenExpiration) {
+  public JWTBuilder(String pSigningKey, int pAccessTokenExpiration, int pRefreshTokenExpiration, int pPasswordResetTokenExpiration) {
     mTokenSigningKey = pSigningKey;
     mAccessTokenExpiration = pAccessTokenExpiration;
     mRefreshTokenExpiration = pRefreshTokenExpiration;
+    mPasswordResetTokenExpiration = pPasswordResetTokenExpiration;
   }
 
   @Override
@@ -30,6 +32,14 @@ public class JWTBuilder implements TokenBuilder {
   public String refreshToken() {
     Calendar refreshTokenExpiration = Calendar.getInstance();
     refreshTokenExpiration.add(Calendar.HOUR, mRefreshTokenExpiration);
+    return Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
+        .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
+  }
+
+  @Override
+  public String passwordResetToken() {
+    Calendar refreshTokenExpiration = Calendar.getInstance();
+    refreshTokenExpiration.add(Calendar.HOUR, mPasswordResetTokenExpiration);
     return Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
         .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
   }

@@ -42,7 +42,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
-  public boolean existenceByEmail(String pEmailAddress) {
+  public boolean emailExists(String pEmailAddress) {
     String query = EXIST_EMAIL + " WHERE EMAIL_ADDRESS = ?";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pEmailAddress);
   }

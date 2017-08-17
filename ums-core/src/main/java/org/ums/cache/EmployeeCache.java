@@ -22,8 +22,8 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   }
 
   @Override
-  public boolean existenceByEmail(final String pEmailAddress) {
-    return getManager().existenceByEmail(pEmailAddress);
+  public boolean emailExists(final String pEmailAddress) {
+    return getManager().emailExists(pEmailAddress);
   }
 
   @Override

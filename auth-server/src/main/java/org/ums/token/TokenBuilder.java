@@ -4,4 +4,6 @@ public interface TokenBuilder {
   String accessToken();
 
   String refreshToken();
+
+  String passwordResetToken();
 }
