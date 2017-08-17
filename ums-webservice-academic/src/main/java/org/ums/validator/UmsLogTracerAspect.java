@@ -24,7 +24,7 @@ public class UmsLogTracerAspect {
   @Pointcut("within(org.ums.manager.*)")
   public void inWebLayer() {}
 
-  @After("execution(* org.ums.academic.resource..*.*(..)) && args(httpServletRequest) ")
+  @After("execution(* org.ums.academic.resource..*.*(..)) && args(httpServletRequest,..) ")
   public void generateLog(JoinPoint pJoinPoint, HttpServletRequest httpServletRequest) {
     HttpServletRequest mHttpServletRequest = httpServletRequest;
 
