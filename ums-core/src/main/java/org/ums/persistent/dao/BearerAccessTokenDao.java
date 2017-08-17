@@ -11,7 +11,6 @@ import org.ums.decorator.BearerAccessTokenDaoDecorator;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.persistent.model.PersistentBearerAccessToken;
-import org.ums.security.TokenBuilder;
 
 public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   String SELECT_ALL = "SELECT TOKEN, REFRESH_TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
@@ -23,11 +22,9 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   String DELETE_ALL = "DELETE FROM BEARER_ACCESS_TOKEN ";
 
   private JdbcTemplate mJdbcTemplate;
-  private TokenBuilder mTokenBuilder;
 
-  public BearerAccessTokenDao(final JdbcTemplate pJdbcTemplate, final TokenBuilder pTokenBuilder) {
+  public BearerAccessTokenDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mTokenBuilder = pTokenBuilder;
   }
 
   @Override
@@ -66,23 +63,15 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   }
 
   @Override
-  public BearerAccessToken getByUser(String userId) {
+  public List<BearerAccessToken> getByUser(String userId) {
     String query = SELECT_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {userId}, new BearerAccessTokenRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {userId}, new BearerAccessTokenRowMapper());
   }
 
   @Override
   public List<BearerAccessToken> getByRefreshToken(String pRefreshToken) {
     String query = SELECT_ALL + "WHERE REFRESH_TOKEN = ?";
     return mJdbcTemplate.query(query, new Object[] {pRefreshToken}, new BearerAccessTokenRowMapper());
-  }
-
-  @Override
-  public String newAccessToken(String pRefreshToken) {
-    String query = UPDATE_ALL + "WHERE REFRESH_TOKEN = ?";
-    String token = mTokenBuilder.accessToken();
-    mJdbcTemplate.update(query, token, pRefreshToken);
-    return token;
   }
 
   class BearerAccessTokenRowMapper implements RowMapper<BearerAccessToken> {

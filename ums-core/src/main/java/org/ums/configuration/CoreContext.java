@@ -1,5 +1,7 @@
 package org.ums.configuration;
 
+import org.apache.shiro.authz.permission.PermissionResolver;
+import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,6 @@ import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
-import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.transaction.EmployeeTransaction;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
@@ -54,25 +55,6 @@ public class CoreContext {
   @Qualifier("mongoTemplate")
   @Lazy
   MongoTemplate mMongoOperations;
-
-  @Autowired
-  UMSAuthenticationRealm mAuthenticationRealm;
-
-  @Autowired
-  @Lazy
-  EmployeeRepository mEmployeeRepository;
-
-  @Autowired
-  @Qualifier("accessTokenExpiration")
-  Integer mAccessTokenExpiration;
-
-  @Autowired
-  @Qualifier("refreshTokenExpiration")
-  Integer mRefreshTokenExpiration;
-
-  @Autowired
-  @Qualifier("tokenSigningKey")
-  String mTokenSigningKey;
 
   @Bean
   @Lazy
@@ -135,7 +117,7 @@ public class CoreContext {
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {
     BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
-    bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate(), tokeBuilder()));
+    bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
     return bearerAccessTokenCache;
   }
 
@@ -170,7 +152,7 @@ public class CoreContext {
   @Bean
   NavigationManager navigationManager() {
     NavigationByPermissionResolver navigationByPermissionResolver =
-        new NavigationByPermissionResolver(mAuthenticationRealm);
+        new NavigationByPermissionResolver(permissionResolver());
     NavigationCache navigationCache = new NavigationCache(mCacheFactory.getCacheManager());
     navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     navigationByPermissionResolver.setManager(navigationCache);
@@ -195,7 +177,7 @@ public class CoreContext {
   @Bean
   RoleManager roleManager() {
     RoleCache roleCache = new RoleCache(mCacheFactory.getCacheManager());
-    RolePermissionResolver rolePermissionResolver = new RolePermissionResolver(mAuthenticationRealm);
+    RolePermissionResolver rolePermissionResolver = new RolePermissionResolver(permissionResolver());
     rolePermissionResolver.setManager(new PersistentRoleDao(mTemplateFactory.getJdbcTemplate()));
     roleCache.setManager(rolePermissionResolver);
     return roleCache;
@@ -333,7 +315,7 @@ public class CoreContext {
   }
 
   @Bean
-  TokenBuilder tokeBuilder() {
-    return new JWTBuilder(mTokenSigningKey, mAccessTokenExpiration, mRefreshTokenExpiration);
+  PermissionResolver permissionResolver() {
+    return new WildcardPermissionResolver();
   }
 }

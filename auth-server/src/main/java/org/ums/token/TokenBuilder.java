@@ -1,4 +1,4 @@
-package org.ums.security;
+package org.ums.token;
 
 public interface TokenBuilder {
   String accessToken();

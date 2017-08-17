@@ -14,7 +14,7 @@ import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.persistent.model.PersistentBearerAccessToken;
-import org.ums.security.TokenBuilder;
+import org.ums.token.TokenBuilder;
 
 public class LoginFilter extends BasicHttpAuthenticationFilter {
   @Autowired
@@ -29,7 +29,8 @@ public class LoginFilter extends BasicHttpAuthenticationFilter {
 
     response.setContentType("application/json");
     PrintWriter out = response.getWriter();
-    out.print(String.format("{\"accessToken\": \"Bearer %s\", \"refreshToken\": \"Bearer %s\"}", accessToken, refreshToken));
+    out.print(String.format("{\"accessToken\": \"Bearer %s\", \"refreshToken\": \"Bearer %s\"}", accessToken,
+        refreshToken));
     out.flush();
     return false;
   }

@@ -24,7 +24,7 @@ public class BearerAccessTokenCache extends
   }
 
   @Override
-  public BearerAccessToken getByUser(String userId) {
+  public List<BearerAccessToken> getByUser(String userId) {
     return getManager().getByUser(userId);
   }
 
@@ -37,16 +37,6 @@ public class BearerAccessTokenCache extends
       }
     }
     return Lists.newArrayList(mCacheManager.get(getCacheKey(pId)));
-  }
-
-  @Override
-  public String newAccessToken(String pRefreshToken) {
-    List<BearerAccessToken> tokens = getByRefreshToken(pRefreshToken);
-    String newToken = getManager().newAccessToken(pRefreshToken);
-    if(tokens.get(0) != null) {
-      invalidate(tokens.get(0));
-    }
-    return newToken;
   }
 
   @Override

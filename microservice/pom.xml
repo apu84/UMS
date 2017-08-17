@@ -8,9 +8,7 @@
         <version>trunk-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>auth-server</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>microservice</artifactId>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
     </properties>
@@ -28,10 +26,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-quartz</artifactId>
-            <version>1.2.2</version>
-            <scope>compile</scope>
+            <groupId>org.ums</groupId>
+            <artifactId>auth-server</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

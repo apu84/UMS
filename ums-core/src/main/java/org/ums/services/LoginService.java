@@ -97,7 +97,7 @@ public class LoginService {
     // if(StringUtils.isBlank(user.getPasswordResetToken())
     // || (tokenInvalidDate != null && now.after(tokenInvalidDate))
     // || user.getPasswordTokenGenerateDateTime() == null) {
-    mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""), user.getId());
+    mUserManager.setPasswordResetToken(token, user.getId());
     user = mUserManager.get(user.getId());
     // }
 

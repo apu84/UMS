@@ -113,12 +113,6 @@ public class SolrContext {
   }
 
   @Bean
-  ConsumeIndex consumeIndex() throws Exception {
-    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager(),
-        mSecurityManager, mUMSConfiguration);
-  }
-
-  @Bean
   EmployeeRepository employeeRepository() throws Exception {
     return new EmployeeRepositoryImpl(solrTemplate());
   }

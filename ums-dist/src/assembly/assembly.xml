@@ -109,10 +109,46 @@
 
     <dependencySet>
       <includes>
+        <include>org.ums:ums-api</include>
+        <include>org.ums:ums-core</include>
+        <include>org.ums:microservice</include>
         <include>org.ums:auth-server</include>
+        <include>org.springframework:spring-core</include>
+        <include>org.springframework:spring-beans</include>
+        <include>org.springframework:spring-web</include>
+        <include>org.springframework:spring-context</include>
+        <include>org.springframework:spring-expression</include>
+        <include>org.springframework:spring-jdbc</include>
+        <include>org.springframework:spring-tx</include>
+        <include>org.springframework:spring-aop</include>
+        <include>org.springframework:spring-aspect</include>
+        <include>org.apache.shiro:shiro-core</include>
+        <include>org.apache.shiro:shiro-web</include>
+        <include>org.apache.shiro:shiro-spring</include>
+        <include>org.apache.shiro:shiro-aspectj</include>
+        <include>commons-beanutils:commons-beanutils</include>
+        <include>cglib:cglib</include>
+        <include>ch.qos.logback:logback-core</include>
+        <include>org.slf4j:slf4j-api</include>
+        <include>org.slf4j:slf4j-jdk14</include>
+        <include>commons-logging:commons-logging</include>
+        <include>commons-io:commons-io</include>
+        <include>commons-fileupload:commons-fileupload</include>
+        <include>aopalliance:aopalliance</include>
+        <!--<include>mysql:mysql-connector-java</include>-->
+        <include>com.oracle:ojdbc6</include>
+        <include>com.jolbox:bonecp</include>
+        <include>com.google.guava:guava</include>
+        <include>commons-lang:commons-lang</include>
+        <include>org.springframework:spring-context-support</include>
+        <include>org.apache.velocity:velocity</include>
+        <include>javax.mail:mail</include>
+        <include>com.google.code.gson:gson</include>
+        <include>net.spy:spymemcached</include>
       </includes>
-      <outputDirectory>webapps</outputDirectory>
-      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+      <outputDirectory>microservice</outputDirectory>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <useTransitiveFiltering>true</useTransitiveFiltering>
     </dependencySet>
 
   </dependencySets>

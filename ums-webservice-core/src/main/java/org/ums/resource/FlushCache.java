@@ -19,13 +19,9 @@ public class FlushCache extends Resource {
   @Autowired
   CacheFactory mCacheFactory;
 
-  @Autowired
-  CacheWarmerManager mCacheWarmerManager;
-
   @POST
   public Response flushCache(final @Context Request pRequest) {
     mCacheFactory.getCacheManager().flushAll();
-    mCacheWarmerManager.warm(true);
     return Response.ok().build();
   }
 }

@@ -115,6 +115,7 @@
             <value>
                 /login = noSessionCreation,authc
                 /logout = tokenFilter,logout
+                /changePassword = tokenFilter,sessionFilter,changePassword
                 /** = tokenFilter,sessionFilter,newUserFilter,user
             </value>
         </property>
@@ -123,4 +124,10 @@
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
     <bean id="rolePermissionResolver" class="org.ums.authorization.PermissionResolver"/>
+
+    <bean id="tokenBuilder" class="org.ums.token.JWTBuilder">
+        <constructor-arg name="pAccessTokenExpiration" value="${access.token.expiration}"/>
+        <constructor-arg name="pRefreshTokenExpiration" value="${refresh.token.expiration}"/>
+        <constructor-arg name="pSigningKey" value="${authentication.token.signing.key}"/>
+    </bean>
 </beans>

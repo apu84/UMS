@@ -22,6 +22,18 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
+      <artifactId>auth-server</artifactId>
+      <type>jar</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>microservice</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
       <artifactId>ums-webservice-academic</artifactId>
       <type>war</type>
       <version>${project.version}</version>
@@ -35,12 +47,6 @@
     <dependency>
       <groupId>org.ums</groupId>
       <artifactId>ums-webservice-library</artifactId>
-      <type>war</type>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.ums</groupId>
-      <artifactId>auth-server</artifactId>
       <type>war</type>
       <version>${project.version}</version>
     </dependency>

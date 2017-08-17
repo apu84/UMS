@@ -58,10 +58,6 @@ public class FeeContext {
   RoleManager mRoleManager;
 
   @Autowired
-  @Qualifier("backendSecurityManager")
-  SecurityManager mSecurityManager;
-
-  @Autowired
   UMSConfiguration mUMSConfiguration;
 
   @Bean
@@ -133,10 +129,5 @@ public class FeeContext {
     PaymentStatusDao paymentStatusDao = new PaymentStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
     paymentStatusDao.setManager(postPaymentActions);
     return paymentStatusDao;
-  }
-
-  @Bean
-  PaymentValidator paymentValidator() {
-    return new PaymentValidatorJob(studentPaymentManager(), mSecurityManager, mUMSConfiguration);
   }
 }

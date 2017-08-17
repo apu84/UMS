@@ -1,20 +1,19 @@
 package org.ums.manager;
 
-import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.PermissionResolver;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.ums.decorator.NavigationDaoDecorator;
-import org.ums.domain.model.immutable.Navigation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class NavigationByPermissionResolver extends NavigationDaoDecorator {
-  private AuthorizingRealm mAuthorizingRealm;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
+import org.ums.decorator.NavigationDaoDecorator;
+import org.ums.domain.model.immutable.Navigation;
 
-  public NavigationByPermissionResolver(final AuthorizingRealm pAuthorizingRealm) {
-    mAuthorizingRealm = pAuthorizingRealm;
+public class NavigationByPermissionResolver extends NavigationDaoDecorator {
+  private PermissionResolver mPermissionResolver;
+
+  public NavigationByPermissionResolver(final PermissionResolver pPermissionResolver) {
+    mPermissionResolver = pPermissionResolver;
   }
 
   @Override
@@ -22,18 +21,16 @@ public class NavigationByPermissionResolver extends NavigationDaoDecorator {
     List<Navigation> navigationList = getManager().getAll();
     List<Navigation> permittedNavigation = null;
 
-    PermissionResolver permissionResolver = mAuthorizingRealm.getPermissionResolver();
-
     if(navigationList != null && navigationList.size() > 0) {
       permittedNavigation = new ArrayList<>();
 
       if(pPermissions != null) {
         for(String permissionString : pPermissions) {
-          Permission permission = permissionResolver.resolvePermission(permissionString);
+          Permission permission = mPermissionResolver.resolvePermission(permissionString);
 
           for(Navigation navigation : navigationList) {
             String navigationPermissionString = navigation.getPermission();
-            Permission navigationPermission = permissionResolver.resolvePermission(navigationPermissionString);
+            Permission navigationPermission = mPermissionResolver.resolvePermission(navigationPermissionString);
             if(permission.implies(navigationPermission)) {
               permittedNavigation.add(navigation);
             }

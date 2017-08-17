@@ -5,28 +5,26 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.authz.permission.PermissionResolver;
-import org.apache.shiro.realm.AuthorizingRealm;
 
 public class RolePermissionResolver extends RoleDaoDecorator {
-  private AuthorizingRealm mAuthorizingRealm;
+  private PermissionResolver mPerPermissionResolver;
 
-  public RolePermissionResolver(AuthorizingRealm pAuthorizingRealm) {
-    mAuthorizingRealm = pAuthorizingRealm;
+  public RolePermissionResolver(PermissionResolver pPermissionResolver) {
+    mPerPermissionResolver = pPermissionResolver;
   }
 
   @Override
   public List<Role> getRolesByPermission(Set<String> pPermissions) {
     List<Role> roles = getAll();
-    PermissionResolver permissionResolver = mAuthorizingRealm.getPermissionResolver();
     List<Role> returnList = new ArrayList<>();
 
     roles.forEach((role) -> {
       Set<String> permissions = role.getPermissions();
       if(permissions != null) {
         permissions.forEach((permission) -> {
-          org.apache.shiro.authz.Permission rolePermission = permissionResolver.resolvePermission(permission);
+          org.apache.shiro.authz.Permission rolePermission = mPerPermissionResolver.resolvePermission(permission);
           pPermissions.forEach((pPermission) -> {
-            org.apache.shiro.authz.Permission matchPermission = permissionResolver.resolvePermission(pPermission);
+            org.apache.shiro.authz.Permission matchPermission = mPerPermissionResolver.resolvePermission(pPermission);
             if(matchPermission.implies(rolePermission)) {
               returnList.add(role);
             }
