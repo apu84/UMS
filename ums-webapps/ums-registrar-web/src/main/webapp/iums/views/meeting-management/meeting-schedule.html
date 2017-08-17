@@ -57,8 +57,8 @@
                                     <i class="fa fa-calendar"></i>
                                     <input type="text"
                                            id="datetimepicker-default"
-                                           data-ng-model="vm.prepareMeetingModel.meetingSchedule.datetimee"
-                                           data-datetime-format="MM/DD/YYYY H:MM A"
+                                           data-ng-model="vm.prepareMeetingModel.meetingSchedule.datetime"
+                                           data-datetime-format="mm/dd/yyyy h:mm a"
                                            class="form-control"
                                            autocomplete="off">
                                 </div>
@@ -113,6 +113,7 @@
             <br /><br /><br />
             <div class="row">
                 <div align="right">
+                    <button type="button" class="btn btn-danger" data-ng-click="vm.getSchedule()">Dummy Get</button>
                     <button type="button" class="btn btn-default" data-ng-click="vm.sendInvitationWithoutAgenda()">Send Invitation Without Agenda</button>
                     <button type="button" class="btn btn-success" data-ng-click="vm.save()">Save</button>
                 </div>

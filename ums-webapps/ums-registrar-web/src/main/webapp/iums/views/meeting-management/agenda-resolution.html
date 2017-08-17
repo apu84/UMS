@@ -64,9 +64,11 @@
                             <div data-ng-show="vm.showAgendaAndResolutionDiv">
                                 <div class="well">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label>Agenda No.</label>
-                                            <input type="text" data-ng-model="vm.agendaNo">
+                                            <input type="text"
+                                                   data-ng-model="vm.agendaNo"
+                                                    class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -106,7 +108,6 @@
                                         <div data-ng-show="vm.showEditorForAgenda">
                                             <div class="col-md-12">
                                                 <textarea id="CKEditorForAgenda"
-                                                          data-ng-model="vm.Resolution"
                                                           class="form-control">
                                                 </textarea>
                                             </div>
@@ -169,7 +170,6 @@
                                             <div data-ng-show="vm.showEditorForResolution">
                                                 <div class="col-md-12">
                                                     <textarea id="CKEditorForResolution"
-                                                              data-ng-model="vm.resolution"
                                                               class="form-control">
                                                     </textarea>
                                                 </div>
@@ -183,11 +183,11 @@
                             <div class="col-md-12">
                                 <div align="right">
                                     <div data-ng-show="!vm.showAgendaAndResolutionDiv">
-                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default btn-xs">Create</button>
+                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default btn-xs">Create New</button>
                                     </div>
                                     <div data-ng-show="vm.showAgendaAndResolutionDiv">
-                                        <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
                                         <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
+                                        <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
                                     </div>
                                 </div>
                             </div>
@@ -209,29 +209,39 @@
                             <div data-ng-repeat="agendaResolution in vm.agendaAndResolutions track by $index">
                                 <div class="well">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <span><b>No: &nbsp;&nbsp;</b></span><label>{{agendaResolution.agendaNo}}</label>
+                                        <div class="col-md-1">
+                                            <b>No:</b>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label>{{agendaResolution.agendaNo}}</label>
                                         </div>
                                         <div class="col-md-6">
                                             <div align="right">
+                                                <span><button type="button" class="btn btn-default btn-xs" data-ng-click="vm.edit($index)">Edit</button></span>
                                                 <div data-ng-show="agendaResolution.showExpandButton">
-                                                    <button type="button" class="btn btn-blue btn-xs" data-ng-click="vm.toggleExpand('hide' , $index)">Expand Resolution</button>
+                                                    <button type="button" class="btn btn-blue btn-xs" data-ng-click="vm.toggleExpand('hide' , $index)">Expand</button>
                                                 </div>
                                                 <div data-ng-show="!agendaResolution.showExpandButton">
-                                                    <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.toggleExpand('expand', $index)">Hide Resolution</button>
+                                                    <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.toggleExpand('expand', $index)">Hide</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <span><b>Agenda: &nbsp;&nbsp;</b></span><label>{{agendaResolution.agenda}}</label>
+                                        <div class="col-md-1">
+                                            <b>Agenda:</b>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <label>{{agendaResolution.agenda}}</label>
                                         </div>
                                     </div>
                                     <div data-ng-show="!agendaResolution.showExpandButton">
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <span><b>Resolution: &nbsp;&nbsp;</b></span><label>{{agendaResolution.resolution}}</label>
+                                            <div class="col-md-1">
+                                                <b>Resolution:</b>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <label>{{agendaResolution.resolution}}</label>
                                             </div>
                                         </div>
                                     </div>

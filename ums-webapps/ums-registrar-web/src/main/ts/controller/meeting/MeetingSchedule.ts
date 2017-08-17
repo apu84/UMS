@@ -1,5 +1,6 @@
 module ums{
     interface IMeetingScheduleModel{
+        id: string
         type: IConstants,
         meetingNo: number;
         refNo: string;
@@ -104,6 +105,15 @@ module ums{
             });
         }
 
+        private getSchedule(): void{
+            this.prepareMeetingModel.meetingSchedule = <IMeetingScheduleModel>{};
+            this.meetingService.getMeetingSchedule(10, 123).then((response: any) =>{
+                console.log(this.prepareMeetingModel.meetingSchedule);
+                this.prepareMeetingModel.meetingSchedule = response[0];
+                console.log(this.prepareMeetingModel.meetingSchedule);
+            })
+        }
+
         private toggleAll(): void{
             if (this.selectedMembers.length === this.meetingMembers.length) {
                 this.selectedMembers = [];
@@ -133,11 +143,7 @@ module ums{
         private convertToJson(): ng.IPromise<any>{
             let defer = this.$q.defer();
             let JsonObject = {};
-            JsonObject['meetingType'] = this.prepareMeetingModel.meetingSchedule.type;
-            JsonObject['meetingNo'] = this.prepareMeetingModel.meetingSchedule.meetingNo;
-            JsonObject['meetingRefNo'] = this.prepareMeetingModel.meetingSchedule.refNo;
-            JsonObject['meetingDateTime'] = this.prepareMeetingModel.meetingSchedule.datetime;
-            JsonObject['meetingRoom'] = this.prepareMeetingModel.meetingSchedule.room;
+            JsonObject['entries'] = this.prepareMeetingModel.meetingSchedule;
             defer.resolve(JsonObject);
             return defer.promise;
         }

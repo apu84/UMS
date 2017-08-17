@@ -27,7 +27,7 @@ public class ScheduleCache extends ContentCache<Schedule, MutableSchedule, Long,
   }
 
   @Override
-  public Schedule getMeetingSchedule(MeetingType pMeetingType, int meetingNo) {
+  public Schedule getMeetingSchedule(int pMeetingType, int meetingNo) {
     return getManager().getMeetingSchedule(pMeetingType, meetingNo);
   }
 

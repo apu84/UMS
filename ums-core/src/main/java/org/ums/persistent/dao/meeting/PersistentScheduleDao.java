@@ -16,11 +16,14 @@ import java.sql.SQLException;
 public class PersistentScheduleDao extends ScheduleDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO MEETING_SCHEDULE (ID, MEETING_TYPE, MEETING_NO, MEETING_REF_NO, DATE_TIME, ROOM) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO MEETING_SCHEDULE (ID, MEETING_TYPE, MEETING_NO, MEETING_REF_NO, DATE_TIME, ROOM, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?,"
+          + getLastModifiedSql() + ")";
 
   static String GET_ONE = "SELECT ID, MEETING_TYPE, MEETING_NO, MEETING_REF_NO, DATE_TIME, ROOM FROM MEETING_SCHEDULE ";
 
-  static String UPDATE_ONE = "UPDATE MEETING_SCHEDULE SET MEETING_REF_NO = ?, DATE_TIME = ?, ROOM = ? ";
+  static String UPDATE_ONE =
+      "UPDATE MEETING_SCHEDULE SET MEETING_REF_NO = ?, DATE_TIME = ?, ROOM = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -39,9 +42,9 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
   }
 
   @Override
-  public Schedule getMeetingSchedule(final MeetingType pMeetingType, final int pMeetingNo) {
+  public Schedule getMeetingSchedule(final int pMeetingTypeId, final int pMeetingNo) {
     String query = GET_ONE + " WHERE MEETING_TYPE = ? AND MEETING_NO = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingType.getId(), pMeetingNo},
+    return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingTypeId, pMeetingNo},
         new PersistentScheduleDao.RoleRowMapper());
   }
 
@@ -61,7 +64,7 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
       persistentSchedule.setMeetingNo(resultSet.getInt("MEETING_NO"));
       persistentSchedule.setMeetingRefNo(resultSet.getString("MEETING_REF_NO"));
       persistentSchedule.setMeetingDateTime(resultSet.getTimestamp("DATE_TIME"));
-      persistentSchedule.setMeetingRefNo(resultSet.getString("ROOM"));
+      persistentSchedule.setMeetingRoomNo(resultSet.getString("ROOM"));
       return persistentSchedule;
     }
   }

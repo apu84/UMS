@@ -14,8 +14,8 @@ public class ScheduleDaoDecorator extends ContentDaoDecorator<Schedule, MutableS
   }
 
   @Override
-  public Schedule getMeetingSchedule(MeetingType pMeetingType, int meetingNo) {
-    return getManager().getMeetingSchedule(pMeetingType, meetingNo);
+  public Schedule getMeetingSchedule(int pMeetingTypeId, int meetingNo) {
+    return getManager().getMeetingSchedule(pMeetingTypeId, meetingNo);
   }
 
   @Override

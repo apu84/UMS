@@ -7,14 +7,14 @@ module ums{
         name: string;
     }
     interface IAgendaResolution{
-        id: number;
+        id: string;
         agendaNo: string;
         agenda: string;
         resolution: string;
         showExpandButton: boolean;
     }
     class AgendaAndResolution{
-        public static $inject = ['registrarConstants', '$scope', 'notify'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify'];
         private meetingTypes: IConstants[] = [];
         private meetingNumbers: number[] = [];
         private meetingType: IConstants = null;
@@ -24,10 +24,14 @@ module ums{
         private showResolutionDiv: boolean = true;
         private showMasterExpandButton: boolean = true;
         private showContent: boolean = false;
-        private agendaAndResolutions: IAgendaResolution[];
+        private agendaAndResolutions: IAgendaResolution[] = [];
+        private agendaNo: string = "";
+        private agenda: string = "";
+        private resolution: string = "";
 
         constructor(private registrarConstants: any,
                     private $scope: IAgendaAndResolution,
+                    private $q: ng.IQService,
                     private notify: Notify) {
 
             $scope.getAgendaResolution = this.getAgendaResolution.bind(this);
@@ -35,6 +39,8 @@ module ums{
             this.meetingTypes = registrarConstants.meetingTypes;
             CKEDITOR.replace('CKEditorForAgenda');
             CKEDITOR.replace('CKEditorForResolution');
+            CKEDITOR.instances['CKEditorForAgenda'].setData("");
+            CKEDITOR.instances['CKEditorForResolution'].setData("");
         }
 
         private getMeetingNumber(): void{
@@ -47,12 +53,7 @@ module ums{
         }
 
         private getAgendaResolution(): void{
-            this.agendaAndResolutions = [{id: 1, agendaNo: "BOT 1", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
-                {id: 2, agendaNo: "BOT 2", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
-                {id: 3, agendaNo: "BOT 3", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
-                {id: 4, agendaNo: "BOT 4", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
-                {id: 5, agendaNo: "BOT 5", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true},
-                {id: 6, agendaNo: "BOT 6", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true}];
+            this.agendaAndResolutions = [{id: "1", agendaNo: "BOT 1", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true}];
             Utils.expandRightDiv();
             this.showContent = true;
         }
@@ -119,7 +120,46 @@ module ums{
         }
 
         private addAgendaAndResolution(): void{
+            if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
+                this.agenda = CKEDITOR.instances['CKEditorForAgenda'].getData();
+            }
+            if(CKEDITOR.instances['CKEditorForResolution'].getData() != ""){
+                this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
+            }
+            let agendaResolutionEntry: IAgendaResolution;
+            agendaResolutionEntry = {
+                id: "",
+                agendaNo: this.agendaNo,
+                agenda: this.agenda,
+                resolution: this.resolution,
+                showExpandButton: true
+            };
+            this.agendaAndResolutions.push(agendaResolutionEntry);
+            this.reset();
+        }
 
+        private edit(index: number): void{
+            this.toggleAgendaAndResolutionDiv('show');
+            this.agendaNo = this.agendaAndResolutions[index].agendaNo;
+            this.agenda = this.agendaAndResolutions[index].agenda;
+            this.resolution = this.agendaAndResolutions[index].resolution;
+            this.agendaAndResolutions.splice(index, 1);
+        }
+
+        private reset(): void{
+            this.agendaNo = "";
+            this.agenda = "";
+            this.resolution = "";
+            CKEDITOR.instances['CKEditorForAgenda'].setData("");
+            CKEDITOR.instances['CKEditorForResolution'].setData("");
+        }
+
+        private convertToJson(): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            JsonObject['entries'] = this.agendaAndResolutions;
+            defer.resolve(JsonObject);
+            return defer.promise;
         }
     }
 

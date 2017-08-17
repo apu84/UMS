@@ -11,7 +11,7 @@ public interface ScheduleManager extends ContentManager<Schedule, MutableSchedul
 
   int saveMeetingSchedule(final MutableSchedule pMeetingSchedule);
 
-  Schedule getMeetingSchedule(final MeetingType pMeetingType, final int meetingNo);
+  Schedule getMeetingSchedule(final int pMeetingTypeId, final int meetingNo);
 
   int updateMeetingSchedule(final MutableSchedule pMeetingSchedule);
 }

@@ -5,13 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.cache.common.DivisionCache;
+import org.ums.cache.meeting.AgendaResolutionCache;
 import org.ums.cache.meeting.ScheduleCache;
 import org.ums.cache.registrar.*;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.common.DivisionManager;
+import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.manager.meeting.ScheduleManager;
 import org.ums.manager.registrar.*;
 import org.ums.persistent.dao.common.PersistentDivisionDao;
+import org.ums.persistent.dao.meeting.PersistentAgendaResolutionDao;
 import org.ums.persistent.dao.meeting.PersistentScheduleDao;
 import org.ums.persistent.dao.registrar.*;
 import org.ums.statistics.JdbcTemplateFactory;
@@ -83,5 +86,13 @@ public class RegistrarContext {
     ScheduleCache scheduleCache = new ScheduleCache(mCacheFactory.getCacheManager());
     scheduleCache.setManager(new PersistentScheduleDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return scheduleCache;
+  }
+
+  @Bean
+  AgendaResolutionManager agendaResolutionManager() {
+    AgendaResolutionCache agendaResolutionCache = new AgendaResolutionCache(mCacheFactory.getCacheManager());
+    agendaResolutionCache
+        .setManager(new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return agendaResolutionCache;
   }
 }

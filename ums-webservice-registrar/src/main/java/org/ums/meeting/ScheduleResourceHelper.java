@@ -30,10 +30,10 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
   @Autowired
   ScheduleBuilder mBuilder;
 
-  public JsonObject getScheduleInformation(final MeetingType pMeetingType, final int pMeetingNo, final UriInfo pUriInfo) {
+  public JsonObject getScheduleInformation(final int pMeetingTypeId, final int pMeetingNo, final UriInfo pUriInfo) {
     Schedule schedule = new PersistentSchedule();
     try {
-      schedule = mManager.getMeetingSchedule(pMeetingType, pMeetingNo);
+      schedule = mManager.getMeetingSchedule(pMeetingTypeId, pMeetingNo);
     } catch(EmptyResultDataAccessException e) {
     }
 
@@ -43,7 +43,7 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
   public Response saveSchedule(JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableSchedule mutableSchedule = new PersistentSchedule();
     LocalCache localCache = new LocalCache();
-    mBuilder.build(mutableSchedule, pJsonObject, localCache);
+    mBuilder.build(mutableSchedule, pJsonObject.getJsonObject("entries"), localCache);
     mManager.saveMeetingSchedule(mutableSchedule);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);

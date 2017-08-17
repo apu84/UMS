@@ -74,6 +74,7 @@
                 org.ums.resource,
                 org.ums.login,
                 org.ums.builder,
+                org.ums.meeting,
                 org.ums.cachewarmer,
                 org.ums.navigation,
                 org.ums.filter.cors,
