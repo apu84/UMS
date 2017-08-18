@@ -1,6 +1,7 @@
 package org.ums.manager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -36,6 +37,19 @@ public class UserPropertyResolver extends UserDaoDecorator {
   @Override
   public List<User> getUsers() {
     return super.getUsers().stream().map(user -> transform(user)).collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<User> getByEmail(String pEmail) {
+    Optional<Student> student = mStudentManager.getByEmail(pEmail);
+    if (student.isPresent()) {
+      return Optional.of(getManager().get(student.get().getId()));
+    }
+    Optional<Employee> employee = mEmployeeManager.getByEmail(pEmail);
+    if (employee.isPresent()) {
+      return Optional.of(getManager().getByEmployeeId(employee.get().getId()));
+    }
+    return Optional.empty();
   }
 
   private User transform(User user) {

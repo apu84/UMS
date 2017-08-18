@@ -27,14 +27,11 @@ public class PersistentUser implements MutableUser {
   private String mId;
   private char[] mPassword;
   private char[] mTemporaryPassword;
-  private List<Role> mRoles;
-  private List<Integer> mRoleIds;
   private boolean mActive;
   private String mPasswordResetToken;
   private Date mPasswordTokenGenerateDateTime;
   private Integer mPrimaryRoleId;
   private Role mPrimaryRole;
-  private List<String> mAdditionalPermissions;
   private String mLastModified;
   private String mEmployeeId;
   private Department mDepartment;
@@ -48,11 +45,8 @@ public class PersistentUser implements MutableUser {
   public PersistentUser(final PersistentUser pPersistentUser) {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
-    mRoleIds = pPersistentUser.getRoleIds();
-    mRoles = pPersistentUser.getRoles();
     mActive = pPersistentUser.isActive();
     mPrimaryRole = pPersistentUser.getPrimaryRole();
-    mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
     mDepartment = pPersistentUser.getDepartment();
     mName = pPersistentUser.getName();
     mEmployeeId = pPersistentUser.getEmployeeId();
@@ -87,32 +81,6 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setPassword(char[] pPassword) {
     mPassword = pPassword;
-  }
-
-  @Override
-  public List<Integer> getRoleIds() {
-    return mRoleIds;
-  }
-
-  @Override
-  public void setRoleIds(List<Integer> pRoleIds) {
-    mRoleIds = pRoleIds;
-  }
-
-  @Override
-  public List<Role> getRoles() {
-    mRoles = new ArrayList<>();
-    if(mRoleIds != null) {
-      for(Integer roleId : mRoleIds) {
-        mRoles.add(sRoleManager.get(roleId));
-      }
-    }
-    return mRoles;
-  }
-
-  @Override
-  public void setRoles(List<Role> pRoles) {
-    mRoles = pRoles;
   }
 
   @Override
@@ -188,16 +156,6 @@ public class PersistentUser implements MutableUser {
   @Override
   public Role getPrimaryRole() {
     return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager.validate(mPrimaryRole);
-  }
-
-  @Override
-  public void setAdditionalPermissions(List<String> pAdditionalPermissions) {
-    mAdditionalPermissions = pAdditionalPermissions;
-  }
-
-  @Override
-  public List<String> getAdditionalPermissions() {
-    return mAdditionalPermissions;
   }
 
   @Override

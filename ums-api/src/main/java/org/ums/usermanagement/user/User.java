@@ -17,10 +17,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
 
   char[] getTemporaryPassword();
 
-  List<Integer> getRoleIds();
-
-  List<Role> getRoles();
-
   boolean isActive();
 
   String getPasswordResetToken();
@@ -30,8 +26,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
   Integer getPrimaryRoleId();
 
   Role getPrimaryRole();
-
-  List<String> getAdditionalPermissions();
 
   Department getDepartment();
 

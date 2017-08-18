@@ -17,6 +17,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Optional;
 
 public class ForgetPassword extends AbstractPathMatchingFilter {
   @Autowired
@@ -24,9 +25,6 @@ public class ForgetPassword extends AbstractPathMatchingFilter {
 
   @Autowired
   private MessageResource mMessageResource;
-
-  @Autowired
-  private EmployeeManager mEmployeeManager;
 
   @Autowired
   TokenBuilder mTokenBuilder;
@@ -51,11 +49,11 @@ public class ForgetPassword extends AbstractPathMatchingFilter {
     else if (recoverBy.equals("email")) {
       Validate.notNull(jsonObject.get("email"), "Email is empty");
       String email = jsonObject.get("email").toString();
-      if (!mEmployeeManager.emailExists(email)) {
+      Optional<User> userOptional = mUserManager.getByEmail(email);
+      if (!userOptional.isPresent()) {
         return sendError(mMessageResource.getMessage("email.not.exists"), response);
       }
-      Employee employee = mEmployeeManager.getByEmail(email);
-      user = mUserManager.getByEmployeeId(employee.getId());
+      user = userOptional.get();
     }
 
     if(user != null) {
@@ -65,7 +63,6 @@ public class ForgetPassword extends AbstractPathMatchingFilter {
       mutableUser.setPasswordTokenGenerateDateTime(new Date());
       mutableUser.update();
     }
-
     return false;
   }
 }

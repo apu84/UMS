@@ -5,18 +5,14 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.EmployeeManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableEmployee, String, EmployeeManager>
     implements EmployeeManager {
 
   @Override
-  public Employee getByEmail(final String pEmailAddress) {
+  public Optional<Employee> getByEmail(final String pEmailAddress) {
     return getManager().getByEmail(pEmailAddress);
-  }
-
-  @Override
-  public boolean emailExists(final String pEmailAddress) {
-    return getManager().emailExists(pEmailAddress);
   }
 
   @Override

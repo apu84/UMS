@@ -6,6 +6,7 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.EmployeeManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmployeeCache extends ContentCache<Employee, MutableEmployee, String, EmployeeManager> implements
     EmployeeManager {
@@ -22,12 +23,7 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   }
 
   @Override
-  public boolean emailExists(final String pEmailAddress) {
-    return getManager().emailExists(pEmailAddress);
-  }
-
-  @Override
-  public Employee getByEmail(final String pEmailAddress) {
+  public Optional<Employee> getByEmail(final String pEmailAddress) {
     return getManager().getByEmail(pEmailAddress);
   }
 

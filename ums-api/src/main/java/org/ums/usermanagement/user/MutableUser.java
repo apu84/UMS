@@ -16,10 +16,6 @@ public interface MutableUser extends User, Editable<String>, MutableIdentifier<S
 
   void setTemporaryPassword(final char[] pPassword);
 
-  void setRoleIds(final List<Integer> pRoleIds);
-
-  void setRoles(final List<Role> pRoles);
-
   void setActive(final boolean pActive);
 
   void setPasswordResetToken(final String pPasswordResetToken);
@@ -29,8 +25,6 @@ public interface MutableUser extends User, Editable<String>, MutableIdentifier<S
   void setPrimaryRoleId(final Integer pRoleId);
 
   void setPrimaryRole(final Role pPrimaryRole);
-
-  void setAdditionalPermissions(List<String> pAdditionalPermissions);
 
   void setDepartment(Department pDepartment);
 

@@ -6,8 +6,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.zookeeper.Op;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;
@@ -272,6 +274,13 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId) {
     String query = "update students set status=? where student_id=?";
     return mJdbcTemplate.update(query, pStudentStatus.getId(), pStudentId);
+  }
+
+  @Override
+  public Optional<Student> getByEmail(String pEmail) {
+    String query = SELECT_ALL + "WHERE EMAIL IS NOT NULL AND EMAIL = ?";
+    List<Student> students = mJdbcTemplate.query(query, new Object[]{pEmail}, new StudentRowMapper());
+    return students.size() == 1 ? Optional.of(students.get(0)) : Optional.empty();
   }
 
   class StudentRowMapper implements RowMapper<Student> {

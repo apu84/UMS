@@ -5,9 +5,9 @@ import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.enums.StudentStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.StudentManager;
-import org.ums.util.CacheUtil;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StudentCache extends ContentCache<Student, MutableStudent, String, StudentManager> implements
     StudentManager {
@@ -70,5 +70,10 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   @Override
   public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId) {
     return getManager().updateStudentsStatus(pStudentStatus, pStudentId);
+  }
+
+  @Override
+  public Optional<Student> getByEmail(String pEmail) {
+    return getManager().getByEmail(pEmail);
   }
 }

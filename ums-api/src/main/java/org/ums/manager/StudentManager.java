@@ -3,10 +3,11 @@ package org.ums.manager;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Student;
 import org.ums.enums.StudentStatus;
+import org.ums.usermanagement.user.UserEmail;
 
 import java.util.List;
 
-public interface StudentManager extends ContentManager<Student, MutableStudent, String> {
+public interface StudentManager extends ContentManager<Student, MutableStudent, String>, UserEmail<Student> {
   List<Student> getStudentListFromStudentsString(final String pStudents);
 
   List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId);
