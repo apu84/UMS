@@ -79,6 +79,32 @@ module ums{
                 });
             return defer.promise;
         }
+
+        public getMeetingAgendaResolution(scheduleId: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.get(this.agendaResolutionUrl + "/get/scheduleId/"+ scheduleId, HttpClient.MIME_TYPE_JSON,
+                (json: any, etag: string) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    this.notify.error("Error in Meeting Schedule Information");
+                });
+            return defer.promise;
+        }
+
+        public updateMeetingAgendaResolution(json: any): ng.IPromise<any> {
+            console.log(json);
+            let defer = this.$q.defer();
+            this.httpClient.put(this.agendaResolutionUrl + "/update", json, HttpClient.MIME_TYPE_JSON)
+                .success(() => {
+                    this.notify.success("Update Successful");
+                    defer.resolve();
+                })
+                .error((data) => {
+                    this.notify.error("Error in Updating");
+                });
+            return defer.promise;
+        }
     }
     UMS.service("meetingService", MeetingService);
 }

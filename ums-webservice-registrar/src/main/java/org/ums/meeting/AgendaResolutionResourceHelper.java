@@ -12,6 +12,7 @@ import org.ums.manager.ContentManager;
 import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.persistent.model.meeting.PersistentAgendaResolution;
 import org.ums.resource.ResourceHelper;
+import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.Json;
@@ -32,10 +33,10 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   @Autowired
   AgendaResolutionBuilder mBuilder;
 
-  public JsonObject getAgendaResolution(final int pMeetingTypeId, final int pMeetingNo, final UriInfo pUriInfo) {
+  public JsonObject getAgendaResolution(final String pScheduleId, final UriInfo pUriInfo) {
     List<AgendaResolution> pAgendaResolution = new ArrayList<>();
     try {
-      pAgendaResolution = mManager.getAgendaResolution(pMeetingTypeId, pMeetingNo);
+      pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -48,6 +49,16 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     LocalCache localCache = new LocalCache();
     mBuilder.build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
     mManager.saveAgendaResolution(mutableAgendaResolution);
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  public Response updateAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
+    LocalCache localCache = new LocalCache();
+    mBuilder.updateBuilder(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
+    mManager.updateAgendaResolution(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface AgendaResolutionManager extends ContentManager<AgendaResolution, MutableAgendaResolution, Long> {
 
-  int saveAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution);
+  Long saveAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution);
 
-  List<AgendaResolution> getAgendaResolution(final int pMeetingTypeId, final int pMeetingNo);
+  List<AgendaResolution> getAgendaResolution(final Long pScheduleId);
 
   int updateAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution);
 

@@ -25,13 +25,13 @@ public class AgendaResolutionCache extends
   }
 
   @Override
-  public int saveAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
+  public Long saveAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
     return getManager().saveAgendaResolution(pMutableAgendaResolution);
   }
 
   @Override
-  public List<AgendaResolution> getAgendaResolution(int pMeetingTypeId, int pMeetingNo) {
-    return getManager().getAgendaResolution(pMeetingTypeId, pMeetingNo);
+  public List<AgendaResolution> getAgendaResolution(Long pScheduleId) {
+    return getManager().getAgendaResolution(pScheduleId);
   }
 
   @Override

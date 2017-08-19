@@ -187,7 +187,8 @@
                                             <div align="right">
                                                 <div data-ng-show="vm.showAgendaAndResolutionDiv">
                                                     <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
-                                                    <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Submit</button>
+                                                    <button type="button" data-ng-show="!vm.showUpdateButton" data-ng-click="vm.save()" class="btn btn-success">Submit</button>
+                                                    <button type="button" data-ng-show="vm.showUpdateButton" data-ng-click="vm.update()" class="btn btn-success">Update</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -29,12 +29,13 @@ module ums{
         private showMasterExpandButton: boolean = true;
         private showRightDiv: boolean = false;
         private showCancelButton: boolean = false;
+        private showUpdateButton: boolean = false;
         private agendaAndResolutions: IAgendaResolution[] = [];
-        private tempAgendaAndResolution: IAgendaResolution [] = [];
+        private tempAgendaAndResolution: IAgendaResolution[] = [];
         private agendaNo: string = "";
         private agenda: string = "";
         private resolution: string = "";
-        private meetingNumber: IAgendaResolution = <IAgendaResolution>{};
+        private meetingNumber: IMeetingScheduleModel = <IMeetingScheduleModel>{};
 
         constructor(private registrarConstants: any,
                     private $scope: IAgendaAndResolution,
@@ -65,8 +66,11 @@ module ums{
         }
 
         private getAgendaResolution(): void{
-            Utils.expandRightDiv();
-            this.showRightDiv = true;
+            this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
+                this.agendaAndResolutions = response;
+                Utils.expandRightDiv();
+                this.showRightDiv = true;
+            });
         }
 
         private toggleEditor(type: string, param: string): void{
@@ -130,8 +134,7 @@ module ums{
             }
         }
 
-        private addAgendaAndResolution(): void{
-            this.showCancelButton = false;  // Will be removed when update button arrive
+        private save(): void{
             let editorForAgenda: string = "N";
             let editorForResolution: string = "N";
             if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
@@ -153,19 +156,50 @@ module ums{
                 scheduleId: this.meetingNumber.id,
                 showExpandButton: true
             };
-            this.agendaAndResolutions.push(agendaResolutionEntry);
             this.convertToJson(agendaResolutionEntry).then((json: any) => {
                 this.meetingService.saveAgendaResolution(json).then(() =>{
-                   this.notify.success("Successfully Saved");
+                    this.getAgendaResolution();
+                    this.reset();
                 });
             });
-            this.reset();
+        }
+
+        private update(): void{
+            let editorForAgenda: string = "N";
+            let editorForResolution: string = "N";
+            let index = this.tempAgendaAndResolution[0].id;
+            if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
+                this.agenda = CKEDITOR.instances['CKEditorForAgenda'].getData();
+                editorForAgenda = "Y";
+            }
+            if(CKEDITOR.instances['CKEditorForResolution'].getData() != ""){
+                this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
+                editorForResolution = "Y";
+            }
+            let agendaResolutionEntry: IAgendaResolution;
+            agendaResolutionEntry = {
+                id: index,
+                agendaNo: this.agendaNo,
+                agenda: this.agenda,
+                agendaEditor: editorForAgenda,
+                resolution: this.resolution,
+                resolutionEditor: editorForResolution,
+                scheduleId: this.meetingNumber.id,
+                showExpandButton: true
+            };
+            this.convertToJson(agendaResolutionEntry).then((json: any) => {
+                this.meetingService.updateMeetingAgendaResolution(json).then(() => {
+                    this.getAgendaResolution();
+                    this.reset();
+                });
+            });
         }
 
         private edit(index: number): void{
             this.tempAgendaAndResolution = [];
             this.toggleAgendaAndResolutionDiv('show');
             this.showCancelButton = true;
+            this.showUpdateButton = true;
             this.agendaNo = this.agendaAndResolutions[index].agendaNo;
             if(this.agendaAndResolutions[index].agendaEditor == "Y"){
                 CKEDITOR.instances['CKEditorForAgenda'].setData(this.agendaAndResolutions[index].agenda);
@@ -192,10 +226,13 @@ module ums{
             this.resolution = "";
             CKEDITOR.instances['CKEditorForAgenda'].setData("");
             CKEDITOR.instances['CKEditorForResolution'].setData("");
+            this.showUpdateButton = false;
+            this.showCancelButton = false;
         }
 
         private cancel(): void{
             this.showCancelButton = false;
+            this.showUpdateButton = false;
             this.agendaAndResolutions.push(this.tempAgendaAndResolution[0]);
             this.tempAgendaAndResolution = [];
             this.reset();

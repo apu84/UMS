@@ -37,12 +37,13 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
   }
 
   @Override
-  public int saveAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution) {
+  public Long saveAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution) {
+    Long id = mIdGenerator.getNumericId();
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutableAgendaResolution.getAgendaNo(),
-        pMutableAgendaResolution.getAgenda(), pMutableAgendaResolution.getAgendaEditor(),
-        pMutableAgendaResolution.getResolution(), pMutableAgendaResolution.getResolutionEditor(),
-        pMutableAgendaResolution.getScheduleId());
+    mJdbcTemplate.update(query, id, pMutableAgendaResolution.getAgendaNo(), pMutableAgendaResolution.getAgenda(),
+        pMutableAgendaResolution.getAgendaEditor(), pMutableAgendaResolution.getResolution(),
+        pMutableAgendaResolution.getResolutionEditor(), pMutableAgendaResolution.getScheduleId());
+    return id;
   }
 
   private List<Object[]> getSaveAgendaResolutionParams(List<MutableAgendaResolution> pMutableAgendaResolution) {
@@ -56,10 +57,17 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
   }
 
   @Override
-  public List<AgendaResolution> getAgendaResolution(final int pMeetingId, final int pMeetingNo) {
-    String query = GET_ONE + " WHERE MEETING_ID = ? AND MEETING_NO = ?";
-    return mJdbcTemplate.query(query, new Object[] {pMeetingId, pMeetingNo},
-        new PersistentAgendaResolutionDao.RoleRowMapper());
+  public List<AgendaResolution> getAgendaResolution(final Long pScheduleId) {
+    String query = GET_ONE + " WHERE SCHEDULE_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pScheduleId}, new PersistentAgendaResolutionDao.RoleRowMapper());
+  }
+
+  @Override
+  public int updateAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution) {
+    String query = UPDATE_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.update(query, pMutableAgendaResolution.getAgendaNo(), pMutableAgendaResolution.getAgenda(),
+        pMutableAgendaResolution.getAgendaEditor(), pMutableAgendaResolution.getResolution(),
+        pMutableAgendaResolution.getResolutionEditor(), pMutableAgendaResolution.getId());
   }
 
   class RoleRowMapper implements RowMapper<AgendaResolution> {

@@ -33,4 +33,13 @@ public class AgendaResolutionBuilder implements Builder<AgendaResolution, Mutabl
     pMutable.setResolutionEditor(pJsonObject.getString("resolutionEditor"));
     pMutable.setScheduleId(Long.parseLong(pJsonObject.getString("scheduleId")));
   }
+
+  public void updateBuilder(MutableAgendaResolution pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    pMutable.setAgendaNo(pJsonObject.containsKey("agendaNo") ? pJsonObject.getString("agendaNo") : null);
+    pMutable.setAgenda(pJsonObject.containsKey("agenda") ? pJsonObject.getString("agenda") : null);
+    pMutable.setAgendaEditor(pJsonObject.getString("agendaEditor"));
+    pMutable.setResolution(pJsonObject.containsKey("resolution") ? pJsonObject.getString("resolution") : null);
+    pMutable.setResolutionEditor(pJsonObject.getString("resolutionEditor"));
+  }
 }
