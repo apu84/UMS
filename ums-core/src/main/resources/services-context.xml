@@ -16,7 +16,7 @@
 
   <aop:aspectj-autoproxy/>
   <context:component-scan
-      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.persistent.model"/>
+      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.persistent.model,org.ums.kafka"/>
   <context:annotation-config/>
   <context:spring-configured/>
 

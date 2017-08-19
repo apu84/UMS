@@ -22,7 +22,7 @@ public class HolidaysResource extends MutableHolidaysResource {
   @GET
   @Path("/year/{year}")
   public JsonObject getHolidaysByYear(@Context HttpServletRequest pHttpServletRequest,
-      final @PathParam("year") int pYear, final @Context Request pRequest, @HeaderParam("user-agent") String userAgent)
+      @HeaderParam("user-agent") String userAgent, final @PathParam("year") int pYear, final @Context Request pRequest)
       throws Exception {
     /*
      * mLogger.trace(userAgent); System.out.println(pHttpServletRequest.getRequestURL());

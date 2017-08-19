@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
-import org.ums.domain.model.dto.logger.ActivityLogger;
 import org.ums.integration.FileWriterGateway;
 import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
@@ -70,8 +69,6 @@ public class ProfilePicture extends Resource {
 
       imageData = mGateway.read("files/user.png");
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-      ActivityLogger activityLogger =
-          new ActivityLogger(timestamp, getUserId(), timestamp, getClassName(), Thread.currentThread().getName());
 
       ObjectMapper mapper = new ObjectMapper();
 
