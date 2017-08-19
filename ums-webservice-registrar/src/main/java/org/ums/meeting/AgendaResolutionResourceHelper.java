@@ -46,7 +46,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public Response saveAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
-    mBuilder.build(mutableAgendaResolution, pJsonObject, localCache);
+    mBuilder.build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
     mManager.saveAgendaResolution(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);

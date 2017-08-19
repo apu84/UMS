@@ -17,7 +17,9 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   private Long mId;
   private String mAgendaNo;
   private String mAgenda;
+  private String mAgendaEditor;
   private String mResolution;
+  private String mResolutionEditor;
   private Long mScheduleId;
   private String mLastModified;
 
@@ -27,7 +29,9 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
     mId = pPersistentAgendaResolution.getId();
     mAgendaNo = pPersistentAgendaResolution.getAgendaNo();
     mAgenda = pPersistentAgendaResolution.getAgenda();
+    mAgendaEditor = pPersistentAgendaResolution.getAgendaEditor();
     mResolution = pPersistentAgendaResolution.getResolution();
+    mResolutionEditor = pPersistentAgendaResolution.getResolutionEditor();
     mScheduleId = pPersistentAgendaResolution.getScheduleId();
     mLastModified = pPersistentAgendaResolution.getLastModified();
   }
@@ -43,8 +47,18 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   }
 
   @Override
+  public void setAgendaEditor(String pAgendaEditor) {
+    mAgendaEditor = pAgendaEditor;
+  }
+
+  @Override
   public void setResolution(String pResolution) {
     mResolution = pResolution;
+  }
+
+  @Override
+  public void setResolutionEditor(String pResolutionEditor) {
+    mResolutionEditor = pResolutionEditor;
   }
 
   @Override
@@ -88,8 +102,18 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   }
 
   @Override
+  public String getAgendaEditor() {
+    return mAgendaEditor;
+  }
+
+  @Override
   public String getResolution() {
     return mResolution;
+  }
+
+  @Override
+  public String getResolutionEditor() {
+    return mResolutionEditor;
   }
 
   @Override

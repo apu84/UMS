@@ -12,6 +12,7 @@ import org.ums.persistent.model.meeting.PersistentSchedule;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class PersistentScheduleDao extends ScheduleDaoDecorator {
 
@@ -46,6 +47,12 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
     String query = GET_ONE + " WHERE MEETING_TYPE = ? AND MEETING_NO = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingTypeId, pMeetingNo},
         new PersistentScheduleDao.RoleRowMapper());
+  }
+
+  @Override
+  public List<Schedule> getAllMeetingSchedule(final int pMeetingType) {
+    String query = GET_ONE + " WHERE MEETING_TYPE = ?";
+    return mJdbcTemplate.query(query, new Object[] {pMeetingType}, new PersistentScheduleDao.RoleRowMapper());
   }
 
   @Override

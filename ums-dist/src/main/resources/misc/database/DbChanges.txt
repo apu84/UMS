@@ -1170,6 +1170,10 @@ CREATE TABLE DB_IUMS.EMP_ADDITIONAL_INFO
 
 //*********************************************************************************************************************
 
+
+//*****************************************Meeting Management System**************************************************
+
+
 CREATE TABLE DB_IUMS.MEETING_SCHEDULE
 (
   ID              NUMBER,
@@ -1178,11 +1182,19 @@ CREATE TABLE DB_IUMS.MEETING_SCHEDULE
   MEETING_REF_NO  VARCHAR2(30 BYTE),
   DATE_TIME       TIMESTAMP(6),
   ROOM            VARCHAR2(30 BYTE)
-)
+);
 
-//*****************************************Meeting Management System**************************************************
-
-
+CREATE TABLE DB_IUMS.MEETING_AGENDA_RESOLUTION
+(
+  ID                 NUMBER,
+  AGENDA_NO          VARCHAR2(20 BYTE),
+  AGENDA             CLOB,
+  AGENDA_EDITOR      VARCHAR2(1 BYTE),
+  RESOLUTION         CLOB,
+  RESOLUTION_EDITOR  VARCHAR2(1 BYTE)
+  SCHEDULE_ID        NUMBER,
+  LAST_MODIFIED      VARCHAR2(18 BYTE)
+);
 
 
 //********************************************************************************************************************

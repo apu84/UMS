@@ -7,6 +7,8 @@ import org.ums.enums.meeting.MeetingType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.meeting.ScheduleManager;
 
+import java.util.List;
+
 public class ScheduleCache extends ContentCache<Schedule, MutableSchedule, Long, ScheduleManager> implements
     ScheduleManager {
 
@@ -29,6 +31,11 @@ public class ScheduleCache extends ContentCache<Schedule, MutableSchedule, Long,
   @Override
   public Schedule getMeetingSchedule(int pMeetingType, int meetingNo) {
     return getManager().getMeetingSchedule(pMeetingType, meetingNo);
+  }
+
+  @Override
+  public List<Schedule> getAllMeetingSchedule(int pMeetingTypeId) {
+    return getManager().getAllMeetingSchedule(pMeetingTypeId);
   }
 
   @Override

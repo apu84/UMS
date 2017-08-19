@@ -10,12 +10,16 @@ module ums{
         id: string;
         agendaNo: string;
         agenda: string;
+        agendaEditor: string;
         resolution: string;
+        resolutionEditor: string;
+        scheduleId: string;
         showExpandButton: boolean;
     }
     class AgendaAndResolution{
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'meetingService'];
         private meetingTypes: IConstants[] = [];
+        private meetingSchedules: IMeetingScheduleModel[] = [];
         private meetingNumbers: number[] = [];
         private meetingType: IConstants = null;
         private showEditorForAgenda: boolean = false;
@@ -23,16 +27,19 @@ module ums{
         private showAgendaAndResolutionDiv: boolean = false;
         private showResolutionDiv: boolean = true;
         private showMasterExpandButton: boolean = true;
-        private showContent: boolean = false;
+        private showRightDiv: boolean = false;
+        private showCancelButton: boolean = false;
         private agendaAndResolutions: IAgendaResolution[] = [];
+        private tempAgendaAndResolution: IAgendaResolution [] = [];
         private agendaNo: string = "";
         private agenda: string = "";
         private resolution: string = "";
+        private meetingNumber: IAgendaResolution = <IAgendaResolution>{};
 
         constructor(private registrarConstants: any,
                     private $scope: IAgendaAndResolution,
                     private $q: ng.IQService,
-                    private notify: Notify) {
+                    private notify: Notify, private meetingService: MeetingService) {
 
             $scope.getAgendaResolution = this.getAgendaResolution.bind(this);
 
@@ -48,14 +55,18 @@ module ums{
                 this.notify.error("Select A Meeting Type");
             }
             else {
-                this.meetingNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                this.meetingSchedules = [];
+                this.meetingService.getMeetingNumber(this.meetingType.id).then((response: any) =>{
+                    for(let i = 0; i < response.length; i++) {
+                        this.meetingSchedules[i] = response[i];
+                    }
+                });
             }
         }
 
         private getAgendaResolution(): void{
-            this.agendaAndResolutions = [{id: "1", agendaNo: "BOT 1", agenda: "Improve Univeristy quality by using automation and automatic monitoring", resolution: "", showExpandButton: true}];
             Utils.expandRightDiv();
-            this.showContent = true;
+            this.showRightDiv = true;
         }
 
         private toggleEditor(type: string, param: string): void{
@@ -67,7 +78,7 @@ module ums{
                     this.showEditorForAgenda = false;
                 }
             }
-            else{
+            else if(type === "resolution") {
                 if (param == "editor") {
                     this.showEditorForResolution = true;
                 }
@@ -120,30 +131,59 @@ module ums{
         }
 
         private addAgendaAndResolution(): void{
+            this.showCancelButton = false;  // Will be removed when update button arrive
+            let editorForAgenda: string = "N";
+            let editorForResolution: string = "N";
             if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
                 this.agenda = CKEDITOR.instances['CKEditorForAgenda'].getData();
+                editorForAgenda = "Y";
             }
             if(CKEDITOR.instances['CKEditorForResolution'].getData() != ""){
                 this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
+                editorForResolution = "Y";
             }
             let agendaResolutionEntry: IAgendaResolution;
             agendaResolutionEntry = {
                 id: "",
                 agendaNo: this.agendaNo,
                 agenda: this.agenda,
+                agendaEditor: editorForAgenda,
                 resolution: this.resolution,
+                resolutionEditor: editorForResolution,
+                scheduleId: this.meetingNumber.id,
                 showExpandButton: true
             };
             this.agendaAndResolutions.push(agendaResolutionEntry);
+            this.convertToJson(agendaResolutionEntry).then((json: any) => {
+                this.meetingService.saveAgendaResolution(json).then(() =>{
+                   this.notify.success("Successfully Saved");
+                });
+            });
             this.reset();
         }
 
         private edit(index: number): void{
+            this.tempAgendaAndResolution = [];
             this.toggleAgendaAndResolutionDiv('show');
+            this.showCancelButton = true;
             this.agendaNo = this.agendaAndResolutions[index].agendaNo;
-            this.agenda = this.agendaAndResolutions[index].agenda;
-            this.resolution = this.agendaAndResolutions[index].resolution;
-            this.agendaAndResolutions.splice(index, 1);
+            if(this.agendaAndResolutions[index].agendaEditor == "Y"){
+                CKEDITOR.instances['CKEditorForAgenda'].setData(this.agendaAndResolutions[index].agenda);
+                this.toggleEditor('agenda', 'editor');
+            }
+            else {
+                this.agenda = this.agendaAndResolutions[index].agenda;
+                this.toggleEditor('agenda','text');
+            }
+            if(this.agendaAndResolutions[index].resolutionEditor == "Y"){
+                CKEDITOR.instances['CKEditorForResolution'].setData(this.agendaAndResolutions[index].resolution);
+                this.toggleEditor('resolution', 'editor');
+            }
+            else {
+                this.resolution = this.agendaAndResolutions[index].resolution;
+                this.toggleEditor('resolution', 'text');
+            }
+            this.tempAgendaAndResolution = this.agendaAndResolutions.splice(index, 1);
         }
 
         private reset(): void{
@@ -154,10 +194,17 @@ module ums{
             CKEDITOR.instances['CKEditorForResolution'].setData("");
         }
 
-        private convertToJson(): ng.IPromise<any>{
+        private cancel(): void{
+            this.showCancelButton = false;
+            this.agendaAndResolutions.push(this.tempAgendaAndResolution[0]);
+            this.tempAgendaAndResolution = [];
+            this.reset();
+        }
+
+        private convertToJson(convertingObject: IAgendaResolution): ng.IPromise<any>{
             let defer = this.$q.defer();
             let JsonObject = {};
-            JsonObject['entries'] = this.agendaAndResolutions;
+            JsonObject['entries'] = convertingObject;
             defer.resolve(JsonObject);
             return defer.promise;
         }

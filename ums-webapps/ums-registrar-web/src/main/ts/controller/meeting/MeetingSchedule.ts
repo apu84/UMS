@@ -1,5 +1,5 @@
 module ums{
-    interface IMeetingScheduleModel{
+    export interface IMeetingScheduleModel{
         id: string
         type: IConstants,
         meetingNo: number;
@@ -107,7 +107,7 @@ module ums{
 
         private getSchedule(): void{
             this.prepareMeetingModel.meetingSchedule = <IMeetingScheduleModel>{};
-            this.meetingService.getMeetingSchedule(10, 123).then((response: any) =>{
+            this.meetingService.getMeetingSchedule(10, 1).then((response: any) =>{
                 console.log(this.prepareMeetingModel.meetingSchedule);
                 this.prepareMeetingModel.meetingSchedule = response[0];
                 console.log(this.prepareMeetingModel.meetingSchedule);

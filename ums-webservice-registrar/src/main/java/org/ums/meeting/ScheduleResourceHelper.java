@@ -20,6 +20,8 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSchedule, Long> {
@@ -40,6 +42,16 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
     return buildJson(schedule, pUriInfo);
   }
 
+  public JsonObject getAllScheduleInformation(final int pMeetingTypeId, final UriInfo pUriInfo) {
+    List<Schedule> schedule = new ArrayList<>();
+    try {
+      schedule = mManager.getAllMeetingSchedule(pMeetingTypeId);
+    } catch(EmptyResultDataAccessException e) {
+    }
+
+    return toJson(schedule, pUriInfo);
+  }
+
   public Response saveSchedule(JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableSchedule mutableSchedule = new PersistentSchedule();
     LocalCache localCache = new LocalCache();
@@ -54,13 +66,26 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
     if(pSchedule.getId() != null) {
       children.add(toJson(pSchedule, pUriInfo, localCache));
     }
     jsonObject.add("entries", children);
     localCache.invalidate();
     return jsonObject.build();
+  }
+
+  private JsonObject toJson(List<Schedule> pSchedule, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Schedule schedule : pSchedule) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().build(jsonObject, schedule, pUriInfo, localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

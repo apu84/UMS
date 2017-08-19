@@ -16,13 +16,14 @@ import java.util.List;
 public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO MEETING_AGENDA_RESOLUTION (ID, AGENDA_NO, AGENDA, RESOLUTION, SCHEDULE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, "
+      "INSERT INTO MEETING_AGENDA_RESOLUTION (ID, AGENDA_NO, AGENDA, AGENDA_EDITOR, RESOLUTION, RESOLUTION_EDITOR, SCHEDULE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE = "SELECT ID, AGENDA_NO, AGENDA, RESOLUTION, SCHEDULE_ID FROM MEETING_AGENDA_RESOLUTION ";
+  static String GET_ONE =
+      "SELECT ID, AGENDA_NO, AGENDA, AGENDA_EDITOR, RESOLUTION, RESOLUTION_EDITOR, SCHEDULE_ID FROM MEETING_AGENDA_RESOLUTION ";
 
   static String UPDATE_ONE =
-      "UPDATE MEETING_AGENDA_RESOLUTION SET AGENDA_NO = ?, AGENDA = ?, RESOLUTION = ?, LAST_MODIFIED = "
+      "UPDATE MEETING_AGENDA_RESOLUTION SET AGENDA_NO = ?, AGENDA = ?, AGENDA_EDITOR = ?, RESOLUTION = ?, RESOLUTION_EDITOR = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
   static String DELETE_ONE = "DELETE FROM MEETING_AGENDA_RESOLUTION ";
@@ -39,7 +40,8 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
   public int saveAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutableAgendaResolution.getAgendaNo(),
-        pMutableAgendaResolution.getAgenda(), pMutableAgendaResolution.getResolution(),
+        pMutableAgendaResolution.getAgenda(), pMutableAgendaResolution.getAgendaEditor(),
+        pMutableAgendaResolution.getResolution(), pMutableAgendaResolution.getResolutionEditor(),
         pMutableAgendaResolution.getScheduleId());
   }
 
@@ -47,7 +49,8 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
     List<Object[]> params = new ArrayList<>();
     for(AgendaResolution agendaResolution : pMutableAgendaResolution) {
       params.add(new Object[] {mIdGenerator.getNumericId(), agendaResolution.getAgendaNo(),
-          agendaResolution.getAgenda(), agendaResolution.getResolution(), agendaResolution.getScheduleId()});
+          agendaResolution.getAgenda(), agendaResolution.getAgendaEditor(), agendaResolution.getResolution(),
+          agendaResolution.getResolutionEditor(), agendaResolution.getScheduleId()});
     }
     return params;
   }
@@ -67,7 +70,9 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
       persistentAgendaResolution.setId(resultSet.getLong("ID"));
       persistentAgendaResolution.setAgendaNo(resultSet.getString("AGENDA_NO"));
       persistentAgendaResolution.setAgenda(resultSet.getString("AGENDA"));
+      persistentAgendaResolution.setAgendaEditor(resultSet.getString("AGENDA_EDITOR"));
       persistentAgendaResolution.setResolution(resultSet.getString("RESOLUTION"));
+      persistentAgendaResolution.setResolutionEditor(resultSet.getString("RESOLUTION_EDITOR"));
       persistentAgendaResolution.setScheduleId(resultSet.getLong("SCHEDULE_ID"));
       return persistentAgendaResolution;
     }

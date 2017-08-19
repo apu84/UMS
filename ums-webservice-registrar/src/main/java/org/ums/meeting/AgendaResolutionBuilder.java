@@ -17,14 +17,20 @@ public class AgendaResolutionBuilder implements Builder<AgendaResolution, Mutabl
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("agendaNo", pReadOnly.getAgendaNo());
     pBuilder.add("agenda", pReadOnly.getAgenda());
+    pBuilder.add("agendaEditor", pReadOnly.getAgendaEditor());
     pBuilder.add("resolution", pReadOnly.getResolution());
+    pBuilder.add("resolutionEditor", pReadOnly.getResolutionEditor());
+    pBuilder.add("scheduleId", pReadOnly.getScheduleId().toString());
     pBuilder.add("showExpandButton", true);
   }
 
   @Override
   public void build(MutableAgendaResolution pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setAgendaNo(pJsonObject.getString("agendaNo"));
-    pMutable.setAgenda(pJsonObject.getString("agenda"));
-    pMutable.setResolution(pJsonObject.getString("resolution"));
+    pMutable.setAgendaNo(pJsonObject.containsKey("agendaNo") ? pJsonObject.getString("agendaNo") : null);
+    pMutable.setAgenda(pJsonObject.containsKey("agenda") ? pJsonObject.getString("agenda") : null);
+    pMutable.setAgendaEditor(pJsonObject.getString("agendaEditor"));
+    pMutable.setResolution(pJsonObject.containsKey("resolution") ? pJsonObject.getString("resolution") : null);
+    pMutable.setResolutionEditor(pJsonObject.getString("resolutionEditor"));
+    pMutable.setScheduleId(Long.parseLong(pJsonObject.getString("scheduleId")));
   }
 }

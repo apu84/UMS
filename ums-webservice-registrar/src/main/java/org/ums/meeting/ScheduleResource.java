@@ -19,4 +19,11 @@ public class ScheduleResource extends MutableScheduleResource {
       final @PathParam("meetingNo") int pMeetingNo, final @Context Request pRequest) throws Exception {
     return mHelper.getScheduleInformation(pMeetingTypeId, pMeetingNo, mUriInfo);
   }
+
+  @GET
+  @Path("/get/meetingType/{meetingType}")
+  public JsonObject getAllMeetingSchedule(final @PathParam("meetingType") int pMeetingTypeId,
+      final @Context Request pRequest) throws Exception {
+    return mHelper.getAllScheduleInformation(pMeetingTypeId, mUriInfo);
+  }
 }

@@ -40,7 +40,7 @@
                             <select name="nMeetingNumber"
                                     id="iMeetingNumber"
                                     data-ng-model="vm.meetingNumber"
-                                    data-ng-options="meetingNumber for meetingNumber in vm.meetingNumbers track by meetingNumber.id"
+                                    data-ng-options="meetingSchedule.meetingNo for meetingSchedule in vm.meetingSchedules track by meetingSchedule.id"
                                     class="form-control" required>
                                 <option value="">Select Meeting No.</option>
                             </select>
@@ -58,7 +58,7 @@
         <div class="panel">
             <div class="panel-body shadowPanel" style="min-height:490px;">
                 <div class="control-fluid">
-                    <div data-ng-show="vm.showContent">
+                    <div data-ng-show="vm.showRightDiv">
                         <fieldset>
                             <legend>Create Agenda & Resolution</legend>
                             <div data-ng-show="vm.showAgendaAndResolutionDiv">
@@ -69,6 +69,22 @@
                                             <input type="text"
                                                    data-ng-model="vm.agendaNo"
                                                     class="form-control">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div align="right">
+                                                <div data-ng-show="vm.showResolutionDiv">
+                                                    <button type="button"
+                                                            data-ng-click="vm.toggleResolutionDiv('hide')"
+                                                            class="btn btn-default btn-xs">Hide Resolution
+                                                    </button>
+                                                </div>
+                                                <div data-ng-show="!vm.showResolutionDiv">
+                                                    <button type="button"
+                                                            data-ng-click="vm.toggleResolutionDiv('show')"
+                                                            class="btn btn-dark btn-xs">Create Resolution
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -114,24 +130,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div align="right">
-                                                <div data-ng-show="vm.showResolutionDiv">
-                                                    <button type="button"
-                                                            data-ng-click="vm.toggleResolutionDiv('hide')"
-                                                            class="btn btn-default btn-xs">Hide Resolution
-                                                    </button>
-                                                </div>
-                                                <div data-ng-show="!vm.showResolutionDiv">
-                                                    <button type="button"
-                                                            data-ng-click="vm.toggleResolutionDiv('show')"
-                                                            class="btn btn-default btn-xs">Show Resolution
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div data-ng-show="vm.showResolutionDiv">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -176,6 +174,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div data-ng-show="!vm.showCancelButton">
+                                                <button type="button" data-ng-click="vm.reset()" class="btn btn-default">Clear</button>
+                                            </div>
+                                            <div data-ng-show="vm.showCancelButton">
+                                                <button type="button" data-ng-click="vm.cancel()" class="btn btn-default">Cancel</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div align="right">
+                                                <div data-ng-show="vm.showAgendaAndResolutionDiv">
+                                                    <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
+                                                    <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -185,27 +201,27 @@
                                     <div data-ng-show="!vm.showAgendaAndResolutionDiv">
                                         <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('show')" class="btn btn-default btn-xs">Create New</button>
                                     </div>
-                                    <div data-ng-show="vm.showAgendaAndResolutionDiv">
-                                        <button type="button" data-ng-click="vm.toggleAgendaAndResolutionDiv('hide')" class="btn btn-default">Hide</button>
-                                        <button type="button" data-ng-click="vm.addAgendaAndResolution()" class="btn btn-success">Create</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <fieldset>
-                            <legend>Preview</legend>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div align="right">
-                                        <div data-ng-show="vm.showMasterExpandButton">
-                                            <button type="button" class="btn btn-white btn-xs" data-ng-click="vm.toggleExpandAll('hide')">Expand All</button>
-                                        </div>
-                                        <div data-ng-show="!vm.showMasterExpandButton">
-                                            <button type="button" class="btn btn-pink btn-xs" data-ng-click="vm.toggleExpandAll('expand')">Hide</button>
+                            <legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        Preview
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div align="right">
+                                            <div data-ng-show="vm.showMasterExpandButton">
+                                                <button type="button" class="btn btn-white btn-xs" data-ng-click="vm.toggleExpandAll('hide')">Expand All</button>
+                                            </div>
+                                            <div data-ng-show="!vm.showMasterExpandButton">
+                                                <button type="button" class="btn btn-pink btn-xs" data-ng-click="vm.toggleExpandAll('expand')">Hide</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </legend>
                             <div data-ng-repeat="agendaResolution in vm.agendaAndResolutions track by $index">
                                 <div class="well">
                                     <div class="row">
@@ -217,12 +233,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div align="right">
-                                                <span><button type="button" class="btn btn-default btn-xs" data-ng-click="vm.edit($index)">Edit</button></span>
-                                                <div data-ng-show="agendaResolution.showExpandButton">
-                                                    <button type="button" class="btn btn-blue btn-xs" data-ng-click="vm.toggleExpand('hide' , $index)">Expand</button>
-                                                </div>
-                                                <div data-ng-show="!agendaResolution.showExpandButton">
-                                                    <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.toggleExpand('expand', $index)">Hide</button>
+                                                <div>
+                                                    <button type="button" class="btn btn-blue btn-xs" data-ng-click="vm.edit($index)">Edit</button>
+                                                    <span data-ng-show="agendaResolution.showExpandButton">
+                                                        <button type="button" class="btn btn-dark btn-xs" data-ng-click="vm.toggleExpand('hide' , $index)">Expand</button>
+                                                    </span>
+                                                    <span data-ng-show="!agendaResolution.showExpandButton">
+                                                        <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.toggleExpand('expand', $index)">Hide</button>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
