@@ -24,9 +24,8 @@ var Authentication = (function () {
                 "Authorization": credentials,
                 "Accept": "application/json"
             },
-            success: function (user) {
-                credentials = "Basic " + btoa(userName + ":" + user.token);
-                getUserAndStartApplication(credentials, user);
+            success: function (tokens) {
+                startApplication(tokens);
             },
             fail: function (msg) {
                 console.error("Login failed....");
@@ -91,7 +90,6 @@ var Authentication = (function () {
     Authentication.prototype.changePassword = function () {
         var _this = this;
         var resetToken = $("#password_reset_token").val();
-        var userId = $("#user_id").val();
         var newPassword = $("#new_password").val();
         var confirmNewPassword = $("#confirm_new_password").val();
 
@@ -108,7 +106,7 @@ var Authentication = (function () {
             async: true,
             url: window.location.origin + '/ums-webservice-academic/forgotPassword/resetPassword',
             contentType: 'application/json',
-            data: '{"userId":"' + userId + '","passwordResetToken":"' + resetToken + '","newPassword":"' + newPassword + '","confirmNewPassword":"' + confirmNewPassword + '"}',
+            data: '{"passwordResetToken":"' + resetToken + '","newPassword":"' + newPassword + '","confirmNewPassword":"' + confirmNewPassword + '"}',
             success: function (response) {
                 if (response.responseType == "SUCCESS") {
                     _this.authenticate(userId, newPassword);
@@ -127,18 +125,8 @@ var Authentication = (function () {
         });
     };
 
-
-    function getUserAndStartApplication(credentials, user) {
-        var userObject = {
-            userId: user['userId'],
-            userName: user['userName']
-        };
-        startApplication(credentials, userObject);
-    }
-
-    function startApplication(credentials, user) {
-        sessionStorage.setItem("ums.token", credentials);
-        sessionStorage.setItem("ums.user", JSON.stringify(user));
+    function startApplication(tokens) {
+        sessionStorage.setItem("ums.token", tokens.accessToken);
         var params = getQueryParams();
         if (isValidRedirectTo()) {
             window.location.href = decodeURIComponent(params.redirectTo);

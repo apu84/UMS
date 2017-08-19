@@ -122,7 +122,7 @@ module ums {
         $('.news-ticker').remove();
       });
 
-      $scope.user = JSON.parse($window.sessionStorage.getItem(HttpClient.USER_KEY));
+      $scope.user = JSON.parse($window.sessionStorage.getItem('ums.user'));
     }
 
     private downloadUserGuide(navigationId:string,manualTitle:string,manualType:string):any{

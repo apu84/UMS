@@ -42,11 +42,11 @@ public class UserPropertyResolver extends UserDaoDecorator {
   @Override
   public Optional<User> getByEmail(String pEmail) {
     Optional<Student> student = mStudentManager.getByEmail(pEmail);
-    if (student.isPresent()) {
+    if(student.isPresent()) {
       return Optional.of(getManager().get(student.get().getId()));
     }
     Optional<Employee> employee = mEmployeeManager.getByEmail(pEmail);
-    if (employee.isPresent()) {
+    if(employee.isPresent()) {
       return Optional.of(getManager().getByEmployeeId(employee.get().getId()));
     }
     return Optional.empty();
@@ -64,6 +64,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       Student student = mStudentManager.get(user.getId());
       mutableUser.setDepartment(student.getDepartment());
       mutableUser.setName(student.getFullName());
+      mutableUser.setEmail(student.getEmail());
     }
     else {
       Employee employee = null;
@@ -76,6 +77,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
         mutableUser.setDepartment(employee.getDepartment());
         mutableUser.setName(employee.getEmployeeName());
         mutableUser.setEmployeeId(employee.getId());
+        mutableUser.setEmail(employee.getEmailAddress());
       }
     }
     return mutableUser;

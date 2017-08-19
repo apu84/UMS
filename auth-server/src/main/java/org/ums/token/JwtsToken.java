@@ -5,6 +5,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 public class JwtsToken implements AuthenticationToken {
   private final String mUserName;
   private final String mToken;
+  private final boolean rememberMe = false;
 
   public JwtsToken(String pUserName, String pToken) {
     mUserName = pUserName;

@@ -67,7 +67,7 @@ public class ChangePassword extends AbstractPathMatchingFilter {
     String newPassword = requestJson.get("newPassword").toString();
     String confirmNewPassword = requestJson.get("confirmNewPassword").toString();
 
-    if (StringUtils.isEmpty(currentPassword) || StringUtils.isEmpty(newPassword)
+    if(StringUtils.isEmpty(currentPassword) || StringUtils.isEmpty(newPassword)
         || StringUtils.isEmpty(confirmNewPassword) || !newPassword.equals(confirmNewPassword)) {
       return sendError("Confirm password doesn't match", response);
     }
@@ -77,17 +77,17 @@ public class ChangePassword extends AbstractPathMatchingFilter {
     AuthenticationToken token = new UsernamePasswordToken(currentUser.getId(), currentPassword);;
     AuthenticationInfo authenticationInfo;
 
-    if (newUser) {
-      authenticationInfo
-          = new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getTemporaryPassword(), "newUserRealm");
+    if(newUser) {
+      authenticationInfo =
+          new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getTemporaryPassword(), "newUserRealm");
     }
     else {
-      authenticationInfo
-          = new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getPassword(), ByteSource.Util.bytes(mSalt),
-          "userRealm");
+      authenticationInfo =
+          new SimpleAuthenticationInfo(currentUser.getId(), currentUser.getPassword(), ByteSource.Util.bytes(mSalt),
+              "userRealm");
     }
 
-    if (getCredentialsMatcher(newUser).doCredentialsMatch(token, authenticationInfo)) {
+    if(getCredentialsMatcher(newUser).doCredentialsMatch(token, authenticationInfo)) {
       return responseNewToken(changePassword(currentUser, newPassword), response);
     }
     else {

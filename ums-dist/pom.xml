@@ -240,6 +240,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-quartz</artifactId>
+      <version>${apache-shiro-version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.9.2</version>

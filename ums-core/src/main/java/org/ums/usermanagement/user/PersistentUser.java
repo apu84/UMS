@@ -1,16 +1,14 @@
 package org.ums.usermanagement.user;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
-import org.ums.usermanagement.role.Role;
 import org.ums.manager.DepartmentManager;
+import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.role.RoleManager;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class PersistentUser implements MutableUser {
   private static UserManager sUserManager;
@@ -37,6 +35,7 @@ public class PersistentUser implements MutableUser {
   private Department mDepartment;
   private String mDepartmentId;
   private String mName;
+  private String mEmail;
 
   public PersistentUser() {
 
@@ -50,12 +49,11 @@ public class PersistentUser implements MutableUser {
     mDepartment = pPersistentUser.getDepartment();
     mName = pPersistentUser.getName();
     mEmployeeId = pPersistentUser.getEmployeeId();
-
     mTemporaryPassword = pPersistentUser.getTemporaryPassword();
     mPasswordResetToken = pPersistentUser.getPasswordResetToken();
     mPasswordTokenGenerateDateTime = pPersistentUser.getPasswordTokenGenerateDateTime();
     mLastModified = pPersistentUser.getLastModified();
-
+    mEmail = pPersistentUser.getEmail();
   }
 
   @Override
@@ -207,5 +205,15 @@ public class PersistentUser implements MutableUser {
   @Override
   public String getName() {
     return mName;
+  }
+
+  @Override
+  public String getEmail() {
+    return mEmail;
+  }
+
+  @Override
+  public void setEmail(String pEmail) {
+    mEmail = pEmail;
   }
 }

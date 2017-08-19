@@ -8,6 +8,12 @@ module ums {
       text: string
     }
   }
+
+  interface TokenResponse {
+    accessToken: string;
+    refreshToken: string;
+  }
+
   export class ChangePassword {
     public static $inject = ['$scope', 'HttpClient', '$window'];
 
@@ -19,12 +25,12 @@ module ums {
 
     private submit(): void {
       this.httpClient.put('changePassword', this.$scope.password, 'application/json')
-          .success((response) => {
+          .success((response: TokenResponse) => {
             this.$scope.response = {
               status: true,
               text: "Password changed successfully"
             };
-            this.resetAuthentication(this.$scope.user, response.token);
+            this.resetAuthentication(this.$scope.user, response);
           }).error((data) => {
             this.$scope.response = {
               status: false,
@@ -33,10 +39,9 @@ module ums {
           });
     }
 
-    private resetAuthentication(user: User, token: string): void {
+    private resetAuthentication(user: User, token: TokenResponse): void {
       this.$window.sessionStorage.removeItem(HttpClient.CREDENTIAL_KEY);
-      var encoded = btoa(user.userName + ":" + token);
-      this.$window.sessionStorage.setItem(HttpClient.CREDENTIAL_KEY, "Basic " + encoded);
+      this.$window.sessionStorage.setItem(HttpClient.CREDENTIAL_KEY, token.accessToken);
       this.httpClient.resetAuthenticationHeader();
     }
   }

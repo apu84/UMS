@@ -279,7 +279,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   @Override
   public Optional<Student> getByEmail(String pEmail) {
     String query = SELECT_ALL + "WHERE EMAIL IS NOT NULL AND EMAIL = ?";
-    List<Student> students = mJdbcTemplate.query(query, new Object[]{pEmail}, new StudentRowMapper());
+    List<Student> students = mJdbcTemplate.query(query, new Object[] {pEmail}, new StudentRowMapper());
     return students.size() == 1 ? Optional.of(students.get(0)) : Optional.empty();
   }
 

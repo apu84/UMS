@@ -16,10 +16,6 @@ import org.ums.manager.*;
 import org.ums.manager.common.*;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.*;
-import org.ums.security.JWTBuilder;
-import org.ums.security.TokenBuilder;
-import org.ums.security.authentication.UMSAuthenticationRealm;
-import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
 import org.ums.solr.repository.transaction.EmployeeTransaction;
@@ -97,11 +93,6 @@ public class CoreContext {
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
     return additionalRolePermissionsCache;
-  }
-
-  @Bean
-  LoginService loginService() {
-    return new LoginService();
   }
 
   @Bean

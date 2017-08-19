@@ -3,7 +3,6 @@ package org.ums.filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -56,6 +55,11 @@ public class TokenFilter extends AuthenticatingFilter {
   protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request,
       ServletResponse response) {
     return FilterUtil.sendUnauthorized(response);
+  }
+
+  @Override
+  protected boolean isRememberMe(ServletRequest request) {
+    return false;
   }
 
   private String getUserName(final String jwt) throws ExpiredJwtException {

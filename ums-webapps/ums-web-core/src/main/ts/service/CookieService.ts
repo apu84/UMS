@@ -1,7 +1,6 @@
 module ums {
   export class CookieService {
     private static CREDENTIAL_KEY = 'ums.credentials';
-    private static USER_KEY = 'ums.user';
     public static $inject = ['$log', '$cookies', '$cookieStore'];
 
     constructor(private $log:ng.ILogService, private $cookies:ng.cookies.ICookiesService, private $cookieStore:ng.cookies.ICookieStoreService) {

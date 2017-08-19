@@ -5,7 +5,6 @@ module ums {
     static MIME_TYPE_PDF: string = 'application/pdf';
     static MIME_TYPE_TEXT: string = 'text/html';
     static CREDENTIAL_KEY = 'ums.token';
-    static USER_KEY = 'ums.user';
 
     private credentials: any;
     private location: string;
@@ -127,7 +126,7 @@ module ums {
     public resetAuthenticationHeader() {
       this.credentials = this.$window.sessionStorage.getItem(HttpClient.CREDENTIAL_KEY);
       if (this.credentials != null && this.credentials != '') {
-        this.$http.defaults.headers.common['X-Authorization'] = this.credentials;
+        this.$http.defaults.headers.common['Authorization'] = this.credentials;
       }
     }
   }

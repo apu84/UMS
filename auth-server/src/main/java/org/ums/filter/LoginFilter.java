@@ -36,6 +36,11 @@ public class LoginFilter extends BasicHttpAuthenticationFilter {
   }
 
   @Override
+  protected boolean isRememberMe(ServletRequest request) {
+    return false;
+  }
+
+  @Override
   protected boolean sendChallenge(ServletRequest request, ServletResponse response) {
     HttpServletResponse httpResponse = WebUtils.toHttp(response);
     httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

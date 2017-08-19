@@ -32,4 +32,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
   String getDepartmentId();
 
   String getName();
+
+  String getEmail();
 }

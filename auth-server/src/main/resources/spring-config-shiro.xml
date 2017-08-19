@@ -9,7 +9,9 @@
         <property name="locations">
             <list>
                 <value>classpath:common.properties</value>
+                <value>classpath:mail-config.properties</value>
                 <value>${UMS_CONFIG}/common.properties</value>
+                <value>${UMS_CONFIG}/mail-config.properties</value>
             </list>
         </property>
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -62,6 +64,10 @@
         <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
     </bean>
 
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+    <property name="sessionIdCookieEnabled" value="false"/>
+</bean>
+
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realms">
             <list>
@@ -71,6 +77,7 @@
                 <ref bean="newUserRealm"/>
             </list>
         </property>
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -107,7 +114,11 @@
         <property name="salt" value="${authentication.salt}"/>
     </bean>
 
-    <bean id="forgetPassword" class="org.ums.filter.ForgetPassword"/>
+    <bean id="forgotPassword" class="org.ums.filter.ForgotPassword"/>
+
+    <bean id="resetPassword" class="org.ums.filter.ResetPassword">
+        <property name="signingKey" value="${authentication.token.signing.key}"/>
+    </bean>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -122,7 +133,8 @@
                 /login = noSessionCreation,authc
                 /logout = tokenFilter,logout
                 /changePassword = tokenFilter,sessionFilter,changePassword
-                /forgetPassword = noSessionCreation,forgetPassword
+                /forgotPassword = noSessionCreation,forgotPassword
+                /resetPassword = noSessionCreation,resetPassword
                 /** = tokenFilter,sessionFilter,newUserFilter,user
             </value>
         </property>
@@ -137,5 +149,18 @@
         <constructor-arg name="pRefreshTokenExpiration" value="${refresh.token.expiration}"/>
         <constructor-arg name="pPasswordResetTokenExpiration" value="24"/>
         <constructor-arg name="pSigningKey" value="${authentication.token.signing.key}"/>
+    </bean>
+
+    <bean id="emailSender" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="${dummy.email}"/>
+    </bean>
+
+    <!--session timeout value in minutes-->
+    <bean id="sessionTimeout" class="java.lang.Integer">
+        <constructor-arg type="java.lang.String" value="${session.timeout}"/>
+    </bean>
+
+    <bean id="sessionTimeoutInterval" class="java.lang.Integer">
+        <constructor-arg type="java.lang.String" value="${session.timeoutInterval}"/>
     </bean>
 </beans>
