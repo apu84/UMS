@@ -152,7 +152,7 @@
     </bean>
 
     <bean id="emailSender" class="java.lang.String">
-        <constructor-arg type="java.lang.String" value="${dummy.email}"/>
+        <constructor-arg type="java.lang.String" value="${mail.user}"/>
     </bean>
 
     <!--session timeout value in minutes-->

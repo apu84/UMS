@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.message.MessageResource;
@@ -27,6 +28,9 @@ public class ResetPassword extends AbstractPathMatchingFilter {
   private UserManager mUserManager;
   @Autowired
   private MessageResource mMessageResource;
+  @Autowired
+  private PasswordService mPasswordService;
+
   private String mSigningKey;
 
   @Override
@@ -47,10 +51,12 @@ public class ResetPassword extends AbstractPathMatchingFilter {
       if(userId.isPresent()) {
         User user = mUserManager.get(userId.get());
         MutableUser mutableUser = user.edit();
-        mutableUser.setPassword(password);
+        mutableUser.setPassword(mPasswordService.encryptPassword(password).toCharArray());
         mutableUser.setPasswordResetToken(null);
         mutableUser.setPasswordTokenGenerateDateTime(null);
         mutableUser.update();
+
+        sendSuccess(String.format("{\"userId\":\"%s\"}", userId.get()), pResponse);
       }
     }
     else {
@@ -68,7 +74,7 @@ public class ResetPassword extends AbstractPathMatchingFilter {
       valid = false;
     }
     if(valid) {
-      if(mUserManager.exists(userId)) {
+      if(!mUserManager.exists(userId)) {
         return false;
       }
       User user = mUserManager.get(userId);

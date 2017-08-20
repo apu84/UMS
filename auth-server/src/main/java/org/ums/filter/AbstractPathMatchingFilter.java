@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public abstract class AbstractPathMatchingFilter extends PathMatchingFilter {
   JSONObject getRequestJson(HttpServletRequest pHttpServletRequest) throws IOException, ParseException {
@@ -19,7 +20,20 @@ public abstract class AbstractPathMatchingFilter extends PathMatchingFilter {
   }
 
   boolean sendError(String error, ServletResponse pResponse) throws IOException {
-    ((HttpServletResponse) pResponse).sendError(HttpServletResponse.SC_BAD_REQUEST, error);
+    ((HttpServletResponse) pResponse).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    pResponse.setContentType("application/json");
+    PrintWriter out = pResponse.getWriter();
+    out.print(error);
+    out.flush();
+    return false;
+  }
+
+  boolean sendSuccess(String message, ServletResponse pResponse) throws IOException {
+    ((HttpServletResponse) pResponse).setStatus(HttpServletResponse.SC_OK);
+    pResponse.setContentType("application/json");
+    PrintWriter out = pResponse.getWriter();
+    out.print(message);
+    out.flush();
     return false;
   }
 }

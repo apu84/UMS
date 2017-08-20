@@ -66,7 +66,7 @@ public class ForgotPassword extends AbstractPathMatchingFilter {
       mutableUser.setPasswordTokenGenerateDateTime(new Date());
       mutableUser.update();
 
-      mPasswordResetEmailService.sendEmail(user.getEmail(), mEmailSender,
+      mPasswordResetEmailService.sendEmail(user.getId(), user.getEmail(), mEmailSender,
           mMessageResource.getMessage("reset.password.email.subject"), prToken);
     }
     else {

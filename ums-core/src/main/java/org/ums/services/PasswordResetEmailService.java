@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -27,8 +28,12 @@ public class PasswordResetEmailService {
   private VelocityEngine velocityEngine;
   @Autowired
   DateFormat mDateFormat;
+  @Autowired
+  @Qualifier("host")
+  String mHost;
 
-  public void sendEmail(final String toEmail, final String fromEmail, final String subject, final String token) {
+  public void sendEmail(final String userId, final String toEmail, final String fromEmail, final String subject,
+      final String token) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {
         MimeMessageHelper message = null;
@@ -39,9 +44,10 @@ public class PasswordResetEmailService {
           message.setSubject(subject);
 
           ResetPasswordEmailDto model = new ResetPasswordEmailDto();
-          model.setUmsRootUrl("http://172.16.25.254/ums-web/login");
-          model.setUmsForgotPasswordUrl("http://172.16.25.254/ums-web/login/?forgot-password.ums");
-          String passwordResetUrl = "http://172.16.25.254/ums-web/login/reset-password.html?pr_token=$$TOKEN$$";
+          model.setId(userId);
+          model.setUmsRootUrl(String.format("%s/ums-web/login", mHost));
+          model.setUmsForgotPasswordUrl(String.format("%s/ums-web/login/?forgot-password.ums", mHost));
+          String passwordResetUrl = String.format("%s/ums-web/login/reset-password.html?pr_token=$$TOKEN$$", mHost);
           passwordResetUrl = passwordResetUrl.replace("$$TOKEN$$", token);
           model.setUmsResetPasswordUrl(passwordResetUrl);
           model.setForgotPasswordRequestDateTime(mDateFormat.format(new Date()));
