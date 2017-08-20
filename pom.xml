@@ -76,8 +76,8 @@
     <module>ums-webservice-library</module>
     <module>ums-webservice-registrar</module>
     <module>codegenerator</module>
-    <module>auth-server</module>
-      <module>microservice</module>
+    <module>auth-support</module>
+    <module>microservice</module>
       <!-- <module>ums-web-templates</module>-->
   </modules>
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>auth-server</artifactId>
+    <artifactId>auth-support</artifactId>
     <packaging>jar</packaging>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>

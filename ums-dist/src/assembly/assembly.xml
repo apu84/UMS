@@ -13,7 +13,7 @@
       <includes>
         <include>org.ums:ums-api</include>
         <include>org.ums:ums-core</include>
-        <include>org.ums:auth-server</include>
+        <include>org.ums:auth-support</include>
         <include>org.springframework:spring-core</include>
         <include>org.springframework:spring-beans</include>
         <include>org.springframework:spring-web</include>

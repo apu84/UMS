@@ -22,7 +22,7 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>auth-server</artifactId>
+      <artifactId>auth-support</artifactId>
       <type>jar</type>
       <version>${project.version}</version>
     </dependency>

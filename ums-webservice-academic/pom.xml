@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>auth-server</artifactId>
+      <artifactId>auth-support</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
