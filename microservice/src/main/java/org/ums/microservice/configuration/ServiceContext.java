@@ -8,15 +8,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.CacheFactory;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.configuration.UMSContext;
-import org.ums.fee.payment.PaymentValidator;
-import org.ums.fee.payment.PaymentValidatorJob;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
 import org.ums.manager.library.RecordManager;
 import org.ums.microservice.instance.cachewarmer.CacheWarmerManagerImpl;
-import org.ums.solr.indexer.ConsumeIndex;
-import org.ums.solr.indexer.ConsumeIndexJobImpl;
+import org.ums.microservice.instance.consumeindex.ConsumeIndex;
+import org.ums.microservice.instance.consumeindex.ConsumeIndexJobImpl;
+import org.ums.microservice.instance.paymentvalidator.PaymentValidator;
+import org.ums.microservice.instance.paymentvalidator.PaymentValidatorJob;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
 import org.ums.solr.indexer.manager.IndexManager;
 import org.ums.solr.indexer.resolver.EntityResolverFactory;
@@ -30,7 +30,7 @@ import org.ums.usermanagement.user.UserManager;
 @EnableScheduling
 @ComponentScan(basePackages = "org.ums")
 @Import({UMSContext.class})
-@ImportResource({"classpath:spring-config-shiro.xml", "classpath:caching.xml"})
+@ImportResource({"classpath*:services-context.xml", "classpath*:spring-config-shiro.xml"})
 public class ServiceContext {
   @Autowired
   private SecurityManager mSecurityManager;
@@ -108,11 +108,11 @@ public class ServiceContext {
 
   @Bean
   CacheWarmerManager cacheWarmerManager() {
-    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration, mDepartmentManager,
-        mRoleManager, mPermissionManager, mBearerAccessTokenManager, mAdditionalRolePermissionsManager,
-        mNavigationManager, mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
+    return new CacheWarmerManagerImpl(mSecurityManager, mUMSConfiguration, mDepartmentManager, mRoleManager,
+        mPermissionManager, mBearerAccessTokenManager, mAdditionalRolePermissionsManager, mNavigationManager,
+        mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
-        mUserManager, mRecordManager);
+        mUserManager);
   }
 }

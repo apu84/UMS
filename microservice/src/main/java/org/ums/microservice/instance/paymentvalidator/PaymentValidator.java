@@ -1,5 +1,5 @@
 package org.ums.microservice.instance.paymentvalidator;
 
-interface PaymentValidator {
+public interface PaymentValidator {
   void validatePayments();
 }

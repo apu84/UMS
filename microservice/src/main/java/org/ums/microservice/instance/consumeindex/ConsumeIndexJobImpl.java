@@ -18,7 +18,6 @@ import org.ums.lock.LockManager;
 import org.ums.lock.MutableLock;
 import org.ums.lock.PersistentLock;
 import org.ums.microservice.AbstractService;
-import org.ums.microservice.Service;
 import org.ums.solr.indexer.PersistentIndexConsumer;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
 import org.ums.solr.indexer.manager.IndexManager;
@@ -49,7 +48,7 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
   }
 
   @Override
-  @Scheduled(fixedDelay = 30000, initialDelay = 240000)
+  @Scheduled(fixedDelay = 30000, initialDelay = 0)
   @Transactional
   public void consume() {
     if(login()) {
@@ -57,28 +56,23 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       MutableLock lock = new PersistentLock();
       lock.setId("indexLock");
       mLockManager.create(lock);
-
-      List<String> endpoints = getEndPoints();
-      if(endpoints.size() > 0) {
-        String host = endpoints.get(0).split(":")[0];
-        String port = endpoints.get(0).split(":")[1];
-        MutableIndexConsumer consumer;
-        if(!mIndexConsumerManager.exists(host, port)) {
-          createNewIndexConsumer(host, port);
-        }
-        IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
-        consumer = indexConsumer.edit();
-
-        List<Index> indexList = mIndexManager.after(consumer.getHead());
-        if(indexList.size() > 0) {
-          // SOLR index
-          for(Index index : indexList) {
-            mEntityResolverFactory.resolve(index);
-          }
-          consumer.setHead(indexList.get(indexList.size() - 1).getModified());
-        }
-        consumer.update();
+      String host = "microservice";
+      String port = "8000";
+      MutableIndexConsumer consumer;
+      if(!mIndexConsumerManager.exists(host, port)) {
+        createNewIndexConsumer(host, port);
       }
+      IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
+      consumer = indexConsumer.edit();
+      List<Index> indexList = mIndexManager.after(consumer.getHead());
+      if(indexList.size() > 0) {
+        // SOLR index
+        for(Index index : indexList) {
+          mEntityResolverFactory.resolve(index);
+        }
+        consumer.setHead(indexList.get(indexList.size() - 1).getModified());
+      }
+      consumer.update();
       mLockManager.delete(lock);
     }
   }

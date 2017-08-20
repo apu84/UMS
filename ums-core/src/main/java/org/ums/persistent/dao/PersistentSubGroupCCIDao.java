@@ -1,19 +1,18 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.decorator.SubGroupCCIDaoDecorator;
-import org.ums.domain.model.immutable.SubGroupCCI;
-import org.ums.domain.model.mutable.MutableSubGroupCCI;
-import org.ums.persistent.model.PersistentSubGroupCCI;
-
-import javax.ws.rs.DELETE;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.SubGroupCCIDaoDecorator;
+import org.ums.domain.model.immutable.SubGroupCCI;
+import org.ums.domain.model.mutable.MutableSubGroupCCI;
+import org.ums.persistent.model.PersistentSubGroupCCI;
 
 public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
 

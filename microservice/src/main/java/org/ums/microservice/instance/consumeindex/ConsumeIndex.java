@@ -1,5 +1,5 @@
 package org.ums.microservice.instance.consumeindex;
 
-interface ConsumeIndex {
+public interface ConsumeIndex {
   void consume();
 }

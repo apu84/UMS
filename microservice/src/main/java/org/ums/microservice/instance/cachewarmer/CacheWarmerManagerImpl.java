@@ -19,12 +19,9 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
 
   private ContentManager[] mContentManagers;
 
-  private CacheFactory mCacheFactory;
-
   @Override
   public void warm() {
     if(login()) {
-      CacheManager cacheManager = mCacheFactory.getCacheManager();
       try {
         if(mContentManagers.length > 0) {
           // start warming up
@@ -40,11 +37,10 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
     }
   }
 
-  public CacheWarmerManagerImpl(SecurityManager pSecurityManager, CacheFactory pCacheFactory,
-      UMSConfiguration pUMSConfiguration, ContentManager... pContentManagers) {
+  public CacheWarmerManagerImpl(SecurityManager pSecurityManager, UMSConfiguration pUMSConfiguration,
+      ContentManager... pContentManagers) {
     mSecurityManager = pSecurityManager;
     mContentManagers = pContentManagers;
-    mCacheFactory = pCacheFactory;
     mUMSConfiguration = pUMSConfiguration;
   }
 

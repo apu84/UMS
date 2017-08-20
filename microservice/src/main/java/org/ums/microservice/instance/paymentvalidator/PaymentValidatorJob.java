@@ -14,7 +14,7 @@ import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.microservice.AbstractService;
 
-class PaymentValidatorJob extends AbstractService implements PaymentValidator {
+public class PaymentValidatorJob extends AbstractService implements PaymentValidator {
   private static final Logger mLogger = LoggerFactory.getLogger(PaymentValidatorJob.class);
   private StudentPaymentManager mStudentPaymentManager;
   private SecurityManager mSecurityManager;
@@ -27,7 +27,7 @@ class PaymentValidatorJob extends AbstractService implements PaymentValidator {
     mUMSConfiguration = pUMSConfiguration;
   }
 
-  @Scheduled(fixedDelay = 120000, initialDelay = 240000)
+  @Scheduled(fixedDelay = 120000, initialDelay = 0)
   @Transactional
   public void validatePayments() {
     if(login()) {
