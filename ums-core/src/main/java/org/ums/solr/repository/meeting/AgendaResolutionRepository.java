@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface AgendaResolutionRepository extends SolrCrudRepository<AgendaResolutionDocument, Long> {
 
-  List<AgendaResolutionDocument> findByNamedQuery(String searchTerm, Pageable pageable);
+  List<AgendaResolutionDocument> findByCustomQuery(String searchTerm, Pageable pageable);
+
+  Long getTotalCount(String searchTerm);
 }

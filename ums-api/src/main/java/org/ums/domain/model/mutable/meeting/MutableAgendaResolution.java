@@ -5,8 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.meeting.AgendaResolution;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableAgendaResolution extends AgendaResolution, Editable<Long>, MutableIdentifier<Long>,
-    MutableLastModifier {
+public interface MutableAgendaResolution extends AgendaResolution, Editable<Long>, MutableLastModifier,
+    MutableIdentifier<Long> {
 
   void setAgendaNo(final String pAgendaNo);
 

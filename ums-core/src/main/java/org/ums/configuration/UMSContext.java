@@ -39,6 +39,9 @@ public class UMSContext {
   @Autowired
   LibraryContext mLibraryContext;
 
+  @Autowired
+  RegistrarContext mRegistrarContext;
+
   @Bean
   CacheWarmerManager cacheWarmerManager() {
     return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
@@ -50,7 +53,7 @@ public class UMSContext {
         mAcademicContext.teacherManager(), mAcademicContext.courseTeacherManager(), mAcademicContext.examinerManager(),
         mCoreContext.studentManager(), mAcademicContext.studentRecordManager(), mAcademicContext.classRoomManager(),
         mAcademicContext.courseManager(), mAcademicContext.marksSubmissionStatusManager(), mCoreContext.userManager(),
-        mLibraryContext.recordManager());
+        mLibraryContext.recordManager(), mRegistrarContext.agendaResolutionManager());
   }
 
   @Bean

@@ -1,12 +1,12 @@
 module ums{
-    interface IAgendaAndResolution extends ng.IScope{
+    interface IAgendaResolution extends ng.IScope{
         getAgendaResolution: Function;
     }
     interface IConstants{
         id: number;
         name: string;
     }
-    interface IAgendaResolution{
+    interface IAgendaResolutionModel{
         id: string;
         agendaNo: string;
         agenda: string;
@@ -16,7 +16,7 @@ module ums{
         scheduleId: string;
         showExpandButton: boolean;
     }
-    class AgendaAndResolution{
+    class AgendaResolution{
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'meetingService'];
         private meetingTypes: IConstants[] = [];
         private meetingSchedules: IMeetingScheduleModel[] = [];
@@ -30,15 +30,15 @@ module ums{
         private showRightDiv: boolean = false;
         private showCancelButton: boolean = false;
         private showUpdateButton: boolean = false;
-        private agendaAndResolutions: IAgendaResolution[] = [];
-        private tempAgendaAndResolution: IAgendaResolution[] = [];
+        private agendaAndResolutions: IAgendaResolutionModel[] = [];
+        private tempAgendaAndResolution: IAgendaResolutionModel[] = [];
         private agendaNo: string = "";
         private agenda: string = "";
         private resolution: string = "";
         private meetingNumber: IMeetingScheduleModel = <IMeetingScheduleModel>{};
 
         constructor(private registrarConstants: any,
-                    private $scope: IAgendaAndResolution,
+                    private $scope: IAgendaResolution,
                     private $q: ng.IQService,
                     private notify: Notify, private meetingService: MeetingService) {
 
@@ -66,11 +66,13 @@ module ums{
         }
 
         private getAgendaResolution(): void{
-            this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
-                this.agendaAndResolutions = response;
-                Utils.expandRightDiv();
-                this.showRightDiv = true;
-            });
+            // this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
+            //     this.agendaAndResolutions = response;
+            //
+            // });
+
+            Utils.expandRightDiv();
+            this.showRightDiv = true;
         }
 
         private toggleEditor(type: string, param: string): void{
@@ -145,7 +147,7 @@ module ums{
                 this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
                 editorForResolution = "Y";
             }
-            let agendaResolutionEntry: IAgendaResolution;
+            let agendaResolutionEntry: IAgendaResolutionModel;
             agendaResolutionEntry = {
                 id: "",
                 agendaNo: this.agendaNo,
@@ -176,7 +178,7 @@ module ums{
                 this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
                 editorForResolution = "Y";
             }
-            let agendaResolutionEntry: IAgendaResolution;
+            let agendaResolutionEntry: IAgendaResolutionModel;
             agendaResolutionEntry = {
                 id: index,
                 agendaNo: this.agendaNo,
@@ -238,7 +240,7 @@ module ums{
             this.reset();
         }
 
-        private convertToJson(convertingObject: IAgendaResolution): ng.IPromise<any>{
+        private convertToJson(convertingObject: IAgendaResolutionModel): ng.IPromise<any>{
             let defer = this.$q.defer();
             let JsonObject = {};
             JsonObject['entries'] = convertingObject;
@@ -247,5 +249,5 @@ module ums{
         }
     }
 
-    UMS.controller("AgendaAndResolution", AgendaAndResolution);
+    UMS.controller("AgendaResolution", AgendaResolution);
 }

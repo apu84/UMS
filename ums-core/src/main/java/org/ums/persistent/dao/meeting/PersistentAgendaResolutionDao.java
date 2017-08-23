@@ -46,6 +46,16 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
     return id;
   }
 
+  @Override
+  public Long create(final MutableAgendaResolution pMutableAgendaResolution) {
+    Long id = mIdGenerator.getNumericId();
+    String query = INSERT_ONE;
+    mJdbcTemplate.update(query, id, pMutableAgendaResolution.getAgendaNo(), pMutableAgendaResolution.getAgenda(),
+        pMutableAgendaResolution.getAgendaEditor(), pMutableAgendaResolution.getResolution(),
+        pMutableAgendaResolution.getResolutionEditor(), pMutableAgendaResolution.getScheduleId());
+    return id;
+  }
+
   private List<Object[]> getSaveAgendaResolutionParams(List<MutableAgendaResolution> pMutableAgendaResolution) {
     List<Object[]> params = new ArrayList<>();
     for(AgendaResolution agendaResolution : pMutableAgendaResolution) {

@@ -19,7 +19,7 @@ module ums{
         name: string;
     }
 
-    class MeetingSchedule{
+    class Schedule{
         public static $inject = ['registrarConstants', '$q', 'notify', '$scope', 'meetingService'];
         private prepareMeetingModel: { meetingSchedule: IMeetingScheduleModel; meetingMember: IMeetingMemberModel[]; };
         private meetingTypes: Array<IConstants> = [];
@@ -160,5 +160,5 @@ module ums{
         }
     }
 
-    UMS.controller("MeetingSchedule", MeetingSchedule);
+    UMS.controller("Schedule", Schedule);
 }

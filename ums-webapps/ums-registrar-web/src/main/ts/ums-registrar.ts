@@ -106,10 +106,10 @@ module ums {
                 }]
             }
         })
-        .state('meetingSchedule', {
-          url: "/meetingSchedule",
-          templateUrl: 'views/meeting-management/meeting-schedule.html',
-          controller: 'MeetingSchedule',
+        .state('schedule', {
+          url: "/schedule",
+          templateUrl: 'views/meeting/schedule.html',
+          controller: 'Schedule',
             controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -122,10 +122,10 @@ module ums {
                 }]
             }
         })
-        .state('agendaAndResolution', {
-            url: "/agendaAndResolution",
-            templateUrl: 'views/meeting-management/agenda-resolution.html',
-            controller: 'AgendaAndResolution',
+        .state('agendaResolution', {
+            url: "/agendaResolution",
+            templateUrl: 'views/meeting/agenda-resolution.html',
+            controller: 'AgendaResolution',
             controllerAs: 'vm',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -138,10 +138,10 @@ module ums {
                 }]
             }
         })
-        .state('meetingSearch', {
-            url: "/meetingSearch",
-            templateUrl: 'views/meeting-management/meeting-search.html',
-            controller: 'MeetingSearch',
+        .state('search', {
+            url: "/search",
+            templateUrl: 'views/meeting/search.html',
+            controller: 'Search',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({

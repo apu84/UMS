@@ -102,9 +102,9 @@
 /// <reference path='controller/eim/EmployeeProfile.ts'/>
 /// <reference path='controller/eim/EmployeeInformation.ts'/>
 /// <reference path='controller/employee-publication/EmployeePublication.ts'/>
-/// <reference path='controller/meeting/AgendaAndResolution.ts'/>
-/// <reference path='controller/meeting/MeetingSchedule.ts'/>
-/// <reference path='controller/meeting/MeetingSearch.ts'/>
+/// <reference path='controller/meeting/AgendaResolution.ts'/>
+/// <reference path='controller/meeting/Schedule.ts'/>
+/// <reference path='controller/meeting/Search.ts'/>
 
 /// <reference path='service/ApprovePublicationService.ts'/>
 /// <reference path='service/PagerService.ts'/>

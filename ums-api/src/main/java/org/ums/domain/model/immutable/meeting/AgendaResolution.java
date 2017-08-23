@@ -7,8 +7,8 @@ import org.ums.domain.model.mutable.meeting.MutableAgendaResolution;
 
 import java.io.Serializable;
 
-public interface AgendaResolution extends Serializable, EditType<MutableAgendaResolution>, Identifier<Long>,
-    LastModifier {
+public interface AgendaResolution extends Serializable, EditType<MutableAgendaResolution>, LastModifier,
+    Identifier<Long> {
 
   String getAgendaNo();
 

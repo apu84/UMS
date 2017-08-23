@@ -17,6 +17,7 @@ import org.ums.persistent.dao.common.PersistentDivisionDao;
 import org.ums.persistent.dao.meeting.PersistentAgendaResolutionDao;
 import org.ums.persistent.dao.meeting.PersistentScheduleDao;
 import org.ums.persistent.dao.registrar.*;
+import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -90,9 +91,13 @@ public class RegistrarContext {
 
   @Bean
   AgendaResolutionManager agendaResolutionManager() {
+    AgendaResolutionTransaction agendaResolutionTransaction = new AgendaResolutionTransaction();
+    PersistentAgendaResolutionDao agendaResolutionDao =
+        new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    agendaResolutionTransaction.setManager(agendaResolutionDao);
+
     AgendaResolutionCache agendaResolutionCache = new AgendaResolutionCache(mCacheFactory.getCacheManager());
-    agendaResolutionCache
-        .setManager(new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    agendaResolutionCache.setManager(agendaResolutionTransaction);
     return agendaResolutionCache;
   }
 }

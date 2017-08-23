@@ -1,17 +1,20 @@
 package org.ums.meeting;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.meeting.AgendaResolution;
 import org.ums.domain.model.mutable.meeting.MutableAgendaResolution;
 import org.ums.manager.ContentManager;
 import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.persistent.model.meeting.PersistentAgendaResolution;
 import org.ums.resource.ResourceHelper;
+import org.ums.solr.repository.meeting.AgendaResolutionRepository;
 import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -36,7 +39,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public JsonObject getAgendaResolution(final String pScheduleId, final UriInfo pUriInfo) {
     List<AgendaResolution> pAgendaResolution = new ArrayList<>();
     try {
-      pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
+      // pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -47,7 +50,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public Response saveAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
-    mBuilder.build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
+    getBuilder().build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
     mManager.saveAgendaResolution(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -58,7 +61,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
     mBuilder.updateBuilder(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
-    mManager.updateAgendaResolution(mutableAgendaResolution);
+    // mManager.updateAgendaResolution(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -84,7 +87,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   }
 
   @Override
-  protected ContentManager<AgendaResolution, MutableAgendaResolution, Long> getContentManager() {
+  protected AgendaResolutionManager getContentManager() {
     return mManager;
   }
 

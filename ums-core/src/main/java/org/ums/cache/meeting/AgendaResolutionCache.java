@@ -13,7 +13,7 @@ public class AgendaResolutionCache extends
     ContentCache<AgendaResolution, MutableAgendaResolution, Long, AgendaResolutionManager> implements
     AgendaResolutionManager {
 
-  private CacheManager<AgendaResolution, Long> mCacheManager;
+  CacheManager<AgendaResolution, Long> mCacheManager;
 
   public AgendaResolutionCache(CacheManager<AgendaResolution, Long> pCacheManager) {
     mCacheManager = pCacheManager;

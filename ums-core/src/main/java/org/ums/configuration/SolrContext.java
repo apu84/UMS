@@ -22,11 +22,15 @@ import org.ums.solr.indexer.resolver.EmployeeResolver;
 import org.ums.solr.indexer.resolver.EntityResolverFactory;
 import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.solr.indexer.resolver.lms.RecordResolver;
+import org.ums.solr.indexer.resolver.meeting.AgendaResolutionResolver;
 import org.ums.solr.repository.CustomSolrJConverter;
 import org.ums.solr.repository.EmployeeRepository;
 import org.ums.solr.repository.EmployeeRepositoryImpl;
 import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.solr.repository.lms.RecordRepositoryImpl;
+import org.ums.solr.repository.meeting.AgendaResolutionRepository;
+import org.ums.solr.repository.meeting.AgendaResolutionRepositoryImpl;
+import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import org.ums.statistics.JdbcTemplateFactory;
 
 import com.google.common.collect.Lists;
@@ -47,6 +51,9 @@ public class SolrContext {
 
   @Autowired
   LibraryContext mLibraryContext;
+
+  @Autowired
+  RegistrarContext mRegistrarContext;
 
   @Autowired
   @Qualifier("backendSecurityManager")
@@ -101,7 +108,8 @@ public class SolrContext {
 
   @Bean
   EntityResolverFactory entityResolverFactory() throws Exception {
-    return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver(), recordResolver()));
+    return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver(), recordResolver(),
+        agendaResolutionResolver()));
   }
 
   @Bean
@@ -114,4 +122,15 @@ public class SolrContext {
   EmployeeRepository employeeRepository() throws Exception {
     return new EmployeeRepositoryImpl(solrTemplate());
   }
+
+  @Bean
+  AgendaResolutionRepository agendaResolutionRepository() throws Exception {
+    return new AgendaResolutionRepositoryImpl(solrTemplate());
+  }
+
+  @Bean
+  AgendaResolutionResolver agendaResolutionResolver() throws Exception {
+    return new AgendaResolutionResolver(mRegistrarContext.agendaResolutionManager(), agendaResolutionRepository());
+  }
+
 }

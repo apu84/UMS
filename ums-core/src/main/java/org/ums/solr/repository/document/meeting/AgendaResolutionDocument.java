@@ -6,7 +6,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.ums.domain.model.immutable.meeting.AgendaResolution;
 import org.ums.solr.repository.document.SearchDocument;
 
-@SolrDocument(solrCoreName = "meeting")
+@SolrDocument(solrCoreName = "ums")
 public class AgendaResolutionDocument implements SearchDocument<String> {
 
   @Id
@@ -14,15 +14,15 @@ public class AgendaResolutionDocument implements SearchDocument<String> {
   private String id;
 
   @Field("type_s")
-  private String type = "Record";
+  private String type = "Meeting";
 
-  @Field("agenda_no")
+  @Field("agendaNo_txt")
   private String agendaNo;
 
-  @Field("agenda")
+  @Field("agenda_txt")
   private String agenda;
 
-  @Field("resolution")
+  @Field("resolution_txt")
   private String resolution;
 
   public AgendaResolutionDocument() {}
