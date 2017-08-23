@@ -7,7 +7,8 @@ module ums {
     static CREDENTIAL_KEY = 'ums.token';
     static USER_KEY = 'ums.user';
 
-    private credentials:any;
+    private credentials: any;
+    private location: string;
 
     public static $inject = [
       '$http',
@@ -15,43 +16,52 @@ module ums {
       '$window'
     ];
 
-    constructor(private $http:ng.IHttpService,
-                private baseURI:BaseUri,
+    constructor(private $http: ng.IHttpService,
+                private baseURI: BaseUri,
                 private $window: ng.IWindowService) {
       this.resetAuthenticationHeader();
+      this.getCurrentLocation();
     }
 
-    public get(url:string,
-               contentType:string,
-               success:(json:any, etag:string) => void,
-               error?:(response:ng.IHttpPromiseCallbackArg<any>) => void,
-               responseType?: string):void {
+    private getCurrentLocation() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        var currentPosition: any = 'latitude:' + position.coords.latitude + ', longitude:' + position.coords.longitude;
+        this.location = currentPosition;
+      });
+    }
+
+    public get (url: string,
+                contentType: string,
+                success: (json: any, etag: string) => void,
+                error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
+                responseType?: string): void {
 
       var config: ng.IRequestShortcutConfig = {
         headers: {
-          'Accept': contentType
+          'Accept': contentType,
+          'Location': this.location
         }
       };
 
-      if(responseType) {
+      if (responseType) {
         config.responseType = responseType;
       }
 
       var promise = this.$http.get(this.baseURI.toAbsolute(url), config);
 
-      promise.then((response:ng.IHttpPromiseCallbackArg<any>) => {
+      promise.then((response: ng.IHttpPromiseCallbackArg<any>) => {
         success(response.data, response.headers('Etag'));
       }, error);
     }
 
-    public post(url:string,
-                data:any,
-                contentType:string,
-                fileName?:string):ng.IHttpPromise<any> {
+    public post(url: string,
+                data: any,
+                contentType: string,
+                fileName?: string): ng.IHttpPromise<any> {
       var requestHeaders = {
         'Content-Type': contentType
       };
-      if(fileName) {
+      if (fileName) {
         requestHeaders['X-ums-media-filename'] = fileName;
       }
       return this.$http({
@@ -62,30 +72,31 @@ module ums {
       });
     }
 
-    public put(url:string,
-               stream:any,
-               contentType:string,
-               etag?:string):ng.IHttpPromise<any> {
+    public put(url: string,
+               stream: any,
+               contentType: string,
+               etag?: string): ng.IHttpPromise<any> {
       return this.$http.put(this.baseURI.toAbsolute(url), stream, {
         headers: {
           'Content-Type': contentType,
-          'If-Match': etag == null ? "*" : etag
+          'If-Match': etag == null ? "*" : etag,
+          'Location': this.location
         }
       });
     }
 
-    public delete(url:string):ng.IHttpPromise<any> {
+    public delete(url: string): ng.IHttpPromise<any> {
       return this.$http.delete(this.baseURI.toAbsolute(url));
     }
 
-    public options(url:string):ng.IPromise<string[]> {
+    public options(url: string): ng.IPromise<string[]> {
       return this.$http({
         method: 'OPTIONS',
         url: this.baseURI.toAbsolute(url)
       });
     }
 
-    public static offline(status:number):boolean {
+    public static offline(status: number): boolean {
       return status == 0 || (status >= 502 && status <= 504);
     }
 

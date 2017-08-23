@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 /**
@@ -16,6 +18,8 @@ import javax.ws.rs.core.Response;
 public class MutableHolidaysResource extends Resource {
 
   protected static final Logger mLogger = LoggerFactory.getLogger(MutableHolidaysResource.class);
+  @Context
+  protected HttpServletRequest mHttpServletRequest;
 
   @Autowired
   HolidaysResourceHelper mHelper;
