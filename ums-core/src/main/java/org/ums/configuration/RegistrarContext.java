@@ -92,10 +92,8 @@ public class RegistrarContext {
   @Bean
   AgendaResolutionManager agendaResolutionManager() {
     AgendaResolutionTransaction agendaResolutionTransaction = new AgendaResolutionTransaction();
-    PersistentAgendaResolutionDao agendaResolutionDao =
-        new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-    agendaResolutionTransaction.setManager(agendaResolutionDao);
-
+    agendaResolutionTransaction.setManager(new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     AgendaResolutionCache agendaResolutionCache = new AgendaResolutionCache(mCacheFactory.getCacheManager());
     agendaResolutionCache.setManager(agendaResolutionTransaction);
     return agendaResolutionCache;

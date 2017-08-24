@@ -30,11 +30,10 @@ public class AgendaResolutionResolver implements EntityResolver {
   @Override
   public void resolve(Index pIndex) {
     if(!pIndex.isDeleted()) {
-      List<AgendaResolution> agendaResolution =
-          mAgendaResolutionManager.getAgendaResolution(Long.valueOf(pIndex.getEntityId()));
+      AgendaResolution agendaResolution = mAgendaResolutionManager.get(Long.parseLong(pIndex.getEntityId()));
       SimpleConverter<AgendaResolution, AgendaResolutionDocument> converter =
           new SimpleConverter<>(AgendaResolution.class, AgendaResolutionDocument.class);
-      List<AgendaResolutionDocument> agendaResolutionDocument = converter.convert(agendaResolution);
+      AgendaResolutionDocument agendaResolutionDocument = converter.convert(agendaResolution);
       mAgendaResolutionRepository.save(agendaResolutionDocument);
     }
     else {

@@ -14,6 +14,7 @@ import org.ums.manager.ContentManager;
 import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.persistent.model.meeting.PersistentAgendaResolution;
 import org.ums.resource.ResourceHelper;
+import org.ums.solr.indexer.resolver.meeting.AgendaResolutionResolver;
 import org.ums.solr.repository.meeting.AgendaResolutionRepository;
 import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -24,6 +25,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,9 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
 
   @Autowired
   AgendaResolutionBuilder mBuilder;
+
+  @Autowired
+  AgendaResolutionRepository mRepository;
 
   public JsonObject getAgendaResolution(final String pScheduleId, final UriInfo pUriInfo) {
     List<AgendaResolution> pAgendaResolution = new ArrayList<>();
@@ -87,7 +92,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   }
 
   @Override
-  protected AgendaResolutionManager getContentManager() {
+  protected ContentManager<AgendaResolution, MutableAgendaResolution, Long> getContentManager() {
     return mManager;
   }
 

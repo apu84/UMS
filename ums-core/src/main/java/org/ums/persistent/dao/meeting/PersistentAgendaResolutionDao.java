@@ -46,16 +46,6 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
     return id;
   }
 
-  @Override
-  public Long create(final MutableAgendaResolution pMutableAgendaResolution) {
-    Long id = mIdGenerator.getNumericId();
-    String query = INSERT_ONE;
-    mJdbcTemplate.update(query, id, pMutableAgendaResolution.getAgendaNo(), pMutableAgendaResolution.getAgenda(),
-        pMutableAgendaResolution.getAgendaEditor(), pMutableAgendaResolution.getResolution(),
-        pMutableAgendaResolution.getResolutionEditor(), pMutableAgendaResolution.getScheduleId());
-    return id;
-  }
-
   private List<Object[]> getSaveAgendaResolutionParams(List<MutableAgendaResolution> pMutableAgendaResolution) {
     List<Object[]> params = new ArrayList<>();
     for(AgendaResolution agendaResolution : pMutableAgendaResolution) {
@@ -70,6 +60,12 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
   public List<AgendaResolution> getAgendaResolution(final Long pScheduleId) {
     String query = GET_ONE + " WHERE SCHEDULE_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pScheduleId}, new PersistentAgendaResolutionDao.RoleRowMapper());
+  }
+
+  @Override
+  public AgendaResolution get(final Long pId) {
+    String query = GET_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAgendaResolutionDao.RoleRowMapper());
   }
 
   @Override

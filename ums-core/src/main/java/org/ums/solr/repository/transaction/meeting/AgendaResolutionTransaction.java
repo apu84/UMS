@@ -12,27 +12,6 @@ import org.ums.solr.indexer.model.MutableIndex;
 public class AgendaResolutionTransaction extends AgendaResolutionDaoDecorator {
 
   @Override
-  public Long create(MutableAgendaResolution pMutableAgendaResolution) {
-    Long id = getManager().create(pMutableAgendaResolution);
-    generateIndexEntity(id, false);
-    return id;
-  }
-
-  @Override
-  public int update(MutableAgendaResolution pMutableAgendaResolution) {
-    int update = getManager().update(pMutableAgendaResolution);
-    generateIndexEntity(pMutableAgendaResolution.getId(), false);
-    return update;
-  }
-
-  @Override
-  public int delete(MutableAgendaResolution pMutableAgendaResolution) {
-    int delete = getManager().delete(pMutableAgendaResolution);
-    generateIndexEntity(pMutableAgendaResolution.getId(), true);
-    return delete;
-  }
-
-  @Override
   public Long saveAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
     Long id = getManager().saveAgendaResolution(pMutableAgendaResolution);
     generateIndexEntity(id, false);
