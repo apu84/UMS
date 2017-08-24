@@ -10,9 +10,13 @@
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-  <aop:aspectj-autoproxy/>
+  <aop:aspectj-autoproxy proxy-target-class="true"/>
+  <context:spring-configured/>
   <context:component-scan
       base-package="org.ums.login,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.dummy.webservice,org.ums.academic.resource,org.ums.academic.resource.helper,org.ums.academic.resource.student.gradesheet,org.ums.login,org.ums.report.generator.seatPlan.support,org.ums.report.generator.seatPlan,org.ums.cachewarmer,org.ums.report,org.ums.navigation,org.ums.resource,org.ums.builder,org.ums.services,org.ums.validator,org.ums.readmission.student,org.ums.kafka"/>
+
+  <!--<bean class="org.ums.validator.UmsLogTracerAspect" id="umsLogTracerAspect" factory-method="aspectOf"/>-->
+
 </beans>
 
 

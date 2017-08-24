@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import org.ums.context.AppContext;
 import org.ums.domain.model.dto.logger.ActivityLogger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +17,19 @@ import java.sql.Timestamp;
 @Component
 public class UmsLogTracerAspect {
 
-  Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
+  // Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
+  ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  @Autowired
-  KafkaTemplate<String, String> kafkaTemplate;
+  KafkaTemplate<String, String> kafkaTemplate = applicationContext.getBean("kafkaTemplate", KafkaTemplate.class);
+
+  /*
+   * @Autowired KafkaTemplate<String, String> kafkaTemplate;
+   */
+
+  /*
+   * public static UmsLogTracerAspect aspectOf() { return
+   * AppContext.getApplicationContext().getBean("umsLogTracerAspect", UmsLogTracerAspect.class); }
+   */
 
   @After("execution(* org.ums.academic.resource..*.*(..)) && args(httpServletRequest, userAgent,..) ")
   public void generateLog(JoinPoint pJoinPoint, HttpServletRequest httpServletRequest, String userAgent)
@@ -47,7 +55,7 @@ public class UmsLogTracerAspect {
     activityLogger.setException("");
     ObjectMapper mapper = new ObjectMapper();
     String jsonToString = mapper.writeValueAsString(activityLogger);
-    // kafkaTemplate.send("ums_logger", jsonToString);
+    kafkaTemplate.send("ums_logger", jsonToString);
   }
 
 }

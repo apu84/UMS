@@ -7,6 +7,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.cache.CacheFactory;
+import org.ums.configuration.KafkaProducerConfig;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.manager.CacheManager;
 import org.ums.manager.CacheWarmerManager;
@@ -32,9 +33,9 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
 
   @Override
   public void warm(boolean force) {
-    if(mUMSConfiguration.isEnableCacheWarmer() && login()) {
+    if (mUMSConfiguration.isEnableCacheWarmer() && login()) {
       CacheManager cacheManager = mCacheFactory.getCacheManager();
-      if(force || cacheManager.get(WARMER_KEY) == null
+      if (force || cacheManager.get(WARMER_KEY) == null
           || ((CacheWarmer) cacheManager.get(WARMER_KEY)).getState() == CacheWarmer.State.NONE) {
 
         mCacheWarmer = new CacheWarmer(CacheWarmer.State.IN_PROGRESS);
@@ -42,10 +43,10 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
         cacheManager.put(WARMER_KEY, mCacheWarmer);
 
         try {
-          if(mContentManagers.length > 0) {
+          if (mContentManagers.length > 0) {
             // start warming up
             mLogger.info("Started warming up cache");
-            for(ContentManager contentManager : mContentManagers) {
+            for (ContentManager contentManager : mContentManagers) {
               contentManager.getAll();
             }
           }
@@ -54,7 +55,7 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
           cacheManager.put(WARMER_KEY, mCacheWarmer);
           mLogger.info("Cache warm up finish");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
           mCacheWarmer = new CacheWarmer(CacheWarmer.State.NONE);
           cacheManager.put(WARMER_KEY, mCacheWarmer);
           mLogger.error("Failed to warm up cache properly, will now fallback to initial state", e);
@@ -73,14 +74,14 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
       // Authenticate the subject
       subject.login(token);
       return true;
-    } catch(Exception e) {
+    } catch (Exception e) {
       mLogger.error("Exception while login using back end user ", e);
     }
     return false;
   }
 
   public CacheWarmerManagerImpl(SecurityManager pSecurityManager, CacheFactory pCacheFactory,
-      UMSConfiguration pUMSConfiguration, ContentManager... pContentManagers) {
+                                UMSConfiguration pUMSConfiguration, KafkaProducerConfig pKafkaProducerConfig, ContentManager... pContentManagers) {
     mSecurityManager = pSecurityManager;
     mContentManagers = pContentManagers;
     mCacheFactory = pCacheFactory;
