@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.CacheFactory;
@@ -27,6 +26,9 @@ public class UMSContext {
   UMSConfiguration mUMSConfiguration;
 
   @Autowired
+  KafkaProducerConfig mKafkaProducerConfig;
+
+  @Autowired
   @Qualifier("backendSecurityManager")
   SecurityManager mSecurityManager;
 
@@ -44,7 +46,7 @@ public class UMSContext {
 
   @Bean
   CacheWarmerManager cacheWarmerManager() {
-    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
+    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration, mKafkaProducerConfig,
         mAcademicContext.departmentManager(), mCoreContext.roleManager(), mCoreContext.permissionManager(),
         mCoreContext.bearerAccessTokenManager(), mCoreContext.additionalRolePermissionsManager(),
         mCoreContext.navigationManager(), mCoreContext.employeeManager(), mAcademicContext.programTypeManager(),

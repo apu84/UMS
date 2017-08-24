@@ -15,7 +15,9 @@ import org.ums.integration.FileWriterGateway;
 import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -50,10 +52,11 @@ public class ProfilePicture extends Resource {
   MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
 
   @GET
-  public Response get(final @Context Request pRequest) {
+  public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
+                      final @Context Request pRequest) {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if(subject != null) {
+    if (subject != null) {
       userId = subject.getPrincipal().toString();
     }
     InputStream imageData = null;
@@ -73,7 +76,7 @@ public class ProfilePicture extends Resource {
       ObjectMapper mapper = new ObjectMapper();
 
       /* mKafkaTemplate.send("ums_logger", mapper.writeValueAsString(activityLogger)); */
-    } catch(Exception fl) {
+    } catch (Exception fl) {
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();
     }
