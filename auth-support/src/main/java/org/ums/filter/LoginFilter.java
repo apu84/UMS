@@ -14,6 +14,7 @@ import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.persistent.model.PersistentBearerAccessToken;
+import org.ums.token.Token;
 import org.ums.token.TokenBuilder;
 
 public class LoginFilter extends BasicHttpAuthenticationFilter {
@@ -23,14 +24,14 @@ public class LoginFilter extends BasicHttpAuthenticationFilter {
   @Override
   protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
       ServletResponse response) throws Exception {
-    String accessToken = mTokenBuilder.accessToken();
-    String refreshToken = mTokenBuilder.refreshToken();
+    Token accessToken = mTokenBuilder.accessToken();
+    Token refreshToken = mTokenBuilder.refreshToken();
     persistToken(accessToken, refreshToken);
-
     response.setContentType("application/json");
+    ((HttpServletResponse) response).addCookie(FilterUtil.refreshTokenCookie(refreshToken, request.getServletContext()
+        .getContextPath()));
     PrintWriter out = response.getWriter();
-    out.print(String.format("{\"accessToken\": \"Bearer %s\", \"refreshToken\": \"Bearer %s\"}", accessToken,
-        refreshToken));
+    out.print(FilterUtil.accessTokenJson(accessToken));
     out.flush();
     return false;
   }
@@ -47,11 +48,11 @@ public class LoginFilter extends BasicHttpAuthenticationFilter {
     return false;
   }
 
-  private void persistToken(String accessToken, String refreshToken) {
+  private void persistToken(Token accessToken, Token refreshToken) {
     MutableBearerAccessToken token = new PersistentBearerAccessToken();
     token.setUserId(SecurityUtils.getSubject().getPrincipal().toString());
-    token.setId(accessToken);
-    token.setRefreshToken(refreshToken);
+    token.setId(accessToken.getHash());
+    token.setRefreshToken(refreshToken.getHash());
     token.create();
   }
 }

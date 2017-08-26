@@ -22,26 +22,29 @@ public class JWTBuilder implements TokenBuilder {
   }
 
   @Override
-  public String accessToken() {
+  public Token accessToken() {
     Calendar accessTokenExpiration = Calendar.getInstance();
     accessTokenExpiration.add(Calendar.MINUTE, mAccessTokenExpiration);
-    return Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
-        .setExpiration(accessTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
+    return new TokenImpl(Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
+        .setExpiration(accessTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(),
+        (mAccessTokenExpiration * 60) - 60);
   }
 
   @Override
-  public String refreshToken() {
+  public Token refreshToken() {
     Calendar refreshTokenExpiration = Calendar.getInstance();
     refreshTokenExpiration.add(Calendar.HOUR, mRefreshTokenExpiration);
-    return Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
-        .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
+    return new TokenImpl(
+        Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
+            .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey)
+            .compact(), mRefreshTokenExpiration * 60 * 60);
   }
 
   @Override
-  public String passwordResetToken(String pUser) {
+  public Token passwordResetToken(String pUser) {
     Calendar refreshTokenExpiration = Calendar.getInstance();
     refreshTokenExpiration.add(Calendar.HOUR, mPasswordResetTokenExpiration);
-    return Jwts.builder().setSubject(pUser).setExpiration(refreshTokenExpiration.getTime())
-        .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact();
+    return new TokenImpl(Jwts.builder().setSubject(pUser).setExpiration(refreshTokenExpiration.getTime())
+        .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), mPasswordResetTokenExpiration * 60 * 60);
   }
 }

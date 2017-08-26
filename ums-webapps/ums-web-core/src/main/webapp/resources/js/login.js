@@ -109,7 +109,7 @@ var Authentication = (function () {
     };
 
     function startApplication(tokens) {
-        sessionStorage.setItem("ums.token", tokens.accessToken);
+        sessionStorage.setItem("ums.token", JSON.stringify(tokens));
         var params = getQueryParams();
         if (isValidRedirectTo()) {
             window.location.href = decodeURIComponent(params.redirectTo);

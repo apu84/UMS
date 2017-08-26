@@ -1,9 +1,9 @@
 package org.ums.token;
 
 public interface TokenBuilder {
-  String accessToken();
+  Token accessToken();
 
-  String refreshToken();
+  Token refreshToken();
 
-  String passwordResetToken(String pUser);
+  Token passwordResetToken(String pUser);
 }

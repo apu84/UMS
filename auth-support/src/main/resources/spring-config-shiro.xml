@@ -120,6 +120,10 @@
         <property name="signingKey" value="${authentication.token.signing.key}"/>
     </bean>
 
+    <bean id="refreshToken" class="org.ums.filter.RefreshTokenFilter">
+        <property name="signingKey" value="${authentication.token.signing.key}"/>
+    </bean>
+
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login"/>
@@ -135,6 +139,7 @@
                 /changePassword = tokenFilter,sessionFilter,changePassword
                 /forgotPassword = noSessionCreation,forgotPassword
                 /resetPassword = noSessionCreation,resetPassword
+                /refreshToken = tokenFilter,sessionFilter,refreshToken
                 /** = tokenFilter,sessionFilter,newUserFilter,user
             </value>
         </property>
@@ -147,7 +152,7 @@
     <bean id="tokenBuilder" class="org.ums.token.JWTBuilder">
         <constructor-arg name="pAccessTokenExpiration" value="${access.token.expiration}"/>
         <constructor-arg name="pRefreshTokenExpiration" value="${refresh.token.expiration}"/>
-        <constructor-arg name="pPasswordResetTokenExpiration" value="24"/>
+        <constructor-arg name="pPasswordResetTokenExpiration" value="${password.reset.token.expiration}"/>
         <constructor-arg name="pSigningKey" value="${authentication.token.signing.key}"/>
     </bean>
 

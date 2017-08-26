@@ -9,11 +9,6 @@ module ums {
     }
   }
 
-  interface TokenResponse {
-    accessToken: string;
-    refreshToken: string;
-  }
-
   export class ChangePassword {
     public static $inject = ['$scope', 'HttpClient', '$window'];
 
@@ -25,12 +20,12 @@ module ums {
 
     private submit(): void {
       this.httpClient.put('changePassword', this.$scope.password, 'application/json')
-          .success((response: TokenResponse) => {
+          .success((response: Token) => {
             this.$scope.response = {
               status: true,
               text: "Password changed successfully"
             };
-            this.resetAuthentication(this.$scope.user, response);
+            this.resetAuthentication(response);
           }).error((data) => {
             this.$scope.response = {
               status: false,
@@ -39,9 +34,8 @@ module ums {
           });
     }
 
-    private resetAuthentication(user: User, token: TokenResponse): void {
-      this.$window.sessionStorage.removeItem(HttpClient.CREDENTIAL_KEY);
-      this.$window.sessionStorage.setItem(HttpClient.CREDENTIAL_KEY, token.accessToken);
+    private resetAuthentication(token: Token): void {
+      this.$window.sessionStorage.setItem(TOKEN_KEY, JSON.stringify(token));
       this.httpClient.resetAuthenticationHeader();
     }
   }

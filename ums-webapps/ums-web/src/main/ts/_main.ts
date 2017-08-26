@@ -35,6 +35,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveApplicationStatusService.ts'/>
 /// <reference path='./service/leaveManagementService/LeaveTypeService.ts'/>

@@ -32,6 +32,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
     setId(pPersistentBearerAccessToken.getId());
     setUserId(pPersistentBearerAccessToken.getUserId());
     setLastAccessedTime(pPersistentBearerAccessToken.getLastAccessTime());
+    setRefreshToken(pPersistentBearerAccessToken.getRefreshToken());
   }
 
   @Override

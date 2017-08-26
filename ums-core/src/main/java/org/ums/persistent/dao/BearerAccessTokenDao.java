@@ -70,7 +70,7 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
 
   @Override
   public List<BearerAccessToken> getByRefreshToken(String pRefreshToken) {
-    String query = SELECT_ALL + "WHERE REFRESH_TOKEN = ?";
+    String query = SELECT_ALL + "WHERE REFRESH_TOKEN = ? ORDER BY LAST_MODIFIED DESC";
     return mJdbcTemplate.query(query, new Object[] {pRefreshToken}, new BearerAccessTokenRowMapper());
   }
 
@@ -82,6 +82,7 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
       accessToken.setUserId(rs.getString("USER_ID"));
       accessToken.setLastAccessedTime(rs.getTimestamp("LAST_ACCESS_TIME"));
       accessToken.setLastModified(rs.getString("LAST_MODIFIED"));
+      accessToken.setRefreshToken(rs.getString("REFRESH_TOKEN"));
       AtomicReference<BearerAccessToken> reference = new AtomicReference<>(accessToken);
       return reference.get();
     }

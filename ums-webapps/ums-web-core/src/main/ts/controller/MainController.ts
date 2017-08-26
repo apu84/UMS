@@ -1,9 +1,10 @@
 module ums {
   export class MainController {
-    public static $inject = ['$scope', 'HttpClient'];
+    public static $inject = ['$scope', 'HttpClient', 'ExpireToken'];
 
     constructor(private $scope:any,
-                private httpClient:HttpClient) {
+                private httpClient:HttpClient,
+                private expireToken: ExpireToken) {
       setTimeout(function () {
         $('.todo-list').slimScroll({
           "width": '100%',

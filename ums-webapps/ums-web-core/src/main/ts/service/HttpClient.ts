@@ -4,9 +4,8 @@ module ums {
     static MIME_TYPE_JSON: string = 'application/json';
     static MIME_TYPE_PDF: string = 'application/pdf';
     static MIME_TYPE_TEXT: string = 'text/html';
-    static CREDENTIAL_KEY = 'ums.token';
 
-    private credentials: any;
+    private credentials: Token;
     private location: string;
 
     public static $inject = [
@@ -29,11 +28,11 @@ module ums {
       });
     }
 
-    public get (url: string,
-                contentType: string,
-                success: (json: any, etag: string) => void,
-                error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
-                responseType?: string): void {
+    public get(url: string,
+               contentType: string,
+               success: (json: any, etag: string) => void,
+               error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
+               responseType?: string): void {
 
       var config: ng.IRequestShortcutConfig = {
         headers: {
@@ -104,10 +103,10 @@ module ums {
                 success: (json: any, etag: string) => void,
                 error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
                 responseType?: string): void {
-      var token = this.$http.defaults.headers.common['X-Authorization'];
+      var token = this.$http.defaults.headers.common['Authorization'];
       $.ajax(this.baseURI.toAbsolute(url), {
         beforeSend: function (xhr) {
-          xhr.setRequestHeader("X-Authorization", token);
+          xhr.setRequestHeader("Authorization", token);
           xhr.setRequestHeader("Accept", contentType);
         },
         error: function (response) {
@@ -124,9 +123,10 @@ module ums {
 
 
     public resetAuthenticationHeader() {
-      this.credentials = this.$window.sessionStorage.getItem(HttpClient.CREDENTIAL_KEY);
-      if (this.credentials != null && this.credentials != '') {
-        this.$http.defaults.headers.common['Authorization'] = this.credentials;
+      this.credentials = this.$window.sessionStorage.getItem(TOKEN_KEY) ?
+          JSON.parse(this.$window.sessionStorage.getItem(TOKEN_KEY)) : null;
+      if (this.credentials != null) {
+        this.$http.defaults.headers.common['Authorization'] = this.credentials.access_token;
       }
     }
   }
