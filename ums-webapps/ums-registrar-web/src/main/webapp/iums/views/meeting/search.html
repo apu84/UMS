@@ -1,9 +1,114 @@
-<div data-ng-show="showSearchDiv">
-    <div class="panel">
-        <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div align="center">
-                <img src="http://affiniahealthcare.org/wp-content/uploads/2016/05/UnderConstruct.jpg" alt="Under Construction Image"style="width:800px;height:500px;">
-                <!--<img src="../../../images/readyForProcess.png" alt="Under Construction Image"style="width:800px;height:500px;">-->
+<style>
+    .row{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    legend {
+        font-size: medium;
+    }
+    #rcorners1 {
+        border-radius: 20px;
+        background: #eee;
+        padding:  16px 12px;
+        height: 64px;
+    }
+    .btn-round{
+        border-radius: 0.5em !important;
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-body shadowPanel" style="min-height: 490px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="rcorners1" style="width: 727px;float: left">
+                    <span style="float: left;margin-top: 5px;">
+                        <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
+                    </span>
+                    <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px; border: 1px solid #D7DBDD; padding-left: 10px;font-weight: bold;
+                margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
+                           data-ng-model="search.queryTerm"/>
+                    <select data-style="btn-white" data-ng-model="search.searchType"
+                            class="selectpier" style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
+                            onchange="searchSelection(this.value)" autocomplete="off">
+                        <option value="basic">Basic Search</option>
+                        <option value="advanced">Advanced Search</option>
+                    </select>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-default btn-round" data-ng-click="doSearch()"
+                       style="border-radius: 0.5em;padding: 8px 10px;background-color: white;margin-left: 5px;margin-top: -1px;" >
+                        <i class="fa fa-search fa-lg" style="color: #0093d9;"></i>
+                    </a>
+                </div>
+                <span style="float: left;margin-top: 21px;">
+                    <a href="javascript:void(0);" class="btn btn-xs btn-default btn-round"
+                       style="border-radius: 0.5em;padding: 8px 10px;background-color: #eee;margin-left: 5px;margin-top: -5px;" >
+                        <img src="https://cdn2.iconfinder.com/data/icons/flaticons-solid/16/backspace-1-512.png" height="16px" />
+                    </a>
+                </span>
+            </div>
+
+            <div id="bbcd">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div style="background-color:#E6F0F2;border: 1px solid #B9D8D9;border-radius: 5px 5px 0 0;color: black;font-size: 100%;padding: .4em 0 .4em 1em;min-height: 50px;">
+                            <strong> Total {{data.totalRecord}} records found.</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-right">
+                            <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
+                                                     on-page-change="pageChanged(newPageNumber)"
+                                                     template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                            <tr>
+                                <th>Results</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr dir-paginate="record in recordList | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage" total-items="data.totalRecord" pagination-id="mainRecordPaginator">
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <b>No:</b>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label>{{agendaResolution.agendaNo}}</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div align="right">
+                                                <button type="button" class="btn btn-white btn-xs" data-ng-click="vm.view($index)">View</button>
+                                                <button type="button" class="btn btn-red btn-xs" data-ng-click="vm.edit($index)">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <b>Agenda:</b>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <label>{{agendaResolution.agenda}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <b>Resolution:</b>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <label>{{agendaResolution.resolution}}</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

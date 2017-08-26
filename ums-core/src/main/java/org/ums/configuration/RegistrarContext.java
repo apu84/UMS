@@ -91,7 +91,7 @@ public class RegistrarContext {
     agendaResolutionTransaction.setManager(new PersistentAgendaResolutionDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
     AgendaResolutionCache agendaResolutionCache = new AgendaResolutionCache(mCacheFactory.getCacheManager());
-    agendaResolutionCache.setManager(agendaResolutionCache);
+    agendaResolutionCache.setManager(agendaResolutionTransaction);
     return agendaResolutionCache;
   }
 }

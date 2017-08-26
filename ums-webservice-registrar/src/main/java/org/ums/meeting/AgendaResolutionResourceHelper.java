@@ -1,8 +1,10 @@
 package org.ums.meeting;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -15,6 +17,7 @@ import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.persistent.model.meeting.PersistentAgendaResolution;
 import org.ums.resource.ResourceHelper;
 import org.ums.solr.indexer.resolver.meeting.AgendaResolutionResolver;
+import org.ums.solr.repository.document.meeting.AgendaResolutionDocument;
 import org.ums.solr.repository.meeting.AgendaResolutionRepository;
 import org.ums.solr.repository.transaction.meeting.AgendaResolutionTransaction;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -44,7 +47,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public JsonObject getAgendaResolution(final String pScheduleId, final UriInfo pUriInfo) {
     List<AgendaResolution> pAgendaResolution = new ArrayList<>();
     try {
-      // pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
+      pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -62,11 +65,26 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     return builder.build();
   }
 
+  public JsonObject searchAgendaResolution(int pPage, int pItemPerPage, final String pFilter, final UriInfo pUriInfo) {
+    List<AgendaResolutionDocument> agendaResolutionDocuments =
+        mRepository.findByCustomQuery(queryBuilder(pFilter), new PageRequest(pPage, pItemPerPage));
+    List<AgendaResolution> agendaResolutions = new ArrayList<>();
+    for(AgendaResolutionDocument document : agendaResolutionDocuments) {
+      agendaResolutions.add(mManager.get(Long.valueOf(document.getId())));
+    }
+
+    return convertToJson(agendaResolutions, mRepository.getTotalCount(queryBuilder(pFilter)), pUriInfo);
+  }
+
+  private String queryBuilder(String pFilter) {
+    return "";
+  }
+
   public Response updateAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
     mBuilder.updateBuilder(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
-    // mManager.updateAgendaResolution(mutableAgendaResolution);
+    mManager.updateAgendaResolution(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -82,6 +100,20 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
       children.add(jsonObject);
     }
     object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  private JsonObject convertToJson(List<AgendaResolution> agendaResolutions, long totalCount, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AgendaResolution agendaResolution : agendaResolutions) {
+      children.add(toJson(agendaResolution, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    object.add("total", totalCount);
     localCache.invalidate();
     return object.build();
   }

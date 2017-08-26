@@ -49,6 +49,8 @@ module ums{
             CKEDITOR.replace('CKEditorForResolution');
             CKEDITOR.instances['CKEditorForAgenda'].setData("");
             CKEDITOR.instances['CKEditorForResolution'].setData("");
+
+            console.log("Changed");
         }
 
         private getMeetingNumber(): void{
@@ -66,13 +68,11 @@ module ums{
         }
 
         private getAgendaResolution(): void{
-            // this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
-            //     this.agendaAndResolutions = response;
-            //
-            // });
-
-            Utils.expandRightDiv();
-            this.showRightDiv = true;
+            this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
+                this.agendaAndResolutions = response;
+                Utils.expandRightDiv();
+                this.showRightDiv = true;
+            });
         }
 
         private toggleEditor(type: string, param: string): void{
