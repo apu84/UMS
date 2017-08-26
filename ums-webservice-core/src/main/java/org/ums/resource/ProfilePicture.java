@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
@@ -50,6 +51,7 @@ public class ProfilePicture extends Resource {
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
   MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
+  KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate", KafkaTemplate.class);
 
   @GET
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
@@ -59,14 +61,9 @@ public class ProfilePicture extends Resource {
     if (subject != null) {
       userId = subject.getPrincipal().toString();
     }
-    InputStream imageData = null;
 
-    /*
-     * File file = new File("G:/shorna.jpg");
-     * 
-     * // this.mGateway.write("love.jpg", file); Message<File> messageA =
-     * MessageBuilder.withPayload(file).build(); lmsChannel.send(messageA);
-     */
+    InputStream imageData = null;
+    mKafkaTemplate.send("ums_logger", "This is from profile picture");
 
     try {
 
@@ -75,7 +72,6 @@ public class ProfilePicture extends Resource {
 
       ObjectMapper mapper = new ObjectMapper();
 
-      /* mKafkaTemplate.send("ums_logger", mapper.writeValueAsString(activityLogger)); */
     } catch (Exception fl) {
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();

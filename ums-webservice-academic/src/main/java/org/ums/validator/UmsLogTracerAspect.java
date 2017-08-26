@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
 import org.ums.domain.model.dto.logger.ActivityLogger;
 
@@ -14,13 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 @Aspect
-@Component
 public class UmsLogTracerAspect {
 
   // Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
   KafkaTemplate<String, String> kafkaTemplate = applicationContext.getBean("kafkaTemplate", KafkaTemplate.class);
+
+  // @Autowired
+  // KafkaTemplate<String, String> kafkaTemplate;
 
   /*
    * @Autowired KafkaTemplate<String, String> kafkaTemplate;
