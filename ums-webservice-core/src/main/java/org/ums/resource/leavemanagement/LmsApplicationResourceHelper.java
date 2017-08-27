@@ -2,6 +2,7 @@ package org.ums.resource.leavemanagement;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -85,7 +86,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
+  @Qualifier("lmsChannel")
+  MessageChannel lmsChannel;// = applicationContext.getBean("lmsChannel", MessageChannel.class);
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {

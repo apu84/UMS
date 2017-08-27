@@ -50,15 +50,16 @@ public class ProfilePicture extends Resource {
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  MessageChannel lmsChannel = applicationContext.getBean("lmsChannel", MessageChannel.class);
+  @Qualifier("lmsChannel")
+  MessageChannel lmsChannel;// = applicationContext.getBean("lmsChannel", MessageChannel.class);
   KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate", KafkaTemplate.class);
 
   @GET
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
-                      final @Context Request pRequest) {
+      final @Context Request pRequest) {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
+    if(subject != null) {
       userId = subject.getPrincipal().toString();
     }
 
@@ -72,7 +73,7 @@ public class ProfilePicture extends Resource {
 
       ObjectMapper mapper = new ObjectMapper();
 
-    } catch (Exception fl) {
+    } catch(Exception fl) {
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();
     }
