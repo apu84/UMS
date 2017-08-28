@@ -13,7 +13,7 @@
       default-request-channel="ftpChannel"></integration:gateway>
 
   <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
-    <property name="host" value="localhost"/>
+    <property name="host" value="103.23.42.69"/>
     <property name="port" value="21"/>
     <property name="username" value="iums"/>
     <property name="password" value="iftiapumunna"/>
