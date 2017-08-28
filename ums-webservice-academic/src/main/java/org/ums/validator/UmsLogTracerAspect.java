@@ -37,13 +37,15 @@ public class UmsLogTracerAspect {
       throws Exception {
     HttpServletRequest mHttpServletRequest = httpServletRequest;
 
-   /* System.out.println("***************");
-    System.out.println("logger---->" + pJoinPoint.getSignature().toString());
-
-    System.out.println("Url: " + mHttpServletRequest.getRequestURI());
-    System.out.println("Authentication Type: " + mHttpServletRequest.getRemoteUser());
-    System.out.println("Location: " + mHttpServletRequest.getHeader("Location"));
-    System.out.println("Ip Address: " + mHttpServletRequest.getRemoteAddr());*/
+    /*
+     * System.out.println("***************"); System.out.println("logger---->" +
+     * pJoinPoint.getSignature().toString());
+     * 
+     * System.out.println("Url: " + mHttpServletRequest.getRequestURI());
+     * System.out.println("Authentication Type: " + mHttpServletRequest.getRemoteUser());
+     * System.out.println("Location: " + mHttpServletRequest.getHeader("Location"));
+     * System.out.println("Ip Address: " + mHttpServletRequest.getRemoteAddr());
+     */
 
     ActivityLogger activityLogger = new ActivityLogger();
     activityLogger.setUserId(mHttpServletRequest.getRemoteUser());

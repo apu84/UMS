@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
@@ -52,7 +51,9 @@ public class ProfilePicture extends Resource {
 
   @Qualifier("lmsChannel")
   MessageChannel lmsChannel;// = applicationContext.getBean("lmsChannel", MessageChannel.class);
-  KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate", KafkaTemplate.class);
+
+  // KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate",
+  // KafkaTemplate.class);
 
   @GET
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
@@ -64,11 +65,11 @@ public class ProfilePicture extends Resource {
     }
 
     InputStream imageData = null;
-    mKafkaTemplate.send("ums_logger", "This is from profile picture");
+    // mKafkaTemplate.send("ums_logger", "This is from profile picture");
 
     try {
 
-      imageData = mGateway.read("files/user.png");
+      imageData = mGateway.read("/files/user.png");
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
       ObjectMapper mapper = new ObjectMapper();
