@@ -36,9 +36,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     List<UGRegistrationResult> resultList = super.getResults(pStudentId, pSemesterId);
-    if(mLogger.isDebugEnabled()) {
-      mLogger.debug("Course found: " + resultList.size());
-    }
+    mLogger.debug("Course found: {}", resultList.size());
     Collections.sort(resultList, new ResultComparator());
     return resultsWithCarryCourses(resultList, pSemesterId);
   }
@@ -50,9 +48,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
       resultMap.put(result.getCourseId(), result);
       // }
     }
-    if(mLogger.isDebugEnabled()) {
-      mLogger.debug("Aggregated result: " + resultMap.size());
-    }
+    mLogger.debug("Aggregated result: {}", resultMap.size());
     return equivalent(resultMap);
   }
 
@@ -77,14 +73,10 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
     int totalStudentFound = studentCourseGradeMap.keySet().size();
     int i = 0;
-    if(mLogger.isDebugEnabled()) {
-      mLogger.debug("Total student found for result process is: " + totalStudentFound);
-    }
+    mLogger.debug("Total student found for result process is: {}", totalStudentFound);
 
     for(String studentId : studentCourseGradeMap.keySet()) {
-      if(mLogger.isDebugEnabled()) {
-        mLogger.debug("Processing grades for student: " + studentId);
-      }
+        mLogger.debug("Processing grades for student: {}", studentId);
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
       List<UGRegistrationResult> results = aggregateResults(studentCourseGradeMap.get(studentId));
       studentCourseGradeMap.put(studentId, results);
@@ -111,9 +103,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         pResults.remove(course.getOldCourseId());
       }
     }
-    if(mLogger.isDebugEnabled()) {
-      mLogger.debug("Equivalence result: " + pResults.values().size());
-    }
+    mLogger.debug("Equivalence result: {}", pResults.values().size());
     return new ArrayList<>(pResults.values());
   }
 
