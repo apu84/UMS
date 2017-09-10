@@ -3,6 +3,7 @@ package org.ums.persistent.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,18 +34,10 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
   static String DELETE_ONE = "DELETE FROM EMPLOYEES ";
 
-  String EXIST_EMAIL = "SELECT COUNT(EMPLOYEE_ID) EXIST FROM EMPLOYEES ";
-
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentEmployeeDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-  }
-
-  @Override
-  public boolean existenceByEmail(String pEmailAddress) {
-    String query = EXIST_EMAIL + " WHERE EMAIL_ADDRESS = ?";
-    return mJdbcTemplate.queryForObject(query, Boolean.class, pEmailAddress);
   }
 
   @Override
@@ -54,9 +47,10 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
-  public Employee getByEmail(String pEmailAddress) {
+  public Optional<Employee> getByEmail(String pEmailAddress) {
     String query = SELECT_ALL + " WHERE EMAIL_ADDRESS = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pEmailAddress}, new EmployeeRowMapper());
+    List<Employee> employees = mJdbcTemplate.query(query, new Object[] {pEmailAddress}, new EmployeeRowMapper());
+    return employees.size() == 1 ? Optional.of(employees.get(0)) : Optional.empty();
   }
 
   @Override

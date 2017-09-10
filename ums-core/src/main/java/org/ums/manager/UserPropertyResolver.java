@@ -1,6 +1,7 @@
 package org.ums.manager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -38,6 +39,19 @@ public class UserPropertyResolver extends UserDaoDecorator {
     return super.getUsers().stream().map(user -> transform(user)).collect(Collectors.toList());
   }
 
+  @Override
+  public Optional<User> getByEmail(String pEmail) {
+    Optional<Student> student = mStudentManager.getByEmail(pEmail);
+    if(student.isPresent()) {
+      return Optional.of(transform(getManager().get(student.get().getId())));
+    }
+    Optional<Employee> employee = mEmployeeManager.getByEmail(pEmail);
+    if(employee.isPresent()) {
+      return Optional.of(transform(getManager().getByEmployeeId(employee.get().getId())));
+    }
+    return Optional.empty();
+  }
+
   private User transform(User user) {
     MutableUser mutableUser = user.edit();
     if(user.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {
@@ -50,6 +64,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       Student student = mStudentManager.get(user.getId());
       mutableUser.setDepartment(student.getDepartment());
       mutableUser.setName(student.getFullName());
+      mutableUser.setEmail(student.getEmail());
     }
     else {
       Employee employee = null;
@@ -62,6 +77,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
         mutableUser.setDepartment(employee.getDepartment());
         mutableUser.setName(employee.getEmployeeName());
         mutableUser.setEmployeeId(employee.getId());
+        mutableUser.setEmail(employee.getEmailAddress());
       }
     }
     return mutableUser;

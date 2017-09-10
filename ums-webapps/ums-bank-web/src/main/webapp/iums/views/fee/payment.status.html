@@ -2,18 +2,18 @@
     <div class="panel-heading">Payments</div>
     <div class="panel-body">
         <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
-        <table class="table table-hover table-bordered table-advanced" style="margin-top: 10px;">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
             <tr>
-                <td width="15%">Transaction Id</td>
-                <td width="15%">Account</td>
-                <td width="15%">Method of payment</td>
-                <td width="10%">Receipt no.</td>
-                <td width="10%">Status</td>
-                <td width="10%">Amount</td>
-                <td width="10%">Receive on</td>
-                <td width="10%">Completed on</td>
-                <td width="5%"></td>
+                <th width="15%">Transaction Id</th>
+                <th width="15%">Account</th>
+                <th width="15%">Method of payment</th>
+                <th width="10%">Receipt no.</th>
+                <th width="10%">Status</th>
+                <th width="10%">Amount</th>
+                <th width="10%">Receive on</th>
+                <th width="10%">Completed on</th>
+                <th width="5%"></th>
             </tr>
             </thead>
             <tbody>
@@ -31,7 +31,9 @@
                     {{::paymentStatus.receiptNo}}
                 </td>
                 <td>
-                    {{paymentStatus.status}}
+                    <span class="badge badge-primary" data-ng-if="paymentStatus.status=='Rejected'">{{paymentStatus.status}}</span>
+                    <span class="badge badge-success" data-ng-if="paymentStatus.status=='Received & Verified'">{{paymentStatus.status}}</span>
+                    <span class="badge badge-warning" data-ng-if="paymentStatus.status=='Received'">{{paymentStatus.status}}</span>
                 </td>
                 <td>
                     {{paymentStatus.amount}}/=
@@ -55,17 +57,13 @@
                    data-ng-click="vm.concludePayment(true)"
                    data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
                     <i class="fa fa-check-circle-o"></i>&nbsp;Verified</a>
-            </div>
-            <div class="col-md-1">
-                &nbsp;
-            </div>
-            <div class="col-md-3">
-                <a href="javascript:void(0);" class="btn btn-warning"
+
+                <a href="javascript:void(0);" class="btn btn-red" style="margin-left: 10px"
                    data-ng-click="vm.concludePayment(false)"
                    data-ng-if="vm.selectedPaymentIds && vm.selectedPaymentIds.length > 0">
                     <i class="fa fa-ban"></i>&nbsp;Reject</a>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-9">
                 <div class="text-right">
                     <button type="button" class="btn btn-defaut btn-outlined" data-ng-click="vm.navigate(vm.nextLink)"
                             data-ng-if="vm.nextLink">

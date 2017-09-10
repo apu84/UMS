@@ -1,10 +1,8 @@
 package org.ums.configuration;
 
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -12,8 +10,6 @@ import org.ums.cache.CacheFactory;
 import org.ums.generator.IdGenerator;
 import org.ums.lock.LockDao;
 import org.ums.lock.LockManager;
-import org.ums.solr.indexer.ConsumeIndex;
-import org.ums.solr.indexer.ConsumeIndexJobImpl;
 import org.ums.solr.indexer.IndexConsumerDao;
 import org.ums.solr.indexer.IndexDao;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
@@ -54,10 +50,6 @@ public class SolrContext {
 
   @Autowired
   RegistrarContext mRegistrarContext;
-
-  @Autowired
-  @Qualifier("backendSecurityManager")
-  SecurityManager mSecurityManager;
 
   @Autowired
   UMSConfiguration mUMSConfiguration;
@@ -110,12 +102,6 @@ public class SolrContext {
   EntityResolverFactory entityResolverFactory() throws Exception {
     return new EntityResolverFactoryImpl(Lists.newArrayList(employeeResolver(), recordResolver(),
         agendaResolutionResolver()));
-  }
-
-  @Bean
-  ConsumeIndex consumeIndex() throws Exception {
-    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), entityResolverFactory(), lockManager(),
-        mSecurityManager, mUMSConfiguration);
   }
 
   @Bean

@@ -5,10 +5,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,8 +64,6 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
       return pApplicationCCIs;
     }
     else {
-      JsonObjectBuilder object = Json.createObjectBuilder();
-      JsonArrayBuilder children = Json.createArrayBuilder();
       Map<String, List<PersistentApplicationCCI>> examDateWithApplicationMap = new HashMap<>();
       List<PersistentApplicationCCI> appsList = new ArrayList<>();
 

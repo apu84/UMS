@@ -6,6 +6,7 @@ import org.ums.enums.StudentStatus;
 import org.ums.manager.StudentManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStudent, String, StudentManager> implements
     StudentManager {
@@ -57,5 +58,10 @@ public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStu
   @Override
   public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId) {
     return getManager().updateStudentsStatus(pStudentStatus, pStudentId);
+  }
+
+  @Override
+  public Optional<Student> getByEmail(String pEmail) {
+    return getManager().getByEmail(pEmail);
   }
 }

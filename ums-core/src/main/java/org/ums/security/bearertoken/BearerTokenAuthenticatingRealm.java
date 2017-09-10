@@ -43,12 +43,6 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private Integer sessionTimeout = 15;
   @Autowired
   private Integer sessionTimeoutInterval = 1;
-  @Autowired
-  private String mLogoutUri = "/logout";
-
-  public void setLogoutUri(String pLogoutUri) {
-    mLogoutUri = pLogoutUri;
-  }
 
   private class BearerAuthenticationInfo implements AuthenticationInfo {
     private final BearerAccessToken token;
@@ -117,22 +111,17 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
      * Exception.
      */
     // Bypassing logout uri.
-    if(!token.getPath().contains(mLogoutUri)) {
-      Date currentDate = new Date();
-      long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
-      long diffMinutes = diff / (60 * 1000);
-
-      if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
-        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
-        mutableBearerAccessToken.update();
-      }
-      else if(diffMinutes > sessionTimeout) {
-        if(mLogger.isDebugEnabled()) {
-          mLogger.debug("Expired access token: " + dbToken.getId());
-        }
-        throw new AuthenticationException("Expired token");
-      }
-    }
+    /*
+     * if(!token.getPath().contains(mLogoutUri)) { Date currentDate = new Date(); long diff =
+     * currentDate.getTime() - dbToken.getLastAccessTime().getTime(); long diffMinutes = diff / (60
+     * * 1000);
+     * 
+     * if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
+     * MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+     * mutableBearerAccessToken.update(); } else if(diffMinutes > sessionTimeout) {
+     * if(mLogger.isDebugEnabled()) { mLogger.debug("Expired access token: " + dbToken.getId()); }
+     * throw new AuthenticationException("Expired token"); } }
+     */
 
     return new BearerAuthenticationInfo(dbToken);
   }

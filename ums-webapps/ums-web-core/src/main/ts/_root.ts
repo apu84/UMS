@@ -42,6 +42,8 @@
 /// <reference path='service/PaymentInfoService.ts'/>
 /// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/Settings.ts'/>
+/// <reference path='service/token.model.ts'/>
+/// <reference path='service/refresh.token.service.ts'/>
 /// <reference path='service/EmployeeService.ts'/>
 
 
@@ -71,7 +73,6 @@
 /// <reference path='directive/Modal.ts'/>
 /// <reference path='directive/Notification.ts'/>
 /// <reference path='directive/ConfirmationDIalog.ts'/>
-
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>

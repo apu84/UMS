@@ -49,7 +49,7 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
       String[] splitToken = decodedToken.split(":");
 
       if(splitToken.length == 2) {
-        BearerAccessToken userToken = mBearerAccessTokenManager.getByUser(splitToken[0]);
+        BearerAccessToken userToken = mBearerAccessTokenManager.getByUser(splitToken[0]).get(0);
         if(userToken != null) {
           if(userToken.getId().equals(splitToken[1])) {
             return true;
@@ -65,7 +65,7 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
 
   protected Object addOwnerToken(final Object folderList) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    String accessToken = getBearerAccessTokenManager().getByUser(userId).getId();
+    String accessToken = getBearerAccessTokenManager().getByUser(userId).get(0).getId();
     try {
       String encryptedToken = encrypt(userId + ":" + accessToken);
 

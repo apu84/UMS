@@ -1,16 +1,14 @@
 package org.ums.usermanagement.user;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
-import org.ums.usermanagement.role.Role;
 import org.ums.manager.DepartmentManager;
+import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.role.RoleManager;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class PersistentUser implements MutableUser {
   private static UserManager sUserManager;
@@ -27,19 +25,17 @@ public class PersistentUser implements MutableUser {
   private String mId;
   private char[] mPassword;
   private char[] mTemporaryPassword;
-  private List<Role> mRoles;
-  private List<Integer> mRoleIds;
   private boolean mActive;
   private String mPasswordResetToken;
   private Date mPasswordTokenGenerateDateTime;
   private Integer mPrimaryRoleId;
   private Role mPrimaryRole;
-  private List<String> mAdditionalPermissions;
   private String mLastModified;
   private String mEmployeeId;
   private Department mDepartment;
   private String mDepartmentId;
   private String mName;
+  private String mEmail;
 
   public PersistentUser() {
 
@@ -48,20 +44,16 @@ public class PersistentUser implements MutableUser {
   public PersistentUser(final PersistentUser pPersistentUser) {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
-    mRoleIds = pPersistentUser.getRoleIds();
-    mRoles = pPersistentUser.getRoles();
     mActive = pPersistentUser.isActive();
     mPrimaryRole = pPersistentUser.getPrimaryRole();
-    mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
     mDepartment = pPersistentUser.getDepartment();
     mName = pPersistentUser.getName();
     mEmployeeId = pPersistentUser.getEmployeeId();
-
     mTemporaryPassword = pPersistentUser.getTemporaryPassword();
     mPasswordResetToken = pPersistentUser.getPasswordResetToken();
     mPasswordTokenGenerateDateTime = pPersistentUser.getPasswordTokenGenerateDateTime();
     mLastModified = pPersistentUser.getLastModified();
-
+    mEmail = pPersistentUser.getEmail();
   }
 
   @Override
@@ -87,32 +79,6 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setPassword(char[] pPassword) {
     mPassword = pPassword;
-  }
-
-  @Override
-  public List<Integer> getRoleIds() {
-    return mRoleIds;
-  }
-
-  @Override
-  public void setRoleIds(List<Integer> pRoleIds) {
-    mRoleIds = pRoleIds;
-  }
-
-  @Override
-  public List<Role> getRoles() {
-    mRoles = new ArrayList<>();
-    if(mRoleIds != null) {
-      for(Integer roleId : mRoleIds) {
-        mRoles.add(sRoleManager.get(roleId));
-      }
-    }
-    return mRoles;
-  }
-
-  @Override
-  public void setRoles(List<Role> pRoles) {
-    mRoles = pRoles;
   }
 
   @Override
@@ -191,16 +157,6 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void setAdditionalPermissions(List<String> pAdditionalPermissions) {
-    mAdditionalPermissions = pAdditionalPermissions;
-  }
-
-  @Override
-  public List<String> getAdditionalPermissions() {
-    return mAdditionalPermissions;
-  }
-
-  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -249,5 +205,15 @@ public class PersistentUser implements MutableUser {
   @Override
   public String getName() {
     return mName;
+  }
+
+  @Override
+  public String getEmail() {
+    return mEmail;
+  }
+
+  @Override
+  public void setEmail(String pEmail) {
+    mEmail = pEmail;
   }
 }

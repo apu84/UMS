@@ -115,7 +115,6 @@
     <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
   </bean>
 
-  <import resource="shiro-context.xml"/>
   <import resource="caching.xml"/>
   <import resource="application-context.xml"/>
   <import resource="integration-context.xml"/>

@@ -24,9 +24,8 @@ var Authentication = (function () {
                 "Authorization": credentials,
                 "Accept": "application/json"
             },
-            success: function (user) {
-                credentials = "Basic " + btoa(userName + ":" + user.token);
-                getUserAndStartApplication(credentials, user);
+            success: function (tokens) {
+                startApplication(tokens);
             },
             fail: function (msg) {
                 console.error("Login failed....");
@@ -61,37 +60,26 @@ var Authentication = (function () {
             async: true,
             url: window.location.origin + '/ums-webservice-academic/forgotPassword',
             contentType: 'application/json',
-            data:'{"userId":"'+userId+'", "emailAddress":"'+emailAddress+'", "recoverBy":"'+recoverBy+'"}',
-
+            data:'{"userId":"'+userId+'", "email":"'+emailAddress+'", "recoverBy":"'+recoverBy+'"}',
             success: function (response) {
-
-                if (response.responseType == "SUCCESS") {
-                    $("#errorDiv").hide();
-                    $(".successdDiv").show();
-                    $(".fPasswordDiv").hide();
-                    $(".loaderDiv").hide();
-                    $("#btn_forgotPassword").show();
-                }
-                else {
-                    $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
-                    $(".loaderDiv").hide();
-                    $("#btn_forgotPassword").show();
-                }
+                $("#errorDiv").hide();
+                $(".successdDiv").show();
+                $(".fPasswordDiv").hide();
+                $(".loaderDiv").hide();
+                $("#btn_forgotPassword").show();
                 $("#login_msg").hide();
-
             },
-            error: (function (httpObj, textStatus) {
+            error: (function (error) {
+                $("#errorDiv").show().html("<b>Sorry</b>, " + error.responseText);
                 $(".loaderDiv").hide();
                 $("#btn_forgotPassword").show();
             })
         });
     };
 
-
     Authentication.prototype.changePassword = function () {
         var _this = this;
         var resetToken = $("#password_reset_token").val();
-        var userId = $("#user_id").val();
         var newPassword = $("#new_password").val();
         var confirmNewPassword = $("#confirm_new_password").val();
 
@@ -104,41 +92,24 @@ var Authentication = (function () {
         $("#btn_change_password").hide();
         $.ajax({
             crossDomain: true,
-            type: "PUT",
+            type: "POST",
             async: true,
-            url: window.location.origin + '/ums-webservice-academic/forgotPassword/resetPassword',
+            url: window.location.origin + '/ums-webservice-academic/resetPassword',
             contentType: 'application/json',
-            data: '{"userId":"' + userId + '","passwordResetToken":"' + resetToken + '","newPassword":"' + newPassword + '","confirmNewPassword":"' + confirmNewPassword + '"}',
+            data: '{"passwordResetToken":"' + resetToken + '","newPassword":"' + newPassword + '","confirmNewPassword":"' + confirmNewPassword + '"}',
             success: function (response) {
-                if (response.responseType == "SUCCESS") {
-                    _this.authenticate(userId, newPassword);
-                }
-                else {
-                    $(".loaderDiv").hide();
-                    $("#btn_change_password").show();
-                    $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
-                }
+                _this.authenticate(response.userId, newPassword);
             },
-            error: (function (httpObj, textStatus) {
+            error: (function (error) {
                 $(".loaderDiv").hide();
                 $("#btn_change_password").show();
-
+                $("#errorDiv").show().html("<b>Sorry</b>, " + error.responseText);
             })
         });
     };
 
-
-    function getUserAndStartApplication(credentials, user) {
-        var userObject = {
-            userId: user['userId'],
-            userName: user['userName']
-        };
-        startApplication(credentials, userObject);
-    }
-
-    function startApplication(credentials, user) {
-        sessionStorage.setItem("ums.token", credentials);
-        sessionStorage.setItem("ums.user", JSON.stringify(user));
+    function startApplication(tokens) {
+        sessionStorage.setItem("ums.token", JSON.stringify(tokens));
         var params = getQueryParams();
         if (isValidRedirectTo()) {
             window.location.href = decodeURIComponent(params.redirectTo);

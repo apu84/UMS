@@ -1,5 +1,6 @@
 package org.ums.resource.leavemanagement;
 
+import com.google.common.collect.Lists;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -176,7 +177,6 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
 
     // todo add more roles, currently mst_role table in db is not complete.
-    List<Integer> roles = user.getRoleIds();
     String message = "Leave Application from employee: " + employee.getEmployeeName() + " of department: "
         + employee.getDepartment().getShortName() + " is waiting for your approval.";
     if (rolePermissionsStream.get(0).getUserId().equals(user.getId())

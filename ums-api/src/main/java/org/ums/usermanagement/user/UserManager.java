@@ -6,8 +6,9 @@ import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserManager extends ContentManager<User, MutableUser, String> {
+public interface UserManager extends ContentManager<User, MutableUser, String>, UserEmail<User> {
 
   User getByEmployeeId(final String pEmployeeId);
 

@@ -92,6 +92,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/InlineNavigationOptionsImpl.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApi.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApiImpl.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
 /// <reference path='../../../../ums-web/src/main/ts/model/master_data/Employee.ts'/>
 

@@ -2,11 +2,9 @@ package org.ums.usermanagement.user;
 
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.usermanagement.role.Role;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.usermanagement.user.User;
-import org.ums.usermanagement.user.UserManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager> implements
     UserManager {
@@ -50,5 +48,10 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   @Override
   public List<User> getUsers(List<Role> pRoles) {
     return getManager().getUsers(pRoles);
+  }
+
+  @Override
+  public Optional<User> getByEmail(String pEmail) {
+    return getManager().getByEmail(pEmail);
   }
 }

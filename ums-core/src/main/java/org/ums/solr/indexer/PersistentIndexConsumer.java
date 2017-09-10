@@ -7,7 +7,7 @@ import org.ums.context.AppContext;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
 import org.ums.solr.indexer.model.MutableIndexConsumer;
 
-class PersistentIndexConsumer implements MutableIndexConsumer {
+public class PersistentIndexConsumer implements MutableIndexConsumer {
 
   private static IndexConsumerManager sIndexConsumerManager;
 
@@ -103,7 +103,7 @@ class PersistentIndexConsumer implements MutableIndexConsumer {
     sIndexConsumerManager.delete(this);
   }
 
-  PersistentIndexConsumer() {}
+  public PersistentIndexConsumer() {}
 
   PersistentIndexConsumer(MutableIndexConsumer pIndexConsumer) {
     setId(pIndexConsumer.getId());

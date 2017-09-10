@@ -77,4 +77,7 @@
     <property name="loggerType" value="${query.logger}"/>
   </bean>
 
+  <bean id="host" class="java.lang.String">
+    <constructor-arg type="java.lang.String" value="${host}"/>
+  </bean>
 </beans>

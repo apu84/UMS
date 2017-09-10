@@ -18,6 +18,7 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
       classpath:application-context.xml
+      classpath:spring-config-shiro.xml
       /WEB-INF/applicationContext.xml
     </param-value>
   </context-param>
@@ -32,7 +33,7 @@
     <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
   </listener>
 
-  <!-- The filter-name matches name of a 'shiroFilter' bean inside application-context.xml -->
+  <!-- The filter-name matches name of a 'shiroFilter' bean inside spring-config-shiro.xml -->
   <filter>
     <filter-name>shiroFilter</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

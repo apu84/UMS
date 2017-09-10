@@ -22,6 +22,18 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
+      <artifactId>auth-support</artifactId>
+      <type>jar</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>microservice</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
       <artifactId>ums-webservice-academic</artifactId>
       <type>war</type>
       <version>${project.version}</version>
@@ -228,6 +240,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-quartz</artifactId>
+      <version>${apache-shiro-version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.9.2</version>
@@ -264,12 +282,12 @@
       <scope>compile</scope>
     </dependency>
 
-    <!--    <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-          <version>5.1.26</version>
-          <scope>compile</scope>
-        </dependency>-->
+<!--    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.26</version>
+      <scope>compile</scope>
+    </dependency>-->
 
     <!--Oracle jdbc driver-->
     <dependency>
@@ -511,6 +529,13 @@
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.7.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

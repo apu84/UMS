@@ -21,7 +21,6 @@ import org.ums.services.UtilsService;
 import org.ums.util.Constants;
 import org.ums.util.UmsUtils;
 
-import javax.json.*;
 import java.io.StringReader;
 import java.util.*;
 
@@ -40,102 +39,6 @@ public class GradeSubmissionService {
 
   @Autowired
   private NotificationGenerator mNotificationGenerator;
-
-  public JsonObject enrich(JsonObject source, String key, String value) {
-    JsonObjectBuilder builder = Json.createObjectBuilder();
-    source.entrySet().
-        forEach(e -> builder.add(e.getKey(), e.getValue()));
-    builder.add(key, value);
-    return builder.build();
-  }
-
-  public void prepareGradeGroups(JsonObjectBuilder objectBuilder, List<StudentGradeDto> examGradeList,
-      CourseMarksSubmissionStatus courseStatus, String currentActor) {
-
-    JsonArrayBuilder noneAndSubmitArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder scrutinizeCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder approveCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder acceptCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder recheckCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder submittedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder scrutinizedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder approvedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder acceptedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder recheckAcceptedArrayBuilder = Json.createArrayBuilder();
-
-    StudentMarksSubmissionStatus gradeStatus;
-    JsonReader jsonReader;
-    JsonObject jsonObject;
-
-    for(StudentGradeDto gradeDto : examGradeList) {
-      jsonReader = Json.createReader(new StringReader(gradeDto.toString()));
-      jsonObject = jsonReader.readObject();
-
-      if(jsonObject.get("partAAddiInfo") != null
-          && (jsonObject.getString("partAAddiInfo").equals("Abs") || jsonObject.getString("partAAddiInfo")
-              .equals("Rep"))) {
-        jsonObject = enrich(jsonObject, "partA", jsonObject.getString("partAAddiInfo"));
-      }
-      if(jsonObject.get("partBAddiInfo") != null
-          && (jsonObject.getString("partBAddiInfo").equals("Abs") || jsonObject.getString("partBAddiInfo")
-              .equals("Rep"))) {
-        jsonObject = enrich(jsonObject, "partB", jsonObject.getString("partBAddiInfo"));
-      }
-
-      jsonReader.close();
-      gradeStatus = gradeDto.getStatus();
-
-      if(gradeStatus == StudentMarksSubmissionStatus.NONE || gradeStatus == StudentMarksSubmissionStatus.SUBMIT
-          && gradeDto.getRecheckStatusId() == 0 && currentActor.equalsIgnoreCase("preparer")) {
-        noneAndSubmitArrayBuilder.add(jsonObject);
-      }
-      else if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE)
-          && currentActor.equalsIgnoreCase("scrutinizer")) {
-        scrutinizeCandidatesArrayBuilder.add(jsonObject);
-      }
-      else if((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)
-          && currentActor.equalsIgnoreCase("head")) {
-        approveCandidatesArrayBuilder.add(jsonObject);
-      }
-      else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)
-          && currentActor.equalsIgnoreCase("coe")) {
-        acceptCandidatesArrayBuilder.add(jsonObject);
-      }
-
-      if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE))// &&
-                                                                                                                           // !currentActor.equalsIgnoreCase("scrutinizer")
-        submittedArrayBuilder.add(jsonObject);
-      else if((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)) // &&
-                                                                                                                                // !currentActor.equalsIgnoreCase("head")
-        scrutinizedArrayBuilder.add(jsonObject);
-      else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)) // &&
-                                                                                                                            // !currentActor.equalsIgnoreCase("coe")
-        approvedArrayBuilder.add(jsonObject);
-      else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED) {
-        // acceptedArrayBuilder.add(object1);
-        if(gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE)
-          recheckAcceptedArrayBuilder.add(jsonObject);
-        else
-          acceptedArrayBuilder.add(jsonObject);
-      }
-      if((courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
-          || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE)
-          && gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE) {
-        recheckCandidatesArrayBuilder.add(jsonObject);
-      }
-    }
-
-    objectBuilder.add("none_and_submit_grades", noneAndSubmitArrayBuilder);
-    objectBuilder.add("scrutinize_candidates_grades", scrutinizeCandidatesArrayBuilder);
-    objectBuilder.add("approve_candidates_grades", approveCandidatesArrayBuilder);
-    objectBuilder.add("accept_candidates_grades", acceptCandidatesArrayBuilder);
-    objectBuilder.add("recheck_candidates_grades", recheckCandidatesArrayBuilder);
-    objectBuilder.add("submitted_grades", submittedArrayBuilder);
-    objectBuilder.add("scrutinized_grades", scrutinizedArrayBuilder);
-    objectBuilder.add("approved_grades", approvedArrayBuilder);
-    objectBuilder.add("accepted_grades", acceptedArrayBuilder);
-    objectBuilder.add("recheck_accepted_grades", recheckAcceptedArrayBuilder);
-  }
 
   public String getActingRoleForCourse(CourseMarksSubmissionStatus currentStatus) {
     String actingRole = "";

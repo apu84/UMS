@@ -27,6 +27,12 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
+      <artifactId>auth-support</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
       <artifactId>ums-webservice-core</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>

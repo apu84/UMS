@@ -4,6 +4,7 @@ package org.ums.domain.model.dto;
  * Created by Ifti on 09-Feb-16.
  */
 public class ResetPasswordEmailDto {
+  private String id;
   private String umsRootUrl;
   private String umsForgotPasswordUrl;
   private String umsResetPasswordUrl;
@@ -48,5 +49,13 @@ public class ResetPasswordEmailDto {
 
   public void setForgotPasswordRequestDateTime(String forgotPasswordRequestDateTime) {
     this.forgotPasswordRequestDateTime = forgotPasswordRequestDateTime;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String pId) {
+    id = pId;
   }
 }

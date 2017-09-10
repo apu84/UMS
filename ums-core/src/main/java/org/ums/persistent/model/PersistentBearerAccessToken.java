@@ -1,22 +1,28 @@
 package org.ums.persistent.model;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
-
-import java.util.Date;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   private static BearerAccessTokenManager sBearerAccessTokenManager;
+  private static UserManager sUserManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sBearerAccessTokenManager = applicationContext.getBean("bearerAccessTokenManager", BearerAccessTokenManager.class);
+    sUserManager = applicationContext.getBean("userManager", UserManager.class);
   }
 
   private String mId;
+  private User mUser;
   private String mUserId;
+  private String mRefreshToken;
   private Date mLastAccessTime;
   private String mLastModified;
 
@@ -26,6 +32,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
     setId(pPersistentBearerAccessToken.getId());
     setUserId(pPersistentBearerAccessToken.getUserId());
     setLastAccessedTime(pPersistentBearerAccessToken.getLastAccessTime());
+    setRefreshToken(pPersistentBearerAccessToken.getRefreshToken());
   }
 
   @Override
@@ -41,6 +48,26 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   @Override
   public String getUserId() {
     return mUserId;
+  }
+
+  @Override
+  public void setUser(User pUser) {
+    mUser = pUser;
+  }
+
+  @Override
+  public User getUser() {
+    return mUser == null ? sUserManager.get(mUserId) : sUserManager.validate(mUser);
+  }
+
+  @Override
+  public void setRefreshToken(String pRefreshToken) {
+    mRefreshToken = pRefreshToken;
+  }
+
+  @Override
+  public String getRefreshToken() {
+    return mRefreshToken;
   }
 
   @Override
