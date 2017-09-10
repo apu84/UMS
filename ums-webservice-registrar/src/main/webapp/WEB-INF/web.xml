@@ -71,9 +71,8 @@
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>
-                org.ums.resource,
+                org.ums.employee
                 org.ums.login,
-                org.ums.builder,
                 org.ums.meeting,
                 org.ums.cachewarmer,
                 org.ums.navigation,

@@ -3,10 +3,9 @@ package org.ums.meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.Resource;
 
+import javax.json.Json;
 import javax.json.JsonObject;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 public class MutableAgendaResolutionResource extends Resource {
@@ -25,4 +24,11 @@ public class MutableAgendaResolutionResource extends Resource {
   public Response updateMeetingAgendaResolution(final JsonObject pJsonObject) throws Exception {
     return mHelper.updateAgendaResolution(pJsonObject, mUriInfo);
   }
+
+  @DELETE
+  @Path("/delete/{id}")
+  public Response deleteMeetingAgendaResolution(final @PathParam("id") String pId) throws Exception {
+    return mHelper.deleteAgendaResolution(pId, mUriInfo);
+  }
+
 }

@@ -49,7 +49,7 @@ public class ConsumeIndexJobImpl implements ConsumeIndex {
   }
 
   @Override
-  @Scheduled(fixedDelay = 30000, initialDelay = 240000)
+  @Scheduled(fixedDelay = 30000, initialDelay = 24000)
   @Transactional
   public void consume() {
     if(login()) {

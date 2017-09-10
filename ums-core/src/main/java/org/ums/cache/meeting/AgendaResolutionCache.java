@@ -40,7 +40,7 @@ public class AgendaResolutionCache extends
   }
 
   @Override
-  public int deleteAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    return getManager().deleteAgendaResolution(pMutableAgendaResolution);
+  public int deleteAgendaResolution(Long pId) {
+    return getManager().deleteAgendaResolution(pId);
   }
 }

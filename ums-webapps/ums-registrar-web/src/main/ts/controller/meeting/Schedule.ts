@@ -48,7 +48,18 @@ module ums{
             // });
         }
 
-        private getMembers(): void{
+        private getMeetingNoAndMembers(): void{
+            this.getNextMeetingNo();
+            this.getMeetingMembers();
+        }
+
+        private getNextMeetingNo(): void{
+            this.meetingService.getNextMeetingNo(this.prepareMeetingModel.meetingSchedule.type.id).then((nextMeetingNo: any) =>{
+                this.prepareMeetingModel.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
+            });
+        }
+
+        private getMeetingMembers(): void{
             if(this.prepareMeetingModel.meetingSchedule.type.id == 10){
                 this.meetingMembers = this.getBoardOfTrusteeMembers();
             }

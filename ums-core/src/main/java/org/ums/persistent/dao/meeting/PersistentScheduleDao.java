@@ -1,5 +1,6 @@
 package org.ums.persistent.dao.meeting;
 
+import org.apache.http.annotation.Obsolete;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -60,6 +61,12 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
     String query = UPDATE_ONE + " WHERE ID = ?, MEETING_TYPE = ?, MEETING_NO = ?";
     return mJdbcTemplate.update(query, pMeetingSchedule.getId(), pMeetingSchedule.getMeetingType().getId(),
         pMeetingSchedule.getMeetingNo());
+  }
+
+  @Override
+  public int getNextMeetingNo(final int pMeetingTypeId) {
+    String query = "SELECT COUNT(*) FROM MEETING_SCHEDULE WHERE MEETING_TYPE = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingTypeId}, Integer.class);
   }
 
   class RoleRowMapper implements RowMapper<Schedule> {

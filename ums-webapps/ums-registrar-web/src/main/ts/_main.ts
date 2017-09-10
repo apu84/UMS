@@ -99,8 +99,8 @@
 
 /// <reference path='data.ts'/>
 
-/// <reference path='controller/eim/EmployeeProfile.ts'/>
-/// <reference path='controller/eim/EmployeeInformation.ts'/>
+/// <reference path='employee/EmployeeProfile.ts'/>
+/// <reference path='employee/EmployeeInformation.ts'/>
 /// <reference path='controller/employee-publication/EmployeePublication.ts'/>
 /// <reference path='controller/meeting/AgendaResolution.ts'/>
 /// <reference path='controller/meeting/Schedule.ts'/>
@@ -108,11 +108,11 @@
 
 /// <reference path='service/ApprovePublicationService.ts'/>
 /// <reference path='service/PagerService.ts'/>
-/// <reference path='service/CRUDDetectionService.ts'/>
-/// <reference path='service/EmployeeInformationService.ts'/>
+/// <reference path='employee/CRUDDetectionService.ts'/>
+/// <reference path='employee/EmployeeInformationService.ts'/>
 /// <reference path='service/MeetingService.ts'/>
 
-/// <reference path='model/EmployeeInformationModel.ts' />
+/// <reference path='employee/EmployeeInformationModel.ts' />
 
 
 

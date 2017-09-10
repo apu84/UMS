@@ -53,9 +53,21 @@ module ums{
 
         public getMeetingNumber(meetingType: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.scheduleUrl+"/get/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.scheduleUrl+"/getAll/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    this.notify.error("Error in Meeting Schedule Information");
+                });
+            return defer.promise;
+        }
+
+        public getNextMeetingNo(meetingType: number): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            this.httpClient.get(this.scheduleUrl+"/get/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
+                (json: any, etag: string) => {
+                    defer.resolve(json);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     this.notify.error("Error in Meeting Schedule Information");
@@ -93,7 +105,6 @@ module ums{
         }
 
         public updateMeetingAgendaResolution(json: any): ng.IPromise<any> {
-            console.log(json);
             let defer = this.$q.defer();
             this.httpClient.put(this.agendaResolutionUrl + "/update", json, HttpClient.MIME_TYPE_JSON)
                 .success(() => {
@@ -105,6 +116,22 @@ module ums{
                 });
             return defer.promise;
         }
+
+        public deleteMeetingAgendaResolution(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.delete(this.agendaResolutionUrl + "/delete/" + id)
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve();
+                })
+                .error((data) => {
+                    this.notify.error("Error in Deleting");
+                });
+            return defer.promise;
+        }
+
+        //search
+
     }
     UMS.service("meetingService", MeetingService);
 }

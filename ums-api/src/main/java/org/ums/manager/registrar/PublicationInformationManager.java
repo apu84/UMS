@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.PublicationInformation;
-import org.ums.domain.model.mutable.registrar.MutablePublicationInformation;
+import org.ums.employee.publication.PublicationInformation;
+import org.ums.employee.publication.MutablePublicationInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

@@ -34,7 +34,7 @@ module ums {
         }
 
         public updatePublicationStatus(json: any):ng.IPromise<any>{
-            const url = "employee/publication/updatePublicationStatus";
+            const url = "employee/publication/update/publicationStatus";
             let defer = this.$q.defer();
             this.httpClient.put(url , json, HttpClient.MIME_TYPE_JSON)
                 .success(()=>{

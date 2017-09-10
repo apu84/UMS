@@ -52,6 +52,15 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
     return toJson(schedule, pUriInfo);
   }
 
+  public JsonObject getNextMeetingNo(final int pMeetingTypeId, final UriInfo pUriInfo) {
+    int meetingNo = 0;
+    meetingNo = mManager.getNextMeetingNo(pMeetingTypeId);
+    System.out.println(meetingNo);
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    jsonObjectBuilder.add("nextMeetingNumber", meetingNo + 1);
+    return jsonObjectBuilder.build();
+  }
+
   public Response saveSchedule(JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableSchedule mutableSchedule = new PersistentSchedule();
     LocalCache localCache = new LocalCache();

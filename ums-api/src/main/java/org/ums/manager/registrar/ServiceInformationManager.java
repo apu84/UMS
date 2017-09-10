@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.ServiceInformation;
-import org.ums.domain.model.mutable.registrar.MutableServiceInformation;
+import org.ums.employee.service.ServiceInformation;
+import org.ums.employee.service.MutableServiceInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

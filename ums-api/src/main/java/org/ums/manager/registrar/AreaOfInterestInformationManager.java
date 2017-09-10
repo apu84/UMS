@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.AreaOfInterestInformation;
-import org.ums.domain.model.mutable.registrar.MutableAreaOfInterestInformation;
+import org.ums.employee.additional.AreaOfInterestInformation;
+import org.ums.employee.additional.MutableAreaOfInterestInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

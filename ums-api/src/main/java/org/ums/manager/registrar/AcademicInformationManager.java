@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.AcademicInformation;
-import org.ums.domain.model.mutable.registrar.MutableAcademicInformation;
+import org.ums.employee.academic.AcademicInformation;
+import org.ums.employee.academic.MutableAcademicInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

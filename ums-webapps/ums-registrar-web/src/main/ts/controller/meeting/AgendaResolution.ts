@@ -49,8 +49,6 @@ module ums{
             CKEDITOR.replace('CKEditorForResolution');
             CKEDITOR.instances['CKEditorForAgenda'].setData("");
             CKEDITOR.instances['CKEditorForResolution'].setData("");
-
-            console.log("Changed");
         }
 
         private getMeetingNumber(): void{
@@ -60,14 +58,20 @@ module ums{
             else {
                 this.meetingSchedules = [];
                 this.meetingService.getMeetingNumber(this.meetingType.id).then((response: any) =>{
-                    for(let i = 0; i < response.length; i++) {
-                        this.meetingSchedules[i] = response[i];
+                    if(response.length <= 0){
+                        this.notify.info("No Meeting Information");
+                    }
+                    else {
+                        for (let i = 0; i < response.length; i++) {
+                            this.meetingSchedules[i] = response[i];
+                        }
                     }
                 });
             }
         }
 
         private getAgendaResolution(): void{
+            this.agendaAndResolutions = [];
             this.meetingService.getMeetingAgendaResolution(this.meetingNumber.id).then((response: any)=>{
                 this.agendaAndResolutions = response;
                 Utils.expandRightDiv();
@@ -220,6 +224,12 @@ module ums{
                 this.toggleEditor('resolution', 'text');
             }
             this.tempAgendaAndResolution = this.agendaAndResolutions.splice(index, 1);
+        }
+
+        private delete(index: number): void{
+            this.meetingService.deleteMeetingAgendaResolution(this.agendaAndResolutions[index].id).then(() => {
+                this.getAgendaResolution();
+            });
         }
 
         private reset(): void{

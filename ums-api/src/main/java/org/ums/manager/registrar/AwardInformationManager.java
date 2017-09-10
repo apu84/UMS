@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.AwardInformation;
-import org.ums.domain.model.mutable.registrar.MutableAwardInformation;
+import org.ums.employee.award.AwardInformation;
+import org.ums.employee.award.MutableAwardInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

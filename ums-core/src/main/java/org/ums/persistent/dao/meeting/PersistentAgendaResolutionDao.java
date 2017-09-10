@@ -76,6 +76,12 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
         pMutableAgendaResolution.getResolutionEditor(), pMutableAgendaResolution.getId());
   }
 
+  @Override
+  public int deleteAgendaResolution(final Long pId) {
+    String query = DELETE_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.update(query, pId);
+  }
+
   class RoleRowMapper implements RowMapper<AgendaResolution> {
 
     @Override

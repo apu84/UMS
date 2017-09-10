@@ -20,4 +20,12 @@ public class AgendaResolutionResource extends MutableAgendaResolutionResource {
       final @PathParam("schedule-id") String pScheduleId) throws Exception {
     return mHelper.getAgendaResolution(pScheduleId, mUriInfo);
   }
+
+  @GET
+  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}")
+  public JsonObject getAllForPagination(final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
+      final @PathParam("order") String pOrder, final @QueryParam("filter") String pFilter) throws Exception {
+    return mHelper.searchAgendaResolution(pPage, pItemPerPage, pFilter, mUriInfo);
+  }
 }

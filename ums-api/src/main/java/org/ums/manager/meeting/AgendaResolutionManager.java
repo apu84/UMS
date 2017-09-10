@@ -14,5 +14,5 @@ public interface AgendaResolutionManager extends ContentManager<AgendaResolution
 
   int updateAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution);
 
-  int deleteAgendaResolution(final MutableAgendaResolution pMutableAgendaResolution);
+  int deleteAgendaResolution(final Long pId);
 }

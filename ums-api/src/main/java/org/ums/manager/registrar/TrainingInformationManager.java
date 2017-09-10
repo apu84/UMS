@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.TrainingInformation;
-import org.ums.domain.model.mutable.registrar.MutableTrainingInformation;
+import org.ums.employee.training.TrainingInformation;
+import org.ums.employee.training.MutableTrainingInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

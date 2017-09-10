@@ -1,253 +1,300 @@
 module ums{
-
-    interface IMeetingSearch extends ng.IScope{
-
-        showScheduleAndMeetingDiv: boolean;
-        showAgendaAndResolutionDiv: boolean;
-        showSearchDiv: boolean;
-        changeNav: Function;
-
-        //ArrangeMeeting.ts
-        meetingMembers: string;
-        selectedMembers: string;
-        selectedMemberList: Function;
-        saveAndPrepareAgenda: Function;
-        saveScheduleAndMembers: Function;
-
-
-
-        //InsertResolution.ts
-        showCKEditorDiv: boolean;
-        showCKEditorBtn: boolean;
-        showHideCKEditorBtn: boolean;
-        showResetCKEditorBtn: boolean;
-        showTextAreaAgendaDiv: boolean;
-        showInlineCKEditorAgendaDiv: boolean;
-        showInlineCKEditorLinkButtonDiv: boolean;
-        showHideInlineCKEditorLinkButtonDiv: boolean;
-        showAgendaAndResolutionListDiv: boolean;
-        modelAgendaNo: string;
-        modelAgendaDescription: string;
-        agendaDescription: Array<IAgendaDescription>;
-        clickToSaveCKEditorDataBtn: Function;
-        clickToShowCKEditor: Function;
-        clickToHideCKEditor: Function;
-        clickToResetCKEditor: Function;
-        switchTextareaToCKEditor: Function;
-        switchCKEditorToTextarea: Function;
-        editAgendaRow: Function;
-        deleteAgendaRow: Function;
-        send: Function;
-
-
+    interface ISearch extends ng.IScope{
+        pageChanged: Function;
+        pagination: any;
+        data: any;
     }
-
-
-
-    //InsertResolution.ts
-    interface IAgendaDescription{
+    interface IAgendaResolutionModel{
+        id: string;
         agendaNo: string;
-        agendaDescription: string;
+        agenda: string;
+        agendaEditor: string;
         resolution: string;
+        resolutionEditor: string;
+        scheduleId: string;
+        showExpandButton: boolean;
     }
 
-    class MeetingSearch{
+    class Search{
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'meetingService'];
+        private queryText: string = "";
+        private searchType: any = "basic";
+        private searchResults: IAgendaResolutionModel[] = [];
+        private agendaResolutionDetail: IAgendaResolutionModel;
+        private itemPerPage: number = 10;
+        private currentPage: number = 1;
+        private totalRecord: number = 0;
+        private meetingScheduleId: string = "";
+        private overflow: boolean[] = [];
+
+
+        //agendaResolution.ts
+        private showEditorForAgenda: boolean = false;
+        private showEditorForResolution: boolean = false;
+        private showAgendaAndResolutionDiv: boolean = false;
+        private showResolutionDiv: boolean = true;
+        private showMasterExpandButton: boolean = true;
+        private showRightDiv: boolean = false;
+        private showCancelButton: boolean = false;
+        private showUpdateButton: boolean = false;
+        private agendaAndResolutions: IAgendaResolutionModel[] = [];
+        private tempAgendaAndResolution: IAgendaResolutionModel[] = [];
+        private agendaNo: string = "";
+        private agenda: string = "";
+        private resolution: string = "";
+
         constructor(private registrarConstants: any,
-                    private $scope: IMeetingSearch,
+                    private $scope: ISearch,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private $window: ng.IWindowService,
-                    private $sce: ng.ISCEService) {
-            console.log("I am in searchMeeting.ts 1");
+                    private meetingService: MeetingService) {
 
-            $scope.showScheduleAndMeetingDiv = true;
-            $scope.showAgendaAndResolutionDiv = false;
-            $scope.showSearchDiv = false;
+            $scope.pagination = {};
+            $scope.pagination.currentPage = 1;
 
-            $scope.changeNav = this.changeNav.bind(this);
+            CKEDITOR.replace('CKEditorForAgenda');
+            CKEDITOR.replace('CKEditorForResolution');
+            CKEDITOR.instances['CKEditorForAgenda'].setData("");
+            CKEDITOR.instances['CKEditorForResolution'].setData("");
 
-
-            //ArrangeMeeting.ts
-            this.addDate();
-            $scope.selectedMemberList = this.selectedMemberList.bind(this);
-            $scope.saveAndPrepareAgenda = this.saveAndPrepareAgenda.bind(this);
-            $scope.saveScheduleAndMembers = this.saveScheduleAndMembers.bind(this);
-
-
-
-
-            //InsertResolution.ts
-            CKEDITOR.replace('CKEditor');
-            CKEDITOR.replace('inlineCKEditor');
-            CKEDITOR.disableAutoInline = true;
-            CKEDITOR.config.resize_enabled = false;
-            CKEDITOR.instances['CKEditor'].setData("");
-            CKEDITOR.config.removePlugins = 'elementspath';
-
-            $scope.showCKEditorDiv = false;
-            $scope.showCKEditorBtn = true;
-            $scope.showHideCKEditorBtn = false;
-            $scope.showResetCKEditorBtn = false;
-            $scope.showAgendaAndResolutionListDiv = false;
-            $scope.showTextAreaAgendaDiv = true;
-            $scope.showInlineCKEditorAgendaDiv = false;
-            $scope.showInlineCKEditorLinkButtonDiv = true;
-            $scope.showHideInlineCKEditorLinkButtonDiv = false;
-
-            $scope.agendaDescription = [];
-
-            $scope.clickToSaveCKEditorDataBtn = this.clickToSaveCKEditorDataBtn.bind(this);
-            $scope.clickToShowCKEditor = this.clickToShowCKEditor.bind(this);
-            $scope.clickToHideCKEditor = this.clickToHideCKEditor.bind(this);
-            $scope.clickToResetCKEditor = this.clickToResetCKEditor.bind(this);
-            $scope.switchTextareaToCKEditor = this.switchTextareaToCKEditor.bind(this);
-            $scope.switchCKEditorToTextarea = this.switchCKEditorToTextarea.bind(this);
-            $scope.editAgendaRow = this.editAgendaRow.bind(this);
-            $scope.deleteAgendaRow = this.deleteAgendaRow.bind(this);
-            $scope.send = this.send.bind(this);
-
-            console.log("I am in searchMeeting.ts");
+            $("#fullMeetingDiv").hide();
         }
 
-        private changeNav(nav: number){
-
-            console.log("I am in ChangeNav()");
-
-            this.$scope.showAgendaAndResolutionDiv = false;
-            this.$scope.showSearchDiv = false;
-            this.$scope.showScheduleAndMeetingDiv = false;
-
-            if(nav == 1){
-                console.log("I am in nav 1");
-                this.$scope.showScheduleAndMeetingDiv = true;
-            }
-            else if(nav == 2){
-                console.log("I am in nav 2");
-                this.$scope.showAgendaAndResolutionDiv = true;
-            }
-            else if(nav == 3){
-                console.log("I am in nav 3");
-                this.$scope.showSearchDiv = true;
-            }
-        }
-
-
-
-        //ArrangeMeeting.ts
-        private addDate(): void {
-            setTimeout(function () {
-                $('.datepicker-default').datepicker();
-                $('.datepicker-default').on('change', function () {
-                    $('.datepicker').hide();
-                });
-            }, 100);
-        }
-
-        private selectedMemberList() {
-            console.log("I am in selectedMemberList()");
-            console.log(this.$scope.selectedMembers);
+        private searchSelection(): void{
 
         }
 
-        private saveAndPrepareAgenda(){
-            console.log("I am in saveAndPrepareAgenda()");
-            this.$scope.changeNav(2);
-            this.notify.success("Data Saved");
+        private search(): void{
+            this.searchResults = [];
+
+            this.meetingService.getMeetingAgendaResolution("-7694807427984587141").then((result: any)=>{
+                this.searchResults = result;
+                this.totalRecord = this.searchResults.length;
+            })
         }
 
-        private saveScheduleAndMembers(){
-            console.log("I am in saveScheduleAndMembers()");
-            this.notify.success("Data Saved");
+        private pageChanged(newPageNumber: number): void{
+
         }
 
+        private view(agendaResolution: any): void{
+            this.agendaResolutionDetail =  <IAgendaResolutionModel> {};
+            this.agendaResolutionDetail = agendaResolution;
+        }
 
+        private showFullMeetingDetails(agendaResolution: any): void{
+            this.meetingScheduleId = agendaResolution.scheduleId;
+            this.getAgendaResolution();
 
+            $("#searchDiv").hide(10);
+            $("#fullMeetingDiv").show(200);
+        }
 
+        private showSearchDiv(): void{
+            $("#fullMeetingDiv").hide(10);
+            $("#searchDiv").show(200);
 
-        //InsertResolution.ts
-        private clickToSaveCKEditorDataBtn(){
-            console.log("I am in clickToSaveCKEditorDataBtn()");
-            this.$scope.showAgendaAndResolutionListDiv = true;
-            if(CKEDITOR.instances['CKEditor'].getData() == ""){
-                console.log("Data Empty");
-            }
-            else{
-                console.log("Data Not Empty");
-            }
+        }
 
-            var obj: IAgendaDescription = <IAgendaDescription>{};
-            obj.agendaNo = this.$scope.modelAgendaNo;
-            if(this.$scope.modelAgendaDescription == '' || this.$scope.modelAgendaDescription == null){
-                obj.agendaDescription = CKEDITOR.instances['inlineCKEditor'].getData();
-            }
-            else if(CKEDITOR.instances['inlineCKEditor'].getData() == ''){
-                obj.agendaDescription = this.$scope.modelAgendaDescription;
+        private textOverflowController(index: number): void{
+            if(this.overflow[index] == true){
+                this.overflow[index] = false;
             }
             else {
-                obj.agendaDescription = this.$scope.modelAgendaDescription;
+                this.overflow[index] = true;
             }
-            obj.resolution = CKEDITOR.instances['CKEditor'].getData();
-            this.$scope.agendaDescription.push(obj);
-
-            CKEDITOR.instances['CKEditor'].setData("");
-            CKEDITOR.instances['inlineCKEditor'].setData("");
-            this.$scope.modelAgendaNo = "";
-            this.$scope.modelAgendaDescription = "";
         }
 
-        private clickToShowCKEditor(){
-            console.log("I am in clickToShowCKEditor()");
-            this.$scope.showCKEditorBtn = false;
-            this.$scope.showCKEditorDiv = true;
-            this.$scope.showHideCKEditorBtn = true;
-            this.$scope.showResetCKEditorBtn = true;
+        // AgendaResolution.ts
+
+        private getAgendaResolution(): void{
+            this.agendaAndResolutions = [];
+            this.meetingService.getMeetingAgendaResolution(this.meetingScheduleId).then((response: any)=>{
+                this.agendaAndResolutions = response;
+                Utils.expandRightDiv();
+                this.showRightDiv = true;
+            });
         }
 
-        private clickToHideCKEditor(){
-            console.log("I am in clickToHideCKEditor()");
-            this.$scope.showCKEditorDiv = false;
-            this.$scope.showHideCKEditorBtn = false;
-            this.$scope.showResetCKEditorBtn = false;
-            this.$scope.showCKEditorBtn = true;
+        private toggleEditor(type: string, param: string): void{
+            if(type === 'agenda') {
+                if (param == "editor") {
+                    this.showEditorForAgenda = true;
+                }
+                else {
+                    this.showEditorForAgenda = false;
+                }
+            }
+            else if(type === "resolution") {
+                if (param == "editor") {
+                    this.showEditorForResolution = true;
+                }
+                else {
+                    this.showEditorForResolution = false;
+                }
+            }
         }
 
-        private clickToResetCKEditor(){
-            console.log("I am in clickToResetCKEditor()");
-            CKEDITOR.instances['CKEditor'].setData("");
+        private toggleAgendaAndResolutionDiv(param: string): void{
+            if(param === "show"){
+                this.showAgendaAndResolutionDiv = true;
+            }
+            else{
+                this.showAgendaAndResolutionDiv = false;
+            }
         }
 
-        private switchTextareaToCKEditor(){
-            console.log("I am in switchTextareaToCKEditor()");
-            this.$scope.showTextAreaAgendaDiv = false;
-            this.$scope.showInlineCKEditorLinkButtonDiv = false;
-            this.$scope.showInlineCKEditorAgendaDiv = true;
-            this.$scope.showHideInlineCKEditorLinkButtonDiv = true;
+        private toggleResolutionDiv(param: string): void{
+            if(param === "show"){
+                this.showResolutionDiv = true;
+            }
+            else{
+                this.showResolutionDiv = false;
+            }
         }
 
-        private switchCKEditorToTextarea(){
-            console.log("I am in switchCKEditorToTextarea()");
-            this.$scope.showInlineCKEditorAgendaDiv = false;
-            this.$scope.showHideInlineCKEditorLinkButtonDiv = false;
-            this.$scope.showInlineCKEditorLinkButtonDiv = true;
-            this.$scope.showTextAreaAgendaDiv = true;
-
-            CKEDITOR.instances['inlineCKEditor'].setData("");
+        private toggleExpand(param: string, index: number): void{
+            if(param == "hide"){
+                this.agendaAndResolutions[index].showExpandButton = false;
+            }
+            else{
+                this.agendaAndResolutions[index].showExpandButton = true;
+            }
         }
 
-        private editAgendaRow(){
-            console.log("I am in editAgendaRow()");
+        private toggleExpandAll(param: string): void{
+            if(param === "hide"){
+                this.showMasterExpandButton = false;
+                for(let i = 0; i < this.agendaAndResolutions.length; i++){
+                    this.agendaAndResolutions[i].showExpandButton = false;
+                }
+            }
+            else{
+                this.showMasterExpandButton = true;for(let i = 0; i < this.agendaAndResolutions.length; i++){
+                    this.agendaAndResolutions[i].showExpandButton = true;
+                }
+
+            }
         }
 
-        private deleteAgendaRow(agenda: IAgendaDescription){
-            console.log("I am in deleteAgendaRow()");
+        private save(): void{
+            let editorForAgenda: string = "N";
+            let editorForResolution: string = "N";
+            if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
+                this.agenda = CKEDITOR.instances['CKEditorForAgenda'].getData();
+                editorForAgenda = "Y";
+            }
+            if(CKEDITOR.instances['CKEditorForResolution'].getData() != ""){
+                this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
+                editorForResolution = "Y";
+            }
+            let agendaResolutionEntry: IAgendaResolutionModel;
+            agendaResolutionEntry = {
+                id: "",
+                agendaNo: this.agendaNo,
+                agenda: this.agenda,
+                agendaEditor: editorForAgenda,
+                resolution: this.resolution,
+                resolutionEditor: editorForResolution,
+                scheduleId: this.meetingScheduleId,
+                showExpandButton: true
+            };
+            this.convertToJson(agendaResolutionEntry).then((json: any) => {
+                this.meetingService.saveAgendaResolution(json).then(() =>{
+                    this.getAgendaResolution();
+                    this.reset();
+                });
+            });
         }
 
-        private send(){
-            console.log("I am in send()");
-            this.notify.success("Meeting Proposal Sent");
+        private update(): void{
+            let editorForAgenda: string = "N";
+            let editorForResolution: string = "N";
+            let index = this.tempAgendaAndResolution[0].id;
+            if(CKEDITOR.instances['CKEditorForAgenda'].getData() != ""){
+                this.agenda = CKEDITOR.instances['CKEditorForAgenda'].getData();
+                editorForAgenda = "Y";
+            }
+            if(CKEDITOR.instances['CKEditorForResolution'].getData() != ""){
+                this.resolution = CKEDITOR.instances['CKEditorForResolution'].getData();
+                editorForResolution = "Y";
+            }
+            let agendaResolutionEntry: IAgendaResolutionModel;
+            agendaResolutionEntry = {
+                id: index,
+                agendaNo: this.agendaNo,
+                agenda: this.agenda,
+                agendaEditor: editorForAgenda,
+                resolution: this.resolution,
+                resolutionEditor: editorForResolution,
+                scheduleId: this.meetingScheduleId,
+                showExpandButton: true
+            };
+            this.convertToJson(agendaResolutionEntry).then((json: any) => {
+                this.meetingService.updateMeetingAgendaResolution(json).then(() => {
+                    this.getAgendaResolution();
+                    this.reset();
+                });
+            });
         }
 
+        private edit(index: number): void{
+            this.tempAgendaAndResolution = [];
+            this.toggleAgendaAndResolutionDiv('show');
+            this.showCancelButton = true;
+            this.showUpdateButton = true;
+            this.agendaNo = this.agendaAndResolutions[index].agendaNo;
+            if(this.agendaAndResolutions[index].agendaEditor == "Y"){
+                CKEDITOR.instances['CKEditorForAgenda'].setData(this.agendaAndResolutions[index].agenda);
+                this.toggleEditor('agenda', 'editor');
+            }
+            else {
+                this.agenda = this.agendaAndResolutions[index].agenda;
+                this.toggleEditor('agenda','text');
+            }
+            if(this.agendaAndResolutions[index].resolutionEditor == "Y"){
+                CKEDITOR.instances['CKEditorForResolution'].setData(this.agendaAndResolutions[index].resolution);
+                this.toggleEditor('resolution', 'editor');
+            }
+            else {
+                this.resolution = this.agendaAndResolutions[index].resolution;
+                this.toggleEditor('resolution', 'text');
+            }
+            this.tempAgendaAndResolution = this.agendaAndResolutions.splice(index, 1);
+        }
+
+        private delete(index: number): void{
+            this.meetingService.deleteMeetingAgendaResolution(this.agendaAndResolutions[index].id).then(() => {
+                this.getAgendaResolution();
+            });
+        }
+
+        private reset(): void{
+            this.agendaNo = "";
+            this.agenda = "";
+            this.resolution = "";
+            CKEDITOR.instances['CKEditorForAgenda'].setData("");
+            CKEDITOR.instances['CKEditorForResolution'].setData("");
+            this.showUpdateButton = false;
+            this.showCancelButton = false;
+        }
+
+        private cancel(): void{
+            this.showCancelButton = false;
+            this.showUpdateButton = false;
+            this.agendaAndResolutions.push(this.tempAgendaAndResolution[0]);
+            this.tempAgendaAndResolution = [];
+            this.reset();
+        }
+
+        private convertToJson(convertingObject: IAgendaResolutionModel): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            JsonObject['entries'] = convertingObject;
+            defer.resolve(JsonObject);
+            return defer.promise;
+        }
     }
 
-    UMS.controller("MeetingSearch", MeetingSearch);
+    UMS.controller("Search", Search);
 }

@@ -77,7 +77,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   }
 
   private String queryBuilder(String pFilter) {
-    return "";
+    return "*Agenda* and type_s:Meeting";
   }
 
   public Response updateAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -88,6 +88,11 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  public Response deleteAgendaResolution(String pId, UriInfo pUriInfo) {
+    mManager.deleteAgendaResolution(Long.parseLong(pId));
+    return Response.noContent().build();
   }
 
   private JsonObject buildJson(List<AgendaResolution> pAgendaResolution, UriInfo pUriInfo) {

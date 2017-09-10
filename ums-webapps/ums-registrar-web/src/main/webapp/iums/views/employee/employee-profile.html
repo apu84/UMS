@@ -1,0 +1,43 @@
+<style>
+    .row{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+</style>
+<ul id="iTab" class="nav nav-tabs nav-justified">
+    <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
+    <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
+    <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+    <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
+    <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
+    <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
+    <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
+    <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
+</ul>
+<div id="iTabContent" class="tab-content responsive">
+    <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/personal-information.html'"></div>
+    </div>
+    <div id="academic" data-ng-show="vm.academic" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/academic-information.html'"></div>
+    </div>
+    <div id="publication" data-ng-show="vm.publication" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/publication-information.html'"></div>
+    </div>
+    <div id="training" data-ng-show="vm.training" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/training-information.html'"></div>
+    </div>
+    <div id="award" data-ng-show="vm.award" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/award-information.html'"></div>
+    </div>
+    <div id="experience" data-ng-show="vm.experience" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/experience-information.html'"></div>
+    </div>
+    <div id="additional" data-ng-show="vm.additional" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/additional-information.html'"></div>
+    </div>
+    <div id="service" data-ng-show="vm.service" style="min-height: 490px;">
+        <div data-ng-include="src='views/employee/service-information.html'"></div>
+    </div>
+</div>
+

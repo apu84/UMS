@@ -15,7 +15,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
-@Path("/users")
+@Path("users")
 @Produces(Resource.MIME_TYPE_JSON)
 public class UserResource extends Resource {
   @Autowired

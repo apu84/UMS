@@ -1,7 +1,7 @@
 package org.ums.manager.registrar;
 
-import org.ums.domain.model.immutable.registrar.ExperienceInformation;
-import org.ums.domain.model.mutable.registrar.MutableExperienceInformation;
+import org.ums.employee.experience.ExperienceInformation;
+import org.ums.employee.experience.MutableExperienceInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;

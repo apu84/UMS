@@ -29,4 +29,9 @@ public class ScheduleDaoDecorator extends ContentDaoDecorator<Schedule, MutableS
   public int updateMeetingSchedule(MutableSchedule pMeetingSchedule) {
     return getManager().updateMeetingSchedule(pMeetingSchedule);
   }
+
+  @Override
+  public int getNextMeetingNo(int pMeetingTypeId) {
+    return getManager().getNextMeetingNo(pMeetingTypeId);
+  }
 }

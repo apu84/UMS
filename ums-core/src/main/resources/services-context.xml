@@ -14,10 +14,9 @@
     http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        xmlns:tx="http://www.springframework.org/schema/tx">
 
-  <aop:aspectj-autoproxy proxy-target-class="true"/>
-  <context:spring-configured/>
+    <context:spring-configured/>
   <context:component-scan
-      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.persistent.model,org.ums.kafka,org.ums.solr.repository.transaction.meeting"/>
+      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.configuration,org.ums.services,org.ums.message,org.ums.persistent.model"/>
   <context:annotation-config/>
   <context:spring-configured/>
 

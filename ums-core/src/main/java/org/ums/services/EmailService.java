@@ -43,12 +43,12 @@ public class EmailService {
   }
 
   public void sendEmailWithAttachment(final String toEmailAddresses, final String fromEmailAddress,
-                                      final String subject, final String attachmentPath, final String attachmentName) {
+      final String subject, final String attachmentPath, final String attachmentName) {
     sendEmail(toEmailAddresses, fromEmailAddress, subject, attachmentPath, attachmentName);
   }
 
   private void sendEmail(final String toEmailAddresses, final String fromEmailAddress, final String subject,
-                         final String attachmentPath, final String attachmentName) {
+      final String attachmentPath, final String attachmentName) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {
         MimeMessageHelper message = null;
@@ -80,11 +80,11 @@ public class EmailService {
               VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "html-templates/password-reset-email.vm",
                   "UTF-8", model);
           message.setText(body, true);
-          if (!StringUtils.isBlank(attachmentPath)) {
+          if(!StringUtils.isBlank(attachmentPath)) {
             FileSystemResource file = new FileSystemResource(attachmentPath);
             message.addAttachment(attachmentName, file);
           }
-        } catch (MessagingException | UnsupportedEncodingException e) {
+        } catch(MessagingException | UnsupportedEncodingException e) {
           throw new RuntimeException(e);
         }
       }

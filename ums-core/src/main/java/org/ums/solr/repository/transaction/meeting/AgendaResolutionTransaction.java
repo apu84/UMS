@@ -26,9 +26,9 @@ public class AgendaResolutionTransaction extends AgendaResolutionDaoDecorator {
   }
 
   @Override
-  public int deleteAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    int delete = getManager().deleteAgendaResolution(pMutableAgendaResolution);
-    generateIndexEntity(pMutableAgendaResolution.getId(), true);
+  public int deleteAgendaResolution(Long pId) {
+    int delete = getManager().deleteAgendaResolution(pId);
+    generateIndexEntity(pId, true);
     return delete;
   }
 
