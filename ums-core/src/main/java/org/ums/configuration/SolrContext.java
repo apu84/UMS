@@ -52,10 +52,6 @@ public class SolrContext {
   RegistrarContext mRegistrarContext;
 
   @Autowired
-  @Qualifier("backendSecurityManager")
-  SecurityManager mSecurityManager;
-
-  @Autowired
   UMSConfiguration mUMSConfiguration;
 
   @Bean

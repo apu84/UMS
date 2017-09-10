@@ -6,12 +6,14 @@ import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.CacheFactory;
+import org.ums.configuration.KafkaProducerConfig;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.configuration.UMSContext;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
 import org.ums.manager.library.RecordManager;
+import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.microservice.instance.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.microservice.instance.consumeindex.ConsumeIndex;
 import org.ums.microservice.instance.consumeindex.ConsumeIndexJobImpl;
@@ -94,6 +96,8 @@ public class ServiceContext {
   private UserManager mUserManager;
   @Autowired
   private RecordManager mRecordManager;
+  @Autowired
+  AgendaResolutionManager mAgendaResolutionManager;
 
   @Bean
   PaymentValidator paymentValidator() {
@@ -113,6 +117,6 @@ public class ServiceContext {
         mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
-        mUserManager);
+        mUserManager, mRecordManager, mAgendaResolutionManager);
   }
 }
