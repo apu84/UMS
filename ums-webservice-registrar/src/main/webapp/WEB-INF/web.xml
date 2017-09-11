@@ -2,113 +2,114 @@
 <web-app id="WebApp_ID_" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    <display-name>ums-webservice-registrar</display-name>
+  <display-name>ums-webservice-registrar</display-name>
 
-    <context-param>
-        <param-name>locatorFactorySelector</param-name>
-        <param-value>classpath:beanRefContext.xml</param-value>
-    </context-param>
+  <context-param>
+    <param-name>locatorFactorySelector</param-name>
+    <param-value>classpath:beanRefContext.xml</param-value>
+  </context-param>
 
-    <context-param>
-        <param-name>parentContextKey</param-name>
-        <param-value>sharedContext</param-value>
-    </context-param>
+  <context-param>
+    <param-name>parentContextKey</param-name>
+    <param-value>sharedContext</param-value>
+  </context-param>
 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath:application-context.xml
-            /WEB-INF/applicationContext.xml
-        </param-value>
-    </context-param>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      classpath:application-context.xml
+      classpath:spring-config-shiro.xml
+      /WEB-INF/applicationContext.xml
+    </param-value>
+  </context-param>
 
-    <listener>
-        <listener-class>
-            org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>
+  <listener>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
 
-    <listener>
-        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-    </listener>
+  <listener>
+    <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+  </listener>
 
-    <!-- The filter-name matches name of a 'shiroFilter' bean inside application-context.xml -->
-    <filter>
-        <filter-name>shiroFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <!-- Make sure any request you want accessible to Shiro is filtered. /* catches all -->
-    <!-- requests.  Usually this filter mapping is defined first (before all others) to -->
-    <!-- ensure that Shiro works in subsequent filters in the filter chain:             -->
-    <filter-mapping>
-        <filter-name>shiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+  <!-- The filter-name matches name of a 'shiroFilter' bean inside application-context.xml -->
+  <filter>
+    <filter-name>shiroFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <!-- Make sure any request you want accessible to Shiro is filtered. /* catches all -->
+  <!-- requests.  Usually this filter mapping is defined first (before all others) to -->
+  <!-- ensure that Shiro works in subsequent filters in the filter chain:             -->
+  <filter-mapping>
+    <filter-name>shiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
-    <!--  <servlet>
-        <description>DummyServlet from its parent ApplicationContext</description>
-        <display-name>DummyServlet</display-name>
-        <servlet-name>DummyServlet</servlet-name>
-        <servlet-class>org.ums.dummy.webservice.DummyServlet</servlet-class>
-      </servlet>
-
-      <servlet-mapping>
-        <servlet-name>DummyServlet</servlet-name>
-        <url-pattern>/dummyServlet</url-pattern>
-      </servlet-mapping>
-
-      <welcome-file-list>
-        <welcome-file>dummyServlet</welcome-file>
-      </welcome-file-list>-->
-
-    <servlet>
-        <servlet-name>UMSWebservice</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>
-                org.ums.employee
-                org.ums.login,
-                org.ums.meeting,
-                org.ums.cachewarmer,
-                org.ums.navigation,
-                org.ums.filter.cors,
-                org.codehaus.jackson.jaxrs,
-                org.ums.exception
-            </param-value>
-        </init-param>
-        <init-param>
-            <param-name>javax.json.stream.JsonGenerator.prettyPrinting</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>jersey.config.server.provider.classnames</param-name>
-            <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
+  <!--  <servlet>
+      <description>DummyServlet from its parent ApplicationContext</description>
+      <display-name>DummyServlet</display-name>
+      <servlet-name>DummyServlet</servlet-name>
+      <servlet-class>org.ums.dummy.webservice.DummyServlet</servlet-class>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>UMSWebservice</servlet-name>
-        <url-pattern>/*</url-pattern>
+      <servlet-name>DummyServlet</servlet-name>
+      <url-pattern>/dummyServlet</url-pattern>
     </servlet-mapping>
 
-    <!--  <security-constraint>
-        <web-resource-collection>
-          <web-resource-name>ums-webservice-academic</web-resource-name>
-          <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-          <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-      </security-constraint>-->
+    <welcome-file-list>
+      <welcome-file>dummyServlet</welcome-file>
+    </welcome-file-list>-->
 
-    <session-config>
-        <!-- web.xml expects the session timeout in minutes: -->
-        <session-timeout>5</session-timeout>
-    </session-config>
+  <servlet>
+    <servlet-name>UMSWebservice</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>
+        org.ums.employee
+        org.ums.login,
+        org.ums.meeting,
+        org.ums.cachewarmer,
+        org.ums.navigation,
+        org.ums.filter.cors,
+        org.codehaus.jackson.jaxrs,
+        org.ums.exception
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>javax.json.stream.JsonGenerator.prettyPrinting</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>jersey.config.server.provider.classnames</param-name>
+      <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UMSWebservice</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
+  <!--  <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ums-webservice-academic</web-resource-name>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+    </security-constraint>-->
+
+  <session-config>
+    <!-- web.xml expects the session timeout in minutes: -->
+    <session-timeout>5</session-timeout>
+  </session-config>
 
 </web-app>
