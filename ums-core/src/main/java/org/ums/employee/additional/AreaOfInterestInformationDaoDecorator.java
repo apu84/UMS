@@ -1,9 +1,6 @@
 package org.ums.employee.additional;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.additional.AreaOfInterestInformation;
-import org.ums.employee.additional.MutableAreaOfInterestInformation;
-import org.ums.manager.registrar.AreaOfInterestInformationManager;
 
 import java.util.List;
 

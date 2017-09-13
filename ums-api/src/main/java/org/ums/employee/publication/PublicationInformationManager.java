@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.publication;
 
 import org.ums.employee.publication.PublicationInformation;
 import org.ums.employee.publication.MutablePublicationInformation;

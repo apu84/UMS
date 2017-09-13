@@ -2,7 +2,6 @@ package org.ums.employee.award;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.manager.registrar.AwardInformationManager;
 
 public class PersistentAwardInformation implements MutableAwardInformation {
   private static AwardInformationManager sAwardInformationManager;

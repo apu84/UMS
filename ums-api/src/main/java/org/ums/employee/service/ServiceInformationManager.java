@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.service;
 
 import org.ums.employee.service.ServiceInformation;
 import org.ums.employee.service.MutableServiceInformation;

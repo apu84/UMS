@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.manager.registrar.PersonalInformationManager;
 import org.ums.resource.ResourceHelper;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

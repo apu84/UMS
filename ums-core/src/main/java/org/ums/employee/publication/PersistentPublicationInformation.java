@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.common.Country;
 import org.ums.enums.common.PublicationType;
-import org.ums.manager.registrar.PublicationInformationManager;
 
 import java.util.Date;
 

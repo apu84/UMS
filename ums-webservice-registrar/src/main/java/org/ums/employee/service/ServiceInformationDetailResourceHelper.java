@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.manager.ContentManager;
-import org.ums.manager.registrar.ServiceInformationDetailManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;

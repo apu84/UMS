@@ -3,7 +3,6 @@ package org.ums.employee.additional;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.AreaOfInterest;
-import org.ums.manager.registrar.AreaOfInterestInformationManager;
 
 public class PersistentAreaOfInterestInformation implements MutableAreaOfInterestInformation {
 

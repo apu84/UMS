@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.manager.registrar.AreaOfInterestInformationManager;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.json.Json;

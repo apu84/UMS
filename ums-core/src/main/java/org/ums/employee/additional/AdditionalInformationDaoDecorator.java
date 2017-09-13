@@ -1,9 +1,6 @@
 package org.ums.employee.additional;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.additional.AdditionalInformation;
-import org.ums.employee.additional.MutableAdditionalInformation;
-import org.ums.manager.registrar.AdditionalInformationManager;
 
 public class AdditionalInformationDaoDecorator extends
     ContentDaoDecorator<AdditionalInformation, MutableAdditionalInformation, String, AdditionalInformationManager>

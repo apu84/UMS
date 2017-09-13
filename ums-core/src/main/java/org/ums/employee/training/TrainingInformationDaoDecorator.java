@@ -1,9 +1,6 @@
 package org.ums.employee.training;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.training.TrainingInformation;
-import org.ums.employee.training.MutableTrainingInformation;
-import org.ums.manager.registrar.TrainingInformationManager;
 
 import java.util.List;
 

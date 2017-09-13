@@ -6,7 +6,6 @@ import org.ums.domain.model.immutable.common.*;
 import org.ums.enums.common.*;
 import org.ums.enums.common.RelationType;
 import org.ums.manager.common.*;
-import org.ums.manager.registrar.PersonalInformationManager;
 
 import java.util.Date;
 

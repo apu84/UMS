@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.award;
 
 import org.ums.employee.award.AwardInformation;
 import org.ums.employee.award.MutableAwardInformation;

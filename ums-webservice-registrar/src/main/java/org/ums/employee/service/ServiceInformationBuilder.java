@@ -9,7 +9,6 @@ import org.ums.formatter.DateFormat;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.DesignationManager;
 import org.ums.manager.EmploymentTypeManager;
-import org.ums.manager.registrar.ServiceInformationDetailManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

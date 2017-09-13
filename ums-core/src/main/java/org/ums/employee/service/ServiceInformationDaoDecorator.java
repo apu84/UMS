@@ -1,9 +1,6 @@
 package org.ums.employee.service;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.service.ServiceInformation;
-import org.ums.employee.service.MutableServiceInformation;
-import org.ums.manager.registrar.ServiceInformationManager;
 
 import java.util.List;
 

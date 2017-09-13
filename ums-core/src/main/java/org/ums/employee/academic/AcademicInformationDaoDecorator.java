@@ -1,9 +1,6 @@
 package org.ums.employee.academic;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.academic.AcademicInformation;
-import org.ums.employee.academic.MutableAcademicInformation;
-import org.ums.manager.registrar.AcademicInformationManager;
 
 import java.util.List;
 

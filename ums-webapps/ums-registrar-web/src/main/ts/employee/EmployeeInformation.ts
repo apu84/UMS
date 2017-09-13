@@ -172,6 +172,9 @@ module ums {
         private initialization() {
             this.employeeService.getAll().then((users: any) => {
                 this.allUser = users;
+                this.showEmployeeInformation = false;
+                this.showSelectPanel = true;
+                this.showFilteredEmployeeList = true;
                 this.countryService.getCountryList().then((countries: any) => {
                     this.countries = countries.entries;
                     this.divisionService.getDivisionList().then((divisions: any) => {
@@ -193,10 +196,6 @@ module ums {
                                             this.employmentTypeService.getAll().then((employmentTypes: any) => {
                                                 this.employmentTypes = employmentTypes;
                                                 this.getServiceIntervals();
-                                                this.showEmployeeInformation = false;
-                                                this.showSelectPanel = true;
-                                                this.showFilteredEmployeeList = true;
-
                                             });
                                         });
                                     });

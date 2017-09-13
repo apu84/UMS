@@ -5,7 +5,6 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Designation;
 import org.ums.domain.model.immutable.EmploymentType;
-import org.ums.manager.registrar.ServiceInformationManager;
 
 import java.util.Date;
 

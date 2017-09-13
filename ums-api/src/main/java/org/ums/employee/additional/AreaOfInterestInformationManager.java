@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.additional;
 
 import org.ums.employee.additional.AreaOfInterestInformation;
 import org.ums.employee.additional.MutableAreaOfInterestInformation;

@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.employee.service.ServiceInformationDetail;
-import org.ums.employee.service.MutableServiceInformationDetail;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.registrar.ServiceInformationManager;
 
 import javax.json.*;
 import javax.ws.rs.core.UriInfo;

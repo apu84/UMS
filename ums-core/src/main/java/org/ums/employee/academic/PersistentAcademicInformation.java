@@ -3,7 +3,6 @@ package org.ums.employee.academic;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.enums.common.AcademicDegreeType;
-import org.ums.manager.registrar.AcademicInformationManager;
 
 public class PersistentAcademicInformation implements MutableAcademicInformation {
 

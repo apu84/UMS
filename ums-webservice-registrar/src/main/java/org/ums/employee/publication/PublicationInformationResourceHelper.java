@@ -8,7 +8,6 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EmployeeManager;
-import org.ums.manager.registrar.PublicationInformationManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.ApprovePublicationService;
 import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;

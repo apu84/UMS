@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
-import org.ums.manager.registrar.AreaOfInterestInformationManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;

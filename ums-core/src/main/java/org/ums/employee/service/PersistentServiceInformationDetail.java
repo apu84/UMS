@@ -3,7 +3,6 @@ package org.ums.employee.service;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.enums.common.EmploymentPeriod;
-import org.ums.manager.registrar.ServiceInformationDetailManager;
 
 import java.util.Date;
 

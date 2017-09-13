@@ -2,7 +2,6 @@ package org.ums.employee.experience;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.manager.registrar.ExperienceInformationManager;
 
 public class PersistentExperienceInformation implements MutableExperienceInformation {
 

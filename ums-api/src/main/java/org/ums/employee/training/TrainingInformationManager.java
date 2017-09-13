@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.training;
 
 import org.ums.employee.training.TrainingInformation;
 import org.ums.employee.training.MutableTrainingInformation;

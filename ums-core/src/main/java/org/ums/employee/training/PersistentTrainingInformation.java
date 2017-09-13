@@ -2,7 +2,6 @@ package org.ums.employee.training;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.manager.registrar.TrainingInformationManager;
 
 public class PersistentTrainingInformation implements MutableTrainingInformation {
 

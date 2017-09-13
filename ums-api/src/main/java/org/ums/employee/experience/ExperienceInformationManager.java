@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.experience;
 
 import org.ums.employee.experience.ExperienceInformation;
 import org.ums.employee.experience.MutableExperienceInformation;

@@ -1,9 +1,6 @@
 package org.ums.employee.publication;
 
 import org.ums.decorator.ContentDaoDecorator;
-import org.ums.employee.publication.PublicationInformation;
-import org.ums.employee.publication.MutablePublicationInformation;
-import org.ums.manager.registrar.PublicationInformationManager;
 
 import java.util.List;
 

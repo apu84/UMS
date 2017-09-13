@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.academic;
 
 import org.ums.employee.academic.AcademicInformation;
 import org.ums.employee.academic.MutableAcademicInformation;

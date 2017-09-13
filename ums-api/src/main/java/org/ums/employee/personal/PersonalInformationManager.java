@@ -1,4 +1,4 @@
-package org.ums.manager.registrar;
+package org.ums.employee.personal;
 
 import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.MutablePersonalInformation;
