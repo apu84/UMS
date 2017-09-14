@@ -18,6 +18,8 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
+import org.ums.services.academic.RemarksBuilder;
+import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -353,5 +355,10 @@ public class AcademicContext {
     SemesterAdmissionCache cache = new SemesterAdmissionCache(mCacheFactory.getCacheManager());
     cache.setManager(new SemesterAdmissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return cache;
+  }
+
+  @Bean
+  RemarksBuilder remarkBuilder() {
+    return new RemarksBuilderImpl();
   }
 }

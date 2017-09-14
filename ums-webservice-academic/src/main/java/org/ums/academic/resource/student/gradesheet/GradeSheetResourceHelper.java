@@ -19,6 +19,7 @@ import org.ums.enums.CourseRegType;
 import org.ums.manager.StudentRecordManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.services.academic.RemarksBuilder;
 
 @Component
 public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
@@ -30,6 +31,9 @@ public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResul
 
   @Autowired
   StudentRecordManager mStudentRecordManager;
+
+  @Autowired
+  RemarksBuilder mRemarksBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -69,7 +73,7 @@ public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResul
     StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId);
     object.add("gpa", studentRecord.getGPA());
     object.add("cgpa", studentRecord.getCGPA());
-    object.add("remarks", getRemarks(results, studentRecord, pSemesterId));
+    object.add("remarks", mRemarksBuilder.getRemarks(results, studentRecord.getStatus(), pSemesterId));
     return object.build();
   }
 
@@ -79,61 +83,5 @@ public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResul
       job.add(entry.getKey(), entry.getValue());
     }
     return job;
-  }
-
-  private String getRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord, Integer pSemesterId) {
-    String passFailStatus = null, carryOverText = null;
-    if(pStudentRecord.getStatus() == StudentRecord.Status.FAILED) {
-      passFailStatus = "Failed";
-      carryOverText = getCarryOverText(pResults, pSemesterId, false);
-    }
-    else if(pStudentRecord.getStatus() == StudentRecord.Status.PASSED) {
-      passFailStatus = "Passed";
-      carryOverText = getCarryOverText(pResults, pSemesterId, true);
-    }
-    return String.format("%s %s %s", passFailStatus, StringUtils.isEmpty(carryOverText) ? "" : "with carry over in",
-        carryOverText);
-  }
-
-  private String getCarryOverText(List<UGRegistrationResult> pResults, final Integer pSemesterId,
-      final boolean isSemesterPassed) {
-    StringBuilder builder = new StringBuilder();
-
-    for(UGRegistrationResult result : pResults) {
-      if(result.getSemesterId().intValue() != pSemesterId) {
-        if(result.getGradeLetter().equalsIgnoreCase("F")) {
-          buildRemarks(builder, result);
-        }
-      }
-      else {
-        if(isSemesterPassed && !isPassed(result, pResults, pSemesterId)) {
-          buildRemarks(builder, result);
-        }
-      }
-    }
-    return builder.toString();
-  }
-
-  private void buildRemarks(final StringBuilder pStringBuilder, UGRegistrationResult pResult) {
-    if(pStringBuilder.length() > 0) {
-      pStringBuilder.append(", ");
-    }
-    pStringBuilder.append(pResult.getCourse().getNo());
-  }
-
-  private boolean isPassed(final UGRegistrationResult pResult, final List<UGRegistrationResult> pResults,
-      final Integer pSemesterId) {
-    if(!pResult.getGradeLetter().equalsIgnoreCase("F")) {
-      return true;
-    }
-    else {
-      for(UGRegistrationResult result : pResults) {
-        if(result.getCourseId().equalsIgnoreCase(pResult.getCourseId())
-            && result.getSemesterId().intValue() == pSemesterId && !result.getGradeLetter().equalsIgnoreCase("F")) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 }

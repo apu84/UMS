@@ -20,13 +20,13 @@ import com.google.common.collect.Lists;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
+      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, REMARKS, ID FROM STUDENT_RECORD ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_RECORD(ID, STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
           + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, " + "YEAR = ?,"
       + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?," + "RESULT = ?," + "LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+      + getLastModifiedSql() + ", REMARKS = ? ";
   String DELETE_ALL = "DELETE FROM STUDENT_RECORD ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -142,7 +142,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       params.add(new Object[] {studentRecord.getStudentId(), studentRecord.getSemester().getId(),
           studentRecord.getYear(), studentRecord.getAcademicSemester(), studentRecord.getCGPA(),
           studentRecord.getGPA(), studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),
-          studentRecord.getId()});
+          studentRecord.getGradesheetRemarks(), studentRecord.getId()});
     }
 
     return params;
@@ -175,6 +175,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       studentRecord.setStatus(StudentRecord.Status.get(rs.getString("RESULT")));
       studentRecord.setLastModified(rs.getString("LAST_MODIFIED"));
       studentRecord.setProgramId(rs.getInt("PROGRAM_ID"));
+      studentRecord.setGradesheetRemarks(rs.getString("REMARKS"));
       AtomicReference<StudentRecord> atomicReference = new AtomicReference<>(studentRecord);
       return atomicReference.get();
     }

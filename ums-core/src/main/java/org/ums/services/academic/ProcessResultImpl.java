@@ -39,6 +39,8 @@ public class ProcessResultImpl implements ProcessResult {
   ResultPublishManager mResultPublishManager;
   @Autowired
   UMSConfiguration mUmsConfiguration;
+  @Autowired
+  RemarksBuilder mRemarksBuilder;
 
   private final static String PROCESS_GRADES = "process_grades";
   private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
@@ -120,6 +122,11 @@ public class ProcessResultImpl implements ProcessResult {
         boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
         studentRecord.setCGPA(cgpa);
         studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+        studentRecord.setGradesheetRemarks(
+            mRemarksBuilder.getRemarks(
+                studentCourseGradeMap.get(studentId),
+                isPassed? StudentRecord.Status.PASSED: StudentRecord.Status.PASSED, pSemesterId)
+        );
       }
       updatedStudentRecords.add(studentRecord);
 

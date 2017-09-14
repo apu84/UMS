@@ -40,6 +40,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private String mLastModified;
   private Integer mProgramId;
   private Program mProgram;
+  private String mRemarks;
 
   public PersistentStudentRecord() {}
 
@@ -54,6 +55,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
     setType(pPersistentStudentRecord.getType());
     setStatus(pPersistentStudentRecord.getStatus());
     setLastModified(pPersistentStudentRecord.getLastModified());
+    setGradesheetRemarks(pPersistentStudentRecord.getGradesheetRemarks());
   }
 
   @Override
@@ -214,5 +216,15 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   @Override
   public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
+  }
+
+  @Override
+  public String getGradesheetRemarks() {
+    return mRemarks;
+  }
+
+  @Override
+  public void setGradesheetRemarks(String pRemarks) {
+    mRemarks = pRemarks;
   }
 }
