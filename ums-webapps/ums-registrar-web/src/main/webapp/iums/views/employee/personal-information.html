@@ -1,590 +1,578 @@
 <style>
-    .container-fluid:hover .box{
-        opacity: 0.90;
-    }
-    .container-fluid .box:hover{
-        /*background: whitesmoke;*/
-        color: black;
-        opacity: 1;
+    .well{
+        background-color: white !important;
     }
 </style>
+
 <div data-ng-show="vm.showPersonalInputDiv">
     <div class="container-fluid">
         <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
-            <div class="box">
-                <div class="row">
-                    <div align="center">
-                        <h4>General</h4>
-                    </div>
-                </div>
+            <div class="well">
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nFirstName"
-                                   id="iFirstName"
-                                   data-ng-model="vm.entry.personal.firstName"
-                                   placeholder="First Name"
-                                   class="form-control" required>
+                    <div class="row">
+                        <div align="center">
+                            <h4>General</h4>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nLastName"
-                                   id="iLastName"
-                                   data-ng-model="vm.entry.personal.lastName"
-                                   placeholder="Last Name"
-                                   class="form-control " required>
-                        </div>
-                    </div>
-                </div>
 
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nGender"
-                                    id="iGender"
-                                    data-ng-model="vm.entry.personal.gender"
-                                    data-ng-options="gender.name for gender in vm.genders track by gender.id"
-                                    class="form-control" required>
-                                <option value="">Select Gender</option>
-                            </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's First Name" for="iFirstName">First Name<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nFirstName"
+                                       id="iFirstName"
+                                       data-ng-model="vm.entry.personal.firstName"
+                                       placeholder="First Name"
+                                       class="form-control" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nFatherName"
-                                   id="iFatherName"
-                                   data-ng-model="vm.entry.personal.fatherName"
-                                   placeholder="Father's Name"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <select name="nBloodGroup"
-                                    id="iBloodGroup"
-                                    data-ng-model="vm.entry.personal.bloodGroup"
-                                    data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
-                                    class="form-control" required>
-                                <option value="">Select Blood Group</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nMotherName"
-                                   id="iMotherName"
-                                   data-ng-model="vm.entry.personal.motherName"
-                                   placeholder="Mother's Name"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nNationality"
-                                    id="iNationality"
-                                    data-ng-model="vm.entry.personal.nationality"
-                                    data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
-                                    class="form-control" required>
-                                <option value="">Select Nationality</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <select name="nReligion"
-                                    id="iReligion"
-                                    data-ng-model="vm.entry.personal.religion"
-                                    data-ng-options="religion.name for religion in vm.religions track by religion.id"
-                                    class="form-control" required>
-                                <option value="">Select Religion</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="iMaritalStatus"
-                                    id="iMaritalStatus"
-                                    data-ng-model="vm.entry.personal.maritalStatus"
-                                    data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
-                                    class="form-control" required>
-                                <option value="">Select Marital Status</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's Name</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nSpouseName"
-                                   id="iSpouseName"
-                                   data-ng-model="vm.entry.personal.spouseName"
-                                   placeholder="Spouse's Name"
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nNationalId"
-                                   id="iNationalId"
-                                   data-ng-model="vm.entry.personal.nidNo"
-                                   placeholder="National Id Card No."
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nSpouseNationalId"
-                                   id="iSpouseNationalId"
-                                   data-ng-model="vm.entry.personal.spouseNidNo"
-                                   placeholder="Spouse's National Id Card Number"
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nBirthDate"
-                                   id="iBirthDate"
-                                   data-ng-model="vm.entry.personal.dateOfBirth"
-                                   data-provide="datepicker"
-                                   data-date-format="dd/mm/yyyy"
-                                   placeholder="DD/MM/YYYY"
-                                   autocomplete="off"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Personal Website" for="iPersonalWebsite">Personal Website</label>
-                        <div class="col-md-8">
-                            <div class="input-icon">
-                                <i class="fa fa-external-link"></i>
-                                <input type="url"
-                                       name="nPersonalWebsite"
-                                       id="iPersonalWebsite"
-                                       data-ng-model="vm.entry.personal.website"
-                                       placeholder="Personal Website"
-                                       class="form-control">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last Name<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nLastName"
+                                       id="iLastName"
+                                       data-ng-model="vm.entry.personal.lastName"
+                                       placeholder="Last Name"
+                                       class="form-control " required>
                             </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-            <hr />
 
 
-            <div class="box">
-                <div class="row">
-                    <div align="center">
-                        <h4>Contact</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
-                        <div class="col-md-8">
-                            <div class="input-icon">
-                                <i class="fa fa-envelope"></i>
-                                <input type="email"
-                                       name="nOrganizationalEmail"
-                                       id="iOrganizationalEmail"
-                                       data-ng-model="vm.entry.personal.organizationalEmail"
-                                       placeholder="Organizational Email Address"
-                                       class="form-control">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nGender"
+                                        id="iGender"
+                                        data-ng-model="vm.entry.personal.gender"
+                                        data-ng-options="gender.name for gender in vm.genders track by gender.id"
+                                        class="form-control" required>
+                                    <option value="">Select Gender</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <div class="input-icon">
-                                <i class="fa fa-envelope"></i>
-                                <input type="email"
-                                       name="nPersonalEmail"
-                                       id="iPersonalEmail"
-                                       data-ng-model="vm.entry.personal.personalEmail"
-                                       placeholder="Personal Email Address"
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's Name<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nFatherName"
+                                       id="iFatherName"
+                                       data-ng-model="vm.entry.personal.fatherName"
+                                       placeholder="Father's Name"
                                        class="form-control" required>
                             </div>
                         </div>
                     </div>
-                </div>
 
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile<span class='require'>*</span></label>
-                        <div class="col-md-8">
-                            <input type="tel"
-                                   name="nMobile"
-                                   id="iMobile"
-                                   data-ng-model="vm.entry.personal.mobile"
-                                   placeholder="Mobile"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Phone No." for="iPhone">Phone</label>
-                        <div class="col-md-8">
-                            <input type="tel"
-                                   name="nPhone"
-                                   id="iPhone"
-                                   data-ng-model="vm.entry.personal.phone"
-                                   placeholder="Phone"
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-12"><b>Present Address:</b></label>
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPresentAddressHouse"
-                                   id="iPresentAddressHouse"
-                                   data-ng-model="vm.entry.personal.preAddressLine1"
-                                   placeholder="House/Holding No."
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPresentAddressRoad"
-                                   id="iPresentAddressRoad"
-                                   data-ng-model="vm.entry.personal.preAddressLine2"
-                                   placeholder="Road/Street"
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressCountry">Country<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPresentAddressCountry"
-                                    id="iPresentAddressCountry"
-                                    data-ng-model="vm.entry.personal.preAddressCountry"
-                                    data-ng-options="country.name for country in vm.countries track by country.id"
-                                    data-ng-change="vm.changePresentAddressFields()"
-                                    class="form-control">
-                                <option value="">Select Country</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPresentAddressDivision"
-                                    id="iPresentAddressDivision"
-                                    data-ng-model="vm.entry.personal.preAddressDivision"
-                                    data-ng-options="division.name for division in vm.divisions track by division.id"
-                                    data-ng-change="vm.changePresentAddressDistrict()"
-                                    data-ng-disabled="vm.disablePresentAddressDropdown"
-                                    class="form-control" requried="vm.required">
-                                <option value="">Select Division</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPresentAddressDistrict"
-                                    id="iPresentAddressDistrict"
-                                    data-ng-model="vm.entry.personal.preAddressDistrict"
-                                    data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
-                                    data-ng-change="vm.changePresentAddressThana()"
-                                    data-ng-disabled="vm.disablePresentAddressDropdown"
-                                    class="form-control" required="vm.required">
-                                <option value="">Select District</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPresentAddressPoliceStation"
-                                    id="iPresentAddressPoliceStation"
-                                    data-ng-model="vm.entry.personal.preAddressThana"
-                                    data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
-                                    data-ng-disabled="vm.disablePresentAddressDropdown"
-                                    class="form-control" required="vm.required">
-                                <option value="">Select Thana</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPresentAddressPostOffice"
-                                   id="iPresentAddressPostOffice"
-                                   data-ng-model="vm.entry.personal.preAddressPostCode"
-                                   placeholder="Police Post Office/Zip"
-                                   data-ng-disabled="vm.disablePresentAddressDropdown"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="col-md-2"><b>Permanent Address:</b></label>
+                    <div class="row">
                         <div class="col-md-6">
-                            <input type="checkbox" data-ng-click="vm.sameAsPresentAddress()" />Same as present address
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPermanentAddressHouse"
-                                   id="iPermanentAddressHouse"
-                                   data-ng-model="vm.entry.personal.perAddressLine1"
-                                   placeholder="House/Holding No."
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPermanentAddressRoad"
-                                   id="iPermanentAddressRoad"
-                                   data-ng-model="vm.entry.personal.perAddressLine2"
-                                   placeholder="Road/Street"
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPermanentAddressCountry"
-                                    id="iPermanentAddressCountry"
-                                    data-ng-model="vm.entry.personal.perAddressCountry"
-                                    data-ng-options="country.name for country in vm.countries track by country.id"
-                                    data-ng-change="vm.changePermanentAddressFields()"
-                                    class="form-control" required>
-                                <option value="">Select Country</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPermanentAddressDivision"
-                                    id="iPermanentAddressDivision"
-                                    data-ng-model="vm.entry.personal.perAddressDivision"
-                                    data-ng-options="division.name for division in vm.divisions track by division.id"
-                                    data-ng-change="vm.changePermanentAddressDistrict()"
-                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                    class="form-control" required="vm.required">
-                                <option value="">Select Division</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPermanentAddressDistrict"
-                                    id="iPermanentAddressDistrict"
-                                    data-ng-model="vm.entry.personal.perAddressDistrict"
-                                    data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
-                                    data-ng-change="vm.changePermanentAddressThana()"
-                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                    class="form-control" requried="vm.required">
-                                <option value="">Select District</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nPermanentAddressPoliceStation"
-                                    id="iPermanentAddressPoliceStation"
-                                    data-ng-model="vm.entry.personal.perAddressThana"
-                                    data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
-                                    data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                    class="form-control" required="vm.required">
-                                <option value="">Select Thana</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nPermanentAddressPostOffice"
-                                   id="iPermanentAddressPostOffice"
-                                   data-ng-model="vm.entry.personal.perAddressPostCode"
-                                   placeholder="Police Post Office/Zip"
-                                   data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-
-            </div>
-            <hr />
-
-
-            <div class="box">
-                <div class="row">
-                    <div align="center">
-                        <h4><b>Emergency Contact</b></h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="ndEmergencyContactName"
-                                   id="idEmergencyContactName"
-                                   data-ng-model="vm.entry.personal.emergencyContactName"
-                                   placeholder="Name"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select name="nEmergencyContactRelation"
-                                    id="iEmergencyContactRelation"
-                                    data-ng-model="vm.entry.personal.emergencyContactRelation"
-                                    data-ng-options="relation.name for relation in vm.relations track by relation.id"
-                                    class="form-control" required>
-                                <option value="">Select Relation</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nEmergencyContactPhone"
-                                   id="iEmergencyContactPhone"
-                                   data-ng-model="vm.entry.personal.emergencyContactPhone"
-                                   placeholder="Phone"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address
-                            <sup>
-                                <select data-ng-model="data.supOptions" data-ng-change="vm.fillEmergencyContactAddress()">
-                                    <option value="1">Default</option>
-                                    <option value="2">Present</option>
-                                    <option value="3">Permanent</option>
+                            <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood Group<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <select name="nBloodGroup"
+                                        id="iBloodGroup"
+                                        data-ng-model="vm.entry.personal.bloodGroup"
+                                        data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
+                                        class="form-control" required>
+                                    <option value="">Select Blood Group</option>
                                 </select>
-                            </sup>
-                        </label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nEmergencyContactAddress"
-                                   id="iEmergencyContactAddress"
-                                   data-ng-model="vm.entry.personal.emergencyContactAddress"
-                                   placeholder="Address"
-                                   class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's Name<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nMotherName"
+                                       id="iMotherName"
+                                       data-ng-model="vm.entry.personal.motherName"
+                                       placeholder="Mother's Name"
+                                       class="form-control" required>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Nationality" for="iNationality">Nationality<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nNationality"
+                                        id="iNationality"
+                                        data-ng-model="vm.entry.personal.nationality"
+                                        data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
+                                        class="form-control" required>
+                                    <option value="">Select Nationality</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Religion" for="iReligion">Religion<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <select name="nReligion"
+                                        id="iReligion"
+                                        data-ng-model="vm.entry.personal.religion"
+                                        data-ng-options="religion.name for religion in vm.religions track by religion.id"
+                                        class="form-control" required>
+                                    <option value="">Select Religion</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Marital Status" for="iMaritalStatus">Marital Status<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="iMaritalStatus"
+                                        id="iMaritalStatus"
+                                        data-ng-model="vm.entry.personal.maritalStatus"
+                                        data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
+                                        class="form-control" required>
+                                    <option value="">Select Marital Status</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's Name</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nSpouseName"
+                                       id="iSpouseName"
+                                       data-ng-model="vm.entry.personal.spouseName"
+                                       placeholder="Spouse's Name"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label title="Employee's National Id Card No." class="col-md-4 control-label" for="iNationalId">National Id</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nNationalId"
+                                       id="iNationalId"
+                                       data-ng-model="vm.entry.personal.nidNo"
+                                       placeholder="National Id Card No."
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Spouse's National Id Card No." for="iSpouseNationalId">Spouse's National Id</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nSpouseNationalId"
+                                       id="iSpouseNationalId"
+                                       data-ng-model="vm.entry.personal.spouseNidNo"
+                                       placeholder="Spouse's National Id Card Number"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date Of Birth<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nBirthDate"
+                                       id="iBirthDate"
+                                       data-ng-model="vm.entry.personal.dateOfBirth"
+                                       data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       autocomplete="off"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Personal Website" for="iPersonalWebsite">Personal Website</label>
+                            <div class="col-md-8">
+                                <div class="input-icon">
+                                    <i class="fa fa-external-link"></i>
+                                    <input type="url"
+                                           name="nPersonalWebsite"
+                                           id="iPersonalWebsite"
+                                           data-ng-model="vm.entry.personal.website"
+                                           placeholder="Personal Website"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
             </div>
-            <hr />
+
+
+            <div class="well">
+
+                    <div class="row">
+                        <div align="center">
+                            <h4>Contact</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="(Example: abc@aust.edu)" for="iOrganizationalEmail">Organizational Email</label>
+                            <div class="col-md-8">
+                                <div class="input-icon">
+                                    <i class="fa fa-envelope"></i>
+                                    <input type="email"
+                                           name="nOrganizationalEmail"
+                                           id="iOrganizationalEmail"
+                                           data-ng-model="vm.entry.personal.organizationalEmail"
+                                           placeholder="Organizational Email Address"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Personal Email" for="iPersonalEmail">Personal Email<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <div class="input-icon">
+                                    <i class="fa fa-envelope"></i>
+                                    <input type="email"
+                                           name="nPersonalEmail"
+                                           id="iPersonalEmail"
+                                           data-ng-model="vm.entry.personal.personalEmail"
+                                           placeholder="Personal Email Address"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Contact No." for="iMobile">Mobile<span class='require'>*</span></label>
+                            <div class="col-md-8">
+                                <input type="tel"
+                                       name="nMobile"
+                                       id="iMobile"
+                                       data-ng-model="vm.entry.personal.mobile"
+                                       placeholder="Mobile"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Employee's Phone No." for="iPhone">Phone</label>
+                            <div class="col-md-8">
+                                <input type="tel"
+                                       name="nPhone"
+                                       id="iPhone"
+                                       data-ng-model="vm.entry.personal.phone"
+                                       placeholder="Phone"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-12"><b>Present Address:</b></label>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPresentAddressHouse"
+                                       id="iPresentAddressHouse"
+                                       data-ng-model="vm.entry.personal.preAddressLine1"
+                                       placeholder="House/Holding No."
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPresentAddressRoad"
+                                       id="iPresentAddressRoad"
+                                       data-ng-model="vm.entry.personal.preAddressLine2"
+                                       placeholder="Road/Street"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressCountry">Country<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPresentAddressCountry"
+                                        id="iPresentAddressCountry"
+                                        data-ng-model="vm.entry.personal.preAddressCountry"
+                                        data-ng-options="country.name for country in vm.countries track by country.id"
+                                        data-ng-change="vm.changePresentAddressFields()"
+                                        class="form-control">
+                                    <option value="">Select Country</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPresentAddressDivision"
+                                        id="iPresentAddressDivision"
+                                        data-ng-model="vm.entry.personal.preAddressDivision"
+                                        data-ng-options="division.name for division in vm.divisions track by division.id"
+                                        data-ng-change="vm.changePresentAddressDistrict()"
+                                        data-ng-disabled="vm.disablePresentAddressDropdown"
+                                        class="form-control" requried="vm.required">
+                                    <option value="">Select Division</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPresentAddressDistrict"
+                                        id="iPresentAddressDistrict"
+                                        data-ng-model="vm.entry.personal.preAddressDistrict"
+                                        data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
+                                        data-ng-change="vm.changePresentAddressThana()"
+                                        data-ng-disabled="vm.disablePresentAddressDropdown"
+                                        class="form-control" required="vm.required">
+                                    <option value="">Select District</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPresentAddressPoliceStation"
+                                        id="iPresentAddressPoliceStation"
+                                        data-ng-model="vm.entry.personal.preAddressThana"
+                                        data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
+                                        data-ng-disabled="vm.disablePresentAddressDropdown"
+                                        class="form-control" required="vm.required">
+                                    <option value="">Select Thana</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office No.</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPresentAddressPostOffice"
+                                       id="iPresentAddressPostOffice"
+                                       data-ng-model="vm.entry.personal.preAddressPostCode"
+                                       placeholder="Police Post Office/Zip"
+                                       data-ng-disabled="vm.disablePresentAddressDropdown"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="col-md-2"><b>Permanent Address:</b></label>
+                            <div class="col-md-6">
+                                <input type="checkbox" data-ng-click="vm.sameAsPresentAddress()" />Same as present address
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPermanentAddressHouse"
+                                       id="iPermanentAddressHouse"
+                                       data-ng-model="vm.entry.personal.perAddressLine1"
+                                       placeholder="House/Holding No."
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPermanentAddressRoad"
+                                       id="iPermanentAddressRoad"
+                                       data-ng-model="vm.entry.personal.perAddressLine2"
+                                       placeholder="Road/Street"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPermanentAddressCountry"
+                                        id="iPermanentAddressCountry"
+                                        data-ng-model="vm.entry.personal.perAddressCountry"
+                                        data-ng-options="country.name for country in vm.countries track by country.id"
+                                        data-ng-change="vm.changePermanentAddressFields()"
+                                        class="form-control" required>
+                                    <option value="">Select Country</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPermanentAddressDivision"
+                                        id="iPermanentAddressDivision"
+                                        data-ng-model="vm.entry.personal.perAddressDivision"
+                                        data-ng-options="division.name for division in vm.divisions track by division.id"
+                                        data-ng-change="vm.changePermanentAddressDistrict()"
+                                        data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                        class="form-control" required="vm.required">
+                                    <option value="">Select Division</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPermanentAddressDistrict"
+                                        id="iPermanentAddressDistrict"
+                                        data-ng-model="vm.entry.personal.perAddressDistrict"
+                                        data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
+                                        data-ng-change="vm.changePermanentAddressThana()"
+                                        data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                        class="form-control" requried="vm.required">
+                                    <option value="">Select District</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nPermanentAddressPoliceStation"
+                                        id="iPermanentAddressPoliceStation"
+                                        data-ng-model="vm.entry.personal.perAddressThana"
+                                        data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
+                                        data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                        class="form-control" required="vm.required">
+                                    <option value="">Select Thana</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office No.</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nPermanentAddressPostOffice"
+                                       id="iPermanentAddressPostOffice"
+                                       data-ng-model="vm.entry.personal.perAddressPostCode"
+                                       placeholder="Police Post Office/Zip"
+                                       data-ng-disabled="vm.disablePermanentAddressDropdown"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+
+            </div>
+
+            <div class="well">
+
+                    <div class="row">
+                        <div align="center">
+                            <h4><b>Emergency Contact</b></h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Emergency Contact Person Name" for="idEmergencyContactName">Name<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="ndEmergencyContactName"
+                                       id="idEmergencyContactName"
+                                       data-ng-model="vm.entry.personal.emergencyContactName"
+                                       placeholder="Name"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Relation With The Employee" for="iEmergencyContactRelation">Relation<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select name="nEmergencyContactRelation"
+                                        id="iEmergencyContactRelation"
+                                        data-ng-model="vm.entry.personal.emergencyContactRelation"
+                                        data-ng-options="relation.name for relation in vm.relations track by relation.id"
+                                        class="form-control" required>
+                                    <option value="">Select Relation</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No." for="iEmergencyContactPhone">Phone<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nEmergencyContactPhone"
+                                       id="iEmergencyContactPhone"
+                                       data-ng-model="vm.entry.personal.emergencyContactPhone"
+                                       placeholder="Phone"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4 control-label" title="Emergency Contact Person's Address" for="iEmergencyContactAddress">Address</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nEmergencyContactAddress"
+                                       id="iEmergencyContactAddress"
+                                       data-ng-model="vm.entry.personal.emergencyContactAddress"
+                                       placeholder="Address"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div align="right">
-                        <button type="button" title="Test Data" class="btn btn-default" data-ng-click="vm.testData()">Test Data</button>
                         <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPersonalInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
                         <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                     </div>
@@ -597,7 +585,7 @@
  
 <div data-ng-show="!vm.showPersonalInputDiv">
     <div class="container-fluid">
-        <div class="box">
+        <div class="well">
             <div class="row">
                 <div align="center">
                     <h4>General</h4>
@@ -716,10 +704,8 @@
             </div>
 
         </div>
-        <hr />
 
-
-        <div class="box">
+        <div class="well">
             <div class="row">
                 <div align="center">
                     <h4>Contact</h4>
@@ -893,10 +879,8 @@
             </div>
 
         </div>
-        <hr />
 
-
-        <div class="box">
+        <div class="well">
             <div class="row">
                 <div align="center">
                     <h4>Emergency Contact</h4>
@@ -935,7 +919,6 @@
             </div>
 
         </div>
-        <hr />
 
         <div class="row">
             <div class="col-md-12">

@@ -318,6 +318,7 @@ module ums {
             }
             else if (formName === "publication") {
                 this.getPublicationInformation();
+                this.getPublicationInformationWithPagination();
                 this.personal = false;
                 this.academic = false;
                 this.training = false;
@@ -382,30 +383,6 @@ module ums {
                 this.additional = false;
                 this.service = true;
             }
-        }
-
-        private testData(): void {
-            this.entry.personal.firstName = "Kawsur";
-            this.entry.personal.lastName = "Mir Md.";
-            this.entry.personal.fatherName = "Mir Abdul Aziz";
-            this.entry.personal.motherName = "Mst Hosne Ara";
-            this.entry.personal.gender = this.genders[1];
-            this.entry.personal.dateOfBirth = "20/10/1995";
-            this.entry.personal.nationality = this.nationalities[1];
-            this.entry.personal.religion = this.religions[1];
-            this.entry.personal.maritalStatus = this.maritalStatus[1];
-            this.entry.personal.spouseName = "";
-            this.entry.personal.nidNo = "19952641478954758";
-            this.entry.personal.spouseNidNo = "";
-            this.entry.personal.bloodGroup = this.bloodGroups[1];
-            this.entry.personal.website = "https://www.kawsur.com";
-            this.entry.personal.organizationalEmail = "kawsur.iums@aust.edu";
-            this.entry.personal.personalEmail = "kawsurilu@yahoo.com";
-            this.entry.personal.mobile = "+8801672494863";
-            this.entry.personal.phone = "none";
-            this.entry.personal.emergencyContactName = "None";
-            this.entry.personal.emergencyContactRelation = this.relations[0];
-            this.entry.personal.emergencyContactPhone = "01898889851";
         }
 
         private submitPersonalForm(): void {
@@ -709,28 +686,6 @@ module ums {
                 this.entry.personal.perAddressDistrict = null;
                 this.entry.personal.perAddressThana = null;
                 this.entry.personal.perAddressPostCode = null;
-            }
-        }
-
-        private fillEmergencyContactAddress() {
-            if (this.data.supOptions === "1") {
-                this.entry.personal.emergencyContactAddress = "";
-            }
-            else if (this.data.supOptions === "2") {
-                this.entry.personal.emergencyContactAddress =
-                    this.entry.personal.preAddressLine1 == null ? "" : this.entry.personal.preAddressLine1
-                    + " " + this.entry.personal.preAddressLine2 == null ? "" : this.entry.personal.preAddressLine2
-                    + " " + this.entry.personal.preAddressThana.name == null ? "" : this.entry.personal.preAddressThana.name
-                    + " " + this.entry.personal.preAddressDistrict.name == null ? "" : this.entry.personal.preAddressDistrict.name
-                    + " - " + this.entry.personal.preAddressPostCode == null ? "" : this.entry.personal.preAddressPostCode;
-            }
-            else if (this.data.supOptions === "3") {
-                this.entry.personal.emergencyContactAddress =
-                    this.entry.personal.perAddressLine1 == null ? "" : this.entry.personal.perAddressLine1
-                    + " " + this.entry.personal.perAddressLine2 == null ? "" : this.entry.personal.perAddressLine2
-                    + " " + this.entry.personal.perAddressThana.name == null ? "" : this.entry.personal.perAddressThana.name
-                    + " " + this.entry.personal.perAddressDistrict.name == null ? "" : this.entry.personal.perAddressDistrict.name
-                    + " - " + this.entry.personal.perAddressPostCode == null ? "" : this.entry.personal.perAddressPostCode;
             }
         }
 

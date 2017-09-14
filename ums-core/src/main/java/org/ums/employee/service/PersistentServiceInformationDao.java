@@ -45,7 +45,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
 
   @Override
   public List<ServiceInformation> getServiceInformation(String pEmployeeId) {
-    String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
+    String query = GET_ONE + " WHERE EMPLOYEE_ID = ? ORDER BY JOINING_DATE ASC";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentServiceInformationDao.RoleRowMapper());
   }
 

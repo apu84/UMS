@@ -12,6 +12,9 @@
         font-weight: normal !important;
         padding: 1%;
     }
+    .well{
+        background-color: darkgrey;
+    }
 </style>
 
 <div data-ng-show="vm.showServiceInputDiv">
@@ -131,7 +134,7 @@
                     [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
             </fieldset>
-            <hr>
+            <!--<hr> --> <br />
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -151,7 +154,7 @@
 <div data-ng-show="!vm.showServiceInputDiv">
     <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
         <fieldset>
-            <legend align="center">Department:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label> & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label></legend>
+            <legend align="center"><b>{{$index + 1}}.</b> &nbsp; Department:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label> & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label></legend>
             <div class="row">
                 <div class="col-md-4">
                     <label class="col-md-4">Employment:</label>
@@ -199,7 +202,7 @@
                 </div>
             </div>
         </fieldset>
-        <hr>
+        <!--<hr>--> <br />
     </div>
     <div data-ng-show="vm.showServiceEditButton">
         <div class="row">

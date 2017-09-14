@@ -51,7 +51,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
 
   @Override
   public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
-    String query = GET_ONE + " WHERE SERVICE_ID = ?";
+    String query = GET_ONE + " WHERE SERVICE_ID = ? ORDER BY START_DATE ASC ";
     return mJdbcTemplate.query(query, new Object[] {pServiceId},
         new PersistentServiceInformationDetailDao.RoleRowMapper());
   }

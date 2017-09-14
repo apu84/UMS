@@ -65,13 +65,13 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       List<MutablePublicationInformation> pMutablePublicationInformation) {
     List<Object[]> params = new ArrayList<>();
     for(PublicationInformation publicationInformation : pMutablePublicationInformation) {
-      params.add(new Object[] {publicationInformation.getEmployeeId(), publicationInformation.getTitle(),
-          publicationInformation.getInterestGenre(), publicationInformation.getPublisherName(),
-          publicationInformation.getDateOfPublication(), publicationInformation.getTypeId(),
-          publicationInformation.getWebLink(), publicationInformation.getISSN(), publicationInformation.getIssue(),
-          publicationInformation.getVolume(), publicationInformation.getJournalName(),
-          publicationInformation.getCountry().getId(), publicationInformation.getStatus(),
-          publicationInformation.getPages(), publicationInformation.getAppliedOn(),
+      params.add(new Object[] {mIdGenerator.getNumericId(), publicationInformation.getEmployeeId(),
+          publicationInformation.getTitle(), publicationInformation.getInterestGenre(),
+          publicationInformation.getPublisherName(), publicationInformation.getDateOfPublication(),
+          publicationInformation.getTypeId(), publicationInformation.getWebLink(), publicationInformation.getISSN(),
+          publicationInformation.getIssue(), publicationInformation.getVolume(),
+          publicationInformation.getJournalName(), publicationInformation.getCountry().getId(),
+          publicationInformation.getStatus(), publicationInformation.getPages(), publicationInformation.getAppliedOn(),
           publicationInformation.getActionTakenOn()});
 
     }

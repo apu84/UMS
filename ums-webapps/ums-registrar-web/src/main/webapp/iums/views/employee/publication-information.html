@@ -195,9 +195,9 @@
 
 <div data-ng-show="!vm.showPublicationInputDiv">
     <div class="container-fluid">
-        <div align="center">
+        <div align="right">
             <dir-pagination-controls boundary-links="true"
-                                     pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
+                                     pagination-id="iPagination" on-page-change="vm.pageChanged(newPageNumber)"
                                      template-url="views\directive\dirPagination.tpl.html">
             </dir-pagination-controls>
         </div>
@@ -294,6 +294,12 @@
                 </div>
             </div>
             <hr />
+        </div>
+        <div align="right">
+            <dir-pagination-controls boundary-links="true"
+                                     pagination-id="iPagination" on-page-change="pageChanged(newPageNumber)"
+                                     template-url="views\directive\dirPagination.tpl.html">
+            </dir-pagination-controls>
         </div>
         <div class="row">
             <div class="col-md-12">
