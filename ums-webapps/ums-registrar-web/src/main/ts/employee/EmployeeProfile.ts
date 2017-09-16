@@ -223,6 +223,7 @@ module ums {
                 this.experience = true;
             }
             else if(formName === 'additional'){
+                this.additional = true;
                 this.getAdditionalInformation();
                 this.personal = false;
                 this.academic = false;
@@ -231,7 +232,7 @@ module ums {
                 this.award = false;
                 this.experience = false;
                 this.service = false;
-                this.additional = true;
+
             }
             else if(formName === 'service'){
                 this.getServiceInformation();
@@ -425,7 +426,23 @@ module ums {
         private getAdditionalInformation() {
             this.entry.additional = <IAdditionalInformationModel>{};
             this.employeeInformationService.getAdditionalInformation(this.userId).then((additional: any) => {
+                console.log(additional[0]);
                 this.entry.additional = additional[0];
+
+                var intArray= new Array();
+                console.log(this.arrayOfAreaOfInterest);
+                for(var i=0;i<additional[0].areaOfInterestInformation.length;i++){
+                    for(var j=0;j<this.arrayOfAreaOfInterest.length;j++) {
+                        console.log(additional[0].areaOfInterestInformation[i]+"----"+this.arrayOfAreaOfInterest[j]);
+                        if(additional[0].areaOfInterestInformation[i].id==this.arrayOfAreaOfInterest[j].id)
+                            intArray.push(this.arrayOfAreaOfInterest[j].id);
+                    }
+
+                }
+                $("#iAoi").val(intArray);
+                $("#iAoi").trigger("change");
+                //this.entry.additional.areaOfInterestInformation = intArray;
+
             });
         }
 

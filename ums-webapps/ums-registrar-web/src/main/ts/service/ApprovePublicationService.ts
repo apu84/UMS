@@ -27,7 +27,7 @@ module ums {
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
-                (response: ng.IHttpPromiseCallback<any>) => {
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.log();
                 });
             return defer.promise;

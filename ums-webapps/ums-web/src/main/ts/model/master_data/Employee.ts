@@ -4,6 +4,7 @@ module ums{
     employeeName:string;
     text?: string;
     designation:number;
+    designationName?:string;
     employmentType:string;
     deptOfficeId:string;
     deptOfficeName?: string;

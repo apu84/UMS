@@ -147,8 +147,7 @@ module ums {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             files: [
-                                'vendors/ckeditor/ckeditor.js',
-                                'vendors/ckeditor/styles.js'
+                              'vendors/ckeditor/ckeditor.js'
                             ]
                         });
                     }]

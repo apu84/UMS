@@ -177,6 +177,7 @@ module ums {
             this.nationalities = this.registrarConstants.nationalityTypes;
             this.serviceIntervals = registrarConstants.servicePeriods;
             this.initialization();
+            this.addDate();
         }
 
         private initialization() {
@@ -415,10 +416,9 @@ module ums {
         }
 
         private previous(): void{
-            console.log("Hello");
             if(this.indexValue >= 0){
-                this.disablePreviousLink = false;
-                this.data.changedUserId = this.allUser[this.indexValue - 1].id;
+                this.userId = this.allUser[this.indexValue - 1].id;
+                this.changedUserName = this.allUser[this.indexValue - 1].employeeName;
                 this.getEmployeeInformation();
             }
             else{
@@ -781,6 +781,7 @@ module ums {
                     }
                 }
             }
+            this.addDate();
         }
 
         private addNewServiceDetailsRow(index: number) {
@@ -887,6 +888,7 @@ module ums {
                     intervalDetails: Array<IServiceDetailsModel>()
                 };
                 this.entry.serviceInfo.push(serviceEntry);
+                this.addDate();
             }
         }
 
@@ -976,6 +978,17 @@ module ums {
             defer.resolve(JsonObject);
             return defer.promise;
         }
+
+        private addDate():void{
+            setTimeout(function () {
+                $('.datepicker-default').datepicker();
+                $('.datepicker-default').on('change', function () {
+                    $('.datepicker').hide();
+                });
+            }, 40);
+
+        }
+
     }
     UMS.controller("EmployeeInformation", EmployeeInformation);
 }

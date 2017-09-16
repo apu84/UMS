@@ -94,13 +94,14 @@
             <div class="panel-heading">Total: {{filterd.length}}<span class="subtitle"></span></div>
             <div class="panel-body pan">
                 <div class="panel-body shadowPanel"  style="min-height: 490px;">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead class="heading well">
                         <tr>
                             <th>Sl.</th>
                             <th>Employee Id</th>
                             <th >Teacher Name</th>
                             <th>Department</th>
+                            <th>Designation</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -110,7 +111,8 @@
                                 <td>{{user.id}}</td>
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
-                                <td><button type="button" class="btn btn-default" data-ng-click="vm.view(user, $index)">View</button></td>
+                                <td>{{user.designationName}}</td>
+                                <td><button type="button" class="btn btn-default btn-sm" data-ng-click="vm.view(user, $index)">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -126,7 +128,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         Name : <b>{{vm.selectedEmployee.employeeName}}</b> & Department: <b>{{vm.selectedEmployee.deptOfficeName}}</b>
-                        <span data-ng-show="vm.data.searchBy=='2' || vm.data.searchBy=='3'" style="float:right"><a href="javascript:void(0)" data-ng-disabled="vm.disablePreviousLink" data-ng-click="vm.previous()">Previous</a>&nbsp;<a href="javascript:void(0)" data-ng-disabled="vm.disableNextLink" data-ng-click="vm.next()">Next</a></span>
+                        <!--<span data-ng-show="vm.data.searchBy=='2' || vm.data.searchBy=='3'" style="float:right"><a href="javascript:void(0)" data-ng-disabled="vm.disablePreviousLink" data-ng-click="vm.previous()">Previous</a>&nbsp;<a href="javascript:void(0)" data-ng-disabled="vm.disableNextLink" data-ng-click="vm.next()">Next</a></span>-->
                     </div>
                 </div>
             </div>
