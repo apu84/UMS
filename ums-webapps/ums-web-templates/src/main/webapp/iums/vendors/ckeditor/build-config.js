@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/e36bab0e1b0cd2508382db742151f0ca
+ * (2) http://ckeditor.com/builder/50877b4c1fcbadd4a2c7659a7907c067
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/e36bab0e1b0cd2508382db742151f0ca
+ * (3) http://ckeditor.com/builder/download/50877b4c1fcbadd4a2c7659a7907c067
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -28,26 +28,25 @@ var CKBUILDER_CONFIG = {
 	skin: 'moono-lisa',
 	preset: 'full',
 	ignore: [
-		'.DS_Store',
 		'.bender',
+		'bender.js',
+		'bender-err.log',
+		'bender-out.log',
+		'dev',
+		'.DS_Store',
 		'.editorconfig',
 		'.gitattributes',
 		'.gitignore',
+		'gruntfile.js',
 		'.idea',
 		'.jscsrc',
 		'.jshintignore',
 		'.jshintrc',
-		'.mailmap',
-		'.travis.yml',
-		'bender-err.log',
-		'bender-out.log',
-		'bender.ci.js',
-		'bender.js',
-		'dev',
-		'gruntfile.js',
 		'less',
+		'.mailmap',
 		'node_modules',
 		'package.json',
+		'README.md',
 		'tests'
 	],
 	plugins : {
@@ -105,7 +104,6 @@ var CKBUILDER_CONFIG = {
 		'stylescombo' : 1,
 		'tab' : 1,
 		'table' : 1,
-		'tableselection' : 1,
 		'tabletools' : 1,
 		'templates' : 1,
 		'toolbar' : 1,
@@ -133,7 +131,6 @@ var CKBUILDER_CONFIG = {
 		'en-gb' : 1,
 		'eo' : 1,
 		'es' : 1,
-		'es-mx' : 1,
 		'et' : 1,
 		'eu' : 1,
 		'fa' : 1,
