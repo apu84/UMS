@@ -78,6 +78,7 @@ module ums {
         private awardDeletedObjects: IAwardInformationModel[];
         private experienceDeletedObjects: IExperienceInformationModel[];
         private userId: string = "";
+        private tabs: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -143,6 +144,7 @@ module ums {
                                 this.allThanas = thanas.entries;
                                 this.areaOfInterestService.getAll().then((aois: any) => {
                                     this.arrayOfAreaOfInterest = aois;
+                                    this.tabs = true;
                                     this.showTab("personal");
                                 });
                             });

@@ -4,16 +4,19 @@
         padding-bottom: 10px;
     }
 </style>
-<ul id="iTab" class="nav nav-tabs nav-justified">
-    <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
-    <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
-    <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
-    <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
-    <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
-    <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
-    <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
-    <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
-</ul>
+<div data-ng-show="vm.tabs">
+    <ul id="iTab" class="nav nav-tabs nav-justified">
+        <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
+        <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
+        <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+        <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
+        <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
+        <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
+        <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
+        <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
+    </ul>
+</div>
+
 <div id="iTabContent" class="tab-content responsive">
     <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
         <div data-ng-include="src='views/employee/personal-information.html'"></div>

@@ -9,6 +9,8 @@ module ums {
         submitAdditionalForm: Function;
         submitServiceForm: Function;
         getEmployeeInformation: Function;
+
+        filterd: number;
     }
     export interface IDepartment{
         id: string;
@@ -91,6 +93,7 @@ module ums {
         private serviceDetailDeletedObjects: IServiceDetailsModel[];
         private userId: string = "";
 
+
         private filterData: string;
         private searchBy: string;
         private changedUserName: string;
@@ -109,6 +112,12 @@ module ums {
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
+        private selectedEmployee: Employee;
+        private showInformationPanel: boolean = false;
+        private indexValue: number = 0;
+        private lengthOfSearchResult: number = 0;
+        private disablePreviousLink: boolean = false;
+        private disableNextLink: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -136,6 +145,7 @@ module ums {
             $scope.submitAdditionalForm = this.submitAdditionalForm.bind(this);
             $scope.submitServiceForm = this.submitServiceForm.bind(this);
             $scope.getEmployeeInformation = this.getEmployeeInformation.bind(this);
+            $scope.filterd = 0;
 
             this.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -171,10 +181,12 @@ module ums {
 
         private initialization() {
             this.employeeService.getAll().then((users: any) => {
+                this.$scope.filterd = 0;
                 this.allUser = users;
                 this.showEmployeeInformation = false;
                 this.showSelectPanel = true;
                 this.showFilteredEmployeeList = true;
+                this.showInformationPanel = false;
                 this.countryService.getCountryList().then((countries: any) => {
                     this.countries = countries.entries;
                     this.divisionService.getDivisionList().then((divisions: any) => {
@@ -214,15 +226,26 @@ module ums {
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        private view(user: any): void{
+        private view(user: any, index?: number): void{
+            this.indexValue = index;
+            this.lengthOfSearchResult = this.$scope.filterd['length'];
+            this.selectedEmployee = <Employee>{};
+            this.selectedEmployee = user;
             this.userId = user.id;
             this.showFilteredEmployeeList = false;
             this.showEmployeeInformation = true;
+            this.showInformationPanel = true;
             this.showTab('personal');
             Utils.expandRightDiv();
         }
 
         private getSearchFields(): void{
+            this.showInformationPanel = false;
+            this.data.changedUserId = "";
+            this.data.changedUserName = "";
+            this.data.changedDepartment = null;
+            this.selectedEmployee = <Employee> {};
+
             if(this.data.searchBy == "1"){
                 this.showSearchByUserName = false;
                 this.showSearchByDepartment = false;
@@ -257,14 +280,17 @@ module ums {
                     }
                     else {
                         Utils.expandRightDiv();
+                        this.showInformationPanel = true;
                         this.showTab("personal");
                     }
                 }
                 else{
+                    this.showInformationPanel = false;
                     this.notify.error("No User Found");
                 }
             }
             else if (this.data.searchBy == "2"){
+                this.showInformationPanel = true;
                 this.showEmployeeInformation = false;
                 this.showFilteredEmployeeList = true;
                 if(this.data.changedUserName != null || this.data.changedUserName != ""){
@@ -278,6 +304,7 @@ module ums {
             }
             else if (this.data.searchBy == "3"){
                 Utils.expandRightDiv();
+                this.showInformationPanel = true;
                 this.showEmployeeInformation = false;
                 this.showFilteredEmployeeList = true;
             }
@@ -287,6 +314,8 @@ module ums {
             let length = this.allUser.length;
             for(let i = 0; i < length; i++){
                 if(this.allUser[i].id == this.data.changedUserId){
+                    this.selectedEmployee = <Employee> {};
+                    this.selectedEmployee = this.allUser[i];
                     return true;
                 }
             }
@@ -382,6 +411,29 @@ module ums {
                 this.experience = false;
                 this.additional = false;
                 this.service = true;
+            }
+        }
+
+        private previous(): void{
+            console.log("Hello");
+            if(this.indexValue >= 0){
+                this.disablePreviousLink = false;
+                this.data.changedUserId = this.allUser[this.indexValue - 1].id;
+                this.getEmployeeInformation();
+            }
+            else{
+                this.disablePreviousLink = true;
+            }
+        }
+
+        private next(): void{
+            if(this.indexValue > 0){
+                this.disableNextLink = false;
+                this.view(this.allUser[this.indexValue + 1], this.indexValue + 1);
+                this.getEmployeeInformation();
+            }
+            else{
+                this.disableNextLink = true;
             }
         }
 

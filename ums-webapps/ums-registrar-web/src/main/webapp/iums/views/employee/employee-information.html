@@ -3,6 +3,21 @@
         padding-top: 10px;
         padding-bottom: 10px;
     }
+     a:link {
+         text-decoration: none;
+     }
+
+    a:visited {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:active {
+        text-decoration: underline;
+    }
 </style>
 <div class="row">
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
@@ -23,7 +38,7 @@
                                     <option value="">Select Search Type</option>
                                     <option value="1">User Id</option>
                                     <option value="2">User Name</option>
-                                    <!--<option value="3">Department</option>-->
+                                    <option value="3">Department</option>
                                 </select>
                             </div>
                         </div>
@@ -76,7 +91,7 @@
 
     <div id="rightDiv" data-ng-show="vm.showFilteredEmployeeList">
         <div class="panel">
-            <div class="panel-heading">Search Employee By : <span data-ng-show="vm.data.searchBy=='1'">User Id</span><span data-ng-show="vm.data.searchBy=='2'">User Name</span><span data-ng-show="vm.data.searchBy=='3'">Department</span>&nbsp;&nbsp; Total: {{vm.filterd.length}}<span class="subtitle"></span></div>
+            <div class="panel-heading">Total: {{filterd.length}}<span class="subtitle"></span></div>
             <div class="panel-body pan">
                 <div class="panel-body shadowPanel"  style="min-height: 490px;">
                     <table class="table table-bordered">
@@ -90,12 +105,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {employeeName: vm.data.changedUserName}))">
+                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {employeeName: vm.data.changedUserName} | filter: {deptOfficeId: vm.data.changedDepartment.id}))">
                                 <td>{{$index + 1}}.</td>
                                 <td>{{user.id}}</td>
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
-                                <td><button type="button" class="btn btn-default" data-ng-click="vm.view(user)">View</button></td>
+                                <td><button type="button" class="btn btn-default" data-ng-click="vm.view(user, $index)">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -106,40 +121,56 @@
     </div>
 
     <div id="rightDiv" data-ng-show="vm.showEmployeeInformation">
-        <ul id="iTab" class="nav nav-tabs nav-justified">
-            <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
-            <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
-            <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
-            <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
-            <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
-            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
-            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
-            <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
-        </ul>
-        <div id="iTabContent" class="tab-content responsive">
-            <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/personal-information.html'"></div>
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-12">
+                        Name : <b>{{vm.selectedEmployee.employeeName}}</b> & Department: <b>{{vm.selectedEmployee.deptOfficeName}}</b>
+                        <span data-ng-show="vm.data.searchBy=='2' || vm.data.searchBy=='3'" style="float:right"><a href="javascript:void(0)" data-ng-disabled="vm.disablePreviousLink" data-ng-click="vm.previous()">Previous</a>&nbsp;<a href="javascript:void(0)" data-ng-disabled="vm.disableNextLink" data-ng-click="vm.next()">Next</a></span>
+                    </div>
+                </div>
             </div>
-            <div id="academic" data-ng-show="vm.academic" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/academic-information.html'"></div>
-            </div>
-            <div id="publication" data-ng-show="vm.publication" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/publication-information.html'"></div>
-            </div>
-            <div id="training" data-ng-show="vm.training" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/training-information.html'"></div>
-            </div>
-            <div id="award" data-ng-show="vm.award" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/award-information.html'"></div>
-            </div>
-            <div id="experience" data-ng-show="vm.experience" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/experience-information.html'"></div>
-            </div>
-            <div id="additional" data-ng-show="vm.additional" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/additional-information.html'"></div>
-            </div>
-            <div id="service" data-ng-show="vm.service" style="min-height: 490px;">
-                <div data-ng-include="src='views/employee/service-information.html'"></div>
+            <div class="panel-body pan">
+                <div class="panel-body shadowPanel"  style="min-height: 490px;">
+                    <div data-ng-show="vm.showInformationPanel">
+                        <ul id="iTab" class="nav nav-tabs nav-justified">
+                            <li class="active"><a href="javascript:void(0)" title="Click to open personal tab" data-ng-click="vm.showTab('personal')" tabindex="-1" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open academic tab" data-ng-click="vm.showTab('academic')" tabindex="-1" data-toggle="tab"><i class="fa fa-cap"></i>&nbsp;Academic</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open publication tab" data-ng-click="vm.showTab('publication')" tabindex="-1" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open training tab" data-ng-click="vm.showTab('training')" tabindex="-1" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open award/honor tab" data-ng-click="vm.showTab('award')" tabindex="-1" data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('experience')" tabindex="-1" data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open experience tab" data-ng-click="vm.showTab('additional')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
+                            <li><a href="javascript:void(0)" title="Click to open Service tab" data-ng-click="vm.showTab('service')" tabindex="-1" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
+                        </ul>
+                        <div id="iTabContent" class="tab-content responsive">
+                            <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/personal-information.html'"></div>
+                            </div>
+                            <div id="academic" data-ng-show="vm.academic" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/academic-information.html'"></div>
+                            </div>
+                            <div id="publication" data-ng-show="vm.publication" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/publication-information.html'"></div>
+                            </div>
+                            <div id="training" data-ng-show="vm.training" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/training-information.html'"></div>
+                            </div>
+                            <div id="award" data-ng-show="vm.award" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/award-information.html'"></div>
+                            </div>
+                            <div id="experience" data-ng-show="vm.experience" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/experience-information.html'"></div>
+                            </div>
+                            <div id="additional" data-ng-show="vm.additional" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/additional-information.html'"></div>
+                            </div>
+                            <div id="service" data-ng-show="vm.service" style="min-height: 490px;">
+                                <div data-ng-include="src='views/employee/service-information.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
