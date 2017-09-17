@@ -19,5 +19,7 @@ public interface ServiceInformationDetail extends Serializable, EditType<Mutable
 
   Date getEndDate();
 
+  String getComment();
+
   Long getServiceId();
 }

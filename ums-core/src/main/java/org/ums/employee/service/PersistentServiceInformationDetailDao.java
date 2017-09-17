@@ -12,13 +12,14 @@ import java.util.List;
 public class PersistentServiceInformationDetailDao extends ServiceInformationDetailDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_SERVICE_DETAIL (ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, "
+      "INSERT INTO EMP_SERVICE_DETAIL (ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, COMMENTS, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE = "SELECT ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, SERVICE_ID FROM EMP_SERVICE_DETAIL ";
+  static String GET_ONE =
+      "SELECT ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, COMMENTS, SERVICE_ID FROM EMP_SERVICE_DETAIL ";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_SERVICE_DETAIL SET EMPLOYMENT_PERIOD = ?, START_DATE = ?, END_DATE = ?, LAST_MODIFIED = "
+      "UPDATE EMP_SERVICE_DETAIL SET EMPLOYMENT_PERIOD = ?, START_DATE = ?, END_DATE = ?, COMMENTS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
   static String DELETE_ONE = "DELETE FROM EMP_SERVICE_DETAIL ";
@@ -43,7 +44,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
     for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
       params.add(new Object[] {mIdGenerator.getNumericId(), serviceInformationDetail.getEmploymentPeriod().getId(),
           serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
-          serviceInformationDetail.getServiceId()});
+          serviceInformationDetail.getComment(), serviceInformationDetail.getServiceId()});
 
     }
     return params;
@@ -51,7 +52,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
 
   @Override
   public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
-    String query = GET_ONE + " WHERE SERVICE_ID = ? ORDER BY START_DATE ASC ";
+    String query = GET_ONE + " WHERE SERVICE_ID = ? ORDER BY START_DATE DESC ";
     return mJdbcTemplate.query(query, new Object[] {pServiceId},
         new PersistentServiceInformationDetailDao.RoleRowMapper());
   }
@@ -68,7 +69,8 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
     for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
       params.add(new Object[] {serviceInformationDetail.getEmploymentPeriod().getId(),
           serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
-          serviceInformationDetail.getId(), serviceInformationDetail.getServiceId()});
+          serviceInformationDetail.getComment(), serviceInformationDetail.getId(),
+          serviceInformationDetail.getServiceId()});
 
     }
     return params;
@@ -98,6 +100,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
       persistentServiceInformationDetail.setEmploymentPeriodId(resultSet.getInt("EMPLOYMENT_PERIOD"));
       persistentServiceInformationDetail.setStartDate(resultSet.getDate("START_DATE"));
       persistentServiceInformationDetail.setEndDate(resultSet.getDate("END_DATE"));
+      persistentServiceInformationDetail.setComment(resultSet.getString("COMMENTS"));
       persistentServiceInformationDetail.setServiceId(resultSet.getLong("SERVICE_ID"));
       return persistentServiceInformationDetail;
     }

@@ -791,6 +791,7 @@ module ums {
                 interval: null,
                 startDate: "",
                 endDate: "",
+                comment: "",
                 serviceId: null,
                 dbAction: "Create"
             };

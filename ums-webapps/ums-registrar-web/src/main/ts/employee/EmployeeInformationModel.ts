@@ -130,6 +130,7 @@ module ums{
         interval: ICommon;
         startDate: string;
         endDate: string;
+        comment: string;
         serviceId: string;
         dbAction: string;
     }

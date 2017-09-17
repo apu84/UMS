@@ -21,6 +21,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   private int mEmploymentPeriodId;
   private Date mStartDate;
   private Date mEndDate;
+  private String mComment;
   private Long mServiceId;
   private String mLastModified;
 
@@ -32,6 +33,7 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
     mEmploymentPeriodId = pPersistentServiceInformationDetail.getEmploymentPeriodId();
     mStartDate = pPersistentServiceInformationDetail.getStartDate();
     mEndDate = pPersistentServiceInformationDetail.getEndDate();
+    mComment = pPersistentServiceInformationDetail.getComment();
     mServiceId = pPersistentServiceInformationDetail.getServiceId();
     mLastModified = pPersistentServiceInformationDetail.getLastModified();
   }
@@ -97,6 +99,11 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   }
 
   @Override
+  public void setComment(String pComment) {
+    mComment = pComment;
+  }
+
+  @Override
   public void setServiceId(Long pServiceId) {
     mServiceId = pServiceId;
   }
@@ -119,6 +126,11 @@ public class PersistentServiceInformationDetail implements MutableServiceInforma
   @Override
   public Date getEndDate() {
     return mEndDate;
+  }
+
+  @Override
+  public String getComment() {
+    return mComment;
   }
 
   @Override

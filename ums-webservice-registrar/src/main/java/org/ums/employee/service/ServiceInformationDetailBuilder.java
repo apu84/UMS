@@ -32,6 +32,7 @@ public class ServiceInformationDetailBuilder implements
     pBuilder.add("interval", intervalBuilder);
     pBuilder.add("startDate", mDateFormat.format(pReadOnly.getStartDate()));
     pBuilder.add("endDate", pReadOnly.getEndDate() == null ? "" : mDateFormat.format(pReadOnly.getEndDate()));
+    pBuilder.add("comment", pReadOnly.getComment() == null ? "" : pReadOnly.getComment());
     pBuilder.add("serviceId", pReadOnly.getServiceId().toString());
     pBuilder.add("dbAction", "");
   }
@@ -54,6 +55,7 @@ public class ServiceInformationDetailBuilder implements
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").equals("") ? null
         : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
+    pMutable.setComment(pJsonObject.getString("comment") == null ? "" : pJsonObject.getString("comment"));
     pMutable.setServiceId(pServiceId);
   }
 }
