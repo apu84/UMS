@@ -405,8 +405,8 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 #leftDiv {
     float:left;
     width:30%;
-    margin-right: 12px;
-    margin-left: 12px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 #rightDiv {
