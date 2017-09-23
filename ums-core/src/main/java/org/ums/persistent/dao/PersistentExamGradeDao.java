@@ -642,7 +642,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           ps.setString(13, gradeDto.getStudentId());
         }
         if(courseType == CourseType.SESSIONAL) {
-          if(gradeDto.getTotal() == -1) {
+          if(gradeDto.getTotal() == null || gradeDto.getTotal() == -1) {
             ps.setNull(1, Types.NULL);
           }
           else {
