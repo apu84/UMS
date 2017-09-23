@@ -49,13 +49,12 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
 
   @Override
   @Scheduled(fixedDelay = 30000, initialDelay = 0)
-  @Transactional
   public void consume() {
     if(login()) {
       // acquire lock
-      MutableLock lock = new PersistentLock();
-      lock.setId("indexLock");
-      mLockManager.create(lock);
+//      MutableLock lock = new PersistentLock();
+//      lock.setId("indexLock");
+//      mLockManager.create(lock);
       String host = "microservice";
       String port = "8000";
       MutableIndexConsumer consumer;
@@ -73,7 +72,7 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
         consumer.setHead(indexList.get(indexList.size() - 1).getModified());
       }
       consumer.update();
-      mLockManager.delete(lock);
+//      mLockManager.delete(lock);
     }
   }
 
@@ -82,7 +81,7 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
     consumer.setHost(pHost);
     consumer.setInstance(pPort);
     Date initialDate = new Date();
-    initialDate.setTime(0);
+   // initialDate.setTime(0);
     consumer.setHead(initialDate);
     consumer.create();
   }
