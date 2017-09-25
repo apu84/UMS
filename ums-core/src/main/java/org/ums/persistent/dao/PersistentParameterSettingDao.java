@@ -45,7 +45,7 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   @Override
   public ParameterSetting get(Long pId) {
     String query = SELECT_ALL + " WHERE PS_ID=? ";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new ParameterSettingRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterSettingRowMapper());
   }
 
   @Override
@@ -53,7 +53,7 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
     String query =
         "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID, START_DATE, END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING where SEMESTER_ID=? and  PS_ID in (select PARAMETER_ID from MST_PARAMETER where PARAMETER=?)";
     List<ParameterSetting> settings =
-        mJdbcTemplate.query(query, new Object[]{semesterId, parameter}, new ParameterSettingRowMapper());
+        mJdbcTemplate.query(query, new Object[] {semesterId, parameter}, new ParameterSettingRowMapper());
     return !settings.isEmpty() ? settings.get(0) : null;
   }
 
@@ -81,7 +81,7 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   @Override
   public List<ParameterSetting> getBySemester(int semesterId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID=? ";
-    return mJdbcTemplate.query(query, new Object[]{semesterId}, new ParameterSettingRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {semesterId}, new ParameterSettingRowMapper());
   }
 
   class ParameterSettingRowMapper implements RowMapper<ParameterSetting> {

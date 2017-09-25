@@ -9,7 +9,8 @@ import org.ums.manager.applications.AppRulesManager;
 /**
  * Created by Monjur-E-Morshed on 21-Sep-17.
  */
-public class AppRulesCache extends ContentCache<AppRules, MutableAppRules, Long, AppRulesManager> implements AppRulesManager {
+public class AppRulesCache extends ContentCache<AppRules, MutableAppRules, Long, AppRulesManager> implements
+    AppRulesManager {
 
   CacheManager<AppRules, Long> mCacheManager;
 

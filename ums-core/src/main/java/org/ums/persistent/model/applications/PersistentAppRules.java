@@ -12,7 +12,6 @@ import org.ums.manager.applications.AppRulesManager;
  */
 public class PersistentAppRules implements MutableAppRules {
 
-
   private static AppRulesManager sAppRulesManager;
   private static FeeCategoryManager sFeeCategoryManager;
 
@@ -22,7 +21,6 @@ public class PersistentAppRules implements MutableAppRules {
     sAppRulesManager = applicationContext.getBean("appRulesManager", AppRulesManager.class);
   }
 
-
   private Long mId;
   private String mFeeCategoryId;
   private FeeCategory mFeeCategory;
@@ -30,8 +28,7 @@ public class PersistentAppRules implements MutableAppRules {
   private FeeCategory mDependentFeeCategory;
   private String mLastModified;
 
-  public PersistentAppRules() {
-  }
+  public PersistentAppRules() {}
 
   public PersistentAppRules(final PersistentAppRules pPersistentAppRules) {
     mId = pPersistentAppRules.getId();
@@ -41,7 +38,6 @@ public class PersistentAppRules implements MutableAppRules {
     mDependentFeeCategory = pPersistentAppRules.getDependentFeeCategory();
     mLastModified = pPersistentAppRules.getLastModified();
   }
-
 
   @Override
   public void setFeeCategoryId(String pFeeCategoryId) {

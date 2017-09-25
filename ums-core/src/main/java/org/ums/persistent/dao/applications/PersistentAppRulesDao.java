@@ -17,7 +17,6 @@ import java.sql.SQLException;
  */
 public class PersistentAppRulesDao extends AppRulesDaoDecorator {
 
-
   private static final Logger mLogger = LoggerFactory.getLogger(PersistentAppRulesDao.class);
 
   private JdbcTemplate mJdbcTemplate;

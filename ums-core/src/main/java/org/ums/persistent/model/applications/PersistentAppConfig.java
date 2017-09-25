@@ -34,8 +34,7 @@ public class PersistentAppConfig implements MutableAppConfig {
   private boolean mHeadsForwarding;
   private String mLastModified;
 
-  public PersistentAppConfig() {
-  }
+  public PersistentAppConfig() {}
 
   public PersistentAppConfig(final PersistentAppConfig pPersistentAppConfig) {
     mId = pPersistentAppConfig.getId();

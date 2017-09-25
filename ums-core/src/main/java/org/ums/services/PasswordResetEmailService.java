@@ -1,14 +1,5 @@
 package org.ums.services;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +10,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.domain.model.dto.ResetPasswordEmailDto;
 import org.ums.formatter.DateFormat;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component("passwordResetEmailService")
 public class PasswordResetEmailService {
@@ -33,7 +32,7 @@ public class PasswordResetEmailService {
   String mHost;
 
   public void sendEmail(final String userId, final String toEmail, final String fromEmail, final String subject,
-      final String token) {
+                        final String token) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {
         MimeMessageHelper message = null;
@@ -59,7 +58,7 @@ public class PasswordResetEmailService {
               VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "html-templates/password-reset-email.vm",
                   "UTF-8", map);
           message.setText(body, true);
-        } catch(MessagingException | UnsupportedEncodingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
           throw new RuntimeException(e);
         }
       }
