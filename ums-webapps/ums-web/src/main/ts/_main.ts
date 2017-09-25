@@ -146,6 +146,7 @@
 /// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
 /// <reference path='controller/semester/ExamSeatPlan.ts'/>
+/// <reference path='controller/semester/AppCCI.ts'/>
 /// <reference path='controller/semester/SeatPlanReports.ts'/>
 
 /// <reference path='controller/course/NewCourseUg.ts'/>

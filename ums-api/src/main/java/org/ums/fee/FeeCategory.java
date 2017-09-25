@@ -1,10 +1,10 @@
 package org.ums.fee;
 
-import java.io.Serializable;
-
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+
+import java.io.Serializable;
 
 public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>, LastModifier, Identifier<String> {
 
@@ -41,6 +41,11 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
     CERTIFICATE_CONVOCATION,
     CERTIFICATE_DUPLICATE,
     LATE_FEE,
-    DROP_PENALTY;
+    DROP_PENALTY,
+    CERTIFICATE_CHARACTER,
+    CERTIFICATE_MIGRATION,
+    CERTIFICATE_STUDENTSHIP,
+    CERTIFICATE_LANGUAGE_PROFICIENCY,
+    TESTIMONIAL_DEPARTMENT;
   }
 }

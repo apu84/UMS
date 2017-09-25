@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
+import org.ums.cache.applications.AppConfigCache;
+import org.ums.cache.applications.AppRulesCache;
 import org.ums.fee.semesterfee.SemesterAdmissionCache;
 import org.ums.fee.semesterfee.SemesterAdmissionDao;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
@@ -14,8 +16,12 @@ import org.ums.generator.IdGenerator;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
+import org.ums.manager.applications.AppConfigManager;
+import org.ums.manager.applications.AppRulesManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
+import org.ums.persistent.dao.applications.PersistentAppConfigDao;
+import org.ums.persistent.dao.applications.PersistentAppRulesDao;
 import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
 import org.ums.services.academic.RemarksBuilder;
@@ -360,5 +366,19 @@ public class AcademicContext {
   @Bean
   RemarksBuilder remarkBuilder() {
     return new RemarksBuilderImpl();
+  }
+
+  @Bean
+  AppConfigManager appConfigManager() {
+    AppConfigCache cache = new AppConfigCache(mCacheFactory.getCacheManager());
+    cache.setManager(new PersistentAppConfigDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return cache;
+  }
+
+  @Bean
+  AppRulesManager appRulesManager() {
+    AppRulesCache cache = new AppRulesCache(mCacheFactory.getCacheManager());
+    cache.setManager(new PersistentAppRulesDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return cache;
   }
 }

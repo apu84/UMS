@@ -1,9 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ParameterSettingDaoDecorator;
@@ -11,6 +7,10 @@ import org.ums.domain.model.immutable.ParameterSetting;
 import org.ums.domain.model.mutable.MutableParameterSetting;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentParameterSetting;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by My Pc on 3/14/2016.
@@ -45,14 +45,15 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   @Override
   public ParameterSetting get(Long pId) {
     String query = SELECT_ALL + " WHERE PS_ID=? ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterSettingRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new ParameterSettingRowMapper());
   }
 
   @Override
   public ParameterSetting getBySemesterAndParameterId(String parameter, int semesterId) {
-    String query = SELECT_ALL + " WHERE PARAMETER_ID = ? AND SEMESTER_ID = ?";
+    String query =
+        "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID, START_DATE, END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING where SEMESTER_ID=? and  PS_ID in (select PARAMETER_ID from MST_PARAMETER where PARAMETER=?)";
     List<ParameterSetting> settings =
-        mJdbcTemplate.query(query, new Object[] {parameter, semesterId}, new ParameterSettingRowMapper());
+        mJdbcTemplate.query(query, new Object[]{semesterId, parameter}, new ParameterSettingRowMapper());
     return !settings.isEmpty() ? settings.get(0) : null;
   }
 
@@ -80,7 +81,7 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   @Override
   public List<ParameterSetting> getBySemester(int semesterId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID=? ";
-    return mJdbcTemplate.query(query, new Object[] {semesterId}, new ParameterSettingRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{semesterId}, new ParameterSettingRowMapper());
   }
 
   class ParameterSettingRowMapper implements RowMapper<ParameterSetting> {
