@@ -32,7 +32,7 @@ public class PasswordResetEmailService {
   String mHost;
 
   public void sendEmail(final String userId, final String toEmail, final String fromEmail, final String subject,
-                        final String token) {
+      final String token) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {
         MimeMessageHelper message = null;
@@ -58,7 +58,7 @@ public class PasswordResetEmailService {
               VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "html-templates/password-reset-email.vm",
                   "UTF-8", map);
           message.setText(body, true);
-        } catch (MessagingException | UnsupportedEncodingException e) {
+        } catch(MessagingException | UnsupportedEncodingException e) {
           throw new RuntimeException(e);
         }
       }
