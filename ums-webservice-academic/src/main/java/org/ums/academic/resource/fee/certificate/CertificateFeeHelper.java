@@ -1,15 +1,5 @@
 package org.ums.academic.resource.fee.certificate;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -23,6 +13,15 @@ import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.util.UmsUtils;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CertificateFeeHelper {
@@ -45,12 +44,12 @@ public class CertificateFeeHelper {
         .filter((studentRecord) -> (studentRecord.getType() != StudentRecord.Type.DROPPED
             || studentRecord.getType() != StudentRecord.Type.WITHDRAWN)
             && (studentRecord.getStatus() == StudentRecord.Status.PASSED
-                || studentRecord.getStatus() == StudentRecord.Status.FAILED))
+            || studentRecord.getStatus() == StudentRecord.Status.FAILED))
         .collect(Collectors.toList());
     JsonObjectBuilder builder = Json.createObjectBuilder();
     JsonArrayBuilder entries = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(StudentRecord studentRecord : studentRecords) {
+    for (StudentRecord studentRecord : studentRecords) {
       JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
       Semester semester =
           (Semester) localCache.cache(studentRecord::getSemester, studentRecord.getSemesterId(), Semester.class);
@@ -70,7 +69,7 @@ public class CertificateFeeHelper {
     List<UGFee> fees = mUGFeeManager
         .getLatestFee(student.getProgram().getFacultyId(), student.getCurrentEnrolledSemesterId()).stream()
         .filter((fee) -> fee.getFeeCategory().getId().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
-    if(fees.size() > 0) {
+    if (fees.size() > 0) {
       UGFee fee = fees.get(0);
       MutableStudentPayment payment = new PersistentStudentPayment();
       payment.setFeeCategoryId(fee.getFeeCategoryId());
@@ -89,7 +88,7 @@ public class CertificateFeeHelper {
     List<UGFee> fees = mUGFeeManager
         .getLatestFee(student.getProgram().getFacultyId(), student.getCurrentEnrolledSemesterId()).stream()
         .filter((fee) -> fee.getFeeCategory().getId().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
-    if(fees.size() > 0) {
+    if (fees.size() > 0) {
       UGFee fee = fees.get(0);
       MutableStudentPayment payment = new PersistentStudentPayment();
       payment.setFeeCategoryId(fee.getFeeCategoryId());

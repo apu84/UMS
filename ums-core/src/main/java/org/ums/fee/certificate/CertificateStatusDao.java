@@ -1,12 +1,6 @@
 package org.ums.fee.certificate;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +8,19 @@ import org.ums.filter.AbstractFilterQueryBuilder;
 import org.ums.filter.ListFilter;
 import org.ums.generator.IdGenerator;
 
-import com.google.common.collect.Lists;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   String SELECT_ALL = "SELECT ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS, PROCESSED_ON, "
       + "PROCESSED_BY, LAST_MODIFIED FROM CERTIFICATE_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO CERTIFICATE_STATUS(ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS,"
-          + "LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
+      "INSERT INTO CERTIFICATE_STATUS(ID, STUDENT_ID, SEMESTER_ID, FEE_CATEGORY, TRANSACTION_ID, STATUS,PROCESSED_ON,PROCESSED_BY,"
+          + "LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ") ";
   String UPDATE_ALL =
       "UPDATE CERTIFICATE_STATUS SET STATUS = ?, PROCESSED_ON = SYSDATE, PROCESSED_BY = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
@@ -123,7 +122,8 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     for(CertificateStatus certificateStatus : pMutableCertificateStatuses) {
       params.add(new Object[] {mIdGenerator.getNumericId(), certificateStatus.getStudentId(),
           certificateStatus.getSemesterId(), certificateStatus.getFeeCategoryId(),
-          certificateStatus.getTransactionId(), certificateStatus.getStatus().getId()});
+          certificateStatus.getTransactionId(), certificateStatus.getStatus().getId(),
+          certificateStatus.getProcessedOn(), certificateStatus.getUserId()});
     }
     return params;
   }

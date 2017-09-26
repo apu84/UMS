@@ -1,16 +1,5 @@
 package org.ums.payment;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +10,10 @@ import org.ums.cache.LocalCache;
 import org.ums.fee.FeeType;
 import org.ums.fee.FeeTypeManager;
 import org.ums.fee.accounts.*;
+import org.ums.fee.certificate.CertificateStatus;
+import org.ums.fee.certificate.CertificateStatusManager;
+import org.ums.fee.certificate.MutableCertificateStatus;
+import org.ums.fee.certificate.PersistentCertificateStatus;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -28,6 +21,16 @@ import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.StudentManager;
 import org.ums.resource.ResourceHelper;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, MutableStudentPayment, Long> {
@@ -43,6 +46,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   private StudentManager mStudentManager;
   @Autowired
   private PaymentStatusManager mPaymentStatusManager;
+  @Autowired
+  private CertificateStatusManager mCertificateStatusManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -62,6 +67,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
+    List<MutableCertificateStatus> certificateStatusList = new ArrayList<>();
     LocalCache cache = new LocalCache();
 
     Validate.notNull(pJsonObject.get("methodOfPayment"));
@@ -86,42 +92,57 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       }
       else {
         payment.setStatus(StudentPayment.Status.RECEIVED);
+        certificateStatusList.add(saveCertificateStatus(payment));
       }
       payments.add(payment);
       latestPayments.add(latestPayment);
     }
 
     validatePayment(pStudentId, latestPayments, payments);
+    if(certificateStatusList.size() > 0)
+      mCertificateStatusManager.create(certificateStatusList);
     mStudentPaymentManager.update(payments);
     updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);
+    // PersistentCertificateStatus certificateStatus = new PersistentCertificateStatus();
     return Response.ok().build();
   }
 
+  private PersistentCertificateStatus saveCertificateStatus(MutableStudentPayment pPayment) {
+    PersistentCertificateStatus certificateStatus = new PersistentCertificateStatus();
+    certificateStatus.setStudentId(pPayment.getStudentId());
+    certificateStatus.setSemesterId(pPayment.getSemesterId());
+    certificateStatus.setFeeCategoryId(pPayment.getFeeCategoryId());
+    certificateStatus.setTransactionId(pPayment.getTransactionId());
+    certificateStatus.setStatus(CertificateStatus.Status.APPLIED);
+    certificateStatus.setProcessedOn(new Date());
+    certificateStatus.setUserId(pPayment.getStudentId());
+    return certificateStatus;
+  }
+
   private void updatePaymentStatus(List<StudentPayment> pStudentPayments, int pPaymentMethod, String receiptNo,
-      String pPaymentDetails, String pStudentId) {
+                                   String pPaymentDetails, String pStudentId) {
     int faculty = mStudentManager.get(pStudentId).getProgram().getFacultyId();
     Map<Integer, List<StudentPayment>> feeTypePaymentMap =
         pStudentPayments.stream().collect(Collectors.groupingBy(StudentPayment::getFeeTypeId));
 
-    for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+    for (Integer feeTypeId : feeTypePaymentMap.keySet()) {
       List<PaymentAccountsMapping> mappings = mPaymentAccountsMappingManager.getAll().stream()
           .filter((mapping) -> mapping.getFeeTypeId().intValue() == feeTypeId && mapping.getFacultyId() == faculty)
           .collect(Collectors.toList());
-      if(mappings.size() > 0) {
+      if (mappings.size() > 0) {
         Map<String, List<StudentPayment>> transactionPaymentMap =
             feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
-        for(String transactionId : transactionPaymentMap.keySet()) {
+        for (String transactionId : transactionPaymentMap.keySet()) {
           MutablePaymentStatus paymentStatus = new PersistentPaymentStatus();
           paymentStatus.setAccount(mappings.get(0).getAccount());
           paymentStatus.setTransactionId(transactionId);
           PaymentStatus.PaymentMethod paymentMethod = PaymentStatus.PaymentMethod.get(pPaymentMethod);
           paymentStatus.setMethodOfPayment(paymentMethod);
           paymentStatus.setReceivedOn(new Date());
-          if(paymentMethod == PaymentStatus.PaymentMethod.CASH) {
+          if (paymentMethod == PaymentStatus.PaymentMethod.CASH) {
             paymentStatus.setStatus(PaymentStatus.Status.VERIFIED);
             paymentStatus.setCompletedOn(new Date());
-          }
-          else {
+          } else {
             paymentStatus.setStatus(PaymentStatus.Status.RECEIVED);
           }
           paymentStatus.setPaymentDetails(pPaymentDetails);
@@ -146,7 +167,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 
-    for(Integer feeTypeId : feeTypePaymentMap.keySet()) {
+    for (Integer feeTypeId : feeTypePaymentMap.keySet()) {
       JsonObjectBuilder feeTypeObject = Json.createObjectBuilder();
       FeeType feeType = mFeeTypeManager.get(feeTypeId);
       feeTypeObject.add("feeType", feeType.getId());
@@ -156,7 +177,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       JsonArrayBuilder transactionsArrayBuilder = Json.createArrayBuilder();
       Map<String, List<StudentPayment>> transactionPaymentMap =
           feeTypePaymentMap.get(feeTypeId).stream().collect(Collectors.groupingBy(StudentPayment::getTransactionId));
-      for(String transactionId : transactionPaymentMap.keySet()) {
+      for (String transactionId : transactionPaymentMap.keySet()) {
         JsonObjectBuilder transactionObjectBuilder = Json.createObjectBuilder();
         JsonObject transactionWiseJson = buildJsonResponse(transactionPaymentMap.get(transactionId), pUriInfo);
         transactionObjectBuilder.add("id", transactionId);
@@ -180,7 +201,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   }
 
   private void validatePayment(String pStudentId, List<StudentPayment> latestPayments,
-      List<MutableStudentPayment> updates) {
+                               List<MutableStudentPayment> updates) {
     Validate.isTrue(isValidUpdateOfEntities(latestPayments, updates));
 
     latestPayments.forEach((latestPayment) -> {
