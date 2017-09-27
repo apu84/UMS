@@ -13,16 +13,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.configuration.UMSConfiguration;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.enums.CourseType;
-import org.ums.manager.ResultPublishManager;
-import org.ums.manager.StudentRecordManager;
-import org.ums.manager.TaskStatusManager;
-import org.ums.manager.UGRegistrationResultManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentTaskStatus;
 import org.ums.response.type.TaskStatusResponse;
 import org.ums.util.UmsUtils;
@@ -41,6 +39,8 @@ public class ProcessResultImpl implements ProcessResult {
   UMSConfiguration mUmsConfiguration;
   @Autowired
   RemarksBuilder mRemarksBuilder;
+  @Autowired
+  SemesterManager mSemesterManager;
 
   private final static String PROCESS_GRADES = "process_grades";
   private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
@@ -93,21 +93,19 @@ public class ProcessResultImpl implements ProcessResult {
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
     processResultStatus.create();
 
-    List<StudentRecord> studentRecords =
-        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
+    List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
     processResult(pProgramId, pSemesterId,
         resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
   }
 
   private void processResult(int pProgramId, int pSemesterId,
-      Map<String, List<UGRegistrationResult>> studentCourseGradeMap,
-      List<StudentRecord> studentRecords) {
+      Map<String, List<UGRegistrationResult>> studentCourseGradeMap, List<StudentRecord> studentRecords) {
     String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
 
-    Map<String, StudentRecord> studentRecordMap = studentRecords.stream()
-        .collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
+    Map<String, StudentRecord> studentRecordMap =
+        studentRecords.stream().collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
 
     List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
 
@@ -118,15 +116,18 @@ public class ProcessResultImpl implements ProcessResult {
           .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
       studentRecord.setGPA(gpa);
       if(!mUmsConfiguration.isProcessGPAOnly()) {
-        Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
+        List<Semester> previousSemesters =
+            mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgramId());
+        List<Integer> previousSemesterIds =
+            previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
+        List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
+            .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
+        Double cgpa = calculateCGPA(courseResults);
         boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
         studentRecord.setCGPA(cgpa);
         studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
-        studentRecord.setGradesheetRemarks(
-            mRemarksBuilder.getRemarks(
-                studentCourseGradeMap.get(studentId),
-                isPassed? StudentRecord.Status.PASSED: StudentRecord.Status.PASSED, pSemesterId)
-        );
+        studentRecord.setGradesheetRemarks(mRemarksBuilder.getRemarks(studentCourseGradeMap.get(studentId),
+            isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.PASSED, pSemesterId));
       }
       updatedStudentRecords.add(studentRecord);
 
