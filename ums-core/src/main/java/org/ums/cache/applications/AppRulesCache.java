@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.applications.MutableAppRules;
 import org.ums.manager.CacheManager;
 import org.ums.manager.applications.AppRulesManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 21-Sep-17.
  */
@@ -21,5 +23,10 @@ public class AppRulesCache extends ContentCache<AppRules, MutableAppRules, Long,
   @Override
   protected CacheManager<AppRules, Long> getCacheManager() {
     return mCacheManager;
+  }
+
+  @Override
+  public List<AppRules> getDependencies(String pFeeCategoryId) {
+    return getManager().getDependencies(pFeeCategoryId);
   }
 }

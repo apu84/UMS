@@ -108,6 +108,14 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new CertificateStatusRowMapper());
   }
 
+  @Override
+  public List<String> getByStudent(String pStudentId, String pFeeCategoryId) {
+    String query =
+        "select DISTINCT(FEE_CATEGORY) from CERTIFICATE_STATUS where STUDENT_ID=? and FEE_CATEGORY in ( "
+            + "  select DEPENDENT_FEE_ID from APP_RULES where FEE_ID=? " + ")";
+    return mJdbcTemplate.queryForList(query, new Object[] {pStudentId, pFeeCategoryId}, String.class);
+  }
+
   private List<Object[]> getUpdateParamList(List<MutableCertificateStatus> pMutableCertificateStatuses) {
     List<Object[]> params = new ArrayList<>();
     for(CertificateStatus certificateStatus : pMutableCertificateStatuses) {

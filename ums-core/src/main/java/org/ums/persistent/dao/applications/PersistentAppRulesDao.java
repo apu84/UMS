@@ -11,6 +11,7 @@ import org.ums.persistent.model.applications.PersistentAppRules;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 24-Sep-17.
@@ -19,12 +20,20 @@ public class PersistentAppRulesDao extends AppRulesDaoDecorator {
 
   private static final Logger mLogger = LoggerFactory.getLogger(PersistentAppRulesDao.class);
 
+  private String SELECT_ALL = "SELECT ID, FEE_ID, DEPENDENT_FEE_ID, LAST_MODIFIED FROM APP_RULES";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
   public PersistentAppRulesDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<AppRules> getDependencies(String pFeeCategoryId) {
+    String query = SELECT_ALL + " where fee_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pFeeCategoryId}, new AppRulesRowMapper());
   }
 
   class AppRulesRowMapper implements RowMapper<AppRules> {

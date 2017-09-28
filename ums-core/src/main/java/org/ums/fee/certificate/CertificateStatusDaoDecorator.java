@@ -1,9 +1,9 @@
 package org.ums.fee.certificate;
 
-import java.util.List;
-
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.filter.ListFilter;
+
+import java.util.List;
 
 public class CertificateStatusDaoDecorator extends
     ContentDaoDecorator<CertificateStatus, MutableCertificateStatus, Long, CertificateStatusManager> implements
@@ -21,5 +21,10 @@ public class CertificateStatusDaoDecorator extends
   @Override
   public List<CertificateStatus> getByStudent(String pStudentId) {
     return getManager().getByStudent(pStudentId);
+  }
+
+  @Override
+  public List<String> getByStudent(String pStudentId, String pFeeCategoryId) {
+    return getManager().getByStudent(pStudentId, pFeeCategoryId);
   }
 }
