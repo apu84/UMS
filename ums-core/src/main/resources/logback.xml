@@ -19,11 +19,11 @@
   <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
     <queueSize>600</queueSize>
     <discardingThreshold>0</discardingThreshold>
-    <appender-ref ref="fileAppender" />
+    <appender-ref ref="fileAppender"/>
   </appender>
 
   <root level="error">
-     <appender-ref ref="ASYNC"/>
+    <appender-ref ref="ASYNC"/>
   </root>
 
   <logger name="org.ums" level="error" additivity="false">
@@ -31,9 +31,9 @@
   </logger>
 
   <!--
-   Comment out this block to debug sql query and prepared statements
+   Comment out this block to debug sql query and prepared statements -->
   <Logger name="org.springframework.jdbc.core" level="TRACE" additivity="false">
-    <Appender-Ref ref="fileAppender" />
+    <Appender-Ref ref="fileAppender"/>
   </Logger>
-  -->
+
 </configuration>
