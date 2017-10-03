@@ -1,21 +1,21 @@
 module ums {
-  export class CirculationSearchBox implements ng.IDirective {
+    export class CirculationSearchBox implements ng.IDirective {
 
-    constructor() {
+        constructor() {
+        }
+
+        public restrict: string = "E";
+        public scope = {
+            data: '='
+        };
+
+        public link = (scope: any, element: JQuery, attributes: any) => {
+            scope.circulationType = attributes.circulationtype;
+
+        };
+
+        public templateUrl: string = "./views/directive/circulation-search-box.html";
     }
 
-    public restrict:string = "E";
-    public scope = {
-      data: '='
-    };
-
-    public link = (scope:any, element:JQuery, attributes:any) => {
-      scope.circulationType=attributes.circulationtype;
-
-    };
-
-    public templateUrl:string = "./views/directive/circulation-search-box.html";
-  }
-
-  UMS.directive("circulationSearchBox", () => new CirculationSearchBox());
+    UMS.directive("circulationSearchBox", () => new CirculationSearchBox());
 }

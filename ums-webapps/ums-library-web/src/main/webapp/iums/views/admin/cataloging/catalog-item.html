@@ -1,11 +1,17 @@
-    <div class="row">
-    <div class="col-md-12" >
+<div class="row">
+    <div class="col-md-12">
 
         <div style="float:left;margin-left:10px;" ng-if="data.collapsedItemTable">
-            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-right fa-cx" style='color:green;cursor:pointer;' ng-click="showHideItemsTable('show')"></i> <span style='font-size:25px;'>]</span>
+            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-right fa-cx"
+                                                      style='color:green;cursor:pointer;'
+                                                      ng-click="showHideItemsTable('show')"></i> <span
+                style='font-size:25px;'>]</span>
         </div>
         <div style="float:left;margin-left:10px;" ng-if="!data.collapsedItemTable">
-            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-left fa-cx" style='color:green;cursor:pointer;' ng-click="showHideItemsTable('hide')"></i> <span style='font-size:25px;'>]</span>
+            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-left fa-cx"
+                                                      style='color:green;cursor:pointer;'
+                                                      ng-click="showHideItemsTable('hide')"></i> <span
+                style='font-size:25px;'>]</span>
         </div>
         <div style='float:left;margin-top:10px;margin-left:5px;font-weight:bold;' ng-if="data.collapsedItemTable">
             Show Items Table
@@ -16,38 +22,39 @@
     </div>
 </div>
 <div class="row" id="itemsDiv">
-    <div class="col-md-12"  style="padding-top: 10px;">
+    <div class="col-md-12" style="padding-top: 10px;">
         <div class="table-responsive">
-        <table class="table table-bordered table-striped table-condensed cf">
-            <thead class="cf">
-            <tr style="background-color: #EEE">
-                <th style="text-align: center">SL</th>
-                <th style="text-align: center">Copy No</th>
-                <th class="numeric">Accession No</th>
-                <th class="numeric">Accession Date</th>
-                <th class="numeric" style="text-align: center">Purchase Price</th>
-                <th class="numeric">Supplier</th>
-                <th class="numeric" style="text-align: center">Status</th>
-                <th class="numeric" style="text-align: center">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="item in itemList">
-                <td data-title="SL" style="text-align: center">{{$index+1}}</td>
-                <td data-title="Copy No"  style="text-align: center">{{item.copyNumber}}</td>
-                <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
-                <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
-                <td data-title="Purchase Price" class="numeric"  style="text-align: right">{{item.price}}</td>
-                <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
-                <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
-                <td data-title="Action" class="numeric" style="text-align: center">
-                    <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
-                    <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="fetchItem(item.id, 'edit')"></i>
-                </td>
-            </tr>
+            <table class="table table-bordered table-striped table-condensed cf">
+                <thead class="cf">
+                <tr style="background-color: #EEE">
+                    <th style="text-align: center">SL</th>
+                    <th style="text-align: center">Copy No</th>
+                    <th class="numeric">Accession No</th>
+                    <th class="numeric">Accession Date</th>
+                    <th class="numeric" style="text-align: center">Purchase Price</th>
+                    <th class="numeric">Supplier</th>
+                    <th class="numeric" style="text-align: center">Status</th>
+                    <th class="numeric" style="text-align: center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in itemList">
+                    <td data-title="SL" style="text-align: center">{{$index+1}}</td>
+                    <td data-title="Copy No" style="text-align: center">{{item.copyNumber}}</td>
+                    <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
+                    <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
+                    <td data-title="Purchase Price" class="numeric" style="text-align: right">{{item.price}}</td>
+                    <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
+                    <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
+                    <td data-title="Action" class="numeric" style="text-align: center">
+                        <i class="fa fa-eye" style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
+                        <i class="fa fa-pencil-square-o" style="cursor: pointer;"
+                           data-ng-click="fetchItem(item.id, 'edit')"></i>
+                    </td>
+                </tr>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
 
     </div>
@@ -71,169 +78,204 @@
     </div>
 </div>
 
-<form action="" class="form-horizontal"  data-onvalidate="saveItem" data-validate="" id="itemForm">
-<div class="form-body pal" style="margin-top: -25px;" ng-show="!data.multipleItemAdd">
-    <div class="form-group">
-        <label class="col-md-1 control-label">Copy Number</label>
-        <div class="col-md-3">
-            <input type="text" class="form-control dottedInput" data-ng-model="item.copyNumber" id="copyNumber" name="copyNumber" ng-readonly="data.itemReadOnlyMode"/>
+<form action="" class="form-horizontal" data-onvalidate="saveItem" data-validate="" id="itemForm">
+    <div class="form-body pal" style="margin-top: -25px;" ng-show="!data.multipleItemAdd">
+        <div class="form-group">
+            <label class="col-md-1 control-label">Copy Number</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control dottedInput" data-ng-model="item.copyNumber" id="copyNumber"
+                       name="copyNumber" ng-readonly="data.itemReadOnlyMode"/>
+            </div>
+            <label class="col-md-1 control-label">Accession #</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control dottedInput required" data-ng-model="item.accessionNumber"
+                       id="accessionNumber" name="accessionNumber" ng-readonly="data.itemReadOnlyMode"/>
+            </div>
+            <label class="col-md-1 control-label">Access. Date</label>
+            <div class="col-md-3">
+                <input type="text" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                       class="datepicker-default form-control dottedInput"
+                       data-ng-model="item.accessionDate" id="accessionDate" name="accessionDate"
+                       ng-readonly="data.itemReadOnlyMode"/>
+            </div>
         </div>
-        <label class="col-md-1 control-label">Accession #</label>
-        <div class="col-md-3">
-            <input  type="text" class="form-control dottedInput required" data-ng-model="item.accessionNumber"  id="accessionNumber" name="accessionNumber" ng-readonly="data.itemReadOnlyMode"/>
+
+        <div class="form-group">
+            <label class="col-md-1 control-label">Barcode</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control dottedInput" data-ng-model="item.barcode" id="barcode"
+                       name="barcode" ng-readonly="data.itemReadOnlyMode"/>
+            </div>
+            <label class="col-md-1 control-label">Price</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control dottedInput" data-ng-model="item.price" id="price" name="price"
+                       ng-readonly="data.itemReadOnlyMode"/>
+            </div>
         </div>
-        <label class="col-md-1 control-label">Access. Date</label>
-        <div class="col-md-3">
-            <input type="text" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control dottedInput"
-                   data-ng-model="item.accessionDate"  id="accessionDate" name="accessionDate" ng-readonly="data.itemReadOnlyMode"/>
+
+
+        <div class="form-group">
+            <label class="col-md-1 control-label">Internal Note</label>
+            <div class="col-md-11">
+                <input type="text" class="form-control dottedInput" data-ng-model="item.internalNote" id="internalNote"
+                       name="internalNote" ng-readonly="data.itemReadOnlyMode"/>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label class="col-md-1 control-label">Barcode</label>
-        <div class="col-md-3">
-            <input    type="text" class="form-control dottedInput" data-ng-model="item.barcode"  id="barcode" name="barcode" ng-readonly="data.itemReadOnlyMode"/>
-        </div>
-        <label class="col-md-1 control-label">Price</label>
-        <div class="col-md-3">
-            <input type="text" class="form-control dottedInput" data-ng-model="item.price"  id="price" name="price" ng-readonly="data.itemReadOnlyMode"/>
-        </div>
-    </div>
+        <div class="form-group">
 
+            <label class="col-md-1 control-label">Supplier
+                &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer"
+                               data-toggle="modal" data-target="#modal-supplier"></i>
+                &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
 
-    <div class="form-group">
-        <label class="col-md-1 control-label">Internal Note</label>
-        <div class="col-md-11">
-            <input    type="text" class="form-control dottedInput" data-ng-model="item.internalNote"  id="internalNote" name="internalNote" ng-readonly="data.itemReadOnlyMode"/>
-        </div>
-    </div>
-
-    <div class="form-group">
-
-        <label class="col-md-1 control-label">Supplier
-            &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#modal-supplier"></i>
-            &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
-
-        </label>
-        <div class="col-md-3" id="supplierSelect2Div">
-            <div data-ng-if="showSupplierSelect2">
-            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"  parent="supplierSelect2Div"
-                   datas="supplierList"  placeholder="Select a Name" data-ng-model="item.supplier.id"  id="supplier" name="supplier" ng-disabled="data.itemReadOnlyMode" />
+            </label>
+            <div class="col-md-3" id="supplierSelect2Div">
+                <div data-ng-if="showSupplierSelect2">
+                    <input type="text" class="form-control" style="width: 98%" data-select="select2" page="true"
+                           parent="supplierSelect2Div"
+                           datas="supplierList" placeholder="Select a Name" data-ng-model="item.supplier.id"
+                           id="supplier" name="supplier" ng-disabled="data.itemReadOnlyMode"/>
                 </div>
-        </div>
+            </div>
 
-        <label class="col-md-1 control-label">Status</label>
-        <div class="col-md-3">
-            <select style="width: 98%" class="required" data-ng-model="item.status"  id="itemStatus" name="itemStatus" ng-disabled="data.itemReadOnlyMode"  ng-class="{'disabledElement': data.itemReadOnlyMode}"  data-convert-to-number>
-                <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
-            </select>
-        </div>
+            <label class="col-md-1 control-label">Status</label>
+            <div class="col-md-3">
+                <select style="width: 98%" class="required" data-ng-model="item.status" id="itemStatus"
+                        name="itemStatus" ng-disabled="data.itemReadOnlyMode"
+                        ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
+                    <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
+                </select>
+            </div>
 
+
+        </div>
 
     </div>
 
-</div>
+    <div class="row" data-ng-show="data.showItemMainButtonPanel">
+        <div class="text-right col-md-12" style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
+            <button type="button" class="btn btn-dark btn-success" value="add_item">Add Item</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-dark btn-success" value="add_and_duplicate_item">Add & Duplicate
+            </button>&nbsp;&nbsp;&nbsp;
+            <a class="btn btn-dark" value="save_edit_record" ng-click="data.showItemMainButtonPanel=false;">Add Multiple
+                copies of this item</a>
 
-<div class="row" data-ng-show="data.showItemMainButtonPanel">
-    <div class="text-right col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
-        <button type="button" class="btn btn-dark btn-success"  value="add_item">Add Item</button>&nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-dark btn-success"  value="add_and_duplicate_item">Add & Duplicate</button>&nbsp;&nbsp;&nbsp;
-        <a  class="btn btn-dark"  value="save_edit_record" ng-click="data.showItemMainButtonPanel=false;">Add Multiple copies of this item</a>
+            <input type="hidden" data-ng-model="item.mfnNo"/>
+            <input type="hidden" data-ng-model="item.itemId"/>
 
-        <input type="hidden"  data-ng-model="item.mfnNo" />
-        <input type="hidden"  data-ng-model="item.itemId" />
-
+        </div>
     </div>
-</div>
 </form>
 
 
-    <div ng-show="data.multipleItemAdd" id="bulkItemContainer">
-        <form action="" class="form-horizontal"  data-onvalidate="saveBulkItems" data-validate="" id="bulkItemForm">
-            <table class="table table-bordered table-striped table-condensed cf">
-                <thead class="cf">
-                <tr>
-                    <th align="center" width="5%" style="text-align: center;">Copy#</th>
-                    <th align="center" width="10%" style="text-align: center;">Accession #</th>
-                    <th align="center" width="10%" style="text-align: center;">Accession Date</th>
-                    <th align="center" width="10%" style="text-align: center;">Barcode</th>
-                    <th align="center" width="8%" style="text-align: center;">Price</th>
-                    <th align="center" width="15%" style="text-align: center;">Supplier</th>
-                    <th align="center" width="8%" style="text-align: center;">Status</th>
-                    <th align="center" width="10%" style="text-align: center;">Note</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in bulkItemList">
-                    <td align="center"><input type='text' style='width:40px;border: 1px solid grey;text-align: center;' data-ng-model="item.copyNumber"/></td>
-                    <td align="center"><input type='text' style='width:150px;border: 1px solid grey;padding-left: 5px;' data-ng-model="item.accessionNumber" class="required" name="bulkAccessionNumber{{$index}}" id="bulkAccessionNumber{{$index}}" /></td>
-                    <td align="center">
-                        <input type='text' style='width:80px;border: 1px solid grey;text-align: center;' data-ng-model="item.accessionDate" readonly="readonly"/>
-                    </td>
-                    <td align="center"><input type='text' style='width:150px;border: 1px solid grey;'  data-ng-model="item.barcode" readonly="readonly"/></td>
-                    <td align="center"><input type='text' style='width:80px;border: 1px solid grey;text-align: right; padding-right: 4px;' data-ng-model="item.price" /></td>
-                    <td align="center">
-                        <input type="text" class="form-control bbvfd" style="width: 99%"  data-select="select2"  page="true" id="bulkContributorName{{$index}}" name="bulkContributorName{{$index}}"
-                               data-ng-model="item.supplier.id"   datas="supplierList"  placeholder="Select a Name"  />
-                    </td>
-                    <td align="center">
-                        <select style="width: 98%;height: 24px;padding: 0px;" class="required" data-ng-model="item.status"  id="itemStatus1" name="itemStatus" data-convert-to-number>
-                            <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
-                        </select>
-                    </td>
-                    <td align="center"><input type='text' style='width:150px;padding-left: 5px;' data-ng-model="item.internalNote" /></td>
+<div ng-show="data.multipleItemAdd" id="bulkItemContainer">
+    <form action="" class="form-horizontal" data-onvalidate="saveBulkItems" data-validate="" id="bulkItemForm">
+        <table class="table table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+            <tr>
+                <th align="center" width="5%" style="text-align: center;">Copy#</th>
+                <th align="center" width="10%" style="text-align: center;">Accession #</th>
+                <th align="center" width="10%" style="text-align: center;">Accession Date</th>
+                <th align="center" width="10%" style="text-align: center;">Barcode</th>
+                <th align="center" width="8%" style="text-align: center;">Price</th>
+                <th align="center" width="15%" style="text-align: center;">Supplier</th>
+                <th align="center" width="8%" style="text-align: center;">Status</th>
+                <th align="center" width="10%" style="text-align: center;">Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in bulkItemList">
+                <td align="center"><input type='text' style='width:40px;border: 1px solid grey;text-align: center;'
+                                          data-ng-model="item.copyNumber"/></td>
+                <td align="center"><input type='text' style='width:150px;border: 1px solid grey;padding-left: 5px;'
+                                          data-ng-model="item.accessionNumber" class="required"
+                                          name="bulkAccessionNumber{{$index}}" id="bulkAccessionNumber{{$index}}"/></td>
+                <td align="center">
+                    <input type='text' style='width:80px;border: 1px solid grey;text-align: center;'
+                           data-ng-model="item.accessionDate" readonly="readonly"/>
+                </td>
+                <td align="center"><input type='text' style='width:150px;border: 1px solid grey;'
+                                          data-ng-model="item.barcode" readonly="readonly"/></td>
+                <td align="center"><input type='text'
+                                          style='width:80px;border: 1px solid grey;text-align: right; padding-right: 4px;'
+                                          data-ng-model="item.price"/></td>
+                <td align="center">
+                    <input type="text" class="form-control bbvfd" style="width: 99%" data-select="select2" page="true"
+                           id="bulkContributorName{{$index}}" name="bulkContributorName{{$index}}"
+                           data-ng-model="item.supplier.id" datas="supplierList" placeholder="Select a Name"/>
+                </td>
+                <td align="center">
+                    <select style="width: 98%;height: 24px;padding: 0px;" class="required" data-ng-model="item.status"
+                            id="itemStatus1" name="itemStatus" data-convert-to-number>
+                        <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </td>
+                <td align="center"><input type='text' style='width:150px;padding-left: 5px;'
+                                          data-ng-model="item.internalNote"/></td>
 
-                </tr>
+            </tr>
 
-                </tbody>
-            </table>
-            <div class="row" >
-                <div class="col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
-                    <button type="button" class="btn btn-dark btn-success"  value="add_item">Save Items</button>&nbsp;&nbsp;&nbsp;
-                </div>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-12" style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
+                <button type="button" class="btn btn-dark btn-success" value="add_item">Save Items</button>&nbsp;&nbsp;&nbsp;
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 <fieldset id="add_multiple_copies_span" data-ng-if="!data.showItemMainButtonPanel">
     <label for="number_of_copies">Number of copies of this item to add: </label>
-    <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" style="text-align:center;border:1px solid grey;" ng-model="data.bulkAddCount">
-    <input type="button" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" ng-click="addNewItems()">
-    <a href="#" id="cancel_add_multiple" class="cancel" ng-click="data.showItemMainButtonPanel=true;data.multipleItemAdd=false;showHideItemsTable('show');">Cancel</a>
+    <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2"
+           style="text-align:center;border:1px solid grey;" ng-model="data.bulkAddCount">
+    <input type="button" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add"
+           ng-click="addNewItems()">
+    <a href="#" id="cancel_add_multiple" class="cancel"
+       ng-click="data.showItemMainButtonPanel=true;data.multipleItemAdd=false;showHideItemsTable('show');">Cancel</a>
     <div class="hint">
         <p>
-            <table>
-                <tr>
-                    <td width="10%" style="height: 28px;">Copy Start From :</td>
-                    <td width="23%"><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.copyStartFrom" /></td>
-                    <td width="10%">First Accession # :</td>
-                    <td width="23%"><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.firstAccession" /></td>
-                    <td width="10%">Increment Segment :</td>
-                    <td width="23%"><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.incrementSegment" /></td>
-                </tr>
-                <tr>
-                    <td style="height: 28px;">Accession Date :</td>
-                    <td><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.accessionDate" /></td>
-                    <td>Price :</td>
-                    <td><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.price" /></td>
-                    <td>Supplier :</td>
-                    <td>
-                        <input type="text" class="form-control"   data-select="select2"  page="true"
-                               data-ng-model="bulk.config.supplier"   datas="supplierList"  placeholder="Select a Name" id="configSupplierName" name="configSupplierName" />
+        <table>
+            <tr>
+                <td width="10%" style="height: 28px;">Copy Start From :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                                       ng-model="bulk.config.copyStartFrom"/></td>
+                <td width="10%">First Accession # :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                                       ng-model="bulk.config.firstAccession"/></td>
+                <td width="10%">Increment Segment :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                                       ng-model="bulk.config.incrementSegment"/></td>
+            </tr>
+            <tr>
+                <td style="height: 28px;">Accession Date :</td>
+                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                           ng-model="bulk.config.accessionDate"/></td>
+                <td>Price :</td>
+                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                           ng-model="bulk.config.price"/></td>
+                <td>Supplier :</td>
+                <td>
+                    <input type="text" class="form-control" data-select="select2" page="true"
+                           data-ng-model="bulk.config.supplier" datas="supplierList" placeholder="Select a Name"
+                           id="configSupplierName" name="configSupplierName"/>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height: 28px;">Status :</td>
-                    <td>
-                        <select style="height: 24px;padding: 0px; width: 171px;" class="required" data-ng-model="bulk.config.status"   data-convert-to-number>
-                            <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
-                        </select>
-                    </td>
-                    <td>Note :</td>
-                    <td><input type="text" value=""  style="text-align:center;border:1px solid grey;" ng-model="bulk.config.internalNote" /></td>
-                    <td></td>
-                    <td><input type="button"  value="Set Values" ng-click="setBulkItemsValue()"></td>
-                </tr>
-            </table>
-    </p></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="height: 28px;">Status :</td>
+                <td>
+                    <select style="height: 24px;padding: 0px; width: 171px;" class="required"
+                            data-ng-model="bulk.config.status" data-convert-to-number>
+                        <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </td>
+                <td>Note :</td>
+                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                           ng-model="bulk.config.internalNote"/></td>
+                <td></td>
+                <td><input type="button" value="Set Values" ng-click="setBulkItemsValue()"></td>
+            </tr>
+        </table>
+        </p></div>
 </fieldset>

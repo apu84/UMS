@@ -1,46 +1,59 @@
 <style>
     .center-block {
-        width:250px;
-        padding:10px;
+        width: 250px;
+        padding: 10px;
     }
+
     #rcorners1 {
         border-radius: 15px;
         background: #eee;
-        padding:  16px 12px;
+        padding: 16px 12px;
         height: 64px;
     }
-    .btn-round{
+
+    .btn-round {
         border-radius: 0.5em !important;
     }
+
     .btn-group > .btn {
-        -webkit-border-radius:14px !important;
+        -webkit-border-radius: 14px !important;
     }
-    .btn-group{
+
+    .btn-group {
         width: 80% !important;
     }
-    .tab-content{
-        padding:2px 1px;
+
+    .tab-content {
+        padding: 2px 1px;
     }
-    .tabbable.tabs-below .tab-content{
+
+    .tabbable.tabs-below .tab-content {
         border-top: 0px !important;
         border-left: 0px !important;
         border-right: 0px !important;
     }
-    .tabbable.tabs-below .nav-tabs{
+
+    .tabbable.tabs-below .nav-tabs {
         margin-left: 30px !important;
     }
-    .tabbable.tabs-below .nav-tabs > li.active > a{
+
+    .tabbable.tabs-below .nav-tabs > li.active > a {
         border-color: #ABB2B9 !important;
     }
-    .tabbable.tabs-below .nav-tabs > li.active > a{
+
+    .tabbable.tabs-below .nav-tabs > li.active > a {
         border-bottom-left-radius: 8px !important;
         border-bottom-right-radius: 8px !important;
     }
-    .tabbable.tabs-below .nav-tabs > li.active > a{
-        font-weight:700;
+
+    .tabbable.tabs-below .nav-tabs > li.active > a {
+        font-weight: 700;
     }
-    .searchLabel{
-        color: #909497;padding-bottom: 3px;padding-left: 34px;
+
+    .searchLabel {
+        color: #909497;
+        padding-bottom: 3px;
+        padding-left: 34px;
     }
 </style>
 
@@ -49,10 +62,12 @@
         <div class="row">
             <div class="col-md-12">
                 <center>
-                <div style="width: 600px;">
-                    <div class="searchLabel" style="float: left;margin-left: 11px;">Enter patron card number or partial name:</div>
-                <data-circulation-search-box circulationType="searchPatron"></data-circulation-search-box>
-                </div>
+                    <div style="width: 600px;">
+                        <div class="searchLabel" style="float: left;margin-left: 11px;">Enter patron card number or
+                            partial name:
+                        </div>
+                        <data-circulation-search-box circulationType="searchPatron"></data-circulation-search-box>
+                    </div>
                 </center>
             </div>
         </div>
@@ -72,24 +87,26 @@
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-            <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
-                <thead>
-                <tr>
-                    <th class="header"
-                        column-sorter="sort('course_no')">Course No</th>
-                    <th>Course Title</th>
-                </tr>
-                </tr></thead>
-                <tbody>
-                <tr dir-paginate="course in courses | itemsPerPage: data.coursePerPage" current-page="pagination.currentPage" total-items="totalCourses" >
-                    <td>{{ course.no }}</td>
-                    <td>{{ course.title }}</td>
-                </tr>
-                </tbody>
-            </table>
-            <dir-pagination-controls boundary-links="true"
-                                     on-page-change="pageChanged(newPageNumber)"
-                                     template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <thead>
+                    <tr>
+                        <th class="header"
+                            column-sorter="sort('course_no')">Course No
+                        </th>
+                        <th>Course Title</th>
+                    </tr>
+                    </tr></thead>
+                    <tbody>
+                    <tr dir-paginate="course in courses | itemsPerPage: data.coursePerPage"
+                        current-page="pagination.currentPage" total-items="totalCourses">
+                        <td>{{ course.no }}</td>
+                        <td>{{ course.title }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls boundary-links="true"
+                                         on-page-change="pageChanged(newPageNumber)"
+                                         template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
 
             </div>
         </div>
@@ -97,9 +114,7 @@
 
     </div>
 
-    </div>
-
-
+</div>
 
 
 <script type="text/javascript">

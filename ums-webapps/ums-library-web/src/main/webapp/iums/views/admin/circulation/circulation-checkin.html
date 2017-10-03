@@ -6,6 +6,7 @@
         border: 2px solid #b9d8d9;
         border-radius: 5px;
     }
+
     legend {
         font-weight: bold;
         border: 2px solid #b9d8d9;
@@ -16,7 +17,8 @@
         margin-bottom: 5px !important;
         font-size: 14px;
     }
-    .table-striped>tbody>tr:nth-of-type(odd) {
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
         /*background-color: white !important;*/
     }
 </style>
@@ -33,19 +35,23 @@
 
             <div class="date-select" id="return_date_override_fields">
                 <div class="hint">Specify return date (DD/MM/YYYY)
-                    : </div>
+                    :
+                </div>
 
-                <input type="text" size="13" id="return_date_override" name="return_date_override" value="" class="hasDatepicker"><img class="ui-datepicker-trigger" src="/intranet-tmpl/prog/img/famfamfam/silk/calendar.png" alt="..." title="...">
+                <input type="text" size="13" id="return_date_override" name="return_date_override" value=""
+                       class="hasDatepicker"><img class="ui-datepicker-trigger"
+                                                  src="/intranet-tmpl/prog/img/famfamfam/silk/calendar.png" alt="..."
+                                                  title="...">
 
                 <label for="return_date_override_remember"> Remember for next check in:</label>
 
-                <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember">
+                <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();"
+                       name="return_date_override_remember">
 
 
-                <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;">
+                <input type="button" class="action" id="cleardate" value="Clear" name="cleardate"
+                       onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;">
             </div>
-
-
 
 
         </fieldset>
@@ -110,7 +116,7 @@
                 <th>Title</th>
                 <th>Author</th>
                 <th>Barcode</th>
-                <th>Call  Number</th>
+                <th>Call Number</th>
                 <th>Type</th>
                 <th>Patron</th>
             </tr>

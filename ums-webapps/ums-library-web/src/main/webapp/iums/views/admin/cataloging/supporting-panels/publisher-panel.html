@@ -3,21 +3,26 @@
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <data-table-paginator-wrapper dataservice="publisherService"  datanotify="notifyService" collectionlist="collectionList"
+            <data-table-paginator-wrapper dataservice="publisherService" datanotify="notifyService"
+                                          collectionlist="collectionList"
                                           ipp="10"
                                           tableprefix="publisher">
                 <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close"
+                            style="opacity: 1;margin-top: 0px;">&times;
+                    </button>
                     <h4 id="modal-default-label" class="modal-title">Publishers</h4></div>
                 <div class="modal-body" style="padding: 0px;min-height: 480px;">
                     <div class="panel">
                         <div class="panel-heading"> <!--start of panel-heading -->
                             <p class="alignLeft" id="pageTitle_publisher" style="float: left;">Search Publisher</p>
                             <p class="alignRight" style="float: right">
-                                <a href="javascript:;" class="btn btn-xs btn-default singleAnchor" data-ng-click="showSearchPanel()" style="background-color: black;">
+                                <a href="javascript:;" class="btn btn-xs btn-default singleAnchor"
+                                   data-ng-click="showSearchPanel()" style="background-color: black;">
                                     <i class="fa fa fa-search" style="color: white;"></i>
                                 </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default bulkAnchor" data-ng-click="showRecordPanelForNewEntry()" style="background-color: #ffffff;">
+                                <a href="javascript:;" class="btn btn-xs btn-default bulkAnchor"
+                                   data-ng-click="showRecordPanelForNewEntry()" style="background-color: #ffffff;">
                                     <i class="fa fa-plus" style="color: black;" aria-hidden="true"></i>
                                 </a>
                             </p>
@@ -26,18 +31,25 @@
 
                         <div class="panel-body" style="padding: 0px;">
                             <div style="vertical-align: top;position: relative;clear: both; ">
-                                <div id="searchPanel_publisher" style="float: left;padding-top: 10px;padding-left: 10px;width: 99%;position: absolute;">
+                                <div id="searchPanel_publisher"
+                                     style="float: left;padding-top: 10px;padding-left: 10px;width: 99%;position: absolute;">
                                     <fieldset id="add_multiple_copies_span">
                                         <ul>
                                             <li style="list-style-type: none;margin-top:10px; ">
-                                                <label style="width:105px;text-align: right;"><b>Search by name:</b> </label>
-                                                <input type="hidden" data-ng-model="filterlist[0].fieldName" data-ng-init="filterlist[0].fieldName = 'name'" />
-                                                <select name="operator" style="width:100px;" data-ng-model="filterlist[0].operator" data-ng-init="filterlist[0].operator = 'cn'">
+                                                <label style="width:105px;text-align: right;"><b>Search by name:</b>
+                                                </label>
+                                                <input type="hidden" data-ng-model="filterlist[0].fieldName"
+                                                       data-ng-init="filterlist[0].fieldName = 'name'"/>
+                                                <select name="operator" style="width:100px;"
+                                                        data-ng-model="filterlist[0].operator"
+                                                        data-ng-init="filterlist[0].operator = 'cn'">
                                                     <option value="cn">contains</option>
                                                     <option value="start">starts with</option>
                                                     <option value="is">is exactly</option>
                                                 </select>
-                                                <input style="width:56%;" type="text" autocomplete="off" data-ng-model="filterlist[0].fieldValue" data-ng-init="filterlist[0].fieldValue = ''">
+                                                <input style="width:56%;" type="text" autocomplete="off"
+                                                       data-ng-model="filterlist[0].fieldValue"
+                                                       data-ng-init="filterlist[0].fieldValue = ''">
                                             </li>
 
                                             <!--
@@ -55,15 +67,19 @@
                                     </fieldset>
 
                                     <div class="btn pull-right" style="padding: 0px;margin-right: 2.5%;">
-                                        <button class="btn btn-default" value="search_publisher" data-ng-click="search();">Search</button>
+                                        <button class="btn btn-default" value="search_publisher"
+                                                data-ng-click="search();">Search
+                                        </button>
                                     </div>
                                 </div>
-                                <div id="listPanel_publisher" style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
+                                <div id="listPanel_publisher"
+                                     style="float: left;padding-top: 10px;padding-left: 10px;display: none;width:98%;position: absolute;">
                                     <!-- Start of Publisher list -->
                                     <div class="row">
-                                        <div class="col-md-12" >
+                                        <div class="col-md-12">
 
-                                            <button data-ng-click="pageChanged(1)" id="btnReloadPublisher" data-ng-show="false"></button>
+                                            <button data-ng-click="pageChanged(1)" id="btnReloadPublisher"
+                                                    data-ng-show="false"></button>
                                             <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
                                                 <thead>
                                                 <tr>
@@ -71,21 +87,28 @@
                                                 </tr>
                                                 </tr></thead>
                                                 <tbody>
-                                                <tr dir-paginate="record in records | itemsPerPage: 10" current-page="pagination.currentPage" total-items="total" pagination-id="publisherPaginator"
-                                                    data-ng-mouseover="showActionPanel('publisherActionPanel',$index)" data-ng-mouseleave="hideActionPanel('publisherActionPanel',$index)">
+                                                <tr dir-paginate="record in records | itemsPerPage: 10"
+                                                    current-page="pagination.currentPage" total-items="total"
+                                                    pagination-id="publisherPaginator"
+                                                    data-ng-mouseover="showActionPanel('publisherActionPanel',$index)"
+                                                    data-ng-mouseleave="hideActionPanel('publisherActionPanel',$index)">
 
 
                                                     <td style="text-align: left;">{{ record.name }}
-                                                        <div style="float: right;display: none;" id="publisherActionPanel{{$index}}">
-                                                            <i class="fa fa-eye"  style="cursor: pointer;" data-ng-click="viewRecord(record.id)"></i>
-                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-ng-click="editRecord(record.id)"></i>
+                                                        <div style="float: right;display: none;"
+                                                             id="publisherActionPanel{{$index}}">
+                                                            <i class="fa fa-eye" style="cursor: pointer;"
+                                                               data-ng-click="viewRecord(record.id)"></i>
+                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer;"
+                                                               data-ng-click="editRecord(record.id)"></i>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             <div class="pull-right" style="margin-top:-30px;">
-                                                <dir-pagination-controls boundary-links="true" pagination-id="publisherPaginator"
+                                                <dir-pagination-controls boundary-links="true"
+                                                                         pagination-id="publisherPaginator"
                                                                          on-page-change="pageChanged(newPageNumber)"
                                                                          template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
                                             </div>
@@ -96,14 +119,19 @@
                                 </div>
 
 
-                                <div id="entryPanel_publisher" style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
-                                    <form action="" class="form-horizontal"  data-onvalidate="saveRecord" data-validate=""  id="publisherForm">
+                                <div id="entryPanel_publisher"
+                                     style="display: none;float: left;position: absolute; text-align: center;width: 100%;">
+                                    <form action="" class="form-horizontal" data-onvalidate="saveRecord"
+                                          data-validate="" id="publisherForm">
                                         <div class="form-body pal">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-user"></i><input
-                                                                id="inputFirstName" type="text" placeholder="Name"  class="form-control required" data-ng-model="record.name" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="inputFirstName" type="text" placeholder="Name"
+                                                                class="form-control required"
+                                                                data-ng-model="record.name"
+                                                                ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,7 +140,8 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-group" data-ng-if="data.select2Show">
-                                                            <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>
+                                                            <div class="input-group-addon"><i
+                                                                    class="fa fa-map-marker"></i></div>
                                                             <select class="form-control" style="text-align: left;"
                                                                     ng-disabled="data.readOnlyMode"
                                                                     data-select="select2"
@@ -121,7 +150,7 @@
                                                                     data-ng-options="country.id as country.name for country in collectionlist[0]">
                                                                 <option></option>
                                                             </select>
-                                                    </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,7 +159,10 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-user-circle"></i><input
-                                                                id="contactPerson" type="text" placeholder="Contact Person"  class="form-control" data-ng-model="record.contactPerson" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="contactPerson" type="text"
+                                                                placeholder="Contact Person" class="form-control"
+                                                                data-ng-model="record.contactPerson"
+                                                                ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,7 +170,9 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-phone"></i><input
-                                                                id="phoneNumber" type="text" placeholder="Phone"  class="form-control" data-ng-model="record.phoneNumber" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="phoneNumber" type="text" placeholder="Phone"
+                                                                class="form-control" data-ng-model="record.phoneNumber"
+                                                                ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -146,12 +180,15 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <div class="input-icon"><i class="fa fa-envelope"></i><input
-                                                                id="emailAddress" type="text" placeholder="E-mail"  class="form-control" data-ng-model="record.emailAddress" ng-disabled="data.readOnlyMode"/></div>
+                                                                id="emailAddress" type="text" placeholder="E-mail"
+                                                                class="form-control" data-ng-model="record.emailAddress"
+                                                                ng-disabled="data.readOnlyMode"/></div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <button type="button" class="btn btn-dark btn-success" id="btn_addPublisher" data-ng-show="false"></button>
+                                            <button type="button" class="btn btn-dark btn-success" id="btn_addPublisher"
+                                                    data-ng-show="false"></button>
                                         </div>
 
                                     </form>
@@ -161,9 +198,15 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top: 10px;" id="footer_publisher">
-                    <button type="button" class="btn btn-dark btn-success"  value="add_publisher" data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List</button>
-                    <button type="button" class="btn btn-danger btn-success"  value="delete_publisher" data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete</button>
-                    <button type="button" class="btn btn-success btn-success"  value="add_publisher" onclick="$('#btn_addPublisher').click();" data-ng-show="data.showSave">Save</button>
+                    <button type="button" class="btn btn-dark btn-success" value="add_publisher"
+                            data-ng-click="showResultPanel()" data-ng-show="data.showList">Back to List
+                    </button>
+                    <button type="button" class="btn btn-danger btn-success" value="delete_publisher"
+                            data-ng-click="deleteRecord()" data-ng-show="data.showDelete">Delete
+                    </button>
+                    <button type="button" class="btn btn-success btn-success" value="add_publisher"
+                            onclick="$('#btn_addPublisher').click();" data-ng-show="data.showSave">Save
+                    </button>
                     <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                 </div>
             </data-table-paginator-wrapper>

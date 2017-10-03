@@ -1,24 +1,29 @@
 <style>
-    input[type=text].dottedInput{
-        border:none;
-        border-bottom:thin dashed black;
-        padding-bottom:0;
-        outline:none;
+    input[type=text].dottedInput {
+        border: none;
+        border-bottom: thin dashed black;
+        padding-bottom: 0;
+        outline: none;
     }
-    .control-label{
+
+    .control-label {
         padding-top: 7px;
         color: #17202A;
     }
-    .form-group{
+
+    .form-group {
         clear: both;
     }
-    .form-control.dottedInput{
+
+    .form-control.dottedInput {
         height: 26px;
         padding: 0px;
         padding-top: 5px;
         padding-left: 5px;
     }
-    fieldset { border:1px solid #BFC9CA;
+
+    fieldset {
+        border: 1px solid #BFC9CA;
         padding-right: 5px;
         padding-left: 5px;
         padding-bottom: 10px;
@@ -26,27 +31,30 @@
 
     legend {
         padding: 0.2em 0.5em;
-        border:1px solid grey;
+        border: 1px solid grey;
         /*color:#4d4b4b;*/
-        color:white;
-        font-size:90%;
-        text-align:left;
+        color: white;
+        font-size: 90%;
+        text-align: left;
         width: 150px;
         padding-right: 11px;
         margin-bottom: 10px;
         font-weight: bold;
         background-color: #839192;
     }
+
     @media (min-width: 992px) {
         .col-md-1 {
             width: 10.333333% !important;
         }
     }
+
     @media (min-width: 992px) {
         .col-md-1s {
             width: 7.333333% !important;
         }
     }
+
     .col-md-1s {
         float: left;
         position: relative;
@@ -60,61 +68,75 @@
             width: 23% !important;
         }
     }
-    .col-md-1{
+
+    .col-md-1 {
         padding-right: 5px !important;
     }
-    @media (min-width: 992px){
+
+    @media (min-width: 992px) {
         .col-md-11 {
             width: 89.666667% !important;
         }
     }
+
     .alignLeft {
         float: left;
     }
+
     .alignRight {
         float: right;
     }
+
     select {
         width: 100%;
         height: 26px;
     }
-    .tokenfield.form-control{
-    border:none;
-    border-bottom:1px dashed black;
-    }
-    .select2-container .select2-choice{
-    height:28px !important;
-    line-height:27px !important;
+
+    .tokenfield.form-control {
+        border: none;
+        border-bottom: 1px dashed black;
     }
 
-    .fa.fa-wpforms.fa-lg{
-    margin-top:6px;
+    .select2-container .select2-choice {
+        height: 28px !important;
+        line-height: 27px !important;
     }
-    .fa.fa-times.fa-lg{
-    margin-top:7px;
+
+    .fa.fa-wpforms.fa-lg {
+        margin-top: 6px;
     }
-    #add_multiple_copies_span{
+
+    .fa.fa-times.fa-lg {
+        margin-top: 7px;
+    }
+
+    #add_multiple_copies_span {
         margin: 1em 1em 1em 0;
         padding: 1em;
         background-color: #f4f8f9;
         border: 2px solid #b9d8d9;
         border-radius: 5px;
     }
-    .input-icon input{
+
+    .input-icon input {
         color: #555 !important;
     }
-    .input-icon.state-error{
+
+    .input-icon.state-error {
         text-align: left;
     }
 
 </style>
 
 <div>
-    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span id="headerTitle"></span>  </p>
+    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span
+            id="headerTitle"></span></p>
     <p class="alignRight">
-        <a  href="javascript:void(0)" data-ng-click="fillSampleData()" style="display: none;">Sample Data</a>
-        <a  href="javascript:void(0)" data-ng-click="goPrevious()" data-ng-if="showLeftNav"><i class="fa fa-arrow-left fa-lg"></i></a> &nbsp;&nbsp; | &nbsp;&nbsp;
-        <a  href="javascript:void(0)" data-ng-click="goNext()" data-ng-if="showRightNav"><i class="fa fa-arrow-right fa-lg"></i></a>
+        <a href="javascript:void(0)" data-ng-click="fillSampleData()" style="display: none;">Sample Data</a>
+        <a href="javascript:void(0)" data-ng-click="goPrevious()" data-ng-if="showLeftNav"><i
+                class="fa fa-arrow-left fa-lg"></i></a> &nbsp;&nbsp; | &nbsp;&nbsp;
+        <a href="javascript:void(0)" data-ng-click="goNext()" data-ng-if="showRightNav"><i
+                class="fa fa-arrow-right fa-lg"></i></a>
         <navigation-button icons="fa fa-book bookIcon,fa fa-files-o recordIcon"
                            ids="recordNav,itemNav"
                            containers="container_recordNav,container_itemNav"
@@ -122,13 +144,15 @@
                            defaultselected="selectedTab">
         </navigation-button>
 
-        <button type="button" class="btn btn-default btn-xs" data-ng-click="enableEdit()" data-ng-if="data.readOnlyMode==true"><i class="fa fa-pencil-square-o"></i> Edit</button>
+        <button type="button" class="btn btn-default btn-xs" data-ng-click="enableEdit()"
+                data-ng-if="data.readOnlyMode==true"><i class="fa fa-pencil-square-o"></i> Edit
+        </button>
     </p>
 </div>
 
 <hr style="clear: both;"/>
 
-<div class="form-body pal" style="margin-top: -25px;" id ="container_recordNav"
+<div class="form-body pal" style="margin-top: -25px;" id="container_recordNav"
      data-ng-include="'views/admin/cataloging/catalog-record.html'">
 </div>
 
@@ -140,28 +164,28 @@
 <div data-ng-include="'views/admin/cataloging/supporting-panels/supplier-panel.html'"></div>
 <div data-ng-include="'views/admin/cataloging/supporting-panels/publisher-panel.html'"></div>
 <script>
-    setTimeout(function(){
+    setTimeout(function () {
         $('[data-toggle="tooltip"]').tooltip(
             {container: 'body'});
     }, 1000);
 
-    function showSearchPanel(panelType){
-        $("#searchPanel_"+panelType).show('slide', {direction: 'left'}, 400);
-        $("#listPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
-        $("#entryPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
+    function showSearchPanel(panelType) {
+        $("#searchPanel_" + panelType).show('slide', {direction: 'left'}, 400);
+        $("#listPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
+        $("#entryPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
 
-        $("#pageTitle_"+panelType).html("Search "+panelType);
+        $("#pageTitle_" + panelType).html("Search " + panelType);
 //        $("#footer_"+panelType).show();
 
     }
 
-    function showEntryPanel(panelType){
-        $("#searchPanel_"+panelType).hide('slide', {direction: 'left'}, 400);
-        $("#listPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
-        $("#entryPanel_"+panelType).show('slide', {direction: 'right'}, 400);
-        $("#pageTitle_"+panelType).html("New "+panelType);
+    function showEntryPanel(panelType) {
+        $("#searchPanel_" + panelType).hide('slide', {direction: 'left'}, 400);
+        $("#listPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
+        $("#entryPanel_" + panelType).show('slide', {direction: 'right'}, 400);
+        $("#pageTitle_" + panelType).html("New " + panelType);
 //        $("#footer_"+panelType).hide();
     }
 
-$("#abcd").tokenfield();
+    $("#abcd").tokenfield();
 </script>
