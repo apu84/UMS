@@ -958,6 +958,12 @@ module ums {
             }]
           }
         })
+        .state('certificateApproval', {
+          url: "/certificateApproval",
+          controller: 'CertificateApprovalController',
+          controllerAs: 'vm',
+          templateUrl: 'views/fee/certificate/certificate.approval.html'
+        })
         .state('studentDues', {
           url: "/studentDues",
           controller: 'StudentDuesController',
