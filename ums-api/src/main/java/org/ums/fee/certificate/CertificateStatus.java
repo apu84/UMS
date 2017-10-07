@@ -5,11 +5,14 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
+import org.ums.usermanagement.user.User;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface CertificateStatus extends Serializable, EditType<MutableCertificateStatus>, LastModifier,
     Identifier<Long> {
@@ -38,7 +41,8 @@ public interface CertificateStatus extends Serializable, EditType<MutableCertifi
 
   enum Status {
     APPLIED(1, "APPLIED"),
-    PROCESSED(2, "PROCESSED");
+    PROCESSED(2, "PROCESSED"),
+    DELIVERED(3, "DELIVERED");
 
     private String label;
     private int id;
