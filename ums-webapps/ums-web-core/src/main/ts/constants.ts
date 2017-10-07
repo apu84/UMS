@@ -544,6 +544,11 @@ module ums {
           {id: '99', name: 'Office of VC'},
           {id: '9999', name: 'All Departments'}
         ],
+        certificateStatus: [
+          {id: 1, name: 'Applied'},
+          {id: 2, name: 'Processed'},
+          {id: 3, name: 'Delivered'}
+        ],
         MARKS_SUBMISSION_STATUS: {
           NOT_SUBMITTED: 0,
           WAITING_FOR_SCRUTINY: 1,
