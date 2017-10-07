@@ -56,7 +56,8 @@ do
 		cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/webapps/*.war $instance/webapps/
 		echo "Starting up $instance"
 		let "port=port+1"
-		start_tomcat $instance $port
+		start_tomcat $instance
+		java -jar $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/microservice/microservice-$PROJECT_VERSION
 done
 
 yes | cp -R $UMS_SRC/ums-webapps/ums-web/target/ums-web-$PROJECT_VERSION/* /opt/ums-web

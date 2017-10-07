@@ -13,6 +13,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.credentials.RetryLimitHashedCredentialsMatcher;
 import org.ums.message.MessageResource;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
@@ -30,6 +31,8 @@ public class ResetPassword extends AbstractPathMatchingFilter {
   private MessageResource mMessageResource;
   @Autowired
   private PasswordService mPasswordService;
+  @Autowired
+  private RetryLimitHashedCredentialsMatcher mRetryLimitHashedCredentialsMatcher;
 
   private String mSigningKey;
 
@@ -55,7 +58,7 @@ public class ResetPassword extends AbstractPathMatchingFilter {
         mutableUser.setPasswordResetToken(null);
         mutableUser.setPasswordTokenGenerateDateTime(null);
         mutableUser.update();
-
+        mRetryLimitHashedCredentialsMatcher.resetRetryLimit(userId.get());
         sendSuccess(String.format("{\"userId\":\"%s\"}", userId.get()), pResponse);
       }
     }
