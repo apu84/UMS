@@ -109,6 +109,11 @@
       <artifactId>spring-aop</artifactId>
       <version>${spring.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>4.3.0.RELEASE</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -142,6 +147,11 @@
           <groupId>org.springframework</groupId>
           <artifactId>spring-aop</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-aspects</artifactId>
+        </exclusion>
+
         <exclusion>
           <groupId>org.springframework</groupId>
           <artifactId>spring-tx</artifactId>
@@ -282,12 +292,12 @@
       <scope>compile</scope>
     </dependency>
 
-<!--    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.26</version>
-      <scope>compile</scope>
-    </dependency>-->
+    <!--    <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.26</version>
+          <scope>compile</scope>
+        </dependency>-->
 
     <!--Oracle jdbc driver-->
     <dependency>
@@ -537,6 +547,30 @@
       <artifactId>jjwt</artifactId>
       <version>0.7.0</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-junit</artifactId>
+      <version>2.0.0.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

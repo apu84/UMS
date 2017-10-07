@@ -142,6 +142,11 @@
       <scope>provided</scope>
       <version>${spring.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>4.3.0.RELEASE</version>
+    </dependency>
 
     <dependency>
       <groupId>aopalliance</groupId>
@@ -281,6 +286,11 @@
       <version>5.1.26</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc6</artifactId>
+      <version>11.2.0.3</version>
+    </dependency>
 
     <!-- testing -->
     <dependency>
@@ -299,6 +309,12 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
       <version>1.10.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-junit</artifactId>
+      <version>2.0.0.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -571,6 +587,11 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <testResources>
+      <testResource>
+        <directory>src/main</directory>
+      </testResource>
+    </testResources>
   </build>
 
   <profiles>

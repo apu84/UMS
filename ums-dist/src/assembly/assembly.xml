@@ -72,6 +72,10 @@
         <include>org.aspectj:aspectjrt</include>
         <include>org.aspectj:aspectjweaver</include>
         <include>io.jsonwebtoken:jjwt</include>
+        <include>org.springframework:spring-test</include>
+        <include>junit:junit</include>
+        <include>org.mockito:mockito-all</include>
+        <include>org.hamcrest:hamcrest-junit</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>
