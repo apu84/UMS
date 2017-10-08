@@ -17,6 +17,7 @@ import org.ums.persistent.model.library.PersistentRecord;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.sound.midi.Soundbank;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
@@ -63,6 +64,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("callNo", pReadOnly.getCallNo() == null ? "" : pReadOnly.getCallNo());
     pBuilder.add("callDate", pReadOnly.getCallDate() == null ? "" : pReadOnly.getCallDate());
     pBuilder.add("classNo", pReadOnly.getClassNo() == null ? "" : pReadOnly.getClassNo());
+    pBuilder.add("callEdition", pReadOnly.getCallEdition() == null ? "" : pReadOnly.getCallEdition());
+    pBuilder.add("callVolume", pReadOnly.getCallVolume() == null ? "" : pReadOnly.getCallVolume());
     pBuilder.add("authorMark", pReadOnly.getAuthorMark() == null ? "" : pReadOnly.getAuthorMark());
     // pBuilder.add("physicalDescription.pagination", pReadOnly.getPhysicalDescription().);
 
@@ -157,18 +160,22 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pMutable.setClassNo(pJsonObject.getString("classNo"));
     pMutable.setCallDate(pJsonObject.getString("callDate"));
     pMutable.setAuthorMark(pJsonObject.getString("authorMark"));
+    if(pJsonObject.containsKey("callEdition"))
+      pMutable.setCallEdition(pJsonObject.getString("callEdition"));
+    if(pJsonObject.containsKey("callVolume"))
+      pMutable.setCallVolume(pJsonObject.getString("callVolume"));
 
     ImprintDto imprintDto = new ImprintDto();
-    JsonObject imprintObject = (JsonObject) (pJsonObject.get("imprint"));
+    JsonObject imprintObject = pJsonObject.getJsonObject("imprint");
     if(imprintObject.containsKey("publisher") && !imprintObject.getString("publisher").equals("0")
         && !imprintObject.getString("publisher").equals(""))
       imprintDto.setPublisher(mPublisherManager.get(Long.valueOf(imprintObject.getString("publisher"))));
 
-    if(pJsonObject.containsKey("placeOfPublication"))
+    if(imprintObject.containsKey("placeOfPublication"))
       imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
-    if(pJsonObject.containsKey("yearDateOfPublication"))
+    if(imprintObject.containsKey("yearDateOfPublication"))
       imprintDto.setDateOfPublication(imprintObject.getString("yearDateOfPublication"));
-    if(pJsonObject.containsKey("copyRightDate"))
+    if(imprintObject.containsKey("copyRightDate"))
       imprintDto.setCopyRightDate(imprintObject.getString("copyRightDate"));
 
     pMutable.setImprint(imprintDto);

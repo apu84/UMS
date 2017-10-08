@@ -67,6 +67,10 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setCallDate(String pCallDate);
 
+  void setCallEdition(String pCallEdition);
+
+  void setCallVolume(String pCallVolume);
+
   void setAuthorMark(String pAuthorMark);
 
   void setContributorList(List<MaterialContributor> pContributorList);

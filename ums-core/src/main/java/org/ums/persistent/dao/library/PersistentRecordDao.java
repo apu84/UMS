@@ -22,32 +22,33 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentRecordDao extends RecordDaoDecorator {
   static String SELECT_ALL =
-      "Select MFN, LANGUAGE, TITLE,    SUB_TITLE, GMD, SERIES_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
+      "Select MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
-          + "   CALL_NO, CLASS_NO, TO_CHAR(CALL_DATE, 'DD-MM-YYYY') CALL_DATE, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   DATE_YEAR_OF_PUBLICATION, TO_CHAR(COPY_RIGHT_DATE, 'DD-MM-YYYY') COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
+          + "   CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
+          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
           + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, LAST_MODIFIED "
           + "FROM RECORDS ";
 
   static String UPDATE_ONE =
       "UPDATE RECORDS SET LANGUAGE = ?, TITLE=?,  SUB_TITLE=?, GMD=?, SERIES_TITLE=?, VOLUME_NO=?, VOLUME_TITLE=?, SERIAL_ISSUE_NO=?, SERIAL_NUMBER=?, "
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
-          + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=to_date(?,'dd-MM-YYYY'),  AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
-          + "  COPY_RIGHT_DATE=to_date(?,'dd-MM-YYYY'), MATERIAL_TYPE=?, "
+          + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
+          + "  COPY_RIGHT_DATE=?, MATERIAL_TYPE=?, "
           + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, NOTES=?, LAST_UPDATED_ON=sysdate,  "
           + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
-          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
+          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
           + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-          + " ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, "
+          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, ?,"
-          + " sysdate, sysdate, ?, " + getLastModifiedSql() + ")";
+          + " sysdate, sysdate, ?, "
+          + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
@@ -72,13 +73,13 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(),
-        pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint().getPublisher().getId(), pRecord
-            .getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
-            .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
-            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
-            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getNoteJsonString(), pRecord
-            .getLastUpdatedBy(), pRecord.getMfn());
+            .getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
+            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
+            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
+            .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
+        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord.getAcquisitionType().getId(),
+        pRecord.getKeyWords(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
+            .getNoteJsonString(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
   @Override
@@ -91,13 +92,14 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(),
-        pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint().getPublisher().getId(), pRecord
-            .getImprint().getPlaceOfPublication(), pRecord.getImprint().getDateOfPublication(), pRecord.getImprint()
-            .getCopyRightDate(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
-            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
-            .getDocumentalist(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
-            .getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
+            .getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
+            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
+            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
+            .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
+        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord.getAcquisitionType().getId(),
+        pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord.getContributorJsonString(), pRecord
+            .getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
+            .getLastUpdatedBy());
 
     return id;
   }
@@ -139,6 +141,8 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setCallNo(resultSet.getString("CALL_NO"));
       record.setClassNo(resultSet.getString("CLASS_NO"));
       record.setCallDate(resultSet.getString("CALL_DATE"));
+      record.setCallEdition(resultSet.getString("CALL_EDITION"));
+      record.setCallVolume(resultSet.getString("CALL_VOLUME"));
       record.setAuthorMark(resultSet.getString("AUTHOR_MARK"));
 
       ImprintDto imprintDto = new ImprintDto();

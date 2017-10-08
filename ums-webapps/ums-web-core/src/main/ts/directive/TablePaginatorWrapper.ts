@@ -44,11 +44,6 @@ module ums {
           scope.pagination = {};
           scope.pagination.currentPage = 1;
           scope.filterlist = new Array <IFilter>();
-          // console.log("----------");
-          console.log(scope.collectionlist);
-          // scope.$watch("collectionlist", function(val) {
-          //  console.log(val);
-          // });
 
           scope.data = {
             readOnlyMode: Boolean,
@@ -193,7 +188,6 @@ module ums {
            */
 
           scope.fetchData = function (pageNumber: number): any {
-            console.log("----------");
             this.dataservice().fetchDataForPaginationTable()(pageNumber, scope.orderBy, scope.ipp, scope.filterlist).then((resultData: any) => {
               scope.records = resultData.entries;
               scope.total = resultData.total;
@@ -232,7 +226,6 @@ module ums {
            */
           scope.updateRecord = function (): void {
             this.dataservice().updateRecord(scope.record).then((response) => {
-              console.log(response);
               scope.datanotify().show(response);
             }, (response) => {
               scope.datanotify().error(response);

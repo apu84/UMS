@@ -62,6 +62,10 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   String getCallDate();
 
+  String getCallEdition();
+
+  String getCallVolume();
+
   String getAuthorMark();
 
   List<MaterialContributor> getContributorList();

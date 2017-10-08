@@ -96,10 +96,6 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     FilterDto filterDto = g.fromJson(pFilter, FilterDto.class);
     String queryString = "";
 
-    System.out.println(filterDto.getSearchType());
-    System.out.println(filterDto.getBasicQueryField());
-    System.out.println(filterDto.getBasicQueryTerm());
-
     if(filterDto.getSearchType().equalsIgnoreCase("basic")) {
       if(filterDto.getBasicQueryField().equals("any"))
         queryString = String.format("*%s* AND type_s:Record", filterDto.getBasicQueryTerm());

@@ -1,7 +1,7 @@
 module ums {
     export class NavigationButton implements ng.IDirective {
 
-        constructor() {
+        constructor(){
         }
 
         public restrict: string = "E";
@@ -12,7 +12,7 @@ module ums {
         public iconsArr = Array<String>();
         public idsArr = Array<String>();
         public containersArr = Array<String>();
-
+        public tooltipsArr = Array<String>();
 
         public link = (scope: any, element: JQuery, attributes: any) => {
 
@@ -22,7 +22,6 @@ module ums {
             this.idsArr = attributes.ids.split(",");
             this.containersArr = attributes.containers.split(",");
 
-
             scope.manageUI = function (navId: string) {
                 this.idsArr = attributes.ids.split(",");
                 for (var i = 0; i < this.idsArr.length; i++) {
@@ -31,11 +30,10 @@ module ums {
 
                     $("#container_" + this.idsArr[i]).hide();
                 }
-
                 $("#" + navId).css({"background-color": "black"});
                 $("#" + navId + " > i").css({"color": "white"});
                 $("#container_" + navId).show();
-            }
+            };
 
 
             for (var i = 0; i < this.iconsArr.length; i++) {
@@ -43,13 +41,13 @@ module ums {
                     "icon": this.iconsArr[i],
                     "id": this.idsArr[i],
                     "callback": scope.callbacks == undefined || scope.callbacks.length != this.iconsArr.length ? {} : scope.callbacks[i]
-                }
+                };
                 scope.iObjects.push(obj);
             }
 
-            // console.log($("#"+ scope.defaultselected));
-            // $("#"+ scope.defaultselected).css({"background-color": "black"});
-            // $("#"+ scope.defaultselected+" > i").css({"color": "white"});
+            if(scope.defaultselected != "" || scope.defaultselected != null || scope.defaultselected != undefined) {
+                    scope.manageUI(scope.defaultselected);
+            }
         };
 
         public templateUrl: string = "./views/directive/navigation-buttons.html";

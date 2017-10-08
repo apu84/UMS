@@ -73,6 +73,8 @@ module ums {
         callNo: string;
         classNo: string;
         callDate: string;
+        callEdition: string;
+        callVolume: string;
         authorMark: string;
         contributorList: Array<IContributor>; //need separate channel
         imprint: IImprint;

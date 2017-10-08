@@ -34,18 +34,12 @@ module ums {
             $scope.doSearch = this.doSearch.bind(this);
             $scope.search = {queryTerm: ""};
 
-            console.log("Inside record Search. ............" + $stateParams["1"]);
             if ($stateParams["1"] == null || $stateParams["1"] == "old") {
-                console.log("inside if");
-
-
-                console.log(localStorage.getItem("lms_search_filter"));
                 var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
                 this.$scope.search.queryTerm = filter.basicQueryTerm;
                 this.$scope.choice = filter.basicQueryField;
-                console.log(filter);
+
             } else {
-                console.log("inside else");
                 this.$scope.search.searchType = "basic";
                 this.$scope.choice = "any";
             }
@@ -70,7 +64,6 @@ module ums {
             filter.searchType = "basic";
             filter.basicQueryField = this.$scope.choice;
             filter.basicQueryTerm = this.$scope.search.queryTerm;
-            // console.log(filter);
             this.$scope.search.filter = filter;
             localStorage["lms_search_filter"] = JSON.stringify(filter);
         }
@@ -95,8 +88,6 @@ module ums {
                     this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
                 }
 
-                console.log("------------" + response.entries.length);
-                console.log(this.$scope.recordIdList.length);
                 localStorage["lms_records"] = JSON.stringify(this.$scope.recordIdList);
                 localStorage["lms_current_index"] = 0;
                 localStorage["lms_total_record"] = response.total;

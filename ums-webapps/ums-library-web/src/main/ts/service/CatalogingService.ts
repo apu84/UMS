@@ -39,8 +39,6 @@ module ums {
             record.imprint.publisher = record.imprint.publisher + '';
 
 
-            console.log("record.physicalDescriptionString :" + record.physicalDescriptionString);
-
             if (record.mfnNo != undefined) {
                 this.httpClient.put(resourceUrl + '/' + record.mfnNo, record, 'application/json')
                     .success(() => {

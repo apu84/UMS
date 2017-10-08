@@ -48,6 +48,8 @@ public class PersistentRecord implements MutableRecord {
   private String mCallNo;
   private String mClassNo;
   private String mCallDate;
+  private String mCallEdition;
+  private String mCallVolume;
   private String mAuthorMark;
   private List<MaterialContributor> mContributorList;
   private ImprintDto mImprint;
@@ -105,6 +107,8 @@ public class PersistentRecord implements MutableRecord {
     mCallNo = pPersistentRecord.getCallNo();
     mClassNo = pPersistentRecord.getClassNo();
     mCallDate = pPersistentRecord.getCallDate();
+    mCallEdition = pPersistentRecord.getCallEdition();
+    mCallVolume = pPersistentRecord.getCallVolume();
     mAuthorMark = pPersistentRecord.getAuthorMark();
     mContributorList = pPersistentRecord.getContributorList();
     mImprint = pPersistentRecord.getImprint();
@@ -369,6 +373,16 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
+  public String getCallEdition() {
+    return mCallEdition;
+  }
+
+  @Override
+  public String getCallVolume() {
+    return mCallVolume;
+  }
+
+  @Override
   public void setCorpCityCountry(String pCorpCitCountry) {
     mCorpCityCountry = pCorpCitCountry;
   }
@@ -441,6 +455,16 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setCallDate(String pCallDate) {
     mCallDate = pCallDate;
+  }
+
+  @Override
+  public void setCallEdition(String pCallEdition) {
+    mCallEdition = pCallEdition;
+  }
+
+  @Override
+  public void setCallVolume(String pCallVolume) {
+    mCallVolume = pCallVolume;
   }
 
   @Override

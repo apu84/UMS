@@ -51,33 +51,35 @@
 </style>
 
 
-<div id="rcorners1" style="width: 727px;float: left">
-            <span style="float: left;margin-top: 5px;">
-                    <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
-            </span>
-    <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
-            margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
-           data-ng-model="search.queryTerm"/>
+<form ng-submit="doSearch()">
+    <div id="rcorners1" style="width: 727px;float: left">
+                <span style="float: left;margin-top: 5px;">
+                        <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
+                </span>
+        <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
+                margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
+               data-ng-model="search.queryTerm"/>
 
-    <select data-style="btn-white" data-ng-model="search.searchType"
-            class="selectpier"
-            style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
-            onchange="searchSelection(this.value)" autocomplete="off">
-        <option value="basic">Basic Search</option>
-        <option value="advanced">Advanced Search</option>
-        <optgroup label="Camping">
-            <option value="authors">Authors</option>
-            <option value="corporate_authors">Corporate Authors</option>
-            <option value="subjects">Subjects</option>
-            <option value="titles">Titles</option>
-            <!--<option value="7">Series</option>-->
-        </optgroup>
-    </select>
-    <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-click="doSearch()"
-       style="border-radius: 0.5em;padding: 8px 10px;background-color: white;margin-left: 5px;margin-top: -1px;">
-        <i class="fa fa-search fa-lg" style="color: #0093d9;"></i>
-    </a>
-</div>
+        <select data-style="btn-white" data-ng-model="search.searchType"
+                class="selectpier"
+                style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
+                onchange="searchSelection(this.value)" autocomplete="off">
+            <option value="basic">Basic Search</option>
+            <option value="advanced">Advanced Search</option>
+            <optgroup label="Camping">
+                <option value="authors">Authors</option>
+                <option value="corporate_authors">Corporate Authors</option>
+                <option value="subjects">Subjects</option>
+                <option value="titles">Titles</option>
+                <!--<option value="7">Series</option>-->
+            </optgroup>
+        </select>
+        <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-click="doSearch()"
+           style="border-radius: 0.5em;padding: 8px 10px;background-color: white;margin-left: 5px;margin-top: -1px;">
+            <i class="fa fa-search fa-lg" style="color: #0093d9;"></i>
+        </a>
+    </div>
+</form>
 <span style="float: left;margin-top: 21px;">
 <a href="javascript:;" class="btn btn-xs btn-default btn-round"
    style="border-radius: 0.5em;padding: 8px 10px;background-color: #eee;margin-left: 5px;margin-top: -5px;">
@@ -411,8 +413,8 @@
 
     function searchSelection(id) {
         var offset = $("#bbcd").offset();
-        console.log(currentSearchType);
-        if (id == "advanced_search") {
+        if (id == "advanced") {
+            console.log("I am here");
             $("#bbcd").offset({top: offset.top + 260});
             $("#generalSearchDiv").hide("slide", {direction: "right"}, 600);
             $("#advancedSearchDiv").show("slide", {direction: "left"}, 600);
@@ -422,7 +424,7 @@
             $("#advancedSearchDiv").hide("slide", {direction: "left"}, 600);
             $("#generalSearchDiv").show("slide", {direction: "right"}, 600);
 
-            if (currentSearchType == "advanced_search") {
+            if (currentSearchType == "advanced") {
                 setTimeout(function () {
                     $("#bbcd").offset({top: offset.top - 260});
 
