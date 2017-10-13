@@ -68,19 +68,17 @@ public class ResetPassword extends AbstractPathMatchingFilter {
   }
 
   private boolean isValidToken(final String token) {
-    boolean valid = true;
-    String userId = null;
-    try {
-      Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(token);
-      userId = claimsJws.getBody().getSubject();
-    } catch(JwtException jwte) {
-      valid = false;
+    boolean valid = false;
+    Optional<String> userId = getUser(token);
+    if(userId.isPresent()) {
+      valid = true;
     }
+
     if(valid) {
-      if(!mUserManager.exists(userId)) {
+      if(!mUserManager.exists(userId.get())) {
         return false;
       }
-      User user = mUserManager.get(userId);
+      User user = mUserManager.get(userId.get());
       if(!user.getPasswordResetToken().equals(token)) {
         return false;
       }
