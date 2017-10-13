@@ -21,6 +21,7 @@ module ums {
             this.iconsArr = attributes.icons.split(",");
             this.idsArr = attributes.ids.split(",");
             this.containersArr = attributes.containers.split(",");
+            this.tooltipsArr = attributes.tooltips.split(",");
 
             scope.manageUI = function (navId: string) {
                 this.idsArr = attributes.ids.split(",");
@@ -40,7 +41,8 @@ module ums {
                 var obj = {
                     "icon": this.iconsArr[i],
                     "id": this.idsArr[i],
-                    "callback": scope.callbacks == undefined || scope.callbacks.length != this.iconsArr.length ? {} : scope.callbacks[i]
+                    "callback": scope.callbacks == undefined || scope.callbacks.length != this.iconsArr.length ? {} : scope.callbacks[i],
+                    "tooltip": this.tooltipsArr[i]
                 };
                 scope.iObjects.push(obj);
             }
