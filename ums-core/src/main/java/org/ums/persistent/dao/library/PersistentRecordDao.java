@@ -45,7 +45,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,, ?, ?, "
+          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, ?,"
           + " sysdate, sysdate, ?, "
           + getLastModifiedSql() + ")";
