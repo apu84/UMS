@@ -22,6 +22,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
   @Override
   public List<R> getAll() {
+    System.out.println("----->>"+this.getClass().getCanonicalName());
     List<R> readOnlys = super.getAll();
     for(R readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
