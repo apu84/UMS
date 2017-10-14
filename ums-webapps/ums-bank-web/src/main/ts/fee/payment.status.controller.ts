@@ -9,7 +9,7 @@ module ums {
     public filters: Filter[];
     public selectedFilters: SelectedFilter[] = [];
     public paymentStatusList: PaymentStatus[];
-    public selectedPayments: {[id: string]: boolean} = {};
+    public selectedPayments: { [id: string]: boolean } = {};
     public selectedPaymentIds: string[];
     public selectedPaymentStatus: PaymentStatus[];
     public reloadReference: ReloadRef = {reloadList: false};
@@ -23,12 +23,12 @@ module ums {
       this.paymentStatusService.getFilters().then((filters: Filter[]) => {
         this.filters = filters;
 
-        $scope.$watch(() => this.selectedFilters, ()=> {
+        $scope.$watch(() => this.selectedFilters, () => {
           this.navigate();
         }, true);
       });
 
-      this.$scope.$watch(()=> {
+      this.$scope.$watch(() => {
         return this.selectedPayments;
       }, () => {
         if (this.selectedPayments) {
@@ -37,7 +37,7 @@ module ums {
                   (key) => {
                     return this.selectedPayments[key] ? key : undefined;
                   })
-              .filter((el)=> !!el);
+              .filter((el) => !!el);
         }
       }, true);
 
@@ -51,7 +51,7 @@ module ums {
     public concludePayment(accepted: boolean): void {
       this.concludeStatus.accepted = accepted;
       this.selectedPaymentStatus
-          = this.paymentStatusList.filter((payment: PaymentStatus)=> {
+          = this.paymentStatusList.filter((payment: PaymentStatus) => {
         return this.selectedPaymentIds.indexOf(payment.id) >= 0;
       });
 
@@ -76,7 +76,10 @@ module ums {
     }
 
     public navigate(url?: string): void {
+      console.log("In navigate");
+      console.log(url);
       this.paymentStatusService.getPaymentStatus(this.selectedFilters, url).then((status: PaymentStatusResponse) => {
+
         if (url && this.paymentStatusList && this.paymentStatusList.length > 0) {
           this.paymentStatusList.push.apply(status.entries);
         }

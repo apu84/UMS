@@ -8,6 +8,8 @@ module ums {
     }
 
     public getPaymentStatus(filters: PaymentStatusFilter[], url?: string): ng.IPromise<PaymentStatusResponse> {
+      console.log("Payment filters");
+      console.log(filters);
       const defer: ng.IDeferred<PaymentStatusResponse> = this.$q.defer();
       this.httpClient.post(url ? `${url}` : 'payment-status/paginated/filtered',
           filters ? {"entries": filters} : {},
@@ -24,7 +26,7 @@ module ums {
 
     public getFilters(): ng.IPromise<Filter[]> {
       const defer: ng.IDeferred<Filter[]> = this.$q.defer();
-      this.httpClient.get('payment-status/filters', HttpClient.MIME_TYPE_JSON, (filters: Filter[])=> {
+      this.httpClient.get('payment-status/filters', HttpClient.MIME_TYPE_JSON, (filters: Filter[]) => {
         defer.resolve(filters);
       });
       return defer.promise;

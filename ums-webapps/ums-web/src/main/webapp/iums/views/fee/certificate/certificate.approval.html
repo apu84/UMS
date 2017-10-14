@@ -51,7 +51,34 @@
         <div class="panel-heading">Certificate Approval</div>
         <div class="panel-body shodowPanel" style="min-height: 490px">
             <div class="col-md-12">
-                <h1>Hello COE!</h1>
+                <div class="row">
+                    <form name="certificateStatusSelectionForm" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="certificateStatusSelect">Certificate
+                                Status</label>
+                            <div class="col-md-3">
+                                <select class="form-control"
+                                        name="certificateStatusSelect"
+                                        id="certificateStatusSelect"
+                                        ng-options="s.name for s in vm.certificateStatusList track by s.id"
+                                        ng-model="vm.certificateStatus">
+
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <dir-pagination-controls boundary-links="true"
+                                                         on-page-change="vm.pageChanged(vm.newPageNumber)"
+                                                         template-url="views\fee\certificate\dirPagination.tpl.html"></dir-pagination-controls>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="row">
+
+                </div>
+
+
             </div>
         </div>
     </div>

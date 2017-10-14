@@ -608,3 +608,8 @@ Insert into DB_IUMS.PERMISSIONS
  Values
    (72, 'coe:*,assign:preparerScrutinizer,class:room,exam:routine,stat:marksSubmissionStat,admission:statistics,certificate:application', 1012, 'xyz');
 
+
+
+
+alter table FEE
+add dept_id VARCHAR2(2);
