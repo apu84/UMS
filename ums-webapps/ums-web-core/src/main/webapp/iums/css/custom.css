@@ -460,3 +460,13 @@ angular-filemanager .breadcrumb{
 .table tbody tr td.center-aligned {
     text-align: center;
 }
+
+.form-control:focus {
+    box-shadow: 0 0 5px rgba(82, 168, 236, .9) !important;
+}
+.has-error .form-control {
+    box-shadow: 0 0 5px #a94442 !important;
+}
+.has-success .form-control:focus{
+    box-shadow: 0 0 5px #18bc9c !important;
+}

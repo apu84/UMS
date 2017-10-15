@@ -118,6 +118,6 @@ public class ServiceContext {
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
         mUserManager, mRecordManager);
-    //, mAgendaResolutionManager
+    // , mAgendaResolutionManager
   }
 }
