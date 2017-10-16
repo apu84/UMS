@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.fee.FeeType;
 import org.ums.filter.AbstractFilterQueryBuilder;
 import org.ums.filter.ListFilter;
 import org.ums.generator.IdGenerator;
@@ -89,14 +90,17 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   }
 
   @Override
-  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
+      FeeType pFeeType) {
     FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
-            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery() + pFeeType == null ? " "
+            : " AND FEE_CATEGORY IN (SELECT ID FROM FEE_CATEGORY WHERE TYPE=?) "
+                + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     List<Object> params = queryBuilder.getParameters();
+    params.add(pFeeType.getId());
     params.add(startIndex);
     params.add(endIndex);
     return mJdbcTemplate.query(query, params.toArray(), new CertificateStatusRowMapper());

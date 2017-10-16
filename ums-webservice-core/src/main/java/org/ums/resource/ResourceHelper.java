@@ -150,8 +150,12 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
       entries.forEach((entry) -> {
         JsonObject filter = (JsonObject) entry;
         Object value = null;
-        if(!StringUtils.isEmpty(filter.getJsonObject("filter").getString("type"))
-            && filter.getJsonObject("filter").getString("type").equalsIgnoreCase("date")) {
+        if(!StringUtils.isEmpty(
+                filter.getJsonObject("filter")
+                        .getString("type"))
+            && filter.getJsonObject("filter")
+                .getString("type")
+                .equalsIgnoreCase("date")) {
           value = getDateFormatter().parse(filter.getJsonObject("value").getString("value"));
         }
         else if(filter.getJsonObject("value").get("value").getValueType() == JsonValue.ValueType.NUMBER) {

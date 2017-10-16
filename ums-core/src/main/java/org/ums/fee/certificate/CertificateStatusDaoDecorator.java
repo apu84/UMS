@@ -1,6 +1,7 @@
 package org.ums.fee.certificate;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.fee.FeeType;
 import org.ums.filter.ListFilter;
 
 import java.util.List;
@@ -14,8 +15,9 @@ public class CertificateStatusDaoDecorator extends
   }
 
   @Override
-  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
-    return getManager().paginatedFilteredList(itemsPerPage, pageNumber, pFilters);
+  public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
+      FeeType pFeeType) {
+    return getManager().paginatedFilteredList(itemsPerPage, pageNumber, pFilters, pFeeType);
   }
 
   @Override
@@ -27,4 +29,5 @@ public class CertificateStatusDaoDecorator extends
   public List<String> getByStudent(String pStudentId, String pFeeCategoryId) {
     return getManager().getByStudent(pStudentId, pFeeCategoryId);
   }
+
 }

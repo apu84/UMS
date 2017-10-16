@@ -1,5 +1,6 @@
 package org.ums.fee.certificate;
 
+import org.ums.fee.FeeType;
 import org.ums.filter.ListFilter;
 import org.ums.manager.ContentManager;
 
@@ -8,7 +9,8 @@ import java.util.List;
 public interface CertificateStatusManager extends ContentManager<CertificateStatus, MutableCertificateStatus, Long> {
   List<CertificateStatus> paginatedList(int itemsPerPage, int pageNumber);
 
-  List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters);
+  List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
+      FeeType pFeeType);
 
   List<CertificateStatus> getByStudent(String pStudentId);
 
@@ -16,6 +18,7 @@ public interface CertificateStatusManager extends ContentManager<CertificateStat
 
   enum FilterCriteria {
     STUDENT_ID,
-    STATUS
+    STATUS,
+    FEE_ID
   }
 }

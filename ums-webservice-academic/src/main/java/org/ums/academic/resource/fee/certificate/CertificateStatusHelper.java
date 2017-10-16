@@ -56,9 +56,9 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     return jsonObjectBuilder.build();
   }
 
-  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, JsonObject pJsonObject, UriInfo pUriInfo) {
+  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, FeeType pFeeType, JsonObject pJsonObject, UriInfo pUriInfo) {
     List<CertificateStatus> certificateStatusList =
-        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject));
+        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject), pFeeType);
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     certificateStatusList.forEach((certificate) -> {
@@ -154,6 +154,10 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     status.addOption("Applied", 1);
     status.addOption("Processed", 2);
     filters.add(status);
+
+    FilterItem feeId =
+        new FilterItem("Fee Id", CertificateStatusManager.FilterCriteria.FEE_ID.toString(), FilterItem.Type.SELECT);
+    filters.add(feeId);
 
     return filters;
   }

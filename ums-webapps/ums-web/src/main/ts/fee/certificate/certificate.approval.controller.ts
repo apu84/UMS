@@ -8,7 +8,7 @@ module ums {
 
 
   export class CertificateApprovalController {
-    public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'userService', 'appConstants'];
+    public static $inject = ['CertificateFeeService', 'CertificateStatusService','FeeCategoryService', 'userService', 'appConstants'];
     public certificateOptions: IOptions[];
     public certificateOption: IOptions;
     public feeCategories: FeeCategory[];
@@ -21,11 +21,11 @@ module ums {
                 private userService: UserService,
                 private appConstants: any) {
 
-      console.log(this.appConstants.certificateStatus);
-      /*this.certificateOptions = appConstants.certificateStatus;
+      this.certificateOptions = appConstants.certificateStatus;
       this.certificateOption = appConstants.certificateStatus[0];
-      this.getLoggedUserAndFeeCategories();*/
+      this.getLoggedUserAndFeeCategories();
     }
+
 
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
@@ -41,16 +41,35 @@ module ums {
         feeType = Utils.CERTIFICATE_FEE;
 
       this.feeCategoryService.getFeeCategories(feeType).then((feeCategories: FeeCategory[]) => {
-        console.log(feeCategories);
+        this.feeCategories = feeCategories;
+        this.getCertificateStatus();
       });
     }
 
     private getCertificateStatus() {
-      /*var filters: SelectedFilter[];
+
+        this.certificateStatusService.getFilters().then((filters:Filter[])=>{
+            console.log("Filters");
+            console.log(filters);
+        })
+      /*var filters: SelectedFilter[] = [];
       var filter: SelectedFilter = <SelectedFilter>{};
       filter.id = 1;
       var filterOption = <FilterOption>{};
-      filterOption.label = "";*/
+      filterOption.label = "type";
+      filterOption.value="string";
+      filter.filter=filterOption;
+
+      var valueOption = <FilterOption>{};
+      valueOption.label="fee_id";
+      valueOption.value="14";
+      filter.value=valueOption;
+      filters.push(filter);
+
+      this.certificateStatusService.listCertificateStatus(filters).then((certificateStatus:any)=>{
+         console.log("certificate status");
+         console.log(certificateStatus);
+      });*/
     }
 
   }

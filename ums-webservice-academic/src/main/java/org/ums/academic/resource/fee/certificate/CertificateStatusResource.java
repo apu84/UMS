@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.fee.FeeTypeManager;
 import org.ums.resource.Resource;
 
 @Component
@@ -16,14 +17,19 @@ import org.ums.resource.Resource;
 public class CertificateStatusResource extends Resource {
   @Autowired
   CertificateStatusHelper mCertificateStatusHelper;
+  @Autowired
+  FeeTypeManager mFeeTypeManager;
+
   private int mDefaultNoOfItems = 20;
 
   @POST
   @Path("/paginated")
   public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
-      @QueryParam("itemsPerPage") Integer itemsPerPage, JsonObject pJsonObject) throws Exception {
+      @QueryParam("itemsPerPage") Integer itemsPerPage, @QueryParam("feeType") Integer feeType, JsonObject pJsonObject)
+      throws Exception {
     return mCertificateStatusHelper.getFilteredCertificateStatus(itemsPerPage == null ? mDefaultNoOfItems
-        : itemsPerPage, pageNumber == null ? 1 : pageNumber, pJsonObject, mUriInfo);
+        : itemsPerPage, pageNumber == null ? 1 : pageNumber, feeType == null ? null : mFeeTypeManager.get(feeType),
+        pJsonObject, mUriInfo);
   }
 
   @GET
