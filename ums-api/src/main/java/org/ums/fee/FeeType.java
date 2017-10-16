@@ -34,7 +34,7 @@ public interface FeeType extends Serializable, EditType<MutableFeeType>, LastMod
     private static final Map<Integer, Types> lookup = new HashMap<>();
 
     static {
-      for (Types c : EnumSet.allOf(Types.class)) {
+      for(Types c : EnumSet.allOf(Types.class)) {
         lookup.put(c.getId(), c);
       }
     }

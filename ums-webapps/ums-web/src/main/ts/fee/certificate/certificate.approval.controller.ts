@@ -21,9 +21,10 @@ module ums {
                 private userService: UserService,
                 private appConstants: any) {
 
-      this.certificateOptions = appConstants.certificateStatus;
+      console.log(this.appConstants.certificateStatus);
+      /*this.certificateOptions = appConstants.certificateStatus;
       this.certificateOption = appConstants.certificateStatus[0];
-      this.getLoggedUserAndFeeCategories();
+      this.getLoggedUserAndFeeCategories();*/
     }
 
     private getLoggedUserAndFeeCategories() {
