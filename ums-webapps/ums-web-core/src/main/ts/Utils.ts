@@ -150,6 +150,14 @@ module ums {
     static DEMAND_NOTE = 2;
     static PAY_ORDER = 3;
 
+
+    /*Fee Type*/
+    static SEMESTER_FEE = 1;
+    static CERTIFICATE_FEE = 2;
+    static DUES = 3;
+    static PENALTY = 4;
+    static OTHER_FEE = 0;
+
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)
      */
