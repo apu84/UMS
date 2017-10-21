@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+ <!-- scan="true" debug="true" -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{36} - %msg%n
+      </Pattern>
+    </layout>
+  </appender>
+
+
   <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${CATALINA_HOME}/logs/ums-logs.log</file>
     <append>true</append>
     <encoder>
-      <pattern>%d %-5level %logger{35} - %msg%n</pattern>
+      <Pattern>
+        %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{36} - %msg%n
+      </Pattern>
+      <!--<pattern>%d %-5level %logger{35} - %msg%n</pattern>-->
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <!-- daily rollover -->
@@ -22,17 +35,23 @@
     <appender-ref ref="fileAppender"/>
   </appender>
 
+  <!--
   <root level="error">
     <appender-ref ref="ASYNC"/>
   </root>
+-->
+  <root level="error">
+    <appender-ref ref="fileAppender" />
+    <appender-ref ref="STDOUT" />
+  </root>
 
-  <logger name="org.ums" level="error" additivity="false">
+  <logger name="org.ums" level="debug" additivity="false">
     <appender-ref ref="fileAppender"/>
+    <appender-ref ref="STDOUT" />
   </logger>
 
-  <!--
-   Comment out this block to debug sql query and prepared statements -->
-  <Logger name="org.springframework.jdbc.core" level="TRACE" additivity="false">
+   <!--Comment out this block to debug sql query and prepared statements-->
+  <Logger name="org.springframework.jdbc.core" level="ERROR" additivity="false">
     <Appender-Ref ref="fileAppender"/>
   </Logger>
 
