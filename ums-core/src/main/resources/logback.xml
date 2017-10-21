@@ -29,6 +29,25 @@
     </rollingPolicy>
   </appender>
 
+    <appender name="dbLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${CATALINA_HOME}/logs/ums-db.log</file>
+        <append>true</append>
+        <encoder>
+            <Pattern>
+                %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+            <!--<pattern>%d %-5level %logger{35} - %msg%n</pattern>-->
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${CATALINA_HOME}/logs/ums-db_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
   <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
     <queueSize>600</queueSize>
     <discardingThreshold>0</discardingThreshold>
@@ -44,6 +63,11 @@
     <appender-ref ref="fileAppender" />
     <appender-ref ref="STDOUT" />
   </root>
+
+
+    <logger name="org.ums.statistics" level="debug" additivity="false">
+        <appender-ref ref="dbLogAppender"/>
+    </logger>
 
   <logger name="org.ums" level="debug" additivity="false">
     <appender-ref ref="fileAppender"/>
