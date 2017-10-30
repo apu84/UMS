@@ -77,13 +77,13 @@ public class UgGradeSheetGenerator {
         examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
     document.open();
-    double totalPage = Math.ceil(Float.valueOf(gradeList.size()) / 80);
-    for(int i = 0; i < totalPage || (gradeList.size() < 80 && i == 0); i++) {
+    double totalPage = Math.ceil(Float.valueOf(gradeList.size()) / 76);
+    for(int i = 0; i < totalPage || (gradeList.size() < 76 && i == 0); i++) {
       if(i != 0)
         document.newPage();
 
-      PdfPTable firstColumnGradeTable = getGradeTable(gradeList, i * 80, 40, course.getCourseType(), examType);
-      PdfPTable secondColumnGradeTable = getGradeTable(gradeList, i * 80 + 40, 40, course.getCourseType(), examType);
+      PdfPTable firstColumnGradeTable = getGradeTable(gradeList, i * 78, 38, course.getCourseType(), examType);
+      PdfPTable secondColumnGradeTable = getGradeTable(gradeList, i * 78 + 38, 38, course.getCourseType(), examType);
 
       PdfPTable mainTable = getMainTable(secondColumnGradeTable == null ? 1 : 3);
       PdfPCell cell =
