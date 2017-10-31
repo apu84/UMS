@@ -18,4 +18,6 @@ public interface TrainingInformation extends Serializable, EditType<MutableTrain
   String getTrainingFromDate();
 
   String getTrainingToDate();
+
+  String getTrainingDuration();
 }

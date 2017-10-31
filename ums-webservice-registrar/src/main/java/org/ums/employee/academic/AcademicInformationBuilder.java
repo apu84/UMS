@@ -24,6 +24,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pBuilder.add("degree", degreeBuilder);
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
+    pBuilder.add("result", pReadOnly.getResult() == null ? "" : pReadOnly.getResult());
     pBuilder.add("dbAction", "");
   }
 
@@ -36,6 +37,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeId(pJsonObject.getJsonObject("degree").getInt("id"));
     pMutable.setInstitute(pJsonObject.getString("institution"));
-    pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
+    pMutable.setPassingYear(pJsonObject.getString("passingYear"));
+    pMutable.setResult(pJsonObject.getString("result") == null ? "" : pJsonObject.getString("result"));
   }
 }

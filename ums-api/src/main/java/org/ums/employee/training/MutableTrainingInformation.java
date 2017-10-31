@@ -16,4 +16,6 @@ public interface MutableTrainingInformation extends TrainingInformation, Editabl
   void setTrainingFromDate(final String pTrainingFromDate);
 
   void setTrainingToDate(final String pTrainingToDate);
+
+  void setTrainingDuration(final String pTrainingDuration);
 }

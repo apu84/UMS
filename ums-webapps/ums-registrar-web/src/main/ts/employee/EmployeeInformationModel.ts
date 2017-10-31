@@ -44,7 +44,8 @@ module ums{
         employeeId: string;
         degree: ICommon;
         institution: string;
-        passingYear: number;
+        passingYear: string;
+        result: string;
         dbAction: string;
     }
 
@@ -77,6 +78,7 @@ module ums{
         trainingInstitution: string;
         trainingFrom: string;
         trainingTo: string;
+        trainingDuration: string;
         dbAction: string;
     }
 

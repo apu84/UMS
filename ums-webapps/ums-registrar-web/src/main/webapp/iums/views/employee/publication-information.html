@@ -16,7 +16,7 @@
 </style>
 
 <div data-ng-show="vm.showPublicationInputDiv">
-    <div class="container-fluid">
+
         <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
             <div data-ng-repeat="publication in vm.entry.publication track by $index">
                 <div data-ng-class="{'outlined': publication.status==='0', 'noOutlined': publication.status==='1', 'redOutlined': publication.status==='2'}">
@@ -175,7 +175,7 @@
                         </div>
                     </div>
                 </div>
-                <hr />
+
             </div>
 
             <div class="row">
@@ -190,11 +190,10 @@
                 </div>
             </div>
         </form>
-    </div>
 </div>
 
 <div data-ng-show="!vm.showPublicationInputDiv">
-    <div class="container-fluid">
+
         <div align="right">
             <dir-pagination-controls boundary-links="true"
                                      pagination-id="iPagination" on-page-change="vm.pageChanged(newPageNumber)"
@@ -293,7 +292,6 @@
                     </div>
                 </div>
             </div>
-            <hr />
         </div>
         <div align="right">
             <dir-pagination-controls boundary-links="true"
@@ -308,5 +306,4 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>

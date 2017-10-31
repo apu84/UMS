@@ -1,5 +1,5 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope{
+    interface IEmployeeProfile extends ng.IScope {
         submitPersonalForm: Function;
         submitAcademicForm: Function;
         submitPublicationForm: Function;
@@ -7,13 +7,14 @@ module ums {
         submitAwardForm: Function;
         submitExperienceForm: Function;
         submitAdditionalForm: Function;
+        submitServiceForm: Function;
     }
 
     class EmployeeProfile {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService','areaOfInterestService', 'userService',
-            'cRUDDetectionService'];
+            'employeeInformationService', 'areaOfInterestService', 'userService',
+            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService'];
 
         private entry: {
             personal: IPersonalInformationModel,
@@ -40,10 +41,13 @@ module ums {
         private showAwardInputDiv: boolean = false;
         private showExperienceInputDiv: boolean = false;
         private showAdditionalInputDiv: boolean = false;
+        private showServiceInputDiv: boolean = false;
         private required: boolean = false;
         private disablePresentAddressDropdown: boolean = false;
         private disablePermanentAddressDropdown: boolean = false;
         private showServiceEditButton: boolean = false;
+        private showAcademicEditButton: boolean = false;
+        private showExperienceEditButton: boolean = false;
         private data: any;
         private itemPerPage: number = 2;
         private currentPage: number = 1;
@@ -72,13 +76,24 @@ module ums {
         private previousTrainingInformation: ITrainingInformationModel[];
         private previousAwardInformation: IAwardInformationModel[];
         private previousExperienceInformation: IExperienceInformationModel[];
+        private previousServiceInformation: IServiceInformationModel[];
         private academicDeletedObjects: IAcademicInformationModel[];
         private publicationDeletedObjects: IPublicationInformationModel[];
         private trainingDeletedObjects: ITrainingInformationModel[];
         private awardDeletedObjects: IAwardInformationModel[];
         private experienceDeletedObjects: IExperienceInformationModel[];
+        private serviceDeletedObjects: IServiceInformationModel[];
+        private serviceDetailDeletedObjects: IServiceDetailsModel[];
         private userId: string = "";
         private tabs: boolean = false;
+        private stateParams: any;
+
+        private designations: ICommon[] = [];
+        private employmentTypes: ICommon[] = [];
+        private serviceIntervals: ICommon[] = [];
+        private serviceRegularIntervals: ICommon[] = [];
+        private serviceContractIntervals: ICommon[] = [];
+        private departments: IDepartment[] = [];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -91,7 +106,11 @@ module ums {
                     private employeeInformationService: EmployeeInformationService,
                     private areaOfInterestService: AreaOfInterestService,
                     private userService: UserService,
-                    private cRUDDetectionService: CRUDDetectionService) {
+                    private cRUDDetectionService: CRUDDetectionService,
+                    private $stateParams: any,
+                    private employmentTypeService: EmploymentTypeService,
+                    private departmentService: DepartmentService,
+                    private designationService: DesignationService) {
 
             $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
             $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
@@ -100,6 +119,7 @@ module ums {
             $scope.submitAwardForm = this.submitAwardForm.bind(this);
             $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
             $scope.submitAdditionalForm = this.submitAdditionalForm.bind(this);
+            $scope.submitServiceForm = this.submitServiceForm.bind(this);
 
             this.entry = {
                 personal: <IPersonalInformationModel> {},
@@ -116,6 +136,7 @@ module ums {
                 supOptions: "1",
                 borderColor: ""
             };
+            this.stateParams = $stateParams;
             this.genders = this.registrarConstants.genderTypes;
             this.publicationTypes = this.registrarConstants.publicationTypes;
             this.degreeNames = this.registrarConstants.degreeTypes;
@@ -124,12 +145,24 @@ module ums {
             this.religions = this.registrarConstants.religionTypes;
             this.relations = this.registrarConstants.relationTypes;
             this.nationalities = this.registrarConstants.nationalityTypes;
+            this.serviceIntervals = registrarConstants.servicePeriods;
             this.initialization();
         }
 
         private initialization() {
             this.userService.fetchCurrentUserInfo().then((user: any) => {
-                this.userId = user.employeeId;
+                if(this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined ){
+                    this.userId = user.employeeId;
+                    this.showServiceEditButton = false;
+                    this.showAcademicEditButton = false;
+                    this.showExperienceEditButton = false;
+                }
+                else {
+                       this.userId = this.stateParams.id;
+                       this.showServiceEditButton = true;
+                       this.showAcademicEditButton = true;
+                       this.showExperienceEditButton = true;
+                }
                 this.countryService.getCountryList().then((countries: any) => {
                     this.countries = countries.entries;
                     this.divisionService.getDivisionList().then((divisions: any) => {
@@ -146,12 +179,29 @@ module ums {
                                     this.arrayOfAreaOfInterest = aois;
                                     this.tabs = true;
                                     this.showTab("personal");
+                                    this.departmentService.getAll().then((departments: any) => {
+                                        this.departments = departments;
+                                        this.designationService.getAll().then((designations: any) => {
+                                            this.designations = designations;
+                                            this.employmentTypeService.getAll().then((employmentTypes: any) => {
+                                                this.employmentTypes = employmentTypes;
+                                                this.getServiceIntervals();
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });
                     });
                 });
             });
+        }
+
+        private getServiceIntervals(): void {
+            this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[0]);
+            this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
+            this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[2]);
+            this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
         private showTab(formName: string){
@@ -223,7 +273,6 @@ module ums {
                 this.experience = true;
             }
             else if(formName === 'additional'){
-                this.additional = true;
                 this.getAdditionalInformation();
                 this.personal = false;
                 this.academic = false;
@@ -232,7 +281,7 @@ module ums {
                 this.award = false;
                 this.experience = false;
                 this.service = false;
-
+                this.additional = true;
             }
             else if(formName === 'service'){
                 this.getServiceInformation();
@@ -273,7 +322,7 @@ module ums {
 
         private submitAcademicForm(): void {
             this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAcademicInformation, angular.copy(this.entry.academic), this.academicDeletedObjects)
-                .then((academicObjects:any)=>{
+                .then((academicObjects: any) => {
                     this.convertToJson('academic', academicObjects)
                         .then((json: any) => {
                             this.employeeInformationService.saveAcademicInformation(json)
@@ -302,7 +351,7 @@ module ums {
 
         private submitTrainingForm(): void {
             this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousTrainingInformation, angular.copy(this.entry.training), this.trainingDeletedObjects)
-                .then((trainingObjects: any)=>{
+                .then((trainingObjects: any) => {
                     this.convertToJson('training', trainingObjects)
                         .then((json: any) => {
                             this.employeeInformationService.saveTrainingInformation(json)
@@ -316,7 +365,7 @@ module ums {
 
         private submitAwardForm(): void {
             this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAwardInformation, angular.copy(this.entry.award), this.awardDeletedObjects)
-                .then((awardObjects: any)=>{
+                .then((awardObjects: any) => {
                     this.convertToJson('award', awardObjects)
                         .then((json: any) => {
                             this.employeeInformationService.saveAwardInformation(json)
@@ -331,7 +380,7 @@ module ums {
 
         private submitExperienceForm(): void {
             this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousExperienceInformation, angular.copy(this.entry.experience), this.experienceDeletedObjects)
-                .then((experienceObjects: any)=>{
+                .then((experienceObjects: any) => {
                     this.convertToJson('experience', experienceObjects)
                         .then((json: any) => {
                             this.employeeInformationService.saveExperienceInformation(json)
@@ -355,6 +404,29 @@ module ums {
                 });
         }
 
+        private submitServiceForm(): void {
+            let countEmptyResignDate = 0;
+            for (let i = 0; i < this.entry.serviceInfo.length; i++) {
+                if (this.entry.serviceInfo[i].resignDate == "" || this.entry.serviceInfo[i].resignDate == null) {
+                    countEmptyResignDate++;
+                }
+            }
+            if (countEmptyResignDate > 1) {
+                this.notify.error("You can empty only one resign date");
+            }
+            else {
+                this.cRUDDetectionService.ObjectDetectionForServiceObjects(this.previousServiceInformation, angular.copy(this.entry.serviceInfo), this.serviceDeletedObjects, this.serviceDetailDeletedObjects)
+                    .then((serviceObjects) => {
+                        this.convertToJson('service', serviceObjects).then((json: any) => {
+                            this.employeeInformationService.saveServiceInformation(json).then((message: any) => {
+                                this.getServiceInformation();
+                                this.showServiceInputDiv = false;
+                            });
+                        });
+                    });
+            }
+        }
+
         private getPersonalInformation() {
             this.entry.personal = <IPersonalInformationModel>{};
             this.employeeInformationService.getPersonalInformation(this.userId).then((personalInformation: any) => {
@@ -370,7 +442,7 @@ module ums {
             this.entry.academic = [];
             this.academicDeletedObjects = [];
             this.employeeInformationService.getAcademicInformation(this.userId).then((academicInformation: any) => {
-                    this.entry.academic = academicInformation;
+                this.entry.academic = academicInformation;
             }).then(() => {
                 this.previousAcademicInformation = angular.copy(this.entry.academic);
             });
@@ -387,7 +459,7 @@ module ums {
             });
         }
 
-        private getPublicationInformationWithPagination(){
+        private getPublicationInformationWithPagination() {
             this.paginatedPublication = [];
             this.employeeInformationService.getPublicationInformationViewWithPagination(this.userId, this.currentPage, this.itemPerPage).then((publicationInformationWithPagination: any) => {
                 this.paginatedPublication = publicationInformationWithPagination;
@@ -398,8 +470,8 @@ module ums {
             this.entry.training = [];
             this.trainingDeletedObjects = [];
             this.employeeInformationService.getTrainingInformation(this.userId).then((trainingInformation: any) => {
-                    this.entry.training = trainingInformation;
-            }).then(()=>{
+                this.entry.training = trainingInformation;
+            }).then(() => {
                 this.previousTrainingInformation = angular.copy(this.entry.training);
             });
         }
@@ -408,8 +480,8 @@ module ums {
             this.entry.award = [];
             this.awardDeletedObjects = [];
             this.employeeInformationService.getAwardInformation(this.userId).then((awardInformation: any) => {
-                    this.entry.award = awardInformation;
-            }).then(() =>{
+                this.entry.award = awardInformation;
+            }).then(() => {
                 this.previousAwardInformation = angular.copy(this.entry.award);
             });
         }
@@ -418,23 +490,24 @@ module ums {
             this.entry.experience = [];
             this.experienceDeletedObjects = [];
             this.employeeInformationService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
-                    this.entry.experience = experienceInformation;
+                this.entry.experience = experienceInformation;
             }).then(() => {
                 this.previousExperienceInformation = angular.copy(this.entry.experience);
             });
         }
+
         private getAdditionalInformation() {
             this.entry.additional = <IAdditionalInformationModel>{};
             this.employeeInformationService.getAdditionalInformation(this.userId).then((additional: any) => {
                 console.log(additional[0]);
                 this.entry.additional = additional[0];
 
-                var intArray= new Array();
+                var intArray = new Array();
                 console.log(this.arrayOfAreaOfInterest);
-                for(var i=0;i<additional[0].areaOfInterestInformation.length;i++){
-                    for(var j=0;j<this.arrayOfAreaOfInterest.length;j++) {
-                        console.log(additional[0].areaOfInterestInformation[i]+"----"+this.arrayOfAreaOfInterest[j]);
-                        if(additional[0].areaOfInterestInformation[i].id==this.arrayOfAreaOfInterest[j].id)
+                for (var i = 0; i < additional[0].areaOfInterestInformation.length; i++) {
+                    for (var j = 0; j < this.arrayOfAreaOfInterest.length; j++) {
+                        console.log(additional[0].areaOfInterestInformation[i] + "----" + this.arrayOfAreaOfInterest[j]);
+                        if (additional[0].areaOfInterestInformation[i].id == this.arrayOfAreaOfInterest[j].id)
                             intArray.push(this.arrayOfAreaOfInterest[j].id);
                     }
 
@@ -448,9 +521,13 @@ module ums {
 
         private getServiceInformation(): void {
             this.entry.serviceInfo = [];
+            this.serviceDeletedObjects = [];
+            this.serviceDetailDeletedObjects = [];
             this.employeeInformationService.getServiceInformation(this.userId).then((services: any) => {
                 this.entry.serviceInfo = services;
-            })
+            }).then(()=>{
+                this.previousServiceInformation = angular.copy(this.entry.serviceInfo);
+            });
         }
 
         private changePresentAddressDistrict() {
@@ -499,7 +576,7 @@ module ums {
 
         private sameAsPresentAddress() {
             this.entry.personal.perAddressLine1 = this.entry.personal.preAddressLine1;
-            this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
+            // this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
             this.entry.personal.perAddressCountry = this.entry.personal.preAddressCountry;
             this.entry.personal.perAddressDivision = this.entry.personal.preAddressDivision;
             this.entry.personal.perAddressDistrict = this.entry.personal.preAddressDistrict;
@@ -540,17 +617,61 @@ module ums {
             }
         }
 
-        private pageChanged(pageNumber: number){
+        private pageChanged(pageNumber: number) {
             this.currentPage = pageNumber;
             this.getPublicationInformationWithPagination();
         }
 
-        private changeItemPerPage(){
-            if(this.data.customItemPerPage == "" || this.data.customItemPerPage == null) {}
-            else{
+        private changeItemPerPage() {
+            if (this.data.customItemPerPage == "" || this.data.customItemPerPage == null) {
+            }
+            else {
                 this.data.itemPerPage = this.data.customItemPerPage;
                 this.getPublicationInformationWithPagination();
             }
+        }
+
+        private addNewServiceRow(parameter: string, index?: number): void {
+            if(parameter == "serviceInfo") {
+                if(this.entry.serviceInfo.length == 0){
+                    this.addNewRow("service");
+                }
+                else {
+                    if(this.entry.serviceInfo[this.entry.serviceInfo.length - 1].resignDate == ""){
+                        this.notify.error("Please fill up the resign date first");
+                    }
+                    else {
+                        this.addNewRow("service");
+                    }
+                }
+            }
+            else if(parameter == "serviceDetails") {
+                if(this.entry.serviceInfo[index].intervalDetails.length == 0) {
+                    this.addNewServiceDetailsRow(index);
+                }
+                else{
+                    if(this.entry.serviceInfo[index].intervalDetails[this.entry.serviceInfo[index].intervalDetails.length - 1].endDate == ""){
+                        this.notify.error("Please fill up the end date first");
+                    }
+                    else {
+                        this.addNewServiceDetailsRow(index);
+                    }
+                }
+            }
+        }
+
+        private addNewServiceDetailsRow(index: number) {
+            let serviceDetailsEntry: IServiceDetailsModel;
+            serviceDetailsEntry = {
+                id: "",
+                interval: null,
+                startDate: "",
+                endDate: "",
+                comment: "",
+                serviceId: null,
+                dbAction: "Create"
+            };
+            this.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
         }
 
         private addNewRow(divName: string) {
@@ -561,7 +682,8 @@ module ums {
                     employeeId: this.userId,
                     degree: null,
                     institution: "",
-                    passingYear: null,
+                    passingYear: "",
+                    result: "",
                     dbAction: "Create"
                 };
                 this.entry.academic.push(academicEntry);
@@ -600,6 +722,7 @@ module ums {
                     trainingInstitution: "",
                     trainingFrom: "",
                     trainingTo: "",
+                    trainingDuration: "",
                     dbAction: "Create"
                 };
                 this.entry.training.push(trainingEntry);
@@ -630,43 +753,65 @@ module ums {
                 };
                 this.entry.experience.push(experienceEntry);
             }
+            else if(divName = 'service'){
+                let serviceEntry: IServiceInformationModel;
+                serviceEntry = {
+                    id: "",
+                    employeeId: this.userId,
+                    department: null,
+                    designation: null,
+                    employmentType: null,
+                    joiningDate: "",
+                    resignDate: "",
+                    dbAction: "Create",
+                    intervalDetails: Array<IServiceDetailsModel>()
+                };
+                this.entry.serviceInfo.push(serviceEntry);
+            }
         }
 
         private deleteRow(divName: string, index: number, parentIndex?: number) {
             if (divName === 'academic') {
-                if(this.entry.academic[index].id != ""){
+                if (this.entry.academic[index].id != "") {
                     this.entry.academic[index].dbAction = "Delete";
                     this.academicDeletedObjects.push(this.entry.academic[index]);
                 }
                 this.entry.academic.splice(index, 1);
             }
             else if (divName === 'publication') {
-                if(this.entry.publication[index].id != ""){
+                if (this.entry.publication[index].id != "") {
                     this.entry.publication[index].dbAction = "Delete";
                     this.publicationDeletedObjects.push(this.entry.publication[index]);
                 }
                 this.entry.publication.splice(index, 1);
             }
             else if (divName === 'training') {
-                if(this.entry.training[index].id != ""){
+                if (this.entry.training[index].id != "") {
                     this.entry.training[index].dbAction = "Delete";
                     this.trainingDeletedObjects.push(this.entry.training[index]);
                 }
                 this.entry.training.splice(index, 1);
             }
             else if (divName === 'award') {
-                if(this.entry.award[index].id != ""){
+                if (this.entry.award[index].id != "") {
                     this.entry.award[index].dbAction = "Delete";
                     this.awardDeletedObjects.push(this.entry.award[index]);
                 }
                 this.entry.award.splice(index, 1);
             }
-            else if (divName === 'experience') {
-                if(this.entry.experience[index].id != ""){
-                    this.entry.experience[index].dbAction = "Delete";
-                    this.experienceDeletedObjects.push(this.entry.experience[index]);
+            else if(divName == "serviceInfo") {
+                if(this.entry.serviceInfo[index].id != "") {
+                    this.entry.serviceInfo[index].dbAction = "Delete";
+                    this.serviceDeletedObjects.push(this.entry.serviceInfo[index]);
                 }
-                this.entry.experience.splice(index, 1);
+                this.entry.serviceInfo.splice(index, 1);
+            }
+            else if(divName == "serviceDetails"){
+                if(this.entry.serviceInfo[parentIndex].intervalDetails[index].id != "") {
+                    this.entry.serviceInfo[parentIndex].intervalDetails[index].dbAction = "Delete";
+                    this.serviceDetailDeletedObjects.push(this.entry.serviceInfo[parentIndex].intervalDetails[index]);
+                }
+                this.entry.serviceInfo[parentIndex].intervalDetails.splice(index, 1);
             }
         }
 
@@ -681,7 +826,7 @@ module ums {
             else if (convertThis === "academic") {
                 item['academic'] = obj;
             }
-            else if (convertThis === "publication"){
+            else if (convertThis === "publication") {
                 item['publication'] = obj;
             }
             else if (convertThis === "training") {
@@ -696,11 +841,55 @@ module ums {
             else if (convertThis === "additional") {
                 item['additional'] = obj;
             }
+            else if (convertThis === "service") {
+                item['service'] = obj;
+            }
             JsonArray.push(item);
             JsonObject['entries'] = JsonArray;
             defer.resolve(JsonObject);
             return defer.promise;
         }
+
+        private calculateDifference(tabName: string, index: number): void {
+            this.entry.training[index].trainingDuration = "";
+            if (this.entry.training[index].trainingFrom == "" || this.entry.training[index].trainingTo == "") {
+                this.entry.training[index].trainingDuration = "";
+            }
+            else {
+                let formattedFromDate: string = moment(this.entry.training[index].trainingFrom, "DD/MM/YYYY").format("MM/DD/YYYY");
+                let fromDate: Date = new Date(formattedFromDate);
+                let formattedToDate: string = moment(this.entry.training[index].trainingTo, "DD/MM/YYYY").format("MM/DD/YYYY");
+                let toDate: Date = new Date(formattedToDate);
+                if (fromDate > toDate) {
+                    this.notify.error("From date is greater than to date");
+                    this.entry.training[index].trainingDuration = "";
+                }
+                else {
+                    let year: number = 0;
+                    let month: number = 0;
+                    let day: number = 0;
+                    let timeDiff: number = (toDate.getTime() - fromDate.getTime());
+                    this.notify.error(" " + timeDiff);
+                    let diffDays: number = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                    if(diffDays >= 365){
+                        year = Math.floor(diffDays / 365);
+                        month = Math.floor((diffDays % 365) / 30);
+                        day = Math.floor((diffDays % 365) % 30);
+                        this.entry.training[index].trainingDuration = year + " year " + month + " month " + day + " day";
+                    }
+                    else if(diffDays >= 30){
+                        month = Math.floor((diffDays / 30));
+                        day = Math.floor(diffDays % 30);
+                        this.entry.training[index].trainingDuration = month + " month " + day + " day";
+                    }
+                    else{
+                        this.entry.training[index].trainingDuration = diffDays + "days";
+                    }
+                }
+            }
+        }
     }
+
     UMS.controller("EmployeeProfile", EmployeeProfile);
 }

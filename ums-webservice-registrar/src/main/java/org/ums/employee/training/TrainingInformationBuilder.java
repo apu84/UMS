@@ -20,6 +20,7 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
     pBuilder.add("trainingInstitution", pReadOnly.getTrainingInstitute());
     pBuilder.add("trainingFrom", pReadOnly.getTrainingFromDate());
     pBuilder.add("trainingTo", pReadOnly.getTrainingToDate());
+    pBuilder.add("trainingDuration", pReadOnly.getTrainingDuration());
     pBuilder.add("dbAction", "");
   }
 
@@ -33,5 +34,6 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
     pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
     pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom"));
     pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
+    pMutable.setTrainingDuration(pJsonObject.getString("trainingDuration"));
   }
 }

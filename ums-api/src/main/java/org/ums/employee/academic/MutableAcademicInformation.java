@@ -16,5 +16,7 @@ public interface MutableAcademicInformation extends AcademicInformation, Editabl
 
   void setInstitute(final String pInstitute);
 
-  void setPassingYear(final int pPassingYear);
+  void setPassingYear(final String pPassingYear);
+
+  void setResult(final String pResult);
 }

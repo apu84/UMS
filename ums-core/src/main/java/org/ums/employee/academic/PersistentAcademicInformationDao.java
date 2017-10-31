@@ -12,14 +12,14 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED) VALUES (? ,? ,? ,?, ?,"
+      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, RESULT, LAST_MODIFIED) VALUES (? ,? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, LAST_MODIFIED From EMP_ACADEMIC_INFO ";
+      "Select ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, RESULT, LAST_MODIFIED From EMP_ACADEMIC_INFO ";
 
   static String UPDATE_ALL =
-      "UPDATE EMP_ACADEMIC_INFO SET DEGREE = ?, INSTITUTE = ?, PASSING_YEAR = ?, LAST_MODIFIED ="
+      "UPDATE EMP_ACADEMIC_INFO SET DEGREE = ?, INSTITUTE = ?, PASSING_YEAR = ?, RESULT = ?, LAST_MODIFIED ="
           + getLastModifiedSql() + " ";
 
   static String DELETE_ALL = "DELETE FROM EMP_ACADEMIC_INFO ";
@@ -49,7 +49,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation academicInformation : pMutableAcademicInformation) {
       params.add(new Object[] {mIdGenerator.getNumericId(), academicInformation.getEmployeeId(),
-          academicInformation.getDegreeId(), academicInformation.getInstitute(), academicInformation.getPassingYear()});
+          academicInformation.getDegreeId(), academicInformation.getInstitute(), academicInformation.getPassingYear(),
+          academicInformation.getResult()});
     }
     return params;
   }
@@ -70,7 +71,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
     List<Object[]> params = new ArrayList<>();
     for(AcademicInformation pAcademicInformation : pMutableAcademicInformation) {
       params.add(new Object[] {pAcademicInformation.getDegreeId(), pAcademicInformation.getInstitute(),
-          pAcademicInformation.getPassingYear(), pAcademicInformation.getEmployeeId(), pAcademicInformation.getId()});
+          pAcademicInformation.getPassingYear(), pAcademicInformation.getResult(),
+          pAcademicInformation.getEmployeeId(), pAcademicInformation.getId()});
     }
     return params;
   }
@@ -97,7 +99,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       academicInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
       academicInformation.setDegreeId(resultSet.getInt("DEGREE"));
       academicInformation.setInstitute(resultSet.getString("INSTITUTE"));
-      academicInformation.setPassingYear(resultSet.getInt("PASSING_YEAR"));
+      academicInformation.setPassingYear(resultSet.getString("PASSING_YEAR"));
+      academicInformation.setResult(resultSet.getString("RESULT"));
       academicInformation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return academicInformation;
     }

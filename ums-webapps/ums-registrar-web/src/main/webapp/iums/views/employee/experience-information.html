@@ -1,166 +1,164 @@
-<div data-ng-show="vm.showExperienceInputDiv">
-    <div class="container-fluid">
-        <form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
-            <div class="row">
-                <div class="col-md-1">
-                    <label class="control-label">Sl.</label>
-                </div>
-                <div class="col-md-4">
-                    <div align="center">
-                        <label class="control-label">Institution/Organization<span class='require'>*</span></label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center">
-                        <label class="control-label">Designation<span class='require'>*</span></label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center">
-                        <label class="control-label">From<span class='require'>*</span></label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center">
-                        <label class="control-label">To<span class='require'>*</span></label>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <div align="center">
-                        <label class="control-label"></label>
-                    </div>
-                </div>
-            </div>
-            <div data-ng-repeat="experience in vm.entry.experience track by $index">
+<form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
+    <div data-ng-repeat="experience in vm.entry.experience track by $index">
+        <div class="panel panel-default">
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-1">
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
                     </div>
-                    <div class="col-md-4">
-                        <input type="text"
-                               name="nExperienceInstitution{{$index}}"
-                               id="iExperienceInstitution{{$index}}"
-                               data-ng-model="experience.experienceInstitution"
-                               placeholder="Institution/Organization"
-                               class="form-control" required>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label">Institution/Organization<span
+                                class='require'>*</span></label>
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExperienceInstitution{{$index}}"
+                                       id="iExperienceInstitution{{$index}}"
+                                       data-ng-model="experience.experienceInstitution"
+                                       placeholder="Institution/Organization"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{experience.experienceInstitution}}</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text"
-                               name="nExperienceDesignation{{$index}}"
-                               id="iExperienceDesignation{{$index}}"
-                               data-ng-model="experience.experienceDesignation"
-                               placeholder="Designation"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text"
-                               name="nExperienceFrom{{$index}}"
-                               id="iExperienceFrom{{$index}}"
-                               data-ng-model="experience.experienceFrom"
-                               data-date-format="mm/yyyy"
-                               placeholder="MM/YYYY"
-                               autocomplete="off"
-                               class="form-control" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text"
-                               name="nExperienceTo{{$index}}"
-                               id="iExperienceTo{{$index}}"
-                               data-ng-model="experience.experienceTo"
-                               data-date-format="mm/yyyy"
-                               placeholder="MM/YYYY"
-                               autocomplete="off"
-                               class="form-control" required>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label">Designation<span class='require'>*</span></label>
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExperienceDesignation{{$index}}"
+                                       id="iExperienceDesignation{{$index}}"
+                                       data-ng-model="experience.experienceDesignation"
+                                       placeholder="Designation"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{experience.experienceDesignation}}</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class='col-md-1'>
-                        [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('experience' , $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('experience' , $index)"
+                                 class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label">From<span class='require'>*</span></label>
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExperienceFrom{{$index}}"
+                                       id="iExperienceFrom{{$index}}"
+                                       data-ng-model="experience.experienceFrom"
+                                       data-date-format="mm/yyyy"
+                                       placeholder="MM/YYYY"
+                                       autocomplete="off"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{experience.experienceFrom}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label">To<span class='require'>*</span></label>
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExperienceTo{{$index}}"
+                                       id="iExperienceTo{{$index}}"
+                                       data-ng-model="experience.experienceTo"
+                                       data-date-format="mm/yyyy"
+                                       placeholder="MM/YYYY"
+                                       autocomplete="off"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-ng-show="!vm.showExperienceInputDiv">
+                        <div class="col-md-8">
+                            <div style="border-bottom: 1px dashed;">
+                                <label class="control-label">{{experience.experienceTo}}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div align="center">
-                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-                    </div>
-                    <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showExperienceInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
-                        <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+            <!--<div class="row">-->
+                <!--<div class="col-md-1"></div>-->
+                <!--<div class="col-md-5">-->
+                    <!--<label class="col-md-4 control-label">Duration<span class="require">*</span></label>-->
+                    <!--<div data-ng-show="vm.showTrainingInputDiv">-->
+                        <!--<div class="col-md-8">-->
+                            <!--<input type="text"-->
+                                   <!--name="nTrainingDuration{{$index}}"-->
+                                   <!--id="iTrainingDuration{{$index}}"-->
+                                   <!--data-ng-model="training.trainingDuration"-->
+                                   <!--placeholder="Duration"-->
+                                   <!--class="form-control" readonly required>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div data-ng-show="!vm.showTrainingInputDiv">-->
+                        <!--<div class="col-md-8">-->
+                            <!--<div style="border-bottom: 1px dashed;">-->
+                                <!--<label class="control-label">{{training.trainingDuration}}</label>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-5"></div>-->
+                <!--<div class="col-md-1"></div>-->
+            <!--</div>-->
+        </div>
     </div>
-</div>
 
-<div data-ng-show="!vm.showExperienceInputDiv">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-1">
-                <label class="control-label">Sl.</label>
+    <div class="row">
+        <div class="col-md-12">
+            <div align="center" data-ng-show="vm.showExperienceInputDiv">
+                [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
+                                                                                       aria-hidden="true"
+                                                                                       style="cursor: pointer;color: green;"></i></a>
+                ]
             </div>
-            <div class="col-md-4">
-                <div align="center">
-                    <label class="control-label">Institution/Organization</label>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div align="center">
-                    <label class="control-label">Designation</label>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div align="center">
-                    <label class="control-label">From</label>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div align="center">
-                    <label class="control-label">To</label>
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div align="center">
-                    <label class="control-label"></label>
-                </div>
+            <div align="right">
+                <button type="button" title="Cancel" class="btn" data-ng-show="vm.showExperienceInputDiv"
+                        data-ng-click="vm.showExperienceInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View
+                </button>
+                <button type="submit" title="Submit" data-ng-show="vm.showExperienceInputDiv" class="btn btn-success"><i
+                        class="fa fa-save"></i>&nbsp;Submit
+                </button>
             </div>
         </div>
-        <div data-ng-repeat="experience in vm.entry.experience track by $index">
-            <div class="row">
-                <div class="col-md-1">
-                    <label class="control-label"><b>{{$index + 1}}.</b></label>
-                </div>
-                <div class="col-md-4">
-                    <div align="center" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{experience.experienceInstitution}}</label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{experience.experienceDesignation}}</label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{experience.experienceFrom}}</label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div align="center" style="border-bottom: 1px dashed;">
-                        <label class="control-label">{{experience.experienceTo}}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-
+    </div>
+    <div data-ng-show="vm.showExperienceEditButton">
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showExperienceInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-show="!vm.showExperienceInputDiv"
+                            data-ng-click="vm.showExperienceInputDiv=true">
+                        <i class="fa fa-edit"></i>&nbsp;Edit
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
+

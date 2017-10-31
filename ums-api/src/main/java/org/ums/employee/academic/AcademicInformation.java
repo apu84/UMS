@@ -18,5 +18,7 @@ public interface AcademicInformation extends Serializable, EditType<MutableAcade
 
   String getInstitute();
 
-  int getPassingYear();
+  String getPassingYear();
+
+  String getResult();
 }

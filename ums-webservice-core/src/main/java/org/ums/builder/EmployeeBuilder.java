@@ -12,6 +12,7 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.enums.common.DesignationType;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
+import org.ums.manager.DesignationManager;
 import org.ums.persistent.model.PersistentDepartment;
 import sun.security.krb5.internal.crypto.Des;
 
@@ -20,13 +21,16 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Autowired
   private DateFormat mDateFormat;
 
+  @Autowired
+  private DesignationManager mDesignationManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("text", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getEmployeeName());
     pBuilder.add("designation", pReadOnly.getDesignation());
-    // pBuilder.add("designationName", DesignationType.get(pReadOnly.getDesignation()).getLabel());
+    pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignation()).getDesignationName());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());
     pBuilder.add("deptOfficeId", pReadOnly.getDepartment().getId());
     pBuilder.add("deptOfficeName", pReadOnly.getDepartment().getLongName());
