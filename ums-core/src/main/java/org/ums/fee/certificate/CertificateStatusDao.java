@@ -107,6 +107,38 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
   }
 
   @Override
+  public List<CertificateStatus> getByStatusAndFeeTypePaginated(int itemsPerPage, int pageNumber,
+      CertificateStatus.Status pStatus, FeeType pFeeType) {
+    int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemsPerPage - 1;
+    String query =
+        "SELECT " + "  tmp2.*, " + "  ind " + "FROM ( " + "       SELECT " + "         rownum ind, "
+            + "         TMP1.* " + "       FROM ( " + "         (SELECT " + "            ID, "
+            + "            STUDENT_ID, " + "            SEMESTER_ID, " + "            FEE_CATEGORY, "
+            + "            TRANSACTION_ID, " + "            STATUS, " + "            PROCESSED_ON, "
+            + "            PROCESSED_BY, " + "            LAST_MODIFIED " + "          FROM CERTIFICATE_STATUS "
+            + "          WHERE STATUS = ? AND FEE_CATEGORY IN (SELECT id "
+            + "                                                FROM FEE_CATEGORY "
+            + "                                                WHERE TYPE = ?)) TMP1)) tmp2 "
+            + "WHERE ind >= ? AND ind <= ?";
+    return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeType.getId(), startIndex, endIndex},
+        new CertificateStatusRowMapper());
+  }
+
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType) {
+
+    String query =
+        "SELECT " + "  ID, " + "  STUDENT_ID, " + "  SEMESTER_ID, " + "  FEE_CATEGORY, " + "  TRANSACTION_ID, "
+            + "  STATUS, " + "  PROCESSED_ON, " + "  PROCESSED_BY, " + "  LAST_MODIFIED " + "FROM CERTIFICATE_STATUS "
+            + "WHERE STATUS = ? AND FEE_CATEGORY IN (SELECT id "
+            + "                                      FROM FEE_CATEGORY "
+            + "                                      WHERE TYPE = ?)";
+    return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeType.getId()},
+        new CertificateStatusRowMapper());
+  }
+
+  @Override
   public List<CertificateStatus> getByStudent(String pStudentId) {
     String query = SELECT_ALL + "WHERE STUDENT_ID = ? ORDER BY LAST_MODIFIED DESC";
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new CertificateStatusRowMapper());

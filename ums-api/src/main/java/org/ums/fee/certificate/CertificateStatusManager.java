@@ -16,6 +16,11 @@ public interface CertificateStatusManager extends ContentManager<CertificateStat
 
   List<String> getByStudent(String pStudentId, String pFeeCategoryId);
 
+  List<CertificateStatus> getByStatusAndFeeTypePaginated(int itemsPerPage, int pageNumber,
+      CertificateStatus.Status pStatus, FeeType pFeeType);
+
+  List<CertificateStatus> getByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType);
+
   enum FilterCriteria {
     STUDENT_ID,
     STATUS,

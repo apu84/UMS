@@ -67,15 +67,36 @@
                             </div>
                             <div class="col-md-7">
                                 <dir-pagination-controls boundary-links="true"
+                                                         pagination-id="certificateApproval"
                                                          on-page-change="vm.pageChanged(vm.newPageNumber)"
-                                                         template-url="views\fee\certificate\dirPagination.tpl.html"></dir-pagination-controls>
+                                                         template-url="views\fee\certificate\dirPagination.html"></dir-pagination-controls>
+
                             </div>
                         </div>
 
                     </form>
                 </div>
                 <div class="row">
-
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <th>Certificate Type</th>
+                            <th>Semester</th>
+                            <th>Student Id</th>
+                            <th>Student Name></th>
+                            <th>Status</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="c in vm.certificateStatusList">
+                                <td>{{c.certificateType}}</td>
+                                <td>{{c.semesterName}}</td>
+                                <td>{{c.studentId}}</td>
+                                <td>{{c.studentName}}</td>
+                                <td>{{c.status}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
 

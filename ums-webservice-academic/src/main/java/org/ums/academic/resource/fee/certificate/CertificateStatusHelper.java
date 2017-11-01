@@ -1,13 +1,5 @@
 package org.ums.academic.resource.fee.certificate;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.SecurityUtils;
@@ -15,16 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.CertificateStatusManager;
 import org.ums.fee.certificate.MutableCertificateStatus;
 import org.ums.fee.certificate.PersistentCertificateStatus;
-import org.ums.fee.dues.StudentDuesManager;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.filter.FilterItem;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, MutableCertificateStatus, Long> {
@@ -50,15 +47,47 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
     addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    if(pageNumber > 1) {
+    if (pageNumber > 1) {
       addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();
   }
 
-  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, FeeType pFeeType, JsonObject pJsonObject, UriInfo pUriInfo) {
+  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, FeeType pFeeType, JsonObject pJsonObject,
+      UriInfo pUriInfo) {
     List<CertificateStatus> certificateStatusList =
-        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject), pFeeType);
+        mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject),
+            pFeeType);
+    return getJsonObject(itemsPerPage, pageNumber, pUriInfo, certificateStatusList);
+  }
+
+  private JsonObject getJsonObject(int itemsPerPage, int pageNumber, UriInfo pUriInfo, List<CertificateStatus> pCertificateStatusList) {
+    LocalCache cache = new LocalCache();
+    JsonArrayBuilder array = Json.createArrayBuilder();
+    pCertificateStatusList.forEach((certificate) -> {
+      array.add(toJson(certificate, pUriInfo, cache));
+    });
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    jsonObjectBuilder.add("entries", array);
+    addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    if (pCertificateStatusList.size() > 0) {
+      addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
+    if (pageNumber > 1) {
+      addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
+    }
+    return jsonObjectBuilder.build();
+  }
+
+  JsonObject getCertificateStatusByStatusAndFeeTypePaginated(int itemsPerPage, int pageNumber,
+      CertificateStatus.Status pStatus, FeeType pFeeType, UriInfo pUriInfo) {
+    List<CertificateStatus> certificateStatusList =
+        mCertificateStatusManager.getByStatusAndFeeTypePaginated(itemsPerPage, pageNumber, pStatus, pFeeType);
+    return getJsonObject(itemsPerPage, pageNumber, pUriInfo, certificateStatusList);
+  }
+
+  JsonObject getCertificateStatusByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType, UriInfo pUriInfo) {
+    List<CertificateStatus> certificateStatusList = mCertificateStatusManager.getByStatusAndFeeType(pStatus, pFeeType);
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     certificateStatusList.forEach((certificate) -> {
@@ -66,13 +95,6 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    if(certificateStatusList.size() > 0) {
-      addLink("next", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    }
-    if(pageNumber > 1) {
-      addLink("previous", pageNumber, itemsPerPage, pUriInfo, jsonObjectBuilder);
-    }
     return jsonObjectBuilder.build();
   }
 

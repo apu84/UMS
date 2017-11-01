@@ -12,7 +12,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
-import org.ums.integration.MessageManipulator;
 import org.ums.manager.BinaryContentManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +39,8 @@ public class ProfilePicture extends Resource {
   @Autowired
   private FileWriterGateway mGateway;
 
-  @Autowired
-  MessageManipulator mMessageManipulator;
+  // @Autowired
+  // MessageManipulator mMessageManipulator;
 
   /*
    * @Autowired private KafkaTemplate<String, String> mKafkaTemplate;

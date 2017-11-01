@@ -23,6 +23,9 @@ module ums {
       this.paymentStatusService.getFilters().then((filters: Filter[]) => {
         this.filters = filters;
 
+        console.log("Filters");
+        console.log(this.filters);
+
         $scope.$watch(() => this.selectedFilters, () => {
           this.navigate();
         }, true);

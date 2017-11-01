@@ -30,4 +30,14 @@ public class CertificateStatusDaoDecorator extends
     return getManager().getByStudent(pStudentId, pFeeCategoryId);
   }
 
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeTypePaginated(int itemsPerPage, int pageNumber,
+      CertificateStatus.Status pStatus, FeeType pFeeType) {
+    return getManager().getByStatusAndFeeTypePaginated(itemsPerPage, pageNumber, pStatus, pFeeType);
+  }
+
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType) {
+    return getManager().getByStatusAndFeeType(pStatus, pFeeType);
+  }
 }
