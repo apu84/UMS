@@ -138,30 +138,33 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div align="center" data-ng-show="vm.showTrainingInputDiv">
-                [ <a title="Add New Row" data-ng-click="vm.addNewRow('training')"><i class="fa fa-plus"
-                                                                                     aria-hidden="true"
-                                                                                     style="cursor: pointer;color: green;"></i></a>
-                ]
-            </div>
-            <div align="right">
-                <button type="button" title="Cancel" class="btn" data-ng-show="vm.showTrainingInputDiv"
-                        data-ng-click="vm.showTrainingInputDiv=false"><i
-                        class="fa fa-eye"></i>&nbsp;View
-                </button>
-                <button type="submit" title="Submit" data-ng-show="vm.showTrainingInputDiv" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
-                </button>
+    <div data-ng-show="vm.showTrainingInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('training')"><i class="fa fa-plus"
+                                                                                         aria-hidden="true"
+                                                                                         style="cursor: pointer;color: green;"></i></a>
+                    ]
+                </div>
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showTrainingInputDiv=false; vm.showTab('training');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div align="right">
-                <button type="button" title="Cancel" class="btn" data-ng-show="!vm.showTrainingInputDiv" data-ng-click="vm.showTrainingInputDiv=true"><i
-                        class="fa fa-edit"></i>&nbsp;Edit
-                </button>
+    <div data-ng-show="!vm.showTrainingInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showTrainingInputDiv=true"><i
+                            class="fa fa-edit"></i>&nbsp;Edit
+                    </button>
+                </div>
             </div>
         </div>
     </div>

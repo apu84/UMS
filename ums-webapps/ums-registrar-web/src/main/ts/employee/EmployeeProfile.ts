@@ -87,7 +87,6 @@ module ums {
         private userId: string = "";
         private tabs: boolean = false;
         private stateParams: any;
-
         private designations: ICommon[] = [];
         private employmentTypes: ICommon[] = [];
         private serviceIntervals: ICommon[] = [];
@@ -205,6 +204,7 @@ module ums {
         }
 
         private showTab(formName: string){
+            console.log("calling");
             if (formName === "personal") {
                 this.getPersonalInformation();
                 this.academic = false;
@@ -869,7 +869,6 @@ module ums {
                     let month: number = 0;
                     let day: number = 0;
                     let timeDiff: number = (toDate.getTime() - fromDate.getTime());
-                    this.notify.error(" " + timeDiff);
                     let diffDays: number = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
                     if(diffDays >= 365){

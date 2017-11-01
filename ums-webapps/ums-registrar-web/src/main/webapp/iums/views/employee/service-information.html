@@ -163,7 +163,7 @@
                     [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showServiceInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showServiceInputDiv=false; vm.showTab('service');">Cancel</button>
                     <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
                 </div>
             </div>
@@ -236,6 +236,14 @@
                     <button type="submit" title="Submit" data-ng-click="vm.showServiceInputDiv=true" class="btn btn-default"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div data-ng-show="!vm.showServiceEditButton">
+    <div class="row">
+        <div class="col-md-12">
+            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Service</strong>) form will be covered by registrar office.</label>
         </div>
     </div>
 </div>

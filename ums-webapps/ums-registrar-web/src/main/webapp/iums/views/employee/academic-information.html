@@ -35,9 +35,9 @@
                 </div>
             </div>
         </div>
-        <div data-ng-repeat="academic in vm.entry.academic track by $index">
-            <div class="panel panel-default">
-                <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div data-ng-repeat="academic in vm.entry.academic track by $index">
                     <div class="row">
                         <div class="col-md-1">
                             <label class="control-label"><b>{{$index + 1}}.</b></label>
@@ -124,34 +124,45 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div align="center" data-ng-show="vm.showAcademicInputDiv">
-                [ <a title="Add New Row" data-ng-click="vm.addNewRow('academic')"><i class="fa fa-plus"
-                                                                                     aria-hidden="true"
-                                                                                     style="cursor: pointer;color: green;"></i></a>
-                ]
-            </div>
-            <div align="right" data-ng-show="vm.showAcademicInputDiv">
-                <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAcademicInputDiv=false"><i
-                        class="fa fa-eye"></i>&nbsp;View
-                </button>
-                <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
-                </button>
-            </div>
-        </div>
-    </div>
-    <div data-ng-show="vm.showAcademicEditButton">
+    <div data-ng-show="vm.showAcademicInputDiv">
         <div class="row">
             <div class="col-md-12">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('academic')"><i class="fa fa-plus"
+                                                                                         aria-hidden="true"
+                                                                                         style="cursor: pointer;color: green;"></i></a>
+                    ]
+                </div>
                 <div align="right">
-                    <button id="btnEdit" type="button" title="Cancel" class="btn"
-                            data-ng-show="!vm.showAcademicInputDiv"
-                            data-ng-click="vm.showAcademicInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showAcademicInputDiv=false; vm.showTab('academic');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    <div data-ng-show="vm.showAcademicEditButton">
+        <div data-ng-show="!vm.showAcademicInputDiv">
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="right">
+                        <button id="btnEdit" type="button" title="Cancel" class="btn"
+                                data-ng-click="vm.showAcademicInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
+
+<div data-ng-show="!vm.showAcademicEditButton">
+    <div class="row">
+        <div class="col-md-12">
+            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Academic</strong>) form will be
+                covered by registrar office.</label>
+        </div>
+    </div>
+</div>

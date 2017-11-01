@@ -1,17 +1,14 @@
-<style>
-    .well{
-        background-color: white !important;
-    }
-</style>
+<form name="nAdditionalForm" data-validate="" data-onvalidate="submitAdditionalForm">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">Work Place Info</div>
+            <div class="panel-body">
+                <div class="form-group">
+                <div class="row">
 
-<div data-ng-show="vm.showAdditionalInputDiv">
-    <div class="container-fluid">
-        <form name="nAdditionalForm" data-validate="" data-onvalidate="submitAdditionalForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="well">
-                        <div class="row">
-                            <label class="col-md-4 control-label">Room No.</label>
+                    <div class="col-md-4">
+                        <label class="col-md-4 control-label">Room No.</label>
+                        <div data-ng-show="vm.showAdditionalInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
                                        name="nRoomNo{{$index}}"
@@ -21,8 +18,16 @@
                                        class="form-control">
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-md-4 control-label">PABX/Ext No.</label>
+
+                        <div data-ng-show="!vm.showAdditionalInputDiv">
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{vm.entry.additional.roomNo}}</b></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="col-md-4 control-label">PABX/Ext No.</label>
+                        <div data-ng-show="vm.showAdditionalInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
                                        name="nExtNo{{$index}}"
@@ -32,8 +37,15 @@
                                        class="form-control">
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-md-4 control-label">Academic Initial</label>
+                        <div data-ng-show="!vm.showAdditionalInputDiv">
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{vm.entry.additional.extNo}}</b></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="col-md-4 control-label">Academic Initial</label>
+                        <div data-ng-show="vm.showAdditionalInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
                                        name="nAcademicInitial{{$index}}"
@@ -43,84 +55,67 @@
                                        class="form-control">
                             </div>
                         </div>
-                    </div>
-                </div>
-
-
-                <div class="col-md-8">
-                    <div class="well">
-                        <div class="row">
-                                <label class="control-label">Area Of Interests:</label>
-                            <br /><br /><br />
-                                <select name="nAoi"
-                                        id="iAoi"
-                                        data-ng-model="vm.entry.additional.areaOfInterestInformation"
-                                        data-ng-options="areaOfInterest.name for areaOfInterest in vm.arrayOfAreaOfInterest track by areaOfInterest.id"
-                                        class="select2-multi-value form-control"
-                                        multiple="multiple">
-                                </select>
+                        <div data-ng-show="!vm.showAdditionalInputDiv">
+                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                                <label class="control-label"><b>{{vm.entry.additional.academicInitial}}</b></label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div align="right">
-                        <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAdditionalInputDiv=false"><i class="fa fa-eye"></i>&nbsp;View</button>
-                        <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div data-ng-show="!vm.showAdditionalInputDiv">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="well">
-                    <div class="row">
-                        <label class="col-md-4 control-label">Room No.</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label"><b>{{vm.entry.additional.roomNo}}</b></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-md-4 control-label">PABX/Ext No.</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label"><b>{{vm.entry.additional.extNo}}</b></label>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <label class="col-md-4 control-label">Academic Initial</label>
-                        <div class="col-md-8" style="border-bottom: 1px dashed;">
-                            <label class="control-label"><b>{{vm.entry.additional.academicInitial}}</b></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="well">
-                    <div class="row">
-                        <label class="control-label">Area Of Interests: </label>
-                        <br /><br /><br />
-                        <label data-ng-repeat="aoi in vm.entry.additional.areaOfInterestInformation track by aoi.id" class="control-label">
-                            <ul><li><u>{{aoi.name}}</u></li></ul>&nbsp;&nbsp;</label>
-                    </div>
                 </div>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Area Of Interests</div>
+            <div class="panel-body">
+                <div data-ng-show="vm.showAdditionalInputDiv">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <select name="nAoi"
+                                    id="iAoi"
+                                    data-ng-model="vm.entry.additional.areaOfInterestInformation"
+                                    data-ng-options="areaOfInterest.name for areaOfInterest in vm.arrayOfAreaOfInterest track by areaOfInterest.id"
+                                    class="select2-multi-value form-control"
+                                    multiple="multiple">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-show="!vm.showAdditionalInputDiv">
+                    <label data-ng-repeat="aoi in vm.entry.additional.areaOfInterestInformation track by aoi.id"
+                           class="control-label">
+                        <ul>
+                            <li><u>{{aoi.name}}</u></li>
+                        </ul>&nbsp;&nbsp;</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-show="vm.showAdditionalInputDiv">
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAdditionalInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showAdditionalInputDiv=false; vm.showTab('additional');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <div data-ng-show="!vm.showAdditionalInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAdditionalInputDiv=true"><i
+                            class="fa fa-edit"></i>&nbsp;Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <script type="text/javascript">
     $(".select2-multi-value").select2({

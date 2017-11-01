@@ -19,10 +19,8 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8">
-                                <div style="border-bottom: 1px dashed; ">
-                                    <label class="control-label">{{vm.entry.personal.name}}</label>
-                                </div>
+                            <div class="col-md-8" style="border-bottom: 1px dashed; ">
+                                <label class="control-label">{{vm.entry.personal.name}}</label>
                             </div>
                         </div>
                     </div>
@@ -797,23 +795,27 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-show="vm.showPersonalInputDiv"
-                            data-ng-click="vm.showPersonalInputDiv=false">Cancel
-                    </button>
-                    <button type="submit" title="Submit" data-ng-show="vm.showPersonalInputDiv" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
-                    </button>
+        <div data-ng-show="vm.showPersonalInputDiv">
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="right">
+                        <button type="button" class="btn"
+                                data-ng-click="vm.showPersonalInputDiv=false; vm.showTab('personal');">Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-show="!vm.showPersonalInputDiv" data-ng-click="vm.showPersonalInputDiv=true"><i
-                            class="fa fa-edit"></i>&nbsp;Edit
-                    </button>
+        <div data-ng-show="!vm.showPersonalInputDiv">
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="right">
+                        <button type="button" class="btn" data-ng-click="vm.showPersonalInputDiv=true"><i
+                                class="fa fa-edit"></i>&nbsp;Edit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
