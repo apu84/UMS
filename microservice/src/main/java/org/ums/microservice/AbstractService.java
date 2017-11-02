@@ -25,27 +25,22 @@ public abstract class AbstractService implements Service {
     return false;
   }
 
-
   // Logout the user fully before continuing.
-  private void ensureUserIsLoggedOut()
-  {
-    try
-    {
+  private void ensureUserIsLoggedOut() {
+    try {
       // Get the user if one is logged in.
       Subject currentUser = SecurityUtils.getSubject();
-      if (currentUser == null)
+      if(currentUser == null)
         return;
 
       // Log the user out and kill their session if possible.
       currentUser.logout();
       Session session = currentUser.getSession(false);
-      if (session == null)
+      if(session == null)
         return;
 
       session.stop();
-    }
-    catch (Exception e)
-    {
+    } catch(Exception e) {
       // Ignore all errors, as we're trying to silently
       // log the user out.
     }

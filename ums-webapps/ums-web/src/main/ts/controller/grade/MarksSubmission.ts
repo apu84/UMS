@@ -499,12 +499,16 @@ module ums {
             this.$scope.data.course_title = part_info.courseTitle;
             this.$scope.data.crhr = part_info.cRhR;
             this.$scope.data.semester_name = part_info.semesterName;
-            this.$scope.data.dept_name = part_info.deptSchoolName;
+            this.$scope.data.dept_short_name = part_info.deptSchoolShortName;
+            this.$scope.data.dept_long_name = part_info.deptSchoolLongName;
 
             this.$scope.gradeSubmissionStatus = part_info.statusId;
             this.$scope.courseType = part_info.courseType;
             this.$scope.currentActor = data.current_actor;
             this.$scope.data.searchBox = "";
+
+            this.$scope.data.program_short_name = part_info.programShortName;
+            this.$scope.data.program_long_name = part_info.programLongName;
 
             if (this.$scope.data.total_part == 1)
               this.$scope.toggleColumn = false;

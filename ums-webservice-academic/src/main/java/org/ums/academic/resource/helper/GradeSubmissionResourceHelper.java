@@ -559,7 +559,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       @Override
       public int compare(MarksSubmissionStatusDto o1, MarksSubmissionStatusDto o2) {
         int c;
-        c = o1.getProgramShortname().compareTo(o2.getProgramShortname());
+        c = o1.getProgramShortName().compareTo(o2.getProgramShortName());
         if(c == 0) {
           c = o1.getCourseNo().compareTo(o2.getCourseNo());
         }
@@ -574,7 +574,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     for(MarksSubmissionStatusDto marksSubmissionStatusDto : marksSubmissionStatusDtoList) {
       PersistentExamGrade examGrade = new PersistentExamGrade();
       examGrade.setExamDate(marksSubmissionStatusDto.getExamDate());
-      examGrade.setProgramShortName(marksSubmissionStatusDto.getProgramShortname());
+      examGrade.setProgramShortName(marksSubmissionStatusDto.getProgramShortName());
       examGrade.setCourseId(marksSubmissionStatusDto.getCourseId());
       examGrade.setCourseNo(marksSubmissionStatusDto.getCourseNo());
       examGrade.setCourseTitle(marksSubmissionStatusDto.getCourseTitle());
