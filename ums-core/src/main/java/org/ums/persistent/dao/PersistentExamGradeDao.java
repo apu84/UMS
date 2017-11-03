@@ -284,7 +284,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       + "         MARKS_SUBMISSION_STATUS_LOG.Status " + "    FROM MARKS_SUBMISSION_STATUS_LOG, EMPLOYEES, USERS "
       + "    WHERE     MARKS_SUBMISSION_STATUS_LOG.User_Id = Users.User_Id "
       + "         AND USERS.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID " + "         AND Semester_Id = ?"
-      + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + "ORDER BY Inserted_On ";
+      + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + "ORDER BY Inserted_On desc";
 
   String SELECT_THEORY_LOG =
       "Select UG_THEORY_MARKS_LOG.User_Id,Employee_Name, ROLE,  "
@@ -292,7 +292,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Total,Grade_Letter,UG_THEORY_MARKS_LOG.Status,Recheck_Status  "
           + "From EMPLOYEES,USERS,UG_THEORY_MARKS_LOG " + "Where EMPLOYEES.EMPLOYEE_ID=USERS.EMPLOYEE_ID "
           + "And UG_THEORY_MARKS_LOG.USER_ID=USERS.USER_ID " + "And Semester_Id=? " + "And Course_Id=?"
-          + "And Exam_Type=? " + "And Student_Id=? " + "Order by Inserted_On ";
+          + "And Exam_Type=? " + "And Student_Id=? " + "Order by Inserted_On desc";
 
   String SELECT_SESSIONAL_LOG = "";
 

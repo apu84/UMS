@@ -442,7 +442,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus.getCourse().getNo());
       }
 
-      getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus, CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, allGradeList);
+      getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus, nextStatus, allGradeList);
       getContentManager().insertMarksSubmissionStatusLog(userId, actingRoleForCurrentUser, marksSubmissionStatus, nextStatus);
 
     }
