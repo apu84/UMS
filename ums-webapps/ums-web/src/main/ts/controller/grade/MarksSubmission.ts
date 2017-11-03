@@ -132,7 +132,10 @@ module ums {
     total_part: number;
     part_a_total: number;
     part_b_total: number;
-    course_typeId: number
+    course_typeId: number;
+    deadline_preparer: string;
+    deadline_scrutinizer: string;
+    deadline_head: string;
   }
   interface IInputParams {
     program_type: number;
@@ -449,6 +452,7 @@ module ums {
     }
 
     private fetchGradeSheet(courseId: string, semesterId: number, examTypeId: number): void {
+
       $("#panel_top").hide();
       $("#loading_panel").show();
       this.$scope.current_courseId = courseId;
@@ -510,6 +514,10 @@ module ums {
             this.$scope.data.program_short_name = part_info.programShortName;
             this.$scope.data.program_long_name = part_info.programLongName;
 
+            this.$scope.data.deadline_preparer = part_info.lastSubmissionDatePrep;
+            this.$scope.data.deadline_scrutinizer = part_info.lastSubmissionDateScr;
+            this.$scope.data.deadline_head = part_info.lastSubmissionDateHead;
+
             if (this.$scope.data.total_part == 1)
               this.$scope.toggleColumn = false;
 
@@ -517,6 +525,7 @@ module ums {
 
             //Initialize ModalWindows
             this.initializeModalWindows();
+            this.initializeDatePickers();
             //Fetch Chart Data ---
             this.fetchChartData().then((chartData: any) => {
               this.$scope.$broadcast("amCharts.updateData", chartData);
@@ -531,6 +540,7 @@ module ums {
       $("#selection2").show();
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
+
 
       //To show new features for a certain time
       /* Don't remove this code.
@@ -1165,7 +1175,10 @@ module ums {
         total_part: 0,
         part_a_total: 0,
         part_b_total: 0,
-        course_typeId: 0
+        course_typeId: 0,
+        deadline_preparer: '',
+        deadline_scrutinizer:'',
+        deadline_head: ''
       };
       courseInfo.course_id = this.$scope.current_courseId;
       courseInfo.semester_id = Number(this.$scope.current_semesterId);
@@ -1175,6 +1188,12 @@ module ums {
       courseInfo.part_a_total = Number(this.$scope.data.part_a_total);
       courseInfo.part_b_total = Number(this.$scope.data.part_b_total);
 
+      if($("#deadline_preparer")) {
+        courseInfo.deadline_preparer = $("#deadline_preparer").val();
+        courseInfo.deadline_scrutinizer = $("#deadline_scrutinizer").val();
+        courseInfo.deadline_head = $("#deadline_head").val();
+      }
+
       complete_json["courseInfo"] = courseInfo;
       complete_json["action"] = action;
       complete_json["actor"] = this.$scope.currentActor;
@@ -1183,14 +1202,22 @@ module ums {
     }
 
     private recheckAll(actor: string): void {
+
+      if($("#approveAllCheckBox"))
+        $("#approveAllCheckBox").prop('checked', false);
+
       var studentMark: IStudentMarks;
       var gradeList: Array<IStudentMarks> = this.getGradeList(actor);
       for (var ind in gradeList) {
         studentMark = gradeList[ind];
-        if ($('#recheckAllCheckBox').prop('checked'))
+        if ($('#recheckAllCheckBox').prop('checked')) {
           $("#recheck_" + studentMark.studentId).prop('checked', true);
-        else
+          if ($('#approve_' + studentMark.studentId).prop('checked'))
+            $("#approve_" + studentMark.studentId).prop('checked', false);
+        }
+        else {
           $("#recheck_" + studentMark.studentId).prop('checked', false);
+        }
       }
       this.enableDisableRecheckApproveButton(actor);
     }
@@ -1209,15 +1236,23 @@ module ums {
     }
 
     private approveAll(actor: string): void {
+
+      if($("#recheckAllCheckBox"))
+            $("#recheckAllCheckBox").prop('checked', false);
+
       var studentMark: IStudentMarks;
       var gradeList: Array<IStudentMarks> = this.getGradeList(actor);
 
       for (var ind in gradeList) {
         studentMark = gradeList[ind];
-        if ($('#approveAllCheckBox').prop('checked'))
+        if ($('#approveAllCheckBox').prop('checked')) {
           $("#approve_" + studentMark.studentId).prop('checked', true);
-        else
+          if($("#recheckAllCheckBox"))
+            $("#recheck_" + studentMark.studentId).prop('checked', false);
+        }
+        else {
           $("#approve_" + studentMark.studentId).prop('checked', false);
+        }
       }
       this.enableDisableRecheckApproveButton(actor);
     }
@@ -1484,8 +1519,40 @@ module ums {
           this.$scope.approveButtonLabel = "Save and Accept";
           this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
 
-          this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
-          this.$scope.modalSettings.recheckBody += "<br/><br/>Here I'm";
+          var abc="";
+          abc ="Are you sure you want to send back the selected grades to preparer for recheck?";
+          abc +="<div>";
+          abc +="<br/><b><u>Marks Submission deadlines</u></b> <hr/>";
+          abc +="<form class='form-horizontal pal'>";
+          abc +="<div class='form-body'>";
+          abc +="<div class='form-group' style='margin-bottom:5px;'>";
+          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Preparer</label>";
+          abc +="<div class='col-md-8'>";
+          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_preparer+"' style='width:60%;text-align: center;' id='deadline_preparer'/>" ;
+          abc +="</div>";
+          abc +="</div>";
+
+          abc +="<div class='form-group' style='margin-bottom:5px;'>";
+          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Scrutinizer</label>";
+          abc +="<div class='col-md-8'>";
+          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_scrutinizer+"'  style='width:60%;text-align: center;' id='deadline_scrutinizer'/>" ;
+          abc +="</div>";
+          abc +="</div>";
+
+          abc +="<div class='form-group'  style='margin-bottom:5px;'>";
+          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Head</label>";
+          abc +="<div class='col-md-8'>";
+          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_head+"' style='width:60%;text-align: center;' id='deadline_head'/>" ;
+          abc +="</div>";
+          abc +="</div>";
+
+
+          abc +="</div>";
+          abc +="</form>";
+
+
+          abc +="</div>";
+          this.$scope.modalSettings.recheckBody  = this.$sce.trustAsHtml(abc);
           this.$scope.modalSettings.recheckHandler = "recheckModal";
           this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
           this.$scope.modalSettings.approveHandler = "approveModal";
@@ -1519,6 +1586,14 @@ module ums {
       }
     }
 
+    private initializeDatePickers() {
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 1000);
+    }
     //MarksSubmissionLog
     private fetchMarksSubmissionLog(): void {
       this.httpClient.get("academic/gradeSubmission/semester/" + this.$scope.current_semesterId +

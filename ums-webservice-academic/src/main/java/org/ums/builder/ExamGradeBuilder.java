@@ -1,9 +1,8 @@
 package org.ums.builder;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -12,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
@@ -22,6 +22,7 @@ import org.ums.enums.ExamType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.formatter.DateFormat;
+import org.ums.util.UmsUtils;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -127,6 +128,21 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     partInfoDto.setPart_a_total(course.getInt("part_a_total"));
     partInfoDto.setPart_b_total(course.getInt("part_b_total"));
     partInfoDto.setCourseType(CourseType.get(course.getInt("course_typeId")));
+
+    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+    try {
+      if(course.containsKey("deadline_preparer") && !StringUtils.isEmpty(course.getString("deadline_preparer")))
+        partInfoDto.setLastSubmissionDatePrep(UmsUtils.modifyTimeToLastSecondOfTheClock(format.parse(course
+            .getString("deadline_preparer"))));
+      if(course.containsKey("deadline_scrutinizer") && !StringUtils.isEmpty(course.getString("deadline_scrutinizer")))
+        partInfoDto.setLastSubmissionDateScr(UmsUtils.modifyTimeToLastSecondOfTheClock(format.parse(course
+            .getString("deadline_scrutinizer"))));
+      if(course.containsKey("deadline_head") && !StringUtils.isEmpty(course.getString("deadline_head")))
+        partInfoDto.setLastSubmissionDateHead(UmsUtils.modifyTimeToLastSecondOfTheClock(format.parse(course
+            .getString("deadline_head"))));
+    } catch(Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   public List<StudentGradeDto> build(JsonObject pJsonObject) {

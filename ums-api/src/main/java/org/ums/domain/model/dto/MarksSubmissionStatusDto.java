@@ -1,6 +1,7 @@
 package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
@@ -377,7 +378,7 @@ public class MarksSubmissionStatusDto {
   }
 
   public String toString() {
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
     return gson.toJson(this);
   }
 

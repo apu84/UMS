@@ -759,7 +759,9 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective'], {serie: true});
+              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective',
+                'vendors/bootstrap-datepicker/css/datepicker.css',
+                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'], {serie: true});
             }]
           }
         })

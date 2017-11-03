@@ -159,7 +159,8 @@ public class GradeSubmissionService {
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
     // Deadline && Part Info Validation
-    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("submit")) {
+    if(operation.equals("submit")) {
+      // actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED &&
       validateGradeSubmissionDeadline(actualActingRole, actualStatus.getLastSubmissionDatePrep(),
           actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead());
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)

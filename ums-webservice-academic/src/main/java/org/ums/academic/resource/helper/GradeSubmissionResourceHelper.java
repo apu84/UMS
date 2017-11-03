@@ -418,6 +418,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(nextStatus);
+      if(nextStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+        mutable.setLastSubmissionDatePrep(requestedStatusDTO.getLastSubmissionDatePrep());
+        mutable.setLastSubmissionDateScr(requestedStatusDTO.getLastSubmissionDateScr());
+        mutable.setLastSubmissionDateHead(requestedStatusDTO.getLastSubmissionDateHead());
+      }
       mutable.update();
 
       if (recheckList != null) recheckList.stream().forEach(g -> {
