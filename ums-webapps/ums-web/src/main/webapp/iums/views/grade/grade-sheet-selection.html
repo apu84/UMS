@@ -232,8 +232,8 @@
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
                         <td colspan="4" align="center" style="height: 30px;">
-                            <h4>Marks/Grade Sheet <b>({{data.semester_name}})</b>, Program </h4>
-                            <h4>Department/School :<b> {{data.dept_name}}</b></h4>
+                            <h4>Marks/Grade Sheet <b>({{data.semester_name}})</b></h4>
+                            <h4>Department/School :<b> {{data.dept_short_name}}</b>, Program : <b>{{data.program_short_name}}</b> </h4>
                         </td>
                     </tr>
                     <tr>
@@ -305,7 +305,7 @@
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
-                    <scrollable-table watch="noneSubmittedGrades" ng-style="{height: noneSubmittedGrades.length > 10 ? 450 : (38 + (noneSubmittedGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="noneSubmittedGrades" ng-style="{height: noneSubmittedGrades.length > 10 ? 450 : (38 + (noneSubmittedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -391,7 +391,7 @@
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
-                    <scrollable-table watch="candidatesGrades" ng-style="{height: candidatesGrades.length > 10 ? 450 : (38 + (candidatesGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="candidatesGrades" ng-style="{height: candidatesGrades.length > 10 ? 450 : (38 + (candidatesGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -470,7 +470,7 @@
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
-                    <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -512,7 +512,7 @@
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
-                    <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -607,7 +607,7 @@
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
-                    <scrollable-table watch="submittedGrades" ng-style="{height: submittedGrades.length > 10 ? 450 : (38 + (submittedGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="submittedGrades" ng-style="{height: submittedGrades.length > 10 ? 450 : (38 + (submittedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -655,7 +655,7 @@
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
-                    <scrollable-table watch="scrutinizedGrades" ng-style="{height: scrutinizedGrades.length > 10 ? 450 : (38 + (scrutinizedGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="scrutinizedGrades" ng-style="{height: scrutinizedGrades.length > 10 ? 450 : (38 + (scrutinizedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -701,7 +701,7 @@
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
-                    <scrollable-table watch="approvedGrades" ng-style="{height: approvedGrades.length > 10 ? 450 : (38 + (approvedGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="approvedGrades" ng-style="{height: approvedGrades.length > 10 ? 450 : (38 + (approvedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -746,7 +746,7 @@
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
-                    <scrollable-table watch="acceptedGrades" ng-style="{height: acceptedGrades.length > 10 ? 450 : (38 + (acceptedGrades.length * 35.5))}">
+                    <scrollable-table resizable watch="acceptedGrades" ng-style="{height: acceptedGrades.length > 10 ? 450 : (38 + (acceptedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -792,7 +792,7 @@
                         Add all Students
                         </a>
                         <div class="clearfix"></div>
-                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height:300}">
+                        <scrollable-table resizable watch="recheckAcceptedGrades" ng-style="{height:300}">
                             <table class="table table-striped table-bordered" id="tbl_recheck_accepted">
                                 <thead>
                                 <tr>
@@ -843,7 +843,7 @@
                             <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending)</span>
                         </div>
                         <div class="clearfix"></div>
-                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height: recheckAcceptedGrades.length > 10 ? 450 : (38 + (recheckAcceptedGrades.length * 35.5))}">
+                        <scrollable-table resizable watch="recheckAcceptedGrades" ng-style="{height: recheckAcceptedGrades.length > 10 ? 450 : (38 + (recheckAcceptedGrades.length * 35.5))}">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                 <tr>

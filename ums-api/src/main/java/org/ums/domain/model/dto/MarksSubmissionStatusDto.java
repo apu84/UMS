@@ -16,7 +16,8 @@ public class MarksSubmissionStatusDto {
   private int semesterId;
   private String semesterName;
   private float cRhR;
-  private String deptSchoolName;
+  private String deptSchoolShortName;
+  private String deptSchoolLongName;
   private int total_part;
   private int part_a_total;
   private int part_b_total;
@@ -33,7 +34,8 @@ public class MarksSubmissionStatusDto {
   private String examTypeName;
 
   private Integer courseCreditHour;
-  private String programShortname;
+  private String programShortName;
+  private String programLongName;
   private String examDate;
   private Integer totalStudents;
 
@@ -92,14 +94,6 @@ public class MarksSubmissionStatusDto {
 
   public void setCourseCreditHour(Integer pCourseCreditHour) {
     courseCreditHour = pCourseCreditHour;
-  }
-
-  public String getProgramShortname() {
-    return programShortname;
-  }
-
-  public void setProgramShortname(String pProgramShortname) {
-    programShortname = pProgramShortname;
   }
 
   public String getExamDate() {
@@ -302,12 +296,20 @@ public class MarksSubmissionStatusDto {
     this.cRhR = cRhR;
   }
 
-  public String getDeptSchoolName() {
-    return deptSchoolName;
+  public String getDeptSchoolShortName() {
+    return deptSchoolShortName;
   }
 
-  public void setDeptSchoolName(String deptSchoolName) {
-    this.deptSchoolName = deptSchoolName;
+  public void setDeptSchoolShortName(String deptSchoolShortName) {
+    this.deptSchoolShortName = deptSchoolShortName;
+  }
+
+  public String getDeptSchoolLongName() {
+    return deptSchoolLongName;
+  }
+
+  public void setDeptSchoolLongName(String deptSchoolLongName) {
+    this.deptSchoolLongName = deptSchoolLongName;
   }
 
   public int getCourseTypeId() {
@@ -356,6 +358,22 @@ public class MarksSubmissionStatusDto {
 
   public void setSubmissionColorCode(GradeSubmissionColorCode submissionColorCode) {
     this.submissionColorCode = submissionColorCode;
+  }
+
+  public String getProgramShortName() {
+    return programShortName;
+  }
+
+  public void setProgramShortName(String programShortName) {
+    this.programShortName = programShortName;
+  }
+
+  public String getProgramLongName() {
+    return programLongName;
+  }
+
+  public void setProgramLongName(String programLongName) {
+    this.programLongName = programLongName;
   }
 
   public String toString() {

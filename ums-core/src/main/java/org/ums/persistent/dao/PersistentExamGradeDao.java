@@ -27,7 +27,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   String SELECT_PART_INFO =
       "Select MARKS_SUBMISSION_STATUS.*, LAST_SUBMISSION_DATE_PREP,LAST_SUBMISSION_DATE_SCR,LAST_SUBMISSION_DATE_HEAD, "
-          + " COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME "
+          + " COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,SHORT_NAME,LONG_NAME,SEMESTER_NAME,PROGRAM_SHORT_NAME,PROGRAM_LONG_NAME  "
           + "From MARKS_SUBMISSION_STATUS,MST_COURSE,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM,MST_DEPT_OFFICE,MST_SEMESTER "
           + " Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id  "
           + "AND MST_COURSE.Course_Id = COURSE_SYLLABUS_MAP.Course_Id "
@@ -284,7 +284,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       + "         MARKS_SUBMISSION_STATUS_LOG.Status " + "    FROM MARKS_SUBMISSION_STATUS_LOG, EMPLOYEES, USERS "
       + "    WHERE     MARKS_SUBMISSION_STATUS_LOG.User_Id = Users.User_Id "
       + "         AND USERS.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID " + "         AND Semester_Id = ?"
-      + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + "ORDER BY Inserted_On ";
+      + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + "ORDER BY Inserted_On desc";
 
   String SELECT_THEORY_LOG =
       "Select UG_THEORY_MARKS_LOG.User_Id,Employee_Name, ROLE,  "
@@ -292,7 +292,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Total,Grade_Letter,UG_THEORY_MARKS_LOG.Status,Recheck_Status  "
           + "From EMPLOYEES,USERS,UG_THEORY_MARKS_LOG " + "Where EMPLOYEES.EMPLOYEE_ID=USERS.EMPLOYEE_ID "
           + "And UG_THEORY_MARKS_LOG.USER_ID=USERS.USER_ID " + "And Semester_Id=? " + "And Course_Id=?"
-          + "And Exam_Type=? " + "And Student_Id=? " + "Order by Inserted_On ";
+          + "And Exam_Type=? " + "And Student_Id=? " + "Order by Inserted_On desc";
 
   String SELECT_SESSIONAL_LOG = "";
 
@@ -870,7 +870,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   private void rowMapperSetter(ResultSet pResultSet, MarksSubmissionStatusDto pSubmissionStatusDto) throws SQLException {
-    pSubmissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
+    pSubmissionStatusDto.setProgramShortName(pResultSet.getString("program_short_name"));
     pSubmissionStatusDto.setCourseId(pResultSet.getString("course_id"));
     pSubmissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
     pSubmissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
@@ -906,12 +906,15 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       statusDto.setCourseTitle(resultSet.getString("COURSE_TITLE"));
       statusDto.setCourseId(resultSet.getString("COURSE_ID"));
       statusDto.setCourseNo(resultSet.getString("COURSE_NO"));
-      statusDto.setDeptSchoolName(resultSet.getString("LONG_NAME"));
+      statusDto.setDeptSchoolShortName(resultSet.getString("SHORT_NAME"));
+      statusDto.setDeptSchoolLongName(resultSet.getString("LONG_NAME"));
       statusDto.setSemesterName(resultSet.getString("SEMESTER_NAME"));
       statusDto.setcRhR(resultSet.getFloat("CRHR"));
       statusDto.setLastSubmissionDatePrep(resultSet.getDate("LAST_SUBMISSION_DATE_PREP"));
       statusDto.setLastSubmissionDateScr(resultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
       statusDto.setLastSubmissionDateHead(resultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
+      statusDto.setProgramShortName(resultSet.getString("PROGRAM_SHORT_NAME"));
+      statusDto.setProgramLongName(resultSet.getString("PROGRAM_LONG_NAME"));
       AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
       return atomicReference.get();
     }
