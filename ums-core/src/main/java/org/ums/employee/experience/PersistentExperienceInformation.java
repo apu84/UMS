@@ -19,6 +19,8 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   private String mDesignation;
   private String mExperienceFromDate;
   private String mExperienceToDate;
+  private int mExperienceDuration;
+  private String mExperienceDurationString;
   private String mLastModified;
 
   public PersistentExperienceInformation() {}
@@ -99,6 +101,16 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
+  public void setExperienceDuration(int pExperienceDuration) {
+    mExperienceDuration = pExperienceDuration;
+  }
+
+  @Override
+  public void setExperienceDurationString(String pExperienceDurationString) {
+    mExperienceDurationString = pExperienceDurationString;
+  }
+
+  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -121,5 +133,15 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   @Override
   public String getExperienceToDate() {
     return mExperienceToDate;
+  }
+
+  @Override
+  public int getExperienceDuration() {
+    return mExperienceDuration;
+  }
+
+  @Override
+  public String getExperienceDurationString() {
+    return mExperienceDurationString;
   }
 }

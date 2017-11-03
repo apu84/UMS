@@ -78,7 +78,8 @@ module ums{
         trainingInstitution: string;
         trainingFrom: string;
         trainingTo: string;
-        trainingDuration: string;
+        trainingDuration: number;
+        trainingDurationString: string;
         dbAction: string;
     }
 
@@ -99,6 +100,8 @@ module ums{
         experienceDesignation: string;
         experienceFrom: string;
         experienceTo: string;
+        experienceDuration: number;
+        experienceDurationString: string;
         dbAction: string;
     }
 

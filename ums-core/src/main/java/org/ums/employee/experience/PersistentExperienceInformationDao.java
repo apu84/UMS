@@ -12,16 +12,18 @@ import java.util.List;
 public class PersistentExperienceInformationDao extends ExperienceInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_EXPERIENCE_INFO (ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED) VALUES (?,?,?,?,?,?,"
+      "INSERT INTO EMP_EXPERIENCE_INFO (ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, "
+          + "EXPERIENCE_FROM, EXPERIENCE_TO, EXPERIENCE_DURATION, EXPERIENCE_DURATION_STRING, LAST_MODIFIED) VALUES (?,?,?,?,?,?,?,?,"
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, EXPERIENCE_TO, LAST_MODIFIED From EMP_EXPERIENCE_INFO";
+  static String GET_ONE = "Select ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, "
+      + "EXPERIENCE_TO, EXPERIENCE_DURATION, EXPERIENCE_DURATION_STRING, LAST_MODIFIED From EMP_EXPERIENCE_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_EXPERIENCE_INFO";
 
   static String UPDATE_ALL =
-      "UPDATE EMP_EXPERIENCE_INFO SET EXPERIENCE_INSTITUTE=?, EXPERIENCE_DESIGNATION=?, EXPERIENCE_FROM=?, EXPERIENCE_TO=?, LAST_MODIFIED="
+      "UPDATE EMP_EXPERIENCE_INFO SET EXPERIENCE_INSTITUTE=?, EXPERIENCE_DESIGNATION=?, EXPERIENCE_FROM=?, "
+          + "EXPERIENCE_TO=?, EXPERIENCE_DURATION = ?, EXPERIENCE_DURATION_STRING = ?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -50,7 +52,8 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     for(ExperienceInformation experienceInformation : pMutableExperienceInformation) {
       params.add(new Object[] {mIdGenerator.getNumericId(), experienceInformation.getEmployeeId(),
           experienceInformation.getExperienceInstitute(), experienceInformation.getDesignation(),
-          experienceInformation.getExperienceFromDate(), experienceInformation.getExperienceToDate()});
+          experienceInformation.getExperienceFromDate(), experienceInformation.getExperienceToDate(),
+          experienceInformation.getExperienceDuration(), experienceInformation.getExperienceDurationString()});
 
     }
     return params;
@@ -74,7 +77,8 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     for(ExperienceInformation pExperienceInformation : pMutableExperienceInformation) {
       params.add(new Object[] {pExperienceInformation.getExperienceInstitute(),
           pExperienceInformation.getDesignation(), pExperienceInformation.getExperienceFromDate(),
-          pExperienceInformation.getExperienceToDate(), pExperienceInformation.getEmployeeId(),
+          pExperienceInformation.getExperienceToDate(), pExperienceInformation.getExperienceDuration(),
+          pExperienceInformation.getExperienceDurationString(), pExperienceInformation.getEmployeeId(),
           pExperienceInformation.getId()});
     }
     return params;
@@ -105,6 +109,8 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
       experienceInformation.setDesignation(resultSet.getString("experience_designation"));
       experienceInformation.setExperienceFromDate(resultSet.getString("experience_from"));
       experienceInformation.setExperienceToDate(resultSet.getString("experience_to"));
+      experienceInformation.setExperienceDuration(resultSet.getInt("experience_duration"));
+      experienceInformation.setExperienceDurationString(resultSet.getString("experience_duration_string"));
       return experienceInformation;
     }
   }
