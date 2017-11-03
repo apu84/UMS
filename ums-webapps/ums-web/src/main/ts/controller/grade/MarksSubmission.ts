@@ -1485,6 +1485,7 @@ module ums {
           this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
 
           this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
+          this.$scope.modalSettings.recheckBody += "<br/><br/>Here I'm";
           this.$scope.modalSettings.recheckHandler = "recheckModal";
           this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
           this.$scope.modalSettings.approveHandler = "approveModal";
