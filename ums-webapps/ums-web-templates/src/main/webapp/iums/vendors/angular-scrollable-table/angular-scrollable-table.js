@@ -142,7 +142,8 @@
                                 // ordinary column(not sortableHeader) has box child div element that contained title string.
                                 title = el.find(".title .ng-scope").html() || el.find(".box").html();
                             }
-                            el.attr("title", title.trim());
+                            // commented by ifti
+                            //el.attr("title", title.trim());
                         });
 
                         //A quick hack by ifti to make checkbox workable in side th
