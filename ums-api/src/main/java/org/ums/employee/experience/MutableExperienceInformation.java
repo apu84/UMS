@@ -16,4 +16,8 @@ public interface MutableExperienceInformation extends ExperienceInformation, Edi
   void setExperienceFromDate(final String pExperienceFromDate);
 
   void setExperienceToDate(final String pExperienceToDate);
+
+  void setExperienceDuration(final int pExperienceDuration);
+
+  void setExperienceDurationString(final String pExperienceDurationString);
 }

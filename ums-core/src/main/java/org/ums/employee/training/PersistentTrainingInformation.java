@@ -19,7 +19,8 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   private String mTrainingInstitute;
   private String mTrainingFromDate;
   private String mTrainingToDate;
-  private String mTrainingDuration;
+  private int mTrainingDuration;
+  private String mTrainingDurationString;
   private String mLastModified;
 
   public PersistentTrainingInformation() {}
@@ -101,8 +102,13 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public void setTrainingDuration(String pTrainingDuration) {
+  public void setTrainingDuration(int pTrainingDuration) {
     mTrainingDuration = pTrainingDuration;
+  }
+
+  @Override
+  public void setTrainingDurationString(String pTrainingDurationString) {
+    mTrainingDurationString = pTrainingDurationString;
   }
 
   @Override
@@ -131,7 +137,12 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public String getTrainingDuration() {
+  public int getTrainingDuration() {
     return mTrainingDuration;
+  }
+
+  @Override
+  public String getTrainingDurationString() {
+    return mTrainingDurationString;
   }
 }

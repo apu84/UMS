@@ -64,8 +64,11 @@
                                        name="nExperienceFrom{{$index}}"
                                        id="iExperienceFrom{{$index}}"
                                        data-ng-model="experience.experienceFrom"
-                                       data-date-format="mm/yyyy"
-                                       placeholder="MM/YYYY"
+                                       data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       onkeydown="return false"
+                                       data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>
                             </div>
@@ -86,79 +89,83 @@
                                        name="nExperienceTo{{$index}}"
                                        id="iExperienceTo{{$index}}"
                                        data-ng-model="experience.experienceTo"
-                                       data-date-format="mm/yyyy"
-                                       placeholder="MM/YYYY"
+                                       data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       onkeydown="return false"
+                                       data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>
                             </div>
                         </div>
-                    </div>
-                    <div data-ng-show="!vm.showExperienceInputDiv">
-                        <div class="col-md-8">
-                            <div style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{experience.experienceTo}}</label>
+                        <div data-ng-show="!vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{experience.experienceTo}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label">Duration<span class="require">*</span></label>
+                        <div data-ng-show="vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nExperienceDurationString{{$index}}"
+                                       id="iExperienceDurationString{{$index}}"
+                                       data-ng-model="experience.experienceDurationString"
+                                       placeholder="Duration"
+                                       class="form-control" readonly required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showExperienceInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{experience.experienceDurationString}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-1"></div>
                 </div>
             </div>
-            <!--<div class="row">-->
-            <!--<div class="col-md-1"></div>-->
-            <!--<div class="col-md-5">-->
-            <!--<label class="col-md-4 control-label">Duration<span class="require">*</span></label>-->
-            <!--<div data-ng-show="vm.showTrainingInputDiv">-->
-            <!--<div class="col-md-8">-->
-            <!--<input type="text"-->
-            <!--name="nTrainingDuration{{$index}}"-->
-            <!--id="iTrainingDuration{{$index}}"-->
-            <!--data-ng-model="training.trainingDuration"-->
-            <!--placeholder="Duration"-->
-            <!--class="form-control" readonly required>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div data-ng-show="!vm.showTrainingInputDiv">-->
-            <!--<div class="col-md-8">-->
-            <!--<div style="border-bottom: 1px dashed;">-->
-            <!--<label class="control-label">{{training.trainingDuration}}</label>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="col-md-5"></div>-->
-            <!--<div class="col-md-1"></div>-->
-            <!--</div>-->
         </div>
-    </div>
 
-    <div data-ng-show="vm.showExperienceInputDiv">
-        <div class="row">
-            <div class="col-md-12">
-                <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
-                                                                                           aria-hidden="true"
-                                                                                           style="cursor: pointer;color: green;"></i></a>
-                    ]
-                </div>
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn"
-                            data-ng-click="vm.showExperienceInputDiv=false; vm.showTab('experience');">Cancel
-                    </button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i
-                            class="fa fa-save"></i>&nbsp;Submit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div data-ng-show="vm.showExperienceEditButton">
-        <div data-ng-show="!vm.showExperienceInputDiv">
+        <div data-ng-show="vm.showExperienceInputDiv">
             <div class="row">
                 <div class="col-md-12">
+                    <div align="center">
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
+                                                                                               aria-hidden="true"
+                                                                                               style="cursor: pointer;color: green;"></i></a>
+                        ]
+                    </div>
                     <div align="right">
                         <button type="button" title="Cancel" class="btn"
-                                data-ng-click="vm.showExperienceInputDiv=true">
-                            <i class="fa fa-edit"></i>&nbsp;Edit
+                                data-ng-click="vm.showExperienceInputDiv=false; vm.showTab('experience');">Cancel
                         </button>
+                        <button type="submit" title="Submit" class="btn btn-success"><i
+                                class="fa fa-save"></i>&nbsp;Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-ng-show="vm.showExperienceEditButton">
+            <div data-ng-show="!vm.showExperienceInputDiv">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="right">
+                            <button type="button" title="Cancel" class="btn"
+                                    data-ng-click="vm.showExperienceInputDiv=true">
+                                <i class="fa fa-edit"></i>&nbsp;Edit
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,7 +176,8 @@
 <div data-ng-show="!vm.showExperienceEditButton">
     <div class="row">
         <div class="col-md-12">
-            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Experience</strong>) form will be covered by registrar office.</label>
+            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Experience</strong>) form will
+                be covered by registrar office.</label>
         </div>
     </div>
 </div>

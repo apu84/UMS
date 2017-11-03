@@ -150,17 +150,17 @@ module ums {
 
         private initialization() {
             this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if(this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined ){
+                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
                     this.userId = user.employeeId;
                     this.showServiceEditButton = false;
                     this.showAcademicEditButton = false;
                     this.showExperienceEditButton = false;
                 }
                 else {
-                       this.userId = this.stateParams.id;
-                       this.showServiceEditButton = true;
-                       this.showAcademicEditButton = true;
-                       this.showExperienceEditButton = true;
+                    this.userId = this.stateParams.id;
+                    this.showServiceEditButton = true;
+                    this.showAcademicEditButton = true;
+                    this.showExperienceEditButton = true;
                 }
                 this.countryService.getCountryList().then((countries: any) => {
                     this.countries = countries.entries;
@@ -203,8 +203,7 @@ module ums {
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        private showTab(formName: string){
-            console.log("calling");
+        private showTab(formName: string) {
             if (formName === "personal") {
                 this.getPersonalInformation();
                 this.academic = false;
@@ -272,7 +271,7 @@ module ums {
                 this.service = false;
                 this.experience = true;
             }
-            else if(formName === 'additional'){
+            else if (formName === 'additional') {
                 this.getAdditionalInformation();
                 this.personal = false;
                 this.academic = false;
@@ -283,7 +282,7 @@ module ums {
                 this.service = false;
                 this.additional = true;
             }
-            else if(formName === 'service'){
+            else if (formName === 'service') {
                 this.getServiceInformation();
                 this.personal = false;
                 this.academic = false;
@@ -525,7 +524,7 @@ module ums {
             this.serviceDetailDeletedObjects = [];
             this.employeeInformationService.getServiceInformation(this.userId).then((services: any) => {
                 this.entry.serviceInfo = services;
-            }).then(()=>{
+            }).then(() => {
                 this.previousServiceInformation = angular.copy(this.entry.serviceInfo);
             });
         }
@@ -632,12 +631,12 @@ module ums {
         }
 
         private addNewServiceRow(parameter: string, index?: number): void {
-            if(parameter == "serviceInfo") {
-                if(this.entry.serviceInfo.length == 0){
+            if (parameter == "serviceInfo") {
+                if (this.entry.serviceInfo.length == 0) {
                     this.addNewRow("service");
                 }
                 else {
-                    if(this.entry.serviceInfo[this.entry.serviceInfo.length - 1].resignDate == ""){
+                    if (this.entry.serviceInfo[this.entry.serviceInfo.length - 1].resignDate == "") {
                         this.notify.error("Please fill up the resign date first");
                     }
                     else {
@@ -645,12 +644,12 @@ module ums {
                     }
                 }
             }
-            else if(parameter == "serviceDetails") {
-                if(this.entry.serviceInfo[index].intervalDetails.length == 0) {
+            else if (parameter == "serviceDetails") {
+                if (this.entry.serviceInfo[index].intervalDetails.length == 0) {
                     this.addNewServiceDetailsRow(index);
                 }
-                else{
-                    if(this.entry.serviceInfo[index].intervalDetails[this.entry.serviceInfo[index].intervalDetails.length - 1].endDate == ""){
+                else {
+                    if (this.entry.serviceInfo[index].intervalDetails[this.entry.serviceInfo[index].intervalDetails.length - 1].endDate == "") {
                         this.notify.error("Please fill up the end date first");
                     }
                     else {
@@ -722,7 +721,8 @@ module ums {
                     trainingInstitution: "",
                     trainingFrom: "",
                     trainingTo: "",
-                    trainingDuration: "",
+                    trainingDuration: null,
+                    trainingDurationString: "",
                     dbAction: "Create"
                 };
                 this.entry.training.push(trainingEntry);
@@ -749,11 +749,13 @@ module ums {
                     experienceDesignation: "",
                     experienceFrom: "",
                     experienceTo: "",
+                    experienceDuration: null,
+                    experienceDurationString: "",
                     dbAction: "Create"
                 };
                 this.entry.experience.push(experienceEntry);
             }
-            else if(divName = 'service'){
+            else if (divName = 'service') {
                 let serviceEntry: IServiceInformationModel;
                 serviceEntry = {
                     id: "",
@@ -799,15 +801,22 @@ module ums {
                 }
                 this.entry.award.splice(index, 1);
             }
-            else if(divName == "serviceInfo") {
-                if(this.entry.serviceInfo[index].id != "") {
+            else if (divName === 'experience') {
+                if (this.entry.experience[index].id != "") {
+                    this.entry.experience[index].dbAction = "Delete";
+                    this.experienceDeletedObjects.push(this.entry.experience[index]);
+                }
+                this.entry.experience.splice(index, 1);
+            }
+            else if (divName == "serviceInfo") {
+                if (this.entry.serviceInfo[index].id != "") {
                     this.entry.serviceInfo[index].dbAction = "Delete";
                     this.serviceDeletedObjects.push(this.entry.serviceInfo[index]);
                 }
                 this.entry.serviceInfo.splice(index, 1);
             }
-            else if(divName == "serviceDetails"){
-                if(this.entry.serviceInfo[parentIndex].intervalDetails[index].id != "") {
+            else if (divName == "serviceDetails") {
+                if (this.entry.serviceInfo[parentIndex].intervalDetails[index].id != "") {
                     this.entry.serviceInfo[parentIndex].intervalDetails[index].dbAction = "Delete";
                     this.serviceDetailDeletedObjects.push(this.entry.serviceInfo[parentIndex].intervalDetails[index]);
                 }
@@ -850,40 +859,44 @@ module ums {
             return defer.promise;
         }
 
-        private calculateDifference(tabName: string, index: number): void {
-            this.entry.training[index].trainingDuration = "";
-            if (this.entry.training[index].trainingFrom == "" || this.entry.training[index].trainingTo == "") {
-                this.entry.training[index].trainingDuration = "";
-            }
-            else {
-                let formattedFromDate: string = moment(this.entry.training[index].trainingFrom, "DD/MM/YYYY").format("MM/DD/YYYY");
+        private calculateDifference(tabName: string, index: number, FromDate: string, ToDate: string): void {
+            if (FromDate != "" && ToDate != "") {
+                let formattedFromDate: string = moment(FromDate, "DD/MM/YYYY").format("MM/DD/YYYY");
                 let fromDate: Date = new Date(formattedFromDate);
-                let formattedToDate: string = moment(this.entry.training[index].trainingTo, "DD/MM/YYYY").format("MM/DD/YYYY");
+                let formattedToDate: string = moment(ToDate, "DD/MM/YYYY").format("MM/DD/YYYY");
                 let toDate: Date = new Date(formattedToDate);
                 if (fromDate > toDate) {
                     this.notify.error("From date is greater than to date");
-                    this.entry.training[index].trainingDuration = "";
-                }
-                else {
+                } else {
+                    let diffDateString = "";
                     let year: number = 0;
                     let month: number = 0;
                     let day: number = 0;
                     let timeDiff: number = (toDate.getTime() - fromDate.getTime());
                     let diffDays: number = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-                    if(diffDays >= 365){
+                    if (diffDays >= 365) {
                         year = Math.floor(diffDays / 365);
                         month = Math.floor((diffDays % 365) / 30);
                         day = Math.floor((diffDays % 365) % 30);
-                        this.entry.training[index].trainingDuration = year + " year " + month + " month " + day + " day";
+                        diffDateString = year + " year " + month + " month " + day + " day";
                     }
-                    else if(diffDays >= 30){
+                    else if (diffDays >= 30) {
                         month = Math.floor((diffDays / 30));
                         day = Math.floor(diffDays % 30);
-                        this.entry.training[index].trainingDuration = month + " month " + day + " day";
+                        diffDateString = month + " month " + day + " day";
                     }
-                    else{
-                        this.entry.training[index].trainingDuration = diffDays + "days";
+                    else {
+                        diffDateString = diffDays + " days";
+                    }
+
+                    if (tabName == "training") {
+                        this.entry.training[index].trainingDuration = diffDays;
+                        this.entry.training[index].trainingDurationString = diffDateString;
+                    }
+                    else if (tabName == "experience") {
+                        this.entry.experience[index].experienceDuration = diffDays;
+                        this.entry.experience[index].experienceDurationString = diffDateString;
                     }
                 }
             }

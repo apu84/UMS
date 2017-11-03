@@ -21,6 +21,8 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pBuilder.add("experienceDesignation", pReadOnly.getDesignation());
     pBuilder.add("experienceFrom", pReadOnly.getExperienceFromDate());
     pBuilder.add("experienceTo", pReadOnly.getExperienceToDate());
+    pBuilder.add("experienceDuration", pReadOnly.getExperienceDuration());
+    pBuilder.add("experienceDurationString", pReadOnly.getExperienceDurationString());
     pBuilder.add("dbAction", "");
   }
 
@@ -34,5 +36,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
     pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom"));
     pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
+    pMutable.setExperienceDuration(pJsonObject.getInt("experienceDuration"));
+    pMutable.setExperienceDurationString(pJsonObject.getString("experienceDurationString"));
   }
 }

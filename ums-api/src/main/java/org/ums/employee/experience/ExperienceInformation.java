@@ -18,4 +18,8 @@ public interface ExperienceInformation extends Serializable, EditType<MutableExp
   String getExperienceFromDate();
 
   String getExperienceToDate();
+
+  int getExperienceDuration();
+
+  String getExperienceDurationString();
 }
