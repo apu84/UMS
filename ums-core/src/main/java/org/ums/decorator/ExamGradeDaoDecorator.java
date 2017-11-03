@@ -33,9 +33,9 @@ public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, Mutabl
   @Override
   public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId, Integer pExamType,
       Integer pProgramId, Integer year, Integer semester, String teacherId, String deptId, String userRole,
-      Integer status) {
+      Integer status, String pCourseNo) {
     return getManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year, semester, teacherId, deptId,
-        userRole, status);
+        userRole, status, pCourseNo);
   }
 
   @Override

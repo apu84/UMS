@@ -200,7 +200,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,
       final Integer pProgramId, final Integer pYearSemester, final String deptId, final String pUserRole,
-      final int pStatus) {
+      final int pStatus, final String pCourseNo) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Integer year = 0;
     Integer semester = 0;
@@ -211,7 +211,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
     List<MarksSubmissionStatusDto> examGradeStatusList =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year, semester,
-            user.getEmployeeId(), deptId, pUserRole, pStatus);
+            user.getEmployeeId(), deptId, pUserRole, pStatus, pCourseNo);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonReader jsonReader;

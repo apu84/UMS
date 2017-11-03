@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 import org.ums.decorator.ExamGradeDaoDecorator;
 import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
@@ -435,7 +436,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   @Override
   public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId, Integer pExamType,
       Integer pProgramId, Integer year, Integer semester, String teacherId, String deptId, String userRole,
-      Integer status) {
+      Integer status, String pCourseNo) {
     String query = "";
     if(userRole.equals("T")) { // Teacher
       query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
@@ -444,11 +445,16 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     }
     else if(userRole.equals("H")) { // Head
       query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
-      if(status != -1) {
-        query += "  And Ms_Status.Status=" + status;
+      if(!StringUtils.isEmpty(pCourseNo)) {
+        query += "  And MST_COURSE.COURSE_NO=UPPER('" + pCourseNo + "') ";
       }
-      if(year != 0) {
-        query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
+      else {
+        if(status != -1) {
+          query += "  And Ms_Status.Status=" + status;
+        }
+        if(year != 0) {
+          query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
+        }
       }
       return mJdbcTemplate.query(query,
       // new Object[] {pSemesterId, pExamType, pProgramId, teacherId},
@@ -456,14 +462,20 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     }
     else if(userRole.equals("C")) { // CoE
       query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
-      if(status != -1) {
-        query += "  And Ms_Status.Status=" + status;
+
+      if(!StringUtils.isEmpty(pCourseNo)) {
+        query += "  And MST_COURSE.COURSE_NO=UPPER('" + pCourseNo + "') ";
       }
-      if(year != 0) {
-        query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
-      }
-      if(!deptId.equalsIgnoreCase("NA")) {
-        query += " AND MST_PROGRAM.PROGRAM_ID =  " + pProgramId;
+      else {
+        if(status != -1) {
+          query += "  And Ms_Status.Status=" + status;
+        }
+        if(year != 0) {
+          query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
+        }
+        if(!deptId.equalsIgnoreCase("NA")) {
+          query += " AND MST_PROGRAM.PROGRAM_ID =  " + pProgramId;
+        }
       }
       return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
           new MarksSubmissionStatusTableRowMapper());

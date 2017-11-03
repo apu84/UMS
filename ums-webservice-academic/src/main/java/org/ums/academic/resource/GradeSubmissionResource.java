@@ -39,7 +39,20 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
       final @PathParam("dept-id") String pDeptId, final @PathParam("role") String pUserRole,
       final @PathParam("status") int pStatus) {
     return mResourceHelper.getGradeSubmissionStatus(pSemesterId, pExamTypeId, pProgramId, pYearSemester, pDeptId,
-        pUserRole, pStatus);
+        pUserRole, pStatus, null);
+
+  }
+
+  @GET
+  @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/yearsemester/{year-semester}/role/{role}/status/{status}/courseno/{course-no}")
+  public JsonObject getGradeSubmissionStatus(@Context HttpServletRequest pHttpServletRequest,
+      @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId,
+      final @PathParam("program-id") Integer pProgramId, final @PathParam("year-semester") Integer pYearSemester,
+      final @PathParam("dept-id") String pDeptId, final @PathParam("role") String pUserRole,
+      final @PathParam("status") int pStatus, final @PathParam("course-no") String pCourseNo) {
+    return mResourceHelper.getGradeSubmissionStatus(pSemesterId, pExamTypeId, pProgramId, pYearSemester, pDeptId,
+        pUserRole, pStatus, pCourseNo);
 
   }
 

@@ -22,7 +22,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
   MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId, String courseId, ExamType examType);
 
   List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId, Integer pExamType, Integer pProgramId,
-      Integer year, Integer semester, String teacherId, String deptId, String userRole, Integer status);
+      Integer year, Integer semester, String teacherId, String deptId, String userRole, Integer status, String pCourseNo);
 
   boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> gradeList);
 

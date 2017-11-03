@@ -145,6 +145,7 @@ module ums {
     program_id: number;
     status: number;
     year_semester: number;
+    course_no: string;
   }
   interface IOption {
     id: number;
@@ -249,7 +250,8 @@ module ums {
         dept_id: '',
         program_id: 1,
         status: -1,
-        year_semester: 0
+        year_semester: 0,
+        course_no: ''
       };
 
       this.loadSemesters();
@@ -422,13 +424,19 @@ module ums {
 
       }
 
-      this.httpClient.get("academic/gradeSubmission/semester/" + this.$scope.inputParams.semester_id +
+      var requestUrl ="academic/gradeSubmission/semester/" + this.$scope.inputParams.semester_id +
           "/examtype/" + this.$scope.inputParams.exam_typeId +
           "/dept/" +deptId+
           "/program/" + programId +
           "/yearsemester/" + this.$scope.inputParams.year_semester +
           "/role/" + this.$scope.userRole +
-          "/status/" + status,
+          "/status/" + status;
+
+      if( this.$scope.inputParams.course_no != null &&  this.$scope.inputParams.course_no!="")
+        requestUrl+="/courseno/" + this.$scope.inputParams.course_no;
+
+      console.log(requestUrl);
+      this.httpClient.get(requestUrl,
           this.appConstants.mimeTypeJson,
           (data: any, etag: string) => {
             this.$scope.allMarksSubmissionStatus = data.entries;
