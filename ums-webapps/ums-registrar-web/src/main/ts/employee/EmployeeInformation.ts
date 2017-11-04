@@ -61,7 +61,6 @@ module ums {
         private view(user: any, index?: number): void {
             this.employee = <Employee>{};
             this.employee = user;
-            console.log(user);
             this.indexValue = index;
             this.checkPreviousAndNextButtons();
             this.showListOfEmployeesPanel = false;
@@ -124,6 +123,8 @@ module ums {
             if (this.searchBy == "1") {
                 if (this.findUser() == true) {
                     this.view(this.employee);
+                    this.enablePreviousButton = false;
+                    this.enableNextButton = false;
                 }
                 else {
                     this.notify.error("No User Found");
