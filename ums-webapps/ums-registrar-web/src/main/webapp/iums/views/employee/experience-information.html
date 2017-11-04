@@ -7,7 +7,7 @@
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">Institution/Organization<span
+                        <label class="col-md-4 control-label">Institution/Organization<span data-ng-show="vm.showExperienceInputDiv"    
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
                             <div class="col-md-8">
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">Designation<span class='require'>*</span></label>
+                        <label class="col-md-4 control-label">Designation<span data-ng-show="vm.showExperienceInputDiv"     class='require'>*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
@@ -57,7 +57,7 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">From<span class='require'>*</span></label>
+                        <label class="col-md-4 control-label">From<span data-ng-show="vm.showExperienceInputDiv"     class='require'>*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">To<span class='require'>*</span></label>
+                        <label class="col-md-4 control-label">To<span data-ng-show="vm.showExperienceInputDiv"     class='require'>*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
@@ -111,7 +111,7 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">Duration<span class="require">*</span></label>
+                        <label class="col-md-4 control-label">Duration<span data-ng-show="vm.showExperienceInputDiv"     class="require">*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
                             <div class="col-md-8">
                                 <input type="text"
@@ -135,37 +135,37 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div data-ng-show="vm.showExperienceInputDiv">
-        <div class="row">
-            <div class="col-md-12">
-                <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
-                                                                                           aria-hidden="true"
-                                                                                           style="cursor: pointer;color: green;"></i></a>
-                    ]
-                </div>
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn"
-                            data-ng-click="vm.showExperienceInputDiv=false; vm.showTab('experience');">Cancel
-                    </button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i
-                            class="fa fa-save"></i>&nbsp;Submit
-                    </button>
+        <div data-ng-show="vm.showExperienceInputDiv">
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="center">
+                        [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
+                                                                                               aria-hidden="true"
+                                                                                               style="cursor: pointer;color: green;"></i></a>
+                        ]
+                    </div>
+                    <div align="right">
+                        <button type="button" title="Cancel" class="btn"
+                                data-ng-click="vm.showExperienceInputDiv=false; vm.showTab('experience');">Cancel
+                        </button>
+                        <button type="submit" title="Submit" class="btn btn-success"><i
+                                class="fa fa-save"></i>&nbsp;Submit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div data-ng-show="vm.showExperienceEditButton">
-        <div data-ng-show="!vm.showExperienceInputDiv">
-            <div class="row">
-                <div class="col-md-12">
-                    <div align="right">
-                        <button type="button" title="Cancel" class="btn"
-                                data-ng-click="vm.showExperienceInputDiv=true">
-                            <i class="fa fa-edit"></i>&nbsp;Edit
-                        </button>
+        <div data-ng-show="vm.showExperienceEditButton">
+            <div data-ng-show="!vm.showExperienceInputDiv">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div align="right">
+                            <button type="button" title="Cancel" class="btn"
+                                    data-ng-click="vm.showExperienceInputDiv=true">
+                                <i class="fa fa-edit"></i>&nbsp;Edit
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
 <div data-ng-show="!vm.showExperienceEditButton">
     <div class="row">
         <div class="col-md-12">
-            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Experience</strong>) form will
+            <label style="color: darkred"><span data-ng-show="vm.showExperienceInputDiv"    ><b>*** N.B.</b></span>&nbsp;This(<strong>Experience</strong>) form will
                 be covered by registrar office.</label>
         </div>
     </div>

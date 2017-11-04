@@ -33,7 +33,8 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignation()).getDesignationName());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());
     pBuilder.add("deptOfficeId", pReadOnly.getDepartment().getId());
-    pBuilder.add("deptOfficeName", pReadOnly.getDepartment().getLongName());
+    pBuilder.add("deptOfficeName", pReadOnly.getDepartment().getType() == 1 ? pReadOnly.getDepartment().getShortName()
+        : pReadOnly.getDepartment().getLongName());
     pBuilder.add("fatherName", pReadOnly.getFatherName() == null ? "" : pReadOnly.getFatherName());
     pBuilder.add("motherName", pReadOnly.getMotherName() == null ? "" : pReadOnly.getMotherName());
     pBuilder.add("birthDate", pReadOnly.getBirthDate() == null ? null : mDateFormat.format(pReadOnly.getBirthDate()));

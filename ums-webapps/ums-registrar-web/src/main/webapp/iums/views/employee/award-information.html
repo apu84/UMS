@@ -7,7 +7,7 @@
                         <b>{{$index + 1}}.</b>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span
+                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span data-ng-show="vm.showAwardInputDiv" 
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showAwardInputDiv">
                             <div class="col-md-8">
@@ -16,6 +16,7 @@
                                        id="iAwardName{{$index}}"
                                        data-ng-model="award.awardName"
                                        placeholder="Award/Honor Name"
+                                       maxlength="50"
                                        class="form-control" required>
                             </div>
                         </div>
@@ -26,7 +27,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span
+                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span data-ng-show="vm.showAwardInputDiv" 
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showAwardInputDiv">
                             <div class="col-md-8">
@@ -36,6 +37,7 @@
                                        data-ng-model="award.awardedYear"
                                        placeholder="YYYY"
                                        autocomplete="off"
+                                       maxlength="4"
                                        class="form-control" required>
                             </div>
                         </div>
@@ -47,7 +49,7 @@
                     </div>
                     <div class="col-md-1">
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <span>
+                            <span data-ng-show="vm.showAwardInputDiv" >
                                 [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('award', $index)"
                                      class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                             </span>
@@ -65,6 +67,7 @@
                                        id="iAwardInstitute{{$index}}"
                                        data-ng-model="award.awardInstitute"
                                        placeholder="Institution"
+                                       maxlength="100"
                                        class="form-control">
                             </div>
                         </div>
@@ -83,6 +86,7 @@
                                           id="iShortDescription{{$index}}"
                                           data-ng-model="award.awardShortDescription"
                                           placeholder="Short Description"
+                                          maxlength="100"
                                           class="form-control">
                                 </textarea>
                             </div>

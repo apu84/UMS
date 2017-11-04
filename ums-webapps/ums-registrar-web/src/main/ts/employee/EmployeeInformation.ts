@@ -20,7 +20,6 @@ module ums {
         private showSearchByDepartment: boolean = false;
         private showListOfEmployeesPanel: boolean = true;
         private showEmployeeProfilePanel: boolean = false;
-        private showSelectPanel: boolean = true;
         private changedDepartment: IDepartment;
         private allUser: Array<Employee>;
         private departments: IDepartment[] = [];
@@ -86,10 +85,12 @@ module ums {
         }
 
         private showSearchByField(): void {
+            this.employee = <Employee>{};
             if (this.searchBy == "1") {
                 this.showSearchByUserName = false;
                 this.showSearchByDepartment = false;
                 this.showListOfEmployeesPanel = false;
+                this.showInformationPanel = false;
                 this.enablePreviousButton = false;
                 this.enableNextButton = false;
                 this.changedUserName = "";
@@ -120,6 +121,7 @@ module ums {
         }
 
         private getEmployees(): void {
+            this.employee = <Employee>{};
             if (this.searchBy == "1") {
                 if (this.findUser() == true) {
                     this.view(this.employee);
@@ -138,14 +140,14 @@ module ums {
                     Utils.expandRightDiv();
                 }
                 else{
-                    this.notify.error("User name filed is empty");
+                    this.notify.error("User name field is empty");
                 }
             }
             else if (this.searchBy == "3") {
-                Utils.expandRightDiv();
-                this.showInformationPanel = true;
+                this.showInformationPanel = false;
                 this.showEmployeeProfilePanel = false;
                 this.showListOfEmployeesPanel = true;
+                Utils.expandRightDiv();
             }
         }
 

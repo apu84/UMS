@@ -15,13 +15,14 @@
                                        id="iRoomNo{{$index}}"
                                        data-ng-model="vm.entry.additional.roomNo"
                                        placeholder="Room No"
+                                       maxlength="15"
                                        class="form-control">
                             </div>
                         </div>
 
                         <div data-ng-show="!vm.showAdditionalInputDiv">
                             <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label"><b>{{vm.entry.additional.roomNo}}</b></label>
+                                <label class="control-label">{{vm.entry.additional.roomNo}}</label>
                             </div>
                         </div>
                     </div>
@@ -34,12 +35,13 @@
                                        id="iExtNo{{$index}}"
                                        data-ng-model="vm.entry.additional.extNo"
                                        placeholder="Ext No"
+                                       maxlength="6"
                                        class="form-control">
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAdditionalInputDiv">
                             <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label"><b>{{vm.entry.additional.extNo}}</b></label>
+                                <label class="control-label">{{vm.entry.additional.extNo}}</label>
                             </div>
                         </div>
                     </div>
@@ -52,12 +54,13 @@
                                        id="iAcademicInitial{{$index}}"
                                        data-ng-model="vm.entry.additional.academicInitial"
                                        placeholder="Academic Initial"
+                                       maxlength="25"
                                        class="form-control">
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAdditionalInputDiv">
                             <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label"><b>{{vm.entry.additional.academicInitial}}</b></label>
+                                <label class="control-label">{{vm.entry.additional.academicInitial}}</label>
                             </div>
                         </div>
                     </div>

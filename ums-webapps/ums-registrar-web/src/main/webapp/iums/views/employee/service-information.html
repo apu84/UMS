@@ -3,6 +3,7 @@
         border: 1px dashed grey;
         width: auto;
     }
+
     legend {
         border: 1px solid grey;
         color: #4d4b4b;
@@ -25,9 +26,10 @@
                                 <label class="col-md-4">Department</label>
                                 <div class="col-md-8">
                                     <select name="nDepartment{{$index}}"
-                                        id="iDepartment{{$index}}"
-                                        data-ng-model="service.department"
-                                        data-ng-options="department.longName for department in vm.departments track by department.id" class="form-control" required>
+                                            id="iDepartment{{$index}}"
+                                            data-ng-model="service.department"
+                                            data-ng-options="department.longName for department in vm.departments track by department.id"
+                                            class="form-control" required>
                                         <option value="">Select Department</option>
                                     </select>
                                 </div>
@@ -36,15 +38,17 @@
                                 <label class="col-md-4">Designation</label>
                                 <div class="col-md-8">
                                     <select name="nDesignation{{$index}}"
-                                        id="iDesignation{{$index}}"
-                                        data-ng-model="service.designation"
-                                        data-ng-options="designation.name for designation in vm.designations track by designation.id" class="form-control" required>
+                                            id="iDesignation{{$index}}"
+                                            data-ng-model="service.designation"
+                                            data-ng-options="designation.name for designation in vm.designations track by designation.id"
+                                            class="form-control" required>
                                         <option value="">Select Designation</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceInfo', $index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
+                                <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceInfo', $index)"
+                                   class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
                             </div>
                         </div>
                     </div>
@@ -67,12 +71,12 @@
                         <label class="col-md-4">Joining Date:</label>
                         <div class="col-md-8">
                             <input name="nJoiningDate{{$index}}"
-                                    id="iJoiningDate{{$index}}"
-                                    data-ng-model="service.joiningDate"
-                                    data-date-format="dd/mm/yyyy"
-                                    placeholder="DD/MM/YYYY"
-                                    autocomplete="off"
-                                    class="datepicker-default form-control" required>
+                                   id="iJoiningDate{{$index}}"
+                                   data-ng-model="service.joiningDate"
+                                   data-date-format="dd/mm/yyyy"
+                                   placeholder="DD/MM/YYYY"
+                                   autocomplete="off"
+                                   class="datepicker-default form-control" required>
                             </input>
                         </div>
                     </div>
@@ -80,12 +84,12 @@
                         <label class="col-md-4">Resign Date:</label>
                         <div class="col-md-8">
                             <input name="nResignDate{{$index}}"
-                                    id="iResignDate{{$index}}"
-                                    data-ng-model="service.resignDate"
-                                    data-date-format="dd/mm/yyyy"
-                                    placeholder="DD/MM/YYYY"
-                                    autocomplete="off"
-                                    class="datepicker-default form-control">
+                                   id="iResignDate{{$index}}"
+                                   data-ng-model="service.resignDate"
+                                   data-date-format="dd/mm/yyyy"
+                                   placeholder="DD/MM/YYYY"
+                                   autocomplete="off"
+                                   class="datepicker-default form-control">
                             </input>
                         </div>
                     </div>
@@ -108,42 +112,51 @@
                                     <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
                                     <tr>
                                         <td width="5%">{{$index + 1}}</td>
-                                        <td width="15%"><div data-ng-show="service.employmentType.name=='Regular'"><select name="nRegularPeriod{{$index}}"
+                                        <td width="15%">
+                                            <div data-ng-show="service.employmentType.name=='Regular'"><select
+                                                    name="nRegularPeriod{{$index}}"
                                                     id="iRegularPeriod{{$index}}"
                                                     data-ng-model="interval.interval"
                                                     data-ng-options="serviceInterval.name for serviceInterval in vm.serviceRegularIntervals track by serviceInterval.id"
                                                     class="form-control" required>
-                                            <option value="">Select Category</option>
-                                        </select></div>
-                                            <div data-ng-show="service.employmentType.name!='Regular'"><select name="nContractPeriod{{$index}}"
-                                                                                                                        id="iContractPeriod{{$index}}"
-                                                                                                                        data-ng-model="interval.interval"
-                                                                                                                        data-ng-options="serviceInterval.name for serviceInterval in vm.serviceContractIntervals track by serviceInterval.id"
-                                                                                                                        class="form-control" required>
-                                            <option value="">Select Category</option>
-                                        </select></div></td>
+                                                <option value="">Select Category</option>
+                                            </select></div>
+                                            <div data-ng-show="service.employmentType.name!='Regular'"><select
+                                                    name="nContractPeriod{{$index}}"
+                                                    id="iContractPeriod{{$index}}"
+                                                    data-ng-model="interval.interval"
+                                                    data-ng-options="serviceInterval.name for serviceInterval in vm.serviceContractIntervals track by serviceInterval.id"
+                                                    class="form-control" required>
+                                                <option value="">Select Category</option>
+                                            </select></div>
+                                        </td>
                                         <td width="15%"><input type="text"
-                                                   name="nStartDate{{$index}}"
-                                                   id="iStartDate{{$index}}"
-                                                   data-ng-model="interval.startDate"
-                                                   data-date-format="dd/mm/yyyy"
-                                                   placeholder="DD/MM/YYYY"
-                                                   autocomplete="off"
-                                                   class="datepicker-default form-control" required></td>
+                                                               name="nStartDate{{$index}}"
+                                                               id="iStartDate{{$index}}"
+                                                               data-ng-model="interval.startDate"
+                                                               data-date-format="dd/mm/yyyy"
+                                                               placeholder="DD/MM/YYYY"
+                                                               autocomplete="off"
+                                                               class="datepicker-default form-control" required></td>
                                         <td width="15%"><input type="text"
-                                                   name="nEndDate{{$index}}"
-                                                   id="iEndDate{{$index}}"
-                                                   data-ng-model="interval.endDate"
-                                                   data-date-format="dd/mm/yyyy"
-                                                   placeholder="DD/MM/YYYY"
-                                                   autocomplete="off"
-                                                   class="datepicker-default form-control"></td>
+                                                               name="nEndDate{{$index}}"
+                                                               id="iEndDate{{$index}}"
+                                                               data-ng-model="interval.endDate"
+                                                               data-date-format="dd/mm/yyyy"
+                                                               placeholder="DD/MM/YYYY"
+                                                               autocomplete="off"
+                                                               class="datepicker-default form-control"></td>
                                         <td width="45%"><input type="text"
-                                                   name="nComment{{$index}}"
-                                                   id="iComment{{$index}}"
-                                                   data-ng-model="interval.comment"
-                                                   class="form-control"></td>
-                                        <td width="5%">[ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceDetails', $index, $parent.$index)" class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]</td>
+                                                               name="nComment{{$index}}"
+                                                               id="iComment{{$index}}"
+                                                               data-ng-model="interval.comment"
+                                                               maxlength="100"
+                                                               class="form-control"></td>
+                                        <td width="5%">[ <i title="Remove Row {{$index + 1}}"
+                                                            data-ng-click="vm.deleteRow('serviceDetails', $index, $parent.$index)"
+                                                            class="fa fa-times fa-lg"
+                                                            style="color:red;cursor:pointer;"></i> ]
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -152,19 +165,26 @@
                     </div>
                 </div>
                 <div class="text-center pal">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceDetails', $index)"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceDetails', $index)"><i
+                        class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
                 </div>
             </fieldset>
-            <!--<hr> --> <br />
+            <!--<hr> --> <br/>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceInfo')"><i class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
+                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceInfo')"><i class="fa fa-plus"
+                                                                                                   aria-hidden="true"
+                                                                                                   style="cursor: pointer;color: green;"></i></a>
+                    ]
                 </div>
                 <div align="right">
-                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showServiceInputDiv=false; vm.showTab('service');">Cancel</button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit</button>
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showServiceInputDiv=false; vm.showTab('service');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
                 </div>
             </div>
         </div>
@@ -175,7 +195,10 @@
 <div data-ng-show="!vm.showServiceInputDiv">
     <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
         <fieldset>
-            <legend align="center"><b>{{$index + 1}}.</b> &nbsp; Department:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label> & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label></legend>
+            <legend align="center"><b>{{$index + 1}}.</b> &nbsp; Department:<label class="control-label"
+                                                                                   style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label>
+                & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label>
+            </legend>
             <div class="row">
                 <div class="col-md-4">
                     <label class="col-md-4">Employment:</label>
@@ -215,7 +238,8 @@
                                 <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
                                 <tr>
                                     <td width="5%%"><label class="control-label">{{$index + 1}}.</label></td>
-                                    <td width="15%%"><label class="control-label">{{interval.interval.name}}</label></td>
+                                    <td width="15%%"><label class="control-label">{{interval.interval.name}}</label>
+                                    </td>
                                     <td width="15%%"><label class="control-label">{{interval.startDate}}</label></td>
                                     <td width="15%%"><label class="control-label">{{interval.endDate}}</label></td>
                                     <td width="50%%"><label class="control-label">{{interval.comment}}</label></td>
@@ -227,13 +251,15 @@
                 </div>
             </div>
         </fieldset>
-        <!--<hr>--> <br />
+        <!--<hr>--> <br/>
     </div>
     <div data-ng-show="vm.showServiceEditButton">
         <div class="row">
             <div class="col-md-12">
                 <div align="right">
-                    <button type="submit" title="Submit" data-ng-click="vm.showServiceInputDiv=true" class="btn btn-default"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                    <button type="submit" title="Submit" data-ng-click="vm.showServiceInputDiv=true"
+                            class="btn btn-default"><i class="fa fa-edit"></i>&nbsp;Edit
+                    </button>
                 </div>
             </div>
         </div>
@@ -243,7 +269,8 @@
 <div data-ng-show="!vm.showServiceEditButton">
     <div class="row">
         <div class="col-md-12">
-            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Service</strong>) form will be covered by registrar office.</label>
+            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Service</strong>) form will be
+                covered by registrar office.</label>
         </div>
     </div>
 </div>

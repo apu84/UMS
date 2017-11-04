@@ -46,6 +46,7 @@
                                        id="iPublicationISSN{{$index}}"
                                        data-ng-model="publication.publicationISSN"
                                        placeholder="ISSN No."
+                                       maxlength="30"
                                        class="form-control">
                             </div>
                         </div>
@@ -59,6 +60,7 @@
                                        id="iPublicationTitle{{$index}}"
                                        data-ng-model="publication.publicationTitle"
                                        placeholder="Publication Title"
+                                       maxlength="100"
                                        class="form-control" required>
                             </div>
                         </div>
@@ -70,6 +72,7 @@
                                        id="iPublicationVolume{{$index}}"
                                        data-ng-model="publication.publicationVolume"
                                        placeholder="Volume"
+                                       maxlength="15"
                                        class="form-control">
                             </div>
                         </div>
@@ -97,6 +100,7 @@
                                        id="iPublicationIssue{{$index}}"
                                        data-ng-model="publication.publicationIssue"
                                        placeholder="Issue"
+                                       maxlength="20"
                                        class="form-control">
                             </div>
                         </div>
@@ -110,6 +114,7 @@
                                        id="iPublicationJournalName{{$index}}"
                                        data-ng-model="publication.publicationJournalName"
                                        placeholder="Journal Name"
+                                       maxlength="100"
                                        class="form-control">
                             </div>
                         </div>
@@ -121,6 +126,7 @@
                                        id="iPublicationPage{{$index}}"
                                        data-ng-model="publication.publicationPages"
                                        placeholder="Page"
+                                       maxlength="15"
                                        class="form-control">
                             </div>
                         </div>
@@ -129,11 +135,12 @@
                         <div class="col-md-6">
                             <label class="col-md-4 control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
                             <div class="col-md-8">
-                                <input type="text"
+                                <input type="url"
                                        name="nEmployeeWebLink{{$index}}"
                                        id="iEmployeeWebLink{{$index}}"
                                        data-ng-model="publication.publicationWebLink"
                                        placeholder="Web Link"
+                                       maxlength="50"
                                        class="form-control">
                             </div>
                         </div>
@@ -145,6 +152,7 @@
                                        id="iPublicationInterestGenre{{$index}}"
                                        data-ng-model="publication.publicationInterestGenre"
                                        placeholder="Genre"
+                                       maxlength="100"
                                        class="form-control">
                             </div>
                         </div>
@@ -170,6 +178,7 @@
                                        id="iPublishername{{$index}}"
                                        type="text"
                                        placeholder="Publisher Name"
+                                       maxlength="100"
                                        class="form-control">
                             </div>
                         </div>

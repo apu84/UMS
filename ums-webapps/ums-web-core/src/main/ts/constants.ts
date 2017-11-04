@@ -740,18 +740,14 @@ module ums {
         ],
         maritalStatuses: [
           {id: 1, name: "Single"},
-          {id: 2, name: "Married"},
-          {id: 3, name: "Divorced"},
-          {id: 4, name: "Widowed"}
+          {id: 2, name: "Married"}
         ],
         degreeTypes: [
-          {id: 1, name: "SSC"},
-          {id: 2, name: "HSC"},
-          {id: 3, name: "O-Level"},
-          {id: 4, name: "A-Level"},
-          {id: 5, name: "Bachelor"},
-          {id: 6, name: "Master's"},
-          {id: 7, name: "PhD"}
+          {id: 1, name: "SSC/O-Level"},
+          {id: 2, name: "HSC/A-Level"},
+          {id: 3, name: "Bachelor"},
+          {id: 4, name: "Master's"},
+          {id: 5, name: "PhD"}
         ],
         relationTypes: [
           {id: 1, name: "Spouse"},

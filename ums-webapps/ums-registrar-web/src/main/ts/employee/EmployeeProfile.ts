@@ -575,7 +575,7 @@ module ums {
 
         private sameAsPresentAddress() {
             this.entry.personal.perAddressLine1 = this.entry.personal.preAddressLine1;
-            // this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
+            this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
             this.entry.personal.perAddressCountry = this.entry.personal.preAddressCountry;
             this.entry.personal.perAddressDivision = this.entry.personal.preAddressDivision;
             this.entry.personal.perAddressDistrict = this.entry.personal.preAddressDistrict;
@@ -879,15 +879,15 @@ module ums {
                         year = Math.floor(diffDays / 365);
                         month = Math.floor((diffDays % 365) / 30);
                         day = Math.floor((diffDays % 365) % 30);
-                        diffDateString = year + " year " + month + " month " + day + " day";
+                        diffDateString = year + " year(s) " + month + " month(s) " + day + " day(s)";
                     }
                     else if (diffDays >= 30) {
                         month = Math.floor((diffDays / 30));
                         day = Math.floor(diffDays % 30);
-                        diffDateString = month + " month " + day + " day";
+                        diffDateString = month + " month(s) " + day + " day(s)";
                     }
                     else {
-                        diffDateString = diffDays + " days";
+                        diffDateString = diffDays + " day(s)";
                     }
 
                     if (tabName == "training") {
