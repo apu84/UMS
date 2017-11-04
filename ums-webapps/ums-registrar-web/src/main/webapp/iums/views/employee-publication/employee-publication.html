@@ -18,7 +18,6 @@
                         <th>Sl.</th>
                         <th >Teacher Name</th>
                         <th>Designation</th>
-                        <th>Employment Type</th>
                         <th>Department</th>
                         <th>Action</th>
                     </tr>
@@ -28,7 +27,6 @@
                         <td>{{$index + 1}}.</td>
                         <td>{{employee.name}}</td>
                         <td>{{employee.designation}}</td>
-                        <td>{{employee.employmentType}}</td>
                         <td>{{employee.department}}</td>
                         <td><button type="button" class="btn btn-default" data-ng-click="view($index)">View</button></td>
                     </tr>
@@ -103,7 +101,7 @@
                         <div class="col-md-6">
                             <label class="col-md-4 control-label">Publication Type</label>
                             <div class="col-md-8"  style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationType}}</label>
+                                <label class="control-label">{{publication.publicationType.name}}</label>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -179,7 +177,7 @@
                         <div class="col-md-6">
                             <label class="col-md-4 control-label">Country</label>
                             <div class="col-md-8" style="border-bottom: 1px dashed;">
-                                <label class="control-label">{{publication.publicationCountry}}</label>
+                                <label class="control-label">{{publication.publicationCountry.name}}</label>
                             </div>
                         </div>
                         <div class="col-md-6">
