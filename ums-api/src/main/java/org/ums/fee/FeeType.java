@@ -21,6 +21,8 @@ public interface FeeType extends Serializable, EditType<MutableFeeType>, LastMod
     DUES(3, "DUES"),
     PENALTY(4, "PENALTY"),
     DEPT_CERTIFICATE_FEE(5, "DEPT_CERTIFICATE_FEE"),
+    REG_CERTIFICATE_FEE(6, "REG_CERTIFICATE_FEE"),
+    PROC_CERTIFICATE_FEE(7, "PROC_CERTIFICATE_FEE"),
     OTHERS(0, "OTHERS");
 
     private String label;
@@ -34,7 +36,7 @@ public interface FeeType extends Serializable, EditType<MutableFeeType>, LastMod
     private static final Map<Integer, Types> lookup = new HashMap<>();
 
     static {
-      for(Types c : EnumSet.allOf(Types.class)) {
+      for (Types c : EnumSet.allOf(Types.class)) {
         lookup.put(c.getId(), c);
       }
     }

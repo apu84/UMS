@@ -52,29 +52,16 @@
         <div class="panel-body shodowPanel" style="min-height: 490px">
             <div class="col-md-12">
                 <div class="row">
-                    <form name="certificateStatusSelectionForm" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="certificateStatusSelect">Certificate
-                                Status</label>
-                            <div class="col-md-3">
-                                <select class="form-control"
-                                        name="certificateStatusSelect"
-                                        id="certificateStatusSelect"
-                                        ng-options="s.name for s in vm.certificateOptions track by s.id"
-                                        ng-model="vm.certificateOption">
+                    <div class="col-md-12">
+                        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
+                    </div>
 
-                                </select>
-                            </div>
-                            <div class="col-md-7">
-                                <dir-pagination-controls boundary-links="true"
-                                                         pagination-id="certificateApproval"
-                                                         on-page-change="vm.pageChanged(vm.newPageNumber)"
-                                                         template-url="views\fee\certificate\dirPagination.html"></dir-pagination-controls>
-
-                            </div>
-                        </div>
-
-                    </form>
+                    <div class="col-md-12" align="right">
+                        <dir-pagination-controls boundary-links="true"
+                                                 pagination-id="certificateApproval"
+                                                 on-page-change="vm.pageChanged(vm.currentPage)"
+                                                 template-url="views\fee\certificate\dirPagination.html"></dir-pagination-controls>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -85,21 +72,43 @@
                             <th>Student Id</th>
                             <th>Student Name></th>
                             <th>Status</th>
+                            <th>Processed On</th>
+                            <th>Print</th>
+                            <th>Change Status</th>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="c in vm.certificateStatusList">
+                            <tr dir-paginate="c in vm.certificateStatusList | itemsPerPage: vm.itemsPerPage"
+                                current-page="vm.currentPage" total-items="vm.totalItems"
+                                pagination-id="certificateApproval">
                                 <td>{{c.certificateType}}</td>
                                 <td>{{c.semesterName}}</td>
                                 <td>{{c.studentId}}</td>
                                 <td>{{c.studentName}}</td>
                                 <td>{{c.status}}</td>
+                                <td>{{c.processedOn}}</td>
+                                <td><i class="fa fa-file-pdf-o" aria-hidden="true"
+                                       data-ng-click="vm.createCertificateReport(c)"></i></td>
+                                <td>
+                                    <select class="form-control" name="statusId" data-ng-model="c.statusId"
+                                            data-ng-change="vm.statusChanged(c)">
+                                        <option ng-repeat="options in vm.certificateOptions" value="{{options.id}}">
+                                            {{options.name}}
+                                        </option>
+                                    </select>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-
+                <div class="row">
+                    <div class="col-md-12" align="right">
+                        <button type="button" data-ng-disabled="!vm.enableButton" class="btn btn-primary"
+                                data-ng-click="vm.save()">Save
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

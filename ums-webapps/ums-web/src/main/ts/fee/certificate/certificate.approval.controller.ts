@@ -8,61 +8,87 @@ module ums {
 
 
   export class CertificateApprovalController {
-    public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'FeeCategoryService', 'userService', 'appConstants', '$q'];
+    public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'CertificateService', 'FeeCategoryService', 'userService', 'appConstants', '$q', '$scope', 'notify'];
     public certificateOptions: IOptions[];
     public certificateOption: IOptions;
+    public selectedFilters: SelectedFilter[] = [];
+    public filters: Filter[];
+    public reloadReference: ReloadRef = {reloadList: false};
     public feeCategories: FeeCategory[];
     public feeCategory: FeeCategory;
     public certificateStatus: CertificateStatus;
     public certificateStatusList: CertificateStatus[];
+    public changedCertificateStatusList: CertificateStatus[];
     public user: LoggedInUser;
     public currentPage: number = 1;
     public totalItems: number = 0;
+    public itemsPerPage: number = 10;
     public feeType: number;
+    public enableButton: boolean = false;
 
     constructor(private certificateFeeService: CertificateFeeService,
                 private certificateStatusService: CertificateStatusService,
+                private certificateService: CertificateService,
                 private feeCategoryService: FeeCategoryService,
                 private userService: UserService,
                 private appConstants: any,
-                private $q: ng.IQService) {
+                private $q: ng.IQService,
+                private $scope: ng.IScope,
+                private notify: Notify) {
 
       this.certificateOptions = appConstants.certificateStatus;
       this.certificateOption = appConstants.certificateStatus[0];
+      this.changedCertificateStatusList = [];
       this.getLoggedUserAndFeeCategories();
+
+      this.certificateStatusService.getFilters().then((filters: Filter[]) => {
+        this.filters = filters;
+
+        $scope.$watch(() => this.selectedFilters, () => {
+          console.log("I am watching");
+          this.navigate();
+        }, true);
+      });
+
     }
 
 
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
         this.user = user;
-        this.getFeeCategories().then((feeType: number) => {
-          this.certificateStatusService.getCertificateStatusByStatusAndType(this.certificateOption.id, feeType).then((certificates: CertificateStatus[]) => {
-            this.totalItems = certificates.length;
-          });
-
-          this.certificateStatusService.getPaginatedCertificateStatusByStatusAndType(this.certificateOption.id, feeType, 1, 2).then((certificates: CertificateStatus[]) => {
-            this.certificateStatusList = certificates;
-          });
-
-
-        });
+        this.getFeeCategories();
       });
     }
 
-    private pageChanged(pageNumber: number) {
-      this.currentPage = pageNumber;
+    private navigate() {
 
+      if (this.selectedFilters.length > 0) {
+        this.fetchTotalItemsAndCertificateList();
+      }
 
-      this.certificateStatusService.getCertificateStatusByStatusAndType(this.certificateOption.id, this.feeType).then((certificates: CertificateStatus[]) => {
-        this.totalItems = certificates.length;
+    }
+
+    private pageChanged(pagenumber: number) {
+
+      this.currentPage = pagenumber;
+      this.fetchTotalItemsAndCertificateList();
+
+    }
+
+    private fetchTotalItemsAndCertificateList() {
+      this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType).then((response: any) => {
+        this.totalItems = response.entries.length;
       });
 
-      this.certificateStatusService.getPaginatedCertificateStatusByStatusAndType(this.certificateOption.id, this.feeType, 1, 2).then((certificates: CertificateStatus[]) => {
-        this.certificateStatusList = [];
-        this.certificateStatusList = certificates;
+      this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage).then((response: any) => {
+        this.certificateStatusList = response.entries;
+        console.log("Certificate status");
+        console.log(this.certificateStatusList);
       });
+    }
 
+    private setPage(pageNo: number) {
+      this.currentPage = pageNo;
     }
 
 
@@ -78,30 +104,33 @@ module ums {
       return defer.promise;
     }
 
+    private createCertificateReport(certificateStatus: CertificateStatus) {
+      this.certificateService.getCertificateReport(certificateStatus.feeCategory, certificateStatus.studentId, certificateStatus.semesterId);
+    }
+
+
+    private statusChanged(certificateStatus: CertificateStatus) {
+      this.enableButton = true;
+      this.changedCertificateStatusList.push(certificateStatus);
+    }
+
+    private save() {
+      this.certificateStatusService.processCertificates(this.changedCertificateStatusList).then((processed: boolean) => {
+        if (processed) {
+          this.changedCertificateStatusList = [];
+          this.notify.success("Successfully Saved");
+        } else {
+          this.notify.error("Error in updating data");
+        }
+      });
+    }
+
+
     private getCertificateStatus() {
 
       this.certificateStatusService.getFilters().then((filters: Filter[]) => {
-        console.log("Filters");
-        console.log(filters);
       })
-      /*var filters: SelectedFilter[] = [];
-      var filter: SelectedFilter = <SelectedFilter>{};
-      filter.id = 1;
-      var filterOption = <FilterOption>{};
-      filterOption.label = "type";
-      filterOption.value="string";
-      filter.filter=filterOption;
 
-      var valueOption = <FilterOption>{};
-      valueOption.label="fee_id";
-      valueOption.value="14";
-      filter.value=valueOption;
-      filters.push(filter);
-
-      this.certificateStatusService.listCertificateStatus(filters).then((certificateStatus:any)=>{
-         console.log("certificate status");
-         console.log(certificateStatus);
-      });*/
     }
 
   }

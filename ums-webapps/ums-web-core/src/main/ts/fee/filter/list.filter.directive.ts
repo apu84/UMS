@@ -25,13 +25,17 @@ module ums {
     }
 
     public addFilter(): void {
-      if (this.selectedFilters.
-          filter((selectedFilter: SelectedFilter) => selectedFilter.filter.value === this.filter.value).length === 0) {
+      console.log("In the add filter");
+
+      if (this.selectedFilters.filter((selectedFilter: SelectedFilter) => selectedFilter.filter.value === this.filter.value).length === 0) {
         this.selectedFilters.push({
           id: Math.round(Math.random() * 1000),
           filter: this.filter,
           value: this.filterValue
         });
+
+
+        console.log(this.selectedFilters);
       }
     }
 
