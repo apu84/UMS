@@ -812,21 +812,12 @@ module ums {
         }
 
         private makeCallNo(): void {
-            if(this.$scope.record.materialType == 1) {
-                this.$scope.record.callNo = this.$scope.record.classNo + " " + this.$scope.record.authorMark + " " + this.$scope.record.callDate + " " + this.$scope.record.callEdition +
-                    " " + this.$scope.record.callVolume;
-            }
-            else if(this.$scope.record.materialType == 2){
-                this.$scope.record.callNo = this.$scope.record.classNo + " " + this.$scope.record.authorMark;
-            }
-            else if(this.$scope.record.materialType == 3){
-                this.$scope.record.callNo = this.$scope.record.classNo + " " + this.$scope.record.authorMark;
-            }
-            else{
-                this.$scope.record.callNo = this.$scope.record.classNo + " " + this.$scope.record.authorMark + " " + this.$scope.record.callDate + " " + this.$scope.record.callEdition +
-                    " " + this.$scope.record.callVolume;
-            }
-
+            this.$scope.record.callNo = "";
+            this.$scope.record.callNo += this.$scope.record.classNo != "" ? this.$scope.record.classNo : "";
+            this.$scope.record.callNo += this.$scope.record.authorMark != "" ? "/" + this.$scope.record.authorMark : "";
+            this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
+            this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition: "";
+            this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }
     }
 
