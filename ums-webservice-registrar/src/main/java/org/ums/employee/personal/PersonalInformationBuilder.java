@@ -166,7 +166,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     pMutable.setReligionId(pJsonObject.getJsonObject("religion").getInt("id"));
     pMutable.setMaritalStatusId(pJsonObject.getJsonObject("maritalStatus").getInt("id"));
     pMutable.setSpouseName(pJsonObject.containsKey("spouseName") ? pJsonObject.getString("spouseName") : "");
-    pMutable.setNidNo(pJsonObject.containsKey("nationalId") ? pJsonObject.getString("nidNo") : "");
+    pMutable.setNidNo(pJsonObject.containsKey("nidNo") ? pJsonObject.getString("nidNo") : "");
     pMutable.setBloodGroupId(pJsonObject.getJsonObject("bloodGroup").getInt("id"));
     pMutable.setSpouseNidNo(pJsonObject.containsKey("spouseNidNo") ? pJsonObject.getString("spouseNidNo") : "");
     pMutable.setWebsite(pJsonObject.containsKey("website") ? pJsonObject.getString("website") : "");

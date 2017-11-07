@@ -7,7 +7,7 @@
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
                     </div>
                     <div class="col-md-5">
-                        <label class="col-md-4 control-label">Institution/Organization<span
+                        <label class="col-md-4 control-label">Organization<span
                                 data-ng-show="vm.showExperienceInputDiv"
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showExperienceInputDiv">
@@ -70,7 +70,6 @@
                                        data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy"
                                        placeholder="DD/MM/YYYY"
-                                       onkeydown="return false"
                                        data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>
@@ -96,7 +95,6 @@
                                        data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy"
                                        placeholder="DD/MM/YYYY"
-                                       onkeydown="return false"
                                        data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>

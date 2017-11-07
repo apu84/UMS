@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum AcademicDegreeType {
-  SSC(1, "SSC"),
-  HSC(2, "HSC"),
-  OLEVEL(3, "O-Level"),
-  ALEVEL(4, "A-Level"),
-  BACHELOR(5, "Bachelor"),
-  MASTERS(6, "Masters"),
-  PhD(7, "PhD");
+  SSC(1, "SSC/O-Level"),
+  HSC(2, "HSC/A-Level"),
+  BACHELOR(3, "Bachelor"),
+  MASTERS(4, "Masters"),
+  PhD(5, "PhD");
 
   private Integer id;
   private String name;
