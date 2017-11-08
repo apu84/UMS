@@ -50,10 +50,12 @@ module ums {
       return defer.promise;
     }*/
 
-    public listCertificateStatus(filters: SelectedFilter[], url?: string, feeType?: number, pageNumber?: number, itemsPerPage?: number): ng.IPromise<CertificateStatusResponse> {
+    public listCertificateStatus(filters: SelectedFilter[], url?: string, feeType?: number, pageNumber?: number, itemsPerPage?: number, deptId?: string): ng.IPromise<CertificateStatusResponse> {
       let defer: ng.IDeferred<CertificateStatusResponse> = this.$q.defer();
       var completeUrl = "";
-      if (pageNumber > 0 && feeType >= 0)
+      if (pageNumber == 0 && itemsPerPage == 0 && feeType >= 0 && deptId != null)
+        completeUrl = url + '?feeType=' + feeType + '&deptId=' + deptId;
+      else if (pageNumber > 0 && feeType >= 0)
         completeUrl = url + '?pageNumber=' + pageNumber + '&itemsPerPage=' + itemsPerPage + '&feeType=' + feeType;
       else if (pageNumber > 0)
         completeUrl = url + '?pageNumber=' + pageNumber + '&itemsPerPage=' + itemsPerPage;

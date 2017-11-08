@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.fee.FeeTypeManager;
 import org.ums.fee.certificate.CertificateStatus;
+import org.ums.manager.DepartmentManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonArray;
@@ -22,17 +23,19 @@ public class CertificateStatusResource extends Resource {
   CertificateStatusHelper mCertificateStatusHelper;
   @Autowired
   FeeTypeManager mFeeTypeManager;
+  @Autowired
+  DepartmentManager mDepartmentManager;
 
   private int mDefaultNoOfItems = 20;
 
   @POST
   @Path("/paginated")
   public JsonObject getCertificateStatus(@QueryParam("pageNumber") Integer pageNumber,
-      @QueryParam("itemsPerPage") Integer itemsPerPage, @QueryParam("feeType") Integer feeType, JsonObject pJsonObject)
-      throws Exception {
+      @QueryParam("itemsPerPage") Integer itemsPerPage, @QueryParam("feeType") Integer feeType,
+      @QueryParam("deptId") String deptId, JsonObject pJsonObject) throws Exception {
     return mCertificateStatusHelper.getFilteredCertificateStatus(itemsPerPage == null ? mDefaultNoOfItems
         : itemsPerPage, pageNumber == null ? 1 : pageNumber, feeType == null ? null : mFeeTypeManager.get(feeType),
-        pJsonObject, mUriInfo);
+        deptId == null ? null : mDepartmentManager.get(deptId), pJsonObject, mUriInfo);
   }
 
   @GET

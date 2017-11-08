@@ -42,7 +42,9 @@ public interface CertificateStatus extends Serializable, EditType<MutableCertifi
   enum Status {
     APPLIED(1, "APPLIED"),
     PROCESSED(2, "PROCESSED"),
-    DELIVERED(3, "DELIVERED");
+    DELIVERED(3, "DELIVERED"),
+    WAITING_FOR_HEAD_FORWARDING(4, "WAITING FOR HEAD'S FORWARDING"),
+    FORWARDED_BY_HEAD(5, "FORWARDED BY HEAD");
 
     private String label;
     private int id;

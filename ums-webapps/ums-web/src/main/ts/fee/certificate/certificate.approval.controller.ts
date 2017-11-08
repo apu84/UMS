@@ -8,7 +8,7 @@ module ums {
 
 
   export class CertificateApprovalController {
-    public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'CertificateService', 'FeeCategoryService', 'userService', 'appConstants', '$q', '$scope', 'notify'];
+    public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'CertificateService', 'FeeCategoryService', 'userService', 'appConstants', '$q', '$scope', 'notify', 'additionalRolePermissionsService'];
     public certificateOptions: IOptions[];
     public certificateOption: IOptions;
     public selectedFilters: SelectedFilter[] = [];
@@ -25,6 +25,7 @@ module ums {
     public itemsPerPage: number = 10;
     public feeType: number;
     public enableButton: boolean = false;
+    public userDeptHead: boolean = false;
 
     constructor(private certificateFeeService: CertificateFeeService,
                 private certificateStatusService: CertificateStatusService,
@@ -34,7 +35,8 @@ module ums {
                 private appConstants: any,
                 private $q: ng.IQService,
                 private $scope: ng.IScope,
-                private notify: Notify) {
+                private notify: Notify,
+                private additionalRolePermissionsService: AdditionalRolePermissionsService) {
 
       this.certificateOptions = appConstants.certificateStatus;
       this.certificateOption = appConstants.certificateStatus[0];
@@ -45,7 +47,6 @@ module ums {
         this.filters = filters;
 
         $scope.$watch(() => this.selectedFilters, () => {
-          console.log("I am watching");
           this.navigate();
         }, true);
       });
@@ -56,6 +57,8 @@ module ums {
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
         this.user = user;
+        console.log("Logged user");
+        console.log(this.user);
         this.getFeeCategories();
       });
     }
@@ -76,15 +79,24 @@ module ums {
     }
 
     private fetchTotalItemsAndCertificateList() {
-      this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType).then((response: any) => {
-        this.totalItems = response.entries.length;
-      });
+      if (this.userDeptHead == false) {
+        this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType).then((response: any) => {
+          this.totalItems = response.entries.length;
+        });
 
-      this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage).then((response: any) => {
-        this.certificateStatusList = response.entries;
-        console.log("Certificate status");
-        console.log(this.certificateStatusList);
-      });
+        this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage).then((response: any) => {
+          this.certificateStatusList = response.entries;
+        });
+      } else {
+        this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, 0, 0, this.user.departmentId).then((response: any) => {
+          this.totalItems = response.entries.length;
+        });
+
+        this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage, this.user.departmentId).then((response: any) => {
+          this.certificateStatusList = response.entries;
+        });
+      }
+
     }
 
     private setPage(pageNo: number) {
@@ -97,10 +109,34 @@ module ums {
       let defer: ng.IDeferred<number> = this.$q.defer();
       if (this.user.departmentId == Utils.DEPT_COE)
         feeType = Utils.CERTIFICATE_FEE;
+      else if (this.user.departmentId == Utils.DEPT_RO)
+        feeType = Utils.REG_CERTIFICATE_FEE;
+      else if (this.user.departmentId == Utils.DEPT_PO)
+        feeType = Utils.PROC_CERTIFICATE_FEE;
+      else {
+        this.getAdditionalRolePermissions().then((result: boolean) => {
+          if (result == true)
+            feeType = Utils.REG_CERTIFICATE_FEE;
+          else
+            feeType = Utils.DEPT_CERTIFICATE_FEE;
+        });
+      }
 
       defer.resolve(feeType);
 
       this.feeType = feeType;
+      return defer.promise;
+    }
+
+    private getAdditionalRolePermissions(): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      var result: boolean = false;
+      this.additionalRolePermissionsService.fetchLoggedUserAdditionalRolePermissions().then((additionalRolePermissions: AdditionalRolePermissions[]) => {
+        if (additionalRolePermissions.length >= 1)
+          result = true;
+      });
+      defer.resolve(result);
+      this.userDeptHead = result;
       return defer.promise;
     }
 
