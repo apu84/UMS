@@ -5,11 +5,14 @@ module ums {
     transactionStatus: string;
     studentId: string;
     studentName: string;
+    semesterId: number;
     semesterName: string;
     certificateType: string;
     processedBy: string;
     processedOn: string;
     status: string;
+    feeCategory: string;
+    statusId: number;
     lastModified: string;
   }
 
@@ -34,7 +37,7 @@ module ums {
       return defer.promise;
     }
 
-    public getPaginatedCertificateStatusByStatusAndType(status: number, feeType: number, pageNumber: number, itemsPerPage: number): ng.IPromise<CertificateStatus[]> {
+    /*public getPaginatedCertificateStatusByStatusAndType(status: number, feeType: number, pageNumber: number, itemsPerPage: number): ng.IPromise<CertificateStatus[]> {
       let defer: ng.IDeferred<CertificateStatus[]> = this.$q.defer();
       this.httpClient.get('certificate-status/status/' + (+status) + '/feeType/' + (+feeType) + '/pageNumber/' + (+pageNumber) + '/itemsPerPage/' + (+itemsPerPage), HttpClient.MIME_TYPE_JSON,
           (response: CertificateStatusResponse) => defer.resolve(response.entries));
@@ -45,11 +48,22 @@ module ums {
       let defer: ng.IDeferred<CertificateStatus[]> = this.$q.defer();
       this.httpClient.get("certificate-status/status/" + status + "/feeType/" + feeType, HttpClient.MIME_TYPE_JSON, (response: CertificateStatusResponse) => defer.resolve(response.entries));
       return defer.promise;
-    }
+    }*/
 
-    public listCertificateStatus(filters: SelectedFilter[], url?: string): ng.IPromise<CertificateStatusResponse> {
+    public listCertificateStatus(filters: SelectedFilter[], url?: string, feeType?: number, pageNumber?: number, itemsPerPage?: number): ng.IPromise<CertificateStatusResponse> {
       let defer: ng.IDeferred<CertificateStatusResponse> = this.$q.defer();
-      this.httpClient.post(url ? url : 'certificate-status/paginated', filters ? {"entries": filters} : {},
+      var completeUrl = "";
+      if (pageNumber > 0 && feeType >= 0)
+        completeUrl = url + '?pageNumber=' + pageNumber + '&itemsPerPage=' + itemsPerPage + '&feeType=' + feeType;
+      else if (pageNumber > 0)
+        completeUrl = url + '?pageNumber=' + pageNumber + '&itemsPerPage=' + itemsPerPage;
+      else if (feeType >= 0)
+        completeUrl = url + '?feeType=' + feeType;
+      else
+        completeUrl = 'certificate-status/paginated';
+
+
+      this.httpClient.post(completeUrl, filters ? {"entries": filters} : {},
           HttpClient.MIME_TYPE_JSON)
           .success((response: CertificateStatusResponse) => {
             defer.resolve(response);
@@ -71,6 +85,8 @@ module ums {
 
     public processCertificates(certificates: CertificateStatus[]): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
+      console.log("In the process certificates");
+      console.log(certificates);
       this.httpClient.put(`certificate-status`, {
             "entries": certificates
           },

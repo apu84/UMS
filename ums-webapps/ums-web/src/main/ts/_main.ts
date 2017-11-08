@@ -200,6 +200,8 @@
 
 /// <reference path='dummy/DummyController.ts'/>
 
+/// <reference path='certificate/certificate.service.ts'/>
+
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
 /// <reference path='model/LoggedInUser.ts'/>

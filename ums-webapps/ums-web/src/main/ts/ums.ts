@@ -975,7 +975,8 @@ module ums {
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                  'vendors/select2/select2-madmin.css',
                 ]
               });
             }]

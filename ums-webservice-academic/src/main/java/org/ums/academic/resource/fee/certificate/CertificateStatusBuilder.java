@@ -1,11 +1,5 @@
 package org.ums.academic.resource.fee.certificate;
 
-import java.util.List;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,13 +8,18 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.usermanagement.user.User;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.MutableCertificateStatus;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.formatter.DateFormat;
+import org.ums.usermanagement.user.User;
+
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Component
 public class CertificateStatusBuilder implements Builder<CertificateStatus, MutableCertificateStatus> {
@@ -36,7 +35,7 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
     Semester semester = (Semester) pLocalCache.cache(pReadOnly::getSemester, pReadOnly.getSemesterId(), Semester.class);
     FeeCategory feeCategory =
         (FeeCategory) pLocalCache.cache(pReadOnly::getFeeCategory, pReadOnly.getFeeCategoryId(), FeeCategory.class);
-    if(!StringUtils.isEmpty(pReadOnly.getTransactionId())) {
+    if (!StringUtils.isEmpty(pReadOnly.getTransactionId())) {
       List<StudentPayment> payments =
           mStudentPaymentManager.getTransactionDetails(pReadOnly.getStudentId(), pReadOnly.getTransactionId());
       pBuilder.add("transactionId", pReadOnly.getTransactionId());
@@ -45,13 +44,16 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
     pBuilder.add("studentId", student.getId());
     pBuilder.add("studentName", student.getFullName());
     pBuilder.add("semesterName", semester.getName());
+    pBuilder.add("semesterId", semester.getId());
     pBuilder.add("certificateType", feeCategory.getDescription());
-    if(!StringUtils.isEmpty(pReadOnly.getUserId())) {
+    if (!StringUtils.isEmpty(pReadOnly.getUserId())) {
       User user = (User) pLocalCache.cache(pReadOnly::getUser, pReadOnly.getUserId(), User.class);
       pBuilder.add("processedBy", user.getName());
       pBuilder.add("processedOn", mDateFormat.format(pReadOnly.getProcessedOn()));
     }
     pBuilder.add("status", pReadOnly.getStatus().getLabel());
+    pBuilder.add("statusId", pReadOnly.getStatus().getId());
+    pBuilder.add("feeCategory", pReadOnly.getFeeCategory().getId());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
   }
 
@@ -59,7 +61,10 @@ public class CertificateStatusBuilder implements Builder<CertificateStatus, Muta
   public void build(MutableCertificateStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     Validate.notEmpty(pJsonObject.getString("id"));
     pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-    pMutable.setStatus(CertificateStatus.Status.PROCESSED);
+    if(pJsonObject.isNull("statusId"))
+      pMutable.setStatus(CertificateStatus.Status.PROCESSED);
+    else
+      pMutable.setStatus(CertificateStatus.Status.get(Integer.parseInt(pJsonObject.getString("statusId"))));
     pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

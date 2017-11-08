@@ -95,10 +95,10 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
     FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
+    String queryCheck = pFeeType == null ? " " : " AND FEE_CATEGORY IN (SELECT ID FROM FEE_CATEGORY WHERE TYPE=?) ";
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery() + pFeeType == null ? " "
-            : " AND FEE_CATEGORY IN (SELECT ID FROM FEE_CATEGORY WHERE TYPE=?) "
-                + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery() + queryCheck
+            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     List<Object> params = queryBuilder.getParameters();
     params.add(pFeeType.getId());
     params.add(startIndex);

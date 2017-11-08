@@ -1,0 +1,49 @@
+package org.ums.report.generator.certificates;
+
+import com.itextpdf.text.DocumentException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeCategoryManager;
+import org.ums.report.generator.certificates.support.CertificateReport;
+import org.ums.report.generator.certificates.support.SemesterFinalGradesheetReport;
+import org.ums.report.generator.certificates.support.TranscriptReport;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+/**
+ * Created by Monjur-E-Morshed on 07-Nov-17.
+ */
+@Component
+public class CertificateReportGeneratorImpl implements CertificateReportGenerator {
+
+  @Autowired
+  SemesterFinalGradesheetReport mSemesterFinalGradesheetReport;
+  @Autowired
+  FeeCategoryManager mFeeCategoryManager;
+  @Autowired
+  CertificateReport mCertificateReport;
+  @Autowired
+  TranscriptReport mTranscriptReport;
+
+  @Override
+  public void createReport(String pFeeCategoryId, String pStudentId, Integer pSemesterId, OutputStream pOutputStream)
+      throws IOException, DocumentException {
+    FeeCategory feeCategory = mFeeCategoryManager.get(pFeeCategoryId);
+
+    if(feeCategory.getFeeId().equals("GRADESHEET_PROVISIONAL") || feeCategory.getFeeId().equals("GRADESHEET_DUPLICATE")) {
+      mSemesterFinalGradesheetReport.createGradeSheetPdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
+    }
+    else if(feeCategory.getFeeId().equals("PROVISIONAL_CERTIFICATE_DUPLICATE")
+        || feeCategory.getFeeId().equals("PROVISIONAL_CERTIFICATE_INITIAL")
+        || feeCategory.getFeeId().equals("CERTIFICATE_CONVOCATION")
+        || feeCategory.getFeeId().equals("CERTIFICATE_DUPLICATE")) {
+      mCertificateReport.createGradeSheetPdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
+    }
+    else {
+      mTranscriptReport.createGradeSheetPdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
+    }
+
+  }
+}

@@ -21,7 +21,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr dir-paginate="p in vm.pendingApplications | itemsPerPage: itemsPerPage" current-page="pagination.currentPage"
+    <tr dir-paginate="p in vm.pendingApplications | itemsPerPage: vm.itemsPerPage"
+        current-page="vm.pagination.currentPage"
         total-items="totalItems"
         pagination-id="leaveApplication"
         data-ng-click="vm.fetchApplicationStatus(p, pagination.currentPage)"

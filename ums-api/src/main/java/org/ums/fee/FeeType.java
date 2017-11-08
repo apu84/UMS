@@ -21,6 +21,8 @@ public interface FeeType extends Serializable, EditType<MutableFeeType>, LastMod
     DUES(3, "DUES"),
     PENALTY(4, "PENALTY"),
     DEPT_CERTIFICATE_FEE(5, "DEPT_CERTIFICATE_FEE"),
+    REG_CERTIFICATE_FEE(6, "REG_CERTIFICATE_FEE"),
+    PROC_CERTIFICATE_FEE(7, "PROC_CERTIFICATE_FEE"),
     OTHERS(0, "OTHERS");
 
     private String label;

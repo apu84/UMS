@@ -175,6 +175,7 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
         new FilterItem("Status", CertificateStatusManager.FilterCriteria.STATUS.toString(), FilterItem.Type.SELECT);
     status.addOption("Applied", 1);
     status.addOption("Processed", 2);
+    status.addOption("Delivered", 3);
     filters.add(status);
 
     FilterItem feeId =
