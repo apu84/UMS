@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Department;
+import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.filter.AbstractFilterQueryBuilder;
 import org.ums.filter.ListFilter;
@@ -141,6 +142,13 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
             + "                                      FROM FEE_CATEGORY "
             + "                                      WHERE TYPE = ?)";
     return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeType.getId()},
+        new CertificateStatusRowMapper());
+  }
+
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeCategory(CertificateStatus.Status pStatus, FeeCategory pFeeCategory) {
+    String query = SELECT_ALL + " WHERE STATUS=? AND FEE_CATEGORY=?";
+    return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeCategory.getId()},
         new CertificateStatusRowMapper());
   }
 

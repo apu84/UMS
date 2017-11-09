@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeCategoryManager;
 import org.ums.report.generator.certificates.support.CertificateReport;
+import org.ums.report.generator.certificates.support.LanguageProficiencyCertificateReport;
 import org.ums.report.generator.certificates.support.SemesterFinalGradesheetReport;
 import org.ums.report.generator.certificates.support.TranscriptReport;
 
@@ -26,6 +27,8 @@ public class CertificateReportGeneratorImpl implements CertificateReportGenerato
   CertificateReport mCertificateReport;
   @Autowired
   TranscriptReport mTranscriptReport;
+  @Autowired
+  LanguageProficiencyCertificateReport mLanguageProficiencyCertificateReport;
 
   @Override
   public void createReport(String pFeeCategoryId, String pStudentId, Integer pSemesterId, OutputStream pOutputStream)
@@ -41,8 +44,22 @@ public class CertificateReportGeneratorImpl implements CertificateReportGenerato
         || feeCategory.getFeeId().equals("CERTIFICATE_DUPLICATE")) {
       mCertificateReport.createGradeSheetPdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
     }
-    else {
+    else if(feeCategory.getFeeId().equals("GRADESHEET_PROVISIONAL")
+        || feeCategory.getFeeId().equals("GRADESHEET_DUPLICATE")) {
       mTranscriptReport.createGradeSheetPdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
+    }
+    else if(feeCategory.getFeeId().equals("CERTIFICATE_LANGUAGE_PROFICIENCY")) {
+      mLanguageProficiencyCertificateReport.createLanguageProficiencyCertificateReport(feeCategory, pStudentId,
+          pSemesterId, pOutputStream);
+    }
+    else if(feeCategory.getFeeId().equals("CERTIFICATE_STUDENTSHIP")) {
+
+    }
+    else if(feeCategory.getFeeId().equals("CERTIFICATE_MIGRATION")) {
+
+    }
+    else {
+
     }
 
   }

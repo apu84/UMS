@@ -107,24 +107,43 @@ module ums {
     private getFeeCategories(): ng.IPromise<number> {
       var feeType: number = 0;
       let defer: ng.IDeferred<number> = this.$q.defer();
-      if (this.user.departmentId == Utils.DEPT_COE)
+
+      if (this.user.departmentId == Utils.DEPT_COE) {
         feeType = Utils.CERTIFICATE_FEE;
-      else if (this.user.departmentId == Utils.DEPT_RO)
+      }
+      else if (this.user.departmentId == Utils.DEPT_RO) {
         feeType = Utils.REG_CERTIFICATE_FEE;
-      else if (this.user.departmentId == Utils.DEPT_PO)
+      }
+      else if (this.user.departmentId == Utils.DEPT_PO) {
         feeType = Utils.PROC_CERTIFICATE_FEE;
+      }
       else {
+        console.log("In the additional role section");
         this.getAdditionalRolePermissions().then((result: boolean) => {
-          if (result == true)
+          console.log("result");
+          console.log(result);
+          if (result) {
             feeType = Utils.REG_CERTIFICATE_FEE;
-          else
+            console.log("Reg fee type: " + feeType);
+          }
+          else {
             feeType = Utils.DEPT_CERTIFICATE_FEE;
+          }
+          defer.resolve(feeType);
+
+          this.feeType = feeType;
+          console.log("fee type");
+          console.log(feeType);
+          return defer.promise;
+
         });
       }
 
       defer.resolve(feeType);
 
       this.feeType = feeType;
+      console.log("fee type");
+      console.log(feeType);
       return defer.promise;
     }
 
@@ -134,9 +153,10 @@ module ums {
       this.additionalRolePermissionsService.fetchLoggedUserAdditionalRolePermissions().then((additionalRolePermissions: AdditionalRolePermissions[]) => {
         if (additionalRolePermissions.length >= 1)
           result = true;
+        defer.resolve(result);
+        this.userDeptHead = result;
       });
-      defer.resolve(result);
-      this.userDeptHead = result;
+
       return defer.promise;
     }
 
