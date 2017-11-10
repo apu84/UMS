@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeCategoryManager;
-import org.ums.report.generator.certificates.support.CertificateReport;
-import org.ums.report.generator.certificates.support.LanguageProficiencyCertificateReport;
-import org.ums.report.generator.certificates.support.SemesterFinalGradesheetReport;
-import org.ums.report.generator.certificates.support.TranscriptReport;
+import org.ums.report.generator.certificates.support.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,6 +26,8 @@ public class CertificateReportGeneratorImpl implements CertificateReportGenerato
   TranscriptReport mTranscriptReport;
   @Autowired
   LanguageProficiencyCertificateReport mLanguageProficiencyCertificateReport;
+  @Autowired
+  MigrationCertificateReport migrationCertificateReport;
 
   @Override
   public void createReport(String pFeeCategoryId, String pStudentId, Integer pSemesterId, OutputStream pOutputStream)
@@ -56,7 +55,7 @@ public class CertificateReportGeneratorImpl implements CertificateReportGenerato
 
     }
     else if(feeCategory.getFeeId().equals("CERTIFICATE_MIGRATION")) {
-
+      migrationCertificateReport.createMigrationCertificatePdf(feeCategory, pStudentId, pSemesterId, pOutputStream);
     }
     else {
 

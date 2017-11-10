@@ -53,7 +53,6 @@ module ums {
 
     }
 
-
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
         this.user = user;
@@ -62,6 +61,7 @@ module ums {
         this.getFeeCategories();
       });
     }
+
 
     private navigate() {
 
@@ -164,9 +164,9 @@ module ums {
       this.certificateService.getCertificateReport(certificateStatus.feeCategory, certificateStatus.studentId, certificateStatus.semesterId);
     }
 
-
     private statusChanged(certificateStatus: CertificateStatus) {
       this.enableButton = true;
+
       this.changedCertificateStatusList.push(certificateStatus);
     }
 

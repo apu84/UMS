@@ -22,6 +22,13 @@ module ums {
           (feeCategories: FeeCategory[]) => defer.resolve(feeCategories));
       return defer.promise;
     }
+
+    public getAllFeeCategories():ng.IPromise<FeeCategory[]>{
+        let defer: ng.IDeferred<FeeCategory[]> = this.$q.defer();
+        this.httpClient.get(`fee-category/all`, HttpClient.MIME_TYPE_JSON,
+            (feeCategories: FeeCategory[]) => defer.resolve(feeCategories));
+        return defer.promise;
+    }
   }
 
   UMS.service('FeeCategoryService', FeeCategoryService);

@@ -90,10 +90,19 @@ public class CertificateFeeHelper {
         payment.setStudentId(pStudentId);
         payment.setSemesterId(pForSemesterId);
         payment.setAmount(fee.getAmount());
+          if (fee.getAmount().equals(BigDecimal.ZERO))
+              payment.setStatus(StudentPayment.Status.RECEIVED);
+          else
+              payment.setStatus(StudentPayment.Status.APPLIED);
         Date today = new Date();
 
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
-        payment.create();
+          Long paymentId = payment.create();
+          if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
+              StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
+              insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
+          }
+
 
       }
     }
@@ -140,7 +149,7 @@ public class CertificateFeeHelper {
         Date today = new Date();
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
         Long paymentId = payment.create();
-        if (fee.getAmount().equals(BigDecimal.ZERO)) {
+        if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
           StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
           insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
         }

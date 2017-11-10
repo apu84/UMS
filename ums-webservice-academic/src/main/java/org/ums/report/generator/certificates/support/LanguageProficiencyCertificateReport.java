@@ -53,7 +53,7 @@ public class LanguageProficiencyCertificateReport {
     int certificateNumber =
         mCertificateStatusManager.getByStatusAndFeeCategory(CertificateStatus.Status.DELIVERED, pFeeCategory).size()
             + mCertificateStatusManager.getByStatusAndFeeCategory(CertificateStatus.Status.PROCESSED, pFeeCategory)
-                .size();
+                .size() + 1;
 
     PdfPTable table = new PdfPTable(2);
     PdfPCell cellOne = new PdfPCell();
@@ -65,7 +65,7 @@ public class LanguageProficiencyCertificateReport {
 
     Date currentDate = new Date();
     PdfPCell cellTwo = new PdfPCell();
-    Format formatter = new SimpleDateFormat("dd/MM/YYYY");
+    Format formatter = new SimpleDateFormat("dd MMMM,YYYY");
     paragraph = new Paragraph("" + formatter.format(currentDate), FontFactory.getFont(FontFactory.TIMES, 12));
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cellTwo.addElement(paragraph);
