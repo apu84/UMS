@@ -157,6 +157,9 @@ module ums {
     static DUES = 3;
     static PENALTY = 4;
     static OTHER_FEE = 0;
+    static DEPT_CERTIFICATE_FEE = 5;
+    static REG_CERTIFICATE_FEE = 6;
+    static PROC_CERTIFICATE_FEE = 7;
 
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)

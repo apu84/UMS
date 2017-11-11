@@ -1,5 +1,7 @@
 package org.ums.fee.certificate;
 
+import org.ums.domain.model.immutable.Department;
+import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.filter.ListFilter;
 import org.ums.manager.ContentManager;
@@ -10,7 +12,7 @@ public interface CertificateStatusManager extends ContentManager<CertificateStat
   List<CertificateStatus> paginatedList(int itemsPerPage, int pageNumber);
 
   List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
-      FeeType pFeeType);
+      FeeType pFeeType, Department pDepartment);
 
   List<CertificateStatus> getByStudent(String pStudentId);
 
@@ -20,6 +22,8 @@ public interface CertificateStatusManager extends ContentManager<CertificateStat
       CertificateStatus.Status pStatus, FeeType pFeeType);
 
   List<CertificateStatus> getByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType);
+
+  List<CertificateStatus> getByStatusAndFeeCategory(CertificateStatus.Status pStatus, FeeCategory pFeeCategory);
 
   enum FilterCriteria {
     STUDENT_ID,

@@ -547,7 +547,9 @@ module ums {
         certificateStatus: [
           {id: 1, name: 'Applied'},
           {id: 2, name: 'Processed'},
-          {id: 3, name: 'Delivered'}
+          {id: 3, name: 'Delivered'},
+          {id: 4, name: "Waiting for Head's Approval"},
+          {id: 5, name: "Forwarded by Head"}
         ],
         MARKS_SUBMISSION_STATUS: {
           NOT_SUBMITTED: 0,

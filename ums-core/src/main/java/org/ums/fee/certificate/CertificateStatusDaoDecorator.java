@@ -1,6 +1,8 @@
 package org.ums.fee.certificate;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.domain.model.immutable.Department;
+import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.filter.ListFilter;
 
@@ -16,8 +18,8 @@ public class CertificateStatusDaoDecorator extends
 
   @Override
   public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
-      FeeType pFeeType) {
-    return getManager().paginatedFilteredList(itemsPerPage, pageNumber, pFilters, pFeeType);
+      FeeType pFeeType, Department pDepartment) {
+    return getManager().paginatedFilteredList(itemsPerPage, pageNumber, pFilters, pFeeType, pDepartment);
   }
 
   @Override
@@ -39,5 +41,10 @@ public class CertificateStatusDaoDecorator extends
   @Override
   public List<CertificateStatus> getByStatusAndFeeType(CertificateStatus.Status pStatus, FeeType pFeeType) {
     return getManager().getByStatusAndFeeType(pStatus, pFeeType);
+  }
+
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeCategory(CertificateStatus.Status pStatus, FeeCategory pFeeCategory) {
+    return getManager().getByStatusAndFeeCategory(pStatus, pFeeCategory);
   }
 }

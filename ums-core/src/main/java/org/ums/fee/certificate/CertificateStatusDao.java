@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.domain.model.immutable.Department;
+import org.ums.fee.FeeCategory;
 import org.ums.fee.FeeType;
 import org.ums.filter.AbstractFilterQueryBuilder;
 import org.ums.filter.ListFilter;
@@ -91,16 +93,21 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
 
   @Override
   public List<CertificateStatus> paginatedFilteredList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters,
-      FeeType pFeeType) {
+      FeeType pFeeType, Department pDepartment) {
     FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
-    String queryCheck = pFeeType == null ? " " : " AND FEE_CATEGORY IN (SELECT ID FROM FEE_CATEGORY WHERE TYPE=?) ";
+    String queryOfFeeType = pFeeType == null ? " " : " AND FEE_CATEGORY IN (SELECT ID FROM FEE_CATEGORY WHERE TYPE=?) ";
+    String queryOfDept =
+        pDepartment == null ? " " : " AND STUDENT_ID IN (SELECT STUDENT_ID FROM STUDENTS WHERE DEPT_ID=?) ";
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery() + queryCheck
-            + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + queryBuilder.getQuery()
+            + queryOfFeeType + queryOfDept + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
     List<Object> params = queryBuilder.getParameters();
-    params.add(pFeeType.getId());
+    if(pFeeType != null)
+      params.add(pFeeType.getId());
+    if(pDepartment != null)
+      params.add(pDepartment.getId());
     params.add(startIndex);
     params.add(endIndex);
     return mJdbcTemplate.query(query, params.toArray(), new CertificateStatusRowMapper());
@@ -135,6 +142,13 @@ public class CertificateStatusDao extends CertificateStatusDaoDecorator {
             + "                                      FROM FEE_CATEGORY "
             + "                                      WHERE TYPE = ?)";
     return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeType.getId()},
+        new CertificateStatusRowMapper());
+  }
+
+  @Override
+  public List<CertificateStatus> getByStatusAndFeeCategory(CertificateStatus.Status pStatus, FeeCategory pFeeCategory) {
+    String query = SELECT_ALL + " WHERE STATUS=? AND FEE_CATEGORY=?";
+    return mJdbcTemplate.query(query, new Object[] {pStatus.getId(), pFeeCategory.getId()},
         new CertificateStatusRowMapper());
   }
 

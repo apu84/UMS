@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Department;
 import org.ums.fee.FeeType;
 import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.CertificateStatusManager;
@@ -53,11 +54,11 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     return jsonObjectBuilder.build();
   }
 
-  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, FeeType pFeeType, JsonObject pJsonObject,
-      UriInfo pUriInfo) {
+  JsonObject getFilteredCertificateStatus(int itemsPerPage, int pageNumber, FeeType pFeeType, Department pDepartment,
+      JsonObject pJsonObject, UriInfo pUriInfo) {
     List<CertificateStatus> certificateStatusList =
         mCertificateStatusManager.paginatedFilteredList(itemsPerPage, pageNumber, buildFilterQuery(pJsonObject),
-            pFeeType);
+            pFeeType, pDepartment);
     return getJsonObject(itemsPerPage, pageNumber, pUriInfo, certificateStatusList);
   }
 
@@ -176,6 +177,8 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
     status.addOption("Applied", 1);
     status.addOption("Processed", 2);
     status.addOption("Delivered", 3);
+    status.addOption("Waiting for Head's forwarding", 4);
+    status.addOption("Forwarded by Head", 5);
     filters.add(status);
 
     FilterItem feeId =

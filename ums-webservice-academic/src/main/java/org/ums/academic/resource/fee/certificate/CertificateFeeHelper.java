@@ -8,9 +8,13 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.applications.AppRules;
 import org.ums.fee.*;
+import org.ums.fee.certificate.CertificateStatus;
 import org.ums.fee.certificate.CertificateStatusManager;
+import org.ums.fee.certificate.MutableCertificateStatus;
+import org.ums.fee.certificate.PersistentCertificateStatus;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
+import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
@@ -22,6 +26,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,12 +90,35 @@ public class CertificateFeeHelper {
         payment.setStudentId(pStudentId);
         payment.setSemesterId(pForSemesterId);
         payment.setAmount(fee.getAmount());
+          if (fee.getAmount().equals(BigDecimal.ZERO))
+              payment.setStatus(StudentPayment.Status.RECEIVED);
+          else
+              payment.setStatus(StudentPayment.Status.APPLIED);
         Date today = new Date();
+
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
-        payment.create();
+          Long paymentId = payment.create();
+          if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
+              StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
+              insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
+          }
+
+
       }
     }
 
+  }
+
+  private void insertIntoCertificateStatus(String pStudentId, UGFee pFee, StudentPayment pPayment, Date pToday) {
+    MutableCertificateStatus certificateStatus = new PersistentCertificateStatus();
+    certificateStatus.setFeeCategoryId(pFee.getFeeCategoryId());
+    certificateStatus.setTransactionId(pPayment.getTransactionId());
+    certificateStatus.setStudentId(pStudentId);
+    certificateStatus.setSemesterId(pPayment.getSemesterId());
+    certificateStatus.setProcessedOn(pToday);
+    certificateStatus.setUserId(pStudentId);
+    certificateStatus.setStatus(CertificateStatus.Status.WAITING_FOR_HEAD_FORWARDING);
+    mCertificateStatusManager.create(certificateStatus);
   }
 
   private boolean resolvedAllDependencies(FeeCategory pCategory, Student pStudent) {
@@ -114,9 +142,17 @@ public class CertificateFeeHelper {
         payment.setStudentId(pStudentId);
         payment.setSemesterId(student.getCurrentEnrolledSemesterId());
         payment.setAmount(fee.getAmount());
+        if (fee.getAmount().equals(BigDecimal.ZERO))
+          payment.setStatus(StudentPayment.Status.RECEIVED);
+        else
+          payment.setStatus(StudentPayment.Status.APPLIED);
         Date today = new Date();
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
-        payment.create();
+        Long paymentId = payment.create();
+        if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
+          StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
+          insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
+        }
       }
     }
 

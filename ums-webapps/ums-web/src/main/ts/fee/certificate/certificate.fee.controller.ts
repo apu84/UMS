@@ -1,6 +1,6 @@
 module ums {
   export class CertificateFeeController {
-    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService'];
+    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService','FeeCategoryService'];
     public attendedSemesters: AttendedSemester[];
     public certificateTypes: FeeCategory[];
     public payments: Payment[];
@@ -13,8 +13,8 @@ module ums {
     constructor(private certificateFeeService: CertificateFeeService,
                 private paymentService: PaymentService,
                 private certificateStatusService: CertificateStatusService,
-                private feeReportService: FeeReportService) {
-      this.certificateFeeService.getFeeCategories().then(
+                private feeReportService: FeeReportService, private feeCategoryService: FeeCategoryService) {
+      /*this.certificateFeeService.getFeeCategories().then(
           (feeCategories: FeeCategory[]) => {
             this.certificateTypes = feeCategories;
             let convertedMap: {[key: string]: FeeCategory} = {};
@@ -26,7 +26,22 @@ module ums {
             certificateFeeService.getAttendedSemesters().then(
                 (semesters: AttendedSemester[]) => this.attendedSemesters = semesters
             );
-          });
+          });*/
+      this.feeCategoryService.getAllFeeCategories().then((feeCategories:FeeCategory[])=>{
+         this.certificateTypes = feeCategories;
+
+
+          let convertedMap: {[key: string]: FeeCategory} = {};
+          this.certificateTypeMap = feeCategories.reduce((map: {[key: string]: FeeCategory}, obj: FeeCategory) => {
+              map[obj.id] = obj;
+              return map;
+          }, convertedMap);
+
+          certificateFeeService.getAttendedSemesters().then(
+              (semesters: AttendedSemester[]) => this.attendedSemesters = semesters
+          );
+
+      });
       this.getCertificateFeePaymentStatus();
       this.certificateStatusService.getCertificateStatus().then(
           (certificates: CertificateStatus[]) => {
