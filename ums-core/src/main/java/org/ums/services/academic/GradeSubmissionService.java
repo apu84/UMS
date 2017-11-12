@@ -218,7 +218,8 @@ public class GradeSubmissionService {
               gradeDTO.getRegType());
       hasError = validateTheoryTotal(hasError, gradeDTO);
     }
-    else if(partInfo.getCourse().getCourseType() == CourseType.SESSIONAL) {
+    else if(partInfo.getCourse().getCourseType() == CourseType.SESSIONAL
+        || partInfo.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
       hasError = validateSessionalTotal(hasError, gradeDTO);
     }
 

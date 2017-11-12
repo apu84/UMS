@@ -420,7 +420,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     if(courseType == CourseType.THEORY) {
       query = String.format(orgQuery, "UG_THEORY_MARKS");
     }
-    else if(courseType == CourseType.SESSIONAL) {
+    else if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
       query = String.format(orgQuery, "UG_SESSIONAL_MARKS");
     }
     return query;
@@ -596,7 +596,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       else
         sql = UPDATE_THEORY_MARKS_RECHECK;
     }
-    else if(courseType == CourseType.SESSIONAL) {
+    else if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
       if(courseMarksSubmissionStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED)
         sql = UPDATE_SESSIONAL_MARKS;
       else
@@ -653,7 +653,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           ps.setInt(12, pExamType.getId());
           ps.setString(13, gradeDto.getStudentId());
         }
-        if(courseType == CourseType.SESSIONAL) {
+        if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
           if(gradeDto.getTotal() == null || gradeDto.getTotal() == -1) {
             ps.setNull(1, Types.NULL);
           }
@@ -1002,7 +1002,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     if(actualStatus.getCourse().getCourseType() == CourseType.THEORY) {
       sql = INSERT_THEORY_LOG;
     }
-    else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL) {
+    else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL
+        || actualStatus.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
       sql = INSERT_SESSIONAL_LOG;
     }
 
@@ -1054,7 +1055,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
               ps.setInt(14, gradeDto.getRecheckStatusId());
             }
           }
-          if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL) {
+          if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL
+              || actualStatus.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
             if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
                 || actualStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
                 || actualStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
@@ -1097,7 +1099,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY) {
         sql = THEORY_SUBMIT_COUNT + " and recheck_status=0";
       }
-      else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL) {
+      else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL
+          || actualStatus.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
         sql = SESSIONAL_SUBMIT_COUNT + " and recheck_status=0";
       }
     }
@@ -1105,7 +1108,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY) {
         sql = THEORY_SUBMIT_COUNT + " and recheck_status=1";
       }
-      else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL) {
+      else if(actualStatus.getCourse().getCourseType() == CourseType.SESSIONAL
+          || actualStatus.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
         sql = SESSIONAL_SUBMIT_COUNT + " and recheck_status=1";
       }
     }
@@ -1143,7 +1147,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     String sql = "";
     if(pCourseType == CourseType.THEORY)
       sql = SELECT_THEORY_LOG;
-    else if(pCourseType == CourseType.SESSIONAL)
+    else if(pCourseType == CourseType.SESSIONAL || pCourseType == CourseType.THESIS_PROJECT)
       sql = SELECT_SESSIONAL_LOG;
 
     return mJdbcTemplate.query(sql, new Object[] {pSemesterId, pCourseId, pExamType.getId(), pStudentId},
