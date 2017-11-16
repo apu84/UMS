@@ -87,13 +87,15 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
-      if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
-        payment.setStatus(StudentPayment.Status.VERIFIED);
-      }
-      else {
-        payment.setStatus(StudentPayment.Status.RECEIVED);
-        certificateStatusList.add(saveCertificateStatus(payment));
-      }
+      /*
+       * if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
+       * payment.setStatus(StudentPayment.Status.VERIFIED); } else {
+       * payment.setStatus(StudentPayment.Status.RECEIVED);
+       * certificateStatusList.add(saveCertificateStatus(payment)); }
+       */
+      payment.setStatus(StudentPayment.Status.RECEIVED);
+      PersistentCertificateStatus certificateStatus = saveCertificateStatus(payment);
+      certificateStatusList.add(certificateStatus);
       payments.add(payment);
       latestPayments.add(latestPayment);
     }

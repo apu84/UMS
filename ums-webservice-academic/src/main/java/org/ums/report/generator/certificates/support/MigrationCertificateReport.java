@@ -4,7 +4,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Student;
@@ -91,7 +90,8 @@ public class MigrationCertificateReport {
         + " leaving this University for pursuing further study in other instution.", FontFactory.getFont(
         FontFactory.TIMES_ITALIC, 13)));
 
-    paragraph = new Paragraph(phrase);
+    paragraph = new Paragraph(20);
+    paragraph.add(phrase);
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     paragraph.setIndentationLeft(indentionValue);
     paragraph.setIndentationRight(indentionValue);

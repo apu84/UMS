@@ -1,8 +1,6 @@
 package org.ums.configuration;
 
-import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
@@ -11,14 +9,15 @@ import org.ums.fee.accounts.PaymentAccountMappingDao;
 import org.ums.fee.accounts.PaymentAccountsMappingManager;
 import org.ums.fee.accounts.PaymentStatusDao;
 import org.ums.fee.accounts.PaymentStatusManager;
-import org.ums.fee.certificate.CertificateNotification;
-import org.ums.fee.certificate.CertificateStatusDao;
-import org.ums.fee.certificate.CertificateStatusManager;
+import org.ums.fee.certificate.*;
 import org.ums.fee.dues.StudentDuesDao;
 import org.ums.fee.dues.StudentDuesManager;
 import org.ums.fee.latefee.LateFeeDao;
 import org.ums.fee.latefee.LateFeeManager;
-import org.ums.fee.payment.*;
+import org.ums.fee.payment.PostPaymentActions;
+import org.ums.fee.payment.PostStudentPaymentActions;
+import org.ums.fee.payment.StudentPaymentDao;
+import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.fee.semesterfee.InstallmentSettingsDao;
 import org.ums.fee.semesterfee.InstallmentSettingsManager;
 import org.ums.fee.semesterfee.InstallmentStatusDao;
@@ -106,6 +105,11 @@ public class FeeContext {
     CertificateStatusDao dao = new CertificateStatusDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
     dao.setManager(notifier);
     return dao;
+  }
+
+  @Bean
+  CertificateStatusLogManager certificateStatusLogManager() {
+    return new CertificateStatusLogDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean

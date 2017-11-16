@@ -48,6 +48,7 @@ module ums {
     }
 
     public setFilter(): void {
+      console.log("In the set filter");
       if (this.selectedFilter) {
         this.filter = this.filters.filter((filter: Filter) => filter.value === this.selectedFilter)[0];
         this.filterValue = {
@@ -58,10 +59,12 @@ module ums {
     }
 
     public setFilterValue(): void {
+      console.log("In the set filter value");
       if (this.filter && this.selectedFilterValue !== null) {
         this.filterValue
             = this.filter.options.filter((filterOption: FilterOption) => filterOption.value == this.selectedFilterValue)[0];
       }
+
     }
   }
 

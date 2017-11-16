@@ -9,10 +9,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.fee.FeeType;
-import org.ums.fee.certificate.CertificateStatus;
-import org.ums.fee.certificate.CertificateStatusManager;
-import org.ums.fee.certificate.MutableCertificateStatus;
-import org.ums.fee.certificate.PersistentCertificateStatus;
+import org.ums.fee.certificate.*;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.filter.FilterItem;
@@ -30,6 +27,8 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
   CertificateStatusBuilder mCertificateStatusBuilder;
   @Autowired
   CertificateStatusManager mCertificateStatusManager;
+  @Autowired
+  CertificateStatusLogManager mCertificateStatusLogManager;
 
   private List<FilterItem> mFilterItems;
 
@@ -141,7 +140,21 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
       mutableCertificateStatuses.add(updated);
     }
     mCertificateStatusManager.update(mutableCertificateStatuses);
+    insertIntoLog(mutableCertificateStatuses);
     return Response.ok().build();
+  }
+
+  private void insertIntoLog(List<MutableCertificateStatus> pCertificateStatuses) {
+    List<MutableCertificateStatusLog> logs = new ArrayList<>();
+    for(CertificateStatus status : pCertificateStatuses) {
+      MutableCertificateStatusLog log = new PersistentCertificateStatusLog();
+      log.setCertificateStatusId(status.getId());
+      log.setStatus(status.getStatus());
+      log.setProcessedOn(status.getProcessedOn());
+      log.setProcessedBy(status.getUserId());
+      logs.add(log);
+    }
+    mCertificateStatusLogManager.create(logs);
   }
 
   @Override

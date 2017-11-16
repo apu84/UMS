@@ -613,3 +613,12 @@ Insert into DB_IUMS.PERMISSIONS
 
 alter table FEE
 add dept_id VARCHAR2(2);
+
+
+
+create table certificate_status_log(
+  certificate_status_id NUMBER,
+  status NUMBER,
+  processed_on TIMESTAMP,
+  processed_by VARCHAR2(20)
+);

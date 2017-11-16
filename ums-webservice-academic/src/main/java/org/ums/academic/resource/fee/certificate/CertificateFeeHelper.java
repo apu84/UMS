@@ -8,10 +8,7 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.applications.AppRules;
 import org.ums.fee.*;
-import org.ums.fee.certificate.CertificateStatus;
-import org.ums.fee.certificate.CertificateStatusManager;
-import org.ums.fee.certificate.MutableCertificateStatus;
-import org.ums.fee.certificate.PersistentCertificateStatus;
+import org.ums.fee.certificate.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
@@ -49,6 +46,8 @@ public class CertificateFeeHelper {
   AppRulesManager mAppRulesManager;
   @Autowired
   CertificateStatusManager mCertificateStatusManager;
+  @Autowired
+  CertificateStatusLogManager mCertificateStatusLogManager;
 
   JsonObject getAttendedSemesters(String pStudentId, UriInfo pUriInfo) {
     List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecord(pStudentId);
@@ -90,19 +89,18 @@ public class CertificateFeeHelper {
         payment.setStudentId(pStudentId);
         payment.setSemesterId(pForSemesterId);
         payment.setAmount(fee.getAmount());
-          if (fee.getAmount().equals(BigDecimal.ZERO))
-              payment.setStatus(StudentPayment.Status.RECEIVED);
-          else
-              payment.setStatus(StudentPayment.Status.APPLIED);
+        if (fee.getAmount().equals(BigDecimal.ZERO))
+          payment.setStatus(StudentPayment.Status.RECEIVED);
+        else
+          payment.setStatus(StudentPayment.Status.APPLIED);
         Date today = new Date();
 
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
-          Long paymentId = payment.create();
-          if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
-              StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
-              insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
-          }
-
+        Long paymentId = payment.create();
+        if (fee.getAmount().equals(BigDecimal.ZERO) || (category.getType().getId() == FeeType.Types.REG_CERTIFICATE_FEE.getId() && payment.getStatus().getValue() == StudentPayment.Status.RECEIVED.getValue())) {
+          StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
+          insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
+        }
 
       }
     }
@@ -118,13 +116,22 @@ public class CertificateFeeHelper {
     certificateStatus.setProcessedOn(pToday);
     certificateStatus.setUserId(pStudentId);
     certificateStatus.setStatus(CertificateStatus.Status.WAITING_FOR_HEAD_FORWARDING);
-    mCertificateStatusManager.create(certificateStatus);
+    Long certificateStatusId = mCertificateStatusManager.create(certificateStatus);
+
+    MutableCertificateStatusLog log = new PersistentCertificateStatusLog();
+    log.setCertificateStatusId(certificateStatusId);
+    log.setStatus(certificateStatus.getStatus());
+    log.setProcessedOn(pToday);
+    log.setProcessedBy(certificateStatus.getUserId());
+    mCertificateStatusLogManager.create(log);
   }
 
+  // todo modify it based on log.
   private boolean resolvedAllDependencies(FeeCategory pCategory, Student pStudent) {
     List<AppRules> appRulesList = mAppRulesManager.getDependencies(pCategory.getId());
     List<String> resolvedFeeCategoryIds = mCertificateStatusManager.getByStudent(pStudent.getId(), pCategory.getId());
-    return appRulesList.size() == resolvedFeeCategoryIds.size() ? true : false;
+    // appRulesList.size() == resolvedFeeCategoryIds.size() ? true : false;
+    return true;
   }
 
   void applyForCertificate(String pFeeCategoryId, String pStudentId) {
@@ -149,12 +156,11 @@ public class CertificateFeeHelper {
         Date today = new Date();
         payment.setTransactionValidTill(UmsUtils.addDay(today, 10));
         Long paymentId = payment.create();
-        if (fee.getAmount().equals(BigDecimal.ZERO) || category.getType().getId()==FeeType.Types.REG_CERTIFICATE_FEE.getId() ) {
+        if (fee.getAmount().equals(BigDecimal.ZERO) || (category.getType().getId() == FeeType.Types.REG_CERTIFICATE_FEE.getId() && payment.getStatus().getValue() == StudentPayment.Status.APPLIED.getValue())) {
           StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
           insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
         }
       }
     }
-
   }
 }

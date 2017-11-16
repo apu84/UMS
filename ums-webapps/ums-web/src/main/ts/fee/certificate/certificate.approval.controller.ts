@@ -175,6 +175,7 @@ module ums {
         if (processed) {
           this.changedCertificateStatusList = [];
           this.notify.success("Successfully Saved");
+          this.navigate();
         } else {
           this.notify.error("Error in updating data");
         }
