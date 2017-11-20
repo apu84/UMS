@@ -18,6 +18,8 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
 
   String getDescription();
 
+  String getDependencies();
+
   enum Categories {
     ADMISSION,
     REGISTRATION,

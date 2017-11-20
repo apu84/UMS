@@ -15,4 +15,6 @@ public interface MutableFeeCategory extends FeeCategory, Editable<String>, Mutab
   void setName(String pName);
 
   void setDescription(String pDescription);
+
+  void setDependencies(String pDependencies);
 }

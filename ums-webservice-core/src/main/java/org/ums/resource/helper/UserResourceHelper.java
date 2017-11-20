@@ -1,6 +1,7 @@
 package org.ums.resource.helper;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.UserBuilder;
@@ -21,7 +22,7 @@ import java.util.List;
 @Component
 public class UserResourceHelper extends ResourceHelper<User, MutableUser, String> {
   @Autowired
-  UserManager mUserManager;
+  public UserManager mUserManager;
 
   @Autowired
   UserBuilder mBuilder;
@@ -45,6 +46,12 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
   @Override
   protected String getETag(User pReadonly) {
     return "";
+  }
+
+  public User getLoggedUser() {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    return user;
   }
 
   public JsonObject getUser(final String pUserId, final UriInfo pUriInfo) {

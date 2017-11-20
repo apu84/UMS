@@ -6,17 +6,20 @@ import org.ums.context.AppContext;
 public class PersistentFeeCategory implements MutableFeeCategory {
   private static FeeCategoryManager sFeeCategoryManager;
   private static FeeTypeManager sFeeTypeManager;
+
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
     sFeeTypeManager = applicationContext.getBean("feeTypeManager", FeeTypeManager.class);
   }
+
   private String mId;
   private String mFeeId;
   private FeeType mFeeType;
   private Integer mFeeTypeId;
   private String mName;
   private String mDescription;
+  private String mDependencies;
   private String mLastModified;
 
   public PersistentFeeCategory() {}
@@ -26,6 +29,17 @@ public class PersistentFeeCategory implements MutableFeeCategory {
     setType(persistentFeeCategory.getType());
     setName(persistentFeeCategory.getName());
     setDescription(persistentFeeCategory.getDescription());
+    setDependencies(persistentFeeCategory.getDependencies());
+  }
+
+  @Override
+  public void setDependencies(String pDependencies) {
+    mDependencies = pDependencies;
+  }
+
+  @Override
+  public String getDependencies() {
+    return mDependencies;
   }
 
   @Override

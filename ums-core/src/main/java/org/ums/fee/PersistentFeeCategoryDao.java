@@ -1,20 +1,22 @@
 package org.ums.fee;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
 public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
-  String SELECT_ALL = "SELECT ID, FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
-  String UPDATE_ALL = "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, TYPE = ?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+  String SELECT_ALL = "SELECT ID, FEE_ID, NAME, DESCRIPTION,DEPENDENCIES, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
+  String UPDATE_ALL =
+      "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, DEPENDENCIES=?, TYPE = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM FEE_CATEGORY ";
-  String INSERT_ALL = "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, TYPE, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
-      + getLastModifiedSql() + ") ";
+  String INSERT_ALL =
+      "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, DEPENDENCIES, TYPE, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, "
+          + getLastModifiedSql() + ") ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -74,6 +76,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
       feeCategory.setName(rs.getString("NAME"));
       feeCategory.setFeeTypeId(rs.getInt("TYPE"));
       feeCategory.setDescription(rs.getString("DESCRIPTION"));
+      feeCategory.setDependencies(rs.getString("DEPENDENCIES"));
       feeCategory.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<FeeCategory> atomicReference = new AtomicReference<>(feeCategory);
       return atomicReference.get();
