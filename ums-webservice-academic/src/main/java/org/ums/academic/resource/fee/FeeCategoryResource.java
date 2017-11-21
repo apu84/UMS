@@ -74,7 +74,6 @@ public class FeeCategoryResource extends Resource {
     List<FeeCategory> feeCategories = new ArrayList<>();
 
     return getFilteredFeeCategories(pStudent, pFeeCategories, certificateStatusList, feeCategories);
-
   }
 
   private List<FeeCategory> getFilteredFeeCategories(Student pStudent, List<FeeCategory> pFeeCategories,

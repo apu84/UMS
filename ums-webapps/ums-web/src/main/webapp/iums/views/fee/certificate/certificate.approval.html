@@ -91,7 +91,7 @@
                                 <td>
                                     <select class="form-control" name="statusId" data-ng-model="c.statusId"
                                             data-ng-change="vm.statusChanged(c)">
-                                        <option ng-repeat="options in vm.certificateOptions" value="{{options.id}}">
+                                        <option ng-repeat="options in vm.certificateOptionsCopy" value="{{options.id}}">
                                             {{options.name}}
                                         </option>
                                     </select>

@@ -11,6 +11,7 @@ module ums {
     public static $inject = ['CertificateFeeService', 'CertificateStatusService', 'CertificateService', 'FeeCategoryService', 'userService', 'appConstants', '$q', '$scope', 'notify', 'additionalRolePermissionsService'];
     public certificateOptions: IOptions[];
     public certificateOption: IOptions;
+    public certificateOptionsCopy: IOptions[];
     public selectedFilters: SelectedFilter[] = [];
     public filters: Filter[];
     public reloadReference: ReloadRef = {reloadList: false};
@@ -40,6 +41,7 @@ module ums {
 
       this.certificateOptions = appConstants.certificateStatus;
       this.certificateOption = appConstants.certificateStatus[0];
+      this.certificateOptionsCopy = angular.copy(this.certificateOptions);
       this.changedCertificateStatusList = [];
       this.getLoggedUserAndFeeCategories();
 
@@ -107,15 +109,24 @@ module ums {
     private getFeeCategories(): ng.IPromise<number> {
       var feeType: number = 0;
       let defer: ng.IDeferred<number> = this.$q.defer();
-
       if (this.user.departmentId == Utils.DEPT_COE) {
         feeType = Utils.CERTIFICATE_FEE;
+        this.certificateOptionsCopy.splice(0, 1);
+        this.certificateOptionsCopy.splice(2, 2);
+        console.log("Certificate options copy");
+        console.log(this.certificateOptionsCopy);
       }
       else if (this.user.departmentId == Utils.DEPT_RO) {
         feeType = Utils.REG_CERTIFICATE_FEE;
+        this.certificateOptionsCopy.splice(0, 1);
+        this.certificateOptionsCopy.splice(2, 2);
+
+
       }
       else if (this.user.departmentId == Utils.DEPT_PO) {
         feeType = Utils.PROC_CERTIFICATE_FEE;
+        this.certificateOptionsCopy.splice(0, 1);
+        this.certificateOptionsCopy.splice(2, 2);
       }
       else {
         console.log("In the additional role section");
@@ -124,10 +135,12 @@ module ums {
           console.log(result);
           if (result) {
             feeType = Utils.REG_CERTIFICATE_FEE;
-            console.log("Reg fee type: " + feeType);
+            this.certificateOptionsCopy.splice(0, 3);
           }
           else {
             feeType = Utils.DEPT_CERTIFICATE_FEE;
+            this.certificateOptionsCopy.splice(0, 1);
+            this.certificateOptionsCopy.splice(2, 2);
           }
           defer.resolve(feeType);
 
