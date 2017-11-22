@@ -291,7 +291,7 @@ module ums {
                         $('#publisher').select2('enable');
                     }
 
-                }, 1000);
+                }, 4000);
 
                 setTimeout(() => {
 
@@ -300,15 +300,18 @@ module ums {
                         $("#contributor" + i).select2('data', {
                             viewOrder: this.$scope.record.contributorList[i].viewOrder,
                             id: this.$scope.record.contributorList[i].id,
+                            text: this.$scope.contributorList[this.$scope.contributorList.map(function (e) {
+                                return e.id;
+                            }).indexOf(this.$scope.record.contributorList[i].id)].name,
                             role: this.$scope.record.contributorList[i].role
                         });
                     }
 
-                }, 1000);
+                }, 4000);
 
-
-                $('#keywords').tokenfield('setTokens', this.$scope.record.keywords);
-
+                setTimeout(() => {
+                    $('#keywords').tokenfield('setTokens', this.$scope.record.keywords);
+                }, 4000);
                 $("#headerTitle").html("Record : " + this.$scope.record.title);
 
 
@@ -540,6 +543,7 @@ module ums {
             this.$scope.bulkItemList = Array<IItem>();
             for (let i = 0; i < this.$scope.data.bulkAddCount; i++) {
                 let item = <IItem> {};
+                item.mfnNo = this.$scope.record.mfnNo;
                 this.$scope.bulkItemList.push(item);
             }
         }
@@ -681,27 +685,37 @@ module ums {
 
         private reloadSuppliers(): void {
             let data = $("#supplier").select2("data");
-            let searchTerm = data.text;
-            this.$scope.showSupplierSelect2 = false;
-            this.getAllSuppliers();
-            setTimeout(() => {
-                this.$scope.showSupplierSelect2 = true;
+            if(data == null || data == undefined){
+                this.getAllSuppliers();
+            }
+            else {
+                let searchTerm = data.text;
+                this.$scope.showSupplierSelect2 = false;
+                this.getAllSuppliers();
                 setTimeout(() => {
-                    Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
-                }, 200);
-            }, 300);
+                    this.$scope.showSupplierSelect2 = true;
+                    setTimeout(() => {
+                        Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
+                    }, 4000);
+                }, 4000);
+            }
         }
 
 
         private reloadPublishers(): void {
             let data = $("#publisher").select2("data");
-            let searchTerm = data.text;
-            this.$scope.showPublisherSelect2 = false;
-            this.getAllPublishers();
-            setTimeout(() => {
-                // Utils.setSelect2Value("recordPublisherDiv","publisher", searchTerm);
-                $("#publisher").select2('data', {id: data.id, text: data.text});
-            }, 1000);
+            if (data == null || data == undefined) {
+                this.getAllPublishers();
+            }
+            else {
+                let searchTerm = data.text;
+                this.$scope.showPublisherSelect2 = false;
+                this.getAllPublishers();
+                setTimeout(() => {
+                    // Utils.setSelect2Value("recordPublisherDiv","publisher", searchTerm);
+                    $("#publisher").select2('data', {id: data.id, text: data.text});
+                }, 4000);
+            }
         }
 
         private reloadContributors(): void {
@@ -709,7 +723,12 @@ module ums {
 
             for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
                 let data = $("#contributor" + i).select2("data");
-                text[i] = data.text;
+                if(data == null || data == undefined) {
+                    text[i] = "";
+                }
+                else {
+                    text[i] = data.text;
+                }
             }
 
             this.$scope.showContributorSelect2 = false;
@@ -718,12 +737,14 @@ module ums {
                 this.$scope.showContributorSelect2 = true;
                 setTimeout(() => {
                     for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
-                        Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
+                        if (text[i] != "") {
+                            Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
+                        }
                     }
 
-                }, 500);
+                }, 4000);
 
-            }, 300);
+            }, 4500);
         }
 
         private loadCountries(): void {
@@ -816,7 +837,7 @@ module ums {
             this.$scope.record.callNo += this.$scope.record.classNo != "" ? this.$scope.record.classNo : "";
             this.$scope.record.callNo += this.$scope.record.authorMark != "" ? "/" + this.$scope.record.authorMark : "";
             this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
-            this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition: "";
+            this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }
     }

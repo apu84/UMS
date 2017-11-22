@@ -72,8 +72,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
   public int update(final MutableItem pItem) {
     String query = UPDATE_ONE + "   Where ID= ? ";
     return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
-        pItem.getBarcode(), pItem.getPrice(), 4, pItem.getInternalNote(), pItem.getStatus().getId(), "", "",
-        pItem.getId());
+        pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus()
+            .getId(), "", "", pItem.getId());
   }
 
   @Override
@@ -82,7 +82,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
     pItem.setId(id);
     mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
         pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier() == null ? null : pItem
-            .getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus().getId(), "inset", "update");
+            .getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus().getId(), "insert", "update");
 
     return id;
   }
@@ -102,7 +102,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
         ps.setString(5, item.getAccessionDate());
         ps.setString(6, id.toString());
         ps.setDouble(7, item.getPrice());
-        ps.setInt(8, 2);
+        ps.setLong(8, item.getSupplier().getId());
         ps.setString(9, item.getInternalNote());
         ps.setInt(10, item.getStatus().getId());
         ps.setString(11, "insert");

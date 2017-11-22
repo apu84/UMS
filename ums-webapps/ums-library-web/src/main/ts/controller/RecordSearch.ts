@@ -10,6 +10,9 @@ module ums {
         choice: string;
 
         doSearch: Function;
+
+        record: IRecord;
+        recordDetails: Function;
     }
 
     export class RecordSearch {
@@ -33,6 +36,8 @@ module ums {
             $scope.navigateRecord = this.navigateRecord.bind(this);
             $scope.doSearch = this.doSearch.bind(this);
             $scope.search = {queryTerm: ""};
+
+            $scope.recordDetails = this.recordDetails.bind(this);
 
             if ($stateParams["1"] == null || $stateParams["1"] == "old") {
                 var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
@@ -102,6 +107,11 @@ module ums {
             localStorage["lms_page"] = pageNumber;
             localStorage["lms_current_index"] = currentIndex;
             window.location.href = "#/cataloging/" + operation + "/record/" + mrnNo;
+        }
+
+        private recordDetails(recordIndex: number) {
+            this.$scope.record = <IRecord>{};
+            this.$scope.record = this.$scope.recordList[recordIndex];
         }
 
     }

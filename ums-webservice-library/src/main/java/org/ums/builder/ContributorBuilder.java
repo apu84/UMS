@@ -57,8 +57,7 @@ public class ContributorBuilder implements Builder<Contributor, MutableContribut
     if(pJsonObject.containsKey("address"))
       pMutable.setAddress(pJsonObject.getString("address"));
     if(pJsonObject.containsKey("countryId"))
-      pMutable.setCountryId(pJsonObject.isNull("countryId") ? null : Integer.parseInt(pJsonObject
-          .getString("countryId")));
+      pMutable.setCountryId(pJsonObject.isNull("countryId") ? null : pJsonObject.getInt("countryId"));
 
     // pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }

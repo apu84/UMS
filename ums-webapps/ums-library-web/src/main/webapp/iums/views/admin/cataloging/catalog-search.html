@@ -241,7 +241,7 @@
                         <td>
                             <ul class="list-unstyled">
                                 <li><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.  </span><a
-                                        style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
+                                        style="cursor: pointer" data-toggle="modal" data-target="#bookPreview" data-ng-click="recordDetails($index)"
                                         href="javascript:void()" class="title">{{record.title}}</a></li>
                                 <li>by <a>Unknown (Musician) [author.]</a></li>
                                 <li> Material type: book Book</li>
@@ -386,8 +386,7 @@
                 <h4 id="modal-default-label" class="modal-title">MFN-1234; Call Number : 1233234</h4></div>
             <div class="modal-body">
                 <ul class="list-unstyled desc">
-                    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">The Ladies' Work-Book
-                        [electronic resource]</a></li>
+                    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a></li>
                     <li>by <a>Unknown (Musician) [author.]</a></li>
                     <li><b>Material type:</b> book Book</li>
                     <li><b>Publisher:</b> Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</li>
@@ -435,12 +434,10 @@
     }
 
     $("#searchBox").focus();
-    /*
     $('#squareRadio input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'iradio_square-blue'
     });
-    */
 
     $('.selectpicker').selectpicker({
         iconBase: 'fa',

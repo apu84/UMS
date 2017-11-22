@@ -70,7 +70,7 @@
 
             <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
                data-ng-click="resetItemForm()" style="background-color: white;">
-                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                <i data-toggle="tooltip" title="Clear & Add Item" class="fa fa-plus-square" aria-hidden="true"></i>
             </a>
         </p>
         <!--Edit Item # 3 / Barcode 3 -->
@@ -94,7 +94,7 @@
             <label class="col-md-1 control-label">Access. Date</label>
             <div class="col-md-3">
                 <input type="text" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
-                       class="datepicker-default form-control dottedInput"
+                       class="datepicker-default form-control dottedInput" data-provide="datepicker"
                        data-ng-model="item.accessionDate" id="accessionDate" name="accessionDate"
                        ng-readonly="data.itemReadOnlyMode"/>
             </div>
@@ -156,8 +156,7 @@
     <div class="row" data-ng-show="data.showItemMainButtonPanel">
         <div class="text-right col-md-12" style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
             <button type="button" class="btn btn-dark btn-success" value="add_item">Add Item</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-dark btn-success" value="add_and_duplicate_item">Add & Duplicate
-            </button>&nbsp;&nbsp;&nbsp;
+            <!--<button type="button" class="btn btn-dark btn-success" value="add_and_duplicate_item">Add & Duplicate</button>&nbsp;&nbsp;&nbsp;-->
             <a class="btn btn-dark" value="save_edit_record" ng-click="data.showItemMainButtonPanel=false;">Add Multiple
                 copies of this item</a>
 

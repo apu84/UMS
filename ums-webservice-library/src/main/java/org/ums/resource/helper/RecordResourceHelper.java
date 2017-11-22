@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 import org.ums.builder.RecordBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.library.FilterDto;
-import org.ums.usermanagement.user.User;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
-import org.ums.usermanagement.user.UserManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentRecord;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
 import org.ums.solr.repository.document.lms.RecordDocument;
 import org.ums.solr.repository.lms.RecordRepository;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.Json;
@@ -108,6 +108,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       // filterDto.getBasicQueryTerm(), filterDto.getBasicQueryTerm(),
       // filterDto.getBasicQueryTerm());
 
+    }
+    else if(filterDto.getSearchType().equalsIgnoreCase("advanced")) {
+      queryString = "title_txt:Programming AND type_s: Record";
     }
 
     return queryString;
