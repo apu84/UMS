@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
-  String SELECT_ALL = "SELECT ID, FEE_ID, NAME, DESCRIPTION,DEPENDENCIES, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
+  String SELECT_ALL =
+      "SELECT ID, FEE_ID, NAME, DESCRIPTION,DEPENDENCIES,DELIVERY_TYPE, TYPE, LAST_MODIFIED FROM FEE_CATEGORY ";
   String UPDATE_ALL =
-      "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, DEPENDENCIES=?, TYPE = ?, LAST_MODIFIED = "
+      "UPDATE FEE_CATEGORY SET NAME = ?, FEE_ID = ?, DESCRIPTION = ?, DEPENDENCIES=?,DELIVERY_TYPE=?, TYPE = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM FEE_CATEGORY ";
   String INSERT_ALL =
-      "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, DEPENDENCIES, TYPE, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, "
+      "INSERT INTO FEE_CATEGORY(FEE_ID, NAME, DESCRIPTION, DEPENDENCIES, DELIVERY_TYPE, TYPE, LAST_MODIFIED) VALUES (?,?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ") ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -77,6 +78,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
       feeCategory.setFeeTypeId(rs.getInt("TYPE"));
       feeCategory.setDescription(rs.getString("DESCRIPTION"));
       feeCategory.setDependencies(rs.getString("DEPENDENCIES"));
+      feeCategory.setDeliveryType(FeeCategory.DeliveryType.get(rs.getInt("DELIVERY_TYPE")));
       feeCategory.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<FeeCategory> atomicReference = new AtomicReference<>(feeCategory);
       return atomicReference.get();

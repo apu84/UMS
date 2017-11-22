@@ -44,10 +44,9 @@ public class FeeCategoryResource extends Resource {
     List<FeeCategory> feeCategories = mFeeCategoryManager.getAll();
     User user = getLoggedUser();
     Student student = mStudentManager.get(user.getId());
-    if(student != null) {
+    if (student != null) {
       return getFeeCategoriesBasedOnGraduationType(feeCategories, student);
-    }
-    else {
+    } else {
       return feeCategories;
     }
   }
@@ -73,25 +72,35 @@ public class FeeCategoryResource extends Resource {
 
     List<FeeCategory> feeCategories = new ArrayList<>();
 
+
     return getFilteredFeeCategories(pStudent, pFeeCategories, certificateStatusList, feeCategories);
   }
 
   private List<FeeCategory> getFilteredFeeCategories(Student pStudent, List<FeeCategory> pFeeCategories,
-      Set<String> pCertificateStatusList, List<FeeCategory> pFilteredFeeCategories) {
-    for(FeeCategory feeCategory : pFeeCategories) {
+                                                     Set<String> pCertificateStatusList, List<FeeCategory> pFilteredFeeCategories) {
+    for (FeeCategory feeCategory : pFeeCategories) {
       List<String> dependencies = new ArrayList<>();
       boolean certificateForGraduate = false;
-      if(feeCategory.getDependencies() != null) {
+      if (feeCategory.getDependencies() != null
+          && feeCategory.getDependencies().length() >= 1) {
         dependencies = Arrays.asList(feeCategory.getDependencies().split(","));
         certificateForGraduate = dependencies.get(0).equals("G") ? true : false;
+        if (certificateForGraduate && dependencies.size() > 1)
+          dependencies = dependencies.stream().filter(d -> !d.equals("G")).collect(Collectors.toList());
       }
-      if(pStudent.getStatus().equals(StudentStatus.ACTIVE))
-        if((dependencies.size() - 1) == pCertificateStatusList.size() && certificateForGraduate)
+
+
+      if (pStudent.getStatus().equals(StudentStatus.PASSED)) {
+        if (dependencies.size() == 1
+            && dependencies.get(0).equals("G"))
           pFilteredFeeCategories.add(feeCategory);
-        else if(dependencies.size() == pCertificateStatusList.size() && !certificateForGraduate)
+        else if (pCertificateStatusList.containsAll(dependencies) && certificateForGraduate)
           pFilteredFeeCategories.add(feeCategory);
+      } else {
+        if (pCertificateStatusList.containsAll(dependencies) && !certificateForGraduate)
+          pFilteredFeeCategories.add(feeCategory);
+      }
     }
     return pFilteredFeeCategories;
   }
-
 }

@@ -20,6 +20,7 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   private String mName;
   private String mDescription;
   private String mDependencies;
+  private FeeCategory.DeliveryType mDeliveryType;
   private String mLastModified;
 
   public PersistentFeeCategory() {}
@@ -30,6 +31,17 @@ public class PersistentFeeCategory implements MutableFeeCategory {
     setName(persistentFeeCategory.getName());
     setDescription(persistentFeeCategory.getDescription());
     setDependencies(persistentFeeCategory.getDependencies());
+    setDeliveryType(persistentFeeCategory.getDeliveryType());
+  }
+
+  @Override
+  public void setDeliveryType(DeliveryType pDeliveryType) {
+    mDeliveryType = pDeliveryType;
+  }
+
+  @Override
+  public DeliveryType getDeliveryType() {
+    return mDeliveryType;
   }
 
   @Override

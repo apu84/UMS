@@ -90,7 +90,7 @@
                                        data-ng-click="vm.createCertificateReport(c)"></i></td>
                                 <td>
                                     <select class="form-control" name="statusId" data-ng-model="c.statusId"
-                                            data-ng-change="vm.statusChanged(c)">
+                                            data-ng-change="vm.statusChanged(c)" data-ng-disabled="!c.enable">
                                         <option ng-repeat="options in vm.certificateOptionsCopy" value="{{options.id}}">
                                             {{options.name}}
                                         </option>

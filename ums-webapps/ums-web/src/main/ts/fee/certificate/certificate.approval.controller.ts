@@ -14,6 +14,7 @@ module ums {
     public certificateOptionsCopy: IOptions[];
     public selectedFilters: SelectedFilter[] = [];
     public filters: Filter[];
+    public enableStatusChangeOption: boolean = false;
     public reloadReference: ReloadRef = {reloadList: false};
     public feeCategories: FeeCategory[];
     public feeCategory: FeeCategory;
@@ -43,6 +44,7 @@ module ums {
       this.certificateOption = appConstants.certificateStatus[0];
       this.certificateOptionsCopy = angular.copy(this.certificateOptions);
       this.changedCertificateStatusList = [];
+      this.certificateStatusList = [];
       this.getLoggedUserAndFeeCategories();
 
       this.certificateStatusService.getFilters().then((filters: Filter[]) => {
@@ -87,7 +89,9 @@ module ums {
         });
 
         this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage).then((response: any) => {
-          this.certificateStatusList = response.entries;
+          for (var i = 0; i < response.entries.length; i++) {
+            this.checkWhetherTheStatusShouldBeDisabledOrEnabled(response.entries[i]);
+          }
         });
       } else {
         this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, 0, 0, this.user.departmentId).then((response: any) => {
@@ -95,10 +99,24 @@ module ums {
         });
 
         this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage, this.user.departmentId).then((response: any) => {
-          this.certificateStatusList = response.entries;
+          for (var i = 0; i < response.entries.length; i++) {
+            this.checkWhetherTheStatusShouldBeDisabledOrEnabled(response.entries[i]);
+          }
         });
       }
 
+    }
+
+    private checkWhetherTheStatusShouldBeDisabledOrEnabled(certificateStatus: CertificateStatus): void {
+      var enable: boolean = false;
+      for (var i = 0; i < this.certificateOptionsCopy.length; i++) {
+        if (certificateStatus.statusId === this.certificateOptionsCopy[i].id) {
+          enable = true;
+          break;
+        }
+      }
+      certificateStatus.enable = enable;
+      this.certificateStatusList.push(certificateStatus);
     }
 
     private setPage(pageNo: number) {
@@ -113,15 +131,11 @@ module ums {
         feeType = Utils.CERTIFICATE_FEE;
         this.certificateOptionsCopy.splice(0, 1);
         this.certificateOptionsCopy.splice(2, 2);
-        console.log("Certificate options copy");
-        console.log(this.certificateOptionsCopy);
       }
       else if (this.user.departmentId == Utils.DEPT_RO) {
         feeType = Utils.REG_CERTIFICATE_FEE;
         this.certificateOptionsCopy.splice(0, 1);
         this.certificateOptionsCopy.splice(2, 2);
-
-
       }
       else if (this.user.departmentId == Utils.DEPT_PO) {
         feeType = Utils.PROC_CERTIFICATE_FEE;
@@ -131,8 +145,6 @@ module ums {
       else {
         console.log("In the additional role section");
         this.getAdditionalRolePermissions().then((result: boolean) => {
-          console.log("result");
-          console.log(result);
           if (result) {
             feeType = Utils.REG_CERTIFICATE_FEE;
             this.certificateOptionsCopy.splice(0, 3);
@@ -145,8 +157,6 @@ module ums {
           defer.resolve(feeType);
 
           this.feeType = feeType;
-          console.log("fee type");
-          console.log(feeType);
           return defer.promise;
 
         });

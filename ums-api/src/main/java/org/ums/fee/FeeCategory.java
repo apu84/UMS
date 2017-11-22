@@ -5,6 +5,9 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 
 import java.io.Serializable;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>, LastModifier, Identifier<String> {
 
@@ -19,6 +22,8 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
   String getDescription();
 
   String getDependencies();
+
+  DeliveryType getDeliveryType();
 
   enum Categories {
     ADMISSION,
@@ -50,4 +55,38 @@ public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>,
     CERTIFICATE_LANGUAGE_PROFICIENCY,
     TESTIMONIAL_DEPARTMENT;
   }
+
+  enum DeliveryType {
+    SINGLE(1, "SINGLE"),
+    MULTIPLE(2, "MULTIPLE");
+
+    private String label;
+    private int id;
+
+    DeliveryType(int id, String label) {
+      this.id = id;
+      this.label = label;
+    }
+
+    private static final Map<Integer, DeliveryType> lookup = new HashMap<>();
+
+    static {
+      for(DeliveryType c : EnumSet.allOf(DeliveryType.class)) {
+        lookup.put(c.getId(), c);
+      }
+    }
+
+    public static DeliveryType get(final int pId) {
+      return lookup.get(pId);
+    }
+
+    public String getLabel() {
+      return this.label;
+    }
+
+    public int getId() {
+      return this.id;
+    }
+  }
+
 }
