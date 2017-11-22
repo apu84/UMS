@@ -29,6 +29,12 @@ module ums {
     public enableButton: boolean = false;
     public userDeptHead: boolean = false;
 
+    static applied = 1;
+    static processed = 2;
+    static delivered = 3;
+    static waiting_for_head_approval = 4;
+    static forwarded_by_head = 5;
+
     constructor(private certificateFeeService: CertificateFeeService,
                 private certificateStatusService: CertificateStatusService,
                 private certificateService: CertificateService,
@@ -89,6 +95,7 @@ module ums {
         });
 
         this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage).then((response: any) => {
+          this.certificateStatusList = [];
           for (var i = 0; i < response.entries.length; i++) {
             this.checkWhetherTheStatusShouldBeDisabledOrEnabled(response.entries[i]);
           }
@@ -99,6 +106,7 @@ module ums {
         });
 
         this.certificateStatusService.listCertificateStatus(this.selectedFilters, 'certificate-status/paginated', this.feeType, this.currentPage, this.itemsPerPage, this.user.departmentId).then((response: any) => {
+          this.certificateStatusList = [];
           for (var i = 0; i < response.entries.length; i++) {
             this.checkWhetherTheStatusShouldBeDisabledOrEnabled(response.entries[i]);
           }
@@ -110,13 +118,46 @@ module ums {
     private checkWhetherTheStatusShouldBeDisabledOrEnabled(certificateStatus: CertificateStatus): void {
       var enable: boolean = false;
       for (var i = 0; i < this.certificateOptionsCopy.length; i++) {
-        if (certificateStatus.statusId === this.certificateOptionsCopy[i].id) {
-          enable = true;
+
+
+        if (this.user.departmentId == Utils.DEPT_COE) {
+          enable = this.enableOrDisableForCommonTasks(certificateStatus, enable);
           break;
         }
+        else if (this.user.departmentId == Utils.DEPT_RO) {
+          if (certificateStatus.statusId === CertificateApprovalController.forwarded_by_head) {
+            enable = true;
+            break;
+          }
+        }
+        else if (this.user.departmentId == Utils.DEPT_PO) {
+          enable = this.enableOrDisableForCommonTasks(certificateStatus, enable);
+          break;
+        }
+        else {
+          var found: boolean = false;
+          this.getAdditionalRolePermissions().then((result: boolean) => {
+            if (result && certificateStatus.statusId === CertificateApprovalController.applied) {
+              enable = true;
+              found = true;
+            }
+
+          });
+          if (found)
+            break;
+
+        }
+
       }
       certificateStatus.enable = enable;
       this.certificateStatusList.push(certificateStatus);
+    }
+
+    private enableOrDisableForCommonTasks(certificateStatus: ums.CertificateStatus, enable: boolean) {
+      if (certificateStatus.statusId === CertificateApprovalController.applied
+          || certificateStatus.statusId === CertificateApprovalController.processed)
+        enable = true;
+      return enable;
     }
 
     private setPage(pageNo: number) {
