@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -137,6 +138,8 @@ public class CertificateStatusHelper extends ResourceHelper<CertificateStatus, M
       updated.setFeeCategoryId(latest.getFeeCategoryId());
       updated.setSemesterId(latest.getSemesterId());
       updated.setStudentId(latest.getStudentId());
+      Date currentDate = new Date();
+      updated.setProcessedOn(currentDate);
       mutableCertificateStatuses.add(updated);
     }
     mCertificateStatusManager.update(mutableCertificateStatuses);

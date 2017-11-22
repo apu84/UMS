@@ -13,6 +13,7 @@ module ums {
     status: string;
     feeCategory: string;
     statusId: number;
+    enable: boolean;
     lastModified: string;
   }
 
