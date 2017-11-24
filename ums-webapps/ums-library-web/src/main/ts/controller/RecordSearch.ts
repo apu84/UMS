@@ -35,7 +35,18 @@ module ums {
             $scope.pageChanged = this.pageChanged.bind(this);
             $scope.navigateRecord = this.navigateRecord.bind(this);
             $scope.doSearch = this.doSearch.bind(this);
-            $scope.search = {queryTerm: ""};
+            $scope.search = {
+                queryTerm: '',
+                searchType: 'basic',
+                itemType: Array(),
+                title: '',
+                author: '',
+                subject: '',
+                corpAuthor: '',
+                publisher: '',
+                yearFrom: '',
+                yearTo: ''
+            };
 
             $scope.recordDetails = this.recordDetails.bind(this);
 
@@ -66,11 +77,31 @@ module ums {
         private prepareFilter() {
             var filter: IFilter = <IFilter> {};
 
-            filter.searchType = "basic";
-            filter.basicQueryField = this.$scope.choice;
-            filter.basicQueryTerm = this.$scope.search.queryTerm;
+            filter.searchType = this.$scope.search.searchType;
+            if(this.$scope.search.searchType == 'basic') {
+                filter.basicQueryField = this.$scope.choice;
+                filter.basicQueryTerm = this.$scope.search.queryTerm;
+            }
+            else if(this.$scope.search.searchType == 'advanced'){
+                // filter.advancedQueryMap = <IAdvancedSearchMap>();
+                // // var advanceSearchMap: any = [];
+                // // advanceSearchMap[0] = {key: 'materialType', value: this.$scope.search.itemType};
+                // // advanceSearchMap[1] = {key: 'title', value: this.$scope.search.title};
+                // // advanceSearchMap[2] = {key: 'author', value: this.$scope.search.author};
+                // // advanceSearchMap[3] = {key: 'subject', value: this.$scope.search.subject};
+                // // advanceSearchMap[4] = {key: 'coprAuthor', value: this.$scope.search.coprAuthor};
+                // // advanceSearchMap[5] = {key: 'publisher', value: this.$scope.search.publisher};
+                // // advanceSearchMap[6] = {key: 'yearFrom', value: this.$scope.search.yearFrom};
+                // // advanceSearchMap[7] = {key: 'yearTo', value: this.$scope.search.yearTo};
+                // // for(var i = 0; i < advanceSearchMap.length; i++) {
+                //
+                // filter.advancedQueryMap[0].key = 'material_txt';
+                // filter.advancedQueryMap[0].value = this.$scope.search.itemType;
+
+            }
             this.$scope.search.filter = filter;
             localStorage["lms_search_filter"] = JSON.stringify(filter);
+            console.log(this.$scope.search.filter);
         }
 
         private doSearch(): void {

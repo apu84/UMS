@@ -132,7 +132,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5"></div>
+                    <div class="col-md-5">
+                        <label class="col-md-4 control-label" for="iCategory">Category<span data-ng-show="vm.showTrainingInputDiv"
+                                                                                                                  class="require">*</span></label>
+                        <div data-ng-show="vm.showTrainingInputDiv">
+                            <div class="col-md-8">
+                                <select name="nCategory"
+                                        id="iCategory"
+                                        data-ng-model="training.trainingCategory"
+                                        data-ng-options="category.name for category in vm.trainingTypes track by category.id"
+                                        class="form-control" required>
+                                    <option value="" selected="selected">Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showTrainingInputDiv">
+                            <div class="col-md-8">
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{training.trainingCategory.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-1"></div>
                 </div>
             </div>

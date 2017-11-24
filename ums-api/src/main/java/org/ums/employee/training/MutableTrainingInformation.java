@@ -3,6 +3,7 @@ package org.ums.employee.training;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.registrar.TrainingCategory;
 
 public interface MutableTrainingInformation extends TrainingInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
@@ -20,4 +21,8 @@ public interface MutableTrainingInformation extends TrainingInformation, Editabl
   void setTrainingDuration(final int pTrainingDuration);
 
   void setTrainingDurationString(final String pTrainingDurationString);
+
+  void setTrainingCategory(final TrainingCategory pTrainingCategory);
+
+  void setTrainingCategoryId(final int pTrainingCategoryId);
 }

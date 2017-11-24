@@ -2,6 +2,7 @@ package org.ums.employee.training;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.enums.registrar.TrainingCategory;
 
 public class PersistentTrainingInformation implements MutableTrainingInformation {
 
@@ -21,6 +22,8 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   private String mTrainingToDate;
   private int mTrainingDuration;
   private String mTrainingDurationString;
+  private TrainingCategory mTrainingCategory;
+  private int mTrainingCategoryId;
   private String mLastModified;
 
   public PersistentTrainingInformation() {}
@@ -112,6 +115,16 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
+  public void setTrainingCategory(TrainingCategory pTrainingCategory) {
+    mTrainingCategory = pTrainingCategory;
+  }
+
+  @Override
+  public void setTrainingCategoryId(int pTrainingCategoryId) {
+    mTrainingCategoryId = pTrainingCategoryId;
+  }
+
+  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -144,5 +157,15 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   @Override
   public String getTrainingDurationString() {
     return mTrainingDurationString;
+  }
+
+  @Override
+  public TrainingCategory getTrainingCategory() {
+    return mTrainingCategory;
+  }
+
+  @Override
+  public int getTrainingCategoryId() {
+    return mTrainingCategoryId;
   }
 }

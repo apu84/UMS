@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
+import org.ums.employee.academic.AcademicInformation;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
@@ -303,6 +304,13 @@ public class CoreContext {
     AreaOfInterestCache areaOfInterestCache = new AreaOfInterestCache(mCacheFactory.getCacheManager());
     areaOfInterestCache.setManager(new PersistentAreaOfInterestDao(mTemplateFactory.getJdbcTemplate()));
     return areaOfInterestCache;
+  }
+
+  @Bean
+  AcademicDegreeManager academicDegreeManager() {
+    AcademicDegreeCache academicDegreeCache = new AcademicDegreeCache(mCacheFactory.getCacheManager());
+    academicDegreeCache.setManager(new PersistentAcademicDegreeDao(mTemplateFactory.getJdbcTemplate()));
+    return academicDegreeCache;
   }
 
   @Bean

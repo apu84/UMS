@@ -5,7 +5,9 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.employee.experience.ExperienceInformation;
 import org.ums.employee.experience.MutableExperienceInformation;
+import org.ums.enums.registrar.ExperienceCategory;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -23,6 +25,15 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pBuilder.add("experienceTo", pReadOnly.getExperienceToDate());
     pBuilder.add("experienceDuration", pReadOnly.getExperienceDuration());
     pBuilder.add("experienceDurationString", pReadOnly.getExperienceDurationString());
+    if(pReadOnly.getExperienceCategoryId() == 0) {
+      pBuilder.add("trainingCategory", "");
+    }
+    else {
+      JsonObjectBuilder categoryBuilder = Json.createObjectBuilder();
+      categoryBuilder.add("id", pReadOnly.getExperienceCategoryId()).add("name",
+          ExperienceCategory.get(pReadOnly.getExperienceCategoryId()).getLabel());
+      pBuilder.add("experienceCategory", categoryBuilder);
+    }
     pBuilder.add("dbAction", "");
   }
 
@@ -38,5 +49,6 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pMutable.setExperienceToDate(pJsonObject.getString("experienceTo"));
     pMutable.setExperienceDuration(pJsonObject.getInt("experienceDuration"));
     pMutable.setExperienceDurationString(pJsonObject.getString("experienceDurationString"));
+    pMutable.setExperienceCategoryId(pJsonObject.getJsonObject("experienceCategory").getInt("id"));
   }
 }

@@ -13,16 +13,16 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
 
   static String INSERT_ONE =
       "INSERT INTO EMP_TRAINING_INFO (ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, "
-          + "TRAINING_DURATION, TRAINING_DURATION_STRING, LAST_MODIFIED) VALUES (?, ?, ? ,? ,?, ?, ?, ?,"
+          + "TRAINING_DURATION, TRAINING_DURATION_STRING, CATEGORY, LAST_MODIFIED) VALUES (?, ?, ? ,? ,?, ?, ?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, TRAINING_DURATION, TRAINING_DURATION_STRING, LAST_MODIFIED From EMP_TRAINING_INFO";
+      "Select ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, TRAINING_DURATION, TRAINING_DURATION_STRING, CATEGORY, LAST_MODIFIED From EMP_TRAINING_INFO";
 
   static String DELETE_ALL = "DELETE FROM EMP_TRAINING_INFO";
 
   static String UPDATE_ALL =
-      "UPDATE EMP_TRAINING_INFO SET TRAINING_NAME=?, TRAINING_INSTITUTE=?, TRAINING_FROM=?, TRAINING_TO=?, TRAINING_DURATION = ?, TRAINING_DURATION_STRING = ?, LAST_MODIFIED="
+      "UPDATE EMP_TRAINING_INFO SET TRAINING_NAME=?, TRAINING_INSTITUTE=?, TRAINING_FROM=?, TRAINING_TO=?, TRAINING_DURATION = ?, TRAINING_DURATION_STRING = ?, CATEGORY = ?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -52,7 +52,8 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       params.add(new Object[] {mIdGenerator.getNumericId(), trainingInformation.getEmployeeId(),
           trainingInformation.getTrainingName(), trainingInformation.getTrainingInstitute(),
           trainingInformation.getTrainingFromDate(), trainingInformation.getTrainingToDate(),
-          trainingInformation.getTrainingDuration(), trainingInformation.getTrainingDurationString()});
+          trainingInformation.getTrainingDuration(), trainingInformation.getTrainingDurationString(),
+          trainingInformation.getTrainingCategoryId()});
 
     }
     return params;
@@ -76,7 +77,8 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       params.add(new Object[] {pTrainingInformation.getTrainingName(), pTrainingInformation.getTrainingInstitute(),
           pTrainingInformation.getTrainingFromDate(), pTrainingInformation.getTrainingToDate(),
           pTrainingInformation.getTrainingDuration(), pTrainingInformation.getTrainingDurationString(),
-          pTrainingInformation.getEmployeeId(), pTrainingInformation.getId()});
+          pTrainingInformation.getTrainingCategoryId(), pTrainingInformation.getEmployeeId(),
+          pTrainingInformation.getId()});
     }
     return params;
   }
@@ -108,6 +110,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       trainingInformation.setTrainingToDate(resultSet.getString("training_to"));
       trainingInformation.setTrainingDuration(resultSet.getInt("training_duration"));
       trainingInformation.setTrainingDurationString(resultSet.getString("training_duration_string"));
+      trainingInformation.setTrainingCategoryId(resultSet.getInt("category"));
       return trainingInformation;
     }
   }

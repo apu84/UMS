@@ -1,17 +1,22 @@
 package org.ums.employee.academic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.employee.academic.AcademicInformation;
 import org.ums.employee.academic.MutableAcademicInformation;
 import org.ums.enums.common.AcademicDegreeType;
+import org.ums.manager.common.AcademicDegreeManager;
 
 import javax.json.*;
 import javax.ws.rs.core.UriInfo;
 
 @Component
 public class AcademicInformationBuilder implements Builder<AcademicInformation, MutableAcademicInformation> {
+
+  @Autowired
+  AcademicDegreeManager mAcademicDegreeManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, AcademicInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -20,7 +25,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     JsonObjectBuilder degreeBuilder = Json.createObjectBuilder();
     degreeBuilder.add("id", pReadOnly.getDegreeId()).add("name",
-        AcademicDegreeType.get(pReadOnly.getDegreeId()).getLabel());
+        mAcademicDegreeManager.get(pReadOnly.getDegreeId()).getDegreeName());
     pBuilder.add("degree", degreeBuilder);
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());

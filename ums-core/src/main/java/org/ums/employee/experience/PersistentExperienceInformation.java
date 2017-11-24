@@ -2,6 +2,7 @@ package org.ums.employee.experience;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.enums.registrar.ExperienceCategory;
 
 public class PersistentExperienceInformation implements MutableExperienceInformation {
 
@@ -21,6 +22,8 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   private String mExperienceToDate;
   private int mExperienceDuration;
   private String mExperienceDurationString;
+  private ExperienceCategory mExperienceCategory;
+  private int mExperienceCategoryId;
   private String mLastModified;
 
   public PersistentExperienceInformation() {}
@@ -111,6 +114,16 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
+  public void setExperienceCategory(ExperienceCategory pExperienceCategory) {
+    mExperienceCategory = pExperienceCategory;
+  }
+
+  @Override
+  public void setExperienceCategoryId(int pExperienceCategoryId) {
+    mExperienceCategoryId = pExperienceCategoryId;
+  }
+
+  @Override
   public String getEmployeeId() {
     return mEmployeeId;
   }
@@ -143,5 +156,15 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   @Override
   public String getExperienceDurationString() {
     return mExperienceDurationString;
+  }
+
+  @Override
+  public ExperienceCategory getExperienceCategory() {
+    return mExperienceCategory;
+  }
+
+  @Override
+  public int getExperienceCategoryId() {
+    return mExperienceCategoryId;
   }
 }

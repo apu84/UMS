@@ -13,7 +13,7 @@ module ums {
     class EmployeeProfile {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService', 'userService',
+            'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
             'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService'];
 
         private entry: {
@@ -56,7 +56,7 @@ module ums {
         private maritalStatus: ICommon[] = [];
         private religions: ICommon[] = [];
         private nationalities: ICommon[] = [];
-        private degreeNames: ICommon[] = [];
+        private degreeNames: IAcademicDegreeTypes[] = [];
         private bloodGroups: ICommon[] = [];
         private publicationTypes: ICommon[] = [];
         private relations: ICommon[] = [];
@@ -69,6 +69,8 @@ module ums {
         private permanentAddressThanas: ICommon[] = [];
         private allThanas: ICommon[] = [];
         private arrayOfAreaOfInterest: ICommon[] = [];
+        private trainingTypes: ICommon[] = [];
+        private experienceTypes: ICommon[] = [];
         private paginatedPublication: IPublicationInformationModel[];
         private previousPersonalInformation: IPersonalInformationModel;
         private previousAcademicInformation: IAcademicInformationModel[];
@@ -105,6 +107,7 @@ module ums {
                     private employeeInformationService: EmployeeInformationService,
                     private areaOfInterestService: AreaOfInterestService,
                     private userService: UserService,
+                    private academicDegreeService: AcademicDegreeService,
                     private cRUDDetectionService: CRUDDetectionService,
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
@@ -138,13 +141,14 @@ module ums {
             this.stateParams = $stateParams;
             this.genders = this.registrarConstants.genderTypes;
             this.publicationTypes = this.registrarConstants.publicationTypes;
-            this.degreeNames = this.registrarConstants.degreeTypes;
             this.bloodGroups = this.registrarConstants.bloodGroupTypes;
             this.maritalStatus = this.registrarConstants.maritalStatuses;
             this.religions = this.registrarConstants.religionTypes;
             this.relations = this.registrarConstants.relationTypes;
             this.nationalities = this.registrarConstants.nationalityTypes;
             this.serviceIntervals = registrarConstants.servicePeriods;
+            this.trainingTypes = registrarConstants.trainingCategories;
+            this.experienceTypes = registrarConstants.experienceCategories;
             this.initialization();
         }
 
@@ -174,17 +178,20 @@ module ums {
                                 this.presentAddressThanas = thanas.entries;
                                 this.permanentAddressThanas = thanas.entries;
                                 this.allThanas = thanas.entries;
-                                this.areaOfInterestService.getAll().then((aois: any) => {
-                                    this.arrayOfAreaOfInterest = aois;
-                                    this.tabs = true;
-                                    this.showTab("personal");
-                                    this.departmentService.getAll().then((departments: any) => {
-                                        this.departments = departments;
-                                        this.designationService.getAll().then((designations: any) => {
-                                            this.designations = designations;
-                                            this.employmentTypeService.getAll().then((employmentTypes: any) => {
-                                                this.employmentTypes = employmentTypes;
-                                                this.getServiceIntervals();
+                                this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
+                                    this.degreeNames = degree;
+                                    this.areaOfInterestService.getAll().then((aois: any) => {
+                                        this.arrayOfAreaOfInterest = aois;
+                                        this.tabs = true;
+                                        this.showTab("personal");
+                                        this.departmentService.getAll().then((departments: any) => {
+                                            this.departments = departments;
+                                            this.designationService.getAll().then((designations: any) => {
+                                                this.designations = designations;
+                                                this.employmentTypeService.getAll().then((employmentTypes: any) => {
+                                                    this.employmentTypes = employmentTypes;
+                                                    this.getServiceIntervals();
+                                                });
                                             });
                                         });
                                     });
@@ -353,6 +360,7 @@ module ums {
                 .then((trainingObjects: any) => {
                     this.convertToJson('training', trainingObjects)
                         .then((json: any) => {
+                            console.log(json);
                             this.employeeInformationService.saveTrainingInformation(json)
                                 .then((message: any) => {
                                     this.getTrainingInformation();
@@ -723,6 +731,7 @@ module ums {
                     trainingTo: "",
                     trainingDuration: null,
                     trainingDurationString: "",
+                    trainingCategory: null,
                     dbAction: "Create"
                 };
                 this.entry.training.push(trainingEntry);
@@ -751,6 +760,7 @@ module ums {
                     experienceTo: "",
                     experienceDuration: null,
                     experienceDurationString: "",
+                    experienceCategory: null,
                     dbAction: "Create"
                 };
                 this.entry.experience.push(experienceEntry);

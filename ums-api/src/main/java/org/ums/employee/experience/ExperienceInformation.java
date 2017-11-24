@@ -3,6 +3,7 @@ package org.ums.employee.experience;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.enums.registrar.ExperienceCategory;
 
 import java.io.Serializable;
 
@@ -22,4 +23,8 @@ public interface ExperienceInformation extends Serializable, EditType<MutableExp
   int getExperienceDuration();
 
   String getExperienceDurationString();
+
+  ExperienceCategory getExperienceCategory();
+
+  int getExperienceCategoryId();
 }

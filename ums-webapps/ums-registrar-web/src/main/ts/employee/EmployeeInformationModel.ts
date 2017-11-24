@@ -42,7 +42,7 @@ module ums{
     export interface IAcademicInformationModel{
         id: string;
         employeeId: string;
-        degree: ICommon;
+        degree: IAcademicDegreeTypes;
         institution: string;
         passingYear: string;
         result: string;
@@ -80,6 +80,7 @@ module ums{
         trainingTo: string;
         trainingDuration: number;
         trainingDurationString: string;
+        trainingCategory: ICommon;
         dbAction: string;
     }
 
@@ -102,6 +103,7 @@ module ums{
         experienceTo: string;
         experienceDuration: number;
         experienceDurationString: string;
+        experienceCategory: ICommon;
         dbAction: string;
     }
 
@@ -148,5 +150,12 @@ module ums{
         id: number;
         name: string;
         foreign_id: number;
+    }
+
+    export interface IAcademicDegreeTypes{
+        id: number;
+        type: number;
+        typeName: string;
+        name: string;
     }
 }

@@ -3,6 +3,7 @@ package org.ums.employee.training;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.enums.registrar.TrainingCategory;
 
 import java.io.Serializable;
 
@@ -22,4 +23,8 @@ public interface TrainingInformation extends Serializable, EditType<MutableTrain
   int getTrainingDuration();
 
   String getTrainingDurationString();
+
+  TrainingCategory getTrainingCategory();
+
+  int getTrainingCategoryId();
 }

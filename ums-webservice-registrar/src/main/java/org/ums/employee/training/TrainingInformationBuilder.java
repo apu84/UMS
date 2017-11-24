@@ -5,7 +5,9 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.employee.training.TrainingInformation;
 import org.ums.employee.training.MutableTrainingInformation;
+import org.ums.enums.registrar.TrainingCategory;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -22,6 +24,15 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
     pBuilder.add("trainingTo", pReadOnly.getTrainingToDate());
     pBuilder.add("trainingDuration", pReadOnly.getTrainingDuration());
     pBuilder.add("trainingDurationString", pReadOnly.getTrainingDurationString());
+    if(pReadOnly.getTrainingCategoryId() == 0) {
+      pBuilder.add("trainingCategory", "");
+    }
+    else {
+      JsonObjectBuilder categoryBuilder = Json.createObjectBuilder();
+      categoryBuilder.add("id", pReadOnly.getTrainingCategoryId()).add("name",
+          TrainingCategory.get(pReadOnly.getTrainingCategoryId()).getLabel());
+      pBuilder.add("trainingCategory", categoryBuilder);
+    }
     pBuilder.add("dbAction", "");
   }
 
@@ -37,5 +48,6 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
     pMutable.setTrainingToDate(pJsonObject.getString("trainingTo"));
     pMutable.setTrainingDuration(pJsonObject.getInt("trainingDuration"));
     pMutable.setTrainingDurationString(pJsonObject.getString("trainingDurationString"));
+    pMutable.setTrainingCategoryId(pJsonObject.getJsonObject("trainingCategory").getInt("id"));
   }
 }
