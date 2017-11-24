@@ -1,5 +1,5 @@
 module ums{
-    export class EmployeeInformationService{
+    export class EmployeeInformationService {
         public static $inject = ['HttpClient', '$q', 'notify'];
 
         private personalUrl: string = "employee/personal";
@@ -13,7 +13,8 @@ module ums{
 
         constructor(private httpClient: HttpClient,
                     private $q: ng.IQService,
-                    private notify: Notify) {}
+                    private notify: Notify) {
+        }
 
         //PersonalInformationService
         public savePersonalInformation(json: any): ng.IPromise<any> {
@@ -29,6 +30,7 @@ module ums{
                 });
             return defer.promise;
         }
+
         public updatePersonalInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.put(this.personalUrl + "/update", json, HttpClient.MIME_TYPE_JSON)
@@ -41,9 +43,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getPersonalInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.personalUrl+"/get/employeeId/"+ employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.personalUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json.entries);
                 },
@@ -68,9 +71,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getAcademicInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.academicUrl+"/get/employeeId/"+ employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.academicUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -95,9 +99,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getPublicationInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl+"/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -106,9 +111,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getPublicationInformationWithPagination(employeeId: string, status: string, pageNumber: number, itemPerPage: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl+"/get/employeeId/" + employeeId + "/publicationStatus/" + status + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/get/employeeId/" + employeeId + "/publicationStatus/" + status + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -117,9 +123,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getPublicationInformationViewWithPagination(employeeId: string, pageNumber: number, itemPerPage: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl+"/get/employeeId/"+ employeeId + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/get/employeeId/" + employeeId + "/pageNumber/" + pageNumber + "/ipp/" + itemPerPage, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -128,9 +135,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getSpecificTeacherPublicationInformation(employeeId: string, status: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl+"/get/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/get/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -139,9 +147,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public fetchRecords(employeeId: string, status: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl+"/get/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/get/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -167,9 +176,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getAwardInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.awardUrl+"/get/employeeId/"+ employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.awardUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -194,9 +204,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getTrainingInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.trainingUrl+"/get/employeeId/"+ employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.trainingUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -221,9 +232,10 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getExperienceInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.experienceUrl+"/get/employeeId/"+ employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.experienceUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -248,6 +260,7 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getAdditionalInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.get(this.additionalUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
@@ -275,6 +288,7 @@ module ums{
                 });
             return defer.promise;
         }
+
         public getServiceInformation(userId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.get(this.serviceUrl + "/get/employeeId/" + userId, HttpClient.MIME_TYPE_JSON,
@@ -285,6 +299,23 @@ module ums{
                     this.notify.error("Error in Fetching Service Information");
                 });
             return defer.promise;
+        }
+
+        public getEmployeeCV(employeeId: string): void {
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName = "CV of " + employeeId;
+
+            this.httpClient.get("employee/report/cv/employeeId/" + employeeId, 'application/pdf', (data: any, etag: string) => {
+
+                    // var file = new Blob([data], {type: 'application/pdf'});
+                    // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+                    // this.$window.open(fileURL);
+
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
         }
     }
 

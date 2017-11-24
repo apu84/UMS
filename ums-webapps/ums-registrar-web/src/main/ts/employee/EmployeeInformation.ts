@@ -12,7 +12,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', '$state'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', 'employeeInformationService', '$state'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -40,6 +40,7 @@ module ums {
                     private notify: Notify,
                     private departmentService: DepartmentService,
                     private employeeService: EmployeeService,
+                    private employeeInformationService: EmployeeInformationService,
                     private $state: any) {
 
             this.state = $state;
@@ -170,6 +171,10 @@ module ums {
         private next(): void {
             this.indexValue = this.indexValue + 1;
             this.view(this.$scope.filterd[this.indexValue], this.indexValue);
+        }
+
+        private downloadPdf(index: number){
+            this.employeeInformationService.getEmployeeCV(this.allUser[index].id);
         }
     }
 

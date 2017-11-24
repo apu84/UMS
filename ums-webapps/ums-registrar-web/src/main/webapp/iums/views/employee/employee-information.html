@@ -111,6 +111,7 @@
                                 <th>Teacher Name</th>
                                 <th>Department</th>
                                 <th>Designation</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -120,6 +121,7 @@
                                 <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
                                 <td>{{user.designationName}}</td>
+                                <td data-ng-click="vm.downloadPdf($index)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>
                             </tr>
                             </tbody>
                         </table>

@@ -44,9 +44,10 @@ public class FeeCategoryResource extends Resource {
     List<FeeCategory> feeCategories = mFeeCategoryManager.getAll();
     User user = getLoggedUser();
     Student student = mStudentManager.get(user.getId());
-    if (student != null) {
+    if(student != null) {
       return getFeeCategoriesBasedOnGraduationType(feeCategories, student);
-    } else {
+    }
+    else {
       return feeCategories;
     }
   }
