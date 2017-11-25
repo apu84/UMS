@@ -68,12 +68,13 @@ public class ProfilePicture extends Resource {
 
     try {
 
-      imageData = mGateway.read("/files/user.png");
+      imageData = mGateway.read("files/user.png");
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
       ObjectMapper mapper = new ObjectMapper();
 
     } catch(Exception fl) {
+      fl.printStackTrace();
       mLogger.error(fl.getMessage());
       return Response.status(Response.Status.NOT_FOUND).build();
     }
