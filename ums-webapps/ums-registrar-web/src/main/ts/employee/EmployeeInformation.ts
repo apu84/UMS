@@ -173,8 +173,9 @@ module ums {
             this.view(this.$scope.filterd[this.indexValue], this.indexValue);
         }
 
-        private downloadPdf(index: number){
-            this.employeeInformationService.getEmployeeCV(this.allUser[index].id);
+        private downloadPdf(userId: string){
+            console.log(userId);
+            this.employeeInformationService.getEmployeeCV(userId);
         }
     }
 
