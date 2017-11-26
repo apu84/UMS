@@ -16,19 +16,7 @@ module ums {
                 private feeReportService: FeeReportService,
                 private feeCategoryService: FeeCategoryService,
                 private $q: ng.IQService) {
-      /*this.certificateFeeService.getFeeCategories().then(
-          (feeCategories: FeeCategory[]) => {
-            this.certificateTypes = feeCategories;
-            let convertedMap: {[key: string]: FeeCategory} = {};
-            this.certificateTypeMap = feeCategories.reduce((map: {[key: string]: FeeCategory}, obj: FeeCategory) => {
-              map[obj.id] = obj;
-              return map;
-            }, convertedMap);
 
-            certificateFeeService.getAttendedSemesters().then(
-                (semesters: AttendedSemester[]) => this.attendedSemesters = semesters
-            );
-          });*/
       this.getCertificateFeeCategories().then((feeCategories: FeeCategory[]) => {
         this.certificateTypes = feeCategories;
         let convertedMap: { [key: string]: FeeCategory } = {};
@@ -42,7 +30,12 @@ module ums {
         );
 
       });
-      //this.getCertificateFeePaymentStatus();
+      this.getCertificateFeePaymentStatus();
+      this.getCertificateStatus();
+    }
+
+
+    private getCertificateStatus() {
       this.certificateStatusService.getCertificateStatus().then(
           (certificates: CertificateStatus[]) => {
             let convertedMap: { [key: string]: CertificateStatus } = {};
@@ -53,7 +46,6 @@ module ums {
           }
       );
     }
-
 
     private getCertificateFeeCategories(): ng.IPromise<FeeCategory[]> {
       let defer: ng.IDeferred<FeeCategory[]> = this.$q.defer();
@@ -78,6 +70,7 @@ module ums {
       this.certificateFeeService.apply(this.feeId, this.semesterId).then((success: boolean) => {
         if (success) {
           this.getCertificateFeePaymentStatus();
+          this.getCertificateStatus();
         }
       });
     }
