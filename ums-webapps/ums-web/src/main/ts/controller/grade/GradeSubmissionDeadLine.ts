@@ -1,12 +1,16 @@
 module ums {
   interface IGradeSubmissionDeadline extends ng.IScope {
     semesterList: Array<Semester>;
+    courseNo: string;
     semesterId: number;
     examType: any;
-    courseType:string;
+    courseType: string;
     examRoutineArr: any;
     examGradeStatisticsArr: Array<IExamGrade>;
     examGradeStatisticsArrTemp: Array<IExamGrade>;
+    examGradeStatisticsMap: any;
+    coloredExamGradeId: number;
+    coloredExamGrade: IExamGrade;
     examDate: string;
     showLoader: boolean;
     showTable: boolean;
@@ -21,8 +25,9 @@ module ums {
     saveChanges: Function;
     cancel: Function;
     semesterSelected: Function;
-
+    checkCourseNo: Function;
     convertToJson: Function;
+    dateTouched: Function;
   }
 
   interface IExamGrade {
@@ -38,6 +43,7 @@ module ums {
     lastSubmissionDateScr: string;
     lastSubmissionDateHead: string;
     changed: boolean;
+    backgroundColor: string;
   }
 
   class GradeSubmissionDeadLine {
@@ -55,7 +61,8 @@ module ums {
       $scope.showTable = false;
       $scope.showButton = false;
       $scope.editable = false;
-      $scope.courseType="1";
+      $scope.courseNo = "";
+      $scope.courseType = "1";
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.getExamDates = this.getExamDates.bind(this);
       $scope.fetchDeadlineInformation = this.fetchDeadlineInformation.bind(this);
@@ -63,16 +70,22 @@ module ums {
       $scope.cancel = this.cancel.bind(this);
       $scope.convertToJson = this.convertToJson.bind(this);
       $scope.saveChanges = this.saveChanges.bind(this);
+      $scope.checkCourseNo = this.checkCourseNo.bind(this);
+      $scope.dateTouched = this.dateTouched.bind(this);
       Utils.setValidationOptions("form-horizontal");
+
     }
 
+    private checkCourseNo(courseNo: string) {
+      this.$scope.courseNo = courseNo;
+    }
 
     private getSemesters(): ng.IPromise<any> {
 
       this.$scope.semesterList = [];
       var defer = this.$q.defer();
 
-      this.semesterService.fetchSemesters(Utils.UG).then((semesterArr: Array<Semester>)=> {
+      this.semesterService.fetchSemesters(Utils.UG).then((semesterArr: Array<Semester>) => {
         this.$scope.semesterList = semesterArr;
         this.$scope.semesterId = semesterArr[0].id;
         this.$scope.examType = Utils.EXAM_TYPE_REGULAR;
@@ -85,25 +98,40 @@ module ums {
 
 
     private saveChanges() {
-      this.convertToJson().then((json: any)=> {
+      this.convertToJson().then((json: any) => {
+        this.$scope.examGradeStatisticsArr.forEach(e => e.backgroundColor = "");
         this.$scope.examGradeStatisticsArrTemp = [];
         this.$scope.examGradeStatisticsArrTemp = angular.copy(this.$scope.examGradeStatisticsArr);
         console.log(json);
-        this.examGradeService.updateGradeSubmissionDeadLine(json).then((message: any)=> {
+        this.examGradeService.updateGradeSubmissionDeadLine(json).then((message: any) => {
           this.notify.success(message);
           this.$scope.showButton = false;
-        
+
         });
       });
     }
 
     private dateChanged(examGrade: IExamGrade) {
-      if(examGrade.lastSubmissionDatePrep!=null && examGrade.lastSubmissionDateScr!=null && examGrade.lastSubmissionDateHead!=null){
+      console.log("In date changed");
+      console.log(examGrade);
+      if (examGrade.lastSubmissionDatePrep != null && examGrade.lastSubmissionDateScr != null && examGrade.lastSubmissionDateHead != null) {
         this.$scope.showButton = true;
-      examGrade.changed = true;
+        examGrade.changed = true;
       }
       // this.$scope.showButton = true;
       // examGrade.changed = true;
+    }
+
+
+    private dateTouched(examGrade: IExamGrade) {
+      if (this.$scope.coloredExamGradeId == null) {
+        this.$scope.coloredExamGradeId = examGrade.id;
+      } else {
+        var tmpExamGrade: IExamGrade = this.$scope.examGradeStatisticsMap[this.$scope.coloredExamGradeId];
+        tmpExamGrade.backgroundColor = "";
+        this.$scope.coloredExamGradeId = examGrade.id;
+      }
+      examGrade.backgroundColor = "yellow";
     }
 
     private cancel() {
@@ -125,24 +153,24 @@ module ums {
 
     private getExamDates(): void {
 
-      if(+this.$scope.courseType==Utils.COURSE_TYPE_THEORY){
-          var semester = this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList, this.$scope.semesterId + "")];
-          this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE);
+      if (+this.$scope.courseType == Utils.COURSE_TYPE_THEORY) {
+        var semester = this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList, this.$scope.semesterId + "")];
+        this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE);
 
-          var examType = +this.$scope.examType;
-          this.$scope.examDate = null;
-          console.log(examType);
-          console.log(this.$scope.semesterId);
-          if (this.$scope.semesterId != null && this.$scope.examType != "") {
-              this.examRoutineService.getExamRoutineDates(this.$scope.semesterId, examType).then((examDateArr: any)=> {
+        var examType = +this.$scope.examType;
+        this.$scope.examDate = null;
+        console.log(examType);
+        console.log(this.$scope.semesterId);
+        if (this.$scope.semesterId != null && this.$scope.examType != "") {
+          this.examRoutineService.getExamRoutineDates(this.$scope.semesterId, examType).then((examDateArr: any) => {
 
-                  this.$scope.examRoutineArr = {};
-                  console.log(examDateArr);
-                  this.$scope.examRoutineArr = examDateArr;
-              });
-          }
-      }else{
-        this.$scope.examDate="";
+            this.$scope.examRoutineArr = {};
+            console.log(examDateArr);
+            this.$scope.examRoutineArr = examDateArr;
+          });
+        }
+      } else {
+        this.$scope.examDate = "";
       }
 
 
@@ -160,26 +188,30 @@ module ums {
 
       this.$scope.showLoader = true;
       this.examGradeService.getGradeSubmissionDeadLine(this.$scope.semesterId, examType, this.$scope.examDate, this.$scope.courseType)
-          .then((outputArr: Array<IExamGrade>)=> {
-        if (outputArr.length == 0) {
-          this.$scope.showLoader = false;
-          this.notify.error("No relevant data found");
-          this.$scope.showTable = false;
-        }
-        else {
-          for (var i = 0; i < outputArr.length; i++) {
-            outputArr[i].changed = false;
-          }
-          this.$scope.examGradeStatisticsArr = outputArr;
-          this.$scope.examGradeStatisticsArrTemp = angular.copy(outputArr);
-          this.$scope.showTable = true;
-          this.$scope.showLoader = false;
+          .then((outputArr: Array<IExamGrade>) => {
+            this.$scope.examGradeStatisticsMap = {};
+            if (outputArr.length == 0) {
+              this.$scope.showLoader = false;
+              this.notify.error("No relevant data found");
+              this.$scope.showTable = false;
+            }
+            else {
+              for (var i = 0; i < outputArr.length; i++) {
+                outputArr[i].changed = false;
+                outputArr[i].backgroundColor = "";
+                this.$scope.examGradeStatisticsMap[outputArr[i].id] = outputArr[i];
 
-          console.log(outputArr);
+              }
+              this.$scope.examGradeStatisticsArr = outputArr;
+              this.$scope.examGradeStatisticsArrTemp = angular.copy(outputArr);
+              this.$scope.showTable = true;
+              this.$scope.showLoader = false;
 
-          this.initializeDatePickers();
-        }
-      });
+              console.log(outputArr);
+
+              this.initializeDatePickers();
+            }
+          });
     }
 
     private convertToJson(): ng.IPromise<any> {

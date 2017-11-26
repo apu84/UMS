@@ -1,5 +1,5 @@
 <style>
-    .datepicker-default.form-control{
+    .datepicker-default.form-control {
         height: 25px !important;
     }
 </style>
@@ -13,21 +13,25 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchDeadlineInformation" >
+            <form action="" class="form-horizontal" data-validate="" data-onvalidate="fetchDeadlineInformation">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="semester" data-ng-model="semesterId"  data-convert-to-number>
+                            <select class="form-control required" name="semester" data-ng-model="semesterId"
+                                    data-convert-to-number>
                                 <option value="">Select a Semester</option>
-                                <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
+                                <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">
+                                    {{semesters.name}}
+                                </option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="examType" data-ng-model="examType"  data-ng-change="getExamDates()"  data-convert-to-number>
+                            <select class="form-control required" name="examType" data-ng-model="examType"
+                                    data-ng-change="getExamDates()" data-convert-to-number>
                                 <option value="1">Semester Final</option>
                                 <option value="2">Carry/Clearance/Improvement</option>
                             </select>
@@ -36,7 +40,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Course Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="courseType" data-ng-model="courseType" data-ng-change="getExamDates()"  data-convert-to-number>
+                            <select class="form-control required" name="courseType" data-ng-model="courseType"
+                                    data-ng-change="getExamDates()" data-convert-to-number>
                                 <option value="1">Theory</option>
                                 <option value="2">Sessional</option>
                             </select>
@@ -56,59 +61,90 @@
                     <button type="button" class="btn btn-success">Search</button>
                 </div>
             </form>
-         </div>
-     </div>
+        </div>
+    </div>
     <div id="rightDiv">
         <div class="panel">
-            <div class="panel-heading">Grade Submission Deadline Information<span
-                    class="subtitle"></span></div>
-            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-8">Grade Submission Deadline Information</div>
+                    <div class="col-md-1" align="right">
+                        <i class="fa fa-search" aria-hidden="true"></i></div>
+                    <div class="col-md-3" align="right">
+                        <input
+                                type="text" class="form-control" ng-model="courseNo" ng-change="checkCourseNo(courseNo)"
+                                style="height: 80%;"
+                                placeholder="Course No"
+                                id="courseId"/></div>
+                </div>
+            </div>
+            <div class="panel-body shadowPanel" style="min-height: 490px;">
                 <div data-ng-show="showLoader" align="center">
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Loading...</span>
                 </div>
 
-                <div class="row" data-ng-if="showLoader==false" style="padding-left: 2%; padding-right: 2%;">
-                <table class="table table-bordered table-advanced table-striped">
-                    <thead id="thead" role="row"  class="heading">
-                    <th style="text-align:center;">Exam Date</th>
-                    <th align="center">Program</th>
-                    <th style="text-align:center;">Course No</th>
-                    <th align="left">Course Title</th>
-                    <th style="text-align:center;">CrHr</th>
-                    <th style="width:120px;text-align:center;">Total Students</th>
-                    <th style="width:172px;text-align:center;">Last Date of Submission(prep)</th>
-                    <th style="width:172px;text-align:center;">Last Date of Submission(scr)</th>
-                    <th style="width:172px;text-align:center;">Last Date of Submission(head)</th>
-                    </thead>
-                    <tbody>
-                    <tr data-ng-repeat="e in examGradeStatisticsArr" align="center">
-                        <td>{{e.examDate}}</td>
-                        <td style="text-align:left;">{{e.programShortName}}</td>
-                        <td>{{e.courseNo}}</td>
-                        <td align="left">{{e.courseTitle}}</td>
-                        <td>{{e.courseCreditHour}}</td>
-                        <td>{{e.totalStudents}}</td>
-                        <td align="center" >
-                            <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
-                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDatePrep" data-ng-change="dateChanged(e)">
-                        </td>
-                        <td align="center" >
-                            <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
-                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDateScr" data-ng-change="dateChanged(e)">
-                        </td>
-                        <td align="center" >
-                            <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
-                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDateHead" data-ng-change="dateChanged(e)">
-                        </td>
-                    </tr>
-                    </tbody>
+                <div class="row" data-ng-if="!showLoader" style="padding-left: 2%; padding-right: 2%;">
+                    <div class="row" data-ng-if="showLoader==false" style="padding-left: 2%; padding-right: 2%;">
+                        <table class="table table-bordered table-advanced table-striped">
+                            <thead id="thead" role="row" class="heading">
+                            <th style="text-align:center;">Exam Date</th>
+                            <th align="center">Program</th>
+                            <th style="text-align:center;">Course No</th>
+                            <th align="left">Course Title</th>
+                            <th style="text-align:center;">CrHr</th>
+                            <th style="width:120px;text-align:center;">Total Students</th>
+                            <th style="width:172px;text-align:center;">Last Date of Submission(prep)</th>
+                            <th style="width:172px;text-align:center;">Last Date of Submission(scr)</th>
+                            <th style="width:172px;text-align:center;">Last Date of Submission(head)</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="e in examGradeStatisticsArr | filter:{courseNo:courseNo}"
+                                align="center" ng-style="{'background-color':e.backgroundColor}"
+                                ng-click="dateTouched(e)">
+                                <td>{{e.examDate}}</td>
+                                <td style="text-align:left;">{{e.programShortName}}</td>
+                                <td>{{e.courseNo}}</td>
+                                <td align="left">{{e.courseTitle}}</td>
+                                <td>{{e.courseCreditHour}}</td>
+                                <td>{{e.totalStudents}}</td>
+                                <td align="center">
 
-                </table>
-                <br/>
-                <div align="right" style="padding-right: 3%;" data-ng-if="showButton">
-                    <button class="btn btn-primary" data-ng-click="saveChanges()">Save Changes</button> <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
-                </div>
+                                    <input align="center" contenteditable="editable"
+                                           style="width:70%;text-align: center;"
+                                           type="text"
+                                           data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                                           class="datepicker-default form-control"
+                                           data-ng-model="e.lastSubmissionDatePrep"
+                                           data-ng-change="dateChanged(e)">
+                                </td>
+                                <td align="center">
+                                    <input align="center" contenteditable="editable"
+                                           style="width:70%;text-align: center;"
+                                           type="text"
+                                           data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                                           class="datepicker-default form-control"
+                                           data-ng-model="e.lastSubmissionDateScr"
+                                           data-ng-change="dateChanged(e)">
+                                </td>
+                                <td align="center">
+                                    <input align="center" contenteditable="editable"
+                                           style="width:70%;text-align: center;"
+                                           type="text"
+                                           data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                                           class="datepicker-default form-control"
+                                           data-ng-model="e.lastSubmissionDateHead"
+                                           data-ng-change="dateChanged(e)">
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <br/>
+                        <div align="right" style="padding-right: 3%;" data-ng-if="showButton">
+                            <button class="btn btn-primary" data-ng-click="saveChanges()">Save Changes</button>
+                            <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+                        </div>
                     </div>
+                </div>
             </div>
-</div>

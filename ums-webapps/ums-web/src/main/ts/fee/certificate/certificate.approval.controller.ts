@@ -116,6 +116,7 @@ module ums {
     }
 
     private checkWhetherTheStatusShouldBeDisabledOrEnabled(certificateStatus: CertificateStatus): void {
+      console.log("********");
       var enable: boolean = false;
       for (var i = 0; i < this.certificateOptionsCopy.length; i++) {
 
@@ -125,7 +126,7 @@ module ums {
           break;
         }
         else if (this.user.departmentId == Utils.DEPT_RO) {
-          if (certificateStatus.statusId === CertificateApprovalController.forwarded_by_head) {
+          if (certificateStatus.statusId === CertificateApprovalController.forwarded_by_head || certificateStatus.statusId === CertificateApprovalController.processed) {
             enable = true;
             break;
           }
@@ -137,14 +138,23 @@ module ums {
         else {
           var found: boolean = false;
           this.getAdditionalRolePermissions().then((result: boolean) => {
-            if (result && certificateStatus.statusId === CertificateApprovalController.applied) {
+            console.log("Result");
+            console.log(result);
+            console.log("Certificate status id");
+            console.log(certificateStatus.statusId);
+            if (result == true && (certificateStatus.statusId === CertificateApprovalController.waiting_for_head_approval)) {
               enable = true;
               found = true;
+              certificateStatus.enable = true;
             }
-
+            console.log("Found value");
+            console.log(found);
           });
-          if (found)
+          if (found) {
+            console.log("Breaking.........");
             break;
+
+          }
 
         }
 
