@@ -11,13 +11,14 @@ module ums {
   }
 
   export class CertificateFeeService {
-    public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService'];
+    public static $inject = ['$q', 'HttpClient', 'FeeTypeService', 'FeeCategoryService', 'notify'];
     public static CERTIFICATE_FEE = 'CERTIFICATE_FEE';
 
     constructor(private $q: ng.IQService,
                 private httpClient: HttpClient,
                 private feeTypeService: FeeTypeService,
-                private feeCategoryService: FeeCategoryService) {
+                private feeCategoryService: FeeCategoryService,
+                private notify: Notify) {
 
     }
 
@@ -47,8 +48,14 @@ module ums {
           : `certificate-fee/apply/category/${categoryId}`;
       let defer: ng.IDeferred<boolean> = this.$q.defer();
       this.httpClient.post(resourceUrl, {}, HttpClient.MIME_TYPE_JSON)
-          .success(() => defer.resolve(true))
-          .error(() => defer.resolve(false));
+          .success(() => {
+            this.notify.success("Successfully Applied");
+            defer.resolve(true)
+          })
+          .error(() => {
+            this.notify.error("Error in applying");
+            defer.resolve(false)
+          });
       return defer.promise;
     }
   }

@@ -42,7 +42,7 @@ module ums {
         );
 
       });
-      this.getCertificateFeePaymentStatus();
+      //this.getCertificateFeePaymentStatus();
       this.certificateStatusService.getCertificateStatus().then(
           (certificates: CertificateStatus[]) => {
             let convertedMap: { [key: string]: CertificateStatus } = {};
