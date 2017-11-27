@@ -19,7 +19,8 @@
                     </select>
                 </td>
                 <td>
-                    <select class="form-control required" data-ng-model="vm.semesterId" data-ng-disabled="!vm.enableSemester">
+                    <select class="form-control required" data-ng-model="vm.semesterId"
+                            data-ng-disabled="!vm.enableSemester">
                         <option data-ng-repeat="semester in vm.attendedSemesters" value="{{semester.semesterId}}">
                             {{semester.semesterName}} ({{semester.year}}/{{semester.academicSemester}})
                         </option>
@@ -31,6 +32,12 @@
             </tr>
             </tbody>
         </table>
+        <div class="row">
+            <div class="col-md-12" align="right">
+                <button class="btn btn-default" ng-click="vm.statusRefresher()"><i class="fa fa-refresh"
+                                                                                   aria-hidden="true"></i></button>
+            </div>
+        </div>
         <div data-ng-if="vm.payments">
             <table class="table table-hover table-bordered table-advanced">
                 <thead>
@@ -62,8 +69,8 @@
                     </td>
                     <td>
                         <img src="images/pdf_square.png" class="download_tooltip ng-scope"
-                                style="position: relative;cursor: pointer;margin-bottom: 10px;"
-                                data-ng-click="vm.receipt(payment.transactionId)">
+                             style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                             data-ng-click="vm.receipt(payment.transactionId)">
                     </td>
                 </tr>
                 </tbody>

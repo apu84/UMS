@@ -14,17 +14,22 @@ module ums {
     public selectedPaymentStatus: PaymentStatus[];
     public reloadReference: ReloadRef = {reloadList: false};
     public concludeStatus: ConcludeStatus = {accepted: false};
+    public selectedFilter: string;
+    public selectedFilterValue: number;
+    public static RECEIVED_VERIFIED = 1;
+    public static REJECTED = 2;
+    public static RECEIVED = 0;
+
 
     constructor(private $scope: ng.IScope,
                 private paymentStatusService: PaymentStatusService,
                 private notify: Notify,
                 private $modal: any) {
       this.navigate();
+      this.selectedFilter = "PAYMENT_STATUS";
+      this.selectedFilterValue = PaymentStatusController.RECEIVED_VERIFIED;
       this.paymentStatusService.getFilters().then((filters: Filter[]) => {
         this.filters = filters;
-
-        console.log("Filters");
-        console.log(this.filters);
 
         $scope.$watch(() => this.selectedFilters, () => {
           this.navigate();

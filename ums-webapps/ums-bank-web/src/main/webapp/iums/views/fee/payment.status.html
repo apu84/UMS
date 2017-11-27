@@ -1,7 +1,9 @@
 <div class="panel">
     <div class="panel-heading">Payments</div>
     <div class="panel-body">
-        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
+        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"
+                     data-selected-filter="vm.selectedFilter"
+                     data-selected-filter-value="vm.selectedFilterValue"></list-filter>
         <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
             <tr>
@@ -46,7 +48,7 @@
                 </td>
                 <td>
                     <input type="checkbox" data-ng-model="vm.selectedPayments[paymentStatus.id]"
-                            data-ng-if="paymentStatus.statusId === 0"/>
+                           data-ng-if="paymentStatus.statusId === 0"/>
                 </td>
             </tr>
             </tbody>

@@ -28,6 +28,9 @@ module ums {
     public feeType: number;
     public enableButton: boolean = false;
     public userDeptHead: boolean = false;
+    public selectedFilter: string;
+    public selectedFilterValue: number;
+
 
     static applied = 1;
     static processed = 2;
@@ -52,7 +55,6 @@ module ums {
       this.changedCertificateStatusList = [];
       this.certificateStatusList = [];
       this.getLoggedUserAndFeeCategories();
-
       this.certificateStatusService.getFilters().then((filters: Filter[]) => {
         this.filters = filters;
 
@@ -66,8 +68,6 @@ module ums {
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
         this.user = user;
-        console.log("Logged user");
-        console.log(this.user);
         this.getFeeCategories();
       });
     }
@@ -138,10 +138,7 @@ module ums {
         else {
           var found: boolean = false;
           this.getAdditionalRolePermissions().then((result: boolean) => {
-            console.log("Result");
-            console.log(result);
-            console.log("Certificate status id");
-            console.log(certificateStatus.statusId);
+
             if (result == true && (certificateStatus.statusId === CertificateApprovalController.waiting_for_head_approval)) {
               enable = true;
               found = true;
@@ -180,16 +177,22 @@ module ums {
       let defer: ng.IDeferred<number> = this.$q.defer();
       if (this.user.departmentId == Utils.DEPT_COE) {
         feeType = Utils.CERTIFICATE_FEE;
+        this.selectedFilter = ListFilterDirective.STATUS;
+        this.selectedFilterValue = CertificateStatusService.APPLIED;
         this.certificateOptionsCopy.splice(0, 1);
         this.certificateOptionsCopy.splice(2, 2);
       }
       else if (this.user.departmentId == Utils.DEPT_RO) {
         feeType = Utils.REG_CERTIFICATE_FEE;
+        this.selectedFilter = ListFilterDirective.STATUS;
+        this.selectedFilterValue = CertificateStatusService.FORWARDED_BY_HEAD;
         this.certificateOptionsCopy.splice(0, 1);
         this.certificateOptionsCopy.splice(2, 2);
       }
       else if (this.user.departmentId == Utils.DEPT_PO) {
         feeType = Utils.PROC_CERTIFICATE_FEE;
+        this.selectedFilter = ListFilterDirective.STATUS;
+        this.selectedFilterValue = CertificateStatusService.APPLIED;
         this.certificateOptionsCopy.splice(0, 1);
         this.certificateOptionsCopy.splice(2, 2);
       }
@@ -198,10 +201,14 @@ module ums {
         this.getAdditionalRolePermissions().then((result: boolean) => {
           if (result) {
             feeType = Utils.REG_CERTIFICATE_FEE;
+            this.selectedFilter = ListFilterDirective.STATUS;
+            this.selectedFilterValue = CertificateStatusService.WAITING_FOR_HEAD_FORWARDING;
             this.certificateOptionsCopy.splice(0, 3);
           }
           else {
             feeType = Utils.DEPT_CERTIFICATE_FEE;
+            this.selectedFilter = ListFilterDirective.STATUS;
+            this.selectedFilterValue = CertificateStatusService.APPLIED;
             this.certificateOptionsCopy.splice(0, 1);
             this.certificateOptionsCopy.splice(2, 2);
           }

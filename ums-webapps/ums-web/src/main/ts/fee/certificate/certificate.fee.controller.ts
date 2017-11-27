@@ -1,6 +1,6 @@
 module ums {
   export class CertificateFeeController {
-    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService', 'FeeCategoryService', '$q'];
+    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService', 'FeeCategoryService', '$q', '$interval'];
     public attendedSemesters: AttendedSemester[];
     public certificateTypes: FeeCategory[];
     public payments: Payment[];
@@ -15,7 +15,8 @@ module ums {
                 private certificateStatusService: CertificateStatusService,
                 private feeReportService: FeeReportService,
                 private feeCategoryService: FeeCategoryService,
-                private $q: ng.IQService) {
+                private $q: ng.IQService,
+                private $interval: ng.IIntervalService) {
 
       this.getCertificateFeeCategories().then((feeCategories: FeeCategory[]) => {
         this.certificateTypes = feeCategories;
@@ -32,6 +33,16 @@ module ums {
       });
       this.getCertificateFeePaymentStatus();
       this.getCertificateStatus();
+      //this.statusRefresher();
+    }
+
+
+    private statusRefresher() {
+      console.log("Calling refresher");
+      this.$interval(() => {
+        this.getCertificateFeePaymentStatus();
+        this.getCertificateStatus();
+      }, 1000);
     }
 
 
