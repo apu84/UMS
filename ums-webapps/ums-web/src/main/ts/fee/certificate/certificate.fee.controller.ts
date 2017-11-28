@@ -1,6 +1,6 @@
 module ums {
   export class CertificateFeeController {
-    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService', 'FeeCategoryService', '$q'];
+    public static $inject = ['CertificateFeeService', 'PaymentService', 'CertificateStatusService', 'FeeReportService', 'FeeCategoryService', '$q', '$interval'];
     public attendedSemesters: AttendedSemester[];
     public certificateTypes: FeeCategory[];
     public payments: Payment[];
@@ -15,20 +15,9 @@ module ums {
                 private certificateStatusService: CertificateStatusService,
                 private feeReportService: FeeReportService,
                 private feeCategoryService: FeeCategoryService,
-                private $q: ng.IQService) {
-      /*this.certificateFeeService.getFeeCategories().then(
-          (feeCategories: FeeCategory[]) => {
-            this.certificateTypes = feeCategories;
-            let convertedMap: {[key: string]: FeeCategory} = {};
-            this.certificateTypeMap = feeCategories.reduce((map: {[key: string]: FeeCategory}, obj: FeeCategory) => {
-              map[obj.id] = obj;
-              return map;
-            }, convertedMap);
+                private $q: ng.IQService,
+                private $interval: ng.IIntervalService) {
 
-            certificateFeeService.getAttendedSemesters().then(
-                (semesters: AttendedSemester[]) => this.attendedSemesters = semesters
-            );
-          });*/
       this.getCertificateFeeCategories().then((feeCategories: FeeCategory[]) => {
         this.certificateTypes = feeCategories;
         let convertedMap: { [key: string]: FeeCategory } = {};
@@ -43,6 +32,21 @@ module ums {
 
       });
       this.getCertificateFeePaymentStatus();
+      this.getCertificateStatus();
+      //this.statusRefresher();
+    }
+
+
+    private statusRefresher() {
+      console.log("Calling refresher");
+      this.$interval(() => {
+        this.getCertificateFeePaymentStatus();
+        this.getCertificateStatus();
+      }, 1000);
+    }
+
+
+    private getCertificateStatus() {
       this.certificateStatusService.getCertificateStatus().then(
           (certificates: CertificateStatus[]) => {
             let convertedMap: { [key: string]: CertificateStatus } = {};
@@ -53,7 +57,6 @@ module ums {
           }
       );
     }
-
 
     private getCertificateFeeCategories(): ng.IPromise<FeeCategory[]> {
       let defer: ng.IDeferred<FeeCategory[]> = this.$q.defer();
@@ -78,6 +81,7 @@ module ums {
       this.certificateFeeService.apply(this.feeId, this.semesterId).then((success: boolean) => {
         if (success) {
           this.getCertificateFeePaymentStatus();
+          this.getCertificateStatus();
         }
       });
     }

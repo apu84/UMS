@@ -53,7 +53,9 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"></list-filter>
+                        <list-filter data-filters="vm.filters" data-selected-filters="vm.selectedFilters"
+                                     data-selected-filter="vm.selectedFilter"
+                                     data-selected-filter-value="vm.selectedFilterValue"></list-filter>
                     </div>
 
                     <div class="col-md-12" align="right">
@@ -84,7 +86,7 @@
                                 <td>{{c.semesterName}}</td>
                                 <td>{{c.studentId}}</td>
                                 <td>{{c.studentName}}</td>
-                                <td>{{c.status}}</td>
+                                <td><span class="badge">{{c.status}}</span></td>
                                 <td>{{c.processedOn}}</td>
                                 <td><i class="fa fa-file-pdf-o" aria-hidden="true"
                                        data-ng-click="vm.createCertificateReport(c)"></i></td>

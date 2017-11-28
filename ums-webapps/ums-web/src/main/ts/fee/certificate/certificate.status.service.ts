@@ -26,6 +26,12 @@ module ums {
   export class CertificateStatusService {
     public static $inject = ['$q', 'HttpClient'];
 
+    public static APPLIED = 1;
+    public static PROCESSED = 2;
+    public static DELIVERED = 3;
+    public static WAITING_FOR_HEAD_FORWARDING = 4;
+    public static FORWARDED_BY_HEAD = 5;
+
     constructor(private $q: ng.IQService,
                 private httpClient: HttpClient) {
 
