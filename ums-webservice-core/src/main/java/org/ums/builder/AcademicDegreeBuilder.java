@@ -31,6 +31,7 @@ public class AcademicDegreeBuilder implements Builder<AcademicDegree, MutableAca
       pBuilder.add("typeName", "Phd");
     }
     pBuilder.add("name", pReadOnly.getDegreeName());
+    pBuilder.add("shortName", pReadOnly.getDegreeShortName());
   }
 
   @Override

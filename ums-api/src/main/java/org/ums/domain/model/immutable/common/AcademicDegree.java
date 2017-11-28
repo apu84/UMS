@@ -13,4 +13,6 @@ public interface AcademicDegree extends Serializable, LastModifier, EditType<Mut
   int getDegreeType();
 
   String getDegreeName();
+
+  String getDegreeShortName();
 }

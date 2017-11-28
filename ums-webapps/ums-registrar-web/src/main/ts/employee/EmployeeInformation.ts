@@ -1,10 +1,10 @@
 module ums {
-    interface IEmployeeInformation extends ng.IScope{
+    interface IEmployeeInformation extends ng.IScope {
         getEmployees: Function;
         filterd: Array<Employee>;
     }
 
-    export interface IDepartment{
+    export interface IDepartment {
         id: string;
         shortName: string;
         longName: string;
@@ -12,7 +12,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', 'employeeInformationService', '$state'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', 'employeeInformationService', '$state', 'allUsers'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -41,20 +41,19 @@ module ums {
                     private departmentService: DepartmentService,
                     private employeeService: EmployeeService,
                     private employeeInformationService: EmployeeInformationService,
-                    private $state: any) {
+                    private $state: any,
+                    private allUsers: any) {
 
             this.state = $state;
             $scope.getEmployees = this.getEmployees.bind(this);
+            this.allUser = allUsers;
+            this.totalItemsNumber = this.allUsers.length;
             this.initialization();
         }
 
         private initialization() {
-            this.employeeService.getAll().then((users: any) => {
-                this.allUser = users;
-                this.totalItemsNumber = this.allUser.length;
-                this.departmentService.getAll().then((departments: any) => {
-                    this.departments = departments;
-                });
+            this.departmentService.getAll().then((departments: any) => {
+                this.departments = departments;
             });
         }
 
@@ -70,14 +69,14 @@ module ums {
             this.state.go("employeeInformation.profile", {id: this.employee.id});
         }
 
-        private checkPreviousAndNextButtons(): void{
-            if(this.indexValue <= 0){
+        private checkPreviousAndNextButtons(): void {
+            if (this.indexValue <= 0) {
                 this.enablePreviousButton = false;
             }
-            else{
+            else {
                 this.enablePreviousButton = true;
             }
-            if(this.indexValue >= this.$scope.filterd.length - 1){
+            if (this.indexValue >= this.$scope.filterd.length - 1) {
                 this.enableNextButton = false;
             }
             else {
@@ -140,7 +139,7 @@ module ums {
                 if (this.changedUserName != null || this.changedUserName != "") {
                     Utils.expandRightDiv();
                 }
-                else{
+                else {
                     this.notify.error("User name field is empty");
                 }
             }
@@ -173,7 +172,7 @@ module ums {
             this.view(this.$scope.filterd[this.indexValue], this.indexValue);
         }
 
-        private downloadPdf(userId: string){
+        private downloadPdf(userId: string) {
             console.log(userId);
             this.employeeInformationService.getEmployeeCV(userId);
         }

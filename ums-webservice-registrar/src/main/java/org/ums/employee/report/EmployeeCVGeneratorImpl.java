@@ -1,7 +1,8 @@
 package org.ums.employee.report;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfImage;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +28,7 @@ import org.ums.manager.common.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,9 +73,6 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
   @Autowired
   AcademicDegreeManager mAcademicDegreeManager;
-
-  // public static final String IMG =
-  // "https://lh4.googleusercontent.com/-KFRA5hmh56w/AAAAAAAAAAI/AAAAAAAAAEw/GONhyI4cuy8/photo.jpg";
 
   @Override
   public void createEmployeeCV(String pEmployeeId, OutputStream pOutputStream) throws IOException, DocumentException {
@@ -131,262 +130,133 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
 
-    Font common = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14);
-    Font title = FontFactory.getFont(FontFactory.TIMES_BOLD, 16);
-    Font italic = FontFactory.getFont(FontFactory.TIMES_ITALIC, 12);
+    Font generalFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
+    Font titleFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+    Font titleSmallFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 11);
+    Font italicFont = FontFactory.getFont(FontFactory.TIMES_ITALIC, 11);
+    Font italicSmallFont = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9);
 
     document.open();
     document.setPageSize(PageSize.A4);
 
-    // Image image = Image.getInstance(IMG);
-    // PdfImage stream = new PdfImage(image, "", null);
+    String imageUrl = "https://lh4.googleusercontent.com/-KFRA5hmh56w/AAAAAAAAAAI/AAAAAAAAAEw/GONhyI4cuy8/photo.jpg";
 
-    Chunk curriculumVitaeTextChunk = new Chunk();
-    curriculumVitaeTextChunk.setFont(title);
-    curriculumVitaeTextChunk.append("Curriculum Vitae");
-    Chunk ofTextChunk = new Chunk();
-    ofTextChunk.setFont(italic);
-    ofTextChunk.append("\n\n\n");
-    ofTextChunk.append("of");
-    ofTextChunk.append("\n\n\n");
-    Chunk personNameTextChunk = new Chunk();
-    personNameTextChunk.setFont(title);
-    personNameTextChunk.append(personalInformation.getFirstName() == null ? "" : personalInformation.getFirstName());
-    personNameTextChunk.append(" ");
-    personNameTextChunk.append(personalInformation.getLastName() == null ? "" : personalInformation.getLastName());
-    personNameTextChunk.append("\n");
-    Chunk personAddressChunk = new Chunk();
-    personAddressChunk.setFont(common);
-    personAddressChunk.append(personalInformation.getPresentAddressLine1() == null ? "" : personalInformation
-        .getPresentAddressLine1());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressLine2() == null ? "" : personalInformation
-        .getPresentAddressLine2());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressCountryId() == null
-        || personalInformation.getPresentAddressCountryId() == 0 ? "" : mCountryManager.get(
-        personalInformation.getPresentAddressCountryId()).getName());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressDivisionId() == null
-        || personalInformation.getPresentAddressDivisionId() == 0 ? "" : mDIvisionManager.get(
-        personalInformation.getPresentAddressDivisionId()).getDivisionName());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressDistrictId() == null
-        || personalInformation.getPresentAddressDistrictId() == 0 ? "" : mDistrictManager.get(
-        personalInformation.getPresentAddressDistrictId()).getDistrictName());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressThanaId() == null
-        || personalInformation.getPresentAddressThanaId() == 0 ? "" : mThanaManager.get(
-        personalInformation.getPresentAddressThanaId()).getThanaName());
-    personAddressChunk.append(" ");
-    personAddressChunk.append(personalInformation.getPresentAddressPostCode() == null ? "" : personalInformation
-        .getPresentAddressPostCode());
-    personAddressChunk.append("\n");
-    Chunk personMobile = new Chunk();
-    personMobile.setFont(common);
-    personMobile.append(personalInformation.getMobileNumber() == null ? "" : personalInformation.getMobileNumber());
-    personMobile.append("\n");
-    Chunk personEmail = new Chunk();
-    personEmail.setFont(common);
-    personEmail.append(personalInformation.getOrganizationalEmail() == null ? "" : personalInformation
-        .getOrganizationalEmail());
-    personEmail.append(" ");
-    personEmail.append(personalInformation.getPersonalEmail() == null ? "" : personalInformation.getPersonalEmail());
-    personEmail.append("\n");
+    Image image = Image.getInstance(new URL(imageUrl));
+    image.setAlignment(2);
+    image.scaleAbsolute(110f, 120f);
+    // document.add(image);
+    Chunk chunk = new Chunk();
+    chunk.setFont(titleFont);
+    chunk.append("Curriculum Vitae");
 
-    Paragraph header = new Paragraph();
-    header.setAlignment(Element.ALIGN_CENTER);
-    header.add(curriculumVitaeTextChunk);
-    header.add(ofTextChunk);
-    header.add(personNameTextChunk);
-    header.add(personAddressChunk);
-    header.add(personMobile);
-    header.add(personEmail);
-    document.add(header);
+    Paragraph paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 1);
+    document.add(paragraph);
 
-    Chunk academicSectionHeaderChunk = new Chunk();
-    academicSectionHeaderChunk.append("Academic Information: ");
-    academicSectionHeaderChunk.setUnderline(0.5f, -2.3f);
+    chunk = new Chunk();
+    chunk.setFont(italicFont);
+    chunk.append("of");
 
-    Paragraph academicInformationText = new Paragraph();
-    emptyLine(academicInformationText, 4);
-    academicInformationText.setAlignment(Element.ALIGN_LEFT);
-    academicInformationText.setFont(common);
-    academicInformationText.add(academicSectionHeaderChunk);
-    emptyLine(academicInformationText, 1);
-    for(AcademicInformation academicInformation1 : academicInformation) {
-      Chunk degreeNameChunk = new Chunk();
-      degreeNameChunk.setFont(title);
-      degreeNameChunk.append(mAcademicDegreeManager.get(academicInformation1.getDegreeId()).getDegreeName());
-      academicInformationText.add(degreeNameChunk);
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 1);
+    document.add(paragraph);
 
-      academicInformationText.add("\nInstitute: ");
-      Chunk degreeTitle = new Chunk();
-      degreeTitle.append(academicInformation1.getInstitute());
-      academicInformationText.add(degreeTitle);
+    chunk = new Chunk();
+    chunk.setFont(generalFont);
+    chunk.append("Mir Md. Kawsur");
+    chunk.append("\n");
+    chunk.append("34/1 Kazi Riaz Uddin Road Posta Lalbagh Dhaka - 1211, Bangladesh");
+    chunk.append("\n");
+    chunk.append("01672494863");
+    chunk.append("\n");
+    chunk.append("kawsurilu@yahoo.com");
 
-      academicInformationText.add("\nPassing Year: ");
-      Chunk passingYear = new Chunk();
-      passingYear.append(academicInformation1.getPassingYear());
-      academicInformationText.add(passingYear);
+    paragraph = new Paragraph();
+    paragraph.add(chunk);
 
-      academicInformationText.add("\nPassing Year: ");
-      Chunk result = new Chunk();
-      result.append(academicInformation1.getResult() == null ? "(Not Given)" : academicInformation1.getResult());
-      academicInformationText.add(result);
+    PdfPTable table = new PdfPTable(3);
+    table.setWidthPercentage(100);
+    table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-      emptyLine(academicInformationText, 1);
-    }
-    document.add(academicInformationText);
+    PdfPCell cell = new PdfPCell();
+    cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+    cell.setBorder(0);
+    cell.addElement(paragraph);
+    table.addCell(cell);
 
-    Chunk publicationSectionHeaderChunk = new Chunk();
-    publicationSectionHeaderChunk.append("Publication Information: ");
-    publicationSectionHeaderChunk.setUnderline(0.5f, -2.3f);
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+    cell.setBorder(0);
+    cell.addElement(new Chunk(""));
+    table.addCell(cell);
 
-    Paragraph publicationInformationText = new Paragraph();
-    emptyLine(publicationInformationText, 4);
-    publicationInformationText.setAlignment(Element.ALIGN_LEFT);
-    publicationInformationText.setFont(common);
-    publicationInformationText.add(publicationSectionHeaderChunk);
-    emptyLine(publicationInformationText, 1);
-    int i = 0;
-    for(PublicationInformation publicationInformation1 : publicationInformation) {
-      i++;
-      Chunk publicationSerialChunk = new Chunk();
-      publicationSerialChunk.setFont(title);
-      publicationSerialChunk.append(i + ". ");
-      publicationInformationText.add(publicationSerialChunk);
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+    cell.setBorder(0);
+    cell.addElement(image);
+    table.addCell(cell);
+    document.add(table);
 
-      Chunk publicationTitleChunk = new Chunk();
-      publicationTitleChunk.setFont(common);
-      publicationTitleChunk
-          .append(publicationInformation1.getTitle() == null ? "" : publicationInformation1.getTitle());
-      publicationInformationText.add(publicationTitleChunk);
+    paragraph = new Paragraph();
+    emptyLine(paragraph, 1);
+    document.add(paragraph);
 
-      emptyLine(publicationInformationText, 1);
-    }
-    document.add(publicationInformationText);
+    table = new PdfPTable(1);
+    table.setWidthPercentage(100);
+    table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-    Chunk trainingSectionHeaderChunk = new Chunk();
-    trainingSectionHeaderChunk.append("Training Information: ");
-    trainingSectionHeaderChunk.setUnderline(0.5f, -2.3f);
+    chunk = new Chunk();
+    chunk.setFont(titleFont);
+    chunk.append("Education");
 
-    Paragraph trainingInformationText = new Paragraph();
-    emptyLine(trainingInformationText, 4);
-    trainingInformationText.setAlignment(Element.ALIGN_LEFT);
-    trainingInformationText.setFont(common);
-    trainingInformationText.add(trainingSectionHeaderChunk);
-    emptyLine(trainingInformationText, 1);
-    Chunk localTitle = new Chunk();
-    localTitle.setFont(title);
-    localTitle.append("Local\n\n");
-    trainingInformationText.add(localTitle);
-    for(TrainingInformation trainingInformation1 : trainingInformation) {
-      if(trainingInformation1.getTrainingCategoryId() == 10) {
-        Chunk trainingNameChunk = new Chunk();
-        trainingNameChunk.setFont(title);
-        trainingNameChunk.append(trainingInformation1.getTrainingName());
-        trainingInformationText.add(trainingNameChunk);
+    paragraph = new Paragraph();
+    paragraph.setFont(titleSmallFont);
+    paragraph.add(chunk);
 
-        trainingInformationText.add("\nInstitute: ");
-        Chunk trainingInstitution = new Chunk();
-        trainingInstitution.append(trainingInformation1.getTrainingInstitute());
-        trainingInformationText.add(trainingInstitution);
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+    cell.setBorder(Rectangle.TOP);
+    cell.addElement(paragraph);
 
-        trainingInformationText.add("\nFrom: ");
-        Chunk trainingFrom = new Chunk();
-        trainingFrom.append(trainingInformation1.getTrainingFromDate());
-        trainingInformationText.add(trainingFrom);
+    table.addCell(cell);
+    document.add(table);
 
-        trainingInformationText.add("\nTo: ");
-        Chunk trainingTo = new Chunk();
-        trainingTo.append(trainingInformation1.getTrainingToDate());
-        trainingInformationText.add(trainingTo);
+    table = new PdfPTable(new float[] {new Float(2), new Float(4), new Float(1), new Float(0.6)});
+    table.setWidthPercentage(100);
 
-        trainingInformationText.add("\nDuration: ");
-        Chunk trainingDuration = new Chunk();
-        trainingDuration.append(trainingInformation1.getTrainingDurationString());
-        trainingInformationText.add(trainingDuration);
+    chunk = new Chunk();
+    chunk.append("Bachelor of Science in computer science and engineering");
 
-        emptyLine(trainingInformationText, 1);
-      }
-    }
+    cell = new PdfPCell();
+    cell.addElement(chunk);
+    table.addCell(cell);
 
-    Chunk foreignTitle = new Chunk();
-    foreignTitle.setFont(title);
-    foreignTitle.append("Foreign\n\n");
-    trainingInformationText.add(foreignTitle);
-    for(TrainingInformation trainingInformation1 : trainingInformation) {
-      if(trainingInformation1.getTrainingCategoryId() == 20) {
-        Chunk trainingNameChunk = new Chunk();
-        trainingNameChunk.setFont(title);
-        trainingNameChunk.append(trainingInformation1.getTrainingName());
-        trainingInformationText.add(trainingNameChunk);
+    chunk = new Chunk();
+    chunk.append("American International University-Bangladesh, Banani-Dhaka");
 
-        trainingInformationText.add("\nInstitute: ");
-        Chunk trainingInstitution = new Chunk();
-        trainingInstitution.append(trainingInformation1.getTrainingInstitute());
-        trainingInformationText.add(trainingInstitution);
+    cell = new PdfPCell();
+    cell.addElement(chunk);
+    table.addCell(cell);
 
-        trainingInformationText.add("\nFrom: ");
-        Chunk trainingFrom = new Chunk();
-        trainingFrom.append(trainingInformation1.getTrainingFromDate());
-        trainingInformationText.add(trainingFrom);
+    chunk = new Chunk();
+    chunk.append("1st Division 1st Class");
 
-        trainingInformationText.add("\nTo: ");
-        Chunk trainingTo = new Chunk();
-        trainingTo.append(trainingInformation1.getTrainingToDate());
-        trainingInformationText.add(trainingTo);
+    cell = new PdfPCell();
+    cell.addElement(chunk);
+    table.addCell(cell);
 
-        trainingInformationText.add("\nDuration: ");
-        Chunk trainingDuration = new Chunk();
-        trainingDuration.append(trainingInformation1.getTrainingDurationString());
-        trainingInformationText.add(trainingDuration);
+    chunk = new Chunk();
+    chunk.append("1986");
 
-        emptyLine(trainingInformationText, 1);
-      }
-    }
-    document.add(trainingInformationText);
+    cell = new PdfPCell();
+    cell.addElement(chunk);
+    table.addCell(cell);
 
-    Chunk experienceSectionHeaderChunk = new Chunk();
-    experienceSectionHeaderChunk.append("Experience Information: ");
-    experienceSectionHeaderChunk.setUnderline(0.5f, -2.3f);
-
-    Paragraph experienceInformationText = new Paragraph();
-    emptyLine(experienceInformationText, 4);
-    experienceInformationText.setAlignment(Element.ALIGN_LEFT);
-    experienceInformationText.setFont(common);
-    experienceInformationText.add(experienceSectionHeaderChunk);
-    document.add(experienceInformationText);
-
-    Chunk awardSectionHeaderChunk = new Chunk();
-    awardSectionHeaderChunk.append("Award Information: ");
-    awardSectionHeaderChunk.setUnderline(0.5f, -2.3f);
-
-    Paragraph awardInformationText = new Paragraph();
-    emptyLine(awardInformationText, 4);
-    awardInformationText.setAlignment(Element.ALIGN_LEFT);
-    awardInformationText.setFont(common);
-    awardInformationText.add(awardSectionHeaderChunk);
-    document.add(awardInformationText);
-
-    Chunk serviceSectionHeaderChunk = new Chunk();
-    serviceSectionHeaderChunk.append("Service Information: ");
-    serviceSectionHeaderChunk.setUnderline(0.5f, -2.3f);
-
-    Paragraph serviceInformationText = new Paragraph();
-    emptyLine(serviceInformationText, 4);
-    serviceInformationText.setAlignment(Element.ALIGN_LEFT);
-    serviceInformationText.setFont(common);
-    serviceInformationText.add(serviceSectionHeaderChunk);
-    document.add(serviceInformationText);
-
-    // List<Chunk> academicChunk = new ArrayList<>();
-    // for(AcademicInformation academicInformation1: academicInformation) {
-    // Chunk degreeName = new Chunk();
-    // degreeName.setFont(common);
-    // academicChunk.add(mAcademicDegreeManager.get(academicInformation1.getDegreeId()).getDegreeName());
-    // }
+    document.add(table);
 
     document.close();
     baos.writeTo(pOutputStream);

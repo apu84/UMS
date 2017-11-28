@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PersistentAcademicDegreeDao extends AcademicDegreeDaoDecorator {
 
-  static String SELECT_ALL = "SELECT ID, TYPE, NAME FROM MST_ACADEMIC_DEGREE_TYPE";
+  static String SELECT_ALL = "SELECT ID, TYPE, NAME, SHORT_NAME FROM MST_ACADEMIC_DEGREE_TYPE";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -41,6 +41,7 @@ public class PersistentAcademicDegreeDao extends AcademicDegreeDaoDecorator {
       persistentAcademicDegree.setId(resultSet.getInt("ID"));
       persistentAcademicDegree.setDegreeType(resultSet.getInt("TYPE"));
       persistentAcademicDegree.setDegreeName(resultSet.getString("NAME"));
+      persistentAcademicDegree.setDegreeShortName(resultSet.getString("SHORT_NAME"));
       return persistentAcademicDegree;
     }
   }

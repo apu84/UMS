@@ -17,6 +17,7 @@ public class PersistentAcademicDegree implements MutableAcademicDegree {
   private Integer mId;
   private int mDegreeType;
   private String mDegreeName;
+  private String mDegreeShortName;
   private String mLastModified;
 
   public PersistentAcademicDegree() {}
@@ -25,6 +26,7 @@ public class PersistentAcademicDegree implements MutableAcademicDegree {
     mId = pPersistentAcademicDegree.getId();
     mDegreeType = pPersistentAcademicDegree.getDegreeType();
     mDegreeName = pPersistentAcademicDegree.getDegreeName();
+    mDegreeShortName = pPersistentAcademicDegree.getDegreeShortName();
     mLastModified = pPersistentAcademicDegree.getLastModified();
   }
 
@@ -36,6 +38,11 @@ public class PersistentAcademicDegree implements MutableAcademicDegree {
   @Override
   public void setDegreeName(String pDegreeName) {
     mDegreeName = pDegreeName;
+  }
+
+  @Override
+  public void setDegreeShortName(String pDegreeShortName) {
+    mDegreeShortName = pDegreeShortName;
   }
 
   @Override
@@ -66,6 +73,11 @@ public class PersistentAcademicDegree implements MutableAcademicDegree {
   @Override
   public String getDegreeName() {
     return mDegreeName;
+  }
+
+  @Override
+  public String getDegreeShortName() {
+    return mDegreeShortName;
   }
 
   @Override

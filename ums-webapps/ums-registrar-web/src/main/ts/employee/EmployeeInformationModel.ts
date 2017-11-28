@@ -157,5 +157,6 @@ module ums{
         type: number;
         typeName: string;
         name: string;
+        shortName: string;
     }
 }

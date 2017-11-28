@@ -11,4 +11,6 @@ public interface MutableAcademicDegree extends AcademicDegree, Editable<Integer>
   void setDegreeType(final int pDegreeType);
 
   void setDegreeName(final String pDegreeName);
+
+  void setDegreeShortName(final String pDegreeShortName);
 }
