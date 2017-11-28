@@ -6,9 +6,7 @@ import java.util.Map;
 
 public enum MaritalStatusType {
   Single(1, "Single"),
-  Married(2, "Married"),
-  Divorced(3, "Divorced"),
-  Widowed(4, "Widowed");
+  Married(2, "Married");
 
   private String label;
   private Integer id;
