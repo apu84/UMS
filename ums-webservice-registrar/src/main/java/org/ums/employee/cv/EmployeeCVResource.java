@@ -24,7 +24,7 @@ public class EmployeeCVResource extends Resource {
   @GET
   @Path("/cv/employeeId/{employee-id}")
   @Produces("application/pdf")
-  public StreamingOutput getUndertakenReport(final @PathParam("employee-id") String pEmployeeId,
+  public StreamingOutput getEmployeeCV(final @PathParam("employee-id") String pEmployeeId,
       final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
