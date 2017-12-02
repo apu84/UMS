@@ -2,10 +2,8 @@ package org.ums.readmission.student;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 
-import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Student;
@@ -24,6 +22,7 @@ public class Readmission extends Resource {
 
   @GET
   @Path("/status")
+  @RequiresPermissions("student:readmission:status")
   public ReadmissionHelper.ReadmissionApplicationStatus getReadmissionStatus() throws Exception {
     return mReadmissionHelper.readmissionApplicationStatus(getLoggedInUserId(), getStudent()
         .getCurrentEnrolledSemesterId());

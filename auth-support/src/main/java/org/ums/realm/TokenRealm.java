@@ -72,9 +72,9 @@ public class TokenRealm extends AuthorizingRealm {
 
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
-    String token = (String) getAvailablePrincipal(principals);
-    BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
-    User user = mUserManager.get(bearerAccessToken.getUserId());
+    String userId = (String) getAvailablePrincipal(principals);
+    // BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
+    User user = mUserManager.get(userId);
     SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
     List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
     Set<String> permissions = new HashSet<>();

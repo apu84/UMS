@@ -28,9 +28,6 @@ public class AdditionalRolePermissionsHelper extends
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
   @Autowired
-  NavigationManager mNavigationManager;
-
-  @Autowired
   AdditionalRolePermissionsBuilder mBuilder;
 
   @Override
