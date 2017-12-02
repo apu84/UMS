@@ -1,1 +1,103 @@
-checkout
+<style type="text/css">
+    .form-control {
+        border-radius: 8px !important;
+    }
+
+    fieldset {
+        margin: 1em 1em 1em 0;
+        padding: 1em;
+        background-color: #f4f8f9;
+        border: 2px solid #b9d8d9;
+        border-radius: 5px;
+    }
+
+    legend {
+        font-weight: bold;
+        border: 2px solid #b9d8d9;
+        background-color: #ffffff;
+        border-radius: 3px;
+        width: auto;
+        padding: 0.2em 30px 0.2em 0.5em;
+        margin-bottom: 5px !important;
+        font-size: 14px;
+    }
+
+    .well {
+        /*background-color: white;*/
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <fieldset>
+            <form>
+                <div class="col-md-12">
+                    <label for="barCode" class="control-label">Enter Item Code or Bar Code</label>
+                    <input id="barCode"
+                           type="text"
+                           class="form-control">
+                </div>
+                <!--<div class="col-md-6">-->
+                <!--<label for="dueDate" class="control-label">Specify Due Date</label>-->
+                <!--<input id="dueDate"-->
+                <!--type="text"-->
+                <!--data-provide="datepicker"-->
+                <!--data-date-format="dd/mm/yyyy"-->
+                <!--placeholder="DD/MM/YYYY"-->
+                <!--autocomplete="off"-->
+                <!--class="form-control">-->
+                <!--</div>-->
+                <div class="col-md-12"><br/></div>
+                <div class="col-md-4">
+                    <button type="submit">Submit</button>
+                </div>
+
+            </form>
+        </fieldset>
+    </div>
+
+    <div class="col-md-6">
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead style="background-color: whitesmoke">
+            <tr>
+                <th>Due Date</th>
+                <th>Title</th>
+                <th>Material Type</th>
+                <th>Barcode</th>
+                <th>Fines</th>
+                <th>Check In</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Due Date</td>
+                <td>Title</td>
+                <td>Material Type</td>
+                <td>Barcode</td>
+                <td>Fines</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <button>Check In Selected Rows</button>
+        <button ng-click="vm.checkAll()">Check In All</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#squareRadio input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue'
+    });
+</script>

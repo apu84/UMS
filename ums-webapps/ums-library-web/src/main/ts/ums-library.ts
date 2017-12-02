@@ -108,7 +108,19 @@ module ums {
             })
             .state('circulation', {
                 url: "/circulation",
-                templateUrl: 'views/admin/circulation/circulation-home.html'
+                templateUrl: 'views/admin/circulation/circulation-home.html',
+                controller: 'Circulation',
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            ]
+                        });
+                    }]
+                }
             })
             .state('patrons', {
                 url: "/patrons",
@@ -123,6 +135,10 @@ module ums {
                 url: "/checkIn",
                 templateUrl: 'views/admin/circulation/circulation-checkin.html'
             })
+            .state('circulation.searchPatron', {
+                url: "/searchPatron",
+                templateUrl: 'views/admin/patron/patron-search.html'
+            })
             .state('circulation.checkOut.patronCheckOut', {
                 url: "/patronCheckOut",
                 templateUrl: 'views/admin/patron/patron-checkout.html'
@@ -130,6 +146,14 @@ module ums {
             .state('circulation.checkOut.patronDetail', {
                 url: "/patronDetail",
                 templateUrl: 'views/admin/patron/patron-detail.html'
+            })
+            .state('circulation.checkOut.patronFines', {
+                url: "/patronFine",
+                templateUrl: 'views/admin/patron/patron-fine.html'
+            })
+            .state('circulation.checkOut.circulationHistory', {
+                url: "/circulationHistory",
+                templateUrl: 'views/admin/circulation/circulation-history.html'
             })
             .state('logout', {
                 url: "/logout",
