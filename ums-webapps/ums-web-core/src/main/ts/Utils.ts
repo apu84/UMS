@@ -254,11 +254,9 @@ module ums {
         let inputElement: any = $(this)[0];
         let inputElementId = inputElement.id;
 
-
         $("#" + targetElementId).select2("search", searchTerm);
         let e = jQuery.Event("keydown");
         e.which = 13;
-        console.log(inputElementId);
         $("#" + inputElementId).trigger(e);
       });
     }
