@@ -5,11 +5,10 @@
             <div class="panel-body">
                 <div class="form-group">
                 <div class="row">
-
                     <div class="col-md-4">
-                        <label class="col-md-4 control-label">Room No.</label>
+                        <label class="control-label">Room No.</label>
                         <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nRoomNo{{$index}}"
                                        id="iRoomNo{{$index}}"
@@ -21,15 +20,15 @@
                         </div>
 
                         <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{vm.entry.additional.roomNo}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label class="col-md-4 control-label">PABX/Ext No.</label>
+                        <label class="control-label">PABX/Ext No.</label>
                         <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nExtNo{{$index}}"
                                        id="iExtNo{{$index}}"
@@ -40,15 +39,15 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{vm.entry.additional.extNo}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label class="col-md-4 control-label">Academic Initial</label>
+                        <label class="control-label">Academic Initial</label>
                         <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nAcademicInitial{{$index}}"
                                        id="iAcademicInitial{{$index}}"
@@ -59,7 +58,7 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{vm.entry.additional.academicInitial}}</label>
                             </div>
                         </div>
@@ -72,7 +71,7 @@
             <div class="panel-heading">Area Of Interests</div>
             <div class="panel-body">
                 <div data-ng-show="vm.showAdditionalInputDiv">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="row">
                             <select name="nAoi"
                                     id="iAoi"

@@ -309,8 +309,11 @@ module ums {
                     .then((json: any) => {
                         this.employeeInformationService.savePersonalInformation(json)
                             .then((message: any) => {
-                                this.getPersonalInformation();
-                                this.showPersonalInputDiv = false;
+                                if(message == "Error"){}
+                                else {
+                                    this.getPersonalInformation();
+                                    this.showPersonalInputDiv = false;
+                                }
                             });
                     });
             }
@@ -333,8 +336,11 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.saveAcademicInformation(json)
                                 .then((message: any) => {
-                                    this.getAcademicInformation();
-                                    this.showAcademicInputDiv = false;
+                                    if(message == "Error"){}
+                                    else {
+                                        this.getAcademicInformation();
+                                        this.showAcademicInputDiv = false;
+                                    }
                                 });
                         });
                 });
@@ -347,9 +353,11 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.savePublicationInformation(json)
                                 .then((message: any) => {
-                                    this.getPublicationInformation();
-                                    this.getPublicationInformationWithPagination();
-                                    this.showPublicationInputDiv = false;
+                                    if(message == "Error") {
+                                        this.getPublicationInformation();
+                                        this.getPublicationInformationWithPagination();
+                                        this.showPublicationInputDiv = false;
+                                    }
                                 });
                         });
                 });
@@ -360,11 +368,14 @@ module ums {
                 .then((trainingObjects: any) => {
                     this.convertToJson('training', trainingObjects)
                         .then((json: any) => {
-                            console.log(json);
                             this.employeeInformationService.saveTrainingInformation(json)
                                 .then((message: any) => {
-                                    this.getTrainingInformation();
-                                    this.showTrainingInputDiv = false;
+                                    if(message == "Error"){
+                                    }
+                                    else {
+                                        this.getTrainingInformation();
+                                        this.showTrainingInputDiv = false;
+                                    }
                                 });
                         });
                 });
@@ -377,8 +388,11 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.saveAwardInformation(json)
                                 .then((message: any) => {
-                                    this.getAwardInformation();
-                                    this.showAwardInputDiv = false;
+                                    if(message == "Error"){}
+                                    else {
+                                        this.getAwardInformation();
+                                        this.showAwardInputDiv = false;
+                                    }
                                 });
                         });
                 });
@@ -392,8 +406,11 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.saveExperienceInformation(json)
                                 .then((message: any) => {
-                                    this.getExperienceInformation();
-                                    this.showExperienceInputDiv = false;
+                                    if(message == "Error"){}
+                                    else {
+                                        this.getExperienceInformation();
+                                        this.showExperienceInputDiv = false;
+                                    }
                                 });
                         });
                 });
@@ -405,8 +422,11 @@ module ums {
                 .then((json: any) => {
                     this.employeeInformationService.saveAdditionalInformation(json)
                         .then((message: any) => {
-                            this.getAdditionalInformation();
-                            this.showAdditionalInputDiv = false;
+                            if(message == "Error"){}
+                            else {
+                                this.getAdditionalInformation();
+                                this.showAdditionalInputDiv = false;
+                            }
                         });
                 });
         }
@@ -426,8 +446,11 @@ module ums {
                     .then((serviceObjects) => {
                         this.convertToJson('service', serviceObjects).then((json: any) => {
                             this.employeeInformationService.saveServiceInformation(json).then((message: any) => {
-                                this.getServiceInformation();
-                                this.showServiceInputDiv = false;
+                                if(message == "Error"){}
+                                else {
+                                    this.getServiceInformation();
+                                    this.showServiceInputDiv = false;
+                                }
                             });
                         });
                     });
@@ -605,7 +628,7 @@ module ums {
                 this.entry.personal.preAddressDivision = null;
                 this.entry.personal.preAddressDistrict = null;
                 this.entry.personal.preAddressThana = null;
-                this.entry.personal.preAddressPostCode = null;
+                this.entry.personal.preAddressPostCode = "";
             }
         }
 
@@ -620,7 +643,7 @@ module ums {
                 this.entry.personal.perAddressDivision = null;
                 this.entry.personal.perAddressDistrict = null;
                 this.entry.personal.perAddressThana = null;
-                this.entry.personal.perAddressPostCode = null;
+                this.entry.personal.perAddressPostCode = "";
             }
         }
 
@@ -689,7 +712,7 @@ module ums {
                     employeeId: this.userId,
                     degree: null,
                     institution: "",
-                    passingYear: "",
+                    passingYear: null,
                     result: "",
                     dbAction: "Create"
                 };

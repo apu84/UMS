@@ -393,7 +393,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
       chunk = new Chunk();
       chunk.setFont(generalFont);
-      chunk.append(academicInformation1.getPassingYear());
+      // chunk.append(academicInformation1.getPassingYear());
 
       cell = new PdfPCell();
       cell.setBorder(PdfPCell.NO_BORDER);

@@ -1,25 +1,37 @@
 <style>
-    .row{
+    .row {
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
     .require {
-        content:"*";
-        color:red;
+        content: "*";
+        color: red;
         font-weight: 900;
         font-size: large;
+    }
+    .form-control {
+        border-radius: 5px !important;
     }
 </style>
 <div data-ng-show="vm.tabs">
     <ul id="iTab" class="nav nav-tabs nav-justified">
-        <li class="active"><a href="javascript:void(0)" data-ng-click="vm.showTab('personal')" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Personal</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('academic')" data-toggle="tab"><i class="fa fa-academic"></i>&nbsp;Academic</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('publication')" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Publication</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('training')"  data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Training</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('award')"  data-toggle="tab"><i class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('experience')"  data-toggle="tab"><i class="fa fa-star"></i>&nbsp;Experience</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('additional')" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Additional</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('service')" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Service</a></li>
+        <li class="active"><a href="javascript:void(0)" data-ng-click="vm.showTab('personal')" data-toggle="tab"><i
+                class="fa fa-user"></i>&nbsp;Personal</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('academic')" data-toggle="tab"><i
+                class="fa fa-academic"></i>&nbsp;Academic</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('publication')" data-toggle="tab"><i
+                class="fa fa-pencil"></i>&nbsp;Publication</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('training')" data-toggle="tab"><i
+                class="fa fa-shield"></i>&nbsp;Training</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('award')" data-toggle="tab"><i
+                class="fa fa-trophy"></i>&nbsp;Award/Honor</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('experience')" data-toggle="tab"><i
+                class="fa fa-star"></i>&nbsp;Experience</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('additional')" data-toggle="tab"><i
+                class="fa fa-wrench"></i>&nbsp;Additional</a></li>
+        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('service')" data-toggle="tab"><i
+                class="fa fa-wrench"></i>&nbsp;Service</a></li>
     </ul>
 </div>
 

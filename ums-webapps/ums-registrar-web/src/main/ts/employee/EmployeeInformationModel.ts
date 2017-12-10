@@ -44,7 +44,7 @@ module ums{
         employeeId: string;
         degree: IAcademicDegreeTypes;
         institution: string;
-        passingYear: string;
+        passingYear: number;
         result: string;
         dbAction: string;
     }

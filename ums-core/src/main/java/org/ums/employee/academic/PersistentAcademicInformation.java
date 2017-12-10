@@ -19,7 +19,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   private AcademicDegreeType mDegree;
   private int mDegreeId;
   private String mInstitute;
-  private String mPassingYear;
+  private int mPassingYear;
   private String mResult;
   private String mLastModified;
 
@@ -97,7 +97,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public void setPassingYear(String pPassingYear) {
+  public void setPassingYear(int pPassingYear) {
     mPassingYear = pPassingYear;
   }
 
@@ -127,7 +127,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
-  public String getPassingYear() {
+  public int getPassingYear() {
     return mPassingYear;
   }
 

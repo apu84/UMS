@@ -6,11 +6,12 @@
                     <div class="col-md-1">
                         <b>{{$index + 1}}.</b>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iAwardName{{$index}}">Award/Honor Name<span data-ng-show="vm.showAwardInputDiv" 
+                    <div class="col-md-8">
+                        <label class="control-label" for="iAwardName{{$index}}">Award/Honor Name<span
+                                data-ng-show="vm.showAwardInputDiv"
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="iAwardName{{$index}}"
                                        id="iAwardName{{$index}}"
@@ -21,16 +22,17 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAwardInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{award.awardName}}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iAwardedYear{{$index}}">Awarded Year<span data-ng-show="vm.showAwardInputDiv" 
+                    <div class="col-md-2">
+                        <label class="control-label" for="iAwardedYear{{$index}}">Awarded Year<span
+                                data-ng-show="vm.showAwardInputDiv"
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="number"
                                        name="nAwardedYear{{$index}}"
                                        id="iAwardedYear{{$index}}"
@@ -42,14 +44,14 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAwardInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{award.awardedYear}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-1">
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <span data-ng-show="vm.showAwardInputDiv" >
+                            <span data-ng-show="vm.showAwardInputDiv">
                                 [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('award', $index)"
                                      class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
                             </span>
@@ -58,10 +60,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iAwardInstitute{{$index}}">Institution</label>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iAwardInstitute{{$index}}">Institution</label>
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nAwardInstitute{{$index}}"
                                        id="iAwardInstitute{{$index}}"
@@ -72,33 +74,36 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAwardInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{award.awardInstitute}}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iShortDescription{{$index}}">Short
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iShortDescription{{$index}}">Short
                             Description</label>
                         <div data-ng-show="vm.showAwardInputDiv">
-                            <div class="col-md-8">
-                                <textarea name="nShortDescription{{$index}}"
-                                          id="iShortDescription{{$index}}"
-                                          data-ng-model="award.awardShortDescription"
-                                          placeholder="Short Description"
-                                          maxlength="100"
-                                          class="form-control">
-                                </textarea>
+                            <div>
+                                <input type="text"
+                                       name="nShortDescription{{$index}}"
+                                       id="iShortDescription{{$index}}"
+                                       data-ng-model="award.awardShortDescription"
+                                       placeholder="Short Description"
+                                       maxlength="100"
+                                       class="form-control">
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAwardInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px dashed;">
+                            <div style="border-bottom: 1px dashed;">
                                 <label class="control-label">{{award.awardShortDescription}}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1">
-                    </div>
+                    <div class="col-md-1"></div>
                 </div>
             </div>
         </div>

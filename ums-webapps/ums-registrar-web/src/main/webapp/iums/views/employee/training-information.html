@@ -6,11 +6,11 @@
                     <div class="col-md-1">
                         <label class="control-label"><b>{{$index + 1}}.</b></label>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label">Training Name<span data-ng-show="vm.showTrainingInputDiv" 
+                    <div class="col-md-10">
+                        <label class="control-label">Training Name<span data-ng-show="vm.showTrainingInputDiv"
                                 class='require'>*</span></label>
                         <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nTrainingName{{$index}}"
                                        id="iTrainingName{{$index}}"
@@ -21,31 +21,9 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <div style="border-bottom: 1px dashed;">
                                     <label class="control-label">{{training.trainingName}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label">Training Institution<span data-ng-show="vm.showTrainingInputDiv" 
-                                class='require'>*</span></label>
-                        <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nTrainingInstitution{{$index}}"
-                                       id="iTrainingInstitution{{$index}}"
-                                       data-ng-model="training.trainingInstitution"
-                                       placeholder="Training Institution/Organization Name"
-                                       maxlength="80"
-                                       class="form-control" required>
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
-                                <div style="border-bottom: 1px dashed;">
-                                    <label class="control-label">{{training.trainingInstitution}}</label>
                                 </div>
                             </div>
                         </div>
@@ -59,10 +37,36 @@
                 </div>
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label">From<span data-ng-show="vm.showTrainingInputDiv"  class='require'>*</span></label>
+                    <div class="col-md-10">
+                        <label class="control-label">Training Institution<span data-ng-show="vm.showTrainingInputDiv"
+                                class='require'>*</span></label>
                         <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
+                                <input type="text"
+                                       name="nTrainingInstitution{{$index}}"
+                                       id="iTrainingInstitution{{$index}}"
+                                       data-ng-model="training.trainingInstitution"
+                                       placeholder="Training Institution/Organization Name"
+                                       maxlength="80"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showTrainingInputDiv">
+                            <div>
+                                <div style="border-bottom: 1px dashed;">
+                                    <label class="control-label">{{training.trainingInstitution}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <label class="control-label">From<span data-ng-show="vm.showTrainingInputDiv"  class='require'>*</span></label>
+                        <div data-ng-show="vm.showTrainingInputDiv">
+                            <div>
                                 <input type="text"
                                        name="nTrainingFrom{{$index}}"
                                        id="iTrainingFrom{{$index}}"
@@ -76,17 +80,17 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <div style="border-bottom: 1px dashed;">
                                     <label class="control-label">{{training.trainingFrom}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label">To<span data-ng-show="vm.showTrainingInputDiv"  class='require'>*</span></label>
+                    <div class="col-md-2">
+                        <label class="control-label">To<span data-ng-show="vm.showTrainingInputDiv"  class='require'>*</span></label>
                         <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nTrainingTo{{$index}}"
                                        id="iTrainingTo{{$index}}"
@@ -101,21 +105,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <div style="border-bottom: 1px dashed;">
                                     <label class="control-label">{{training.trainingTo}}</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label">Duration<span data-ng-show="vm.showTrainingInputDiv"  class="require">*</span></label>
+                    <!--<div class="col-md-1"></div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-1"></div>-->
+                    <div class="col-md-3">
+                        <label class="control-label">Duration<span data-ng-show="vm.showTrainingInputDiv"  class="require">*</span></label>
                         <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <input type="text"
                                        name="nTrainingDurationString{{$index}}"
                                        id="iTrainingDurationString{{$index}}"
@@ -125,18 +129,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <div style="border-bottom: 1px dashed;">
                                     <label class="control-label">{{training.trainingDurationString}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="col-md-4 control-label" for="iCategory">Category<span data-ng-show="vm.showTrainingInputDiv"
+                    <div class="col-md-3">
+                        <label class="control-label" for="iCategory">Category<span data-ng-show="vm.showTrainingInputDiv"
                                                                                                                   class="require">*</span></label>
                         <div data-ng-show="vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <select name="nCategory"
                                         id="iCategory"
                                         data-ng-model="training.trainingCategory"
@@ -147,7 +151,7 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showTrainingInputDiv">
-                            <div class="col-md-8">
+                            <div>
                                 <div style="border-bottom: 1px dashed;">
                                     <label class="control-label">{{training.trainingCategory.name}}</label>
                                 </div>

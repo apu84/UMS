@@ -57,7 +57,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
 
   @Override
   public List<AcademicInformation> getEmployeeAcademicInformation(final String pEmployeeId) {
-    String query = GET_ONE + " Where EMPLOYEE_ID=?";
+    String query = GET_ONE + " Where EMPLOYEE_ID=? ORDER BY PASSING_YEAR DESC ";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentAcademicInformationDao.RoleRowMapper());
   }
 
@@ -99,7 +99,7 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       academicInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
       academicInformation.setDegreeId(resultSet.getInt("DEGREE"));
       academicInformation.setInstitute(resultSet.getString("INSTITUTE"));
-      academicInformation.setPassingYear(resultSet.getString("PASSING_YEAR"));
+      academicInformation.setPassingYear(resultSet.getInt("PASSING_YEAR"));
       academicInformation.setResult(resultSet.getString("RESULT"));
       academicInformation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return academicInformation;

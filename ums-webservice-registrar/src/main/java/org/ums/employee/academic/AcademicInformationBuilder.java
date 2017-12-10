@@ -42,7 +42,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeId(pJsonObject.getJsonObject("degree").getInt("id"));
     pMutable.setInstitute(pJsonObject.getString("institution"));
-    pMutable.setPassingYear(pJsonObject.getString("passingYear"));
+    pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
     pMutable.setResult(pJsonObject.getString("result") == null ? "" : pJsonObject.getString("result"));
   }
 }

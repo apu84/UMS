@@ -57,7 +57,7 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
 
   @Override
   public List<AwardInformation> getEmployeeAwardInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
+    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY AWARDED_YEAR DESC";
     return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAwardInformationDao.RoleRowMapper());
   }
 

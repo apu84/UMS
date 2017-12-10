@@ -6,19 +6,19 @@
                     <div class="col-md-1">
                         <label class="control-label"><b>Sl.</b></label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div align="center">
                             <label class="control-label"><b>Degree</b><span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span></label>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div align="center">
                             <label class="control-label"><b>Institution</b><span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span></label>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div align="center">
-                            <label class="control-label"><b>Passing Year</b><span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span></label>
+                            <label class="control-label"><b>Year</b><span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span></label>
                         </div>
                     </div>
 
@@ -43,7 +43,7 @@
                             <label class="control-label"><b>{{$index + 1}}.</b></label>
                         </div>
                         <div data-ng-show="vm.showAcademicInputDiv">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <select name="nAcademicDegree{{$index}}"
                                         id="iAcademicDegree{{$index}}"
                                         data-ng-model="academic.degree"
@@ -54,14 +54,14 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAcademicInputDiv">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div align="center">
                                     <label class="control-label">{{academic.degree.name}}</label>
                                 </div>
                             </div>
                         </div>
                         <div data-ng-show="vm.showAcademicInputDiv">
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <input type="text"
                                        name="nAcademicInstitution{{$index}}"
                                        id="iAcademicInstitution {{$index}}"
@@ -72,15 +72,15 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAcademicInputDiv">
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div align="center">
                                     <label class="control-label">{{academic.institution}}</label>
                                 </div>
                             </div>
                         </div>
                         <div data-ng-show="vm.showAcademicInputDiv">
-                            <div class="col-md-2">
-                                <input type="text"
+                            <div class="col-md-1">
+                                <input type="number"
                                        name="nPassingYear{{$index}}"
                                        id="iPassingYear{{$index}}"
                                        data-ng-model="academic.passingYear"
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showAcademicInputDiv">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div align="center">
                                     <label class="control-label">{{academic.passingYear}}</label>
                                 </div>
