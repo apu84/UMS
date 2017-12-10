@@ -18,19 +18,20 @@ import javax.ws.rs.core.Response;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AuthorResource extends MutableAuthorResource {
+
   @Autowired
-  AuthorResourceHelper mResourceHelper;
+  AuthorResourceHelper authorResourceHelper;
 
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    return mResourceHelper.getAll(mUriInfo);
+    return authorResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest, final @PathParam("object-id") Integer pObjectId)
       throws Exception {
-    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
+    return authorResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }
