@@ -353,7 +353,8 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.savePublicationInformation(json)
                                 .then((message: any) => {
-                                    if(message == "Error") {
+                                    if(message == "Error") {}
+                                    else{
                                         this.getPublicationInformation();
                                         this.getPublicationInformationWithPagination();
                                         this.showPublicationInputDiv = false;
@@ -370,8 +371,7 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.saveTrainingInformation(json)
                                 .then((message: any) => {
-                                    if(message == "Error"){
-                                    }
+                                    if(message == "Error"){}
                                     else {
                                         this.getTrainingInformation();
                                         this.showTrainingInputDiv = false;

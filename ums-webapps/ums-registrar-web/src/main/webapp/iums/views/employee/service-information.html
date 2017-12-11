@@ -200,26 +200,26 @@
     <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
         <fieldset>
             <legend align="center"><b>{{$index + 1}}.</b> &nbsp; Department:<label class="control-label"
-                                                                                   style="border-bottom: 1px dashed;"><b>{{service.department.name}}</b></label>
-                & Designation:<label class="control-label" style="border-bottom: 1px dashed;"><b>{{service.designation.name}}</b></label>
+                                                                                   style="border-bottom: 1px solid;"><b>{{service.department.name}}</b></label>
+                & Designation:<label class="control-label" style="border-bottom: 1px solid;"><b>{{service.designation.name}}</b></label>
             </legend>
             <div class="row">
                 <div class="col-md-4">
                     <label class="col-md-4">Employment:</label>
-                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                    <div class="col-md-8" style="border-bottom: 1px solid;">
                         <label class="control-label"><b>{{service.employmentType.name}}</b></label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label class="col-md-4">Joining Date:</label>
-                    <div class="col-md-8" style="border-bottom: 1px dashed;">
+                    <div class="col-md-8" style="border-bottom: 1px solid;">
                         <label class="control-label"><b>{{service.joiningDate}}</b></label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label class="col-md-4">Resign Date:</label>
                     <div class="col-md-8">
-                        <div style="border-bottom: 1px dashed;" align="center">
+                        <div style="border-bottom: 1px solid;" align="center">
                             <label class="control-label"><b>{{service.resignDate}}</b></label>
                         </div>
                     </div>
