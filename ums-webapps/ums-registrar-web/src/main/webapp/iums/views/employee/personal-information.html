@@ -5,11 +5,11 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's First Name"
+                        <label class="col-md-3 control-label" title="Employee's First Name"
                                for="iFirstName">First Name<span data-ng-show="vm.showPersonalInputDiv"
-                                class='require'>*</span></label>
+                                                                class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nFirstName"
                                        id="iFirstName"
@@ -20,59 +20,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.firstName}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.firstName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Last Name" for="iLastName">Last
-                            Name<span data-ng-show="vm.showPersonalInputDiv"
-                                    class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Father Name" for="iFatherName">Father's
+                            Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nLastName"
-                                       id="iLastName"
-                                       data-ng-model="vm.entry.personal.lastName"
-                                       placeholder="Last Name"
-                                       maxlength="75"
-                                       class="form-control " required>
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.lastName}}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Gender" for="iGender">Gender<span data-ng-show="vm.showPersonalInputDiv"
-                                class="require">*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
-                                <select name="nGender"
-                                        id="iGender"
-                                        data-ng-model="vm.entry.personal.gender"
-                                        data-ng-options="gender.name for gender in vm.genders track by gender.id"
-                                        class="form-control" required>
-                                    <option value="" selected="selected">Select Gender</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.gender.name}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Father Name" for="iFatherName">Father's
-                            Name<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nFatherName"
                                        id="iFatherName"
@@ -83,38 +42,43 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.fatherName}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.fatherName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood
-                            Group<span data-ng-show="vm.showPersonalInputDiv"  class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Last Name" for="iLastName">Last
+                            Name<span data-ng-show="vm.showPersonalInputDiv"
+                                      class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
-                                <select name="nBloodGroup"
-                                        id="iBloodGroup"
-                                        data-ng-model="vm.entry.personal.bloodGroup"
-                                        data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
-                                        class="form-control" required>
-                                    <option value="">Select Blood Group</option>
-                                </select>
+                            <div class="col-md-9">
+                                <input type="text"
+                                       name="nLastName"
+                                       id="iLastName"
+                                       data-ng-model="vm.entry.personal.lastName"
+                                       placeholder="Last Name"
+                                       maxlength="75"
+                                       class="form-control " required>
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label"> {{vm.entry.personal.bloodGroup.name}} </label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.lastName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Mother Name" for="iMotherName">Mother's
-                            Name<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Mother Name" for="iMotherName">Mother's
+                            Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nMotherName"
                                        id="iMotherName"
@@ -125,19 +89,68 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.motherName}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.motherName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Nationality"
-                               for="iNationality">Nationality<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" title="Employee's Gender" for="iGender">Gender<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
+                                <select name="nGender"
+                                        id="iGender"
+                                        data-ng-model="vm.entry.personal.gender"
+                                        data-ng-options="gender.name for gender in vm.genders track by gender.id"
+                                        class="form-control" required>
+                                    <option value="" selected="selected">Select Gender</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showPersonalInputDiv">
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.gender.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-3 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood
+                            Group<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
+                        <div data-ng-show="vm.showPersonalInputDiv">
+                            <div class="col-md-9">
+                                <select name="nBloodGroup"
+                                        id="iBloodGroup"
+                                        data-ng-model="vm.entry.personal.bloodGroup"
+                                        data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
+                                        class="form-control" required>
+                                    <option value="">Select Blood Group</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showPersonalInputDiv">
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label"> {{vm.entry.personal.bloodGroup.name}} </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-3 control-label" title="Employee's Nationality"
+                               for="iNationality">Nationality<span data-ng-show="vm.showPersonalInputDiv"
+                                                                   class="require">*</span></label>
+                        <div data-ng-show="vm.showPersonalInputDiv">
+                            <div class="col-md-9">
                                 <select name="nNationality"
                                         id="iNationality"
                                         data-ng-model="vm.entry.personal.nationality"
@@ -148,16 +161,19 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.nationality.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.nationality.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Religion"
-                               for="iReligion">Religion<span data-ng-show="vm.showPersonalInputDiv"  class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Religion"
+                               for="iReligion">Religion<span data-ng-show="vm.showPersonalInputDiv"
+                                                             class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nReligion"
                                         id="iReligion"
                                         data-ng-model="vm.entry.personal.religion"
@@ -168,18 +184,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.religion.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.religion.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Marital Status"
-                               for="iMaritalStatus">Marital Status<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Marital Status"
+                               for="iMaritalStatus">Marital Status<span data-ng-show="vm.showPersonalInputDiv"
+                                                                        class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="iMaritalStatus"
                                         id="iMaritalStatus"
                                         data-ng-model="vm.entry.personal.maritalStatus"
@@ -190,16 +209,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.maritalStatus.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.maritalStatus.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Spouse Name" for="iSpouseName">Spouse's
+                        <label class="col-md-3 control-label" title="Spouse Name" for="iSpouseName">Spouse's
                             Name</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nSpouseName"
                                        id="iSpouseName"
@@ -210,18 +231,20 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.spouseName}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.spouseName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label title="Employee's National Id Card No." class="col-md-4 control-label"
+                        <label title="Employee's National Id Card No." class="col-md-3 control-label"
                                for="iNationalId">National Id</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nNationalId"
                                        id="iNationalId"
@@ -232,16 +255,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.nidNo}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.nidNo}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Spouse's National Id Card No."
-                               for="iSpouseNationalId">Spouse's National Id</label>
+                        <label class="col-md-3 control-label" title="Spouse's National Id Card No."
+                               for="iSpouseNationalId">Spouse's NID</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nSpouseNationalId"
                                        id="iSpouseNationalId"
@@ -252,18 +277,20 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid;">
-                                <label class="control-label">{{vm.entry.personal.spouseNidNo}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.spouseNidNo}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Date of Birth" for="iBirthDate">Date
-                            Of Birth<span data-ng-show="vm.showPersonalInputDiv"  class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Date of Birth" for="iBirthDate">Date
+                            Of Birth<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nBirthDate"
                                        id="iBirthDate"
@@ -276,16 +303,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid;">
-                                <label class="control-label">{{vm.entry.personal.dateOfBirth}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.dateOfBirth}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Personal Website"
+                        <label class="col-md-3 control-label" title="Employee's Personal Website"
                                for="iPersonalWebsite">Website/Blog</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="input-icon">
                                     <i class="fa fa-external-link"></i>
                                     <input type="url"
@@ -299,8 +328,10 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.website}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.website}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -312,33 +343,36 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="(Example: abc@aust.edu)"
-                               for="iOrganizationalEmail">Organizational Email</label>
+                        <label class="col-md-3 control-label" title="(Example: abc@aust.edu)"
+                               for="iOrganizationalEmail">Org. Email</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="input-icon">
                                     <i class="fa fa-envelope"></i>
                                     <input type="email"
                                            name="nOrganizationalEmail"
                                            id="iOrganizationalEmail"
                                            data-ng-model="vm.entry.personal.organizationalEmail"
-                                           placeholder="Organizational Email Address"
+                                           placeholder="Organizationl Email Address"
                                            maxlength="80"
                                            class="form-control">
                                 </div>
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.organizationalEmail}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.organizationalEmail}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Personal Email"
-                               for="iPersonalEmail">Personal Email<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Personal Email"
+                               for="iPersonalEmail">Personal Email<span data-ng-show="vm.showPersonalInputDiv"
+                                                                        class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="input-icon">
                                     <i class="fa fa-envelope"></i>
                                     <input type="email"
@@ -352,18 +386,20 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.personalEmail}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.personalEmail}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Contact No."
-                               for="iMobile">Mobile<span data-ng-show="vm.showPersonalInputDiv"  class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Contact No."
+                               for="iMobile">Mobile<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nMobile"
                                        id="iMobile"
@@ -374,16 +410,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.mobile}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.mobile}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Employee's Phone No."
+                        <label class="col-md-3 control-label" title="Employee's Phone No."
                                for="iPhone">Phone</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPhone"
                                        id="iPhone"
@@ -394,8 +432,10 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.phone}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.phone}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -408,10 +448,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressHouse">Address Line 1<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPresentAddressHouse">Address Line 1<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPresentAddressHouse"
                                        id="iPresentAddressHouse"
@@ -422,15 +463,17 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressLine1}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressLine1}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressRoad">Address Line 2</label>
+                        <label class="col-md-3 control-label" for="iPresentAddressRoad">Address Line 2</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPresentAddressRoad"
                                        id="iPresentAddressRoad"
@@ -441,18 +484,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label"> {{vm.entry.personal.preAddressLine2}} </label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label"> {{vm.entry.personal.preAddressLine2}} </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressCountry">Country<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPresentAddressCountry">Country<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPresentAddressCountry"
                                         id="iPresentAddressCountry"
                                         data-ng-model="vm.entry.personal.preAddressCountry"
@@ -464,16 +510,19 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressCountry.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressCountry.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressDivision">Division<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPresentAddressDivision">Division<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPresentAddressDivision"
                                         id="iPresentAddressDivision"
                                         data-ng-model="vm.entry.personal.preAddressDivision"
@@ -486,18 +535,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressDivision.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressDivision.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressDistrict">District<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPresentAddressDistrict">District<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPresentAddressDistrict"
                                         id="iPresentAddressDistrict"
                                         data-ng-model="vm.entry.personal.preAddressDistrict"
@@ -510,16 +562,19 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressDistrict.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressDistrict.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressPoliceStation">Thana<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPresentAddressPoliceStation">Thana<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPresentAddressPoliceStation"
                                         id="iPresentAddressPoliceStation"
                                         data-ng-model="vm.entry.personal.preAddressThana"
@@ -531,18 +586,20 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressThana.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressThana.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPresentAddressPostOffice">Post Office
+                        <label class="col-md-3 control-label" for="iPresentAddressPostOffice">Post Office
                             No.</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPresentAddressPostOffice"
                                        id="iPresentAddressPostOffice"
@@ -554,8 +611,10 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.preAddressPostCode}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.preAddressPostCode}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -572,10 +631,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressHouse">Address Line 1<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPermanentAddressHouse">Address Line 1<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPermanentAddressHouse"
                                        id="iPermanentAddressHouse"
@@ -586,15 +646,17 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressLine1}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressLine1}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressRoad">Address Line 2</label>
+                        <label class="col-md-3 control-label" for="iPermanentAddressRoad">Address Line 2</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPermanentAddressRoad"
                                        id="iPermanentAddressRoad"
@@ -605,39 +667,45 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label"> {{vm.entry.personal.perAddressLine2}} </label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label"> {{vm.entry.personal.perAddressLine2}} </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressCountry">Country<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPermanentAddressCountry">Country<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPermanentAddressCountry"
                                         id="iPermanentAddressCountry"
                                         data-ng-model="vm.entry.personal.perAddressCountry"
                                         data-ng-options="country.name for country in vm.countries track by country.id"
                                         data-ng-change="vm.changePermanentAddressFields()"
                                         class="form-control" required>
-                                    <option value="" >Select Country</option>
+                                    <option value="">Select Country</option>
                                 </select>
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressCountry.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressCountry.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressDivision">Division<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPermanentAddressDivision">Division<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPermanentAddressDivision"
                                         id="iPermanentAddressDivision"
                                         data-ng-model="vm.entry.personal.perAddressDivision"
@@ -650,18 +718,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressDivision.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressDivision.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressDistrict">District<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPermanentAddressDistrict">District<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPermanentAddressDistrict"
                                         id="iPermanentAddressDistrict"
                                         data-ng-model="vm.entry.personal.perAddressDistrict"
@@ -674,16 +745,19 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressDistrict.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressDistrict.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressPoliceStation">Thana<span data-ng-show="vm.showPersonalInputDiv"
+                        <label class="col-md-3 control-label" for="iPermanentAddressPoliceStation">Thana<span
+                                data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nPermanentAddressPoliceStation"
                                         id="iPermanentAddressPoliceStation"
                                         data-ng-model="vm.entry.personal.perAddressThana"
@@ -695,18 +769,20 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressThana.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressThana.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" for="iPermanentAddressPostOffice">Post Office
+                        <label class="col-md-3 control-label" for="iPermanentAddressPostOffice">Post Office
                             No.</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nPermanentAddressPostOffice"
                                        id="iPermanentAddressPostOffice"
@@ -718,8 +794,10 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.perAddressPostCode}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.perAddressPostCode}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -732,10 +810,11 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person Name"
-                               for="idEmergencyContactName">Name<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Emergency Contact Person Name"
+                               for="idEmergencyContactName">Name<span data-ng-show="vm.showPersonalInputDiv"
+                                                                      class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="ndEmergencyContactName"
                                        id="idEmergencyContactName"
@@ -746,16 +825,19 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.emergencyContactName}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.emergencyContactName}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Relation With The Employee"
-                               for="iEmergencyContactRelation">Relation<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Relation With The Employee"
+                               for="iEmergencyContactRelation">Relation<span data-ng-show="vm.showPersonalInputDiv"
+                                                                             class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <select name="nEmergencyContactRelation"
                                         id="iEmergencyContactRelation"
                                         data-ng-model="vm.entry.personal.emergencyContactRelation"
@@ -766,18 +848,21 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.emergencyContactRelation.name}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.emergencyContactRelation.name}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person's Phone/Mobile No."
-                               for="iEmergencyContactPhone">Phone<span data-ng-show="vm.showPersonalInputDiv"  class="require">*</span></label>
+                        <label class="col-md-3 control-label" title="Emergency Contact Person's Phone/Mobile No."
+                               for="iEmergencyContactPhone">Phone<span data-ng-show="vm.showPersonalInputDiv"
+                                                                       class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nEmergencyContactPhone"
                                        id="iEmergencyContactPhone"
@@ -788,16 +873,18 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.emergencyContactPhone}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.emergencyContactPhone}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-4 control-label" title="Emergency Contact Person's Address"
+                        <label class="col-md-3 control-label" title="Emergency Contact Person's Address"
                                for="iEmergencyContactAddress">Address</label>
                         <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <input type="text"
                                        name="nEmergencyContactAddress"
                                        id="iEmergencyContactAddress"
@@ -808,8 +895,10 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-8" style="border-bottom: 1px solid; ">
-                                <label class="control-label">{{vm.entry.personal.emergencyContactAddress}}</label>
+                            <div class="col-md-9">
+                                <div style="border-bottom: 1px solid; ">
+                                    <label class="control-label">{{vm.entry.personal.emergencyContactAddress}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>

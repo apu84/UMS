@@ -55,7 +55,7 @@ module ums{
         publicationTitle: string;
         publicationInterestGenre: string;
         publisherName: string;
-        dateOfPublication: string;
+        dateOfPublication: number;
         publicationType: ICommon;
         publicationWebLink: string;
         publicationISSN: string;

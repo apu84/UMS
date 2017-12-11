@@ -41,7 +41,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pBuilder.add("publicationTitle", pReadOnly.getTitle());
     pBuilder.add("publicationInterestGenre", pReadOnly.getInterestGenre() == null ? "" : pReadOnly.getInterestGenre());
     pBuilder.add("publisherName", pReadOnly.getPublisherName() == null ? "" : pReadOnly.getPublisherName());
-    pBuilder.add("dateOfPublication", mDateFormat.format(pReadOnly.getDateOfPublication()));
+    pBuilder.add("dateOfPublication", pReadOnly.getDateOfPublication());
     JsonObjectBuilder publicationTypeBuilder = Json.createObjectBuilder();
     publicationTypeBuilder.add("id", pReadOnly.getTypeId()).add("name",
         mPublicationType.get(pReadOnly.getTypeId()).getLabel());
@@ -93,7 +93,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
             : null);
     pMutable.setPages(pJsonObject.containsKey("publicationPages") ? pJsonObject.getString("publicationPages") : "");
 
-    pMutable.setDateOfPublication(mDateFormat.parse(pJsonObject.getString("dateOfPublication")));
+    pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));
     pMutable.setTypeId(pJsonObject.getJsonObject("publicationType").getInt("id"));
     pMutable.setAppliedOn(mDateFormat.parse(mDate));
     pMutable.setStatus("0");
@@ -107,7 +107,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
     pMutable.setPublisherName(pJsonObject.getString("publisherName"));
-    pMutable.setDateOfPublication(mDateFormat.parse(pJsonObject.getString("dateOfPublication")));
+    pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));
     pMutable.setTypeId(pJsonObject.getJsonObject("publicationType").getInt("id"));
     pMutable.setWebLink(pJsonObject.getString("publicationWebLink"));
     pMutable.setISSN(pJsonObject.getString("publicationISSN"));
