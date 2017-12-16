@@ -173,7 +173,6 @@ module ums {
         }
 
         private downloadPdf(userId: string) {
-            console.log(userId);
             this.employeeInformationService.getEmployeeCV(userId);
         }
     }

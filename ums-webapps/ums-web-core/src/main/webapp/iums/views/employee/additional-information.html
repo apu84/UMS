@@ -4,66 +4,66 @@
             <div class="panel-heading">Work Place Info</div>
             <div class="panel-body">
                 <div class="form-group">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="control-label">Room No.</label>
-                        <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div>
-                                <input type="text"
-                                       name="nRoomNo{{$index}}"
-                                       id="iRoomNo{{$index}}"
-                                       data-ng-model="vm.entry.additional.roomNo"
-                                       placeholder="Room No"
-                                       maxlength="15"
-                                       class="form-control">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label">Room No.</label>
+                            <div data-ng-show="vm.showAdditionalInputDiv">
+                                <div>
+                                    <input type="text"
+                                           name="nRoomNo{{$index}}"
+                                           id="iRoomNo{{$index}}"
+                                           data-ng-model="vm.entry.additional.roomNo"
+                                           placeholder="Room No"
+                                           maxlength="15"
+                                           class="form-control">
+                                </div>
                             </div>
-                        </div>
 
-                        <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div style="border-bottom: 1px solid;">
-                                <label class="control-label">{{vm.entry.additional.roomNo}}</label>
+                            <div data-ng-show="!vm.showAdditionalInputDiv">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.additional.roomNo}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">Ext No.</label>
+                            <div data-ng-show="vm.showAdditionalInputDiv">
+                                <div>
+                                    <input type="text"
+                                           name="nExtNo{{$index}}"
+                                           id="iExtNo{{$index}}"
+                                           data-ng-model="vm.entry.additional.extNo"
+                                           placeholder="Ext No"
+                                           maxlength="6"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div data-ng-show="!vm.showAdditionalInputDiv">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.additional.extNo}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">Academic Initial</label>
+                            <div data-ng-show="vm.showAdditionalInputDiv">
+                                <div>
+                                    <input type="text"
+                                           name="nAcademicInitial{{$index}}"
+                                           id="iAcademicInitial{{$index}}"
+                                           data-ng-model="vm.entry.additional.academicInitial"
+                                           placeholder="Academic Initial"
+                                           maxlength="25"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div data-ng-show="!vm.showAdditionalInputDiv">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.additional.academicInitial}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="control-label">PABX/Ext No.</label>
-                        <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div>
-                                <input type="text"
-                                       name="nExtNo{{$index}}"
-                                       id="iExtNo{{$index}}"
-                                       data-ng-model="vm.entry.additional.extNo"
-                                       placeholder="Ext No"
-                                       maxlength="6"
-                                       class="form-control">
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div style="border-bottom: 1px solid;">
-                                <label class="control-label">{{vm.entry.additional.extNo}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="control-label">Academic Initial</label>
-                        <div data-ng-show="vm.showAdditionalInputDiv">
-                            <div>
-                                <input type="text"
-                                       name="nAcademicInitial{{$index}}"
-                                       id="iAcademicInitial{{$index}}"
-                                       data-ng-model="vm.entry.additional.academicInitial"
-                                       placeholder="Academic Initial"
-                                       maxlength="25"
-                                       class="form-control">
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showAdditionalInputDiv">
-                            <div style="border-bottom: 1px solid;">
-                                <label class="control-label">{{vm.entry.additional.academicInitial}}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
