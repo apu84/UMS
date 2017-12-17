@@ -16,6 +16,8 @@ import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.persistent.model.PersistentTaskStatus;
 import org.ums.services.academic.ProcessResult;
+import org.ums.services.academic.StudentCarryCourseService;
+import org.ums.tabulation.TabulationCourseModel;
 import org.ums.util.UmsUtils;
 
 public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecorator {
@@ -25,12 +27,15 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   private EquivalentCourseManager mEquivalentCourseManager;
   private TaskStatusManager mTaskStatusManager;
   private SemesterManager mSemesterManager;
+  private StudentCarryCourseService mStudentCarryCourseService;
 
   public UGRegistrationResultAggregator(final EquivalentCourseManager pEquivalentCourseManager,
-      final TaskStatusManager pTaskStatusManager, final SemesterManager pSemesterManager) {
+      final TaskStatusManager pTaskStatusManager, final SemesterManager pSemesterManager,
+      final StudentCarryCourseService pStudentCarryCourseService) {
     mEquivalentCourseManager = pEquivalentCourseManager;
     mTaskStatusManager = pTaskStatusManager;
     mSemesterManager = pSemesterManager;
+    mStudentCarryCourseService = pStudentCarryCourseService;
   }
 
   @Override
@@ -64,6 +69,13 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return processResult(resultList, pProgramId, pSemesterId);
   }
 
+  @Override
+  public Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pSemester) {
+    List<UGRegistrationResult> semesterResult = super.getResults(pProgramId, pSemesterId, pYear, pSemester);
+    return processResult(semesterResult, pSemesterId);
+  }
+
   private List<UGRegistrationResult> processResult(List<UGRegistrationResult> resultList, Integer pProgramId,
       Integer pSemesterId) {
     String taskId = String.format("%s_%s%s", pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
@@ -76,7 +88,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     mLogger.debug("Total student found for result process is: {}", totalStudentFound);
 
     for(String studentId : studentCourseGradeMap.keySet()) {
-        mLogger.debug("Processing grades for student: {}", studentId);
+      mLogger.debug("Processing grades for student: {}", studentId);
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
       List<UGRegistrationResult> results = aggregateResults(studentCourseGradeMap.get(studentId));
       studentCourseGradeMap.put(studentId, results);
@@ -92,14 +104,30 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return returnList;
   }
 
+  private Map<String, TabulationCourseModel> processResult(List<UGRegistrationResult> resultList, Integer pSemesterId) {
+
+    Map<String, List<UGRegistrationResult>> studentCourseGradeMap =
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
+
+    int totalStudentFound = studentCourseGradeMap.keySet().size();
+    mLogger.debug("Total student found for result process is: {}", totalStudentFound);
+
+    Map<String, TabulationCourseModel> tabulationCourseModelMap = new HashMap<>();
+    for(String studentId : studentCourseGradeMap.keySet()) {
+      mLogger.debug("Processing grades for student: {}", studentId);
+      tabulationCourseModelMap.put(studentId,
+          mStudentCarryCourseService.findCoursesForTabulation(studentCourseGradeMap.get(studentId), pSemesterId));
+    }
+    return tabulationCourseModelMap;
+  }
+
   private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults) {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
-    Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
-        .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
+    Map<String, EquivalentCourse> equivalentCourseMap =
+        equivalentCourses.stream().collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
 
     for(EquivalentCourse course : equivalentCourseMap.values()) {
-      if(pResults.containsKey(course.getOldCourseId())
-          && pResults.containsKey(course.getNewCourseId())) {
+      if(pResults.containsKey(course.getOldCourseId()) && pResults.containsKey(course.getNewCourseId())) {
         pResults.remove(course.getOldCourseId());
       }
     }
@@ -164,8 +192,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         resultIterator.remove();
       }
 
-      if(result.getSemester().getStartDate().before(pForSemester.getStartDate())
-          && result.getGradeLetter() != null) {
+      if(result.getSemester().getStartDate().before(pForSemester.getStartDate()) && result.getGradeLetter() != null) {
         if(result.getGradeLetter().equalsIgnoreCase("F")) {
           if(hasTakenInFollowingSemesters(result, pResults)) {
             resultIterator.remove();
@@ -197,8 +224,8 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   private boolean hasTakenEquivalentInFollowingSemesters(UGRegistrationResult pResult,
       List<UGRegistrationResult> pResults) {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
-    Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
-        .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
+    Map<String, EquivalentCourse> equivalentCourseMap =
+        equivalentCourses.stream().collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
     EquivalentCourse equivalentCourse = equivalentCourseMap.get(pResult.getCourseId());
     if(equivalentCourse != null) {
       for(UGRegistrationResult result : pResults) {
@@ -206,6 +233,17 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
             && pResult.getSemester().getStartDate().before(result.getSemester().getStartDate())) {
           return true;
         }
+      }
+    }
+    return false;
+  }
+
+  private boolean hasPassedInFollowingSemesters(UGRegistrationResult pResult, List<UGRegistrationResult> pResults) {
+    for(UGRegistrationResult result : pResults) {
+      if(result.getCourseId().equalsIgnoreCase(pResult.getCourseId())
+          && pResult.getSemester().getStartDate().before(result.getSemester().getStartDate())
+          && (!result.getGradeLetter().equalsIgnoreCase("F") && !result.getGradeLetter().equalsIgnoreCase("W"))) {
+        return true;
       }
     }
     return false;

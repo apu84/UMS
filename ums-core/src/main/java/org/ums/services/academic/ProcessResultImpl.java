@@ -126,8 +126,10 @@ public class ProcessResultImpl implements ProcessResult {
         boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
         studentRecord.setCGPA(cgpa);
         studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
-        studentRecord.setGradesheetRemarks(mRemarksBuilder.getRemarks(studentCourseGradeMap.get(studentId),
+        studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(studentCourseGradeMap.get(studentId),
             isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.PASSED, pSemesterId));
+        studentRecord.setTabulationSheetRemarks(mRemarksBuilder
+            .getTabulationSheetRemarks(studentCourseGradeMap.get(studentId), studentRecord, pSemesterId));
       }
       updatedStudentRecords.add(studentRecord);
 

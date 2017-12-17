@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.ums.academic.tabulation.service.TabulationService;
+import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
 import org.ums.cache.applications.AppConfigCache;
 import org.ums.cache.applications.AppRulesCache;
@@ -26,6 +28,7 @@ import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
 import org.ums.services.academic.RemarksBuilder;
 import org.ums.services.academic.RemarksBuilderImpl;
+import org.ums.services.academic.StudentCarryCourseService;
 import org.ums.statistics.JdbcTemplateFactory;
 
 @Configuration
@@ -56,6 +59,9 @@ public class AcademicContext {
   @Autowired
   @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
+
+  @Autowired
+  StudentCarryCourseService mStudentCarryCourseService;
 
   @Bean
   FacultyManager facultyManager() {
@@ -267,7 +273,7 @@ public class AcademicContext {
   UGRegistrationResultManager registrationResultManager() {
     UGRegistrationResultAggregator resultAggregator =
         new UGRegistrationResultAggregator(equivalentCourseManager(), mCoreContext.taskStatusManager(),
-            semesterManager());
+            semesterManager(), mStudentCarryCourseService);
     UGRegistrationResultCache registrationResultCache = new UGRegistrationResultCache(mCacheFactory.getCacheManager());
     registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
@@ -380,5 +386,11 @@ public class AcademicContext {
     AppRulesCache cache = new AppRulesCache(mCacheFactory.getCacheManager());
     cache.setManager(new PersistentAppRulesDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return cache;
+  }
+
+  @Bean
+  TabulationService tabulationService() {
+    return new TabulationServiceImpl(registrationResultManager(), semesterManager(), studentRecordManager(),
+        mCoreContext.studentManager());
   }
 }

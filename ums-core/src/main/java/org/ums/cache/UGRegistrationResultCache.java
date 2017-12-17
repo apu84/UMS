@@ -1,12 +1,14 @@
 package org.ums.cache;
 
 import java.util.List;
+import java.util.Map;
 
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.UGRegistrationResultManager;
+import org.ums.tabulation.TabulationCourseModel;
 
 public class UGRegistrationResultCache extends
     ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager> implements
@@ -79,5 +81,11 @@ public class UGRegistrationResultCache extends
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
     return getManager().getResults(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
+  @Override
+  public Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pSemester) {
+    return getManager().getResultForTabulation(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

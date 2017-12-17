@@ -37,6 +37,8 @@ public interface StudentRecord extends Serializable, Identifier<Long>, LastModif
 
   String getGradesheetRemarks();
 
+  String getTabulationSheetRemarks();
+
   enum Type {
     REGULAR("R"),
     READMISSION_REQUIRED("RR"),
