@@ -734,11 +734,10 @@ module ums {
                     {id: 8, name: "O-"}
                 ],
                 publicationTypes: [
-                    {id: 1, name: "Conference"},
-                    {id: 2, name: "Journal"},
-                    {id: 3, name: "Proceedings"},
-                    {id: 4, name: "Presentation"},
-                    {id: 5, name: "Others"}
+                    {id: 1, name: "Conference Proceedings"},
+                    {id: 2, name: "Journal Article"},
+                    {id: 3, name: "Book"},
+                    {id: 4, name: "Others"}
                 ],
                 maritalStatuses: [
                     {id: 1, name: "Single"},

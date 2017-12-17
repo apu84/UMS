@@ -86,4 +86,25 @@ public class LibraryContext {
     contributorCache.setManager(new PersistentContributorDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return contributorCache;
   }
+
+  @Bean
+  CheckoutManager checkoutManager() {
+    CheckoutCache checkoutCache = new CheckoutCache(mCacheFactory.getCacheManager());
+    checkoutCache.setManager(new PersistentCheckoutDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    return checkoutCache;
+  }
+
+  @Bean
+  CheckInManager checkInManager() {
+    CheckInCache checkInCache = new CheckInCache(mCacheFactory.getCacheManager());
+    checkInCache.setManager(new PersistentCheckInDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    return checkInCache;
+  }
+
+  @Bean
+  FineManager fineManager() {
+    FineCache fineCache = new FineCache(mCacheFactory.getCacheManager());
+    fineCache.setManager(new PersistentFineDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    return fineCache;
+  }
 }

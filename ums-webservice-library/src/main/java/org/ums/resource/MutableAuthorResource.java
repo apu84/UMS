@@ -8,7 +8,8 @@ import org.ums.domain.model.mutable.library.MutableAuthor;
  * Created by Ifti on 30-Jan-17.
  */
 public class MutableAuthorResource extends Resource {
-  @Autowired
-  ResourceHelper<Author, MutableAuthor, Integer> mResourceHelper;
+  /*
+   * @Autowired ResourceHelper<Author, MutableAuthor, Integer> mResourceHelper;
+   */
 
 }

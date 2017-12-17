@@ -98,3 +98,13 @@
 
 /// <reference path='util/UmsUtil.ts'/>
 /// <reference path='util/UriUtil.ts'/>
+
+
+/// <reference path='employee/EmployeeProfile.ts'/>
+/// <reference path='employee/ApprovePublicationService.ts'/>
+/// <reference path='employee/EmployeeInformation.ts'/>
+/// <reference path='employee/EmployeeInformationModel.ts'/>
+/// <reference path='employee/EmployeeInformationService.ts'/>
+/// <reference path='employee/EmployeePublication.ts'/>
+/// <reference path='employee/PagerService.ts'/>
+/// <reference path='employee/CRUDDetectionService.ts'/>

@@ -61,7 +61,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
 
   @Override
   public List<TrainingInformation> getEmployeeTrainingInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
+    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY TRAINING_FROM DESC";
     return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentTrainingInformationDao.RoleRowMapper());
   }
 

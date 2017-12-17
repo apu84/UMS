@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PublicationType {
-  CONFERENCE(1, "Conference"),
-  JOURNAL(2, "Journal"),
-  PROCEEDINGS(3, "Proceedings"),
-  PRESENTATION(4, "Presentation"),
-  OTHERS(5, "Others");
+  CONFERENCE(1, "Conference Proceedings"),
+  JOURNAL(2, "Journal Article"),
+  PROCEEDINGS(3, "Book"),
+  OTHERS(4, "Others");
 
   private Integer id;
   private String name;

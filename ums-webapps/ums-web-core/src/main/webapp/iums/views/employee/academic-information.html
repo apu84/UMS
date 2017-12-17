@@ -1,0 +1,158 @@
+<form name="nAcademicForm" data-validate="" data-onvalidate="submitAcademicForm">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1">
+                    Sl.
+                </div>
+                <div class="col-md-2">
+                    Degree<span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span>
+                </div>
+                <div class="col-md-4">
+                    Institution<span data-ng-show="vm.showAcademicInputDiv" class='require'>*</span>
+                </div>
+                <div class="col-md-2">
+                    Year<span data-ng-show="vm.showAcademicInputDiv"
+                                                                  class='require'>*</span>
+                </div>
+                <div class="col-md-2">
+                    Result
+                </div>
+                <div class="col-md-1">
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div data-ng-repeat="academic in vm.entry.academic track by $index">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label class="control-label"><b>{{$index + 1}}.</b></label>
+                    </div>
+                    <div data-ng-show="vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+                            <select name="nAcademicDegree{{$index}}"
+                                    id="iAcademicDegree{{$index}}"
+                                    data-ng-model="academic.degree"
+                                    data-ng-options="degreeName.shortName group by degreeName.typeName for degreeName in vm.degreeNames track by degreeName.id"
+                                    class="form-control" required>
+                                <option value="">Select Degree</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div data-ng-show="!vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+
+                            <label class="control-label">{{academic.degree.name}}</label>
+
+                        </div>
+                    </div>
+                    <div data-ng-show="vm.showAcademicInputDiv">
+                        <div class="col-md-4">
+                            <input type="text"
+                                   name="nAcademicInstitution{{$index}}"
+                                   id="iAcademicInstitution {{$index}}"
+                                   data-ng-model="academic.institution"
+                                   placeholder="Institution"
+                                   maxlength="145"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div data-ng-show="!vm.showAcademicInputDiv">
+                        <div class="col-md-4">
+
+                            <label class="control-label">{{academic.institution}}</label>
+
+                        </div>
+                    </div>
+                    <div data-ng-show="vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+                            <input type="number"
+                                   name="nPassingYear{{$index}}"
+                                   id="iPassingYear{{$index}}"
+                                   data-ng-model="academic.passingYear"
+                                   placeholder="YYYY"
+                                   autocomplete="off"
+                                   maxlength="4"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div data-ng-show="!vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+                            <label class="control-label">{{academic.passingYear}}</label>
+
+                        </div>
+                    </div>
+                    <div data-ng-show="vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+                            <input type="text"
+                                   name="nresult{{$index}}"
+                                   id="iResult{{$index}}"
+                                   data-ng-model="academic.result"
+                                   placeholder="YYYY"
+                                   autocomplete="off"
+                                   maxlength="25"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div data-ng-show="!vm.showAcademicInputDiv">
+                        <div class="col-md-2">
+
+                            <label class="control-label">{{academic.result}}</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div data-ng-show="vm.showAcademicInputDiv">
+                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('academic' , $index)"
+                                 class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-show="vm.showAcademicInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="center">
+
+                [ <a title="Add New Row" data-ng-click="vm.addNewRow('academic')"><i class="fa fa-plus"
+                                                                                     aria-hidden="true"
+                                                                                     style="cursor: pointer;color: green;"></i></a>
+                ]
+                </div>
+
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showAcademicInputDiv=false; vm.showTab('academic');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-show="vm.showAcademicEditButton">
+        <div data-ng-show="!vm.showAcademicInputDiv">
+            <div class="row">
+                <div class="col-md-12">
+                    <div align="right">
+                        <button id="btnEdit" type="button" title="Cancel" class="btn"
+                                data-ng-click="vm.showAcademicInputDiv=true"><i class="fa fa-edit"></i>&nbsp;Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div data-ng-show="!vm.showAcademicEditButton">
+    <div class="row">
+        <div class="col-md-12">
+            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Academic</strong>) form will be
+                covered by registrar office.</label>
+        </div>
+    </div>
+</div>

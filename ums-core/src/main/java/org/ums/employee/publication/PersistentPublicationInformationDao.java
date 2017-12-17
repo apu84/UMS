@@ -80,7 +80,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
 
   @Override
   public List<PublicationInformation> getEmployeePublicationInformation(final String pEmployeeId) {
-    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY APPLIED_ON";
+    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY DATE_OF_PUBLICATION";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
         new PersistentPublicationInformationDao.RoleRowMapper());
   }
@@ -106,7 +106,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
         "SELECT ID, EMPLOYEE_ID, TITLE, INTEREST_GENRE, PUBLISHER_NAME,"
             + " DATE_OF_PUBLICATION, TYPE, WEB_LINK, ISSN, ISSUE,"
             + " VOLUME, JOURNAL_NAME, COUNTRY, STATUS, PAGES, APPLIED_ON, ACTION_TAKEN_ON, LAST_MODIFIED, row_number FROM ( SELECT a.*,ROWNUM row_number FROM ( "
-            + " SELECT * FROM EMP_PUBLICATION_INFO " + " WHERE EMPLOYEE_ID=? ORDER BY APPLIED_ON) a "
+            + " SELECT * FROM EMP_PUBLICATION_INFO " + " WHERE EMPLOYEE_ID=? ORDER BY DATE_OF_PUBLICATION) a "
             + "  WHERE ROWNUM < ((" + pPageNumber + " * " + pItemPerPage + ") + 1)) " + "WHERE row_number >= ((("
             + pPageNumber + " - 1) * " + pItemPerPage + ") + 1)";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
@@ -179,7 +179,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setTitle(resultSet.getString("title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
       publicationInformation.setPublisherName(resultSet.getString("publisher_name"));
-      publicationInformation.setDateOfPublication(resultSet.getDate("date_of_publication"));
+      publicationInformation.setDateOfPublication(resultSet.getInt("date_of_publication"));
       publicationInformation.setTypeId(resultSet.getInt("type"));
       publicationInformation.setWebLink(resultSet.getString("web_link"));
       publicationInformation.setISSN(resultSet.getString("issn"));
@@ -207,7 +207,7 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
       publicationInformation.setTitle(resultSet.getString("title"));
       publicationInformation.setInterestGenre(resultSet.getString("interest_genre"));
       publicationInformation.setPublisherName(resultSet.getString("publisher_name"));
-      publicationInformation.setDateOfPublication(resultSet.getDate("date_of_publication"));
+      publicationInformation.setDateOfPublication(resultSet.getInt("date_of_publication"));
       publicationInformation.setTypeId(resultSet.getInt("type"));
       publicationInformation.setWebLink(resultSet.getString("web_link"));
       publicationInformation.setISSN(resultSet.getString("issn"));
