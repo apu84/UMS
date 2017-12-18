@@ -1,0 +1,143 @@
+<form name="nAwardForm" data-validate="" data-onvalidate="submitAwardForm">
+    <div data-ng-repeat="award in vm.entry.award track by $index">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-1">
+                        <b>{{$index + 1}}.</b>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="control-label" for="iAwardName{{$index}}">Award/Honor Name<span
+                                data-ng-show="vm.showAwardInputDiv"
+                                class='require'>*</span></label>
+                        <div data-ng-show="vm.showAwardInputDiv">
+                            <div>
+                                <input type="text"
+                                       name="iAwardName{{$index}}"
+                                       id="iAwardName{{$index}}"
+                                       data-ng-model="award.awardName"
+                                       placeholder="Award/Honor Name"
+                                       maxlength="100"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showAwardInputDiv">
+                            <div class="underlineBox">
+                                <label class="control-label">{{award.awardName}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label" for="iAwardedYear{{$index}}">Awarded Year<span
+                                data-ng-show="vm.showAwardInputDiv"
+                                class='require'>*</span></label>
+                        <div data-ng-show="vm.showAwardInputDiv">
+                            <div>
+                                <input type="number"
+                                       name="nAwardedYear{{$index}}"
+                                       id="iAwardedYear{{$index}}"
+                                       data-ng-model="award.awardedYear"
+                                       placeholder="YYYY"
+                                       autocomplete="off"
+                                       maxlength="4"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showAwardInputDiv">
+                            <div class="underlineBox">
+                                <label class="control-label">{{award.awardedYear}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div data-ng-show="vm.showAwardInputDiv">
+                            <span data-ng-show="vm.showAwardInputDiv">
+                                [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('award', $index)"
+                                     class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iAwardInstitute{{$index}}">Institution</label>
+                        <div data-ng-show="vm.showAwardInputDiv">
+                            <div>
+                                <input type="text"
+                                       name="nAwardInstitute{{$index}}"
+                                       id="iAwardInstitute{{$index}}"
+                                       data-ng-model="award.awardInstitute"
+                                       placeholder="Institution"
+                                       maxlength="150"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showAwardInputDiv">
+                            <div class="underlineBox">
+                                <label class="control-label">{{award.awardInstitute}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iShortDescription{{$index}}">Short
+                            Description</label>
+                        <div data-ng-show="vm.showAwardInputDiv">
+                            <div>
+                                <input type="text"
+                                       name="nShortDescription{{$index}}"
+                                       id="iShortDescription{{$index}}"
+                                       data-ng-model="award.awardShortDescription"
+                                       placeholder="Short Description"
+                                       maxlength="300"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div data-ng-show="!vm.showAwardInputDiv">
+                            <div class="underlineBox">
+                                <label class="control-label">{{award.awardShortDescription}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-ng-show="vm.showAwardInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('award')"><i class="fa fa-plus"
+                                                                                      aria-hidden="true"
+                                                                                      style="cursor: pointer;color: green;"></i></a>
+                    ]
+                </div>
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showAwardInputDiv=false; vm.showTab('award');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-show="!vm.showAwardInputDiv">
+        <div class="row">
+            <div class="col-md-12">
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn" data-ng-click="vm.showAwardInputDiv=true"><i
+                            class="fa fa-edit"></i>&nbsp;Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,351 @@
+<div data-ng-show="vm.showPublicationInputDiv">
+    <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
+        <div data-ng-repeat="publication in vm.entry.publication track by $index">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="control-label"><b>{{$index + 1}}.</b></label>
+                        </div>
+                        <div class="col-md-10">
+                            <label class="control-label" for="iPublicationTitle{{$index}}">Title<span
+                                    class='require'>*</span></label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationTitle{{$index}}"
+                                       id="iPublicationTitle{{$index}}"
+                                       data-ng-model="publication.publicationTitle"
+                                       placeholder="Publication Title"
+                                       maxlength="250"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-1">[ <i title="Remove Row {{$index + 1}}"
+                                                   data-ng-click="vm.deleteRow('publication', $index)"
+                                                   class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
+                            ]
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label class="control-label" for="iPublicationType{{$index}}">Publication Type<span
+                                    class='require'>*</span></label>
+                            <div>
+                                <select name="nPublicationType{{$index}}"
+                                        id="iPublicationType{{$index}}"
+                                        data-ng-model="publication.publicationType"
+                                        data-ng-options="publicationType.name for publicationType in vm.publicationTypes track by publicationType.id"
+                                        class="form-control" required>
+                                    <option value="">Select Publication Type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iPublicationCountry{{$index}}">Country<span
+                                    class='require'>*</span></label>
+                            <div>
+                                <select name="nPublicationCountry{{$index}}"
+                                        id="iPublicationCountry{{$index}}"
+                                        data-ng-model="publication.publicationCountry"
+                                        data-ng-options="country.name for country in vm.countries track by country.id"
+                                        class="form-control" required>
+                                    <option value="">Select Country</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iDateOfPublication{{$index}}">Year<span class='require'>*</span></label>
+                            <div>
+                                <input type="number"
+                                       name="nDateOfPublication{{$index}}"
+                                       id="iDateOfPublication{{$index}}"
+                                       data-ng-model="publication.dateOfPublication"
+                                       maxlength="4"
+                                       class="datepicker-default form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <label class="control-label" for="iPublicationJournalName{{$index}}">Journal/Conference
+                                Name<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
+                                        class='require'>*</span></span>
+                            </label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationJournalName{{$index}}"
+                                       id="iPublicationJournalName{{$index}}"
+                                       data-ng-model="publication.publicationJournalName"
+                                       placeholder="Journal Name"
+                                       maxlength="250"
+                                       class="form-control" ng-required="publication.publicationType.id==1 || publication.publicationType.id==2">
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label class="control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationISSN{{$index}}"
+                                       id="iPublicationISSN{{$index}}"
+                                       data-ng-model="publication.publicationISSN"
+                                       placeholder="ISSN No."
+                                       maxlength="80"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iPublicationVolume{{$index}}">Volume</label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationVolume{{$index}}"
+                                       id="iPublicationVolume{{$index}}"
+                                       data-ng-model="publication.publicationVolume"
+                                       placeholder="Volume"
+                                       maxlength="80"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iPublicationIssue{{$index}}">Issue</label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationIssue{{$index}}"
+                                       id="iPublicationIssue{{$index}}"
+                                       data-ng-model="publication.publicationIssue"
+                                       placeholder="Issue"
+                                       maxlength="80"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label class="control-label" for="iPublishername{{$index}}">Publisher Name<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
+                                    class='require'>*</span></span></label></label>
+                            <div>
+                                <input data-ng-model="publication.publisherName"
+                                       name="nPublishername{{$index}}"
+                                       id="iPublishername{{$index}}"
+                                       type="text"
+                                       placeholder="Publisher Name"
+                                       maxlength="100"
+                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==3"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iPublicationPage{{$index}}">Pages<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
+                                    class='require'>*</span></span></label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationPage{{$index}}"
+                                       id="iPublicationPage{{$index}}"
+                                       data-ng-model="publication.publicationPages"
+                                       placeholder="Page"
+                                       maxlength="80"
+                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
+                            <div>
+                                <input type="text"
+                                       name="nPublicationInterestGenre{{$index}}"
+                                       id="iPublicationInterestGenre{{$index}}"
+                                       data-ng-model="publication.publicationInterestGenre"
+                                       placeholder="Genre"
+                                       maxlength="100"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label class="control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
+                            <div>
+                                <input type="url"
+                                       name="nEmployeeWebLink{{$index}}"
+                                       id="iEmployeeWebLink{{$index}}"
+                                       data-ng-model="publication.publicationWebLink"
+                                       placeholder="Web Link"
+                                       maxlength="100"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3"><span data-ng-show="publication.status=='9'" style="float: right"></span>
+                            <span data-ng-show="publication.status=='0'" style="float: right"><b>Waiting for head's approval</b></span>
+                            <span data-ng-show="publication.status=='1'"></span>
+                            <span data-ng-show="publication.status=='2'"
+                                  style="color: red; float: right;"><b>Rejected</b></span>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div align="center">
+                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('publication')"><i class="fa fa-plus"
+                                                                                            aria-hidden="true"
+                                                                                            style="cursor: pointer;color: green;"></i></a>
+                    ]
+                </div>
+                <div align="right">
+                    <button type="button" title="Cancel" class="btn"
+                            data-ng-click="vm.showPublicationInputDiv=false; vm.showTab('publication');">Cancel
+                    </button>
+                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div data-ng-show="!vm.showPublicationInputDiv">
+    <div dir-paginate="publication in vm.paginatedPublication | itemsPerPage: vm.itemPerPage"
+         current-page="vm.currentPage" total-items="vm.totalRecord" pagination-id="iPagination">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label class="control-label"><b>{{publication.rowNumber}}.</b></label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iPublicationTitle{{$index}}">Title</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationTitle}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label class="control-label" for="iPublicationType{{$index}}">Publication Type</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationType.name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="iPublicationCountry{{$index}}">Country</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationCountry.name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="iDateOfPublication{{$index}}">Year</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.dateOfPublication}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <label class="control-label" for="iPublicationJournalName{{$index}}">Journal/Conference
+                            Name</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationJournalName}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label class="control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationISSN}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="iPublicationVolume{{$index}}">Volume</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationVolume}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class=" control-label" for="iPublicationIssue{{$index}}">Issue</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationIssue}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label class="control-label" for="iPublishername{{$index}}">Publisher Name</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publisherName}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="iPublicationPage{{$index}}">Pages</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationPages}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label class="control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
+                        <div class="underlineBox">
+                            <label class="control-label">{{publication.publicationWebLink}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"><span data-ng-show="publication.status=='0'" style="float: right"><b>Waiting for head's approval</b></span>
+                        <span data-ng-show="publication.status=='1'"></span>
+                        <span data-ng-show="publication.status=='2'"
+                              style="color: red; float: right;"><b>Rejected</b></span>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div align="right">
+        <dir-pagination-controls boundary-links="true"
+                                 pagination-id="iPagination" on-page-change="vm.pageChanged(newPageNumber)"
+                                 template-url="views\directive\dirPagination.tpl.html">
+        </dir-pagination-controls>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div align="right">
+                <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPublicationInputDiv=true"><i
+                        class="fa fa-edit"></i>&nbsp;Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

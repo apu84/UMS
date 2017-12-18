@@ -34,4 +34,6 @@ public interface MutableStudentRecord extends StudentRecord, Editable<Long>, Mut
   void setProgram(final Program pProgram);
 
   void setGradesheetRemarks(final String pRemarks);
+
+  void setTabulationSheetRemarks(final String pRemarks);
 }

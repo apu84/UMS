@@ -102,20 +102,20 @@
 
 /// <reference path='data.ts'/>
 
-/// <reference path='employee/EmployeeProfile.ts'/>
-/// <reference path='employee/EmployeeInformation.ts'/>
-/// <reference path='controller/employee-publication/EmployeePublication.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeProfile.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeePublication.ts'/>
 /// <reference path='controller/meeting/AgendaResolution.ts'/>
 /// <reference path='controller/meeting/Schedule.ts'/>
 /// <reference path='controller/meeting/Search.ts'/>
 
-/// <reference path='service/ApprovePublicationService.ts'/>
-/// <reference path='service/PagerService.ts'/>
-/// <reference path='employee/CRUDDetectionService.ts'/>
-/// <reference path='employee/EmployeeInformationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/ApprovePublicationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PagerService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/CRUDDetectionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
 /// <reference path='service/MeetingService.ts'/>
 
-/// <reference path='employee/EmployeeInformationModel.ts' />
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
 
 
 

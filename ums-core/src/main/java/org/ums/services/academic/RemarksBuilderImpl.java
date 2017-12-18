@@ -1,14 +1,15 @@
 package org.ums.services.academic;
 
+import java.util.List;
+
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 
-import java.util.List;
-
 public class RemarksBuilderImpl implements RemarksBuilder {
   @Override
-  public String getRemarks(List<UGRegistrationResult> pResults, StudentRecord.Status pStatus, Integer pSemesterId) {
+  public String getGradeSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord.Status pStatus,
+      Integer pSemesterId) {
     String passFailStatus = null, carryOverText = null;
     if(pStatus == StudentRecord.Status.FAILED) {
       passFailStatus = "Failed";
@@ -19,6 +20,21 @@ public class RemarksBuilderImpl implements RemarksBuilder {
       carryOverText = getCarryOverText(pResults, pSemesterId, true);
     }
     return String.format("%s %s %s", passFailStatus, StringUtils.isEmpty(carryOverText) ? "" : "with carry over in",
+        carryOverText);
+  }
+
+  @Override
+  public String getTabulationSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord,
+      Integer pSemesterId) {
+    String promotionStatus = null, carryOverText = null;
+    if(pStudentRecord.getStatus() == StudentRecord.Status.FAILED) {
+      return "Failed";
+    }
+    else if(pStudentRecord.getStatus() == StudentRecord.Status.PASSED) {
+      promotionStatus = promotionText(pStudentRecord);
+      carryOverText = getCarryOverText(pResults, pSemesterId, true);
+    }
+    return String.format("%s %s %s", promotionStatus, StringUtils.isEmpty(carryOverText) ? "" : "with carry over in",
         carryOverText);
   }
 
@@ -62,5 +78,27 @@ public class RemarksBuilderImpl implements RemarksBuilder {
       }
     }
     return false;
+  }
+
+  private String promotionText(StudentRecord pStudentRecord) {
+    if(pStudentRecord.getStudent().getProgram().getShortName().equalsIgnoreCase("BSc in ARC")) {
+      if(pStudentRecord.getYear() == 5 && pStudentRecord.getAcademicSemester() == 2) {
+        return "Passed";
+      }
+    }
+    else {
+      if(pStudentRecord.getYear() == 4 && pStudentRecord.getAcademicSemester() == 2) {
+        return "Passed";
+      }
+    }
+    return incrementYearSemester(pStudentRecord);
+  }
+
+  private String incrementYearSemester(StudentRecord pStudentRecord) {
+    String[] year = {"", "First", "Second", "Third", "Fourth", "Fifth"};
+    String[] academicSemester = {"Second", "First"};
+    return String.format("Promoted to %s Year %s Semester",
+        year[pStudentRecord.getYear() + ((pStudentRecord.getAcademicSemester() + 1) % 2)],
+        academicSemester[(pStudentRecord.getAcademicSemester() + 1) % 2]);
   }
 }

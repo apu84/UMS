@@ -9,6 +9,7 @@
       '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
       '/profile': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/employeeInformation': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
+      '/profile/:id': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
       '/employeePublication': {title: 'Publication Approval', 'breadcrumb': ['Publication Approval']},
       '/meetingSchedule': {title: 'Meeting Management', 'breadcrumb': ['Meeting Schedule & Invite Members']},
       '/agendaAndResolution': {title: 'Meeting Management', 'breadcrumb': ['Prepare Agenda & Resolution']},

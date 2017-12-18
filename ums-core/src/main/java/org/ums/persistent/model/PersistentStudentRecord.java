@@ -2,11 +2,11 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
+import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
@@ -40,7 +40,8 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private String mLastModified;
   private Integer mProgramId;
   private Program mProgram;
-  private String mRemarks;
+  private String mGradesheetRemarks;
+  private String mTabulationSheetRemarks;
 
   public PersistentStudentRecord() {}
 
@@ -56,6 +57,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
     setStatus(pPersistentStudentRecord.getStatus());
     setLastModified(pPersistentStudentRecord.getLastModified());
     setGradesheetRemarks(pPersistentStudentRecord.getGradesheetRemarks());
+    setTabulationSheetRemarks(pPersistentStudentRecord.getTabulationSheetRemarks());
   }
 
   @Override
@@ -220,11 +222,21 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   @Override
   public String getGradesheetRemarks() {
-    return mRemarks;
+    return mGradesheetRemarks;
   }
 
   @Override
   public void setGradesheetRemarks(String pRemarks) {
-    mRemarks = pRemarks;
+    mGradesheetRemarks = pRemarks;
+  }
+
+  @Override
+  public String getTabulationSheetRemarks() {
+    return mTabulationSheetRemarks;
+  }
+
+  @Override
+  public void setTabulationSheetRemarks(String pRemarks) {
+    mTabulationSheetRemarks = pRemarks;
   }
 }

@@ -63,7 +63,7 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
 
   @Override
   public List<ExperienceInformation> getEmployeeExperienceInformation(final String employeeId) {
-    String query = GET_ONE + " Where employee_id = ?";
+    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY EXPERIENCE_FROM DESC";
     return mJdbcTemplate
         .query(query, new Object[] {employeeId}, new PersistentExperienceInformationDao.RoleRowMapper());
   }

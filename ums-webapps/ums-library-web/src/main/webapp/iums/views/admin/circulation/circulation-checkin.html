@@ -1,4 +1,8 @@
 <style>
+    .form-control {
+        border-radius: 8px !important;
+    }
+
     fieldset {
         margin: 1em 1em 1em 0;
         padding: 1em;
@@ -23,15 +27,16 @@
     }
 </style>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <fieldset>
             <legend>Check in</legend>
             <label for="barcode">Enter item barcode: </label>
 
-            <input name="barcode" id="barcode" size="14" class="focus">
+            {{vm.text}}}
+            <input name="barcode" id="barcode" size="14" class="form-control">
+            <br/>
 
             <input type="submit" class="submit" value="Submit">
-
 
             <div class="date-select" id="return_date_override_fields">
                 <div class="hint">Specify return date (DD/MM/YYYY)
@@ -43,10 +48,10 @@
                                                   src="/intranet-tmpl/prog/img/famfamfam/silk/calendar.png" alt="..."
                                                   title="...">
 
-                <label for="return_date_override_remember"> Remember for next check in:</label>
+                <!--<label for="return_date_override_remember"> Remember for next check in:</label>-->
 
-                <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();"
-                       name="return_date_override_remember">
+                <!--<input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();"-->
+                <!--name="return_date_override_remember">-->
 
 
                 <input type="button" class="action" id="cleardate" value="Clear" name="cleardate"
@@ -67,47 +72,47 @@
                 <label for="exemptcheck">Forgive overdue charges</label>
             </p>
             <!-- overduecharges -->
-            <p>
+            <!--<p>-->
 
-                <input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode">
-                <label for="dropboxcheck">Book drop mode</label>
-            </p>
+            <!--&lt;!&ndash;<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode">&ndash;&gt;-->
+            <!--&lt;!&ndash;<label for="dropboxcheck">Book drop mode</label>&ndash;&gt;-->
+            <!--</p>-->
             <!-- overduecharges -->
         </fieldset>
     </div>
 
-    <div class="col-md-4">
-        <fieldset id="checkin_options">
-            <legend>Patrons</legend>
+    <!--<div class="col-md-4">-->
+    <!--<fieldset id="checkin_options">-->
+    <!--<legend>Patrons</legend>-->
 
-            <table class="table table-bordered table-striped table-condensed cf">
-                <thead class="cf">
-                <tr>
-                    <th width="80%">Name</th>
-                    <th width="20%" style="text-align: center;">Hold</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Ifta Khirul</td>
-                    <td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>
+    <!--<table class="table table-bordered table-striped table-condensed cf">-->
+    <!--<thead class="cf">-->
+    <!--<tr>-->
+    <!--<th width="80%">Name</th>-->
+    <!--<th width="20%" style="text-align: center;">Hold</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<tr>-->
+    <!--<td>Ifta Khirul</td>-->
+    <!--<td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>-->
 
-                </tr>
-                <tr>
-                    <td>Imrul Kayes</td>
-                    <td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>
-                </tr>
-                </tbody>
-            </table>
-            <!-- overduecharges -->
-        </fieldset>
-    </div>
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>Imrul Kayes</td>-->
+    <!--<td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--&lt;!&ndash; overduecharges &ndash;&gt;-->
+    <!--</fieldset>-->
+    <!--</div>-->
 </div>
 
 <!-- S - Checked-in Items Table Start -->
 
 <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-12">
         <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-in Items</p>
         <table class="table table-bordered table-striped table-condensed cf">
             <thead class="cf">

@@ -20,7 +20,7 @@ public interface PublicationInformation extends Serializable, EditType<MutablePu
 
   String getPublisherName();
 
-  Date getDateOfPublication();
+  int getDateOfPublication();
 
   PublicationType getType();
 

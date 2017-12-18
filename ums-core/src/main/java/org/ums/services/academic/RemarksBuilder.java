@@ -1,10 +1,13 @@
 package org.ums.services.academic;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 
-import java.util.List;
-
 public interface RemarksBuilder {
-  String getRemarks(List<UGRegistrationResult> pResults, StudentRecord.Status pStatus, Integer pSemesterId);
+  String getGradeSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord.Status pStatus, Integer pSemesterId);
+
+  String getTabulationSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord,
+      Integer pSemesterId);
 }

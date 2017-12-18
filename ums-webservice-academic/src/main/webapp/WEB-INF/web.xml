@@ -86,7 +86,8 @@
         org.ums.resource,
         org.ums.response.type,
         org.codehaus.jackson.jaxrs,
-        org.ums.exception</param-value>
+        org.ums.exception,
+        org.ums.employee</param-value>
     </init-param>
     <init-param>
       <param-name>javax.json.stream.JsonGenerator.prettyPrinting</param-name>

@@ -9,7 +9,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.StudentRecord;
@@ -73,7 +72,7 @@ public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResul
     StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId);
     object.add("gpa", studentRecord.getGPA());
     object.add("cgpa", studentRecord.getCGPA());
-    object.add("remarks", mRemarksBuilder.getRemarks(results, studentRecord.getStatus(), pSemesterId));
+    object.add("remarks", mRemarksBuilder.getGradeSheetRemarks(results, studentRecord.getStatus(), pSemesterId));
     return object.build();
   }
 

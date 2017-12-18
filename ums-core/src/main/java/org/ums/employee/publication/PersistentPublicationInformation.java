@@ -22,7 +22,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   private String mTitle;
   private String mInterestGenre;
   private String mPublisherName;
-  private Date mDateOfPublication;
+  private int mDateOfPublication;
   private PublicationType mType;
   private int mTypeId;
   private String mWebLink;
@@ -125,7 +125,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public void setDateOfPublication(Date pDateOfPublication) {
+  public void setDateOfPublication(int pDateOfPublication) {
     mDateOfPublication = pDateOfPublication;
   }
 
@@ -220,7 +220,7 @@ public class PersistentPublicationInformation implements MutablePublicationInfor
   }
 
   @Override
-  public Date getDateOfPublication() {
+  public int getDateOfPublication() {
     return mDateOfPublication;
   }
 

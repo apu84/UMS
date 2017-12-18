@@ -1,0 +1,178 @@
+<style>
+    .row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+
+    a:visited {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:active {
+        text-decoration: underline;
+    }
+
+    tr:hover td {
+        background-color: #f0f7fd !important; /* or #000 */
+    }
+</style>
+<div class="row">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select</h3>
+        </div>
+        <div class="panel-body pan">
+            <form class="form-horizontal" data-validate="" data-onvalidate="getEmployees">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Search By</label>
+                        <div class="col-md-8">
+                            <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
+                                    data-ng-change="vm.showSearchByField()" class="form-control required">
+                                <option value="">Select Search Type</option>
+                                <option value="1">User Id</option>
+                                <option value="2">User Name</option>
+                                <option value="3">Dept/School/Office</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div data-ng-if="vm.showSearchByUserId">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">User Id</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nUserId"
+                                       id="iUserId"
+                                       data-ng-model="vm.changedUserId"
+                                       placeholder="User Id"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div data-ng-if="vm.showSearchByUserName">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">User Name</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nUserName"
+                                       id="iUserName"
+                                       data-ng-model="vm.changedUserName"
+                                       placeholder="User Name"
+                                       class="form-control required">
+                            </div>
+                        </div>
+                    </div>
+                    <div data-ng-if="vm.showSearchByDepartment">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Department</label>
+                            <div class="col-md-8">
+                                <select class="form-control required"
+                                        name="nDepartment"
+                                        id="iDepartment"
+                                        data-ng-options="department.longName for department in vm.departments track by department.id"
+                                        data-ng-change="vm.showSearchByField()"
+                                        data-ng-model="vm.changedDepartment"
+                                >
+                                    <option value="">Select Department</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="submit" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div data-ng-show="vm.showListOfEmployeesPanel">
+            <div class="panel">
+                <div class="panel-heading">Total Employees Found: {{filterd.length}}<span class="subtitle"></span></div>
+                <div class="panel-body pan">
+                    <div class="panel-body shadowPanel" style="min-height: 490px;">
+                        <table class="table table-bordered table-hover">
+                            <thead class="heading well">
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Employee Id</th>
+                                <th>Teacher Name</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <!--<th>Action</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                                <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
+                                <td style="cursor:pointer" data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">{{user.id}}</td>
+                                <td>{{user.employeeName}}</td>
+                                <td>{{user.deptOfficeName}}</td>
+                                <td>{{user.designationName}}</td>
+                                <!--<td data-ng-click="vm.downloadPdf(user.id)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div align="right">
+                            <pagination total-items="filterd.length" ng-model="vm.currentPageNumber" max-size="7"
+                                        class="pagination-sm" boundary-links="true" rotate="false"
+                                        class="pagination-page"
+                                        items-per-page="vm.itemsPerPage"></pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-ng-show="vm.showEmployeeProfilePanel">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">
+                            Name : <b>{{vm.employee.employeeName}}</b> & Department:
+                            <b>{{vm.employee.deptOfficeName}}</b>
+                        </div>
+                        <div class="col-md-3">
+                            <div align="right">
+                                <div class="btn-group-sm">
+                                <span data-ng-show="vm.enablePreviousButton">
+                                    <button type="button" class="btn btn-white" data-ng-click="vm.previous()"
+                                            data-ng-disabled="vm.disablePrevious">
+                                        <span class="glyphicon glyphicon-chevron-left"></span> &nbsp;Previous
+                                    </button>
+                                </span>
+                                    <span data-ng-show="vm.enableNextButton">
+                                <button type="button" class="btn btn-white" data-ng-click="vm.next()"
+                                        data-ng-disabled="vm.disableNext">
+                                   Next &nbsp;<span class="glyphicon glyphicon-chevron-right"></span></button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body pan">
+                    <div class="panel-body shadowPanel" style="min-height: 490px;">
+                        <div data-ng-show="vm.showInformationPanel">
+                            <div ui-view>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

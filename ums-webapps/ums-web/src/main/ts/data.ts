@@ -63,7 +63,9 @@
     '/admissionStudentId': {title: 'Admitted Student Id', 'breadcrumb': ['Admitted Student Information']},
     '/leaveApplication': {title: 'Leave Application', 'breadcrumb': ['Leave Application ']},
     '/leaveApproval': {title: 'Leave Application Approval', 'breadcrumb': ['Leave Application Approval']},
-    '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']}
+    '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
+
+      '/profile': {title: 'Profile', 'breadcrumb': ['Profile']}
   };
 
 

@@ -1,9 +1,9 @@
 module ums{
     export class DivisionService {
-        public static $inject = ['HttpClient','$q','notify','$sce','$window','MessageFactory'];
+        public static $inject = ['HttpClient','$q','notify','$sce','$window'];
         constructor(private HttpClient: HttpClient,
                     private $q: ng.IQService, private Notify: Notify,
-                    private $sce: ng.ISCEService, private $window: ng.IWindowService, private MessageFactory: MessageFactory) {
+                    private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
         public getDivisionList(): ng.IPromise<any> {

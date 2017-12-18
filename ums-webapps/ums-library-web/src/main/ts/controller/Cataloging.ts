@@ -685,7 +685,7 @@ module ums {
 
         private reloadSuppliers(): void {
             let data = $("#supplier").select2("data");
-            if(data == null || data == undefined){
+            if (data == null || data == undefined) {
                 this.getAllSuppliers();
             }
             else {
@@ -696,8 +696,8 @@ module ums {
                     this.$scope.showSupplierSelect2 = true;
                     setTimeout(() => {
                         Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
-                    }, 4000);
-                }, 4000);
+                    }, 600);
+                }, 800);
             }
         }
 
@@ -712,9 +712,11 @@ module ums {
                 this.$scope.showPublisherSelect2 = false;
                 this.getAllPublishers();
                 setTimeout(() => {
-                    // Utils.setSelect2Value("recordPublisherDiv","publisher", searchTerm);
-                    $("#publisher").select2('data', {id: data.id, text: data.text});
-                }, 4000);
+                    this.$scope.showPublisherSelect2 = true;
+                    setTimeout(() => {
+                        Utils.setSelect2Value("recordPublisherDiv", "publisher", searchTerm);
+                    }, 600);
+                }, 800)
             }
         }
 
@@ -723,7 +725,7 @@ module ums {
 
             for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
                 let data = $("#contributor" + i).select2("data");
-                if(data == null || data == undefined) {
+                if (data == null || data == undefined) {
                     text[i] = "";
                 }
                 else {
@@ -742,9 +744,8 @@ module ums {
                         }
                     }
 
-                }, 4000);
-
-            }, 4500);
+                }, 600);
+            }, 800);
         }
 
         private loadCountries(): void {

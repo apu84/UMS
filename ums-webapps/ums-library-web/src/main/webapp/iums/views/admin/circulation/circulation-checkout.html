@@ -1,4 +1,3 @@
-checkout history......
 <style>
     .tabbable.tabs-left .tab-content {
         border-right: 0px;
@@ -72,13 +71,20 @@ checkout history......
     }
 </style>
 
+
 <div class="tabbable tabs-left" id="menu">
     <ul class="nav nav-tabs">
-        <li id="o1" class="active"><a ui-sref=".patronCheckOut">Check Out</a></li>
-        <li onclick="changeSelection(this.id)" id="o2"><a ui-sref=".patronDetail">Details </a></li>
-        <li onclick="changeSelection(this.id)" id="o3"><a ui-sref=".thesis">Fines</a></li>
-        <li onclick="changeSelection(this.id)" id="o4"><a ui-sref=".journal">Circulation History </a></li>
-        <li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Purchase Suggestions </a></li>
+        <li><img src="https://image.flaticon.com/icons/svg/16/16480.svg" alt="User Image"
+                 style="width:120px;height:95px;">
+            <label><b>Name:</b> Kawsur</label>
+            <label><b>Category:</b> Student</label>
+            <label><b>Id:</b>17-99919-1</label>
+        </li>
+        <li id="o1" ui-sref-active="active"><a ui-sref=".patronCheckOut">Check Out</a></li>
+        <li id="o2" ui-sref-active="active"><a ui-sref=".patronDetail">Details </a></li>
+        <li id="o3" ui-sref-active="active"><a ui-sref=".patronFines">Fines</a></li>
+        <li id="o4" ui-sref-active="active"><a ui-sref=".circulationHistory">Circulation History </a></li>
+        <!--<li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Purchase Suggestions </a></li>-->
     </ul>
     <div id="myTabContent2" class="tab-content" ui-view style="min-height: 400px;padding-left: 20px;">
 
