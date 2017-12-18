@@ -762,9 +762,6 @@ module ums {
             this.$scope.data.readOnlyMode = false;
         }
 
-        /**/
-
-
         private fillSampleData() {
             this.enableEdit();
             this.$scope.record.mfnNo = undefined;

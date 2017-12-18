@@ -23,7 +23,7 @@ module ums{
     getDeadlines:Function;
     add:Function;
     edit:Function;
-    delete:Function;
+    doDelete:Function;
     save:Function;
     showHide:Function;
   }
@@ -72,7 +72,7 @@ module ums{
       $scope.getDeadlines = this.getDeadlines.bind(this);
       $scope.add = this.add.bind(this);
       $scope.edit = this.edit.bind(this);
-      $scope.delete = this.delete.bind(this);
+      $scope.doDelete = this.doDelete.bind(this);
       $scope.save = this.save.bind(this);
       $scope.showHide = this.showHide.bind(this);
 
@@ -150,7 +150,7 @@ module ums{
       departmentSelectionDeadline.disable=false;
     }
 
-    private delete(departmentSelectionDeadline: DepartmentSelectionDeadline){
+    private doDelete(departmentSelectionDeadline: DepartmentSelectionDeadline){
       for(var i=0;i<this.$scope.departmentSelectionDeadlines.length;i++){
         if(this.$scope.departmentSelectionDeadlines[i] == departmentSelectionDeadline){
           this.$scope.departmentSelectionDeadlines.splice(i,1);
@@ -161,7 +161,7 @@ module ums{
       if(departmentSelectionDeadline.id==null){
         this.notify.success("Sucessfully Deleted");
       }else{
-        this.departmentSelectionDeadlineService.delete(departmentSelectionDeadline.id);
+        this.departmentSelectionDeadlineService.doDelete(departmentSelectionDeadline.id);
       }
     }
 

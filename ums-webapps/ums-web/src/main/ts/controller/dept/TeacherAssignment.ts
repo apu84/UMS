@@ -190,7 +190,7 @@ module ums {
         return this.$q.when(this.teachersList[departmentId]);
       }
       else {
-        var defer = this.$q.defer();
+        var defer = this.$q.defer<ITeachers>();
         this.teacherService
             .getByDepartment(departmentId)
             .then((response: ITeachers) => {

@@ -396,7 +396,7 @@ module ums {
       }
       //If the selected attendance column is an existing  column
       else{
-        this.httpClient.delete('classAttendance/'+dateObject.id)
+        this.httpClient.doDelete('classAttendance/'+dateObject.id)
             .success(()=>{
               this.notify.success("Successfully Deleted Attendance Information.");
               this.$scope.data.columns.splice(column, 1);
