@@ -90,7 +90,7 @@ module ums {
       this.removeReadOnly(gridElement,'programTypeId','name','status');
     }
 
-    public decorateScope(): GridConfig {
+    public decorateScope(): any {
       return this.$scope;
     }
 

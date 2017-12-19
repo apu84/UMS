@@ -36,7 +36,7 @@ module ums {
 
         public bDeleteRecord(resourceUrl: string, messagePostfix: string): ng.IPromise<any> {
             var defer = this.b$q.defer();
-            this.bHttpClient.delete(resourceUrl)
+            this.bHttpClient.doDelete(resourceUrl)
                 .success(() => {
                     defer.resolve(this.bMessageFactory.getSuccessMessage("Successfully deleted new " + messagePostfix));
                 }).error((data) => {

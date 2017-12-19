@@ -24,12 +24,12 @@ module ums{
       return defer.promise;
     }
 
-    public delete(id:number):ng.IPromise<any>{
+    public doDelete(id:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       var url="academic/department-selection-deadline/delete/id/"+id;
 
 
-      this.httpClient.delete(url)
+      this.httpClient.doDelete(url)
           .success(()=>{
             this.notify.success("Successfully deleted");
             defer.resolve("success");

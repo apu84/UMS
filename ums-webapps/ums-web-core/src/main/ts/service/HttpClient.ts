@@ -83,11 +83,11 @@ module ums {
       });
     }
 
-    public delete(url: string): ng.IHttpPromise<any> {
-      return this.$http.delete(this.baseURI.toAbsolute(url));
+    public doDelete(url: string): ng.IHttpPromise<any> {
+      return this.$http['delete'](this.baseURI.toAbsolute(url));
     }
 
-    public options(url: string): ng.IPromise<string[]> {
+    public options(url: string): ng.IPromise<any> {
       return this.$http({
         method: 'OPTIONS',
         url: this.baseURI.toAbsolute(url)

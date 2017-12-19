@@ -2203,7 +2203,7 @@ module ums{
 
     private deleteExistingSubGroupInfo(groupNo:number):void{
 
-      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
+      this.httpClient.doDelete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
           .success(()=>{
             console.log("Successfully deleted");
           }).error((data)=>{
