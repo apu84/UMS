@@ -19,6 +19,6 @@
     <module>ums-bank-web</module>
     <module>ums-library-web</module>
     <module>ums-registrar-web</module>
-    <module>ums-accounce-web</module>
+    <module>ums-account-web</module>
   </modules>
 </project>
