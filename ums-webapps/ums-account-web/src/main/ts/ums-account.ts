@@ -14,7 +14,7 @@ module ums {
   ]);
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
-    baseUriProvider.setServicePath('/ums-webservice-accounce/');
+    baseUriProvider.setServicePath('/ums-webservice-account/');
   }]);
 
   UMS.constant("registrarConstants", Constants.RegistrarConstant());
