@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 
 @Component
 @Path("library/checkout")
-public class CheckoutResource extends MutableCheckoutResource {
+public class CirculationResource extends MutableCirculationResource {
 
   @GET
   @Path("/all")

@@ -34,22 +34,24 @@
                 <div class="col-md-12">
                     <label for="barCode" class="control-label">Enter Item Code or Bar Code</label>
                     <input id="barCode"
+                           data-ng-model="vm.itemCode"
                            type="text"
                            class="form-control">
                 </div>
-                <!--<div class="col-md-6">-->
-                <!--<label for="dueDate" class="control-label">Specify Due Date</label>-->
-                <!--<input id="dueDate"-->
-                <!--type="text"-->
-                <!--data-provide="datepicker"-->
-                <!--data-date-format="dd/mm/yyyy"-->
-                <!--placeholder="DD/MM/YYYY"-->
-                <!--autocomplete="off"-->
-                <!--class="form-control">-->
-                <!--</div>-->
+                <div class="col-md-6">
+                    <label for="dueDate" class="control-label">Specify Due Date</label>
+                    <input id="dueDate"
+                           type="text"
+                           data-ng-model="vm.itemDueDate"
+                           data-provide="datepicker"
+                           data-date-format="dd/mm/yyyy"
+                           placeholder="DD/MM/YYYY"
+                           autocomplete="off"
+                           class="form-control">
+                </div>
                 <div class="col-md-12"><br/></div>
                 <div class="col-md-4">
-                    <button type="submit">Submit</button>
+                    <button type="submit" data-ng-click="vm.checkoutSubmit()">Submit</button>
                 </div>
 
             </form>

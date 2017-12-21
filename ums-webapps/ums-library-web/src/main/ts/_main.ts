@@ -31,6 +31,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/userService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -100,4 +101,5 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/service/CirculationService.ts'/>
 

@@ -12,7 +12,11 @@
         '/newBook': {title: 'Cataloging', 'breadcrumb': ['Cataloging', 'Books']},
         '/thesis': {title: 'Cataloging', 'breadcrumb': ['Cataloging', 'Thesis']},
         '/circulation': {title: 'Circulation', 'breadcrumb': ['Circulation']},
-        '/patrons': {title: 'Patrons', 'breadcrumb': ['Patrons']}
+        '/patrons': {title: 'Patrons', 'breadcrumb': ['Patrons']},
+        '/cataloging': {title: 'Cataloging', 'breadcrumb': ['Cataloging']},
+        '/search/:1': {title: "Catalog: Search", 'breadcrumb': ['Catalog']},
+        '/:1/record/:2': {title: 'Catalog: Records', 'breadcrumb': ['Catalog']}
+
     };
 
 
