@@ -4,7 +4,7 @@ module ums {
     }
 
     export class Circulation {
-        public static $inject = ['HttpClient', '$state', '$scope', '$q', 'notify', 'userService'];
+        public static $inject = ['HttpClient', '$state', '$scope', '$q', 'notify']; // 'userService'
 
         private text: string = "Hello World";
         private searchValue: string;
@@ -17,8 +17,7 @@ module ums {
                     private $state: any,
                     private $scope: any,
                     private $q: ng.IQService,
-                    private notify: Notify,
-                    private userService: UserService) {
+                    private notify: Notify) {
 
             $scope.checkoutSubmit = this.checkoutSubmit.bind(this);
         }
@@ -38,11 +37,11 @@ module ums {
             }
         }
 
-        private checkout(patronId: string): void{
+        private checkout(patronId: string): void{/*
             this.userService.fetchCurrentUserInfo().then((data: any) => {
                 this.user = data;
                 console.log(this.user);
-            });
+            });*/
         }
 
         private checkIn(itemId: string): void{
