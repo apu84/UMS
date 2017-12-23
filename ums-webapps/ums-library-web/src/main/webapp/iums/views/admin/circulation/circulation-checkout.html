@@ -77,13 +77,13 @@
         <li><img src="https://image.flaticon.com/icons/svg/16/16480.svg" alt="User Image"
                  style="width:120px;height:95px;">
             <label><b>Name:</b> {{vm.user.userName}}</label>
-            <label><b>Category:</b> Student</label>
-            <label><b>Id:</b>{{vm.user.roleId}}</label>
+            <label><b>Id:</b>{{vm.user.userId}}</label>
+            <label><b>Category:</b> {{vm.user.category}}</label>
         </li>
         <li id="o1" ui-sref-active="active"><a ui-sref=".patronCheckOut">Check Out</a></li>
-        <li id="o2" ui-sref-active="active"><a ui-sref=".patronDetail">Details </a></li>
+        <li id="o2" ui-sref-active="active"><a data-ng-click="vm.getAllCirculations()" ui-sref=".patronDetail">Details </a></li>
         <li id="o3" ui-sref-active="active"><a ui-sref=".patronFines">Fines</a></li>
-        <li id="o4" ui-sref-active="active"><a ui-sref=".circulationHistory">Circulation History </a></li>
+        <li id="o4" ui-sref-active="active"><a data-ng-click="vm.getAllCirculations()" ui-sref=".circulationHistory">Circulation History </a></li>
         <!--<li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Purchase Suggestions </a></li>-->
     </ul>
     <div id="myTabContent2" class="tab-content" ui-view style="min-height: 400px;padding-left: 20px;">
