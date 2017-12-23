@@ -67,24 +67,27 @@
                             <div data-ng-if="parameter.editData ==true">
                                 <div class="input-icon right">
                                     <i class="fa fa-calendar"></i>
-                                    <input type="text" data-ng-model="parameter.startDateTmp"
+                                    <!--<input type="text" data-ng-model="parameter.startDateTmp"
                                            data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY"
-                                           class="datepicker-default form-control required" autocomplete="off"/>
+                                           class="datepicker-default form-control required" autocomplete="off"/>-->
+                                    <div date-picker date-model="parameter.startDateTmp" date-format="dd/MM/YYYY"
+                                         disable="false"></div>
                                 </div>
 
                             </div>
                         </td>
                         <td>
                             <div data-ng-if="parameter.editData ==false" align="center">
-
                                 {{parameter.endDate}}
                             </div>
                             <div data-ng-if="parameter.editData ==true">
                                 <div class="input-icon right">
                                     <i class="fa fa-calendar"></i>
-                                    <input type="text" data-ng-model="parameter.endDateTmp"
+                                    <!--<input type="text" data-ng-model="parameter.endDateTmp"
                                            data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY"
-                                           class="datepicker-default form-control required" autocomplete="off"/>
+                                           class="datepicker-default form-control required" autocomplete="off"/>-->
+                                    <div date-picker date-model="parameter.endDateTmp" date-format="dd/MM/YYYY"
+                                         disable="false"></div>
                                 </div>
                             </div>
                         </td>

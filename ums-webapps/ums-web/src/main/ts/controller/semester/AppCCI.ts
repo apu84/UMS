@@ -16,6 +16,11 @@ module ums {
     appCCIClearanceNumber: number;
     appCCISpecialCarryNumber: number;
 
+    CARRY: number;
+    CLEARANCE: number;
+    IMPROVEMENT: number;
+    SPECIAL_CARRY: number;
+
     resultCarryNumber: number;
     resultImprovementNumber: number;
     resultClearanceNumber: number;
@@ -55,7 +60,7 @@ module ums {
     courseId: string;
     gradeLetter: string;
     examType: number;
-    type: string;
+    type: number;
     courseNo: string;
     courseTitle: string;
     examDate: string;
@@ -80,11 +85,22 @@ module ums {
 
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window'];
 
+    private static REGULAR = 1;
+    private static CLEARANCE = 2;
+    private static CARRY = 3;
+    private static SPECIAL_CARRY = 4;
+    private static IMPROVEMENT = 5;
+    private static LEAVE = 6;
+
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationCCIScope,
                 private $q: ng.IQService, private notify: Notify,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
 
 
+      $scope.CARRY = 3;
+      $scope.IMPROVEMENT = 5;
+      $scope.SPECIAL_CARRY = 4;
+      $scope.CLEARANCE = 2;
       $scope.submitButtonClicked = false;
       $scope.applicationAllowed = false;
       $scope.applicationCCIFound = false;
@@ -111,7 +127,7 @@ module ums {
       var json: any = this.convertToJson(this.$scope.registrationResults);
       this.$scope.loadingVisibility = true;
       this.$scope.responseResults = [];
-      this.httpClient.post('/ums-webservice-academic/academic/applicationCCI', json, 'application/json')
+      this.httpClient.post('academic/applicationCCI', json, 'application/json')
           .success((data, status, header, config) => {
             console.log("#####################");
             console.log(data);
@@ -147,10 +163,10 @@ module ums {
       for (var i = 0; i < this.$scope.registrationResults.length; i++) {
         if (this.$scope.registrationResults[i].apply == true) {
           totalOccurance += 1;
-          if (this.$scope.registrationResults[i].type == "Carry") {
+          if (this.$scope.registrationResults[i].type == ApplicationCCI.CARRY) {
             this.$scope.selectedCarryNumber += 1;
           }
-          else if (this.$scope.registrationResults[i].type == "Clearance") {
+          else if (this.$scope.registrationResults[i].type == ApplicationCCI.CLEARANCE) {
             this.$scope.selectedClearanceNumber += 1;
           }
           else {
@@ -171,10 +187,10 @@ module ums {
       this.$scope.resultImprovementNumber = 0;
 
       for (var i = 0; i < resultArr.length; i++) {
-        if (resultArr[i].type == "Carry") {
+        if (resultArr[i].type == ApplicationCCI.CARRY) {
           this.$scope.resultCarryNumber += 1;
         }
-        else if (resultArr[i].type == "Clearance") {
+        else if (resultArr[i].type == ApplicationCCI.CLEARANCE) {
           this.$scope.resultClearanceNumber += 1;
         }
         else {
@@ -320,15 +336,9 @@ module ums {
 
     private getRegistrationResult() {
       this.getRegistrationResultInfo().then((resultArr: Array<IUGRegistrationResult>) => {
+        console.log("result arr");
+        console.log(resultArr);
         this.$scope.registrationResults = this.makeDataEmpty(resultArr);
-
-        /* for(var i=0;i<resultArr.length;i++){
-           resultArr[i].backgroundColor="white";
-           resultArr[i].color="black";
-           resultArr[i].status="one";
-           resultArr[i].apply=false;
-           this.$scope.registrationResults.push(resultArr[i]);
-         }*/
 
       });
     }
@@ -342,13 +352,13 @@ module ums {
       this.getApplicationCCIInfo().then((appArr: Array<AppCCI>) => {
 
         for (var i = 0; i < appArr.length; i++) {
-          if (appArr[i].applicationType == 2) {
+          if (appArr[i].applicationType == ApplicationCCI.CLEARANCE) {
             this.$scope.appCCIClearanceNumber += 1;
           }
-          else if (appArr[i].applicationType == 5) {
+          else if (appArr[i].applicationType == ApplicationCCI.IMPROVEMENT) {
             this.$scope.appCCIImprovementNumber += 1;
           }
-          else if (appArr[i].applicationType == 4) {
+          else if (appArr[i].applicationType == ApplicationCCI.SPECIAL_CARRY) {
             this.$scope.appCCISpecialCarryNumber += 1;
           }
           else {
@@ -373,11 +383,12 @@ module ums {
           (json: any, etag: string) => {
             parameter = json.entries;
 
-
             var date = new Date();
 
-
-            if (date >= new Date(parameter[0].startDate) && date <= new Date(parameter[0].endDate)) {
+            console.log("*****8");
+            console.log("Parameter");
+            console.log(parameter);
+            if (date >= new Date(parameter[0].startDateJs) && date <= new Date(parameter[0].endDateJs)) {
               this.$scope.applicationAllowed = true;
               this.$scope.applicationMessage = "";
               this.getApplicationCCI();
@@ -427,7 +438,9 @@ module ums {
       this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/student', 'application/json',
           (json: any, etag: string) => {
             appCCIArr = json.entries;
-
+            console.log("**********");
+            console.log("Applicatino cci");
+            console.log(json);
             defer.resolve(appCCIArr);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -448,15 +461,15 @@ module ums {
           item["semesterId"] = this.$scope.student[0].semesterId;
           item["studentId"] = this.$scope.student[0].id;
           item["courseId"] = this.$scope.registrationResults[i].courseId;
-          var applicationTpe: any;
-          if (a.type == 'Carry') {
+          /*var applicationTpe: any;
+          if (a.type == ApplicationCCI.CARRY) {
             applicationTpe = 3;
-          } else if (a.type == 'Clearance') {
+          } else if (a.type == ApplicationCCI.CLEARANCE) {
             applicationTpe = 2;
           } else {
             applicationTpe = 5;
-          }
-          item["applicationType"] = applicationTpe;
+          }*/
+          item["applicationType"] = a.type;
           jsonObj.push(item);
         }
 
