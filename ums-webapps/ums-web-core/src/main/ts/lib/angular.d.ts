@@ -798,7 +798,7 @@ declare module ng {
     statusText?: string;
   }
 
-  interface IHttpPromise<T> extends IPromise<T> {
+  interface IHttpPromise<T> extends IPromise<any> {
     success(callback: IHttpPromiseCallback<T>): IHttpPromise<T>;
     error(callback: IHttpPromiseCallback<T>): IHttpPromise<T>;
     then<TResult>(successCallback: (response: IHttpPromiseCallbackArg<T>) => TResult, errorCallback?: (response: IHttpPromiseCallbackArg<T>) => any): IPromise<TResult>;

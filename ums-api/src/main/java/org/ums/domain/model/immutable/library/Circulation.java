@@ -3,12 +3,12 @@ package org.ums.domain.model.immutable.library;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
-import org.ums.domain.model.mutable.library.MutableCheckout;
+import org.ums.domain.model.mutable.library.MutableCirculation;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public interface Checkout extends Serializable, LastModifier, EditType<MutableCheckout>, Identifier<Long> {
+public interface Circulation extends Serializable, LastModifier, EditType<MutableCirculation>, Identifier<Long> {
 
   String getPatronId();
 
@@ -17,4 +17,8 @@ public interface Checkout extends Serializable, LastModifier, EditType<MutableCh
   Date getIssueDate();
 
   Date getDueDate();
+
+  Date getReturnDate();
+
+  int getFineStatus();
 }

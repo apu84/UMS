@@ -1581,7 +1581,7 @@ module ums{
 
     private deleteExistingSubGroupInfo(groupNo:number):void{
 
-      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
+      this.httpClient.doDelete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
           .success(()=>{
             console.log("Successfully deleted");
           }).error((data)=>{
@@ -1591,7 +1591,7 @@ module ums{
     }
 
     private deleteExistingSubGroupCCI(){
-      this.httpClient.delete('academic/subGroupCCI/semesterId/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate)
+      this.httpClient.doDelete('academic/subGroupCCI/semesterId/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate)
           .success(()=>{
               for(var i=0;i<this.$scope.examRoutineCCIArr.length;i++){
                 if(this.$scope.examRoutineCCIArr[i].examDate==this.$scope.examDate){

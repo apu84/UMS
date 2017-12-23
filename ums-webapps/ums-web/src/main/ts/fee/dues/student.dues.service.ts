@@ -79,7 +79,7 @@ module ums {
       return defer.promise;
     }
 
-    public listDues(filters: SelectedFilter[], url?: string): ng.IPromise<StudentDuesResponse> {
+    public listDues(filters: any, url?: string): any {
       let defer: ng.IDeferred<StudentDuesResponse> = this.$q.defer();
       this.httpClient.post(url ? url : 'student-dues/paginated', filters ? {"entries": filters} : {},
           HttpClient.MIME_TYPE_JSON)

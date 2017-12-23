@@ -2,18 +2,18 @@ package org.ums.persistent.model.library;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.library.MutableCheckout;
-import org.ums.manager.library.CheckoutManager;
+import org.ums.domain.model.mutable.library.MutableCirculation;
+import org.ums.manager.library.CirculationManager;
 
 import java.util.Date;
 
-public class PersistentCheckout implements MutableCheckout {
+public class PersistentCirculation implements MutableCirculation {
 
-  private static CheckoutManager sCheckoutManager;
+  private static CirculationManager sCheckoutManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sCheckoutManager = applicationContext.getBean("checkoutManager", CheckoutManager.class);
+    sCheckoutManager = applicationContext.getBean("checkoutManager", CirculationManager.class);
   }
 
   private Long mId;
@@ -21,22 +21,26 @@ public class PersistentCheckout implements MutableCheckout {
   private Long mMfn;
   private Date mIssueDate;
   private Date mDueDate;
+  private Date mReturnDate;
+  private int mFineStatus;
   private String mLastModified;
 
-  public PersistentCheckout() {}
+  public PersistentCirculation() {}
 
-  public PersistentCheckout(PersistentCheckout persistentCheckout) {
-    mId = persistentCheckout.getId();
-    mPatronId = persistentCheckout.getPatronId();
-    mMfn = persistentCheckout.getMfn();
-    mIssueDate = persistentCheckout.getIssueDate();
-    mDueDate = persistentCheckout.getDueDate();
-    mLastModified = persistentCheckout.getLastModified();
+  public PersistentCirculation(PersistentCirculation persistentCirculation) {
+    mId = persistentCirculation.getId();
+    mPatronId = persistentCirculation.getPatronId();
+    mMfn = persistentCirculation.getMfn();
+    mIssueDate = persistentCirculation.getIssueDate();
+    mDueDate = persistentCirculation.getDueDate();
+    mReturnDate = persistentCirculation.getReturnDate();
+    mFineStatus = persistentCirculation.getFineStatus();
+    mLastModified = persistentCirculation.getLastModified();
   }
 
   @Override
-  public MutableCheckout edit() {
-    return new PersistentCheckout(this);
+  public MutableCirculation edit() {
+    return new PersistentCirculation(this);
   }
 
   @Override
@@ -95,6 +99,16 @@ public class PersistentCheckout implements MutableCheckout {
   }
 
   @Override
+  public void setReturnDate(Date pReturnDate) {
+    mReturnDate = pReturnDate;
+  }
+
+  @Override
+  public void setFineStatus(int pFineStatus) {
+    mFineStatus = pFineStatus;
+  }
+
+  @Override
   public String getPatronId() {
     return mPatronId;
   }
@@ -112,5 +126,15 @@ public class PersistentCheckout implements MutableCheckout {
   @Override
   public Date getDueDate() {
     return mDueDate;
+  }
+
+  @Override
+  public Date getReturnDate() {
+    return mReturnDate;
+  }
+
+  @Override
+  public int getFineStatus() {
+    return mFineStatus;
   }
 }

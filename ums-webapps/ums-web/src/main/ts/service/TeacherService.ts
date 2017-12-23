@@ -16,7 +16,7 @@ module ums {
     }
 
     public getByDepartment(departmentId: string): ng.IPromise<ITeachers> {
-      var defer = this.$q.defer();
+      var defer = this.$q.defer<ITeachers>();
 
       this.httpClient.get(`academic/teacher/department/${departmentId}`,
           HttpClient.MIME_TYPE_JSON,
