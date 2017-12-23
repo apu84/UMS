@@ -2,6 +2,7 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.GradeSubmissionResourceHelper;
+import org.ums.annotations.TwoFA;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,13 +19,14 @@ public class MutableGradeSubmissionResource extends Resource {
   GradeSubmissionResourceHelper mResourceHelper;
 
   @PUT
+  @TwoFA
   public Response saveGradeSheet(final JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }
 
   @PUT
   @Path("/recheckApprove")
-  public Response recheckApprove(final JsonObject pJsonObject) {
+  public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.updateGradeStatus(pJsonObject);
   }
 

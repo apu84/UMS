@@ -318,9 +318,9 @@ public class GradeSubmissionService {
       else if(action.equalsIgnoreCase("approve")
           && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
-      else if(action.equalsIgnoreCase("recheck_request_submit")
+      else if(action.equalsIgnoreCase("recheckAccepted")
           && currentStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE)
-        nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL;
+        nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
     }
     else if(actor.equalsIgnoreCase("vc")) {
       if(action.equalsIgnoreCase("recheck_request_rejected")

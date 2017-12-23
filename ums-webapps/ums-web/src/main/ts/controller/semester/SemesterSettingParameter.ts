@@ -98,6 +98,8 @@ module ums {
     }
 
     private addAndReloadData(parameter: DummySemesterSetting): void {
+      console.log("Parameter");
+      console.log(parameter);
       this.addData(parameter);
 
     }
@@ -115,10 +117,14 @@ module ums {
 
     private getDummyParameterSetting(): void {
       this.$scope.showTable = true;
-      console.log("~~~~~~~~~~~~~~~~In dummy parameter setting------>>>")
       var gotValue: boolean;
       var parameterSettingArr: DummySemesterSetting[] = [];
       gotValue = false;
+
+      console.log("Parameter selector");
+      console.log(this.$scope.parameterSelector);
+      console.log("Semester setting parameter data");
+      console.log(this.$scope.semesterSettingParameterData);
 
       var count: number = 0;
       for (var i = 0; i < this.$scope.parameterSelector.length; i++) {
@@ -129,7 +135,7 @@ module ums {
         for (var j = 0; j < this.$scope.semesterSettingParameterData.length; j++) {
 
 
-          if (this.$scope.semesterSettingParameterData[j].parameterId == this.$scope.parameterSelector[i].id && this.$scope.semesterSettingParameterData[j].semesterId == this.$scope.semesterTypeId) {
+          if (this.$scope.semesterSettingParameterData[j].parameterId == this.$scope.parameterSelector[i].id) {
             gotValue = true;
             var inners = new DummySemesterSetting();
             inners.srl = count;
@@ -217,15 +223,13 @@ module ums {
       this.httpClient.get('academic/parameterSetting/semester/' + (+this.$scope.semesterType.id), 'application/json',
           (json: any, etag: string) => {
             semesterSettingParameterArr = json.entries;
-            console.log("semester parameter Data------------->");
 
             this.$scope.semesterSettingSize = semesterSettingParameterArr.length;
 
             this.$scope.semesterSettingParameterData = semesterSettingParameterArr;
+            this.$scope.semesterSettingParameterData.forEach((s: IParameterSetting) => {
 
-            console.log("MMMMMMMMMMMMMMM");
-            console.log(this.$scope.semesterSettingParameterData);
-
+            });
             defer.resolve(semesterSettingParameterArr);
 
           },
@@ -253,8 +257,6 @@ module ums {
       var parameterArr: Array<any>;
       this.httpClient.get('academic/academicCalenderParameter/all', 'application/json',
           (json: any, etag: string) => {
-            console.log("-----------parameter---------");
-            console.log(json);
             parameterArr = json.entries;
             this.$scope.parameterSelector = parameterArr;
           },
@@ -286,10 +288,9 @@ module ums {
         this.$scope.semesterSettingStore[parameter.srl].startDate = parameter.startDateTmp;
         this.$scope.semesterSettingStore[parameter.srl].endDate = parameter.endDateTmp;
 
-        console.log("semesterSetting store");
-        console.log(this.$scope.semesterSettingStore);
-        ////
         var json = this.convertToJsonForUpdate(this.$scope.semesterSettingStore[parameter.srl].id, +this.$scope.semesterType.id, parameter.parameterId, parameter.startDate, parameter.endDate);
+        console.log("Json from add data");
+        console.log(json);
 
         this.httpClient.put('academic/parameterSetting/' + this.$scope.semesterSettingStore[parameter.srl].id, json, 'application/json')
             .success(() => {
@@ -335,7 +336,6 @@ module ums {
     private convertToJson(semesterTypeId: number, parameterId: string, startDate: string, endDate: string): any {
       var jsonObj = [];
       var item = {};
-      item["id"] = "";
       item["semesterId"] = +this.$scope.semesterType.id;
       item["parameterId"] = parameterId;
       item["startDate"] = startDate;
