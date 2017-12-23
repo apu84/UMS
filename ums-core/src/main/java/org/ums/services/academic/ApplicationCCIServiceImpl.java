@@ -1,18 +1,18 @@
 package org.ums.services.academic;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.ApplicationCCI;
+import org.ums.domain.model.immutable.ParameterSetting;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.persistent.model.PersistentApplicationCCI;
+
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created by My Pc on 7/18/2016.
@@ -34,8 +34,8 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
       List<UGRegistrationResult> results, Student pStudent) {
     Date date = new Date();
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getBySemesterAndParameterId(Parameter.ParameterName.APPLICATION_CCI.getId(),
-            pStudent.getSemesterId());
+        mParameterSettingManager.getBySemesterAndParameterId("application_cci",
+            pStudent.getCurrentEnrolledSemester().getId());
     Timestamp currentTimestamp = new Timestamp(date.getTime());
 
     Date startDate, endDate;
@@ -43,11 +43,10 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
     startDate = parameterSetting.getStartDate();
     endDate = parameterSetting.getEndDate();
 
-    List<ApplicationCCI> allApps = mAppManager.getAll();
+    // List<ApplicationCCI> allApps = mAppManager.getAll();
     List<ApplicationCCI> savedApps = new ArrayList<>();
-    if(allApps.size() > 0) {
-      savedApps = mAppManager.getByStudentIdAndSemester(pStudent.getId(), pStudent.getSemesterId());
-    }
+
+    savedApps = mAppManager.getByStudentIdAndSemester(pStudent.getId(), pStudent.getCurrentEnrolledSemester().getId());
     if(savedApps.size() > 0) {
       for(PersistentApplicationCCI appsIteration : pApplicationCCIs) {
         appsIteration.setMessage("applied");
