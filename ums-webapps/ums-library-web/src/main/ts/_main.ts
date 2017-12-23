@@ -99,5 +99,6 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/userService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CirculationService.ts'/>
 
