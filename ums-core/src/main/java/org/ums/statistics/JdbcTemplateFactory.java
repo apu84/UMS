@@ -6,4 +6,6 @@ public interface JdbcTemplateFactory {
   JdbcTemplate getJdbcTemplate();
 
   JdbcTemplate getLmsJdbcTemplate();
+
+  JdbcTemplate getAccountsJdbcTemplate();
 }
