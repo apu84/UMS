@@ -5,16 +5,17 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
 import org.ums.manager.accounts.GroupManager;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 20-Dec-17.
  */
-public class PersistentGroup implements MutableGroup{
+public class PersistentGroup implements MutableGroup {
 
   private static GroupManager sGroupManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sGroupManager = applicationContext.getBean("groupManager", GroupManager.class);
   }
@@ -26,37 +27,35 @@ public class PersistentGroup implements MutableGroup{
   private String mMainGroup;
   private String mReservedFlag;
   private String mFlag;
-  private double mTaxLimit;
-  private double mTdsPercent;
+  private BigDecimal mTaxLimit;
+  private BigDecimal mTdsPercent;
   private String mDefaultCompanyCode;
-  private char mStatusFlag;
-  private char mStatusUpFlag;
+  private String mStatusFlag;
+  private String mStatusUpFlag;
   private Date mModifiedDate;
-  private String mAuthCode;
+  private String mModifiedBy;
 
-  public PersistentGroup() {
-  }
+  public PersistentGroup() {}
 
-  public PersistentGroup(final PersistentGroup pPersistentGroup){
-    mId  = pPersistentGroup.getId();
-    mCompanyCode = pPersistentGroup.getCompanyCode();
+  public PersistentGroup(final PersistentGroup pPersistentGroup) {
+    mId = pPersistentGroup.getId();
+    mCompanyCode = pPersistentGroup.getCompCode();
     mGroupCode = pPersistentGroup.getGroupCode();
     mGroupName = pPersistentGroup.getGroupName();
     mMainGroup = pPersistentGroup.getMainGroup();
     mReservedFlag = pPersistentGroup.getReservedFlag();
     mFlag = pPersistentGroup.getFlag();
     mTaxLimit = pPersistentGroup.getTaxLimit();
-    mTdsPercent = pPersistentGroup.getTaxPercent();
-    mDefaultCompanyCode = pPersistentGroup.getDefaultCompanyCode();
-    mStatusFlag = pPersistentGroup.getStatusFlag();
-    mStatusUpFlag = pPersistentGroup.getStatusUpFlag();
-    mModifiedDate = pPersistentGroup.getLastModifiedDate();
-    mAuthCode = pPersistentGroup.getAuthenticationCode();
+    mTdsPercent = pPersistentGroup.getTdsPercent();
+    mDefaultCompanyCode = pPersistentGroup.getDefaultComp();
+    mStatusFlag = pPersistentGroup.getStatFlag();
+    mStatusUpFlag = pPersistentGroup.getStatUpFlag();
+    mModifiedDate = pPersistentGroup.getModifiedDate();
+    mModifiedBy = pPersistentGroup.getModifiedBy();
   }
 
-
   @Override
-  public void setCompanyCode(String pCompanyCode) {
+  public void setCompCode(String pCompanyCode) {
     mCompanyCode = pCompanyCode;
   }
 
@@ -86,38 +85,38 @@ public class PersistentGroup implements MutableGroup{
   }
 
   @Override
-  public void setTexLimit(double pTexLimit) {
+  public void setTaxLimit(BigDecimal pTexLimit) {
     mTaxLimit = pTexLimit;
   }
 
   @Override
-  public void setTdsPercent(double pTdsPercent) {
+  public void setTdsPercent(BigDecimal pTdsPercent) {
     mTdsPercent = pTdsPercent;
   }
 
   @Override
-  public void setDefaultCompanyCode(String pDefaultCompanyCode) {
+  public void setDefaultComp(String pDefaultCompanyCode) {
     mDefaultCompanyCode = pDefaultCompanyCode;
   }
 
   @Override
-  public void setStatusFlag(char pStatusFlag) {
+  public void setStatFlag(String pStatusFlag) {
     mStatusFlag = pStatusFlag;
   }
 
   @Override
-  public void setStatusUpFlag(char pStatusUpFlag) {
+  public void setStatUpFlag(String pStatusUpFlag) {
     mStatusUpFlag = pStatusUpFlag;
   }
 
   @Override
-  public void setLastModifiedDate(Date pLastModifiedDate) {
+  public void setModifiedDate(Date pLastModifiedDate) {
     mModifiedDate = pLastModifiedDate;
   }
 
   @Override
-  public void setAuthenticationCode(String pAuthenticationCode) {
-    mAuthCode = pAuthenticationCode;
+  public void setModifiedBy(String pAuthenticationCode) {
+    mModifiedBy = pAuthenticationCode;
   }
 
   @Override
@@ -141,7 +140,7 @@ public class PersistentGroup implements MutableGroup{
   }
 
   @Override
-  public String getCompanyCode() {
+  public String getCompCode() {
     return mCompanyCode;
   }
 
@@ -171,38 +170,38 @@ public class PersistentGroup implements MutableGroup{
   }
 
   @Override
-  public double getTaxLimit() {
+  public BigDecimal getTaxLimit() {
     return mTaxLimit;
   }
 
   @Override
-  public double getTaxPercent() {
+  public BigDecimal getTdsPercent() {
     return mTdsPercent;
   }
 
   @Override
-  public String getDefaultCompanyCode() {
+  public String getDefaultComp() {
     return mDefaultCompanyCode;
   }
 
   @Override
-  public char getStatusFlag() {
+  public String getStatFlag() {
     return mStatusFlag;
   }
 
   @Override
-  public char getStatusUpFlag() {
+  public String getStatUpFlag() {
     return mStatusUpFlag;
   }
 
   @Override
-  public Date getLastModifiedDate() {
+  public Date getModifiedDate() {
     return mModifiedDate;
   }
 
   @Override
-  public String getAuthenticationCode() {
-    return mAuthCode;
+  public String getModifiedBy() {
+    return mModifiedBy;
   }
 
   @Override

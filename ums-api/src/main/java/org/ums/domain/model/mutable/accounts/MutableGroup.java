@@ -5,6 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  */
 public interface MutableGroup extends Group, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
-  void setCompanyCode(String pCompanyCode);
+  void setCompCode(String pCompanyCode);
 
   void setGroupCode(String pGroupCode);
 
@@ -24,18 +25,18 @@ public interface MutableGroup extends Group, Editable<Long>, MutableLastModifier
 
   void setFlag(String pFlag);
 
-  void setTexLimit(double pTexLimit);
+  void setTaxLimit(BigDecimal pTexLimit);
 
-  void setTdsPercent(double pTdsPercent);
+  void setTdsPercent(BigDecimal pTdsPercent);
 
-  void setDefaultCompanyCode(String pDefaultCompanyCode);
+  void setDefaultComp(String pDefaultCompanyCode);
 
-  void setStatusFlag(char pStatusFlag);
+  void setStatFlag(String pStatusFlag);
 
-  void setStatusUpFlag(char pStatusUpFlag);
+  void setStatUpFlag(String pStatusUpFlag);
 
-  void setLastModifiedDate(Date pLastModifiedDate);
+  void setModifiedDate(Date pLastModifiedDate);
 
-  void setAuthenticationCode(String pAuthenticationCode);
+  void setModifiedBy(String pSetModifiedBy);
 
 }

@@ -67,8 +67,22 @@
     <property name="dataSource" ref="accountsDataSource"/>
   </bean>
 
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+        id="accountsNamedParameterJdbcTemplate">
+    <constructor-arg ref="accountsDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="lmsNamedParameterJdbcTemplate">
+    <constructor-arg ref="libraryDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="namedParameterJdbcTemplate">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
   <bean id="jdbcTemplateFactory" class="org.ums.statistics.JdbcTemplateFactoryImpl">
     <property name="loggingEnabled" value="${enable.query.logging}"/>
+  </bean>
+  <bean id="namedParameterJdbcTemplateFactory" class="org.ums.statistics.NamedParameterJdbcTemplateFactoryImpl">
+    <property name="loggingEnabled" value="false"/>
   </bean>
 
   <bean id="idGenerator" class="org.ums.generator.IdGenerator"/>

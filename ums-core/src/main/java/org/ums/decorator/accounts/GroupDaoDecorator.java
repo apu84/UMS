@@ -8,6 +8,7 @@ import org.ums.manager.accounts.GroupManager;
 /**
  * Created by Monjur-E-Morshed on 20-Dec-17.
  */
-public class GroupDaoDecorator extends ContentDaoDecorator<Group, MutableGroup, Long, GroupManager> {
+public class GroupDaoDecorator extends ContentDaoDecorator<Group, MutableGroup, Long, GroupManager> implements
+    GroupManager {
 
 }

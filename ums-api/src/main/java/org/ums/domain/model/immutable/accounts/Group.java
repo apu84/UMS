@@ -6,13 +6,14 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 05-Dec-17.
  */
 public interface Group extends Serializable, LastModifier, EditType<MutableGroup>, Identifier<Long> {
-  String getCompanyCode();
+  String getCompCode();
 
   String getGroupCode();
 
@@ -24,17 +25,17 @@ public interface Group extends Serializable, LastModifier, EditType<MutableGroup
 
   String getFlag();
 
-  double getTaxLimit();
+  BigDecimal getTaxLimit();
 
-  double getTaxPercent();
+  BigDecimal getTdsPercent();
 
-  String getDefaultCompanyCode();
+  String getDefaultComp();
 
-  char getStatusFlag();
+  String getStatFlag();
 
-  char getStatusUpFlag();
+  String getStatUpFlag();
 
-  Date getLastModifiedDate();
+  Date getModifiedDate();
 
-  String getAuthenticationCode();
+  String getModifiedBy();
 }
