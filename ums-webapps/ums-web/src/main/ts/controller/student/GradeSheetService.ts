@@ -18,6 +18,7 @@ module ums {
     courses: GradeSheetCourse[];
   }
 
+
   export class GradeSheetService {
     public static $inject = ['HttpClient', 'appConstants', '$q'];
 

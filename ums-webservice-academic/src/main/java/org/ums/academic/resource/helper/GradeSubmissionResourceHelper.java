@@ -30,6 +30,7 @@ import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
+import org.ums.services.email.OtpEmailService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -59,6 +60,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   @Autowired
   private ExamGradeManager mExamGradeManager;
+
+  @Autowired
+  private OtpEmailService otpEmailService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -310,13 +314,26 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
-    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
+
+    String otp = "";
+    if(pJsonObject.containsKey("otp"))
+      otp = pJsonObject.getString("otp");
+
+    if(otp == null || otp.equalsIgnoreCase("")) {
+      return Response.status(428).entity("{\"message\" : \"OTP Required\"}").build();
+    }
+
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
-
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
+
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
+
+    otpEmailService.sendEmail("ifti", "ifticse_kuet@hotmail.com", "IUMS",
+        "One-Time Password for Online Marks Submission ");
+
+    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
         mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),

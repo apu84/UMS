@@ -1,4 +1,4 @@
-package org.ums.services;
+package org.ums.services.email;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.domain.model.dto.ResetPasswordEmailDto;
 import org.ums.formatter.DateFormat;
@@ -31,6 +33,7 @@ public class PasswordResetEmailService {
   @Qualifier("host")
   String mHost;
 
+  @Async
   public void sendEmail(final String userId, final String toEmail, final String fromEmail, final String subject,
       final String token) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {

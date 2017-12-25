@@ -25,7 +25,7 @@ public class UmsLogTracerAspect {
   @Pointcut("within(org.ums.*)")
   public void inWebLayer() {}
 
-  @After("execution(* org.ums.manager.CacheManager.*(..))")
+  //@After("execution(* org.ums.manager.CacheManager.*(..))")
   public void generateLog(JoinPoint pJoinPoint) {
 
     System.out.println("*******###################*******");
