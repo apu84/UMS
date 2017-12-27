@@ -1,9 +1,9 @@
 {
-  "name": "ums-registrar-web",
+  "name": "ums-account-web",
   "version": "1.0.0",
   "description": "UMS Web",
   "repository": "http://swlabs.co",
-  "dest": "target/ums-accounce-web-trunk-SNAPSHOT/",
+  "dest": "target/ums-account-web-trunk-SNAPSHOT/",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-concurrent": "*",

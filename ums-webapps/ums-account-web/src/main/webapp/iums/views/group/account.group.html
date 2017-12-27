@@ -1,0 +1,169 @@
+<style>
+    table {
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    td + td {
+        border-left: 1px solid #eee;
+    }
+
+    td, th {
+        border-bottom: 1px solid #eee;
+        background: white;
+        color: black;
+        padding: 10px 25px;
+    }
+
+    th {
+        height: 0;
+        line-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        color: black;
+        border: none;
+        white-space: nowrap;
+    }
+
+    th div {
+        position: absolute;
+        background: transparent;
+        color: black;
+        padding: 9px 25px;
+        top: 0;
+        margin-left: -25px;
+        line-height: normal;
+        border-left: 1px solid #800;
+    }
+
+    th:first-child div {
+        border: none;
+    }
+
+    .select2 > .select2-choice.ui-select-match {
+        /* Because of the inclusion of Bootstrap */
+        height: 29px;
+    }
+
+    .selectize-control > .selectize-dropdown {
+        top: 36px;
+    }
+
+    /* Some additional styling to demonstrate that append-to-body helps achieve the proper z-index layering. */
+    .select-box {
+        background: #fff;
+        position: relative;
+        z-index: 1;
+    }
+
+    .alert-info.positioned {
+        margin-top: 1em;
+        position: relative;
+        z-index: 10000; /* The select2 dropdown has a z-index of 9999 */
+    }
+
+
+</style>
+
+<link type="text/css" rel="stylesheet" src="account.group.css"/>
+<div class="row">
+
+    <div class="panel panel-green">
+        <div class="panel-heading">Account Group</b><span
+                class="subtitle"></span></div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row">
+                <div class="col-md-4" align="center"></div>
+                <div class="col-md-4" data-ng-include="'views/menu/menu.html'"></div>
+                <div class="col-md-4"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class=" table table-striped table-bordered">
+                        <thead align="center">
+                        <tr class="header">
+                            <th>Group Name</th>
+                            <th>Under The Main Group Of</th>
+                            <th>Sub Ledger</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="g in vm.groups">
+                            <td>{{g.groupName}}</td>
+                            <td>{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
+                            <td>
+                                <label><input type="checkbox" value="g.flagBoolValue"></label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <!-- Modal -->
+                <div id="addModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Modal Header</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Some text in the modal.</p>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <th>Group Name</th>
+                                        <th>Main Group Of</th>
+                                        <th>Sub Ledger</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td><input type="text" ng-model="vm.addedGroup.groupName"
+                                                       class="form-control"/></td>
+                                            <td>
+                                                <select ui-select2 allow-clear theme="bootstrap"
+                                                        data-ng-model="vm.addedGroup.mainGroup"
+                                                        data-placeholder="Pick a number" style="width: 100%">
+                                                    <option ng-repeat="g in vm.groups"
+                                                            value="{{g.groupCode}}">{{g.groupName}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <label><input type="checkbox"
+                                                              ng-model="vm.addedGroup.flagBoolValue"></label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" ng-click="vm.add()" data-dismiss="modal">
+                                    Add
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                 <div class="col-md-12">
+                     <hot-table settings="vm.handsOnTableFeature.settings" hot-id="group" datarows="vm.groups"
+                                autoWrapRow="true" columns="vm.handsOnTableFeature.columns"></hot-table>
+                 </div>
+             </div>-->
+
+        </div>
+
+    </div>
+</div>

@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public interface MutableGroup extends Group, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
+  void setStringId(Long pId);
+
   void setCompCode(String pCompanyCode);
 
   void setGroupCode(String pGroupCode);

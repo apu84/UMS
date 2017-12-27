@@ -13,6 +13,9 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 05-Dec-17.
  */
 public interface Group extends Serializable, LastModifier, EditType<MutableGroup>, Identifier<Long> {
+
+  String getStringId();
+
   String getCompCode();
 
   String getGroupCode();

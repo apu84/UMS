@@ -1,6 +1,8 @@
 module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute',
+    'ngAnimate',
+    'ngTouch',
     'ui.bootstrap',
     'ui.router',
     'oc.lazyLoad',
@@ -10,14 +12,17 @@ module ums {
     'scrollable-table',
     'amChartsDirective',
     'ui.sortable',
-    "angularUtils.directives.dirPagination"
+    "angularUtils.directives.dirPagination",
+    'smart-table',
+    'ui.grid',
+    'ui.select2'
   ]);
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-account/');
   }]);
 
-  UMS.constant("registrarConstants", Constants.RegistrarConstant());
+  UMS.constant("accountConstants", Constants.RegistrarConstant());
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.otherwise("/userHome");
@@ -60,7 +65,12 @@ module ums {
           }
         })
 
-
+        .state('group', {
+          url: "/group",
+          controller: 'GroupController',
+          controllerAs: 'vm',
+          templateUrl: 'views/group/account.group.html'
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'

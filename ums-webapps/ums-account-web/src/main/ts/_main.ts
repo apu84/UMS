@@ -96,11 +96,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
-/// <reference path='../../../../ums-web/src/main/ts/model/master_data/Employee.ts'/>
-
-/// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
-
 /// <reference path='data.ts'/>
+/// <reference path='components/group/group.controller.ts'/>
+/// <reference path='components/group/group.service.ts'/>
 
 
 

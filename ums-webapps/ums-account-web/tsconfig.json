@@ -5,7 +5,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": false,
-    "outFile": "target/ums-accounce-web-trunk-SNAPSHOT/iums/js/main.js"
+    "outFile": "target/ums-account-web-trunk-SNAPSHOT/iums/js/main.js"
   },
   "exclude": [
     "node_modules/*",

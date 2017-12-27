@@ -1,5 +1,6 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
@@ -21,6 +22,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   private Long mId;
+  private String mStringId;
   private String mCompanyCode;
   private String mGroupCode;
   private String mGroupName;
@@ -29,13 +31,18 @@ public class PersistentGroup implements MutableGroup {
   private String mFlag;
   private BigDecimal mTaxLimit;
   private BigDecimal mTdsPercent;
-  private String mDefaultCompanyCode;
+  private String mDefaultComp;
   private String mStatusFlag;
   private String mStatusUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
+  @JsonIgnore
+  private String mMainGroupObject;
+  @JsonIgnore
+  private Boolean mFlagBoolValue;
 
-  public PersistentGroup() {}
+  public PersistentGroup() {
+  }
 
   public PersistentGroup(final PersistentGroup pPersistentGroup) {
     mId = pPersistentGroup.getId();
@@ -47,11 +54,37 @@ public class PersistentGroup implements MutableGroup {
     mFlag = pPersistentGroup.getFlag();
     mTaxLimit = pPersistentGroup.getTaxLimit();
     mTdsPercent = pPersistentGroup.getTdsPercent();
-    mDefaultCompanyCode = pPersistentGroup.getDefaultComp();
+    mDefaultComp = pPersistentGroup.getDefaultComp();
     mStatusFlag = pPersistentGroup.getStatFlag();
     mStatusUpFlag = pPersistentGroup.getStatUpFlag();
     mModifiedDate = pPersistentGroup.getModifiedDate();
     mModifiedBy = pPersistentGroup.getModifiedBy();
+  }
+
+  public String getMainGroupObject() {
+    return mMainGroupObject;
+  }
+
+  public void setMainGroupObject(String pMainGroupObject) {
+    mMainGroupObject = pMainGroupObject;
+  }
+
+  public Boolean getFlagBoolValue() {
+    return mFlagBoolValue;
+  }
+
+  public void setFlagBoolValue(Boolean pFlagBoolValue) {
+    mFlagBoolValue = pFlagBoolValue;
+  }
+
+  @Override
+  public void setStringId(Long pId) {
+    mStringId = pId.toString();
+  }
+
+  @Override
+  public String getStringId() {
+    return mStringId;
   }
 
   @Override
@@ -95,8 +128,8 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
-  public void setDefaultComp(String pDefaultCompanyCode) {
-    mDefaultCompanyCode = pDefaultCompanyCode;
+  public void setDefaultComp(String pDefaultCompCode) {
+    mDefaultComp = pDefaultCompCode;
   }
 
   @Override
@@ -181,7 +214,7 @@ public class PersistentGroup implements MutableGroup {
 
   @Override
   public String getDefaultComp() {
-    return mDefaultCompanyCode;
+    return mDefaultComp;
   }
 
   @Override
@@ -211,7 +244,7 @@ public class PersistentGroup implements MutableGroup {
 
   @Override
   public Long getId() {
-    return mId;
+    return Long.parseLong(mStringId);
   }
 
   @Override
