@@ -44,6 +44,17 @@ module ums {
       return defer.promise;
     }
 
+    public deleteAGroup(group:IGroup):ng.IPromise<IGroup[]>{
+        let defer: ng.IDeferred<IGroup[]> = this.$q.defer();
+        this.httpClient.post(this.groupServiceURL+"/delete", group, HttpClient.MIME_TYPE_JSON)
+            .success((response:IGroup[])=>defer.resolve(response))
+            .error((error) => {
+                console.error(error);
+                defer.resolve(undefined);
+            });
+        return defer.promise;
+    }
+
     public saveAllGroup(groups:IGroup[]):ng.IPromise<IGroup[]>{
       let defer: ng.IDeferred<IGroup[]>=this.$q.defer();
       this.httpClient.post(this.groupServiceURL+"/saveAll", groups, HttpClient.MIME_TYPE_JSON)

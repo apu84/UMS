@@ -1,5 +1,6 @@
 package org.ums.accounts.resource.group;
 
+import org.apache.commons.lang.mutable.Mutable;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,7 +56,7 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
   public List<Group> saveAndReturnUpdatedGroups(MutableGroup pGroup) {
     int savedGroupSize = getContentManager().getGroups(pGroup).size();
     String newGroupId = "";
-    if (String.valueOf(savedGroupSize).length() == 1)
+    if(String.valueOf(savedGroupSize).length() == 1)
       newGroupId = pGroup.getMainGroup() + "00" + (savedGroupSize + 1);
     pGroup.setGroupCode(newGroupId);
     pGroup.setDefaultComp("01");
@@ -63,6 +64,11 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
     pGroup.setModifiedDate(new Date());
     pGroup.setModifiedBy(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     getContentManager().create(pGroup);
+    return getContentManager().getAll();
+  }
+
+  public List<Group> deleteAndReturnUpdatedGroups(MutableGroup pGroup) {
+    getContentManager().delete(pGroup);
     return getContentManager().getAll();
   }
 
@@ -74,17 +80,19 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
         .collect(Collectors.groupingBy(Group::getMainGroup));
     pGroups.forEach(g -> {
       String newGroupId = "";
-      int savedGroupSize = groupMapWithMainGroup.get(g.getMainGroup()).size();
-      if (String.valueOf(savedGroupSize).length() == 1)
-        newGroupId = g.getMainGroup() + "00" + (savedGroupSize + 1);
-      else if (String.valueOf(savedGroupSize).length() == 2)
-        newGroupId = g.getMainGroup() + "0" + (savedGroupSize + 1);
+      List<Group> groupsOfMap = groupMapWithMainGroup.get(g.getMainGroup());
+      if (String.valueOf(groupsOfMap.size()).length() == 1)
+        newGroupId = g.getMainGroup() + "00" + (groupsOfMap.size() + 1);
+      else if (String.valueOf(groupsOfMap.size()).length() == 2)
+        newGroupId = g.getMainGroup() + "0" + (groupsOfMap.size() + 1);
       else
-        newGroupId = g.getMainGroup() + (savedGroupSize + 1);
+        newGroupId = g.getMainGroup() + (groupsOfMap.size() + 1);
 
       g.setGroupCode(newGroupId);
       g.setModifiedDate(new Date());
       g.setModifiedBy(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
+      groupsOfMap.add(g);
+      groupMapWithMainGroup.put(g.getMainGroup(),groupsOfMap);
     });
     getContentManager().create(pGroups);
     return getContentManager().getAll();

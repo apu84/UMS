@@ -6,6 +6,7 @@ module ums {
     public groups: IGroup[];
     public tempGroup: IGroup[];
     public addedGroup: IGroup;
+    public removedGroup: IGroup;
     public groupMapWithId: any;
     public gridOptions: any;
     public handsOnTableFeature: any;
@@ -27,6 +28,11 @@ module ums {
       this.addedGroup.mainGroup = "";
     }
 
+    private removeButtonClicked(group:IGroup){
+        this.removedGroup=group;
+        console.log("Removed group");
+        console.log(this.removedGroup);
+    }
 
     private initialize() {
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
@@ -35,6 +41,14 @@ module ums {
       });
 
 
+    }
+
+
+    private remove(){
+        this.groupService.deleteAGroup(this.removedGroup).then((groups)=>{
+            this.removedGroup=<IGroup>{};
+           this.assignToGroupAndMap(groups);
+        });
     }
 
     private assignToGroupAndMap(groups: IGroup[]) {
@@ -83,6 +97,7 @@ module ums {
 
 
     private add() {
+        this.addedGroup.mainGroup=this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groups.push(this.addedGroup);
     }

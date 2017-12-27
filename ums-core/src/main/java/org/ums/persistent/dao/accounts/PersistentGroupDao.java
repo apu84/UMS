@@ -74,7 +74,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public int delete(MutableGroup pMutable) {
-    return super.delete(pMutable);
+    String query = "delete from mst_group where id=:id";
+    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
+    return mNamedParameterJdbcTemplate.update(query, namedParameters);
   }
 
   @Override

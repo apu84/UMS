@@ -15,8 +15,9 @@ module ums {
     "angularUtils.directives.dirPagination",
     'smart-table',
     'ui.grid',
-    'ui.select2'
+    'ui.select'
   ]);
+
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-account/');

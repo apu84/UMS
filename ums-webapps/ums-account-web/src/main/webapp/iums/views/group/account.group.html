@@ -1,66 +1,5 @@
 <style>
-    table {
-        border-spacing: 0;
-        width: 100%;
-    }
 
-    td + td {
-        border-left: 1px solid #eee;
-    }
-
-    td, th {
-        border-bottom: 1px solid #eee;
-        background: white;
-        color: black;
-        padding: 10px 25px;
-    }
-
-    th {
-        height: 0;
-        line-height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        color: black;
-        border: none;
-        white-space: nowrap;
-    }
-
-    th div {
-        position: absolute;
-        background: transparent;
-        color: black;
-        padding: 9px 25px;
-        top: 0;
-        margin-left: -25px;
-        line-height: normal;
-        border-left: 1px solid #800;
-    }
-
-    th:first-child div {
-        border: none;
-    }
-
-    .select2 > .select2-choice.ui-select-match {
-        /* Because of the inclusion of Bootstrap */
-        height: 29px;
-    }
-
-    .selectize-control > .selectize-dropdown {
-        top: 36px;
-    }
-
-    /* Some additional styling to demonstrate that append-to-body helps achieve the proper z-index layering. */
-    .select-box {
-        background: #fff;
-        position: relative;
-        z-index: 1;
-    }
-
-    .alert-info.positioned {
-        margin-top: 1em;
-        position: relative;
-        z-index: 10000; /* The select2 dropdown has a z-index of 9999 */
-    }
 
 
 </style>
@@ -86,6 +25,7 @@
                             <th>Group Name</th>
                             <th>Under The Main Group Of</th>
                             <th>Sub Ledger</th>
+                            <th> </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -93,7 +33,10 @@
                             <td>{{g.groupName}}</td>
                             <td>{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
                             <td>
-                                <label><input type="checkbox" ng-model="g.flagBoolValue"></label>
+                                <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                         </tbody>
@@ -111,10 +54,9 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Modal Header</h4>
+                                <h4 class="modal-title">Add Group</h4>
                             </div>
                             <div class="modal-body">
-                                <p>Some text in the modal.</p>
                                 <div class="col-md-12">
                                     <table class="table table-bordered">
                                         <thead>
@@ -127,13 +69,17 @@
                                             <td><input type="text" ng-model="vm.addedGroup.groupName"
                                                        class="form-control"/></td>
                                             <td>
-                                                <select ui-select2 allow-clear theme="bootstrap"
-                                                        data-ng-model="vm.addedGroup.mainGroup"
-                                                        data-placeholder="Pick a number" style="width: 100%">
-                                                    <option ng-repeat="g in vm.groups"
+                                                <ui-select   theme="bootstrap"
+                                                        data-ng-model="vm.addedGroup.mainGroupObject"
+                                                        >
+                                                    <ui-select-match placeholder="Select Main Group">{{vm.addedGroup.mainGroupObject.groupName}}</ui-select-match>
+                                                    <ui-select-choices repeat="g in vm.groups|filter:$select.search">
+                                                        <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                                                    </ui-select-choices>
+                                                   <!-- <option ng-repeat="g in vm.groups"
                                                             value="{{g.groupCode}}">{{g.groupName}}
-                                                    </option>
-                                                </select>
+                                                    </option>-->
+                                                </ui-select>
                                             </td>
                                             <td>
                                                 <label><input type="checkbox"
@@ -147,6 +93,48 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-success" ng-click="vm.add()" data-dismiss="modal">
                                     Add
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="removeModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Remove Group?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <th>Group Name</th>
+                                        <th>Main Group Of</th>
+                                        <th>Sub Ledger</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{vm.removedGroup.groupName}}</td>
+                                            <td>
+                                                {{vm.removedGroup.mainGroupObject.groupName}}
+                                            </td>
+                                            <td>
+                                                <label><input type="checkbox" ng-disabled="true"
+                                                              ng-model="vm.removedGroup.flagBoolValue"></label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" ng-click="vm.remove()" data-dismiss="modal">
+                                    Remove
                                 </button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
