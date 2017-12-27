@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface GroupManager extends ContentManager<Group, MutableGroup, Long> {
   List<Group> getGroups(Group pGroup);
+
 }

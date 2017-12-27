@@ -2,6 +2,7 @@ package org.ums.accounts.resource.group;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.accounts.Group;
+import org.ums.domain.model.mutable.accounts.MutableGroup;
 import org.ums.persistent.model.accounts.PersistentGroup;
 
 import javax.ws.rs.Consumes;
@@ -9,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,5 +28,14 @@ public class MutableGroupResource {
     PersistentGroup mGroup = new PersistentGroup();
     mGroup = pMutableGroup;
     return mHelper.saveAndReturnUpdatedGroups(mGroup);
+  }
+
+  @POST
+  @Path("/saveAll")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<Group> saveListAndReturnUpdatedGroupList(List<PersistentGroup> pPersistentGroups) {
+    List<MutableGroup> groups = new ArrayList<>(pPersistentGroups);
+    return mHelper.saveGroupListAndReturnUpdatedList(groups);
   }
 }

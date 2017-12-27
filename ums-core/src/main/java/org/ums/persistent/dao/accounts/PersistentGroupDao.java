@@ -24,14 +24,13 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   private IdGenerator mIdGenerator;
   private SimpleJdbcInsert mSimpleJdbcInsert;
 
-  private String INSERT_ONE =
-      "insert into mst_group (id, comp_code, group_code, group_name, main_group, reserved_flag,"
-          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by)"
-          + " values (:id, :compCode, :groupCode, :groupName, :mainGroup, :reservedFlag, "
-          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
+  private String INSERT_ONE = "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
+      + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by)"
+      + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
+      + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-                            IdGenerator pIdGenerator) {
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -69,6 +68,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public int update(List<MutableGroup> pMutableList) {
+
     return super.update(pMutableList);
   }
 
@@ -94,6 +94,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Long> create(List<MutableGroup> pMutableList) {
+    pMutableList.forEach(p -> p.setStringId(mIdGenerator.getNumericId()));
     SqlParameterSource[] parameterSources = SqlParameterSourceUtils.createBatch(pMutableList.toArray());
     mNamedParameterJdbcTemplate.batchUpdate(INSERT_ONE, parameterSources);
     return null;

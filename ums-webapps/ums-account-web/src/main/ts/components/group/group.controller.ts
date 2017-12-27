@@ -4,6 +4,7 @@ module ums {
     public static $inject = ['$scope', '$modal', 'notify', 'GroupService'];
 
     public groups: IGroup[];
+    public tempGroup: IGroup[];
     public addedGroup: IGroup;
     public groupMapWithId: any;
     public gridOptions: any;
@@ -36,14 +37,21 @@ module ums {
 
     }
 
-    private assignToGroupAndMap(groups: ums.IGroup[]) {
+    private assignToGroupAndMap(groups: IGroup[]) {
       this.groups = [];
+      this.tempGroup = [];
       this.groups = groups;
+      this.tempGroup = angular.copy(groups);
       this.groups.forEach((g: IGroup) => {
         this.groupMapWithId[g.groupCode] = g;
         g.mainGroupObject = this.groupMapWithId[g.mainGroup];
-        g.flagBoolValue = g.flag == null ? false : true;
+        g.flagBoolValue = (g.flag == null || g.flag == "N") ? false : true;
       });
+    }
+
+    private undo() {
+      this.groups = [];
+      this.groups = angular.copy(this.tempGroup);
     }
 
     private initializeHandsOnTable() {
@@ -75,14 +83,23 @@ module ums {
 
 
     private add() {
-      console.log('added group');
+      this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
+      this.groups.push(this.addedGroup);
+    }
 
-      console.log(this.addedGroup);
-
+    private saveOne() {
       this.groupService.saveAGroup(this.addedGroup).then((groups) => {
         this.addedGroup = <IGroup>{};
         this.assignToGroupAndMap(groups);
 
+      });
+    }
+
+    private saveAll() {
+      let newlyAddedGroups: IGroup[] = [];
+      newlyAddedGroups = this.groups.filter((g: IGroup) => g.stringId == null);
+      this.groupService.saveAllGroup(newlyAddedGroups).then((groups) => {
+        this.assignToGroupAndMap(groups);
       });
     }
   }

@@ -314,15 +314,12 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
-   /*
-    String otp = "";
-    if(pJsonObject.containsKey("otp"))
-      otp = pJsonObject.getString("otp");
-
-    if(otp == null || otp.equalsIgnoreCase("")) {
-      return Response.status(428).entity("{\"message\" : \"OTP Required\"}").build();
-    }
-   */
+    /*
+     * String otp = ""; if(pJsonObject.containsKey("otp")) otp = pJsonObject.getString("otp");
+     * 
+     * if(otp == null || otp.equalsIgnoreCase("")) { return
+     * Response.status(428).entity("{\"message\" : \"OTP Required\"}").build(); }
+     */
 
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
@@ -331,9 +328,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     /*
-    otpEmailService.sendEmail("234543", "ifticse_kuet@hotmail.com", "IUMS",
-        "One-Time Password for Online Marks Submission ");
-    */
+     * otpEmailService.sendEmail("234543", "ifticse_kuet@hotmail.com", "IUMS",
+     * "One-Time Password for Online Marks Submission ");
+     */
     List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
