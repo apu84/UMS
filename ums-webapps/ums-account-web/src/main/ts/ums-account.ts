@@ -70,7 +70,19 @@ module ums {
           url: "/group",
           controller: 'GroupController',
           controllerAs: 'vm',
-          templateUrl: 'views/group/account.group.html'
+          templateUrl: 'views/definitions/group/account.group.html'
+        })
+        .state('account', {
+          url: "/account",
+          controller: 'AccountController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/account/account.html'
+        })
+        .state('financialAccountYear', {
+          url: "/financialAccountYear",
+          controller: 'FinancialAccountYearController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/financial.account.year/financial.account.year.html'
         })
         .state('logout', {
           url: "/logout",

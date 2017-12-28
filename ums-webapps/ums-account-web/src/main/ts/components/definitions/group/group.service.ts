@@ -23,7 +23,7 @@ module ums {
     private groupServiceURL: string = "";
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient) {
-      this.groupServiceURL = "account/group"
+      this.groupServiceURL = "account/definition/group"
     }
 
     public getAllGroups(): ng.IPromise<IGroup[]> {

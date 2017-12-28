@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.group;
+package org.ums.accounts.resource.definitions.group;
 
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;

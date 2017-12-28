@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.group;
+package org.ums.accounts.resource.definitions.group;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.accounts.Group;

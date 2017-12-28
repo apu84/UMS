@@ -97,8 +97,13 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
 /// <reference path='data.ts'/>
-/// <reference path='components/group/group.controller.ts'/>
-/// <reference path='components/group/group.service.ts'/>
+/// <reference path='components/definitions/group/group.controller.ts'/>
+/// <reference path='components/definitions/group/group.service.ts'/>
+/// <reference path='components/definitions/account/account.controller.ts'/>
+/// <reference path='components/definitions/account/account.service.ts'/>
+
+/// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
+/// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
 
 
 

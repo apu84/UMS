@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.group;
+package org.ums.accounts.resource.definitions.group;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 24-Dec-17.
  */
 @Component
-@Path("/account/group")
+@Path("/account/definition/group")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class GroupResource extends MutableGroupResource {

@@ -1,6 +1,5 @@
-package org.ums.accounts.resource.group;
+package org.ums.accounts.resource.definitions.group;
 
-import org.apache.commons.lang.mutable.Mutable;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
