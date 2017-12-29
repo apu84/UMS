@@ -82,7 +82,14 @@ module ums {
           url: "/financialAccountYear",
           controller: 'FinancialAccountYearController',
           controllerAs: 'vm',
-          templateUrl: 'views/definitions/financial.account.year/financial.account.year.html'
+          templateUrl: 'views/definitions/financial.account.year/financial.account.year.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: ['vendors/bootstrap-datepicker/css/datepicker.css']
+                    });
+                }]
+            }
         })
         .state('logout', {
           url: "/logout",
