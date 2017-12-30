@@ -12,6 +12,7 @@ module ums {
         private circulations: Array<ILibraryCirculation>;
         private allCirculation: Array<ILibraryCirculation>;
         private checkInItem: ICheckIn;
+        private circulationType: string;
 
         constructor(private httpClient: HttpClient,
                     private $state: any,
@@ -22,6 +23,7 @@ module ums {
                     private circulationService: CirculationService) {
 
             $scope.checkoutSubmit = this.checkoutSubmit.bind(this);
+            this.addDate();
         }
 
         private doSearch(circulationType: string): void {
@@ -32,6 +34,7 @@ module ums {
                 this.checkIn(this.searchValue);
             }
             else if (circulationType == 'searchPatron') {
+                this.circulationType = 'searchPatron';
                 this.searchPatron(this.searchValue);
             }
             else {
@@ -41,12 +44,16 @@ module ums {
 
         private checkout(patronId: string): void {
             this.userService.getUser(patronId).then((data: any) => {
-                this.user = data[0];
-                this.getCirculation();
+                this.user = data;
+                if (this.validateUser()) {
+                    this.circulationType = 'checkOut';
+                    this.getCirculation();
+                }
             });
         }
 
         private checkIn(itemId: string): void {
+            this.circulationType = 'checkIn';
             this.checkInItem.mfn = this.searchValue;
         }
 
@@ -64,14 +71,13 @@ module ums {
         }
 
         private searchPatron(patronId: string): void {
-            this.userService.getUser(patronId).then((data: any) => {
-                this.user = data[0];
+            if (this.validateUser()) {
                 this.getAllCirculations();
-            });
+            }
         }
 
         private checkoutSubmit(): void {
-            if (this.checkUser()) {
+            if (this.validateUser()) {
                 if ((this.circulation.mfn != undefined && this.circulation.mfn != null && this.circulation.mfn != "")
                     && (this.circulation.dueDate != undefined && this.circulation.dueDate != null && this.circulation.dueDate != "")) {
                     this.convertToJson('save')
@@ -97,23 +103,20 @@ module ums {
         }
 
         private getCirculation(): void {
-            if (this.checkUser()) {
+            if (this.validateUser()) {
                 this.circulationService.getCirculation(this.user.userId).then((data: any) => {
                     this.circulations = data;
                 });
             }
-            else {
-                this.notify.error("No user available! Search Patron Again.");
-            }
+
         }
 
         private getAllCirculations(): void {
-            if (this.checkUser()) {
+            if (this.validateUser()) {
+                this.allCirculation = [];
                 this.circulationService.getAllCirculation(this.user.userId).then((data: any) => {
                     this.allCirculation = data;
                 });
-            } else {
-                this.notify.error("No user available! Search Patron Again.");
             }
         }
 
@@ -145,8 +148,8 @@ module ums {
             }
         }
 
-        private checkUser(): boolean {
-            return this.user != null;
+        private validateUser(): boolean {
+            return this.user.userId != undefined && this.user.userId != null;
         }
 
         private convertToJson(type: string): ng.IPromise<any> {
@@ -164,6 +167,17 @@ module ums {
             }
             defer.resolve(JsonObject);
             return defer.promise;
+        }
+
+        private addDate(): void {
+            let internalThis: any = this;
+            setTimeout(function () {
+                $('#datetimepicker-default').datetimepicker();
+                $('#datetimepicker-default').blur(function (e) {
+                    internalThis.circulation.dueDate = $(this).val();
+                    console.log(internalThis.circulation.dueDate );
+                });
+            }, 10);
         }
 
     }

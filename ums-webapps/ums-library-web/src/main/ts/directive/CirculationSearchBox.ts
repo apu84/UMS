@@ -8,11 +8,11 @@ module ums {
         public scope = {
             data: '=',
             searchValue: '=',
-            doSearch: '&'
+            doSearch: '&',
+            circulationType: '='
         };
 
         public link = (scope: any, element: JQuery, attributes: any) => {
-
             scope.circulationType = attributes.circulationtype;
             scope.searchValue = $('dirProgram').val();
 

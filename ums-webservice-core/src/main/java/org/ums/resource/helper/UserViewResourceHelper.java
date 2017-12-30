@@ -34,10 +34,8 @@ public class UserViewResourceHelper extends ResourceHelper<UserView, MutableUser
     UserView user = new PersistentUserView();
     user = mManager.get(pUserId);
     JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    children.add(toJson(user, pUriInfo, localCache));
-    object.add("entries", children);
+    object.add("entries", toJson(user, pUriInfo, localCache));
     return object.build();
   }
 

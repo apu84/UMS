@@ -44,8 +44,8 @@ module ums {
                         defer.resolve(user);
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {
-                        this.notify.error("Error in getting user data");
                         defer.resolve(response);
+                        console.log(response);
                     });
             }
             else{
