@@ -25,6 +25,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datetimepicker.d.ts'/>
 
 /// <reference path='ums-account.ts'/>
+/// <reference path='ums-account.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
