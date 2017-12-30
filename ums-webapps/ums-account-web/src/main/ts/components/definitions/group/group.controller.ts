@@ -28,10 +28,10 @@ module ums {
       this.addedGroup.mainGroup = "";
     }
 
-    private removeButtonClicked(group:IGroup){
-        this.removedGroup=group;
-        console.log("Removed group");
-        console.log(this.removedGroup);
+    private removeButtonClicked(group: IGroup) {
+      this.removedGroup = group;
+      console.log("Removed group");
+      console.log(this.removedGroup);
     }
 
     private initialize() {
@@ -44,11 +44,11 @@ module ums {
     }
 
 
-    private remove(){
-        this.groupService.deleteAGroup(this.removedGroup).then((groups)=>{
-            this.removedGroup=<IGroup>{};
-           this.assignToGroupAndMap(groups);
-        });
+    private remove() {
+      this.groupService.deleteAGroup(this.removedGroup).then((groups) => {
+        this.removedGroup = <IGroup>{};
+        this.assignToGroupAndMap(groups);
+      });
     }
 
     private assignToGroupAndMap(groups: IGroup[]) {
@@ -97,12 +97,14 @@ module ums {
 
 
     private add() {
-        this.addedGroup.mainGroup=this.addedGroup.mainGroupObject.groupCode;
+      this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groups.push(this.addedGroup);
     }
 
     private saveOne() {
+      this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
+      this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groupService.saveAGroup(this.addedGroup).then((groups) => {
         this.addedGroup = <IGroup>{};
         this.assignToGroupAndMap(groups);

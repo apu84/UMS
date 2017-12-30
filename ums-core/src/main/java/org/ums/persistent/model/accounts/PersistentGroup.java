@@ -37,11 +37,12 @@ public class PersistentGroup implements MutableGroup {
   private Date mModifiedDate;
   private String mModifiedBy;
   @JsonIgnore
-  private String mMainGroupObject;
+  private PersistentGroup mMainGroupObject;
   @JsonIgnore
   private Boolean mFlagBoolValue;
 
-  public PersistentGroup() {}
+  public PersistentGroup() {
+  }
 
   public PersistentGroup(final PersistentGroup pPersistentGroup) {
     mId = pPersistentGroup.getId();
@@ -60,11 +61,11 @@ public class PersistentGroup implements MutableGroup {
     mModifiedBy = pPersistentGroup.getModifiedBy();
   }
 
-  public String getMainGroupObject() {
+  public PersistentGroup getMainGroupObject() {
     return mMainGroupObject;
   }
 
-  public void setMainGroupObject(String pMainGroupObject) {
+  public void setMainGroupObject(PersistentGroup pMainGroupObject) {
     mMainGroupObject = pMainGroupObject;
   }
 

@@ -16,9 +16,9 @@ module ums {
 
     public link = ($scope: any, element: any, attribute: any) => {
 
-        console.log("Date format");
-        console.log($scope.format);
-        let dateFormat=$scope.format;
+      console.log("Date format");
+      console.log($scope.format);
+      let dateFormat = $scope.format;
 
       if ($scope.disable == true) {
         $('.datepicker').disableSelection();
@@ -26,7 +26,7 @@ module ums {
       this.$timeout(() => {
 
         $('.datepicker-default').datepicker({
-          dateFormat: dateFormat
+          dateFormat: "dd/MM/yyyy"
         });
 
         $('.datepicker-default').on('change', function () {
@@ -40,5 +40,6 @@ module ums {
 
     public templateUrl: string = "./views/directive/date-picker.html";
   }
+
   UMS.directive('datePicker', ['$timeout', ($timeout: ng.ITimeoutService) => new DatePicker($timeout)]);
 }

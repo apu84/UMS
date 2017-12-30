@@ -24,7 +24,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   private IdGenerator mIdGenerator;
 
   public PersistentFinancialAccountYearDao(JdbcTemplate pJdbcTemplate,
-      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+                                           NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -38,6 +38,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   @Override
   public FinancialAccountYear get(Long pId) {
+    String query = "";
     return super.get(pId);
   }
 
