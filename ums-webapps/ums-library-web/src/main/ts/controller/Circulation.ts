@@ -23,7 +23,7 @@ module ums {
                     private circulationService: CirculationService) {
 
             $scope.checkoutSubmit = this.checkoutSubmit.bind(this);
-            this.addDate();
+            // this.addDate();
         }
 
         private doSearch(circulationType: string): void {
@@ -169,16 +169,16 @@ module ums {
             return defer.promise;
         }
 
-        private addDate(): void {
-            let internalThis: any = this;
-            setTimeout(function () {
-                $('#datetimepicker-default').datetimepicker();
-                $('#datetimepicker-default').blur(function (e) {
-                    internalThis.circulation.dueDate = $(this).val();
-                    console.log(internalThis.circulation.dueDate );
-                });
-            }, 10);
-        }
+        // private addDate(): void {
+        //     let internalThis: any = this;
+        //     setTimeout(function () {
+        //         $('#datetimepicker-default').datetimepicker();
+        //         $('#datetimepicker-default').blur(function (e) {
+        //             internalThis.circulation.dueDate = $(this).val();
+        //             console.log(internalThis.circulation.dueDate );
+        //         });
+        //     }, 10);
+        // }
 
     }
 
