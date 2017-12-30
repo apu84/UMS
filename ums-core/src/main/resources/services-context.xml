@@ -39,8 +39,8 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="${jdbc.driverClass}"/>
     <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-    <property name="username" value="db_iums_account"/>
-    <property name="password" value="ig100 "/>
+    <property name="username" value="${accounts.jdbc.username}"/>
+    <property name="password" value="${accounts.jdbc.password} "/>
   </bean>
 
   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
