@@ -108,7 +108,13 @@
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
-
+    <dependencySet>
+      <includes>
+        <include>org.ums:ums-webservice-account</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
     <dependencySet>
       <includes>
         <include>org.ums:microservice</include>
