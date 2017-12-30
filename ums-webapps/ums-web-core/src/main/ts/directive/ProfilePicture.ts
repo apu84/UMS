@@ -19,7 +19,7 @@ module ums {
         var dataURL = "data:image/jpeg;base64," + b64;
         $(element).attr('src', dataURL);
       }, (response)=> {
-        console.error(response);
+        //console.error(response);
       }, 'arraybuffer');
     };
   }

@@ -251,7 +251,7 @@
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>
+                        <td style="font-weight: bold;font-size: 14px;">
                             {{data.crhr}}<!--<a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a>-->
                         </td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
@@ -301,6 +301,10 @@
                                 <i class="fa fa-eraser" style="color: blue;" aria-hidden="true"></i>
                             </a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td  style="height: 30px;"><b>Current Status :</b></td>
+                        <td colspan="3" style="font-weight: bold;color: #E41B17;font-size: 14px;">{{data.status_name}}</td>
                     </tr>
                 </table>
                 <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->

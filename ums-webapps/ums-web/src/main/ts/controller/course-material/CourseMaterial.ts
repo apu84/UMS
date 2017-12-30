@@ -32,7 +32,6 @@ module ums {
     }
 
     private fetchCourseInfo(): void {
-
       $("#leftDiv").hide(100);
       $("#arrowDiv").show(50);
 

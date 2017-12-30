@@ -931,6 +931,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       statusDto.setPart_b_total(resultSet.getInt("PART_B_TOTAL"));
       statusDto.setStatusId(resultSet.getInt("STATUS"));
       statusDto.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
+      statusDto.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());
 
       statusDto.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
       statusDto.setExamType(ExamType.get(resultSet.getInt("Exam_Type")));

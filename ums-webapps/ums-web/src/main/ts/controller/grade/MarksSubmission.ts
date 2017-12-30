@@ -442,6 +442,7 @@ module ums {
             this.$scope.data.semester_name = part_info.semesterName;
             this.$scope.data.dept_short_name = part_info.deptSchoolShortName;
             this.$scope.data.dept_long_name = part_info.deptSchoolLongName;
+            this.$scope.data.status_name = part_info.statusName;
 
             this.$scope.gradeSubmissionStatus = part_info.statusId;
             this.$scope.courseType = part_info.courseType;
