@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <button type="button" data-ng-click="ok()" aria-hidden="true"
+            class="close">&times;
+    </button>
+    <h4 class="modal-title">Two FA form</h4>
+</div>
+<form action="" class="form-horizontal" data-validate=""
+      data-onvalidate="testTwoFa">
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="twofatoken" class="control-label col-md-3"></label>
+                <div class="col-md-9">
+                    <input id="twofatoken" type="text" class="form-control required"
+                           data-ng-model="tokenRef.twofatoken">
+                </div>
+                {{tokenRef.message}}
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success">
+            <i class="fa"></i>&nbsp;OK
+        </button>
+    </div>
+</form>

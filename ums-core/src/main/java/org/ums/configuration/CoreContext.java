@@ -2,19 +2,23 @@ package org.ums.configuration;
 
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.authz.permission.WildcardPermissionResolver;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
-import org.ums.employee.academic.AcademicInformation;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
 import org.ums.manager.common.*;
+import org.ums.mapper.Mapper;
+import org.ums.mapper.MapperDao;
+import org.ums.mapper.MapperEntry;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.*;
 import org.ums.services.NotificationGenerator;
@@ -24,6 +28,7 @@ import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
+import org.ums.twofa.*;
 import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
@@ -52,6 +57,16 @@ public class CoreContext {
   @Qualifier("mongoTemplate")
   @Lazy
   MongoTemplate mMongoOperations;
+
+  @Autowired
+  JavaMailSender mJavaMailSender;
+
+  @Autowired
+  VelocityEngine mVelocityEngine;
+
+  @Autowired
+  @Qualifier("dummyEmail")
+  String emailSender;
 
   @Bean
   @Lazy
@@ -316,5 +331,25 @@ public class CoreContext {
   @Bean
   PermissionResolver permissionResolver() {
     return new WildcardPermissionResolver();
+  }
+
+  @Bean
+  Mapper<String, MapperEntry> mapper() {
+    return new MapperDao<String, MapperEntry>(mUMSConfiguration, "twofadata", "twofa");
+  }
+
+  @Bean
+  TwoFATokenManager twoFATokenManager() {
+    return new TwoFATokenDao(mTemplateFactory.getJdbcTemplate(), mUMSConfiguration, mIdGenerator);
+  }
+
+  @Bean
+  TwoFATokenEmailSender twoFATokenEmailSender() {
+    return new TwoFATokenEmailSender(mJavaMailSender, mVelocityEngine, mUMSConfiguration);
+  }
+
+  @Bean
+  TwoFATokenGenerator twoFATokenGenerator() {
+    return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager(), emailSender);
   }
 }

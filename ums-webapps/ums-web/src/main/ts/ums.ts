@@ -1079,6 +1079,12 @@ module ums {
                 }]
             }
         })
+        .state('twoFATest', {
+          url: "/twoFATest",
+          controller: 'TwoFATestController',
+          controllerAs: 'vm',
+          templateUrl: 'views/twofatest/two.fa.test.html'
+        })
 
   });
 }

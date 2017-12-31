@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "PaymentStatus",
-    "package": "org.ums.fee.accounts",
+    "name": "TwoFAToken",
+    "package": "org.ums.twofa",
     "fields": [
       {
         "id": {
@@ -10,22 +10,29 @@
         }
       },
       {
-        "account": "String"
+        "state": "String"
       },
       {
-        "transactionId": "String"
+        "token": "String"
       },
       {
-        "methodOfPayment": "Integer"
+        "token_expiry": "Date"
       },
       {
-        "paymentComplete": "boolean"
-      },
-      {
-        "receivedOn": "Date"
-      },
-      {
-        "completedOn": "Date"
+        "user": {
+          "type": "Ref",
+          "reference": {
+            "name": "User",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "String"
+            },
+            "manager": {
+              "name": "UserManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
       }
     ]
   }

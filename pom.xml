@@ -74,9 +74,9 @@
     <!--<module>ums-web</module>-->
     <module>ums-dist</module>
     <module>ums-webservice-academic</module>
-    <module>ums-webservice-bank</module>
+<!--    <module>ums-webservice-bank</module>
     <module>ums-webservice-library</module>
-    <module>ums-webservice-registrar</module>
+    <module>ums-webservice-registrar</module>-->
     <module>codegenerator</module>
     <module>auth-support</module>
     <module>microservice</module>
@@ -527,6 +527,18 @@
       <artifactId>spring-kafka</artifactId>
       <version>1.2.2.RELEASE</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>3.0.5</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 

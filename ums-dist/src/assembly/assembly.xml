@@ -72,6 +72,7 @@
         <include>org.aspectj:aspectjrt</include>
         <include>org.aspectj:aspectjweaver</include>
         <include>io.jsonwebtoken:jjwt</include>
+        <include>org.mapdb:mapdb</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>
@@ -85,7 +86,7 @@
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
 
-    <dependencySet>
+<!--    <dependencySet>
       <includes>
         <include>org.ums:ums-webservice-bank</include>
       </includes>
@@ -107,7 +108,7 @@
       </includes>
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-    </dependencySet>
+    </dependencySet>-->
 
     <dependencySet>
       <includes>

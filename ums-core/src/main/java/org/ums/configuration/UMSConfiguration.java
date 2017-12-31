@@ -35,6 +35,15 @@ public class UMSConfiguration {
   @Value("${process.gpa.only}")
   private boolean mProcessGPAOnly;
 
+  @Value("${developer.mode}")
+  private boolean mDeveloperMode;
+
+  @Value("${data.dir}")
+  private String mDataDir;
+
+  @Value("${two.fa.token.expiry}")
+  private int mTwoFATokenExpiry;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -77,5 +86,17 @@ public class UMSConfiguration {
 
   public boolean isProcessGPAOnly() {
     return mProcessGPAOnly;
+  }
+
+  public boolean isDeveloperMode() {
+    return mDeveloperMode;
+  }
+
+  public String getDataDir() {
+    return mDataDir;
+  }
+
+  public int getTwoFATokenExpiry() {
+    return mTwoFATokenExpiry;
   }
 }
