@@ -1,0 +1,40 @@
+package org.ums.domain.model.immutable.accounts;
+
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.ums.domain.model.common.EditType;
+import org.ums.domain.model.common.Identifier;
+import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.mutable.accounts.MutableAccount;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * Created by Monjur-E-Morshed on 28-Dec-17.
+ */
+public interface Account extends Serializable, LastModifier, EditType<MutableAccount>, Identifier<Long> {
+  String getStringId();
+
+  String getAccountCode();
+
+  String getAccountName();
+
+  String getAccGroupCode();
+
+  Boolean getReserved();
+
+  BigDecimal getTaxLimit();
+
+  String getTaxCode();
+
+  String getDefaultComp();
+
+  String getStatFlag();
+
+  String getStatUpFlag();
+
+  Date getModifiedDate();
+
+  String getModifiedBy();
+}

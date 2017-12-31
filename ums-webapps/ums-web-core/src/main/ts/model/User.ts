@@ -6,4 +6,19 @@ module ums {
     roleId: number;
     employeeId: string;
   }
+
+  export interface UserView{
+    userId: string;
+    userName: string;
+    gender: string;
+    dateOfBirth: string;
+    bloodGroup: string;
+    fatherName: string;
+    motherName: string;
+    mobileNumber: string;
+    emailAddress: string;
+    department: string;
+    designation: string;
+    category: string;
+  }
 }

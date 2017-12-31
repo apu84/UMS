@@ -2,7 +2,7 @@ module ums {
   export class DuesController {
     public static $inject = ['StudentDuesService'];
     public dues: StudentDue[];
-    public filter: Filter[] = [];
+    public filter:any = [];
     public selectedFilter;
     public selectedFilterValue;
 
@@ -11,7 +11,7 @@ module ums {
     }
 
     public navigate(url: string): void {
-      this.studentDuesService.listDues(url).then((dues: StudentDue[]) => {
+      this.studentDuesService.listDues(null, url).then((dues: StudentDue[]) => {
         this.dues = dues;
       });
     }

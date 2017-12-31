@@ -4,6 +4,7 @@ import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableExamGrade;
+import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
@@ -141,6 +142,23 @@ public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, Mutabl
   public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId, String pDeptId,
       Integer pExamType, String pStatus) throws Exception {
     return getManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType, pStatus);
+  }
+
+  @Override
+  public int transferUGGradesToPrivateDB(String pCourseId, int pSemesterId, int pExamType) throws Exception {
+    return getManager().transferUGGradesToPrivateDB(pCourseId, pSemesterId, pExamType);
+  }
+
+  @Override
+  public int transferUGGradesToPublicDB(String pCourseId, int pSemesterId, int pCourseType, int pExamType,
+      String pStudents, String pCause, String pActor) throws Exception {
+    return getManager().transferUGGradesToPublicDB(pCourseId, pSemesterId, pCourseType, pExamType, pStudents, pCause,
+        pActor);
+  }
+
+  @Override
+  public int update(MutableMarksSubmissionStatus pMutable) throws Exception {
+    return getManager().update(pMutable);
   }
 
 }

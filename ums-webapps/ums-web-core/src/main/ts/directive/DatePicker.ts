@@ -16,13 +16,17 @@ module ums {
 
     public link = ($scope: any, element: any, attribute: any) => {
 
+        console.log("Date format");
+        console.log($scope.format);
+        let dateFormat=$scope.format;
+
       if ($scope.disable == true) {
         $('.datepicker').disableSelection();
       }
       this.$timeout(() => {
 
         $('.datepicker-default').datepicker({
-          dateFormat: 'dd/mm/yy'
+          dateFormat: "dd/MM/yyyy"
         });
 
         $('.datepicker-default').on('change', function () {

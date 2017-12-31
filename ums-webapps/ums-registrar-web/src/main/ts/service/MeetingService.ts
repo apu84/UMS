@@ -119,7 +119,7 @@ module ums{
 
         public deleteMeetingAgendaResolution(id: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.delete(this.agendaResolutionUrl + "/delete/" + id)
+            this.httpClient.doDelete(this.agendaResolutionUrl + "/delete/" + id)
                 .success(() => {
                     this.notify.success("Delete Successful");
                     defer.resolve();

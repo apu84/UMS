@@ -74,9 +74,10 @@
     <!--<module>ums-web</module>-->
     <module>ums-dist</module>
     <module>ums-webservice-academic</module>
-<!--    <module>ums-webservice-bank</module>
+    <module>ums-webservice-bank</module>
     <module>ums-webservice-library</module>
-    <module>ums-webservice-registrar</module>-->
+    <module>ums-webservice-registrar</module>
+    <module>ums-webservice-account</module>
     <module>codegenerator</module>
     <module>auth-support</module>
     <module>microservice</module>

@@ -46,7 +46,7 @@ module ums {
     }
 
     public remove(rowData: RowData): void {
-      this.httpClient.delete('academic/classroom/' + rowData)
+      this.httpClient.doDelete('academic/classroom/' + rowData)
           .success(() => {
             $.notific8("Removed entry");
           }).error((data) => {
@@ -60,7 +60,7 @@ module ums {
     public afterShowEditForm(formId: String, gridElement: JQuery): void {
     }
 
-    public decorateScope(): GridConfig {
+    public decorateScope(): any {
       return this.$scope;
     }
 

@@ -238,7 +238,7 @@ module ums{
     }
 
     private deleteApplication():void{
-      this.httpClient.delete('academic/semesterWithdraw/'+this.$scope.semesterWithdraw.id)
+      this.httpClient.doDelete('academic/semesterWithdraw/'+this.$scope.semesterWithdraw.id)
       .success(()=>{
         this.$scope.data.status = "Application Deleted Successfully";
         this.$scope.data.cause = "";

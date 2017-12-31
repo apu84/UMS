@@ -261,6 +261,17 @@ module ums {
       });
     }
 
+    public static getDateObject(dateString: string): Date {
+      let dateArray: string[] = dateString.split("-" || "/");
+      let newDate = dateArray[1] + "/" + dateArray[0] + "/" + dateArray[2];
+      return new Date(newDate);
+    }
+
+    public static convertFromJacksonDate(dateString: string): string {
+      let dateArray: string[] = dateString.split("-" || "/");
+      let newDate = dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
+      return newDate;
+    }
 
   }
 }

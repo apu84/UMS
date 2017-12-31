@@ -4,6 +4,7 @@ import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableExamGrade;
+import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
@@ -69,7 +70,13 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
 
   Map getUserRoleList(Integer pSemesterId, String pCourseId);
 
-  List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer getMarksSubmissionStat, Integer pSemesterId,
-      String pDeptId, Integer pExamType, String pStatus) throws Exception;
+  List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId, String pDeptId,
+      Integer pExamType, String pStatus) throws Exception;
 
+  int transferUGGradesToPrivateDB(String pCourseId, int pSemesterId, int pExamType) throws Exception;
+
+  int transferUGGradesToPublicDB(String pCourseId, int pSemesterId, int pCourseType, int pExamType, String pStudents,
+      String pCause, String pActor) throws Exception;
+
+  int update(MutableMarksSubmissionStatus pMutable) throws Exception;
 }

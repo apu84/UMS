@@ -251,7 +251,7 @@
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>
+                        <td style="font-weight: bold;font-size: 14px;">
                             {{data.crhr}}<!--<a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a>-->
                         </td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
@@ -301,6 +301,10 @@
                                 <i class="fa fa-eraser" style="color: blue;" aria-hidden="true"></i>
                             </a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td  style="height: 30px;"><b>Current Status :</b></td>
+                        <td colspan="3" style="font-weight: bold;color: #E41B17;font-size: 14px;">{{data.status_name}}</td>
                     </tr>
                 </table>
                 <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->
@@ -757,14 +761,17 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
-                                <th sortable-header col="studentId" width="10%">Student Id</th>
-                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="studentId" width="8%">Student Id</th>
+                                <th sortable-header col="studentName" width="22%">Student Name</th>
                                 <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
                                 <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
                                 <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
                                 <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                                <th col="recheckAll" width="8%" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
+                                    Recheck&nbsp;&nbsp;
+                                 <input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox" /></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -777,124 +784,22 @@
                                 <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
+                                <td id="td_recheck_{{response.studentId}}" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
+                                    <input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </scrollable-table>
-                    <br/><br/>
+                    <br/>
                     <div class="row">
                         <div class="col-md-6">
                             <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                         </div>
-                    </div>
-
-                    <div ng-if="acceptedGrades.length>0 &&  (gradeSubmissionStatus =='7' && currentActor=='coe') ">
-                        <div class="btn btn-red" style="margin-top: 20px;">
-                            <i class="fa fa-check-circle"></i>
-                            <span style="padding-right: 30px;">Recheck Accepted Grades(Pending) <input type="'textbox" style="width:150px;border:1px solid white;color:black;margin-left:10px"  ng-keypress="($event.which === 13)?copyGradeRow():0" data-ng-model="data.recheck_accepted_studentId"/></span>
+                        <div class="col-md-6" style="text-align: right;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
+                            <modal  data-handler="modalSettings.recheckHandler" data-body="modalSettings.recheckBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rightButton(currentActor,'recheckAccepted')"></modal>
+                            <a data-target="#{{modalSettings.recheckHandler}}" role="button" id="recheckBtn"  class="btn btn-primary btn-square disabled" data-toggle="modal">{{recheckButtonLabel}}</a>
                         </div>
-                        &nbsp;&nbsp;
-                        <a href="javascript:void(0)" class="btn btn-red" data-ng-click="copyAllGradeRow()" style="padding: 0 9px !important;margin-top: 16px;">
-                            <i class="fa fa-plus-square"></i>&nbsp;
-                        Add all Students
-                        </a>
-                        <div class="clearfix"></div>
-                        <scrollable-table resizable watch="recheckAcceptedGrades" ng-style="{height:300}">
-                            <table class="table table-striped table-bordered" id="tbl_recheck_accepted">
-                                <thead>
-                                <tr>
-                                    <th sortable-header col="studentId" width="10%">Student Id</th>
-                                    <th sortable-header col="studentName" width="30%">Student Name</th>
-                                    <th sortable-header col="quiz" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
-                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
-                                    <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
-                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
-                                    <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
-                                    <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
-                                    <th sortable-header col="gradeLetter" width="4%" style="text-align: center;">Delete</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="response in recheckAcceptedGrades" id="recheck_accepted_{{response.studentId}}" data-emit-last-repeater-element>
-                                    <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
-                                    <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                                    <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                    <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                    <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                    <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                    <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                    <td id="td_grade_letter_{{response.studentId}}"  style="text-align: center;">{{response.gradeLetter}}</td>
-                                    <td style="text-align: center;" ></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </scrollable-table>
-
-                        <div class="row" style="padding-top:20px;padding-bottom: 20px;">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
-                            </div>
-                            <div class="col-md-6" style="text-align: right;">
-
-                                <modal data-handler="modalSettings.submitHandler" data-body="modalSettings.submitBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.submitRightButton()"></modal>
-                                <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal">Send Recheck Request to VC</a>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div ng-if="recheckAcceptedGrades.length>0 &&  gradeSubmissionStatus =='8' ">
-                        <div class="btn btn-red" style="margin-top: 20px;">
-                            <i class="fa fa-check-circle"></i>
-                            <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending)</span>
-                        </div>
-                        <div class="clearfix"></div>
-                        <scrollable-table resizable watch="recheckAcceptedGrades" ng-style="{height: recheckAcceptedGrades.length > 10 ? 450 : (38 + (recheckAcceptedGrades.length * 35.5))}">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                <tr>
-                                    <th sortable-header col="studentId" width="10%">Student Id</th>
-                                    <th sortable-header col="studentName" width="30%">Student Name</th>
-                                    <th sortable-header col="quiz" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
-                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
-                                    <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
-                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
-                                    <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
-                                    <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="response in recheckAcceptedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
-                                    <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
-                                    <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                                    <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                    <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                    <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                    <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                    <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                    <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </scrollable-table>
-
-                        <div class="row" style="padding-top:20px;padding-bottom: 20px;">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
-                            </div>
-                            <div class="col-md-6" style="text-align: right;" ng-if="gradeSubmissionStatus =='8' && currentActor=='vc'">
-
-                                <modal  data-handler="modalSettings.rejectHandler" data-body="modalSettings.rejectBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rejectRightButton(currentActor,'recheck_request_rejected')"></modal>
-                                <a data-target="#{{modalSettings.rejectHandler}}" role="button" id="rejectBtn"  class="btn btn-primary btn-square" data-toggle="modal">Reject Recheck Request</a>
-
-                                <modal   data-handler="modalSettings.approveHandler" data-body="modalSettings.approveBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.approveRightButton(currentActor,'recheck_request_approved')"></modal>
-                                <a data-target="#{{modalSettings.approveHandler}}" role="button" id="approveBtn"  class="btn btn-green btn-square" data-toggle="modal">Approve Recheck Request</a>
-
-
-                            </div>
-                        </div>
-
                     </div>
 
                 </div>

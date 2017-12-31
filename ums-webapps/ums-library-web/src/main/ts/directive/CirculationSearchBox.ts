@@ -6,11 +6,15 @@ module ums {
 
         public restrict: string = "E";
         public scope = {
-            data: '='
+            data: '=',
+            searchValue: '=',
+            doSearch: '&',
+            circulationType: '='
         };
 
         public link = (scope: any, element: JQuery, attributes: any) => {
             scope.circulationType = attributes.circulationtype;
+            scope.searchValue = $('dirProgram').val();
 
         };
 

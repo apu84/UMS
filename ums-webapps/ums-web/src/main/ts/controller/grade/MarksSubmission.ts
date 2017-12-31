@@ -227,10 +227,6 @@ module ums {
       $scope.saveRecheckApproveGrades = this.saveRecheckApproveGrades.bind(this);
       $scope.closePopupModal = this.closePopupModal.bind(this);
 
-      $scope.copyGradeRow = this.copyGradeRow.bind(this);
-      $scope.copyAllGradeRow = this.copyAllGradeRow.bind(this);
-      $scope.sendRecheckRequestToVC = this.sendRecheckRequestToVC.bind(this);
-      $scope.recheckRequestHandler = this.recheckRequestHandler.bind(this);
       $scope.loadSemesters = this.loadSemesters.bind(this);
       $scope.loadPrograms = this.loadPrograms.bind(this);
 
@@ -328,66 +324,6 @@ module ums {
       return defer.promise;
     }
 
-    private copyGradeRow(): void {
-      var studentId: any = this.$scope.data.recheck_accepted_studentId;
-      this.appendDataForRecheckRequest(studentId);
-      this.$scope.data.recheck_accepted_studentId = "";
-    }
-
-    private copyAllGradeRow() : void {
-      for(var i=0;i<this.$scope.acceptedGrades.length; i++) {
-        var marks :IStudentMarks = this.$scope.acceptedGrades[i];
-        this.appendDataForRecheckRequest(marks.studentId);
-      }
-    }
-
-    private appendDataForRecheckRequest(studentId : String) : void {
-      var newRowId: any = "recheck_accepted_" + studentId;
-      if ($("#" + newRowId).length) return;
-      var $clone = $("#row_" + studentId).clone();
-      $clone.attr("id", newRowId);
-      $clone.append('<td style="text-align: center;cursor:pointer;" onclick="removeTableRow(\'' + newRowId + '\')"><img src="https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Delete.png" /></td>');
-      $clone.appendTo($('#tbl_recheck_accepted > tbody'));
-    }
-
-    private sendRecheckRequestToVC(): void {
-
-      var recheckRequestStudentList: Array<IStudent> = new Array<IStudent>();
-      var approveStudentList: Array<IStudent> = new Array<IStudent>();
-      var student: IStudent;
-      $("#tbl_recheck_accepted  tbody tr[id^='recheck_accepted_']").each(function (i, el: any) {
-        student = {studentId: ""}
-        student.studentId = el.id.substr(17, 9);
-        recheckRequestStudentList.push(student);
-      });
-
-      if(recheckRequestStudentList.length == 0) {
-        alert("Please select at least one student to recheck.");
-        return;
-      }
-
-      var url = "academic/gradeSubmission/recheckApprove";
-      var complete_json = this.createCompleteJson("recheck_request_submit", null, recheckRequestStudentList, approveStudentList);
-      this.httpClient.put(url, complete_json, 'application/json')
-          .success(() => {
-            this.notify.success("Successfully Saved.");
-            this.reloadGradeSheet(this);
-          }).error((data) => {
-      });
-    }
-
-    private recheckRequestHandler(actor: string, action: string): void {
-      var url = "academic/gradeSubmission/vc/recheckApprove";
-      console.clear();
-      var complete_json = this.createCompleteJson(action, null, null, null);
-      this.httpClient.put(url, complete_json, 'application/json')
-          .success(() => {
-            this.notify.success("Successfully Saved.");
-            this.reloadGradeSheet(this);
-          }).error((data) => {
-      });
-    }
-
 
     private downloadPdf():any{
       var contentType:string=UmsUtil.getFileContentType("pdf");
@@ -460,18 +396,11 @@ module ums {
     }
 
     private fetchGradeSheet(courseId: string, semesterId: number, examTypeId: number): void {
-
       $("#panel_top").hide();
       $("#loading_panel").show();
       this.$scope.current_courseId = courseId;
       this.$scope.current_semesterId = semesterId;
       this.$scope.current_examTypeId = examTypeId;
-
-      if($("#tbl_recheck_accepted")) {
-        $('#tbl_recheck_accepted > tbody').html("");
-      }
-
-
 
       $('.page-title.ng-binding').html("Online Grade Preparation/Scrutiny/Approval");
 
@@ -513,6 +442,7 @@ module ums {
             this.$scope.data.semester_name = part_info.semesterName;
             this.$scope.data.dept_short_name = part_info.deptSchoolShortName;
             this.$scope.data.dept_long_name = part_info.deptSchoolLongName;
+            this.$scope.data.status_name = part_info.statusName;
 
             this.$scope.gradeSubmissionStatus = part_info.statusId;
             this.$scope.courseType = part_info.courseType;
@@ -1151,10 +1081,7 @@ module ums {
           return;
         }
       }
-
-
       this.postGradeSheet(gradeList, 'submit');
-
     }
 
     private postGradeSheet(gradeList: Array<IStudentMarks>, action: string): void {
@@ -1164,8 +1091,48 @@ module ums {
           .success(() => {
             this.notify.success("Successfully Saved.");
             this.reloadGradeSheet(this);
-          }).error((data) => {
-      });
+          }).error((data, status) => {
+             this.notify.error(data);
+             /*
+            $('#modal-otp').modal('show');
+            $('.progress-bar').progressbar({display_text: 'fill'});
+
+            var remainingSeconds=1*70;  //We will get this value from backend
+            var clockTimer=+localStorage.getItem("clockTimer");
+            clearInterval(clockTimer);
+            var cTimer = setInterval(function() {
+                var minutes = parseInt((remainingSeconds/60)+'');
+                var seconds =  remainingSeconds%60;
+                document.getElementById("demo").innerHTML =  "00"+" : "+("0" + minutes).slice(-2) + " : " + ("0" + seconds).slice(-2);
+                if (remainingSeconds < 0) {
+                    clearInterval(cTimer);
+                    $("#otpInput").hide();
+                    $("#otpExpired").show();
+                }
+                remainingSeconds = remainingSeconds-1;
+              }, 1000);
+        localStorage["clockTimer"] = cTimer;
+
+        var progressTimer=+localStorage.getItem("progressTimer");
+        clearInterval(progressTimer);
+        var progressRemainingSeconds=1*70;  //We will get this value from backend
+
+        var otpLifeTime = 600; //In Seconds
+        var percentage = (100/otpLifeTime)*(progressRemainingSeconds);
+        var index = progressRemainingSeconds;
+        var pTimer = setInterval(function(){
+          percentage = percentage - 1/6;
+          index --;
+          if (index > 0){
+            $('.progress-bar').css('width', percentage+'%');
+            $('.progress-bar').attr('aria-valuenow', Math.round(percentage));
+            $('.progress-bar').html($('.progress-bar').attr('aria-valuenow') + '%');
+          } else {
+            clearInterval(pTimer);
+          }
+        }, 1000);
+        localStorage["progressTimer"] = pTimer;
+      */});
     }
 
     private createCompleteJson(action: string, gradeList: Array<IStudentMarks>, recheckList: Array<IStudent>, approveList: Array<IStudent>): any {
@@ -1210,7 +1177,7 @@ module ums {
     }
 
     private recheckAll(actor: string): void {
-
+     console.log("-----");
       if($("#approveAllCheckBox"))
         $("#approveAllCheckBox").prop('checked', false);
 
@@ -1322,6 +1289,9 @@ module ums {
       var url = "academic/gradeSubmission/recheckApprove";
 
       var complete_json = this.createCompleteJson(action, null, recheckStudentList, approveStudentList);
+      if(action=="recheckAccepted") {
+        complete_json["cause"] =$("#recheck_explanation").val() ;
+      }
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             this.notify.success("Successfully Saved.");
@@ -1338,7 +1308,7 @@ module ums {
       this.getTotalRecheckApproveGrade(actor);
       var msg: string = "";
 
-      if (action == "recheck" && this.$scope.totalRecheck == 0) {
+      if ((action == "recheck" ||  action == "recheckAccepted" ) && this.$scope.totalRecheck == 0) {
         msg = "You should recheck at least one student grade for Recheck Request.";
       }
       else if (action == "recheck" && this.$scope.totalRecheck + this.$scope.totalApprove != totalGrade) {
@@ -1379,7 +1349,10 @@ module ums {
         gradeList = this.$scope.approveCandidatesGrades;
       }
       else if (actor == "coe") {
-        gradeList = this.$scope.acceptCandidatesGrades;
+        if(this.$scope.acceptCandidatesGrades.length>0)
+          gradeList = this.$scope.acceptCandidatesGrades;
+        else
+          gradeList = this.$scope.acceptedGrades;
       }
       return gradeList;
     }
@@ -1445,8 +1418,8 @@ module ums {
         $("#approveBtn").removeClass("disabled");
       }
       else if (this.$scope.totalRecheck > 0) {
-        $("#approveBtn").addClass("disabled");
         $("#recheckBtn").removeClass("disabled");
+        $("#approveBtn").addClass("disabled");
       }
     }
 
@@ -1527,40 +1500,11 @@ module ums {
           this.$scope.approveButtonLabel = "Save and Accept";
           this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
 
-          var abc="";
-          abc ="Are you sure you want to send back the selected grades to preparer for recheck?";
-          abc +="<div>";
-          abc +="<br/><b><u>Marks Submission deadlines</u></b> <hr/>";
-          abc +="<form class='form-horizontal pal'>";
-          abc +="<div class='form-body'>";
-          abc +="<div class='form-group' style='margin-bottom:5px;'>";
-          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Preparer</label>";
-          abc +="<div class='col-md-8'>";
-          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_preparer+"' style='width:60%;text-align: center;' id='deadline_preparer'/>" ;
-          abc +="</div>";
-          abc +="</div>";
+          var recheckContent="";
+          recheckContent ="Are you sure you want to send back the selected grades to preparer for recheck?";
+          recheckContent = this.getGradeRecheckConfirmationCommonBody();
 
-          abc +="<div class='form-group' style='margin-bottom:5px;'>";
-          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Scrutinizer</label>";
-          abc +="<div class='col-md-8'>";
-          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_scrutinizer+"'  style='width:60%;text-align: center;' id='deadline_scrutinizer'/>" ;
-          abc +="</div>";
-          abc +="</div>";
-
-          abc +="<div class='form-group'  style='margin-bottom:5px;'>";
-          abc +="<label for='preparerDeadline' class='col-md-4 control-label'>Head</label>";
-          abc +="<div class='col-md-8'>";
-          abc +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_head+"' style='width:60%;text-align: center;' id='deadline_head'/>" ;
-          abc +="</div>";
-          abc +="</div>";
-
-
-          abc +="</div>";
-          abc +="</form>";
-
-
-          abc +="</div>";
-          this.$scope.modalSettings.recheckBody  = this.$sce.trustAsHtml(abc);
+          this.$scope.modalSettings.recheckBody  = this.$sce.trustAsHtml(recheckContent);
           this.$scope.modalSettings.recheckHandler = "recheckModal";
           this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
           this.$scope.modalSettings.approveHandler = "approveModal";
@@ -1569,30 +1513,26 @@ module ums {
           }
         }
         else if (this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.ACCEPTED_BY_COE) {
-          this.$scope.modalSettings.submitBody = "Are you sure you want to send grade recheck request to Honorable Vice Chancellor?";
-          this.$scope.modalSettings.submitHandler = "submitModal";
-          this.$scope.modalSettings.submitRightButton = () => {
-            this.sendRecheckRequestToVC();
+          var recheckContent="";
+          recheckContent ="Are you sure you want to send back the selected grades to preparer for recheck?";
+          recheckContent += this.getGradeRecheckConfirmationCommonBody();
+          recheckContent +="<br/><b><u>Why do we need to recheck these accepted grades ?</u></b> <hr/>";
+          recheckContent += "<font color='red'>(Please write down proper explanation)</font><br/><br/>";
+          recheckContent += "<textarea rows='5' class='form-control' id='recheck_explanation'></textarea>";
+          this.$scope.recheckButtonLabel = "Save & Send back to Preparer";
+          this.$scope.modalSettings.recheckBody  = this.$sce.trustAsHtml(recheckContent);
+          this.$scope.modalSettings.recheckHandler = "recheckModal";
+          this.$scope.modalSettings.rightButton = (currentActor, action) => {
+            if($("#recheck_explanation").val() == "")
+                this.notify.error("Please provide explanation for recheck.");
+            else
+              this.saveRecheckApproveGrades(currentActor, action);
           }
         }
 
       }
-      if (this.$scope.currentActor == "vc"
-          && this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_RECHECK_REQUEST_APPROVAL) {
-
-        this.$scope.modalSettings.rejectBody = "Are you sure you want to reject the recheck request?";
-        this.$scope.modalSettings.rejectHandler = "rejectModal";
-        this.$scope.modalSettings.rejectRightButton = (currentActor, action) => {
-          this.recheckRequestHandler(currentActor, action);
-        }
-
-        this.$scope.modalSettings.approveBody = "Are you sure you want to approve the recheck request?";
-        this.$scope.modalSettings.approveHandler = "approveModal";
-        this.$scope.modalSettings.approveRightButton = (currentActor, action) => {
-          this.recheckRequestHandler(currentActor, action);
-        }
-      }
     }
+
 
     private initializeDatePickers() {
       setTimeout(function () {
@@ -1601,6 +1541,42 @@ module ums {
           $('.datepicker').hide();
         });
       }, 1000);
+    }
+
+    private getGradeRecheckConfirmationCommonBody() {
+      var recheckContent="";
+      recheckContent +="<div>";
+      recheckContent +="<br/><b><u>Marks Submission deadlines</u></b> <hr/>";
+      recheckContent +="<form class='form-horizontal'>";
+      recheckContent +="<div class='form-body'>";
+      recheckContent +="<div class='form-group' style='margin-bottom:5px;'>";
+      recheckContent +="<label for='preparerDeadline' class='col-md-4 control-label'>Preparer</label>";
+      recheckContent +="<div class='col-md-8'>";
+      recheckContent +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_preparer+"' style='width:60%;text-align: center;' id='deadline_preparer'/>" ;
+      recheckContent +="</div>";
+      recheckContent +="</div>";
+
+      recheckContent +="<div class='form-group' style='margin-bottom:5px;'>";
+      recheckContent +="<label for='preparerDeadline' class='col-md-4 control-label'>Scrutinizer</label>";
+      recheckContent +="<div class='col-md-8'>";
+      recheckContent +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_scrutinizer+"'  style='width:60%;text-align: center;' id='deadline_scrutinizer'/>" ;
+      recheckContent +="</div>";
+      recheckContent +="</div>";
+
+      recheckContent +="<div class='form-group'  style='margin-bottom:5px;'>";
+      recheckContent +="<label for='preparerDeadline' class='col-md-4 control-label'>Head</label>";
+      recheckContent +="<div class='col-md-8'>";
+      recheckContent +="<input type='text'  data-date-format='dd-mm-yyyy' placeholder='DD-MM-YYYY' class='datepicker-default form-control' value='"+this.$scope.data.deadline_head+"' style='width:60%;text-align: center;' id='deadline_head'/>" ;
+      recheckContent +="</div>";
+      recheckContent +="</div>";
+
+      recheckContent +="</div>";
+      recheckContent +="</form>";
+
+
+      recheckContent +="</div>";
+
+      return recheckContent;
     }
     //MarksSubmissionLog
     private fetchMarksSubmissionLog(): void {

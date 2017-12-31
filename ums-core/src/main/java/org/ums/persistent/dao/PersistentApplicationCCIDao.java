@@ -1,11 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationCCIDaoDecorator;
@@ -14,6 +8,12 @@ import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 7/14/2016.
@@ -48,7 +48,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     List<Object[]> parameters = getInsertParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ONE, parameters);
     return parameters.stream()
-        .map(paramArray -> (Long)paramArray[0])
+        .map(paramArray -> (Long) paramArray[0])
         .collect(Collectors.toCollection(ArrayList::new));
   }
 
@@ -147,7 +147,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
-    String query = SELECT_ALL + " and  a.student_id=? and a.semester_id=?";
+    String query = SELECT_ALL + " and  a.student_id=? and a.semester_id=? and exam_routine.semester=a.semester_id";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new ApplicationCCIRowMapper());
   }
 

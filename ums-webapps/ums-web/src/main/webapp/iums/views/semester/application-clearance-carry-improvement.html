@@ -1,5 +1,5 @@
 <div class="container-fluid" data-ng-init="initialization()">
-    <div class="panel panel-blue" >
+    <div class="panel panel-blue">
         <div class="panel-heading" align="center">
             <h4 class="panel-title"><p>Application System for Clearance/Carry/Improvement</p></h4>
         </div>
@@ -28,7 +28,7 @@
 
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:2}" >
+                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:2}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -51,7 +51,7 @@
                                 <th>Exam Date</th>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}" >
+                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -74,7 +74,7 @@
                                 <th>Exam Date</th>
                                 </thead>
                                 <tbody>
-                                <tr  data-ng-repeat="app in applicationCCI|filter:{applicationType:3}" >
+                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:3}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -97,7 +97,7 @@
                                 <th>Exam Date</th>
                                 </thead>
                                 <tbody>
-                                <tr  data-ng-repeat="app in applicationCCI|filter:{applicationType:4}" >
+                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:4}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -109,7 +109,7 @@
                     </div>
 
                 </div>
-                <div data-ng-if="applicationCCIFound==false && submitButtonClicked==false && loadingVisibility==false" >
+                <div data-ng-if="applicationCCIFound==false && submitButtonClicked==false && loadingVisibility==false">
                     <h4>Please choose course(s) from the bellow list</h4>
 
                     <div class="panel panel-danger" data-ng-if="resultClearanceNumber>0">
@@ -125,7 +125,8 @@
                                 <th>Apply</th>
                                 </thead>
                                 <tbody>
-                                <tr  data-ng-repeat="app in registrationResults" data-ng-if="app.type=='Clearance'" data-ng-style="{'background-color':app.backgroundColor,color:app.color}" >
+                                <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==2"
+                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -150,7 +151,8 @@
                                 <th>Apply</th>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type=='Improvement'" data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==5"
+                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
@@ -175,11 +177,14 @@
                                 <th>Apply</th>
                                 </thead>
                                 <tbody>
-                                <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults" data-ng-if="app.type=='Carry'" data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults"
+                                    data-ng-if="app.type==3"
+                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                     <td>{{app.courseNo}}</td>
                                     <td>{{app.courseTitle}}</td>
                                     <td>{{app.examDate}}</td>
-                                    <td><input type="checkbox" data-ng-model="app.apply"  data-ng-click="checkMoreThanOneSelection(app)"></td>
+                                    <td><input type="checkbox" data-ng-model="app.apply"
+                                               data-ng-click="checkMoreThanOneSelection(app)"></td>
                                     <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
                                 </tr>
                                 </tbody>
@@ -193,7 +198,8 @@
                         <button class="btn btn-success" data-ng-click="cancel()">Cancel</button>
                     </div>
                 </div>
-                <div data-ng-if="submitButtonClicked && applicationCCIFound == false && loadingVisibility==false" class="container ">
+                <div data-ng-if="submitButtonClicked && applicationCCIFound == false && loadingVisibility==false"
+                     class="container ">
                     <div class="row">
                         <h4>Are you sure you want to apply for the following courses?</h4>
                     </div>
@@ -211,7 +217,9 @@
                                     <!--<th>Apply</th>-->
                                     </thead>
                                     <tbody>
-                                    <tr  data-ng-repeat="app in registrationResults | filter:{apply:true}"  data-ng-if="app.type=='Clearance' " data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                    <tr data-ng-repeat="app in registrationResults | filter:{apply:true}"
+                                        data-ng-if="app.type==2 "
+                                        data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                         <td>{{app.courseNo}}</td>
                                         <td>{{app.courseTitle}}</td>
                                         <td>{{app.examDate}}</td>
@@ -236,7 +244,9 @@
                                     <!--<th>Apply</th>-->
                                     </thead>
                                     <tbody>
-                                    <tr data-ng-repeat="app in registrationResults | filter:{apply:true}" data-ng-if="app.type=='Improvement' "  data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                    <tr data-ng-repeat="app in registrationResults | filter:{apply:true}"
+                                        data-ng-if="app.type==5"
+                                        data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                         <td>{{app.courseNo}}</td>
                                         <td>{{app.courseTitle}}</td>
                                         <td>{{app.examDate}}</td>
@@ -261,7 +271,9 @@
                                     <!--<th>Apply</th>-->
                                     </thead>
                                     <tbody>
-                                    <tr  data-ng-repeat="app in registrationResults | filter:{apply:true}" data-ng-if="app.type=='Carry' " data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                    <tr data-ng-repeat="app in registrationResults | filter:{apply:true}"
+                                        data-ng-if="app.type==3 "
+                                        data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                         <td>{{app.courseNo}}</td>
                                         <td>{{app.courseTitle}}</td>
                                         <td>{{app.examDate}}</td>
@@ -279,9 +291,9 @@
                             <button class="btn btn-success" data-ng-click="close()">Close</button>
                         </div>
                     </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>

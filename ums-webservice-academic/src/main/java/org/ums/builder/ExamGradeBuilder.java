@@ -219,7 +219,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         approveList.add(grade);
       }
     }
-    else if(action.equalsIgnoreCase("recheck") || action.equalsIgnoreCase("recheck_request_submit")) {
+    else if(action.equalsIgnoreCase("recheck") || action.equalsIgnoreCase("recheckAccepted")) {
       for(int i = 0; i < recheckEntries.size(); i++) {
         JsonObject jsonObject = recheckEntries.getJsonObject(i);
         StudentGradeDto grade = new StudentGradeDto();
@@ -228,7 +228,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         grade.setStudentId(jsonObject.getString("studentId"));
         if(action.equalsIgnoreCase("recheck"))
           grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
-        else if(action.equalsIgnoreCase("recheck_request_submit"))
+        else if(action.equalsIgnoreCase("recheckAccepted"))
           grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor, action));
         recheckList.add(grade);
       }
@@ -290,8 +290,8 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         return StudentMarksSubmissionStatus.ACCEPT;
       else if(action.equals("approve") && gradeType.equals("approve"))
         return StudentMarksSubmissionStatus.ACCEPTED;
-      else if(action.equals("recheck_request_submit"))
-        return StudentMarksSubmissionStatus.ACCEPTED;
+      else if(action.equals("recheckAccepted"))
+        return StudentMarksSubmissionStatus.NONE;
 
     }
     return null;
@@ -310,7 +310,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   }
 
   private String getPrevMarksSubmissionStatus(String actor, String action) {
-    if(actor.equals("coe") && action.equalsIgnoreCase("recheck_request_submit"))
+    if(actor.equals("coe") && action.equalsIgnoreCase("recheckAccepted"))
       return String.valueOf(StudentMarksSubmissionStatus.ACCEPTED.getId());
 
     return null;

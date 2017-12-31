@@ -1,8 +1,8 @@
 <div class="row">
-    <br />
+    <br/>
 </div>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
         <fieldset style="background-color: whitesmoke">
             <div class="col-md-6">
                 <br/>
@@ -12,38 +12,35 @@
         </fieldset>
     </div>
 
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Name:</b> Kawsur</label><br />
-            <label><b>Category:</b> Student</label><br />
-            <label><b>Patron Card No.</b> 1</label><br />
-            <label><b>Id:</b> 12441223</label>
-        </div>
+    <div class="col-md-5">
+        <fieldset style="background-color: whitesmoke">
+            <div class="col-md-6">
+                <br/>
+                <label><b>Name:</b> {{vm.user.userName}} </label><br/>
+                <label><b>Id:</b> {{vm.user.userId}}</label>
+                <label><b>Category:</b> {{vm.user.category}}</label><br/>
+            </div>
+        </fieldset>
     </div>
 
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Contact No:</b> Kawsur</label><br />
-            <label><b>Email:</b> Student</label><br />
-            <label><b>Address</b> 1</label>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Contact No:</b> Kawsur</label><br />
-            <label><b>Email:</b> Student</label><br />
-            <label><b>Address</b> 1</label>
-        </div>
+    <div class="col-md-5">
+        <fieldset style="background-color: whitesmoke">
+            <div class="col-md-12">
+                <br/>
+                <label><b>Contact No:</b> {{vm.user.mobileNo}}</label><br/>
+                <label><b>Email:</b> {{vm.user.emailAddress}}</label><br/>
+            </div>
+        </fieldset>
     </div>
 </div>
 
 
 <div class="row">
-    <br />
+    <br/>
 </div>
 <div class="row">
     <div class="col-md-12">
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked out & Checked in History</p>
         <table class="table table-bordered">
             <thead style="background-color: whitesmoke">
             <tr>
@@ -51,16 +48,18 @@
                 <th>Title</th>
                 <th>Material Type</th>
                 <th>Barcode</th>
+                <th>Return Date</th>
                 <th>Fines</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody data-ng-repeat="item in vm.allCirculation">
             <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
+                <td>{{item.dueDate}}</td>
+                <td>{{item.title}}</td>
+                <td>{{item.materialType}}</td>
+                <td>{{item.mfn}}</td>
+                <td>{{item.returnDate}}</td>
+                <td>{{item.fineStatusString}}</td>
             </tr>
             </tbody>
         </table>

@@ -88,7 +88,7 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     ParameterSetting parameterSettings =
-        getContentManager().getBySemesterAndParameterId(parameter, student.getSemester().getId());
+        getContentManager().getBySemesterAndParameterId(parameter, student.getCurrentEnrolledSemester().getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

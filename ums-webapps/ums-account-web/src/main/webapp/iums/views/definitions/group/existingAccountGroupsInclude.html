@@ -1,0 +1,23 @@
+<table class=" table table-striped table-bordered">
+    <thead align="center">
+    <tr class="header">
+        <th>Group Name</th>
+        <th>Under The Main Group Of</th>
+        <th>Sub Ledger</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="g in vm.groups">
+        <td>{{g.groupName}}</td>
+        <td>{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
+        <td align="center">
+            <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
+        </td>
+        <td>
+            <button class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)" data-toggle="modal"
+                    data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

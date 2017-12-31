@@ -14,6 +14,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.ums.builder.ExamGradeBuilder;
@@ -24,10 +25,12 @@ import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.*;
 import org.ums.enums.academic.GradeSubmissionColorCode;
+import org.ums.exceptions.ValidationException;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
+import org.ums.services.email.OtpEmailService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -57,6 +60,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   @Autowired
   private ExamGradeManager mExamGradeManager;
+
+  @Autowired
+  private OtpEmailService otpEmailService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -308,13 +314,24 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
-    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
+    /*
+     * String otp = ""; if(pJsonObject.containsKey("otp")) otp = pJsonObject.getString("otp");
+     * 
+     * if(otp == null || otp.equalsIgnoreCase("")) { return
+     * Response.status(428).entity("{\"message\" : \"OTP Required\"}").build(); }
+     */
+
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
-
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
+
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    /*
+     * otpEmailService.sendEmail("234543", "ifticse_kuet@hotmail.com", "IUMS",
+     * "One-Time Password for Online Marks Submission ");
+     */
+    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
         mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),
@@ -360,7 +377,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       String notificationConsumer =
           gradeSubmissionService.getUserIdForNotification(marksSubmissionStatus.getSemesterId(),
               marksSubmissionStatus.getCourseId(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
-
       gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus.getCourse().getNo());
     }
 
@@ -371,7 +387,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   }
 
   @Transactional
-  public Response updateGradeStatus(final JsonObject pJsonObject) {
+  public Response updateGradeStatus(final JsonObject pJsonObject) throws Exception{
 
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
@@ -411,19 +427,37 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       } else if (action.equals("approve")) { //Scrutinizer, Head, CoE Press the Approve Button
         approveList = gradeList.get(1);
         getContentManager().updateGradeStatus_Approve(marksSubmissionStatus, gradeList.get(0), gradeList.get(1));
-      } else if (action.equals("recheck_request_submit")) { // CoE Press the "Send Recheck Request to VC" Button
+      } else if (action.equals("recheckAccepted")) { // CoE Pressed the "Recheck" Button for Accepted Course
         recheckList = gradeList.get(0);
+
+        if(pJsonObject.getString("cause").isEmpty())
+          throw new ValidationException("Please write down recheck cause.");
+        if(recheckList.size() == 0)
+          throw new ValidationException("Please select grades to recheck.");
+        StringBuilder students = new StringBuilder("");
+        recheckList.stream().forEach(e-> students.append("'"+e.getStudentId()+"',"));
+        if(students.length()>0)
+          students.deleteCharAt( students.length()-1);
+        int transferResponse = getContentManager().transferUGGradesToPublicDB(requestedStatusDTO.getCourseId(), requestedStatusDTO.getSemesterId(),
+            requestedStatusDTO.getCourseType().getId(), requestedStatusDTO.getExamType().getId(),students.toString(), pJsonObject.getString("cause"), userId);
+        if(transferResponse!=200) {
+          throw new ValidationException("Sorry, some unexpected error occurred. Please contact IUMS Support.");
+        }
         getContentManager().updateGradeStatus_Recheck(marksSubmissionStatus, gradeList.get(0), gradeList.get(1));
       }
-
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(nextStatus);
       if(nextStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
         mutable.setLastSubmissionDatePrep(requestedStatusDTO.getLastSubmissionDatePrep());
         mutable.setLastSubmissionDateScr(requestedStatusDTO.getLastSubmissionDateScr());
         mutable.setLastSubmissionDateHead(requestedStatusDTO.getLastSubmissionDateHead());
+        if(getContentManager().update(mutable)==0)
+         // throw new ValidationException("Failed to update makrs submission status..");
+        System.out.println("abcddd");
       }
-      mutable.update();
+      else
+       mutable.update();
+
 
       if (recheckList != null) recheckList.stream().forEach(g -> {
         g.setRecheckStatusId(1);
@@ -450,6 +484,13 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus, nextStatus, allGradeList);
       getContentManager().insertMarksSubmissionStatusLog(userId, actingRoleForCurrentUser, marksSubmissionStatus, nextStatus);
 
+    }
+
+    if(action.equals("approve") && nextStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE) {
+      int transferResponse = getContentManager().transferUGGradesToPrivateDB(requestedStatusDTO.getCourseId(), requestedStatusDTO.getSemesterId(), requestedStatusDTO.getExamType().getId());
+      if(transferResponse!=200) {
+        throw new ValidationException("Sorry, some unexpected error occurred. Please contact IUMS Support.");
+      }
     }
 
     Response.ResponseBuilder builder = Response.created(null);

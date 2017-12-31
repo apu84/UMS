@@ -37,6 +37,9 @@ import org.ums.usermanagement.role.RolePermissionResolver;
 import org.ums.usermanagement.user.PersistentUserDao;
 import org.ums.usermanagement.user.UserCache;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.usermanagement.userView.PersistentUserViewDao;
+import org.ums.usermanagement.userView.UserViewCache;
+import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
 @Configuration
@@ -326,6 +329,13 @@ public class CoreContext {
     AcademicDegreeCache academicDegreeCache = new AcademicDegreeCache(mCacheFactory.getCacheManager());
     academicDegreeCache.setManager(new PersistentAcademicDegreeDao(mTemplateFactory.getJdbcTemplate()));
     return academicDegreeCache;
+  }
+
+  @Bean
+  UserViewManager userViewManager() {
+    UserViewCache userViewCache = new UserViewCache(mCacheFactory.getCacheManager());
+    userViewCache.setManager(new PersistentUserViewDao(mTemplateFactory.getJdbcTemplate()));
+    return userViewCache;
   }
 
   @Bean

@@ -678,7 +678,7 @@ module ums {
 
 
       if (this.$scope.optional.sections[targetIndex].type != "new") {
-        this.httpClient.delete(url)
+        this.httpClient.doDelete(url)
             .success(() => {
               $.notific8("Removed Section");
             }).error((data) => {

@@ -35,6 +35,13 @@
     <property name="password" value="${lms.jdbc.password}"/>
   </bean>
 
+  <bean id="accountsDataSource" name="accountsDataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClass}"/>
+    <property name="url" value="${accounts.jdbc.url}"/>
+    <property name="username" value="${accounts.jdbc.username}"/>
+    <property name="password" value="${accounts.jdbc.password} "/>
+  </bean>
 
   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
@@ -56,8 +63,26 @@
     <property name="dataSource" ref="libraryDataSource"/>
   </bean>
 
+  <bean id="accountsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="accountsDataSource"/>
+  </bean>
+
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+        id="accountsNamedParameterJdbcTemplate">
+    <constructor-arg ref="accountsDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="lmsNamedParameterJdbcTemplate">
+    <constructor-arg ref="libraryDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="namedParameterJdbcTemplate">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
   <bean id="jdbcTemplateFactory" class="org.ums.statistics.JdbcTemplateFactoryImpl">
     <property name="loggingEnabled" value="${enable.query.logging}"/>
+  </bean>
+  <bean id="namedParameterJdbcTemplateFactory" class="org.ums.statistics.NamedParameterJdbcTemplateFactoryImpl">
+    <property name="loggingEnabled" value="false"/>
   </bean>
 
   <bean id="idGenerator" class="org.ums.generator.IdGenerator"/>

@@ -19,6 +19,10 @@ public class JdbcTemplateFactoryImpl implements JdbcTemplateFactory {
   @Qualifier("lmsJdbcTemplate")
   JdbcTemplate mLMSJdbcTemplate;
 
+  @Autowired
+  @Qualifier("accountsJdbcTemplate")
+  JdbcTemplate mAccountsJdbcTemplate;
+
   @Override
   public JdbcTemplate getJdbcTemplate() {
     return mLoggingEnabled ? mUMSJdbcTemplate : mJdbcTemplate;
@@ -27,6 +31,11 @@ public class JdbcTemplateFactoryImpl implements JdbcTemplateFactory {
   @Override
   public JdbcTemplate getLmsJdbcTemplate() {
     return mLMSJdbcTemplate;
+  }
+
+  @Override
+  public JdbcTemplate getAccountsJdbcTemplate() {
+    return mAccountsJdbcTemplate;
   }
 
   public void setLoggingEnabled(boolean pLoggingEnabled) {

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
 import org.ums.manager.BinaryContentManager;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -39,6 +41,9 @@ public class ProfilePicture extends Resource {
   @Autowired
   private FileWriterGateway mGateway;
 
+  @Autowired
+  private UserManager mUserManager;
+
   // @Autowired
   // MessageManipulator mMessageManipulator;
 
@@ -59,16 +64,17 @@ public class ProfilePicture extends Resource {
       final @Context Request pRequest) {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if(subject != null) {
-      userId = subject.getPrincipal().toString();
-    }
 
+    userId = subject.getPrincipal().toString();
+    User user = mUserManager.get(userId);
     InputStream imageData = null;
     // mKafkaTemplate.send("ums_logger", "This is from profile picture");
 
     try {
 
-      imageData = mGateway.read("files/user.png");
+      imageData =
+          mGateway.read("files/user-photo/"
+              + (user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId()) + ".jpg");
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
       ObjectMapper mapper = new ObjectMapper();
@@ -76,7 +82,13 @@ public class ProfilePicture extends Resource {
     } catch(Exception fl) {
       fl.printStackTrace();
       mLogger.error(fl.getMessage());
-      return Response.status(Response.Status.NOT_FOUND).build();
+      // return Response.status(Response.Status.NOT_FOUND).build();
+      try {
+
+        imageData = mGateway.read("files/user.png");
+      } catch(Exception e) {
+        return Response.status(Response.Status.NOT_FOUND).build();
+      }
     }
 
     return Response.ok(imageData).build();

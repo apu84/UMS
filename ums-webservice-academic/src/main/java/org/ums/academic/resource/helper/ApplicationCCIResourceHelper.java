@@ -91,10 +91,6 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
-    List<ApplicationCCI> aplicationListAll = getContentManager().getAll();
-    if(aplicationListAll.size() > 0) {
-      mManager.deleteByStudentId(studentId);
-    }
 
     List<MutableApplicationCCI> applications = new ArrayList<>();
     List<PersistentApplicationCCI> persistentApplicationCCIs = new ArrayList<>();

@@ -136,4 +136,23 @@ module ums {
         value: string;
     }
 
+    export interface ILibraryCirculation{
+        circulationId: string;
+        patronId: string;
+        mfn: string;
+        issueDate: string;
+        dueDate: string;
+        returnDate: string;
+        fineStatus: number;
+        fineStatusString: string;
+        title: string;
+        materialType: string;
+        checkBoxStatus: boolean;
+    }
+
+    export interface ICheckIn{
+        mfn: string;
+        returnDate: string;
+    }
+
 }

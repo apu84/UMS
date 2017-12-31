@@ -5,6 +5,8 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.library.MutableFine;
 import org.ums.manager.library.FineManager;
 
+import java.util.Date;
+
 public class PersistentFine implements MutableFine {
 
   private static FineManager sFineManager;
@@ -17,6 +19,10 @@ public class PersistentFine implements MutableFine {
   private Long mId;
   private Long mCheckInId;
   private int mFineCategory;
+  private Date mFineAppliedDate;
+  private String mFineAppliedBy;
+  private String mFineForgivenBy;
+  private Date mFinePaymentDate;
   private String mDescription;
   private double mAmount;
   private String mLastModified;
@@ -25,8 +31,12 @@ public class PersistentFine implements MutableFine {
 
   public PersistentFine(PersistentFine persistentFine) {
     mId = persistentFine.getId();
-    mCheckInId = persistentFine.getCheckInId();
+    mCheckInId = persistentFine.getCirculationId();
     mFineCategory = persistentFine.getFineCategory();
+    mFineAppliedDate = persistentFine.getFineAppliedDate();
+    mFineAppliedBy = persistentFine.getFineAppliedBy();
+    mFineForgivenBy = persistentFine.getFineForgivenBy();
+    mFinePaymentDate = persistentFine.getFinePaymentDate();
     mDescription = persistentFine.getDescription();
     mAmount = persistentFine.getAmount();
     mLastModified = persistentFine.getLastModified();
@@ -73,13 +83,33 @@ public class PersistentFine implements MutableFine {
   }
 
   @Override
-  public void setCheckInId(Long pCheckInId) {
+  public void setCirculationId(Long pCheckInId) {
     mCheckInId = pCheckInId;
   }
 
   @Override
   public void setFineCategory(int pFineCategory) {
     mFineCategory = pFineCategory;
+  }
+
+  @Override
+  public void setFineAppliedDate(Date pFineAppliedDate) {
+    mFineAppliedDate = pFineAppliedDate;
+  }
+
+  @Override
+  public void setFineAppliedBy(String pFineAppliedBy) {
+    mFineAppliedBy = pFineAppliedBy;
+  }
+
+  @Override
+  public void setFineForgivenBy(String pFineForgivenBy) {
+    mFineForgivenBy = pFineForgivenBy;
+  }
+
+  @Override
+  public void setFinePaymentDate(Date pFinePaymentDate) {
+    mFinePaymentDate = pFinePaymentDate;
   }
 
   @Override
@@ -93,13 +123,33 @@ public class PersistentFine implements MutableFine {
   }
 
   @Override
-  public Long getCheckInId() {
+  public Long getCirculationId() {
     return mCheckInId;
   }
 
   @Override
   public int getFineCategory() {
     return mFineCategory;
+  }
+
+  @Override
+  public Date getFineAppliedDate() {
+    return mFineAppliedDate;
+  }
+
+  @Override
+  public String getFineAppliedBy() {
+    return mFineAppliedBy;
+  }
+
+  @Override
+  public String getFineForgivenBy() {
+    return mFineForgivenBy;
+  }
+
+  @Override
+  public Date getFinePaymentDate() {
+    return mFinePaymentDate;
   }
 
   @Override

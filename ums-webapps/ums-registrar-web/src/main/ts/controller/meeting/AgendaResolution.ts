@@ -226,7 +226,7 @@ module ums{
             this.tempAgendaAndResolution = this.agendaAndResolutions.splice(index, 1);
         }
 
-        private delete(index: number): void{
+        private doDelete(index: number): void{
             this.meetingService.deleteMeetingAgendaResolution(this.agendaAndResolutions[index].id).then(() => {
                 this.getAgendaResolution();
             });

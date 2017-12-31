@@ -788,9 +788,10 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/course-material/course-material.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+            loadMyCtrl: ['$$animateJs','$ocLazyLoad', function ($$animateJs,$ocLazyLoad) {
               return $ocLazyLoad.load(['FileManagerApp'])
             }]
+
           }
         })
         .state('studentCourseMaterial', {
