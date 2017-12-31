@@ -9,7 +9,7 @@ module ums {
             let twoFaService: TwoFAService = $injector.get('TwoFAService');
             return twoFaService.showTwoFAForm(state).then((success) => {
                   response.data = success;
-                  return $q.resolve(response);
+                  return $q.resolve(response);               
                 },
                 (error) => {
                   $log.info("Got 2FA error: ", error);
