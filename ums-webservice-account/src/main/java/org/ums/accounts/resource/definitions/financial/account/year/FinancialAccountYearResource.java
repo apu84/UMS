@@ -22,7 +22,8 @@ public class FinancialAccountYearResource extends MutableFinancialAccountyearRes
   @GET
   @Path("/all")
   public List<FinancialAccountYear> getAll() {
-    return mFinancialAccountYearManager.getAll();
+    List<FinancialAccountYear> years = mFinancialAccountYearManager.getAll();
+    return years;
   }
 
 }

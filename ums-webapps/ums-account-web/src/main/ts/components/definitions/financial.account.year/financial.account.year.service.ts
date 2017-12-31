@@ -1,27 +1,27 @@
 module ums {
   export enum BookClosingFlagType {
-    OPEN = "O",
-    CLOSED = "C"
+    OPEN = "OPEN",
+    CLOSED = "CLOSED"
   }
 
   export enum YearClosingFlagType {
-    OPEN = "O",
-    CLOSED = "C"
+    OPEN = "OPEN",
+    CLOSED = "CLOSED"
   }
 
   export interface IFinancialAccountYear {
     id: number;
-    mStringId: string;
-    mCurrentStartDate: Date;
-    mCurrentEndDate: Date;
-    previousStartDate: Date;
-    previousEndDate: Date;
+    stringId: string;
+    currentStartDate: any;
+    currentEndDate: any;
+    previousStartDate: any;
+    previousEndDate: any;
     bookClosingFlag: BookClosingFlagType;
     itLimit: number;
     yearClosingFlag: YearClosingFlagType;
     statFlag: string;
     statUpFlag: string;
-    modifiedDate: Date;
+    modifiedDate: any;
     modifiedBy: string;
   }
 
@@ -37,6 +37,17 @@ module ums {
       let defer: ng.IDeferred<IFinancialAccountYear[]> = this.$q.defer();
       this.httpClient.get(this.financialAccountYearServiceUrl + "/all", HttpClient.MIME_TYPE_JSON,
           (response: IFinancialAccountYear[]) => defer.resolve(response));
+      return defer.promise;
+    }
+
+    public saveAndGetAllFinancialYears(financialAccountYear: IFinancialAccountYear): ng.IPromise<IFinancialAccountYear[]> {
+      let defer: ng.IDeferred<IFinancialAccountYear[]> = this.$q.defer();
+      this.httpClient.post(this.financialAccountYearServiceUrl + "/save", financialAccountYear, HttpClient.MIME_TYPE_JSON)
+          .success((response: IFinancialAccountYear[]) => defer.resolve(response))
+          .error((error) => {
+            console.error(error);
+            defer.resolve(undefined);
+          });
       return defer.promise;
     }
 

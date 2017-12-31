@@ -57,7 +57,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
 
   @Override
   public Long getId() {
-    return mId == null ? Long.parseLong(getStringId()) : mId;
+    return Long.parseLong(getStringId());
   }
 
   @Override

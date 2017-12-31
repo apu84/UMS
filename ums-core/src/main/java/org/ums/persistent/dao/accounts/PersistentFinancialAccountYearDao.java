@@ -2,7 +2,9 @@ package org.ums.persistent.dao.accounts;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.ums.decorator.accounts.FinancialAccountYearDaoDecorator;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
@@ -33,7 +35,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   @Override
   public List<FinancialAccountYear> getAll() {
     String query = "SELECT * FROM FIN_ACCOUNT_YEAR";
-    return mNamedParameterJdbcTemplate.query(query, new FinancialAccountYearRowMapper());
+    return mJdbcTemplate.query(query, new FinancialAccountYearRowMapper());
   }
 
   @Override
@@ -49,7 +51,10 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   @Override
   public int update(MutableFinancialAccountYear pMutable) {
-    return super.update(pMutable);
+    String query =
+        "update FIN_ACCOUNT_YEAR set CURRENT_START_DATE=? ,CURRENT_END_DATE=?, "
+            + "  PREVIOUS_START_DATE=? , PREVIOUS_END_DATE=? , MODIFIED_BY=? , MODIFIED_DATE=? , BOOK_CLOSING_FLAG=? , YEAR_CLOSING_FLAG=? where id=?";
+    return mJdbcTemplate.update(query, pMutable.getCurrentStartDate(), pMutable.getCurrentEndDate(), pMutable.getPreviousStartDate(), pMutable.getPreviousEndDate(), pMutable.getModifiedBy(), pMutable.getModifiedDate(), pMutable.getBookClosingFlag().getValue(), pMutable.getYearClosingFlag().getValue(), pMutable.getId());
   }
 
   @Override
@@ -69,7 +74,13 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   @Override
   public Long create(MutableFinancialAccountYear pMutable) {
-    return super.create(pMutable);
+    String query =
+        "insert into FIN_ACCOUNT_YEAR(id, CURRENT_START_DATE, CURRENT_END_DATE, PREVIOUS_START_DATE, PREVIOUS_END_DATE,BOOK_CLOSING_FLAG, YEAR_CLOSING_FLAG, MODIFIED_DATE, MODIFIED_BY) "
+            + "  values(:id, :currentStartDate, :currentEndDate, :previousStartDate, :previousEndDate, 'O', 'O', :modifiedDate, :modifiedBy)";
+    Long id = mIdGenerator.getNumericId();
+    pMutable.setId(id);
+    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
+    return new Long(mNamedParameterJdbcTemplate.update(query, namedParameters));
   }
 
   @Override
@@ -98,7 +109,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
       financialAccountYear.setStatUpFlag(rs.getString("stat_up_flag"));
       financialAccountYear.setModifiedDate(rs.getDate("modified_date"));
       financialAccountYear.setModifiedBy(rs.getString("modified_by"));
-      return null;
+      return financialAccountYear;
     }
   }
 }

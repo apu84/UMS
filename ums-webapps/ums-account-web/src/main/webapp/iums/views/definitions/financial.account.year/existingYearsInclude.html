@@ -1,0 +1,28 @@
+<table class="table table-hover table-striped table-bordered table-advanced tablesorter tb-sticky-header">
+    <thead>
+    <tr>
+        <th>Current Start Date</th>
+        <th>Current End Date</th>
+        <th>Previous Start Date</th>
+        <th>Previous End Date</th>
+        <th>Book Closing Status</th>
+        <th>Year Closing Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="y in vm.financialAccountYears">
+        <td>{{y.currentStartDate}}</td>
+        <td>{{y.currentEndDate}}</td>
+        <td>{{y.previousStartDate}}</td>
+        <td>{{y.previousEndDate}}</td>
+        <td>
+            <p ng-if="y.bookClosingFlag=='OPEN'"><span class="label label-primary">Open</span></p>
+            <p ng-if="y.bookClosingFlag=='CLOSED'"><span class="label label-success">Closed</span></p>
+        </td>
+        <td>
+            <p ng-if="y.yearClosingFlag=='OPEN'"><span class="label label-primary">Open</span></p>
+            <p ng-if="y.yearClosingFlag=='CLOSED'"><span class="label label-success">Closed</span></p>
+        </td>
+    </tr>
+    </tbody>
+</table>

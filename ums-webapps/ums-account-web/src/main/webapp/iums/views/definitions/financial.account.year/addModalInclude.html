@@ -5,55 +5,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Group</h4>
+                <h4 class="modal-title">Add Financial Year</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered">
-                            <thead>
-                            <th>Group Name</th>
-                            <th>Main Group Of</th>
-                            <th>Sub Ledger</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="text" ng-model="vm.addedGroup.groupName"
-                                           class="form-control"/></td>
-                                <td>
-                                    <div class="form-group">
-                                        <ui-select theme="bootstrap"
-                                                   data-ng-model="vm.addedGroup.mainGroupObject"
-
-                                        >
-                                            <ui-select-match placeholder="Select Main Group">
-                                                {{vm.addedGroup.mainGroupObject.groupName}}
-                                            </ui-select-match>
-                                            <ui-select-choices class="ui-select"
-                                                               repeat="g in vm.groups|filter:$select.search">
-                                                <small ng-bind-html="g.groupName | highlight:$select.search"></small>
-                                            </ui-select-choices>
-                                            <!-- <option ng-repeat="g in vm.groups"
-                                                     value="{{g.groupCode}}">{{g.groupName}}
-                                             </option>-->
-                                        </ui-select>
-                                    </div>
-
-                                </td>
-                                <td>
-                                    <label><input type="checkbox"
-                                                  ng-model="vm.addedGroup.flagBoolValue"></label>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-md-12"
+                         ng-include="'views/definitions/financial.account.year/current.financial.year.form.include.html'">
                     </div>
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" ng-click="vm.saveOne()" data-dismiss="modal">
-                    Add
+                <button type="button" class="btn btn-success" ng-click="vm.saveFinancialYear()" data-dismiss="modal">
+                    {{vm.addButtonName}}
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>

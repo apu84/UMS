@@ -74,8 +74,7 @@ public class ProfilePicture extends Resource {
 
       imageData =
           mGateway.read("files/user-photo/"
-              + (user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId())
-              + ".jpg");
+              + (user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId()) + ".jpg");
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
       ObjectMapper mapper = new ObjectMapper();
@@ -83,12 +82,11 @@ public class ProfilePicture extends Resource {
     } catch(Exception fl) {
       fl.printStackTrace();
       mLogger.error(fl.getMessage());
-      //return Response.status(Response.Status.NOT_FOUND).build();
+      // return Response.status(Response.Status.NOT_FOUND).build();
       try {
 
-        imageData =
-            mGateway.read("files/user.png");
-      } catch (Exception e) {
+        imageData = mGateway.read("files/user.png");
+      } catch(Exception e) {
         return Response.status(Response.Status.NOT_FOUND).build();
       }
     }

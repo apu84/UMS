@@ -19,8 +19,15 @@
             <br>
             <div class="row">
                 <div class="col-md-2"></div>
-                <div class="col-md-8"
-                     ng-include="'views/definitions/financial.account.year/current.financial.year.form.include.html'"></div>
+                <div class="col-md-8">
+                    <div ng-if="vm.financialAccountYears.length<1">
+                        <div class="alert alert-info" align="center"><strong>No records found on Financial Year</strong>
+                        </div>
+                    </div>
+                    <div ng-if="vm.financialAccountYears.length>0">
+                        <div ng-include="'views/definitions/financial.account.year/existingYearsInclude.html'"></div>
+                    </div>
+                </div>
                 <div class="col-md-2"></div>
 
             </div>

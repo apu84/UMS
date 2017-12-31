@@ -41,8 +41,7 @@ public class PersistentGroup implements MutableGroup {
   @JsonIgnore
   private Boolean mFlagBoolValue;
 
-  public PersistentGroup() {
-  }
+  public PersistentGroup() {}
 
   public PersistentGroup(final PersistentGroup pPersistentGroup) {
     mId = pPersistentGroup.getId();
