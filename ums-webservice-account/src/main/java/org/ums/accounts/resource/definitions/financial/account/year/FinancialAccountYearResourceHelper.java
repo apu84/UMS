@@ -41,11 +41,12 @@ public class FinancialAccountYearResourceHelper extends
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     pMutableFinancialAccountYear.setModifiedDate(new Date());
     pMutableFinancialAccountYear.setModifiedBy(user.getEmployeeId());
-    if (pMutableFinancialAccountYear.getStringId() == null) {
+    if(pMutableFinancialAccountYear.getStringId() == null) {
       pMutableFinancialAccountYear.setYearClosingFlag(YearClosingFlagType.OPEN);
       pMutableFinancialAccountYear.setBookClosingFlag(BookClosingFlagType.OPEN);
       getContentManager().create(pMutableFinancialAccountYear);
-    } else
+    }
+    else
       getContentManager().update(pMutableFinancialAccountYear);
     return getContentManager().getAll();
   }

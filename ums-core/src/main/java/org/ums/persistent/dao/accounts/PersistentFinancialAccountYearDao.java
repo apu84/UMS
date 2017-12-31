@@ -26,7 +26,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   private IdGenerator mIdGenerator;
 
   public PersistentFinancialAccountYearDao(JdbcTemplate pJdbcTemplate,
-                                           NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -54,7 +54,10 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
     String query =
         "update FIN_ACCOUNT_YEAR set CURRENT_START_DATE=? ,CURRENT_END_DATE=?, "
             + "  PREVIOUS_START_DATE=? , PREVIOUS_END_DATE=? , MODIFIED_BY=? , MODIFIED_DATE=? , BOOK_CLOSING_FLAG=? , YEAR_CLOSING_FLAG=? where id=?";
-    return mJdbcTemplate.update(query, pMutable.getCurrentStartDate(), pMutable.getCurrentEndDate(), pMutable.getPreviousStartDate(), pMutable.getPreviousEndDate(), pMutable.getModifiedBy(), pMutable.getModifiedDate(), pMutable.getBookClosingFlag().getValue(), pMutable.getYearClosingFlag().getValue(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getCurrentStartDate(), pMutable.getCurrentEndDate(),
+        pMutable.getPreviousStartDate(), pMutable.getPreviousEndDate(), pMutable.getModifiedBy(),
+        pMutable.getModifiedDate(), pMutable.getBookClosingFlag().getValue(), pMutable.getYearClosingFlag().getValue(),
+        pMutable.getId());
   }
 
   @Override
