@@ -5,6 +5,7 @@ module ums {
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
+    private totalAccountSize: number;
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -18,6 +19,7 @@ module ums {
 
     public initialize() {
       this.loadAllGroups();
+      this.getTotalAccountSize();
       this.selectedGroup = <IGroup>{};
     }
 
@@ -28,6 +30,10 @@ module ums {
         console.log(groups);
         this.groups = groups.filter((g: IGroup) => g.mainGroup != "0");
       });
+    }
+
+    public getTotalAccountSize() {
+      this.accountService.getSize().then((size: number) => this.totalAccountSize = size);
     }
   }
 

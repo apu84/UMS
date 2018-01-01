@@ -38,12 +38,34 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   private BigDecimal mTotMonthDbBal10;
   private BigDecimal mTotMonthDbBal11;
   private BigDecimal mTotMonthDbBal12;
+  private BigDecimal mTotCreditTrans;
+  private BigDecimal mTotDebitTrans;
   private String mStatFlag;
   private String mStatUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
 
   public PersistentAccountBalance() {}
+
+  @Override
+  public BigDecimal getTotCreditTrans() {
+    return mTotCreditTrans;
+  }
+
+  @Override
+  public void setTotCreditTrans(BigDecimal pTotCreditTrans) {
+    mTotCreditTrans = pTotCreditTrans;
+  }
+
+  @Override
+  public BigDecimal getTotDebitTrans() {
+    return mTotDebitTrans;
+  }
+
+  @Override
+  public void setTotDebitTrans(BigDecimal pTotDebitTrans) {
+    mTotDebitTrans = pTotDebitTrans;
+  }
 
   @Override
   public Long getId() {

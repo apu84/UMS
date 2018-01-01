@@ -11,4 +11,9 @@ import org.ums.manager.accounts.AccountBalanceManager;
 public class AccountBalanceDaoDecorator extends
     ContentDaoDecorator<AccountBalance, MutableAccountBalance, Long, AccountBalanceManager> implements
     AccountBalanceManager {
+
+  @Override
+  public Long insertFromAccount(MutableAccountBalance pAccountBalance) {
+    return getManager().insertFromAccount(pAccountBalance);
+  }
 }

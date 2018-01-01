@@ -12,7 +12,6 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 28-Dec-17.
  */
 public interface MutableAccount extends Account, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
-  void setStringId(Long pId);
 
   void setAccountCode(String pAccountCode);
 

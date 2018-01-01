@@ -21,7 +21,6 @@ public class PersistentAccount implements MutableAccount {
   }
 
   private Long mId;
-  private String mStringId;
   private String mAccountcode;
   private String mAccountName;
   private String mAccGroupCode;
@@ -38,7 +37,6 @@ public class PersistentAccount implements MutableAccount {
 
   public PersistentAccount(final PersistentAccount pPersistentAccount) {
     mId = pPersistentAccount.getId();
-    mStringId = pPersistentAccount.getStringId();
     mAccountcode = pPersistentAccount.getAccountCode();
     mAccountName = pPersistentAccount.getAccountName();
     mAccGroupCode = pPersistentAccount.getAccGroupCode();
@@ -50,11 +48,6 @@ public class PersistentAccount implements MutableAccount {
     mStatUpFlag = pPersistentAccount.getStatUpFlag();
     mModifiedDate = pPersistentAccount.getModifiedDate();
     mModifiedBy = pPersistentAccount.getModifiedBy();
-  }
-
-  @Override
-  public void setStringId(Long pId) {
-    mStringId = pId.toString();
   }
 
   @Override
@@ -134,7 +127,7 @@ public class PersistentAccount implements MutableAccount {
 
   @Override
   public Long getId() {
-    return mId == null ? Long.parseLong(getStringId()) : mId;
+    return mId;
   }
 
   @Override
@@ -145,11 +138,6 @@ public class PersistentAccount implements MutableAccount {
   @Override
   public void setId(Long pId) {
     mId = pId;
-  }
-
-  @Override
-  public String getStringId() {
-    return mStringId;
   }
 
   @Override

@@ -11,6 +11,7 @@ import org.ums.persistent.model.accounts.PersistentAccount;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 28-Dec-17.
@@ -27,11 +28,91 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
+  @Override
+  public List<Account> getAll() {
+    String query = "select * from account";
+    return mJdbcTemplate.query(query, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public List<Account> getAccounts(String pAccountName) {
+    String query = "select * from account where account_name=?";
+    return mJdbcTemplate.query(query, new Object[] {pAccountName}, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
+    int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemPerPage - 1;
+    String query =
+        "select * from (select ROWNUM row_num,mst_account.* from mst_account)tmp where row_num>=? and row_num<=? ";
+    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public Integer getSize() {
+    String query = "select count(*) from accounts";
+    return mJdbcTemplate.queryForObject(query, Integer.class);
+  }
+
+  @Override
+  public Account get(Long pId) {
+    String query = "select * from account where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public Account validate(Account pReadonly) {
+    return get(pReadonly.getId());
+  }
+
+  @Override
+  public int update(MutableAccount pMutable) {
+    return super.update(pMutable);
+  }
+
+  @Override
+  public int update(List<MutableAccount> pMutableList) {
+    return super.update(pMutableList);
+  }
+
+  @Override
+  public int delete(MutableAccount pMutable) {
+    return super.delete(pMutable);
+  }
+
+  @Override
+  public int delete(List<MutableAccount> pMutableList) {
+    return super.delete(pMutableList);
+  }
+
+  @Override
+  public Long create(MutableAccount pMutable) {
+    String query =
+        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE, RESERVED, TAX_LIMIT, TAX_CODE,  STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY) "
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(query, id, pMutable.getAccountCode(), pMutable.getAccountName(), pMutable.getAccountCode(),
+        pMutable.getReserved(), pMutable.getTaxLimit(), pMutable.getTaxCode(), pMutable.getStatFlag(),
+        pMutable.getStatUpFlag(), pMutable.getModifiedDate(), pMutable.getModifiedBy());
+    return id;
+  }
+
+  @Override
+  public List<Long> create(List<MutableAccount> pMutableList) {
+    return super.create(pMutableList);
+  }
+
+  @Override
+  public boolean exists(Long pId) {
+    return super.exists(pId);
+  }
+
   class PersistentAccountRowMapper implements RowMapper<Account> {
     @Override
     public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableAccount account = new PersistentAccount();
-      account.setStringId(rs.getLong("id"));
+      account.setId(rs.getLong("id"));
       account.setAccountCode(rs.getString("account_code"));
       account.setAccountName(rs.getString("account_name"));
       account.setAccGroupCode(rs.getString("acc_group_code"));

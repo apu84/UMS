@@ -2,7 +2,6 @@ package org.ums.mapper;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.mapdb.DB;
-import org.mapdb.DBMaker;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 
@@ -22,7 +21,7 @@ public class MapperDao<K, V extends Serializable> implements Mapper<K, V> {
     else {
       dbFile = System.getProperty("java.io.tempDir") + File.separator + pFileName;
     }
-    //mDB = DBMaker.fileDB(dbFile).fileLockDisable().make();
+    // mDB = DBMaker.fileDB(dbFile).fileLockDisable().make();
     mMapName = pMapName;
   }
 

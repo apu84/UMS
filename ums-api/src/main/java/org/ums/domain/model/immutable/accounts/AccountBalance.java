@@ -49,6 +49,10 @@ public interface AccountBalance extends Serializable, LastModifier, EditType<Mut
 
   BigDecimal getTotMonthDbBal12();
 
+  BigDecimal getTotDebitTrans();
+
+  BigDecimal getTotCreditTrans();
+
   String getStatFlag();
 
   String getStatUpFlag();

@@ -28,6 +28,19 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
+  @Override
+  public Long insertFromAccount(MutableAccountBalance pAccountBalance) {
+    String query =
+        "INSERT INTO MST_ACCOUNT_BALANCE (ID,FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE,YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, MODIFIED_DATE, MODIFIED_BY) "
+            + " VALUES(?,?,?,?,?,?,?,?,?,?)";
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(query, id, pAccountBalance.getFinStartDate(), pAccountBalance.getFinEndDate(), pAccountBalance
+        .getAccountCode(), pAccountBalance.getYearOpenBalance(), pAccountBalance.getYearOpenBalanceType().getValue(),
+        pAccountBalance.getTotDebitTrans(), pAccountBalance.getTotCreditTrans(), pAccountBalance.getModifiedDate(),
+        pAccountBalance.getModifiedBy());
+    return id;
+  }
+
   private class AccountBalanceRowMapper implements RowMapper<AccountBalance> {
     @Override
     public AccountBalance mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -50,6 +63,8 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       accountBalance.setTotMonthDbBal10(rs.getBigDecimal("tot_month_db_bal_10"));
       accountBalance.setTotMonthDbBal11(rs.getBigDecimal("tot_month_db_bal_11"));
       accountBalance.setTotMonthDbBal12(rs.getBigDecimal("tot_month_db_bal_12"));
+      accountBalance.setTotCreditTrans(rs.getBigDecimal("tot_credit_trans"));
+      accountBalance.setTotDebitTrans(rs.getBigDecimal("tot_debit_trans"));
       accountBalance.setStatFlag(rs.getString("stat_flag"));
       accountBalance.setStatUpFlag(rs.getString("stat_up_flag"));
       accountBalance.setModifiedDate(rs.getDate("modified_date"));

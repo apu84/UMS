@@ -49,6 +49,10 @@ public interface MutableAccountBalance extends AccountBalance, Editable<Long>, M
 
   void setTotMonthDbBal12(BigDecimal pTotMonthDbBal12);
 
+  void setTotDebitTrans(BigDecimal pTotDebitTrans);
+
+  void setTotCreditTrans(BigDecimal pTotCreditTrans);
+
   void setStatFlag(String pStatFlag);
 
   void setStatUpFlag(String pStatUpFlag);
