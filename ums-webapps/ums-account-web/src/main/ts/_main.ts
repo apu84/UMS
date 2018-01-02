@@ -106,6 +106,8 @@
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
 
+/// <reference path="components/directives/balance.type.directive.ts"/>
+
 
 
 

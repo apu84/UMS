@@ -13,7 +13,9 @@ import java.util.Date;
  */
 public interface MutableAccount extends Account, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
 
-  void setAccountCode(String pAccountCode);
+  void setRowNumber(int pRowNumber);
+
+  void setAccountCode(Long pAccountCode);
 
   void setAccountName(String pAccountName);
 

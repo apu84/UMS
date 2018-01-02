@@ -13,8 +13,9 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 28-Dec-17.
  */
 public interface Account extends Serializable, LastModifier, EditType<MutableAccount>, Identifier<Long> {
+  Integer getRowNumber();
 
-  String getAccountCode();
+  Long getAccountCode();
 
   String getAccountName();
 

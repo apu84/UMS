@@ -1,10 +1,17 @@
 module ums{
 
+  export enum BalanceType {
+    Dr = "Dr",
+    Cr = "Cr"
+  }
+
   export interface IAccount {
+    rowNum: number;
     id: string;
     accountCode: number;
     accountName: string;
-    accGroupCode: number;
+    accGroupCode: string;
+    accGroupName: string;
     reserved: boolean;
     taxLimit: string;
     taxCode: string;
@@ -12,6 +19,9 @@ module ums{
     statUpFlag: string;
     modifiedDate: string;
     modifiedBy: string;
+    yearOpenBalance: number;
+    yearOpenBalanceType: BalanceType;
+    yearClosingBalanceType: BalanceType;
   }
 
   export interface IAccountResponse {
@@ -24,12 +34,12 @@ module ums{
     private accountServiceURL: string = "";
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient) {
-      this.accountServiceURL = "/account/definition/account";
+      this.accountServiceURL = "account/definition/account";
     }
 
-    public saveAccount(account: IAccount): ng.IPromise<IAccount[]> {
+    public saveAccountPaginated(account: IAccount, itemPerPage: number, pageNumber: number): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
-      this.httpClient.post(this.accountServiceURL + "/save", account, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(this.accountServiceURL + "/create/item-per-page/" + itemPerPage + "/page-number/" + pageNumber, account, HttpClient.MIME_TYPE_JSON)
           .success((response: IAccountResponse) => defer.resolve(response.entries))
           .error((error) => {
             console.error(error);

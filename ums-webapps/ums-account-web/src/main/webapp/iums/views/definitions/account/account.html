@@ -1,5 +1,22 @@
 <style>
+    .search {
+        width: 130px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-image: url('searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+    }
 
+    .search {
+        width: 80%;
+    }
 
 </style>
 
@@ -7,19 +24,58 @@
 <div class="row">
 
     <div class="panel panel-green">
-        <div class="panel-heading">Account</b><span
-                class="subtitle"></span></div>
-        <div class="panel-body shadowPanel" style="min-height: 490px;">
+        <div class="panel-heading">
             <div class="row">
-                <div class="col-md-4" align="center"></div>
-                <div class="col-md-4" data-ng-include="'views/menu/menu.html'"></div>
-                <div class="col-md-4"></div>
+                <div class="col-md-6">
+                    Account
+                </div>
+                <div class="col-md-6" align="right" data-ng-include="'views/definitions/account/menu.html'"></div>
+            </div>
+        </div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row" ng-if="vm.totalAccountSize>0 && vm.searchBar">
+                <div class="col-md-12">
+                    <form>
+                        <input class="search" type="text" name="search" placeholder="Search.."
+                               ng-model="vm.searchValue">
+                        <button class="btn btn-default" ng-click="vm.search()"><i class="fa fa-search"
+                                                                                  aria-hidden="true"></i></button>
+                    </form>
+                </div>
             </div>
             <br>
             <div class="row">
-                <div ng-if="vm.totalAccountSize==0">
-                    <div class="alert alert-info col-md-12" align="center"><strong>No records found on Financial
-                        Year</strong>
+                <div class="col-md-6"></div>
+                <div class="col-md-4" align="right">
+                    <div class="form-group">
+                        <label for="itemsPerPage" class="col-md-6 control-label">Accounts per page</label>
+                        <div class="col-md-4">
+                            <div class="input-icon right">
+                                <input id="itemsPerPage" ng-model="vm.itemsPerPage" type="text" placeholder=""
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div ng-if="vm.totalAccountSize<1">
+                    <div class="col-md-12">
+                        <div class="alert alert-info" align="center"><strong>No records found of Existing Accounts
+                        </strong>
+                        </div>
+                    </div>
+
+                </div>
+                <div ng-if="vm.totalAccountSize>0">
+                    <div class="col-md-12">
+                        <div ng-include="'views/definitions/account/existingAccountsInclude.html'"></div>
                     </div>
                 </div>
                 <div ng-if="vm.totalAccountSize>0">
@@ -28,51 +84,7 @@
             </div>
 
             <div class="row">
-                <!-- Modal -->
-
-                <div id="removeModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Remove Group?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="col-md-12">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <th>Group Name</th>
-                                        <th>Main Group Of</th>
-                                        <th>Sub Ledger</th>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>{{vm.removedGroup.groupName}}</td>
-                                            <td>
-                                                {{vm.removedGroup.mainGroupObject.groupName}}
-                                            </td>
-                                            <td>
-                                                <label><input type="checkbox" ng-disabled="true"
-                                                              ng-model="vm.removedGroup.flagBoolValue"></label>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" ng-click="vm.remove()"
-                                        data-dismiss="modal">
-                                    Remove
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                <div class="col-md-12" ng-include="'views/definitions/account/accountAddModalInclude.html'"></div>
             </div>
 
             <!-- <div class="row">

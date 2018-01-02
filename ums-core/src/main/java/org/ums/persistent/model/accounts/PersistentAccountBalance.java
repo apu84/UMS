@@ -23,7 +23,7 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   private Long mId;
   private Date mFinStartDate;
   private Date mFinEndDate;
-  private Integer mAccountCode;
+  private Long mAccountCode;
   private BigDecimal mYearOpenBalance;
   private BalanceType mYearOpenBalanceType;
   private BigDecimal mTotMonthDbBal01;
@@ -96,12 +96,12 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   }
 
   @Override
-  public Integer getAccountCode() {
+  public Long getAccountCode() {
     return mAccountCode;
   }
 
   @Override
-  public void setAccountCode(Integer pAccountCode) {
+  public void setAccountCode(Long pAccountCode) {
     mAccountCode = pAccountCode;
   }
 

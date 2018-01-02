@@ -19,7 +19,7 @@ public interface AccountBalance extends Serializable, LastModifier, EditType<Mut
 
   Date getFinEndDate();
 
-  Integer getAccountCode();
+  Long getAccountCode();
 
   BigDecimal getYearOpenBalance();
 

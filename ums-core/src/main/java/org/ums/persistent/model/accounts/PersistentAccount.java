@@ -21,7 +21,8 @@ public class PersistentAccount implements MutableAccount {
   }
 
   private Long mId;
-  private String mAccountcode;
+  private Long mAccountcode;
+  private Integer mRowNumber;
   private String mAccountName;
   private String mAccGroupCode;
   private Boolean mReserved;
@@ -51,7 +52,17 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
-  public void setAccountCode(String pAccountCode) {
+  public Integer getRowNumber() {
+    return mRowNumber;
+  }
+
+  @Override
+  public void setRowNumber(int pRowNumber) {
+    mRowNumber = pRowNumber;
+  }
+
+  @Override
+  public void setAccountCode(Long pAccountCode) {
     mAccountcode = pAccountCode;
   }
 
@@ -141,7 +152,7 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
-  public String getAccountCode() {
+  public Long getAccountCode() {
     return mAccountcode;
   }
 

@@ -48,7 +48,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       accountBalance.setId(rs.getLong("id"));
       accountBalance.setFinStartDate(rs.getDate("fin_start_date"));
       accountBalance.setFinEndDate(rs.getDate("fin_end_date"));
-      accountBalance.setAccountCode(rs.getInt("account_code"));
+      accountBalance.setAccountCode(rs.getLong("account_code"));
       accountBalance.setYearOpenBalance(rs.getBigDecimal("year_open_balance"));
       accountBalance.setYearOpenBalanceType(BalanceType.get(rs.getString("year_open_balance_type")));
       accountBalance.setTotMonthDbBal01(rs.getBigDecimal("tot_month_db_bal_01"));

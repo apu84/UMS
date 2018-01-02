@@ -1,25 +1,35 @@
 package org.ums.accounts.resource.definitions.account;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
+import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
+import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.AccountManager;
+import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 28-Dec-17.
@@ -39,6 +49,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountBalanceManager mAccountBalanceManager;
   @Autowired
   private AccountBalanceBuilder mAccountBalanceBuilder;
+  @Autowired
+  private FinancialAccountYearManager mFinancialAccountYearManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -47,16 +59,25 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject createAccount(final JsonObject pJsonObject, int pItemPerPage, int pItemNumber,
       final UriInfo pUriInfo) {
-    JsonArray entries = pJsonObject.getJsonArray("entries");
+//    JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache cache = new LocalCache();
     MutableAccount account = new PersistentAccount();
-    JsonObject jsonObject = entries.getJsonObject(0);
-    getBuilder().build(account, jsonObject, cache);
-
+//    JsonObject jsonObject = entries.getJsonObject(0);
+    getBuilder().build(account, pJsonObject, cache);
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    account.setModifiedBy(user.getEmployeeId());
+    account.setModifiedDate(new Date());
+    account.setAccountCode(mIdGenerator.getNumericId());
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
-    mAccountBalanceBuilder.build(accountBalance, jsonObject, cache);
+    mAccountBalanceBuilder.build(accountBalance, pJsonObject, cache);
+    FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
+    accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
+    accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
+    accountBalance.setAccountCode(id);
+    accountBalance.setModifiedBy(user.getEmployeeId());
+    accountBalance.setModifiedDate(new Date());
     mAccountBalanceManager.insertFromAccount(accountBalance);
     return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
   }

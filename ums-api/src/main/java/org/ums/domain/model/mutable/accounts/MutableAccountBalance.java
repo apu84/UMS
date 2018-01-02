@@ -19,7 +19,7 @@ public interface MutableAccountBalance extends AccountBalance, Editable<Long>, M
 
   void setFinEndDate(Date pFinEndDate);
 
-  void setAccountCode(Integer pAccountCode);
+  void setAccountCode(Long pAccountCode);
 
   void setYearOpenBalance(BigDecimal pYearOpenBalance);
 
