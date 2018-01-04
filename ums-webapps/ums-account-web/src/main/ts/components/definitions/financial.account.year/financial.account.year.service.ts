@@ -40,6 +40,13 @@ module ums {
       return defer.promise;
     }
 
+    public getOpenedFinancialAccountYear(): ng.IPromise<IFinancialAccountYear> {
+      let defer: ng.IDeferred<IFinancialAccountYear> = this.$q.defer();
+      this.httpClient.get(this.financialAccountYearServiceUrl + "/openedYear", HttpClient.MIME_TYPE_JSON,
+          (response: IFinancialAccountYear) => defer.resolve(response));
+      return defer.promise;
+    }
+
     public saveAndGetAllFinancialYears(financialAccountYear: IFinancialAccountYear): ng.IPromise<IFinancialAccountYear[]> {
       let defer: ng.IDeferred<IFinancialAccountYear[]> = this.$q.defer();
       this.httpClient.post(this.financialAccountYearServiceUrl + "/save", financialAccountYear, HttpClient.MIME_TYPE_JSON)

@@ -5,14 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.accounts.AccountBalanceManager;
-import org.ums.manager.accounts.AccountManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
-import org.ums.manager.accounts.GroupManager;
-import org.ums.persistent.dao.accounts.PersistentAccountBalanceDao;
-import org.ums.persistent.dao.accounts.PersistentAccountDao;
-import org.ums.persistent.dao.accounts.PersistentFinancialAccountYearDao;
-import org.ums.persistent.dao.accounts.PersistentGroupDao;
+import org.ums.manager.accounts.*;
+import org.ums.persistent.dao.accounts.*;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.NamedParameterJdbcTemplateFactory;
 
@@ -54,6 +48,12 @@ public class AccountsContext {
   @Bean
   AccountBalanceManager accountBalanceManager() {
     return new PersistentAccountBalanceDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  PeriodCloseManager periodCloseManager() {
+    return new PersistentPeriodCloseDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
