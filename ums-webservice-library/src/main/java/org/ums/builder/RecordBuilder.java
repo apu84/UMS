@@ -39,6 +39,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("mfnNo", pReadOnly.getId().toString());
     pBuilder.add("language", pReadOnly.getLanguage() == null ? 101101 : pReadOnly.getLanguage().getId());
     pBuilder.add("materialType", pReadOnly.getMaterialType() == null ? 101101 : pReadOnly.getMaterialType().getId());
+    pBuilder.add("materialTypeName", pReadOnly.getMaterialType() == null ? "Unknown" : pReadOnly.getMaterialType()
+        .getLabel());
     pBuilder.add("status", pReadOnly.getRecordStatus() == null ? 101101 : pReadOnly.getRecordStatus().getId());
     pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
         .getId());

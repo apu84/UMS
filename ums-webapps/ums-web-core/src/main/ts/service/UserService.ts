@@ -31,8 +31,8 @@ module ums {
         public getUser(id: string): ng.IPromise<any> {
             var defer = this.$q.defer();
             if (id == undefined || id == null || id == "") {
-                this.notify.error("Please enter user id properly");
-                defer.resolve("Please enter user id properly");
+                this.notify.error("Invalid UserId");
+                defer.resolve("Invalid User Id");
             }
             else if (id.length == 9 || id.length == 6) {
 
@@ -45,12 +45,11 @@ module ums {
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {
                         defer.resolve(response);
-                        console.log(response);
                     });
             }
             else{
-                this.notify.error("Please check the user id");
-                defer.resolve("Please check the user id");
+                this.notify.error("Invalid UserId");
+                defer.resolve("Invalid User Id");
             }
             return defer.promise;
         }

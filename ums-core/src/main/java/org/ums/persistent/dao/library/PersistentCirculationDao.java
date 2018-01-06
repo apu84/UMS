@@ -17,10 +17,10 @@ import java.util.List;
 public class PersistentCirculationDao extends CirculationDaoDecorator {
 
   String GET_ONE =
-      "SELECT ID, PATRON_ID, MFN, ISSUE_DATE, DUE_DATE, RETURN_DATE, FINE_STATUS, LAST_MODIFIED FROM CIRCULATION ";
+      "SELECT ID, PATRON_ID, MFN, ISSUE_DATE, DUE_DATE, RETURN_DATE, FINE_STATUS, ACCESSION_NUMBER, LAST_MODIFIED FROM CIRCULATION ";
 
   String INSERT_ONE =
-      "INSERT INTO CIRCULATION (ID, PATRON_ID, MFN, ISSUE_DATE, DUE_DATE, RETURN_DATE, FINE_STATUS, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, "
+      "INSERT INTO CIRCULATION (ID, PATRON_ID, MFN, ISSUE_DATE, DUE_DATE, RETURN_DATE, FINE_STATUS, ACCESSION_NUMBER, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + " )";
 
   String UPDATE_ONE = "UPDATE CIRCULATION SET RETURN_DATE = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
@@ -39,7 +39,14 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
   public int saveCheckout(MutableCirculation pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getPatronId(), pMutable.getMfn(),
-        new Date(), pMutable.getDueDate(), pMutable.getReturnDate(), 0);
+        new Date(), pMutable.getDueDate(), pMutable.getReturnDate(), 0, pMutable.getAccessionNumber());
+  }
+
+  @Override
+  public Circulation getSingleCirculation(final String pAccessionNumber) {
+    String query = GET_ONE + " WHERE ACCESSION_NUMBER = ? AND RETURN_DATE IS NULL ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pAccessionNumber},
+        new PersistentCirculationDao.RoleRowMapper());
   }
 
   @Override
@@ -62,13 +69,13 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
 
   @Override
   public int updateCirculation(MutableCirculation pMutable) {
-    String query = UPDATE_ONE + " WHERE MFN = ? AND RETURN_DATE IS NULL";
+    String query = UPDATE_ONE + " WHERE ACCESSION_NUMBER = ? AND RETURN_DATE IS NULL";
     return mJdbcTemplate.update(query, pMutable.getReturnDate(), pMutable.getMfn());
   }
 
   @Override
   public int batchUpdateCirculation(List<MutableCirculation> pMutable) {
-    String query = UPDATE_ONE + " WHERE ID = ? AND PATRON_ID = ? AND MFN = ?";
+    String query = UPDATE_ONE + " WHERE ID = ? AND PATRON_ID = ? AND ACCESSION_NUMBER = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutable)).length;
   }
 
@@ -76,7 +83,7 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(Circulation circulation : pMutable) {
       params.add(new Object[] {circulation.getReturnDate(), circulation.getId(), circulation.getPatronId(),
-          circulation.getMfn()});
+          circulation.getAccessionNumber()});
     }
     return params;
   }
@@ -93,6 +100,7 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
       persistentCirculation.setDueDate(resultSet.getDate("DUE_DATE"));
       persistentCirculation.setReturnDate(resultSet.getDate("RETURN_DATE"));
       persistentCirculation.setFineStatus(resultSet.getInt("FINE_STATUS"));
+      persistentCirculation.setAccessionNumber(resultSet.getString("ACCESSION_NUMBER"));
       persistentCirculation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return persistentCirculation;
     }

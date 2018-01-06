@@ -38,4 +38,9 @@ public class CirculationDaoDecorator extends
   public List<Circulation> getCirculationCheckedInItems(String pPatronId) {
     return getManager().getCirculationCheckedInItems(pPatronId);
   }
+
+  @Override
+  public Circulation getSingleCirculation(String pAccessionNumber) {
+    return getManager().getSingleCirculation(pAccessionNumber);
+  }
 }

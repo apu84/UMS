@@ -38,4 +38,11 @@ public class ItemResource extends MutableItemResource {
     return mResourceHelper.getByMfn(pMfn, mUriInfo);
   }
 
+  @GET
+  @Path("/accessionNumber/{accession-no}")
+  public JsonObject getByAccessionNo(final @Context Request pRequest,
+      final @PathParam("accession-no") String pAccessionNumber) throws Exception {
+    return mResourceHelper.getByAccessionNUmber(pAccessionNumber, mUriInfo);
+  }
+
 }

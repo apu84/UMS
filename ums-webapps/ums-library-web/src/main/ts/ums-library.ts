@@ -23,7 +23,7 @@ module ums {
 
     UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
         $urlRouterProvider.when('/cataloging', '/cataloging/search/new');
-        //$urlRouterProvider.otherwise("/userHome");
+        $urlRouterProvider.otherwise("/userHome");
         $stateProvider
             .state('userHome', {
                 url: "/userHome",
@@ -109,7 +109,7 @@ module ums {
             .state('circulation', {
                 url: "/circulation",
                 templateUrl: 'views/admin/circulation/circulation-home.html',
-                controller: 'Circulation',
+                controller: 'CirculationHome',
                 controllerAs: 'vm',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -128,32 +128,46 @@ module ums {
                 controller: 'PatronHome'
             })
             .state('circulation.checkOut', {
-                url: "/checkOut",
-                templateUrl: 'views/admin/circulation/circulation-checkout.html'
+                url: "/checkOut/:userId",
+                templateUrl: 'views/admin/circulation/circulation-checkout.html',
+                controller: 'CirculationCheckOut',
+                controllerAs: 'vm'
             })
             .state('circulation.checkIn', {
-                url: "/checkIn",
-                templateUrl: 'views/admin/circulation/circulation-checkin.html'
+                url: "/checkIn/:itemId",
+                templateUrl: 'views/admin/circulation/circulation-checkin.html',
+                controller: 'CheckIn',
+                controllerAs: 'vm'
             })
             .state('circulation.searchPatron', {
-                url: "/searchPatron",
-                templateUrl: 'views/admin/patron/patron-search.html'
+                url: "/searchPatron/:patronId",
+                templateUrl: 'views/admin/patron/patron-search.html',
+                controller: 'PatronSearch',
+                controllerAs: 'vm'
             })
             .state('circulation.checkOut.patronCheckOut', {
-                url: "/patronCheckOut",
-                templateUrl: 'views/admin/patron/patron-checkout.html'
+                url: "/patronCheckOut/:patronId",
+                templateUrl: 'views/admin/patron/patron-checkout.html',
+                controller: 'PatronCheckOut',
+                controllerAs: 'vm'
             })
             .state('circulation.checkOut.patronDetail', {
-                url: "/patronDetail",
-                templateUrl: 'views/admin/patron/patron-detail.html'
+                url: "/patronDetail/:patronId",
+                templateUrl: 'views/admin/patron/patron-detail.html',
+                controller: 'PatronDetails',
+                controllerAs: 'vm'
             })
             .state('circulation.checkOut.patronFines', {
-                url: "/patronFine",
-                templateUrl: 'views/admin/patron/patron-fine.html'
+                url: "/patronFine/:patronId",
+                templateUrl: 'views/admin/patron/patron-fine.html',
+                controller: 'Fine',
+                controllerAs: 'vm'
             })
             .state('circulation.checkOut.circulationHistory', {
-                url: "/circulationHistory",
-                templateUrl: 'views/admin/circulation/circulation-history.html'
+                url: "/circulationHistory/:patronId",
+                templateUrl: 'views/admin/circulation/circulation-history.html',
+                controller: 'CirculationHistory',
+                controllerAs: 'vm'
             })
             .state('logout', {
                 url: "/logout",

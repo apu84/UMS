@@ -13,4 +13,8 @@ import java.util.List;
  */
 public interface ItemManager extends ContentManager<Item, MutableItem, Long> {
   List<Item> getByMfn(final Long pMfn);
+
+  Item getByAccessionNumber(final String pAccessionNumber);
+
+  int updateItemCirculationStatus(final String pAccessionNumber, final int pCirculationStatus);
 }

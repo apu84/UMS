@@ -31,6 +31,7 @@ public class PersistentItem implements MutableItem {
   private String mInsertedOn;
   private String mLastUpdatedBy;
   private String mLastUpdatedOn;
+  private int mCirculationStatus;
   private String mLastModified;
 
   static {
@@ -57,6 +58,7 @@ public class PersistentItem implements MutableItem {
     mInsertedBy = pPersistentItem.getInsertedBy();
     mInsertedOn = pPersistentItem.getInsertedOn();
     mLastUpdatedBy = pPersistentItem.getLastUpdatedBy();
+    mCirculationStatus = pPersistentItem.getCirculationStatus();
     mLastUpdatedOn = pPersistentItem.getLastUpdatedOn();
   }
 
@@ -171,6 +173,11 @@ public class PersistentItem implements MutableItem {
   }
 
   @Override
+  public int getCirculationStatus() {
+    return mCirculationStatus;
+  }
+
+  @Override
   public void setMfn(Long pMfn) {
     mMfn = pMfn;
   }
@@ -238,5 +245,10 @@ public class PersistentItem implements MutableItem {
   @Override
   public void setLastUpdatedOn(String pLastUpdatedOn) {
     mLastUpdatedOn = pLastUpdatedOn;
+  }
+
+  @Override
+  public void setCirculationStatus(int pCirculationStatus) {
+    mCirculationStatus = pCirculationStatus;
   }
 }

@@ -1,67 +1,66 @@
-<div class="row">
-    <br/>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <fieldset style="background-color: whitesmoke">
-            <div class="col-md-6">
-                <br/>
-                <img src="https://image.flaticon.com/icons/svg/16/16480.svg" alt="User Image"
-                     style="width:85px;height:95px;">
-            </div>
-        </fieldset>
-    </div>
+<fieldset>
+    <legend>Library use</legend>
+    <div class="col-md-2"><b>Name:</b></div> <div class="col-md-10">{{vm.user.userName}}</div>
+    <div class="col-md-2"><b>Id:</b></div> <div class="col-md-10">{{vm.user.userId}}</div>
+    <div class="col-md-2"><b>Category:</b></div> <div class="col-md-10">{{vm.user.category}}</div>
+    <div class="col-md-2"><b>Address:</b></div> <div class="col-md-10">{{vm.user.emailAddress}}</div>
+    <div class="col-md-2"><b>Contact No:</b></div><div class="col-md-10">{{vm.user.mobileNo}}</div>
+</fieldset>
 
-    <div class="col-md-5">
-        <fieldset style="background-color: whitesmoke">
-            <div class="col-md-6">
-                <br/>
-                <label><b>Name:</b> {{vm.user.userName}} </label><br/>
-                <label><b>Id:</b> {{vm.user.userId}}</label>
-                <label><b>Category:</b> {{vm.user.category}}</label><br/>
-            </div>
-        </fieldset>
-    </div>
+<br />
 
-    <div class="col-md-5">
-        <fieldset style="background-color: whitesmoke">
-            <div class="col-md-12">
-                <br/>
-                <label><b>Contact No:</b> {{vm.user.mobileNo}}</label><br/>
-                <label><b>Email:</b> {{vm.user.emailAddress}}</label><br/>
-            </div>
-        </fieldset>
-    </div>
-</div>
+<fieldset>
+    <legend>General</legend>
+    <div class="col-md-2"><b>Gender:</b></div> <div class="col-md-10">{{vm.user.gender}}</div>
+    <div class="col-md-2"><b>Blood Group:</b></div> <div class="col-md-10">{{vm.user.bloodGroup}}</div>
+    <div class="col-md-2"><b>Date of Birth:</b></div> <div class="col-md-10">{{vm.user.dateOfBirth}}</div>
+    <div class="col-md-2"><b>Department:</b></div> <div class="col-md-10">{{vm.user.department}}</div>
+    <div class="col-md-2"><b>Designation:</b></div><div class="col-md-10">{{vm.user.designation}}</div>
+    <div class="col-md-2"><b>Father Name:</b></div> <div class="col-md-10">{{vm.user.fatherName}}</div>
+    <div class="col-md-2"><b>Mother Name:</b></div><div class="col-md-10">{{vm.user.motherName}}</div>
+</fieldset>
 
 
-<div class="row">
-    <br/>
-</div>
 <div class="row">
     <div class="col-md-12">
-        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked out & Checked in History</p>
-        <table class="table table-bordered">
-            <thead style="background-color: whitesmoke">
-            <tr>
-                <th>Due Date</th>
-                <th>Title</th>
-                <th>Material Type</th>
-                <th>Barcode</th>
-                <th>Return Date</th>
-                <th>Fines</th>
-            </tr>
-            </thead>
-            <tbody data-ng-repeat="item in vm.allCirculation">
-            <tr>
-                <td>{{item.dueDate}}</td>
-                <td>{{item.title}}</td>
-                <td>{{item.materialType}}</td>
-                <td>{{item.mfn}}</td>
-                <td>{{item.returnDate}}</td>
-                <td>{{item.fineStatusString}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-out Items</p>
+        <div data-ng-show="!vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.getCirculations()">Show Circulation history</button>
+        </div>
+        <div data-ng-show="vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.showCheckedOutItems=false">Hide Circulation history</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <br/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div data-ng-show="vm.showCheckedOutItems">
+            <table class="table table-bordered">
+                <thead style="background-color: whitesmoke">
+                <tr>
+                    <th>Due Date</th>
+                    <th>Title</th>
+                    <th>Material Type</th>
+                    <th>Barcode</th>
+                    <th>Return Date</th>
+                    <th>Fines</th>
+                </tr>
+                </thead>
+                <tbody data-ng-repeat="item in vm.allCirculation">
+                <tr>
+                    <td>{{item.dueDate}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.materialType}}</td>
+                    <td>{{item.mfn}}</td>
+                    <td>{{item.returnDate}}</td>
+                    <td>{{item.fineStatusString}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

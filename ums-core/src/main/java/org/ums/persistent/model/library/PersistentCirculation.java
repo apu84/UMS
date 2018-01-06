@@ -23,6 +23,7 @@ public class PersistentCirculation implements MutableCirculation {
   private Date mDueDate;
   private Date mReturnDate;
   private int mFineStatus;
+  private String mAccessionNumber;
   private String mLastModified;
 
   public PersistentCirculation() {}
@@ -35,6 +36,7 @@ public class PersistentCirculation implements MutableCirculation {
     mDueDate = persistentCirculation.getDueDate();
     mReturnDate = persistentCirculation.getReturnDate();
     mFineStatus = persistentCirculation.getFineStatus();
+    mAccessionNumber = persistentCirculation.getAccessionNumber();
     mLastModified = persistentCirculation.getLastModified();
   }
 
@@ -109,6 +111,11 @@ public class PersistentCirculation implements MutableCirculation {
   }
 
   @Override
+  public void setAccessionNumber(String pAccessionNumber) {
+    mAccessionNumber = pAccessionNumber;
+  }
+
+  @Override
   public String getPatronId() {
     return mPatronId;
   }
@@ -136,5 +143,10 @@ public class PersistentCirculation implements MutableCirculation {
   @Override
   public int getFineStatus() {
     return mFineStatus;
+  }
+
+  @Override
+  public String getAccessionNumber() {
+    return mAccessionNumber;
   }
 }
