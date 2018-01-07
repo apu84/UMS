@@ -85,7 +85,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     // pMutable.setSupplier(pJsonObject.getInt("copyNumber"));
     // pMutable.setSupplierId(pJsonObject.getInt("supplier"));
     pMutable.setStatus(pJsonObject.containsKey("status") ? ItemStatus.get(pJsonObject.getInt("status"))
-        : ItemStatus.ENTRY_MODE);
+        : ItemStatus.AVAILABLE);
 
     pMutable.setCirculationStatus(pJsonObject.containsKey("circulationStatus") ? pJsonObject
         .getInt("circulationStatus") : 0);

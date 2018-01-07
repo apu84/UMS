@@ -668,16 +668,13 @@ module ums {
                 ],
                 recordStatus: [
                     {id: 101101, name: 'Select Status'},
-
                     {id: 0, name: 'Entry Mode'},
                     {id: 2, name: 'Available'}
                 ],
                 itemStatus: [
                     {id: 101101, name: 'Select a Status'},
-                    {id: 0, name: 'Entry Mode'},
                     {id: 2, name: 'Available'},
-                    {id: 3, name: 'On Hold'},
-                    {id: 4, name: 'Rented'}
+                    {id: 3, name: 'On Hold'}
                 ],
                 materialTypes: [
                     {id: 101101, name: 'Select Material Type'},

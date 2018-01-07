@@ -8,8 +8,8 @@ import java.util.Map;
  * Created by Ifti on 04-Mar-17.
  */
 public enum ItemStatus {
-  ENTRY_MODE(0, "Entry Mode"),
-  AVAILABLE(2, "Available");
+  AVAILABLE(2, "Available"),
+  ON_HOLD(3, "On Hold");
 
   private String label;
   private int id;
