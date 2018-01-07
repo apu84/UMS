@@ -100,6 +100,7 @@ module ums {
         supplier: ISupplier;
         status: number;
         statusName: string;
+        circulationStatus: number;
     }
 
     export interface ISupplier {
@@ -148,10 +149,11 @@ module ums {
         title: string;
         materialType: string;
         checkBoxStatus: boolean;
+        itemCode: string;
     }
 
     export interface ICheckIn{
-        mfn: string;
+        itemCode: string;
         returnDate: string;
     }
 

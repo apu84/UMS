@@ -21,4 +21,6 @@ public interface Circulation extends Serializable, LastModifier, EditType<Mutabl
   Date getReturnDate();
 
   int getFineStatus();
+
+  String getAccessionNumber();
 }

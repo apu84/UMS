@@ -12,4 +12,8 @@ public class FinancialAccountYearDaoDecorator extends
     ContentDaoDecorator<FinancialAccountYear, MutableFinancialAccountYear, Long, FinancialAccountYearManager> implements
     FinancialAccountYearManager {
 
+  @Override
+  public FinancialAccountYear getOpenedFinancialAccountYear() {
+    return getManager().getOpenedFinancialAccountYear();
+  }
 }

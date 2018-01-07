@@ -31,7 +31,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
-    pBuilder.add("mfnNo", pReadOnly.getMfn());
+    pBuilder.add("mfnNo", pReadOnly.getMfn().toString());
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber() == 0 ? "0" : pReadOnly.getCopyNumber().toString());
     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
@@ -52,6 +52,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     object.add("id", pReadOnly.getSupplier() == null ? "" : pReadOnly.getSupplier().getId().toString());
     object.add("name", pReadOnly.getSupplier() == null ? "" : pReadOnly.getSupplier().getName());
     pBuilder.add("supplier", object);
+
+    pBuilder.add("circulationStatus", pReadOnly.getCirculationStatus());
 
   }
 
@@ -84,6 +86,9 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     // pMutable.setSupplierId(pJsonObject.getInt("supplier"));
     pMutable.setStatus(pJsonObject.containsKey("status") ? ItemStatus.get(pJsonObject.getInt("status"))
         : ItemStatus.ENTRY_MODE);
+
+    pMutable.setCirculationStatus(pJsonObject.containsKey("circulationStatus") ? pJsonObject
+        .getInt("circulationStatus") : 0);
   }
 
 }

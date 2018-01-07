@@ -102,9 +102,12 @@
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
 /// <reference path='components/definitions/account/account.service.ts'/>
-
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
+/// <reference path='components/definitions/budget-allocation/budget.allocation.controller.ts'/>
+/// <reference path='components/definitions/budget-allocation/budget.allocation.service.ts'/>
+/// <reference path='components/definitions/period-close/period.close.controller.ts'/>
+/// <reference path='components/definitions/period-close/period.close.service.ts'/>
 
 /// <reference path="components/directives/balance.type.directive.ts"/>
 

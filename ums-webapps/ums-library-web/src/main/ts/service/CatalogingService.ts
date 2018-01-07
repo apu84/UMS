@@ -195,6 +195,18 @@ module ums {
             return defer.promise;
         }
 
+        public getItem(accessionNumber: string): ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get("item/accessionNumber/" + accessionNumber, 'application/json',
+                (json: any, etag: string) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
 
     }
 

@@ -85,8 +85,15 @@
 /// <reference path='controller/Cataloging.ts'/>
 /// <reference path='controller/RecordSearch.ts'/>
 /// <reference path='controller/PatronHome.ts'/>
-/// <reference path='controller/Circulation.ts'/>
+/// <reference path='controller/CirculationHome.ts'/>
+/// <reference path='controller/CirculationCheckOut.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
+/// <reference path='controller/PatronCheckOut.ts'/>
+/// <reference path='controller/Fine.ts'/>
+/// <reference path='controller/CirculationHistory.ts'/>
+/// <reference path='controller/PatronDetails.ts'/>
+/// <reference path='controller/CheckIn.ts'/>
+/// <reference path='controller/PatronSearch.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/service/BaseService.ts'/>

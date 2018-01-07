@@ -10,4 +10,5 @@ import org.ums.manager.ContentManager;
 public interface FinancialAccountYearManager extends
     ContentManager<FinancialAccountYear, MutableFinancialAccountYear, Long> {
 
+  FinancialAccountYear getOpenedFinancialAccountYear();
 }

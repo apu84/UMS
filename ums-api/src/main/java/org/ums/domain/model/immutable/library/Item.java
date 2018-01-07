@@ -41,4 +41,6 @@ public interface Item extends Serializable, EditType<MutableItem>, LastModifier,
 
   String getLastUpdatedOn();
 
+  int getCirculationStatus();
+
 }

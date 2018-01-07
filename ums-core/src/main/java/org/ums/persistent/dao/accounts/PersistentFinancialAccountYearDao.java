@@ -39,6 +39,12 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   }
 
   @Override
+  public FinancialAccountYear getOpenedFinancialAccountYear() {
+    String query = "SELECT * FROM FIN_ACCOUNT_YEAR WHERE YEAR_CLOSING_FLAG='O'";
+    return mJdbcTemplate.queryForObject(query, new FinancialAccountYearRowMapper());
+  }
+
+  @Override
   public FinancialAccountYear get(Long pId) {
     String query = "";
     return super.get(pId);

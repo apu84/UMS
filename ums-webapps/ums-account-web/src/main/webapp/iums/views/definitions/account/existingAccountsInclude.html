@@ -1,7 +1,7 @@
 <div align="right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="existingAccounts"
-                             on-page-change="vm.pageChanged(vm.pagination.currentPage)"
+                             on-page-change="vm.pageChanged(vm.pageNumber)"
                              template-url="views\definitions\account\dirPagination.html"></dir-pagination-controls>
 </div>
 
@@ -16,9 +16,9 @@
     </thead>
     <tbody>
     <tr dir-paginate="p in vm.existingAccounts | itemsPerPage: vm.itemsPerPage"
-        current-page="vm.pagination.currentPage"
+        current-page="vm.pageNumber"
         total-items="vm.totalAccountSize"
-        pagination-id="existingAccountPaginated"
+        pagination-id="existingAccounts"
         style="cursor: pointer;">
         <td>{{p.rowNum}}</td>
         <td>{{p.accountName}}</td>

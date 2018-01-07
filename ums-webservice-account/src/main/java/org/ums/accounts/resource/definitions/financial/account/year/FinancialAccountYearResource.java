@@ -26,4 +26,10 @@ public class FinancialAccountYearResource extends MutableFinancialAccountyearRes
     return years;
   }
 
+  @GET
+  @Path("/openedYear")
+  public FinancialAccountYear getOpenedFinancialAccountYear() {
+    return mHelper.getContentManager().getOpenedFinancialAccountYear();
+  }
+
 }

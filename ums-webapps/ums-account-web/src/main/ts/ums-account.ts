@@ -78,6 +78,18 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/definitions/account/account.html'
         })
+        .state('budgetAllocation', {
+          url: "/budgetAllocation",
+          controller: 'BudgetAllocationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/budget-allocation/budget.allocation.html'
+        })
+        .state('periodClose', {
+          url: "/periodClose",
+          controller: 'PeriodCloseController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/period-close/period.close.html'
+        })
         .state('financialAccountYear', {
           url: "/financialAccountYear",
           controller: 'FinancialAccountYearController',

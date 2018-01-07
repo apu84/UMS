@@ -44,6 +44,18 @@ module ums {
             return defer.promise;
         }
 
+        public getSingleCirculation(accessionNumber: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.get("circulation/accessionNumber/" + accessionNumber, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    defer.resolve(response);
+                });
+            return defer.promise;
+        }
+
         public saveCirculation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.post("circulation/save", json, 'application/json')

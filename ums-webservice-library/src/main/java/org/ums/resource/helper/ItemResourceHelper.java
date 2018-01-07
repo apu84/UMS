@@ -64,6 +64,17 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
 
   }
 
+  public JsonObject getByAccessionNUmber(final String pAccessionNumber, final UriInfo pUriInfo) {
+    Item item = mManager.getByAccessionNumber(pAccessionNumber);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("entries", toJson(item, pUriInfo, localCache));
+    localCache.invalidate();
+    return object.build();
+
+  }
+
   @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableItem mutableItem = new PersistentItem();

@@ -39,4 +39,11 @@ public class CirculationResource extends MutableCirculationResource {
       throws Exception {
     return mHelper.getAllCirculation(pPatronId, mUriInfo);
   }
+
+  @GET
+  @Path("/accessionNumber/{accession-id}")
+  public JsonObject getSingleCirculationItem(final @PathParam("accession-id") String pAccessionNumber,
+      final @Context Request pRequest) throws Exception {
+    return mHelper.getSingleCirculation(pAccessionNumber, mUriInfo);
+  }
 }

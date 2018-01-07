@@ -41,7 +41,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     String query = "select * from MST_ACCOUNT where ACCOUNT_NAME like :accountName";
     SqlParameterSource namedParameters = new MapSqlParameterSource("accountName", "%" + pAccountName + "%");
     return this.mNamedParameterJdbcTemplate.query(query, namedParameters, new PersistentAccountRowMapper());
-    // return mJdbcTemplate.query(query, new Object[]{pAccountName}, new PersistentAccountRowMapper());
+    // return mJdbcTemplate.query(query, new Object[]{pAccountName}, new
+    // PersistentAccountRowMapper());
   }
 
   @Override
@@ -118,8 +119,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setId(rs.getLong("id"));
       try {
         account.setRowNumber(rs.getInt("row_num"));
-      } catch (Exception e) {
-        //e.printStackTrace();
+      } catch(Exception e) {
+        // e.printStackTrace();
       }
       account.setAccountCode(rs.getLong("account_code"));
       account.setAccountName(rs.getString("account_name"));

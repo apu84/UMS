@@ -3,6 +3,7 @@ package org.ums.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.CirculationBuilder;
 import org.ums.cache.LocalCache;
@@ -10,6 +11,7 @@ import org.ums.domain.model.immutable.library.Circulation;
 import org.ums.domain.model.mutable.library.MutableCirculation;
 import org.ums.manager.ContentManager;
 import org.ums.manager.library.CirculationManager;
+import org.ums.manager.library.ItemManager;
 import org.ums.persistent.model.library.PersistentCirculation;
 import org.ums.resource.ResourceHelper;
 
@@ -27,6 +29,9 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
 
   @Autowired
   CirculationBuilder mBuilder;
+
+  @Autowired
+  ItemManager mItemManager;
 
   public JsonObject getCirculation(final String pPatronId, final UriInfo pUriInfo) {
     List<Circulation> circulations = new ArrayList<>();
@@ -48,6 +53,15 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     return toJson(circulations, pUriInfo);
   }
 
+  public JsonObject getSingleCirculation(final String pAccessionNumber, final UriInfo pUriInfo) {
+    Circulation circulation = new PersistentCirculation();
+    circulation = mManager.getSingleCirculation(pAccessionNumber);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("entries", toJson(circulation, pUriInfo, localCache));
+    return object.build();
+  }
+
   public JsonObject getAllCirculation(final String pPatronId, final UriInfo pUriInfo) {
     List<Circulation> circulations = new ArrayList<>();
     try {
@@ -58,28 +72,33 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     return toJson(circulations, pUriInfo);
   }
 
+  @Transactional
   public Response saveCheckout(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableCirculation mutableCirculation = new PersistentCirculation();
     LocalCache localCache = new LocalCache();
     mBuilder.build(mutableCirculation, pJsonObject.getJsonObject("entries"), localCache);
     mManager.saveCheckout(mutableCirculation);
+    mItemManager.updateItemCirculationStatus(mutableCirculation.getAccessionNumber(), 1);
     localCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
+  @Transactional
   public Response updateCirculationForCheckIn(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableCirculation mutableCirculation = new PersistentCirculation();
     LocalCache localCache = new LocalCache();
     mBuilder.checkInBuilder(mutableCirculation, pJsonObject.getJsonObject("entries"), localCache);
     mManager.updateCirculation(mutableCirculation);
+    mItemManager.updateItemCirculationStatus(mutableCirculation.getAccessionNumber(), 0);
     localCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
+  @Transactional
   public Response updateCirculation(JsonObject pJsonObject, UriInfo pUriInfo) {
     List<MutableCirculation> mutableCirculation = new ArrayList<>();
     LocalCache localCache = new LocalCache();
@@ -89,6 +108,9 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
       mutableCirculation.add(mutableCirculation1);
     }
     mManager.batchUpdateCirculation(mutableCirculation);
+    for(MutableCirculation mutableCirculation1 : mutableCirculation) {
+      mItemManager.updateItemCirculationStatus(mutableCirculation1.getAccessionNumber(), 0);
+    }
     localCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);

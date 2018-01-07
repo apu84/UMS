@@ -30,4 +30,14 @@ public class ItemCache extends ContentCache<Item, MutableItem, Long, ItemManager
     return getManager().getByMfn(pMfn);
   }
 
+  @Override
+  public Item getByAccessionNumber(String pAccessionNumber) {
+    return getManager().getByAccessionNumber(pAccessionNumber);
+  }
+
+  @Override
+  public int updateItemCirculationStatus(String pAccessionNumber, int pCirculationStatus) {
+    return getManager().updateItemCirculationStatus(pAccessionNumber, pCirculationStatus);
+  }
+
 }

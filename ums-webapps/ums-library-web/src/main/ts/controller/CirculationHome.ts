@@ -1,10 +1,10 @@
 module ums {
-    interface ICirculation extends ng.IScope {
+    interface ICirculationHome extends ng.IScope {
         checkoutSubmit: Function;
     }
 
-    export class Circulation {
-        public static $inject = ['HttpClient', '$state', '$scope', '$q', 'notify', 'userService', 'circulationService'];
+    export class CirculationHome {
+        public static $inject = ['$state', '$scope', '$q', 'notify', 'userService', 'circulationService'];
 
         private searchValue: string;
         private user: UserView;
@@ -13,9 +13,9 @@ module ums {
         private allCirculation: Array<ILibraryCirculation>;
         private checkInItem: ICheckIn;
         private circulationType: string;
+        private state: any;
 
-        constructor(private httpClient: HttpClient,
-                    private $state: any,
+        constructor(private $state: any,
                     private $scope: any,
                     private $q: ng.IQService,
                     private notify: Notify,
@@ -24,6 +24,8 @@ module ums {
 
             $scope.checkoutSubmit = this.checkoutSubmit.bind(this);
             // this.addDate();
+            console.log("In Home");
+            this.state = $state;
         }
 
         private doSearch(circulationType: string): void {
@@ -34,7 +36,6 @@ module ums {
                 this.checkIn(this.searchValue);
             }
             else if (circulationType == 'searchPatron') {
-                this.circulationType = 'searchPatron';
                 this.searchPatron(this.searchValue);
             }
             else {
@@ -45,35 +46,24 @@ module ums {
         private checkout(patronId: string): void {
             this.userService.getUser(patronId).then((data: any) => {
                 this.user = data;
-                if (this.validateUser()) {
-                    this.circulationType = 'checkOut';
-                    this.getCirculation();
+                if(this.user.userId != undefined){
+                    this.state.go('circulation.checkOut', {userId: this.user.userId});
                 }
             });
         }
 
         private checkIn(itemId: string): void {
-            this.circulationType = 'checkIn';
-            this.checkInItem.mfn = this.searchValue;
+            this.state.go('circulation.checkIn', {itemId: itemId});
         }
 
-        private submitCheckIn(): void {
-            if (this.checkInItem.mfn != undefined && this.checkInItem.mfn != null && this.checkInItem.mfn != "") {
-                this.convertToJson('checkInUpdate').then((json: any) => {
-                    this.circulationService.updateCirculationForCheckIn(json).then((data: any) => {
-                        this.checkInItem.mfn = "";
-                    });
-                });
-            }
-            else {
-                this.notify.error("No item code or barcode found!");
-            }
-        }
+
 
         private searchPatron(patronId: string): void {
-            if (this.validateUser()) {
-                this.getAllCirculations();
-            }
+            this.userService.getUser(patronId).then((data: any) => {
+                if(data.userId != undefined){
+                    this.state.go('circulation.searchPatron', {patronId: data.userId});
+                }
+            });
         }
 
         private checkoutSubmit(): void {
@@ -182,5 +172,5 @@ module ums {
 
     }
 
-    UMS.controller("Circulation", Circulation);
+    UMS.controller("CirculationHome", CirculationHome);
 }
