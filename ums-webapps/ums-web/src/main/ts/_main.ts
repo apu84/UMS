@@ -201,7 +201,7 @@
 /// <reference path='twofatest/two.fa.test.controller.ts'/>
 /// <reference path='twofa/two.fa.interceptor.ts'/>
 /// <reference path='twofa/two.fa.service.ts'/>
-/// <reference path='twofa/two.fa.modal.controller.test.ts'/>
+/// <reference path='twofa/two.fa.modal.controller.ts'/>
 
 /// <reference path='certificate/certificate.service.ts'/>
 

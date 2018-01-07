@@ -29,11 +29,8 @@ public class OtpEmailService {
   private VelocityEngine velocityEngine;
   @Autowired
   DateFormat mDateFormat;
-  @Autowired
-  @Qualifier("host")
-  String mHost;
 
-  @Async(value = "myExecutor")
+  @Async
   public void sendEmail(final String otp, final String toEmail, final String fromEmail, final String subject) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       public void prepare(MimeMessage mimeMessage) {

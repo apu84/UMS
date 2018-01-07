@@ -1,31 +1,28 @@
 package org.ums.twofa;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+
+import java.util.List;
+import java.util.Random;
 
 public class TwoFATokenGeneratorImpl implements TwoFATokenGenerator {
   private TwoFATokenManager mTwoFATokenManager;
   private TwoFATokenEmailSender mTwoFATokenEmailSender;
   private UserManager mUserManager;
-  private String mEmailSender;
-  private Random mRandom = new Random();
 
   public TwoFATokenGeneratorImpl(TwoFATokenManager pTwoFATokenManager, TwoFATokenEmailSender pTwoFATokenEmailSender,
-      UserManager pUserManager, String pEmailSender) {
+      UserManager pUserManager) {
     mTwoFATokenManager = pTwoFATokenManager;
     mTwoFATokenEmailSender = pTwoFATokenEmailSender;
     mUserManager = pUserManager;
-    mEmailSender = pEmailSender;
   }
 
   @Override
-  public TwoFAToken generateToken(String pUserId) {
-    List<TwoFAToken> tokens = mTwoFATokenManager.getUnExpiredTokens(pUserId);
+  public TwoFAToken generateToken(String pUserId, String pType) {
+    List<TwoFAToken> tokens = mTwoFATokenManager.getUnExpiredTokens(pUserId, pType);
     TwoFAToken existingToken = null;
     if(tokens != null && tokens.size() > 0) {
       existingToken = tokens.get(0);
@@ -34,12 +31,19 @@ public class TwoFATokenGeneratorImpl implements TwoFATokenGenerator {
       SecureRandomNumberGenerator generator = new SecureRandomNumberGenerator();
       MutableTwoFAToken newToken = new PersistentTwoFAToken();
       newToken.setUserId(pUserId);
-      newToken.setState(generator.nextBytes().toBase64());
-      newToken.setToken(String.valueOf(Math.abs(mRandom.nextInt(100000))));
-      newToken.setId(newToken.create());
+      newToken.setType(pType);
 
+      Random rnd = new Random();
+      int n = 100000 + rnd.nextInt(900000);
+      String sha256hex = DigestUtils.sha256Hex(String.valueOf(n));
+      newToken.setOtp(sha256hex);
+      newToken.setId(newToken.create());
+      existingToken = mTwoFATokenManager.get(newToken.getId());
       User user = mUserManager.get(pUserId);
-      mTwoFATokenEmailSender.sendEmail(user.getEmail(), mEmailSender, "Two FA token", newToken.getToken());
+
+      mTwoFATokenEmailSender.sendEmail(String.valueOf(n), existingToken.getExpiredOn(), user.getEmail(),
+          "IUMS", "One-Time Password for Online Marks Submission ");
+
       return newToken;
     }
     else {
@@ -47,17 +51,14 @@ public class TwoFATokenGeneratorImpl implements TwoFATokenGenerator {
     }
   }
 
-  @Override
-  public boolean validateToken(String pUserId, String pState, String pToken) {
+  public TwoFAToken getTokenForValidation(String pUserId, String pState) {
     List<TwoFAToken> tokens = mTwoFATokenManager.getTokens(pUserId, pState);
-    TwoFAToken existingToken = null;
     if(tokens == null || tokens.size() == 0) {
-      return false;
+      return null;
     }
     else {
-      existingToken = tokens.get(0);
+      return tokens.get(0);
     }
-    return existingToken != null && existingToken.getToken().equals(pToken)
-        && existingToken.getTokenExpiry().after(new Date());
   }
+
 }

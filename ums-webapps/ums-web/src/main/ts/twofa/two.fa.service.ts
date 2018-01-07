@@ -8,33 +8,27 @@ module ums {
                 private $modal: any) {
     }
 
-    public showTwoFAForm(state: string): ng.IPromise<any> {
+    public showTwoFAForm(state: string, lifeTime: number, remainingTime : number): ng.IPromise<any> {
       this.currentDefer = this.$q.defer();
       this.currentState = state;
-      this.showModal(state);
+      this.showModal(state, lifeTime, remainingTime);
       return this.currentDefer.promise;
     }
 
-    private showModal(state: string): void {
+    private showModal(state: string, lifeTime: number, remainingTime: number ): void {
       this.$modal.open({
-        templateUrl: 'views/twofatest/two.fa.modal.test.html',
-        controller: ModalController,
+        templateUrl: 'views/two-fa/two.fa.modal.html',
+        controller: TwoFaModalController,
         resolve: {
           state: () => state,
-          currentDefer: () => this.currentDefer,
-          loadMyCtrl: ['$ocLazyLoad', ($ocLazyLoad) => {
-            return $ocLazyLoad.load({
-              files: [
-                'vendors/bootstrap-datepicker/css/datepicker.css',
-                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
-              ]
-            });
-          }]
-        }
+          lifeTime:() => lifeTime,
+          remainingTime:() => remainingTime,
+          currentDefer: () => this.currentDefer
+        },
+        backdrop: 'static'
       });
     }
   }
-
   UMS.service('TwoFAService', TwoFAService);
 }
 

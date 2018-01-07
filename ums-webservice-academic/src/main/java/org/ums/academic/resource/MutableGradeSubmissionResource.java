@@ -2,9 +2,8 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.GradeSubmissionResourceHelper;
-import org.ums.annotations.TwoFA;
 import org.ums.resource.Resource;
-
+import org.ums.twofa.TwoFA;
 import javax.json.JsonObject;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -19,7 +18,7 @@ public class MutableGradeSubmissionResource extends Resource {
   GradeSubmissionResourceHelper mResourceHelper;
 
   @PUT
-  @TwoFA
+  @TwoFA(type = "marks_submission")
   public Response saveGradeSheet(final JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }

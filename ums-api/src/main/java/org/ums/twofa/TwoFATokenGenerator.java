@@ -1,7 +1,7 @@
 package org.ums.twofa;
 
 public interface TwoFATokenGenerator {
-  TwoFAToken generateToken(String pUserId);
+  TwoFAToken generateToken(String pUserId, String pType);
 
-  boolean validateToken(String pUserId, String pState, String pToken);
+  TwoFAToken getTokenForValidation(String pUserId, String pState);
 }

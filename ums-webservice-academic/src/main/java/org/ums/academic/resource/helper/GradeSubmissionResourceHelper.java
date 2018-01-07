@@ -314,12 +314,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
-    /*
-     * String otp = ""; if(pJsonObject.containsKey("otp")) otp = pJsonObject.getString("otp");
-     * 
-     * if(otp == null || otp.equalsIgnoreCase("")) { return
-     * Response.status(428).entity("{\"message\" : \"OTP Required\"}").build(); }
-     */
 
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
@@ -327,10 +321,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     String userRole = pJsonObject.getString("role");
 
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    /*
-     * otpEmailService.sendEmail("234543", "ifticse_kuet@hotmail.com", "IUMS",
-     * "One-Time Password for Online Marks Submission ");
-     */
     List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
@@ -361,12 +351,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
       mutable.update();
-
-      /*
-       * marksSubmissionStatus =
-       * mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-       * requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
-       */
 
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
           CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
@@ -469,12 +453,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
           Stream.concat(recheckList == null ? Stream.empty() : recheckList.stream(), approveList == null ? Stream.empty() : approveList.stream()).collect(Collectors.toList());
 
       gradeSubmissionService.validateGradeSubmission(actingRoleForCurrentUser, requestedStatusDTO, marksSubmissionStatus, allGradeList, action);
-
-/*      marksSubmissionStatus
-          = mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-          requestedStatusDTO.getCourseId(),
-          requestedStatusDTO.getExamType());*/
-
       String notificationConsumer = gradeSubmissionService.getUserIdForNotification(marksSubmissionStatus.getSemesterId(), marksSubmissionStatus.getCourseId(), nextStatus);
 
       if (!StringUtils.isEmpty(userId)) {
@@ -500,6 +478,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   }
 
   @Transactional
+  @Deprecated
   public Response recheckRequestApprove(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");
@@ -521,8 +500,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         gradeSubmissionService.getCourseMarksSubmissionNextStatus(actingRoleForCurrentUser, action,
             marksSubmissionStatus.getStatus());
 
-    // int current_course_status = pJsonObject.getInt("course_current_status");
-
     // Need to improve this if else logic here....
     if(action.equals("recheck_request_rejected")) {// VC sir Rejected the whole recheck request
       getContentManager().rejectRecheckRequest(marksSubmissionStatus);
@@ -535,10 +512,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
     mutable.setStatus(nextStatus);
     mutable.update();
-
-    // marksSubmissionStatus =
-    // mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-    // requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
 
     // Need to put log here....
     String notificationConsumer =
@@ -585,23 +558,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.get(user.getEmployeeId());
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
-    /*
-     * int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
-     * 
-     * if(size == 0) { getContentManager().createGradeSubmissionStatus(pSemesterId, pExamType,
-     * pExamDate); marksSubmissionStatusDtoList =
-     * getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
-     * employee.getDepartment().getId(), pCourseType); } else { marksSubmissionStatusDtoList =
-     * mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
-     * .getDepartment().getId(), pCourseType); }
-     */
 
     marksSubmissionStatusDtoList =
         mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee.getDepartment().getId(),
             pCourseType);
-
     Collections.sort(marksSubmissionStatusDtoList, new Comparator<MarksSubmissionStatusDto>() {
-
       @Override
       public int compare(MarksSubmissionStatusDto o1, MarksSubmissionStatusDto o2) {
         int c;

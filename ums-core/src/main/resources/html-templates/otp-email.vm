@@ -10,6 +10,7 @@
         <td style="padding-top: 20px; padding-right: 40px; padding-bottom: 20px; padding-left: 40px; background-color: #F5FFFA;">
             <h5 style="font-size: 20px; color: #000000;font-weight: bold; letter-spacing: -0.5px;">One-time Password</h5>
             <p style="font-size: 16px; color: #000000; padding-bottom: 3px; padding-top: 10px;">Your One-time password(OTP) is : <font style="font-weight: bold; font-size: 25px;">${others.otp}</font> </p>
+
             <p style="font-size: 16px; color: #000000; padding-bottom: 15px; padding-top: 5px;">OTP will expire at : <font style="font-weight: bold; ">${others.expireAt}</font> </p>
         </td>
     </tr>

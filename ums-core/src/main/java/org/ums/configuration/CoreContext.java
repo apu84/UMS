@@ -2,14 +2,12 @@ package org.ums.configuration;
 
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.authz.permission.WildcardPermissionResolver;
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
 import org.ums.formatter.DateFormat;
@@ -60,12 +58,6 @@ public class CoreContext {
   @Qualifier("mongoTemplate")
   @Lazy
   MongoTemplate mMongoOperations;
-
-  @Autowired
-  JavaMailSender mJavaMailSender;
-
-  @Autowired
-  VelocityEngine mVelocityEngine;
 
   @Autowired
   @Qualifier("dummyEmail")
@@ -355,11 +347,11 @@ public class CoreContext {
 
   @Bean
   TwoFATokenEmailSender twoFATokenEmailSender() {
-    return new TwoFATokenEmailSender(mJavaMailSender, mVelocityEngine, mUMSConfiguration);
+    return new TwoFATokenEmailSender();
   }
 
   @Bean
   TwoFATokenGenerator twoFATokenGenerator() {
-    return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager(), emailSender);
+    return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager());
   }
 }

@@ -41,8 +41,11 @@ public class UMSConfiguration {
   @Value("${data.dir}")
   private String mDataDir;
 
-  @Value("${two.fa.token.expiry}")
-  private int mTwoFATokenExpiry;
+  @Value("${twoFa.token.lifeTime}")
+  private int mTwoFATokenLifeTime;
+
+  @Value("${twoFa.token.allowable.wrongTry}")
+  private int mTwoFATokenAllowableWrongTry;
 
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
@@ -96,7 +99,11 @@ public class UMSConfiguration {
     return mDataDir;
   }
 
-  public int getTwoFATokenExpiry() {
-    return mTwoFATokenExpiry;
+  public int getTwoFATokenLifeTime() {
+    return mTwoFATokenLifeTime * 60;
+  }
+
+  public int getTwoFATokenAllowableWrongTry() {
+    return mTwoFATokenAllowableWrongTry;
   }
 }

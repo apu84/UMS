@@ -6,12 +6,19 @@ import org.ums.decorator.ContentDaoDecorator;
 
 public class TwoFATokenDaoDecorator extends ContentDaoDecorator<TwoFAToken, MutableTwoFAToken, Long, TwoFATokenManager>
     implements TwoFATokenManager {
-  @Override
-  public List<TwoFAToken> getUnExpiredTokens(String pUserId) {
-    return getManager().getUnExpiredTokens(pUserId);
+
+  public int updateWrongTryCount(Long pTokenId) {
+    return getManager().updateWrongTryCount(pTokenId);
   }
 
-  @Override
+  public int updateRightTryCount(Long pTokenId) {
+    return getManager().updateRightTryCount(pTokenId);
+  }
+
+  public List<TwoFAToken> getUnExpiredTokens(String pUserId, String pType) {
+    return getManager().getUnExpiredTokens(pUserId, pType);
+  }
+
   public List<TwoFAToken> getTokens(String pUserId, String pState) {
     return getManager().getTokens(pUserId, pState);
   }
