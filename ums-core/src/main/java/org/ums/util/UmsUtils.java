@@ -96,7 +96,7 @@ public class UmsUtils {
 
   /**
    * Modify the time portion of a given date
-   *
+   * 
    * @param inputDate Date for which the time need to be modified
    * @param hour New hour
    * @param minute New minute
@@ -115,7 +115,7 @@ public class UmsUtils {
 
   /**
    * Update time of a given date so that it holds 23:59:59 as its date.
-   *
+   * 
    * @param inputDate Date for which the time need to be modified
    * @return modified date with updated time information
    */
@@ -125,7 +125,7 @@ public class UmsUtils {
 
   /**
    * Update time of a given date so that it holds 0:0:0 as its date.
-   *
+   * 
    * @param inputDate Date for which the time need to be modified
    * @return modified date with updated time information
    */

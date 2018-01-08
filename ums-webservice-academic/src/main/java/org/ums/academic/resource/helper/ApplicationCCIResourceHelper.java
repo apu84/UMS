@@ -2,6 +2,7 @@ package org.ums.academic.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Persistent;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.ApplicationCCIResource;
 import org.ums.builder.ApplicationCCIBuilder;
@@ -27,6 +28,10 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 7/14/2016.
@@ -92,7 +97,6 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
 
-
     List<MutableApplicationCCI> applications = new ArrayList<>();
     List<PersistentApplicationCCI> persistentApplicationCCIs = new ArrayList<>();
 
@@ -100,55 +104,31 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     List<UGRegistrationResult> results =
         mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(), studentId);
+      Map<String, UGRegistrationResult> courseIdMapWithUgRegistrationResult=results
+              .stream()
+              .collect(Collectors.toMap(UGRegistrationResult::getCourseId, Function.identity()));
 
-    for(int i = 0; i < entries.size(); i++) {
-      LocalCache localCache = new LocalCache();
-      JsonObject jsonObject = entries.getJsonObject(i);
-      PersistentApplicationCCI application = new PersistentApplicationCCI();
-      getBuilder().build(application, jsonObject, localCache);
+      retrieveObjectFromJson(applications, persistentApplicationCCIs, entries, courseIdMapWithUgRegistrationResult);
 
-      for(UGRegistrationResult rrx : results) {
-        if(application.getCourseId().equals(rrx.getCourseId())) {
-          application.setExamDate(rrx.getExamDate());
-          break;
-        }
-      }
-      applications.add(application);
-      persistentApplicationCCIs.add(application);
-
-    }
-
-    List<PersistentApplicationCCI> applicationAfterValidationByService =
+      List<PersistentApplicationCCI> applicationAfterValidationByService =
         mApplicationCCIService.validateForAnomalies(persistentApplicationCCIs, results, student);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     List<UGRegistrationResult> resultForWorkingAsResponse = new ArrayList<>();
-    if(applicationAfterValidationByService.size() == 0) {
-      mManager.create(applications);
-    }
+      if(applicationAfterValidationByService.size() == 0) {
+          mManager.create(applications);
+      }
     else {
 
-      for(ApplicationCCI appsForJsonIterator : applicationAfterValidationByService) {
-
-        for(UGRegistrationResult r : results) {
-          if(r.getCourseId().equals(appsForJsonIterator.getCourseId())) {
-            PersistentUGRegistrationResult rr = new PersistentUGRegistrationResult();
-            rr.setStudentId(r.getStudentId());
-            rr.setCourseId(r.getCourseId());
-            rr.setGradeLetter(r.getGradeLetter());
-            rr.setExamType(r.getExamType());
-            rr.setType(r.getType());
-            rr.setCourseNo(r.getCourseNo());
-            rr.setCourseTitle(r.getCourseTitle());
-            rr.setExamDate(r.getExamDate());
-            rr.setMessage(appsForJsonIterator.getMessage());
-
-            UGRegistrationResult rResult = rr;
-            resultForWorkingAsResponse.add(rResult);
+      applicationAfterValidationByService.forEach(a->{
+          if(courseIdMapWithUgRegistrationResult.containsKey(a.getCourseId()))
+          {
+              PersistentUGRegistrationResult regResult  = (PersistentUGRegistrationResult) courseIdMapWithUgRegistrationResult.get(a.getCourseId());
+              regResult.setMessage(a.getMessage());
+              resultForWorkingAsResponse.add(regResult);
           }
-        }
-      }
+      });
     }
 
     object.add("entries", children);
@@ -156,7 +136,20 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return mResultHelper.getResultForApplicationCCIOfCarryClearanceAndImprovement(resultForWorkingAsResponse, pUriInfo);
   }
 
-  public Response deleteByStudentId(UriInfo pUriInfo) {
+    private void retrieveObjectFromJson(List<MutableApplicationCCI> applications, List<PersistentApplicationCCI> persistentApplicationCCIs, JsonArray entries, Map<String, UGRegistrationResult> courseIdMapWithUgRegistrationResult) {
+        for(int i = 0; i < entries.size(); i++) {
+          LocalCache localCache = new LocalCache();
+          JsonObject jsonObject = entries.getJsonObject(i);
+          PersistentApplicationCCI application = new PersistentApplicationCCI();
+          getBuilder().build(application, jsonObject, localCache);
+          if(courseIdMapWithUgRegistrationResult.containsKey(application.getCourseId()))
+              application.setExamDate(courseIdMapWithUgRegistrationResult.get(application.getCourseId()).getExamDate());
+          applications.add(application);
+          persistentApplicationCCIs.add(application);
+        }
+    }
+
+    public Response deleteByStudentId(UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     getContentManager().deleteByStudentId(studentId);
     URI contextURI =
@@ -177,7 +170,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     if(applictionAll.size() > 0) {
       List<ApplicationCCI> applications =
-          getContentManager().getByStudentIdAndSemester(studentId, student.getSemesterId());
+          getContentManager().getByStudentIdAndSemester(studentId, student.getCurrentEnrolledSemester().getId());
       for(ApplicationCCI app : applications) {
         children.add(toJson(app, pUriInfo, localCache));
       }

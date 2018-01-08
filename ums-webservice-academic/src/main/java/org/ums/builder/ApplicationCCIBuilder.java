@@ -5,6 +5,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 
 import javax.json.JsonObject;
@@ -54,14 +55,26 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
     if(pReadOnly.getRoomId() != null) {
       pBuilder.add("roomId", pReadOnly.getRoomId());
     }
+
+    if(pReadOnly.getApplicationStatus() != null) {
+      pBuilder.add("status", pReadOnly.getApplicationStatus().getId());
+      pBuilder.add("statusName", pReadOnly.getApplicationStatus().getLabel());
+    }
+
   }
 
   @Override
   public void build(MutableApplicationCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
-    pMutable.setStudentId(pJsonObject.getString("studentId"));
-    pMutable.setCourseId(pJsonObject.getString("courseId"));
-    pMutable.setApplicationType(ApplicationType.get(pJsonObject.getInt("applicationType")));
+    if(pJsonObject.containsKey("semesterId"))
+      pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    if(pJsonObject.containsKey("studentId"))
+      pMutable.setStudentId(pJsonObject.getString("studentId"));
+    if(pJsonObject.containsKey("courseId"))
+      pMutable.setCourseId(pJsonObject.getString("courseId"));
+    if(pJsonObject.containsKey("applicationType"))
+      pMutable.setApplicationType(ApplicationType.get(pJsonObject.getInt("applicationType")));
+    if(pJsonObject.containsKey("staus"))
+      pMutable.setApplicationStatus(ApplicationStatus.get(pJsonObject.getInt("status")));
     // pMutable.setApplicationDate(pJsonObject.getString("applicationDate"));
   }
 }

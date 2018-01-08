@@ -103,6 +103,7 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
     }
 
     public int getValue() {
+
       return this.typeCode;
     }
   }

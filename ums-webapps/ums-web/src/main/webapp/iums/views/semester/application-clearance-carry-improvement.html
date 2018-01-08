@@ -167,6 +167,7 @@
                     <div class="panel panel-info" data-ng-if="resultCarryNumber>0">
                         <div class="panel-heading" align="center">
                             <p>Candidate Carry Courses</p>
+
                         </div>
                         <div class="panel-body">
                             <table class="table table-bordered">
@@ -198,6 +199,55 @@
                         <button class="btn btn-success" data-ng-click="cancel()">Cancel</button>
                     </div>
                 </div>
+                <div style="padding-top: 10px">
+                    <div class="panel panel-info" >
+                        <div class="panel-heading" align="center">
+                            <p>Pending Applications</p>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Course Number</th>
+                                <th>Course Title</th>
+                                <th>Exam Date</th>
+                                <th>Status</th>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
+                                    <td>{{app.courseNo}}</td>
+                                    <td>{{app.courseTitle}}</td>
+                                    <td>{{app.examDate}}</td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel panel-info" >
+                    <div class="panel-heading" align="center">
+                        <p>Approved Applications</p>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>Course Number</th>
+                            <th>Course Title</th>
+                            <th>Exam Date</th>
+                            <th>Status</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.examDate}}</td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                </div>
+
                 <div data-ng-if="submitButtonClicked && applicationCCIFound == false && loadingVisibility==false"
                      class="container ">
                     <div class="row">
@@ -287,8 +337,9 @@
                         </div>
 
                         <div align="right">
-                            <button class="btn btn-primary" data-ng-click="submitAndClose()">Submit & Close</button>
+
                             <button class="btn btn-success" data-ng-click="close()">Close</button>
+
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.CourseManager;
@@ -50,6 +51,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mCourseSemester;
   private String mRoomNo;
   private Integer mRoomId;
+  private ApplicationStatus mApplicationStatus;
 
   public PersistentApplicationCCI() {
 
@@ -75,6 +77,18 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mCourseSemester = pPersistentApplicationCCI.getCourseSemester();
     mRoomNo = pPersistentApplicationCCI.getRoomNo();
     mRoomId = pPersistentApplicationCCI.getRoomId();
+    mApplicationStatus = pPersistentApplicationCCI.getApplicationStatus();
+  }
+
+  @Override
+  public void setApplicationStatus(ApplicationStatus applicationStatus) {
+    mApplicationStatus = applicationStatus;
+
+  }
+
+  @Override
+  public ApplicationStatus getApplicationStatus() {
+    return mApplicationStatus;
   }
 
   @Override

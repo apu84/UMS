@@ -25,15 +25,15 @@ public class UmsLogTracerAspect {
   @Pointcut("within(org.ums.*)")
   public void inWebLayer() {}
 
-  @After("execution(* org.ums.manager.CacheManager.*(..))")
-  public void generateLog(JoinPoint pJoinPoint) {
-
-    System.out.println("*******###################*******");
-    System.out.println("logger---->" + pJoinPoint.getSignature().toString());
-    mLogger.trace("the logger******************");
-
-    /* mKafkaTemplate.send("ums_logger", "the method accessed --> "); */
-
-  }
+  /*
+   * @After("execution(* org.ums.manager.CacheManager.*(..))") public void generateLog(JoinPoint
+   * pJoinPoint) {
+   * 
+   * System.out.println("*******###################*******"); System.out.println("logger---->" +
+   * pJoinPoint.getSignature().toString()); mLogger.trace("the logger******************");
+   *//* mKafkaTemplate.send("ums_logger", "the method accessed --> "); *//*
+                                                                          * 
+                                                                          * }
+                                                                          */
 
 }

@@ -1,5 +1,4 @@
 module ums {
-
   interface IApplicationCCIScope extends ng.IScope {
     parameter: IParameterSetting;
     applicationMessage: string;
@@ -9,6 +8,8 @@ module ums {
     applicationCCI: Array<AppCCI>;
     twoOccuranceCourseList: Array<IUGRegistrationResult>;
     moreThanTwoOccuranceCourseList: Array<IUGRegistrationResult>;
+    //New property added
+    ballProperties:Array<Rumi>;
 
 
     appCCICarryNumber: number;
@@ -34,6 +35,9 @@ module ums {
     applicationCCIFound: boolean;
     submitButtonClicked: boolean;
     loadingVisibility: boolean;
+    submitAndCloseEscape:boolean;
+    //Rumi
+      appcci_load_status:boolean;
 
     //functions
     getParameterForCCIApplication: Function;
@@ -52,7 +56,15 @@ module ums {
     submitAndClose: Function;
     close: Function;
     convertToJson: Function;
+    finalSave:Function;
+   // alert:Function;
 
+  }
+  //New interface
+  interface  Rumi{
+      ballId:number;
+      ballSize:number;
+      ballName:String;
   }
 
   interface IUGRegistrationResult {
@@ -68,6 +80,7 @@ module ums {
     status: string;
     backgroundColor: string;
     color: string;
+    //status and pending status
   }
 
   interface AppCCI {
@@ -79,6 +92,8 @@ module ums {
     courseNo: string;
     courseTitle: string;
     examDate: string;
+    status:number;
+    pendingStatus:number;
   }
 
   export class ApplicationCCI {
@@ -105,6 +120,8 @@ module ums {
       $scope.applicationAllowed = false;
       $scope.applicationCCIFound = false;
       $scope.loadingVisibility = false;
+      $scope.submitAndCloseEscape=false;
+      $scope.appcci_load_status=true;
       $scope.applicationMessage = "";
       $scope.registrationResults = [];
       $scope.initialization = this.initializatino.bind(this);
@@ -120,8 +137,18 @@ module ums {
       $scope.submit = this.submit.bind(this);
       $scope.submitAndClose = this.submitAndClose.bind(this);
       $scope.close = this.close.bind(this);
+     // $scope.alert=this.alert.bind(this);
+        $scope.finalSave=this.finalSave.bind(this);
       $scope.convertToJson = this.convertToJson.bind(this);
     }
+   // private alert(){
+     //   alert('This in an alert');
+      //  document.write('hello');
+    //}
+
+      private  finalSave(){
+          this.submitAndClose();
+      }
 
     private submitAndClose() {
       var json: any = this.convertToJson(this.$scope.registrationResults);
@@ -129,8 +156,6 @@ module ums {
       this.$scope.responseResults = [];
       this.httpClient.post('academic/applicationCCI', json, 'application/json')
           .success((data, status, header, config) => {
-            console.log("#####################");
-            console.log(data);
 
             this.$scope.responseResults = data.entries;
             console.log(this.$scope.responseResults);
@@ -155,6 +180,7 @@ module ums {
     }
 
     private submit() {
+
       var totalOccurance: number = 0;
       this.$scope.selectedCarryNumber = 0;
       this.$scope.selectedClearanceNumber = 0;
@@ -172,6 +198,39 @@ module ums {
           else {
             this.$scope.selectedImprovementNumber += 1;
           }
+          this.submitAndClose();
+
+          /*
+          * submitAndClose Function Call if user confirms
+          * */
+          /*
+            if(confirm("Are you sure you want to apply for the following courses?") == true) {
+                this.submitAndClose();
+
+            } else {
+                this.notify.info("Cancelled", true);
+                totalOccurance=0;
+            }
+            */
+        }else{
+            this.getApplicationCCIInfo().then((appArr: Array<AppCCI>) => {
+
+                for (var i = 0; i < appArr.length; i++) {
+                    if (appArr[i].status == 10) {
+                        this.$scope.appcci_load_status=false;
+
+                    }
+
+                    this.$scope.applicationCCI.push(appArr[i]);
+
+                }
+                console.log(this.$scope.applicationCCI);
+                this.postInitialization();
+            });
+            alert('Result Is: '+this.$scope.appcci_load_status);
+            //alert('Work After Head sir and Bank Approval');
+            //this.notify.info("Required  T apply checkbox to be checked", true);
+
         }
       }
 
@@ -179,6 +238,8 @@ module ums {
         this.$scope.submitButtonClicked = true;
 
       }
+
+
     }
 
     private makeDataEmpty(resultArr: Array<IUGRegistrationResult>): Array<IUGRegistrationResult> {
@@ -363,6 +424,7 @@ module ums {
           }
           else {
             this.$scope.appCCICarryNumber += 1;
+
           }
           this.$scope.applicationCCI.push(appArr[i]);
         }
@@ -423,7 +485,8 @@ module ums {
       this.httpClient.get('/ums-webservice-academic/academic/UGRegistrationResultResource/CarryClearanceImprovement', 'application/json',
           (json: any, etag: string) => {
             registrationResult = json.entries;
-
+              console.log("Registration result");
+              console.log(registrationResult);
             defer.resolve(registrationResult);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -438,7 +501,7 @@ module ums {
       this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/student', 'application/json',
           (json: any, etag: string) => {
             appCCIArr = json.entries;
-            console.log("**********");
+            console.log("****RRRRRRRRRRRRRRRRR******");
             console.log("Applicatino cci");
             console.log(json);
             defer.resolve(appCCIArr);

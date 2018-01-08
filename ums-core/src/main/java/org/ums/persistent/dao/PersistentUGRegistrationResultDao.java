@@ -98,7 +98,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
 
   @Override
   public List<UGRegistrationResult> getBySemesterAndExamTypeAndGradeAndStudent(int pSemesterId, int pExamType,
-                                                                               String pGrade, String pStudentId) {
+      String pGrade, String pStudentId) {
     return super.getBySemesterAndExamTypeAndGradeAndStudent(pSemesterId, pExamType, pGrade, pStudentId);
   }
 
@@ -207,7 +207,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
 
   @Override
   public List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId, String pStudentId,
-                                                                 CourseRegType pCourseRegType) {
+      CourseRegType pCourseRegType) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ?  AND STUDENT_ID = ? AND REG_TYPE = ?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pCourseRegType.getId()},
         new UGRegistrationResultRowMapperWithoutResult());

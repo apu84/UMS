@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationCCIDaoDecorator;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
@@ -18,11 +19,14 @@ import java.util.stream.Collectors;
 /**
  * Created by My Pc on 7/14/2016.
  */
+
 public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
-  String SELECT_ALL =
-      "select a.id,a.semester_id,a.student_id,a.course_id,a.application_type,a.applied_on,c.course_no,c.course_title,to_char(exam_routine.exam_date,'DD-MM-YYYY') exam_date from application_cci a, mst_course c,exam_routine where "
-          + " a.course_id= c.course_id and a.course_id=exam_routine.course_id and exam_routine.exam_type=2";
+  String SELECT_ALL = "SELECT " + "  a.id, " + "  a.semester_id, " + "  a.student_id, " + "  a.course_id, "
+      + "  a.application_type, " + "  a.applied_on, " + "  a.STATUS, " + "   " + "  c.course_no, "
+      + "  c.course_title, " + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+      + "FROM application_cci a, mst_course c, exam_routine " + "WHERE "
+      + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2";
   String INSERT_ONE =
       "Insert into APPLICATION_CCI (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,APPLIED_ON) values (?,?,?,?,?,systimestamp)";
   String UPDATE_ONE =
@@ -173,6 +177,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setCourseNo(pResultSet.getString("course_no"));
       application.setCourseTitle(pResultSet.getString("course_title"));
       application.setExamDate(pResultSet.getString("exam_date"));
+      application.setApplicationStatus(ApplicationStatus.get(pResultSet.getInt("status")));
+      // application.setExamDate(pResultSet.getString("exam_date"));
       // application.setTotalStudent(pResultSet.getInt("total_student"));
       return application;
     }

@@ -1,9 +1,11 @@
 package org.ums.domain.model.immutable;
 
+import javafx.application.Application;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 
 import java.io.Serializable;
@@ -47,4 +49,6 @@ public interface ApplicationCCI extends Serializable, LastModifier, EditType<Mut
   String getRoomNo();
 
   Integer getRoomId();
+
+  ApplicationStatus getApplicationStatus();
 }

@@ -128,8 +128,11 @@ public class CertificateFeeHelper {
 
   // todo modify it based on log.
   private boolean resolvedAllDependencies(FeeCategory pCategory, Student pStudent) {
-    List<AppRules> appRulesList = mAppRulesManager.getDependencies(pCategory.getId());
-    List<String> resolvedFeeCategoryIds = mCertificateStatusManager.getByStudent(pStudent.getId(), pCategory.getId());
+    /*
+     * List<AppRules> appRulesList = mAppRulesManager.getDependencies(pCategory.getId());
+     * List<String> resolvedFeeCategoryIds =
+     * mCertificateStatusManager.getByStudent(pStudent.getId(), pCategory.getId());
+     */
     // appRulesList.size() == resolvedFeeCategoryIds.size() ? true : false;
     return true;
   }

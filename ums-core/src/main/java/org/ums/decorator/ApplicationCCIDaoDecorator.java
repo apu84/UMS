@@ -12,6 +12,7 @@ import java.util.List;
 public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
+
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
     return getManager().getByStudentIdAndSemesterAndType(pStudentId, pSemesterId, pExamType);

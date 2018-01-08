@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 
 /**
@@ -48,4 +49,6 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
   void setRoomNo(final String pRoomNo);
 
   void setRoomId(final Integer pRoomId);
+
+  void setApplicationStatus(final ApplicationStatus applicationStatus);
 }

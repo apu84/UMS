@@ -33,7 +33,7 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
       pBuilder.add("endDate", UmsUtils.formatDate(pReadOnly.getEndDate(), "dd-MM-yyyy"));
       pBuilder.add("startDateJs", UmsUtils.formatDate(pReadOnly.getStartDate(), "MM-dd-yyyy"));
       pBuilder.add("endDateJs", UmsUtils.formatDate(pReadOnly.getEndDate(), "MM-dd-yyyy"));
-    } catch (Exception e) {
+    } catch(Exception e) {
       e.printStackTrace();
     }
 
@@ -60,7 +60,7 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
       pMutable.setStartDate(UmsUtils.convertToDate((pJsonObject.getString("startDate")), "dd-MM-yyyy"));
       pMutable.setEndDate(UmsUtils.convertToDate((pJsonObject.getString("endDate")), "dd-MM-yyyy"));
 
-    } catch (Exception e) {
+    } catch(Exception e) {
 
     }
   }

@@ -34,8 +34,8 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
       List<UGRegistrationResult> results, Student pStudent) {
     Date date = new Date();
     ParameterSetting parameterSetting =
-        mParameterSettingManager.getBySemesterAndParameterId("application_cci",
-            pStudent.getCurrentEnrolledSemester().getId());
+        mParameterSettingManager.getBySemesterAndParameterId("application_cci", pStudent.getCurrentEnrolledSemester()
+            .getId());
     Timestamp currentTimestamp = new Timestamp(date.getTime());
 
     Date startDate, endDate;
