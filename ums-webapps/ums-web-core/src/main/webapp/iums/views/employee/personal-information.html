@@ -504,7 +504,7 @@
                                         data-ng-model="vm.entry.personal.preAddressCountry"
                                         data-ng-options="country.name for country in vm.countries track by country.id"
                                         data-ng-change="vm.changePresentAddressFields()"
-                                        class="form-control">
+                                        class="form-control" required>
                                     <option value="">Select Country</option>
                                 </select>
                             </div>
@@ -529,7 +529,7 @@
                                         data-ng-options="division.name for division in vm.divisions track by division.id"
                                         data-ng-change="vm.changePresentAddressDistrict()"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" requried="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -556,7 +556,7 @@
                                         data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
                                         data-ng-change="vm.changePresentAddressThana()"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -580,7 +580,7 @@
                                         data-ng-model="vm.entry.personal.preAddressThana"
                                         data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>
@@ -624,7 +624,7 @@
                     <div class="col-md-12">
                         <label class="col-md-2"><b>Permanent Address:</b></label>
                         <div class="col-md-6" data-ng-show="vm.showPersonalInputDiv">
-                            <input type="checkbox" data-ng-click="vm.sameAsPresentAddress()"/>Same as present
+                            <input type="checkbox" data-ng-model="vm.checkBoxValue" data-ng-click="vm.sameAsPresentAddress()"/>Same as present
                             address
                         </div>
                     </div>
@@ -712,7 +712,7 @@
                                         data-ng-options="division.name for division in vm.divisions track by division.id"
                                         data-ng-change="vm.changePermanentAddressDistrict()"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -739,7 +739,7 @@
                                         data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
                                         data-ng-change="vm.changePermanentAddressThana()"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" requried="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -763,7 +763,7 @@
                                         data-ng-model="vm.entry.personal.perAddressThana"
                                         data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>
@@ -931,6 +931,3 @@
         </div>
     </div>
 </form>
-
-
-
