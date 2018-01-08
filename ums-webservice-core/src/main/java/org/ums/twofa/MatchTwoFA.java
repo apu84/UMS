@@ -104,8 +104,8 @@ public class MatchTwoFA extends Resource {
       existingToken = mTwoFATokenManager.get(newToken.getId());
       User user = mUserManager.get(getLoggedInUserId());
 
-      mTwoFATokenEmailSender.sendEmail(String.valueOf(n), existingToken.getExpiredOn(), user.getEmail(),
-          "IUMS", "One-Time Password for Online Marks Submission ");
+      mTwoFATokenEmailSender.sendEmail(String.valueOf(n), existingToken.getExpiredOn(), user.getEmail(), "IUMS",
+          "One-Time Password for Online Marks Submission ");
     }
 
     mMapper.save(existingToken.getId().toString(), mMapper.lookup(state));

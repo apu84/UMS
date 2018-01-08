@@ -1,10 +1,11 @@
 package org.ums.accounts.resource.definitions.period.close;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
-import org.ums.manager.ContentManager;
+import org.ums.manager.accounts.PeriodCloseManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.UriInfo;
  */
 @Component
 public class PeriodCloseReosurceHelper extends ResourceHelper<PeriodClose, MutablePeriodClose, Long> {
+  @Autowired
+  private PeriodCloseManager mPeriodCloseManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -23,8 +26,8 @@ public class PeriodCloseReosurceHelper extends ResourceHelper<PeriodClose, Mutab
   }
 
   @Override
-  protected ContentManager<PeriodClose, MutablePeriodClose, Long> getContentManager() {
-    return null;
+  protected PeriodCloseManager getContentManager() {
+    return mPeriodCloseManager;
   }
 
   @Override

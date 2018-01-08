@@ -90,6 +90,12 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/definitions/period-close/period.close.html'
         })
+        .state('voucherNumberControl', {
+          url: "/voucherNumberControl",
+          controller: 'VoucherNumberController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/voucher/voucher.number.control.html'
+        })
         .state('financialAccountYear', {
           url: "/financialAccountYear",
           controller: 'FinancialAccountYearController',

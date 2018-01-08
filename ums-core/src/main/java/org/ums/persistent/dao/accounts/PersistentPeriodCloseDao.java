@@ -34,12 +34,21 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
 
   @Override
   public List<PeriodClose> getByCurrentYear() {
-    return super.getByCurrentYear();
+    String query =
+        "SELECT * " + "FROM PERIOD_CLOSE " + "WHERE FIN_ACCOUNT_YEAR_ID IN (SELECT ID "
+            + "                              FROM FIN_ACCOUNT_YEAR "
+            + "                              WHERE YEAR_CLOSING_FLAG = 'O')";
+    return mJdbcTemplate.query(query, new PersistentPeriodCloseRowMapper());
   }
 
   @Override
   public List<PeriodClose> getByPreviousYear() {
-    return super.getByPreviousYear();
+    String query =
+        "SELECT * " + "FROM PERIOD_CLOSE " + "WHERE FIN_ACCOUNT_YEAR_ID IN (SELECT ID "
+            + "                              FROM FIN_ACCOUNT_YEAR "
+            + "                              WHERE YEAR_CLOSING_FLAG = 'O' AND ROWNUM = 1 "
+            + "                              ORDER BY CURRENT_START_DATE)";
+    return mJdbcTemplate.query(query, new PersistentPeriodCloseRowMapper());
   }
 
   @Override

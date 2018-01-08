@@ -72,13 +72,16 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
     mAccountBalanceBuilder.build(accountBalance, pJsonObject, cache);
-    FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
-    accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
-    accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
-    accountBalance.setAccountCode(id);
-    accountBalance.setModifiedBy(user.getEmployeeId());
-    accountBalance.setModifiedDate(new Date());
-    mAccountBalanceManager.insertFromAccount(accountBalance);
+    if (accountBalance != null) {
+      FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
+      accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
+      accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
+      accountBalance.setAccountCode(id);
+      accountBalance.setModifiedBy(user.getEmployeeId());
+      accountBalance.setModifiedDate(new Date());
+      mAccountBalanceManager.insertFromAccount(accountBalance);
+    }
+
     return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
   }
 

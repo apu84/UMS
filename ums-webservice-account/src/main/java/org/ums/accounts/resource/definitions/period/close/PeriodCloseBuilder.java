@@ -17,6 +17,14 @@ import javax.ws.rs.core.UriInfo;
 public class PeriodCloseBuilder implements Builder<PeriodClose, MutablePeriodClose> {
   @Override
   public void build(JsonObjectBuilder pBuilder, PeriodClose pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+    if(pReadOnly.getId() != null)
+      pBuilder.add("id", pReadOnly.getId());
+    if(pReadOnly.getCloseMonth() != null) {
+      pBuilder.add("closeMonth", pReadOnly.getCloseMonth().getValue());
+      pBuilder.add("closeMonthName", pReadOnly.getCloseMonth().name());
+    }
+    if(pReadOnly.getCloseYear() != null)
+      pBuilder.add("closeYear", pReadOnly.getCloseYear());
 
   }
 

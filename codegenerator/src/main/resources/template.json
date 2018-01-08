@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "TwoFAToken",
-    "package": "org.ums.twofa",
+    "name": "Voucher",
+    "package": "org.ums.domain.model.immutable.accounts",
     "fields": [
       {
         "id": {
@@ -10,29 +10,10 @@
         }
       },
       {
-        "state": "String"
+        "name": "String"
       },
       {
-        "token": "String"
-      },
-      {
-        "token_expiry": "Date"
-      },
-      {
-        "user": {
-          "type": "Ref",
-          "reference": {
-            "name": "User",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "String"
-            },
-            "manager": {
-              "name": "UserManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "shortName": "String"
       }
     ]
   }
