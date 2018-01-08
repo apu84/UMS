@@ -103,7 +103,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
     List<UGRegistrationResult> results =
-        mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(), studentId);
+        mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getCurrentEnrolledSemester().getId(), studentId);
       Map<String, UGRegistrationResult> courseIdMapWithUgRegistrationResult=results
               .stream()
               .collect(Collectors.toMap(UGRegistrationResult::getCourseId, Function.identity()));
@@ -136,20 +136,22 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return mResultHelper.getResultForApplicationCCIOfCarryClearanceAndImprovement(resultForWorkingAsResponse, pUriInfo);
   }
 
-    private void retrieveObjectFromJson(List<MutableApplicationCCI> applications, List<PersistentApplicationCCI> persistentApplicationCCIs, JsonArray entries, Map<String, UGRegistrationResult> courseIdMapWithUgRegistrationResult) {
-        for(int i = 0; i < entries.size(); i++) {
-          LocalCache localCache = new LocalCache();
-          JsonObject jsonObject = entries.getJsonObject(i);
-          PersistentApplicationCCI application = new PersistentApplicationCCI();
-          getBuilder().build(application, jsonObject, localCache);
-          if(courseIdMapWithUgRegistrationResult.containsKey(application.getCourseId()))
-              application.setExamDate(courseIdMapWithUgRegistrationResult.get(application.getCourseId()).getExamDate());
-          applications.add(application);
-          persistentApplicationCCIs.add(application);
-        }
+  private void retrieveObjectFromJson(List<MutableApplicationCCI> applications,
+      List<PersistentApplicationCCI> persistentApplicationCCIs, JsonArray entries,
+      Map<String, UGRegistrationResult> courseIdMapWithUgRegistrationResult) {
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      getBuilder().build(application, jsonObject, localCache);
+      if(courseIdMapWithUgRegistrationResult.containsKey(application.getCourseId()))
+        application.setExamDate(courseIdMapWithUgRegistrationResult.get(application.getCourseId()).getExamDate());
+      applications.add(application);
+      persistentApplicationCCIs.add(application);
     }
+  }
 
-    public Response deleteByStudentId(UriInfo pUriInfo) {
+  public Response deleteByStudentId(UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     getContentManager().deleteByStudentId(studentId);
     URI contextURI =

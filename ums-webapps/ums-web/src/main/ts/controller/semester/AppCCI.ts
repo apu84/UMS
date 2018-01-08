@@ -227,9 +227,9 @@ module ums {
                 console.log(this.$scope.applicationCCI);
                 this.postInitialization();
             });
-            alert('Result Is: '+this.$scope.appcci_load_status);
+            //alert('Result Is: '+this.$scope.appcci_load_status);
             //alert('Work After Head sir and Bank Approval');
-            //this.notify.info("Required  T apply checkbox to be checked", true);
+            this.notify.info("Required  To apply checkbox to be checked", true);
 
         }
       }
