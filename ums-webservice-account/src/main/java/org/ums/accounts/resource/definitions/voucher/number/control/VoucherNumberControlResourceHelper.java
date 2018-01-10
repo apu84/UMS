@@ -11,6 +11,8 @@ import org.ums.resource.ResourceHelper;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
@@ -24,6 +26,24 @@ public class VoucherNumberControlResourceHelper extends
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
+  }
+
+  protected List<VoucherNumberControl> createOrUpdate(List<MutableVoucherNumberControl> pVoucherNumberControls) {
+    List<MutableVoucherNumberControl> newVoucherNumberControls = new ArrayList<>();
+    List<MutableVoucherNumberControl> voucherNumberControlsForUpdate = new ArrayList<>();
+    pVoucherNumberControls.forEach(v -> {
+      if (v.getId() != null)
+        newVoucherNumberControls.add(v);
+      else
+        voucherNumberControlsForUpdate.add(v);
+    });
+
+    if (newVoucherNumberControls.size() > 0)
+      getContentManager().create(newVoucherNumberControls);
+    if (voucherNumberControlsForUpdate.size() > 0)
+      getContentManager().update(voucherNumberControlsForUpdate);
+
+    return getContentManager().getByCurrentFinancialYear();
   }
 
   @Override

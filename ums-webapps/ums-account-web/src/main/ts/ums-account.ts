@@ -94,7 +94,18 @@ module ums {
           url: "/voucherNumberControl",
           controller: 'VoucherNumberController',
           controllerAs: 'vm',
-          templateUrl: 'views/definitions/voucher/voucher.number.control.html'
+          templateUrl: 'views/definitions/voucher/voucher.number.control.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-tablesorter/themes/blue/style-custom.css',
+                  'vendors/jquery-tablesorter/jquery.tablesorter.js'
+                ]
+              });
+
+            }]
+          }
         })
         .state('financialAccountYear', {
           url: "/financialAccountYear",

@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-hover table-striped table-bordered table-advanced tablesorter tb-sticky-header">
+            <thead>
+            <tr>
+                <th>Voucher Type</th>
+                <th>Restart basis</th>
+                <th>Starting No.</th>
+                <th>Max. Transaction Ammount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="v in vm.voucherNumberControls" data-ng-disabled="vm.disable">
+                <td>{{v.voucher.name}}</td>
+                <td>
+                    <select class="form-control" name="resetBasis" data-ng-model="v.resetBasis">
+                        <option value="Y">Yearly</option>
+                        <option value="M">Monthly</option>
+                        <option value="D">Daily</option>
+                    </select>
+                </td>
+                <td><input class="form-control" type="number" ng-model="v.startVoucherNo"/></td>
+                <td><input class="form-control" type="text" ng-model="v.voucherLimit"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

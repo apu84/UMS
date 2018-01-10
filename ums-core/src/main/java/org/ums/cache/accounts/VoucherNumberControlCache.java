@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.VoucherNumberControlManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
  */
@@ -22,5 +24,10 @@ public class VoucherNumberControlCache extends
   @Override
   protected CacheManager<VoucherNumberControl, Long> getCacheManager() {
     return mVoucherNumberControlLongCacheManager;
+  }
+
+  @Override
+  public List<VoucherNumberControl> getByCurrentFinancialYear() {
+    return getManager().getByCurrentFinancialYear();
   }
 }

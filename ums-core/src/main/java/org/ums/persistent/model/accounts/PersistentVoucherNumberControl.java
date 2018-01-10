@@ -43,6 +43,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   private Long mId;
   @JsonIgnore
   @JsonProperty("finAccountYearId")
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mFinAccountYearId;
   @JsonIgnore
   @JsonProperty("finAccountYear")
@@ -63,6 +64,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   private Integer mStartVoucherNo;
   @JsonIgnore
   @JsonProperty("voucherLimit")
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mVoucherLimit;
   @JsonIgnore
   @JsonProperty("statFlag")

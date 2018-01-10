@@ -1,1 +1,25 @@
-<h1>Voucher Number Control</h1>
+<style>
+
+    .table {
+        padding-top: 10px;
+    }
+
+</style>
+
+<link type="text/css" rel="stylesheet" src="account.group.css"/>
+<div class="row">
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">Voucher Number Control</div>
+                <div class="col-md-6" align="right"
+                     data-ng-include="'views/definitions/voucher/menu.html'"></div>
+            </div>
+        </div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div ng-include="'views/definitions/voucher/voucherTableInclude.html'"></div>
+        </div>
+
+    </div>
+</div>

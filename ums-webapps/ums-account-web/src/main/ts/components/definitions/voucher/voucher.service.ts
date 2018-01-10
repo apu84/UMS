@@ -13,7 +13,7 @@ module ums {
     private voucherURL: string = "";
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient) {
-      this.voucherURL = "/account/definition/voucher";
+      this.voucherURL = "account/definition/voucher";
     }
 
     public getAllVoucher(): ng.IPromise<IVoucher[]> {

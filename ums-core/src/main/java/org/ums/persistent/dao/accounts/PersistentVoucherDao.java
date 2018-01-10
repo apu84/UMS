@@ -30,7 +30,7 @@ public class PersistentVoucherDao extends VoucherDaoDecorator {
 
   @Override
   public List<Voucher> getAll() {
-    String query = "select * from voucher";
+    String query = "select * from mst_voucher";
     return mJdbcTemplate.query(query, new PersistentVoucherRowMapper());
   }
 
