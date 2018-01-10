@@ -46,8 +46,8 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   @Override
   public FinancialAccountYear get(Long pId) {
-    String query = "";
-    return super.get(pId);
+    String query = "select * from fin_account_year where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new FinancialAccountYearRowMapper());
   }
 
   @Override

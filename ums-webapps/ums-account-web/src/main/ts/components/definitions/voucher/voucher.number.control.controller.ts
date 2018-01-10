@@ -36,6 +36,7 @@ module ums {
           voucherNumberControl.voucherId = v.id;
           voucherNumberControl.voucher = v;
           voucherNumberControl.startVoucherNo = 1;
+          voucherNumberControl.voucherLimit= '60000';
           this.voucherNumberControls.push(voucherNumberControl);
         });
         this.voucherNumberControlsCopy = angular.copy(this.voucherNumberControls);
@@ -52,6 +53,8 @@ module ums {
     }
 
     public save() {
+        console.log("VOuchers");
+        console.log(this.voucherNumberControls);
       this.voucherNumberControlService.saveAndReturnList(this.voucherNumberControls).then((voucherNumberControls: IVoucherNumberControl[]) => {
         if (voucherNumberControls === undefined)
           this.notify.error("Error in saving data");

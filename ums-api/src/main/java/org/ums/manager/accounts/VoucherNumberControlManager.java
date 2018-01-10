@@ -14,4 +14,6 @@ public interface VoucherNumberControlManager extends
 
   List<VoucherNumberControl> getByCurrentFinancialYear();
 
+  int[] updateVoucherNumberControls(List<MutableVoucherNumberControl> voucherNumberControls);
+
 }

@@ -16,52 +16,52 @@ public class PersistentVoucher implements MutableVoucher {
   @JsonIgnore
   private static VoucherManager sVoucherManager;
   @JsonProperty("id")
-  private Long mId;
+  private Long id;
   @JsonProperty("name")
-  private String mName;
+  private String name;
   @JsonProperty("shortName")
-  private String mShortName;
+  private String shortName;
   @JsonIgnore
-  private String mLastModified;
+  private String lastModified;
 
   @Override
   public Long getId() {
-    return mId;
+    return id;
   }
 
   @Override
   public void setId(Long pId) {
-    this.mId = pId;
+    this.id = pId;
   }
 
   @Override
   public String getName() {
-    return mName;
+    return name;
   }
 
   @Override
   public void setName(String pName) {
-    this.mName = pName;
+    this.name = pName;
   }
 
   @Override
   public String getShortName() {
-    return mShortName;
+    return shortName;
   }
 
   @Override
   public void setShortName(String pShortName) {
-    this.mShortName = pShortName;
+    this.shortName = pShortName;
   }
 
   @Override
   public String getLastModified() {
-    return mLastModified;
+    return lastModified;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
-    this.mLastModified = pLastModified;
+    this.lastModified = pLastModified;
   }
 
   @Override

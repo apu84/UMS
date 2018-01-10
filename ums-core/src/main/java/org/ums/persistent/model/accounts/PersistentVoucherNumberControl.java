@@ -1,9 +1,6 @@
 package org.ums.persistent.model.accounts;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
@@ -20,6 +17,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
  */
+
 public class PersistentVoucherNumberControl implements MutableVoucherNumberControl {
   @JsonIgnore
   private static FinancialAccountYearManager sFinancialAccountYearManager;
@@ -31,7 +29,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sFinancialAccountYearManager =
-        applicationContext.getBean("financialAccountManager", FinancialAccountYearManager.class);
+        applicationContext.getBean("financialAccountYearManager", FinancialAccountYearManager.class);
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
     sVoucherNumberControlManager =
         applicationContext.getBean("voucherNumberControlManager", VoucherNumberControlManager.class);
@@ -40,32 +38,31 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   @JsonIgnore
   @JsonProperty("id")
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  private Long mId;
+  private Long id;
   @JsonIgnore
   @JsonProperty("finAccountYearId")
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  private Long mFinAccountYearId;
-  @JsonIgnore
+  private Long finAccountYearId;
   @JsonProperty("finAccountYear")
-  @JsonBackReference
-  private FinancialAccountYear mFinancialAccountYear;
+  @JsonIgnore
+  private FinancialAccountYear finAccountYear;
   @JsonIgnore
   @JsonProperty("voucherId")
-  private Long mVoucherId;
-  @JsonIgnore
+  private Long voucherId;
   @JsonProperty("voucher")
   @JsonBackReference
-  private Voucher mVoucher;
+  @JsonIgnore
+  private Voucher voucher;
   @JsonIgnore
   @JsonProperty("resetBasis")
-  private ResetBasis mResetBasis;
+  private ResetBasis resetBasis;
   @JsonIgnore
   @JsonProperty("startVoucherNo")
-  private Integer mStartVoucherNo;
+  private Integer startVoucherNo;
   @JsonIgnore
   @JsonProperty("voucherLimit")
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  private BigDecimal mVoucherLimit;
+  private BigDecimal voucherLimit;
   @JsonIgnore
   @JsonProperty("statFlag")
   private String mStatFlag;
@@ -83,12 +80,12 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   public PersistentVoucherNumberControl() {}
 
   public PersistentVoucherNumberControl(final PersistentVoucherNumberControl pPersistentVoucherNumberControl) {
-    mId = pPersistentVoucherNumberControl.getId();
-    mFinAccountYearId = pPersistentVoucherNumberControl.getFinAccountYearId();
-    mVoucher = pPersistentVoucherNumberControl.getVoucher();
-    mResetBasis = pPersistentVoucherNumberControl.getResetBasis();
-    mStartVoucherNo = pPersistentVoucherNumberControl.getStartVoucherNo();
-    mVoucherLimit = pPersistentVoucherNumberControl.getVoucherLimit();
+    id = pPersistentVoucherNumberControl.getId();
+    finAccountYearId = pPersistentVoucherNumberControl.getFinAccountYearId();
+    voucher = pPersistentVoucherNumberControl.getVoucher();
+    resetBasis = pPersistentVoucherNumberControl.getResetBasis();
+    startVoucherNo = pPersistentVoucherNumberControl.getStartVoucherNo();
+    voucherLimit = pPersistentVoucherNumberControl.getVoucherLimit();
     mStatFlag = pPersistentVoucherNumberControl.getStatFlag();
     mStatUpFlag = pPersistentVoucherNumberControl.getStatUpFlag();
     mModifiedDate = pPersistentVoucherNumberControl.getModifiedDate();
@@ -97,64 +94,64 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
 
   @Override
   public Long getId() {
-    return mId;
+    return id;
   }
 
   @Override
   public Long getVoucherId() {
-    return mVoucherId;
+    return voucherId;
   }
 
   public void setVoucherId(Long pVoucherId) {
-    mVoucherId = pVoucherId;
+    voucherId = pVoucherId;
   }
 
   @Override
   public void setId(Long pId) {
-    mId = pId;
+    id = pId;
   }
 
   @Override
   public Long getFinAccountYearId() {
-    return mFinAccountYearId;
+    return finAccountYearId;
   }
 
   @Override
   public void setFinAccountYearId(Long pFinAccountYearId) {
-    mFinAccountYearId = pFinAccountYearId;
+    finAccountYearId = pFinAccountYearId;
   }
 
   @Override
   public Voucher getVoucher() {
-    return mVoucher == null ? sVoucherManager.get(mVoucherId) : mVoucher;
+    return voucher == null ? sVoucherManager.get(voucherId) : voucher;
   }
 
   @Override
   public ResetBasis getResetBasis() {
-    return mResetBasis;
+    return resetBasis;
   }
 
   @Override
   public void setResetBasis(ResetBasis pResetBasis) {
-    mResetBasis = pResetBasis;
+    resetBasis = pResetBasis;
   }
 
   public Integer getStartVoucherNo() {
-    return mStartVoucherNo;
+    return startVoucherNo;
   }
 
   public void setStartVoucherNo(Integer pStartVoucherNo) {
-    mStartVoucherNo = pStartVoucherNo;
+    startVoucherNo = pStartVoucherNo;
   }
 
   @Override
   public BigDecimal getVoucherLimit() {
-    return mVoucherLimit;
+    return voucherLimit;
   }
 
   @Override
   public void setVoucherLimit(BigDecimal pVoucherLimit) {
-    mVoucherLimit = pVoucherLimit;
+    voucherLimit = pVoucherLimit;
   }
 
   @Override
@@ -219,7 +216,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
 
   @Override
   public FinancialAccountYear getFinAccountYear() {
-    return mFinancialAccountYear == null ? sFinancialAccountYearManager.get(mFinAccountYearId) : mFinancialAccountYear;
+    return finAccountYear == null ? sFinancialAccountYearManager.get(finAccountYearId) : finAccountYear;
   }
 
   @Override

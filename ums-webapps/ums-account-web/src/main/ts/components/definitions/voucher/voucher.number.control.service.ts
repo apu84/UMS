@@ -36,6 +36,8 @@ module ums {
     }
 
     public saveAndReturnList(voucherNumberControl: IVoucherNumberControl[]): ng.IPromise<IVoucherNumberControl[]> {
+        console.log("Jsons");
+        console.log(voucherNumberControl);
       let defer: ng.IDeferred<IVoucherNumberControl[]> = this.$q.defer();
       this.httpClient.post(this.voucherNumberControlServiceURL + "/save", voucherNumberControl, HttpClient.MIME_TYPE_JSON)
           .success((response: IVoucherNumberControl[]) => defer.resolve(response))

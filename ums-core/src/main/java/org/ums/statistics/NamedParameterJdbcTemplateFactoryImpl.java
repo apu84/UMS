@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by Monjur-E-Morshed on 24-Dec-17.
  */
-@Component
 public class NamedParameterJdbcTemplateFactoryImpl implements NamedParameterJdbcTemplateFactory {
 
   private boolean mLoggingEnabled;

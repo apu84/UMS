@@ -2,7 +2,10 @@ package org.ums.persistent.dao.accounts;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.ums.decorator.accounts.VoucherNumberControlDaoDecorator;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
@@ -12,6 +15,7 @@ import org.ums.persistent.model.accounts.PersistentVoucherNumberControl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,25 +82,32 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   }
 
   @Override
-  public int update(List<MutableVoucherNumberControl> pMutableList) {
+  public int[] updateVoucherNumberControls(List<MutableVoucherNumberControl> pMutableList) {
     String query =
-        "update MST_VOUCHER_NUMBER_CONTROL SET RESET_BASIS=:resetBasis, START_VOUCHER_NO=:startVoucherNo, VOUCHER_LIMIT=:voucherLimit WHERE ID=:id";
-    Map<String, Object>[] maps = new HashMap[pMutableList.size()];
+        "update MST_VOUCHER_NUMBER_CONTROL set RESET_BASIS=:resetBasis, " +
+                "START_VOUCHER_NO=:startVoucherNo, VOUCHER_LIMIT=:voucherLimit, " +
+                "MODIFIED_DATE=:modifiedDate, MODIFIED_BY=:modifiedBy where id=:id";
+
+    SqlParameterSource[] parameters = new SqlParameterSource[pMutableList.size()];
     for(int i = 0; i < pMutableList.size(); i++) {
-      Map<String, Object> map = new HashMap<>();
-      map.put("resetBasis", pMutableList.get(i).getResetBasis().getId());
-      map.put("startVoucherNo", pMutableList.get(i).getStartVoucherNo());
-      map.put("voucherLimit", pMutableList.get(i).getVoucherLimit());
-      map.put("id", pMutableList.get(i).getId());
-      maps[i] = map;
+      BeanPropertySqlParameterSource beanPropertySqlParameterSource =
+          new BeanPropertySqlParameterSource(pMutableList.get(i));
+      beanPropertySqlParameterSource.registerSqlType("resetBasis", Types.VARCHAR);
+      parameters[i] = beanPropertySqlParameterSource;
     }
-    return mNamedParameterJdbcTemplate.batchUpdate(query, maps)[0];
+    int[] value=mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+    return value;
+  }
+
+  @Override
+  public int update(List<MutableVoucherNumberControl> pMutableList) {
+    return 0;
   }
 
   @Override
   public List<Long> create(List<MutableVoucherNumberControl> pMutableList) {
-    String query = "insert into MST_VOUCHER_NUMBER_CONTROL(ID, FIN_ACCOUNT_YEAR_ID, RESET_BASIS, START_VOUCHER_NO, VOUCHER_LIMIT, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY)" +
-        " values(:id, :finAccountYearId, :resetBasis, :startVoucherNo, :voucherLimit, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
+    String query = "insert into MST_VOUCHER_NUMBER_CONTROL(ID, FIN_ACCOUNT_YEAR_ID,VOUCHER_ID, RESET_BASIS, START_VOUCHER_NO, VOUCHER_LIMIT, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY)" +
+        " values(:id, :finAccountYearId, :voucherId, :resetBasis, :startVoucherNo, :voucherLimit, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
     pMutableList.forEach(v -> v.setId(mIdGenerator.getNumericId()));
     Map<String, Object>[] maps = new HashMap[pMutableList.size()];
     createMapArrayFromObject(pMutableList, maps);
@@ -109,6 +120,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
       Map<String, Object> map = new HashMap<>();
       map.put("id", pMutableList.get(i).getId());
       map.put("finAccountYearId", pMutableList.get(i).getFinAccountYearId());
+      map.put("voucherId", pMutableList.get(i).getVoucher().getId());
       map.put("resetBasis", pMutableList.get(i).getResetBasis().getId());
       map.put("startVoucherNo", pMutableList.get(i).getStartVoucherNo());
       map.put("voucherLimit", pMutableList.get(i).getVoucherLimit());
@@ -135,7 +147,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
       voucher.setResetBasis(ResetBasis.get(rs.getString("reset_basis")));
       voucher.setStartVoucherNo(rs.getInt("start_voucher_no"));
       voucher.setVoucherLimit(rs.getBigDecimal("voucher_limit"));
-      voucher.setStatFlag(rs.getString("stat_flat"));
+      voucher.setStatFlag(rs.getString("stat_flag"));
       voucher.setStatUpFlag(rs.getString("stat_up_flag"));
       voucher.setModifiedDate(rs.getDate("modified_date"));
       voucher.setModifiedBy(rs.getString("modified_by"));

@@ -36,7 +36,8 @@ public class PersistentVoucherDao extends VoucherDaoDecorator {
 
   @Override
   public Voucher get(Long pId) {
-    return super.get(pId);
+    String query = "select * from mst_voucher where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentVoucherRowMapper());
   }
 
   @Override
