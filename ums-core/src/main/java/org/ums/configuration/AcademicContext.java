@@ -35,7 +35,7 @@ import org.ums.statistics.JdbcTemplateFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+@Configuration("academicConfig")
 public class AcademicContext {
   @Autowired
   CacheFactory mCacheFactory;
