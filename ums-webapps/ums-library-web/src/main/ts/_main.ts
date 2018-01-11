@@ -79,6 +79,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 
 /// <reference path='data.ts'/>
 

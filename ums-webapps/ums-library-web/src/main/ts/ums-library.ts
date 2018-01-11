@@ -125,7 +125,8 @@ module ums {
             .state('patrons', {
                 url: "/patrons",
                 templateUrl: 'views/admin/patron/patron-home.html',
-                controller: 'PatronHome'
+                controller: 'PatronHome',
+                controllerAs: 'vm'
             })
             .state('circulation.checkOut', {
                 url: "/checkOut/:userId",
@@ -149,7 +150,17 @@ module ums {
                 url: "/patronCheckOut/:patronId",
                 templateUrl: 'views/admin/patron/patron-checkout.html',
                 controller: 'PatronCheckOut',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                                'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+                            ]
+                        });
+                    }]
+                }
             })
             .state('circulation.checkOut.patronDetail', {
                 url: "/patronDetail/:patronId",

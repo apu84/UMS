@@ -1,4 +1,10 @@
 module ums {
+
+    export interface ICommon {
+        id: number;
+        name: string;
+    }
+
     export interface IRecordSearchScope extends ng.IScope {
         data: any;
         recordList: Array<IRecord>;
@@ -13,14 +19,19 @@ module ums {
 
         record: IRecord;
         recordDetails: Function;
+
+        contributorList: Array<IContributor>;
+
+        contributorRoleOptions: Array<ICommon>;
+        roleMap: any;
     }
 
     export class RecordSearch {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'contributorService'];
 
         constructor(private $scope: IRecordSearchScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
-                    private catalogingService: CatalogingService, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private $stateParams: any, private contributorService: ContributorService) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
@@ -47,6 +58,12 @@ module ums {
                 yearFrom: '',
                 yearTo: ''
             };
+
+            $scope.contributorList = [];
+
+            $scope.contributorRoleOptions = libConstants.libContributorRoles;
+
+            this.getAllContributors();
 
             $scope.recordDetails = this.recordDetails.bind(this);
 
@@ -78,11 +95,11 @@ module ums {
             var filter: IFilter = <IFilter> {};
 
             filter.searchType = this.$scope.search.searchType;
-            if(this.$scope.search.searchType == 'basic') {
+            if (this.$scope.search.searchType == 'basic') {
                 filter.basicQueryField = this.$scope.choice;
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
             }
-            else if(this.$scope.search.searchType == 'advanced'){
+            else if (this.$scope.search.searchType == 'advanced') {
                 // filter.advancedQueryMap = <IAdvancedSearchMap>();
                 // // var advanceSearchMap: any = [];
                 // // advanceSearchMap[0] = {key: 'materialType', value: this.$scope.search.itemType};
@@ -117,21 +134,86 @@ module ums {
 
         private fetchRecords(pageNumber: number): void {
             this.catalogingService.fetchRecords(pageNumber, this.$scope.data.itemPerPage, "", this.$scope.search.filter).then((response: any) => {
-                this.$scope.recordIdList = Array<String>();
-                this.$scope.recordList = response.entries;
-                this.$scope.data.totalRecord = response.total;
-                for (var i = 0; i < this.$scope.recordList.length; i++) {
-                    this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
+                    this.$scope.recordIdList = Array<String>();
+                    this.$scope.recordList = response.entries;
+                    for (var a = 0; a < this.$scope.recordList.length; a++) {
+                        this.$scope.recordList[a].contributorList = Array<IContributor>();
+                        this.$scope.recordList[a].subjectList = Array<ISubjectEntry>();
+                        this.$scope.recordList[a].noteList = Array<INoteEntry>();
+
+                        this.setMaterialTypeName(this.$scope.recordList[a].materialType);
+
+                        var jsonObj = $.parseJSON(this.$scope.recordList[a].contributorJsonString);
+
+                        if (jsonObj != null) {
+                            for (var i = 0; i < jsonObj.length; i++) {
+                                var contributor = <IContributor> {};
+                                contributor.viewOrder = jsonObj[i].viewOrder;
+                                contributor.role = jsonObj[i].role;
+                                contributor.id = jsonObj[i].id;
+                                this.$scope.recordList[a].contributorList.push(contributor);
+                            }
+                        }
+
+                        var jsonObj = $.parseJSON(this.$scope.recordList[a].noteJsonString);
+
+                        if (jsonObj != null) {
+                            for (var i = 0; i < jsonObj.length; i++) {
+                                var note = {viewOrder: jsonObj[i].viewOrder, note: jsonObj[i].note};
+                                this.$scope.recordList[a].noteList.push(note);
+                            }
+                        }
+
+                        var jsonObj = $.parseJSON(this.$scope.recordList[a].subjectJsonString);
+                        if (jsonObj != null) {
+                            for (var i = 0; i < jsonObj.length; i++) {
+                                var subject = {viewOrder: jsonObj[i].viewOrder, subject: jsonObj[i].subject};
+                                this.$scope.recordList[a].subjectList.push(subject);
+                            }
+                        }
+
+                        var jsonObj = $.parseJSON(this.$scope.recordList[a].physicalDescriptionString);
+                        if (jsonObj != null) {
+                            var physicalDescription = {
+                                pagination: jsonObj.pagination,
+                                illustrations: jsonObj.illustrations,
+                                accompanyingMaterials: jsonObj.accompanyingMaterials,
+                                dimensions: jsonObj.dimensions,
+                                paperQuality: jsonObj.paperQuality
+                            };
+                            this.$scope.recordList[a].physicalDescription = physicalDescription;
+                        }
+
+                        for (var i = 0; i < this.$scope.recordList[a].contributorList.length; i++) {
+                            this.$scope.recordList[a].contributorName = this.$scope.contributorList[this.$scope.contributorList.map(function (e) {
+                                return e.id;
+                            }).indexOf(this.$scope.record.contributorList[i].id)].name;
+
+                            var role = this.$scope.contributorList[this.$scope.contributorList.map(function (e) {
+                                return e.id;
+                            }).indexOf(this.$scope.record.contributorList[i].id)].role;
+
+                            this.$scope.recordList[a].constributorRole = this.$scope.roleMap[role].name;
+                        }
+                    }
+
+
+                    this.$scope.data.totalRecord = response.total;
+                    for (var i = 0; i < this.$scope.recordList.length; i++) {
+                        this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
+                    }
+
+                    localStorage["lms_records"] = JSON.stringify(this.$scope.recordIdList);
+                    localStorage["lms_current_index"] = 0;
+                    localStorage["lms_total_record"] = response.total;
+                    localStorage["lms_page"] = pageNumber;
+
+                },
+
+                function errorCallback(response) {
+                    this.notify.error(response);
                 }
-
-                localStorage["lms_records"] = JSON.stringify(this.$scope.recordIdList);
-                localStorage["lms_current_index"] = 0;
-                localStorage["lms_total_record"] = response.total;
-                localStorage["lms_page"] = pageNumber;
-
-            }, function errorCallback(response) {
-                this.notify.error(response);
-            });
+            );
         }
 
         private navigateRecord(operation: string, mrnNo: string, pageNumber: number, currentIndex: number): void {
@@ -143,6 +225,30 @@ module ums {
         private recordDetails(recordIndex: number) {
             this.$scope.record = <IRecord>{};
             this.$scope.record = this.$scope.recordList[recordIndex];
+        }
+
+        public setMaterialTypeName(id) {
+            angular.forEach(this.$scope.data.materialTypeOptions, (attr: any) => {
+                if (attr.id == id) {
+                    this.$scope.record.materialTypeName = attr.name;
+                }
+            });
+        }
+
+        private getAllContributors(): void {
+            this.contributorService.fetchAllContributors().then((response: any) => {
+                this.$scope.contributorList = response.entries;
+            }, function errorCallback(response) {
+                this.notify.error(response);
+            });
+        }
+
+        private createMap() {
+            this.$scope.roleMap = {};
+
+            for (let i = 0; i < this.$scope.contributorRoleOptions.length; i++) {
+                this.$scope.roleMap[this.$scope.contributorRoleOptions[i].id] = this.$scope.contributorRoleOptions[i];
+            }
         }
 
     }

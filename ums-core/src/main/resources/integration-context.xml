@@ -9,8 +9,8 @@
 
 
   <integration:gateway
-      service-interface="org.ums.integration.FileWriterGateway"
-      default-request-channel="ftpChannel"></integration:gateway>
+          service-interface="org.ums.integration.FileWriterGateway"
+          default-request-channel="ftpChannel"></integration:gateway>
 
   <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
     <property name="host" value="${ftp.localhost}"/>
@@ -20,25 +20,43 @@
   </bean>
 
   <ftp:outbound-gateway
-      session-factory="ftpClientFactory"
-      request-channel="ftpChannel"
-      command="get"
-      command-options="-stream"
-      expression="payload"
-      reply-channel="outputChannel">
+          session-factory="ftpClientFactory"
+          request-channel="ftpChannel"
+          command="get"
+          command-options="-stream"
+          expression="payload"
+          reply-channel="outputChannel">
 
   </ftp:outbound-gateway>
 
   <integration:channel id="lmsChannel"/>
+  <integration:channel id="photoUploadChannel"/>
+
+  <!--<integration:recipient-list-router id="router" input-channel="publishSubscribeChannel">
+    <integration:recipient channel="lmsChannel"></integration:recipient>
+    <integration:recipient channel="photoUploadChannel"></integration:recipient>
+  </integration:recipient-list-router>-->
+
+  <!--  <integration:publish-subscribe-channel id="publishSubscribeChannel">
+    </integration:publish-subscribe-channel>
+    <ftp:outbound-channel-adapter
+        session-factory="ftpClientFactory"
+        channel="lmsChannel"
+        remote-directory="files/lms"
+        auto-create-directory="true"
+        remote-filename-generator-expression="headers['fileName']">
+
+    </ftp:outbound-channel-adapter>-->
+
+
   <ftp:outbound-channel-adapter
-      session-factory="ftpClientFactory"
-      channel="lmsChannel"
-      remote-directory="files/lms"
-      auto-create-directory="true"
-      remote-filename-generator-expression="headers['fileName']">
+          session-factory="ftpClientFactory"
+          channel="photoUploadChannel"
+          remote-directory="files/user-photo"
+          auto-create-directory="true"
+          remote-filename-generator-expression="headers['fileName']">
 
   </ftp:outbound-channel-adapter>
-
 
   <bean id="mp" class="org.ums.integration.MessageManipulator"/>
   <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>

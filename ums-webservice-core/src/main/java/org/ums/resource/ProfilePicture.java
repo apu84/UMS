@@ -1,13 +1,17 @@
 package org.ums.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
@@ -17,15 +21,20 @@ import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 @Component
 @Path("/profilePicture")
@@ -53,8 +62,10 @@ public class ProfilePicture extends Resource {
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  @Qualifier("lmsChannel")
-  MessageChannel lmsChannel;// = applicationContext.getBean("lmsChannel", MessageChannel.class);
+  @Qualifier("photoUploadChannel")
+  @Autowired
+  MessageChannel photoUploadChannel;// = applicationContext.getBean("lmsChannel",
+                                    // MessageChannel.class);
 
   // KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate",
   // KafkaTemplate.class);
@@ -112,5 +123,27 @@ public class ProfilePicture extends Resource {
   private String getTimeStamp() {
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     return "timestamp:" + timestamp.getTime();
+  }
+
+  @POST
+  @Path("/upload")
+  @Consumes({MediaType.MULTIPART_FORM_DATA})
+  public Response uploadFile(@FormDataParam("files") File pInputStream, @FormDataParam("id") String id,
+      @FormDataParam("name") String name) throws IOException {
+
+    File newFile = new File(pInputStream.getParent(), id + ".jpg");
+    Files.move(pInputStream.toPath(), newFile.toPath());
+
+    Message<File> messageA = MessageBuilder.withPayload(newFile).build();
+    photoUploadChannel.send(messageA);
+
+    pInputStream.deleteOnExit();
+    newFile.delete();
+    System.gc();
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+
   }
 }

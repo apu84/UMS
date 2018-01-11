@@ -86,6 +86,13 @@ module ums {
         noteJsonString: string;
         subjectJsonString: string;
         physicalDescriptionString: string;
+        totalItems: number;
+        totalAvailable: number;
+        totalCheckedOut: number;
+        totalOnHold: number;
+
+        contributorName?: string;
+        constributorRole?: string;
     }
 
     export interface IItem {

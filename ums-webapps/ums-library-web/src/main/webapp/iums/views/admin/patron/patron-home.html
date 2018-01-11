@@ -59,61 +59,27 @@
 
 <div class="panel panel-default">
     <div class="panel-body" style="padding-top: 17px;" id="panelBody1">
-        <div class="row">
-            <div class="col-md-12">
-                <center>
-                    <div style="width: 600px;">
-                        <div class="searchLabel" style="float: left;margin-left: 11px;">Enter patron card number or
-                            partial name:
-                        </div>
-                        <data-circulation-search-box circulationType="searchPatron"></data-circulation-search-box>
-                    </div>
-                </center>
-            </div>
-        </div>
+
+        <!--<div class="col-md-6">-->
+        <!--<input type="file" file-input="vm.file" file-preview="filepreview"/>-->
+        <!--</div>-->
+        <!--<div class="col-md-6">-->
+        <!--<img ng-src="{{filepreview}}" class="img-responsive" ng-show="filepreview"/>-->
+        <!--</div>-->
+        <!--<button type="button" data-ng-click="vm.submitImage()">Upload Image</button>-->
+        <!--{{vm.file}}-->
 
         <div class="row">
-            <div class="col-md-2">
-
-            </div>
             <div class="col-md-4">
-                <h3>Current Page: {{ pagination.currentPage }}</h3>
-                <label>items per page:</label>
-                <input type="number" min="1" max="100" class="form-control" ng-model="data.coursePerPage">
+                <input type='file' id="inputFile"/>
             </div>
-            <div class="col-md-2">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
-                    <thead>
-                    <tr>
-                        <th class="header"
-                            column-sorter="sort('course_no')">Course No
-                        </th>
-                        <th>Course Title</th>
-                    </tr>
-                    </tr></thead>
-                    <tbody>
-                    <tr dir-paginate="course in courses | itemsPerPage: data.coursePerPage"
-                        current-page="pagination.currentPage" total-items="totalCourses">
-                        <td>{{ course.no }}</td>
-                        <td>{{ course.title }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <dir-pagination-controls boundary-links="true"
-                                         on-page-change="pageChanged(newPageNumber)"
-                                         template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
-
+            <div class="col-md-6">
+                <img id="image_upload_preview"/>
             </div>
         </div>
-
+        <button type="button" id="submitBtn" data-ng-click="vm.uploadImage()">Upload Image</button>
 
     </div>
-
 </div>
 
 
@@ -124,4 +90,52 @@
     var height = div.height();
     div1.css('height', height);
     */
+
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png)$");
+            if (regex.test(input.value.toLowerCase())) {
+                if (typeof (input.files[0]) != "undefined") {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(input.files[0]);
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            var height = this.height;
+                            var width = this.width;
+                            if (height > 128 || width > 128) {
+                                alert("Height and Width must not exceed 128px.");
+                                $("#inputFile").val("");
+                                return false;
+                            }
+                            $('#image_upload_preview').attr('src', e.target.result);
+                            $("#submitBtn").show();
+                            return true;
+                        };
+                    }
+                } else {
+                    alert("This browser does not support HTML5.");
+                    return false;
+                }
+            } else {
+                alert("Please select a valid Image file.");
+                return false;
+            }
+        }
+
+        //     var reader = new FileReader();
+        //
+        //     reader.onload = function (e) {
+        //         $('#image_upload_preview').attr('src', e.target.result);
+        //     };
+        //
+        //     reader.readAsDataURL(input.files[0]);
+        // }
+    }
+
+    $("#inputFile").change(function () {
+        readURL(this);
+    });
 </script>

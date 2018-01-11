@@ -97,7 +97,7 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
       persistentCirculation.setPatronId(resultSet.getString("PATRON_ID"));
       persistentCirculation.setMfn(resultSet.getLong("MFN"));
       persistentCirculation.setIssueDate(resultSet.getDate("ISSUE_DATE"));
-      persistentCirculation.setDueDate(resultSet.getDate("DUE_DATE"));
+      persistentCirculation.setDueDate(resultSet.getTimestamp("DUE_DATE"));
       persistentCirculation.setReturnDate(resultSet.getDate("RETURN_DATE"));
       persistentCirculation.setFineStatus(resultSet.getInt("FINE_STATUS"));
       persistentCirculation.setAccessionNumber(resultSet.getString("ACCESSION_NUMBER"));

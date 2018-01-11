@@ -111,4 +111,12 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setPublisherId(Long pPublisherId);
 
+  void setTotalItems(int pTotalItems);
+
+  void setTotalAvailable(int pTotalAvailable);
+
+  void setTotalCheckedOut(int pTotalCheckedOut);
+
+  void setTotalOnHold(int pTotalOnHold);
+
 }

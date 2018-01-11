@@ -44,11 +44,9 @@
                     <input id="dueDate"
                            type="text"
                            data-ng-model="vm.circulation.dueDate"
-                           data-date-format="dd/mm/yyyy"
-                           data-provide="datepicker"
                            placeholder="DD/MM/YYYY"
                            autocomplete="off"
-                           class="form-control">
+                           class="datetimepicker-default form-control">
                 </div>
                 <div class="col-md-12"><br/></div>
                 <div class="col-md-4">
@@ -102,7 +100,7 @@
     <div class="col-md-12">
         <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-out Items</p>
         <div data-ng-show="!vm.showCheckedOutItems">
-            <button type="button" data-ng-click="vm.getCirculation()">Show Checked-out Items</button>
+            <button type="button" data-ng-click="vm.getCheckedOutItems()">Show Checked-out Items</button>
         </div>
         <div data-ng-show="vm.showCheckedOutItems">
             <button type="button" data-ng-click="vm.showCheckedOutItems=false">Hide Checked-out Items</button>

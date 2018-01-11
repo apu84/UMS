@@ -30,26 +30,24 @@ module ums {
 
         public getUser(id: string): ng.IPromise<any> {
             var defer = this.$q.defer();
+
             if (id == undefined || id == null || id == "") {
-                this.notify.error("Invalid UserId");
-                defer.resolve("Invalid User Id");
+                defer.reject("Patron id is empty");
             }
             else if (id.length == 9 || id.length == 6) {
-
                 var url = "user/view/id/" + id;
 
                 this.httpClient.get(url, 'application/json',
                     (json: any, etag: string) => {
-                        var user: any = json.entries;
-                        defer.resolve(user);
+                        defer.resolve(json.entries);
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {
-                        defer.resolve(response);
+                        console.log(response);
+                        defer.reject("");
                     });
             }
             else{
-                this.notify.error("Invalid UserId");
-                defer.resolve("Invalid User Id");
+                defer.reject("Patron id too short or too long");
             }
             return defer.promise;
         }

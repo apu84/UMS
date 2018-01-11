@@ -10,7 +10,7 @@ module ums {
         private item: IItem;
         private showBookInformation: boolean;
 
-        constructor(private $stateParams:any,
+        constructor(private $stateParams: any,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private userService: UserService,
@@ -18,12 +18,12 @@ module ums {
                     private catalogingService: CatalogingService) {
 
             this.userId = $stateParams.patronId;
-            console.log(this.userId);
             this.circulation = <ILibraryCirculation>{};
+            this.addDate();
         }
 
 
-        private getCirculation(): void {
+        private getCheckedOutItems(): void {
             this.showCheckedOutItems = true;
             this.circulations = [];
             this.circulationService.getCirculation(this.userId).then((data: any) => {
@@ -43,7 +43,7 @@ module ums {
             if (flag == 1) {
                 this.convertToJson('update').then((json: any) => {
                     this.circulationService.updateCirculation(json).then((data: any) => {
-                        this.getCirculation();
+                        this.getCheckedOutItems();
                         flag = 0;
                     });
                 });
@@ -57,8 +57,8 @@ module ums {
         private checkoutSubmit(): void {
             if ((this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "")
                 && (this.circulation.dueDate != undefined && this.circulation.dueDate != null && this.circulation.dueDate != "")) {
-                if(this.circulation.itemCode == this.item.accessionNumber) {
-                    if(this.item.circulationStatus == 0) {
+                if (this.circulation.itemCode == this.item.accessionNumber) {
+                    if (this.item.circulationStatus == 0) {
                         this.convertToJson('save')
                             .then((json: any) => {
                                 this.circulationService.saveCirculation(json)
@@ -66,7 +66,7 @@ module ums {
                                         if (message == "Error") {
                                         }
                                         else {
-                                            this.getCirculation();
+                                            this.getCheckedOutItems();
                                             this.showCheckedOutItems = true;
                                             this.circulation.itemCode = "";
                                             this.fetchRecord();
@@ -74,11 +74,11 @@ module ums {
                                     });
                             });
                     }
-                    else{
+                    else {
                         this.notify.error("Item already checkedOut");
                     }
                 }
-                else{
+                else {
                     this.notify.error("Wrong Item Code");
                 }
 
@@ -88,14 +88,14 @@ module ums {
             }
         }
 
-        private fetchRecord(): void{
-            if(this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "") {
+        private fetchRecord(): void {
+            if (this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "") {
                 this.catalogingService.getItem(this.circulation.itemCode).then((data: any) => {
                     console.log(data);
                     this.item = data;
 
                     console.log(this.item);
-                    if(this.item.mfnNo) {
+                    if (this.item.mfnNo) {
                         this.showBookInformation = true;
                         this.catalogingService.fetchRecord(this.item.mfnNo).then((data: any) => {
                             this.record = data;
@@ -107,7 +107,7 @@ module ums {
                     }
                 });
             }
-            else{
+            else {
                 this.showBookInformation = false;
             }
         }
@@ -125,6 +125,27 @@ module ums {
             }
             defer.resolve(JsonObject);
             return defer.promise;
+        }
+
+        private addDate(): void {
+            console.log("here");
+            var date = new Date();
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yyyy = date.getFullYear();
+            let internalThis: any = this;
+            internalThis.circulation.dueDate = mm + "/" + dd + "/" + yyyy + ' 05:00 PM';
+            $('.datetimepicker-default').datetimepicker({
+                format:'DD/MM/YYYY hh:mm A',
+                minDate: mm + "/" + dd + "/" + yyyy + ' 05:00 PM'
+            });
+            $('.datetimepicker-default').blur(function (e) {
+                console.log($(this).val());
+
+                 internalThis.circulation.dueDate = $(this).val();
+                console.log(internalThis.circulation.dueDate);
+
+            });
         }
     }
 

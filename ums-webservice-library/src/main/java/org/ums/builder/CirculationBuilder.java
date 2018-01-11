@@ -13,6 +13,9 @@ import org.ums.manager.library.RecordManager;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
@@ -32,7 +35,11 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     pBuilder.add("mfn", pReadOnly.getMfn().toString());
     pBuilder.add("itemCode", pReadOnly.getAccessionNumber());
     pBuilder.add("issueDate", mDateFormat.format(pReadOnly.getIssueDate()));
-    pBuilder.add("dueDate", mDateFormat.format(pReadOnly.getDueDate()));
+    java.text.DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aaa");
+    String outputString = outputFormat.format(pReadOnly.getDueDate());
+    System.out.println("pReadOnly.getDueDate(): -- " + pReadOnly.getDueDate());
+    System.out.println("outputString: -- " + outputString);
+    pBuilder.add("dueDate", outputString);
     pBuilder.add("returnDate", pReadOnly.getReturnDate() == null ? "" : mDateFormat.format(pReadOnly.getReturnDate()));
     pBuilder.add("fineStatus", pReadOnly.getFineStatus());
     pBuilder.add("fineStatusString", pReadOnly.getFineStatus() == 0 ? "No Fine Applied" : "Fine Applied");
@@ -43,6 +50,15 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
 
   @Override
   public void build(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    java.text.DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aaa");
+    Date date = null;
+    try {
+      date = dateFormat.parse(pJsonObject.getString("dueDate"));
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
+    long time = date.getTime();
+
     pMutable.setId(pJsonObject.containsKey("circulationId") ? Long.parseLong(pJsonObject.getString("circulationId"))
         : null);
     pMutable.setPatronId(pJsonObject.getString("patronId"));
@@ -50,7 +66,7 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     pMutable
         .setIssueDate(pJsonObject.containsKey("issueDate") ? pJsonObject.getString("issueDate") == null ? new Date()
             : mDateFormat.parse(pJsonObject.getString("issueDate")) : null);
-    pMutable.setDueDate(mDateFormat.parse(pJsonObject.getString("dueDate")));
+    pMutable.setDueDate(new Timestamp(time));
     pMutable.setFineStatus(pJsonObject.containsKey("fineStatus") ? pJsonObject.getInt("fineStatus") : 0);
 
     pMutable.setReturnDate(pJsonObject.containsKey("returnDate") ? pJsonObject.getString("returnDate") == null

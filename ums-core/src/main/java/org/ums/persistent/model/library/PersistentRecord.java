@@ -73,6 +73,11 @@ public class PersistentRecord implements MutableRecord {
   private String mSubjectJsonString;
   private String mPhysicalDescriptionString;
 
+  private int mTotalItems;
+  private int mTotalAvailable;
+  private int mTotalCheckedOut;
+  private int mTotalOnHold;
+
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sRecordManager = applicationContext.getBean("recordManager", RecordManager.class);
@@ -121,6 +126,10 @@ public class PersistentRecord implements MutableRecord {
     mKeywords = pPersistentRecord.getKeyWords();
     mSubjectList = pPersistentRecord.getSubjectList();
     mNoteList = pPersistentRecord.getNoteList();
+    mTotalItems = pPersistentRecord.getTotalItems();
+    mTotalAvailable = pPersistentRecord.getTotalAvailable();
+    mTotalCheckedOut = pPersistentRecord.getTotalCheckedOut();
+    mTotalOnHold = pPersistentRecord.getTotalOnHold();
     mLastModified = pPersistentRecord.getLastModified();
 
   }
@@ -578,6 +587,26 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
+  public int getTotalItems() {
+    return mTotalItems;
+  }
+
+  @Override
+  public int getTotalAvailable() {
+    return mTotalAvailable;
+  }
+
+  @Override
+  public int getTotalCheckedOut() {
+    return mTotalCheckedOut;
+  }
+
+  @Override
+  public int getTotalOnHold() {
+    return mTotalOnHold;
+  }
+
+  @Override
   public void setLastUpdatedBy(String pLastUpdatedBy) {
     mLastUpdatedBy = pLastUpdatedBy;
   }
@@ -626,5 +655,25 @@ public class PersistentRecord implements MutableRecord {
 
   public void setPublisherId(Long pPublisherId) {
     this.mPublisherId = pPublisherId;
+  }
+
+  @Override
+  public void setTotalItems(int pTotalItems) {
+    mTotalItems = pTotalItems;
+  }
+
+  @Override
+  public void setTotalAvailable(int pTotalAvailable) {
+    mTotalAvailable = pTotalAvailable;
+  }
+
+  @Override
+  public void setTotalCheckedOut(int pTotalCheckedOut) {
+    mTotalCheckedOut = pTotalCheckedOut;
+  }
+
+  @Override
+  public void setTotalOnHold(int pTotalOnHold) {
+    mTotalOnHold = pTotalOnHold;
   }
 }
