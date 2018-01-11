@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.PeriodCloseDaoDecorator;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
-import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.enums.accounts.definitions.OpenCloseFlag;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentPeriodClose;
@@ -69,7 +68,7 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
             + ":id, :closeMonth, :closeYear, :periodClosingFlag, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
     Map namedParameters = new HashMap();
     namedParameters.put("id", pMutable.getId());
-    namedParameters.put("closeMonth", pMutable.getCloseMonth().getValue());
+    namedParameters.put("closeMonth", pMutable.getMonth().getId());
     namedParameters.put("closeYear", pMutable.getCloseYear());
     namedParameters.put("periodClosingFlag", pMutable.getPeriodClosingFlag().getValue());
     namedParameters.put("statFlag", pMutable.getStatFlag());
@@ -85,8 +84,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
     public PeriodClose mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutablePeriodClose periodClose = new PersistentPeriodClose();
       periodClose.setId(rs.getLong("id"));
-      periodClose.setFinAccountYearId(rs.getLong("fin_account_year_id"));
-      periodClose.setCloseMonth(MonthType.get(rs.getInt("close_month")));
+      periodClose.setFinancialAccountYearId(rs.getLong("fin_account_year_id"));
+      periodClose.setMonthId(rs.getLong("month_id"));
       periodClose.setCloseYear(rs.getInt("close_year"));
       periodClose.setPeriodClosingFlag(OpenCloseFlag.get(rs.getString("period_closing_flag")));
       periodClose.setStatFlag(rs.getString("stat_flag"));

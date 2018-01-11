@@ -7,11 +7,8 @@ import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
 import java.util.concurrent.ConcurrentMap;
-import java.nio.file.Path;
 
 public class MapperDao<K, V extends Serializable> implements Mapper<K, V> {
   private DB mDB;

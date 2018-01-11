@@ -1,27 +1,38 @@
 package org.ums.persistent.model.accounts;
 
-import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
-import org.ums.enums.accounts.definitions.MonthType;
-import org.ums.enums.accounts.definitions.OpenCloseFlag;
-
-import java.util.Date;
-
 /**
  * Created by Monjur-E-Morshed on 04-Jan-18.
  */
+
+import org.springframework.context.ApplicationContext;
+import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.Month;
+import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
+import org.ums.enums.accounts.definitions.OpenCloseFlag;
+import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.manager.accounts.MonthManager;
+import org.ums.manager.accounts.PeriodCloseManager;
+
+import java.util.Date;
+
 public class PersistentPeriodClose implements MutablePeriodClose {
 
+  private static MonthManager sMonthManager;
+  private static FinancialAccountYearManager sFinancialAccountYearManager;
+  private static PeriodCloseManager sPeriodCloseManager;
   private Long mId;
-  private Long mFinAccountYearId;
-  private MonthType mCloseMonth;
+  private Month mMonth;
+  private Long mMonthId;
+  private FinancialAccountYear mFinancialAccountYear;
+  private Long mFinancialAccountYearId;
   private Integer mCloseYear;
   private OpenCloseFlag mPeriodClosingFlag;
   private String mStatFlag;
   private String mStatUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
-
-  public PersistentPeriodClose() {}
+  private String mLastModified;
 
   @Override
   public Long getId() {
@@ -30,27 +41,48 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setId(Long pId) {
-    mId = pId;
+    this.mId = pId;
   }
 
   @Override
-  public Long getFinAccountYearId() {
-    return mFinAccountYearId;
+  public Month getMonth() {
+    return mMonth == null ? sMonthManager.get(mMonthId) : sMonthManager.validate(mMonth);
   }
 
   @Override
-  public void setFinAccountYearId(Long pFinAccountYearId) {
-    mFinAccountYearId = pFinAccountYearId;
+  public void setMonth(Month pMonth) {
+    this.mMonth = pMonth;
   }
 
   @Override
-  public MonthType getCloseMonth() {
-    return mCloseMonth;
+  public Long getMonthId() {
+    return mMonthId;
   }
 
   @Override
-  public void setCloseMonth(MonthType pCloseMonth) {
-    mCloseMonth = pCloseMonth;
+  public void setMonthId(Long pMonthId) {
+    this.mMonthId = pMonthId;
+  }
+
+  @Override
+  public FinancialAccountYear getFinancialAccountYear() {
+    return mFinancialAccountYear == null ? sFinancialAccountYearManager.get(mFinancialAccountYearId)
+        : sFinancialAccountYearManager.validate(mFinancialAccountYear);
+  }
+
+  @Override
+  public void setFinancialAccountYear(FinancialAccountYear pFinancialAccountYear) {
+    this.mFinancialAccountYear = pFinancialAccountYear;
+  }
+
+  @Override
+  public Long getFinancialAccountYearId() {
+    return mFinancialAccountYearId;
+  }
+
+  @Override
+  public void setFinancialAccountYearId(Long pFinancialAccountYearId) {
+    this.mFinancialAccountYearId = pFinancialAccountYearId;
   }
 
   @Override
@@ -60,7 +92,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setCloseYear(Integer pCloseYear) {
-    mCloseYear = pCloseYear;
+    this.mCloseYear = pCloseYear;
   }
 
   @Override
@@ -70,7 +102,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setPeriodClosingFlag(OpenCloseFlag pPeriodClosingFlag) {
-    mPeriodClosingFlag = pPeriodClosingFlag;
+    this.mPeriodClosingFlag = pPeriodClosingFlag;
   }
 
   @Override
@@ -80,7 +112,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setStatFlag(String pStatFlag) {
-    mStatFlag = pStatFlag;
+    this.mStatFlag = pStatFlag;
   }
 
   @Override
@@ -90,7 +122,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setStatUpFlag(String pStatUpFlag) {
-    mStatUpFlag = pStatUpFlag;
+    this.mStatUpFlag = pStatUpFlag;
   }
 
   @Override
@@ -100,7 +132,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setModifiedDate(Date pModifiedDate) {
-    mModifiedDate = pModifiedDate;
+    this.mModifiedDate = pModifiedDate;
   }
 
   @Override
@@ -110,36 +142,61 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   @Override
   public void setModifiedBy(String pModifiedBy) {
-    mModifiedBy = pModifiedBy;
-  }
-
-  @Override
-  public MutablePeriodClose edit() {
-    return null;
-  }
-
-  @Override
-  public Long create() {
-    return null;
-  }
-
-  @Override
-  public void update() {
-
-  }
-
-  @Override
-  public void delete() {
-
+    this.mModifiedBy = pModifiedBy;
   }
 
   @Override
   public String getLastModified() {
-    return null;
+    return mLastModified;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
+    this.mLastModified = pLastModified;
+  }
 
+  @Override
+  public Long create() {
+    return sPeriodCloseManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sPeriodCloseManager.update(this);
+  }
+
+  @Override
+  public MutablePeriodClose edit() {
+    return new PersistentPeriodClose(this);
+  }
+
+  @Override
+  public void delete() {
+    sPeriodCloseManager.delete(this);
+  }
+
+  public PersistentPeriodClose() {}
+
+  public PersistentPeriodClose(MutablePeriodClose pPeriodClose) {
+    setId(pPeriodClose.getId());
+    setMonth(pPeriodClose.getMonth());
+    setMonthId(pPeriodClose.getMonthId());
+    setFinancialAccountYear(pPeriodClose.getFinancialAccountYear());
+    setFinancialAccountYearId(pPeriodClose.getFinancialAccountYearId());
+    setCloseYear(pPeriodClose.getCloseYear());
+    setPeriodClosingFlag(pPeriodClose.getPeriodClosingFlag());
+    setStatFlag(pPeriodClose.getStatFlag());
+    setStatUpFlag(pPeriodClose.getStatUpFlag());
+    setModifiedDate(pPeriodClose.getModifiedDate());
+    setModifiedBy(pPeriodClose.getModifiedBy());
+    setLastModified(pPeriodClose.getLastModified());
+  }
+
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sMonthManager = applicationContext.getBean("monthManager", MonthManager.class);
+    sFinancialAccountYearManager =
+        applicationContext.getBean("financialAccountYearManager", FinancialAccountYearManager.class);
+    sPeriodCloseManager = applicationContext.getBean("periodCloseManager", PeriodCloseManager.class);
   }
 }

@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.ums.decorator.accounts.VoucherNumberControlDaoDecorator;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
@@ -16,6 +15,7 @@ import org.ums.persistent.model.accounts.PersistentVoucherNumberControl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   private IdGenerator mIdGenerator;
 
   public PersistentVoucherNumberControlDao(JdbcTemplate pJdbcTemplate,
-      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+                                           NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -52,7 +52,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   @Override
   public VoucherNumberControl get(Long pId) {
     String query = "select * from mst_voucher_number_control where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentVoucherNumberControlRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentVoucherNumberControlRowMapper());
   }
 
   @Override
@@ -84,24 +84,50 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   @Override
   public int[] updateVoucherNumberControls(List<MutableVoucherNumberControl> pMutableList) {
     String query =
-        "update MST_VOUCHER_NUMBER_CONTROL set RESET_BASIS=:resetBasis, " +
-                "START_VOUCHER_NO=:startVoucherNo, VOUCHER_LIMIT=:voucherLimit, " +
-                "MODIFIED_DATE=:modifiedDate, MODIFIED_BY=:modifiedBy where id=:id";
+        "update MST_VOUCHER_NUMBER_CONTROL set  RESET_BASIS=:resetBasis,START_VOUCHER_NO=:startVoucherNo, VOUCHER_LIMIT=:voucherLimit, "
+            + "MODIFIED_DATE=:modifiedDate, MODIFIED_BY=:modifiedBy where id=:id";
 
     SqlParameterSource[] parameters = new SqlParameterSource[pMutableList.size()];
-    for(int i = 0; i < pMutableList.size(); i++) {
+    for (int i = 0; i < pMutableList.size(); i++) {
       BeanPropertySqlParameterSource beanPropertySqlParameterSource =
           new BeanPropertySqlParameterSource(pMutableList.get(i));
-      beanPropertySqlParameterSource.registerSqlType("resetBasis", Types.VARCHAR);
+      beanPropertySqlParameterSource.registerSqlType("resetBasis", Types.CHAR);
       parameters[i] = beanPropertySqlParameterSource;
     }
-    int[] value=mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+    int[] value = new int[pMutableList.size()];
+    try {
+
+      value = mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     return value;
+    /*
+     * String query =
+     * "update MST_VOUCHER_NUMBER_CONTROL set  RESET_BASIS=?,START_VOUCHER_NO=?, VOUCHER_LIMIT=?, "
+     * + "MODIFIED_DATE=?, MODIFIED_BY=? where id=?"; List<Object[]> params =
+     * getUpdateParamList(pMutableList); int[] values = mJdbcTemplate.batchUpdate(query, params);
+     * return values;
+     */
   }
 
   @Override
   public int update(List<MutableVoucherNumberControl> pMutableList) {
-    return 0;
+    String query =
+        "update MST_VOUCHER_NUMBER_CONTROL set  RESET_BASIS=:resetBasis,START_VOUCHER_NO=:startVoucherNo, VOUCHER_LIMIT=:voucherLimit, "
+            + "MODIFIED_DATE=:modifiedDate, MODIFIED_BY=:modifiedBy where id=:id";
+    Map<String, Object>[] maps = new HashMap[pMutableList.size()];
+    createMapArrayFromObject(pMutableList, maps);
+    return mNamedParameterJdbcTemplate.batchUpdate(query, maps).length;
+  }
+
+  private List<Object[]> getUpdateParamList(List<MutableVoucherNumberControl> pMutableVoucherNumberControls) {
+    List<Object[]> params = new ArrayList<>();
+
+    for (MutableVoucherNumberControl v : pMutableVoucherNumberControls) {
+      params.add(new Object[]{v.getStartVoucherNo(), v.getId()});
+    }
+    return params;
   }
 
   @Override
@@ -110,13 +136,14 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
         " values(:id, :finAccountYearId, :voucherId, :resetBasis, :startVoucherNo, :voucherLimit, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
     pMutableList.forEach(v -> v.setId(mIdGenerator.getNumericId()));
     Map<String, Object>[] maps = new HashMap[pMutableList.size()];
+
     createMapArrayFromObject(pMutableList, maps);
     mNamedParameterJdbcTemplate.batchUpdate(query, maps);
     return null;
   }
 
   private void createMapArrayFromObject(List<MutableVoucherNumberControl> pMutableList, Map<String, Object>[] pMaps) {
-    for(int i = 0; i < pMutableList.size(); i++) {
+    for (int i = 0; i < pMutableList.size(); i++) {
       Map<String, Object> map = new HashMap<>();
       map.put("id", pMutableList.get(i).getId());
       map.put("finAccountYearId", pMutableList.get(i).getFinAccountYearId());

@@ -6,99 +6,100 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.accounts.MutableVoucher;
-import org.ums.manager.accounts.VoucherManager;
+import org.ums.domain.model.mutable.accounts.MutableMonth;
+import org.ums.manager.accounts.MonthManager;
 
 /**
- * Created by Monjur-E-Morshed on 08-Jan-18.
+ * Created by Monjur-E-Morshed on 11-Jan-18.
  */
-
-public class PersistentVoucher implements MutableVoucher {
+public class PersistentMonth implements MutableMonth {
 
   @JsonIgnore
-  private static VoucherManager sVoucherManager;
+  private static MonthManager sMonthManager;
   @JsonProperty("id")
-  private Long id;
-  @JsonProperty("name")
-  private String name;
-  @JsonProperty("shortName")
-  private String shortName;
   @JsonIgnore
-  private String lastModified;
+  private Long mId;
+  @JsonProperty("name")
+  @JsonIgnore
+  private String mName;
+  @JsonProperty("shortName")
+  private String mShortName;
+  @JsonIgnore
+  private String mLastModified;
 
   @Override
   @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
-    return id;
+    return mId;
   }
 
   @Override
   public void setId(Long pId) {
-    this.id = pId;
+    this.mId = pId;
   }
 
   @Override
   public String getName() {
-    return name;
+    return mName;
   }
 
   @Override
   public void setName(String pName) {
-    this.name = pName;
+    this.mName = pName;
   }
 
   @Override
   public String getShortName() {
-    return shortName;
+    return mShortName;
   }
 
   @Override
   public void setShortName(String pShortName) {
-    this.shortName = pShortName;
+    this.mShortName = pShortName;
   }
 
   @Override
   public String getLastModified() {
-    return lastModified;
+    return mLastModified;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
-    this.lastModified = pLastModified;
+    this.mLastModified = pLastModified;
   }
 
   @Override
   public Long create() {
-    return sVoucherManager.create(this);
+    return sMonthManager.create(this);
   }
 
   @Override
   public void update() {
-    sVoucherManager.update(this);
+    sMonthManager.update(this);
   }
 
   @Override
-  public MutableVoucher edit() {
-    return new PersistentVoucher(this);
+  public MutableMonth edit() {
+    return new PersistentMonth(this);
   }
 
   @Override
   public void delete() {
-    sVoucherManager.delete(this);
+    sMonthManager.delete(this);
   }
 
-  public PersistentVoucher() {
+  public PersistentMonth() {
   }
 
-  public PersistentVoucher(MutableVoucher pVoucher) {
-    setId(pVoucher.getId());
-    setName(pVoucher.getName());
-    setShortName(pVoucher.getShortName());
-    setLastModified(pVoucher.getLastModified());
+  public PersistentMonth(MutableMonth pMonth) {
+    setId(pMonth.getId());
+    setName(pMonth.getName());
+    setShortName(pMonth.getShortName());
+    setLastModified(pMonth.getLastModified());
   }
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
+    sMonthManager = applicationContext.getBean("monthManager", MonthManager.class);
   }
 }

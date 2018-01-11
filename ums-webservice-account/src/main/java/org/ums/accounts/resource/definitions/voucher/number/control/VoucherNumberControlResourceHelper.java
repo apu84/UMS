@@ -41,23 +41,22 @@ public class VoucherNumberControlResourceHelper extends
   protected List<VoucherNumberControl> createOrUpdate(List<MutableVoucherNumberControl> pVoucherNumberControls) {
     List<MutableVoucherNumberControl> newVoucherNumberControls = new ArrayList<>();
     List<MutableVoucherNumberControl> voucherNumberControlsForUpdate = new ArrayList<>();
-      User user = userManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    User user = userManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     pVoucherNumberControls.forEach(v -> {
-        v.setModifiedBy(user.getEmployeeId());
-        v.setModifiedDate(new Date());
-      if (v.getId()==null){
-          FinancialAccountYear financialAccountYear = financialAccountYearManager.getOpenedFinancialAccountYear();
-          v.setFinAccountYearId(financialAccountYear.getId());
-          newVoucherNumberControls.add(v);
-      }
-      else
+      v.setModifiedBy(user.getEmployeeId());
+      v.setModifiedDate(new Date());
+      if (v.getId() == null) {
+        FinancialAccountYear financialAccountYear = financialAccountYearManager.getOpenedFinancialAccountYear();
+        v.setFinAccountYearId(financialAccountYear.getId());
+        newVoucherNumberControls.add(v);
+      } else
         voucherNumberControlsForUpdate.add(v);
     });
 
     if (newVoucherNumberControls.size() > 0)
       getContentManager().create(newVoucherNumberControls);
     if (voucherNumberControlsForUpdate.size() > 0)
-      getContentManager().updateVoucherNumberControls(voucherNumberControlsForUpdate);
+      getContentManager().update(voucherNumberControlsForUpdate);
 
     return getContentManager().getByCurrentFinancialYear();
   }

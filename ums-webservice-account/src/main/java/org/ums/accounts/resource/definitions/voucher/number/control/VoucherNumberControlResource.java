@@ -1,12 +1,12 @@
 package org.ums.accounts.resource.definitions.voucher.number.control;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.manager.SemesterManager;
@@ -36,16 +36,17 @@ public class VoucherNumberControlResource extends MutableVoucherNumberControlRes
   @Path("/based-on-curr-fin-year")
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public List<VoucherNumberControl> getVoucherNumberControlBasedOnCurrentFinancialYear(final @Context Request pRequest) {
+  public String getVoucherNumberControlBasedOnCurrentFinancialYear(final @Context Request pRequest) throws Exception {
     List<VoucherNumberControl> numberControls = mHelper.getContentManager().getByCurrentFinancialYear();
     List<Semester> semesters = semesterManager.getAll();
-    return numberControls;
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.writeValueAsString(numberControls);
   }
 
   @POST
   @Path("/save")
   public List<VoucherNumberControl> saveAndReturn(List<PersistentVoucherNumberControl> pVoucherNumberControls,
-      final @Context Request pRequest) {
+                                                  final @Context Request pRequest) {
     List<MutableVoucherNumberControl> voucherNumberControls = new ArrayList<>(pVoucherNumberControls);
     return mHelper.createOrUpdate(voucherNumberControls);
   }

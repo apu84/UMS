@@ -13,14 +13,16 @@
             <tr ng-repeat="v in vm.voucherNumberControls" data-ng-disabled="vm.disable">
                 <td>{{v.voucher.name}}</td>
                 <td>
-                    <select class="form-control" name="resetBasis" data-ng-model="v.resetBasis">
+                    <select data-ng-disabled="vm.disable" class="form-control" name="resetBasis"
+                            data-ng-model="v.resetBasis">
                         <option value="Y">Yearly</option>
                         <option value="M">Monthly</option>
                         <option value="D">Daily</option>
                     </select>
                 </td>
-                <td><input class="form-control" type="number" ng-model="v.startVoucherNo"/></td>
-                <td><input class="form-control" type="text" ng-model="v.voucherLimit"/></td>
+                <td><input ng-disabled="vm.disable" class="form-control" type="number" ng-model="v.startVoucherNo"/>
+                </td>
+                <td><input ng-disabled="vm.disable" class="form-control" type="text" ng-model="v.voucherLimit"/></td>
             </tr>
             </tbody>
         </table>

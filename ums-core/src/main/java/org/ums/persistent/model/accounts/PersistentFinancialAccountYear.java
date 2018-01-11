@@ -1,5 +1,7 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
@@ -37,7 +39,8 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   private Date mModifiedDate;
   private String mModifiedBy;
 
-  public PersistentFinancialAccountYear() {}
+  public PersistentFinancialAccountYear() {
+  }
 
   public PersistentFinancialAccountYear(final PersistentFinancialAccountYear pPersistentFinancialAccountYear) {
     mId = pPersistentFinancialAccountYear.getId();
@@ -56,6 +59,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return Long.parseLong(getStringId());
   }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "Voucher",
+    "name": "PeriodClose",
     "package": "org.ums.domain.model.immutable.accounts",
     "fields": [
       {
@@ -10,10 +10,54 @@
         }
       },
       {
-        "name": "String"
+        "month": {
+          "type": "Ref",
+          "reference": {
+            "name": "Month",
+            "package": "org.ums.domain.model.immutable.accounts",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "MonthManager",
+              "package": "org.ums.manager.accounts"
+            }
+          }
+        }
       },
       {
-        "shortName": "String"
+        "financialAccountYear": {
+          "type": "Ref",
+          "reference": {
+            "name": "FinancialAccountYear",
+            "package": "org.ums.domain.model.immutable.accounts",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "FinancialAccountYearManager",
+              "package": "org.ums.manager.accounts"
+            }
+          }
+        }
+      },
+      {
+        "closeYear": "Integer"
+      },
+      {
+        "periodClosingFlag": "OpenCloseFlag"
+      },
+      {
+        "statFlag": "String"
+      },
+      {
+        "statUpFlag": "String"
+      },
+      {
+        "modifiedDate": "Date"
+      },
+      {
+        "modifiedBy": "String"
       }
     ]
   }

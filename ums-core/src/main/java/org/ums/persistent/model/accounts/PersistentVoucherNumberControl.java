@@ -1,6 +1,11 @@
 package org.ums.persistent.model.accounts;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
@@ -37,17 +42,16 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
 
   @JsonIgnore
   @JsonProperty("id")
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long id;
   @JsonIgnore
   @JsonProperty("finAccountYearId")
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  @JsonSerialize(using = ToStringSerializer.class)
   private Long finAccountYearId;
   @JsonProperty("finAccountYear")
   @JsonIgnore
   private FinancialAccountYear finAccountYear;
   @JsonIgnore
-  @JsonProperty("voucherId")
+  @JsonSerialize(using = ToStringSerializer.class)
   private Long voucherId;
   @JsonProperty("voucher")
   @JsonBackReference
@@ -65,17 +69,17 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   private BigDecimal voucherLimit;
   @JsonIgnore
   @JsonProperty("statFlag")
-  private String mStatFlag;
+  private String statFlag;
   @JsonIgnore
   @JsonProperty("statUpFlag")
-  private String mStatUpFlag;
+  private String statUpFlag;
   @JsonIgnore
   @JsonProperty("modifiedDate")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-  private Date mModifiedDate;
+  private Date modifiedDate;
   @JsonIgnore
   @JsonProperty("modifiedBy")
-  private String mModifiedBy;
+  private String modifiedBy;
 
   public PersistentVoucherNumberControl() {}
 
@@ -86,18 +90,20 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
     resetBasis = pPersistentVoucherNumberControl.getResetBasis();
     startVoucherNo = pPersistentVoucherNumberControl.getStartVoucherNo();
     voucherLimit = pPersistentVoucherNumberControl.getVoucherLimit();
-    mStatFlag = pPersistentVoucherNumberControl.getStatFlag();
-    mStatUpFlag = pPersistentVoucherNumberControl.getStatUpFlag();
-    mModifiedDate = pPersistentVoucherNumberControl.getModifiedDate();
-    mModifiedBy = pPersistentVoucherNumberControl.getModifiedBy();
+    statFlag = pPersistentVoucherNumberControl.getStatFlag();
+    statUpFlag = pPersistentVoucherNumberControl.getStatUpFlag();
+    modifiedDate = pPersistentVoucherNumberControl.getModifiedDate();
+    modifiedBy = pPersistentVoucherNumberControl.getModifiedBy();
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return id;
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getVoucherId() {
     return voucherId;
   }
@@ -112,6 +118,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getFinAccountYearId() {
     return finAccountYearId;
   }
@@ -156,42 +163,42 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
 
   @Override
   public String getStatFlag() {
-    return mStatFlag;
+    return statFlag;
   }
 
   @Override
   public void setStatFlag(String pStatFlag) {
-    mStatFlag = pStatFlag;
+    statFlag = pStatFlag;
   }
 
   @Override
   public String getStatUpFlag() {
-    return mStatUpFlag;
+    return statUpFlag;
   }
 
   @Override
   public void setStatUpFlag(String pStatUpFlag) {
-    mStatUpFlag = pStatUpFlag;
+    statUpFlag = pStatUpFlag;
   }
 
   @Override
   public Date getModifiedDate() {
-    return mModifiedDate;
+    return modifiedDate;
   }
 
   @Override
   public void setModifiedDate(Date pModifiedDate) {
-    mModifiedDate = pModifiedDate;
+    modifiedDate = pModifiedDate;
   }
 
   @Override
   public String getModifiedBy() {
-    return mModifiedBy;
+    return modifiedBy;
   }
 
   @Override
   public void setModifiedBy(String pModifiedBy) {
-    mModifiedBy = pModifiedBy;
+    modifiedBy = pModifiedBy;
   }
 
   @Override

@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
-import org.ums.cache.accounts.AccountCache;
-import org.ums.cache.accounts.FinancialAccountYearCache;
-import org.ums.cache.accounts.VoucherCache;
-import org.ums.cache.accounts.VoucherNumberControlCache;
+import org.ums.cache.accounts.*;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.dao.accounts.*;
@@ -43,6 +40,14 @@ public class AccountsContext {
     accountCache.setManager(new PersistentAccountDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return accountCache;
+  }
+
+  @Bean
+  MonthManager monthManager() {
+    MonthCache monthCache = new MonthCache(mCacheFactory.getCacheManager());
+    monthCache.setManager(new PersistentMonthDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return monthCache;
   }
 
   @Bean
