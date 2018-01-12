@@ -36,7 +36,7 @@ public class PredefinedNarrationResourceHelper extends ResourceHelper<Predefined
     return null;
   }
 
-  public List<MutablePredefinedNarration> createOrUpdate(List<MutablePredefinedNarration> pMutablePredefinedNarrations){
+  public List<PredefinedNarration> createOrUpdate(List<MutablePredefinedNarration> pMutablePredefinedNarrations){
     List<MutablePredefinedNarration> newList = new ArrayList<>();
     List<MutablePredefinedNarration> updatedList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
@@ -55,7 +55,7 @@ public class PredefinedNarrationResourceHelper extends ResourceHelper<Predefined
     if(updatedList.size()>0)
       getContentManager().update(updatedList);
 
-    return pMutablePredefinedNarrations;
+    return getContentManager().getAll();
   }
 
   @Override
