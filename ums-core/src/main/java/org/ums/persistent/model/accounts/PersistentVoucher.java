@@ -87,8 +87,7 @@ public class PersistentVoucher implements MutableVoucher {
     sVoucherManager.delete(this);
   }
 
-  public PersistentVoucher() {
-  }
+  public PersistentVoucher() {}
 
   public PersistentVoucher(MutableVoucher pVoucher) {
     setId(pVoucher.getId());

@@ -108,6 +108,7 @@
 /// <reference path='components/definitions/budget-allocation/budget.allocation.service.ts'/>
 /// <reference path='components/definitions/period-close/period.close.controller.ts'/>
 /// <reference path='components/definitions/period-close/period.close.service.ts'/>
+/// <reference path='components/definitions/period-close/month.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.controller.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>

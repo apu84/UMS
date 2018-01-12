@@ -39,8 +39,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   private Date mModifiedDate;
   private String mModifiedBy;
 
-  public PersistentFinancialAccountYear() {
-  }
+  public PersistentFinancialAccountYear() {}
 
   public PersistentFinancialAccountYear(final PersistentFinancialAccountYear pPersistentFinancialAccountYear) {
     mId = pPersistentFinancialAccountYear.getId();

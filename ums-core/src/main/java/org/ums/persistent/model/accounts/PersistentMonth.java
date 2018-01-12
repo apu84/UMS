@@ -88,8 +88,7 @@ public class PersistentMonth implements MutableMonth {
     sMonthManager.delete(this);
   }
 
-  public PersistentMonth() {
-  }
+  public PersistentMonth() {}
 
   public PersistentMonth(MutableMonth pMonth) {
     setId(pMonth.getId());

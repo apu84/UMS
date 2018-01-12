@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 11-Jan-18.
  */
 @Component
-@Path("account/definition/account")
+@Path("account/definition/period-close/month")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class MonthResource {

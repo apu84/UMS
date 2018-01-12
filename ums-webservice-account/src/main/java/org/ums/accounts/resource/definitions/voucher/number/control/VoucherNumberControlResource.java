@@ -46,7 +46,7 @@ public class VoucherNumberControlResource extends MutableVoucherNumberControlRes
   @POST
   @Path("/save")
   public List<VoucherNumberControl> saveAndReturn(List<PersistentVoucherNumberControl> pVoucherNumberControls,
-                                                  final @Context Request pRequest) {
+      final @Context Request pRequest) {
     List<MutableVoucherNumberControl> voucherNumberControls = new ArrayList<>(pVoucherNumberControls);
     return mHelper.createOrUpdate(voucherNumberControls);
   }
