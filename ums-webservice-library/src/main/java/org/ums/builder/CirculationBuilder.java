@@ -63,12 +63,9 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
         : null);
     pMutable.setPatronId(pJsonObject.getString("patronId"));
     pMutable.setMfn(Long.parseLong(pJsonObject.getString("mfn")));
-    pMutable
-        .setIssueDate(pJsonObject.containsKey("issueDate") ? pJsonObject.getString("issueDate") == null ? new Date()
-            : mDateFormat.parse(pJsonObject.getString("issueDate")) : null);
+    pMutable.setIssueDate(new Date());
     pMutable.setDueDate(new Timestamp(time));
     pMutable.setFineStatus(pJsonObject.containsKey("fineStatus") ? pJsonObject.getInt("fineStatus") : 0);
-
     pMutable.setReturnDate(pJsonObject.containsKey("returnDate") ? pJsonObject.getString("returnDate") == null
         || pJsonObject.getString("returnDate").equals("") ? null : mDateFormat.parse(pJsonObject
         .getString("returnDate")) : null);
@@ -85,7 +82,13 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
   public void checkInBuilder(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setReturnDate(pJsonObject.containsKey("returnDate") ? mDateFormat.parse(pJsonObject
         .getString("returnDate")) : new Date());
-    // pMutable.setMfn(Long.parseLong(pJsonObject.getString("mfn")));
     pMutable.setAccessionNumber(pJsonObject.getString("itemCode"));
+  }
+
+  public void checkInUpdateBuilder(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    pMutable.setReturnDate(new Date());
+    pMutable.setAccessionNumber(pJsonObject.getString("itemCode"));
+    pMutable.setId(Long.parseLong(pJsonObject.getString("circulationId")));
+    pMutable.setPatronId(pJsonObject.getString("patronId"));
   }
 }

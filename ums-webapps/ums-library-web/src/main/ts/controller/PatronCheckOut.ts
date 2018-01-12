@@ -55,8 +55,7 @@ module ums {
 
 
         private checkoutSubmit(): void {
-            if ((this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "")
-                && (this.circulation.dueDate != undefined && this.circulation.dueDate != null && this.circulation.dueDate != "")) {
+            if (this.verifyCheckOutSubmitForm()) {
                 if (this.circulation.itemCode == this.item.accessionNumber) {
                     if (this.item.circulationStatus == 0) {
                         this.convertToJson('save')
@@ -67,9 +66,7 @@ module ums {
                                         }
                                         else {
                                             this.getCheckedOutItems();
-                                            this.showCheckedOutItems = true;
                                             this.circulation.itemCode = "";
-                                            this.fetchRecord();
                                         }
                                     });
                             });
@@ -81,20 +78,21 @@ module ums {
                 else {
                     this.notify.error("Wrong Item Code");
                 }
-
             }
             else {
                 this.notify.error("Please fill the form properly");
             }
         }
 
+        private verifyCheckOutSubmitForm() {
+            return (this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "")
+                && (this.circulation.dueDate != undefined && this.circulation.dueDate != null && this.circulation.dueDate != "");
+        }
+
         private fetchRecord(): void {
             if (this.circulation.itemCode != undefined && this.circulation.itemCode != null && this.circulation.itemCode != "") {
                 this.catalogingService.getItem(this.circulation.itemCode).then((data: any) => {
-                    console.log(data);
                     this.item = data;
-
-                    console.log(this.item);
                     if (this.item.mfnNo) {
                         this.showBookInformation = true;
                         this.catalogingService.fetchRecord(this.item.mfnNo).then((data: any) => {
@@ -102,7 +100,6 @@ module ums {
                         });
                     }
                     else {
-                        console.log("here in else");
                         this.showBookInformation = false;
                     }
                 });
@@ -112,15 +109,15 @@ module ums {
             }
         }
 
-        private convertToJson(type: string): ng.IPromise<any> {
+        private convertToJson(operationType: string): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            if (type == 'save') {
+            if (operationType == 'save') {
                 this.circulation.patronId = this.userId;
                 this.circulation.mfn = this.item.mfnNo;
                 JsonObject['entries'] = this.circulation;
             }
-            else if (type == 'update') {
+            else if (operationType == 'update') {
                 JsonObject['entries'] = this.circulations;
             }
             defer.resolve(JsonObject);
@@ -128,23 +125,17 @@ module ums {
         }
 
         private addDate(): void {
-            console.log("here");
-            var date = new Date();
-            var dd = date.getDate();
-            var mm = date.getMonth() + 1;
-            var yyyy = date.getFullYear();
+            let date = new Date();
+            let dd = date.getDate();
+            let mm = date.getMonth() + 1;
+            let yyyy = date.getFullYear();
             let internalThis: any = this;
             internalThis.circulation.dueDate = mm + "/" + dd + "/" + yyyy + ' 05:00 PM';
             $('.datetimepicker-default').datetimepicker({
                 format:'DD/MM/YYYY hh:mm A',
                 minDate: mm + "/" + dd + "/" + yyyy + ' 05:00 PM'
-            });
-            $('.datetimepicker-default').blur(function (e) {
-                console.log($(this).val());
-
+            }).blur(function (e) {
                  internalThis.circulation.dueDate = $(this).val();
-                console.log(internalThis.circulation.dueDate);
-
             });
         }
     }

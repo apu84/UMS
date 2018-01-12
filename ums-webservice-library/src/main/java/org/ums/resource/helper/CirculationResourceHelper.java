@@ -102,9 +102,9 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
   public Response updateCirculation(JsonObject pJsonObject, UriInfo pUriInfo) {
     List<MutableCirculation> mutableCirculation = new ArrayList<>();
     LocalCache localCache = new LocalCache();
-    for(int i = 0; i < pJsonObject.size(); i++) {
+    for(int i = 0; i < pJsonObject.getJsonArray("entries").size(); i++) {
       MutableCirculation mutableCirculation1 = new PersistentCirculation();
-      mBuilder.build(mutableCirculation1, pJsonObject.getJsonArray("entries").getJsonObject(i), localCache);
+      mBuilder.checkInUpdateBuilder(mutableCirculation1, pJsonObject.getJsonArray("entries").getJsonObject(i), localCache);
       mutableCirculation.add(mutableCirculation1);
     }
     mManager.batchUpdateCirculation(mutableCirculation);

@@ -62,33 +62,29 @@
             <fieldset>
                 <legend>Book Information</legend>
                 <div class="row">
-                    <div class="col-md-3">Accession:</div>
-                    <div class="col-md-9">{{vm.item.accessionNumber}}</div>
+                    <div class="col-md-4"><b>Accession:</b></div>
+                    <div class="col-md-8">{{vm.item.accessionNumber}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">Title:</div>
-                    <div class="col-md-9">{{vm.record.title}}</div>
+                    <div class="col-md-4"><b>Title:</b></div>
+                    <div class="col-md-8">{{vm.record.title}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">Type:</div>
-                    <div class="col-md-9">{{vm.record.materialTypeName}}</div>
+                    <div class="col-md-4"><b>Type:</b></div>
+                    <div class="col-md-8">{{vm.record.materialTypeName}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">Call No:</div>
-                    <div class="col-md-9">{{vm.record.callNo}}</div>
+                    <div class="col-md-4"><b>Call No:</b></div>
+                    <div class="col-md-8">{{vm.record.callNo}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">ISBN:</div>
-                    <div class="col-md-9">{{vm.record.isbn}}</div>
+                    <div class="col-md-4"><b>Copies Available:</b></div>
+                    <div class="col-md-8"><b>{{vm.record.totalAvailable}}</b> out of <b>{{vm.record.totalItems}}</b></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">ISSN:</div>
-                    <div class="col-md-9">{{vm.record.issn}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">Status:</div>
-                    <div class="col-md-9"><span data-ng-show="vm.item.circulationStatus==0"><b>Available</b></span>
-                        <span data-ng-show="vm.item.circulationStatus==1"><b>Checked Out</b></span></div>
+                    <div class="col-md-4"><b>Status:</b></div>
+                    <div class="col-md-8"><span data-ng-show="vm.item.circulationStatus==0" style="color: green"><b>Available</b></span>
+                        <span data-ng-show="vm.item.circulationStatus==1" style="color: red"><b>Checked Out</b></span></div>
                 </div>
             </fieldset>
         </div>
