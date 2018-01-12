@@ -7,11 +7,7 @@ import org.ums.domain.model.immutable.accounts.PredefinedNarration;
 import java.util.Date;
 import org.ums.domain.model.immutable.accounts.Voucher;
 
-public interface MutablePredefinedNarration
-    extends
-    PredefinedNarration,
-    Editable<Long>,
-    MutableIdentifier<Long>,
+public interface MutablePredefinedNarration extends PredefinedNarration, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
   void setVoucher(Voucher pVoucher);

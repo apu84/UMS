@@ -14,9 +14,7 @@ import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
 import org.ums.manager.accounts.PredefinedNarrationManager;
 import org.ums.manager.accounts.VoucherManager;
 
-public class PersistentPredefinedNarration
-    implements
-    MutablePredefinedNarration {
+public class PersistentPredefinedNarration implements MutablePredefinedNarration {
 
   @JsonIgnore
   private static VoucherManager sVoucherManager;
@@ -56,7 +54,7 @@ public class PersistentPredefinedNarration
 
   @Override
   public void setNarration(String pNarration) {
-    mNarration=pNarration;
+    mNarration = pNarration;
   }
 
   @Override
@@ -66,9 +64,7 @@ public class PersistentPredefinedNarration
 
   @Override
   public Voucher getVoucher() {
-    return mVoucher == null
-        ? sVoucherManager.get(mVoucherId)
-        : sVoucherManager.validate(mVoucher);
+    return mVoucher == null ? sVoucherManager.get(mVoucherId) : sVoucherManager.validate(mVoucher);
   }
 
   @Override
@@ -158,11 +154,9 @@ public class PersistentPredefinedNarration
     sPredefinedNarrationManager.delete(this);
   }
 
-  public PersistentPredefinedNarration() {
-  }
+  public PersistentPredefinedNarration() {}
 
-  public PersistentPredefinedNarration(
-      MutablePredefinedNarration pPredefinedNarration) {
+  public PersistentPredefinedNarration(MutablePredefinedNarration pPredefinedNarration) {
     setId(pPredefinedNarration.getId());
     setVoucher(pPredefinedNarration.getVoucher());
     setVoucherId(pPredefinedNarration.getVoucherId());
@@ -175,11 +169,9 @@ public class PersistentPredefinedNarration
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sVoucherManager = applicationContext.getBean("voucherManager",
-        VoucherManager.class);
-    sPredefinedNarrationManager = applicationContext.getBean(
-        "predefinedNarrationManager", PredefinedNarrationManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
+    sPredefinedNarrationManager =
+        applicationContext.getBean("predefinedNarrationManager", PredefinedNarrationManager.class);
   }
 }

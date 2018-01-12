@@ -24,13 +24,15 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 13-Jan-18.
  */
 @Component
-public class PredefinedNarrationResourceHelper extends ResourceHelper<PredefinedNarration, MutablePredefinedNarration, Long> {
+public class PredefinedNarrationResourceHelper extends
+    ResourceHelper<PredefinedNarration, MutablePredefinedNarration, Long> {
   @Autowired
   private PredefinedNarrationManager mPredefinedNarrationManager;
   @Autowired
   private UserManager mUserManager;
   @Autowired
   private IdGenerator mIdGenerator;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;

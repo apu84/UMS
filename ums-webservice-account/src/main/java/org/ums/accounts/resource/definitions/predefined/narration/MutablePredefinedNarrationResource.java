@@ -21,7 +21,8 @@ public class MutablePredefinedNarrationResource {
 
   @POST
   @Path("/save")
-  public List<PredefinedNarration> saveAndReturnUpdatedList(List<MutablePredefinedNarration> pPersistentPredefinedNarrations, final @Context Request pRequest){
+  public List<PredefinedNarration> saveAndReturnUpdatedList(
+      List<MutablePredefinedNarration> pPersistentPredefinedNarrations, final @Context Request pRequest) {
     return mHelper.createOrUpdate(pPersistentPredefinedNarrations);
   }
 }

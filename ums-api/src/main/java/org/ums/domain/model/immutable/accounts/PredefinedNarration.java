@@ -8,11 +8,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
 
-public interface PredefinedNarration
-    extends
-    Serializable,
-    EditType<MutablePredefinedNarration>,
-    LastModifier,
+public interface PredefinedNarration extends Serializable, EditType<MutablePredefinedNarration>, LastModifier,
     Identifier<Long> {
 
   Voucher getVoucher();

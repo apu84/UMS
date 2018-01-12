@@ -20,11 +20,11 @@ import java.util.List;
 @Path("account/definition/narration")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class PredefinedNarrationResource extends MutablePredefinedNarrationResource{
+public class PredefinedNarrationResource extends MutablePredefinedNarrationResource {
 
   @GET
   @Path("/all")
-  public List<PredefinedNarration> getAll(final @Context Request pRequest){
+  public List<PredefinedNarration> getAll(final @Context Request pRequest) {
     return mHelper.getContentManager().getAll();
   }
 

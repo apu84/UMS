@@ -8,9 +8,7 @@ import org.ums.manager.accounts.PredefinedNarrationManager;
 /**
  * Created by Monjur-E-Morshed on 12-Jan-18.
  */
-public class PredefinedNarrationDaoDecorator
-    extends
-    ContentDaoDecorator<PredefinedNarration, MutablePredefinedNarration, Long, PredefinedNarrationManager>
-    implements
+public class PredefinedNarrationDaoDecorator extends
+    ContentDaoDecorator<PredefinedNarration, MutablePredefinedNarration, Long, PredefinedNarrationManager> implements
     PredefinedNarrationManager {
 }

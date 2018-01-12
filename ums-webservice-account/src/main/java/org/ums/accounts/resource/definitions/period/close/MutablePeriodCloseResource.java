@@ -23,7 +23,8 @@ public class MutablePeriodCloseResource {
 
   @POST
   @Path("/save")
-  public List<MutablePeriodClose> saveAndReturnUpdatedList(List<MutablePeriodClose> pPersistentPeriodCloses, final @Context Request pRequest){
+  public List<MutablePeriodClose> saveAndReturnUpdatedList(List<MutablePeriodClose> pPersistentPeriodCloses,
+      final @Context Request pRequest) {
     return mHelper.saveAndReturnUpdatedList(pPersistentPeriodCloses);
   }
 }

@@ -23,7 +23,8 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentPredefinedNarrationDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentPredefinedNarrationDao(JdbcTemplate pJdbcTemplate,
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -31,14 +32,14 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   @Override
   public List<PredefinedNarration> getAll() {
-    String query="select * from dt_predefined_narration";
+    String query = "select * from dt_predefined_narration";
     return mJdbcTemplate.query(query, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
   public PredefinedNarration get(Long pId) {
-    String query="select * from dt_predefined_narration where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentPredefinedNarrationRowMapper());
+    String query = "select * from dt_predefined_narration where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
@@ -48,44 +49,35 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   @Override
   public int update(MutablePredefinedNarration pMutable) {
-    String query="update DT_PREDEFINED_NARATION set NARRATION=?, MODIFIED_BY=?, MODIFIED_DATE=? where id=?";
-    return mJdbcTemplate.update(query, pMutable.getNarration(), pMutable.getModifiedBy(), pMutable.getModifiedDate(), pMutable.getId());
+    String query = "update DT_PREDEFINED_NARATION set NARRATION=?, MODIFIED_BY=?, MODIFIED_DATE=? where id=?";
+    return mJdbcTemplate.update(query, pMutable.getNarration(), pMutable.getModifiedBy(), pMutable.getModifiedDate(),
+        pMutable.getId());
   }
 
   @Override
   public int update(List<MutablePredefinedNarration> pMutableList) {
-    String query="update DT_PREDEFINED_NARATION set NARRATION=?, MODIFIED_BY=?, MODIFIED_DATE=? where id=?";
+    String query = "update DT_PREDEFINED_NARATION set NARRATION=?, MODIFIED_BY=?, MODIFIED_DATE=? where id=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableList)).length;
   }
 
-  private List<Object[]> getUpdateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations){
+  private List<Object[]> getUpdateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for(PredefinedNarration predefinedNarration: pMutablePredefinedNarrations){
-      params.add(new Object[]{
-         predefinedNarration.getNarration(),
-         predefinedNarration.getModifiedBy(),
-         predefinedNarration.getModifiedDate(),
-         predefinedNarration.getId()
-      });
+    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[] {predefinedNarration.getNarration(), predefinedNarration.getModifiedBy(),
+          predefinedNarration.getModifiedDate(), predefinedNarration.getId()});
     }
     return params;
   }
 
-  private List<Object[]> getCreateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations){
+  private List<Object[]> getCreateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for(PredefinedNarration predefinedNarration: pMutablePredefinedNarrations){
-      params.add(new Object[]{
-          predefinedNarration.getId(),
-          predefinedNarration.getNarration(),
-          predefinedNarration.getStatFlag(),
-          predefinedNarration.getStatUpFlag(),
-          predefinedNarration.getModifiedDate(),
-          predefinedNarration.getModifiedBy()
-      });
+    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[] {predefinedNarration.getId(), predefinedNarration.getNarration(),
+          predefinedNarration.getStatFlag(), predefinedNarration.getStatUpFlag(),
+          predefinedNarration.getModifiedDate(), predefinedNarration.getModifiedBy()});
     }
     return params;
   }
-
 
   @Override
   public List<Long> create(List<MutablePredefinedNarration> pMutableList) {
@@ -100,7 +92,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
     return super.exists(pId);
   }
 
-  class PersistentPredefinedNarrationRowMapper implements RowMapper<PredefinedNarration>{
+  class PersistentPredefinedNarrationRowMapper implements RowMapper<PredefinedNarration> {
     @Override
     public PredefinedNarration mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutablePredefinedNarration narration = new PersistentPredefinedNarration();

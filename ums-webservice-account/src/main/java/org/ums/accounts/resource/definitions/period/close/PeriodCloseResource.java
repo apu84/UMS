@@ -17,12 +17,15 @@ import java.util.List;
 @Path("account/definition/period-close")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class PeriodCloseResource extends MutablePeriodCloseResource{
+public class PeriodCloseResource extends MutablePeriodCloseResource {
 
   @GET
   @Path("/year-type/{year-type}")
-  public String getPeriodCloseList(final @Context Request pRequest, @PathParam("year-type") String pYearTYpe) throws  Exception{
-    List<PeriodClose> periodCloseList = pYearTYpe.equals("current")?mHelper.getContentManager().getByCurrentYear():mHelper.getContentManager().getByPreviousYear();
+  public String getPeriodCloseList(final @Context Request pRequest, @PathParam("year-type") String pYearTYpe)
+      throws Exception {
+    List<PeriodClose> periodCloseList =
+        pYearTYpe.equals("current") ? mHelper.getContentManager().getByCurrentYear() : mHelper.getContentManager()
+            .getByPreviousYear();
     ObjectMapper mapper = new ObjectMapper();
     return mapper.writeValueAsString(periodCloseList);
   }
