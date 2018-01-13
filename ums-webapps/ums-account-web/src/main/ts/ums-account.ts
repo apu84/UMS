@@ -90,6 +90,12 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/definitions/period-close/period.close.html'
         })
+        .state('narration', {
+          url: "/narration",
+          controller: 'NarrationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/narration/narration.html'
+        })
         .state('voucherNumberControl', {
           url: "/voucherNumberControl",
           controller: 'VoucherNumberController',

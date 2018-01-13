@@ -112,6 +112,8 @@
 /// <reference path='components/definitions/voucher/voucher.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.controller.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>
+/// <reference path='components/definitions/narration/narration.controller.ts'/>
+/// <reference path='components/definitions/narration/narration.service.ts'/>
 
 /// <reference path="components/directives/balance.type.directive.ts"/>
 

@@ -51,6 +51,15 @@ public class AccountsContext {
   }
 
   @Bean
+  PredefinedNarrationManager predefinedNarrationManager() {
+    PredefinedNarrationCache predefinedNarrationCache = new PredefinedNarrationCache(mCacheFactory.getCacheManager());
+    predefinedNarrationCache.setManager(new PersistentPredefinedNarrationDao(
+        mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory
+            .getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return predefinedNarrationCache;
+  }
+
+  @Bean
   FinancialAccountYearManager financialAccountYearManager() {
     FinancialAccountYearCache financialAccountYearCache =
         new FinancialAccountYearCache(mCacheFactory.getCacheManager());
