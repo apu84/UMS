@@ -272,7 +272,7 @@
       <groupId>org.mapdb</groupId>
       <artifactId>mapdb</artifactId>
       <version>3.0.5</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
       <exclusions>
         <exclusion>
           <artifactId>guava</artifactId>
