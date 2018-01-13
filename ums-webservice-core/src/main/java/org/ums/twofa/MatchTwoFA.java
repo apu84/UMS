@@ -35,7 +35,7 @@ public class MatchTwoFA extends Resource {
   @Autowired
   UMSConfiguration mUMSConfiguration;
   @Autowired
-  HttpClient mHttpClient;
+  HttpClient1 mHttpClient;
   @Autowired
   TwoFATokenGenerator mTwoFATokenGenerator;
   @Autowired
@@ -46,7 +46,7 @@ public class MatchTwoFA extends Resource {
   private UserManager mUserManager;
 
   @POST
-  public Response matchTwoFATest(final @Context Request pRequest, final JsonObject pJsonObject) {
+  public Response matchTwoFATest(final @Context Request pRequest, final JsonObject pJsonObject) throws  Exception{
     String state = pJsonObject.getString(TwoFAConstants.TWO_FA_STATE_HEADER);
     String userProvidedPlainTextToken = pJsonObject.getString(TwoFAConstants.TWO_FA_TOKEN);
     String userProvidedHashedToken = "";
@@ -64,7 +64,7 @@ public class MatchTwoFA extends Resource {
 
       MapperEntry mapperEntry = mMapper.lookup(state);
       return mHttpClient
-          .getClient()
+          .createClient()
           .target(UriBuilder.fromUri(mapperEntry.getUri()).scheme("https").build())
           .request(MediaType.valueOf(mapperEntry.getMediaType()))
           .header(TwoFAConstants.TWO_FA_AUTHORIZATION_HEADER,
