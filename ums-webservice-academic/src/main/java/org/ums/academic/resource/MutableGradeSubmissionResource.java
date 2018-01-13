@@ -18,7 +18,7 @@ public class MutableGradeSubmissionResource extends Resource {
   GradeSubmissionResourceHelper mResourceHelper;
 
   @PUT
-  //@TwoFA(type = "marks_submission")
+   @TwoFA(type = "marks_submission")
   public Response saveGradeSheet(final JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }
