@@ -157,11 +157,29 @@ module ums {
         materialType: string;
         checkBoxStatus: boolean;
         itemCode: string;
+        totalItems: number;
+        totalAvailable: number;
+        totalCheckedOut: number;
+        totalOnHold: number;
     }
 
     export interface ICheckIn{
         itemCode: string;
         returnDate: string;
+        dueDate: string;
+        fineStatus: string;
+    }
+
+    export interface IFine{
+        id: string;
+        circulationId: string;
+        amount: number;
+        fineCategory: number;
+        description: string;
+        fineAppliedDate: string;
+        fineAppliedBy: string;
+        fineForgivenBy: string;
+        finePaymentDate: string;
     }
 
 }

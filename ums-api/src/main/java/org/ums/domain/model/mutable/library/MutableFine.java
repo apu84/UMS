@@ -24,4 +24,6 @@ public interface MutableFine extends Fine, Editable<Long>, MutableLastModifier, 
   void setDescription(final String pDescription);
 
   void setAmount(final double pAmount);
+
+  void setPatronId(final String pPatronId);
 }

@@ -16,23 +16,29 @@ module ums{
                     private userService: UserService,
                     private circulationService: CirculationService){
 
-            this.itemId = $stateParams.itemId;
-            this.getCheckedOutItem();
             this.checkInItem = <ICheckIn>{};
             this.allCirculation = [];
             this.circulation = <ILibraryCirculation>{};
+
+            if($stateParams.itemId == null || $stateParams.itemId == "" || $stateParams.itemId == undefined){
+                this.showWarning = true;
+            }
+            else {
+                this.itemId = $stateParams.itemId;
+                this.showWarning = false;
+                this.getCheckedOutItem();
+            }
         }
 
         private getCheckedOutItem(): void{
             this.circulation = <ILibraryCirculation>{};
             this.circulationService.getSingleCirculation(this.itemId).then((data: any) => {
-               console.log(data.itemCode);
                 if(data.itemCode != undefined){
                    this.showWarning = false;
-                    console.log("Here");
-                    console.log(this.itemId);
                     this.circulation = data;
                     this.checkInItem.itemCode = this.itemId;
+                    this.checkInItem.dueDate = data.dueDate;
+                    console.log(this.checkInItem.dueDate);
                }
                else{
                    this.showWarning = true;
@@ -42,34 +48,25 @@ module ums{
 
         private submitCheckIn(): void {
             this.checkInItem.itemCode = this.itemId;
-            if (this.checkInItem.itemCode != undefined && this.checkInItem.itemCode != null && this.checkInItem.itemCode != "") {
-                this.convertToJson('checkInUpdate').then((json: any) => {
+            if ((this.checkInItem.itemCode != undefined && this.checkInItem.itemCode != null && this.checkInItem.itemCode != "") &&
+                (this.checkInItem.returnDate != undefined && this.checkInItem.returnDate != null && this.checkInItem.returnDate != "")) {
+                this.convertToJson().then((json: any) => {
                     this.circulationService.updateCirculationForCheckIn(json).then((data: any) => {
                         this.checkInItem.itemCode = "";
                         this.allCirculation.push(this.circulation);
-                        this.showWarning = false;
+                        this.showWarning = true;
                     });
                 });
             }
             else {
-                this.notify.error("No item code or barcode found!");
+                this.notify.error("Fill the form properly!");
             }
         }
 
-        // private getCirculationCheckIns(): void {
-        //     this.allCirculation = [];
-        //     this.circulationService.getCirculationCheckInItems('051001').then((data: any) => {
-        //         this.allCirculation = data;
-        //     });
-        // }
-
-
-        private convertToJson(type: string): ng.IPromise<any> {
+        private convertToJson(): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            if (type == 'checkInUpdate') {
-                JsonObject['entries'] = this.checkInItem;
-            }
+            JsonObject['entries'] = this.checkInItem;
             defer.resolve(JsonObject);
             return defer.promise;
         }

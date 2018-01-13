@@ -37,8 +37,6 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     pBuilder.add("issueDate", mDateFormat.format(pReadOnly.getIssueDate()));
     java.text.DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aaa");
     String outputString = outputFormat.format(pReadOnly.getDueDate());
-    System.out.println("pReadOnly.getDueDate(): -- " + pReadOnly.getDueDate());
-    System.out.println("outputString: -- " + outputString);
     pBuilder.add("dueDate", outputString);
     pBuilder.add("returnDate", pReadOnly.getReturnDate() == null ? "" : mDateFormat.format(pReadOnly.getReturnDate()));
     pBuilder.add("fineStatus", pReadOnly.getFineStatus());
@@ -46,6 +44,10 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     pBuilder.add("title", record.getTitle());
     pBuilder.add("materialType", (record.getMaterialType()).getLabel());
     pBuilder.add("checkBoxStatus", false);
+    pBuilder.add("totalItems", record.getTotalItems());
+    pBuilder.add("totalAvailable", record.getTotalAvailable());
+    pBuilder.add("totalCheckedOut", record.getTotalCheckedOut());
+    pBuilder.add("totalOnHold", record.getTotalOnHold());
   }
 
   @Override

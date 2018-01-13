@@ -70,7 +70,7 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
   @Override
   public int updateCirculation(MutableCirculation pMutable) {
     String query = UPDATE_ONE + " WHERE ACCESSION_NUMBER = ? AND RETURN_DATE IS NULL";
-    return mJdbcTemplate.update(query, pMutable.getReturnDate(), pMutable.getMfn());
+    return mJdbcTemplate.update(query, pMutable.getReturnDate(), pMutable.getAccessionNumber());
   }
 
   @Override

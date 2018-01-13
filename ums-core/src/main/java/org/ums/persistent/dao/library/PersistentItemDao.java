@@ -34,8 +34,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
           + "   LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED FROM ITEMS ";
 
   static String UPDATE_ONE =
-      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, LAST_UPDATED_BY=?, "
-          + "   LAST_UPDATED_ON=?, CIRCULATION_STATUS = ?, LAST_MODIFIED=" + getLastModifiedSql();
+      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?, LAST_UPDATED_BY=?, "
+          + "   LAST_UPDATED_ON=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO ITEMS(ID, MFN, COPY_NUMBER, ACCESSION_NUMBER, ACCESSION_DATE, BARCODE, PRICE, SUPPLIER, INTERNAL_NOTE, "
@@ -43,9 +43,6 @@ public class PersistentItemDao extends ItemDaoDecorator {
           // Fields
           + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
           + getLastModifiedSql() + ")";
-
-  static String UPDATE_CIRCULATION_STATUS = "UPDATE ITEMS SET CIRCULATION_STATUS = ?, LAST_MODIFIED = "
-      + getLastModifiedSql();
 
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
@@ -76,13 +73,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
   public int update(final MutableItem pItem) {
     String query = UPDATE_ONE + "   Where ID= ? ";
     return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
-        pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus()
-            .getId(), "", pItem.getCirculationStatus(), "", pItem.getId());
-  }
-
-  public int updateItemCirculationStatus(final String pAccessionNumber, final int pCirculationStatus) {
-    String query = UPDATE_CIRCULATION_STATUS + "   Where ACCESSION_NUMBER = ?";
-    return mJdbcTemplate.update(query, pCirculationStatus, pAccessionNumber);
+        pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier() == null ? null : pItem.getSupplier().getId(),
+        pItem.getInternalNote(), pItem.getStatus().getId(), pItem.getCirculationStatus(), "", "", pItem.getId());
   }
 
   @Override

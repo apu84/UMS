@@ -25,4 +25,6 @@ public interface Fine extends Serializable, LastModifier, EditType<MutableFine>,
   String getDescription();
 
   double getAmount();
+
+  String getPatronId();
 }

@@ -35,7 +35,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
           + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
           + "  COPY_RIGHT_DATE=?, MATERIAL_TYPE=?, "
-          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, LAST_UPDATED_ON=sysdate,  "
+          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?, TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate,  "
           + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
@@ -77,9 +77,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
             .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
             .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord.getAcquisitionType().getId(),
-        pRecord.getKeyWords(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
-            .getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
+        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType()
+            .getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord.getContributorJsonString(),
+        pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
+            .getTotalItems(), pRecord.getTotalAvailable(), pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(),
+        pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
   @Override

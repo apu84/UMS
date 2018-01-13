@@ -10,5 +10,4 @@ import org.ums.manager.ContentManager;
  * Created by Ifti on 18-Feb-17.
  */
 public interface RecordManager extends ContentManager<Record, MutableRecord, Long> {
-
 }

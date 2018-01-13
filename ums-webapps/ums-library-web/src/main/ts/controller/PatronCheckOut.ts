@@ -97,6 +97,11 @@ module ums {
                         this.showBookInformation = true;
                         this.catalogingService.fetchRecord(this.item.mfnNo).then((data: any) => {
                             this.record = data;
+                            console.log(data);
+                            this.circulation.totalItems = this.record.totalItems;
+                            this.circulation.totalAvailable = this.record.totalAvailable;
+                            this.circulation.totalCheckedOut = this.record.totalCheckedOut;
+                            this.circulation.totalOnHold =  this.record.totalOnHold;
                         });
                     }
                     else {

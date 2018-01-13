@@ -31,37 +31,23 @@
         <div class="col-md-8">
             <fieldset>
                 <legend>Check in</legend>
-                <label for="barcode">Enter item barcode: </label>
-
-                <input name="barcode" id="barcode" size="14" data-ng-model="vm.checkInItem.itemCode"
-                       class="form-control" disabled>
-                <br/>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label for="barcode">Enter item barcode: </label>
+                        <input name="barcode" id="barcode" size="14" data-ng-model="vm.checkInItem.itemCode"
+                               class="form-control" disabled>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Specify return date</label>
+                        <input type="text" size="13" data-provide="datepicker" placeholder="DD/MM/YYYY"
+                               data-date-format="dd/mm/yyyy" data-ng-model="vm.checkInItem.returnDate"
+                               id="return_date_override" name="return_date_override"
+                               class="form-control">
+                    </div>
+                </div>
+                <br />
 
                 <input type="button" data-ng-click="vm.submitCheckIn()" class="submit" value="Submit">
-
-                <div class="date-select" id="return_date_override_fields">
-                    <div class="hint">Specify return date (DD/MM/YYYY)
-                        :
-                    </div>
-
-                    <input type="text" size="13" data-provide="datepicker"
-                           data-date-format="dd/mm/yyyy" data-ng-model="vm.checkInItem.returnDate"
-                           id="return_date_override" name="return_date_override" value="{{vm.returnDate}}"
-                           class="hasDatepicker"><img class="ui-datepicker-trigger"
-                                                      src="/intranet-tmpl/prog/img/famfamfam/silk/calendar.png"
-                                                      alt="..."
-                                                      title="...">
-
-                    <!--<label for="return_date_override_remember"> Remember for next check in:</label>-->
-
-                    <!--<input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();"-->
-                    <!--name="return_date_override_remember">-->
-
-
-                    <input type="button" data-ng-click="vm.returnDate=''" class="action" id="cleardate" value="Clear"
-                           name="cleardate"
-                           onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;">
-                </div>
 
 
             </fieldset>
@@ -72,7 +58,7 @@
 
                 <p>
 
-                    <input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine">
+                    <input type="checkbox" data-ng-model="vm.checkInItem.fineStatus" id="exemptcheck" name="exemptfine" value="exemptfine">
 
                     <label for="exemptcheck">Forgive overdue charges</label>
                 </p>

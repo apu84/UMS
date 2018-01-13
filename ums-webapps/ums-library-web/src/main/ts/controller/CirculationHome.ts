@@ -44,10 +44,20 @@ module ums {
         }
 
         private checkIn(itemId: string): void {
-            this.state.go('circulation.checkIn', {itemId: itemId});
+            if(itemId != undefined && itemId != null && itemId != "") {
+                this.circulationService.getSingleCirculation(itemId).then((data: any) => {
+                    if (data.itemCode) {
+                        this.state.go('circulation.checkIn', {itemId: itemId});
+                    }
+                    else{
+                        this.state.go('circulation.checkIn', {itemId: null});
+                    }
+                });
+            }
+            else{
+                this.notify.error("Check Item Code or Barcode");
+            }
         }
-
-
 
         private searchPatron(patronId: string): void {
             this.userService.getUser(patronId).then((data: any) => {

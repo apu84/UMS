@@ -20,4 +20,19 @@ public class FineCache extends ContentCache<Fine, MutableFine, Long, FineManager
   protected CacheManager<Fine, Long> getCacheManager() {
     return mCacheManager;
   }
+
+  @Override
+  public List<Fine> getFines(String pPatronId) {
+    return getManager().getFines(pPatronId);
+  }
+
+  @Override
+  public int saveFine(MutableFine pMutableFine) {
+    return getManager().saveFine(pMutableFine);
+  }
+
+  @Override
+  public int updateFine(MutableFine pMutableFine) {
+    return getManager().update(pMutableFine);
+  }
 }
