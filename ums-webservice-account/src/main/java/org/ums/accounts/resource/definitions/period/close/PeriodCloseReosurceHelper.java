@@ -1,6 +1,7 @@
 package org.ums.accounts.resource.definitions.period.close;
 
 import org.apache.shiro.SecurityUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -8,10 +9,12 @@ import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.PeriodCloseManager;
+import org.ums.persistent.model.accounts.PersistentPeriodClose;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -30,13 +33,16 @@ public class PeriodCloseReosurceHelper extends ResourceHelper<PeriodClose, Mutab
   private IdGenerator mIdGenerator;
   @Autowired
   private UserManager mUserManager;
+  @Autowired
+  private PeriodCloseBuilder mPeriodCloseBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
-  public List<MutablePeriodClose> saveAndReturnUpdatedList(final List<MutablePeriodClose> pMutablePeriodCloses){
+  public List<MutablePeriodClose> saveAndReturnUpdatedList(final JsonArray pJsonObject) throws Exception {
+    List<MutablePeriodClose> pMutablePeriodCloses = convertToObjectFromJson(pJsonObject);
     List<MutablePeriodClose> updatedList = new ArrayList<>();
     List<MutablePeriodClose> newList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
@@ -56,6 +62,17 @@ public class PeriodCloseReosurceHelper extends ResourceHelper<PeriodClose, Mutab
     if(newList.size()>0)
       getContentManager().create(newList);
 
+    return pMutablePeriodCloses;
+  }
+
+  @NotNull
+  private List<MutablePeriodClose> convertToObjectFromJson(JsonArray pJsonObject) {
+    List<MutablePeriodClose> pMutablePeriodCloses = new ArrayList<>();
+    for(int i = 0; i < pJsonObject.size(); i++) {
+      MutablePeriodClose periodClose = new PersistentPeriodClose();
+      mPeriodCloseBuilder.build(periodClose, pJsonObject.getJsonObject(i));
+      pMutablePeriodCloses.add(periodClose);
+    }
     return pMutablePeriodCloses;
   }
 

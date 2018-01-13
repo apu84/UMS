@@ -3,8 +3,10 @@ package org.ums.accounts.resource.definitions.period.close;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
+import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.resource.Resource;
 
+import javax.json.JsonArray;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -28,5 +30,12 @@ public class PeriodCloseResource extends MutablePeriodCloseResource {
             .getByPreviousYear();
     ObjectMapper mapper = new ObjectMapper();
     return mapper.writeValueAsString(periodCloseList);
+  }
+
+  @POST
+  @Path("/save")
+  public List<MutablePeriodClose> saveAndReturnUpdatedList(final JsonArray pJsonObject) throws Exception {
+
+    return mHelper.saveAndReturnUpdatedList(pJsonObject);
   }
 }

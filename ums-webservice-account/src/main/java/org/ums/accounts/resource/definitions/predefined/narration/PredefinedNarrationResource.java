@@ -2,13 +2,10 @@ package org.ums.accounts.resource.definitions.predefined.narration;
 
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.PredefinedNarration;
-import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
 import org.ums.resource.Resource;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.json.JsonArray;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import java.util.List;
@@ -26,6 +23,13 @@ public class PredefinedNarrationResource extends MutablePredefinedNarrationResou
   @Path("/all")
   public List<PredefinedNarration> getAll(final @Context Request pRequest) {
     return mHelper.getContentManager().getAll();
+  }
+
+  @POST
+  @Path("/save")
+  public List<PredefinedNarration> saveAndReturnUpdatedList(JsonArray pPersistentPredefinedNarrations,
+      final @Context Request pRequest) {
+    return mHelper.createOrUpdate(pPersistentPredefinedNarrations);
   }
 
 }

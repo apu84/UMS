@@ -8,8 +8,8 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 04-Jan-18.
  */
 public enum OpenCloseFlag {
-  OPEN("O"),
-  CLOSED("C");
+  O("O"),
+  C("C");
 
   private static final Map<String, OpenCloseFlag> Lookup = new HashMap<>();
 

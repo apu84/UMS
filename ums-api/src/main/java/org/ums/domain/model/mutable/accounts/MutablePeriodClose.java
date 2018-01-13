@@ -2,7 +2,6 @@ package org.ums.domain.model.mutable.accounts;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Month;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.MutableLastModifier;
@@ -13,14 +12,11 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 04-Jan-18.
  */
-
 public interface MutablePeriodClose extends PeriodClose, Editable<Long>, MutableIdentifier<Long>, MutableLastModifier {
-
-  void setMonth(Month pMonth);
 
   void setMonthId(Long pMonthId);
 
-  void setFinancialAccountYear(FinancialAccountYear pFinancialAccountYear);
+  void setMonth(Month pMonth);
 
   void setFinancialAccountYearId(Long pFinancialAccountYearId);
 

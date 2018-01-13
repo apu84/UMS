@@ -5,13 +5,16 @@ package org.ums.persistent.model.accounts;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Month;
+import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.enums.accounts.definitions.OpenCloseFlag;
 import org.ums.manager.accounts.FinancialAccountYearManager;
@@ -20,6 +23,7 @@ import org.ums.manager.accounts.PeriodCloseManager;
 
 import java.util.Date;
 
+@JsonDeserialize(as = PeriodClose.class)
 public class PersistentPeriodClose implements MutablePeriodClose {
 
   @JsonIgnore
@@ -34,6 +38,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   private Long mId;
   @JsonProperty("month")
   @JsonIgnore
+  @JsonManagedReference
   private Month mMonth;
   @JsonProperty("monthId")
   @JsonIgnore
@@ -82,9 +87,9 @@ public class PersistentPeriodClose implements MutablePeriodClose {
     return mMonth == null ? sMonthManager.get(mMonthId) : sMonthManager.validate(mMonth);
   }
 
-  @Override
+  @JsonIgnore
   public void setMonth(Month pMonth) {
-    this.mMonth = pMonth;
+    mMonth = pMonth;
   }
 
   @Override
@@ -102,11 +107,6 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   public FinancialAccountYear getFinancialAccountYear() {
     return mFinancialAccountYear == null ? sFinancialAccountYearManager.get(mFinancialAccountYearId)
         : sFinancialAccountYearManager.validate(mFinancialAccountYear);
-  }
-
-  @Override
-  public void setFinancialAccountYear(FinancialAccountYear pFinancialAccountYear) {
-    this.mFinancialAccountYear = pFinancialAccountYear;
   }
 
   @Override
@@ -214,9 +214,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
 
   public PersistentPeriodClose(MutablePeriodClose pPeriodClose) {
     setId(pPeriodClose.getId());
-    setMonth(pPeriodClose.getMonth());
     setMonthId(pPeriodClose.getMonthId());
-    setFinancialAccountYear(pPeriodClose.getFinancialAccountYear());
     setFinancialAccountYearId(pPeriodClose.getFinancialAccountYearId());
     setCloseYear(pPeriodClose.getCloseYear());
     setPeriodClosingFlag(pPeriodClose.getPeriodClosingFlag());

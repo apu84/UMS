@@ -12,7 +12,10 @@ import org.ums.persistent.model.accounts.PersistentPeriodClose;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Monjur-E-Morshed on 04-Jan-18.
@@ -23,7 +26,7 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   private IdGenerator mIdGenerator;
 
   public PersistentPeriodCloseDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-      IdGenerator pIdGenerator) {
+                                  IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -78,14 +81,26 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
 
   @Override
   public int update(List<MutablePeriodClose> pMutableList) {
-    return super.update(pMutableList);
+    String query = "update PERIOD_CLOSE set PERIOD_CLOSING_FLAG=?, MODIFIED_BY=? ,MODIFIED_DATE=? where id=?";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableList)).length;
+  }
+
+  private List<Object[]> getUpdateParams(List<MutablePeriodClose> periodCloses) {
+    List<Object[]> params = new ArrayList<>();
+
+    for (PeriodClose periodClose : periodCloses) {
+      params.add(new Object[]{periodClose.getPeriodClosingFlag().getValue(), periodClose.getModifiedBy(),
+          periodClose.getModifiedDate(), periodClose.getId()});
+    }
+    return params;
   }
 
   @Override
   public List<Long> create(List<MutablePeriodClose> pMutableList) {
     String query =
-        "insert into PERIOD_CLOSE(ID, CLOSE_MONTH, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID)  VALUES  "
+        "insert into PERIOD_CLOSE(ID, MONTH_ID, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID)  VALUES  "
             + "  (?,?,?,?,?,?,?,?,?)";
+    List<Object[]> params = getCreateParams(pMutableList);
     mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList));
     return null;
   }
@@ -93,8 +108,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   private List<Object[]> getCreateParams(List<MutablePeriodClose> periodCloses) {
     List<Object[]> params = new ArrayList<>();
 
-    for(PeriodClose periodClose : periodCloses) {
-      params.add(new Object[] {periodClose.getId(), periodClose.getMonth().getId(), periodClose.getCloseYear(),
+    for (PeriodClose periodClose : periodCloses) {
+      params.add(new Object[]{periodClose.getId(), periodClose.getMonth().getId(), periodClose.getCloseYear(),
           periodClose.getPeriodClosingFlag().getValue(), periodClose.getStatFlag(), periodClose.getStatUpFlag(),
           periodClose.getModifiedDate(), periodClose.getModifiedBy(), periodClose.getFinancialAccountYear().getId()});
     }

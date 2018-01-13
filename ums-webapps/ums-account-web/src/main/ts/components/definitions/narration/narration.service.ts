@@ -16,7 +16,7 @@ module ums {
     private narrationURL: string = "";
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient, private notify: Notify) {
-      this.narrationURL = "account/definition/account";
+      this.narrationURL = "account/definition/narration";
     }
 
     public getAll(): ng.IPromise<INarration[]> {

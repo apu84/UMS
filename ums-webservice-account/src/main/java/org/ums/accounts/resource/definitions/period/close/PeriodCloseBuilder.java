@@ -5,6 +5,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
+import org.ums.enums.accounts.definitions.OpenCloseFlag;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -28,6 +29,26 @@ public class PeriodCloseBuilder implements Builder<PeriodClose, MutablePeriodClo
 
   @Override
   public void build(MutablePeriodClose pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    if(pJsonObject.containsKey("id"))
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    if(pJsonObject.containsKey("monthId"))
+      pMutable.setMonthId(Long.parseLong(pJsonObject.getString("monthId")));
+    if(pJsonObject.containsKey("closeYear"))
+      pMutable.setCloseYear(pJsonObject.getInt("closeYear"));
+    if(pJsonObject.containsKey("finAccountYearId"))
+      pMutable.setFinancialAccountYearId(Long.parseLong("finAccountYearId"));
+  }
 
+  public void build(MutablePeriodClose pMutable, JsonObject pJsonObject) {
+    if(pJsonObject.containsKey("id"))
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
+    if(pJsonObject.containsKey("monthId"))
+      pMutable.setMonthId(Long.parseLong(pJsonObject.getString("monthId")));
+    if(pJsonObject.containsKey("closeYear"))
+      pMutable.setCloseYear(pJsonObject.getInt("closeYear"));
+    if(pJsonObject.containsKey("financialAccountYearId"))
+      pMutable.setFinancialAccountYearId(Long.parseLong(pJsonObject.getString("financialAccountYearId")));
+    if(pJsonObject.containsKey("periodCloseFlag"))
+      pMutable.setPeriodClosingFlag(OpenCloseFlag.get(pJsonObject.getString("periodCloseFlag")));
   }
 }

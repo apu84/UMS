@@ -24,7 +24,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
   private IdGenerator mIdGenerator;
 
   public PersistentPredefinedNarrationDao(JdbcTemplate pJdbcTemplate,
-      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+                                          NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -32,14 +32,14 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   @Override
   public List<PredefinedNarration> getAll() {
-    String query = "select * from dt_predefined_narration";
+    String query = "select * from DT_PREDEFINED_NARATION";
     return mJdbcTemplate.query(query, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
   public PredefinedNarration get(Long pId) {
     String query = "select * from dt_predefined_narration where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentPredefinedNarrationRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
@@ -62,8 +62,8 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   private List<Object[]> getUpdateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
-      params.add(new Object[] {predefinedNarration.getNarration(), predefinedNarration.getModifiedBy(),
+    for (PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[]{predefinedNarration.getNarration(), predefinedNarration.getModifiedBy(),
           predefinedNarration.getModifiedDate(), predefinedNarration.getId()});
     }
     return params;
@@ -71,9 +71,9 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   private List<Object[]> getCreateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
-      params.add(new Object[] {predefinedNarration.getId(), predefinedNarration.getNarration(),
-          predefinedNarration.getStatFlag(), predefinedNarration.getStatUpFlag(),
+    for (PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[]{predefinedNarration.getId(), predefinedNarration.getVoucher().getId(),
+          predefinedNarration.getNarration(), predefinedNarration.getStatFlag(), predefinedNarration.getStatUpFlag(),
           predefinedNarration.getModifiedDate(), predefinedNarration.getModifiedBy()});
     }
     return params;
@@ -81,8 +81,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   @Override
   public List<Long> create(List<MutablePredefinedNarration> pMutableList) {
-    String query ="insert into DT_PREDEFINED_NARATION(ID, VOUCHER_ID, NARRATION, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY)" +
-        "    VALUES (?,?,?,?,?,?,?)" ;
+    String query = "insert into DT_PREDEFINED_NARATION(ID, VOUCHER_ID, NARRATION, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY) VALUES (?,?,?,?,?,?,?)";
     mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList));
     return pMutableList.stream().map(pMutablePredefinedNarration -> pMutablePredefinedNarration.getId()).collect(Collectors.toList());
   }
@@ -99,6 +98,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
       narration.setId(pResultSet.getLong("id"));
       narration.setVoucherId(pResultSet.getLong("voucher_id"));
       narration.setStatFlag(pResultSet.getString("stat_flag"));
+      narration.setNarration(pResultSet.getString("narration"));
       narration.setStatUpFlag(pResultSet.getString("stat_up_flag"));
       narration.setModifiedDate(pResultSet.getDate("modified_date"));
       narration.setModifiedBy(pResultSet.getString("modified_by"));

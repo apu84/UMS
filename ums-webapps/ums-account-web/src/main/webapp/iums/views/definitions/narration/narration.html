@@ -20,9 +20,9 @@
                         <div class="col-md-6">
                             <select class="form-control"
                                     name="voucherType"
-                                    ng-options="n.voucher.name for n in vm.narrations track by n.id"
+                                    ng-options="n.voucher.name for n in vm.narrations"
                                     data-ng-model="vm.narration"
-                                    data-ng-change="vm.narrationChanged(n)"
+                                    data-ng-change="vm.narrationChanged()"
                             ></select>
                         </div>
                     </div>

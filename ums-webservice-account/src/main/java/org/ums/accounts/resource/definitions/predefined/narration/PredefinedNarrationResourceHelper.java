@@ -1,18 +1,20 @@
 package org.ums.accounts.resource.definitions.predefined.narration;
 
 import org.apache.shiro.SecurityUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.accounts.PredefinedNarration;
 import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.ContentManager;
 import org.ums.manager.accounts.PredefinedNarrationManager;
+import org.ums.persistent.model.accounts.PersistentPredefinedNarration;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -32,13 +34,16 @@ public class PredefinedNarrationResourceHelper extends
   private UserManager mUserManager;
   @Autowired
   private IdGenerator mIdGenerator;
+  @Autowired
+  private PredefinedNarrationBuilder mPredefinedNarrationBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
-  public List<PredefinedNarration> createOrUpdate(List<MutablePredefinedNarration> pMutablePredefinedNarrations){
+  public List<PredefinedNarration> createOrUpdate(JsonArray pJsonArray) {
+    List<MutablePredefinedNarration> pMutablePredefinedNarrations = getObjectFromJson(pJsonArray);
     List<MutablePredefinedNarration> newList = new ArrayList<>();
     List<MutablePredefinedNarration> updatedList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
@@ -58,6 +63,17 @@ public class PredefinedNarrationResourceHelper extends
       getContentManager().update(updatedList);
 
     return getContentManager().getAll();
+  }
+
+  @NotNull
+  private List<MutablePredefinedNarration> getObjectFromJson(JsonArray pJsonArray) {
+    List<MutablePredefinedNarration> pMutablePredefinedNarrations = new ArrayList<>();
+    for(int i = 0; i < pJsonArray.size(); i++) {
+      MutablePredefinedNarration narration = new PersistentPredefinedNarration();
+      mPredefinedNarrationBuilder.build(narration, pJsonArray.getJsonObject(i));
+      pMutablePredefinedNarrations.add(narration);
+    }
+    return pMutablePredefinedNarrations;
   }
 
   @Override

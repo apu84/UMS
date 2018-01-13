@@ -5,9 +5,9 @@ module ums {
 
     public static $inject = ['$scope', '$modal', 'notify', 'NarrationService', '$timeout', 'VoucherService'];
 
-    private narrations: INarration[];
-    private narration: INarration;
-    private disable: boolean;
+    public narrations: INarration[];
+    public narration: INarration;
+    public disable: boolean;
 
 
     constructor($scope: ng.IScope, private $modal: any, private notify: Notify, private narrationService: NarrationService, private $timeout: ng.ITimeoutService, private voucherService: VoucherService) {
@@ -22,9 +22,9 @@ module ums {
           let narration: INarration = <INarration>{};
           narration.voucher = v;
           narration.voucherId = v.id;
-          narration.statFlag = "";
-          narration.statUpFlag = "";
-          narration.narration = "";
+          narration.statFlag = " ";
+          narration.statUpFlag = " ";
+          narration.narration = " ";
           this.narrations.push(narration);
         });
         console.log("Narrations");
@@ -37,10 +37,9 @@ module ums {
       this.disable = false;
     }
 
-    private narrationChanged(narration: INarration) {
+    private narrationChanged() {
       console.log("In the narration changed");
-      console.log(narration);
-      this.narration = narration;
+      console.log(this.narration);
     }
 
     private cancel() {
@@ -62,7 +61,11 @@ module ums {
           this.disable = true;
           this.narrations = [];
           this.narrations = narrations;
+          console.log("narrations");
+          console.log(narrations);
           this.narration = narrations[0];
+          console.log("Narration");
+          console.log(this.narration);
         } else {
           this.disable = false;
           this.getAllVouchers();
