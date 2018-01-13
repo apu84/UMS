@@ -30,7 +30,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   private IdGenerator mIdGenerator;
 
   public PersistentVoucherNumberControlDao(JdbcTemplate pJdbcTemplate,
-                                           NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -52,7 +52,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   @Override
   public VoucherNumberControl get(Long pId) {
     String query = "select * from mst_voucher_number_control where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentVoucherNumberControlRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentVoucherNumberControlRowMapper());
   }
 
   @Override
@@ -88,7 +88,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
             + "MODIFIED_DATE=:modifiedDate, MODIFIED_BY=:modifiedBy where id=:id";
 
     SqlParameterSource[] parameters = new SqlParameterSource[pMutableList.size()];
-    for (int i = 0; i < pMutableList.size(); i++) {
+    for(int i = 0; i < pMutableList.size(); i++) {
       BeanPropertySqlParameterSource beanPropertySqlParameterSource =
           new BeanPropertySqlParameterSource(pMutableList.get(i));
       beanPropertySqlParameterSource.registerSqlType("resetBasis", Types.CHAR);
@@ -98,7 +98,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
     try {
 
       value = mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
-    } catch (Exception e) {
+    } catch(Exception e) {
       e.printStackTrace();
     }
     return value;
@@ -124,8 +124,8 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   private List<Object[]> getUpdateParamList(List<MutableVoucherNumberControl> pMutableVoucherNumberControls) {
     List<Object[]> params = new ArrayList<>();
 
-    for (MutableVoucherNumberControl v : pMutableVoucherNumberControls) {
-      params.add(new Object[]{v.getStartVoucherNo(), v.getId()});
+    for(MutableVoucherNumberControl v : pMutableVoucherNumberControls) {
+      params.add(new Object[] {v.getStartVoucherNo(), v.getId()});
     }
     return params;
   }
@@ -143,7 +143,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   }
 
   private void createMapArrayFromObject(List<MutableVoucherNumberControl> pMutableList, Map<String, Object>[] pMaps) {
-    for (int i = 0; i < pMutableList.size(); i++) {
+    for(int i = 0; i < pMutableList.size(); i++) {
       Map<String, Object> map = new HashMap<>();
       map.put("id", pMutableList.get(i).getId());
       map.put("finAccountYearId", pMutableList.get(i).getFinAccountYearId());

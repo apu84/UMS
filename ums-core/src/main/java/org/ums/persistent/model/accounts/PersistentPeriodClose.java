@@ -4,6 +4,10 @@ package org.ums.persistent.model.accounts;
  * Created by Monjur-E-Morshed on 04-Jan-18.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
@@ -18,23 +22,52 @@ import java.util.Date;
 
 public class PersistentPeriodClose implements MutablePeriodClose {
 
+  @JsonIgnore
   private static MonthManager sMonthManager;
+  @JsonIgnore
   private static FinancialAccountYearManager sFinancialAccountYearManager;
+  @JsonIgnore
   private static PeriodCloseManager sPeriodCloseManager;
+
+  @JsonProperty("id")
+  @JsonIgnore
   private Long mId;
+  @JsonProperty("month")
+  @JsonIgnore
   private Month mMonth;
+  @JsonProperty("monthId")
+  @JsonIgnore
   private Long mMonthId;
+  @JsonProperty("financialAccountYear")
+  @JsonIgnore
   private FinancialAccountYear mFinancialAccountYear;
+  @JsonProperty("financialAccountYearId")
+  @JsonIgnore
   private Long mFinancialAccountYearId;
+  @JsonProperty("closeYear")
+  @JsonIgnore
   private Integer mCloseYear;
+  @JsonProperty("periodCloseFlag")
+  @JsonIgnore
   private OpenCloseFlag mPeriodClosingFlag;
+  @JsonProperty("statFlag")
+  @JsonIgnore
   private String mStatFlag;
+  @JsonProperty("statUpFlag")
+  @JsonIgnore
   private String mStatUpFlag;
+  @JsonProperty("modifiedDate")
+  @JsonIgnore
   private Date mModifiedDate;
+  @JsonProperty("modifiedBy")
+  @JsonIgnore
   private String mModifiedBy;
+  @JsonProperty("lastModified")
+  @JsonIgnore
   private String mLastModified;
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return mId;
   }
@@ -55,6 +88,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getMonthId() {
     return mMonthId;
   }
@@ -76,6 +110,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getFinancialAccountYearId() {
     return mFinancialAccountYearId;
   }
