@@ -24,7 +24,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
   private IdGenerator mIdGenerator;
 
   public PersistentPredefinedNarrationDao(JdbcTemplate pJdbcTemplate,
-                                          NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -39,7 +39,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
   @Override
   public PredefinedNarration get(Long pId) {
     String query = "select * from dt_predefined_narration where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentPredefinedNarrationRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
@@ -62,8 +62,8 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   private List<Object[]> getUpdateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for (PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
-      params.add(new Object[]{predefinedNarration.getNarration(), predefinedNarration.getModifiedBy(),
+    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[] {predefinedNarration.getNarration(), predefinedNarration.getModifiedBy(),
           predefinedNarration.getModifiedDate(), predefinedNarration.getId()});
     }
     return params;
@@ -71,8 +71,8 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
 
   private List<Object[]> getCreateParams(List<MutablePredefinedNarration> pMutablePredefinedNarrations) {
     List<Object[]> params = new ArrayList<>();
-    for (PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
-      params.add(new Object[]{predefinedNarration.getId(), predefinedNarration.getVoucher().getId(),
+    for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
+      params.add(new Object[] {predefinedNarration.getId(), predefinedNarration.getVoucher().getId(),
           predefinedNarration.getNarration(), predefinedNarration.getStatFlag(), predefinedNarration.getStatUpFlag(),
           predefinedNarration.getModifiedDate(), predefinedNarration.getModifiedBy()});
     }

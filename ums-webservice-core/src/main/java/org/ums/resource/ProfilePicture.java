@@ -63,7 +63,6 @@ public class ProfilePicture extends Resource {
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
   @Qualifier("photoUploadChannel")
-  @Autowired
   MessageChannel photoUploadChannel;// = applicationContext.getBean("lmsChannel",
                                     // MessageChannel.class);
 

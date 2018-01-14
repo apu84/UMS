@@ -26,11 +26,11 @@ public class PredefinedNarrationBuilder implements Builder<PredefinedNarration, 
   }
 
   public void build(MutablePredefinedNarration pMutablePredefinedNarration, JsonObject pJsonObject) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutablePredefinedNarration.setId(Long.parseLong(pJsonObject.getString("id")));
-    if (pJsonObject.containsKey("voucherId"))
+    if(pJsonObject.containsKey("voucherId"))
       pMutablePredefinedNarration.setVoucherId(Long.parseLong(pJsonObject.getString("voucherId")));
-    if (pJsonObject.containsKey("narration"))
+    if(pJsonObject.containsKey("narration"))
       pMutablePredefinedNarration.setNarration(pJsonObject.getString("narration"));
 
   }

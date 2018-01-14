@@ -118,7 +118,7 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     mRecordManager.update(mutableRecord);
 
     Date dueDate = mDateFormat.parse(pJsonObject.getJsonObject("entries").getString("dueDate"));
-    Date returnDate =  mutableCirculation.getReturnDate();
+    Date returnDate = mutableCirculation.getReturnDate();
 
     int compare = dueDate.compareTo(returnDate);
 

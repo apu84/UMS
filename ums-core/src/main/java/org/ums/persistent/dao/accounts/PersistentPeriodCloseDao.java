@@ -26,7 +26,7 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   private IdGenerator mIdGenerator;
 
   public PersistentPeriodCloseDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-                                  IdGenerator pIdGenerator) {
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -88,8 +88,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   private List<Object[]> getUpdateParams(List<MutablePeriodClose> periodCloses) {
     List<Object[]> params = new ArrayList<>();
 
-    for (PeriodClose periodClose : periodCloses) {
-      params.add(new Object[]{periodClose.getPeriodClosingFlag().getValue(), periodClose.getModifiedBy(),
+    for(PeriodClose periodClose : periodCloses) {
+      params.add(new Object[] {periodClose.getPeriodClosingFlag().getValue(), periodClose.getModifiedBy(),
           periodClose.getModifiedDate(), periodClose.getId()});
     }
     return params;
@@ -108,8 +108,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   private List<Object[]> getCreateParams(List<MutablePeriodClose> periodCloses) {
     List<Object[]> params = new ArrayList<>();
 
-    for (PeriodClose periodClose : periodCloses) {
-      params.add(new Object[]{periodClose.getId(), periodClose.getMonth().getId(), periodClose.getCloseYear(),
+    for(PeriodClose periodClose : periodCloses) {
+      params.add(new Object[] {periodClose.getId(), periodClose.getMonth().getId(), periodClose.getCloseYear(),
           periodClose.getPeriodClosingFlag().getValue(), periodClose.getStatFlag(), periodClose.getStatUpFlag(),
           periodClose.getModifiedDate(), periodClose.getModifiedBy(), periodClose.getFinancialAccountYear().getId()});
     }
