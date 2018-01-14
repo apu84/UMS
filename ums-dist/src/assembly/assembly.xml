@@ -86,41 +86,41 @@
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
 
-    <!--<dependencySet>-->
-      <!--<includes>-->
-        <!--<include>org.ums:ums-webservice-bank</include>-->
-      <!--</includes>-->
-      <!--<outputDirectory>webapps</outputDirectory>-->
-      <!--<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>-->
-    <!--</dependencySet>-->
+    <dependencySet>
+      <includes>
+        <include>org.ums:ums-webservice-bank</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
 
-    <!--<dependencySet>-->
-      <!--<includes>-->
-        <!--<include>org.ums:ums-webservice-library</include>-->
-      <!--</includes>-->
-      <!--<outputDirectory>webapps</outputDirectory>-->
-      <!--<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>-->
-    <!--</dependencySet>-->
+    <dependencySet>
+      <includes>
+        <include>org.ums:ums-webservice-library</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
 
-    <!--<dependencySet>-->
-      <!--<includes>-->
-        <!--<include>org.ums:ums-webservice-registrar</include>-->
-      <!--</includes>-->
-      <!--<outputDirectory>webapps</outputDirectory>-->
-      <!--<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>-->
-    <!--</dependencySet>-->
-    <!--<dependencySet>-->
-      <!--<includes>-->
-        <!--<include>org.ums:ums-webservice-account</include>-->
-      <!--</includes>-->
-      <!--<outputDirectory>webapps</outputDirectory>-->
-      <!--<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>-->
-    <!--</dependencySet>-->
-    <!--<dependencySet>-->
-      <!--<includes>-->
-        <!--<include>org.ums:microservice</include>-->
-      <!--</includes>-->
-      <!--<outputDirectory>microservice</outputDirectory>-->
-    <!--</dependencySet>-->
+    <dependencySet>
+      <includes>
+        <include>org.ums:ums-webservice-registrar</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.ums:ums-webservice-account</include>
+      </includes>
+      <outputDirectory>webapps</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.ums:microservice</include>
+      </includes>
+      <outputDirectory>microservice</outputDirectory>
+    </dependencySet>
   </dependencySets>
 </assembly>
