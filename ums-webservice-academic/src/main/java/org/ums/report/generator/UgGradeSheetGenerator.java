@@ -171,7 +171,8 @@ public class UgGradeSheetGenerator {
     if(courseType == CourseType.THEORY) {
       table = new PdfPTable(6);
       table.setWidths(new float[] {new Float(1.5), 1, 1, 1, 1, 1});
-    } else if (courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
+    }
+    else if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
       table = new PdfPTable(3);
       table.setWidths(new int[] {2, 1, 1});
     }

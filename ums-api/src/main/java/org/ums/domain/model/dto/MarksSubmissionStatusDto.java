@@ -50,12 +50,21 @@ public class MarksSubmissionStatusDto {
   private Date lastSubmissionDatePrep;
   private Date lastSubmissionDateScr;
   private Date lastSubmissionDateHead;
+  private Date lastSubmissionDateCoe;
   private List<CourseTeacherDto> courseTeacherList;
 
   private boolean isSubmissionDateOver;
   private GradeSubmissionColorCode submissionColorCode;
 
   private int mId;
+
+  public Date getLastSubmissionDateCoe() {
+    return lastSubmissionDateCoe;
+  }
+
+  public void setLastSubmissionDateCoe(Date pLastSubmissionDateCoe) {
+    lastSubmissionDateCoe = pLastSubmissionDateCoe;
+  }
 
   public Date getLastSubmissionDateScr() {
     return lastSubmissionDateScr;
