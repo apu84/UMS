@@ -40,6 +40,8 @@ public interface MutableExamGrade extends ExamGrade, Editable<Integer>, MutableI
 
   void setLastSubmissionDateHead(Date pLastSubmissionDateHead);
 
+  void setLastSubmissionDateCoe(Date pLastSubmissionDateCoe);
+
   void setExamDate(String pExamDate);
 
   void setProgramShortName(String pProgramShortName);

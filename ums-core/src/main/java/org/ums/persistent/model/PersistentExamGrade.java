@@ -38,6 +38,7 @@ public class PersistentExamGrade implements MutableExamGrade {
   private Date mLastSubmissionDatePrep;
   private Date mLastSubmissionDateScr;
   private Date mLastSubmissionDateHead;
+  private Date mLastSubmissionDateCoe;
   private Integer mTotalStudents;
 
   public PersistentExamGrade() {
@@ -62,6 +63,16 @@ public class PersistentExamGrade implements MutableExamGrade {
 
     // sExamRoutineManager.create(this);
 
+  }
+
+  @Override
+  public void setLastSubmissionDateCoe(Date pLastSubmissionDateCoe) {
+    mLastSubmissionDateCoe = pLastSubmissionDateCoe;
+  }
+
+  @Override
+  public Date getLastSubmissionDateCoe() {
+    return mLastSubmissionDateCoe;
   }
 
   @Override

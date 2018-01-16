@@ -1,14 +1,5 @@
 package org.ums.builder;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -23,6 +14,13 @@ import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.formatter.DateFormat;
 import org.ums.util.UmsUtils;
+
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -76,6 +74,8 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     if(pReadOnly.getLastSubmissionDateHead() != null)
       pBuilder.add("lastSubmissionDateHead", mDateFormat.format(pReadOnly.getLastSubmissionDateHead()));
 
+    if(pReadOnly.getLastSubmissionDateCoe() != null)
+      pBuilder.add("lastSubmissionDateCoe", mDateFormat.format(pReadOnly.getLastSubmissionDateCoe()));
   }
 
   @Override

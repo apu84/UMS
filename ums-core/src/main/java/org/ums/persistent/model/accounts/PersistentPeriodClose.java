@@ -87,7 +87,6 @@ public class PersistentPeriodClose implements MutablePeriodClose {
     return mMonth == null ? sMonthManager.get(mMonthId) : sMonthManager.validate(mMonth);
   }
 
-  @JsonIgnore
   public void setMonth(Month pMonth) {
     mMonth = pMonth;
   }

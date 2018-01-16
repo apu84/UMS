@@ -19,6 +19,10 @@ module ums {
 
     }
 
+    public yearChanged() {
+      this.initialize();
+    }
+
     public initialize() {
       this.financialAccountYearService.getOpenedFinancialAccountYear().then((financialAccountYear: IFinancialAccountYear) => this.financialAccountYear = financialAccountYear);
       this.periodCloseService.getPeriodCloseList(this.financialYearType).then((periodCloseList: IPeriodClose[]) => {
@@ -69,7 +73,7 @@ module ums {
           periodClose.financialAccountYearId = this.financialAccountYear.stringId;
           let date = new Date();
           periodClose.closeYear = date.getFullYear();
-          periodClose.periodCloseFlag = IOpenCloseType.O;
+          periodClose.periodClosingFlag = IOpenCloseType.O;
           this.periodCloseList.push(periodClose);
         });
         console.log(this.periodCloseList);

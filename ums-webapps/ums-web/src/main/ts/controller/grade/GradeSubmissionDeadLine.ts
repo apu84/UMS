@@ -1,4 +1,6 @@
 module ums {
+  import AdditionalRolePermissions = ums.AdditionalRolePermissions;
+
   interface IGradeSubmissionDeadline extends ng.IScope {
     semesterList: Array<Semester>;
     courseNo: string;
@@ -11,6 +13,8 @@ module ums {
     examGradeStatisticsMap: any;
     coloredExamGradeId: number;
     coloredExamGrade: IExamGrade;
+    user: User;
+    additionalRolePermission: AdditionalRolePermissions;
     examDate: string;
     showLoader: boolean;
     showTable: boolean;
@@ -42,6 +46,7 @@ module ums {
     lastSubmissionDatePrep: string;
     lastSubmissionDateScr: string;
     lastSubmissionDateHead: string;
+    lastSubmissionDateCoe: string;
     changed: boolean;
     backgroundColor: string;
   }
@@ -49,13 +54,13 @@ module ums {
   class GradeSubmissionDeadLine {
 
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService',
-      'examRoutineService', 'examGradeService'];
+      'examRoutineService', 'examGradeService', 'userService', 'additionalRolePermissionsService'];
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IGradeSubmissionDeadline,
                 private $q: ng.IQService, private notify: Notify,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService, private semesterService: SemesterService,
                 private examRoutineService: ExamRoutineService,
-                private examGradeService: ExamGradeService) {
+                private examGradeService: ExamGradeService, private userService: UserService, private additionalRolePermissionService: AdditionalRolePermissionsService) {
 
       $scope.showLoader = false;
       $scope.showTable = false;
@@ -73,7 +78,14 @@ module ums {
       $scope.checkCourseNo = this.checkCourseNo.bind(this);
       $scope.dateTouched = this.dateTouched.bind(this);
       Utils.setValidationOptions("form-horizontal");
+      this.getLoggedUserAdditionalPermissions();
+    }
 
+    private getLoggedUserAdditionalPermissions() {
+      this.additionalRolePermissionService.fetchLoggedUserAdditionalRolePermissions().then((permissions: AdditionalRolePermissions[]) => {
+        console.log("Permissions");
+        console.log(permissions[0].permissions.entries);
+      });
     }
 
     private checkCourseNo(courseNo: string) {

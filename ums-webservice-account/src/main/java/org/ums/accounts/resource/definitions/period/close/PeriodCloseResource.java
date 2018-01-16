@@ -23,13 +23,15 @@ public class PeriodCloseResource extends MutablePeriodCloseResource {
 
   @GET
   @Path("/year-type/{year-type}")
-  public String getPeriodCloseList(final @Context Request pRequest, @PathParam("year-type") String pYearTYpe)
+  public List<PeriodClose> getPeriodCloseList(final @Context Request pRequest, @PathParam("year-type") String pYearTYpe)
       throws Exception {
     List<PeriodClose> periodCloseList =
         pYearTYpe.equals("current") ? mHelper.getContentManager().getByCurrentYear() : mHelper.getContentManager()
             .getByPreviousYear();
+    
+    periodCloseList.sort((o1, o2) -> o1.getMonthId().compareTo(o2.getMonthId()));
     ObjectMapper mapper = new ObjectMapper();
-    return mapper.writeValueAsString(periodCloseList);
+    return periodCloseList;
   }
 
   @POST

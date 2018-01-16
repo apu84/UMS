@@ -16,7 +16,7 @@ module ums {
     financialAccountYear: IFinancialAccountYear;
     financialAccountYearId: string;
     closeYear: number;
-    periodCloseFlag: IOpenCloseType;
+    periodClosingFlag: IOpenCloseType;
     statFlag: string;
     statUpFlag: string;
     modifiedDate: string;
