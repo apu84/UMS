@@ -81,8 +81,8 @@ module ums {
             var responseBody =response.data;
             this.state = responseBody.state;
             console.log(this.state);
-            $("#twoFaInputDiv").hide();
-            $("#twoFaExpireDiv").show();
+            $("#twoFaInputDiv").show();
+            $("#twoFaExpireDiv").hide();
             this.manageTimer(responseBody.lifeTime, responseBody.remainingTime);
           },
           function(response){

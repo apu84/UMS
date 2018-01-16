@@ -380,6 +380,10 @@ module ums {
 
       $("#leftDiv").hide();
       $("#arrowDiv").show();
+
+      setTimeout(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      }, 1000);
     }
 
 

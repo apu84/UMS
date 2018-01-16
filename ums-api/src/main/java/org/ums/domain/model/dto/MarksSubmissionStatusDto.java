@@ -52,6 +52,7 @@ public class MarksSubmissionStatusDto {
   private Date lastSubmissionDateHead;
   private Date lastSubmissionDateCoe;
   private List<CourseTeacherDto> courseTeacherList;
+  private String courseTeacherStr;
 
   private boolean isSubmissionDateOver;
   private GradeSubmissionColorCode submissionColorCode;
@@ -384,6 +385,14 @@ public class MarksSubmissionStatusDto {
 
   public void setProgramLongName(String programLongName) {
     this.programLongName = programLongName;
+  }
+
+  public String getCourseTeacherStr() {
+    return courseTeacherStr;
+  }
+
+  public void setCourseTeacherStr(String courseTeacherStr) {
+    this.courseTeacherStr = courseTeacherStr;
   }
 
   public String toString() {

@@ -161,9 +161,12 @@
                         <td align="center">{{marksSubmission.year}}-{{marksSubmission.semester}}</td>
                         <td align="center">{{marksSubmission.offeredTo}}</td>
                         <td>
-                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList">
-                                {{courseTeacher.teacher_name}},
+                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList  | limitTo:4">
+                                {{courseTeacher.teacher_name}}   {{$last ? '' : ($index==marksSubmission.courseTeacherList.length-2) ? ' and ' : ', '}}
                             </span>
+                            <span  ng-if="marksSubmission.courseTeacherList.length > 4">...
+							<a data-toggle="tooltip" tooltip-trigger="none" data-placement="bottom" title="{{ marksSubmission.courseTeacherStr }}"><i class="fa fa-hand-o-down" aria-hidden="true"></i></a>
+							</span>
 
                         </td>
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
