@@ -22,6 +22,8 @@ import org.ums.configuration.UMSConfiguration;
 import org.ums.mapper.Mapper;
 import org.ums.mapper.MapperEntry;
 import org.ums.mapper.MapperEntryImpl;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 @Component
 @Provider
@@ -37,6 +39,8 @@ public class TwoFAFilter implements ContainerRequestFilter {
   ResourceInfo resourceInfo;
   @Autowired
   UMSConfiguration mUMSConfiguration;
+  @Autowired
+  private UserManager mUserManager;
 
   @Override
   public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -45,6 +49,8 @@ public class TwoFAFilter implements ContainerRequestFilter {
     TwoFA methodAnnotation = resourceMethod.getAnnotation(TwoFA.class);
     String type = null;
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+
     if(methodAnnotation != null) {
       type = methodAnnotation.type();
     }
@@ -62,6 +68,7 @@ public class TwoFAFilter implements ContainerRequestFilter {
       response =
           Response.status(428).header(TwoFAConstants.TWO_FA_STATE_HEADER, id.toString())
               .header(TwoFAConstants.TWO_FA_LIFE_HEADER, mUMSConfiguration.getTwoFATokenLifeTime())
+              .header(TwoFAConstants.EMAIL_ADDRESS, user.getEmail())
               .header(TwoFAConstants.TWO_FA_REMAINING_TIME_HEADER, seconds).build();
       requestContext.abortWith(response);
     }

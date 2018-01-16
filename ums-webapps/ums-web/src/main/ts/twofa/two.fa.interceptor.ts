@@ -11,8 +11,9 @@ module ums {
             let state: string = response.headers('state');
             let lifeTime: number = Number(response.headers('lifeTime'));
             let remainingTime: number = Number(response.headers('remainingTime'));
+            let emailAddress: string = response.headers('emailAddress');
             let twoFaService: TwoFAService = $injector.get('TwoFAService');
-            return twoFaService.showTwoFAForm(state, lifeTime, remainingTime).then((success) => {
+            return twoFaService.showTwoFAForm(state, lifeTime, remainingTime, emailAddress).then((success) => {
                   response.data = success;
                   return $q.resolve(response);               
                 },

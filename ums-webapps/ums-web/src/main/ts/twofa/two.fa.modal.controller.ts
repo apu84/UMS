@@ -1,6 +1,6 @@
 module ums {
   export class TwoFaModalController {
-    public static $inject = ['$scope', '$modalInstance','HttpClient', 'state','lifeTime','remainingTime','$http', 'currentDefer','notify'];
+    public static $inject = ['$scope', '$modalInstance','HttpClient', 'state','lifeTime','remainingTime','emailAddress','$http', 'currentDefer','notify'];
 
     constructor(private $scope: any,
                 private $modalInstance: any,
@@ -8,6 +8,7 @@ module ums {
                 private state: string,
                 private lifeTime: number,
                 private remainingTime: number,
+                private emailAddress: string,
                 private $http: any,
                 private currentDefer: ng.IDeferred<any>,
                 private notify: Notify) {
@@ -16,7 +17,8 @@ module ums {
       this.$scope.resend = this.resend.bind(this);
       this.$scope.tokenRef = {
         message: '',
-        twofatoken: ''
+        twofatoken: '',
+        emailAddress: this.emailAddress
       };
 
       this.manageTimer(this.lifeTime, this.remainingTime);

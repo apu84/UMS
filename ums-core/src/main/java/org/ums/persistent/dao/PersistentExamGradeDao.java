@@ -1004,7 +1004,6 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       statusDto.setLastSubmissionDateScr(resultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
       statusDto.setLastSubmissionDateHead(resultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
 
-
       String courseTeachers = resultSet.getString("Course_Teachers");
       ArrayList<CourseTeacherDto> teacherList = new ArrayList();
       if(courseTeachers != null && !courseTeachers.equalsIgnoreCase("")) {

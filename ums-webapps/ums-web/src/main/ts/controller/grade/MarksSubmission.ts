@@ -255,11 +255,19 @@ module ums {
       $scope.data.recheck_accepted_studentId = "";
       $scope.chartData = [];
       this.initChart();
+      var thisScope = this. $scope;
       $scope.$on('LastRepeaterElement', function () {
         setTimeout(function () {
               $(".img_tooltip").hide();
               $("#panel_top").show();
               $("#loading_panel").hide();
+
+              //To show new features for a certain time
+              //Don't remove this code.
+              if(thisScope.data.totalInfoView  == 0) {
+                $("#modal-feature-info").modal('show');
+              }
+              thisScope.data.totalInfoView++;
             }
             , 400);
       });
@@ -482,15 +490,6 @@ module ums {
       $("#selection2").show();
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
-
-
-      //To show new features for a certain time
-      //Don't remove this code.
-      if(this. $scope.data.totalInfoView  == 0) {
-        $("#modal-feature-info").modal('show');
-      }
-      this. $scope.data.totalInfoView++;
-
     }
 
     private calculateTotalAndGradeLetter(student_id: string, reg_type : number): void {
@@ -1037,7 +1036,6 @@ module ums {
               studentMark.statusId = this.appConstants.marksStatusEnum.SUBMITTED;
           }
         }
-
         gradeList.push(studentMark);
       }
       return gradeList;

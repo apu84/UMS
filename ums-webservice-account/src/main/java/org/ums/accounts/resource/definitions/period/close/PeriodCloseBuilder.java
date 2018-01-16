@@ -48,7 +48,7 @@ public class PeriodCloseBuilder implements Builder<PeriodClose, MutablePeriodClo
       pMutable.setCloseYear(pJsonObject.getInt("closeYear"));
     if(pJsonObject.containsKey("financialAccountYearId"))
       pMutable.setFinancialAccountYearId(Long.parseLong(pJsonObject.getString("financialAccountYearId")));
-    if (pJsonObject.containsKey("periodClosingFlag"))
+    if(pJsonObject.containsKey("periodClosingFlag"))
       pMutable.setPeriodClosingFlag(OpenCloseFlag.get(pJsonObject.getString("periodClosingFlag")));
   }
 }
