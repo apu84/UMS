@@ -485,12 +485,12 @@ module ums {
 
 
       //To show new features for a certain time
-      /* Don't remove this code.
+      //Don't remove this code.
       if(this. $scope.data.totalInfoView  == 0) {
         $("#modal-feature-info").modal('show');
       }
       this. $scope.data.totalInfoView++;
-      */
+
     }
 
     private calculateTotalAndGradeLetter(student_id: string, reg_type : number): void {
