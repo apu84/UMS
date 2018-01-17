@@ -28,47 +28,107 @@
 </style>
 <div data-ng-show="!vm.showWarning">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
             <fieldset>
                 <legend>Check in</legend>
                 <div class="row">
                     <div class="col-md-8">
                         <label for="barcode">Enter item barcode: </label>
-                        <input name="barcode" id="barcode" size="14" data-ng-model="vm.checkInItem.itemCode"
+                        <input name="barcode"
+                               id="barcode"
+                               size="14"
+                               data-ng-model="vm.checkInItem.itemCode"
                                class="form-control" disabled>
                     </div>
                     <div class="col-md-4">
                         <label>Specify return date</label>
-                        <input type="text" size="13" data-provide="datepicker" placeholder="DD/MM/YYYY"
-                               data-date-format="dd/mm/yyyy" data-ng-model="vm.checkInItem.returnDate"
-                               id="return_date_override" name="return_date_override"
-                               class="form-control">
+                        <input type="text"
+                               size="13"
+                               data-ng-model="vm.checkInItem.returnDate"
+                               id="return_date_override"
+                               name="return_date_override"
+                               class="datetimepicker-default form-control">
                     </div>
                 </div>
-                <br />
+                <br/>
 
-                <input type="button" data-ng-click="vm.submitCheckIn()" class="submit" value="Submit">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="button" data-ng-click="vm.submitCheckIn()" class="submit" value="Submit">
 
+                    </div>
+                    <div class="col-md-7">
+                        <div align="right">
+                            <input type="checkbox" data-ng-model="vm.checkInItem.fineStatus" id="exemptcheck"
+                                   name="exemptfine" value="exemptfine">
 
+                            <label for="exemptcheck">Forgive overdue charges</label>
+                        </div>
+                    </div>
+                </div>
             </fieldset>
         </div>
-        <div class="col-md-4">
-            <fieldset id="checkin_options">
-                <legend>Options</legend>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset>
+                <legend>Book Information</legend>
+                <div class="row">
+                    <div class="col-md-3"><b>Title</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.record.title}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Type</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.record.materialTypeName}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Call No</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.record.callNo}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Copies Available</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8"><b>{{vm.record.totalAvailable}}</b> out of <b>{{vm.record.totalItems}}</b>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
 
-                <p>
-
-                    <input type="checkbox" data-ng-model="vm.checkInItem.fineStatus" id="exemptcheck" name="exemptfine" value="exemptfine">
-
-                    <label for="exemptcheck">Forgive overdue charges</label>
-                </p>
-                <!-- overduecharges -->
-                <!--<p>-->
-
-                <!--&lt;!&ndash;<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode">&ndash;&gt;-->
-                <!--&lt;!&ndash;<label for="dropboxcheck">Book drop mode</label>&ndash;&gt;-->
-                <!--</p>-->
-                <!-- overduecharges -->
+        <div class="col-md-6">
+            <fieldset>
+                <legend>Circulation Information</legend>
+                <div class="row">
+                    <div class="col-md-3"><b>MFN</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.circulationDetail.mfn}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Accession</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.circulationDetail.itemCode}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Issue Date</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.circulationDetail.issueDate}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Due Date</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8"><span data-ng-if="vm.circulationDetail.overDueStatus==true"><span style="color: red">{{vm.circulationDetail.dueDate}}</span></span>
+                        <span data-ng-if="vm.circulationDetail.overDueStatus==false"><span style="color: green">{{vm.circulationDetail.dueDate}}</span></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><b>Patron Id</b></div>
+                    <div class="col-md-1"><b>:</b></div>
+                    <div class="col-md-8">{{vm.circulationDetail.patronId}}
+                    </div>
+                </div>
             </fieldset>
         </div>
 
@@ -142,36 +202,36 @@
     <!--</div>-->
     <!--&lt;!&ndash; - X-  Checked-in Items Table End &ndash;&gt;-->
 
-    <div class="row">
-        <br/>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-in Items</p>
-            <table class="table table-bordered">
-                <thead style="background-color: whitesmoke">
-                <tr>
-                    <th>Due Date</th>
-                    <th>Title</th>
-                    <th>Material Type</th>
-                    <th>Barcode</th>
-                    <th>Return Date</th>
-                    <th>Fines</th>
-                </tr>
-                </thead>
-                <tbody data-ng-repeat="item in vm.allCirculation">
-                <tr>
-                    <td>{{item.dueDate}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.materialType}}</td>
-                    <td>{{item.mfn}}</td>
-                    <td>{{item.returnDate}}</td>
-                    <td>{{item.fineStatusString}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!--<div class="row">-->
+    <!--<br/>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+    <!--<p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-in Items</p>-->
+    <!--<table class="table table-bordered">-->
+    <!--<thead style="background-color: whitesmoke">-->
+    <!--<tr>-->
+    <!--<th>Due Date</th>-->
+    <!--<th>Title</th>-->
+    <!--<th>Material Type</th>-->
+    <!--<th>Barcode</th>-->
+    <!--<th>Return Date</th>-->
+    <!--<th>Fines</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody data-ng-repeat="item in vm.allCirculation">-->
+    <!--<tr>-->
+    <!--<td>{{item.dueDate}}</td>-->
+    <!--<td>{{item.title}}</td>-->
+    <!--<td>{{item.materialType}}</td>-->
+    <!--<td>{{item.mfn}}</td>-->
+    <!--<td>{{item.returnDate}}</td>-->
+    <!--<td>{{item.fineStatusString}}</td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--</div>-->
+    <!--</div>-->
 
 </div>
 

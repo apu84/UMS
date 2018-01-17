@@ -161,6 +161,7 @@ module ums {
         totalAvailable: number;
         totalCheckedOut: number;
         totalOnHold: number;
+        overDueStatus: boolean;
     }
 
     export interface ICheckIn{
