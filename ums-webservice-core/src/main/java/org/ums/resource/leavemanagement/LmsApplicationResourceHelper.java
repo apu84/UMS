@@ -4,8 +4,10 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.integration.file.remote.handler.FileTransferringMessageHandler;
-import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.expression.common.LiteralExpression;
+import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -91,7 +93,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
   // PublishSubscribeChannel lmsChannel;// = applicationContext.getBean("pubSubscribeChannel",
   // PublishSubscribeChannel.class);
 
-  private DefaultFtpSessionFactory mSessionFactory;
+  @Autowired
+  @Lazy
+  private SessionFactory<FTPFile> mSessionFactory;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -150,11 +154,16 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     Files.move(pInputStream.toPath(), newFile.toPath());
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
+    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
+    template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+    template.setUseTemporaryFileName(false);
+    template.execute(session -> {
+      session.mkdir("files/");
+      return session.mkdir("files/lms/");
+    });
+    template.append(messageA);
     // lmsChannel.send(messageA);
 
-    /* Code for removing the channels */
-    FileTransferringMessageHandler<FTPFile> handler = new FileTransferringMessageHandler<FTPFile>(mSessionFactory);
-    handler.handleMessage(messageA);
 
     PersistentAttachment attachment = new PersistentAttachment();
     attachment.setApplicationType(ApplicationType.LEAVE);

@@ -102,6 +102,14 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
       Calendar calendar = getCalendar(date);
       pMutable.setLastSubmissionDateHead(calendar.getTime());
     }
+    if(pJsonObject.containsKey("lastSubmissionDateCoe")) {
+      try {
+        pMutable.setLastSubmissionDateCoe(UmsUtils.convertToDate(pJsonObject.getString("lastSubmissionDateCoe"),
+            "dd-MM-yyyy"));
+      } catch(Exception e) {
+        e.printStackTrace();
+      }
+    }
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     // pMutable.setExamTypeId(pJsonObject.getInt("examType"));

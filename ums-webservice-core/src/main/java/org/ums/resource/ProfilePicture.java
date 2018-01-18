@@ -1,7 +1,7 @@
 package org.ums.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -10,9 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.expression.common.LiteralExpression;
+import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
@@ -27,14 +30,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 @Component
 @Path("/profilePicture")
@@ -60,11 +60,17 @@ public class ProfilePicture extends Resource {
    * @Autowired private KafkaTemplate<String, String> mKafkaTemplate;
    */
 
+  @Autowired
+  @Lazy
+  private SessionFactory<FTPFile> mSessionFactory;
+
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  @Qualifier("photoUploadChannel")
-  MessageChannel photoUploadChannel;// = applicationContext.getBean("lmsChannel",
-                                    // MessageChannel.class);
+  /*
+   * @Qualifier("photoUploadChannel") MessageChannel photoUploadChannel;
+   */
+  // = applicationContext.getBean("lmsChannel",
+  // MessageChannel.class);
 
   // KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate",
   // KafkaTemplate.class);
@@ -134,8 +140,15 @@ public class ProfilePicture extends Resource {
     Files.move(pInputStream.toPath(), newFile.toPath());
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
-    photoUploadChannel.send(messageA);
 
+    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
+    template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+    template.setUseTemporaryFileName(false);
+    template.execute(session -> {
+      session.mkdir("files/");
+      return session.mkdir("files/user-photo/");
+    });
+    template.append(messageA);
     pInputStream.deleteOnExit();
     newFile.delete();
     System.gc();

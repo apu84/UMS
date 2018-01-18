@@ -129,6 +129,8 @@ module ums {
       if (examGrade.lastSubmissionDatePrep != null && examGrade.lastSubmissionDateScr != null && examGrade.lastSubmissionDateHead != null) {
         this.$scope.showButton = true;
         examGrade.changed = true;
+        let date = Utils.getDateObject(examGrade.lastSubmissionDateHead);
+
       }
       // this.$scope.showButton = true;
       // examGrade.changed = true;

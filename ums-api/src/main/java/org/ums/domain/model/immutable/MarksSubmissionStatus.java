@@ -35,6 +35,8 @@ public interface MarksSubmissionStatus extends Serializable, EditType<MutableMar
 
   Date getLastSubmissionDateHead();
 
+  Date getLastSubmissionDateCoe();
+
   Integer getYear();
 
   Integer getAcademicSemester();

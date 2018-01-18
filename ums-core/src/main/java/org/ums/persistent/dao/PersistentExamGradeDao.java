@@ -16,15 +16,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   String UPDATE_ALL = "UPDATE MARKS_SUBMISSION_STATUS_CURR SET Status = ? , LAST_SUBMISSION_DATE_PREP= ?, "
-      + "LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=?,  LAST_MODIFIED =  " + getLastModifiedSql()
-      + " Where Course_Id=? and Semester_Id=? and Exam_Type=?";
+      + "LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=?, LAST_SUBMISSION_DATE_COE=?,  LAST_MODIFIED =  "
+      + getLastModifiedSql() + " Where Course_Id=? and Semester_Id=? and Exam_Type=?";
 
   public int update(MutableMarksSubmissionStatus pMutable) {
     String query = UPDATE_ALL;
 
     return mJdbcTemplate.update(query, pMutable.getStatus().getId(), pMutable.getLastSubmissionDatePrep(),
-        pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateHead(), pMutable.getCourseId(),
-        pMutable.getSemesterId(), pMutable.getExamType().getId());
+        pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateHead(), pMutable.getLastSubmissionDateCoe(),
+        pMutable.getCourseId(), pMutable.getSemesterId(), pMutable.getExamType().getId());
     /*
      * List<MutableMarksSubmissionStatus> abc = new ArrayList<>(); abc.add(pMutable); int[] a =
      * mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -896,7 +896,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(MarksSubmissionStatusDto app : pMarksSubmissionStatusDtos) {
       params.add(new Object[] {app.getLastSubmissionDatePrep(), app.getLastSubmissionDateScr(),
-          app.getLastSubmissionDateHead(), app.getSemesterId(), app.getCourseId(), app.getExamType().getId()});
+          app.getLastSubmissionDateHead(), app.getLastSubmissionDateCoe(), app.getSemesterId(), app.getCourseId(),
+          app.getExamType().getId()});
     }
     return params;
   }
