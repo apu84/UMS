@@ -1,10 +1,10 @@
 package org.ums.decorator;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.CourseManager;
-
-import java.util.List;
 
 public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCourse, String, CourseManager> implements
     CourseManager {
@@ -85,4 +85,8 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
     return getManager().getOfferedToProgram(pSemesterId, pCourseId);
   }
 
+  @Override
+  public List<Course> getSemesterWiseCourseList(int pProgramId, int pSemesterId, int pYear, int pAcademicSemester) {
+    return getManager().getSemesterWiseCourseList(pProgramId, pSemesterId, pYear, pAcademicSemester);
+  }
 }

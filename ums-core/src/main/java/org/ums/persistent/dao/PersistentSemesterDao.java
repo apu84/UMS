@@ -108,7 +108,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   @Override
   public List<Semester> getPreviousSemesters(Integer pSemesterId, Integer pProgramTypeId) {
     String query =
-        SELECT_ALL + "WHERE START_DATE < (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? "
+        SELECT_ALL + "WHERE START_DATE <= (SELECT START_DATE FROM MST_SEMESTER WHERE SEMESTER_ID = ? "
             + "AND PROGRAM_TYPE = ?) ORDER BY START_DATE DESC";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramTypeId}, new SemesterRowMapper());
   }

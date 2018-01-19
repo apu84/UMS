@@ -112,19 +112,27 @@ public class ProcessResultImpl implements ProcessResult {
     for(String studentId : studentCourseGradeMap.keySet()) {
       MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
 
-      Double gpa = calculateGPA(studentCourseGradeMap.get(studentId).stream()
+      StudentRecordParams studentRecordParams = calculateGPA(studentCourseGradeMap.get(studentId).stream()
           .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
-      studentRecord.setGPA(gpa);
+      if(studentRecordParams != null) {
+        studentRecord.setGPA(studentRecordParams.getGpa());
+        studentRecord.setCompletedCrHr(studentRecordParams.getCompletedCrHr());
+        studentRecord.setCompletedGradePoints(studentRecordParams.getCompletedGradePoints());
+      }
       if(!mUmsConfiguration.isProcessGPAOnly()) {
         List<Semester> previousSemesters =
-            mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgramId());
+            mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgram().getProgramTypeId());
         List<Integer> previousSemesterIds =
             previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
         List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
             .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
-        Double cgpa = calculateCGPA(courseResults);
+        StudentRecordParams cgpa = calculateCGPA(courseResults);
         boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
-        studentRecord.setCGPA(cgpa);
+        if(cgpa != null) {
+          studentRecord.setCGPA(cgpa.getGpa());
+          studentRecord.setTotalCompletedCrHr(cgpa.getCompletedCrHr());
+          studentRecord.setTotalCompletedGradePoints(cgpa.getCompletedGradePoints());
+        }
         studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
         studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(studentCourseGradeMap.get(studentId),
             isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.PASSED, pSemesterId));
@@ -151,15 +159,15 @@ public class ProcessResultImpl implements ProcessResult {
     mutableTaskStatus.update();
   }
 
-  private Double calculateCGPA(List<UGRegistrationResult> pResults) {
+  private StudentRecordParams calculateCGPA(List<UGRegistrationResult> pResults) {
     return calculateGPA(pResults);
   }
 
-  private Double calculateGPA(List<UGRegistrationResult> pResults) {
+  private StudentRecordParams calculateGPA(List<UGRegistrationResult> pResults) {
     Double totalCrHr = 0D;
     Double totalGPA = 0D;
     if(pResults.size() == 0) {
-      return 0D;
+      return null;
     }
     for(UGRegistrationResult result : pResults) {
       if(!EXCLUDE_GRADES.contains(result.getGradeLetter())) {
@@ -168,7 +176,8 @@ public class ProcessResultImpl implements ProcessResult {
       }
     }
     Double toBeTruncated = totalGPA / totalCrHr;
-    return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    return new StudentRecordParams(BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue(),
+        totalCrHr, totalGPA);
   }
 
   private Boolean isPassed(final int pSemesterId, List<UGRegistrationResult> pResults) {
@@ -237,5 +246,29 @@ public class ProcessResultImpl implements ProcessResult {
     MutableTaskStatus mutableTaskStatus = status.edit();
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
     mutableTaskStatus.update();
+  }
+
+  private class StudentRecordParams {
+    private double gpa;
+    private double completedCrHr;
+    private double completedGradePoints;
+
+    public StudentRecordParams(double pGpa, double pCompletedCrHr, double pCompletedGradePoints) {
+      gpa = pGpa;
+      completedCrHr = pCompletedCrHr;
+      completedGradePoints = pCompletedGradePoints;
+    }
+
+    public double getGpa() {
+      return gpa;
+    }
+
+    public double getCompletedCrHr() {
+      return completedCrHr;
+    }
+
+    public double getCompletedGradePoints() {
+      return completedGradePoints;
+    }
   }
 }

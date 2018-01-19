@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.UGRegistrationResult;
 
 public class TabulationCourseModelImpl implements org.ums.tabulation.TabulationCourseModel {
   Map<String, UGRegistrationResult> mRegularCoursesForCurrentSemester;
-  Map<String, UGRegistrationResult> mClearanceCoursesForCurrrentSemester;
+  Map<String, UGRegistrationResult> mClearanceCoursesForCurrentSemester;
   Map<String, UGRegistrationResult> mFailedCoursesForCurrentSemester;
   Map<String, UGRegistrationResult> mFailedCoursesForPreviousSemester;
   Map<String, UGRegistrationResult> mCarryCoursesForCurrentSemester;
@@ -17,7 +17,7 @@ public class TabulationCourseModelImpl implements org.ums.tabulation.TabulationC
       Map<String, UGRegistrationResult> pFailedCoursesForCurrentSemester,
       Map<String, UGRegistrationResult> pFailedCoursesForPreviousSemester) {
     mRegularCoursesForCurrentSemester = pRegularCoursesForCurrentSemester;
-    mClearanceCoursesForCurrrentSemester = pClearanceCoursesForCurrentSemester;
+    mClearanceCoursesForCurrentSemester = pClearanceCoursesForCurrentSemester;
     mFailedCoursesForCurrentSemester = pFailedCoursesForCurrentSemester;
     mFailedCoursesForPreviousSemester = pFailedCoursesForPreviousSemester;
     mCarryCoursesForCurrentSemester = pCarryCoursesForCurrentSemester;
@@ -38,7 +38,7 @@ public class TabulationCourseModelImpl implements org.ums.tabulation.TabulationC
 
   @Override
   public Map<String, UGRegistrationResult> getClearanceCoursesForCurrentSemester() {
-    return mClearanceCoursesForCurrrentSemester;
+    return mClearanceCoursesForCurrentSemester;
   }
 
   @Override

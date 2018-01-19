@@ -96,4 +96,8 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
     return getManager().getOfferedToProgram(pSemesterId, pCourseId);
   }
 
+  @Override
+  public List<Course> getSemesterWiseCourseList(int pProgramId, int pSemesterId, int pYear, int pAcademicSemester) {
+    return getManager().getSemesterWiseCourseList(pProgramId, pSemesterId, pYear, pAcademicSemester);
+  }
 }

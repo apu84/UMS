@@ -8,6 +8,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.ums.academic.tabulation.model.TabulationCourseModelImpl;
 import org.ums.domain.model.immutable.EquivalentCourse;
@@ -24,8 +25,10 @@ import com.google.common.collect.Maps;
 public class StudentCarryCourseServiceImpl implements StudentCarryCourseService {
   private static final Logger mLogger = LoggerFactory.getLogger(UGRegistrationResultAggregator.class);
   @Autowired
+  @Lazy
   private SemesterManager mSemesterManager;
   @Autowired
+  @Lazy
   private EquivalentCourseManager mEquivalentCourseManager;
   private Map<String, EquivalentCourse> mEquivalentCourseMap;
 

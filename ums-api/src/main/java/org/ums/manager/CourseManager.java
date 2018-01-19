@@ -1,9 +1,9 @@
 package org.ums.manager;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableCourse;
-
-import java.util.List;
 
 public interface CourseManager extends ContentManager<Course, MutableCourse, String> {
   List<Course> getBySyllabus(final String pSyllabusId);
@@ -40,4 +40,6 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
 
   Integer getOfferedToProgram(final Integer pSemesterId, final String pCourseId);
 
+  List<Course> getSemesterWiseCourseList(final int pProgramId, final int pSemesterId, final int pYear,
+      final int pAcademicSemester);
 }

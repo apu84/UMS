@@ -395,6 +395,6 @@ public class AcademicContext {
   @Bean
   TabulationService tabulationService() {
     return new TabulationServiceImpl(registrationResultManager(), semesterManager(), studentRecordManager(),
-        mCoreContext.studentManager());
+        mCoreContext.studentManager(), courseManager(), programManager());
   }
 }
