@@ -40,6 +40,8 @@ public interface ExamGrade extends Serializable, EditType<MutableExamGrade>, Ide
 
   Date getLastSubmissionDateHead();
 
+  Date getLastSubmissionDateCoe();
+
   String getExamDate();
 
   String getProgramShortName();

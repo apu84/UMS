@@ -31,6 +31,8 @@ public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Edi
 
   void setLastSubmissionDateHead(Date pLastSubmissionDateHead);
 
+  void setLastSubmissionDateCoe(Date pLastSubmissionDateCoe);
+
   void setPartATotal(Integer pPartATotal);
 
   void setPartBTotal(Integer pPartBTotal);

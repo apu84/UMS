@@ -30,6 +30,12 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
   @Override
   public void build(JsonObjectBuilder pBuilder, Circulation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     Record record = mRecordManager.get(pReadOnly.getMfn());
+    if(new Date().compareTo(pReadOnly.getDueDate()) > - 1){
+      pBuilder.add("overDueStatus", true);
+    }
+    else{
+      pBuilder.add("overDueStatus", false);
+    }
     pBuilder.add("circulationId", pReadOnly.getId().toString());
     pBuilder.add("patronId", pReadOnly.getPatronId());
     pBuilder.add("mfn", pReadOnly.getMfn().toString());
@@ -38,7 +44,14 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     java.text.DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aaa");
     String outputString = outputFormat.format(pReadOnly.getDueDate());
     pBuilder.add("dueDate", outputString);
-    pBuilder.add("returnDate", pReadOnly.getReturnDate() == null ? "" : mDateFormat.format(pReadOnly.getReturnDate()));
+    if(pReadOnly.getReturnDate() == null) {
+      pBuilder.add("returnDate", "");
+    }
+    else {
+      java.text.DateFormat outputReturnDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aaa");
+      String outputReturnDateString = outputReturnDateFormat.format(pReadOnly.getReturnDate());
+      pBuilder.add("returnDate", outputReturnDateString);
+    }
     pBuilder.add("fineStatus", pReadOnly.getFineStatus());
     pBuilder.add("fineStatusString", pReadOnly.getFineStatus() == 0 ? "No Fine Applied" : "Fine Applied");
     pBuilder.add("title", record.getTitle());
@@ -52,7 +65,7 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
 
   @Override
   public void build(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    java.text.DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aaa");
+    java.text.DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aaa");
     Date date = null;
     try {
       date = dateFormat.parse(pJsonObject.getString("dueDate"));
@@ -82,8 +95,15 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
   }
 
   public void checkInBuilder(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setReturnDate(pJsonObject.containsKey("returnDate") ? mDateFormat.parse(pJsonObject
-        .getString("returnDate")) : new Date());
+    java.text.DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aaa");
+    Date date = null;
+    try {
+      date = dateFormat.parse(pJsonObject.getString("returnDate"));
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
+    long time = date.getTime();
+    pMutable.setReturnDate(new Timestamp(time));
     pMutable.setAccessionNumber(pJsonObject.getString("itemCode"));
   }
 

@@ -47,10 +47,10 @@ module ums {
             if(itemId != undefined && itemId != null && itemId != "") {
                 this.circulationService.getSingleCirculation(itemId).then((data: any) => {
                     if (data.itemCode) {
-                        this.state.go('circulation.checkIn', {itemId: itemId});
+                        this.state.go('circulation.checkIn', {itemId: itemId, mfn: data.mfn});
                     }
                     else{
-                        this.state.go('circulation.checkIn', {itemId: null});
+                        this.state.go('circulation.checkIn', {itemId: null, mfn: null});
                     }
                 });
             }

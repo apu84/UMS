@@ -41,8 +41,8 @@ public class TwoFATokenGeneratorImpl implements TwoFATokenGenerator {
       existingToken = mTwoFATokenManager.get(newToken.getId());
       User user = mUserManager.get(pUserId);
 
-      mTwoFATokenEmailSender.sendEmail(String.valueOf(n), existingToken.getExpiredOn(), "ifticse_kuet@hotmail.com",
-          "IUMS", "One-Time Password for Online Marks Submission ");
+      mTwoFATokenEmailSender.sendEmail(String.valueOf(n), existingToken.getExpiredOn(), user.getEmail(), "IUMS",
+          "One-Time Password for Online Marks Submission ");
 
       return newToken;
     }

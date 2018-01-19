@@ -135,10 +135,20 @@ module ums {
                 controllerAs: 'vm'
             })
             .state('circulation.checkIn', {
-                url: "/checkIn/:itemId",
+                url: "/checkIn/:itemId/:mfn",
                 templateUrl: 'views/admin/circulation/circulation-checkin.html',
                 controller: 'CheckIn',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                                'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+                            ]
+                        });
+                    }]
+                }
             })
             .state('circulation.searchPatron', {
                 url: "/searchPatron/:patronId",

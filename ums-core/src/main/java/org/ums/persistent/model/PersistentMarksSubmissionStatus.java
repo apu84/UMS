@@ -38,6 +38,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   private Date mLastSubmissionDatePrep;
   private Date mLastSubmissionDateScr;
   private Date mLastSubmissionDateHead;
+  private Date mLastSubmissionDateCoe;
   private Integer mYear;
   private Integer mAcademicSemester;
   private String mLastModified;
@@ -60,6 +61,17 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
     setPartBTotal(pMarksSubmissionStatus.getPartBTotal());
     setLastModified(pMarksSubmissionStatus.getLastModified());
     setTotalPart(pMarksSubmissionStatus.getTotalPart());
+    setLastSubmissionDateCoe(pMarksSubmissionStatus.getLastSubmissionDateCoe());
+  }
+
+  @Override
+  public Date getLastSubmissionDateCoe() {
+    return mLastSubmissionDateCoe;
+  }
+
+  @Override
+  public void setLastSubmissionDateCoe(Date pLastSubmissionDateCoe) {
+    mLastSubmissionDateCoe = pLastSubmissionDateCoe;
   }
 
   @Override

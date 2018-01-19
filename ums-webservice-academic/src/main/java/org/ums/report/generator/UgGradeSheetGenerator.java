@@ -9,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
-import org.ums.manager.*;
+import org.ums.manager.CourseManager;
+import org.ums.manager.ExamGradeManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.SemesterManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -170,7 +172,7 @@ public class UgGradeSheetGenerator {
       table = new PdfPTable(6);
       table.setWidths(new float[] {new Float(1.5), 1, 1, 1, 1, 1});
     }
-    else if(courseType == CourseType.SESSIONAL) {
+    else if(courseType == CourseType.SESSIONAL || courseType == CourseType.THESIS_PROJECT) {
       table = new PdfPTable(3);
       table.setWidths(new int[] {2, 1, 1});
     }

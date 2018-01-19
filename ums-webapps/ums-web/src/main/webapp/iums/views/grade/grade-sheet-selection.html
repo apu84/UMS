@@ -161,9 +161,12 @@
                         <td align="center">{{marksSubmission.year}}-{{marksSubmission.semester}}</td>
                         <td align="center">{{marksSubmission.offeredTo}}</td>
                         <td>
-                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList">
-                                {{courseTeacher.teacher_name}},
+                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList  | limitTo:4">
+                                {{courseTeacher.teacher_name}}   {{$last ? '' : ($index==marksSubmission.courseTeacherList.length-2) ? ' and ' : ', '}}
                             </span>
+                            <span  ng-if="marksSubmission.courseTeacherList.length > 4">...
+							<a data-toggle="tooltip" tooltip-trigger="none" data-placement="bottom" title="{{ marksSubmission.courseTeacherStr }}"><i class="fa fa-hand-o-down" aria-hidden="true"></i></a>
+							</span>
 
                         </td>
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
@@ -1176,12 +1179,22 @@
     }
 
     /*Temporary Modal Setup */
+    /*
     var contents = "<ul class='b'> "+
         "<li>You can now put <b>'Absent'</b> and <b>'Reported'</b> information in online grade sheet.</li>"+
         "<li><b>'Absent'</b> and <b>'Reported'</b> are allowed only for  <b>'Theory'</b> Grade Sheet.</li>"+
         "<li>Provide 'Abs' for Absent and 'Rep' for Reported Students.</li>"+
         "<li>You can put <font color='#A569BD' style='font-size: 15px;font-weight: bold;'>\"Abs\"</font> or <font color='#E74C3C' style='font-size: 15px;font-weight: bold;'>\"Rep\"</font> only for Part-A and Part-B column..</li>"+
     "</ul>";
+    */
+    var contents = "<ul class='b'> "+
+        "<li>Online marks submission is now more <b>secure.</b></li>"+
+        "<li>Each time you save your grades, IUMS will send you an <font color='#E74C3C' style='font-size: 15px;font-weight: bold;'>OTP (One Time Password)</font> to your email address.<br/>"+
+        "You should provide the correct OTP during online marks submission.</li>"+
+        "<li>If you provide the wrong OTP for five (5) times, your account will be locked.<br/>"+
+        "In that case, please contact with IUMS Support.</li>"+
+        "</ul>";
+
     $("#").html("Newly Added Features");
     $("#modal-feature-info-body").html(contents);
 </script>

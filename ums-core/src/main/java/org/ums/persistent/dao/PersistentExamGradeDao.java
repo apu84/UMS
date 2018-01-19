@@ -16,15 +16,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   String UPDATE_ALL = "UPDATE MARKS_SUBMISSION_STATUS_CURR SET Status = ? , LAST_SUBMISSION_DATE_PREP= ?, "
-      + "LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=?,  LAST_MODIFIED =  " + getLastModifiedSql()
-      + " Where Course_Id=? and Semester_Id=? and Exam_Type=?";
+      + "LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=?, LAST_SUBMISSION_DATE_COE=?,  LAST_MODIFIED =  "
+      + getLastModifiedSql() + " Where Course_Id=? and Semester_Id=? and Exam_Type=?";
 
   public int update(MutableMarksSubmissionStatus pMutable) {
     String query = UPDATE_ALL;
 
     return mJdbcTemplate.update(query, pMutable.getStatus().getId(), pMutable.getLastSubmissionDatePrep(),
-        pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateHead(), pMutable.getCourseId(),
-        pMutable.getSemesterId(), pMutable.getExamType().getId());
+        pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateHead(), pMutable.getLastSubmissionDateCoe(),
+        pMutable.getCourseId(), pMutable.getSemesterId(), pMutable.getExamType().getId());
     /*
      * List<MutableMarksSubmissionStatus> abc = new ArrayList<>(); abc.add(pMutable); int[] a =
      * mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -192,63 +192,77 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  "
           + ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  ";
 
-  String SELECT_EXAM_GRADE_DEAD_LINE_THEORY_BY_DATE = " SELECT "
-      + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date, " + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
-      + "  MST_COURSE.COURSE_ID, " + "  MST_COURSE.COURSE_NO, " + "  MST_COURSE.COURSE_TITLE, " + "  MST_COURSE.CRHR, "
-      + "  ugRegistrationResult.total_students, " + "  marksSubmissionStatus.ID, " + "  last_submission_date_prep, "
-      + "  LAST_SUBMISSION_DATE_SCR, " + "  LAST_SUBMISSION_DATE_HEAD " + "FROM EXAM_ROUTINE, MST_PROGRAM, "
-      + "  MST_COURSE, (SELECT " + "                 COURSE_ID, " + "                 count(COURSE_ID) total_students "
-      + "               FROM UG_REGISTRATION_RESULT " + "               WHERE SEMESTER_ID = ? AND EXAM_TYPE = ? "
-      + "               GROUP BY COURSE_ID) ugRegistrationResult, (SELECT "
-      + "                                                            ID, "
-      + "                                                            SEMESTER_ID, "
-      + "                                                            COURSE_ID, "
-      + "                                                            last_submission_date_prep, "
-      + "                                                            LAST_SUBMISSION_DATE_SCR, "
-      + "                                                            LAST_SUBMISSION_DATE_HEAD "
-      + "                                                          FROM MARKS_SUBMISSION_STATUS "
-      + "                                                          WHERE EXAM_TYPE = ?) marksSubmissionStatus "
-      + "WHERE EXAM_ROUTINE.EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
-      + "      MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND "
-      + "      MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND "
-      + "      EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND "
-      + "      exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND "
-      + "      marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND "
-      + "      marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
+  String SELECT_EXAM_GRADE_DEAD_LINE_THEORY_BY_DATE =
+      " SELECT "
+          + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date, "
+          + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
+          + "  MST_COURSE.COURSE_ID, "
+          + "  MST_COURSE.COURSE_NO, "
+          + "  MST_COURSE.COURSE_TITLE, "
+          + "  MST_COURSE.CRHR, "
+          + "  ugRegistrationResult.total_students, "
+          + "  marksSubmissionStatus.ID, "
+          + "  last_submission_date_prep, "
+          + "  LAST_SUBMISSION_DATE_SCR, "
+          + "  LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_COE "
+          + "FROM EXAM_ROUTINE, MST_PROGRAM, "
+          + "  MST_COURSE, (SELECT "
+          + "                 COURSE_ID, "
+          + "                 count(COURSE_ID) total_students "
+          + "               FROM UG_REGISTRATION_RESULT "
+          + "               WHERE SEMESTER_ID = ? AND EXAM_TYPE = ? "
+          + "               GROUP BY COURSE_ID) ugRegistrationResult, (SELECT "
+          + "                                                            ID, "
+          + "                                                            SEMESTER_ID, "
+          + "                                                            COURSE_ID, "
+          + "                                                            last_submission_date_prep, "
+          + "                                                            LAST_SUBMISSION_DATE_SCR, "
+          + "                                                            LAST_SUBMISSION_DATE_HEAD,LAST_SUBMISSION_DATE_COE "
+          + "                                                          FROM MARKS_SUBMISSION_STATUS "
+          + "                                                          WHERE EXAM_TYPE = ?) marksSubmissionStatus "
+          + "WHERE EXAM_ROUTINE.EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
+          + "      MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND "
+          + "      MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND "
+          + "      EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND "
+          + "      exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND "
+          + "      marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND "
+          + "      marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
 
   String SELECT_EXAM_GRADE_DEAD_LINE_THEORY_ALL =
-      "SELECT  "
-          + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date,  "
-          + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  "
-          + "  MST_COURSE.COURSE_ID,  "
-          + "  MST_COURSE.COURSE_NO,  "
-          + "  MST_COURSE.COURSE_TITLE,  "
-          + "  MST_COURSE.CRHR,  "
-          + "  ugRegistrationResult.total_students,  "
-          + "  marksSubmissionStatus.ID,  "
-          + "  last_submission_date_prep,  "
-          + "  LAST_SUBMISSION_DATE_SCR,  "
-          + "  LAST_SUBMISSION_DATE_HEAD  "
-          + "FROM EXAM_ROUTINE, MST_PROGRAM,  "
-          + "  MST_COURSE, (SELECT  "
-          + "                 COURSE_ID,  "
-          + "                 count(COURSE_ID) total_students  "
-          + "               FROM UG_REGISTRATION_RESULT  "
-          + "               WHERE SEMESTER_ID = ?  "
-          + "               GROUP BY COURSE_ID) ugRegistrationResult, (SELECT  "
-          + "                                                            ID,  "
-          + "                                                            SEMESTER_ID,  "
-          + "                                                            COURSE_ID,  "
-          + "                                                            last_submission_date_prep,  "
-          + "                                                            LAST_SUBMISSION_DATE_SCR,  "
-          + "                                                            LAST_SUBMISSION_DATE_HEAD  "
-          + "                                                          FROM MARKS_SUBMISSION_STATUS) marksSubmissionStatus  "
-          + "WHERE  " + "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND  "
-          + "  MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND  "
-          + "  EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND  "
-          + "  exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND  "
-          + "  marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND  "
-          + "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID  and mst_course.crhr!=0 "
+      "SELECT "
+          + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date, "
+          + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
+          + "  MST_COURSE.COURSE_ID, "
+          + "  MST_COURSE.COURSE_NO, "
+          + "  MST_COURSE.COURSE_TITLE, "
+          + "  MST_COURSE.CRHR, "
+          + "  ugRegistrationResult.total_students, "
+          + "  marksSubmissionStatus.ID, "
+          + "  last_submission_date_prep, "
+          + "  LAST_SUBMISSION_DATE_SCR, "
+          + "  LAST_SUBMISSION_DATE_HEAD, "
+          + "  LAST_SUBMISSION_DATE_coe "
+          + "FROM EXAM_ROUTINE, MST_PROGRAM, "
+          + "  MST_COURSE, (SELECT "
+          + "                 COURSE_ID, "
+          + "                 count(COURSE_ID) total_students "
+          + "               FROM UG_REGISTRATION_RESULT "
+          + "               WHERE SEMESTER_ID = ? "
+          + "               GROUP BY COURSE_ID) ugRegistrationResult, (SELECT "
+          + "                                                            ID, "
+          + "                                                            SEMESTER_ID, "
+          + "                                                            COURSE_ID, "
+          + "                                                            last_submission_date_prep, "
+          + "                                                            LAST_SUBMISSION_DATE_SCR, "
+          + "                                                            LAST_SUBMISSION_DATE_HEAD, "
+          + "                                                            LAST_SUBMISSION_DATE_COE "
+          + "                                                          FROM MARKS_SUBMISSION_STATUS) marksSubmissionStatus "
+          + "WHERE MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND "
+          + "      MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND "
+          + "      EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND "
+          + "      exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND "
+          + "      marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND "
+          + "      marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND mst_course.crhr != 0 "
           + "ORDER BY EXAM_ROUTINE.EXAM_DATE";
 
   String SELECT_ALL_EXAMGRADE_DEADLINE_SESSIONAL =
@@ -263,7 +277,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "  MARKS_SUBMISSION_STATUS.ID,  "
           + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_prep,  "
           + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_scr,  "
-          + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_head  "
+          + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_head, MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_COE  "
           + "FROM  "
           + "  (SELECT  "
           + "     UG_SESSIONAL_MARKS.COURSE_ID,  "
@@ -882,7 +896,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(MarksSubmissionStatusDto app : pMarksSubmissionStatusDtos) {
       params.add(new Object[] {app.getLastSubmissionDatePrep(), app.getLastSubmissionDateScr(),
-          app.getLastSubmissionDateHead(), app.getSemesterId(), app.getCourseId(), app.getExamType().getId()});
+          app.getLastSubmissionDateHead(), app.getLastSubmissionDateCoe(), app.getSemesterId(), app.getCourseId(),
+          app.getExamType().getId()});
     }
     return params;
   }
@@ -917,6 +932,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     pSubmissionStatusDto.setLastSubmissionDatePrep(pResultSet.getDate("LAST_SUBMISSION_DATE_PREP"));
     pSubmissionStatusDto.setLastSubmissionDateScr(pResultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
     pSubmissionStatusDto.setLastSubmissionDateHead(pResultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
+    pSubmissionStatusDto.setLastSubmissionDateCoe(pResultSet.getDate("LAST_SUBMISSION_DATE_COE"));
     pSubmissionStatusDto.setId(pResultSet.getInt("id"));
   }
 
@@ -992,6 +1008,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       String courseTeachers = resultSet.getString("Course_Teachers");
       ArrayList<CourseTeacherDto> teacherList = new ArrayList();
       if(courseTeachers != null && !courseTeachers.equalsIgnoreCase("")) {
+        statusDto.setCourseTeacherStr(courseTeachers.replaceAll("#", ", "));
         String courseTeacherArr[] = courseTeachers.split("#");
 
         for(int t = 0; t < courseTeacherArr.length; t++) {

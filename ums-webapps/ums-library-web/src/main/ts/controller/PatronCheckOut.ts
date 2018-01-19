@@ -20,6 +20,7 @@ module ums {
             this.userId = $stateParams.patronId;
             this.circulation = <ILibraryCirculation>{};
             this.addDate();
+
         }
 
 
@@ -97,7 +98,6 @@ module ums {
                         this.showBookInformation = true;
                         this.catalogingService.fetchRecord(this.item.mfnNo).then((data: any) => {
                             this.record = data;
-                            console.log(data);
                             this.circulation.totalItems = this.record.totalItems;
                             this.circulation.totalAvailable = this.record.totalAvailable;
                             this.circulation.totalCheckedOut = this.record.totalCheckedOut;
@@ -135,10 +135,10 @@ module ums {
             let mm = date.getMonth() + 1;
             let yyyy = date.getFullYear();
             let internalThis: any = this;
-            internalThis.circulation.dueDate = mm + "/" + dd + "/" + yyyy + ' 05:00 PM';
+            internalThis.circulation.dueDate = dd + "/" + mm + "/" + yyyy + ' 05:00 PM';
             $('.datetimepicker-default').datetimepicker({
                 format:'DD/MM/YYYY hh:mm A',
-                minDate: mm + "/" + dd + "/" + yyyy + ' 05:00 PM'
+                minDate: dd + "/" + mm + "/" + yyyy + ' 05:00 PM'
             }).blur(function (e) {
                  internalThis.circulation.dueDate = $(this).val();
             });
