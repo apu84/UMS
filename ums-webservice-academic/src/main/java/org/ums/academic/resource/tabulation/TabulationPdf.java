@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import com.itextpdf.text.pdf.*;
 import org.springframework.stereotype.Component;
 import org.ums.academic.tabulation.model.TabulationEntryModel;
 import org.ums.academic.tabulation.model.TabulationReportModel;
@@ -15,18 +14,19 @@ import org.ums.util.Constants;
 import org.ums.util.UmsUtils;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
 @Component
 public class TabulationPdf {
   final Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
   final Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8);
-  final Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 8.5f);
+  final Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f);
   final Font pageNoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.ITALIC);
 
   private TabulationReportModel mTabulationReportModel;
 
-  public void createPdf(TabulationReportModel pReportModel, OutputStream pOutputStream) throws IOException,
-      DocumentException {
+  public void createPdf(TabulationReportModel pReportModel, OutputStream pOutputStream)
+      throws IOException, DocumentException {
     mTabulationReportModel = pReportModel;
     Document document = new Document();
     document.addTitle("Tabulation");
@@ -34,7 +34,7 @@ public class TabulationPdf {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     document.setPageSize(PageSize.LEGAL.rotate());
-    document.setMargins(10, 10, 10, 10);
+    document.setMargins(40, 40, 10, 10);
 
     HeaderFooter event = new HeaderFooter();
     writer.setBoxSize("art", new Rectangle(20, 54, 1024, 850));
@@ -42,6 +42,8 @@ public class TabulationPdf {
 
     document.open();
     PdfPTable contentTable = new PdfPTable(20);
+    contentTable.setWidths(new float[] {5, 13.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f,
+        4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 5});
     contentTable.setWidthPercentage(100);
     contentTableHeader(contentTable);
     headerSecondLine(contentTable, pReportModel);
@@ -51,6 +53,7 @@ public class TabulationPdf {
 
     document.newPage();
     PdfPTable secondPageContentTable = new PdfPTable(12);
+    secondPageContentTable.setWidths(new int[] {5, 9, 9, 9, 9, 8, 7, 7, 5, 5, 22, 5});
     secondPageContentTable.setWidthPercentage(100);
     secondPageTableHeader(secondPageContentTable);
     entryLineSecondPage(secondPageContentTable, pReportModel);
@@ -72,28 +75,28 @@ public class TabulationPdf {
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("SEMESTER FINAL", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(6);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("SESSIONAL", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(5);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("CLEARANCE/ IMPROVEMENT", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(6);
     contentTable.addCell(cell);
@@ -119,24 +122,25 @@ public class TabulationPdf {
     contentTable.addCell(cell);
 
     for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-      addCourse(contentTable, theoryCourse.getNo());
+      addInnerTable(contentTable, theoryCourse.getNo());
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
     for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
-      addCourse(contentTable, sessionalCourse.getNo());
+      addInnerTable(contentTable, sessionalCourse.getNo());
     }
 
     addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
 
     for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-      addCourse(contentTable, theoryCourse.getNo());
+      addInnerTable(contentTable, theoryCourse.getNo());
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
     addEmptyCell(contentTable, 1);
   }
 
-  private void headerThirdLine(final PdfPTable contentTable, final TabulationReportModel pReportModel) {
+  private void headerThirdLine(final PdfPTable contentTable, final TabulationReportModel pReportModel)
+      throws DocumentException {
     PdfPCell cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -156,18 +160,18 @@ public class TabulationPdf {
     contentTable.addCell(cell);
 
     for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-      addCourse(contentTable, "cr.          " + theoryCourse.getCrHr());
+      addInnerTable(contentTable, "cr.", theoryCourse.getCrHr() + "");
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
     for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
-      addCourse(contentTable, "cr.          " + sessionalCourse.getCrHr());
+      addInnerTable(contentTable, "cr.", sessionalCourse.getCrHr() + "");
     }
 
     addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
 
     for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-      addCourse(contentTable, "cr.          " + theoryCourse.getCrHr());
+      addInnerTable(contentTable, "cr.", theoryCourse.getCrHr() + "");
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
@@ -181,7 +185,8 @@ public class TabulationPdf {
     contentTable.addCell(cell);
   }
 
-  private void entryLine(final PdfPTable contentTable, final TabulationReportModel pReportModel) {
+  private void entryLine(final PdfPTable contentTable, final TabulationReportModel pReportModel)
+      throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
@@ -207,15 +212,15 @@ public class TabulationPdf {
       for(Course theoryCourse : pReportModel.getTheoryCourses()) {
         String gradeLetter = entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
-        addCourse(contentTable, entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter()
-            + "           " + gradePoint);
+        addInnerTable(contentTable, entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter(),
+            gradePoint + "");
       }
       addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
       for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
         String gradeLetter = entryModel.getRegularCourseList().get(sessionalCourse.getId()).getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * sessionalCourse.getCrHr();
-        addCourse(contentTable, gradeLetter + "         " + gradePoint);
+        addInnerTable(contentTable, gradeLetter, gradePoint + "");
       }
 
       addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
@@ -224,7 +229,7 @@ public class TabulationPdf {
         if(entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
           String gradeLetter = entryModel.getClearanceCourseList().get(theoryCourse.getId()).getGradeLetter();
           double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
-          addCourse(contentTable, gradeLetter + "         " + gradePoint);
+          addInnerTable(contentTable, gradeLetter, gradePoint + "");
         }
         else {
           addEmptyCell(contentTable, 1);
@@ -243,7 +248,8 @@ public class TabulationPdf {
     }
   }
 
-  private void entryLineSecondPage(final PdfPTable contentTable, final TabulationReportModel pReportModel) {
+  private void entryLineSecondPage(final PdfPTable contentTable, final TabulationReportModel pReportModel)
+      throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
@@ -260,63 +266,37 @@ public class TabulationPdf {
       for(UGRegistrationResult carryCourse : entryModel.getCarryCourseList().values()) {
         String gradeLetter = carryCourse.getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * carryCourse.getCourse().getCrHr();
-        addCourse(contentTable, carryCourse.getCourse().getNo() + "          " + carryCourse.getCourse().getCrHr()
-            + "\n" + gradeLetter + "                     " + gradePoint);
+        addInnerTable(contentTable, carryCourse.getCourse().getNo(), carryCourse.getCourse().getCrHr() + "",
+            gradeLetter + "", gradePoint + "");
       }
       addEmptyCell(contentTable, (4 - entryModel.getCarryCourseList().size()));
+      addInnerTable(contentTable, entryModel.getPresentCompletedCrHr() + "",
+          entryModel.getPresentCompletedGradePoints() + "");
 
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph =
-          new Paragraph(entryModel.getPresentCompletedCrHr() + "       " + entryModel.getPresentCompletedGradePoints(),
-              infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
       if(entryModel.getPreviousSemesterCompletedCrHr() > 0) {
-        paragraph =
-            new Paragraph(entryModel.getPreviousSemesterCompletedCrHr() + "       "
-                + entryModel.getPreviousSemesterCompletedGradePoints(), infoFont);
+        addInnerTable(contentTable, entryModel.getPreviousSemesterCompletedCrHr() + "",
+            entryModel.getPreviousSemesterCompletedGradePoints() + "");
       }
       else {
-        paragraph = new Paragraph("", infoFont);
+        addInnerTable(contentTable, "", "");
       }
 
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
+      addInnerTable(contentTable, entryModel.getCumulativeCrHr() + "", entryModel.getCumulativeGradePoints() + "");
 
       cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph =
-          new Paragraph(entryModel.getCumulativeCrHr() + "       " + entryModel.getCumulativeGradePoints(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
       paragraph = new Paragraph(entryModel.getGpa() + "", infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
+      paragraph.setAlignment(Element.ALIGN_RIGHT);
       cell.addElement(paragraph);
       cell.setColspan(1);
       contentTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
       paragraph = new Paragraph(entryModel.getCgpa() + "", infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
+      paragraph.setAlignment(Element.ALIGN_RIGHT);
       cell.addElement(paragraph);
       cell.setColspan(1);
       contentTable.addCell(cell);
@@ -341,7 +321,7 @@ public class TabulationPdf {
     }
   }
 
-  private void addCourse(PdfPTable contentTable, String content) {
+  private void addInnerTable(PdfPTable contentTable, String content) {
     PdfPCell cell;
     Paragraph paragraph;
     cell = new PdfPCell();
@@ -350,7 +330,85 @@ public class TabulationPdf {
     paragraph = new Paragraph(content, infoFont);
     paragraph.setAlignment(Element.ALIGN_LEFT);
     cell.addElement(paragraph);
-    cell.setColspan(1);
+    contentTable.addCell(cell);
+  }
+
+  private void addInnerTable(PdfPTable contentTable, String leftPart, String rightPart) throws DocumentException {
+    PdfPCell cell;
+    Paragraph paragraph;
+    PdfPTable table = new PdfPTable(2);
+    table.setWidths(new int[] {45, 55});
+    table.setWidthPercentage(100);
+    // table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(leftPart, infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(rightPart, infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.addElement(table);
+    cell.setPadding(0);
+    contentTable.addCell(cell);
+  }
+
+  private void addInnerTable(PdfPTable contentTable, String cell1, String cell2, String cell3, String cell4) {
+    PdfPCell cell;
+    Paragraph paragraph;
+    PdfPTable table = new PdfPTable(2);
+    table.setWidthPercentage(100);
+    // table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(cell1, infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(cell2, infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(cell3, infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(cell4, infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    table.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.addElement(table);
+    cell.setPadding(0);
     contentTable.addCell(cell);
   }
 
@@ -380,73 +438,73 @@ public class TabulationPdf {
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("CARRY OVER", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(4);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("Present Grade Points", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("Previous Grade Points", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("Cumulative Grade Points", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("GPA", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("CGPA", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("REMARKS", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
 
     cell = new PdfPCell();
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     paragraph = new Paragraph("Student No.", infoFont);
-    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     cell.setColspan(1);
     contentTable.addCell(cell);
@@ -461,7 +519,6 @@ public class TabulationPdf {
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidths(new int[] {25, 75});
         headerTable.setWidthPercentage(100);
-        // headerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
         PdfPTable gpaTable = new PdfPTable(2);
         gpaTable.setWidthPercentage(100);
@@ -479,270 +536,39 @@ public class TabulationPdf {
         percentageTable.setWidthPercentage(100);
         percentageTable.setWidths(new int[] {50, 25, 25});
 
-        PdfPCell percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Numerical Equivalent", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Letter Grade", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Grade Point", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setBorder(Rectangle.NO_BORDER);
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("80% and above", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("A+", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("4", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("75% to less than 80", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("A", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("3.75", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("70% to less than 75", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("A-", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("3.5", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("65% to less than 70", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("B+", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("3.25", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("60% to less than 65", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("B", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("3", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("55% to less than 60", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("B-", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("2.75", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("50% to less than 55", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("C+", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("2.5", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("45% to less than 50", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("C", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("2.25", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("40% to less than 45", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("D", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("2", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Less than 40%", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("F", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
-
-        percentageTableCell = new PdfPCell();
-        percentageTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("0", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        percentageTableCell.addElement(paragraph);
-        percentageTable.addCell(percentageTableCell);
+        percentageTable.addCell(getGPATableCell("Numerical Equivalent"));
+        percentageTable.addCell(getGPATableCell("Letter Grade"));
+        percentageTable.addCell(getGPATableCell("Grade Point"));
+        percentageTable.addCell(getGPATableCell("80% and above", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("A+", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("4", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("75% to less than 80", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("A", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("3.75", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("70% to less than 75", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("A-", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("3.5", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("65% to less than 70", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("B+", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("3.25", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("60% to less than 65", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("B", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("3", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("55% to less than 60", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("B-", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("2.75", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("50% to less than 55", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("C+", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("2.5", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("45% to less than 50", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("C", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("2.25", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("40% to less than 45", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("D", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("2", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("Less than 40%", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("F", Rectangle.LEFT));
+        percentageTable.addCell(getGPATableCell("0", Rectangle.LEFT));
 
         gpaCell = new PdfPCell();
         gpaCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -755,53 +581,12 @@ public class TabulationPdf {
         extraOrdinaryTable.setWidthPercentage(100);
         extraOrdinaryTable.setWidths(new int[] {70, 30});
 
-        PdfPCell extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Numerical Equivalent", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
-
-        extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Letter Grade", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
-
-        extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Exemption", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
-
-        extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("E", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
-
-        extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("Withheld", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
-
-        extraOrdinaryTableCell = new PdfPCell();
-        extraOrdinaryTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        paragraph = new Paragraph("W", infoFont);
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        extraOrdinaryTableCell.addElement(paragraph);
-        extraOrdinaryTable.addCell(extraOrdinaryTableCell);
+        extraOrdinaryTable.addCell(getGPATableCell("Numerical Equivalent"));
+        extraOrdinaryTable.addCell(getGPATableCell("Letter Grade"));
+        extraOrdinaryTable.addCell(getGPATableCell("Exemption", Rectangle.LEFT));
+        extraOrdinaryTable.addCell(getGPATableCell("E", Rectangle.RIGHT));
+        extraOrdinaryTable.addCell(getGPATableCell("Withheld", Rectangle.BOTTOM));
+        extraOrdinaryTable.addCell(getGPATableCell("W", Rectangle.BOTTOM));
 
         gpaCell = new PdfPCell();
         gpaCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -812,6 +597,7 @@ public class TabulationPdf {
 
         PdfPCell headerTableCell = new PdfPCell();
         headerTableCell.setBorder(Rectangle.NO_BORDER);
+        headerTableCell.setPaddingLeft(0);
         headerTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         headerTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         headerTableCell.addElement(gpaTable);
@@ -837,7 +623,7 @@ public class TabulationPdf {
         titleTableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         titleTableCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         paragraph =
-            new Paragraph("Approved by the Government of Bangladesh and sponsored by Dhaka Ahsania Mission", tableFont);
+            new Paragraph("Approved by the Government of Bangladesh and sponsored by Dhaka Ahsania Mission", infoFont);
         paragraph.setAlignment(Element.ALIGN_CENTER);
         titleTableCell.addElement(paragraph);
         titleTable.addCell(titleTableCell);
@@ -849,7 +635,7 @@ public class TabulationPdf {
         paragraph =
             new Paragraph("TABULATION SHEET FOR " + UmsUtils.getNumberWithSuffix(mTabulationReportModel.getYear())
                 + " YEAR   " + UmsUtils.getNumberWithSuffix(mTabulationReportModel.getAcademicSemester())
-                + " SEMESTER;   SESSION: " + mTabulationReportModel.getSemester().getName(), infoFont);
+                + " SEMESTER;   SESSION: " + mTabulationReportModel.getSemester().getName(), tableFont);
         paragraph.setAlignment(Element.ALIGN_CENTER);
         titleTableCell.addElement(paragraph);
         titleTable.addCell(titleTableCell);
@@ -904,12 +690,30 @@ public class TabulationPdf {
       table.addCell(pCell);
 
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), pageNoFont);
-      ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, footer, document.right(), document.top() + 2, 0);
+      ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, footer, document.right(),
+          document.top() - 10, 0);
       if(writer.getPageNumber() % 2 != 0) {
         Phrase continued = new Phrase("Continued on the opposite side", pageNoFont);
-        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, continued, document.right(), document.top() - 10, 0);
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, continued, document.right(),
+            document.top() - 20, 0);
       }
-      table.writeSelectedRows(0, -1, 36, 65, writer.getDirectContent());
+      table.writeSelectedRows(0, -1, 36, 35, writer.getDirectContent());
+    }
+
+    private PdfPCell getGPATableCell(String pContent) {
+      PdfPCell cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+      Paragraph paragraph = new Paragraph(pContent, infoFont);
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      cell.addElement(paragraph);
+      return cell;
+    }
+
+    private PdfPCell getGPATableCell(String pContent, int pBorder) {
+      PdfPCell cell = getGPATableCell(pContent);
+      cell.setBorder(pBorder);
+      return cell;
     }
   }
 }
