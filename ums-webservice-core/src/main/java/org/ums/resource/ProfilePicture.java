@@ -141,17 +141,24 @@ public class ProfilePicture extends Resource {
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
 
-    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
-    template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
-    template.setUseTemporaryFileName(false);
-    template.execute(session -> {
-      session.mkdir("files/");
-      return session.mkdir("files/user-photo/");
-    });
-    template.append(messageA);
-    pInputStream.deleteOnExit();
-    newFile.delete();
-    System.gc();
+    try {
+      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
+      template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+      template.setUseTemporaryFileName(false);
+      template.execute(session -> {
+        session.mkdir("files/");
+        return session.mkdir("files/user-photo/");
+      });
+    template.send(messageA);
+    }
+    catch (Exception e){
+      mLogger.error(e.getMessage());
+      e.printStackTrace();
+    }
+    finally {
+      pInputStream.deleteOnExit();
+      newFile.delete();
+    }
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);

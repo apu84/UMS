@@ -69,73 +69,82 @@
         <!--<button type="button" data-ng-click="vm.submitImage()">Upload Image</button>-->
         <!--{{vm.file}}-->
 
+        <!--<div class="row">-->
+        <!--<div class="col-md-4">-->
+        <!--<input type='file' id="inputFile"/>-->
+        <!--</div>-->
+        <!--<div class="col-md-6">-->
+        <!--<img id="image_upload_preview"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<button type="button" id="submitBtn" data-ng-click="vm.uploadImage()">Upload Image</button>-->
+
+
         <div class="row">
-            <div class="col-md-4">
-                <input type='file' id="inputFile"/>
-            </div>
             <div class="col-md-6">
-                <img id="image_upload_preview"/>
+                <!-- <a data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer"><b>Change
+                     Picture</b></a>-->
+                <div align="left">
+                    <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
+                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
+                         src=""
+                         data-profile-picture="">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div align="right">
+                    <img class="img-square"
+                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                         src=""
+                         data-profile-picture="">
+                </div>
             </div>
         </div>
-        <button type="button" id="submitBtn" data-ng-click="vm.uploadImage()">Upload Image</button>
+    </div>
+</div>
 
+<div id="modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="imageupload panel panel-default">
+                    <div class="panel-heading clearfix">
+                        <h3 class="panel-title pull-left">Upload Image</h3>
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default active">File</button>
+                        </div>
+                    </div>
+                    <div class="file-tab panel-body">
+                        <label class="btn btn-default btn-file">
+                            <span>Browse</span>
+                            <input type="file" name="image-file" id="userPhoto">
+                        </label>
+                        <button type="button" class="btn btn-default">Remove</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="vm.uploadImage()">
+                    Upload
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
 
-<script type="text/javascript">
-    /*
-    var div = $('.page-content');
-    var div1 = $('#panelBody1');
-    var height = div.height();
-    div1.css('height', height);
-    */
 
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png)$");
-            if (regex.test(input.value.toLowerCase())) {
-                if (typeof (input.files[0]) != "undefined") {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(input.files[0]);
-                    reader.onload = function (e) {
-                        var image = new Image();
-                        image.src = e.target.result;
-                        image.onload = function () {
-                            var height = this.height;
-                            var width = this.width;
-                            if (height > 128 || width > 128) {
-                                alert("Height and Width must not exceed 128px.");
-                                $("#inputFile").val("");
-                                return false;
-                            }
-                            $('#image_upload_preview').attr('src', e.target.result);
-                            $("#submitBtn").show();
-                            return true;
-                        };
-                    }
-                } else {
-                    alert("This browser does not support HTML5.");
-                    return false;
-                }
-            } else {
-                alert("Please select a valid Image file.");
-                return false;
-            }
-        }
-
-        //     var reader = new FileReader();
-        //
-        //     reader.onload = function (e) {
-        //         $('#image_upload_preview').attr('src', e.target.result);
-        //     };
-        //
-        //     reader.readAsDataURL(input.files[0]);
-        // }
-    }
-
-    $("#inputFile").change(function () {
-        readURL(this);
+<script>
+    var $imageupload = $('.imageupload');
+    $imageupload.imageupload({
+        allowedFormats: ['jpg', 'png'],
+        maxWidth: 200,
+        maxHeight: 250,
+        maxFileSizeKb: 150,
+        height: 180,
+        width: 150
     });
 </script>
