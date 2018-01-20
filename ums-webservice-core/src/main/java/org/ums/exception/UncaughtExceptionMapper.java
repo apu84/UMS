@@ -17,7 +17,7 @@ public class UncaughtExceptionMapper extends Throwable implements javax.ws.rs.ex
   @Override
   public Response toResponse(Throwable e) {
     e.printStackTrace();
-    mLogger.error(e.getMessage());
+    mLogger.error(e.getMessage(), e);
     CustomReasonPhraseExceptionStatusType error =
         new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, "Internal Server Error");
     JsonObjectBuilder errorObject = Json.createObjectBuilder();
