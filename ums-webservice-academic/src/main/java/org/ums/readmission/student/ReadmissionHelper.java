@@ -156,6 +156,7 @@ public class ReadmissionHelper {
     Student student = mStudentManager.get(pStudentId);
     List<Semester> previousSemesters =
         mSemesterManager.getPreviousSemesters(pSemesterId, student.getProgram().getProgramTypeId());
+    previousSemesters.remove(0);
     for(Semester semester : previousSemesters) {
       Optional<SemesterAdmissionStatus> admissionStatus =
           mSemesterAdmissionStatusManager.getAdmissionStatus(pStudentId, semester.getId());

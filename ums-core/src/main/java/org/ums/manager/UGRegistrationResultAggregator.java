@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -86,11 +87,17 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     int totalStudentFound = studentCourseGradeMap.keySet().size();
     int i = 0;
     mLogger.debug("Total student found for result process is: {}", totalStudentFound);
-
+    Semester untilSemester = mSemesterManager.get(pSemesterId);
     for(String studentId : studentCourseGradeMap.keySet()) {
       mLogger.debug("Processing grades for student: {}", studentId);
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
-      List<UGRegistrationResult> results = aggregateResults(studentCourseGradeMap.get(studentId));
+      List<UGRegistrationResult> filteredResults =
+          studentCourseGradeMap.get(studentId)
+              .stream()
+              .filter(pResult -> DateUtils.isSameDay(pResult.getSemester().getStartDate(), untilSemester.getStartDate())
+                  || pResult.getSemester().getStartDate().before(untilSemester.getStartDate()))
+              .collect(Collectors.toList());
+      List<UGRegistrationResult> results = aggregateResults(filteredResults);
       studentCourseGradeMap.put(studentId, results);
 
       i++;

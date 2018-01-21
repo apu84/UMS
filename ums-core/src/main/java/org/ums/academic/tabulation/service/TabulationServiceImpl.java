@@ -55,15 +55,17 @@ public class TabulationServiceImpl implements TabulationService {
       entry.setCumulativeGradePoints(studentRecord.getTotalCompletedGradePoints());
       entry.setPresentCompletedCrHr(studentRecord.getCompletedCrHr());
       entry.setPresentCompletedGradePoints(studentRecord.getCompletedGradePoints());
-      try {
-        StudentRecord previousSemesterStudentRecord =
-            mStudentRecordManager.getStudentRecord(studentId, previousSemester.getId());
-        if(previousSemesterStudentRecord != null) {
-          entry.setPreviousSemesterCompletedCrHr(previousSemesterStudentRecord.getCompletedCrHr());
-          entry.setPreviousSemesterCompletedGradePoints(previousSemesterStudentRecord.getCompletedGradePoints());
+      if(!(studentRecord.getYear() == 1 && studentRecord.getAcademicSemester() == 1)) {
+        try {
+          StudentRecord previousSemesterStudentRecord =
+              mStudentRecordManager.getStudentRecord(studentId, previousSemester.getId());
+          if(previousSemesterStudentRecord != null) {
+            entry.setPreviousSemesterCompletedCrHr(previousSemesterStudentRecord.getCompletedCrHr());
+            entry.setPreviousSemesterCompletedGradePoints(previousSemesterStudentRecord.getCompletedGradePoints());
+          }
+        } catch(Exception e) {
+          e.printStackTrace();
         }
-      } catch(Exception e) {
-        e.printStackTrace();
       }
       entry.setRemarks(studentRecord.getTabulationSheetRemarks());
       entries.add(entry);

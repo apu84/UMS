@@ -127,17 +127,17 @@ public class ProcessResultImpl implements ProcessResult {
         List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
             .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
         StudentRecordParams cgpa = calculateCGPA(courseResults);
-        boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
+        boolean isPassed = isPassed(pSemesterId, courseResults);
         if(cgpa != null) {
           studentRecord.setCGPA(cgpa.getGpa());
           studentRecord.setTotalCompletedCrHr(cgpa.getCompletedCrHr());
           studentRecord.setTotalCompletedGradePoints(cgpa.getCompletedGradePoints());
         }
         studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
-        studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(studentCourseGradeMap.get(studentId),
+        studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(courseResults,
             isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.PASSED, pSemesterId));
         studentRecord.setTabulationSheetRemarks(mRemarksBuilder
-            .getTabulationSheetRemarks(studentCourseGradeMap.get(studentId), studentRecord, pSemesterId));
+            .getTabulationSheetRemarks(courseResults, studentRecord, pSemesterId));
       }
       updatedStudentRecords.add(studentRecord);
 

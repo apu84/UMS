@@ -22,11 +22,12 @@ public class TabulationPdf {
   final Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8);
   final Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f);
   final Font pageNoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.ITALIC);
+  final static int NUMBER_OF_ENTRIES_PER_PAGE = 12;
 
   private TabulationReportModel mTabulationReportModel;
 
-  public void createPdf(TabulationReportModel pReportModel, OutputStream pOutputStream)
-      throws IOException, DocumentException {
+  public void createPdf(TabulationReportModel pReportModel, OutputStream pOutputStream) throws IOException,
+      DocumentException {
     mTabulationReportModel = pReportModel;
     Document document = new Document();
     document.addTitle("Tabulation");
@@ -41,27 +42,49 @@ public class TabulationPdf {
     writer.setPageEvent(event);
 
     document.open();
-    PdfPTable contentTable = new PdfPTable(20);
-    contentTable.setWidths(new float[] {5, 13.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f,
-        4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 5});
-    contentTable.setWidthPercentage(100);
-    contentTableHeader(contentTable);
-    headerSecondLine(contentTable, pReportModel);
-    headerThirdLine(contentTable, pReportModel);
-    entryLine(contentTable, pReportModel);
-    document.add(contentTable);
+    int totalPageRequired = totalPageRequired(pReportModel.getTabulationEntries().size());
+    for(int i = 1; i <= totalPageRequired; i++) {
+      PdfPTable contentTable = new PdfPTable(20);
+      contentTable.setWidths(new float[] {5, 13.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f,
+          4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 4.5f, 5});
+      contentTable.setWidthPercentage(100);
+      contentTableHeader(contentTable);
+      headerSecondLine(contentTable, pReportModel);
+      headerThirdLine(contentTable, pReportModel);
+      for(int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
+        entryLineFirstPage(contentTable, pReportModel, pReportModel.getTabulationEntries().get(j));
+      }
+      document.add(contentTable);
 
-    document.newPage();
-    PdfPTable secondPageContentTable = new PdfPTable(12);
-    secondPageContentTable.setWidths(new int[] {5, 9, 9, 9, 9, 8, 7, 7, 5, 5, 22, 5});
-    secondPageContentTable.setWidthPercentage(100);
-    secondPageTableHeader(secondPageContentTable);
-    entryLineSecondPage(secondPageContentTable, pReportModel);
-    document.add(secondPageContentTable);
+      document.newPage();
+      PdfPTable secondPageContentTable = new PdfPTable(12);
+      secondPageContentTable.setWidths(new int[] {5, 9, 9, 9, 9, 8, 7, 7, 5, 5, 22, 5});
+      secondPageContentTable.setWidthPercentage(100);
+      secondPageTableHeader(secondPageContentTable);
+      for(int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
+        entryLineSecondPage(secondPageContentTable, pReportModel, pReportModel.getTabulationEntries().get(j));
+      }
+      document.add(secondPageContentTable);
+      if(i != totalPageRequired) {
+        document.newPage();
+      }
+    }
 
     document.close();
 
     baos.writeTo(pOutputStream);
+  }
+
+  private int startIndex(final int pPageNumber) {
+    return pPageNumber == 1 ? 0 : (pPageNumber * NUMBER_OF_ENTRIES_PER_PAGE) - NUMBER_OF_ENTRIES_PER_PAGE;
+  }
+
+  private int totalNumberOfEntriesToBeDrawn(final int pPageNumber, final int pTotal) {
+    return pPageNumber * NUMBER_OF_ENTRIES_PER_PAGE > pTotal ? pTotal : pPageNumber * NUMBER_OF_ENTRIES_PER_PAGE;
+  }
+
+  private int totalPageRequired(final int pTotalEntries) {
+    return pTotalEntries / NUMBER_OF_ENTRIES_PER_PAGE + (pTotalEntries % NUMBER_OF_ENTRIES_PER_PAGE > 0 ? 1 : 0);
   }
 
   private void contentTableHeader(final PdfPTable contentTable) {
@@ -185,140 +208,138 @@ public class TabulationPdf {
     contentTable.addCell(cell);
   }
 
-  private void entryLine(final PdfPTable contentTable, final TabulationReportModel pReportModel)
-      throws DocumentException {
+  private void entryLineFirstPage(final PdfPTable contentTable, final TabulationReportModel pReportModel,
+      final TabulationEntryModel entryModel) throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
-    for(TabulationEntryModel entryModel : pReportModel.getTabulationEntries()) {
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
 
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getStudent().getFullName(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
 
-      for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-        String gradeLetter = entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter();
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getStudent().getFullName(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
+
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
+      String gradeLetter = entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter();
+      double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
+      addInnerTable(contentTable, entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter(),
+          gradePoint + "");
+    }
+    addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
+
+    for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
+      String gradeLetter = entryModel.getRegularCourseList().get(sessionalCourse.getId()).getGradeLetter();
+      double gradePoint = GPA_MAP.get(gradeLetter) * sessionalCourse.getCrHr();
+      addInnerTable(contentTable, gradeLetter, gradePoint + "");
+    }
+
+    addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
+
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
+      if(entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
+        String gradeLetter = entryModel.getClearanceCourseList().get(theoryCourse.getId()).getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
-        addInnerTable(contentTable, entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter(),
-            gradePoint + "");
-      }
-      addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
-
-      for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
-        String gradeLetter = entryModel.getRegularCourseList().get(sessionalCourse.getId()).getGradeLetter();
-        double gradePoint = GPA_MAP.get(gradeLetter) * sessionalCourse.getCrHr();
         addInnerTable(contentTable, gradeLetter, gradePoint + "");
       }
-
-      addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
-
-      for(Course theoryCourse : pReportModel.getTheoryCourses()) {
-        if(entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
-          String gradeLetter = entryModel.getClearanceCourseList().get(theoryCourse.getId()).getGradeLetter();
-          double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
-          addInnerTable(contentTable, gradeLetter, gradePoint + "");
-        }
-        else {
-          addEmptyCell(contentTable, 1);
-        }
+      else {
+        addEmptyCell(contentTable, 1);
       }
-      addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
     }
+    addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
   }
 
-  private void entryLineSecondPage(final PdfPTable contentTable, final TabulationReportModel pReportModel)
-      throws DocumentException {
+  private void entryLineSecondPage(final PdfPTable contentTable, final TabulationReportModel pReportModel,
+      TabulationEntryModel entryModel) throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
-    for(TabulationEntryModel entryModel : pReportModel.getTabulationEntries()) {
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
 
-      for(UGRegistrationResult carryCourse : entryModel.getCarryCourseList().values()) {
-        String gradeLetter = carryCourse.getGradeLetter();
-        double gradePoint = GPA_MAP.get(gradeLetter) * carryCourse.getCourse().getCrHr();
-        addInnerTable(contentTable, carryCourse.getCourse().getNo(), carryCourse.getCourse().getCrHr() + "",
-            gradeLetter + "", gradePoint + "");
-      }
-      addEmptyCell(contentTable, (4 - entryModel.getCarryCourseList().size()));
-      addInnerTable(contentTable, entryModel.getPresentCompletedCrHr() + "",
-          entryModel.getPresentCompletedGradePoints() + "");
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
 
-      if(entryModel.getPreviousSemesterCompletedCrHr() > 0) {
-        addInnerTable(contentTable, entryModel.getPreviousSemesterCompletedCrHr() + "",
-            entryModel.getPreviousSemesterCompletedGradePoints() + "");
-      }
-      else {
-        addInnerTable(contentTable, "", "");
-      }
-
-      addInnerTable(contentTable, entryModel.getCumulativeCrHr() + "", entryModel.getCumulativeGradePoints() + "");
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getGpa() + "", infoFont);
-      paragraph.setAlignment(Element.ALIGN_RIGHT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getCgpa() + "", infoFont);
-      paragraph.setAlignment(Element.ALIGN_RIGHT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getRemarks(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
+    for(UGRegistrationResult carryCourse : entryModel.getCarryCourseList().values()) {
+      String gradeLetter = carryCourse.getGradeLetter();
+      double gradePoint = GPA_MAP.get(gradeLetter) * carryCourse.getCourse().getCrHr();
+      addInnerTable(contentTable, carryCourse.getCourse().getNo(), carryCourse.getCourse().getCrHr() + "", gradeLetter
+          + "", gradePoint + "");
     }
+    addEmptyCell(contentTable, (4 - entryModel.getCarryCourseList().size()));
+    addInnerTable(contentTable, entryModel.getPresentCompletedCrHr() + "", entryModel.getPresentCompletedGradePoints()
+        + "");
+
+    if(entryModel.getPreviousSemesterCompletedCrHr() > 0) {
+      addInnerTable(contentTable, entryModel.getPreviousSemesterCompletedCrHr() + "",
+          entryModel.getPreviousSemesterCompletedGradePoints() + "");
+    }
+    else {
+      addInnerTable(contentTable, "", "");
+    }
+
+    addInnerTable(contentTable, entryModel.getCumulativeCrHr() + "", entryModel.getCumulativeGradePoints() + "");
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getGpa() + "", infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getCgpa() + "", infoFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getRemarks(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(entryModel.getStudent().getId(), infoFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(1);
+    contentTable.addCell(cell);
   }
 
   private void addInnerTable(PdfPTable contentTable, String content) {
@@ -337,7 +358,7 @@ public class TabulationPdf {
     PdfPCell cell;
     Paragraph paragraph;
     PdfPTable table = new PdfPTable(2);
-    table.setWidths(new int[] {45, 55});
+    table.setWidths(new int[] {35, 65});
     table.setWidthPercentage(100);
     // table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
     cell = new PdfPCell();

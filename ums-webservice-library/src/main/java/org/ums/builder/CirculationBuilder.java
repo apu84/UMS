@@ -30,10 +30,10 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
   @Override
   public void build(JsonObjectBuilder pBuilder, Circulation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     Record record = mRecordManager.get(pReadOnly.getMfn());
-    if(new Date().compareTo(pReadOnly.getDueDate()) > - 1){
+    if(new Date().compareTo(pReadOnly.getDueDate()) > -1) {
       pBuilder.add("overDueStatus", true);
     }
-    else{
+    else {
       pBuilder.add("overDueStatus", false);
     }
     pBuilder.add("circulationId", pReadOnly.getId().toString());
