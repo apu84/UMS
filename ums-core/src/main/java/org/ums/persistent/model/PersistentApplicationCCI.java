@@ -52,6 +52,11 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private String mRoomNo;
   private Integer mRoomId;
   private ApplicationStatus mApplicationStatus;
+  // rumi
+  private Integer mCCIStatus;
+  private String mGradeLetter;
+  private Integer mcarryYear;
+  private Integer mcarrySemester;
 
   public PersistentApplicationCCI() {
 
@@ -78,6 +83,51 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mRoomNo = pPersistentApplicationCCI.getRoomNo();
     mRoomId = pPersistentApplicationCCI.getRoomId();
     mApplicationStatus = pPersistentApplicationCCI.getApplicationStatus();
+    mCCIStatus = pPersistentApplicationCCI.getCCIStatus();
+    mGradeLetter = pPersistentApplicationCCI.getGradeLetter();
+    mcarryYear = pPersistentApplicationCCI.getCarryYear();
+    mcarrySemester = pPersistentApplicationCCI.getCarrySemester();
+  }
+
+  @Override
+  public void setCarryYear(Integer carryyear) {
+    mcarryYear = carryyear;
+  }
+
+  @Override
+  public void setCarrySemester(Integer carrySemester) {
+    mcarrySemester = carrySemester;
+  }
+
+  @Override
+  public Integer getCarryYear() {
+    return mcarryYear;
+  }
+
+  @Override
+  public Integer getCarrySemester() {
+    return mcarrySemester;
+  }
+
+  @Override
+  public void setGradeLetter(String gradeLetter) {
+    mGradeLetter = gradeLetter;
+  }
+
+  @Override
+  public String getGradeLetter() {
+    return mGradeLetter;
+  }
+
+  // /rumi
+  @Override
+  public void setCCIStatus(Integer cciStatus) {
+    mCCIStatus = cciStatus;
+  }
+
+  @Override
+  public Integer getCCIStatus() {
+    return mCCIStatus;
   }
 
   @Override
@@ -91,6 +141,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     return mApplicationStatus;
   }
 
+  // ////////
   @Override
   public void setRoomId(Integer pRoomId) {
     mRoomId = pRoomId;

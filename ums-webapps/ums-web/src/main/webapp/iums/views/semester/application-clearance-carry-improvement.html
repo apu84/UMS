@@ -1,7 +1,7 @@
 <div class="container-fluid" data-ng-init="initialization()">
     <div class="panel panel-blue">
         <div class="panel-heading" align="center">
-            <h4 class="panel-title"><p>Application System for Clearance/Carry/Improvement</p></h4>
+            <h4 class="panel-title">Application System for Clearance/Carry/Improvement</h4>
         </div>
         <div class="panel-body">
             <div class="spinner" ng-show="loadingVisibility">
@@ -12,220 +12,13 @@
             <div data-ng-if="!applicationAllowed && loadingVisibility==false" align="center">
                 <h1>{{applicationMessage}}</h1>
             </div>
-            <div data-ng-if="applicationAllowed">
-                <div data-ng-if="applicationCCIFound && loadingVisibility==false">
 
-                    <div class="panel panel-danger" data-ng-if="appCCIClearanceNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Clearance Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
+            <div data-ng-if="applicationCCIFound==false && submitButtonClicked==false && loadingVisibility==false">
+                <h4>Please choose course(s) from the bellow list</h4>
 
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:2}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-warning" data-ng-if="appCCIImprovementNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Improvement Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-info" data-ng-if="appCCICarryNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Carry Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:3}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-success" data-ng-if="appCCISpecialCarryNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Carry Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:4}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-                <div data-ng-if="applicationCCIFound==false && submitButtonClicked==false && loadingVisibility==false">
-                    <h4>Please choose course(s) from the bellow list</h4>
-
-                    <div class="panel panel-danger" data-ng-if="resultClearanceNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Clearance Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                <th>Apply</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==2"
-                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                    <td><input type="checkbox" data-ng-model="app.apply"></td>
-                                    <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="panel panel-warning" data-ng-if="resultImprovementNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Improvement Courses</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                <th>Apply</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==5"
-                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                    <td><input type="checkbox" data-ng-model="app.apply"></td>
-                                    <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="panel panel-info" data-ng-if="resultCarryNumber>0">
-                        <div class="panel-heading" align="center">
-                            <p>Candidate Carry Courses</p>
-
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                <th>Apply</th>
-                                </thead>
-                                <tbody>
-                                <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults"
-                                    data-ng-if="app.type==3"
-                                    data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                    <td><input type="checkbox" data-ng-model="app.apply"
-                                               data-ng-click="checkMoreThanOneSelection(app)"></td>
-                                    <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <div align="right">
-                        <button class="btn btn-primary" data-ng-click="submit()">Submit</button>
-                        <button class="btn btn-success" data-ng-click="cancel()">Cancel</button>
-                    </div>
-                </div>
-                <div style="padding-top: 10px">
-                    <div class="panel panel-info" >
-                        <div class="panel-heading" align="center">
-                            <p>Pending Applications</p>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Course Number</th>
-                                <th>Course Title</th>
-                                <th>Exam Date</th>
-                                <th>Status</th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
-                                    <td>{{app.courseNo}}</td>
-                                    <td>{{app.courseTitle}}</td>
-                                    <td>{{app.examDate}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="panel panel-info" >
+                <div class="panel panel-danger" data-ng-if="resultClearanceNumber>0 || appCCIClearanceNumber>0">
                     <div class="panel-heading" align="center">
-                        <p>Approved Applications</p>
+                        Candidate Clearance Courses
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered">
@@ -233,24 +26,120 @@
                             <th>Course Number</th>
                             <th>Course Title</th>
                             <th>Exam Date</th>
-                            <th>Status</th>
+                            <th>Last Apply Date</th>
+                            <th style="width:180px; max-width: 180px;">Status</th>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="app in applicationCCI|filter:{applicationType:5}">
+                            <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==2"
+                                data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
                                 <td>{{app.courseNo}}</td>
                                 <td>{{app.courseTitle}}</td>
                                 <td>{{app.examDate}}</td>
+                                <td>{{app.lastApplyDate}}</td>
+                                <td><input type="checkbox" ng-disabled="app.lastApplyDate=='Date Over' ?  true : false" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
+                            </tr>
+                            <tr data-ng-repeat="app in applicationCCI" data-ng-if="app.cciStatus==8">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.examDate}}</td>
+                                <td>{{'Appiled'}}</td>
+                                <td>{{app.statusName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="panel panel-warning" data-ng-if="resultImprovementNumber>0 || appCCIImprovementNumber>0">
+                    <div class="panel-heading" align="center">
+                        Candidate Improvement Courses
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>Course Number</th>
+                            <th>Course Title</th>
+                            <th>Grade</th>
+                            <th>Exam Date</th>
+                            <th>Last Apply Date</th>
+                            <th style="width:180px; max-width: 180px;">Status</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==5"
+                                data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.gradeLetter}}</td>
+                                <td>{{app.examDate}}</td>
+                                <td>{{app.lastApplyDate}}</td>
+                                <td><input type="checkbox" ng-disabled="app.lastApplyDate=='Date Over' ?  true : false" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
+                            </tr>
+                            <tr data-ng-repeat="app in applicationCCI" data-ng-if="app.cciStatus==7">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.grade}}</td>
+                                <td>{{app.examDate}}</td>
+                                <td>{{'Applied'}}</td>
+                                <td>{{app.statusName}}</td>
                             </tr>
                             </tbody>
 
                         </table>
+
                     </div>
                 </div>
+                <div class="panel panel-info" data-ng-if="resultCarryNumber>0 || appCCICarryNumber>0">
+                    <div class="panel-heading" align="center">
+                        Candidate Carry Courses
+
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>Course Number</th>
+                            <th>Course Title</th>
+                            <th>Failed Course Semester</th>
+                            <th>Exam Date</th>
+                            <th style="width:180px; max-width: 180px;">Status</th>
+                            </thead>
+                            <tbody>
+                            <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults"
+                                data-ng-if="app.type==3"
+                                data-ng-style="{'background-color':app.backgroundColor,color:app.color}">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.courseYear+"-"+app.courseSemester}}</td>
+                                <td>{{app.examDate}}</td>
+                                <td ><input type="checkbox" data-ng-model="app.apply"
+                                           data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
+                            </tr>
+                            <tr data-ng-repeat="app in applicationCCI" data-ng-if="app.cciStatus==2">
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.carryYear+"-"+app.carrySemester }}</td>
+                                <td>{{app.examDate}}</td>
+                                <td>{{app.statusName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+                <div align="right" style="padding-bottom:5px" data-ng-if="resultCarryNumber>0 || resultImprovementNumber>0 || resultClearanceNumber>0" >
+                    <button class="btn btn-primary" data-ng-disabled="submit_Button_Disable"  data-ng-click="submit()">Submit</button>
+                    <button class="btn btn-success" data-ng-disabled="submit_Button_Disable" data-ng-click="cancel()">Cancel</button>
                 </div>
 
-
             </div>
+
+
         </div>
     </div>
+</div>
 </div>
 </div>

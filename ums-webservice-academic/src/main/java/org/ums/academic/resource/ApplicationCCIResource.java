@@ -40,4 +40,5 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest) {
     return mHelper.getApplicationCCIForSeatPlanViewingOfStudent(mUriInfo);
   }
+
 }

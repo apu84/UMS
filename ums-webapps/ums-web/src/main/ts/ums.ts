@@ -899,6 +899,25 @@ module ums {
             }]
           }
         })
+        .state('cciApproval', {
+            url: "/cciApproval",
+            controller: 'LeaveApplicationApproval',
+            controllerAs: 'vm',
+            templateUrl: 'views/cciManagement/cci-application-approval.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                        ]
+                    });
+                }]
+            }
+        })
         .state('userGuide', {
           url: "/userGuide",
           controller: 'UserGuide',

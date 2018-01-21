@@ -1,0 +1,121 @@
+<style>
+    .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    }
+
+    .animate-if.ng-enter {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+</style>
+
+<div class="row" ng-cloak="">
+    <div class="panel">
+        <div class="panel-heading">CCI Application Approval<span
+                class="subtitle"></span></div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;"
+             data-ng-style="'background-color': backgroundColor">
+
+            <div data-ng-if="vm.showStatusSection==false && vm.showApprovalSection==true && vm.showHistorySection==false && vm.activeLeaveSection==false"
+                 class="animate-if" data-value="fadeInLeftBig">
+                <div class="col-md-12" align="right">
+                    <button class="btn btn-xs btn-success" data-ng-click="vm.showActiveLeaveSection()">Active Leave
+                    </button>
+                    <br>
+                    <br>
+                </div>
+                <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
+            </div>
+
+            <div data-ng-if="vm.showStatusSection && vm.activeLeaveSection==false" class="animate-if">
+                <div class="col-md-12" align="right">
+                    <span class="label label-info" style="cursor: pointer" data-ng-click="vm.showHistory()">Applicant's History</span>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="col-md-12" data-ng-include="'views/leave-management/leave-application-status.html'">
+                </div>
+                <div class="col-md-12">
+                    <div class="well" align="right">
+                        <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
+                                data-toggle="modal" data-target="#actionModal" data-ng-click="vm.approve()">Approve
+                        </button>
+                        <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
+                                data-toggle="modal" data-target="#actionModal" data-ng-click="vm.reject()">Reject
+                        </button>
+                        <button class="btn btn-danger" data-ng-click="vm.closeStatusSection()">Close</button>
+                    </div>
+
+
+                    <div id="actionModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog  modal-lg">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Approval Comments</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="com-md-12">
+                                            <div class="well">
+                                                <div class="form-group">
+                                                    <label for="comment">Comments</label>
+                                                    <textarea class="form-control"
+                                                              rows="10"
+                                                              id="comment"
+                                                              data-ng-model="vm.data.comment"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                                            data-ng-click="vm.saveAction()">Submit & Close
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div data-ng-if="vm.showHistorySection==true && vm.showApprovalSection==false && vm.showStatusSection==false && vm.activeLeaveSection==false"
+                 class="animate-if">
+                <div class="col-md-12"><h2>Applicant's Histories</h2></div>
+                <div data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
+                <div class="col-md-12">
+                    <div class="well" align="right">
+                        <button class="btn btn-danger" data-ng-click="vm.closeHistory()">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-if="vm.activeLeaveSection==true && vm.showHistorySection==false&& vm.showApprovalSection==false && vm.showStatusSection==false">
+                <div data-ng-include="'views/leave-management/active-leave-of-the-day.html'"></div>
+                <div class="col-md-12" align="right">
+                    <div class="well">
+                        <button class="btn btn-danger" data-ng-click="vm.closeActiveLeaveSection()">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

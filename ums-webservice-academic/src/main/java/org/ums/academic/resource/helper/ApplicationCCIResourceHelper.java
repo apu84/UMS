@@ -111,15 +111,14 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       retrieveObjectFromJson(applications, persistentApplicationCCIs, entries, courseIdMapWithUgRegistrationResult);
 
       List<PersistentApplicationCCI> applicationAfterValidationByService =
-        mApplicationCCIService.validateForAnomalies(persistentApplicationCCIs, results, student);
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    List<UGRegistrationResult> resultForWorkingAsResponse = new ArrayList<>();
-      if(applicationAfterValidationByService.size() == 0) {
-          mManager.create(applications);
-      }
-    else {
+        persistentApplicationCCIs;
+      mManager.create(applications);
+      JsonObjectBuilder object = Json.createObjectBuilder();
+      JsonArrayBuilder children = Json.createArrayBuilder();
+      LocalCache localCache = new LocalCache();
+      List<UGRegistrationResult> resultForWorkingAsResponse = new ArrayList<>();
+
+
 
       applicationAfterValidationByService.forEach(a->{
           if(courseIdMapWithUgRegistrationResult.containsKey(a.getCourseId()))
@@ -129,7 +128,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
               resultForWorkingAsResponse.add(regResult);
           }
       });
-    }
+
 
     object.add("entries", children);
     localCache.invalidate();
@@ -165,24 +164,25 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   public JsonObject getApplicationCCIInfoForStudent(final Request pRequest, final UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
-    List<ApplicationCCI> applictionAll = getContentManager().getAll();
+//    List<ApplicationCCI> applictionAll = getContentManager().getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
-    if(applictionAll.size() > 0) {
       List<ApplicationCCI> applications =
-          getContentManager().getByStudentIdAndSemester(studentId, student.getCurrentEnrolledSemester().getId());
-      for(ApplicationCCI app : applications) {
-        children.add(toJson(app, pUriInfo, localCache));
-      }
+              getContentManager().getByStudentIdAndSemester(studentId, student.getCurrentEnrolledSemester().getId());
+      applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+      /*for(ApplicationCCI app : applications) {
+          children.add(toJson(app, pUriInfo, localCache));
+      }*/
+  /*  if(applictionAll.size() > 0) {
+
     }
     else {
       List<ApplicationCCI> applications = getContentManager().getAll();
       for(ApplicationCCI app : applications) {
         children.add(toJson(app, pUriInfo, localCache));
       }
-    }
+    }*/
 
     object.add("entries", children);
     localCache.invalidate();

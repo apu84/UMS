@@ -60,6 +60,19 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
       pBuilder.add("status", pReadOnly.getApplicationStatus().getId());
       pBuilder.add("statusName", pReadOnly.getApplicationStatus().getLabel());
     }
+    // Rumi
+
+    pBuilder.add("cciStatus", pReadOnly.getCCIStatus());
+
+    pBuilder.add("statusName", ApplicationStatus.get(pReadOnly.getCCIStatus()).getLabel());
+
+    if(pReadOnly.getGradeLetter() != null)
+      pBuilder.add("grade", pReadOnly.getGradeLetter());
+
+    if(pReadOnly.getCarryYear() != null)
+      pBuilder.add("carryYear", pReadOnly.getCarryYear());
+    if(pReadOnly.getCarrySemester() != null)
+      pBuilder.add("carrySemester", pReadOnly.getCarrySemester());
 
   }
 
@@ -73,8 +86,16 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
       pMutable.setCourseId(pJsonObject.getString("courseId"));
     if(pJsonObject.containsKey("applicationType"))
       pMutable.setApplicationType(ApplicationType.get(pJsonObject.getInt("applicationType")));
-    if(pJsonObject.containsKey("staus"))
+    if(pJsonObject.containsKey("status"))
       pMutable.setApplicationStatus(ApplicationStatus.get(pJsonObject.getInt("status")));
     // pMutable.setApplicationDate(pJsonObject.getString("applicationDate"));
+
+    // rumi
+    if(pJsonObject.containsKey("cciStatus"))
+      pMutable.setCCIStatus(pJsonObject.getInt("cciStatus"));
+
+    if(pJsonObject.containsKey("grade"))
+      pMutable.setGradeLetter(pJsonObject.getString("grade"));
+
   }
 }

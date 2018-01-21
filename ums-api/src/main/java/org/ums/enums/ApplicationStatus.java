@@ -9,6 +9,7 @@ import java.util.Map;
 /**
  * Created by Morshed on 3/22/2016.
  */
+
 public enum ApplicationStatus {
   WRITTEN(0, "Saved"),
   SUBMITTED(1, "Submitted"),
@@ -20,7 +21,8 @@ public enum ApplicationStatus {
   WAITING_FOR_PAYMENT(7, "Waiting for payment"),
   APPROVED(8, "Approved"),
   REJECTED(9, "Rejected"),
-  DEFAULT_LOAD_STATUS(10, "False");
+  DEFAULT_LOAD_STATUS(10, "False"),
+  TEST_ENUM(19, "HELLO WOLRD");
 
   private String label;
   private int id;

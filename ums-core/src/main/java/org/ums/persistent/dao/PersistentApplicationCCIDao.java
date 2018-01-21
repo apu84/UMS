@@ -16,19 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
+/*
  * Created by My Pc on 7/14/2016.
  */
 
 public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   String SELECT_ALL = "SELECT " + "  a.id, " + "  a.semester_id, " + "  a.student_id, " + "  a.course_id, "
-      + "  a.application_type, " + "  a.applied_on, " + "  a.STATUS, " + "   " + "  c.course_no, "
-      + "  c.course_title, " + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+      + "  a.application_type, " + "  a.applied_on, " + "  a.STATUS, " + " " + "  c.course_no, " + "  c.course_title, "
+      + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
       + "FROM application_cci a, mst_course c, exam_routine " + "WHERE "
       + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2";
   String INSERT_ONE =
-      "Insert into APPLICATION_CCI (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,APPLIED_ON) values (?,?,?,?,?,systimestamp)";
+      "Insert into APPLICATION_CCI (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,STATUS,APPLIED_ON) values (?,?,?,?,?,?,systimestamp)";
   String UPDATE_ONE =
       "update application_cci set semester_id=?, student_id=?, course_id=?,application_type=?,applied_on=systimestamp ";
   String DELETE_ONE = "delete from application_cci";
@@ -56,11 +56,12 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
         .collect(Collectors.toCollection(ArrayList::new));
   }
 
+  // insert for one data
   @Override
   public Long create(MutableApplicationCCI pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterId(), pMutable.getStudentId(), pMutable.getCourseId(),
-        pMutable.getApplicationType().getValue());
+        pMutable.getApplicationType().getValue(), pMutable.getCCIStatus());
     return id;
   }
 
@@ -88,7 +89,24 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
-    String query = SELECT_ALL + " STUDENT_ID=? AND SEMESTER_ID=? AND APPLICATION_TYPE=? ";
+    String query =
+        "SELECT "
+            + "  a.id, "
+            + "  a.semester_id, "
+            + "  a.student_id, "
+            + "  a.course_id, "
+            + "  a.application_type, "
+            + "  a.applied_on, "
+            + "  a.STATUS, "
+            + "  t.GRADE_LETTER                                GRADE, "
+            + "  c.course_no, "
+            + "  c.course_title, "
+            + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_THEORY_MARKS_CURR t "
+            + "WHERE "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 AND a.student_id = ? "
+            + "  AND a.semester_id = ? AND exam_routine.semester = a.semester_id AND t.SEMESTER_ID = a.SEMESTER_ID AND t.EXAM_TYPE = 1 "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID ";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pExamType}, new ApplicationCCIRowMapper());
   }
 
@@ -149,17 +167,38 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     return super.getByProgramAndSemesterAndType(pProgramId, pSemesterId, pExamType);
   }
 
+  // fetching GET M
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
-    String query = SELECT_ALL + " and  a.student_id=? and a.semester_id=? and exam_routine.semester=a.semester_id";
+    String query =
+        "SELECT  "
+            + "  a.id,  "
+            + "  a.semester_id,  "
+            + "  a.student_id,  "
+            + "  a.course_id,  "
+            + "  a.application_type,  "
+            + "  a.applied_on,  "
+            + "  a.STATUS,  "
+            + "  t.GRADE_LETTER                                GRADE,  "
+            + "  c.course_no,  "
+            + "  c.course_title,  "
+            + " c.YEAR,   "
+            + "  c.SEMESTER,  "
+            + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date  "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t  "
+            + "WHERE  "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 AND a.student_id = ?  "
+            + "  AND a.semester_id = ? AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1  "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new ApplicationCCIRowMapper());
   }
 
+  // Insert operation
   private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
       params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(), app.getStudentId(), app.getCourseId(),
-          app.getApplicationType().getValue()});
+          app.getApplicationType().getValue(), app.getCCIStatus()});
     }
     return params;
   }
@@ -177,7 +216,12 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setCourseNo(pResultSet.getString("course_no"));
       application.setCourseTitle(pResultSet.getString("course_title"));
       application.setExamDate(pResultSet.getString("exam_date"));
-      application.setApplicationStatus(ApplicationStatus.get(pResultSet.getInt("status")));
+      application.setCCIStatus(pResultSet.getInt("status"));
+      application.setGradeLetter(pResultSet.getString("grade"));
+      application.setCarryYear(pResultSet.getInt("YEAR"));
+      application.setCarrySemester(pResultSet.getInt("SEMESTER"));
+
+      // application.setApplicationStatus(ApplicationStatus.get(pResultSet.getInt("status")));
       // application.setExamDate(pResultSet.getString("exam_date"));
       // application.setTotalStudent(pResultSet.getInt("total_student"));
       return application;

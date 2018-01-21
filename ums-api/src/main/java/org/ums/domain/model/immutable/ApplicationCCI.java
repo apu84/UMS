@@ -14,6 +14,7 @@ import java.io.Serializable;
  * Created by My Pc on 7/11/2016.
  */
 public interface ApplicationCCI extends Serializable, LastModifier, EditType<MutableApplicationCCI>, Identifier<Long> {
+
   Semester getSemester();
 
   Integer getSemesterId();
@@ -50,5 +51,14 @@ public interface ApplicationCCI extends Serializable, LastModifier, EditType<Mut
 
   Integer getRoomId();
 
+  // Rumi
   ApplicationStatus getApplicationStatus();
+
+  Integer getCCIStatus();
+
+  String getGradeLetter();
+
+  Integer getCarryYear();
+
+  Integer getCarrySemester();
 }

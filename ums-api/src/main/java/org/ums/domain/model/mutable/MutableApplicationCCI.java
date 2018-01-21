@@ -51,4 +51,12 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
   void setRoomId(final Integer pRoomId);
 
   void setApplicationStatus(final ApplicationStatus applicationStatus);
+
+  void setCCIStatus(final Integer cciStatus);
+
+  void setGradeLetter(final String gradeLetter);
+
+  void setCarryYear(final Integer carryyear);
+
+  void setCarrySemester(final Integer carrySemester);
 }
