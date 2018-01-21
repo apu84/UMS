@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -9,23 +10,35 @@ import org.ums.builder.CirculationBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.library.Circulation;
 import org.ums.domain.model.mutable.library.MutableCirculation;
+import org.ums.domain.model.mutable.library.MutableFine;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.fee.FeeCategory;
+import org.ums.fee.dues.MutableStudentDues;
+import org.ums.fee.dues.PersistentStudentDues;
+import org.ums.fee.dues.StudentDues;
+import org.ums.fee.dues.StudentDuesManager;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.manager.library.CirculationManager;
+import org.ums.manager.library.FineManager;
 import org.ums.manager.library.ItemManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentCirculation;
+import org.ums.persistent.model.library.PersistentFine;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class CirculationResourceHelper extends ResourceHelper<Circulation, MutableCirculation, Long> {
@@ -44,6 +57,15 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
 
   @Autowired
   private DateFormat mDateFormat;
+
+  @Autowired
+  private FineManager mFineManager;
+
+  @Autowired
+  private UserManager mUserManager;
+
+  @Autowired
+  private StudentDuesManager mStudentDuesManager;
 
   public JsonObject getCirculation(final String pPatronId, final UriInfo pUriInfo) {
     List<Circulation> circulations = new ArrayList<>();
@@ -106,6 +128,9 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
   @Transactional
   public Response updateCirculationForCheckIn(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableCirculation mutableCirculation = new PersistentCirculation();
+    MutableCirculation mutableCirculation1 = new PersistentCirculation();
+    mutableCirculation1 =
+        (MutableCirculation) mManager.getSingleCirculation(pJsonObject.getJsonObject("entries").getString("itemCode"));
     LocalCache localCache = new LocalCache();
     mBuilder.checkInBuilder(mutableCirculation, pJsonObject.getJsonObject("entries"), localCache);
     mManager.updateCirculation(mutableCirculation);
@@ -116,19 +141,8 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     mutableRecord.setTotalAvailable(mutableRecord.getTotalAvailable() + 1);
     mutableRecord.setTotalCheckedOut(mutableRecord.getTotalCheckedOut() - 1);
     mRecordManager.update(mutableRecord);
-
-    Date dueDate = mDateFormat.parse(pJsonObject.getJsonObject("entries").getString("dueDate"));
-    Date returnDate = mutableCirculation.getReturnDate();
-
-    int compare = dueDate.compareTo(returnDate);
-
-    System.out.println("Compare: " + compare);
-
-    if(pJsonObject.getJsonObject("entries").containsKey("fineStatus")) {
-      if(pJsonObject.getJsonObject("entries").getBoolean("fineStatus")) {
-        System.out.println("True");
-      }
-    }
+    mutableCirculation1.setReturnDate(mutableCirculation.getReturnDate());
+    fineCalculator(mutableCirculation1);
     localCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -157,6 +171,45 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  private void fineCalculator(MutableCirculation pMutableCirculation) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    long dueDate = pMutableCirculation.getDueDate().getTime();
+    long returnDate = pMutableCirculation.getReturnDate().getTime();
+    long diff1 = Math.abs(TimeUnit.DAYS.convert((dueDate - returnDate), TimeUnit.MILLISECONDS));
+    System.out.println("diff1: " + diff1);
+    if(dueDate < returnDate) {
+      MutableFine mutableFine = new PersistentFine();
+      mutableFine.setPatronId(pMutableCirculation.getPatronId());
+      mutableFine.setCirculationId(pMutableCirculation.getId());
+      mutableFine.setDescription("");
+      mutableFine.setAmount(5 * diff1);
+      mutableFine.setFineAppliedBy(user.getEmployeeId());
+      if(pMutableCirculation.getFineStatus() == 2 || pMutableCirculation.getFineStatus() == 1) {
+        mutableFine.setFineForgivenBy(user.getEmployeeId());
+      }
+      else {
+        mutableFine.setFineForgivenBy(null);
+      }
+      mutableFine.setFineCategory(1);
+      mutableFine.setFinePaymentDate(null);
+      mutableFine.setFineAppliedDate(pMutableCirculation.getDueDate());
+      mFineManager.saveFine(mutableFine);
+
+      MutableStudentDues mutableStudentDues = new PersistentStudentDues();
+      mutableStudentDues.setFeeCategoryId("99");
+      mutableStudentDues.setDescription("No Description");
+      mutableStudentDues.setStudentId(pMutableCirculation.getPatronId());
+      mutableStudentDues.setAmount(BigDecimal.valueOf(5 * diff1));
+      mutableStudentDues.setAddedOn(new Date());
+      mutableStudentDues.setUserId(user.getEmployeeId());
+      mutableStudentDues.setPayBefore(new Date());
+      mutableStudentDues.setStatus(StudentDues.Status.APPLIED);
+
+      mStudentDuesManager.create(mutableStudentDues);
+    }
   }
 
   private JsonObject toJson(List<Circulation> pCirculation, UriInfo pUriInfo) {

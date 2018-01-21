@@ -8,21 +8,21 @@
             <thead style="background-color: whitesmoke">
             <tr>
                 <th>Due Date</th>
-                <th>Title</th>
-                <th>Material Type</th>
-                <th>Return Date</th>
-                <th>Fines</th>
-                <th>Check In</th>
+                <th>MFN</th>
+                <th>Amount</th>
+                <th>status</th>
+                <th>Payment Date</th>
+                <th>Forgive Fine</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
-                <td><input type="checkbox"></td>
+            <tr data-ng-repeat="fine in vm.fines">
+                <td>{{fine.dueDate}}</td>
+                <td>{{fine.mfn}}</td>
+                <td>{{fine.amount}}</td>
+                <td>{{fine.statusName}}</td>
+                <td>{{fine.paymentDate}}</td>
+                <td><span data-ng-if="fine.status==1"><input data-ng-model="fine.checkBoxStatus" type="checkbox"></span></td>
             </tr>
             </tbody>
         </table>
@@ -31,7 +31,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <button>Check In Selected Rows</button>
-        <button ng-click="vm.checkAll()">Check In All</button>
+        <button type="button" data-ng-click="vm.forgiveFines()">Forgive Fine</button>
     </div>
 </div>

@@ -23,7 +23,10 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
       "INSERT INTO CIRCULATION (ID, PATRON_ID, MFN, ISSUE_DATE, DUE_DATE, RETURN_DATE, FINE_STATUS, ACCESSION_NUMBER, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + " )";
 
-  String UPDATE_ONE = "UPDATE CIRCULATION SET RETURN_DATE = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String UPDATE_ONE = "UPDATE CIRCULATION SET RETURN_DATE = ?, FINE_STATUS = ?, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
+
+  String UPDATE_STATUS = "UPDATE CIRCULATION SET FINE_STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   String DELETE_ONE = "DELETE FROM CIRCULATION ";
 
@@ -33,6 +36,18 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
   public PersistentCirculationDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public Circulation get(final Long pId) {
+    String query = GET_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentCirculationDao.RoleRowMapper());
+  }
+
+  @Override
+  public Circulation getCirculation(final Long pId) {
+    String query = GET_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentCirculationDao.RoleRowMapper());
   }
 
   @Override
@@ -70,7 +85,14 @@ public class PersistentCirculationDao extends CirculationDaoDecorator {
   @Override
   public int updateCirculation(MutableCirculation pMutable) {
     String query = UPDATE_ONE + " WHERE ACCESSION_NUMBER = ? AND RETURN_DATE IS NULL";
-    return mJdbcTemplate.update(query, pMutable.getReturnDate(), pMutable.getAccessionNumber());
+    return mJdbcTemplate.update(query, pMutable.getReturnDate(), pMutable.getFineStatus(),
+        pMutable.getAccessionNumber());
+  }
+
+  @Override
+  public int updateCirculationStatus(MutableCirculation pMutable) {
+    String query = UPDATE_STATUS + " WHERE ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getFineStatus(), pMutable.getId());
   }
 
   @Override

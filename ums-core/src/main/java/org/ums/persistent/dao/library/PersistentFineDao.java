@@ -35,8 +35,14 @@ public class PersistentFineDao extends FineDaoDecorator {
   }
 
   @Override
+  public Fine getFine(final Long pCirculationId) {
+    String query = GET_ONE + " WHERE CIRCULATION_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pCirculationId}, new PersistentFineDao.RoleRowMapper());
+  }
+
+  @Override
   public List<Fine> getFines(final String pPatronId) {
-    String query = GET_ONE + " WHERE PATRON_ID = ?";
+    String query = GET_ONE + " WHERE PATRON_ID = ? ORDER BY FINE_APPLIED_DATE DESC ";
     return mJdbcTemplate.query(query, new Object[] {pPatronId}, new PersistentFineDao.RoleRowMapper());
   }
 

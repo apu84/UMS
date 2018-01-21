@@ -251,7 +251,6 @@
                                         style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
                                         data-ng-click="recordDetails($index)"
                                         href="javascript:void()" class="title">{{record.title}}</a></li>
-                                <li>by <a>{{record.contributorName}} [{{record.contributorRole}}]</a></li>
                                 <li> Material type: {{record.materialTypeName}}</li>
                                 <!--<li>Publisher: <span class="results_summary">{{record.imprint.publisherName}}</span>-->
                                 </li>
@@ -391,19 +390,18 @@
                 <button type="button" data-dismiss="modal" aria-hidden="true"
                         class="close" style="opacity: 1;margin-top: 0px;">&times;
                 </button>
-                <h4 id="modal-default-label" class="modal-title">MFN-1234; Call Number : 1233234</h4></div>
+                <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number : {{record.callNo}}</h4></div>
             <div class="modal-body">
                 <ul class="list-unstyled desc">
                     <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a>
                     </li>
-                    <li>by <a>Unknown (Musician) [author.]</a></li>
-                    <li><b>Material type:</b> book Book</li>
-                    <li><b>Publisher:</b> Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</li>
-                    <li><b>Material type:</b> book Book</li>
-                    <li><b>Edition:</b> 3rd ed.</li>
-                    <li><b>ISBN:</b> 9781429261555 (pbk.) :</li>
-                    <li><b>Imprint:</b> New York: Worth (3), 2012</li>
-                    <li><b>Subject:</b> Psychology - Textbooks (2); Psychology (24);</li>
+                    <li>by <span data-ng-repeat="contri in record.contributorList">{{contri.roleName}}</span></li>
+                    <li><b>Material type:</b> {{record.materialTypeName}}</li>
+                    <li><b>Edition:</b> {{record.edition}}</li>
+                    <li><b>ISBN:</b> {{record.isbn}}</li>
+                    <li><b>Publisher:</b>{{record.imprint.publisherName}}</li>
+                    <li><b>Year of Publication:</b> {{record.imprint.yearDateOfPublication}}</li>
+                    <li><b>Subject:</b><span data-ng-repeat="sub in record.subjectList">{{sub.subject}},&nbsp;</span></li>
                     <li><b>Tags:</b> Tag1, Tag2, Tag3</li>
                     <li><b>Notes:</b>Previous ed.: 2009.<br/>Includes bibliographical references and index.</li>
                     <li><b>Physical Description:</b> 1 v. (various pagings) : ill. (some col.), ports. ; 23 cm.</li>

@@ -95,6 +95,31 @@ module ums {
                 });
             return defer.promise;
         }
+
+        public getFine(patronId: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.get("library/fine/patronId/" + patronId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+
+                });
+            return defer.promise;
+        }
+
+        public updateFines(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.put("library/fine/update", json, HttpClient.MIME_TYPE_JSON)
+                .success(() => {
+                    this.notify.success("Update Successful");
+                    defer.resolve();
+                })
+                .error((data) => {
+                    this.notify.error("Error in Updating");
+                });
+            return defer.promise;
+        }
     }
 
     UMS.service("circulationService", CirculationService);

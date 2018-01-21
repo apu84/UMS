@@ -168,11 +168,12 @@ module ums {
         itemCode: string;
         returnDate: string;
         dueDate: string;
-        fineStatus: string;
+        fineStatus: boolean;
     }
 
     export interface IFine{
         id: string;
+        patronId: string;
         circulationId: string;
         amount: number;
         fineCategory: number;
@@ -181,6 +182,11 @@ module ums {
         fineAppliedBy: string;
         fineForgivenBy: string;
         finePaymentDate: string;
+        dueDate: string;
+        mfn: string;
+        status: number;
+        statusName: string;
+        checkBoxStatus: boolean;
     }
 
 }
