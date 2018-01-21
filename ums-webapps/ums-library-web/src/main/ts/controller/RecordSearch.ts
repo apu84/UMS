@@ -13,20 +13,27 @@ module ums {
 
         record: IRecord;
         recordDetails: Function;
+
+        supplierList: Array<ISupplier>;
+        publisherList: Array<IPublisher>;
+        contributorList: Array<IContributor>;
     }
 
     export class RecordSearch {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService'];
 
         constructor(private $scope: IRecordSearchScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
-                    private catalogingService: CatalogingService, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private $stateParams: any,
+                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
             $scope.data = {
                 itemPerPage: 10,
-                totalRecord: 0
+                totalRecord: 0,
+                materialTypeOptions: libConstants.materialTypes,
+                contributorRoles: libConstants.libContributorRoles
             };
 
 
@@ -70,6 +77,10 @@ module ums {
             else {
                 this.fetchRecords(1);
             }
+
+            this.getAllSuppliers();
+            this.getAllContributors();
+            this.getAllPublishers();
         }
 
         private prepareFilter() {
@@ -116,6 +127,7 @@ module ums {
             this.catalogingService.fetchRecords(pageNumber, this.$scope.data.itemPerPage, "", this.$scope.search.filter).then((response: any) => {
                 this.$scope.recordIdList = Array<String>();
                 this.$scope.recordList = response.entries;
+                this.prepareRecord();
                 this.$scope.data.totalRecord = response.total;
                 for (var i = 0; i < this.$scope.recordList.length; i++) {
                     this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
@@ -138,57 +150,87 @@ module ums {
         }
 
         private recordDetails(recordIndex: number) {
-            this.prepareRecord(recordIndex);
             this.$scope.record = <IRecord>{};
             this.$scope.record = this.$scope.recordList[recordIndex];
         }
 
-        private prepareRecord(index: number): void {
-            var defer = this.$q.defer();
-            this.$scope.recordList[index].contributorList = Array<IContributor>();
-            this.$scope.recordList[index].subjectList = Array<ISubjectEntry>();
-            this.$scope.recordList[index].noteList = Array<INoteEntry>();
+        private prepareRecord(): void {
+            for(var index = 0; index < this.$scope.recordList.length; index++) {
+                this.$scope.recordList[index].contributorList = Array<IContributor>();
+                this.$scope.recordList[index].subjectList = Array<ISubjectEntry>();
+                this.$scope.recordList[index].noteList = Array<INoteEntry>();
 
-            var jsonObj = $.parseJSON(this.$scope.recordList[index].contributorJsonString);
+                var jsonObj = $.parseJSON(this.$scope.recordList[index].contributorJsonString);
 
-            if (jsonObj != null) {
-                for (var i = 0; i < jsonObj.length; i++) {
-                    var contributor = <IContributor> {};
-                    contributor.viewOrder = jsonObj[i].viewOrder;
-                    contributor.role = jsonObj[i].role;
-                    contributor.id = jsonObj[i].id;
-                    this.$scope.recordList[index].contributorList.push(contributor);
+                if (jsonObj != null) {
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        var contributor = <IContributor> {};
+                        contributor.viewOrder = jsonObj[i].viewOrder;
+                        contributor.role = jsonObj[i].role;
+                        angular.forEach(this.$scope.data.contributorRoles, (attr: any) => {
+                            if (attr.id == jsonObj[i].role) {
+                                contributor.roleName = attr.name;
+                            }
+                        });
+                        contributor.id = jsonObj[i].id;
+                        contributor.name = this.$scope.contributorList[this.$scope.contributorList.map(function (e) {
+                            return e.id;
+                        }).indexOf(jsonObj[i].id)].name;
+
+                        this.$scope.recordList[index].contributorList.push(contributor);
+                    }
+                }
+                var jsonObj = $.parseJSON(this.$scope.recordList[index].noteJsonString);
+                if (jsonObj != null) {
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        var note = {viewOrder: jsonObj[i].viewOrder, note: jsonObj[i].note};
+                        this.$scope.recordList[index].noteList.push(note);
+                    }
+                }
+                var jsonObj = $.parseJSON(this.$scope.recordList[index].subjectJsonString);
+                if (jsonObj != null) {
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        var subject = {viewOrder: jsonObj[i].viewOrder, subject: jsonObj[i].subject};
+                        this.$scope.recordList[index].subjectList.push(subject);
+                    }
+                }
+
+                var jsonObj = $.parseJSON(this.$scope.recordList[index].physicalDescriptionString);
+                if (jsonObj != null) {
+                    var physicalDescription = {
+                        pagination: jsonObj.pagination,
+                        illustrations: jsonObj.illustrations,
+                        accompanyingMaterials: jsonObj.accompanyingMaterials,
+                        dimensions: jsonObj.dimensions,
+                        paperQuality: jsonObj.paperQuality
+                    };
+                    this.$scope.recordList[index].physicalDescription = physicalDescription;
                 }
             }
+        }
 
-            var jsonObj = $.parseJSON(this.$scope.recordList[index].noteJsonString);
+        private getAllSuppliers(): void {
+            this.supplierService.fetchAllSuppliers().then((response: any) => {
+                this.$scope.supplierList = response.entries;
+            }, function errorCallback(response) {
+                this.notify.error(response);
+            });
+        }
 
-            if (jsonObj != null) {
-                for (var i = 0; i < jsonObj.length; i++) {
-                    var note = {viewOrder: jsonObj[i].viewOrder, note: jsonObj[i].note};
-                    this.$scope.recordList[index].noteList.push(note);
-                }
-            }
+        private getAllPublishers(): void {
+            this.publisherService.fetchAllPublishers().then((response: any) => {
+                this.$scope.publisherList = response.entries;
+            }, function errorCallback(response) {
+                this.notify.error(response);
+            });
+        }
 
-            var jsonObj = $.parseJSON(this.$scope.recordList[index].subjectJsonString);
-            if (jsonObj != null) {
-                for (var i = 0; i < jsonObj.length; i++) {
-                    var subject = {viewOrder: jsonObj[i].viewOrder, subject: jsonObj[i].subject};
-                    this.$scope.recordList[index].subjectList.push(subject);
-                }
-            }
-
-            var jsonObj = $.parseJSON(this.$scope.recordList[index].physicalDescriptionString);
-            if (jsonObj != null) {
-                var physicalDescription = {
-                    pagination: jsonObj.pagination,
-                    illustrations: jsonObj.illustrations,
-                    accompanyingMaterials: jsonObj.accompanyingMaterials,
-                    dimensions: jsonObj.dimensions,
-                    paperQuality: jsonObj.paperQuality
-                };
-                this.$scope.recordList[index].physicalDescription = physicalDescription;
-            }
+        private getAllContributors(): void {
+            this.contributorService.fetchAllContributors().then((response: any) => {
+                this.$scope.contributorList = response.entries;
+            }, function errorCallback(response) {
+                this.notify.error(response);
+            });
         }
 
     }

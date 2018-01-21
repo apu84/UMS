@@ -4,6 +4,7 @@ module ums {
         id: string,
         viewOrder: number;
         role: number;
+        roleName: string;
         name: string;
         text: string;
         shortName: string;
@@ -90,9 +91,6 @@ module ums {
         totalAvailable: number;
         totalCheckedOut: number;
         totalOnHold: number;
-
-        contributorName?: string;
-        constributorRole?: string;
     }
 
     export interface IItem {
