@@ -22,4 +22,9 @@ public class FineDaoDecorator extends ContentDaoDecorator<Fine, MutableFine, Lon
   public int updateFine(MutableFine pMutableFine) {
     return getManager().updateFine(pMutableFine);
   }
+
+  @Override
+  public Fine getFine(Long pCirculationId) {
+    return getManager().getFine(pCirculationId);
+  }
 }

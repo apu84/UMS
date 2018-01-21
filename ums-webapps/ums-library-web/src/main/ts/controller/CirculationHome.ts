@@ -64,6 +64,8 @@ module ums {
                 if(data.userId != undefined){
                     this.state.go('circulation.searchPatron', {patronId: data.userId});
                 }
+            }).catch((data: any) => {
+                this.notify.error(data);
             });
         }
 

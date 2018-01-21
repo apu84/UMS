@@ -33,6 +33,11 @@ public class FineCache extends ContentCache<Fine, MutableFine, Long, FineManager
 
   @Override
   public int updateFine(MutableFine pMutableFine) {
-    return getManager().update(pMutableFine);
+    return getManager().updateFine(pMutableFine);
+  }
+
+  @Override
+  public Fine getFine(Long pCirculationId) {
+    return getManager().getFine(pCirculationId);
   }
 }

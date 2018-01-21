@@ -6,9 +6,13 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.library.Circulation;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableCirculation;
+import org.ums.domain.model.mutable.library.MutableFine;
 import org.ums.enums.library.MaterialType;
 import org.ums.formatter.DateFormat;
+import org.ums.manager.library.CirculationManager;
+import org.ums.manager.library.FineManager;
 import org.ums.manager.library.RecordManager;
+import org.ums.persistent.model.library.PersistentCirculation;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -17,6 +21,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class CirculationBuilder implements Builder<Circulation, MutableCirculation> {
@@ -26,6 +31,9 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
 
   @Autowired
   private RecordManager mRecordManager;
+
+  @Autowired
+  private FineManager mFineManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Circulation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -61,6 +69,11 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     pBuilder.add("totalAvailable", record.getTotalAvailable());
     pBuilder.add("totalCheckedOut", record.getTotalCheckedOut());
     pBuilder.add("totalOnHold", record.getTotalOnHold());
+
+    if(pReadOnly.getFineStatus() == 1) {
+      MutableFine mutableFine = (MutableFine) mFineManager.getFine(pReadOnly.getId());
+      pBuilder.add("amount", mutableFine.getAmount());
+    }
   }
 
   @Override
@@ -105,6 +118,17 @@ public class CirculationBuilder implements Builder<Circulation, MutableCirculati
     long time = date.getTime();
     pMutable.setReturnDate(new Timestamp(time));
     pMutable.setAccessionNumber(pJsonObject.getString("itemCode"));
+    if(pJsonObject.containsKey("fineStatus")) {
+      if(pJsonObject.getBoolean("fineStatus")) {
+        pMutable.setFineStatus(2);
+      }
+      else {
+        pMutable.setFineStatus(1);
+      }
+    }
+    else {
+      pMutable.setFineStatus(0);
+    }
   }
 
   public void checkInUpdateBuilder(MutableCirculation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {

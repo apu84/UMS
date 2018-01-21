@@ -25,7 +25,6 @@ module ums {
             this.circulation = <ILibraryCirculation>{};
             this.circulationDetail = <ILibraryCirculation>{};
 
-            console.log($stateParams.itemId);
             if ($stateParams.itemId == null || $stateParams.itemId == "" || $stateParams.itemId == undefined) {
                 this.showWarning = true;
             }
@@ -82,7 +81,6 @@ module ums {
             this.catalogingService.fetchRecord(this.mfn).then((data: any) => {
                 this.record = <IRecord>{};
                 this.record = data;
-                console.log(this.record);
             });
         }
 

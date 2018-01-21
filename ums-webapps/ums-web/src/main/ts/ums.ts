@@ -1074,7 +1074,9 @@ module ums {
                             'vendors/bootstrap-switch/css/bootstrap-switch.css',
                             'vendors/bootstrap-datepicker/css/datepicker.css',
                             'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
                         ]
                     });
                 }]

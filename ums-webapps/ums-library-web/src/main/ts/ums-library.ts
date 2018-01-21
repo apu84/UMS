@@ -126,7 +126,17 @@ module ums {
                 url: "/patrons",
                 templateUrl: 'views/admin/patron/patron-home.html',
                 controller: 'PatronHome',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
+                            ]
+                        });
+                    }]
+                }
             })
             .state('circulation.checkOut', {
                 url: "/checkOut/:userId",

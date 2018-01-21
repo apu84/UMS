@@ -43,4 +43,14 @@ public class CirculationDaoDecorator extends
   public Circulation getSingleCirculation(String pAccessionNumber) {
     return getManager().getSingleCirculation(pAccessionNumber);
   }
+
+  @Override
+  public int updateCirculationStatus(MutableCirculation pMutableCirculation) {
+    return getManager().updateCirculationStatus(pMutableCirculation);
+  }
+
+  @Override
+  public Circulation getCirculation(Long pId) {
+    return getManager().getCirculation(pId);
+  }
 }

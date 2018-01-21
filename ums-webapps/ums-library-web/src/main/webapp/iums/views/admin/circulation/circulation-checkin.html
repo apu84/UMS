@@ -60,10 +60,12 @@
                     </div>
                     <div class="col-md-7">
                         <div align="right">
-                            <input type="checkbox" data-ng-model="vm.checkInItem.fineStatus" id="exemptcheck"
-                                   name="exemptfine" value="exemptfine">
+                            <div data-ng-if="vm.circulationDetail.overDueStatus==true">
+                                <input type="checkbox" data-ng-model="vm.checkInItem.fineStatus" id="exemptcheck"
+                                       name="exemptfine" value="exemptfine">
 
-                            <label for="exemptcheck">Forgive overdue charges</label>
+                                <label for="exemptcheck">Forgive overdue charges</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -120,8 +122,10 @@
                 <div class="row">
                     <div class="col-md-3"><b>Due Date</b></div>
                     <div class="col-md-1"><b>:</b></div>
-                    <div class="col-md-8"><span data-ng-if="vm.circulationDetail.overDueStatus==true"><span style="color: red">{{vm.circulationDetail.dueDate}}</span></span>
-                        <span data-ng-if="vm.circulationDetail.overDueStatus==false"><span style="color: green">{{vm.circulationDetail.dueDate}}</span></span></div>
+                    <div class="col-md-8"><span data-ng-if="vm.circulationDetail.overDueStatus==true"><span
+                            style="color: red">{{vm.circulationDetail.dueDate}}</span></span>
+                        <span data-ng-if="vm.circulationDetail.overDueStatus==false"><span style="color: green">{{vm.circulationDetail.dueDate}}</span></span>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3"><b>Patron Id</b></div>

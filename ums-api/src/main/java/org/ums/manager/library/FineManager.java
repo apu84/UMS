@@ -13,4 +13,6 @@ public interface FineManager extends ContentManager<Fine, MutableFine, Long> {
 
   int updateFine(final MutableFine pMutableFine);
 
+  Fine getFine(final Long pCirculationId);
+
 }

@@ -118,7 +118,7 @@
                     <th>MFN</th>
                     <th>Barcode</th>
                     <th>Fines</th>
-                    <th>Check In</th>
+                    <!--<th>Check In</th>-->
                 </tr>
                 </thead>
                 <tbody data-ng-repeat="item in vm.circulations">
@@ -129,11 +129,11 @@
                     <td>{{item.mfn}}</td>
                     <td>{{item.itemCode}}</td>
                     <td>{{item.fineStatusString}}</td>
-                    <td><input type="checkbox" data-ng-model="item.checkBoxStatus"></td>
+                    <!--<td><input type="checkbox" data-ng-model="item.checkBoxStatus"></td>-->
                 </tr>
                 </tbody>
             </table>
-            <button type="button" data-ng-click="vm.checkInSelectedItem()">Check In</button>
+            <!--<button type="button" data-ng-click="vm.checkInSelectedItem()">Check In</button>-->
         </div>
     </div>
 </div>

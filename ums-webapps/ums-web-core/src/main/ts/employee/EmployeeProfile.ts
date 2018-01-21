@@ -14,7 +14,7 @@ module ums {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
             'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService'];
+            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
 
         private entry: {
             personal: IPersonalInformationModel,
@@ -97,6 +97,7 @@ module ums {
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
+        private isRegistrar: boolean;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -114,7 +115,8 @@ module ums {
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private FileUpload: FileUpload) {
 
             $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
             $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
@@ -156,6 +158,12 @@ module ums {
 
         private initialization() {
             this.userService.fetchCurrentUserInfo().then((user: any) => {
+                if(user.roleId == 82 || user.roleId == 81){
+                    this.isRegistrar = true;
+                }
+                else{
+                    this.isRegistrar = false;
+                }
                 if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
                     this.userId = user.employeeId;
                     this.showServiceEditButton = false;
@@ -944,6 +952,24 @@ module ums {
                     }
                 }
             }
+        }
+
+        private uploadImage() {
+            var id = this.userId;
+            var image = $("#userPhoto").contents().prevObject[0].files[0];
+            this.getFormData(image, id).then((formData) => {
+                this.FileUpload.uploadPhoto(formData);
+            });
+        }
+
+        private getFormData(file, id): ng.IPromise<any> {
+            var formData = new FormData();
+            formData.append('files', file);
+            formData.append('name', file.name);
+            formData.append("id", id);
+            var defer = this.$q.defer();
+            defer.resolve(formData);
+            return defer.promise;
         }
     }
 

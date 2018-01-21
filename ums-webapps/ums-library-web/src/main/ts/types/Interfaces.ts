@@ -4,6 +4,7 @@ module ums {
         id: string,
         viewOrder: number;
         role: number;
+        roleName: string;
         name: string;
         text: string;
         shortName: string;
@@ -90,9 +91,6 @@ module ums {
         totalAvailable: number;
         totalCheckedOut: number;
         totalOnHold: number;
-
-        contributorName?: string;
-        constributorRole?: string;
     }
 
     export interface IItem {
@@ -168,11 +166,12 @@ module ums {
         itemCode: string;
         returnDate: string;
         dueDate: string;
-        fineStatus: string;
+        fineStatus: boolean;
     }
 
     export interface IFine{
         id: string;
+        patronId: string;
         circulationId: string;
         amount: number;
         fineCategory: number;
@@ -181,6 +180,11 @@ module ums {
         fineAppliedBy: string;
         fineForgivenBy: string;
         finePaymentDate: string;
+        dueDate: string;
+        mfn: string;
+        status: number;
+        statusName: string;
+        checkBoxStatus: boolean;
     }
 
 }

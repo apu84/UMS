@@ -21,4 +21,8 @@ public interface CirculationManager extends ContentManager<Circulation, MutableC
   List<Circulation> getCirculationCheckedInItems(final String pPatronId);
 
   Circulation getSingleCirculation(final String pAccessionNumber);
+
+  int updateCirculationStatus(final MutableCirculation pMutableCirculation);
+
+  Circulation getCirculation(final Long pId);
 }
