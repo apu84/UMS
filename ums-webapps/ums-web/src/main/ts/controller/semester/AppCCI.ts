@@ -93,6 +93,7 @@ module ums {
     color: string;
     courseYear:number;
     courseSemester:number;
+    deadline:string;
 
     //status and pending status
   }

@@ -34,13 +34,13 @@ public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult
 
       lastApplyDate = DateUtils.addDays(UmsUtils.convertToDate(pReadOnly.getExamDate(), "dd-MM-yyyy"), -5);
       currentDate = new Date();
-      // pBuilder.add("lastApplyDate", UmsUtils.formatDate(lastApplyDate, "dd-MM-yyyy"));
+       pBuilder.add("lastApplyDate", UmsUtils.formatDate(lastApplyDate, "dd-MM-yyyy"));
 
       if(currentDate.compareTo(lastApplyDate) > 0) {
-        pBuilder.add("lastApplyDate", "Date Over");
+        pBuilder.add("deadline", "Date Over");
       }
       else {
-        pBuilder.add("lastApplyDate", UmsUtils.formatDate(lastApplyDate, "dd-MM-yyyy"));
+        pBuilder.add("deadline", "Available");
       }
 
     } catch(Exception e) {

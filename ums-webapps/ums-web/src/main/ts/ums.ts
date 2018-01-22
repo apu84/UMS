@@ -901,7 +901,7 @@ module ums {
         })
         .state('cciApproval', {
             url: "/cciApproval",
-            controller: 'LeaveApplicationApproval',
+            controller: 'CarryApplicationApproval',
             controllerAs: 'vm',
             templateUrl: 'views/cciManagement/cci-application-approval.html',
             resolve: {

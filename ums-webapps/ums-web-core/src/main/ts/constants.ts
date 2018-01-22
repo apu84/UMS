@@ -526,6 +526,12 @@ module ums {
                     {id: 7, name: "Application Approved"},
                     {id: 8, name: "All"}
                 ],
+                carryApprovalStatus: [
+                    {id: 1, name: "Waiting for head's approval"},
+                    {id: 2, name: "Approved By Head"},
+                    {id: 3, name: "Rejected By Head "},
+                    {id: 4, name: "All"}
+                ],
                 departmentOffice: [
                     {id: '01', name: 'Department of Architecture'},
                     {id: '02', name: 'School of Business'},
