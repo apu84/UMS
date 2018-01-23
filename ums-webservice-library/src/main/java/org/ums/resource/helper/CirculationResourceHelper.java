@@ -142,7 +142,7 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
     mutableRecord.setTotalCheckedOut(mutableRecord.getTotalCheckedOut() - 1);
     mRecordManager.update(mutableRecord);
     mutableCirculation1.setReturnDate(mutableCirculation.getReturnDate());
-    fineCalculator(mutableCirculation1);
+    /* fineCalculator(mutableCirculation1); */
     localCache.invalidate();
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -174,42 +174,33 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
   }
 
   private void fineCalculator(MutableCirculation pMutableCirculation) {
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
-    long dueDate = pMutableCirculation.getDueDate().getTime();
-    long returnDate = pMutableCirculation.getReturnDate().getTime();
-    long diff1 = Math.abs(TimeUnit.DAYS.convert((dueDate - returnDate), TimeUnit.MILLISECONDS));
-    System.out.println("diff1: " + diff1);
-    if(dueDate < returnDate) {
-      MutableFine mutableFine = new PersistentFine();
-      mutableFine.setPatronId(pMutableCirculation.getPatronId());
-      mutableFine.setCirculationId(pMutableCirculation.getId());
-      mutableFine.setDescription("");
-      mutableFine.setAmount(5 * diff1);
-      mutableFine.setFineAppliedBy(user.getEmployeeId());
-      if(pMutableCirculation.getFineStatus() == 2 || pMutableCirculation.getFineStatus() == 1) {
-        mutableFine.setFineForgivenBy(user.getEmployeeId());
-      }
-      else {
-        mutableFine.setFineForgivenBy(null);
-      }
-      mutableFine.setFineCategory(1);
-      mutableFine.setFinePaymentDate(null);
-      mutableFine.setFineAppliedDate(pMutableCirculation.getDueDate());
-      mFineManager.saveFine(mutableFine);
-
-      MutableStudentDues mutableStudentDues = new PersistentStudentDues();
-      mutableStudentDues.setFeeCategoryId("99");
-      mutableStudentDues.setDescription("No Description");
-      mutableStudentDues.setStudentId(pMutableCirculation.getPatronId());
-      mutableStudentDues.setAmount(BigDecimal.valueOf(5 * diff1));
-      mutableStudentDues.setAddedOn(new Date());
-      mutableStudentDues.setUserId(user.getEmployeeId());
-      mutableStudentDues.setPayBefore(new Date());
-      mutableStudentDues.setStatus(StudentDues.Status.APPLIED);
-
-      mStudentDuesManager.create(mutableStudentDues);
-    }
+    /*
+     * String userId = SecurityUtils.getSubject().getPrincipal().toString(); User user =
+     * mUserManager.get(userId); long dueDate = pMutableCirculation.getDueDate().getTime(); long
+     * returnDate = pMutableCirculation.getReturnDate().getTime(); long diff1 =
+     * Math.abs(TimeUnit.DAYS.convert((dueDate - returnDate), TimeUnit.MILLISECONDS));
+     * System.out.println("diff1: " + diff1); if(dueDate < returnDate) { MutableFine mutableFine =
+     * new PersistentFine(); mutableFine.setPatronId(pMutableCirculation.getPatronId());
+     * mutableFine.setCirculationId(pMutableCirculation.getId()); mutableFine.setDescription("");
+     * mutableFine.setAmount(5 * diff1); mutableFine.setFineAppliedBy(user.getEmployeeId());
+     * if(pMutableCirculation.getFineStatus() == 2 || pMutableCirculation.getFineStatus() == 1) {
+     * mutableFine.setFineForgivenBy(user.getEmployeeId()); } else {
+     * mutableFine.setFineForgivenBy(null); } mutableFine.setFineCategory(1);
+     * mutableFine.setFinePaymentDate(null);
+     * mutableFine.setFineAppliedDate(pMutableCirculation.getDueDate());
+     * mFineManager.saveFine(mutableFine);
+     * 
+     * MutableStudentDues mutableStudentDues = new PersistentStudentDues();
+     * mutableStudentDues.setFeeCategoryId("99");
+     * mutableStudentDues.setDescription("No Description");
+     * mutableStudentDues.setStudentId(pMutableCirculation.getPatronId());
+     * mutableStudentDues.setAmount(BigDecimal.valueOf(5 * diff1));
+     * mutableStudentDues.setAddedOn(new Date());
+     * mutableStudentDues.setUserId(user.getEmployeeId()); mutableStudentDues.setPayBefore(new
+     * Date()); mutableStudentDues.setStatus(StudentDues.Status.APPLIED);
+     * 
+     * mStudentDuesManager.create(mutableStudentDues); }
+     */
   }
 
   private JsonObject toJson(List<Circulation> pCirculation, UriInfo pUriInfo) {
