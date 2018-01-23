@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.BloodGroupBuilder;
@@ -9,7 +10,6 @@ import org.ums.domain.model.mutable.common.MutableBloodGroup;
 import org.ums.manager.ContentManager;
 import org.ums.manager.common.BloodGroupManager;
 import org.ums.resource.ResourceHelper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

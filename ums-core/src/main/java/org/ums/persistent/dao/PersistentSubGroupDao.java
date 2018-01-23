@@ -6,7 +6,6 @@ import org.ums.decorator.SubGroupDaoDecorator;
 import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.mutable.MutableSubGroup;
 import org.ums.persistent.model.PersistentSubGroup;
-import sun.misc.resources.Messages_ja;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

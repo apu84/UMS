@@ -47,8 +47,6 @@ public abstract class AbstractCourseMaterialResource extends Resource {
       final @PathParam("semester-name") String pSemesterName, final @PathParam("course-no") String pCourseNo,
       final JsonObject pJsonObject) throws Exception {
     Map<String, Object> result = new HashMap<>();
-    Asserts.notNull(pRequest, "cant be");
-    Asserts.notNull(pJsonObject, "thats working");
     if(pJsonObject != null && pJsonObject.containsKey("action")) {
       switch(pJsonObject.getString("action")) {
 
@@ -254,6 +252,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
     return actionItems;
   }
 
+  @SuppressWarnings("unchecked")
   private Map<String, String> buildAdditionalParams(JsonObject pJsonObject) throws IOException {
     if(pJsonObject.containsKey("additionalParams")) {
       pJsonObject.getJsonObject("additionalParams");

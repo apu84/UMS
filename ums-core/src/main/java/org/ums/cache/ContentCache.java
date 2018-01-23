@@ -126,6 +126,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return CacheUtil.getCacheKey(getClassOfR(), pId);
   }
 
+  @SuppressWarnings("unchecked")
   private Class<R> getClassOfR() {
     ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
     return (Class<R>) superclass.getActualTypeArguments()[0];

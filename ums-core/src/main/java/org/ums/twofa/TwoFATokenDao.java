@@ -1,10 +1,10 @@
 package org.ums.twofa;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.generator.IdGenerator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

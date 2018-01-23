@@ -101,6 +101,7 @@ public abstract class ResourceHelper<R extends EditType<M> & Identifier, M exten
     return mutables;
   }
 
+  @SuppressWarnings("unchecked")
   protected boolean isValidUpdateOfEntities(List<R> latest, List<M> updated) {
     for(R latestR : latest) {
       for(M updatedR : updated) {

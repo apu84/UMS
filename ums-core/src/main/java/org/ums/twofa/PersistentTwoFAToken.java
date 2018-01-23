@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 
