@@ -18,7 +18,6 @@ public class FtpIntegration {
   @Autowired
   Environment mEnvironment;
 
-  @Bean
   public SessionFactory<FTPFile> ftpSessionFactory() {
     DefaultFtpSessionFactory sf = new DefaultFtpSessionFactory();
     sf.setHost(mEnvironment.getProperty("ftp.localhost"));
