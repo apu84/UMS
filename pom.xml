@@ -65,25 +65,6 @@
     </repository>
   </repositories>
 
-
-  <modules>
-    <module>build-tools</module>
-    <module>ums-api</module>
-    <module>ums-core</module>
-    <module>ums-webservice-core</module>
-    <!--<module>ums-web</module>-->
-    <module>ums-dist</module>
-    <module>ums-webservice-academic</module>
-    <module>ums-webservice-bank</module>
-    <module>ums-webservice-library</module>
-    <module>ums-webservice-registrar</module>
-    <module>ums-webservice-account</module>
-    <module>codegenerator</module>
-    <module>auth-support</module>
-    <module>microservice</module>
-    <!-- <module>ums-web-templates</module>-->
-  </modules>
-
   <dependencies>
     <!-- Spring 3 dependencies -->
     <dependency>
@@ -586,10 +567,31 @@
   <profiles>
     <profile>
       <id>dev</id>
+      <properties>
+        <assembly.target>all</assembly.target>
+      </properties>
 
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
+
+      <modules>
+        <module>build-tools</module>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <!--<module>ums-web</module>-->
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+        <module>ums-webservice-bank</module>
+        <module>ums-webservice-library</module>
+        <module>ums-webservice-registrar</module>
+        <module>ums-webservice-account</module>
+        <module>codegenerator</module>
+        <module>auth-support</module>
+        <module>microservice</module>
+        <!-- <module>ums-web-templates</module>-->
+      </modules>
 
       <build>
         <plugins>
@@ -610,6 +612,171 @@
       </build>
     </profile>
 
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>academic</id>
+      <properties>
+        <assembly.target>academic</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>accounts</id>
+      <properties>
+        <assembly.target>accounts</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-account</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>library</id>
+      <properties>
+        <assembly.target>library</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-library</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>registrar</id>
+      <properties>
+        <assembly.target>registrar</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-registrar</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>bank</id>
+      <properties>
+        <assembly.target>bank</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-bank</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>test-server</id>
       <!-- Some other logic here, if necessary.
