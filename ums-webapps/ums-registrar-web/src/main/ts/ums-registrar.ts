@@ -170,6 +170,11 @@ module ums {
                     }]
                 }
             })
+            .state('changePassword', {
+                url: "/changePassword",
+                controller: 'ChangePassword',
+                templateUrl: 'views/common/change-password.html'
+            })
             .state('logout', {
                 url: "/logout",
                 controller: 'Logout'

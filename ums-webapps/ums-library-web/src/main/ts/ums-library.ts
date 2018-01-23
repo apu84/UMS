@@ -20,6 +20,7 @@ module ums {
     }]);
 
     UMS.constant("libConstants", Constants.LibConstant());
+    UMS.constant("registrarConstants", Constants.RegistrarConstant());
 
     UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
         $urlRouterProvider.when('/cataloging', '/cataloging/search/new');
@@ -199,6 +200,37 @@ module ums {
                 templateUrl: 'views/admin/circulation/circulation-history.html',
                 controller: 'CirculationHistory',
                 controllerAs: 'vm'
+            })
+            .state('profile', {
+                url: "/profile",
+                templateUrl: 'views/employee/employee-profile.html',
+                controller: 'EmployeeProfile',
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/select2/select2-madmin.css',
+                                'vendors/bootstrap-select/bootstrap-select.min.css',
+                                'vendors/multi-select/css/multi-select-madmin.css',
+                                'vendors/select2/select2.min.js',
+                                'vendors/bootstrap-select/bootstrap-select.min.js',
+                                'vendors/multi-select/js/jquery.multi-select.js',
+                                'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                                'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
+                            ]
+                        });
+                    }]
+                }
+            })
+            .state('changePassword', {
+                url: "/changePassword",
+                controller: 'ChangePassword',
+                templateUrl: 'views/common/change-password.html'
             })
             .state('logout', {
                 url: "/logout",
