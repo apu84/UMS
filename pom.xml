@@ -779,8 +779,24 @@
     </profile>
     <profile>
       <id>test-server</id>
-      <!-- Some other logic here, if necessary.
-           Otherwise, there's no need for another profile. -->
+      <properties>
+        <assembly.target>all</assembly.target>
+      </properties>
+      <modules>
+        <module>build-tools</module>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+        <module>ums-webservice-bank</module>
+        <module>ums-webservice-library</module>
+        <module>ums-webservice-registrar</module>
+        <module>ums-webservice-account</module>
+        <module>codegenerator</module>
+        <module>auth-support</module>
+        <module>microservice</module>
+      </modules>
     </profile>
   </profiles>
 
