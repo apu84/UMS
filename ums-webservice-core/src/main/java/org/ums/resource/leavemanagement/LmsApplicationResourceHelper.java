@@ -95,7 +95,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   @Autowired
   @Lazy
-  private SessionFactory<FTPFile> mSessionFactory;
+  private SessionFactory<FTPFile> ftpSessionFactory;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -154,7 +154,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     Files.move(pInputStream.toPath(), newFile.toPath());
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
-    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
+    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
     template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
     template.setUseTemporaryFileName(false);
     template.execute(session -> {

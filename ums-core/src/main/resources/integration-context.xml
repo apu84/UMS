@@ -12,7 +12,8 @@
           service-interface="org.ums.integration.FileWriterGateway"
           default-request-channel="ftpChannel"></integration:gateway>
 
-  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
+  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory"
+        name="ftpSessionFactory" autowire="autodetect" lazy-init="true">
     <property name="host" value="${ftp.localhost}"/>
     <!--<property name="port" value="${ftp.port}"/>-->
     <property name="username" value="${ftp.username}"/>

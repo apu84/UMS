@@ -63,6 +63,12 @@ public class CoreContext {
   @Qualifier("dummyEmail")
   String emailSender;
 
+  /*
+   * @Bean(name = "ftpSessionFactory") public SessionFactory<FTPFile> ftpSessionFactory() {
+   * DefaultFtpSessionFactory sf = new DefaultFtpSessionFactory(); sf.setHost("localhost");
+   * sf.setUsername("iums"); sf.setPassword("austig100"); return new
+   * CachingSessionFactory<FTPFile>(sf); }
+   */
   @Bean
   @Lazy
   EmployeeManager employeeManager() {

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
@@ -61,8 +60,7 @@ public class ProfilePicture extends Resource {
    */
 
   @Autowired
-  @Lazy
-  private SessionFactory<FTPFile> mSessionFactory;
+  private SessionFactory<FTPFile> ftpSessionFactory;
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
@@ -142,7 +140,7 @@ public class ProfilePicture extends Resource {
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
 
     try {
-      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(mSessionFactory);
+      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
       template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
       template.setUseTemporaryFileName(false);
       template.execute(session -> {
