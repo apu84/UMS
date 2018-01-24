@@ -21,6 +21,7 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
   enum Status {
     INPROGRESS(1, "Inprogress"),
     COMPLETED(2, "Completed"),
+    FAILED(3, "Failed"),
     NONE(0, "");
 
     private String label;

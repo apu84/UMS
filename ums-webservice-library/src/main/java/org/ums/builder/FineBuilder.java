@@ -1,7 +1,12 @@
 package org.ums.builder;
 
+import java.text.SimpleDateFormat;
+
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.shiro.SecurityUtils;
-import org.eclipse.collections.api.partition.bag.PartitionMutableBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -13,12 +18,6 @@ import org.ums.formatter.DateFormat;
 import org.ums.manager.library.CirculationManager;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.print.attribute.PrintJobAttributeSet;
-import javax.ws.rs.core.UriInfo;
-import java.text.SimpleDateFormat;
 
 @Component
 public class FineBuilder implements Builder<Fine, MutableFine> {

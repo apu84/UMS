@@ -2,9 +2,7 @@ package org.ums.services.academic;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -104,59 +102,79 @@ public class ProcessResultImpl implements ProcessResult {
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
 
-    Map<String, StudentRecord> studentRecordMap =
-        studentRecords.stream().collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
+    try  {
+//      Temoporary code to find duplicate student record
+//      Set<String> allItems = new HashSet<>();
+//      Set<String> duplicates = studentRecords.stream()
+//          .map(StudentRecord::getStudentId)
+//          .filter(pStudentId -> !allItems.add(pStudentId))
+//          .collect(Collectors.toSet());
+//      System.out.println(duplicates);
 
-    List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
+      Map<String, StudentRecord> studentRecordMap =
+          studentRecords.stream().collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
 
-    for(String studentId : studentCourseGradeMap.keySet()) {
-      MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
+      List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
 
-      StudentRecordParams studentRecordParams = calculateGPA(studentCourseGradeMap.get(studentId).stream()
-          .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
-      if(studentRecordParams != null) {
-        studentRecord.setGPA(studentRecordParams.getGpa());
-        studentRecord.setCompletedCrHr(studentRecordParams.getCompletedCrHr());
-        studentRecord.setCompletedGradePoints(studentRecordParams.getCompletedGradePoints());
-      }
-      if(!mUmsConfiguration.isProcessGPAOnly()) {
-        List<Semester> previousSemesters =
-            mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgram().getProgramTypeId());
-        List<Integer> previousSemesterIds =
-            previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
-        List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
-            .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
-        StudentRecordParams cgpa = calculateCGPA(courseResults);
-        boolean isPassed = isPassed(pSemesterId, courseResults);
-        if(cgpa != null) {
-          studentRecord.setCGPA(cgpa.getGpa());
-          studentRecord.setTotalCompletedCrHr(cgpa.getCompletedCrHr());
-          studentRecord.setTotalCompletedGradePoints(cgpa.getCompletedGradePoints());
+      for(String studentId : studentCourseGradeMap.keySet()) {
+        MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
+
+        StudentRecordParams studentRecordParams = calculateGPA(studentCourseGradeMap.get(studentId).stream()
+            .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
+        if(studentRecordParams != null) {
+          studentRecord.setGPA(studentRecordParams.getGpa());
+          studentRecord.setCompletedCrHr(studentRecordParams.getCompletedCrHr());
+          studentRecord.setCompletedGradePoints(studentRecordParams.getCompletedGradePoints());
         }
-        studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
-        studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(courseResults,
-            isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.PASSED, pSemesterId));
-        studentRecord.setTabulationSheetRemarks(mRemarksBuilder
-            .getTabulationSheetRemarks(courseResults, studentRecord, pSemesterId));
-      }
-      updatedStudentRecords.add(studentRecord);
+        if(!mUmsConfiguration.isProcessGPAOnly()) {
+          List<Semester> previousSemesters =
+              mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgram().getProgramTypeId());
+          List<Integer> previousSemesterIds =
+              previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
+          List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
+              .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
+          StudentRecordParams cgpa = calculateCGPA(courseResults);
+          boolean isPassed = isPassed(pSemesterId, courseResults);
+          if(cgpa != null) {
+            studentRecord.setCGPA(cgpa.getGpa());
+            studentRecord.setTotalCompletedCrHr(cgpa.getCompletedCrHr());
+            studentRecord.setTotalCompletedGradePoints(cgpa.getCompletedGradePoints());
+          }
+          studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
+          studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(courseResults,
+              isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED, pSemesterId));
+          studentRecord.setTabulationSheetRemarks(mRemarksBuilder
+              .getTabulationSheetRemarks(courseResults, studentRecord, pSemesterId));
+        }
+        updatedStudentRecords.add(studentRecord);
 
-      i++;
+        i++;
 
-      if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudents)) {
-        mStudentRecordManager.update(updatedStudentRecords);
-        updatedStudentRecords.clear();
-        TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
-        MutableTaskStatus mutableTaskStatus = taskStatus.edit();
-        mutableTaskStatus.setProgressDescription(UmsUtils.getPercentageString(i, totalStudents));
-        mutableTaskStatus.update();
+        if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudents)) {
+          mStudentRecordManager.update(updatedStudentRecords);
+          updatedStudentRecords.clear();
+          TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+          MutableTaskStatus mutableTaskStatus = taskStatus.edit();
+          mutableTaskStatus.setProgressDescription(UmsUtils.getPercentageString(i, totalStudents));
+          mutableTaskStatus.update();
+        }
       }
+      TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+      MutableTaskStatus mutableTaskStatus = taskStatus.edit();
+      mutableTaskStatus.setProgressDescription("100");
+      mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
+      mutableTaskStatus.update();
     }
-    TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
-    MutableTaskStatus mutableTaskStatus = taskStatus.edit();
-    mutableTaskStatus.setProgressDescription("100");
-    mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-    mutableTaskStatus.update();
+    catch(Exception e) {
+      TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+      MutableTaskStatus mutableTaskStatus = taskStatus.edit();
+      mutableTaskStatus.setProgressDescription("0");
+      mutableTaskStatus.setStatus(TaskStatus.Status.FAILED);
+      mutableTaskStatus.update();
+
+      throw e;
+    }
+
   }
 
   private StudentRecordParams calculateCGPA(List<UGRegistrationResult> pResults) {
