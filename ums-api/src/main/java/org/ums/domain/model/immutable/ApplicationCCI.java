@@ -61,4 +61,16 @@ public interface ApplicationCCI extends Serializable, LastModifier, EditType<Mut
   Integer getCarryYear();
 
   Integer getCarrySemester();
+
+  String getFullName();
+
+  Integer getCurrentEnrolledSemester();
+
+  Integer getTotalcarry();
+
+  Integer getTotalApplied();
+
+  Integer getTotalApproved();
+
+  Integer getTotalRejected();
 }

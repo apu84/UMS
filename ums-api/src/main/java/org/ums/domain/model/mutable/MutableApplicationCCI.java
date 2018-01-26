@@ -59,4 +59,17 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
   void setCarryYear(final Integer carryyear);
 
   void setCarrySemester(final Integer carrySemester);
+
+  void setFullName(final String fullName);
+
+  void setCurrentEnrolledSemester(final Integer currentEnrolledSemester);
+
+  void setTotalcarry(final Integer totalcarry);
+
+  void setTotalApplied(final Integer totalApplied);
+
+  void setTotalApproved(final Integer totalApproved);
+
+  void setTotalRejected(final Integer totalrejected);
+
 }

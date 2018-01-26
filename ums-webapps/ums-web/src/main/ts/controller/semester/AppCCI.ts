@@ -18,7 +18,6 @@ module ums {
     appCCIImprovementNumber: number;
     appCCIClearanceNumber: number;
     appCCISpecialCarryNumber: number;
-
     CARRY: number;
     CLEARANCE: number;
     IMPROVEMENT: number;

@@ -1,22 +1,5 @@
 <div class="col-sm-4">
     <div class="form-group" align="right">
-        <label class="col-md-4 control-label"><strong>Semester</strong></label>
-        <div class="col-md-8">
-            <select
-                    class="form-control required"
-                    name="leaveType"
-                    id="leaveTypTe"
-                    data-ng-options="L.id for L in vm.allSemesters"
-                    data-ng-model="vm.semesterApprovalStatus"
-                    data-ng-change="vm.statusChanged(vm.semesterApprovalStatus)"
-
-            ><option style="display:none" value="">select a Semester</option></select>
-        </div>
-    </div>
-</div>
-
-<div class="col-sm-4">
-    <div class="form-group" align="right">
         <label class="col-md-4 control-label"><strong>Approval Status</strong></label>
         <div class="col-md-8">
             <select
@@ -43,17 +26,15 @@
         </div>
     </div>
 </div>
-<div class="col-sm-4" style="padding-top: 10px;padding-bottom: 25px">
+<div class="col-sm-4" style="padding-bottom: 25px">
     <div class="form-group" align="right">
-        <label class="col-md-4 control-label"><strong>Search by student Id</strong></label>
-        <div class="col-md-8">
-            <input type="text"
-                   class="form-control required"
-                   id="resultsPerPoage"
-                   placeholder='13.02.04.019'
-                   data-ng-model="vm.itemsPerPagei"
-                   data-ng-change="vm.setResultsPerPage(vm.itemsPerPage)"
-            />
+        <label class="col-md-8 control-label"><input type="text"
+                                                     class="form-control required"
+                                                     id="resultsPerPloage"
+                                                     placeholder='Search by student Id'
+                                                     data-ng-model="seachByStudentId"/></label>
+        <div class="col-md-4">
+            <button class="btn btn-success"  data-ng-click="submit()">Search  </button>
         </div>
     </div>
 </div>

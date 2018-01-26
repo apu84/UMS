@@ -1,5 +1,6 @@
 package org.ums.academic.resource;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.ApplicationCCIManager;
@@ -36,9 +37,28 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   }
 
   @GET
+  @Path("/studentId/{student-id}/semesterId/{semester-id}")
+  public JsonObject getTotalcarry(final @Context Request pRequest, final @PathParam("student-id") String pStudentId,
+      final @PathParam("semester-id") Integer pSemesterid) {
+    return mHelper.getTotalCarry(pStudentId, pSemesterid, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/seatPlanView")
   public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest) {
     return mHelper.getApplicationCCIForSeatPlanViewingOfStudent(mUriInfo);
+  }
+
+  @GET
+  @Path("/headsApproval")
+  public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest) {
+    return mHelper.getApplicationCarryForHeadsApproval(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getAllcarryInfo")
+  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(@Context Request pRequest) {
+    return mHelper.getApplicationCarryForHeadsApprovalAndAppiled(pRequest, mUriInfo);
   }
 
 }

@@ -22,6 +22,7 @@ import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.ApplicationCCIService;
 
 import javax.json.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -159,6 +160,45 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  // CarryApprovaByHeadMethod
+  public JsonObject getApplicationCarryForHeadsApproval(final Request pRequest, final UriInfo pUriInfo){
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApproval();
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+
+  }
+
+  // AllcarryFor Applied && Approved Info
+  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(final Request pRequest, final UriInfo pUriInfo){
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApprovalAndAppiled();
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+
+  }
+
+  // Total carry From UG_Registration Result
+  public JsonObject getTotalCarry(final String studentId, final Integer semesterid, final Request pRequest, final UriInfo pUriInfo){
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    List<ApplicationCCI> applications =getContentManager().getTotalCarry(studentId,semesterid);
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+
   }
 
   public JsonObject getApplicationCCIInfoForStudent(final Request pRequest, final UriInfo pUriInfo) {

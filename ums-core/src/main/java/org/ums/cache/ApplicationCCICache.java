@@ -18,6 +18,21 @@ public class ApplicationCCICache extends
 
   CacheManager<ApplicationCCI, Long> mCacheManager;
 
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled() {
+    return getManager().getApplicationCarryForHeadsApprovalAndAppiled();
+  }
+
+  @Override
+  public List<ApplicationCCI> getTotalCarry(String pStudentId, Integer pSemesterId) {
+    return getManager().getTotalCarry(pStudentId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval() {
+    return getManager().getApplicationCarryForHeadsApproval();
+  }
+
   public ApplicationCCICache(CacheManager<ApplicationCCI, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }

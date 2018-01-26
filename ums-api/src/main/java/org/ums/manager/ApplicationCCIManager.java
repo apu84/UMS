@@ -19,6 +19,12 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
 
   List<ApplicationCCI> getByStudentIdAndSemester(final String pStudentId, final int pSemesterId);
 
+  List<ApplicationCCI> getApplicationCarryForHeadsApproval();
+
+  List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled();
+
+  List<ApplicationCCI> getTotalCarry(final String pStudentId, final Integer pSemesterId);
+
   List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate);
 
   int deleteByStudentId(final String pStudentId);

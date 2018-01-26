@@ -12,6 +12,16 @@ import java.util.List;
 public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled() {
+    return getManager().getApplicationCarryForHeadsApprovalAndAppiled();
+  }
+
+  // carryHeadsApproval
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval() {
+    return getManager().getApplicationCarryForHeadsApproval();
+  }
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
@@ -36,6 +46,11 @@ public class ApplicationCCIDaoDecorator extends
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
     return getManager().getByStudentIdAndSemester(pStudentId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getTotalCarry(String pStudentId, Integer pSemesterId) {
+    return getManager().getTotalCarry(pStudentId, pSemesterId);
   }
 
   @Override

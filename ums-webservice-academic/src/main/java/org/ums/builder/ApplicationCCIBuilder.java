@@ -61,18 +61,38 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
       pBuilder.add("statusName", pReadOnly.getApplicationStatus().getLabel());
     }
     // Rumi
+    if(pReadOnly.getCCIStatus() != null)
+      pBuilder.add("cciStatus", pReadOnly.getCCIStatus());
 
-    pBuilder.add("cciStatus", pReadOnly.getCCIStatus());
-
-    pBuilder.add("statusName", ApplicationStatus.get(pReadOnly.getCCIStatus()).getLabel());
+    if(pReadOnly.getCCIStatus() != null)
+      pBuilder.add("statusName", ApplicationStatus.get(pReadOnly.getCCIStatus()).getLabel());
 
     if(pReadOnly.getGradeLetter() != null)
       pBuilder.add("grade", pReadOnly.getGradeLetter());
 
     if(pReadOnly.getCarryYear() != null)
       pBuilder.add("carryYear", pReadOnly.getCarryYear());
+
     if(pReadOnly.getCarrySemester() != null)
       pBuilder.add("carrySemester", pReadOnly.getCarrySemester());
+
+    if(pReadOnly.getFullName() != null)
+      pBuilder.add("fullName", pReadOnly.getFullName());
+
+    if(pReadOnly.getCurrentEnrolledSemester() != null)
+      pBuilder.add("currentEnrolledSemester", pReadOnly.getCurrentEnrolledSemester());
+
+    if(pReadOnly.getTotalcarry() != null)
+      pBuilder.add("TOTALCARRY", pReadOnly.getTotalcarry());
+
+    if(pReadOnly.getTotalApplied() != null)
+      pBuilder.add("totalApplied", pReadOnly.getTotalApplied());
+
+    if(pReadOnly.getTotalApproved() != null)
+      pBuilder.add("taotalApproved", pReadOnly.getTotalApproved());
+
+    if(pReadOnly.getTotalRejected() != null)
+      pBuilder.add("totalRejected", pReadOnly.getTotalRejected());
 
   }
 

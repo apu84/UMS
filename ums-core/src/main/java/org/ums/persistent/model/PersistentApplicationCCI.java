@@ -57,6 +57,12 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private String mGradeLetter;
   private Integer mcarryYear;
   private Integer mcarrySemester;
+  private String mFullName;
+  private Integer mCurrentEnrolledSemester;
+  private Integer mGetTotalcarry;
+  private Integer mGetTotalApplied;
+  private Integer mGetTotalApproved;
+  private Integer mGetTotalRejected;
 
   public PersistentApplicationCCI() {
 
@@ -87,6 +93,72 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mGradeLetter = pPersistentApplicationCCI.getGradeLetter();
     mcarryYear = pPersistentApplicationCCI.getCarryYear();
     mcarrySemester = pPersistentApplicationCCI.getCarrySemester();
+    mFullName = pPersistentApplicationCCI.getFullName();
+    mCurrentEnrolledSemester = pPersistentApplicationCCI.getCurrentEnrolledSemester();
+    mGetTotalcarry = pPersistentApplicationCCI.getTotalcarry();
+    mGetTotalApplied = pPersistentApplicationCCI.getTotalApplied();
+    mGetTotalApproved = pPersistentApplicationCCI.getTotalApproved();
+    mGetTotalRejected = pPersistentApplicationCCI.getTotalRejected();
+  }
+
+  @Override
+  public void setTotalcarry(Integer totalcarry) {
+    mGetTotalcarry = totalcarry;
+  }
+
+  @Override
+  public void setTotalApplied(Integer totalApplied) {
+    mGetTotalApplied = totalApplied;
+  }
+
+  @Override
+  public void setTotalApproved(Integer totalApproved) {
+    mGetTotalApproved = totalApproved;
+  }
+
+  @Override
+  public void setTotalRejected(Integer totalrejected) {
+    mGetTotalRejected = totalrejected;
+  }
+
+  @Override
+  public Integer getTotalcarry() {
+    return mGetTotalcarry;
+  }
+
+  @Override
+  public Integer getTotalApplied() {
+    return mGetTotalApplied;
+  }
+
+  @Override
+  public Integer getTotalApproved() {
+    return mGetTotalApproved;
+  }
+
+  @Override
+  public Integer getTotalRejected() {
+    return mGetTotalRejected;
+  }
+
+  @Override
+  public void setFullName(String fullName) {
+    mFullName = fullName;
+  }
+
+  @Override
+  public void setCurrentEnrolledSemester(Integer currentEnrolledSemester) {
+    mCurrentEnrolledSemester = currentEnrolledSemester;
+  }
+
+  @Override
+  public String getFullName() {
+    return mFullName;
+  }
+
+  @Override
+  public Integer getCurrentEnrolledSemester() {
+    return mCurrentEnrolledSemester;
   }
 
   @Override

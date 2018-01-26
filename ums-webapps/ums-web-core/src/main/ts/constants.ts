@@ -529,7 +529,7 @@ module ums {
                 carryApprovalStatus: [
                     {id: 1, name: "Waiting for head's approval"},
                     {id: 2, name: "Approved By Head"},
-                    {id: 3, name: "Rejected By Head "},
+                    {id: 3, name: "Rejected By Head"},
                     {id: 4, name: "All"}
                 ],
                 departmentOffice: [
