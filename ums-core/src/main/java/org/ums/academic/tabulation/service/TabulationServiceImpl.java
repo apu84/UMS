@@ -38,8 +38,6 @@ public class TabulationServiceImpl implements TabulationService {
     Map<String, TabulationCourseModel> resultList =
         mResultManager.getResultForTabulation(pProgramId, pSemesterId, pYear, pAcademicSemester);
     List<TabulationEntryModel> entries = new ArrayList<>();
-    Semester previousSemester = mSemesterManager.getPreviousSemester(pSemesterId, 11);
-
     for(String studentId : resultList.keySet()) {
       TabulationEntryModel entry = new TabulationEntryModel();
       entry.setStudent(mStudentManager.get(studentId));
@@ -55,18 +53,9 @@ public class TabulationServiceImpl implements TabulationService {
       entry.setCumulativeGradePoints(studentRecord.getTotalCompletedGradePoints());
       entry.setPresentCompletedCrHr(studentRecord.getCompletedCrHr());
       entry.setPresentCompletedGradePoints(studentRecord.getCompletedGradePoints());
-      if(!(studentRecord.getYear() == 1 && studentRecord.getAcademicSemester() == 1)) {
-        try {
-          StudentRecord previousSemesterStudentRecord =
-              mStudentRecordManager.getStudentRecord(studentId, previousSemester.getId());
-          if(previousSemesterStudentRecord != null) {
-            entry.setPreviousSemesterCompletedCrHr(previousSemesterStudentRecord.getCompletedCrHr());
-            entry.setPreviousSemesterCompletedGradePoints(previousSemesterStudentRecord.getCompletedGradePoints());
-          }
-        } catch(Exception e) {
-          e.printStackTrace();
-        }
-      }
+      entry.setPreviousSemesterCompletedCrHr(entry.getCumulativeCrHr() - entry.getPresentCompletedCrHr());
+      entry.setPreviousSemesterCompletedGradePoints(
+          entry.getCumulativeGradePoints() - entry.getPresentCompletedGradePoints());
       entry.setRemarks(studentRecord.getTabulationSheetRemarks());
       entries.add(entry);
     }

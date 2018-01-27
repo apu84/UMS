@@ -54,6 +54,7 @@ public class ProcessResultImpl implements ProcessResult {
     EXCLUDE_GRADES.add("E");
     EXCLUDE_GRADES.add("W");
     EXCLUDE_GRADES.add("P");
+    EXCLUDE_GRADES.add("F");
   }
 
   @Override
@@ -194,7 +195,8 @@ public class ProcessResultImpl implements ProcessResult {
       }
     }
     Double toBeTruncated = totalGPA / totalCrHr;
-    return new StudentRecordParams(BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue(),
+    toBeTruncated = Double.isNaN(toBeTruncated)? 0D: toBeTruncated;
+    return new StudentRecordParams(BigDecimal.valueOf(toBeTruncated).setScale(6, RoundingMode.HALF_UP).doubleValue(),
         totalCrHr, totalGPA);
   }
 
