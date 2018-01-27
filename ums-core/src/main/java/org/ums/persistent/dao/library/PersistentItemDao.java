@@ -22,6 +22,7 @@ import org.ums.persistent.model.library.PersistentSupplier;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -91,35 +92,33 @@ public class PersistentItemDao extends ItemDaoDecorator {
   @Override
   public List<Long> create(final List<MutableItem> items) {
 
-    mJdbcTemplate.batchUpdate(INSERT_ONE, new BatchPreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps, int i) throws SQLException {
-        Item item = items.get(i);
-        Long id = mIdGenerator.getNumericId();
-        ps.setLong(1, id);
-        ps.setLong(2, item.getMfn());
-        ps.setInt(3, item.getCopyNumber());
-        ps.setString(4, item.getAccessionNumber());
-        ps.setString(5, item.getAccessionDate());
-        ps.setString(6, id.toString());
-        ps.setDouble(7, item.getPrice());
-        ps.setLong(8, item.getSupplier().getId());
-        ps.setString(9, item.getInternalNote());
-        ps.setInt(10, item.getStatus().getId());
-        ps.setString(11, "insert");
-        ps.setInt(12, 0);
-        ps.setString(13, "update");
+    List<Long> longIds = new ArrayList<>();
+    for(MutableItem item : items) {
+      Long id = create(item);
+      longIds.add(id);
+    }
 
-      }
+    /*
+     * mJdbcTemplate.batchUpdate(INSERT_ONE, new BatchPreparedStatementSetter() {
+     * 
+     * @Override public void setValues(PreparedStatement ps, int i) throws SQLException { Item item
+     * = items.get(i); Long id = mIdGenerator.getNumericId(); ps.setLong(1, id); ps.setLong(2,
+     * item.getMfn()); ps.setInt(3, item.getCopyNumber()); ps.setString(4,
+     * item.getAccessionNumber()); ps.setString(5, item.getAccessionDate()); ps.setString(6,
+     * id.toString()); ps.setDouble(7, item.getPrice()); ps.setLong(8, item.getSupplier().getId());
+     * ps.setString(9, item.getInternalNote()); ps.setInt(10, item.getStatus().getId());
+     * ps.setString(11, "insert"); ps.setInt(12, 0); ps.setString(13, "update");
+     * 
+     * }
+     * 
+     * @Override public int getBatchSize() { return items.size(); }
+     * 
+     * });
+     * 
+     * return null;
+     */
 
-      @Override
-      public int getBatchSize() {
-        return items.size();
-      }
-
-    });
-
-    return null;
+    return longIds;
   }
 
   @Override
