@@ -2,9 +2,14 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.ItemBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.enums.library.ItemStatus;
+import org.ums.manager.library.RecordManager;
 import org.ums.usermanagement.user.User;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.mutable.library.MutableItem;
@@ -26,9 +31,7 @@ import java.util.List;
  * Created by Ifti on 04-Mar-17.
  */
 @Component
-public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
-
-{
+public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long> {
 
   @Autowired
   private ItemManager mManager;
@@ -38,6 +41,9 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  private RecordManager mRecordManager;
 
   @Override
   public ItemManager getContentManager() {
@@ -76,6 +82,7 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
   }
 
   @Override
+  @Transactional
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableItem mutableItem = new PersistentItem();
     LocalCache localCache = new LocalCache();
@@ -87,6 +94,17 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
     getBuilder().build(mutableItem, pJsonObject, localCache);
     mutableItem.create();
 
+    MutableRecord mutableRecord = (MutableRecord) mRecordManager.get(mutableItem.getMfn());
+    if(mutableItem.getStatus() == ItemStatus.AVAILABLE) {
+      mutableRecord.setTotalItems(mutableRecord.getTotalItems() + 1);
+      mutableRecord.setTotalAvailable(mutableRecord.getTotalAvailable() + 1);
+    }
+    else if(mutableItem.getStatus() == ItemStatus.ON_HOLD) {
+      mutableRecord.setTotalItems(mutableRecord.getTotalItems() + 1);
+      mutableRecord.setTotalOnHold(mutableRecord.getTotalOnHold() + 1);
+    }
+    mRecordManager.update(mutableRecord);
+
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(ItemResource.class).path(ItemResource.class, "get")
             .build(mutableItem.getId());
@@ -95,7 +113,41 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
     return builder.build();
   }
 
+  @Transactional
+  public Response updateItem(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutableItem mutableItem = new PersistentItem();
+    MutableItem mutableItem1 = new PersistentItem();
+    mutableItem1 = (MutableItem) mManager.get(Long.parseLong(pJsonObject.getString("id")));
+    LocalCache localCache = new LocalCache();
+
+    getBuilder().build(mutableItem, pJsonObject, localCache);
+    mutableItem.setId(mutableItem1.getId());
+    mutableItem.update();
+
+    MutableRecord mutableRecord = (MutableRecord) mRecordManager.get(mutableItem.getMfn());
+    if(mutableItem1.getStatus() == ItemStatus.AVAILABLE && mutableItem.getStatus() == ItemStatus.ON_HOLD) {
+      mutableRecord.setTotalAvailable(mutableRecord.getTotalAvailable() - 1);
+      mutableRecord.setTotalOnHold(mutableRecord.getTotalOnHold() + 1);
+    }
+    else if(mutableItem1.getStatus() == ItemStatus.ON_HOLD && mutableItem.getStatus() == ItemStatus.AVAILABLE) {
+      mutableRecord.setTotalAvailable(mutableRecord.getTotalAvailable() + 1);
+      mutableRecord.setTotalOnHold(mutableRecord.getTotalOnHold() - 1);
+    }
+    mRecordManager.update(mutableRecord);
+    localCache.invalidate();
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  @Transactional
   public Response batchPost(final JsonObject pJsonObject, final UriInfo pUriInfo) {
+    int mTotalAvailable = 0;
+    int mTotalItems = 0;
+    int mTotalOnHold = 0;
+
     List<MutableItem> itemList = new ArrayList<>();
 
     JsonArray entries = pJsonObject.getJsonArray("items");
@@ -105,10 +157,24 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
       JsonObject jsonObject = entries.getJsonObject(i);
       MutableItem item = new PersistentItem();
       getBuilder().build(item, jsonObject, localCache);
+      mTotalItems = mTotalItems + 1;
+      if(item.getStatus() == ItemStatus.AVAILABLE) {
+        mTotalAvailable = mTotalAvailable + 1;
+      }
+      else if(item.getStatus() == ItemStatus.ON_HOLD) {
+        mTotalOnHold = mTotalOnHold + 1;
+      }
       itemList.add(item);
     }
-
     mManager.create(itemList);
+
+    MutableRecord mutableRecord =
+        (MutableRecord) mRecordManager.get(Long.parseLong(entries.getJsonObject(0).getString("mfnNo")));
+    mutableRecord.setTotalItems(mutableRecord.getTotalItems() + mTotalItems);
+    mutableRecord.setTotalAvailable(mutableRecord.getTotalAvailable() + mTotalAvailable);
+    mutableRecord.setTotalOnHold(mutableRecord.getTotalOnHold() + mTotalOnHold);
+
+    mRecordManager.update(mutableRecord);
 
     return null;
     // mManager.create(itemList);
