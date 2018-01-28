@@ -87,11 +87,11 @@
                             <div class="input-icon right" >
                                 Group : {{::date_time.examGroup}}
                             </div>
-                                <div class="input-icon right" ng-if="routine.examType==2">
-                                    App. Deadline : {{date_time.appDeadLineStr}}
-                                </div>
+                            <div class="input-icon right" ng-if="routine.examType==2">
+                                App. Deadline : {{date_time.appDeadLineStr}}
+                            </div>
 
-                            <br/>
+                            <div style="margin-top: 10px;">
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
                                style="border-radius: 15px;" >
                                 <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
@@ -108,6 +108,7 @@
                                style="border-radius: 15px;" >
                                 <i class="fa fa-times" style="color: darkslategrey;"></i>
                             </a>
+                            </div>
                         </td>
 
                         <td colspan="6" style="padding: 0px;border: none;" data-ng-if="date_time.readOnly == true">
@@ -174,6 +175,7 @@
                                         placeholder="DD/MM/YYYY" class="datepicker-default form-control required" readonly  />
                                 <br/>
                             </div>
+                                <div class="clear:both;" >
                             <select data-ng-model="date_time.examTime" style="width: 135px;float: left">
                                 <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
                             </select>
@@ -182,6 +184,7 @@
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                             </select>
+                                </div>
                                 <div class="input-icon right" ng-if="routine.examType==2" style="float: left; margin-left: 2px;padding-bottom: 10px;">
                                     <br/>Application Deadline<br/>
                                     <div class="input-icon right" >
@@ -193,10 +196,9 @@
                                                autocomplete="off">
 
                                     </div>
-
-
                                 </div>
 
+                             <br/><br/>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" >
                                 <i class="fa fa-plus-circle" style="color: blue;"></i>
@@ -213,6 +215,7 @@
                                style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)">
                                 <i class="fa fa-times" style="color: red;"></i>
                             </a>
+
                         </td>
                         <td colspan="6" style="padding: 0px;border: none;" data-ng-if="date_time.readOnly == false">
                             <table width="100%" id="programTable">
