@@ -25,6 +25,7 @@ module ums {
     readOnly: boolean;
     index: number;
     examDate: string;
+    appDeadLineStr: string;
     examTime: string;
     examGroup:number;
     programs: Array<IProgram>;
@@ -152,9 +153,9 @@ module ums {
       this.$scope.routine.date_times.splice(0, 0, item);
 
       setTimeout(function () {
-        $('.datepicker-default').datepicker();
-        $('.datepicker-default').on('change', function () {
-          $('.datepicker').hide();
+        $('#date_0').datepicker();
+        $('#date_0').on('change', function () {
+          $('#date_0').hide();
         });
       }, 200);
 
@@ -284,6 +285,7 @@ module ums {
         readOnly: false,
         index: index,
         examDate: '',
+        appDeadLineStr: '',
         examTime: '9:30 a.m. to 12:30 p.m',
         examGroup: 1,
         programs: Array<IProgram>()
@@ -382,6 +384,7 @@ module ums {
         readOnly: false,
         index: date_time.index,
         examDate: date_time.examDate,
+        appDeadLineStr: date_time.appDeadLineStr,
         examTime: date_time.examTime,
         examGroup: date_time.examGroup,
         programs: [program]
@@ -433,8 +436,10 @@ module ums {
 
 
     private convertToJson(dateTimeArr:Array<IDateTime>, insertType:string):any {
+      console.log(dateTimeArr);
       var jsonObj = [];
       for (var indx_date_time in dateTimeArr) {
+        console.log(dateTimeArr[indx_date_time]);
         for (var indx_program in dateTimeArr[indx_date_time].programs) {
           var program:IProgram = dateTimeArr[indx_date_time].programs[indx_program];
           for (var indx_course in program.courses) {
@@ -445,6 +450,7 @@ module ums {
             item ["group"] = dateTimeArr[indx_date_time].examGroup;
             item ["program"] = Number(program.programId);
             item ["course"] = course.id;
+            item ["appDeadLineStr"] = $("#appDeadLine_"+indx_date_time).val();
             jsonObj.push(item);
           }
         }
@@ -581,23 +587,27 @@ module ums {
 
 
     private editDateTime(date_time_row_obj:IDateTime):void {
-
       this.showOverlay(date_time_row_obj.index);
+      var that= this;
+      setTimeout(function () {
       date_time_row_obj.readOnly = false;
-      var that = this;
+
 
       for (var ind in date_time_row_obj.programs) {
+        console.log("ind :"+ind)
         var program:IProgram = date_time_row_obj.programs[ind];
-        this.getCourseArr(program.programId, program).then((courseResponse:any)=> {
+        that.getCourseArr(program.programId, program).then((courseResponse:any)=> {
           var courseArr:Array<ICourse> = courseResponse.courseArr;
           courseResponse.program.courseArr = courseArr;
         });
-
       }
-      setTimeout(function () {
-        that.setSelect2Courses(date_time_row_obj);
-      }, 1000);
+      console.log("end of course load");
 
+        setTimeout(function () {
+          that.setSelect2Courses(date_time_row_obj);
+        }, 500);
+
+      }, 500);
     }
 
     private setSelect2Courses(date_time_row_obj:IDateTime):void {
@@ -614,6 +624,7 @@ module ums {
     }
 
     private showOverlay(rowIndex:number):void {
+      console.log("---------Start");
       var $divOverlay = $('#divOverlay');
       var bottomWidth = $("#row" + rowIndex).css('width');
       var bottomHeight = $("#row" + rowIndex).css('height');
@@ -629,6 +640,7 @@ module ums {
       });
       $('#info').text('Top: ' + bottomTop + ' Left: ' + bottomLeft);
       $divOverlay.delay(100).slideDown('fast');
+      console.log("---------End");
     }
 
     private hideOverlay(date_time_row_obj:any):void {

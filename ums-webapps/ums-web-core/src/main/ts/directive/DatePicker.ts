@@ -9,8 +9,8 @@ module ums {
     public restrict: string = "EA";
     public scope = {
       model: '=dateModel',
-      format: '=dateFormat',
-      disable: '=disable',
+      format: '@dateFormat',
+      disable: '@disable',
       dateChanged: '&dateChanged'
     };
 
@@ -19,20 +19,22 @@ module ums {
         console.log("Date format");
         console.log($scope.format);
         let dateFormat=$scope.format;
-
+      console.log($scope.disable+"---------");
       if ($scope.disable == true) {
-        $('.datepicker').disableSelection();
+        $('.datepicker-default').disableSelection();
+        // $('.datepicker-default').attr('readonly', 'true');
       }
       this.$timeout(() => {
 
         $('.datepicker-default').datepicker({
-          dateFormat: "dd/MM/yyyy"
+          dateFormat: $scope.dateFormat
         });
+
 
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
-
+console.log("------");
       });
 
 

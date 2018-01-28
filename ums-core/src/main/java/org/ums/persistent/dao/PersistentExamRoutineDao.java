@@ -18,21 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
 
-  static String SELECT_ALL =
-      "Select TO_CHAR(EXAM_DATE,'DD/MM/YYYY') EXAM_DATE,EXAM_TIME,MST_PROGRAM.PROGRAM_ID,PROGRAM_SHORT_NAME, "
-          + "YEAR,MST_COURSE.SEMESTER,COURSE_NO,COURSE_TITLE,MST_COURSE.COURSE_ID,EXAM_GROUP "
-          + "From EXAM_ROUTINE,MST_COURSE,MST_SYLLABUS,MST_PROGRAM,COURSE_SYLLABUS_MAP "
-          + "Where EXAM_ROUTINE.SEMESTER=? " + "And Exam_Type=? "
-          + "And COURSE_SYLLABUS_MAP.COURSE_ID=MST_COURSE.COURSE_ID "
-          + "And EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID "
-          + "And COURSE_SYLLABUS_MAP.SYLLABUS_ID=MST_SYLLABUS.SYLLABUS_ID "
-          + "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID "
-          + "Order By to_date(EXAM_DATE,'DD/MM/YYYY'),Exam_Time,Program_Id,Year,Semester,Course_No ";
-
-  static String INSERT_ONE =
-      "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID,EXAM_GROUP) "
-          + "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?,?)";
-
   static String DELETE = "DELETE EXAM_ROUTINE Where SEMESTER=? And Exam_Type=? ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -43,6 +28,17 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
 
   @Override
   public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) {
+    String SELECT_ALL =
+        "Select TO_CHAR(EXAM_DATE,'DD/MM/YYYY') EXAM_DATE,EXAM_TIME,MST_PROGRAM.PROGRAM_ID,PROGRAM_SHORT_NAME, "
+            + "YEAR,MST_COURSE.SEMESTER,COURSE_NO,COURSE_TITLE,MST_COURSE.COURSE_ID,EXAM_GROUP,APPLICATION_DEADLINE, "
+            + "TO_CHAR(APPLICATION_DEADLINE, 'DD/MM/YYYY HH:MI AM') APPLICATION_DEADLINE_STR "
+            + "From EXAM_ROUTINE,MST_COURSE,MST_SYLLABUS,MST_PROGRAM,COURSE_SYLLABUS_MAP "
+            + "Where EXAM_ROUTINE.SEMESTER=? " + "And Exam_Type=? "
+            + "And COURSE_SYLLABUS_MAP.COURSE_ID=MST_COURSE.COURSE_ID "
+            + "And EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID "
+            + "And COURSE_SYLLABUS_MAP.SYLLABUS_ID=MST_SYLLABUS.SYLLABUS_ID "
+            + "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID "
+            + "Order By to_date(EXAM_DATE,'DD/MM/YYYY') desc,Exam_Time,Program_Id,Year,Semester,Course_No ";
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new Object[] {semesterId, examTypeId}, new ExamRoutineRowMapper());
   }
@@ -52,7 +48,8 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
     String query =
         "SELECT" + "  TO_CHAR(EXAM_DATE, 'DD/MM/YYYY') EXAM_DATE," + "  EXAM_TIME," + "  MST_PROGRAM.PROGRAM_ID,"
             + "  PROGRAM_SHORT_NAME," + "  YEAR," + "  MST_COURSE.SEMESTER," + "  COURSE_NO," + "  COURSE_TITLE,"
-            + "  MST_COURSE.COURSE_ID," + "  EXAM_GROUP "
+            + "  MST_COURSE.COURSE_ID,"
+            + "  EXAM_GROUP, TO_CHAR(APPLICATION_DEADLINE, 'DD/MM/YYYY HH:MI') APPLICATION_DEADLINE_STR "
             + " FROM EXAM_ROUTINE, MST_COURSE, MST_SYLLABUS, MST_PROGRAM, COURSE_SYLLABUS_MAP "
             + " WHERE EXAM_ROUTINE.SEMESTER = ?" + "      AND Exam_Type = ?"
             + "      AND COURSE_SYLLABUS_MAP.COURSE_ID = MST_COURSE.COURSE_ID"
@@ -145,6 +142,10 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
   }
 
   public void insertBatch(final MutableExamRoutine pExamRoutine) {
+    String INSERT_ONE =
+        "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID,EXAM_GROUP,APPLICATION_DEADLINE) "
+            + "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?,?,to_date(?,'dd/MM/YYYY HH:MI AM'))";
+
     List<ExamRoutineDto> routineList = pExamRoutine.getRoutine();
     String sql = INSERT_ONE;
 
@@ -161,6 +162,7 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
         ps.setString(6, routine.getCourseId());
         ps.setInt(7, routine.getExamGroup());
 
+        ps.setString(8, routine.getAppDeadLineStr());
       }
 
       @Override
@@ -185,6 +187,8 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
       routine.setCourseId(resultSet.getString("COURSE_ID"));
       routine.setCourseTitle(resultSet.getString("COURSE_TITLE"));
       routine.setExamGroup(resultSet.getInt("EXAM_GROUP"));
+      routine.setAppDeadLine(resultSet.getDate("APPLICATION_DEADLINE"));
+      routine.setAppDeadLineStr(resultSet.getString("APPLICATION_DEADLINE_STR"));
       AtomicReference<ExamRoutineDto> atomicReference = new AtomicReference<>(routine);
       return atomicReference.get();
     }
@@ -219,6 +223,8 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
       routine.setExamTime(pResultSet.getString("exam_time"));
       routine.setProgramId(pResultSet.getInt("program_id"));
       routine.setCourseId(pResultSet.getString("course_id"));
+      routine.setAppDeadLine(pResultSet.getDate("APPLICATION_DEADLINE"));
+      routine.setAppDeadLineStr(pResultSet.getString("APPLICATION_DEADLINE_STR"));
       return routine;
     }
   }

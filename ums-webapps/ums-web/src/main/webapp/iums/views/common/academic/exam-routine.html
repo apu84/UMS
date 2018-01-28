@@ -63,8 +63,6 @@
                     </div>
                 </div>
 
-
-
                 <table id="routineTable" class="table table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
@@ -78,95 +76,48 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="date_time in routine.date_times"  id="row{{date_time.index}}">
-                        <td align="center" style="border-right: none;">
-
-
-                            <div  data-ng-hide="date_time.readOnly" style="width: 190px;">
-                                <div class="input-icon right" >
-                                    <i class="fa fa-calendar"></i>
-                                    <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
-                                            placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off" /><br/>
+                    <tr ng-repeat="date_time in routine.date_times"  id="row{{date_time.index}}" data-ng-if="data.editable">
+                            <td align="center" style="border-right: none;" data-ng-if="date_time.readOnly == true">
+                            <div class="input-icon right" >
+                                {{::date_time.examDate}}
+                            </div>
+                            <div class="input-icon right" >
+                                {{::date_time.examTime}}
+                            </div>
+                            <div class="input-icon right" >
+                                Group : {{::date_time.examGroup}}
+                            </div>
+                                <div class="input-icon right" ng-if="routine.examType==2">
+                                    App. Deadline : {{date_time.appDeadLineStr}}
                                 </div>
-                                    <select data-ng-model="date_time.examTime" style="width: 135px;float: left">
-                                        <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
-                                    </select>
-                                    <select data-ng-model="date_time.examGroup" style="width: 50px;float: left; margin-left: 2px;" data-convert-to-number>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                            </div>
-                    .<div data-ng-show="date_time.readOnly" style="clear: both;">
-                            <div class="input-icon right" >
-                                {{date_time.examDate}}
-                            </div>
-                            <div class="input-icon right" >
-                                {{date_time.examTime}}
-                            </div>
-                            <div class="input-icon right" >
-                                Group : {{date_time.examGroup}}
-                            </div>
-                        </div>
-            <br/>
 
-                            <span data-ng-show="data.editable">
-                            <div data-ng-show="date_time.readOnly">
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                   style="border-radius: 15px;" >
-                                    <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                   style="border-radius: 15px;">
-                                    <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                   data-ng-click="editDateTime(date_time)">
-                                    <i class="fa fa-edit" style="color: blue;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                   style="border-radius: 15px;" >
-                                    <i class="fa fa-times" style="color: darkslategrey;"></i>
-                                </a>
-                            </div>
+                            <br/>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;" >
+                                <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;">
+                                <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="editDateTime(date_time)">
+                                <i class="fa fa-edit" style="color: blue;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;" >
+                                <i class="fa fa-times" style="color: darkslategrey;"></i>
+                            </a>
+                        </td>
 
-                            <div data-ng-hide="date_time.readOnly" style="padding-top: 25px;">
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                   data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" >
-                                    <i class="fa fa-plus-circle" style="color: blue;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                   data-ng-click="saveByDateTime(date_time)"  style="border-radius: 15px;">
-                                    <i class="fa fa-floppy-o" style="color: blue;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                   data-ng-click="date_time.readOnly=true;">
-                                    <i class="fa fa-arrow-circle-left" style="color: blue;"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                   style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)">
-                                    <i class="fa fa-times" style="color: red;"></i>
-                                </a>
-                            </div>
-                            </span>
-
-                        <td colspan="6" style="padding: 0px;border: none;">
+                        <td colspan="6" style="padding: 0px;border: none;" data-ng-if="date_time.readOnly == true">
                             <table width="100%" id="programTable">
                                 <tr ng-repeat="program in date_time.programs" >
                                     <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; border-bottom: none;">
-
-
-                                        <select id="program_{{date_time.index}}{{program.index}}" data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%" data-ng-model="program.programId"
-                                                ng-change="programSelectionChanged(program,date_time)">
-                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
-                                        </select>
-                                        <div  data-ng-show="date_time.readOnly">
+                                        <div>
                                             {{program.programName}}
                                         </div>
                                         <br/>
-
-                                        <span data-ng-show="data.editable">
-                                                <div data-ng-show="date_time.readOnly">
                                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
                                                        style="border-radius: 15px;" data-ng-show="date_time.readOnly">
                                                         <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
@@ -179,8 +130,117 @@
                                                        style="border-radius: 15px;" data-ng-show="date_time.readOnly">
                                                         <i class="fa fa-times" style="color: darkslategrey;"></i>
                                                     </a>
-                                                </div>
-                                                <div data-ng-hide="date_time.readOnly">
+                                    </td>
+                                    <!------->
+                                    <td width="73%" style="vertical-align: top;" >
+                                        <div><!--style="min-height: 160px;"-->
+                                            <table width="100%">
+                                                <tr ng-repeat="course in program.courses">
+                                                    <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
+                                                        <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year"  data-ng-hide="date_time.readOnly"/>
+                                                            {{course.year}}
+                                                    </td>
+                                                    <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                        <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester"  data-ng-hide="date_time.readOnly"//>
+                                                            {{course.semester}}
+                                                    </td>
+
+                                                    <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                            {{course.no}}
+                                                    </td>
+
+                                                    <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
+                                                    <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                           style="border-radius: 15px;">
+                                                            <i class="fa fa-times" style="color: darkslategrey;"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                    </td>
+                                    <!-------->
+
+                                </tr>
+                            </table>
+                        </td>
+
+                            <td align="center" style="border-right: none;" data-ng-if="date_time.readOnly == false"  >
+                            <div class="input-icon right" >
+                                <i class="fa fa-calendar"></i>
+                                <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
+                                        placeholder="DD/MM/YYYY" class="datepicker-default form-control required" readonly  />
+                                <br/>
+                            </div>
+                            <select data-ng-model="date_time.examTime" style="width: 135px;float: left">
+                                <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
+                            </select>
+                            <select data-ng-model="date_time.examGroup" style="width: 50px;float: left; margin-left: 2px;" data-convert-to-number>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                                <div class="input-icon right" ng-if="routine.examType==2" style="float: left; margin-left: 2px;padding-bottom: 10px;">
+                                    <br/>Application Deadline<br/>
+                                    <div class="input-icon right" >
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="text"  id="appDeadLine_{{::date_time.index}}"
+                                               class="dTimePicker form-control required"
+                                               data-ng-model="date_time.appDeadLineStr"
+                                               placeholder="DD/MM/YYYY HH:MI"
+                                               autocomplete="off">
+
+                                    </div>
+
+
+                                </div>
+
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" >
+                                <i class="fa fa-plus-circle" style="color: blue;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="saveByDateTime(date_time)"  style="border-radius: 15px;">
+                                <i class="fa fa-floppy-o" style="color: blue;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="date_time.readOnly=true;">
+                                <i class="fa fa-arrow-circle-left" style="color: blue;"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)">
+                                <i class="fa fa-times" style="color: red;"></i>
+                            </a>
+                        </td>
+                        <td colspan="6" style="padding: 0px;border: none;" data-ng-if="date_time.readOnly == false">
+                            <table width="100%" id="programTable">
+                                <tr ng-repeat="program in date_time.programs" >
+                                    <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; border-bottom: none;">
+                                        <select id="program_{{date_time.index}}{{program.index}}"  class="form-control"  style="width: 80%" data-ng-model="program.programId"
+                                                ng-change="programSelectionChanged(program,date_time)">
+                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
+                                        </select>
+                                        <div  data-ng-show="date_time.readOnly">
+                                            {{program.programName}}
+                                        </div>
+                                        <br/>
+
+
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;"  data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-times" style="color: darkslategrey;"></i>
+                                                    </a>
+
                                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                                        style="border-radius: 15px;" data-ng-click="addNewCourse(date_time,program)" data-ng-hide="date_time.readOnly">
                                                         <i class="fa fa-plus-circle" style="color: blue;"></i>
@@ -193,60 +253,66 @@
                                                        style="border-radius: 15px;" data-ng-click="removeProgram(date_time.index,program.index)" data-ng-hide="date_time.readOnly">
                                                         <i class="fa fa-times" style="color: red;"></i>
                                                     </a>
-                                                </div>
                                         </span>
                                     </td>
                                     <td width="73%" style="vertical-align: top;" >
                                         <div><!--style="min-height: 160px;"-->
-                                        <table width="100%">
-                                            <tr ng-repeat="course in program.courses">
-                                                <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
-                                                    <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year"  data-ng-hide="date_time.readOnly"/>
-                                                    <div  data-ng-show="date_time.readOnly">
-                                                        {{course.year}}
-                                                    </div>
+                                            <table width="100%">
+                                                <tr ng-repeat="course in program.courses">
+                                                    <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
+                                                        <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year" />
+                                                    </td>
+                                                    <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                        <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester"  />
+                                                    </td>
 
-                                                </td>
-                                                <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester"  data-ng-hide="date_time.readOnly"//>
-                                                    <div  data-ng-show="date_time.readOnly">
-                                                        {{course.semester}}
-                                                    </div>
-                                                </td>
-
-                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
-                                                            ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
-                                                        <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
-                                                    </select>
-
-                                                    <div  data-ng-show="date_time.readOnly">
-                                                        {{course.no}}
-                                                    </div>
-                                                </td>
-                                                <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
-                                                <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                                       style="border-radius: 15px;" data-ng-click="removeCourse(date_time.index,program.index,course.index)" data-ng-hide="date_time.readOnly">
-                                                        <i class="fa fa-times" style="color: red;"></i>
-                                                    </a>
-
-                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
-                                                        <i class="fa fa-times" style="color: darkslategrey;"></i>
-                                                    </a>
-
-
-
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                    <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                        <select id="course_{{::date_time.index}}{{::program.index}}{{::course.index}}" class="select2-size" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
+                                                                ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
+                                                            <option data-ng-repeat="exam_course in program.courseArr" value="{{::exam_course.id}}">{{::exam_course.no}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
+                                                    <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                           style="border-radius: 15px;" data-ng-click="removeCourse(date_time.index,program.index,course.index)">
+                                                            <i class="fa fa-times" style="color: red;"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
 
                                     </td>
                                 </tr>
                             </table>
+                            <script type="text/javascript">
+                                setTimeout(function () {
+                                    $('.select2-size').select2({
+                                        placeholder: "Select an option",
+                                        allowClear: true
+                                    });
+                                    $('.dTimePicker').datetimepicker({format : 'dd-mm-yyyy HH:ii P',showMeridian: true,autoclose: true,
+                                        todayBtn: true});
+                                }, 10);
 
+                            </script>
+                        </td>
+                        </span>
+                    </tr>
+
+                    <tr ng-repeat="date_time in routine.date_times"  id="row{{date_time.index}}" data-ng-if="!data.editable">
+                        <td align="center" style="border-right: none;">
+                            {{::date_time.readOnly}}
+                            <div class="input-icon right" >
+                                {{::date_time.examDate}}
+                            </div>
+                            <div class="input-icon right" >
+                                {{::date_time.examTime}}
+                            </div>
+                            <div class="input-icon right" >
+                                Group : {{::date_time.examGroup}}
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -260,6 +326,29 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+
+    jQuery.event.special.touchstart = {
+    setup: function( _, ns, handle ){
+        if ( ns.includes("noPreventDefault") ) {
+            this.addEventListener("touchstart", handle, { passive: false });
+        } else {
+        this.addEventListener("touchstart", handle, { passive: true });
+        }
+    }
+    }
+
+        jQuery.event.special.touchmove = {
+            setup: function( _, ns, handle ){
+                if ( ns.includes("noPreventDefault") ) {
+                    this.addEventListener("touchmove", handle, { passive: false });
+                } else {
+                    this.addEventListener("touchmove", handle, { passive: true });
+                }
+            }
+        }
+</script>
 
 </div>
 

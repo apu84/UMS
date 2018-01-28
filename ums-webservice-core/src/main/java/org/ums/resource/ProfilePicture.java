@@ -60,7 +60,7 @@ public class ProfilePicture extends Resource {
    * @Autowired private KafkaTemplate<String, String> mKafkaTemplate;
    */
 
-  @Autowired
+  // @Autowired
   @Qualifier("ftpSessionFactory")
   @Lazy
   private SessionFactory<FTPFile> ftpSessionFactory;

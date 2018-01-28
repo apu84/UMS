@@ -704,6 +704,8 @@ module ums {
                 files: [
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-datetimepicker-malot/css/bootstrap-datetimepicker.min.css',
+                  'vendors/bootstrap-datetimepicker-malot/js/bootstrap-datetimepicker.min.js',
                   'vendors/select2/select2-madmin.css',
                   'vendors/bootstrap-select/bootstrap-select.min.css',
                   'vendors/multi-select/css/multi-select-madmin.css',

@@ -33,6 +33,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   private Integer mCourseSemester;
   private Integer mExamGroup;
   private Long mId;
+  private String mAppDeadLineStr;
 
   public PersistentExamRoutine() {}
 
@@ -221,5 +222,13 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   @Override
   public void setId(Long pId) {
     mId = pId;
+  }
+
+  public String getAppDeadLineStr() {
+    return mAppDeadLineStr;
+  }
+
+  public void setAppDeadLineStr(String mAppDeadLineStr) {
+    this.mAppDeadLineStr = mAppDeadLineStr;
   }
 }

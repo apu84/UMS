@@ -267,7 +267,8 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
         programCounter = 0;
         courseCounter = 0;
         dateTimeString =
-            "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate() + "\",\"examTime\":\""
+            "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate()
+                + "\",\"appDeadLineStr\":\"" + routineDto.getAppDeadLineStr() + "\",\"examTime\":\""
                 + routineDto.getExamTime() + "\",\"examGroup\":" + routineDto.getExamGroup() + ",\"readOnly\":true,";
         programString =
             "\"programs\":[{\"index\":" + programCounter + ",\"programId\":" + routineDto.getProgramId()
