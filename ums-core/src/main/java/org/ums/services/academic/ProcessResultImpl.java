@@ -195,7 +195,7 @@ public class ProcessResultImpl implements ProcessResult {
       }
     }
     Double toBeTruncated = totalGPA / totalCrHr;
-    toBeTruncated = Double.isNaN(toBeTruncated)? 0D: toBeTruncated;
+    toBeTruncated = Double.isNaN(toBeTruncated) ? 0D : toBeTruncated;
     return new StudentRecordParams(BigDecimal.valueOf(toBeTruncated).setScale(6, RoundingMode.HALF_UP).doubleValue(),
         totalCrHr, totalGPA);
   }

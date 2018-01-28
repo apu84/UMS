@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
@@ -60,18 +61,9 @@ public class ProfilePicture extends Resource {
    */
 
   @Autowired
+  @Qualifier("ftpSessionFactory")
+  @Lazy
   private SessionFactory<FTPFile> ftpSessionFactory;
-
-  ApplicationContext applicationContext = AppContext.getApplicationContext();
-
-  /*
-   * @Qualifier("photoUploadChannel") MessageChannel photoUploadChannel;
-   */
-  // = applicationContext.getBean("lmsChannel",
-  // MessageChannel.class);
-
-  // KafkaTemplate<String, String> mKafkaTemplate = applicationContext.getBean("kafkaTemplate",
-  // KafkaTemplate.class);
 
   @GET
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,

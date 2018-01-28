@@ -12,8 +12,7 @@
           service-interface="org.ums.integration.FileWriterGateway"
           default-request-channel="ftpChannel"></integration:gateway>
 
-  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory"
-        name="ftpSessionFactory" autowire="autodetect" lazy-init="true">
+  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpSessionFactory">
     <property name="host" value="${ftp.localhost}"/>
     <!--<property name="port" value="${ftp.port}"/>-->
     <property name="username" value="${ftp.username}"/>
@@ -21,7 +20,7 @@
   </bean>
 
   <ftp:outbound-gateway
-          session-factory="ftpClientFactory"
+          session-factory="ftpSessionFactory"
           request-channel="ftpChannel"
           command="get"
           command-options="-stream"
@@ -51,7 +50,7 @@
 
 
   <ftp:outbound-channel-adapter
-          session-factory="ftpClientFactory"
+          session-factory="ftpSessionFactory"
           channel="photoUploadChannel"
           remote-directory="files/user-photo"
           auto-create-directory="true"

@@ -103,6 +103,7 @@
         <value>classpath:caching.properties</value>
         <value>classpath:mongodb.properties</value>
         <value>classpath:notification.properties</value>
+        <value>classpath:ftp.properties</value>
         <value>${UMS_CONFIG}/jdbc.properties</value>
         <value>${UMS_CONFIG}/ftp.properties</value>
         <value>${UMS_CONFIG}/common.properties</value>
