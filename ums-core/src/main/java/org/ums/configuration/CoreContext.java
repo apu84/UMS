@@ -81,6 +81,20 @@ public class CoreContext {
   }
 
   @Bean
+  CompanyManager companyManager() {
+    CompanyCache companyCache = new CompanyCache(mCacheFactory.getCacheManager());
+    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return companyCache;
+  }
+
+  @Bean
+  CompanyBranchManager companyBranchManager() {
+    CompanyBranchCache companyBranchCache = new CompanyBranchCache(mCacheFactory.getCacheManager());
+    companyBranchCache.setManager(new PersistentCompanyBranchDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return companyBranchCache;
+  }
+
+  @Bean
   StudentManager studentManager() {
     StudentCache studentCache = new StudentCache(mCacheFactory.getCacheManager());
     studentCache.setManager(new PersistentStudentDao(mTemplateFactory.getJdbcTemplate()));

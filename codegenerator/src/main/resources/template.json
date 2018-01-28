@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "PredefinedNarration",
-    "package": "org.ums.domain.model.immutable.accounts",
+    "name": "CompanyBranch",
+    "package": "org.ums.domain.model.immutable",
     "fields": [
       {
         "id": {
@@ -10,32 +10,23 @@
         }
       },
       {
-        "voucher": {
+        "company": {
           "type": "Ref",
           "reference": {
-            "name": "Voucher",
-            "package": "org.ums.domain.model.immutable.accounts",
+            "name": "Company",
+            "package": "org.ums.domain.model.immutable",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "VoucherManager",
-              "package": "org.ums.manager.accounts"
+              "name": "CompanyManager",
+              "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "statFlag": "String"
-      },
-      {
-        "statUpFlag": "String"
-      },
-      {
-        "modifiedDate": "Date"
-      },
-      {
-        "modifiedBy": "String"
+        "name": "String"
       }
     ]
   }
