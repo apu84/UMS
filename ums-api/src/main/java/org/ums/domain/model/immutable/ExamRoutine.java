@@ -37,6 +37,6 @@ public interface ExamRoutine extends Serializable, EditType<MutableExamRoutine>,
   Integer getCourseSemester();
 
   Integer getExamGroup();
-`
+
   String getAppDeadLineStr();
 }
