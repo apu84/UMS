@@ -151,12 +151,10 @@ module ums {
       var index = this.getAttributeMaxValueFromArray(this.$scope.routine.date_times);
       var item = this.getNewDateTimeRow(index);
       this.$scope.routine.date_times.splice(0, 0, item);
-
+      var index:number = this.$scope.routine.date_times.length;
+      index = index-1;
       setTimeout(function () {
-        $('#date_0').datepicker();
-        $('#date_0').on('change', function () {
-          $('#date_0').hide();
-        });
+        $('#date_'+index).datepicker({autoclose:true});
       }, 200);
 
 
@@ -436,10 +434,8 @@ module ums {
 
 
     private convertToJson(dateTimeArr:Array<IDateTime>, insertType:string):any {
-      console.log(dateTimeArr);
       var jsonObj = [];
       for (var indx_date_time in dateTimeArr) {
-        console.log(dateTimeArr[indx_date_time]);
         for (var indx_program in dateTimeArr[indx_date_time].programs) {
           var program:IProgram = dateTimeArr[indx_date_time].programs[indx_program];
           for (var indx_course in program.courses) {
@@ -594,15 +590,12 @@ module ums {
 
 
       for (var ind in date_time_row_obj.programs) {
-        console.log("ind :"+ind)
         var program:IProgram = date_time_row_obj.programs[ind];
         that.getCourseArr(program.programId, program).then((courseResponse:any)=> {
           var courseArr:Array<ICourse> = courseResponse.courseArr;
           courseResponse.program.courseArr = courseArr;
         });
       }
-      console.log("end of course load");
-
         setTimeout(function () {
           that.setSelect2Courses(date_time_row_obj);
         }, 500);
@@ -624,7 +617,6 @@ module ums {
     }
 
     private showOverlay(rowIndex:number):void {
-      console.log("---------Start");
       var $divOverlay = $('#divOverlay');
       var bottomWidth = $("#row" + rowIndex).css('width');
       var bottomHeight = $("#row" + rowIndex).css('height');
@@ -640,7 +632,6 @@ module ums {
       });
       $('#info').text('Top: ' + bottomTop + ' Left: ' + bottomLeft);
       $divOverlay.delay(100).slideDown('fast');
-      console.log("---------End");
     }
 
     private hideOverlay(date_time_row_obj:any):void {
