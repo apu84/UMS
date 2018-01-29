@@ -24,6 +24,6 @@ public class PersistentCompanyBranchDao extends CompanyBranchDaoDecorator {
   @Override
   public CompanyBranch get(Long pId) {
     String query = SELECT_ALL + " where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, ((rs, rowNum) -> new PersistentCompanyBranch(rs.getLong("id"), rs.getLong("comp_id"), rs.getString("name"))));
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, ((rs, rowNum) -> new PersistentCompanyBranch(rs.getLong("id"), rs.getString("comp_id"), rs.getString("name"))));
   }
 }

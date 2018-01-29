@@ -7,6 +7,6 @@ import org.ums.manager.CompanyManager;
 /**
  * Created by Monjur-E-Morshed on 28-Jan-18.
  */
-public class CompanyDaoDecorator extends ContentDaoDecorator<Company, MutableCompany, Long, CompanyManager> implements
+public class CompanyDaoDecorator extends ContentDaoDecorator<Company, MutableCompany, String, CompanyManager> implements
     CompanyManager {
 }

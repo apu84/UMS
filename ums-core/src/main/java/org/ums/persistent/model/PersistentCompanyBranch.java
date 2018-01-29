@@ -16,7 +16,7 @@ public class PersistentCompanyBranch implements MutableCompanyBranch {
   private static CompanyBranchManager sCompanyBranchManager;
   private Long mId;
   private Company mCompany;
-  private Long mCompanyId;
+  private String mCompanyId;
   private String mName;
   private String mLastModified;
 
@@ -41,12 +41,12 @@ public class PersistentCompanyBranch implements MutableCompanyBranch {
   }
 
   @Override
-  public Long getCompanyId() {
+  public String getCompanyId() {
     return mCompanyId;
   }
 
   @Override
-  public void setCompanyId(Long pCompanyId) {
+  public void setCompanyId(String pCompanyId) {
     this.mCompanyId = pCompanyId;
   }
 
@@ -100,7 +100,7 @@ public class PersistentCompanyBranch implements MutableCompanyBranch {
     setLastModified(pCompanyBranch.getLastModified());
   }
 
-  public PersistentCompanyBranch(Long pId, Long pCompanyId, String pName) {
+  public PersistentCompanyBranch(Long pId, String pCompanyId, String pName) {
     mId = pId;
     mCompanyId = pCompanyId;
     mName = pName;

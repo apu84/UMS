@@ -13,7 +13,7 @@ public interface MutableCompanyBranch extends CompanyBranch, Editable<Long>, Mut
 
   void setCompany(Company pCompany);
 
-  void setCompanyId(Long pCompanyId);
+  void setCompanyId(String pCompanyId);
 
   void setName(String pName);
 }

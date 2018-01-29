@@ -14,7 +14,7 @@ public interface CompanyBranch extends Serializable, EditType<MutableCompanyBran
 
   Company getCompany();
 
-  Long getCompanyId();
+  String getCompanyId();
 
   String getName();
 }

@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.Company;
 /**
  * Created by Monjur-E-Morshed on 28-Jan-18.
  */
-public interface MutableCompany extends Company, Editable<Long>, MutableIdentifier<Long>, MutableLastModifier {
+public interface MutableCompany extends Company, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
 
   void setName(String pName);
 

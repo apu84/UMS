@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 28-Jan-18.
  */
-public interface Company extends Serializable, EditType<MutableCompany>, LastModifier, Identifier<Long> {
+public interface Company extends Serializable, EditType<MutableCompany>, LastModifier, Identifier<String> {
 
   String getName();
 

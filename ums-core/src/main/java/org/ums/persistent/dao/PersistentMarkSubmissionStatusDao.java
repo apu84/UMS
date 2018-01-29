@@ -48,7 +48,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   @Override
   public MarksSubmissionStatus get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new MarksSubmissionStatusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new MarksSubmissionStatusRowMapper());
   }
 
   @Override
@@ -86,20 +86,20 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   @Override
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId, pCourseId, pExamType.getId()},
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pCourseId, pExamType.getId()},
         new MarksSubmissionStatusRowMapper());
   }
 
   @Override
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE DESC";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId}, new MarksSubmissionStatusRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new MarksSubmissionStatusRowMapper());
   }
 
   private List<Object[]> getUpdateParamArray(List<MutableMarksSubmissionStatus> pMarksSubmissionStatusList) {
     List<Object[]> params = new ArrayList<>();
-    for (MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
-      params.add(new Object[]{pMutable.getSemesterId(), pMutable.getCourseId(), pMutable.getStatus().getId(),
+    for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
+      params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(), pMutable.getStatus().getId(),
           pMutable.getExamType().getId(), pMutable.getLastSubmissionDatePrep(), pMutable.getLastSubmissionDateHead(),
           pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateCoe(), pMutable.getTotalPart(),
           pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
@@ -118,13 +118,13 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
       marksSubmissionStatus.setCourseId(rs.getString("COURSE_ID"));
       marksSubmissionStatus.setStatus(CourseMarksSubmissionStatus.get(rs.getInt("STATUS")));
       marksSubmissionStatus.setExamType(ExamType.get(rs.getInt("EXAM_TYPE")));
-      if (rs.getObject("LAST_SUBMISSION_DATE_PREP") != null) {
+      if(rs.getObject("LAST_SUBMISSION_DATE_PREP") != null) {
         marksSubmissionStatus.setLastSubmissionDatePrep(rs.getTimestamp("LAST_SUBMISSION_DATE_PREP"));
       }
-      if (rs.getObject("LAST_SUBMISSION_DATE_HEAD") != null) {
+      if(rs.getObject("LAST_SUBMISSION_DATE_HEAD") != null) {
         marksSubmissionStatus.setLastSubmissionDateHead(rs.getTimestamp("LAST_SUBMISSION_DATE_HEAD"));
       }
-      if (rs.getObject("LAST_SUBMISSION_DATE_SCR") != null) {
+      if(rs.getObject("LAST_SUBMISSION_DATE_SCR") != null) {
         marksSubmissionStatus.setLastSubmissionDateScr(rs.getTimestamp("LAST_SUBMISSION_DATE_SCR"));
       }
       marksSubmissionStatus.setTotalPart(rs.getInt("TOTAL_PART"));

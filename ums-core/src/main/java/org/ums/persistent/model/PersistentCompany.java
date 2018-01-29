@@ -12,18 +12,18 @@ import org.ums.manager.CompanyManager;
 public class PersistentCompany implements MutableCompany {
 
   private static CompanyManager sCompanyManager;
-  private Long mId;
+  private String mId;
   private String mName;
   private String mShortName;
   private String mLastModified;
 
   @Override
-  public Long getId() {
+  public String getId() {
     return mId;
   }
 
   @Override
-  public void setId(Long pId) {
+  public void setId(String pId) {
     this.mId = pId;
   }
 
@@ -58,8 +58,8 @@ public class PersistentCompany implements MutableCompany {
   }
 
   @Override
-  public Long create() {
-    return sCompanyManager.create(this);
+  public String create() {
+    return null;
   }
 
   @Override
@@ -86,7 +86,7 @@ public class PersistentCompany implements MutableCompany {
     setLastModified(pCompany.getLastModified());
   }
 
-  public PersistentCompany(Long pId, String pName, String pShortName) {
+  public PersistentCompany(String pId, String pName, String pShortName) {
     mId = pId;
     mName = pName;
     mShortName = pShortName;
