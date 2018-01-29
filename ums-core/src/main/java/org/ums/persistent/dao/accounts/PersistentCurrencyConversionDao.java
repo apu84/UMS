@@ -13,11 +13,11 @@ public class PersistentCurrencyConversionDao extends CurrencyConversionDaoDecora
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentCurrencyConversionDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentCurrencyConversionDao(JdbcTemplate pJdbcTemplate,
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }
-
 
 }

@@ -43,9 +43,7 @@ public class PersistentCurrency implements MutableCurrency {
 
   @Override
   public Company getCompany() {
-    return mCompany == null
-        ? sCompanyManager.get(mCompanyId)
-        : sCompanyManager.validate(mCompany);
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : sCompanyManager.validate(mCompany);
   }
 
   @Override
@@ -183,8 +181,7 @@ public class PersistentCurrency implements MutableCurrency {
     sCurrencyManager.delete(this);
   }
 
-  public PersistentCurrency() {
-  }
+  public PersistentCurrency() {}
 
   public PersistentCurrency(MutableCurrency pCurrency) {
     setId(pCurrency.getId());
@@ -202,14 +199,9 @@ public class PersistentCurrency implements MutableCurrency {
     setLastModified(pCurrency.getLastModified());
   }
 
-
-
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sCompanyManager = applicationContext.getBean("companyManager",
-        CompanyManager.class);
-    sCurrencyManager = applicationContext.getBean("currencyManager",
-        CurrencyManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
+    sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
   }
 }

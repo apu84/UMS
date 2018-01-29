@@ -53,22 +53,24 @@ public class AccountsContext {
   @Bean
   CurrencyManager currencyManager() {
     CurrencyCache currencyCache = new CurrencyCache(mCacheFactory.getCacheManager());
-    currencyCache.setManager(new PersistentCurrencyDao(mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    currencyCache.setManager(new PersistentCurrencyDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return currencyCache;
   }
-
 
   @Bean
   CurrencyConversionManager currencyConversionManager() {
     CurrencyConversionCache currencyConversionCache = new CurrencyConversionCache(mCacheFactory.getCacheManager());
-    currencyConversionCache.setManager(new PersistentCurrencyConversionDao(mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    currencyConversionCache.setManager(new PersistentCurrencyConversionDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return currencyConversionCache;
   }
 
   @Bean
   ReceiptManager receiptManager() {
     ReceiptCache receiptCache = new ReceiptCache(mCacheFactory.getCacheManager());
-    receiptCache.setManager(new PersistentReceiptDao(mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    receiptCache.setManager(new PersistentReceiptDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return receiptCache;
   }
 
@@ -98,8 +100,9 @@ public class AccountsContext {
   }
 
   @Bean
-  TransactionManager transactionManager(){
-    return new PersistentTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  TransactionManager transactionManager() {
+    return new PersistentTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
   @Bean

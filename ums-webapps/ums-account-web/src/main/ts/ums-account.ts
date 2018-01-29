@@ -131,6 +131,12 @@ module ums {
             }]
           }
         })
+        .state('journalVoucher', {
+          url: "/journalVoucher",
+          controller: 'JournalVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/journal-voucher/journal-voucher.html'
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'

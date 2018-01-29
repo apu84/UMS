@@ -10,12 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface Receipt
-    extends
-    Serializable,
-    EditType<MutableReceipt>,
-    LastModifier,
-    Identifier<Long> {
+public interface Receipt extends Serializable, EditType<MutableReceipt>, LastModifier, Identifier<Long> {
 
   String getName();
 

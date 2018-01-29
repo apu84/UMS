@@ -49,9 +49,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
 
   @Override
   public Company getCompany() {
-    return mCompany == null
-        ? sCompanyManager.get(mCompanyId)
-        : sCompanyManager.validate(mCompany);
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : sCompanyManager.validate(mCompany);
   }
 
   @Override
@@ -71,9 +69,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
 
   @Override
   public Company getDefaultCompany() {
-    return mCompany == null
-        ? sCompanyManager.get(mDefaultCompanyId)
-        : sCompanyManager.validate(mDefaultCompany);
+    return mCompany == null ? sCompanyManager.get(mDefaultCompanyId) : sCompanyManager.validate(mDefaultCompany);
   }
 
   @Override
@@ -93,9 +89,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
 
   @Override
   public Currency getCurrency() {
-    return mCurrency == null
-        ? sCurrencyManager.get(mCurrencyId)
-        : sCurrencyManager.validate(mCurrency);
+    return mCurrency == null ? sCurrencyManager.get(mCurrencyId) : sCurrencyManager.validate(mCurrency);
   }
 
   @Override
@@ -149,8 +143,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
-  public void setReverseBaseConversionFactor(
-      BigDecimal pReverseBaseConversionFactor) {
+  public void setReverseBaseConversionFactor(BigDecimal pReverseBaseConversionFactor) {
     this.mReverseBaseConversionFactor = pReverseBaseConversionFactor;
   }
 
@@ -224,11 +217,9 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
     sCurrencyConversionManager.delete(this);
   }
 
-  public PersistentCurrencyConversion() {
-  }
+  public PersistentCurrencyConversion() {}
 
-  public PersistentCurrencyConversion(
-      MutableCurrencyConversion pCurrencyConversion) {
+  public PersistentCurrencyConversion(MutableCurrencyConversion pCurrencyConversion) {
     setId(pCurrencyConversion.getId());
     setCompany(pCurrencyConversion.getCompany());
     setCompanyId(pCurrencyConversion.getCompanyId());
@@ -237,11 +228,9 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
     setCurrency(pCurrencyConversion.getCurrency());
     setCurrencyId(pCurrencyConversion.getCurrencyId());
     setConversionFactor(pCurrencyConversion.getConversionFactor());
-    setReverseConversionFactor(pCurrencyConversion
-        .getReverseConversionFactor());
+    setReverseConversionFactor(pCurrencyConversion.getReverseConversionFactor());
     setBaseConversionFactor(pCurrencyConversion.getBaseConversionFactor());
-    setReverseBaseConversionFactor(pCurrencyConversion
-        .getReverseBaseConversionFactor());
+    setReverseBaseConversionFactor(pCurrencyConversion.getReverseBaseConversionFactor());
     setStatFlag(pCurrencyConversion.getStatFlag());
     setStatUpFlag(pCurrencyConversion.getStatUpFlag());
     setModifiedDate(pCurrencyConversion.getModifiedDate());
@@ -250,14 +239,11 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sCompanyManager = applicationContext.getBean("companyManager",
-        CompanyManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
 
-    sCurrencyManager = applicationContext.getBean("currencyManager",
-        CurrencyManager.class);
-    sCurrencyConversionManager = applicationContext.getBean(
-        "currencyConversionManager", CurrencyConversionManager.class);
+    sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
+    sCurrencyConversionManager =
+        applicationContext.getBean("currencyConversionManager", CurrencyConversionManager.class);
   }
 }

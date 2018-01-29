@@ -13,11 +13,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface CurrencyConversion
-    extends
-    Serializable,
-    EditType<MutableCurrencyConversion>,
-    LastModifier,
+public interface CurrencyConversion extends Serializable, EditType<MutableCurrencyConversion>, LastModifier,
     Identifier<Long> {
 
   Company getCompany();

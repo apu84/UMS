@@ -13,12 +13,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface Currency
-    extends
-    Serializable,
-    EditType<MutableCurrency>,
-    LastModifier,
-    Identifier<Long> {
+public interface Currency extends Serializable, EditType<MutableCurrency>, LastModifier, Identifier<Long> {
 
   Company getCompany();
 

@@ -7,7 +7,5 @@ import org.ums.manager.ContentManager;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface TransactionManager
-    extends
-    ContentManager<Transaction, MutableTransaction, Long> {
+public interface TransactionManager extends ContentManager<Transaction, MutableTransaction, Long> {
 }

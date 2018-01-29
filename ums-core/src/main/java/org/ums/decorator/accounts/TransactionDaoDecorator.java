@@ -8,9 +8,6 @@ import org.ums.manager.accounts.TransactionManager;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public class TransactionDaoDecorator
-    extends
-    ContentDaoDecorator<Transaction, MutableTransaction, Long, TransactionManager>
-    implements
-    TransactionManager {
+public class TransactionDaoDecorator extends
+    ContentDaoDecorator<Transaction, MutableTransaction, Long, TransactionManager> implements TransactionManager {
 }

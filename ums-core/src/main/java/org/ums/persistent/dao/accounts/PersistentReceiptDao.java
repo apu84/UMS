@@ -10,12 +10,12 @@ import org.ums.generator.IdGenerator;
  */
 public class PersistentReceiptDao extends ReceiptDaoDecorator {
 
-
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentReceiptDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentReceiptDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;

@@ -14,12 +14,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface Transaction
-    extends
-    Serializable,
-    EditType<MutableTransaction>,
-    LastModifier,
-    Identifier<Long> {
+public interface Transaction extends Serializable, EditType<MutableTransaction>, LastModifier, Identifier<Long> {
 
   Company getCompany();
 

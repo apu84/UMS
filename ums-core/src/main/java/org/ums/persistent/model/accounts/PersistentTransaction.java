@@ -68,9 +68,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Company getCompany() {
-    return mCompany == null
-        ? sCompanyManager.get(mCompanyId)
-        : sCompanyManager.validate(mCompany);
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : sCompanyManager.validate(mCompany);
   }
 
   @Override
@@ -140,9 +138,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Account getAccount() {
-    return mAccount == null
-        ? sAccountManager.get(mAccountId)
-        : sAccountManager.validate(mAccount);
+    return mAccount == null ? sAccountManager.get(mAccountId) : sAccountManager.validate(mAccount);
   }
 
   @Override
@@ -162,9 +158,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Voucher getVoucher() {
-    return mVoucher == null
-        ? sVoucherManager.get(mVoucherId)
-        : sVoucherManager.validate(mVoucher);
+    return mVoucher == null ? sVoucherManager.get(mVoucherId) : sVoucherManager.validate(mVoucher);
   }
 
   @Override
@@ -224,9 +218,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Currency getCurrency() {
-    return mCurrency == null
-        ? sCurrencyManager.get(mCurrencyId)
-        : sCurrencyManager.validate(mCurrency);
+    return mCurrency == null ? sCurrencyManager.get(mCurrencyId) : sCurrencyManager.validate(mCurrency);
   }
 
   @Override
@@ -266,7 +258,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Company getDefaultCompany() {
-    return mDefaultCompany==null? sCompanyManager.get(mDefaultCompanyId):mDefaultCompany;
+    return mDefaultCompany == null ? sCompanyManager.get(mDefaultCompanyId) : mDefaultCompany;
   }
 
   @Override
@@ -296,9 +288,7 @@ public class PersistentTransaction implements MutableTransaction {
 
   @Override
   public Receipt getReceipt() {
-    return mReceipt == null
-        ? sReceiptManager.get(mReceiptId)
-        : sReceiptManager.validate(mReceipt);
+    return mReceipt == null ? sReceiptManager.get(mReceiptId) : sReceiptManager.validate(mReceipt);
   }
 
   @Override
@@ -376,8 +366,7 @@ public class PersistentTransaction implements MutableTransaction {
     sTransactionManager.delete(this);
   }
 
-  public PersistentTransaction() {
-  }
+  public PersistentTransaction() {}
 
   public PersistentTransaction(MutableTransaction pTransaction) {
     setId(pTransaction.getId());
@@ -411,19 +400,12 @@ public class PersistentTransaction implements MutableTransaction {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sCompanyManager = applicationContext.getBean("companyManager",
-        CompanyManager.class);
-    sAccountManager = applicationContext.getBean("accountManager",
-        AccountManager.class);
-    sVoucherManager = applicationContext.getBean("voucherManager",
-        VoucherManager.class);
-    sCurrencyManager = applicationContext.getBean("currencyManager",
-        CurrencyManager.class);
-    sReceiptManager = applicationContext.getBean("receiptManager",
-        ReceiptManager.class);
-    sTransactionManager = applicationContext.getBean("transactionManager",
-        TransactionManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
+    sAccountManager = applicationContext.getBean("accountManager", AccountManager.class);
+    sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
+    sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
+    sReceiptManager = applicationContext.getBean("receiptManager", ReceiptManager.class);
+    sTransactionManager = applicationContext.getBean("transactionManager", TransactionManager.class);
   }
 }

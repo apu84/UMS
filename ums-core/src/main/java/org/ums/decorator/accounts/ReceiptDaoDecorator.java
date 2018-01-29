@@ -8,9 +8,6 @@ import org.ums.manager.accounts.ReceiptManager;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public class ReceiptDaoDecorator
-    extends
-    ContentDaoDecorator<Receipt, MutableReceipt, Long, ReceiptManager>
-    implements
+public class ReceiptDaoDecorator extends ContentDaoDecorator<Receipt, MutableReceipt, Long, ReceiptManager> implements
     ReceiptManager {
 }

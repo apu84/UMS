@@ -12,12 +12,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface MutableCurrency
-    extends
-    Currency,
-    Editable<Long>,
-    MutableIdentifier<Long>,
-    MutableLastModifier {
+public interface MutableCurrency extends Currency, Editable<Long>, MutableIdentifier<Long>, MutableLastModifier {
 
   void setCompany(Company pCompany);
 

@@ -10,14 +10,12 @@ import org.ums.generator.IdGenerator;
  */
 public class PersistentCurrencyDao extends CurrencyDaoDecorator {
 
-
-
-
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentCurrencyDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentCurrencyDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;

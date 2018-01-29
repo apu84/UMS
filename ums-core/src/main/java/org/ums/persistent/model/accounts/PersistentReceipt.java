@@ -76,8 +76,7 @@ public class PersistentReceipt implements MutableReceipt {
     sReceiptManager.delete(this);
   }
 
-  public PersistentReceipt() {
-  }
+  public PersistentReceipt() {}
 
   public PersistentReceipt(MutableReceipt pReceipt) {
     setId(pReceipt.getId());
@@ -87,9 +86,7 @@ public class PersistentReceipt implements MutableReceipt {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sReceiptManager = applicationContext.getBean("receiptManager",
-        ReceiptManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sReceiptManager = applicationContext.getBean("receiptManager", ReceiptManager.class);
   }
 }

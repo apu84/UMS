@@ -9,7 +9,8 @@ import org.ums.manager.accounts.CurrencyManager;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public class CurrencyCache extends ContentCache<Currency, MutableCurrency, Long, CurrencyManager> implements CurrencyManager {
+public class CurrencyCache extends ContentCache<Currency, MutableCurrency, Long, CurrencyManager> implements
+    CurrencyManager {
 
   CacheManager<Currency, Long> mCurrencyLongCacheManager;
 
