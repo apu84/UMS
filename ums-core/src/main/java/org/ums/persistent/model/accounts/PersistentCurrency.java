@@ -199,6 +199,21 @@ public class PersistentCurrency implements MutableCurrency {
     setLastModified(pCurrency.getLastModified());
   }
 
+  public PersistentCurrency(Long pId, String pCompanyId, Integer pCurrencyCode, String pCurrencyDescription,
+      CurrencyFlag pCurrencyFlag, String pNotation, String pStatFlag, String pStatUpFlag, Date pModifiedDate,
+      String pModifiedBy) {
+    mId = pId;
+    mCompanyId = pCompanyId;
+    mCurrencyCode = pCurrencyCode;
+    mCurrencyDescription = pCurrencyDescription;
+    mCurrencyFlag = pCurrencyFlag;
+    mNotation = pNotation;
+    mStatFlag = pStatFlag;
+    mStatUpFlag = pStatUpFlag;
+    mModifiedDate = pModifiedDate;
+    mModifiedBy = pModifiedBy;
+  }
+
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
