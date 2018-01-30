@@ -21,7 +21,7 @@
         color:white;
         text-align: center;
         font-size: 20px;
-        padding:15px 30px;
+        padding:5px 10px;
     }
 
 
@@ -83,7 +83,7 @@
                             <td>{{app.courseNo}}</td>
                             <td>{{app.courseTitle}}</td>
                             <td>{{app.carryYear+"-"+app.carrySemester}}</td>
-                            <td style="background-color: #FCFCFC; text-align: center;  font-size: 15px; "><strong>2.87</strong></td>
+                            <td>2.8</td>
                             <td>{{app.statusName}}</td>
                         </tr>
                         </tbody>
@@ -91,29 +91,96 @@
 
                         <div class="modal fade" id="myModal" role="dialog" >
                          <!--   <div class="modal-backdrop"> -->
-                            <div class="modal-dialog">
+                            <div class="modal-dialog ">
 
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header" >
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Modal Header</h4>
+                                        <h4 class="modal-title">Carry Applications Approval</h4>
                                     </div>
-                                    <div align="center">
-                                        <img class="img-square"
-                                             style="border: 5px solid #fff;  box-shadow: 0 2px 3px rgba(0,0,0,0);"
-                                             src=""
-                                             data-profile-picture="">
-                                    </div>
-                                    <div class="modal-body">
-                                        <p><strong>Applicant ID:  {{vm.studentIdTA}}</strong></p>
-                                        <p><strong>Semester ID:  {{vm.semesterIdTA}}</strong></p>
-                                        <p><strong>Applicant Name:  {{vm.fullNameTA}}</strong></p>
-                                        <p><strong>CourseNo ID:  {{vm.courseNoTA}}</strong></p>
-                                        <p><strong>CourseTitle :  {{vm.courseTitleTA}}</strong></p>
-                                        <p><strong>Totalcarry :  {{vm.totalcarry}}</strong></p>
+                                    <div>
 
                                     </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="panel-body">
+                                            <table class="table table-borderless table-condensed table-hover">
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <p>Applicant_ID:  <strong>{{vm.studentIdTA}}</strong></p>
+                                                        <p>Semester_ID: <strong> {{vm.semesterIdTA}}</strong></p>
+                                                        <p>Applicant_Name: <strong> {{vm.fullNameTA}}</strong></p>
+                                                        <p>CourseNo_ID:  <strong>{{vm.courseNoTA}}</strong></p>
+                                                        <p>Course_Title :  <strong>{{vm.courseTitleTA}}</strong></p>
+                                                        <p>Total_Carry :  <strong>{{vm.totalcarry}}</strong></p>
+                                                        <p>Total_Applied :  <strong>{{vm.totalApplied}}</strong></p>
+                                                    </td>
+                                                    <td>
+                                                        <div align="right" >
+                                                            <img class="img-square"
+                                                                 style="border: 5px solid #fff;  box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                                                 src=""
+                                                                 width="100"
+                                                                 height="100"
+                                                                 data-profile-picture="">
+                                                        </div>
+                                                    </td>
+
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading" align="center">
+                                            Applicant Request's
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-bordered" >
+                                                <thead>
+                                                <th style="background-color: #FAFAFA; ">Course Id</th>
+                                                <th style="background-color: #FAFAFA; ">Course Title</th>
+                                                <th style="background-color: #FAFAFA; ">Current Status</th>
+                                                <th style="background-color: #FAFAFA; ">Response</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr data-ng-repeat="a in vm.applicationModalAppliedInfo">
+                                                    <td>{{a.courseId}}</td>
+                                                    <td>{{a.courseTitle}}</td>
+                                                    <td>{{a.statusName}}</td>
+                                                    <td><input type="checkbox" ng-disabled="a.statusName=='Waiting for payment' || a.statusName=='Approved' ?  true : false"  data-ng-model="a.apply"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading" align="center">
+                                            Applicant Carry Courses
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <th style="background-color: #FAFAFA; ">Course No</th>
+                                                <th style="background-color: #FAFAFA; ">Course Title</th>
+                                                <th style="background-color: #FAFAFA; ">Carry Semester</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr data-ng-repeat="a in vm.applicationModalTableinfo">
+                                                    <td>{{a.courseNo}}</td>
+                                                    <td>{{a.courseTitle}}</td>
+                                                    <td>{{a.carryYear+"."+a.carrySemester}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-success"  data-ng-click="vm.submitModal('accept')" data-dismiss="modal">Accept</button>
                                         <button type="button" class="btn btn-primary"  data-ng-click="vm.submitModal('reject')" data-dismiss="modal">Reject</button>

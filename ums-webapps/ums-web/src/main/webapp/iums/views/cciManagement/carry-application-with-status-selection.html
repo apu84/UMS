@@ -32,9 +32,9 @@
                                                      class="form-control required"
                                                      id="resultsPerPloage"
                                                      placeholder='Search by student Id'
-                                                     data-ng-model="seachByStudentId"/></label>
+                                                     data-ng-model="vm.seachByStudentId"/></label>
         <div class="col-md-4">
-            <button class="btn btn-success"  data-ng-click="submit()">Search  </button>
+            <button class="btn btn-success"  data-ng-click="vm.searchByStudentId(vm.seachByStudentId)">Search  </button>
         </div>
     </div>
 </div>

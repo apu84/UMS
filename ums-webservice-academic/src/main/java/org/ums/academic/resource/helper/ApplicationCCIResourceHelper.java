@@ -10,16 +10,20 @@ import org.ums.builder.Builder;
 import org.ums.builder.UGRegistrationResultBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationCCI;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.manager.ApplicationCCIManager;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.persistent.model.PersistentApplicationCCI;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.ApplicationCCIService;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Context;
@@ -61,6 +65,12 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   @Autowired
   UGRegistrationResultResourceHelper mResultHelper;
 
+  @Autowired
+  EmployeeManager mEmployeeManager;
+
+  @Autowired
+  UserManager mUserManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     /*
@@ -93,6 +103,27 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return builder.build();
   }
 
+  public Response appliedAndApproved(final String studentId, final Integer semesterId, JsonObject pJsonObject,
+      UriInfo pUriInfo) {
+    List<MutableApplicationCCI> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      System.out.println("--------" + jsonObject);
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      getBuilder().build(application, jsonObject, localCache);
+      application.setStudentId(studentId);
+      application.setSemesterId(semesterId);
+      applications.add(application);
+    }
+    mManager.update(applications);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
@@ -102,6 +133,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     List<PersistentApplicationCCI> persistentApplicationCCIs = new ArrayList<>();
 
     JsonArray entries = pJsonObject.getJsonArray("entries");
+
 
     List<UGRegistrationResult> results =
         mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getCurrentEnrolledSemester().getId(), studentId);
@@ -163,11 +195,16 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   }
 
   // CarryApprovaByHeadMethod
-  public JsonObject getApplicationCarryForHeadsApproval(final Request pRequest, final UriInfo pUriInfo){
+  public JsonObject getApplicationCarryForHeadsApproval(final String pApprovalStatus,final Request pRequest, final UriInfo pUriInfo){
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApproval();
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User loggedUser = mUserManager.get(userId);
+    Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+    String empDeptId=loggedEmployee.getDepartment().getId();
+    //(pApprovalStatus, loggedEmployee.getId())
+    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApproval(pApprovalStatus,empDeptId);
     applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
     object.add("entries", children);
     localCache.invalidate();
@@ -176,11 +213,11 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   }
 
   // AllcarryFor Applied && Approved Info
-  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(final Request pRequest, final UriInfo pUriInfo){
+  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(final String studentId,final Integer semesterid,final Request pRequest, final UriInfo pUriInfo){
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApprovalAndAppiled();
+    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApprovalAndAppiled(studentId,semesterid);
     applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
     object.add("entries", children);
     localCache.invalidate();
@@ -276,4 +313,5 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   protected String getETag(ApplicationCCI pReadonly) {
     return pReadonly.getApplicationDate();
   }
+
 }

@@ -50,15 +50,17 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   }
 
   @GET
-  @Path("/headsApproval")
-  public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest) {
-    return mHelper.getApplicationCarryForHeadsApproval(pRequest, mUriInfo);
+  @Path("/approvalStatus/{approval-status}")
+  public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest,
+      final @PathParam("approval-status") String pApprovalStatus) {
+    return mHelper.getApplicationCarryForHeadsApproval(pApprovalStatus, pRequest, mUriInfo);
   }
 
   @GET
-  @Path("/getAllcarryInfo")
-  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(@Context Request pRequest) {
-    return mHelper.getApplicationCarryForHeadsApprovalAndAppiled(pRequest, mUriInfo);
+  @Path("/getAllcarryInfo/studentId/{student-id}/semesterId/{semester-id}")
+  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(@Context Request pRequest,
+      final @PathParam("student-id") String pStudentId, final @PathParam("semester-id") Integer pSemesterid) {
+    return mHelper.getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterid, pRequest, mUriInfo);
   }
 
 }

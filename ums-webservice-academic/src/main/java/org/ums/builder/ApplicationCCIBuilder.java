@@ -114,6 +114,9 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
     if(pJsonObject.containsKey("cciStatus"))
       pMutable.setCCIStatus(pJsonObject.getInt("cciStatus"));
 
+    // if(pJsonObject.containsKey("courseTitle"))
+    // pMutable.setCourseTitle(pJsonObject.getString("courseTitle"));
+
     if(pJsonObject.containsKey("grade"))
       pMutable.setGradeLetter(pJsonObject.getString("grade"));
 

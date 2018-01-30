@@ -13,14 +13,14 @@ public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
   @Override
-  public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled() {
-    return getManager().getApplicationCarryForHeadsApprovalAndAppiled();
+  public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled(String pStudentId, Integer pSemesterId) {
+    return getManager().getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterId);
   }
 
   // carryHeadsApproval
   @Override
-  public List<ApplicationCCI> getApplicationCarryForHeadsApproval() {
-    return getManager().getApplicationCarryForHeadsApproval();
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, String empDeptId) {
+    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, empDeptId);
   }
 
   @Override
