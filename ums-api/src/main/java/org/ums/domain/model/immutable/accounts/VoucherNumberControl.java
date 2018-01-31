@@ -3,6 +3,7 @@ package org.ums.domain.model.immutable.accounts;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 
@@ -17,6 +18,10 @@ public interface VoucherNumberControl extends Serializable, LastModifier, EditTy
     Identifier<Long> {
 
   Long getFinAccountYearId();
+
+  String getCompanyCode();
+
+  Company getCompany();
 
   FinancialAccountYear getFinAccountYear();
 

@@ -1,5 +1,10 @@
 package org.ums.accounts.resource.definitions.voucher;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +28,8 @@ public class VoucherResourceTest {
 
   private MockMvc mMockMvc;
 
+  private static final String SERVICE_URL = "http://localhost:8080/ums-webservice-account/account/definitions/voucher";
+
   @Before
   public void init() {
 
@@ -30,6 +37,11 @@ public class VoucherResourceTest {
 
   @Test
   public void getVoucherTest() throws Exception {
+    HttpUriRequest request = new HttpGet(SERVICE_URL);
+
+    HttpResponse response = HttpClientBuilder.create().build().execute(request);
+
+    Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
     /*
      * Voucher voucher = mVoucherResource.mVoucherManager.get(1L); ObjectMapper mapper = new
      * ObjectMapper(); System.out.println(get("/account/definition/voucher/id/1"));

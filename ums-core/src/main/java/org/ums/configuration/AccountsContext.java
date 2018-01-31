@@ -99,9 +99,9 @@ public class AccountsContext {
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
-  @Bean
-  TransactionManager transactionManager() {
-    return new PersistentTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(),
+  @Bean(name = "accountTransactionManager")
+  AccountTransactionManager accountTransactionManager() {
+    return new PersistantAccountTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 

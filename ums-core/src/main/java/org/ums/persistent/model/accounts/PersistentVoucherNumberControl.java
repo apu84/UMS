@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.manager.accounts.VoucherManager;
 import org.ums.manager.accounts.VoucherNumberControlManager;
@@ -30,14 +32,18 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   private static VoucherNumberControlManager sVoucherNumberControlManager;
   @JsonIgnore
   private static VoucherManager sVoucherManager;
+  @JsonIgnore
+  private static CompanyManager sCompanyManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sFinancialAccountYearManager =
         applicationContext.getBean("financialAccountYearManager", FinancialAccountYearManager.class);
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
     sVoucherNumberControlManager =
         applicationContext.getBean("voucherNumberControlManager", VoucherNumberControlManager.class);
+
   }
 
   @JsonIgnore
@@ -80,6 +86,12 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   @JsonIgnore
   @JsonProperty("modifiedBy")
   private String modifiedBy;
+  @JsonIgnore
+  @JsonProperty("compCode")
+  private String mCompanyCode;
+  @JsonIgnore
+  @JsonProperty("company")
+  private Company mCompany;
 
   public PersistentVoucherNumberControl() {}
 
@@ -94,6 +106,26 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
     statUpFlag = pPersistentVoucherNumberControl.getStatUpFlag();
     modifiedDate = pPersistentVoucherNumberControl.getModifiedDate();
     modifiedBy = pPersistentVoucherNumberControl.getModifiedBy();
+  }
+
+  @Override
+  public void setCompanyCode(String pCompanyCode) {
+    mCompanyCode = pCompanyCode;
+  }
+
+  @Override
+  public void setCompany(Company pCompany) {
+    mCompany = pCompany;
+  }
+
+  @Override
+  public String getCompanyCode() {
+    return mCompanyCode;
+  }
+
+  @Override
+  public Company getCompany() {
+    return mCompany == null ? sCompanyManager.get(mCompanyCode) : mCompany;
   }
 
   @Override
