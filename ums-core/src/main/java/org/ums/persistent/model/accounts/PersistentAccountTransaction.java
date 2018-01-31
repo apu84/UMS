@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.immutable.accounts.Receipt;
 import org.ums.domain.model.immutable.accounts.Voucher;
-import org.ums.domain.model.mutable.accounts.MutableTransaction;
+import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -18,14 +18,14 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public class PersistentTransaction implements MutableTransaction {
+public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   private static CompanyManager sCompanyManager;
   private static AccountManager sAccountManager;
   private static VoucherManager sVoucherManager;
   private static CurrencyManager sCurrencyManager;
   private static ReceiptManager sReceiptManager;
-  private static TransactionManager sTransactionManager;
+  private static AccountTransactionManager sTransactionManager;
   private Long mId;
   private Company mCompany;
   private String mCompanyId;
@@ -357,8 +357,8 @@ public class PersistentTransaction implements MutableTransaction {
   }
 
   @Override
-  public MutableTransaction edit() {
-    return new PersistentTransaction(this);
+  public MutableAccountTransaction edit() {
+    return new PersistentAccountTransaction(this);
   }
 
   @Override
@@ -366,9 +366,9 @@ public class PersistentTransaction implements MutableTransaction {
     sTransactionManager.delete(this);
   }
 
-  public PersistentTransaction() {}
+  public PersistentAccountTransaction() {}
 
-  public PersistentTransaction(MutableTransaction pTransaction) {
+  public PersistentAccountTransaction(MutableAccountTransaction pTransaction) {
     setId(pTransaction.getId());
     setCompany(pTransaction.getCompany());
     setCompanyId(pTransaction.getCompanyId());
@@ -406,6 +406,6 @@ public class PersistentTransaction implements MutableTransaction {
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
     sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
     sReceiptManager = applicationContext.getBean("receiptManager", ReceiptManager.class);
-    sTransactionManager = applicationContext.getBean("transactionManager", TransactionManager.class);
+    sTransactionManager = applicationContext.getBean("transactionManager", AccountTransactionManager.class);
   }
 }
