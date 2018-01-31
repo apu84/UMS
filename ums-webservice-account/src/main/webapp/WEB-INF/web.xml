@@ -19,7 +19,7 @@
     <param-value>
       classpath:application-context-webservice-core.xml
       classpath:spring-config-shiro.xml
-      /WEB-INF/applicationContext.xml
+      classpath:applicationContext.xml
     </param-value>
   </context-param>
 
