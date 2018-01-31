@@ -193,7 +193,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
 
     // todo add more roles, currently mst_role table in db is not complete.
-    String message = "Leave Application from employee: " + employee.getEmployeeName() + " of department: "
+    String message = "Leave Application from employee: " + employee.getPersonalInformation().getFullName() + " of department: "
         + employee.getDepartment().getShortName() + " is waiting for your approval.";
     if (rolePermissionsStream.get(0).getUserId().equals(user.getId())
         || user.getPrimaryRole().getId() == RoleType.COE.getId()
@@ -321,13 +321,13 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     Employee employee =
         mEmployeeManager.get(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     if(employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if(employee.getGender().equals("M"))
+      if(employee.getPersonalInformation().getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
     }
     else {
-      if(employee.getGender().equals("M"))
+      if(employee.getPersonalInformation().getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

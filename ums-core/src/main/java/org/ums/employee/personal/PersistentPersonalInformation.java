@@ -91,6 +91,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Integer mEmergencyContactRelationId;
   private String mEmergencyContactPhone;
   private String mEmergencyContactAddress;
+  private String mFullName;
   private String mLastModified;
 
   public PersistentPersonalInformation() {}
@@ -146,6 +147,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mEmergencyContactRelationId = pPersistentPersonalInformation.getEmergencyContactRelationId();
     mEmergencyContactPhone = pPersistentPersonalInformation.getEmergencyContactPhone();
     mEmergencyContactAddress = pPersistentPersonalInformation.getEmergencyContactAddress();
+    mFullName = pPersistentPersonalInformation.getFullName();
     mLastModified = pPersistentPersonalInformation.getLastModified();
   }
 
@@ -370,6 +372,11 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
+  public void setFullName(String pFullName) {
+    mFullName = pFullName;
+  }
+
+  @Override
   public String getFirstName() {
     return mFirstName;
   }
@@ -547,6 +554,11 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   @Override
   public String getEmergencyContactAddress() {
     return mEmergencyContactAddress;
+  }
+
+  @Override
+  public String getFullName() {
+    return mFirstName.concat(mLastName == null ? "" : (" " + mLastName));
   }
 
   @Override

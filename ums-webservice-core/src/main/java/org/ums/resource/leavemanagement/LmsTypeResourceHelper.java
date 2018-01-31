@@ -56,13 +56,13 @@ public class LmsTypeResourceHelper extends ResourceHelper<LmsType, MutableLmsTyp
     // todo Need to know gender, waiting till employee management completion. Gender is needed for
     // knowing whether the maternity leave is applicable or not
     if(loggedEmployee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if(loggedEmployee.getGender().equals("M"))
+      if(loggedEmployee.getPersonalInformation().getGender().equals("M"))
         leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
     }
     else {
-      if(loggedEmployee.getGender().equals("M"))
+      if(loggedEmployee.getPersonalInformation().getGender().equals("M"))
         leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         leaveTypes = getContentManager().getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

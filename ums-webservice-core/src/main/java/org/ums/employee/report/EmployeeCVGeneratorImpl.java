@@ -102,7 +102,8 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     PersonalInformation personalInformation = new PersistentPersonalInformation();
     try {
-      personalInformation = mPersonalInformationManager.getPersonalInformation(pEmployeeId);
+      /* personalInformation = mPersonalInformationManager.getPersonalInformation(pEmployeeId); */
+      personalInformation = mPersonalInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
 
