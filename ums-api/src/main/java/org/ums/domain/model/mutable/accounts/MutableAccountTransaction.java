@@ -13,7 +13,8 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface MutableTransaction extends Transaction, Editable<Long>, MutableIdentifier<Long>, MutableLastModifier {
+public interface MutableAccountTransaction extends AccountTransaction, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
 
   void setCompany(Company pCompany);
 

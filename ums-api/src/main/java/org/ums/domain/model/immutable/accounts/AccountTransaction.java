@@ -4,7 +4,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Company;
-import org.ums.domain.model.mutable.accounts.MutableTransaction;
+import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 
 import java.io.Serializable;
@@ -14,7 +14,8 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-public interface Transaction extends Serializable, EditType<MutableTransaction>, LastModifier, Identifier<Long> {
+public interface AccountTransaction extends Serializable, EditType<MutableAccountTransaction>, LastModifier,
+    Identifier<Long> {
 
   Company getCompany();
 
