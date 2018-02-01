@@ -143,6 +143,6 @@
 
   <import resource="caching.xml"/>
   <import resource="application-context.xml"/>
-  <import resource="integration-context.xml"/>
+  <!--<import resource="integration-context.xml"/>-->
 
 </beans>
