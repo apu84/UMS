@@ -75,7 +75,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
       if(!supplierObject.getString("id").equals("")) {
         pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
       }
-      else{
+      else {
         pMutable.setSupplierId(null);
       }
     }

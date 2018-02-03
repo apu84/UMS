@@ -616,7 +616,7 @@
 
   <profiles>
     <profile>
-      <id>dev</id>
+      <id>all</id>
       <properties>
         <assembly.target>all</assembly.target>
       </properties>
