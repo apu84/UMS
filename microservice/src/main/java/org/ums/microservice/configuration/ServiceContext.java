@@ -9,6 +9,7 @@ import org.ums.cache.CacheFactory;
 import org.ums.configuration.KafkaProducerConfig;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.configuration.UMSContext;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
@@ -98,6 +99,8 @@ public class ServiceContext {
   private RecordManager mRecordManager;
   @Autowired
   AgendaResolutionManager mAgendaResolutionManager;
+  @Autowired
+  PersonalInformationManager mPersonalInformationManager;
 
   @Bean
   PaymentValidator paymentValidator() {
@@ -117,7 +120,7 @@ public class ServiceContext {
         mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
-        mUserManager, mRecordManager);
+        mUserManager, mRecordManager, mPersonalInformationManager);
     // , mAgendaResolutionManager
   }
 }

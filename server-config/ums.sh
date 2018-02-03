@@ -54,17 +54,32 @@ do
 		rm -rf $instance/ums/lib/*.*
 		cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/lib/*.jar $instance/ums/lib/
 		cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/webapps/*.war $instance/webapps/
-		echo "Starting up $instance"
 		let "port=port+1"
+        echo "Starting up $instance at port : $port"
 		start_tomcat $instance $port
 done
 
 yes | cp -R $UMS_SRC/ums-webapps/ums-web/target/ums-web-$PROJECT_VERSION/* /opt/ums-web
+yes | cp -R $UMS_SRC/ums-webapps/ums-registrar-web/target/ums-registrar-web-$PROJECT_VERSION/* /opt/ums-registrar-web
+yes | cp -R $UMS_SRC/ums-webapps/ums-library-web/target/ums-library-web-$PROJECT_VERSION/* /opt/ums-library-web
+yes | cp -R $UMS_SRC/ums-webapps/ums-account-web/target/ums-account-web-$PROJECT_VERSION/* /opt/ums-account-web
+}
 
+mservice() {
+  echo "Starting microservice"
+  ps aux | grep microservice-$PROJECT_VERSION.jar |grep -v grep| awk '{print $2}' | xargs -r kill
+  export PATH=$PATH:$MAVEN_HOME/bin:$UMS_CONFIG:$JAVA_HOME/bin
+  UMS_CONFIG=$UMS_CONFIG
+  export UMS_CONFIG
+  cd /opt/ums-repo/UMS/microservice/target
+  screen -S mservice  java -jar $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar
+  mservice -dmS
+  echo "End of microservice call"
 }
 
 restart_web_server() {
-	service nginx restart	
+	service solr restart -e schemaless
+	service nginx restart
 }
 
 restart_cache_server() {
@@ -85,7 +100,7 @@ do
 		set_env $instance
 		echo "Shutting down $instance"
 		stop_tomcat $instance
-done		
+done
 }
 
 start_all() {
@@ -118,7 +133,14 @@ stop_remote_debug() {
 }
 
 stop_tomcat() {
-	sh $1/bin/shutdown.sh
+        #Finds the tomcat process id
+        ps aux | grep $1 |grep -v grep | awk -F  " " '{print $2}' > tomcatProcessID
+
+        #Kills the process id returned from above mentioned command.
+        kill -9 `cat tomcatProcessID` && tput setaf 3 && echo "Tomcat $1 killed Successfully" ;rm -rf tomcatProcessID
+
+
+	#sh $1/bin/shutdown.sh
 	if [ "$ENABLE_REMOTE_DEBUGGING" == "true" ]
 	then
 		stop_remote_debug
@@ -129,9 +151,9 @@ start_tomcat() {
 	if [ "$ENABLE_REMOTE_DEBUGGING" == "true" ]
 	then
 		let "remote_port=$REMOTE_DEBUG_PORT+1"
-		export CATALINA_OPTS="-agentlib:jdwp=transport=dt_socket,address=$remote_port,server=y,suspend=n"
+		export CATALINA_OPTS="-agentlib:jdwp=transport=dt_socket,address=$remote_port,server=y,suspend=n -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
 		$1/bin/catalina.sh jpda start
-  fi	
+  fi
 	sh $1/bin/startup.sh
 }
 
@@ -144,6 +166,7 @@ usage() {
 	echo "-rb | --remote-branch name to checkout"
 	echo "-d  | --deploy Deploy in application and web server"
 	echo "-b  | --build Build distribution"
+    echo "-m  | --mservice Run microservice"
 	echo "-bd | --build-deploy Build distribution and deploy in application and web server"
 	echo "      --stop Stops a particular tomcat instance"
 	echo "      --start Start a particular tomcat instance"
@@ -151,17 +174,18 @@ usage() {
 	echo "      --status Status a particular tomcat instance"
 	echo "      --applog Show applicaiton logs of a particular tomcat instance"
 	echo "      --restart-app-servers Restarts all tomcat instances"
-	echo "      --restart-web-server Restarts web server (apache/nginx)"
+	echo "      --restart-web-server Restarts web server and solar (apache/nginx)"
 	echo "      --restart-cache-server Restarts cache server (memcached)"
 }
 
-#restart_service_if_not_running nginx	
+#restart_service_if_not_running nginx
 
 ARGUMENTS=0
 BRANCH="master"
 DEPLOY=""
 BUILD_DEPLOY=""
 BUILD=""
+MSERVICE=""
 STOP=""
 START=""
 RESTART=""
@@ -179,50 +203,53 @@ ARGUMENTS=1
 
 case $key in
 		-rb|--repo-branch)
-    BRANCH=$2 
+    BRANCH=$2
     ;;
-		
+
 		-b|--build)
 		BUILD="build"
     ;;
-    
+
 		-d|--deploy)
 		DEPLOY="deploy"
+    ;;
+                -m|--mservice)
+                MSERVICE="mservice"
     ;;
 
     -bd|--build-deploy)
 		BUILD_DEPLOY="build_deploy"
     ;;
-		
+
 		--stop)
 		STOP="stop"
 		TOMCAT_INSTANCE=$2
     ;;
-		
+
 		--start)
 		START="start"
 		TOMCAT_INSTANCE=$2
     ;;
-		
+
 		--restart)
 		RESTART="restart"
 		TOMCAT_INSTANCE=$2
     ;;
-		
+
 		--status)
 		STATUS="status"
 		TOMCAT_INSTANCE=$2
     ;;
-		
+
 		--applog)
 		APP_LOG="applog"
 		TOMCAT_INSTANCE=$2
     ;;
-		
+
     --restart-app-servers)
     RESTART_APP_SERVERS="restart-app-servers"
     ;;
-		
+
 		--restart-web-server)
     RESTART_WEB_SERVER="restart-web-server"
     ;;
@@ -232,7 +259,7 @@ case $key in
 		;;
 
     *)
-		
+
     ;;
 esac
 shift
@@ -240,13 +267,19 @@ done
 
 if [ ! -z "$BUILD" ]
 then
-	build_src $BRANCH		
+	build_src $BRANCH
 fi
 
 if [ ! -z "$DEPLOY" ]
 then
-	deploy		
+	deploy
 fi
+
+if [ ! -z "$MSERVICE" ]
+then
+       mservice
+fi
+
 
 if [ ! -z "$BUILD_DEPLOY" ]
 then
