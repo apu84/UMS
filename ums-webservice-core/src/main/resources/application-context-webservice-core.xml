@@ -3,75 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:integration="http://www.springframework.org/schema/integration"
-       xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
-
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
   <aop:aspectj-autoproxy proxy-target-class="true"/>
   <context:spring-configured/>
   <context:component-scan
       base-package="org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.employee,org.ums.twofa"/>
-
-  <integration:gateway
-          service-interface="org.ums.integration.FileWriterGateway"
-          default-request-channel="ftpChannel"></integration:gateway>
-
-  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpSessionFactory">
-    <property name="host" value="${ftp.localhost}"/>
-    <!--<property name="port" value="${ftp.port}"/>-->
-    <property name="username" value="${ftp.username}"/>
-    <property name="password" value="${ftp.password}"/>
-    <property name="clientMode" value="2"/>
-  </bean>
-
-  <ftp:outbound-gateway
-          session-factory="ftpSessionFactory"
-          request-channel="ftpChannel"
-          command="get"
-          command-options="-stream"
-          expression="payload"
-          reply-channel="outputChannel">
-
-  </ftp:outbound-gateway>
-
-  <integration:channel id="lmsChannel"/>
-  <integration:channel id="photoUploadChannel"/>
-
-  <!--<integration:recipient-list-router id="router" input-channel="publishSubscribeChannel">
-    <integration:recipient channel="lmsChannel"></integration:recipient>
-    <integration:recipient channel="photoUploadChannel"></integration:recipient>
-  </integration:recipient-list-router>-->
-
-  <!--  <integration:publish-subscribe-channel id="publishSubscribeChannel">
-    </integration:publish-subscribe-channel>
-    <ftp:outbound-channel-adapter
-        session-factory="ftpClientFactory"
-        channel="lmsChannel"
-        remote-directory="files/lms"
-        auto-create-directory="true"
-        remote-filename-generator-expression="headers['fileName']">
-
-    </ftp:outbound-channel-adapter>-->
-
-
-  <ftp:outbound-channel-adapter
-          session-factory="ftpSessionFactory"
-          channel="photoUploadChannel"
-          remote-directory="files/user-photo"
-          auto-create-directory="true"
-          remote-filename-generator-expression="headers['fileName']">
-
-  </ftp:outbound-channel-adapter>
-
-  <bean id="mp" class="org.ums.integration.MessageManipulator"/>
-  <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
-
-  <integration:channel id="outputChannel"/>
-  <integration:channel id="inputChannel"/>
-  <integration:channel id="ftpChannel"/>
 </beans>
