@@ -18,12 +18,14 @@
       <artifactId>ums-api</artifactId>
       <version>trunk-SNAPSHOT</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.5</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.googlecode.json-simple</groupId>

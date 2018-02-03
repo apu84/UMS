@@ -22,6 +22,13 @@ module ums {
           (response: IVoucher[]) => defer.resolve(response));
       return defer.promise;
     }
+
+    public getVoucher(voucherId: string): ng.IPromise<IVoucher> {
+      let defer: ng.IDeferred<IVoucher> = this.$q.defer();
+      this.httpClient.get(this.voucherURL + "/id/" + voucherId, HttpClient.MIME_TYPE_JSON,
+          (response: IVoucher) => defer.resolve(response));
+      return defer.promise;
+    }
   }
 
   UMS.service("VoucherService", VoucherService);

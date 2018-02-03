@@ -72,7 +72,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     if(pJsonObject.containsKey("supplier")) {
       JsonObject supplierObject = (JsonObject) (pJsonObject.get("supplier"));
-      pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
+      if(!supplierObject.getString("id").equals("")) {
+        pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
+      }
+      else{
+        pMutable.setSupplierId(null);
+      }
     }
 
     if(pJsonObject.containsKey("barcode"))

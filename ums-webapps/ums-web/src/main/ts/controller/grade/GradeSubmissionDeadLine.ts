@@ -20,6 +20,8 @@ module ums {
     showTable: boolean;
     showButton: boolean;
     editable: boolean;
+    dateModifiable: boolean;
+    loggedUser: User;
 
     //functions
     getSemesters: Function;
@@ -56,6 +58,8 @@ module ums {
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService',
       'examRoutineService', 'examGradeService', 'userService', 'additionalRolePermissionsService'];
 
+    private static SADMIN: number = 999;
+
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IGradeSubmissionDeadline,
                 private $q: ng.IQService, private notify: Notify,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService, private semesterService: SemesterService,
@@ -66,6 +70,7 @@ module ums {
       $scope.showTable = false;
       $scope.showButton = false;
       $scope.editable = false;
+      $scope.loggedUser = <User>{};
       $scope.courseNo = "";
       $scope.courseType = "1";
       $scope.getSemesters = this.getSemesters.bind(this);
@@ -78,14 +83,26 @@ module ums {
       $scope.checkCourseNo = this.checkCourseNo.bind(this);
       $scope.dateTouched = this.dateTouched.bind(this);
       Utils.setValidationOptions("form-horizontal");
-      this.getLoggedUserAdditionalPermissions();
+      this.getLoggedUserInfo();
+      //todo after assigning the role of assistant directer, the following method is needed to be used.
+      //this.getLoggedUserAdditionalPermissions();
+
+    }
+
+    private getLoggedUserInfo() {
+      this.userService.fetchCurrentUserInfo().then((user: User) => {
+        this.$scope.loggedUser = user;
+      });
     }
 
     private getLoggedUserAdditionalPermissions() {
       this.additionalRolePermissionService.fetchLoggedUserAdditionalRolePermissions().then((permissions: AdditionalRolePermissions[]) => {
-        console.log("Permissions");
-        console.log(permissions[0].permissions.entries);
+
       });
+    }
+
+    private getUserInfo() {
+
     }
 
     private checkCourseNo(courseNo: string) {
@@ -125,15 +142,14 @@ module ums {
 
     private dateChanged(examGrade: IExamGrade) {
       console.log("In date changed");
-      console.log(examGrade);
       if (examGrade.lastSubmissionDatePrep != null && examGrade.lastSubmissionDateScr != null && examGrade.lastSubmissionDateHead != null) {
         this.$scope.showButton = true;
         examGrade.changed = true;
         let date = Utils.getDateObject(examGrade.lastSubmissionDateHead);
-
+        date.setDate(date.getDate() + 2);
+        examGrade.lastSubmissionDateCoe = date === undefined ? "" : moment(date).format("DD-MM-YYYY");
       }
-      // this.$scope.showButton = true;
-      // examGrade.changed = true;
+
     }
 
 
@@ -169,7 +185,7 @@ module ums {
 
       if (+this.$scope.courseType == Utils.COURSE_TYPE_THEORY) {
         var semester = this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList, this.$scope.semesterId + "")];
-        this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE);
+        this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE) && this.$scope.loggedUser.roleId != GradeSubmissionDeadLine.SADMIN ? false : true;
 
         var examType = +this.$scope.examType;
         this.$scope.examDate = null;
@@ -245,6 +261,7 @@ module ums {
           item['lastSubmissionDatePrep'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDatePrep;
           item['lastSubmissionDateScr'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDateScr;
           item['lastSubmissionDateHead'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDateHead;
+          item['lastSubmissionDateCoe'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDateCoe;
           jsonObject.push(item);
         }
       }

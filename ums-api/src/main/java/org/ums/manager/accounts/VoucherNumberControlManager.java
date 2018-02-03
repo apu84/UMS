@@ -1,5 +1,7 @@
 package org.ums.manager.accounts;
 
+import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.manager.ContentManager;
@@ -13,6 +15,8 @@ public interface VoucherNumberControlManager extends
     ContentManager<VoucherNumberControl, MutableVoucherNumberControl, Long> {
 
   List<VoucherNumberControl> getByCurrentFinancialYear();
+
+  VoucherNumberControl getByVoucher(Voucher pVoucher, Company pCompany);
 
   int[] updateVoucherNumberControls(List<MutableVoucherNumberControl> voucherNumberControls);
 

@@ -110,4 +110,6 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
   String getEmergencyContactPhone();
 
   String getEmergencyContactAddress();
+
+  String getFullName();
 }

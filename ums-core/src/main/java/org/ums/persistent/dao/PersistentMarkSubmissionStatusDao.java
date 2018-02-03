@@ -1,12 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.MarksSubmissionStatusDaoDecorator;
@@ -16,6 +9,12 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentMarksSubmissionStatus;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL = "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, "

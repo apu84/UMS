@@ -25,6 +25,7 @@ module ums {
     readOnly: boolean;
     index: number;
     examDate: string;
+    appDeadLineStr: string;
     examTime: string;
     examGroup:number;
     programs: Array<IProgram>;
@@ -150,12 +151,10 @@ module ums {
       var index = this.getAttributeMaxValueFromArray(this.$scope.routine.date_times);
       var item = this.getNewDateTimeRow(index);
       this.$scope.routine.date_times.splice(0, 0, item);
-
+      var index:number = this.$scope.routine.date_times.length;
+      index = index-1;
       setTimeout(function () {
-        $('.datepicker-default').datepicker();
-        $('.datepicker-default').on('change', function () {
-          $('.datepicker').hide();
-        });
+        $('#date_'+index).datepicker({autoclose:true});
       }, 200);
 
 
@@ -284,6 +283,7 @@ module ums {
         readOnly: false,
         index: index,
         examDate: '',
+        appDeadLineStr: '',
         examTime: '9:30 a.m. to 12:30 p.m',
         examGroup: 1,
         programs: Array<IProgram>()
@@ -382,6 +382,7 @@ module ums {
         readOnly: false,
         index: date_time.index,
         examDate: date_time.examDate,
+        appDeadLineStr: date_time.appDeadLineStr,
         examTime: date_time.examTime,
         examGroup: date_time.examGroup,
         programs: [program]
@@ -445,6 +446,7 @@ module ums {
             item ["group"] = dateTimeArr[indx_date_time].examGroup;
             item ["program"] = Number(program.programId);
             item ["course"] = course.id;
+            item ["appDeadLineStr"] = $("#appDeadLine_"+indx_date_time).val();
             jsonObj.push(item);
           }
         }
@@ -581,23 +583,24 @@ module ums {
 
 
     private editDateTime(date_time_row_obj:IDateTime):void {
-
       this.showOverlay(date_time_row_obj.index);
+      var that= this;
+      setTimeout(function () {
       date_time_row_obj.readOnly = false;
-      var that = this;
+
 
       for (var ind in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
-        this.getCourseArr(program.programId, program).then((courseResponse:any)=> {
+        that.getCourseArr(program.programId, program).then((courseResponse:any)=> {
           var courseArr:Array<ICourse> = courseResponse.courseArr;
           courseResponse.program.courseArr = courseArr;
         });
-
       }
-      setTimeout(function () {
-        that.setSelect2Courses(date_time_row_obj);
-      }, 1000);
+        setTimeout(function () {
+          that.setSelect2Courses(date_time_row_obj);
+        }, 500);
 
+      }, 500);
     }
 
     private setSelect2Courses(date_time_row_obj:IDateTime):void {

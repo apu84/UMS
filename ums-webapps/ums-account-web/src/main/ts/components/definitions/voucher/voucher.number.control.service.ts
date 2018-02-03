@@ -2,7 +2,9 @@ module ums {
   export enum ResetBasis {
     Monthly = "M",
     Yearly = "Y",
-    Daily = "D"
+    Daily = "D",
+    Weekly="W",
+    CarryForward="C"
   }
 
   export interface IVoucherNumberControl {

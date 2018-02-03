@@ -1,0 +1,21 @@
+{
+  "model": {
+    "name": "Receipt",
+    "package": "org.ums.domain.model.immutable.account",
+    "fields": [
+      {
+        "id": {
+          "type": "Long",
+          "idType": true
+        }
+      },
+      {
+        "name": "String"
+      },
+      {
+        "shortName": "String"
+      }
+    ]
+  }
+}
+

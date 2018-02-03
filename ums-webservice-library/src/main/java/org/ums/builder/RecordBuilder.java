@@ -170,7 +170,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     pMutable.setCallNo(pJsonObject.getString("callNo"));
     pMutable.setClassNo(pJsonObject.getString("classNo"));
-    pMutable.setCallDate(pJsonObject.getString("callDate"));
+    if(pJsonObject.containsKey("callDate"))
+      pMutable.setCallDate(pJsonObject.getString("callDate"));
     pMutable.setAuthorMark(pJsonObject.getString("authorMark"));
     if(pJsonObject.containsKey("callEdition"))
       pMutable.setCallEdition(pJsonObject.getString("callEdition"));

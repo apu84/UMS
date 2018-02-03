@@ -4,10 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.resource.Resource;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import java.util.List;
@@ -25,5 +22,11 @@ public class VoucherResource extends MutableVoucherResource {
   @Path("/all")
   public List<Voucher> getAll(final @Context Request pRequest) {
     return mVoucherManager.getAll();
+  }
+
+  @GET
+  @Path("/id/{id}")
+  public Voucher getVoucher(@PathParam("id") String pId) {
+    return mVoucherManager.get(Long.parseLong(pId));
   }
 }

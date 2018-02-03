@@ -1,6 +1,8 @@
 package org.ums.cache.accounts;
 
 import org.ums.cache.ContentCache;
+import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.manager.CacheManager;
@@ -35,4 +37,10 @@ public class VoucherNumberControlCache extends
   public int[] updateVoucherNumberControls(List<MutableVoucherNumberControl> voucherNumberControls) {
     return getManager().updateVoucherNumberControls(voucherNumberControls);
   }
+
+  @Override
+  public VoucherNumberControl getByVoucher(Voucher pVoucher, Company pCompany) {
+    return getManager().getByVoucher(pVoucher, pCompany);
+  }
+
 }

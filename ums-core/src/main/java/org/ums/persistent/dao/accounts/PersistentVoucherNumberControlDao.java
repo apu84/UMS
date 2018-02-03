@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.ums.decorator.accounts.VoucherNumberControlDaoDecorator;
+import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
@@ -53,6 +55,13 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   public VoucherNumberControl get(Long pId) {
     String query = "select * from mst_voucher_number_control where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentVoucherNumberControlRowMapper());
+  }
+
+  @Override
+  public VoucherNumberControl getByVoucher(Voucher pVoucher, Company pCompany) {
+    String query = "select * from mst_voucher_number_control where voucher_id=? and comp_code=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pVoucher.getId(), pCompany.getId()},
+        new PersistentVoucherNumberControlRowMapper());
   }
 
   @Override
@@ -178,6 +187,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
       voucher.setStatUpFlag(rs.getString("stat_up_flag"));
       voucher.setModifiedDate(rs.getDate("modified_date"));
       voucher.setModifiedBy(rs.getString("modified_by"));
+      voucher.setCompanyCode(rs.getString("comp_code"));
       return voucher;
     }
   }

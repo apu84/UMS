@@ -86,6 +86,8 @@ public class ExamRoutineBuilder implements Builder<ExamRoutine, MutableExamRouti
       routine.setCourseId(jsonObject.getString("course"));
       routine.setExamGroup(jsonObject.getInt("group"));
 
+      if(jsonObject.containsKey("appDeadLineStr") && !jsonObject.getString("appDeadLineStr").isEmpty())
+        routine.setAppDeadLineStr(jsonObject.getString("appDeadLineStr"));
       routineList.add(routine);
     }
     pMutable.setRoutine(routineList);

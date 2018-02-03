@@ -3,6 +3,7 @@ package org.ums.domain.model.dto;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ExamRoutineDto implements Serializable {
 
@@ -16,9 +17,10 @@ public class ExamRoutineDto implements Serializable {
   private Integer programId;
   private String programName;
   private Integer totalStudent;
-  private String examDateOriginal; // to retrieve the original examdate without doing anything with
-                                   // the modified examdate
+  private String examDateOriginal;
   private Integer examGroup;
+  private String appDeadLineStr;
+  private Date appDeadLine;
 
   public String getExamDateOriginal() {
     return examDateOriginal;
@@ -114,6 +116,22 @@ public class ExamRoutineDto implements Serializable {
 
   public void setExamGroup(Integer examGroup) {
     this.examGroup = examGroup;
+  }
+
+  public String getAppDeadLineStr() {
+    return appDeadLineStr;
+  }
+
+  public void setAppDeadLineStr(String appDeadLineStr) {
+    this.appDeadLineStr = appDeadLineStr;
+  }
+
+  public Date getAppDeadLine() {
+    return appDeadLine;
+  }
+
+  public void setAppDeadLine(Date appDeadLine) {
+    this.appDeadLine = appDeadLine;
   }
 
   public String toString() {

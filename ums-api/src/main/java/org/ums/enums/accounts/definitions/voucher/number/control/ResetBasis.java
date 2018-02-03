@@ -13,7 +13,9 @@ public enum ResetBasis {
 
   MONTHLY("M", "MONTHLY"),
   DAILY("D", "DAILY"),
-  YEARLY("Y", "YEARLY");
+  YEARLY("Y", "YEARLY"),
+  WEEKLY("W", "WEEKLY"),
+  CARRY_FORWARD("C", "CARRY_FORWARD");
 
   private String label;
   private String id;

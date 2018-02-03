@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable.accounts;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
@@ -16,6 +17,10 @@ public interface MutableVoucherNumberControl extends VoucherNumberControl, Edita
     MutableIdentifier<Long> {
 
   void setFinAccountYearId(Long pFinAccountYearId);
+
+  void setCompanyCode(String pCompanyCode);
+
+  void setCompany(Company pCompany);
 
   void setVoucherId(Long pVoucherId);
 

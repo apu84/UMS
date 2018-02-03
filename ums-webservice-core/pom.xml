@@ -20,12 +20,14 @@
       <artifactId>ums-core</artifactId>
       <version>trunk-SNAPSHOT</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
       <artifactId>ums-api</artifactId>
       <version>trunk-SNAPSHOT</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 

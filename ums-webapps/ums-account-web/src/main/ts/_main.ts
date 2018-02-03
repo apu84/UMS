@@ -115,6 +115,10 @@
 /// <reference path='components/definitions/narration/narration.controller.ts'/>
 /// <reference path='components/definitions/narration/narration.service.ts'/>
 
+/// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.service.ts'/>
+
+
 /// <reference path="components/directives/balance.type.directive.ts"/>
 
 
