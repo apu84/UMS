@@ -17,6 +17,7 @@ import org.ums.employee.award.PersistentAwardInformationDao;
 import org.ums.employee.experience.ExperienceInformationManager;
 import org.ums.employee.experience.PersistentExperienceInformationDao;
 import org.ums.employee.personal.PersistentPersonalInformationDao;
+import org.ums.employee.personal.PersonalInformationCache;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.employee.publication.PersistentPublicationInformationDao;
 import org.ums.employee.publication.PublicationInformationManager;
@@ -73,7 +74,9 @@ public class RegistrarContext {
 
   @Bean
   PersonalInformationManager personalInformationManager() {
-    return new PersistentPersonalInformationDao(mTemplateFactory.getJdbcTemplate());
+    PersonalInformationCache personalInformationCache = new PersonalInformationCache(mCacheFactory.getCacheManager());
+    personalInformationCache.setManager(new PersistentPersonalInformationDao(mTemplateFactory.getJdbcTemplate()));
+    return personalInformationCache;
   }
 
   @Bean
