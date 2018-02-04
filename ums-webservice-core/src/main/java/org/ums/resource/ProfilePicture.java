@@ -61,8 +61,7 @@ public class ProfilePicture extends Resource {
    */
 
   // @Autowired
-  @Qualifier("ftpSessionFactory")
-  @Lazy
+  @Autowired
   private SessionFactory<FTPFile> ftpSessionFactory;
 
   @GET
@@ -133,7 +132,7 @@ public class ProfilePicture extends Resource {
 
     try {
       FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
-      template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+      template.setRemoteDirectoryExpression(new LiteralExpression("files/user-photo"));
       template.setUseTemporaryFileName(false);
       template.execute(session -> {
         session.mkdir("files/");
