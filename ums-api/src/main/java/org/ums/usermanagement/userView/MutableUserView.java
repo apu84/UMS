@@ -11,6 +11,8 @@ import java.util.Date;
 public interface MutableUserView extends UserView, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
   void setUserName(final String pUserName);
 
+  void setLoginId(final String pLoginId);
+
   void setGender(final String pGender);
 
   void setDateOfBirth(final Date pDateOfBirth);

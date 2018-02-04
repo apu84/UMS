@@ -24,6 +24,7 @@ public class UserViewBuilder implements Builder<UserView, MutableUserView> {
   @Override
   public void build(JsonObjectBuilder pBuilder, UserView pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("userId", pReadOnly.getId());
+    pBuilder.add("loginId", pReadOnly.getLoginId());
     pBuilder.add("userName", pReadOnly.getUserName());
     pBuilder.add("gender", pReadOnly.getGender());
     pBuilder.add("dateOfBirth", pReadOnly.getDateOfBirth().toString());
