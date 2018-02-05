@@ -18,6 +18,7 @@ public class SeatPlanBuilder implements Builder<SeatPlan, MutableSeatPlan> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SeatPlan pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("idStr", pReadOnly.getId().toString());
     pBuilder.add("roomId", pReadOnly.getClassRoom().getId());
     pBuilder.add("rowNo", pReadOnly.getRowNo());
     pBuilder.add("colNo", pReadOnly.getColumnNo());

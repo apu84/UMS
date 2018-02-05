@@ -3,6 +3,7 @@ module ums{
 
   export interface ISeatPlan {
     id: number;
+    idStr: string;
     roomId: number;
     rowNo: number;
     colNo: number;
@@ -51,7 +52,8 @@ module ums{
                            examDate?: string,
                            studentId?: string): ng.IPromise<ISeatPlan> {
       let defer: ng.IDeferred<ISeatPlan> = this.$q.defer();
-      this.httpClient.get("academic/seatPlan?semester-id=" + semesterId + "&examType=" + examType + "&examDate=" + examDate + "&student-id=" + studentId, HttpClient.MIME_TYPE_JSON, (response => {
+      examDate='11-12-2017';
+      this.httpClient.get("academic/seatPlan/by-student/semester-id/" + semesterId + "/exam-type/" + examType + "/exam-date/" + examDate + "/student-id/" + studentId, HttpClient.MIME_TYPE_JSON, (response => {
         console.log(response.entries);
         defer.resolve(response.entries)
       }));
@@ -81,6 +83,25 @@ module ums{
 
       return defer.promise;
     }
+
+    public  getSeatPlanByStudent(semesterId?: number,
+                                 examType?: number,
+                                 examDate?: string,
+                                 studentId?: string): ng.IPromise<ISeatPlan> {
+
+      let defer: ng.IDeferred<ISeatPlan> = this.$q.defer();
+
+
+      let url:any="/ums-webservice-academic/academic/seatplan/splan/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate+"/studentId/"+studentId;
+
+      this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+          (response:any)=>defer.resolve(response.entries[0]));
+      return defer.promise;
+    }
+
+
+
+
   }
 
   UMS.service("seatPlanService",SeatPlanService);

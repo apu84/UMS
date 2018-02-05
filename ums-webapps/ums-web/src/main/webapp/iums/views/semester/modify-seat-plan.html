@@ -85,15 +85,21 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <ui-select id="groupName" theme="bootstrap"
-                                   data-ng-model="vm.selectedGroup"
-                        >
-                            <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="g in vm.groups|filter:$select.search">
-                                <small ng-bind-html="g.groupName | highlight:$select.search"></small>
-                            </ui-select-choices>
-                        </ui-select>
+                        <td>
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="vm.selectedRoom"
+                            >
+                                <ui-select-match placeholder="Select Main Group">{{vm.selectedRoom.roomNo}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="g in vm.roomList|filter:$select.search">
+                                    <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </td>
+                        <td>{{vm.selectedRoom.capacity}}</td>
+                        <td><input type="number" ng-model="vm.seatPlan.rowNo"/></td>
+                        <td><input type="number" ng-model="vm.seatPlan.colNo"</td>
+
                     </tr>
                     </tbody>
                 </table>

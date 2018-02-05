@@ -102,7 +102,8 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   public JsonObject getSeatPlanForStudent(Integer pSemesterId, Integer pExamType, String pExamDate, String pStudentId, UriInfo pUriInfo) {
     SeatPlan seatPlan = new PersistentSeatPlan();
-    if (pExamType.equals(ExamType.SEMESTER_FINAL)) {
+    List<SeatPlan> seatPlans = mSeatPlanManager.getForStudent(pStudentId, pSemesterId);
+    if (pExamType.equals(ExamType.SEMESTER_FINAL.getId())) {
       seatPlan = mSeatPlanManager.getForStudent(pStudentId, pSemesterId)
           .stream()
           .filter(p -> p.getExamType() == pExamType)

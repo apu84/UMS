@@ -45,8 +45,9 @@ module ums{
       var rooms: any = {};
       this.httpClient.get("academic/classroom/seat-plan/all", 'application/json',
           (json: any, etag: string) => {
-            rooms = json.entries;
-            defer.resolve(rooms);
+        console.log(json);
+            rooms = json;
+            defer.resolve(rooms.rows);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);

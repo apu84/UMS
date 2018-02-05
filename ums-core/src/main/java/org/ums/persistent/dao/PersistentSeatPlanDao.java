@@ -181,9 +181,9 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
 
     String query =
-        "select  s.ID, s.ROOM_ID, s.SEMESTER_ID, s.GROUP_NO, s.STUDENT_ID,s.ROW_NO,s.COL_NO,s.EXAM_TYPE,s.LAST_MODIFIED from seat_plan s, SP_PUBLISH sp "
-            + " where s.student_id=? and s.semester_id=? and s.semester_id=sp.semester_id and s.exam_type=1 and s.exam_type=sp.exam_type and sp.published=1"
-            + " order by row_no,col_no";
+        "SELECT " + "  s.ID, " + "  s.ROOM_ID, " + "  s.SEMESTER_ID, " + "  s.GROUP_NO, " + "  s.STUDENT_ID, "
+            + "  s.ROW_NO, " + "  s.COL_NO, " + "  s.EXAM_TYPE, " + "  s.LAST_MODIFIED " + "FROM seat_plan s "
+            + "WHERE s.student_id = ? AND s.semester_id = ? " + "ORDER BY row_no, col_no";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new SeatPlanRowMapper());
   }
 

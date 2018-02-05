@@ -33,12 +33,12 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   }
 
   @GET
-  @Path("?semester-id={semester-id}&exam-type={exam-type}&exam-date={exam-date}&student-id={student-id}")
-  public JsonObject getSeatPlanOfStudent(@QueryParam("semester-id") Integer semesterId,
-                                         @QueryParam("exam-tye") Integer examType, @QueryParam("exam-date") String examDate,
-                                         @QueryParam("student-id") String studentId) {
-    return mSeatPlanResourceHelper.getSeatPlanForStudent(semesterId, examType,
-        examDate, studentId, mUriInfo);
+  @Path("/splan/semesterId/{semesterId}/examType/{examType}/examDate/{examDate}/studentId/{studentId}")
+  public JsonObject getSeatPlanOfStudent(@PathParam("semesterId") Integer semesterId,
+      @PathParam("examType") Integer examType, @PathParam("studentId") String studentId,
+      @PathParam("examDate") String pExamDate) {
+    Integer sid = semesterId;
+    return mSeatPlanResourceHelper.getSeatPlanForStudent(semesterId, examType, pExamDate, studentId, mUriInfo);
   }
 
   @GET
