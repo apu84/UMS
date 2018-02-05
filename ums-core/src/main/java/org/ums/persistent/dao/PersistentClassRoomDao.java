@@ -1,10 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ClassRoomDaoDecorator;
@@ -13,6 +8,11 @@ import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.enums.ClassRoomType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentClassRoom;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   static String SELECT_ALL =
@@ -48,6 +48,12 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   @Override
   public List<ClassRoom> getAll() {
     String query = SELECT_ALL + " Order by ROOM_ID";
+    return mJdbcTemplate.query(query, new ClassRoomRowMapper());
+  }
+
+  @Override
+  public List<ClassRoom> getAllForSeatPlan() {
+    String query = SELECT_ALL + " WHERE EXAM_SEAT_PLAN=1 ORDER BY ROOM_ID";
     return mJdbcTemplate.query(query, new ClassRoomRowMapper());
   }
 

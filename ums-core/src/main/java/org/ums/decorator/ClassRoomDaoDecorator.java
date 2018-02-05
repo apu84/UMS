@@ -1,7 +1,7 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.manager.ClassRoomManager;
 
 import java.util.List;
@@ -29,5 +29,10 @@ public class ClassRoomDaoDecorator extends ContentDaoDecorator<ClassRoom, Mutabl
   @Override
   public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) {
     return getManager().getRoomsBasedOnRoutine(pSemesterId, pProgramId);
+  }
+
+  @Override
+  public List<ClassRoom> getAllForSeatPlan() {
+    return getManager().getAllForSeatPlan();
   }
 }

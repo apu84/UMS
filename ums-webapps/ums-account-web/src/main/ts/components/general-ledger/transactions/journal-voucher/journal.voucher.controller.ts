@@ -2,6 +2,10 @@ module ums {
   export class JournalVoucherController {
     public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService'];
 
+
+    private voucherNo: string;
+    private voucherDate: string;
+
     constructor($scope: ng.IScope,
                 private $modal: any,
                 private notify: Notify,
@@ -15,6 +19,15 @@ module ums {
     public initialize() {
 
 
+    }
+
+    public addModalClicked() {
+      this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => {
+        this.voucherNo = voucherNo;
+      });
+      let currDate: Date = new Date();
+
+      this.voucherDate = moment(currDate).format("DD-MM-YYYY");
     }
   }
 

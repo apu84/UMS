@@ -50,7 +50,7 @@ public class AccountTransactionCommonResourceHelper extends
     Next
   }
 
-  public TransactionResponse voucherNo(Long pVoucherId) throws Exception {
+  public TransactionResponse getVoucherNo(Long pVoucherId) throws Exception {
     Voucher voucher = mVoucherManager.get(pVoucherId);
     FinancialAccountYear openFinancialYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
     Date currentDay = new Date();
@@ -147,7 +147,7 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @Override
-  protected AccountTransactionManager getContentManager() {
+  public AccountTransactionManager getContentManager() {
     return mAccountTransactionManager;
   }
 

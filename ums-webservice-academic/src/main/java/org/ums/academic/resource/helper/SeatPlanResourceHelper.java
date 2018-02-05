@@ -16,6 +16,7 @@ import org.ums.domain.model.immutable.SubGroupCCI;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
+import org.ums.persistent.model.PersistentSeatPlan;
 import org.ums.report.generator.seatPlan.SeatPlanReportGenerator;
 import org.ums.resource.ResourceHelper;
 import org.ums.response.type.GenericResponse;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -74,6 +76,9 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   private SpStudentManager mSpStudentManager;
 
   @Autowired
+  private StudentManager mStudentManager;
+
+  @Autowired
   private SubGroupManager mSubGroupManager;
 
   @Autowired
@@ -90,6 +95,27 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
     for(SeatPlan seatPlan : seatPlans) {
       children.add(toJson(seatPlan, mUriInfo, localCache));
     }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getSeatPlanForStudent(Integer pSemesterId, Integer pExamType, String pExamDate, String pStudentId, UriInfo pUriInfo) {
+    SeatPlan seatPlan = new PersistentSeatPlan();
+    if (pExamType.equals(ExamType.SEMESTER_FINAL)) {
+      seatPlan = mSeatPlanManager.getForStudent(pStudentId, pSemesterId)
+          .stream()
+          .filter(p -> p.getExamType() == pExamType)
+          .collect(Collectors.toList())
+          .get(0);
+    } else {
+      seatPlan = mSeatPlanManager.getForStudentAndCCIExam(pStudentId, pSemesterId, pExamDate).get(0);
+    }
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    children.add(toJson(seatPlan, pUriInfo, localCache));
     object.add("entries", children);
     localCache.invalidate();
     return object.build();

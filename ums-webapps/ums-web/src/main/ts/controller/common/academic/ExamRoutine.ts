@@ -21,7 +21,8 @@ module ums {
     rowId: any;
     courseArr:Array<ICourse>;
   }
-  interface IDateTime {
+
+  export interface IDateTime {
     readOnly: boolean;
     index: number;
     examDate: string;

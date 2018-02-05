@@ -3,15 +3,18 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.enums.ExamType;
-import org.ums.resource.SemesterResource;
 import org.ums.builder.ClassRoomBuilder;
-import org.ums.domain.model.immutable.*;
+import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.mutable.MutableClassRoom;
+import org.ums.enums.ExamType;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentClassRoom;
-import org.ums.cache.LocalCache;
 import org.ums.resource.ResourceHelper;
-import org.ums.domain.model.mutable.MutableClassRoom;
+import org.ums.resource.SemesterResource;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -62,20 +65,28 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   public JsonObject getAll(final UriInfo pUriInfo) {
     List<ClassRoom> roomList = getContentManager().getAll();
 
+    return getJsonObject(pUriInfo, roomList);
+  }
+
+  public JsonObject getAllForSeatPlan(final UriInfo pUriInfo) {
+    List<ClassRoom> roomList = getContentManager().getAllForSeatPlan();
+    return getJsonObject(pUriInfo, roomList);
+  }
+
+  private JsonObject getJsonObject(UriInfo pUriInfo, List<ClassRoom> pRoomList) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(ClassRoom room : roomList) {
+    for(ClassRoom room : pRoomList) {
       children.add(toJson(room, pUriInfo, localCache));
     }
     object.add("rows", children);
     object.add("page", 1);
-    object.add("total", roomList.size());
-    object.add("records", roomList.size());
+    object.add("total", pRoomList.size());
+    object.add("records", pRoomList.size());
 
     localCache.invalidate();
     return object.build();
-
   }
 
   public JsonObject getRooms(UriInfo pUriInfo) {

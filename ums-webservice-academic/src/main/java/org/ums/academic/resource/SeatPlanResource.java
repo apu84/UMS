@@ -12,7 +12,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -29,6 +30,15 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   @Path("/all")
   public JsonObject getAll() throws Exception {
     return mSeatPlanResourceHelper.getAll(mUriInfo);
+  }
+
+  @GET
+  @Path("?semester-id={semester-id}&exam-type={exam-type}&exam-date={exam-date}&student-id={student-id}")
+  public JsonObject getSeatPlanOfStudent(@QueryParam("semester-id") Integer semesterId,
+                                         @QueryParam("exam-tye") Integer examType, @QueryParam("exam-date") String examDate,
+                                         @QueryParam("student-id") String studentId) {
+    return mSeatPlanResourceHelper.getSeatPlanForStudent(semesterId, examType,
+        examDate, studentId, mUriInfo);
   }
 
   @GET

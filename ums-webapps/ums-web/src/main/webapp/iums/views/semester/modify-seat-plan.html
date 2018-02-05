@@ -1,0 +1,104 @@
+<style>
+    form.search input[type=text] {
+        padding: 10px;
+        font-size: 17px;
+        border: 1px solid grey;
+        float: left;
+        width: 80%;
+        background: #f1f1f1;
+    }
+
+    form.search button {
+        float: left;
+        width: 20%;
+        padding: 10px;
+        background: #2196F3;
+        color: white;
+        font-size: 17px;
+        border: 1px solid grey;
+        border-left: none;
+        cursor: pointer;
+    }
+
+    form.search button:hover {
+        background: #0b7dda;
+    }
+
+    form.search::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+</style>
+<div class="row" style="padding-right: 3px">
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12">
+                    Modify Seat Plan
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <select class="form-control required" id="examType" name="examType"
+                                    data-ng-model="vm.examType" ng-change="vm.examTypeChanged()">
+                                <option value="">Select Exam Type</option>
+                                <option value="1">Regular Exam</option>
+                                <option value="2">Clearance/Improvement/Carryover Exam</option>
+                            </select>
+                        </div>
+                        <div class="form-group" ng-if="vm.examType==2">
+                            <select
+                                    class="form-control required"
+                                    name="examDate"
+                                    id="examDate"
+                                    data-ng-options="examRoutine.examDate for examRoutine in vm.examRoutineList "
+                                    data-ng-model="vm.selectedExamRoutine"
+                            >
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentId">Student Id:</label>
+                            <input type="text" ng-model="vm.student.id" class="form-control" id="studentId">
+                        </div>
+
+                        <button class="btn btn-default" ng-click="vm.search()">Search</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Room No</th>
+                        <th>Room Capacity</th>
+                        <th>Row</th>
+                        <th>Column</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <ui-select id="groupName" theme="bootstrap"
+                                   data-ng-model="vm.selectedGroup"
+                        >
+                            <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="g in vm.groups|filter:$select.search">
+                                <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
