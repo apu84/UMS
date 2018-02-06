@@ -74,9 +74,11 @@
 
 <div class="tabbable tabs-left" id="menu">
     <ul class="nav nav-tabs">
-        <li>   <img class="img-circle" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src="" pictureValue="051001"
-                    data-profile-picture="">
+        <li><img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src=""
+                 img-id="vm.user.userId"
+                 data-profile-picture="">
         </li>
+        <br />
         <li>
             <div class="row">
                 <div class="col-md-2"><b>Name: </b></div>
@@ -94,9 +96,10 @@
             </div>
         </li>
         <li id="o1"><a data-ng-click="vm.changeStateToPatronCheckOut()" data-toggle="tab">Check Out</a></li>
-        <li id="o2" ><a data-ng-click="vm.changeStateToPatronDetail()" data-toggle="tab">Details </a></li>
-        <li id="o3" ><a data-ng-click="vm.changeStateToPatronFine()" data-toggle="tab">Fines</a></li>
-        <li id="o4" ><a data-ng-click="vm.changeStateToCirculationHistory()" data-toggle="tab">Circulation History </a></li>
+        <li id="o2"><a data-ng-click="vm.changeStateToPatronDetail()" data-toggle="tab">Details </a></li>
+        <li id="o3"><a data-ng-click="vm.changeStateToPatronFine()" data-toggle="tab">Fines</a></li>
+        <li id="o4"><a data-ng-click="vm.changeStateToCirculationHistory()" data-toggle="tab">Circulation History </a>
+        </li>
     </ul>
     <div id="myTabContent2" class="tab-content" ui-view style="padding-left: 10px;">
 

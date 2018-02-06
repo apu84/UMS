@@ -34,7 +34,7 @@ public class UserViewBuilder implements Builder<UserView, MutableUserView> {
     pBuilder.add("mobileNumber", pReadOnly.getMobileNumber());
     pBuilder.add("emailAddress", pReadOnly.getEmailAddress());
     pBuilder.add("department", mDepartmentManager.get(pReadOnly.getDepartment()).getLongName());
-    pBuilder.add("designation", mDesignationManager.get(pReadOnly.getDesignation()).getDesignationName());
+    pBuilder.add("designation", pReadOnly.getDesignation() == 0 ? "" : mDesignationManager.get(pReadOnly.getDesignation()).getDesignationName());
     pBuilder.add("category", pReadOnly.getRoleId() == 11 ? "Student" : pReadOnly.getRoleId() == 21 ? "Teacher"
         : "Management");
   }
