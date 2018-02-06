@@ -77,6 +77,8 @@ module ums{
         submitResult:number;
         approvalStatusFromHead:number;
         seachByStudentId:string;
+        submit_Button_Disable:boolean;
+        checkBoxCounter:number;
 
 
 
@@ -125,6 +127,8 @@ module ums{
             this.submitResult=0;
             this.approvalStatusFromHead=0;
             this.seachByStudentId="";
+            this.submit_Button_Disable=true;
+            this.checkBoxCounter=0;
 
             //Functions
             this.statusChanged(this.carryApprovalStatus);
@@ -170,6 +174,7 @@ module ums{
 
         private statusChanged(carryApplicationStatus: IConstants) :ng.IPromise<any> {
             this.carryApprovalStatus= carryApplicationStatus;
+
             if(this.carryApprovalStatus.name.match("Waiting for head's approval")){
              this.approvalStatus="Waiting for head's approval";
             }else if(this.carryApprovalStatus.name.match("Approved By Head")){
@@ -196,6 +201,8 @@ module ums{
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);
                 });
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
             return defer.promise;
         }
 
@@ -236,6 +243,8 @@ module ums{
 
         //---------------
         private click(studentId:string,semesterId:number,fullName:string,courseTitle:string,courseNo:string){
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
             this.getAppliedAndApprovedInfo(studentId,semesterId).then((value:any)=>{
                 this.getSemester(studentId,semesterId);
             })
@@ -247,6 +256,8 @@ module ums{
             this.courseNoTA=courseNo;
         }
         private close(){
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
             console.log("Rumi");
 
         }
@@ -254,6 +265,7 @@ module ums{
         private submitModal(submitStatus:string){
             var appliedvalue:Array<ImodalApliedInfo>=[];
             this.applicationModalAppliedInfoUpdated=[];
+
 
              if(submitStatus=="accept"){
                  this.approvalStatusFromHead=7;
@@ -330,30 +342,67 @@ module ums{
 
         private searchByStudentId(studentId:string) {
             this.seachByStudentId=studentId;
-            if(this.seachByStudentId.length>=12){
+
+            if(this.seachByStudentId.length>=9){
                 console.log(this.seachByStudentId+""+this.approvalStatus);
-               /* var defer = this.$q.defer();
+                var defer = this.$q.defer();
                 this.applicationCCI=[];
                 var appCCIArr: Array<AppCCI> = [];
-                this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/approvalStatus/'+this.approvalStatus+'/studentId/'+this.seachByStudentId, 'application/json',
+                this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/searchByStudentId/approvalStatus/'+this.approvalStatus+'/studentId/'+this.seachByStudentId, 'application/json',
                     (json: any, etag: string) => {
                         appCCIArr = json.entries;
                         console.log("*****RRRRRR******");
-                        console.log("Applicatino cci Updated!!");
+                        console.log("SearchByStudentId!!");
 
                         this.applicationCCI=appCCIArr;
                         console.log(this.applicationCCI);
                         defer.resolve(appCCIArr);
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {
-                        console.error(response);
+                      //  console.error(response);
+                        alert("No Records Found For this Student Id");
                     });
-                return defer.promise;*/
+                this.seachByStudentId="";
+                return defer.promise;
             }else{
                 alert("Invalid Student Id");
             }
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
 
           this.seachByStudentId="";
+
+        }
+
+        private refresh(){
+            console.log("refresh");
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
+            this.statusChanged(this.carryApprovalStatus);
+            this.seachByStudentId="";
+
+        }
+        private checkMoreThanOneSelectionSubmit(result:ImodalApliedInfo) {
+
+            if(result.apply){
+                this.checkBoxCounter++;
+                this.enableOrDisableSubmitButton();
+            }
+            else{
+                this.checkBoxCounter--;
+                this.enableOrDisableSubmitButton();
+            }
+
+            console.log("value:"+this.submit_Button_Disable);
+
+        }
+
+        private enableOrDisableSubmitButton(): void{
+            if( this.checkBoxCounter > 0){
+                this.submit_Button_Disable=false;
+            }else{
+                this.submit_Button_Disable=true;
+            }
         }
 
 

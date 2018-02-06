@@ -63,6 +63,8 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mGetTotalApplied;
   private Integer mGetTotalApproved;
   private Integer mGetTotalRejected;
+  private String mTransactionId;
+  private Integer mImprovementLimit;
 
   public PersistentApplicationCCI() {
 
@@ -99,6 +101,28 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mGetTotalApplied = pPersistentApplicationCCI.getTotalApplied();
     mGetTotalApproved = pPersistentApplicationCCI.getTotalApproved();
     mGetTotalRejected = pPersistentApplicationCCI.getTotalRejected();
+    mTransactionId = pPersistentApplicationCCI.getTransactionID();
+    mImprovementLimit = pPersistentApplicationCCI.getImprovementLimit();
+  }
+
+  @Override
+  public void setImprovementLimit(Integer improvementLimit) {
+    mImprovementLimit = improvementLimit;
+  }
+
+  @Override
+  public Integer getImprovementLimit() {
+    return mImprovementLimit;
+  }
+
+  @Override
+  public void setTransactionID(String transactionId) {
+    mTransactionId = transactionId;
+  }
+
+  @Override
+  public String getTransactionID() {
+    return mTransactionId;
   }
 
   @Override

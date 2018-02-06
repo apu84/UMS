@@ -57,7 +57,7 @@
 
                 <div class="panel panel-warning" data-ng-if="resultImprovementNumber>0 || appCCIImprovementNumber>0">
                     <div class="panel-heading" align="center">
-                        Candidate Improvement Courses
+                        Candidate Improvement  Courses
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered">
@@ -69,6 +69,7 @@
                             <th>Last Apply Date</th>
                             <th>Deadline</th>
                             <th style="width:180px; max-width: 180px;">Status</th>
+                            <th>Slip</th>
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==5"
@@ -80,6 +81,7 @@
                                 <td>{{app.lastApplyDate}}</td>
                                 <td>{{app.deadline}}</td>
                                 <td><input type="checkbox" ng-disabled="app.deadline=='Date Over' ?  true : false" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <td>Not Applied Yet</td>
                                 <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
                             </tr>
                             <tr data-ng-repeat="app in applicationCCI" data-ng-if="(app.cciStatus==7 || app.cciStatus==8) && app.applicationType==5">
@@ -90,10 +92,13 @@
                                 <td>{{'Applied'}}</td>
                                 <td>{{'N/A'}}</td>
                                 <td>{{app.statusName}}</td>
+                                <td ><img src="images/pdf_square.png"  data-ng-if="app.cciStatus==7 && app.applicationType==5 " class="download_tooltip ng-scope"
+                                         style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                                         data-ng-click="receipt(app.transactionId)"><p data-ng-if="app.cciStatus!=7 && app.applicationType==5">N/A</p></td>
                             </tr>
                             </tbody>
 
-                        </table>
+                        </table><p align="center" style="color:gray;font-size: 15px">Improvement Examination  Limit (within 8 Semesters): <strong style="font-size: 15px;color: black">{{improvementLimitstatic}} </strong> And You have already Given:  <strong style="font-size: 15px;color: black">{{improvementLimit}}</strong></p>
 
                     </div>
                 </div>
@@ -110,6 +115,7 @@
                             <th>Failed Course Semester</th>
                             <th>Exam Date</th>
                             <th style="width:180px; max-width: 180px;">Status</th>
+                            <th>Slip</th>
                             </thead>
                             <tbody>
                             <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults"
@@ -121,14 +127,18 @@
                                 <td>{{app.examDate}}</td>
                                 <td ><input type="checkbox" data-ng-model="app.apply"
                                            data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <td>{{'N/A'}}</td>
                                 <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
                             </tr>
                             <tr data-ng-repeat="app in applicationCCI" data-ng-if="app.applicationType==3 && (app.cciStatus==2  || app.cciStatus==7 || app.cciStatus==8 || app.cciStatus==9)">
                                 <td>{{app.courseNo}}</td>
                                 <td>{{app.courseTitle}}</td>
-                                <td>{{app.carryYear+"."+app.carrySemester }}</td>
+                                <td>{{app.carryYear+"-"+app.carrySemester }}</td>
                                 <td>{{app.examDate}}</td>
                                 <td>{{app.statusName}}</td>
+                                <td><img src="images/pdf_square.png"  data-ng-if="app.cciStatus==7 && app.applicationType==3" class="download_tooltip ng-scope"
+                                         style="position: relative;cursor: pointer;margin-bottom: 10px;"
+                                         data-ng-click="receipt(app.transactionId)"><p  data-ng-if="app.cciStatus!=7 && app.applicationType==3">N/A</p></td>
                             </tr>
                             </tbody>
                         </table>

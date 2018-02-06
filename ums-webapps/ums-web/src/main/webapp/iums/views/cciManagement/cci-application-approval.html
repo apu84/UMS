@@ -153,7 +153,7 @@
                                                     <td>{{a.courseId}}</td>
                                                     <td>{{a.courseTitle}}</td>
                                                     <td>{{a.statusName}}</td>
-                                                    <td><input type="checkbox" ng-disabled="a.statusName=='Waiting for payment' || a.statusName=='Approved' ?  true : false"  data-ng-model="a.apply"></td>
+                                                    <td><input type="checkbox" data-ng-model="a.apply" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -182,8 +182,8 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-success"  data-ng-click="vm.submitModal('accept')" data-dismiss="modal">Accept</button>
-                                        <button type="button" class="btn btn-primary"  data-ng-click="vm.submitModal('reject')" data-dismiss="modal">Reject</button>
+                                        <button type="button" class="btn btn-success" data-ng-disabled="vm.submit_Button_Disable"   data-ng-click="vm.submitModal('accept')" data-dismiss="modal">Accept</button>
+                                        <button type="button" class="btn btn-primary" data-ng-disabled="vm.submit_Button_Disable"  data-ng-click="vm.submitModal('reject')" data-dismiss="modal">Reject</button>
                                         <button type="button" class="btn btn-info"   data-ng-click="vm.close()" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>

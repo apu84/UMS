@@ -268,7 +268,8 @@ public class FeeReceipt {
       cell.setBorder(Rectangle.NO_BORDER);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-      paragraph = new Paragraph(payment.getFeeCategory().getName(), infoFont);
+      paragraph = new Paragraph(payment.getFeeCategory().getName(), infoFont);// ------------------fee
+                                                                              // category
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       paymentTable.addCell(cell);

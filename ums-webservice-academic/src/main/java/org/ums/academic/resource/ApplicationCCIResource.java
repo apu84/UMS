@@ -29,6 +29,13 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
     return mHelper.getApplicationCCIInfoForStudent(pRequest, mUriInfo);
   }
 
+  // getImprovementLimit
+  @GET
+  @Path("/getImprovementLimit")
+  public Integer getApplicationCCIForImprovementLimit(@Context Request pRequest) {
+    return mHelper.getApplicationCCIForImprovementLimit(pRequest, mUriInfo);
+  }
+
   @GET
   @Path("/semester/{semester-id}/examDate/{exam-date}")
   public JsonObject getApplicationCCIForSeatPlan(@Context Request pRequest,
@@ -54,6 +61,13 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest,
       final @PathParam("approval-status") String pApprovalStatus) {
     return mHelper.getApplicationCarryForHeadsApproval(pApprovalStatus, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/searchByStudentId/approvalStatus/{approval-status}/studentId/{student-id}")
+  public JsonObject getByStudentId(@Context Request pRequest,
+      final @PathParam("approval-status") String pApprovalStatus, final @PathParam("student-id") String pStudentId) {
+    return mHelper.getByStudentId(pApprovalStatus, pStudentId, pRequest, mUriInfo);
   }
 
   @GET

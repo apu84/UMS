@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
+import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
 
@@ -29,7 +30,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.student_id,  "
           + "    a.course_id,  "
           + "    a.application_type,  "
-          + "    a.applied_on,  "
+          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,  "
           + "    a.STATUS,  "
           + "  "
           + "    c.course_no,  "
@@ -39,7 +40,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE  "
           + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2";
   String INSERT_ONE =
-      "Insert  into  APPLICATION_CCI  (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,STATUS,APPLIED_ON)  values  (?,?,?,?,?,?,systimestamp)";
+      "Insert  into  APPLICATION_CCI  (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,STATUS,TRANSACTION_ID,APPLIED_ON)  values  (?,?,?,?,?,?,?,systimestamp)";
   String UPDATE_ONE =
       "update  application_cci  set  semester_id=?,  student_id=?,  course_id=?,application_type=?,applied_on=systimestamp  ";
   String DELETE_ONE = "delete  from  application_cci";
@@ -56,7 +57,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.student_id,"
           + "    a.course_id,"
           + "    a.application_type,"
-          + "    a.applied_on,"
+          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
           + "    a.STATUS,"
           + "    t.GRADE_LETTER                                                                GRADE,"
           + "    c.course_no,"
@@ -71,6 +72,30 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
           + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
           + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 AND c.OFFER_BY= ? ";
+  // -----------SearchBystudent Id
+  String SELECT_ALL_CA_SearchByStudentId =
+      " SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER                                GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 AND c.OFFER_BY= ? ";
+
   // Rejected
   String SELECT_ALL_Reject =
       "SELECT"
@@ -79,7 +104,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.student_id,"
           + "    a.course_id,"
           + "    a.application_type,"
-          + "    a.applied_on,"
+          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
           + "    a.STATUS,"
           + "    t.GRADE_LETTER                                                                GRADE,"
           + "    c.course_no,"
@@ -95,6 +120,31 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
           + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 AND c.OFFER_BY= ? ";
 
+  // SearchByStudentId
+
+  String SELECT_ALL_REJECT_SearchByStudentId =
+      " SELECT  "
+          + "  a.id,  "
+          + "  a.semester_id,  "
+          + "  a.student_id,  "
+          + "  a.course_id,  "
+          + "  a.application_type,  "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on,  "
+          + "  a.STATUS,  "
+          + "  t.GRADE_LETTER                                GRADE,  "
+          + "  c.course_no,  "
+          + "  c.course_title,  "
+          + "  STUDENTS.FULL_NAME,  "
+          + "  STUDENTS.CURR_YEAR,  "
+          + "  STUDENTS.CURR_SEMESTER,  "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER,  "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date  "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS  "
+          + "WHERE  "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2  "
+          + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1  "
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 AND c.OFFER_BY= ? ";
+
   // /////PaymentAndApproved Query
   String SELECT_ALL_Payment_ANd_Approved =
       "SELECT"
@@ -103,7 +153,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.student_id,"
           + "    a.course_id,"
           + "    a.application_type,"
-          + "    a.applied_on,"
+          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
           + "    a.STATUS,"
           + "    t.GRADE_LETTER                                                                GRADE,"
           + "    c.course_no,"
@@ -118,7 +168,30 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
           + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
           + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND c.OFFER_BY= ? ";
+  // Payment Approval Search
 
+  String SELECT_ALL_Payment_ANd_Approved_SearchByStudentId =
+      " SELECT   "
+          + "  a.id,   "
+          + "  a.semester_id,   "
+          + "  a.student_id,   "
+          + "  a.course_id,   "
+          + "  a.application_type,   "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on,   "
+          + "  a.STATUS,   "
+          + "  t.GRADE_LETTER                                GRADE,   "
+          + "  c.course_no,   "
+          + "  c.course_title,   "
+          + "  STUDENTS.FULL_NAME,   "
+          + "  STUDENTS.CURR_YEAR,   "
+          + "  STUDENTS.CURR_SEMESTER,   "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER,   "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date   "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS   "
+          + "WHERE   "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2   "
+          + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1   "
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND c.OFFER_BY= ? ";
   // All
   String SELECT_ALL_All_Approval_Status =
       "SELECT"
@@ -127,7 +200,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.student_id,"
           + "    a.course_id,"
           + "    a.application_type,"
-          + "    a.applied_on,"
+          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
           + "    a.STATUS,"
           + "    t.GRADE_LETTER                                                                GRADE,"
           + "    c.course_no,"
@@ -142,6 +215,30 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
           + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
           + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND c.OFFER_BY= ? ";
+  // SEachByStudent
+  String SELECT_ALL_All_Approval_Status_SearchByStudentId =
+      " SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER                                GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3  AND c.OFFER_BY= ?";
+
   // GetAllInfo
   String SELECT_ALL_INFO =
       "SELECT  "
@@ -151,7 +248,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "b.COURSE_NO,  "
           + "b.COURSE_TITLE,  "
           + "a.APPLICATION_TYPE,  "
-          + "a.APPLIED_ON,  "
+          + "to_char(a.applied_on,'DD-MM-YYYY') applied_on,  "
           + "a.STATUS  "
           + " from APPLICATION_CCI a,MST_COURSE b where a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=b.COURSE_ID  and a.APPLICATION_TYPE=3 ";
   // GetTotalcarry
@@ -161,12 +258,20 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE UG_REGISTRATION_RESULT.Student_id = ? AND UG_REGISTRATION_RESULT.Semester_Id != ? AND "
           + "UG_REGISTRATION_RESULT.Exam_Type = 1 AND " + "UG_REGISTRATION_RESULT.GRADE_LETTER = 'F')";
 
+  // Improvement_Limit_Calculation_Theory
+  String SELECT_IMPROVEMENT_LIMIT =
+      "SELECT COUNT (COURSE_ID) as improvement_limit from APPLICATION_CCI WHERE STUDENT_ID= ? and STATUS=7 and APPLICATION_TYPE=5";
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
   public PersistentApplicationCCIDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  public List<ApplicationCCI> getApplicationCCIForImprovementLimit(final String pStudentId) {
+    String query = SELECT_IMPROVEMENT_LIMIT;
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new ApplicationCCIRowMapperForImprovementLimit());
   }
 
   @Override
@@ -193,6 +298,26 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       query = SELECT_ALL_All_Approval_Status;
     }
     return mJdbcTemplate.query(query, new Object[] {empDeptId}, new ApplicationCCICarryRowMapper());
+  }
+
+  public List<ApplicationCCI> getByStudentId(String pApprovalStatus, String pStudentId, Integer pSemesterId,
+      String empDeptId) {
+    String approvalStatus = pApprovalStatus;
+    String query = "";
+    if(approvalStatus.equals("Waiting for head's approval")) {
+      query = SELECT_ALL_CA_SearchByStudentId;
+    }
+    else if(approvalStatus.equals("Approved By Head")) {
+      query = SELECT_ALL_Payment_ANd_Approved_SearchByStudentId;
+    }
+    else if(approvalStatus.equals("Rejected By Head")) {
+      query = SELECT_ALL_REJECT_SearchByStudentId;
+    }
+    else {
+      query = SELECT_ALL_All_Approval_Status_SearchByStudentId;
+    }
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pSemesterId, pSemesterId, pSemesterId, pStudentId,
+        pStudentId, pStudentId, empDeptId}, new ApplicationCCICSearchByStudentIdRowMapper());
   }
 
   @Override
@@ -261,7 +386,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "    a.student_id,  "
             + "    a.course_id,  "
             + "    a.application_type,  "
-            + "    a.applied_on,  "
+            + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,  "
             + "    a.STATUS,  "
             + "    t.GRADE_LETTER                                                                GRADE,  "
             + "    c.course_no,  "
@@ -342,9 +467,10 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "    a.student_id,    "
             + "    a.course_id,    "
             + "    a.application_type,    "
-            + "    a.applied_on,    "
+            + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,    "
             + "    a.STATUS,    "
             + "    t.GRADE_LETTER                                                                GRADE,    "
+            + "    a.TRANSACTION_ID,    "
             + "    c.course_no,    "
             + "    c.course_title,    "
             + "  c.YEAR,      "
@@ -362,9 +488,18 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(), app.getStudentId(), app.getCourseId(),
-          app.getApplicationType().getValue(), app.getCCIStatus()});
+      // String transactionId = mIdGenerator.getAlphaNumericId();
+      if(app.getApplicationType().getValue() != 2) {
+        params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(), app.getStudentId(),
+            app.getCourseId(), app.getApplicationType().getValue(), app.getCCIStatus(), app.getTransactionID()});
+      }
+      else {
+        params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(), app.getStudentId(),
+            app.getCourseId(), app.getApplicationType().getValue(), app.getCCIStatus(), null});
+      }
+
     }
+
     return params;
   }
 
@@ -393,14 +528,39 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setExamDate(pResultSet.getString("exam_date"));
       application.setCCIStatus(pResultSet.getInt("status"));
       application.setGradeLetter(pResultSet.getString("grade"));
+      application.setTransactionID(pResultSet.getString("TRANSACTION_ID"));
       application.setCarryYear(pResultSet.getInt("YEAR"));
       application.setCarrySemester(pResultSet.getInt("SEMESTER"));
+      // application.setTransactionID(pResultSet.getString("TRANSACTION_ID"));
       // application.setFullName(pResultSet.getString("FULL_NAME"));
       // application.setCurrentEnrolledSemester(pResultSet.getInt("CURR_ENROLLED_SEMESTER"));
 
       // application.setApplicationStatus(ApplicationStatus.get(pResultSet.getInt("status")));
       // application.setExamDate(pResultSet.getString("exam_date"));
       // application.setTotalStudent(pResultSet.getInt("total_student"));
+      return application;
+    }
+  }
+  class ApplicationCCICSearchByStudentIdRowMapper implements RowMapper<ApplicationCCI> {
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      application.setId(pResultSet.getLong("id"));
+      application.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      application.setStudentId(pResultSet.getString("student_id"));
+      application.setCourseId(pResultSet.getString("course_id"));
+      application.setApplicationType(ApplicationType.get(pResultSet.getInt("application_type")));
+      application.setApplicationDate(pResultSet.getString("applied_on"));
+      application.setCourseNo(pResultSet.getString("course_no"));
+      application.setCourseTitle(pResultSet.getString("course_title"));
+      application.setExamDate(pResultSet.getString("exam_date"));
+      application.setCCIStatus(pResultSet.getInt("status"));
+      application.setGradeLetter(pResultSet.getString("grade"));
+      application.setCarryYear(pResultSet.getInt("CURR_YEAR"));
+      application.setCarrySemester(pResultSet.getInt("CURR_SEMESTER"));
+      application.setFullName(pResultSet.getString("FULL_NAME"));
+      application.setCurrentEnrolledSemester(pResultSet.getInt("CURR_ENROLLED_SEMESTER"));
+
       return application;
     }
   }
@@ -428,6 +588,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       return application;
     }
   }
+
   class ApplicationCCIRowMapperForTotalCarry implements RowMapper<ApplicationCCI> {
     @Override
     public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -439,6 +600,15 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       return application;
     }
   }
+  class ApplicationCCIRowMapperForImprovementLimit implements RowMapper<ApplicationCCI> {
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      application.setImprovementLimit(pResultSet.getInt("improvement_limit"));
+      return application;
+    }
+  }
+  //
   class ApplicationCCIRowMapperForAppliedAndApproved implements RowMapper<ApplicationCCI> {
     @Override
     public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {

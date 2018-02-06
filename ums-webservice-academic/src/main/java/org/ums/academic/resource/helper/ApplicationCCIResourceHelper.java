@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.academic.resource.ApplicationCCIResource;
 import org.ums.builder.ApplicationCCIBuilder;
 import org.ums.builder.Builder;
@@ -14,6 +15,16 @@ import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationType;
+import org.ums.fee.FeeCategory;
+import org.ums.fee.FeeCategoryManager;
+import org.ums.fee.UGFee;
+import org.ums.fee.UGFeeManager;
+import org.ums.fee.payment.MutableStudentPayment;
+import org.ums.fee.payment.PersistentStudentPayment;
+import org.ums.fee.payment.StudentPayment;
+import org.ums.fee.payment.StudentPaymentManager;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.StudentManager;
@@ -24,6 +35,7 @@ import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.ApplicationCCIService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.UmsUtils;
 
 import javax.json.*;
 import javax.ws.rs.core.Context;
@@ -32,6 +44,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -70,6 +83,18 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
   @Autowired
   UserManager mUserManager;
+
+  @Autowired
+  IdGenerator mIdGenerator;
+
+  @Autowired
+  StudentPaymentManager mStudentPaymentManager;
+
+  @Autowired
+  UGFeeManager mUgFeeManager;
+
+  @Autowired
+  FeeCategoryManager mFeeCategoryManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -124,6 +149,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return builder.build();
   }
 
+  @Transactional
   public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
@@ -146,6 +172,26 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       List<PersistentApplicationCCI> applicationAfterValidationByService =
         persistentApplicationCCIs;
       mManager.create(applications);
+
+    List<MutableStudentPayment> studentPayments = new ArrayList<>();
+    applications.forEach(application->{
+      MutableStudentPayment studentPayment = new PersistentStudentPayment();
+      FeeCategory.Categories feeCategoryId = application.getApplicationType().equals(ApplicationType.CARRY)? FeeCategory.Categories.CARRY:FeeCategory.Categories.IMPROVEMENT;
+      FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
+      List<FeeCategory> feeCategories = new ArrayList<>();
+      feeCategories.add(feeCategory);
+      List<UGFee> fees = mUgFeeManager.getFee(application.getStudent().getProgram().getFacultyId(),
+              application.getStudent().getSemester().getId(), feeCategories);
+      studentPayment.setFeeCategoryId(feeCategoryId.toString());
+      studentPayment.setStatus(StudentPayment.Status.APPLIED);
+      studentPayment.setSemesterId(application.getSemester().getId());
+      studentPayment.setStudentId(application.getStudent().getId());
+      studentPayment.setAmount(fees.get(0).getAmount());
+      studentPayment.setTransactionValidTill(UmsUtils.addDay(new Date(), 10));
+      studentPayments.add(studentPayment);
+    });
+
+    mStudentPaymentManager.create(studentPayments);
       JsonObjectBuilder object = Json.createObjectBuilder();
       JsonArrayBuilder children = Json.createArrayBuilder();
       LocalCache localCache = new LocalCache();
@@ -178,7 +224,10 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       getBuilder().build(application, jsonObject, localCache);
       if(courseIdMapWithUgRegistrationResult.containsKey(application.getCourseId()))
         application.setExamDate(courseIdMapWithUgRegistrationResult.get(application.getCourseId()).getExamDate());
+      if(!application.getApplicationType().equals(ApplicationType.CLEARANCE))
+        application.setTransactionID(mIdGenerator.getAlphaNumericId());
       applications.add(application);
+
       persistentApplicationCCIs.add(application);
     }
   }
@@ -218,6 +267,20 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApprovalAndAppiled(studentId,semesterid);
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+
+  }
+
+  // getByStudentId
+  public JsonObject getByStudentId(final String approvalStatus,final String studentId,final Request pRequest, final UriInfo pUriInfo){
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    Student student = mStudentManager.get(studentId);
+    LocalCache localCache = new LocalCache();
+    List<ApplicationCCI> applications =getContentManager().getByStudentId(approvalStatus,studentId,student.getCurrentEnrolledSemester().getId(),student.getDepartmentId());
     applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
     object.add("entries", children);
     localCache.invalidate();
@@ -281,6 +344,13 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  // limit
+  public Integer getApplicationCCIForImprovementLimit(final Request pRequest, final UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    List<ApplicationCCI> applications = getContentManager().getApplicationCCIForImprovementLimit(studentId);
+    return applications.get(0).getImprovementLimit();
   }
 
   public JsonObject getApplicationCCIForSeatPlan(final Integer pSemesterId, final String pExamDate,

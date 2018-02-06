@@ -17,6 +17,17 @@ public class ApplicationCCIDaoDecorator extends
     return getManager().getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterId);
   }
 
+  @Override
+  public List<ApplicationCCI> getApplicationCCIForImprovementLimit(String pStudentId) {
+    return getManager().getApplicationCCIForImprovementLimit(pStudentId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getByStudentId(String pApprovalStatus, String pStudentId, Integer pSemesterId,
+      String empDeptId) {
+    return getManager().getByStudentId(pApprovalStatus, pStudentId, pSemesterId, empDeptId);
+  }
+
   // carryHeadsApproval
   @Override
   public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, String empDeptId) {

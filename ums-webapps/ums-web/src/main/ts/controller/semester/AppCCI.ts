@@ -36,6 +36,9 @@ module ums {
       improvement_status_initial:number;
       submitButtonParameter:string;
       pendingApprovedStatus:number;
+      improvementLimit:number;
+      improvementLimitstatic:number;
+
 
     //booleans
     applicationAllowed: boolean;
@@ -66,6 +69,9 @@ module ums {
     convertToJson: Function;
     finalSave:Function;
       submitButtonEnable:Function;
+      receipt:Function;
+      improvementLimitCalculation:Function;
+      insertIntoStudentPayment:Function;
    // alert:Function;
 
   }
@@ -111,12 +117,13 @@ module ums {
     statusName: string;
     carryYear:number;
     carrySemester:number;
+    transactionId:string;
 
 }
 
   export class ApplicationCCI {
 
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','FeeReportService', '$sce', '$window'];
 
     private static REGULAR = 1;
     private static CLEARANCE = 2;
@@ -127,6 +134,7 @@ module ums {
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationCCIScope,
                 private $q: ng.IQService, private notify: Notify,
+                private feeReportService: FeeReportService,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
 
 
@@ -143,6 +151,8 @@ module ums {
         $scope.improvement_status_initial=16;
         $scope.pendingApprovedStatus=0;
         $scope.ugResultsForSave=[];
+        $scope.improvementLimitstatic=4;
+        $scope.improvementLimit=0;
         $scope.submit_Button_Disable=true;
         //-----
       $scope.submitButtonClicked = false;
@@ -165,27 +175,58 @@ module ums {
       $scope.makeDataEmpty = this.makeDataEmpty.bind(this);
       $scope.cancel = this.cancel.bind(this);
       $scope.submit = this.submit.bind(this);
+      $scope.receipt=this.receipt.bind(this);
+      $scope.improvementLimitCalculation=this.improvementLimitCalculation.bind(this);
       $scope.submitAndClose = this.submitAndClose.bind(this);
       $scope.close = this.close.bind(this);
-      $scope.submitButtonEnable=this.submitButtonEnable.bind(this);
+      $scope.insertIntoStudentPayment=this.insertIntoStudentPayment.bind(this);
+     // $scope.submitButtonEnable=this.submitButtonEnable.bind(this);
      // $scope.alert=this.alert.bind(this);
         $scope.finalSave=this.finalSave.bind(this);
       $scope.convertToJson = this.convertToJson.bind(this);
+      this.improvementLimitCalculation();
 
     }
-   // private alert(){
-     //   alert('This in an alert');
-      //  document.write('hello');
-    //}
 
       private  finalSave(){
           this.submitAndClose();
       }
-      private submitButtonEnable(){
+      private improvementLimitCalculation(): ng.IPromise<any>{
+        this.$scope.improvementLimit=0;
+          var defer = this.$q.defer();
+          var improvement_limit_check: number=0;
+          this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/getImprovementLimit', 'application/json',
+              (json: any, etag: string) => {
+                  improvement_limit_check = json;
+                  console.log("---------------------Improvement Limit ---------------------");
+
+                  this.$scope.improvementLimit=improvement_limit_check;
+                  console.log(this.$scope.improvementLimit);
+                  defer.resolve(this.$scope.improvementLimit);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
 
       }
 
+      public receipt(transactionId: string): void {
+        console.log("report:"+transactionId);
+        this.feeReportService.receipt(transactionId);
+      }
 
+      private insertIntoStudentPayment(){
+         /* this.convertToJson( )).
+          then((json:any)=>{
+              console.log("Stydeht payment Accept Clearance Exam");
+              console.log(json);
+              this.$scope.loadingVisibility = true;
+              this.$scope.responseResults = [];
+
+          })*/
+
+      }
 
     private submitAndClose() {
       this.convertToJson(this.$scope.registrationResults).then((json:any)=>{
@@ -207,12 +248,14 @@ module ums {
                   this.$scope.checkBoxCounter=0;
                   this.$scope.submit_Button_Disable=true;
                this.initializatino();
+
                   this.$scope.loadingVisibility = false;
 
               }).error((data) => {
 
           });
       })
+        this.insertIntoStudentPayment();
 
 
     }
@@ -285,6 +328,7 @@ module ums {
     private initializatino() {
       this.getParameterInfoForCCIApplication();
       this.getStudentInfo();
+        this.improvementLimitCalculation();
     }
 
 

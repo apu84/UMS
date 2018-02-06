@@ -52,4 +52,5 @@ public class UGFeeCache extends ContentCache<UGFee, MutableUGFee, Long, UGFeeMan
   protected String getCachedListKey() {
     return "UGFeeCacheList";
   }
+
 }

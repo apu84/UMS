@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
+import org.ums.enums.CourseRegType;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.UGRegistrationResultManager;
@@ -53,15 +54,45 @@ public class UGRegistrationResultResourceHelper extends
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
+   // Integer x1=student.getCurrentYear();
+   // Integer x2=student.getCurrentAcademicSemester();
 
     List<String> cciTakenCourses = applicationCCIManager.getByStudentIdAndSemester(student.getId(),student.getCurrentEnrolledSemester().getId())
             .stream()
             .map(a->a.getCourse().getId())
             .collect(Collectors.toList());
+    //--------------------
       List<UGRegistrationResult> results =
               mManager.getCarryClearanceImprovementCoursesByStudent(student.getCurrentEnrolledSemester().getId(),
-                      student.getId()).stream().filter(p-> cciTakenCourses.contains(p.getCourse().getId())==false)
+                      student.getId()).
+                      stream().
+                      filter(p-> {
+                        if(p.getType().equals(CourseRegType.CARRY)){
+                          if(student.getDepartmentId()=="01"){
+                            if(student.getCurrentYear()==5 && student.getCurrentAcademicSemester()==2){
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false ;
+                            }else{
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }else{
+                            if(student.getCurrentYear()==4 && student.getCurrentAcademicSemester()==2){
+
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false;
+
+                            }else{
+
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }
+                        }else{
+                          return  cciTakenCourses.contains(p.getCourse().getId())==false;
+                        }
+
+                      })
               .collect(Collectors.toList());
+      //------------
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

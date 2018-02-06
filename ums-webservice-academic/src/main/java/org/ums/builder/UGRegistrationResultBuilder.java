@@ -28,11 +28,12 @@ public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult
     pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
     pBuilder.add("courseYear", pReadOnly.getCourse().getYear());
     pBuilder.add("courseSemester", pReadOnly.getCourse().getSemester());
-    pBuilder.add("examDate", pReadOnly.getExamDate());
+    pBuilder.add("examDate", "21-10-2018");
+    // pBuilder.add("examDate", pReadOnly.getExamDate());
     try {
       Date lastApplyDate, currentDate;
 
-      lastApplyDate = DateUtils.addDays(UmsUtils.convertToDate(pReadOnly.getExamDate(), "dd-MM-yyyy"), -5);
+      lastApplyDate = DateUtils.addDays(UmsUtils.convertToDate("21-10-2018", "dd-MM-yyyy"), -5);
       currentDate = new Date();
       pBuilder.add("lastApplyDate", UmsUtils.formatDate(lastApplyDate, "dd-MM-yyyy"));
 

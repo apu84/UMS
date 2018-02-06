@@ -94,6 +94,12 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
     if(pReadOnly.getTotalRejected() != null)
       pBuilder.add("totalRejected", pReadOnly.getTotalRejected());
 
+    if(pReadOnly.getTransactionID() != null)
+      pBuilder.add("transactionId", pReadOnly.getTransactionID());
+
+    if(pReadOnly.getImprovementLimit() != null)
+      pBuilder.add("improvement_limit", pReadOnly.getImprovementLimit());
+
   }
 
   @Override

@@ -25,4 +25,5 @@ public class UGFeeDaoDecorator extends ContentDaoDecorator<UGFee, MutableUGFee, 
   public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
     return getManager().getDistinctSemesterIds(pFacultyId);
   }
+
 }
