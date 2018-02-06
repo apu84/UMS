@@ -71,7 +71,8 @@ public class ProfilePicture extends Resource {
     String userId = "";
     if(pImageId.equals("0")) {
       Subject subject = SecurityUtils.getSubject();
-      userId = subject.getPrincipal().toString();
+      User user = mUserManager.get(subject.getPrincipal().toString());
+      userId = user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId();
     }
     else {
       userId = pImageId;
