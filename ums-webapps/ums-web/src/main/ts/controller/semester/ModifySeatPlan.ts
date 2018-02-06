@@ -59,6 +59,11 @@ module ums {
       }
 
     }
+
+    public update() {
+      this.seatPlan.roomId = this.selectedRoom.id;
+      this.seatPlanService.updateSeatPlan(this.seatPlan);
+    }
   }
 
 

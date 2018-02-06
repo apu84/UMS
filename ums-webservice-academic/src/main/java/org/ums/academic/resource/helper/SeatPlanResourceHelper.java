@@ -136,6 +136,13 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
     return object.build();
   }
 
+  public Response updateSeatPlan(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutableSeatPlan seatPlan = new PersistentSeatPlan();
+    mBuilder.build(seatPlan, pJsonObject);
+    mSeatPlanManager.update(seatPlan);
+    return null;
+  }
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     int groupNo = pJsonObject.getInt("groupNo");

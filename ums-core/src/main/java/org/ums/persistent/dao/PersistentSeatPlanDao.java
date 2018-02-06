@@ -1,11 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SeatPlanDaoDecorator;
@@ -14,6 +8,12 @@ import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentSeatPlan;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -110,7 +110,10 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   // will check if it is needed
   @Override
   public int update(MutableSeatPlan pMutable) {
-    return super.update(pMutable);
+    String query =
+        "update SEAT_PLAN set ROOM_ID=?, ROW_NO=?, COL_NO=?, LAST_MODIFIED=" + getLastModifiedSql() + " where id=?";
+    return mJdbcTemplate.update(query, pMutable.getClassRoom().getId(), pMutable.getRowNo(), pMutable.getColumnNo(),
+        pMutable.getId());
   }
 
   @Override

@@ -61,6 +61,18 @@ module ums{
       return defer.promise;
     }
 
+
+    public updateSeatPlan(seatPlan: ISeatPlan): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      this.httpClient.put("academic/seatplan/updateSeat", seatPlan, HttpClient.MIME_TYPE_JSON)
+          .success((response: any) => {
+            this.notify.success("Successfully Saved");
+          }).error((error) => {
+        console.error(error);
+      });
+      return defer.promise;
+    }
+
     public getSeatPlanTopSheetReport(programType:number,
                                      semesterId:number,
                                      examType:number,
@@ -98,8 +110,6 @@ module ums{
           (response:any)=>defer.resolve(response.entries[0]));
       return defer.promise;
     }
-
-
 
 
   }
