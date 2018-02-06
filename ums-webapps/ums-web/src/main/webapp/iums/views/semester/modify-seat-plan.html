@@ -73,7 +73,8 @@
                 </div>
 
             </div>
-            <div class="table-responsive">
+            <div class="row">
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -97,13 +98,20 @@
                             </ui-select>
                         </td>
                         <td>{{vm.selectedRoom.capacity}}</td>
-                        <td><input type="number" ng-model="vm.seatPlan.rowNo"/></td>
-                        <td><input type="number" ng-model="vm.seatPlan.colNo"</td>
+                        <td><input type="number" class="form-control" ng-model="vm.seatPlan.rowNo"/></td>
+                        <td><input type="number" class="form-control" ng-model="vm.seatPlan.colNo"</td>
 
                     </tr>
                     </tbody>
                 </table>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-primary" ng-click="vm.update()">Update</button>
+                </div>
+            </div>
+
         </div>
 
     </div>

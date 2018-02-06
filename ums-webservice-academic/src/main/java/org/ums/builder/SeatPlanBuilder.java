@@ -1,7 +1,6 @@
 package org.ums.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
@@ -32,5 +31,16 @@ public class SeatPlanBuilder implements Builder<SeatPlan, MutableSeatPlan> {
   @Override
   public void build(MutableSeatPlan pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
+  }
+
+  public void build(MutableSeatPlan pMutable, JsonObject pJsonObject) {
+    if(pJsonObject.containsKey("idStr"))
+      pMutable.setId(Long.parseLong(pJsonObject.getString("idStr")));
+    if(pJsonObject.containsKey("roomId"))
+      pMutable.setClassRoomId(new Long(pJsonObject.getInt("roomId")));
+    if(pJsonObject.containsKey("rowNo"))
+      pMutable.setRowNo(pJsonObject.getInt("rowNo"));
+    if(pJsonObject.containsKey("colNo"))
+      pMutable.setColumnNo(pJsonObject.getInt("colNo"));
   }
 }

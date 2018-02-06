@@ -1,6 +1,5 @@
 package org.ums.configuration;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +30,6 @@ import org.ums.services.academic.RemarksBuilder;
 import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.services.academic.StudentCarryCourseService;
 import org.ums.statistics.JdbcTemplateFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration("academicConfig")
 public class AcademicContext {
@@ -192,9 +188,7 @@ public class AcademicContext {
 
   @Bean
   SeatPlanManager seatPlanManager() {
-    SeatPlanCache seatPlanCache = new SeatPlanCache(mCacheFactory.getCacheManager());
-    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
-    return seatPlanCache;
+    return new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
