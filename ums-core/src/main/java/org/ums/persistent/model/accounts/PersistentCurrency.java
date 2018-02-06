@@ -1,5 +1,7 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -15,10 +17,15 @@ import java.util.Date;
  */
 public class PersistentCurrency implements MutableCurrency {
 
+  @JsonIgnore
   private static CompanyManager sCompanyManager;
+  @JsonIgnore
   private static CurrencyManager sCurrencyManager;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mId;
   private Company mCompany;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private String mCompanyId;
   private Integer mCurrencyCode;
   private String mCurrencyDescription;
@@ -27,6 +34,7 @@ public class PersistentCurrency implements MutableCurrency {
   private String mDefaultCompany;
   private String mStatFlag;
   private String mStatUpFlag;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;

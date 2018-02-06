@@ -104,6 +104,7 @@
 /// <reference path='components/definitions/account/account.controller.ts'/>
 /// <reference path='components/definitions/account/account.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>
+/// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
 /// <reference path='components/definitions/budget-allocation/budget.allocation.controller.ts'/>

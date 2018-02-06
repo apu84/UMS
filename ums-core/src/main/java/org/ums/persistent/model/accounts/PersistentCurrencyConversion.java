@@ -1,5 +1,9 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -17,22 +21,34 @@ import java.util.Date;
  */
 public class PersistentCurrencyConversion implements MutableCurrencyConversion {
 
+  @JsonIgnore
   private static CompanyManager sCompanyManager;
+  @JsonIgnore
   private static CurrencyManager sCurrencyManager;
+  @JsonIgnore
   private static CurrencyConversionManager sCurrencyConversionManager;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mId;
   private Company mCompany;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private String mCompanyId;
   private Company mDefaultCompany;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private String mDefaultCompanyId;
   private Currency mCurrency;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mCurrencyId;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mConversionFactor;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mReverseConversionFactor;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mBaseConversionFactor;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mReverseBaseConversionFactor;
   private String mStatFlag;
   private String mStatUpFlag;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;

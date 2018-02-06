@@ -9,7 +9,9 @@ module ums {
     id: string;
     company: ICompany;
     currencyCode: string;
+    currencyDescription:string;
     currencyFlag: CurrencyFlag;
+    notation: string;
   }
 
 
@@ -24,6 +26,12 @@ module ums {
       this.url = "account/definition/currency";
     }
 
+    public getAllCurrencies():ng.IPromise<ICurrency[]>{
+      let defer:ng.IDeferred<ICurrency[]> = this.$q.defer();
+      this.httpClient.get(this.url+"/all", HttpClient.MIME_TYPE_JSON,
+          (response:ICurrency[])=>defer.resolve(response));
+      return defer.promise;
+    }
 
   }
 

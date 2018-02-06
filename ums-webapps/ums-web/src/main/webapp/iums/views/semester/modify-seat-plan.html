@@ -90,7 +90,7 @@
                             <ui-select id="room" theme="bootstrap"
                                        data-ng-model="vm.selectedRoom"
                             >
-                                <ui-select-match placeholder="Select Main Group">{{vm.selectedRoom.roomNo}}
+                                <ui-select-match placeholder="Select Room No">{{vm.selectedRoom.roomNo}}
                                 </ui-select-match>
                                 <ui-select-choices repeat="g in vm.roomList|filter:$select.search">
                                     <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
