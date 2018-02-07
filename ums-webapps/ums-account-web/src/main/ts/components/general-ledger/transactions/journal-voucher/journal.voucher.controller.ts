@@ -9,6 +9,14 @@ module ums {
     private selectedCurrency: ICurrency;
     private currencyConversions: ICurrencyConversion[];
     private currencyConversionMapWithCurrency: any;
+    private showAddSection:boolean;
+    private type:AccountTransactionType;
+    private journalVoucherOfAddModal: IJournalVoucher;
+    private journalVouchers: IJournalVoucher[];
+    private accounts: IAccount[];
+
+    static JOURNAL_VOUCHER_GROUP_FLAG=GroupFlag.NO;
+
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -24,15 +32,36 @@ module ums {
     }
 
     public initialize() {
-
-
+      this.showAddSection=false;
+      this.type=AccountTransactionType.SELLING;
+      this.accountService.getAccountsByGroupFlag(JournalVoucherController.JOURNAL_VOUCHER_GROUP_FLAG).then((accounts:IAccount[])=>{
+        console.log("Accounts")
+        console.log(accounts);
+        this.accounts = accounts;
+      });
     }
 
-    public addModalClicked() {
+    public addData(){
+      this.journalVoucherOfAddModal=<IJournalVoucher>{};
+      this.journalVoucherOfAddModal.serialNo=this.journalVouchers.length+1;
+      this.journalVoucherOfAddModal.balanceType= BalanceType.Dr;
+    }
+
+    public addDataToJournalTable(){
+      this.journalVoucherOfAddModal.voucherNo = this.voucherNo;
+      this.journalVoucherOfAddModal.currency=this.selectedCurrency;
+      this.journalVoucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
+      this.journalVoucherOfAddModal.accountTransactionType=this.type;
+      this.journalVouchers.push(this.journalVoucherOfAddModal);
+    }
+
+    public addButtonClicked() {
+      this.showAddSection=true;
       this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
       this.getCurrencyConversions();
       this.getCurrencies();
       let currDate: Date = new Date();
+      this.journalVouchers=[];
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
     }
 

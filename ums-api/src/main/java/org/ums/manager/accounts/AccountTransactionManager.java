@@ -14,4 +14,5 @@ public interface AccountTransactionManager extends ContentManager<AccountTransac
   Integer getTotalVoucherNumberBasedOnCurrentDay(Voucher pVoucher);
 
   Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate);
+
 }

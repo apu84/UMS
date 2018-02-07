@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.ums.decorator.accounts.AccountDaoDecorator;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccount;
 
@@ -43,6 +44,12 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     return this.mNamedParameterJdbcTemplate.query(query, namedParameters, new PersistentAccountRowMapper());
     // return mJdbcTemplate.query(query, new Object[]{pAccountName}, new
     // PersistentAccountRowMapper());
+  }
+
+  @Override
+  public List<Account> getAccounts(GroupFlag pGroupFlag) {
+    String query = "select * from MST_ACCOUNT where ACC_GROUP_CODE  in (select GROUP_CODE from MST_GROUP where FLAG=?)";
+    return mJdbcTemplate.query(query, new Object[] {pGroupFlag.getValue()}, new PersistentAccountRowMapper());
   }
 
   @Override

@@ -11,6 +11,7 @@ import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.AccountManager;
@@ -87,6 +88,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getAll(final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAll();
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
+    List<Account> accounts = getContentManager().getAccounts(pGroupFlag);
     return getJsonObject(pUriInfo, accounts);
   }
 

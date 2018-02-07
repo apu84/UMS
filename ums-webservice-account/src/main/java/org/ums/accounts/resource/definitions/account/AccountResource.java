@@ -1,6 +1,7 @@
 package org.ums.accounts.resource.definitions.account;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -43,6 +44,12 @@ public class AccountResource extends MutableAccountResource {
   public JsonObject getAccountsByAccountName(@PathParam("account-name") String pAccountName,
       final @Context Request pRequest) {
     return mHelper.getAccountsByAccountName(pAccountName, mUriInfo);
+  }
+
+  @GET
+  @Path("/group-flag/{group-flag}")
+  public JsonObject getAccountsByGroupFlag(@PathParam("group-flag") String pGroupFlag, final @Context Request pRequest) {
+    return mHelper.getAccounts(GroupFlag.get(pGroupFlag), mUriInfo);
   }
 
 }

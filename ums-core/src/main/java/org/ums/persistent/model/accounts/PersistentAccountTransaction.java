@@ -1,5 +1,7 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -9,6 +11,7 @@ import org.ums.domain.model.immutable.accounts.Receipt;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 
@@ -26,6 +29,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private static CurrencyManager sCurrencyManager;
   private static ReceiptManager sReceiptManager;
   private static AccountTransactionManager sTransactionManager;
+
   private Long mId;
   private Company mCompany;
   private String mCompanyId;
@@ -52,11 +56,23 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private Receipt mReceipt;
   private Long mReceiptId;
   private Date mPostDate;
+  private AccountTransactionType mAccountTransactionType;
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;
 
   @Override
+  public AccountTransactionType getAccountTransactionType() {
+    return mAccountTransactionType;
+  }
+
+  @Override
+  public void setAccountTransactionType(AccountTransactionType pAccountTransactionType) {
+    mAccountTransactionType = pAccountTransactionType;
+  }
+
+  @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }
@@ -77,6 +93,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public String getDefaultCompanyId() {
     return mDefaultCompanyId;
   }
@@ -87,6 +104,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public String getCompanyId() {
     return mCompanyId;
   }
@@ -117,6 +135,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public Date getVoucherDate() {
     return mVoucherDate;
   }
@@ -147,6 +166,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getAccountId() {
     return mAccountId;
   }
@@ -167,6 +187,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getVoucherId() {
     return mVoucherId;
   }
@@ -227,6 +248,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getCurrencyId() {
     return mCurrencyId;
   }
@@ -257,6 +279,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public Company getDefaultCompany() {
     return mDefaultCompany == null ? sCompanyManager.get(mDefaultCompanyId) : mDefaultCompany;
   }
@@ -297,6 +320,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getReceiptId() {
     return mReceiptId;
   }
@@ -307,6 +331,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public Date getPostDate() {
     return mPostDate;
   }
@@ -317,6 +342,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public Date getModifiedDate() {
     return mModifiedDate;
   }

@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -65,6 +66,8 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
   void setReceiptId(Long pReceiptId);
 
   void setPostDate(Date pPostDate);
+
+  void setAccountTransactionType(AccountTransactionType pAccountTransactionType);
 
   void setModifiedDate(Date pModifiedDate);
 

@@ -5,6 +5,39 @@ module ums {
     message: string;
   }
 
+  export enum AccountTransactionType{
+    BUYING="B",
+    SELLING="S"
+  }
+
+  export interface IJournalVoucher{
+    id: string;
+    company: ICompany;
+    companyId: string;
+    divisionCode:string;
+    voucherNo: string;
+    voucherDate: string;
+    serialNo: number;
+    account: IAccount;
+    accountId: string;
+    voucher: IVoucher;
+    voucherId: string;
+    amount: number;
+    balanceType: BalanceType;
+    narration: string;
+    foreignCurrency: number;
+    currency: ICurrency;
+    conversionFactor: number;
+    projNo: string;
+    statFlag: string;
+    statUpFlag: string;
+    receiptId: string;
+    postDate: string;
+    accountTransactionType:AccountTransactionType;
+    modifiedDate: string;
+    modifiedBy: string;
+  }
+
   export class JournalVoucherService {
 
     private url: string;

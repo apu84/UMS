@@ -32,7 +32,7 @@
         <div class="panel-body shadowPanel" style="min-height: 490px;">
 
             <div>
-                <div ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-add-modal.html'"></div>
+                <div ng-if="vm.showAddSection"  ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-form-include.html'"></div>
             </div>
 
         </div>

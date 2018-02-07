@@ -12,10 +12,7 @@ import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 import org.ums.manager.CompanyManager;
-import org.ums.manager.accounts.AccountTransactionManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
-import org.ums.manager.accounts.VoucherManager;
-import org.ums.manager.accounts.VoucherNumberControlManager;
+import org.ums.manager.accounts.*;
 import org.ums.resource.ResourceHelper;
 import org.ums.util.UmsUtils;
 
@@ -44,6 +41,8 @@ public class AccountTransactionCommonResourceHelper extends
   protected VoucherNumberControlManager mVoucherNumberControlManager;
   @Autowired
   protected CompanyManager mCompanyManager;
+  @Autowired
+  protected AccountManager mAccountManager;
 
   private enum DateCondition {
     Previous,

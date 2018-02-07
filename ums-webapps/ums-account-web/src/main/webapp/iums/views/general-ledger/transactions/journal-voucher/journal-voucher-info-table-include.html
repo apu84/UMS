@@ -1,0 +1,24 @@
+<div class="col-md-12" align="center"><i ng-click="vm.addData()" data-toggle="modal"
+                                         data-target="#addVoucher"  class="fa fa-plus-circle" style="font-size:26px; cursor: pointer"></i></div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>S.No</th>
+        <th>Account Name</th>
+        <th>Amount In Specific</th>
+        <th>Account In Base</th>
+        <th>Dr/Cr</th>
+        <th>Narration</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="v in vm.journalVouchers">
+        <td>{{v.serialNo}}</td>
+        <td>{{v.account.accountName}}</td>
+        <td>{{v.amount}}</td>
+        <td>{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * v.amount}}</td>
+        <td>{{v.balanceType}}</td>
+        <td>{{v.narration}}</td>
+    </tr>
+    </tbody>
+</table>
