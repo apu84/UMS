@@ -2,8 +2,6 @@ package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -21,39 +19,28 @@ import java.util.Date;
  */
 public class PersistentCurrencyConversion implements MutableCurrencyConversion {
 
-  @JsonIgnore
   private static CompanyManager sCompanyManager;
-  @JsonIgnore
   private static CurrencyManager sCurrencyManager;
-  @JsonIgnore
   private static CurrencyConversionManager sCurrencyConversionManager;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mId;
   private Company mCompany;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private String mCompanyId;
   private Company mDefaultCompany;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private String mDefaultCompanyId;
   private Currency mCurrency;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mCurrencyId;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mConversionFactor;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mReverseConversionFactor;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mBaseConversionFactor;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal mReverseBaseConversionFactor;
   private String mStatFlag;
   private String mStatUpFlag;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }
@@ -74,6 +61,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public String getCompanyId() {
     return mCompanyId;
   }
@@ -84,6 +72,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonIgnore
   public Company getDefaultCompany() {
     return mCompany == null ? sCompanyManager.get(mDefaultCompanyId) : sCompanyManager.validate(mDefaultCompany);
   }
@@ -94,6 +83,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonIgnore
   public String getDefaultCompanyId() {
     return mDefaultCompanyId;
   }
@@ -114,6 +104,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getCurrencyId() {
     return mCurrencyId;
   }
@@ -124,6 +115,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getConversionFactor() {
     return mConversionFactor;
   }
@@ -134,6 +126,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getReverseConversionFactor() {
     return mReverseConversionFactor;
   }
@@ -144,6 +137,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getBaseConversionFactor() {
     return mBaseConversionFactor;
   }
@@ -154,6 +148,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getReverseBaseConversionFactor() {
     return mReverseBaseConversionFactor;
   }
@@ -184,6 +179,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public Date getModifiedDate() {
     return mModifiedDate;
   }
