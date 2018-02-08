@@ -27,6 +27,7 @@ module ums {
     narration: string;
     foreignCurrency: number;
     currency: ICurrency;
+    currencyId: string;
     conversionFactor: number;
     projNo: string;
     statFlag: string;
@@ -47,6 +48,18 @@ module ums {
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient, private notify: Notify) {
       this.url = "account/general-ledger/transaction/journal-voucher";
+    }
+
+    public saveVoucher(vouchers: IJournalVoucher[]):ng.IPromise<any>{
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.httpClient.post(this.url+"/save", vouchers, HttpClient.MIME_TYPE_JSON)
+          .success((response)=>defer.resolve(response))
+          .error((error)=>{
+            console.log(error);
+            this.notify.error("Error in saving data");
+            defer.resolve(undefined);
+          });
+      return defer.promise;
     }
 
     public getVoucherNumber(): ng.IPromise<string> {

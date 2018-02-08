@@ -11,9 +11,11 @@ import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
@@ -43,6 +45,12 @@ public class AccountTransactionCommonResourceHelper extends
   protected CompanyManager mCompanyManager;
   @Autowired
   protected AccountManager mAccountManager;
+  @Autowired
+  protected AccountBalanceManager mAccountBalanceManager;
+  @Autowired
+  protected UserManager mUserManager;
+  @Autowired
+  protected IdGenerator mIdGenerator;
 
   private enum DateCondition {
     Previous,
@@ -123,7 +131,7 @@ public class AccountTransactionCommonResourceHelper extends
   @NotNull
   private String generateVoucherNumber(Voucher pVoucher, Integer pNextVoucher) {
     String voucherNumber = "" + pNextVoucher;
-    for(int i = 0; i < (8 - pNextVoucher.toString().length()); i++) {
+    for(int i = 0; i < (6 - pNextVoucher.toString().length()); i++) {
       voucherNumber = "0" + voucherNumber;
     }
     voucherNumber = pVoucher.getShortName() + voucherNumber;

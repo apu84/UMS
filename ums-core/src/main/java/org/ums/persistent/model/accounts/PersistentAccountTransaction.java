@@ -78,6 +78,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setId(Long pId) {
     this.mId = pId;
   }
@@ -99,6 +100,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setDefaultCompanyId(String pDefaultCompanyId) {
     mDefaultCompanyId = pDefaultCompanyId;
   }
@@ -110,6 +112,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setCompanyId(String pCompanyId) {
     this.mCompanyId = pCompanyId;
   }
@@ -120,6 +123,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setDivisionCode(String pDivisionCode) {
     this.mDivisionCode = pDivisionCode;
   }
@@ -141,6 +145,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setVoucherDate(Date pVoucherDate) {
     this.mVoucherDate = pVoucherDate;
   }
@@ -172,6 +177,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setAccountId(Long pAccountId) {
     this.mAccountId = pAccountId;
   }
@@ -193,6 +199,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setVoucherId(Long pVoucherId) {
     this.mVoucherId = pVoucherId;
   }
@@ -254,6 +261,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setCurrencyId(Long pCurrencyId) {
     this.mCurrencyId = pCurrencyId;
   }
@@ -285,6 +293,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setDefaultCompany(Company pDefaultCompany) {
     this.mDefaultCompany = pDefaultCompany;
   }
@@ -326,6 +335,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setReceiptId(Long pReceiptId) {
     this.mReceiptId = pReceiptId;
   }
@@ -337,6 +347,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setPostDate(Date pPostDate) {
     this.mPostDate = pPostDate;
   }
@@ -348,6 +359,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setModifiedDate(Date pModifiedDate) {
     this.mModifiedDate = pModifiedDate;
   }
@@ -363,36 +375,44 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public String getLastModified() {
     return mLastModified;
   }
 
   @Override
+  @JsonIgnore
   public void setLastModified(String pLastModified) {
     this.mLastModified = pLastModified;
   }
 
   @Override
+  @JsonIgnore
   public Long create() {
     return sTransactionManager.create(this);
   }
 
   @Override
+  @JsonIgnore
   public void update() {
     sTransactionManager.update(this);
   }
 
   @Override
+  @JsonIgnore
   public MutableAccountTransaction edit() {
     return new PersistentAccountTransaction(this);
   }
 
   @Override
+  @JsonIgnore
   public void delete() {
     sTransactionManager.delete(this);
   }
 
-  public PersistentAccountTransaction() {}
+  public PersistentAccountTransaction() {
+
+  }
 
   public PersistentAccountTransaction(MutableAccountTransaction pTransaction) {
     setId(pTransaction.getId());
@@ -432,6 +452,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
     sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
     sReceiptManager = applicationContext.getBean("receiptManager", ReceiptManager.class);
-    sTransactionManager = applicationContext.getBean("transactionManager", AccountTransactionManager.class);
+    sTransactionManager = applicationContext.getBean("accountTransactionManager", AccountTransactionManager.class);
   }
 }

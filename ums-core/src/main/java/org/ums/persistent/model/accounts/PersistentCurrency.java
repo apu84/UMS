@@ -40,6 +40,7 @@ public class PersistentCurrency implements MutableCurrency {
   private String mLastModified;
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }

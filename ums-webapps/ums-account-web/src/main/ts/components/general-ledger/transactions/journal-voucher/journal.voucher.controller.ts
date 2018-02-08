@@ -14,8 +14,11 @@ module ums {
     private journalVoucherOfAddModal: IJournalVoucher;
     private journalVouchers: IJournalVoucher[];
     private accounts: IAccount[];
-
+    private totalDebit: number;
+    private totalCredit: number;
+    private accounting: any;
     static JOURNAL_VOUCHER_GROUP_FLAG=GroupFlag.NO;
+    static JOURNAL_VOUCHER_ID='1';
 
 
     constructor($scope: ng.IScope,
@@ -41,22 +44,61 @@ module ums {
       });
     }
 
+    public convertDateObjectToDateString(date: Date):string{
+      return moment(date).format("DD-MM-YYYY").toString();
+    }
+
+    public saveJournalVoucher(){
+      if(this.journalVouchers.length==0)
+        this.notify.warn("No journal voucher data");
+      else{
+        this.journalVoucherService.saveVoucher(this.journalVouchers).then((response)=>{
+          if(response!=undefined)
+          this.addButtonClicked();
+        });
+      }
+    }
+
     public addData(){
       this.journalVoucherOfAddModal=<IJournalVoucher>{};
       this.journalVoucherOfAddModal.serialNo=this.journalVouchers.length+1;
       this.journalVoucherOfAddModal.balanceType= BalanceType.Dr;
     }
 
+    //todo use accounting library
+    public convertToCurrencyFormat(amount: number):any{
+      return null;
+    }
+
     public addDataToJournalTable(){
       this.journalVoucherOfAddModal.voucherNo = this.voucherNo;
       this.journalVoucherOfAddModal.currency=this.selectedCurrency;
+      this.journalVoucherOfAddModal.currencyId=this.selectedCurrency.id.toString();
+      this.journalVoucherOfAddModal.accountId=this.journalVoucherOfAddModal.account.id;
+      this.journalVoucherOfAddModal.voucherId=JournalVoucherController.JOURNAL_VOUCHER_ID;
       this.journalVoucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
       this.journalVoucherOfAddModal.accountTransactionType=this.type;
+      this.journalVoucherOfAddModal.foreignCurrency=this.journalVoucherOfAddModal.amount* this.journalVoucherOfAddModal.conversionFactor;
+      this.journalVoucherOfAddModal.accountTransactionType=this.type;
       this.journalVouchers.push(this.journalVoucherOfAddModal);
+      this.calculateTotalDebitAndCredit();
+    }
+
+    public calculateTotalDebitAndCredit(){
+      this.totalCredit=0;
+      this.totalDebit=0;
+      for(var i=0; i<this.journalVouchers.length;i++){
+        if(this.journalVouchers[i].balanceType==BalanceType.Dr)
+          this.totalDebit+=this.journalVouchers[i].amount;
+        else
+          this.totalCredit+=this.journalVouchers[i].amount;
+      }
     }
 
     public addButtonClicked() {
       this.showAddSection=true;
+      this.totalCredit=0;
+      this.totalDebit=0;
       this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
       this.getCurrencyConversions();
       this.getCurrencies();
