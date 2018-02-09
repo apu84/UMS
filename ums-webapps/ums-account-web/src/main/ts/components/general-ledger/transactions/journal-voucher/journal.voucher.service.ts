@@ -77,6 +77,13 @@ module ums {
           });
       return defer.promise;
     }
+
+    public getAllVouchersPaginated(itemPerPage: number, pageNumber: number):ng.IPromise<IJournalVoucher[]>{
+      let defer: ng.IDeferred<IJournalVoucher[]> = this.$q.defer();
+      this.httpClient.get(this.url+"/item-per-page/"+itemPerPage+"/page-number/"+pageNumber, HttpClient.MIME_TYPE_JSON,
+          (respose:IJournalVoucher[])=>defer.resolve(respose));
+      return defer.promise;
+    }
   }
 
   UMS.service("JournalVoucherService", JournalVoucherService);

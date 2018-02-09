@@ -48,6 +48,12 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
     return Response.ok().build();
   }
 
+  public List<MutableAccountTransaction> getAll(int itemPerPage, int pageNumber) {
+    List<MutableAccountTransaction> accountTransactions=getContentManager().getAllPaginated(itemPerPage, pageNumber, mVoucherManager.get(JOURNAL_VOUCHER));
+    accountTransactions.forEach(a->a.setVoucherNo(a.getVoucherNo().substring(2)));
+    return accountTransactions;
+  }
+
   @NotNull
   private List<MutableAccountTransaction> createTransactions(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = new ArrayList<>();
@@ -165,7 +171,14 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
         mAccountBalanceManager.getAccountBalance(pCurrentFinancialAccountYear.getCurrentStartDate(),
             pCurrentFinancialAccountYear.getCurrentEndDate(), pAccounts);
 
-    for(MutableAccountBalance a : accountBalanceList) {
+    updateTotalBalance(pAccountMapWithTransaction, accountBalanceList);
+
+    return accountBalanceList;
+  }
+
+  private void updateTotalBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction,
+      List<MutableAccountBalance> pAccountBalanceList) {
+    for(MutableAccountBalance a : pAccountBalanceList) {
       MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
       if(accountTransaction.getBalanceType().equals(BalanceType.CREDIT))
         a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(
@@ -174,16 +187,6 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
         a.setTotDebitTrans(a.getTotDebitTrans() == null ? accountTransaction.getAmount() : a.getTotDebitTrans().add(
             accountTransaction.getAmount()));
     }
-    // accountBalanceList.forEach((a)->{
-    // MutableAccountTransaction accountTransaction =
-    // pAccountMapWithTransaction.get(a.getAccountCode());
-    // adjustMonthAmount(month, a, accountTransaction);
-    // if(accountTransaction.getBalanceType().equals(BalanceType.CREDIT))
-    // a.setTotCreditTrans(a.getTotCreditTrans().add(accountTransaction.getAmount()));
-    // else
-    // a.setTotDebitTrans(a.getTotDebitTrans().add(accountTransaction.getAmount()));
-    // });
-    return accountBalanceList;
   }
 
 }

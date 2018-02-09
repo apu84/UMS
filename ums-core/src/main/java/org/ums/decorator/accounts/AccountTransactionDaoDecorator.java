@@ -7,6 +7,7 @@ import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.manager.accounts.AccountTransactionManager;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
@@ -23,5 +24,10 @@ public class AccountTransactionDaoDecorator extends
   @Override
   public Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate) {
     return getManager().getVoucherNumber(pVoucher, pStartDate, pEndDate);
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, voucher);
   }
 }

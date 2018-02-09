@@ -13,9 +13,12 @@ module ums {
     private type:AccountTransactionType;
     private journalVoucherOfAddModal: IJournalVoucher;
     private journalVouchers: IJournalVoucher[];
+    private existingJournalVouchers: IJournalVoucher[];
     private accounts: IAccount[];
     private totalDebit: number;
     private totalCredit: number;
+    private pageNumber: number;
+    private itemsPerPage: number;
     private accounting: any;
     static JOURNAL_VOUCHER_GROUP_FLAG=GroupFlag.NO;
     static JOURNAL_VOUCHER_ID='1';
@@ -36,11 +39,16 @@ module ums {
 
     public initialize() {
       this.showAddSection=false;
+      this.pageNumber=1;
+      this.itemsPerPage=5;
       this.type=AccountTransactionType.SELLING;
       this.accountService.getAccountsByGroupFlag(JournalVoucherController.JOURNAL_VOUCHER_GROUP_FLAG).then((accounts:IAccount[])=>{
         console.log("Accounts")
         console.log(accounts);
         this.accounts = accounts;
+      });
+      this.journalVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber).then((journalVouchers: IJournalVoucher[])=>{
+        this.existingJournalVouchers=journalVouchers;
       });
     }
 

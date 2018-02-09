@@ -78,9 +78,33 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     return mJdbcTemplate.queryForObject(query, new Object[] {pVoucher.getId(), pStartDate, pEndDate}, Integer.class);
   }
 
-  class PersistentAccountTransactionRowMapper implements RowMapper<AccountTransaction> {
+  @Override
+  public List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher) {
+    int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemPerPage - 1;
+    String query =
+        "SELECT * "
+            + "FROM (SELECT "
+            + "        ROWNUM row_num, "
+            + "        DT_TRANSACTION.* "
+            + "      FROM DT_TRANSACTION "
+            + "      WHERE (VOUCHER_NO, POST_DATE) IN (SELECT "
+            + "                                          DT_TRANSACTION.VOUCHER_NO, "
+            + "                                          MAX(DT_TRANSACTION.POST_DATE) "
+            + "                                        FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                        WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                              DT_TRANSACTION.POST_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                              DT_TRANSACTION.POST_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
+            + "                                              VOUCHER_ID = ? "
+            + "                                        GROUP BY DT_TRANSACTION.VOUCHER_NO)) temp "
+            + "WHERE row_num >= ? AND row_num <= ? " + "ORDER BY POST_DATE, SERIAL_NO";
+    return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
+        new PersistentAccountTransactionRowMapper());
+  }
+
+  class PersistentAccountTransactionRowMapper implements RowMapper<MutableAccountTransaction> {
     @Override
-    public AccountTransaction mapRow(ResultSet pResultSet, int pI) throws SQLException {
+    public MutableAccountTransaction mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAccountTransaction transaction = new PersistentAccountTransaction();
       transaction.setId(pResultSet.getLong("id"));
       transaction.setCompanyId(pResultSet.getString("comp_code"));
