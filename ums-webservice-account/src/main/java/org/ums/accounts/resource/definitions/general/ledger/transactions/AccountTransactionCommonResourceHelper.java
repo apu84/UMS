@@ -51,6 +51,8 @@ public class AccountTransactionCommonResourceHelper extends
   protected UserManager mUserManager;
   @Autowired
   protected IdGenerator mIdGenerator;
+  @Autowired
+  protected MonthBalanceManager mMonthBalanceManager;
 
   private enum DateCondition {
     Previous,

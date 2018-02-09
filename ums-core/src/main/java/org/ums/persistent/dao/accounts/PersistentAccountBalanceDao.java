@@ -54,7 +54,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   @Override
   public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, List<Account> pAccounts) {
    List<Long> accountCode= new ArrayList<>();
-   accountCode = pAccounts.stream().map(a->a.getAccountCode()).collect(Collectors.toList());
+   accountCode = pAccounts.stream().map(a->a.getId()).collect(Collectors.toList());
     String query="select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE in (" + org.apache.commons.lang.StringUtils.join(accountCode,",") +
         ")";
     return mJdbcTemplate.query(query, new Object[]{pFinancialStartDate, pFinancialEndDate}, new AccountBalanceRowMapper());
@@ -65,41 +65,27 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     String query =
         "INSERT INTO MST_ACCOUNT_BALANCE (ID,FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE,YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, MODIFIED_DATE, MODIFIED_BY) "
             + " VALUES(?,?,?,?,?,?,?,?,?,?)";
-    Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(query, id, pAccountBalance.getFinStartDate(), pAccountBalance.getFinEndDate(), pAccountBalance
-        .getAccountCode(), pAccountBalance.getYearOpenBalance(), pAccountBalance.getYearOpenBalanceType().getValue(),
-        pAccountBalance.getTotDebitTrans(), pAccountBalance.getTotCreditTrans(), pAccountBalance.getModifiedDate(),
-        pAccountBalance.getModifiedBy());
-    return id;
+
+    mJdbcTemplate.update(query, pAccountBalance.getId(), pAccountBalance.getFinStartDate(),
+        pAccountBalance.getFinEndDate(), pAccountBalance.getAccountCode(), pAccountBalance.getYearOpenBalance(),
+        pAccountBalance.getYearOpenBalanceType().getValue(), pAccountBalance.getTotDebitTrans(),
+        pAccountBalance.getTotCreditTrans(), pAccountBalance.getModifiedDate(), pAccountBalance.getModifiedBy());
+    return pAccountBalance.getId();
   }
 
   @Override
   public int update(List<MutableAccountBalance> pMutableList) {
     String query =
-        "UPDATE MST_ACCOUNT_BALANCE "
-            + "SET TOT_MONTH_CR_BAL_01 = ?, TOT_MONTH_CR_BAL_02 = ?, TOT_MONTH_CR_BAL_03 = ?, TOT_MONTH_CR_BAL_04 = ?, "
-            + "  TOT_MONTH_CR_BAL_05   = ?, TOT_MONTH_CR_BAL_06 = ?, TOT_MONTH_CR_BAL_07 = ?, TOT_MONTH_CR_BAL_08 = ?, "
-            + "  TOT_MONTH_CR_BAL_09   = ?, TOT_MONTH_CR_BAL_10 = ?, "
-            + "  TOT_MONTH_CR_BAL_11   = ?, TOT_MONTH_CR_BAL_12 = ?, TOT_DEBIT_TRANS = ?, TOT_CREDIT_TRANS = ?, STAT_FLAG = ?, "
-            + "  STAT_UP_FLAG          = ?, MODIFIED_DATE = ? "
-            + "WHERE FIN_START_DATE = ? AND FIN_END_DATE = ? AND ACCOUNT_CODE = ?";
+        "UPDATE MST_ACCOUNT_BALANCE SET TOT_DEBIT_TRANS=?, TOT_CREDIT_TRANS=?, MODIFIED_DATE=?, MODIFIED_BY=? WHERE ID=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
   }
 
   private List<Object[]> getUpdateParamList(List<MutableAccountBalance> pAccountBalanceList) {
     List<Object[]> params = new ArrayList<>();
-
     for(AccountBalance accountBalance : pAccountBalanceList) {
-      params.add(new Object[] {accountBalance.getTotMonthDbBal01(), accountBalance.getTotMonthDbBal02(),
-          accountBalance.getTotMonthDbBal03(), accountBalance.getTotMonthDbBal04(),
-          accountBalance.getTotMonthDbBal05(), accountBalance.getTotMonthDbBal06(),
-          accountBalance.getTotMonthDbBal07(), accountBalance.getTotMonthDbBal08(),
-          accountBalance.getTotMonthDbBal09(), accountBalance.getTotMonthDbBal10(),
-          accountBalance.getTotMonthDbBal11(), accountBalance.getTotMonthDbBal12(), accountBalance.getTotDebitTrans(),
-          accountBalance.getTotCreditTrans(), accountBalance.getStatFlag(), accountBalance.getFinStartDate(),
-          accountBalance.getFinEndDate(), accountBalance.getAccountCode()});
+      params.add(new Object[] {accountBalance.getTotDebitTrans(), accountBalance.getTotCreditTrans(),
+          accountBalance.getModifiedDate(), accountBalance.getModifiedBy(), accountBalance.getId()});
     }
-
     return params;
   }
 
@@ -125,6 +111,18 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       accountBalance.setTotMonthDbBal10(rs.getBigDecimal("tot_month_db_bal_10"));
       accountBalance.setTotMonthDbBal11(rs.getBigDecimal("tot_month_db_bal_11"));
       accountBalance.setTotMonthDbBal12(rs.getBigDecimal("tot_month_db_bal_12"));
+      accountBalance.setTotMonthCrBal01(rs.getBigDecimal("tot_month_cr_bal_01"));
+      accountBalance.setTotMonthCrBal02(rs.getBigDecimal("tot_month_cr_bal_02"));
+      accountBalance.setTotMonthCrBal03(rs.getBigDecimal("tot_month_cr_bal_03"));
+      accountBalance.setTotMonthCrBal04(rs.getBigDecimal("tot_month_cr_bal_04"));
+      accountBalance.setTotMonthCrBal05(rs.getBigDecimal("tot_month_cr_bal_05"));
+      accountBalance.setTotMonthCrBal06(rs.getBigDecimal("tot_month_cr_bal_06"));
+      accountBalance.setTotMonthCrBal07(rs.getBigDecimal("tot_month_cr_bal_07"));
+      accountBalance.setTotMonthCrBal08(rs.getBigDecimal("tot_month_cr_bal_08"));
+      accountBalance.setTotMonthCrBal09(rs.getBigDecimal("tot_month_cr_bal_09"));
+      accountBalance.setTotMonthCrBal10(rs.getBigDecimal("tot_month_cr_bal_10"));
+      accountBalance.setTotMonthCrBal11(rs.getBigDecimal("tot_month_cr_bal_11"));
+      accountBalance.setTotMonthCrBal12(rs.getBigDecimal("tot_month_cr_bal_12"));
       accountBalance.setTotCreditTrans(rs.getBigDecimal("tot_credit_trans"));
       accountBalance.setTotDebitTrans(rs.getBigDecimal("tot_debit_trans"));
       accountBalance.setStatFlag(rs.getString("stat_flag"));

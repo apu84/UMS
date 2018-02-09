@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "Transaction",
+    "name": "MonthBalance",
     "package": "org.ums.domain.model.immutable.account",
     "fields": [
       {
@@ -10,133 +10,45 @@
         }
       },
       {
-        "company": {
+        "AccountBalance": {
           "type": "Ref",
           "reference": {
-            "name": "Company",
+            "name": "AccountBalance",
             "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "String"
+              "type": "Long"
             },
             "manager": {
-              "name": "CompanyManager",
+              "name": "AccountBalanceManager",
               "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "divisionCode": "String"
-      },
-      {
-        "voucherNo": "String"
-      },
-      {
-        "voucherDate": "Date"
-      },
-      {
-        "serialNo": "Integer"
-      },
-      {
-        "account": {
+        "Month": {
           "type": "Ref",
           "reference": {
-            "name": "Account",
-            "package": "org.ums.domain.model.immutable.account",
+            "name": "Month",
+            "package": "org.ums.domain.model.immutable",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "AccountManager",
+              "name": "MonthManager",
               "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "voucher": {
-          "type": "Ref",
-          "reference": {
-            "name": "Voucher",
-            "package": "org.ums.domain.model.immutable.account",
-            "id": {
-              "type": "Long"
-            },
-            "manager": {
-              "name": "VoucherManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "totalMonthDebitBalance": "BigDecimal"
       },
       {
-        "amount": "BigDecimal"
+        "totalMonthCreditBalance": "BigDecimal"
       },
-      {
-        "balanceType": "BalanceType"
-      },
-      {
-        "narration": "String"
-      },
-      {
-        "foreignCurrency": "BigDecimal"
-      },
-      {
-        "currency": {
-          "type": "Ref",
-          "reference": {
-            "name": "Currency",
-            "package": "org.ums.domain.model.immutable.account",
-            "id": {
-              "type": "Long"
-            },
-            "manager": {
-              "name": "CurrencyManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "conversionFactor": "BigDecimal"
-      },
-      {
-        "projNo": "String"
-      },
-      {
-        "defaultCompany": "Company"
-      },
-      {
-        "statFlag": "String"
-      },
-      {
-        "statUpFlag": "String"
-      },
-      {
-        "receipt": {
-          "type": "Ref",
-          "reference": {
-            "name": "Receipt",
-            "package": "org.ums.domain.model.immutable.account",
-            "id": {
-              "type": "Long"
-            },
-            "manager": {
-              "name": "ReceiptManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "postDate": "Date"
-      },
-      {
-        "modifiedDate": "Date"
-      },
-      {
-        "modifiedBy": "String"
-      }
+
+
     ]
   }
 }

@@ -3,24 +3,25 @@ package org.ums.accounts.resource.definitions.general.ledger.transactions.journa
 import io.reactivex.Observable;
 import javafx.beans.value.ObservableValue;
 import org.apache.shiro.SecurityUtils;
+import org.apache.zookeeper.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.accounts.resource.definitions.general.ledger.transactions.AccountTransactionCommonResourceHelper;
 import org.ums.accounts.resource.definitions.general.ledger.transactions.helper.TransactionResponse;
 import org.ums.domain.model.immutable.Company;
-import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.AccountBalance;
-import org.ums.domain.model.immutable.accounts.AccountTransaction;
-import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
+import org.ums.domain.model.mutable.accounts.MutableMonth;
+import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
 import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.exceptions.MisMatchException;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
+import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.usermanagement.user.User;
 
 import javax.json.JsonArray;
@@ -73,69 +74,116 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
     FinancialAccountYear currentFinancialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
     List<Account> accounts = new ArrayList<>();
     Map<Long, MutableAccountTransaction> accountMapWithTransaction = new HashMap<>();
-    BigDecimal totalDebit= BigDecimal.valueOf(0.00);
+    BigDecimal totalDebit = BigDecimal.valueOf(0.00);
     BigDecimal totalCredit = BigDecimal.valueOf(0.00);
-    Observable<MutableAccountTransaction> observableTransactions = Observable.fromIterable(pTransactions);
-    observableTransactions.subscribe((a)->{
+    for(MutableAccountTransaction a : pTransactions) {
       accounts.add(a.getAccount());
-      accountMapWithTransaction.put(a.getAccount().getAccountCode(), a);
+      accountMapWithTransaction.put(a.getAccount().getId(), a);
 
       if(a.getBalanceType().equals(BalanceType.CREDIT))
-        totalCredit.add(a.getAmount());
+        totalCredit = totalCredit.add(a.getAmount());
       else
-        totalDebit.add(a.getAmount());
-    });
+        totalDebit = totalDebit.add(a.getAmount());
+    }
     if(!totalCredit.equals(totalDebit))
       throw new MisMatchException("Credit and Debit should be equal");
 
-    List<MutableAccountBalance> accountBalanceList = generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
+    List<MutableAccountBalance> accountBalanceList =
+        generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
     mAccountBalanceManager.update(accountBalanceList);
+
+    createOrUpdateMonthBalance(accountMapWithTransaction, accountBalanceList);
   }
 
-  @NotNull
-  private List<MutableAccountBalance> generateUpdatedAccountBalance(FinancialAccountYear pCurrentFinancialAccountYear, List<Account> pAccounts, Map<Long, MutableAccountTransaction> pAccountMapWithTransaction) {
-    List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(pCurrentFinancialAccountYear.getCurrentStartDate(), pCurrentFinancialAccountYear.getCurrentEndDate(), pAccounts);
-    Observable<MutableAccountBalance> accountBalanceObservable= Observable.fromIterable(accountBalanceList);
+  private void createOrUpdateMonthBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction, List<MutableAccountBalance> pAccountBalanceList) {
     Date date = new Date();
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     int month = calendar.get(Calendar.MONTH);
-    accountBalanceObservable.subscribe((a)->{
-      MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
-      adjustMonthAmount(month, a, accountTransaction);
-      if(accountTransaction.getBalanceType().equals(BalanceType.CREDIT))
-        a.setTotCreditTrans(a.getTotCreditTrans().add(accountTransaction.getAmount()));
+    List<MutableMonthBalance> existingMonthBalance = mMonthBalanceManager.getExistingMonthBalanceBasedOnAccountBalance(pAccountBalanceList,new Long(month));
+    Map<Long, MutableMonthBalance> accountBalanceIdMapWithMonthBalance= existingMonthBalance.stream()
+        .collect(Collectors.toMap(i->i.getAccountBalanceId(), i->i));
+    List<MutableMonthBalance> newMonthBalance= new ArrayList<>();
+    List<MutableMonthBalance> updatedMonthBalance = new ArrayList<>();
+    pAccountBalanceList.forEach(a->{
+      MutableAccountTransaction transaction= pAccountMapWithTransaction.get(a.getAccountCode());
+      MutableMonthBalance monthBalance = new PersistentMonthBalance();
+      monthBalance = initializeMonthBalance(month, accountBalanceIdMapWithMonthBalance, a, monthBalance);
+      adjustTotalDebitOrCreditBalance(transaction, monthBalance);
+      if(accountBalanceIdMapWithMonthBalance.containsKey(a.getId()))
+        updatedMonthBalance.add(monthBalance);
       else
-        a.setTotDebitTrans(a.getTotDebitTrans().add(accountTransaction.getAmount()));
+        newMonthBalance.add(monthBalance);
     });
-    return accountBalanceList;
+
+    insertNewOrUpdatedMonthBalance(newMonthBalance, updatedMonthBalance);
   }
 
-  private void adjustMonthAmount(int pMonth, MutableAccountBalance a, MutableAccountTransaction pAccountTransaction) {
-    if(pMonth == MonthType.JANUARY.getValue())
-      a.setTotMonthDbBal01(a.getTotMonthDbBal01().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.FEBRUARY.getValue())
-      a.setTotMonthDbBal02(a.getTotMonthDbBal02().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.MARCH.getValue())
-      a.setTotMonthDbBal03(a.getTotMonthDbBal03().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.APRIL.getValue())
-      a.setTotMonthDbBal04(a.getTotMonthDbBal04().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.MAY.getValue())
-      a.setTotMonthDbBal05(a.getTotMonthDbBal05().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.JUNE.getValue())
-      a.setTotMonthDbBal06(a.getTotMonthDbBal06().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.JULY.getValue())
-      a.setTotMonthDbBal07(a.getTotMonthDbBal07().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.AUGUST.getValue())
-      a.setTotMonthDbBal08(a.getTotMonthDbBal08().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.SEPTEMBER.getValue())
-      a.setTotMonthDbBal09(a.getTotMonthDbBal09().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.OCTOBER.getValue())
-      a.setTotMonthDbBal10(a.getTotMonthDbBal10().add(pAccountTransaction.getAmount()));
-    else if(pMonth == MonthType.NOVEMBER.getValue())
-      a.setTotMonthDbBal11(a.getTotMonthDbBal11().add(pAccountTransaction.getAmount()));
-    else
-      a.setTotMonthDbBal12(a.getTotMonthDbBal12().add(pAccountTransaction.getAmount()));
+  private void insertNewOrUpdatedMonthBalance(List<MutableMonthBalance> pNewMonthBalance,
+      List<MutableMonthBalance> pUpdatedMonthBalance) {
+    if(pNewMonthBalance.size() > 0)
+      mMonthBalanceManager.create(pNewMonthBalance);
+    if(pUpdatedMonthBalance.size() > 0)
+      mMonthBalanceManager.update(pUpdatedMonthBalance);
+  }
+
+  private void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
+    if(pTransaction.getBalanceType().equals(BalanceType.CREDIT)) {
+      pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? pTransaction
+          .getAmount() : pMonthBalance.getTotalMonthCreditBalance().add(pTransaction.getAmount()));
+      pMonthBalance.setTotalMonthDebitBalance(pMonthBalance.getTotalMonthDebitBalance() == null ? new BigDecimal(0)
+          : pMonthBalance.getTotalMonthDebitBalance());
+    }
+
+    else {
+      pMonthBalance.setTotalMonthDebitBalance(pMonthBalance.getTotalMonthDebitBalance() == null ? pTransaction
+          .getAmount() : pMonthBalance.getTotalMonthDebitBalance().add(pTransaction.getAmount()));
+      pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? new BigDecimal(0)
+          : pMonthBalance.getTotalMonthCreditBalance());
+    }
+
+  }
+
+  private MutableMonthBalance initializeMonthBalance(int pMonth,
+      Map<Long, MutableMonthBalance> pAccountBalanceIdMapWithMonthBalance, MutableAccountBalance a,
+      MutableMonthBalance pMonthBalance) {
+    if(pAccountBalanceIdMapWithMonthBalance.containsKey(a.getId())) {
+      pMonthBalance = pAccountBalanceIdMapWithMonthBalance.get(a.getId());
+    }
+    else {
+      pMonthBalance.setId(mIdGenerator.getNumericId());
+      pMonthBalance.setMonthId(new Long(pMonth));
+      pMonthBalance.setAccountBalanceId(a.getId());
+    }
+    return pMonthBalance;
+  }
+
+  @NotNull
+  private List<MutableAccountBalance> generateUpdatedAccountBalance(FinancialAccountYear pCurrentFinancialAccountYear,
+      List<Account> pAccounts, Map<Long, MutableAccountTransaction> pAccountMapWithTransaction) {
+    List<MutableAccountBalance> accountBalanceList =
+        mAccountBalanceManager.getAccountBalance(pCurrentFinancialAccountYear.getCurrentStartDate(),
+            pCurrentFinancialAccountYear.getCurrentEndDate(), pAccounts);
+
+    for(MutableAccountBalance a : accountBalanceList) {
+      MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
+      if(accountTransaction.getBalanceType().equals(BalanceType.CREDIT))
+        a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(
+            accountTransaction.getAmount()));
+      else
+        a.setTotDebitTrans(a.getTotDebitTrans() == null ? accountTransaction.getAmount() : a.getTotDebitTrans().add(
+            accountTransaction.getAmount()));
+    }
+    // accountBalanceList.forEach((a)->{
+    // MutableAccountTransaction accountTransaction =
+    // pAccountMapWithTransaction.get(a.getAccountCode());
+    // adjustMonthAmount(month, a, accountTransaction);
+    // if(accountTransaction.getBalanceType().equals(BalanceType.CREDIT))
+    // a.setTotCreditTrans(a.getTotCreditTrans().add(accountTransaction.getAmount()));
+    // else
+    // a.setTotDebitTrans(a.getTotDebitTrans().add(accountTransaction.getAmount()));
+    // });
+    return accountBalanceList;
   }
 
 }

@@ -38,6 +38,18 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   private BigDecimal mTotMonthDbBal10;
   private BigDecimal mTotMonthDbBal11;
   private BigDecimal mTotMonthDbBal12;
+  private BigDecimal mTotMonthCrBal01;
+  private BigDecimal mTotMonthCrBal02;
+  private BigDecimal mTotMonthCrBal03;
+  private BigDecimal mTotMonthCrBal04;
+  private BigDecimal mTotMonthCrBal05;
+  private BigDecimal mTotMonthCrBal06;
+  private BigDecimal mTotMonthCrBal07;
+  private BigDecimal mTotMonthCrBal08;
+  private BigDecimal mTotMonthCrBal09;
+  private BigDecimal mTotMonthCrBal10;
+  private BigDecimal mTotMonthCrBal11;
+  private BigDecimal mTotMonthCrBal12;
   private BigDecimal mTotCreditTrans;
   private BigDecimal mTotDebitTrans;
   private String mStatFlag;
@@ -243,6 +255,126 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   @Override
   public void setTotMonthDbBal12(BigDecimal pTotMonthDbBal12) {
     mTotMonthDbBal12 = pTotMonthDbBal12;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal01() {
+    return mTotMonthCrBal01;
+  }
+
+  @Override
+  public void setTotMonthCrBal01(BigDecimal pTotMonthCrBal01) {
+    mTotMonthCrBal01 = pTotMonthCrBal01;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal02() {
+    return mTotMonthCrBal02;
+  }
+
+  @Override
+  public void setTotMonthCrBal02(BigDecimal pTotMonthCrBal02) {
+    mTotMonthCrBal02 = pTotMonthCrBal02;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal03() {
+    return mTotMonthCrBal03;
+  }
+
+  @Override
+  public void setTotMonthCrBal03(BigDecimal pTotMonthCrBal03) {
+    mTotMonthCrBal03 = pTotMonthCrBal03;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal04() {
+    return mTotMonthCrBal04;
+  }
+
+  @Override
+  public void setTotMonthCrBal04(BigDecimal pTotMonthCrBal04) {
+    mTotMonthCrBal04 = pTotMonthCrBal04;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal05() {
+    return mTotMonthCrBal05;
+  }
+
+  @Override
+  public void setTotMonthCrBal05(BigDecimal pTotMonthCrBal05) {
+    mTotMonthCrBal05 = pTotMonthCrBal05;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal06() {
+    return mTotMonthCrBal06;
+  }
+
+  @Override
+  public void setTotMonthCrBal06(BigDecimal pTotMonthCrBal06) {
+    mTotMonthCrBal06 = pTotMonthCrBal06;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal07() {
+    return mTotMonthCrBal07;
+  }
+
+  @Override
+  public void setTotMonthCrBal07(BigDecimal pTotMonthCrBal07) {
+    mTotMonthCrBal07 = pTotMonthCrBal07;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal08() {
+    return mTotMonthCrBal08;
+  }
+
+  @Override
+  public void setTotMonthCrBal08(BigDecimal pTotMonthCrBal08) {
+    mTotMonthCrBal08 = pTotMonthCrBal08;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal09() {
+    return mTotMonthCrBal09;
+  }
+
+  @Override
+  public void setTotMonthCrBal09(BigDecimal pTotMonthCrBal09) {
+    mTotMonthCrBal09 = pTotMonthCrBal09;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal10() {
+    return mTotMonthCrBal10;
+  }
+
+  @Override
+  public void setTotMonthCrBal10(BigDecimal pTotMonthCrBal10) {
+    mTotMonthCrBal10 = pTotMonthCrBal10;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal11() {
+    return mTotMonthCrBal11;
+  }
+
+  @Override
+  public void setTotMonthCrBal11(BigDecimal pTotMonthCrBal11) {
+    mTotMonthCrBal11 = pTotMonthCrBal11;
+  }
+
+  @Override
+  public BigDecimal getTotMonthCrBal12() {
+    return mTotMonthCrBal12;
+  }
+
+  @Override
+  public void setTotMonthCrBal12(BigDecimal pTotMonthCrBal12) {
+    mTotMonthCrBal12 = pTotMonthCrBal12;
   }
 
   @Override

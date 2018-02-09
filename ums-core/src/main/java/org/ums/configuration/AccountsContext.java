@@ -75,6 +75,12 @@ public class AccountsContext {
   }
 
   @Bean
+  MonthBalanceManager monthBalanceManager() {
+    return new PersistentMonthBalanceDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
   PredefinedNarrationManager predefinedNarrationManager() {
     PredefinedNarrationCache predefinedNarrationCache = new PredefinedNarrationCache(mCacheFactory.getCacheManager());
     predefinedNarrationCache.setManager(new PersistentPredefinedNarrationDao(

@@ -49,6 +49,30 @@ public interface AccountBalance extends Serializable, LastModifier, EditType<Mut
 
   BigDecimal getTotMonthDbBal12();
 
+  BigDecimal getTotMonthCrBal01();
+
+  BigDecimal getTotMonthCrBal02();
+
+  BigDecimal getTotMonthCrBal03();
+
+  BigDecimal getTotMonthCrBal04();
+
+  BigDecimal getTotMonthCrBal05();
+
+  BigDecimal getTotMonthCrBal06();
+
+  BigDecimal getTotMonthCrBal07();
+
+  BigDecimal getTotMonthCrBal08();
+
+  BigDecimal getTotMonthCrBal09();
+
+  BigDecimal getTotMonthCrBal10();
+
+  BigDecimal getTotMonthCrBal11();
+
+  BigDecimal getTotMonthCrBal12();
+
   BigDecimal getTotDebitTrans();
 
   BigDecimal getTotCreditTrans();
