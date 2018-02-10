@@ -119,7 +119,7 @@
                              Picture</b></a>-->
                         <div data-ng-show="vm.isRegistrar">
                             <div data-ng-show="vm.showPersonalInputDiv">
-                                <div align="right">
+                                <div align="center"  data-ng-if="vm.test==true">
                                     <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
                                          style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
                                          src=""
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <div data-ng-show="!vm.showPersonalInputDiv">
-                                <div align="right">
+                                <div align="center" data-ng-if="vm.test==true">
                                     <img class="img-square"
                                          style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
                                          src=""
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div data-ng-show="!vm.isRegistrar">
-                            <div align="right">
+                            <div align="center">
                                 <img class="img-square"
                                      style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
                                      src=""
