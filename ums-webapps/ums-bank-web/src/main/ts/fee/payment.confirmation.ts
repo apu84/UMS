@@ -45,6 +45,9 @@ module ums {
     }
 
     private ok(): void {
+      console.log("closed");
+      this.convertToJson();
+     // alert("i am alert");
       this.$modalInstance.dismiss('cancel');
       this.reload.reloadList = true;
     }
@@ -55,6 +58,7 @@ module ums {
           .then((result) => {
             if (result) {
               this.ok();
+               // this.convertToJson();
               this.reload.reloadList = true;
             }
             else {
@@ -62,7 +66,29 @@ module ums {
             }
           });
     }
+      private convertToJson() {
 
+          //var json= this.selectedReceivePayment.filter(p=>p.feeCategory=="Carry over exam fee" || p.feeCategory=="Improvement exam fee");
+          var result= this.selectedReceivePayment.filter(p=>p.feeCategory=="Carry over exam fee");
+          var completeJson = {};
+          console.log("result in converto Json Just carry Courses");
+          console.log(result);
+          console.log(result.length);
+          var jsonObj = [];
+          for(var i=0;i<result.length;i++){
+              var item = {};
+              item["transactionId"] =result[i].transactionId;
+
+              console.log("Items");
+              console.log(item);
+              //this.notify.success("sending./.....");
+              jsonObj.push(item);
+          }
+          completeJson["entries"] = jsonObj;
+          console.log("Complete json cci Bank section!!!!!!!!!!!!!!!");
+          console.log(completeJson);
+
+      }
     private totalAmount(payments: ReceivePayment[]): number {
       return this.receivePaymentService.totalAmount(payments);
     }

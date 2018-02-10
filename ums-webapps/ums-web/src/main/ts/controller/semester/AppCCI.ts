@@ -232,6 +232,7 @@ module ums {
       this.convertToJson(this.$scope.registrationResults).then((json:any)=>{
           console.log("Checking");
           console.log(json);
+
           this.$scope.loadingVisibility = true;
           this.$scope.responseResults = [];
           this.httpClient.post('academic/applicationCCI', json, 'application/json')
@@ -244,6 +245,7 @@ module ums {
                       //this.$window.alert("Error in saving data");
                   }
                   console.log("Rumi");
+
                   console.log(this.$scope.responseResults.length);
                   this.$scope.checkBoxCounter=0;
                   this.$scope.submit_Button_Disable=true;

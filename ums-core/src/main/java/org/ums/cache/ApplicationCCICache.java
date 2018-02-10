@@ -4,6 +4,7 @@ import javafx.application.Application;
 import org.springframework.context.ApplicationContextInitializer;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
@@ -17,6 +18,11 @@ public class ApplicationCCICache extends
     ContentCache<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements ApplicationCCIManager {
 
   CacheManager<ApplicationCCI, Long> mCacheManager;
+
+  @Override
+  public int updatebank(MutableStudentPayment MutableStudentPayment) {
+    return getManager().updatebank(MutableStudentPayment);
+  }
 
   @Override
   public List<ApplicationCCI> getApplicationCCIForImprovementLimit(String pStudentId) {

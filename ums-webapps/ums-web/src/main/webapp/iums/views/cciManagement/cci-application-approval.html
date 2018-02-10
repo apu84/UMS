@@ -153,7 +153,7 @@
                                                     <td>{{a.courseId}}</td>
                                                     <td>{{a.courseTitle}}</td>
                                                     <td>{{a.statusName}}</td>
-                                                    <td><input type="checkbox" data-ng-model="a.apply" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
+                                                    <td><input type="checkbox" data-ng-model="a.apply" ng-disabled="a.statusName=='Waiting for payment' || a.statusName=='Approved' ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
                                                 </tr>
                                                 </tbody>
                                             </table>

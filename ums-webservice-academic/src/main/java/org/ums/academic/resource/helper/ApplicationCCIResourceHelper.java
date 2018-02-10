@@ -128,6 +128,25 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return builder.build();
   }
 
+  // Bank Payment Approval
+  public Response cciApproval(JsonObject pJsonObject, UriInfo pUriInfo) {
+    List<MutableApplicationCCI> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      System.out.println("--------" + jsonObject);
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      getBuilder().build(application, jsonObject, localCache);
+      applications.add(application);
+    }
+    mManager.update(applications);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public Response appliedAndApproved(final String studentId, final Integer semesterId, JsonObject pJsonObject,
       UriInfo pUriInfo) {
     List<MutableApplicationCCI> applications = new ArrayList<>();
@@ -172,24 +191,33 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       List<PersistentApplicationCCI> applicationAfterValidationByService =
         persistentApplicationCCIs;
       mManager.create(applications);
-
     List<MutableStudentPayment> studentPayments = new ArrayList<>();
     applications.forEach(application->{
-      MutableStudentPayment studentPayment = new PersistentStudentPayment();
-      FeeCategory.Categories feeCategoryId = application.getApplicationType().equals(ApplicationType.CARRY)? FeeCategory.Categories.CARRY:FeeCategory.Categories.IMPROVEMENT;
-      FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
-      List<FeeCategory> feeCategories = new ArrayList<>();
-      feeCategories.add(feeCategory);
-      List<UGFee> fees = mUgFeeManager.getFee(application.getStudent().getProgram().getFacultyId(),
-              application.getStudent().getSemester().getId(), feeCategories);
-      studentPayment.setFeeCategoryId(feeCategoryId.toString());
-      studentPayment.setStatus(StudentPayment.Status.APPLIED);
-      studentPayment.setSemesterId(application.getSemester().getId());
-      studentPayment.setStudentId(application.getStudent().getId());
-      studentPayment.setAmount(fees.get(0).getAmount());
-      studentPayment.setTransactionValidTill(UmsUtils.addDay(new Date(), 10));
-      studentPayments.add(studentPayment);
+      if(!application.getApplicationType().equals(ApplicationType.CLEARANCE)){
+        MutableStudentPayment studentPayment = new PersistentStudentPayment();
+        FeeCategory.Categories feeCategoryId = application.getApplicationType().equals(ApplicationType.CARRY)? FeeCategory.Categories.CARRY:FeeCategory.Categories.IMPROVEMENT;
+        FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
+        List<FeeCategory> feeCategories = new ArrayList<>();
+        feeCategories.add(feeCategory);
+//      List<UGFee> fees = mUgFeeManager.getFee(
+//              application.getStudent().getProgram().getFacultyId(),
+//              application.getStudent().getSemester().getId(),
+//              feeCategories);
+        UGFee fee = mUgFeeManager.getFee(application.getStudent().getProgram().getFacultyId(),
+                application.getStudent().getSemester().getId(),feeCategory);
+        studentPayment.setFeeCategoryId(feeCategory.getId());
+        studentPayment.setStatus(StudentPayment.Status.APPLIED);
+        studentPayment.setSemesterId(application.getSemester().getId());
+        studentPayment.setStudentId(application.getStudent().getId());
+        studentPayment.setAmount(fee.getAmount());
+        String transactionIIIID = application.getTransactionID();
+        studentPayment.setTransactionId(application.getTransactionID());
+        studentPayment.setTransactionValidTill(UmsUtils.addDay(new Date(), 10));
+        studentPayments.add(studentPayment);
+      }
+
     });
+    //int x=studentPayments.size();
 
     mStudentPaymentManager.create(studentPayments);
       JsonObjectBuilder object = Json.createObjectBuilder();

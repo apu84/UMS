@@ -10,6 +10,11 @@ import org.ums.util.CacheUtil;
 public class UGFeeCache extends ContentCache<UGFee, MutableUGFee, Long, UGFeeManager> implements UGFeeManager {
   private CacheManager<UGFee, Long> mCacheManager;
 
+  @Override
+  public UGFee getFee(Integer pFacultyId, Integer pSemesterId, FeeCategory pFeeCategory) {
+    return getManager().getFee(pFacultyId, pSemesterId, pFeeCategory);
+  }
+
   public UGFeeCache(final CacheManager<UGFee, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.ApplicationCCIResourceHelper;
 import org.ums.resource.Resource;
 
+import javax.annotation.PostConstruct;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +30,13 @@ public class MutableApplicationCCIResource extends Resource {
   public Response appliedAndApproved(final @PathParam("student-id") String pStudentId,
       final @PathParam("semester-id") Integer pSemesterid, final JsonObject pJsonObject) {
     return mHelper.appliedAndApproved(pStudentId, pSemesterid, pJsonObject, mUriInfo);
+  }
+
+  @POST
+  @Path("/transactionId")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response cciApprovalbank(final JsonObject pJsonObject) {
+    return mHelper.cciApproval(pJsonObject, mUriInfo);
   }
 
   @DELETE

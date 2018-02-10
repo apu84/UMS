@@ -3,6 +3,7 @@ package org.ums.manager;
 import org.glassfish.jersey.jaxb.internal.XmlCollectionJaxbProvider;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.fee.payment.MutableStudentPayment;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
   List<ApplicationCCI> getByStudentIdAndSemester(final String pStudentId, final int pSemesterId);
 
   List<ApplicationCCI> getApplicationCCIForImprovementLimit(final String pStudentId);
+
+  int updatebank(MutableStudentPayment MutableStudentPayment);
 
   List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus, final String empDeptId);// getByStudentId
 

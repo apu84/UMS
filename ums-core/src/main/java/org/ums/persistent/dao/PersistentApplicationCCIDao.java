@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import javafx.application.Application;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationCCIDaoDecorator;
@@ -7,6 +8,7 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
+import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
@@ -48,6 +50,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   // UpdateApliedAndApproved
   String UDAPTE_APPLIED_APPROVED = "update APPLICATION_CCI " + "set STATUS=?  where "
       + "STUDENT_ID=? AND SEMESTER_ID=? AND APPLICATION_TYPE=3 AND COURSE_ID=?";
+
+  String UPADTE_BANK_APPROVED = "update APPLICATION_CCI " + "set STATUS=8  where " + "TRANSACTION_ID=?";
 
   // Rumi-CarryApporvalQueries
   String SELECT_ALL_CA =
@@ -260,7 +264,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   // Improvement_Limit_Calculation_Theory
   String SELECT_IMPROVEMENT_LIMIT =
-      "SELECT COUNT (COURSE_ID) as improvement_limit from APPLICATION_CCI WHERE STUDENT_ID= ? and STATUS=7 and APPLICATION_TYPE=5";
+      "SELECT COUNT (COURSE_ID) as improvement_limit from APPLICATION_CCI WHERE STUDENT_ID= ? and STATUS=8 and APPLICATION_TYPE=5";
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
@@ -372,9 +376,18 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public int updatebank(MutableStudentPayment studentPayment) {
+    // List<Object[]> parameters = getUpdateParamListBank(MutableStudentPayment);
+    return mJdbcTemplate.update("update APPLICATION_CCI set STATUS=8  where TRANSACTION_ID=?", studentPayment
+        .getTransactionId());
+  }
+
+  @Override
   public int update(List<MutableApplicationCCI> pMutableList) {
+    boolean result = false;
     List<Object[]> parameters = getUpdateParamList(pMutableList);
     return mJdbcTemplate.batchUpdate(UDAPTE_APPLIED_APPROVED, parameters).length;
+
   }
 
   @Override

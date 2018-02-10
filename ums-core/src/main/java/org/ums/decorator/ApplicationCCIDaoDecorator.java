@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.manager.ApplicationCCIManager;
 
 import java.util.List;
@@ -12,6 +13,11 @@ import java.util.List;
 public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
+  @Override
+  public int updatebank(MutableStudentPayment MutableStudentPayment) {
+    return getManager().updatebank(MutableStudentPayment);
+  }
+
   @Override
   public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled(String pStudentId, Integer pSemesterId) {
     return getManager().getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterId);
