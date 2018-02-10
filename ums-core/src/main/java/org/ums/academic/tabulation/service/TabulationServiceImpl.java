@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.ums.academic.tabulation.model.TabulationEntryModel;
 import org.ums.academic.tabulation.model.TabulationReportModel;
 import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.enums.CourseType;
 import org.ums.manager.*;
@@ -60,7 +59,9 @@ public class TabulationServiceImpl implements TabulationService {
       entries.add(entry);
     }
     TabulationReportModel reportModel = new TabulationReportModel();
-    reportModel.setTabulationEntries(entries);
+    reportModel.setTabulationEntries(
+        entries.stream().sorted((entry1, entry2) -> entry1.getStudent().getId().compareTo(entry2.getStudent().getId()))
+            .collect(Collectors.toList()));
     reportModel.setSemester(mSemesterManager.get(pSemesterId));
     reportModel.setYear(pYear);
     reportModel.setAcademicSemester(pAcademicSemester);

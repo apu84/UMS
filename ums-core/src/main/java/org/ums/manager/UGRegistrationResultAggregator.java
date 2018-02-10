@@ -138,7 +138,9 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         pResults.remove(course.getOldCourseId());
       }
     }
-    mLogger.debug("Equivalence result: {}", pResults.values().size());
+    if(mLogger.isDebugEnabled()) {
+      mLogger.debug("Equivalence result: {}", pResults.values().size());
+    }
     return new ArrayList<>(pResults.values());
   }
 

@@ -141,7 +141,7 @@ module ums {
                   ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id
                   : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
               statusByYearSemester.statusText = gradeProcessTask
-                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
+                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label+ '...'+ statusByYearSemester.taskStatus.response.progressDescription
                   : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
               return;
             }
@@ -150,12 +150,14 @@ module ums {
             this.startPolling(programId, semesterId, statusByYearSemester);
             if (resultPublishTask) {
               statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.id;
-              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.label;
+              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.label
+                  + '...'+ statusByYearSemester.taskStatus.response.progressDescription;
               return;
             }
             else {
               statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
-              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label;
+              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
+                  + '...'+ statusByYearSemester.taskStatus.response.progressDescription;
               return;
             }
           }
