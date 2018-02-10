@@ -87,7 +87,7 @@
     <div class="row">
         <div class="session-wrapper text-center">
             <h4 class="title">Your Session Has Expired. <a href="javascript:void()" onclick="login()">Click here</a> to login again. </h4>
-            <p class="session-con">You will be redirected back to the login page in <span>(5)</span> seconds.</p>
+            <p class="session-con">You will be redirected back to the login page in <span id="countdown"></span> seconds.</p>
             <div class="logo"> <img src="../resources/images/clock-01.png" title="IUMS" alt="IUMS" height=""> </div>
             <div class="session-copy-right">&copy; <span class="newYear"></span> IUMS Terms of use  Privacy &amp; Cookies</div>
         </div>
@@ -105,4 +105,18 @@
         var baseUri = window.location.pathname.substring(0, window.location.pathname.indexOf('/', 1) + 1);
         window.location.href = baseUri + 'login';
     }
+
+
+    var counter = 5;
+    var id;
+
+    id = setInterval(function() {
+        counter--;
+        if(counter < 0) {
+            clearInterval(id);
+        } else {
+            document.getElementById("countdown").innerHTML  = "(" + counter.toString() + ")";
+        }
+    }, 1000);
+
 </script>
