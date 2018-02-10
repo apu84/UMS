@@ -215,6 +215,7 @@ module ums {
     }
 
     private tabulationReport(programId: string, year: string, semester: string): void {
+      $("body").css("cursor", "progress");
       this.httpClient.get(`academic/tabulation/report/program/${programId}/semester/${this.resultProcessingSearchParamModel.semesterId}/year/${year}/academic-semester/${semester}`, 'application/pdf',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/pdf'});
@@ -223,10 +224,12 @@ module ums {
             reader.onloadend = (e) => {
               UmsUtil.saveAsFile(reader.result,
                   `result_list_${this.resultProcessingSearchParamModel.programId}_${this.resultProcessingSearchParamModel.semesterId}`);
+              $("body").css("cursor", "default");
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
+            $("body").css("cursor", "default");
           }, 'arraybuffer');
     }
 

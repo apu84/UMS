@@ -734,6 +734,7 @@ public class TabulationPdf {
     private PdfPCell getGPATableCell(String pContent, int pBorder) {
       PdfPCell cell = getGPATableCell(pContent);
       cell.setBorder(pBorder);
+      cell.setPadding(0.7f);
       return cell;
     }
   }
