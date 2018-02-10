@@ -41,4 +41,5 @@ public interface Group extends Serializable, LastModifier, EditType<MutableGroup
   Date getModifiedDate();
 
   String getModifiedBy();
+
 }

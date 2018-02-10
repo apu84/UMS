@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -66,6 +67,8 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
   Long getReceiptId();
 
   Date getPostDate();
+
+  AccountTransactionType getAccountTransactionType();
 
   Date getModifiedDate();
 

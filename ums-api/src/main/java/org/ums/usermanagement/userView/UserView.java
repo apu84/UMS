@@ -13,6 +13,8 @@ public interface UserView extends Serializable, EditType<MutableUserView>, Ident
 
   String getUserName();
 
+  String getLoginId();
+
   String getGender();
 
   Date getDateOfBirth();

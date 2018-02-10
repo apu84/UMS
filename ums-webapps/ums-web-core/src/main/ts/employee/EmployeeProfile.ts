@@ -98,6 +98,7 @@ module ums {
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
         private isRegistrar: boolean;
+        private test: boolean = true;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -958,7 +959,13 @@ module ums {
             var id = this.userId;
             var image = $("#userPhoto").contents().prevObject[0].files[0];
             this.getFormData(image, id).then((formData) => {
-                this.FileUpload.uploadPhoto(formData);
+                this.FileUpload.uploadPhoto(formData).then(() =>{
+                    this.test = false;
+                    var that = this;
+                    setTimeout(()=> {
+                        that.test = true;
+                    }, 500)
+                });
             });
         }
 

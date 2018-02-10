@@ -10,7 +10,7 @@ module ums{
 
     }
 
-    public getExamRoutine(semesterId:number,examType:number):ng.IPromise<any>{
+    public getExamRoutine(semesterId?: number, examType?: number): ng.IPromise<any> {
       var examRoutineList:Array<ExamRoutineModel>=[];
       var defer = this.$q.defer();
       this.httpClient.get("/ums-webservice-academic/academic/examroutine/simplified/semester/"+semesterId+"/examtype/"+examType,"application/json",

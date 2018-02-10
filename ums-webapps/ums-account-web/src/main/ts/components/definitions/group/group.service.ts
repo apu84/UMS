@@ -17,6 +17,11 @@ module ums {
     modifiedBy: string;
   }
 
+  export enum GroupFlag{
+    YES="Y",
+    NO="N"
+  }
+
   export class GroupService {
     public static $inject = ['$q', 'HttpClient'];
 

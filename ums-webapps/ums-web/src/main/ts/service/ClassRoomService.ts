@@ -40,6 +40,23 @@ module ums{
       return defer.promise;
     }
 
+    public getClassRoomsForSeatPlan(): ng.IPromise<any> {
+      var defer = this.$q.defer();
+      var rooms: any = {};
+      this.httpClient.get("academic/classroom/seat-plan/all", 'application/json',
+          (json: any, etag: string) => {
+        console.log(json);
+            rooms = json;
+            defer.resolve(rooms.rows);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in fetching room data for seat plan");
+          });
+
+      return defer.promise;
+    }
+
     public getClassRoomsBasedOnRoutine(semesterId:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       var rooms:any={};

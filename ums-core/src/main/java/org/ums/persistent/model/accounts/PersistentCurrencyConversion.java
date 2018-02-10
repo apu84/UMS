@@ -1,5 +1,7 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -38,6 +40,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   private String mLastModified;
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }
@@ -58,6 +61,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public String getCompanyId() {
     return mCompanyId;
   }
@@ -68,6 +72,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonIgnore
   public Company getDefaultCompany() {
     return mCompany == null ? sCompanyManager.get(mDefaultCompanyId) : sCompanyManager.validate(mDefaultCompany);
   }
@@ -78,6 +83,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonIgnore
   public String getDefaultCompanyId() {
     return mDefaultCompanyId;
   }
@@ -98,6 +104,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getCurrencyId() {
     return mCurrencyId;
   }
@@ -108,6 +115,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getConversionFactor() {
     return mConversionFactor;
   }
@@ -118,6 +126,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getReverseConversionFactor() {
     return mReverseConversionFactor;
   }
@@ -128,6 +137,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getBaseConversionFactor() {
     return mBaseConversionFactor;
   }
@@ -138,6 +148,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public BigDecimal getReverseBaseConversionFactor() {
     return mReverseBaseConversionFactor;
   }
@@ -168,6 +179,7 @@ public class PersistentCurrencyConversion implements MutableCurrencyConversion {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public Date getModifiedDate() {
     return mModifiedDate;
   }

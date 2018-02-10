@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class PersistentUserViewDao extends UserViewDaoDecorator {
   static String SELECT_ALL =
-      "SELECT USER_ID, USER_NAME, GENDER, DATE_OF_BIRTH, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, MOBILE_NUMBER, MOBILE_NUMBER,"
+      "SELECT USER_ID, LOGIN_ID, USER_NAME, GENDER, DATE_OF_BIRTH, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, MOBILE_NUMBER, MOBILE_NUMBER,"
           + " EMAIL_ADDRESS, DEPARTMENT, DESIGNATION, ROLE_ID, STATUS FROM MVIEW_USERS ";
 
   String EXISTS = "SELECT COUNT(USER_ID) EXIST FROM MVIEW_USERS ";
@@ -52,6 +52,7 @@ public class PersistentUserViewDao extends UserViewDaoDecorator {
     public UserView mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableUserView userView = new PersistentUserView();
       userView.setId(rs.getString("USER_ID"));
+      userView.setLoginId(rs.getString("LOGIN_ID"));
       userView.setUserName(rs.getString("USER_NAME"));
       userView.setGender(rs.getString("GENDER"));
       userView.setDateOfBirth(rs.getDate("DATE_OF_BIRTH"));

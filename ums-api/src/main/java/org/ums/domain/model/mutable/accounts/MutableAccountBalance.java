@@ -49,6 +49,30 @@ public interface MutableAccountBalance extends AccountBalance, Editable<Long>, M
 
   void setTotMonthDbBal12(BigDecimal pTotMonthDbBal12);
 
+  void setTotMonthCrBal01(BigDecimal pTotMonthCrBal01);
+
+  void setTotMonthCrBal02(BigDecimal pTotMonthCrBal02);
+
+  void setTotMonthCrBal03(BigDecimal pTotMonthCrBal03);
+
+  void setTotMonthCrBal04(BigDecimal pTotMonthCrBal04);
+
+  void setTotMonthCrBal05(BigDecimal pTotMonthCrBal05);
+
+  void setTotMonthCrBal06(BigDecimal pTotMonthCrBal06);
+
+  void setTotMonthCrBal07(BigDecimal pTotMonthCrBal07);
+
+  void setTotMonthCrBal08(BigDecimal pTotMonthCrBal08);
+
+  void setTotMonthCrBal09(BigDecimal pTotMonthCrBal09);
+
+  void setTotMonthCrBal10(BigDecimal pTotMonthCrBal10);
+
+  void setTotMonthCrBal11(BigDecimal pTotMonthCrBal11);
+
+  void setTotMonthCrBal12(BigDecimal pTotMonthCrBal12);
+
   void setTotDebitTrans(BigDecimal pTotDebitTrans);
 
   void setTotCreditTrans(BigDecimal pTotCreditTrans);

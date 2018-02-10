@@ -3,6 +3,7 @@ package org.ums.cache.accounts;
 import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.AccountManager;
 
@@ -37,5 +38,10 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   @Override
   public List<Account> getAccounts(String pAccountName) {
     return getManager().getAccounts(pAccountName);
+  }
+
+  @Override
+  public List<Account> getAccounts(GroupFlag pGroupFlag) {
+    return getManager().getAccounts(pGroupFlag);
   }
 }

@@ -31,7 +31,7 @@ public class PersistentCurrencyDao extends CurrencyDaoDecorator {
 
   @Override
   public List<Currency> getAll() {
-    String query = SELECT_ALL;
+    String query = SELECT_ALL+" ORDER BY CURRENCY_FLAG";
     return mJdbcTemplate.query(query, ((rs, rowNum) -> new PersistentCurrency(
         rs.getLong("id"),
         rs.getString("comp_code"),

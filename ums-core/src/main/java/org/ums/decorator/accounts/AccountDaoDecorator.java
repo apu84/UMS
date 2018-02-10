@@ -3,6 +3,7 @@ package org.ums.decorator.accounts;
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.manager.accounts.AccountManager;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   @Override
   public List<Account> getAccounts(String pAccountName) {
     return getManager().getAccounts(pAccountName);
+  }
+
+  @Override
+  public List<Account> getAccounts(GroupFlag pGroupFlag) {
+    return getManager().getAccounts(pGroupFlag);
   }
 }

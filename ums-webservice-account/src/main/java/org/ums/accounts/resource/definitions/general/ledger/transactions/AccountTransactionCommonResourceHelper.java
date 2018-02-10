@@ -11,12 +11,11 @@ import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
-import org.ums.manager.accounts.AccountTransactionManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
-import org.ums.manager.accounts.VoucherManager;
-import org.ums.manager.accounts.VoucherNumberControlManager;
+import org.ums.manager.accounts.*;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
@@ -44,13 +43,23 @@ public class AccountTransactionCommonResourceHelper extends
   protected VoucherNumberControlManager mVoucherNumberControlManager;
   @Autowired
   protected CompanyManager mCompanyManager;
+  @Autowired
+  protected AccountManager mAccountManager;
+  @Autowired
+  protected AccountBalanceManager mAccountBalanceManager;
+  @Autowired
+  protected UserManager mUserManager;
+  @Autowired
+  protected IdGenerator mIdGenerator;
+  @Autowired
+  protected MonthBalanceManager mMonthBalanceManager;
 
   private enum DateCondition {
     Previous,
     Next
   }
 
-  public TransactionResponse voucherNo(Long pVoucherId) throws Exception {
+  public TransactionResponse getVoucherNo(Long pVoucherId) throws Exception {
     Voucher voucher = mVoucherManager.get(pVoucherId);
     FinancialAccountYear openFinancialYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
     Date currentDay = new Date();
@@ -124,7 +133,7 @@ public class AccountTransactionCommonResourceHelper extends
   @NotNull
   private String generateVoucherNumber(Voucher pVoucher, Integer pNextVoucher) {
     String voucherNumber = "" + pNextVoucher;
-    for(int i = 0; i < (8 - pNextVoucher.toString().length()); i++) {
+    for(int i = 0; i < (6 - pNextVoucher.toString().length()); i++) {
       voucherNumber = "0" + voucherNumber;
     }
     voucherNumber = pVoucher.getShortName() + voucherNumber;
@@ -147,7 +156,7 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @Override
-  protected AccountTransactionManager getContentManager() {
+  public AccountTransactionManager getContentManager() {
     return mAccountTransactionManager;
   }
 

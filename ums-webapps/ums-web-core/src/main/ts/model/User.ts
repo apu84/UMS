@@ -20,5 +20,6 @@ module ums {
     department: string;
     designation: string;
     category: string;
+    loginId: string;
   }
 }

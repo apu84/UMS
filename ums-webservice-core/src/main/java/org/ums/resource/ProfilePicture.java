@@ -61,26 +61,28 @@ public class ProfilePicture extends Resource {
    */
 
   // @Autowired
-  @Qualifier("ftpSessionFactory")
-  @Lazy
+  @Autowired
   private SessionFactory<FTPFile> ftpSessionFactory;
 
   @GET
+  @Path("/{image-id}")
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
-      final @Context Request pRequest) {
+      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
     String userId = "";
-    Subject subject = SecurityUtils.getSubject();
-
-    userId = subject.getPrincipal().toString();
-    User user = mUserManager.get(userId);
+    if(pImageId.equals("0")) {
+      Subject subject = SecurityUtils.getSubject();
+      User user = mUserManager.get(subject.getPrincipal().toString());
+      userId = user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId();
+    }
+    else {
+      userId = pImageId;
+    }
     InputStream imageData = null;
     // mKafkaTemplate.send("ums_logger", "This is from profile picture");
 
     try {
 
-      imageData =
-          mGateway.read("files/user-photo/"
-              + (user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId()) + ".jpg");
+      imageData = mGateway.read("files/user-photo/" + (userId + ".jpg"));
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
       ObjectMapper mapper = new ObjectMapper();
@@ -133,7 +135,7 @@ public class ProfilePicture extends Resource {
 
     try {
       FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
-      template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+      template.setRemoteDirectoryExpression(new LiteralExpression("files/user-photo"));
       template.setUseTemporaryFileName(false);
       template.execute(session -> {
         session.mkdir("files/");

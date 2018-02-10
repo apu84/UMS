@@ -8,15 +8,19 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.Month;
+import org.ums.domain.model.immutable.accounts.MonthBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
+import org.ums.domain.model.mutable.accounts.MutableMonth;
+import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
+import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.accounts.AccountBalanceManager;
-import org.ums.manager.accounts.AccountManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
+import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
@@ -27,6 +31,8 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +57,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountBalanceBuilder mAccountBalanceBuilder;
   @Autowired
   private FinancialAccountYearManager mFinancialAccountYearManager;
+  @Autowired
+  private MonthManager mMonthManager;
+  @Autowired
+  private MonthBalanceManager mMonthBalanceManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -74,12 +84,26 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     mAccountBalanceBuilder.build(accountBalance, pJsonObject, cache);
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
+      accountBalance.setId(mIdGenerator.getNumericId());
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
       accountBalance.setAccountCode(id);
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
       mAccountBalanceManager.insertFromAccount(accountBalance);
+
+//      List<Month> months = mMonthManager.getAll();
+//      List<MutableMonthBalance> monthBalances = new ArrayList<>();
+//      for(Month month: months){
+//        MutableMonthBalance monthBalance = new PersistentMonthBalance();
+//        monthBalance.setId(mIdGenerator.getNumericId());
+//        monthBalance.setAccountBalanceId(accountBalance.getId());
+//        monthBalance.setMonthId(month.getId());
+//        monthBalance.setTotalMonthCreditBalance(new BigDecimal(0));
+//        monthBalance.setTotalMonthDebitBalance(new BigDecimal(0));
+//        monthBalances.add(monthBalance);
+//      }
+//      mMonthBalanceManager.create(monthBalances);
     }
 
     return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
@@ -87,6 +111,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getAll(final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAll();
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
+    List<Account> accounts = getContentManager().getAccounts(pGroupFlag);
     return getJsonObject(pUriInfo, accounts);
   }
 

@@ -47,6 +47,15 @@ public class UMSConfiguration {
   @Value("${twoFa.token.allowable.wrongTry}")
   private int mTwoFATokenAllowableWrongTry;
 
+  @Value("${accounts.jdbc.url}")
+  private String mAccountJdbcUrl;
+
+  @Value("${accounts.jdbc.username}")
+  private String mAccountJdbcUserName;
+
+  @Value("${accounts.jdbc.password}")
+  private String mAccountJdbcPassword;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -105,5 +114,17 @@ public class UMSConfiguration {
 
   public int getTwoFATokenAllowableWrongTry() {
     return mTwoFATokenAllowableWrongTry;
+  }
+
+  public String getAccountJdbcUrl() {
+    return mAccountJdbcUrl;
+  }
+
+  public String getAccountJdbcUserName() {
+    return mAccountJdbcUserName;
+  }
+
+  public String getAccountJdbcPassword() {
+    return mAccountJdbcPassword;
   }
 }

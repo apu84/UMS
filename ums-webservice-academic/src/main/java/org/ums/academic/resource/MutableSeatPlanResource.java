@@ -24,6 +24,13 @@ public class MutableSeatPlanResource extends Resource {
   }
 
   @PUT
+  @Path("/updateSeat")
+  public Response updateseat(final JsonObject pJsonObject) {
+
+    return mSeatPlanResourceHelper.updateSeatPlan(pJsonObject, mUriInfo);
+  }
+
+  @PUT
   public Response updateSeatPlan(final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     return mSeatPlanResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest, pIfMatchHeader,
