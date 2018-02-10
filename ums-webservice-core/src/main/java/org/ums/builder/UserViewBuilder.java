@@ -11,6 +11,7 @@ import org.ums.usermanagement.userView.UserView;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.DateFormat;
 
 @Component
 public class UserViewBuilder implements Builder<UserView, MutableUserView> {
@@ -21,13 +22,16 @@ public class UserViewBuilder implements Builder<UserView, MutableUserView> {
   @Autowired
   DesignationManager mDesignationManager;
 
+  @Autowired
+  private DateFormat mDateFormat;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, UserView pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("userId", pReadOnly.getId());
     pBuilder.add("loginId", pReadOnly.getLoginId());
     pBuilder.add("userName", pReadOnly.getUserName());
     pBuilder.add("gender", pReadOnly.getGender());
-    pBuilder.add("dateOfBirth", pReadOnly.getDateOfBirth().toString());
+    pBuilder.add("dateOfBirth", mDateFormat.format(pReadOnly.getDateOfBirth()));
     pBuilder.add("bloodGroup", pReadOnly.getBloodGroup());
     pBuilder.add("fatherName", pReadOnly.getFatherName());
     pBuilder.add("motherName", pReadOnly.getMotherName());
