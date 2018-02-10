@@ -19,12 +19,18 @@
   <context:annotation-config/>
   <context:spring-configured/>
 
-  <bean id="dataSource" name="dataSource" primary="true"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${jdbc.driverClass}"/>
-    <property name="url" value="${jdbc.url}"/>
+  <bean id="dataSource" name="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+    <property name="driverClass" value="${jdbc.driverClass}"/>
+    <property name="jdbcUrl" value="${jdbc.url}"/>
     <property name="username" value="${jdbc.username}"/>
     <property name="password" value="${jdbc.password}"/>
+    <property name="idleConnectionTestPeriodInMinutes" value="60"/>
+    <property name="idleMaxAgeInMinutes" value="240"/>
+    <property name="maxConnectionsPerPartition" value="30"/>
+    <property name="minConnectionsPerPartition" value="10"/>
+    <property name="partitionCount" value="3"/>
+    <property name="acquireIncrement" value="5"/>
+    <property name="statementsCacheSize" value="100"/>
   </bean>
 
   <bean id="libraryDataSource" name="libraryDataSource"

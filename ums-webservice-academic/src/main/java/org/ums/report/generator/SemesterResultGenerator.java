@@ -106,7 +106,8 @@ public class SemesterResultGenerator extends AbstractResultGenerator {
     cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
-    paragraph = new Paragraph(pStudentRecord.getStatus().getValue(), tableFont);
+    paragraph =
+        new Paragraph(pStudentRecord.getStatus() == null ? "" : pStudentRecord.getStatus().getValue(), tableFont);
     paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     pContentTable.addCell(cell);

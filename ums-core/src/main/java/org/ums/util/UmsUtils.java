@@ -48,7 +48,7 @@ public class UmsUtils {
   }
 
   public static String getPercentageString(int portion, int total) {
-    return ((portion / total) * 100) + "%";
+    return (int) (((float) portion / (float) total) * 100) + "%";
   }
 
   public static Map<String, Double> getGPAMap() {
