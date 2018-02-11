@@ -9,6 +9,9 @@ set -e
 
 source "/opt/config/iums.conf"
 
+pid_file="$RUN_DIR/microservie-$PROJECT_VERSION.pid"
+out_log="${LOG_DIR}/microservie-$PROJECT_VERSION.out"
+
 restart_service_if_not_running() {
 	if P=$(pgrep $1)
 	then
@@ -65,16 +68,100 @@ yes | cp -R $UMS_SRC/ums-webapps/ums-library-web/target/ums-library-web-$PROJECT
 yes | cp -R $UMS_SRC/ums-webapps/ums-account-web/target/ums-account-web-$PROJECT_VERSION/* /opt/ums-account-web
 }
 
-mservice() {
-  echo "Starting microservice"
-  ps aux | grep microservice-$PROJECT_VERSION.jar |grep -v grep| awk '{print $2}' | xargs -r kill
+get_micro_service_pids() {
+  ps aux | grep microservice-$PROJECT_VERSION.jar |grep -v grep| awk '{print $2}'
+}
+
+status_of_micro_service() {
+ if [ -r "${pid_file}" ]; then
+    local pid=
+    pid=$(cat "${pid_file}")
+    if [ "$(ps -p "${pid}" | wc -l)" -eq 2 ]; then
+      echo "Microservice is running with PID ${pid}"
+    else
+      echo "Microservice is NOT running but has a dangling PID file ${pid_file}"
+    fi
+  else
+    local micro_service_pids=
+    micro_service_pids=$(get_micro_service_pids)
+    if [ -n "${micro_service_pids:-}" ]; then
+      cat <<EOF
+There's rogue Microservice process running on $HOSTNAME
+It wasn't started with ${0}, it has PID ${micro_service_pids}
+EOF
+      exit 1
+    fi
+    echo "Microservice is NOT running"
+  fi
+
+  exit 0
+}
+
+stop_micro_service() {
+  if [ -r "${pid_file}" ]; then
+    local pid=
+    pid=$(cat "${pid_file}")
+
+    ## ps -p will output two lines if the process is running
+    if [ "$(ps -p "${pid}" | wc -l)" -eq 2 ]; then
+      echo "Stopping Microservice running with PID ${pid} ..."
+      kill "${pid}"
+
+      echo -n "Waiting for Microservice to shut down "
+      for i in {0..10}; do
+        echo -n "."
+        sleep 1
+        if [ "$(ps -p "${pid}" | wc -l)" -eq 1 ]; then
+          break
+        fi
+      done
+      echo ""
+
+      if [ "$(ps -p "${pid}" | wc -l)" -eq 2 ]; then
+        echo "Gracefully stopping Microservice failed, will now use force ..."
+        kill -9 "${pid}"
+      fi
+
+      rm "${pid_file}"
+    fi
+  else
+    echo "PID file doesn't not exist ${pid_file}"
+    exit 1
+  fi
+}
+
+start_micro_service() {
+  local pid=
+  local running_micro_services=
+  running_micro_services=$(get_micro_service_pids)
+  if [ ! -z "${running_micro_services}" ]; then
+    echo "Microservice already running with PID ${running_micro_services}"
+    exit 1
+  fi
+
   export PATH=$PATH:$MAVEN_HOME/bin:$UMS_CONFIG:$JAVA_HOME/bin
   UMS_CONFIG=$UMS_CONFIG
   export UMS_CONFIG
-  cd /opt/ums-repo/UMS/microservice/target
-  screen -S mservice  java -jar $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar
-  mservice -dmS
-  echo "End of microservice call"
+  java -jar $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar &>> "${out_log}" & pid=$!
+  echo "${pid}" > "${pid_file}"
+  printf "%s" "Starting Microservice "
+
+  ## Wait for few seconds to check if user-manager has started properly
+  for i in {0..5}; do
+    echo -n "."
+    sleep 1
+    if [ "$(ps -p "${pid}" | wc -l)" -eq 1 ]; then
+      rm "${pid_file}"
+      cat <<EOF
+
+Failed to start Microservice.
+Please check ${out_log} for further details.
+EOF
+       exit 1
+    fi
+    done
+    echo ""
+    echo "Started Microservice with PID ${pid}"
 }
 
 restart_web_server() {
@@ -168,10 +255,10 @@ usage() {
 	echo "-b  | --build Build distribution"
     echo "-m  | --mservice Run microservice"
 	echo "-bd | --build-deploy Build distribution and deploy in application and web server"
-	echo "      --stop Stops a particular tomcat instance"
-	echo "      --start Start a particular tomcat instance"
+	echo "      --stop Stops a particular tomcat instance / microservice"
+	echo "      --start Start a particular tomcat instance/ microservice"
 	echo "      --restart Restart a particular tomcat instance"
-	echo "      --status Status a particular tomcat instance"
+	echo "      --status Status a particular tomcat instance/ microservice"
 	echo "      --applog Show applicaiton logs of a particular tomcat instance"
 	echo "      --restart-app-servers Restarts all tomcat instances"
 	echo "      --restart-web-server Restarts web server and solar (apache/nginx)"
@@ -212,9 +299,10 @@ case $key in
 
 		-d|--deploy)
 		DEPLOY="deploy"
+
     ;;
-                -m|--mservice)
-                MSERVICE="mservice"
+		-m|--mservice)
+		MSERVICE="mservice"
     ;;
 
     -bd|--build-deploy)
@@ -222,13 +310,21 @@ case $key in
     ;;
 
 		--stop)
-		STOP="stop"
-		TOMCAT_INSTANCE=$2
+	if [ -z "$MSERVICE" ]; then
+      STOP="stop"
+	  TOMCAT_INSTANCE=$2
+    else
+	  stop_micro_service
+	fi
     ;;
 
 		--start)
-		START="start"
-		TOMCAT_INSTANCE=$2
+	if [ -z "$MSERVICE" ]; then
+	  START="start"
+      TOMCAT_INSTANCE=$2
+    else
+	  start_micro_service
+	fi
     ;;
 
 		--restart)
@@ -237,8 +333,12 @@ case $key in
     ;;
 
 		--status)
-		STATUS="status"
-		TOMCAT_INSTANCE=$2
+	if [ -z "$MSERVICE" ]; then
+      STATUS="status"
+	  TOMCAT_INSTANCE=$2
+    else
+	  status_of_micro_service
+	fi
     ;;
 
 		--applog)
@@ -274,12 +374,6 @@ if [ ! -z "$DEPLOY" ]
 then
 	deploy
 fi
-
-if [ ! -z "$MSERVICE" ]
-then
-       mservice
-fi
-
 
 if [ ! -z "$BUILD_DEPLOY" ]
 then
