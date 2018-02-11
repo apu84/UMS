@@ -1,6 +1,17 @@
 package org.ums.resource.helper;
 
-import com.google.gson.Gson;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,15 +31,7 @@ import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.Gson;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -97,11 +100,13 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     String queryString = "";
 
     if(filterDto.getSearchType().equalsIgnoreCase("basic")) {
-      if(filterDto.getBasicQueryField().equals("any"))
-        queryString = String.format("%s AND type_s:Record", filterDto.getBasicQueryTerm());
-      else
-        queryString =
-            String.format(filterDto.getBasicQueryField() + " : %s AND type_s:Record", filterDto.getBasicQueryTerm());
+      String queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*:*" : filterDto.getBasicQueryTerm();
+      if(filterDto.getBasicQueryField().equals("any")) {
+        queryString = String.format("%s AND type_s:Record", queryTerm);
+      }
+      else {
+        queryString = String.format(filterDto.getBasicQueryField() + " : %s AND type_s:Record", queryTerm);
+      }
 
       // queryString =
       // String.format("{!parent which=\"type_s:Record  AND _text_:*%s*\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
