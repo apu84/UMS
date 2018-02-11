@@ -101,7 +101,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
         queryString = String.format("%s AND type_s:Record", filterDto.getBasicQueryTerm());
       else
         queryString =
-            String.format(filterDto.getBasicQueryField() + " : *%s* AND type_s:Record", filterDto.getBasicQueryTerm());
+            String.format(filterDto.getBasicQueryField() + " : %s AND type_s:Record", filterDto.getBasicQueryTerm());
 
       // queryString =
       // String.format("{!parent which=\"type_s:Record  AND _text_:*%s*\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
