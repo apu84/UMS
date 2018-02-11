@@ -3,6 +3,7 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.processor.userhome.UserInfo;
 import org.ums.services.UserHomeService;
 
 import javax.ws.rs.GET;
@@ -21,7 +22,7 @@ public class UserHomeResource extends Resource {
   private UserHomeService mUserHomeService;
 
   @GET
-  public List<Map<String, String>> get(final @Context Request pRequest) {
+  public UserInfo get(final @Context Request pRequest) {
     return mUserHomeService.process(SecurityUtils.getSubject());
   }
 }

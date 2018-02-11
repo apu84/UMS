@@ -957,7 +957,8 @@ module ums {
 
         private uploadImage() {
             var id = this.userId;
-            var image = $("#userPhoto").contents().prevObject[0].files[0];
+            var photoContent : any =$("#userPhoto").contents();
+            var image = photoContent.prevObject[0].files[0];
             this.getFormData(image, id).then((formData) => {
                 this.FileUpload.uploadPhoto(formData).then(() =>{
                     this.test = false;

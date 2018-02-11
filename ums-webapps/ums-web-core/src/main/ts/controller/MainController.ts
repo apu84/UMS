@@ -34,7 +34,11 @@ module ums {
       }, 50);
 */
       httpClient.get("userHome", HttpClient.MIME_TYPE_JSON, (response) => {
-        $scope.userHome = response;
+        $scope.userHome = response.infoList;
+        $scope.userRole = response.userRole;
+        if(response.userRole!="Teacher") {
+          document.getElementById("empProfile").style.display="none";
+        }
       });
     }
   }

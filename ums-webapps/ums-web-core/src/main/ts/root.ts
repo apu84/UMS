@@ -13,6 +13,5 @@ module ums {
     'ngHandsontableApp',
     "dirPaginationApp",
     'ui.select'
-
   ]);
 }
