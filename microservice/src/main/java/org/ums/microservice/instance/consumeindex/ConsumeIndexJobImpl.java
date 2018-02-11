@@ -67,6 +67,9 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       if(indexList.size() > 0) {
         // SOLR index
         for(Index index : indexList) {
+          if(mLogger.isDebugEnabled()) {
+            mLogger.debug("Indexing doc: {}, type {}", index.getEntityId(), index.getEntityType());
+          }
           mEntityResolverFactory.resolve(index);
         }
         consumer.setHead(indexList.get(indexList.size() - 1).getModified());
