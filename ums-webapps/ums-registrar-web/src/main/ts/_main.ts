@@ -117,6 +117,8 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
 
+/// <reference path='controller/NewEmployee.ts'/>
+
 
 
 

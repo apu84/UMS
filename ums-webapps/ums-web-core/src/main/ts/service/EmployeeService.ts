@@ -74,6 +74,18 @@ module ums{
 
           return defer.promise;
       }
+
+      public save(json: any): ng.IPromise<any> {
+          let defer = this.$q.defer();
+          this.httpClient.post("academic/employee/", json, 'application/json')
+              .success(() => {
+                  defer.resolve("Saved");
+              })
+              .error((data) => {
+                  defer.resolve("Error");
+              });
+          return defer.promise;
+      }
   }
 
   UMS.service("employeeService",EmployeeService);

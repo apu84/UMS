@@ -17,6 +17,7 @@ module ums {
         baseUriProvider.setServicePath('/ums-webservice-registrar/');
     }]);
 
+    UMS.constant("appConstants", Constants.Default());
     UMS.constant("registrarConstants", Constants.RegistrarConstant());
 
     UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
@@ -119,6 +120,39 @@ module ums {
                                 'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                                 'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                             ]
+                        });
+                    }]
+                }
+            })
+            .state('newEmployee', {
+                url: "/newEmployee",
+                templateUrl: 'views/new-employee.html',
+                controller: 'NewEmployee',
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                                'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
+                            ]
+                        });
+                    }],
+                    departments: ['departmentService', function (departmentService) {
+                        return departmentService.getAll().then((data) => {
+                            return data;
+                        });
+                    }],
+                    designations: ['designationService', function (designationService) {
+                        return designationService.getAll().then((data) => {
+                            return data;
+                        });
+                    }],
+                    employmentTypes: ['employmentTypeService', function (employmentTypeService) {
+                        return employmentTypeService.getAll().then((data) => {
+                            return data;
                         });
                     }]
                 }
