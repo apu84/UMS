@@ -1,13 +1,8 @@
-package org.ums.authorization;
+package org.ums.usermanagement.permission;
 
-import org.ums.usermanagement.permission.AdditionalRolePermissions;
-import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
-import org.ums.usermanagement.permission.Permission;
-import org.ums.usermanagement.permission.PermissionManager;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +12,13 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
   private AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
   private PermissionManager mPermissionManager;
   private UserManager mUserManager;
+
+  public UserRolePermissionsImpl(AdditionalRolePermissionsManager pAdditionalRolePermissionsManager,
+      PermissionManager pPermissionManager, UserManager pUserManager) {
+    mAdditionalRolePermissionsManager = pAdditionalRolePermissionsManager;
+    mPermissionManager = pPermissionManager;
+    mUserManager = pUserManager;
+  }
 
   @Override
   public Set<String> getUserPermissions(String pUserId) {
@@ -51,17 +53,5 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
           .collect(Collectors.toSet()));
     }
     return allRoles;
-  }
-
-  public void setAdditionalRolePermissionsManager(AdditionalRolePermissionsManager pAdditionalRolePermissionsManager) {
-    mAdditionalRolePermissionsManager = pAdditionalRolePermissionsManager;
-  }
-
-  public void setPermissionManager(PermissionManager pPermissionManager) {
-    mPermissionManager = pPermissionManager;
-  }
-
-  public void setUserManager(UserManager pUserManager) {
-    mUserManager = pUserManager;
   }
 }

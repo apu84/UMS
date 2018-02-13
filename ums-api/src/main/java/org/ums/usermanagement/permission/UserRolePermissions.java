@@ -1,4 +1,4 @@
-package org.ums.authorization;
+package org.ums.usermanagement.permission;
 
 import java.util.Set;
 

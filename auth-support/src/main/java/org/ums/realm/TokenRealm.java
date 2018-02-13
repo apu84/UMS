@@ -1,9 +1,5 @@
 package org.ums.realm;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -17,18 +13,13 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.authorization.UserRolePermissions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.domain.model.immutable.BearerAccessToken;
-import org.ums.dummy.shared.model.UserRole;
 import org.ums.manager.BearerAccessTokenManager;
-import org.ums.manager.ContentManager;
 import org.ums.token.JwtsToken;
-import org.ums.usermanagement.permission.Permission;
-import org.ums.usermanagement.permission.PermissionManager;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.permission.UserRolePermissions;
 
-import com.google.common.collect.Sets;
+import java.util.List;
 
 public class TokenRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenRealm.class);

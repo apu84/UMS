@@ -448,4 +448,9 @@ public class CoreContext {
   TwoFATokenGenerator twoFATokenGenerator() {
     return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager());
   }
+
+  @Bean
+  public UserRolePermissions userRolePermissions() {
+    return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager());
+  }
 }
