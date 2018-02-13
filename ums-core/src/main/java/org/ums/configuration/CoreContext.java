@@ -123,7 +123,7 @@ public class CoreContext {
   }
 
   @Bean
-  UserManager userManager() {
+  public UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
     userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
     UserPropertyResolver userPropertyResolver =
@@ -140,7 +140,7 @@ public class CoreContext {
   }
 
   @Bean
-  AdditionalRolePermissionsManager additionalRolePermissionsManager() {
+  public AdditionalRolePermissionsManager additionalRolePermissionsManager() {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory.getJdbcTemplate(),
@@ -159,7 +159,7 @@ public class CoreContext {
   }
 
   @Bean
-  BearerAccessTokenManager bearerAccessTokenManager() {
+  public BearerAccessTokenManager bearerAccessTokenManager() {
     BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
     bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
     return bearerAccessTokenCache;
@@ -205,7 +205,7 @@ public class CoreContext {
 
   @Bean
   @Lazy
-  PermissionManager permissionManager() {
+  public PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
     permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return permissionCache;

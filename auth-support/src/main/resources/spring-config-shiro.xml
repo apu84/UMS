@@ -72,6 +72,14 @@
 
     <bean id="tokenRealm" class="org.ums.realm.TokenRealm">
         <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
+        <property name="userRolePermissions" ref="userRolePermissions"/>
+        <property name="bearerAccessTokenManager" ref="bearerAccessTokenManager"/>
+    </bean>
+
+    <bean id="userRolePermissions" class="org.ums.authorization.UserRolePermissionsImpl">
+        <property name="userManager" ref="userManager"/>
+        <property name="additionalRolePermissionsManager" ref="additionalRolePermissionsManager"/>
+        <property name="permissionManager" ref="permissionManager"/>
     </bean>
 
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">

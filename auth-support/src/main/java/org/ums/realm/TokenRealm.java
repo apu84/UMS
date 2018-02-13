@@ -17,7 +17,9 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.authorization.UserRolePermissions;
 import org.ums.domain.model.immutable.BearerAccessToken;
+import org.ums.dummy.shared.model.UserRole;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.manager.ContentManager;
 import org.ums.token.JwtsToken;
@@ -30,13 +32,8 @@ import com.google.common.collect.Sets;
 
 public class TokenRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenRealm.class);
-
-  @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
-  @Autowired
-  private PermissionManager mPermissionManager;
-  @Autowired
-  private ContentManager<User, MutableUser, String> mUserManager;
+  private UserRolePermissions mUserRolePermissions;
 
   @Override
   public boolean supports(AuthenticationToken token) {
@@ -73,19 +70,20 @@ public class TokenRealm extends AuthorizingRealm {
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     String userId = (String) getAvailablePrincipal(principals);
-    // BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
-    User user = mUserManager.get(userId);
-    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-    List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
-    Set<String> permissions = new HashSet<>();
-    for(Permission permission : rolePermissions) {
-      permissions.addAll(permission.getPermissions());
-    }
-    info.setStringPermissions(permissions);
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(mUserRolePermissions.getUserRoles(userId));
+    info.setStringPermissions(mUserRolePermissions.getUserPermissions(userId));
     return info;
   }
 
   private boolean tokenIsInvalid(JwtsToken token, BearerAccessToken dbToken) {
     return token == null || dbToken == null || !dbToken.getUserId().equals(token.getPrincipal());
+  }
+
+  public void setBearerAccessTokenManager(BearerAccessTokenManager pBearerAccessTokenManager) {
+    mBearerAccessTokenManager = pBearerAccessTokenManager;
+  }
+
+  public void setUserRolePermissions(UserRolePermissions pUserRolePermissions) {
+    mUserRolePermissions = pUserRolePermissions;
   }
 }
