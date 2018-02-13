@@ -12,8 +12,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.token.JwtsToken;
@@ -62,7 +60,7 @@ public class TokenRealm extends AuthorizingRealm {
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     String userId = (String) getAvailablePrincipal(principals);
     SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(mUserRolePermissions.getUserRoles(userId));
-    info.setStringPermissions(mUserRolePermissions.getUserPermissions(userId));
+    info.setStringPermissions(mUserRolePermissions.getUserRolePermissions(userId));
     return info;
   }
 
