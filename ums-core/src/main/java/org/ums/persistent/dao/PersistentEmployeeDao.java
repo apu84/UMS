@@ -99,6 +99,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
     return pMutable.getId();
   }
 
+  @Override
+  public String getLastEmployeeId(String pDepartmentId, int pEmployeeType) {
+    String query = "SELECT MAX(EMPLOYEE_ID) AS EMPLOYEE_ID FROM EMPLOYEES WHERE DEPT_OFFICE = ? AND EMPLOYEE_TYPE = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pDepartmentId, pEmployeeType}, String.class);
+  }
+
   class EmployeeRowMapper implements RowMapper<Employee> {
 
     @Override

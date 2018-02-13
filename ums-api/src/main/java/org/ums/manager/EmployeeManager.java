@@ -15,4 +15,6 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
   List<Employee> getEmployees(String pDeptId, String pPublicationStatus);
 
   List<Employee> getEmployees(String pDepartmentId);
+
+  String getLastEmployeeId(String pDepartmentId, int pEmployeeType);
 }

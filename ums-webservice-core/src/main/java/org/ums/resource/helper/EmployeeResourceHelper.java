@@ -14,14 +14,23 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.employee.personal.MutablePersonalInformation;
+import org.ums.employee.personal.PersistentPersonalInformation;
+import org.ums.employee.personal.PersonalInformation;
+import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.formatter.DateFormat;
 import org.ums.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.usermanagement.user.MutableUser;
+import org.ums.usermanagement.user.PersistentUser;
 import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.EmployeeManager;
@@ -46,12 +55,28 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   EmployeeRepository mEmployeeRepository;
 
+  @Autowired
+  PersonalInformationManager mPersonalInformationManager;
+
+  @Autowired
+  DateFormat mDateFormat;
+
   @Override
+  @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject.getJsonObject("entries"), localCache);
     mutableEmployee.create();
+
+    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+    preparePersonalInformation(mutablePersonalInformation, pJsonObject.getJsonObject("entries"));
+    mPersonalInformationManager.create(mutablePersonalInformation);
+
+    MutableUser mutableUser = new PersistentUser();
+    prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
+    mUserManager.create(mutableUser);
+
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(EmployeeResource.class).path(EmployeeResource.class, "get")
             .build(mutableEmployee.getId());
@@ -85,6 +110,21 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     employees = getContentManager().getEmployees(pDepartmentId);
 
     return convertToJson(employees, pUriInfo);
+  }
+
+  public JsonObject getCurrentMaxEmployeeId(final String pDepartmentId, final int pEmployeeType) {
+    String currentMax = "";
+    String newId = "";
+    try {
+      currentMax = mEmployeeManager.getLastEmployeeId(pDepartmentId, pEmployeeType);
+      newId = "0" + String.valueOf(Integer.parseInt(currentMax) + 1);
+    } catch(Exception e) {
+      newId = pDepartmentId + pEmployeeType + "001";
+    }
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    object.add("entries", newId);
+    return object.build();
   }
 
   public JsonObject getByDesignation(final String designationId, final Request pRequest, final UriInfo pUriInfo) {
@@ -151,6 +191,56 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
+    pMutablePersonalInformation.setId(pJsonObject.getString("id"));
+    pMutablePersonalInformation.setFirstName(pJsonObject.getString("firstName"));
+    pMutablePersonalInformation.setLastName(pJsonObject.getString("lastName"));
+    pMutablePersonalInformation.setFatherName(" ");
+    pMutablePersonalInformation.setMotherName(" ");
+    pMutablePersonalInformation.setGender(" ");
+    pMutablePersonalInformation.setDateOfBirth(mDateFormat.parse("1/1/1960"));
+    pMutablePersonalInformation.setNationalityId(0);
+    pMutablePersonalInformation.setReligionId(0);
+    pMutablePersonalInformation.setMaritalStatusId(0);
+    pMutablePersonalInformation.setSpouseName(" ");
+    pMutablePersonalInformation.setNidNo(" ");
+    pMutablePersonalInformation.setBloodGroupId(0);
+    pMutablePersonalInformation.setSpouseNidNo(" ");
+    pMutablePersonalInformation.setWebsite(" ");
+    pMutablePersonalInformation.setOrganizationalEmail(" ");
+    pMutablePersonalInformation.setPersonalEmail(pJsonObject.getString("email"));
+    pMutablePersonalInformation.setMobileNumber(" ");
+    pMutablePersonalInformation.setPhoneNumber(" ");
+    pMutablePersonalInformation.setPresentAddressLine1(" ");
+    pMutablePersonalInformation.setPresentAddressLine2(" ");
+    pMutablePersonalInformation.setPresentAddressCountryId(0);
+    pMutablePersonalInformation.setPresentAddressDivision(null);
+    pMutablePersonalInformation.setPresentAddressDistrict(null);
+    pMutablePersonalInformation.setPresentAddressThana(null);
+    pMutablePersonalInformation.setPresentAddressPostCode(" ");
+
+    pMutablePersonalInformation.setPermanentAddressLine1(" ");
+    pMutablePersonalInformation.setPermanentAddressLine2(" ");
+    pMutablePersonalInformation.setPermanentAddressCountryId(0);
+    pMutablePersonalInformation.setPermanentAddressDivision(null);
+    pMutablePersonalInformation.setPermanentAddressDistrict(null);
+    pMutablePersonalInformation.setPermanentAddressThana(null);
+    pMutablePersonalInformation.setPermanentAddressPostCode(" ");
+
+    pMutablePersonalInformation.setEmergencyContactName(" ");
+    pMutablePersonalInformation.setEmergencyContactRelationId(0);
+    pMutablePersonalInformation.setEmergencyContactPhone(" ");
+    pMutablePersonalInformation.setEmergencyContactAddress(" ");
+  }
+
+  private void prepareUserInformation(MutableUser pMutableUser, JsonObject pJsonObject) {
+    pMutableUser.setId(pJsonObject.getString("shortName"));
+    pMutableUser.setEmployeeId(pJsonObject.getString("id"));
+    pMutableUser.setPrimaryRoleId(Integer.parseInt(pJsonObject.getString("role")));
+    pMutableUser.setActive(true);
+    pMutableUser.setPassword(null);
   }
 
   @Override

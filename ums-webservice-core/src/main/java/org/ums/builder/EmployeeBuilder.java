@@ -45,7 +45,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
 
   @Override
   public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setId("051099");
+    pMutable.setId(pJsonObject.getString("id"));
     pMutable.setDesignation(pJsonObject.getJsonObject("designation").getInt("id"));
     pMutable.setEmploymentType(String.valueOf(pJsonObject.getJsonObject("employmentType").getInt("id")));
     PersistentDepartment dept = new PersistentDepartment();
@@ -54,7 +54,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
     pMutable.setStatus(Integer.parseInt(pJsonObject.getString("status")));
     pMutable.setShortName(pJsonObject.getString("shortName"));
-    pMutable.setEmployeeType(1);
+    pMutable.setEmployeeType(Integer.parseInt(pJsonObject.getString("employeeType")));
   }
 
   public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,

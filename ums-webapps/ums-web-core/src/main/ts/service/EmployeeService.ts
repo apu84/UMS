@@ -86,6 +86,22 @@ module ums{
               });
           return defer.promise;
       }
+
+
+      public getNewEmployeeId(pDept: string, pEmployeeType: number):ng.IPromise<any>{
+          var defer = this.$q.defer();
+          var employees:any={};
+          this.httpClient.get("academic/employee/newId/deptId/" + pDept + "/employeeType/" + pEmployeeType,'application/json',
+              (json:any,etag:string)=>{
+                  defer.resolve(json.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+                  this.notify.error("Error");
+              });
+
+          return defer.promise;
+      }
   }
 
   UMS.service("employeeService",EmployeeService);

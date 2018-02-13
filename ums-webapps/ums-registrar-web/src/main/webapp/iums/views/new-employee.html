@@ -1,6 +1,6 @@
 <style type="text/css">
     .form-control {
-        border-radius: 10px !important;
+        border-radius: 15px !important;
     }
 
     .checkbox label:after {
@@ -8,6 +8,7 @@
         display: table;
         clear: both;
     }
+
     .checkbox .cr {
         position: relative;
         display: inline-block;
@@ -19,6 +20,7 @@
         float: left;
         margin-right: .5em;
     }
+
     .checkbox .cr .cr-icon {
         position: absolute;
         font-size: .8em;
@@ -31,16 +33,21 @@
         display: none;
     }
 
-    .checkbox label input[type="checkbox"]+.cr>.cr-icon {
+    .checkbox label input[type="checkbox"] + .cr > .cr-icon {
         opacity: 0;
     }
 
-    .checkbox label input[type="checkbox"]:checked+.cr>.cr-icon {
+    .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon {
         opacity: 1;
     }
 
-    .checkbox label input[type="checkbox"]:disabled+.cr {
+    .checkbox label input[type="checkbox"]:disabled + .cr {
         opacity: .5;
+    }
+
+    .v1 {
+        border-right: 5px solid grey;
+        padding-right: 25px;
     }
 </style>
 <form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm()" novalidate>
@@ -48,228 +55,262 @@
         <div class="panel-heading">New Employee Form</div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine }">
-                        <label for="iFirstName" class="control-label">First Name<span class="require">*</span></label>
-                        <input type="text"
-                               id="iFirstName"
-                               name="nFirstName"
-                               class="form-control"
-                               ng-model="vm.newEmployee.firstName" required>
-                        <label data-ng-show="nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine"
-                               class="help-block control-label">First Name is required.</label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine }">
-                        <label for="iLastName" class="control-label">Last Name<span class="require">*</span></label>
-                        <input type="text"
-                               id="iLastName"
-                               name="nLastName"
-                               class="form-control"
-                               ng-model="vm.newEmployee.lastName" required>
-                        <label data-ng-show="nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine"
-                               class="help-block control-label">Last Name is required.</label>
-                    </div>
-                </div>
-            </div>
+                <div class="col-md-5">
+                    <div class="v1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nDepartment.$invalid && !nEmployeeForm.nDepartment.$pristine}">
+                                    <label class="control-label" for="iDepartment">Department<span
+                                            class="require">*</span></label>
+                                    <select name="nDepartment"
+                                            id="iDepartment"
+                                            data-ng-model="vm.newEmployee.department"
+                                            data-ng-options="depts.longName for depts in vm.allDepartments track by depts.id"
+                                            data-ng-change="vm.createId()"
+                                            class="form-control" required>
+                                        <option value="">Select Department</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nDepartment.$invalid && !nEmployeeForm.nDepartment.$pristine"
+                                           class="help-block control-label">Select a department.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nDesignation.$invalid && !nEmployeeForm.nDesignation.$pristine}">
+                                    <label class="control-label" for="iDesignation">Designation<span
+                                            class="require">*</span></label>
+                                    <select name="nDesignation"
+                                            id="iDesignation"
+                                            data-ng-model="vm.newEmployee.designation"
+                                            data-ng-options="designations.name for designations in vm.allDesignations track by designations.id"
+                                            class="form-control" required>
+                                        <option value="">Select Designation</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nDesignation.$invalid && !nEmployeeForm.nDesignation.$pristine"
+                                           class="help-block control-label">Select designation.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine}">
+                                    <label class="control-label" for="iRole">IUMS Role<span
+                                            class="require">*</span></label>
+                                    <select name="nRole"
+                                            id="iRole"
+                                            data-ng-model="vm.newEmployee.role"
+                                            class="form-control" required>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nDepartment.$invalid && !nEmployeeForm.nDepartment.$pristine}">
-                        <label class="control-label" for="iDepartment">Department<span
-                                class="require">*</span></label>
-                        <select name="nDepartment"
-                                id="iDepartment"
-                                data-ng-model="vm.newEmployee.department"
-                                data-ng-options="depts.shortName for depts in vm.allDepartments track by depts.id"
-                                data-ng-change="vm.createId()"
-                                class="form-control" required>
-                            <option value="">Select Department</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nDepartment.$invalid && !nEmployeeForm.nDepartment.$pristine"
-                               class="help-block control-label">Select a department.</label>
-                    </div>
-                </div>
-
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nDesignation.$invalid && !nEmployeeForm.nDesignation.$pristine}">
-                        <label class="control-label" for="iDesignation">Designation<span
-                                class="require">*</span></label>
-                        <select name="nDesignation"
-                                id="iDesignation"
-                                data-ng-model="vm.newEmployee.designation"
-                                data-ng-options="designations.name for designations in vm.allDesignations track by designations.id"
-                                class="form-control" required>
-                            <option value="">Select Designation</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nDesignation.$invalid && !nEmployeeForm.nDesignation.$pristine"
-                               class="help-block control-label">Select designation.</label>
-                    </div>
-                </div>
-
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nEmploymentType.$invalid && !nEmployeeForm.nEmploymentType.$pristine}">
-                        <label class="control-label" for="iEmploymentType">Employment Type<span
-                                class="require">*</span></label>
-                        <select name="nEmploymentType"
-                                id="iEmploymentType"
-                                data-ng-model="vm.newEmployee.employmentType"
-                                data-ng-options="employmentTypes.name for employmentTypes in vm.allEmploymentTypes track by employmentTypes.id"
-                                class="form-control" required>
-                            <option value="">Select Employment Type</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nEmploymentType.$invalid && !nEmployeeForm.nEmploymentType.$pristine"
-                               class="help-block control-label">Select Employment Type.</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nJoiningDate.$invalid && !nEmployeeForm.nJoiningDate.$pristine}">
-                        <label for="iJoiningDate" class="control-label">Joining Date<span
-                                class="require">*</span></label>
-                        <input type="text"
-                               name="nJoiningDate"
-                               id="iJoiningDate"
-                               data-ng-model="vm.newEmployee.joiningDate"
-                               data-provide="datepicker"
-                               data-date-format="dd/mm/yyyy"
-                               placeholder="DD/MM/YYYY"
-                               autocomplete="off"
-                               class="form-control" required>
-                        <label data-ng-show="nEmployeeForm.nJoiningDate.$invalid && !nEmployeeForm.nJoiningDate.$pristine"
-                               class="help-block control-label">
-                            Joining Date is Required.</label>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine}">
-                        <label class="control-label" for="iEmploymentType">Status<span
-                                class="require">*</span></label>
-                        <select name="nStatus"
-                                id="iStatus"
-                                data-ng-model="vm.newEmployee.status"
-                                class="form-control" required>
-
-                            <option value="">Select A Status</option>
-                            <option value="1">Active</option>
-                            <option value="2">On Leave</option>
-                            <option value="3">Inactive</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine"
-                               class="help-block control-label">Select Status.</label>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine }">
-                        <label for="iShortName" class="control-label">Short Name<span class="require">*</span></label>
-                        <input type="text"
-                               id="iShortName"
-                               name="nShortName"
-                               class="form-control"
-                               ng-model="vm.newEmployee.shortName" required>
-                        <label data-ng-show="nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine"
-                               class="help-block control-label">Short Name is required.</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine}">
-                        <label class="control-label" for="iEmployeeType">Employee Type<span
-                                class="require">*</span></label>
-                        <select name="nEmployeeType"
-                                id="iEmployeeType"
-                                data-ng-model="vm.newEmployee.employeeType"
-                                data-ng-change="vm.createId()"
-                                class="form-control" required>
-
-                            <option value="">Select A Employee Type</option>
-                            <option value="1">Teacher</option>
-                            <option value="2">Officer</option>
-                            <option value="3">Staff</option>
-                            <option value="9">Top Management</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine"
-                               class="help-block control-label">Select Employee Type.</label>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine}">
-                        <label class="control-label" for="iEmploymentType">Role<span
-                                class="require">*</span></label>
-                        <select name="nRole"
-                                id="iRole"
-                                data-ng-model="vm.newEmployee.role"
-                                class="form-control" required>
-
-                            <option value="">Select A Role</option>
-                            <option value="81">Registrar</option>
-                            <option value="71">coe</option>
-                            <option value="21">Teacher</option>
-                            <option value="82">dpregistrar</option>
-                            <option value="22">Dept-head</option>
-                            <option value="72">dpCoe</option>
-                        </select>
-                        <label data-ng-show="nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine"
-                               class="help-block control-label">Select Role.</label>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine }">
-                        <label for="iShortName" class="control-label">Email<span class="require">*</span></label>
-                        <input type="email"
-                               id="iEmail"
-                               name="nEmail"
-                               class="form-control"
-                               ng-model="vm.newEmployee.email" required>
-                        <label data-ng-show="nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine"
-                               class="help-block control-label">Email is required (someone@abc.com).</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div align="left">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" data-ng-model="vm.newEmployee.IUMSAccount">
-                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                                Create IUMS Account
-                            </label>
+                                        <option value="">Select A Role</option>
+                                        <option value="81">Registrar</option>
+                                        <option value="71">coe</option>
+                                        <option value="21">Teacher</option>
+                                        <option value="82">dpregistrar</option>
+                                        <option value="22">Dept-head</option>
+                                        <option value="72">dpCoe</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine"
+                                           class="help-block control-label">Select Role.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nEmploymentType.$invalid && !nEmployeeForm.nEmploymentType.$pristine}">
+                                    <label class="control-label" for="iEmploymentType">Employment Type<span
+                                            class="require">*</span></label>
+                                    <select name="nEmploymentType"
+                                            id="iEmploymentType"
+                                            data-ng-model="vm.newEmployee.employmentType"
+                                            data-ng-options="employmentTypes.name for employmentTypes in vm.allEmploymentTypes track by employmentTypes.id"
+                                            class="form-control" required>
+                                        <option value="">Select Employment Type</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nEmploymentType.$invalid && !nEmployeeForm.nEmploymentType.$pristine"
+                                           class="help-block control-label">Select Employment Type.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine}">
+                                    <label class="control-label" for="iEmployeeType">Employee Type<span
+                                            class="require">*</span></label>
+                                    <select name="nEmployeeType"
+                                            id="iEmployeeType"
+                                            data-ng-model="vm.newEmployee.employeeType"
+                                            data-ng-change="vm.createId()"
+                                            class="form-control" required>
+                                        <option value="">Select A Employee Type</option>
+                                        <option value="1">Teacher</option>
+                                        <option value="2">Officer</option>
+                                        <option value="3">Staff</option>
+                                        <option value="9">Top Management</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine"
+                                           class="help-block control-label">Select Employee Type.</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div align="right">
-                        <button type="submit" class="btn btn-success"
-                                data-ng-disabled="nEmployeeForm.$invalid">Submit
-                        </button>
+                <div class="col-md-7">
+                    <div data-ng-show="vm.showRightDiv">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nEmployeeId.$invalid && !nEmployeeForm.nEmployeeId.$pristine }">
+                                    <label for="iEmployeeId" class="control-label">Employee Id:<span
+                                            class="require">*</span></label>
+                                    <input type="text"
+                                           id="iEmployeeId"
+                                           name="nEmployeeId"
+                                           class="form-control"
+                                           ng-model="vm.newEmployee.id"
+                                           ng-disabled="true" required>
+                                    <label data-ng-show="nEmployeeForm.nEmployeeId.$invalid && !nEmployeeForm.nEmployeeId.$pristine"
+                                           class="help-block control-label">Employee Id is missing</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine }">
+                                    <label for="iFirstName" class="control-label">First Name<span
+                                            class="require">*</span></label>
+                                    <input type="text"
+                                           id="iFirstName"
+                                           name="nFirstName"
+                                           class="form-control"
+                                           ng-model="vm.newEmployee.firstName" required>
+                                    <label data-ng-show="nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine"
+                                           class="help-block control-label">First Name is required.</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine }">
+                                    <label for="iLastName" class="control-label">Last Name<span
+                                            class="require">*</span></label>
+                                    <input type="text"
+                                           id="iLastName"
+                                           name="nLastName"
+                                           class="form-control"
+                                           ng-model="vm.newEmployee.lastName" required>
+                                    <label data-ng-show="nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine"
+                                           class="help-block control-label">Last Name is required.</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nJoiningDate.$invalid && !nEmployeeForm.nJoiningDate.$pristine}">
+                                    <label for="iJoiningDate" class="control-label">Joining Date<span
+                                            class="require">*</span></label>
+                                    <input type="text"
+                                           name="nJoiningDate"
+                                           id="iJoiningDate"
+                                           data-ng-model="vm.newEmployee.joiningDate"
+                                           data-provide="datepicker"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="form-control" required>
+                                    <label data-ng-show="nEmployeeForm.nJoiningDate.$invalid && !nEmployeeForm.nJoiningDate.$pristine"
+                                           class="help-block control-label">
+                                        Joining Date is Required.</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine }">
+                                    <label for="iShortName" class="control-label">Email<span
+                                            class="require">*</span></label>
+                                    <input type="email"
+                                           id="iEmail"
+                                           name="nEmail"
+                                           class="form-control"
+                                           ng-model="vm.newEmployee.email" required>
+                                    <label data-ng-show="nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine"
+                                           class="help-block control-label">Email is required
+                                        (someone@abc.com).</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine}">
+                                    <label class="control-label" for="iEmploymentType">Status<span
+                                            class="require">*</span></label>
+                                    <select name="nStatus"
+                                            id="iStatus"
+                                            data-ng-model="vm.newEmployee.status"
+                                            class="form-control" required>
+
+                                        <option value="">Select A Status</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">On Leave</option>
+                                        <option value="3">Inactive</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine"
+                                           class="help-block control-label">Select Status.</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine }">
+                                    <label for="iShortName" class="control-label">Short Name<span
+                                            class="require">*</span></label>
+                                    <input type="text"
+                                           id="iShortName"
+                                           name="nShortName"
+                                           class="form-control"
+                                           ng-model="vm.newEmployee.shortName" required>
+                                    <label data-ng-show="nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine"
+                                           class="help-block control-label">Short Name is required.</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div align="left">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" data-ng-model="vm.newEmployee.IUMSAccount">
+                                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            Create IUMS account
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-success"
+                                            data-ng-disabled="nEmployeeForm.$invalid">Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+
 
