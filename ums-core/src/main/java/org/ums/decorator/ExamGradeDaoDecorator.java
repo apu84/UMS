@@ -124,6 +124,10 @@ public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, Mutabl
     return getManager().getTotalStudentCount(actualStatus);
   }
 
+  public int getRegistrationResultCount(String studentIds, int pSemesterId, String pCourseId, ExamType pExamType) {
+    return getManager().getRegistrationResultCount(studentIds, pSemesterId, pCourseId, pExamType);
+  }
+
   public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,
       Integer pExamType) {
     return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
@@ -161,4 +165,8 @@ public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, Mutabl
     return getManager().update(pMutable);
   }
 
+  public int[] updateRegistrationResultLetterGrade(List<StudentGradeDto> pGradeList, int pSemesterId, String pCourseId,
+      ExamType pExamType) throws Exception {
+    return getManager().updateRegistrationResultLetterGrade(pGradeList, pSemesterId, pCourseId, pExamType);
+  }
 }

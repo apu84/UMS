@@ -465,6 +465,16 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
 
     if(action.equals("approve") && nextStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE) {
+      List<String> studentList = new ArrayList<>();
+      approveList.forEach(o->studentList.add(o.getStudentId()));
+      String commaSeparatedStudents = String.join("', '", studentList);
+      commaSeparatedStudents = "'"+commaSeparatedStudents+"'";
+      int totalStudents= getContentManager().getRegistrationResultCount(commaSeparatedStudents, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+      getContentManager().updateRegistrationResultLetterGrade(approveList, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+      if(totalStudents !=approveList.size()) {
+        throw new ValidationException("Mismatch found between registration and approved grades. Please contact with IUMS Support.");
+      }
+
       int transferResponse = getContentManager().transferUGGradesToPrivateDB(requestedStatusDTO.getCourseId(), requestedStatusDTO.getSemesterId(), requestedStatusDTO.getExamType().getId());
       if(transferResponse!=200) {
         throw new ValidationException("Sorry, some unexpected error occurred. Please contact IUMS Support.");
