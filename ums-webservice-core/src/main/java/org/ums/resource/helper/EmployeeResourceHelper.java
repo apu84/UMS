@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.json.Json;
@@ -215,7 +216,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     pMutablePersonalInformation.setPhoneNumber(" ");
     pMutablePersonalInformation.setPresentAddressLine1(" ");
     pMutablePersonalInformation.setPresentAddressLine2(" ");
-    pMutablePersonalInformation.setPresentAddressCountryId(0);
+    pMutablePersonalInformation.setPresentAddressCountryId(18);
     pMutablePersonalInformation.setPresentAddressDivision(null);
     pMutablePersonalInformation.setPresentAddressDistrict(null);
     pMutablePersonalInformation.setPresentAddressThana(null);
@@ -223,7 +224,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
     pMutablePersonalInformation.setPermanentAddressLine1(" ");
     pMutablePersonalInformation.setPermanentAddressLine2(" ");
-    pMutablePersonalInformation.setPermanentAddressCountryId(0);
+    pMutablePersonalInformation.setPermanentAddressCountryId(18);
     pMutablePersonalInformation.setPermanentAddressDivision(null);
     pMutablePersonalInformation.setPermanentAddressDistrict(null);
     pMutablePersonalInformation.setPermanentAddressThana(null);
@@ -236,11 +237,17 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   private void prepareUserInformation(MutableUser pMutableUser, JsonObject pJsonObject) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+
     pMutableUser.setId(pJsonObject.getString("shortName"));
     pMutableUser.setEmployeeId(pJsonObject.getString("id"));
     pMutableUser.setPrimaryRoleId(Integer.parseInt(pJsonObject.getString("role")));
+    // pMutableUser.setPassword('A');
     pMutableUser.setActive(true);
     pMutableUser.setPassword(null);
+    pMutableUser.setCreatedOn(new Date());
+    pMutableUser.setCreatedBy(user.getId());
   }
 
   @Override

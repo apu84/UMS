@@ -40,11 +40,10 @@ module ums {
 
         public submitNewEmployeeForm(): void {
             this.convertToJson().then((result: any) => {
-                console.log(result);
                 this.employeeService.save(result).then((message: any) => {
-                    this.notify.success("Successfully created");
+                    this.notify.success(message);
                 }).catch((message: any) =>{
-                    this.notify.error("Error in creating new employee");
+                    this.notify.error(message);
                 });
             });
         }
