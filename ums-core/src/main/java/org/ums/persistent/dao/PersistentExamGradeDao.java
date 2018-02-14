@@ -1163,6 +1163,14 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
+  public int getRegistrationResultCount(String studentIds, int pSemesterId, String pCourseId, ExamType pExamType) {
+    String sql =
+        "Select Count(Student_Id) From UG_REGISTRATION_RESULT_CURR Where Semester_Id=? and Course_Id=? and Exam_Type=? and Student_Id in ("
+            + studentIds + ")";
+    return mJdbcTemplate.queryForObject(sql, Integer.class, pSemesterId, pCourseId, pExamType.getId());
+  }
+
+  @Override
   public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,
       Integer pExamType) {
     return mJdbcTemplate.query(SELECT_MARKS_SUBMISSION_STATUS_LOG, new Object[] {pSemesterId, pCourseId, pExamType},
@@ -1315,6 +1323,34 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     t.forEach((k, v) -> System.out.println((k + ":" + v)));
 
     return (Integer)t.get("oRespCode");
+  }
+
+  @Override
+  public int[] updateRegistrationResultLetterGrade(List<StudentGradeDto> pGradeList, int pSemesterId, String pCourseId,
+      ExamType pExamType) {
+
+    String sql =
+        "Update UG_REGISTRATION_RESULT_CURR Set Grade_Letter=?, Last_Modified = " + getLastModifiedSql()
+            + " Where Student_Id=? and Semester_Id=? and Course_Id=? and Exam_Type=? ";
+
+    return mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        StudentGradeDto gradeDto = pGradeList.get(i);
+
+        ps.setString(1, gradeDto.getGradeLetter());
+        ps.setString(2, gradeDto.getStudentId());
+        ps.setInt(3, pSemesterId);
+        ps.setString(4, pCourseId);
+        ps.setInt(5, pExamType.getId());
+      }
+
+      @Override
+      public int getBatchSize() {
+        return pGradeList.size();
+      }
+
+    });
   }
 
   class MarksSubmissionStatRow implements RowMapper<MarksSubmissionStatDto> {
