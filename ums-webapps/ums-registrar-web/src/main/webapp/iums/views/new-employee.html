@@ -54,7 +54,7 @@
         padding-right: 25px;
     }
 </style>
-<form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm()" novalidate>
+<ng-form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm()" novalidate>
     <div class="panel panel-default">
         <div class="panel-heading">New Employee Form</div>
         <div class="panel-body">
@@ -238,7 +238,7 @@
                             <div class="col-md-6">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine }">
-                                    <label for="iShortName" class="control-label">Email<span
+                                    <label for="iEmail" class="control-label">Email<span
                                             class="require">*</span></label>
                                     <input type="email"
                                            id="iEmail"
@@ -282,15 +282,19 @@
                                            id="iShortName"
                                            name="nShortName"
                                            class="form-control"
-                                           ng-model="vm.newEmployee.shortName" required>
+                                           ng-minlength="3"
+                                           ng-maxlength="5"
+                                           ng-model="vm.newEmployee.shortName"
+                                           data-ng-change="vm.validateShortName()" required>
                                     <label data-ng-show="nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine"
-                                           class="help-block control-label">Short Name is required.</label>
+                                           class="help-block control-label">ShortName is required (Min-length: 3 and
+                                        Max-length: 5).</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <br />
+                            <br/>
                         </div>
 
                         <div class="row">
@@ -318,7 +322,7 @@
             </div>
         </div>
     </div>
-</form>
+</ng-form>
 
 
 

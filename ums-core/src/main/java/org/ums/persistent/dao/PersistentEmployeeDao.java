@@ -26,6 +26,8 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
   static String DELETE_ONE = "DELETE FROM EMPLOYEES ";
 
+  static String EXISTS = "SELECT COUNT(*) AS COUNTER FROM EMPLOYEES ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentEmployeeDao(JdbcTemplate pJdbcTemplate) {
@@ -103,6 +105,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   public String getLastEmployeeId(String pDepartmentId, int pEmployeeType) {
     String query = "SELECT MAX(EMPLOYEE_ID) AS EMPLOYEE_ID FROM EMPLOYEES WHERE DEPT_OFFICE = ? AND EMPLOYEE_TYPE = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pDepartmentId, pEmployeeType}, String.class);
+  }
+
+  @Override
+  public boolean validateShortName(String pShortName) {
+    String query = EXISTS + " WHERE SHORT_NAME = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pShortName}, Boolean.class);
   }
 
   class EmployeeRowMapper implements RowMapper<Employee> {

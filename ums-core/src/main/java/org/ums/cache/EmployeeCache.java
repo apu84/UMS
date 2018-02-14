@@ -52,4 +52,9 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
     return getManager().getLastEmployeeId(pDepartmentId, pEmployeeType);
   }
 
+  @Override
+  public boolean validateShortName(String pShortName) {
+    return getManager().validateShortName(pShortName);
+  }
+
 }

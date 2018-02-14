@@ -1,4 +1,6 @@
 module ums {
+    import IFormController = ng.IFormController;
+
     export interface INewEmployee {
         id: string;
         firstName: string;
@@ -27,6 +29,7 @@ module ums {
         private showRightDiv: boolean = false;
 
         private newEmployee: INewEmployee;
+        private isNotUniqueShortName: boolean;
 
         constructor(private appConstants: any, private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private httpClient: HttpClient, private departments: any, private designations: any,
@@ -60,6 +63,12 @@ module ums {
             else{
                 this.showRightDiv = false;
             }
+        }
+
+        public validateShortName(): void{
+            this.employeeService.validate(this.newEmployee.shortName).then((result: any) =>{
+                this.isNotUniqueShortName = !!result;
+            });
         }
 
         private convertToJson(): ng.IPromise<any> {

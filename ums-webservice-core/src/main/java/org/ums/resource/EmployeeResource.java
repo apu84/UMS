@@ -81,4 +81,10 @@ public class EmployeeResource extends MutableEmployeeResource {
       final @PathParam("employee-type") int pEmployeeType) {
     return mEmployeeResourceHelper.getCurrentMaxEmployeeId(pDeptId, pEmployeeType);
   }
+
+  @GET
+  @Path("/validate/{short-name}")
+  public boolean validate(final @Context Request pRequest, final @PathParam("short-name") String pShortName) {
+    return mEmployeeResourceHelper.validateShortName(pShortName);
+  }
 }

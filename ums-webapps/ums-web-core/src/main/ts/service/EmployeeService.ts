@@ -102,6 +102,21 @@ module ums{
 
           return defer.promise;
       }
+
+      public validate(pShortName: string):ng.IPromise<any>{
+          var defer = this.$q.defer();
+          var employees:any={};
+          this.httpClient.get("academic/employee/validate/" + pShortName,'application/json',
+              (result:boolean,etag:string)=>{
+                  defer.resolve(result);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+                  this.notify.error("Error");
+              });
+
+          return defer.promise;
+      }
   }
 
   UMS.service("employeeService",EmployeeService);

@@ -40,4 +40,9 @@ public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableE
     return getManager().getLastEmployeeId(pDepartmentId, pEmployeeType);
   }
 
+  @Override
+  public boolean validateShortName(String pShortName) {
+    return getManager().validateShortName(pShortName);
+  }
+
 }

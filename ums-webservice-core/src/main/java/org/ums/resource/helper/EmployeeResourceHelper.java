@@ -128,6 +128,10 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return object.build();
   }
 
+  public boolean validateShortName(final String pShortName) {
+    return mEmployeeManager.validateShortName(pShortName);
+  }
+
   public JsonObject getByDesignation(final String designationId, final Request pRequest, final UriInfo pUriInfo) {
     List<Employee> employees = getContentManager().getByDesignation(designationId);
     return convertToJson(employees, pUriInfo);
