@@ -11,10 +11,12 @@ import org.ums.usermanagement.user.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDecorator {
 
@@ -64,11 +66,26 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public int update(MutableAdditionalRolePermissions pMutable) {
-    String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getUser().getId(), pMutable.getRole().getId(),
-        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
-        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable.getId());
+  public List<Long> create(List<MutableAdditionalRolePermissions> pMutableList) {
+    List<java.lang.Object[]> insertParams = getInsertParamArray(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, insertParams);
+    return insertParams.stream().map(pObjects -> (Long) pObjects[0]).collect(Collectors.toList());
+  }
+
+  @Override
+  public int update(List<MutableAdditionalRolePermissions> pMutableList) {
+    return super.update(pMutableList);
+  }
+
+  private List<Object[]> getInsertParamArray(List<MutableAdditionalRolePermissions> pAdditionalRolePermissions) {
+    List<Object[]> params = new ArrayList<>();
+    for(AdditionalRolePermissions pAdditionalRolePermission : pAdditionalRolePermissions) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), pAdditionalRolePermission.getUser().getId(),
+          pAdditionalRolePermission.getRole().getId(),
+          Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pAdditionalRolePermission.getPermission()),
+          new Date(), new Date(), 1, ""});
+    }
+    return params;
   }
 
   @Override
@@ -108,6 +125,29 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   @Override
   public int addRole(String pUserId, Role pRole, User pAssignedBy, Date pFromDate, Date pToDate) {
     return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", pFromDate, pToDate, 1, pAssignedBy.getId());
+  }
+
+  @Override
+  public int removeExistingAdditionalRoles(String pUserId) {
+    String query = DELETE_ALL + "WHERE ROLE_ID IS NOT NULL AND USER_ID = ? ";
+    return mJdbcTemplate.update(query, pUserId);
+  }
+
+  @Override
+  public int removeExistingAdditionalPermissions(String pUserId) {
+    String query = DELETE_ALL + "WHERE PERMISSIONS IS NOT NULL AND USER_ID = ? ";
+    return mJdbcTemplate.update(query, pUserId);
+  }
+
+  @Override
+  public int addRole(String pUserId, Role pRole) {
+    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", new Date(), new Date(), 1, "");
+  }
+
+  @Override
+  public int addPermissions(String pUserId, Set<String> pPermissions) {
+    return mJdbcTemplate.update(INSERT_ALL, pUserId, 0,
+        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions), new Date(), new Date(), 1, "");
   }
 
   class RolePermissionsMapper implements RowMapper<AdditionalRolePermissions> {

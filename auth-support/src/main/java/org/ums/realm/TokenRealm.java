@@ -16,8 +16,10 @@ import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.token.JwtsToken;
 import org.ums.usermanagement.permission.UserRolePermissions;
+import org.ums.usermanagement.role.Role;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TokenRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenRealm.class);
@@ -59,7 +61,10 @@ public class TokenRealm extends AuthorizingRealm {
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     String userId = (String) getAvailablePrincipal(principals);
-    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(mUserRolePermissions.getUserRoles(userId));
+    SimpleAuthorizationInfo info
+        = new SimpleAuthorizationInfo(mUserRolePermissions.getUserRoles(userId).stream()
+        .map(Role::getName)
+        .collect(Collectors.toSet()));
     info.setStringPermissions(mUserRolePermissions.getUserRolePermissions(userId));
     return info;
   }

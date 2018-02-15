@@ -451,6 +451,7 @@ public class CoreContext {
 
   @Bean
   public UserRolePermissions userRolePermissions() {
-    return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager());
+    return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager(),
+        roleManager());
   }
 }

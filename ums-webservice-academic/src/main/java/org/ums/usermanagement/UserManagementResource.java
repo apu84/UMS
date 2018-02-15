@@ -9,10 +9,8 @@ import org.ums.usermanagement.permission.UserRolePermissions;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.role.RoleManager;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Set;
 
@@ -42,23 +40,47 @@ public class UserManagementResource extends Resource {
   }
 
   @GET
-  @Path("/{role-id}/permissions")
+  @Path("/role/{role-id}/permissions")
   @RequiresPermissions("user-management")
   public Set<String> getPermissionsByRole(final @PathParam("role-id") Integer pRoleId) {
     return mPermissionManager.getPermissionByRole(mRoleManager.get(pRoleId)).get(0).getPermissions();
   }
 
   @GET
-  @Path("/{user-id}/roles")
+  @Path("/user/{user-id}/roles")
   @RequiresPermissions("user-management")
-  public Set<Role> getUserRoles(final @PathParam("user-id") String pUserId) {
+  public List<Role> getUserRoles(final @PathParam("user-id") String pUserId) {
     return mUserRolePermissions.getUserRoles(pUserId);
   }
 
   @GET
-  @Path("/{user-id}/permissions")
+  @Path("/user/{user-id}/permissions")
   @RequiresPermissions("user-management")
   public Set<String> getUserPermissions(final @PathParam("user-id") String pUserId) {
-    return mUserRolePermissions.getUserRolePermissions(pUserId);
+    return mUserRolePermissions.getUserAdditionalPermissions(pUserId);
+  }
+
+  @PUT
+  @Path("/user/{user-id}/roles")
+  @RequiresPermissions("user-management")
+  public List<Role> updateUserRoles(final @PathParam("user-id") String pUserId, final List<Role> pRoles) {
+    mUserRolePermissions.updateUserRoles(pUserId, pRoles);
+    return mUserRolePermissions.getUserRoles(pUserId);
+  }
+
+  @PUT
+  @Path("/user/{user-id}/permissions")
+  @RequiresPermissions("user-management")
+  public Set<String> updateUserPermissions(final @PathParam("user-id") String pUserId, final Set<String> pPermissions) {
+    mUserRolePermissions.updateUserPermissions(pUserId, pPermissions);
+    return mUserRolePermissions.getUserAdditionalPermissions(pUserId);
+  }
+
+  @PUT
+  @Path("/role/{role-id}/permissions")
+  @RequiresPermissions("user-management")
+  public Set<String> updateRolePermissions(final @PathParam("role-id") Integer pRoleId, final Set<String> pPermissions) {
+    mUserRolePermissions.updateRolePermissions(pRoleId, pPermissions);
+    return mPermissionManager.getPermissionByRole(mRoleManager.get(pRoleId)).get(0).getPermissions();
   }
 }

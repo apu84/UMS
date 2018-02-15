@@ -1,9 +1,16 @@
 package org.ums.usermanagement.permission;
 
+import org.apache.commons.lang.mutable.Mutable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.ums.usermanagement.role.MutableRole;
 import org.ums.usermanagement.role.Role;
+import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,12 +20,14 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
   private AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
   private PermissionManager mPermissionManager;
   private UserManager mUserManager;
+  private RoleManager mRoleManager;
 
-  public UserRolePermissionsImpl(AdditionalRolePermissionsManager pAdditionalRolePermissionsManager,
-                                 PermissionManager pPermissionManager, UserManager pUserManager) {
+  public UserRolePermissionsImpl(final AdditionalRolePermissionsManager pAdditionalRolePermissionsManager,
+      final PermissionManager pPermissionManager, final UserManager pUserManager, final RoleManager pRoleManager) {
     mAdditionalRolePermissionsManager = pAdditionalRolePermissionsManager;
     mPermissionManager = pPermissionManager;
     mUserManager = pUserManager;
+    mRoleManager = pRoleManager;
   }
 
   @Override
@@ -30,9 +39,9 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
         mAdditionalRolePermissionsManager.getPermissionsByUser(user.getId());
     Set<String> allPermissions = new HashSet<>();
     allPermissions.addAll(primaryPermissionsString);
-    if (additionalRolePermissions != null && !additionalRolePermissions.isEmpty()) {
-      for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
-        if (additionalRolePermission.getRole() != null) {
+    if(additionalRolePermissions != null && !additionalRolePermissions.isEmpty()) {
+      for(AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
+        if(additionalRolePermission.getRole() != null) {
           allPermissions.addAll(mPermissionManager.getPermissionByRole(user.getPrimaryRole()).get(0).getPermissions());
         }
       }
@@ -46,9 +55,9 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
     List<AdditionalRolePermissions> additionalRolePermissions =
         mAdditionalRolePermissionsManager.getPermissionsByUser(user.getId());
     Set<String> allPermissions = new HashSet<>();
-    if (additionalRolePermissions != null && !additionalRolePermissions.isEmpty()) {
-      for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
-        if (additionalRolePermission.getPermission() != null) {
+    if(additionalRolePermissions != null && !additionalRolePermissions.isEmpty()) {
+      for(AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
+        if(additionalRolePermission.getPermission() != null) {
           allPermissions.addAll(additionalRolePermission.getPermission());
         }
       }
@@ -57,8 +66,8 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
   }
 
   @Override
-  public Set<Role> getUserRoles(String pUserId) {
-    Set<Role> allRoles = new HashSet<>();
+  public List<Role> getUserRoles(String pUserId) {
+    List<Role> allRoles = new ArrayList<>();
     User user = mUserManager.get(pUserId);
     allRoles.add(user.getPrimaryRole());
 
@@ -67,7 +76,7 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
     if (additionalRolePermissions != null) {
       allRoles.addAll(additionalRolePermissions.stream()
           .map(AdditionalRolePermissions::getRole)
-          .collect(Collectors.toSet()));
+          .collect(Collectors.toList()));
     }
     return allRoles;
   }
@@ -79,5 +88,35 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
     mAdditionalRolePermissionsManager.getAll()
         .forEach(pAdditionalRolePermissions -> allPermissions.addAll(pAdditionalRolePermissions.getPermission()));
     return allPermissions;
+  }
+
+  @Override
+  @Transactional
+  public void updateUserRoles(final String pUserId, final List<Role> pRoles) {
+    Assert.notEmpty(pRoles, "At least one role is required");
+    MutableUser user = mUserManager.get(pUserId).edit();
+    user.setPrimaryRole(mRoleManager.get(pRoles.get(0).getId()));
+    user.update();
+    if(pRoles.size() > 1) {
+      mAdditionalRolePermissionsManager.removeExistingAdditionalRoles(pUserId);
+      for(Role role : pRoles.subList(1, pRoles.size())) {
+        mAdditionalRolePermissionsManager.addRole(pUserId, role);
+      }
+    }
+  }
+
+  @Override
+  @Transactional
+  public void updateUserPermissions(String pUserId, Set<String> pPermissions) {
+    Assert.notEmpty(pPermissions, "At least one permission is required");
+    mAdditionalRolePermissionsManager.removeExistingAdditionalPermissions(pUserId);
+    mAdditionalRolePermissionsManager.addPermissions(pUserId, pPermissions);
+  }
+
+  @Override
+  public void updateRolePermissions(int pRoleId, Set<String> pPermissions) {
+    MutablePermission permission = mPermissionManager.getPermissionByRole(mRoleManager.get(pRoleId)).get(0).edit();
+    permission.setPermissions(pPermissions);
+    permission.update();
   }
 }
