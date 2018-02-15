@@ -1,6 +1,6 @@
-package org.ums.accounts.resource.definitions.general.ledger.transactions;
+package org.ums.accounts.resource.general.ledger.transactions;
 
-import io.reactivex.internal.operators.parallel.ParallelJoin;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -8,6 +8,7 @@ import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
+import org.ums.manager.EmployeeManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
@@ -20,9 +21,35 @@ import java.math.BigDecimal;
  */
 @Component
 public class AccountTransactionBuilder implements Builder<AccountTransaction, MutableAccountTransaction> {
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, AccountTransaction pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-
+    pBuilder.add("id", pReadOnly.getId().toString());
+    pBuilder.add("companyCodeId", pReadOnly.getCompany().getId());
+    pBuilder.add("divisionCode", pReadOnly.getDivisionCode());
+    pBuilder.add("voucherNo", pReadOnly.getVoucherNo());
+    pBuilder.add("voucherDate", UmsUtils.formatDate(pReadOnly.getVoucherDate(), "dd-MM-yyyy"));
+    pBuilder.add("serialNo", pReadOnly.getSerialNo());
+    pBuilder.add("accountId", pReadOnly.getAccount().getId().toString());
+    pBuilder.add("voucherId", pReadOnly.getVoucher().getId().toString());
+    pBuilder.add("voucherName", pReadOnly.getVoucher().getName());
+    pBuilder.add("voucherShortName", pReadOnly.getVoucher().getShortName());
+    pBuilder.add("amount", pReadOnly.getAmount());
+    pBuilder.add("balanceType", pReadOnly.getBalanceType().getValue());
+    pBuilder.add("narration", pReadOnly.getNarration());
+    pBuilder.add("foreignCurrency", pReadOnly.getForeignCurrency());
+    pBuilder.add("currencyId", pReadOnly.getCurrency().getId().toString());
+    pBuilder.add("currencyName", pReadOnly.getCurrency().getCurrencyDescription());
+    pBuilder.add("conversionFactor", pReadOnly.getConversionFactor());
+    pBuilder.add("projNo", pReadOnly.getProjNo());
+    pBuilder.add("statFlag", pReadOnly.getStatFlag());
+    pBuilder.add("statUpFlag", pReadOnly.getStatUpFlag());
+    pBuilder.add("receiptId", pReadOnly.getReceiptId().toString());
+    pBuilder.add("postDate", UmsUtils.formatDate(pReadOnly.getPostDate(), "dd-MM-yyyy"));
+    pBuilder.add("modifiedBy", mEmployeeManager.get(pReadOnly.getModifiedBy()).getPersonalInformation().getFullName());
+    pBuilder.add("modifiedDate", UmsUtils.formatDate(pReadOnly.getModifiedDate(), "dd-MM-yyyy"));
   }
 
   @Override

@@ -1,3 +1,12 @@
+<div class="col-md-3"></div>
+<div class="col-md-6">
+    <div class="input-group">
+        <input type="text" ng-model="vm.searchVoucherNo" class="form-control"/><span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button></span>
+    </div>
+</div>
+<div class="col-md-3"></div>
+
 <div align="right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="existing-journal-voucher"
@@ -15,7 +24,7 @@
     <tbody>
     <tr dir-paginate="p in vm.existingJournalVouchers | itemsPerPage: vm.itemsPerPage"
         current-page="vm.pageNumber"
-        total-items="vm.totalAccountSize"
+        total-items="vm.totalVoucherNumber"
         pagination-id="existing-journal-voucher"
         style="cursor: pointer;">
         <td>{{p.postDate}}</td>

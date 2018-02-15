@@ -97,7 +97,8 @@ module ums {
 
     private getLoggedUserAdditionalPermissions() {
       this.additionalRolePermissionService.fetchLoggedUserAdditionalRolePermissions().then((permissions: AdditionalRolePermissions[]) => {
-
+        console.log("permissions");
+        console.log(permissions);
       });
     }
 

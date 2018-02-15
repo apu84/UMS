@@ -101,8 +101,8 @@ module ums {
     static DEPT_CSE = '04';
     static DEPT_BBA = '02';
     static DEPT_ARC = '01';
-    static DEPT_COE = '81';
-    static DEPT_RO = '80';
+    static DEPT_COE = '73';
+    static DEPT_RO = '72';
     static DEPT_TO = '82';
     static DEPT_EO = '83';
     static DEPT_AOSW = '84';

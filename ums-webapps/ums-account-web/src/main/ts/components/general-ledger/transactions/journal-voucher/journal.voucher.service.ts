@@ -10,6 +10,11 @@ module ums {
     SELLING="S"
   }
 
+  export interface IPaginatedVouchers {
+    totalNumber: number;
+    vouchers: IJournalVoucher[];
+  }
+
   export interface IJournalVoucher{
     id: string;
     company: ICompany;
@@ -67,6 +72,7 @@ module ums {
       this.httpClient.get(this.url + "/voucher-number", HttpClient.MIME_TYPE_JSON,
           (response: ITransactionResponse) => {
             if (response.message.length > 1) {
+
               this.notify.error("Error in fetching voucher number");
               defer.resolve(undefined)
             }
@@ -78,10 +84,14 @@ module ums {
       return defer.promise;
     }
 
-    public getAllVouchersPaginated(itemPerPage: number, pageNumber: number):ng.IPromise<IJournalVoucher[]>{
-      let defer: ng.IDeferred<IJournalVoucher[]> = this.$q.defer();
+    public getAllVouchersPaginated(itemPerPage: number, pageNumber: number): ng.IPromise<IPaginatedVouchers> {
+      let defer: ng.IDeferred<IPaginatedVouchers> = this.$q.defer();
       this.httpClient.get(this.url+"/item-per-page/"+itemPerPage+"/page-number/"+pageNumber, HttpClient.MIME_TYPE_JSON,
-          (respose:IJournalVoucher[])=>defer.resolve(respose));
+          (respose: IPaginatedVouchers) => {
+            console.log("Voucher response");
+            console.log(respose);
+            defer.resolve(respose)
+          });
       return defer.promise;
     }
   }
