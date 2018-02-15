@@ -79,10 +79,11 @@ module ums{
           let defer = this.$q.defer();
           this.httpClient.post("academic/employee/", json, 'application/json')
               .success(() => {
-                  defer.resolve("Saved");
+                  defer.resolve("Success");
               })
               .error((data) => {
-                  defer.resolve("Error");
+                  console.log(data);
+                  defer.reject();
               });
           return defer.promise;
       }

@@ -74,9 +74,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     preparePersonalInformation(mutablePersonalInformation, pJsonObject.getJsonObject("entries"));
     mPersonalInformationManager.create(mutablePersonalInformation);
 
-    MutableUser mutableUser = new PersistentUser();
-    prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
-    mUserManager.create(mutableUser);
+    if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
+        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
+      MutableUser mutableUser = new PersistentUser();
+      prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
+      mUserManager.create(mutableUser);
+    }
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(EmployeeResource.class).path(EmployeeResource.class, "get")
@@ -246,7 +249,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
     pMutableUser.setId(pJsonObject.getString("shortName"));
     pMutableUser.setEmployeeId(pJsonObject.getString("id"));
-    pMutableUser.setPrimaryRoleId(Integer.parseInt(pJsonObject.getString("role")));
+    pMutableUser.setPrimaryRoleId(pJsonObject.getJsonObject("role").getInt("id"));
     // pMutableUser.setPassword('A');
     pMutableUser.setActive(true);
     pMutableUser.setPassword(null);

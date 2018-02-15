@@ -154,6 +154,11 @@ module ums {
                         return employmentTypeService.getAll().then((data) => {
                             return data;
                         });
+                    }],
+                    roles: ['roleService', function (roleService) {
+                        return roleService.getAll().then((data: any) => {
+                           return data.entries;
+                        });
                     }]
                 }
             })

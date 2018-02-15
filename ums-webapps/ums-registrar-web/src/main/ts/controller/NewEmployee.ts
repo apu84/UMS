@@ -1,31 +1,16 @@
 module ums {
     import IFormController = ng.IFormController;
 
-    export interface INewEmployee {
-        id: string;
-        firstName: string;
-        lastName: string;
-        department: object;
-        designation: object;
-        employmentType: object;
-        joiningDate: string;
-        status: object;
-        shortName: string;
-        email: string;
-        employeeType: object;
-        role: object;
-        IUMSAccount: boolean;
-    }
-
     class NewEmployee {
 
         public static $inject = ['appConstants', 'registrarConstants',
             '$q', 'notify', '$scope', 'HttpClient',
-            'departments', 'designations', 'employmentTypes', 'employeeService'];
+            'departments', 'designations', 'employmentTypes', 'employeeService', 'roles'];
 
         private allDepartments = [];
         private allDesignations = [];
         private allEmploymentTypes = [];
+        private allRoles = [];
         private showRightDiv: boolean = false;
 
         private newEmployee: INewEmployee;
@@ -33,29 +18,37 @@ module ums {
 
         constructor(private appConstants: any, private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private httpClient: HttpClient, private departments: any, private designations: any,
-                    private employmentTypes: any, private employeeService: EmployeeService) {
+                    private employmentTypes: any, private employeeService: EmployeeService, private roles: any) {
 
             this.newEmployee = <INewEmployee>{};
             this.allDepartments = departments;
             this.allDesignations = designations;
             this.allEmploymentTypes = employmentTypes;
+            this.allRoles = roles;
         }
 
-        public submitNewEmployeeForm(): void {
+        public submitNewEmployeeForm(form: IFormController): void {
             this.convertToJson().then((result: any) => {
                 this.employeeService.save(result).then((message: any) => {
+                    console.log(message);
+                    this.resetForm(form);
                     this.notify.success(message);
                 }).catch((message: any) =>{
-                    this.notify.error(message);
+                    this.notify.error("Error in new employee creation");
                 });
             });
+        }
+
+        private resetForm(form: ng.IFormController) {
+            this.showRightDiv = false;
+            this.newEmployee = <INewEmployee>{};
+            form.$setPristine();
         }
 
         public createId(): void {
             if (this.newEmployee.department && this.newEmployee.employeeType) {
                 this.employeeService.getNewEmployeeId(this.newEmployee.department["id"],
                     +this.newEmployee.employeeType).then((result: any) => {
-                        console.log(result);
                         this.newEmployee.id = result;
                         this.showRightDiv = true;
                 });

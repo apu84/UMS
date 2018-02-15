@@ -54,7 +54,7 @@
         padding-right: 25px;
     }
 </style>
-<ng-form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm()" novalidate>
+<form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm(nEmployeeForm)" novalidate>
     <div class="panel panel-default">
         <div class="panel-heading">New Employee Form</div>
         <div class="panel-body">
@@ -107,15 +107,9 @@
                                     <select name="nRole"
                                             id="iRole"
                                             data-ng-model="vm.newEmployee.role"
+                                            data-ng-options="roles.name for roles in vm.allRoles track by roles.id"
                                             class="form-control" required>
-
                                         <option value="">Select A Role</option>
-                                        <option value="81">Registrar</option>
-                                        <option value="71">coe</option>
-                                        <option value="21">Teacher</option>
-                                        <option value="82">dpregistrar</option>
-                                        <option value="22">Dept-head</option>
-                                        <option value="72">dpCoe</option>
                                     </select>
                                     <label data-ng-show="nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine"
                                            class="help-block control-label">Select Role.</label>
@@ -322,7 +316,7 @@
             </div>
         </div>
     </div>
-</ng-form>
+</form>
 
 
 

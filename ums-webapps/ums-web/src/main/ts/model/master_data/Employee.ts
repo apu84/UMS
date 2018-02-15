@@ -22,4 +22,21 @@ module ums{
     jobPermanentDate:string;
     status:number;
   }
+
+    export interface INewEmployee {
+        id: string;
+        firstName: string;
+        lastName: string;
+        department: object;
+        designation: object;
+        employmentType: object;
+        joiningDate: string;
+        status: object;
+        shortName: string;
+        email: string;
+        employeeType: object;
+        role: object;
+        IUMSAccount: boolean;
+    }
+
 }
