@@ -1,24 +1,38 @@
 module ums {
-    import IFormController = ng.IFormController;
-
     class NewEmployee {
 
-        public static $inject = ['appConstants', 'registrarConstants',
-            '$q', 'notify', '$scope', 'HttpClient',
-            'departments', 'designations', 'employmentTypes', 'employeeService', 'roles'];
+        public static $inject = [
+            'appConstants',
+            'registrarConstants',
+            '$q',
+            'notify',
+            '$scope',
+            'HttpClient',
+            'departments',
+            'designations',
+            'employmentTypes',
+            'employeeService',
+            'roles'];
 
         private allDepartments = [];
         private allDesignations = [];
         private allEmploymentTypes = [];
         private allRoles = [];
         private showRightDiv: boolean = false;
-
         private newEmployee: INewEmployee;
-        private isNotUniqueShortName: boolean;
+        private isNotUniqueShortName: boolean = false;
 
-        constructor(private appConstants: any, private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
-                    private $scope: ng.IScope, private httpClient: HttpClient, private departments: any, private designations: any,
-                    private employmentTypes: any, private employeeService: EmployeeService, private roles: any) {
+        constructor(private appConstants: any,
+                    private registrarConstants: any,
+                    private $q: ng.IQService,
+                    private notify: Notify,
+                    private $scope: ng.IScope,
+                    private httpClient: HttpClient,
+                    private departments: any,
+                    private designations: any,
+                    private employmentTypes: any,
+                    private employeeService: EmployeeService,
+                    private roles: any) {
 
             this.newEmployee = <INewEmployee>{};
             this.allDepartments = departments;
@@ -27,16 +41,21 @@ module ums {
             this.allRoles = roles;
         }
 
-        public submitNewEmployeeForm(form: IFormController): void {
-            this.convertToJson().then((result: any) => {
-                this.employeeService.save(result).then((message: any) => {
-                    console.log(message);
-                    this.resetForm(form);
-                    this.notify.success(message);
-                }).catch((message: any) =>{
-                    this.notify.error("Error in new employee creation");
+        public submitNewEmployeeForm(form: ng.IFormController): void {
+            if (this.isNotUniqueShortName) {
+                this.notify.error("Short name is not unique");
+            }
+            else {
+                this.convertToJson().then((result: any) => {
+                    this.employeeService.save(result).then((message: any) => {
+                        this.resetForm(form);
+                        this.notify.success(message);
+
+                    }).catch((message: any) => {
+                        this.notify.error("Error in new employee creation");
+                    });
                 });
-            });
+            }
         }
 
         private resetForm(form: ng.IFormController) {
@@ -49,18 +68,21 @@ module ums {
             if (this.newEmployee.department && this.newEmployee.employeeType) {
                 this.employeeService.getNewEmployeeId(this.newEmployee.department["id"],
                     +this.newEmployee.employeeType).then((result: any) => {
-                        this.newEmployee.id = result;
-                        this.showRightDiv = true;
+                    this.newEmployee.id = result;
+                    this.showRightDiv = true;
                 });
             }
-            else{
+            else {
                 this.showRightDiv = false;
             }
         }
 
-        public validateShortName(): void{
-            this.employeeService.validate(this.newEmployee.shortName).then((result: any) =>{
+        public validateShortName(): void {
+            this.employeeService.checkDuplicate(this.newEmployee.shortName).then((result: any) => {
                 this.isNotUniqueShortName = !!result;
+                if (this.isNotUniqueShortName) {
+                    this.notify.error("Short name already exists");
+                }
             });
         }
 

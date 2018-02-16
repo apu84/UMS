@@ -104,7 +104,7 @@ module ums{
           return defer.promise;
       }
 
-      public validate(pShortName: string):ng.IPromise<any>{
+      public checkDuplicate(pShortName: string):ng.IPromise<any>{
           var defer = this.$q.defer();
           var employees:any={};
           this.httpClient.get("academic/employee/validate/" + pShortName,'application/json',

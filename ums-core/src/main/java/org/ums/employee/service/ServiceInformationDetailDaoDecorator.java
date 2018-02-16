@@ -15,6 +15,11 @@ public class ServiceInformationDetailDaoDecorator
   }
 
   @Override
+  public int saveServiceInformationDetail(MutableServiceInformationDetail pMutableServiceInformationDetail) {
+    return getManager().saveServiceInformationDetail(pMutableServiceInformationDetail);
+  }
+
+  @Override
   public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
     return getManager().getServiceInformationDetail(pServiceId);
   }

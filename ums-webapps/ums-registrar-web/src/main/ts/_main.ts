@@ -120,6 +120,8 @@
 
 /// <reference path='controller/NewEmployee.ts'/>
 
+/// <reference path='directive/ElementValidation.ts' />
+
 
 
 

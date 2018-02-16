@@ -23,7 +23,13 @@ import org.ums.employee.personal.MutablePersonalInformation;
 import org.ums.employee.personal.PersistentPersonalInformation;
 import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.employee.service.*;
+import org.ums.enums.common.EmploymentPeriod;
+import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.DesignationManager;
+import org.ums.manager.EmploymentTypeManager;
 import org.ums.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
@@ -62,6 +68,21 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   DateFormat mDateFormat;
 
+  @Autowired
+  ServiceInformationManager mServiceInformationManager;
+
+  @Autowired
+  ServiceInformationDetailManager mServiceInformationDetailManager;
+
+  @Autowired
+  DepartmentManager mDepartmentManager;
+
+  @Autowired
+  DesignationManager mDesignationManager;
+
+  @Autowired
+  EmploymentTypeManager mEmploymentTypeManager;
+
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -73,6 +94,14 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
     preparePersonalInformation(mutablePersonalInformation, pJsonObject.getJsonObject("entries"));
     mPersonalInformationManager.create(mutablePersonalInformation);
+
+    MutableServiceInformation mutableServiceInformation = new PersistentServiceInformation();
+    MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+    prepareServiceInformation(mutableServiceInformation, mutableServiceInformationDetail,
+        pJsonObject.getJsonObject("entries"));
+    Long serviceId = mServiceInformationManager.saveServiceInformation(mutableServiceInformation);
+    mutableServiceInformationDetail.setServiceId(serviceId);
+    mServiceInformationDetailManager.saveServiceInformationDetail(mutableServiceInformationDetail);
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
         && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
@@ -255,6 +284,26 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     pMutableUser.setPassword(null);
     pMutableUser.setCreatedOn(new Date());
     pMutableUser.setCreatedBy(user.getId());
+  }
+
+  private void prepareServiceInformation(MutableServiceInformation pMutableServiceInformation,
+      MutableServiceInformationDetail pMutableServiceInformationDetail, JsonObject pJsonObject) {
+    pMutableServiceInformation.setEmployeeId(pJsonObject.getString("id"));
+    pMutableServiceInformation.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString(
+        "id")));
+    pMutableServiceInformation.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt(
+        "id")));
+    pMutableServiceInformation.setEmployment(mEmploymentTypeManager.get(pJsonObject.getJsonObject("employmentType")
+        .getInt("id")));
+    pMutableServiceInformation.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
+    pMutableServiceInformation.setResignDate(null);
+
+    pMutableServiceInformationDetail
+        .setEmploymentPeriod(pJsonObject.getJsonObject("employmentType").getInt("id") == EmploymentType.REGULAR.getId() ? EmploymentPeriod.CONTRACTUAL
+            : EmploymentPeriod.CONTRACT);
+    pMutableServiceInformationDetail.setStartDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
+    pMutableServiceInformationDetail.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));
+    pMutableServiceInformationDetail.setComment(" ");
   }
 
   @Override

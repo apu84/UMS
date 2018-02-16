@@ -36,6 +36,7 @@ module ums{
         email: string;
         employeeType: object;
         role: object;
+        endDate: string;
         IUMSAccount: boolean;
     }
 
