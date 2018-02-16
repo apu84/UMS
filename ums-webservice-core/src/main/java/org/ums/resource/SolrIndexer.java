@@ -1,18 +1,15 @@
 package org.ums.resource;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.solr.indexer.reindex.DocumentsTobeReIndexed;
+import org.ums.solr.indexer.reindex.ReIndexer;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.ums.usermanagement.user.User;
-import org.ums.usermanagement.user.UserManager;
-import org.ums.solr.repository.EmployeeRepository;
-import org.ums.solr.repository.converter.SimpleConverter;
-import org.ums.solr.repository.document.EmployeeDocument;
-import org.ums.solr.repository.lms.RecordRepository;
 
 @Component
 @Path("/indexer")
@@ -20,24 +17,15 @@ import org.ums.solr.repository.lms.RecordRepository;
 public class SolrIndexer extends Resource {
 
   @Autowired
-  EmployeeRepository mEmployeeRepository;
-
-  @Autowired
-  RecordRepository mRecordRepository;
-
-  @Autowired
-  UserManager mUserManager;
+  DocumentsTobeReIndexed mDocumentsTobeReIndexed;
 
   @GET
   @Path("/reindex")
+  @RequiresPermissions("search:index")
   public Response reindex() throws Exception {
-    indexDocuments();
+    for(ReIndexer indexer : mDocumentsTobeReIndexed.getReIndexers()) {
+      indexer.reindex();
+    }
     return Response.ok().build();
-  }
-
-  private void indexDocuments() {
-    SimpleConverter<User, EmployeeDocument> converter = new SimpleConverter<>(User.class, EmployeeDocument.class);
-    mEmployeeRepository.deleteAll();
-    mEmployeeRepository.save(converter.convert(mUserManager.getAll()));
   }
 }
