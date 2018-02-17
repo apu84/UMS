@@ -84,8 +84,7 @@ public class UserManagementResource extends Resource {
   @PUT
   @Path("/role/{role-id}/permissions")
   @RequiresPermissions("user-management")
-  public Set<String> updateRolePermissions(final @PathParam("role-id") Integer pRoleId,
-      final Set<String> pPermissions) {
+  public Set<String> updateRolePermissions(final @PathParam("role-id") Integer pRoleId, final Set<String> pPermissions) {
     mUserRolePermissions.updateRolePermissions(pRoleId, pPermissions);
     return mPermissionManager.getPermissionByRole(mRoleManager.get(pRoleId)).get(0).getPermissions();
   }

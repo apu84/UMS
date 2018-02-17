@@ -48,6 +48,9 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.twofa.*;
+import org.ums.usermanagement.application.ApplicationCache;
+import org.ums.usermanagement.application.ApplicationDao;
+import org.ums.usermanagement.application.ApplicationManager;
 import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
@@ -453,5 +456,12 @@ public class CoreContext {
   public UserRolePermissions userRolePermissions() {
     return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager(),
         roleManager());
+  }
+
+  @Bean
+  ApplicationManager applicationManager() {
+    ApplicationCache applicationCache = new ApplicationCache(mCacheFactory.getCacheManager());
+    applicationCache.setManager(new ApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return applicationCache;
   }
 }

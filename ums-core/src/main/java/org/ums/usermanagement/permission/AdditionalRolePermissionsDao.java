@@ -141,8 +141,8 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
   @Override
   public int addRole(String pUserId, Role pRole) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pUserId, pRole.getId(), "",
-        new Date(), new Date(), 1, "");
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pUserId, pRole.getId(), "", new Date(),
+        new Date(), 1, "");
   }
 
   @Override

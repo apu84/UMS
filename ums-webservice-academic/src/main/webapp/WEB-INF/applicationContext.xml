@@ -3,10 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.1.xsd
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
@@ -14,6 +17,9 @@
   <aop:aspectj-autoproxy proxy-target-class="true"/>
   <context:spring-configured/>
   <context:component-scan
-      base-package="org.ums.login,org.ums.logs,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.dummy.webservice,org.ums.academic.resource,org.ums.academic.resource.helper,org.ums.academic.resource.student.gradesheet,org.ums.login,org.ums.report.generator.seatPlan.support,org.ums.report.generator.seatPlan,org.ums.cachewarmer,org.ums.report,org.ums.navigation,org.ums.resource,org.ums.builder,org.ums.services,org.ums.validator,org.ums.readmission.student,org.ums.kafka,org.ums.employee"/>
+      base-package="org.ums.login,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.dummy.webservice,org.ums.academic.resource,org.ums.academic.resource.helper,org.ums.academic.resource.student.gradesheet,org.ums.login,org.ums.report.generator.seatPlan.support,org.ums.report.generator.seatPlan,org.ums.cachewarmer,org.ums.report,org.ums.navigation,org.ums.resource,org.ums.builder,org.ums.services,org.ums.validator,org.ums.readmission.student,org.ums.kafka,org.ums.employee,org.ums.usermanagement"/>
 
+  <task:annotation-driven executor="asynExecutor"/>
+  <task:executor id="asynExecutor" pool-size="25" />
+  <task:executor id="myExecutor" pool-size="10" />
 </beans>
