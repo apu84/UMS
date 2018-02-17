@@ -57,6 +57,12 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   }
 
   @Override
+  public List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate) {
+    String query = "select * from DT_TRANSACTION where VOUCHER_NO=? and trunc(MODIFIED_DATE)=TRUNC(?)";
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
   public List<Long> create(List<MutableAccountTransaction> pMutableList) {
     String query=INSERT_ONE;
     List<Object[]> params = getCreateParams(pMutableList);

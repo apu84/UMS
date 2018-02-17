@@ -32,11 +32,11 @@ public class ReceiptBuilder implements Builder<Receipt, MutableReceipt> {
   }
 
   public void build(MutableReceipt pMutableReceipt, JsonObject pJsonObject) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutableReceipt.setId(Long.parseLong(pJsonObject.getString("id")));
-    if (pJsonObject.containsKey("name"))
+    if(pJsonObject.containsKey("name"))
       pMutableReceipt.setName(pJsonObject.getString("name"));
-    if (pJsonObject.containsKey("shortName"))
+    if(pJsonObject.containsKey("shortName"))
       pMutableReceipt.setShortName(pJsonObject.getString("shortName"));
   }
 }

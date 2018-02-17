@@ -8,8 +8,8 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 31-Dec-17.
  */
 public enum BalanceType {
-  DEBIT("Dr"),
-  CREDIT("Cr");
+  Dr("Dr"),
+  Cr("Cr");
 
   private static final Map<String, BalanceType> Lookup = new HashMap<>();
 

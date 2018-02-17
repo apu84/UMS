@@ -33,11 +33,11 @@ public class VoucherBuilder implements Builder<Voucher, MutableVoucher> {
   }
 
   public void buil(MutableVoucher pMutableVoucher, JsonObject pJsonObject) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutableVoucher.setId(Long.parseLong(pJsonObject.getString("id")));
-    if (pJsonObject.containsKey("name"))
+    if(pJsonObject.containsKey("name"))
       pMutableVoucher.setName(pJsonObject.getString("name"));
-    if (pJsonObject.containsKey("shortName"))
+    if(pJsonObject.containsKey("shortName"))
       pMutableVoucher.setShortName(pJsonObject.getString("shortName"));
   }
 }

@@ -12,7 +12,10 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
 public interface AccountTransactionManager extends ContentManager<AccountTransaction, MutableAccountTransaction, Long> {
+
   Integer getTotalVoucherNumberBasedOnCurrentDay(Voucher pVoucher);
+
+  List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate);
 
   List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo);
 

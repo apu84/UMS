@@ -72,11 +72,16 @@
         <br>
 
         <br>
-        <div class="row" align="right">
+        <div class="row">
             <div class="col-md-12">
                 <div class="well">
-                    <label class="control-label col-md-6">Total Debit : </label><label align="left" class="control-label col-md-6">{{vm.totalDebit}}</label><br>
-                    <label class="control-label col-md-6">Total Credit: </label><label align="left" class="control-label col-md-6">{{vm.totalCredit}}</label><br>
+                    <label class="control-label col-md-6" align="right">Total Debit : </label><label align="left"
+                                                                                                     class="control-label col-md-6">{{vm.totalDebit}}</label>
+                    <label class="control-label col-md-6" align="right">Total Credit: </label><label align="left"
+                                                                                                     class="control-label col-md-6">{{vm.totalCredit}}</label><br><br>
+                </div>
+                <div class="alert alert-success" align="center">
+                    <label class="control-label">{{vm.poststatus}}</label>
                 </div>
             </div>
 

@@ -22,6 +22,11 @@ public class AccountTransactionDaoDecorator extends
   }
 
   @Override
+  public List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate) {
+    return getManager().getByVoucherNoAndDate(pVoucherNo, pDate);
+  }
+
+  @Override
   public Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate) {
     return getManager().getVoucherNumber(pVoucher, pStartDate, pEndDate);
   }

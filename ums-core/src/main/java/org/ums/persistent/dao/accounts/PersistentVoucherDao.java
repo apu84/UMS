@@ -22,7 +22,7 @@ public class PersistentVoucherDao extends VoucherDaoDecorator {
   private IdGenerator mIdGenerator;
 
   public PersistentVoucherDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-                              IdGenerator pIdGenerator) {
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -37,7 +37,7 @@ public class PersistentVoucherDao extends VoucherDaoDecorator {
   @Override
   public Voucher get(Long pId) {
     String query = "select * from mst_voucher where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new PersistentVoucherRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentVoucherRowMapper());
   }
 
   @Override

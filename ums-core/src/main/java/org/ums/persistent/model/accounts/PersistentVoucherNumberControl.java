@@ -93,8 +93,7 @@ public class PersistentVoucherNumberControl implements MutableVoucherNumberContr
   @JsonProperty("company")
   private Company mCompany;
 
-  public PersistentVoucherNumberControl() {
-  }
+  public PersistentVoucherNumberControl() {}
 
   public PersistentVoucherNumberControl(final PersistentVoucherNumberControl pPersistentVoucherNumberControl) {
     id = pPersistentVoucherNumberControl.getId();

@@ -26,7 +26,7 @@
         current-page="vm.pageNumber"
         total-items="vm.totalVoucherNumber"
         pagination-id="existing-journal-voucher"
-        style="cursor: pointer;">
+        style="cursor: pointer;" ng-click="vm.fetchDetails(p)">
         <td> {{p.postDate==null?"Not Posted": vm.changeDateFormat(p.postDate)}}</td>
         <td>{{p.voucherNo}}</td>
     </tr>

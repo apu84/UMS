@@ -1,5 +1,8 @@
 module ums {
+
+
   export class JournalVoucherController {
+
     public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService'];
 
 
@@ -21,6 +24,7 @@ module ums {
     private itemsPerPage: number;
     private totalVoucherNumber: number;
     private searchVoucherNo: string;
+    private poststatus: string;
     private accounting: any;
     static JOURNAL_VOUCHER_GROUP_FLAG = GroupFlag.NO;
     static JOURNAL_VOUCHER_ID = '1';
@@ -40,6 +44,7 @@ module ums {
     }
 
     public initialize() {
+
       this.showAddSection = false;
       this.pageNumber = 1;
 
@@ -50,9 +55,11 @@ module ums {
         console.log(accounts);
         this.accounts = accounts;
       });
-
+      this.getCurrencyConversions();
+      this.getCurrencies();
       this.getPaginatedJournalVouchers();
     }
+
 
     public getPaginatedJournalVouchers() {
       this.journalVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedVouchers) => {
@@ -132,13 +139,24 @@ module ums {
       this.showAddSection = false;
     }
 
+    public fetchDetails(journalVoucher: IJournalVoucher) {
+      this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
+        this.journalVouchers = vouchers;
+        this.showAddSection = true;
+        this.voucherNo = vouchers[0].voucherNo;
+        this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
+        this.poststatus = vouchers[0].postDate == null ? "Not posted" : "Posted";
+        this.selectedCurrency = vouchers[0].currency;
+        this.calculateTotalDebitAndCredit();
+      });
+    }
+
     public addButtonClicked() {
+      this.poststatus = "Not Posted";
       this.showAddSection = true;
       this.totalCredit = 0;
       this.totalDebit = 0;
       this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
-      this.getCurrencyConversions();
-      this.getCurrencies();
       let currDate: Date = new Date();
       this.journalVouchers = [];
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
