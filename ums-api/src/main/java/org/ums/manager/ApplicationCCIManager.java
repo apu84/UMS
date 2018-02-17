@@ -24,7 +24,12 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
 
   int updatebank(MutableStudentPayment MutableStudentPayment);
 
-  List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus, final String empDeptId);// getByStudentId
+  String getApplicationCCIForCarryLastfdate(final Integer pSemesterId);
+
+  Integer getAllReords(final String pApprovalStatus, final String empDeptId);
+
+  List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus, final Integer pCurentpage,
+      final Integer pItemPerpage, final String empDeptId);// getByStudentId
 
   List<ApplicationCCI> getByStudentId(final String pApprovalStatus, final String pStudentId, final Integer pSemesterId,
       final String empDeptId);

@@ -147,7 +147,7 @@ module ums {
         /**
          * Fetch Record List
          */
-        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any> {
+        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any>{
 
             var defer = this.$q.defer();
             var tPage = page - 1;

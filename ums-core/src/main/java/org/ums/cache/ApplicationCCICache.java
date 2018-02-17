@@ -20,6 +20,16 @@ public class ApplicationCCICache extends
   CacheManager<ApplicationCCI, Long> mCacheManager;
 
   @Override
+  public Integer getAllReords(String pApprovalStatus, String empDeptId) {
+    return getManager().getAllReords(pApprovalStatus, empDeptId);
+  }
+
+  @Override
+  public String getApplicationCCIForCarryLastfdate(Integer pSemesterId) {
+    return getManager().getApplicationCCIForCarryLastfdate(pSemesterId);
+  }
+
+  @Override
   public int updatebank(MutableStudentPayment MutableStudentPayment) {
     return getManager().updatebank(MutableStudentPayment);
   }
@@ -46,8 +56,9 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, String empDeptId) {
-    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, empDeptId);
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, Integer pCurentpage,
+      Integer pItemPerpage, String empDeptId) {
+    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, pCurentpage, pItemPerpage, empDeptId);
   }
 
   public ApplicationCCICache(CacheManager<ApplicationCCI, Long> pCacheManager) {

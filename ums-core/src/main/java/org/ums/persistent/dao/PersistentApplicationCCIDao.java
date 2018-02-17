@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
+  public Integer curPage = 1;
+  public Integer itemParPg = 2;
   String SELECT_ALL =
       "SELECT  "
           + "    a.id,  "
@@ -48,37 +50,56 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   String DELETE_ONE = "delete  from  application_cci";
 
   // UpdateApliedAndApproved
-  String UDAPTE_APPLIED_APPROVED = "update APPLICATION_CCI " + "set STATUS=?  where "
+  String UDAPTE_APPLIED_APPROVED = "update APPLICATION_CCI " + "set STATUS=?,TRANSACTION_ID=?  where "
       + "STUDENT_ID=? AND SEMESTER_ID=? AND APPLICATION_TYPE=3 AND COURSE_ID=?";
 
   String UPADTE_BANK_APPROVED = "update APPLICATION_CCI " + "set STATUS=8  where " + "TRANSACTION_ID=?";
 
   // Rumi-CarryApporvalQueries
   String SELECT_ALL_CA =
-      "SELECT"
-          + "    a.id,"
-          + "    a.semester_id,"
-          + "    a.student_id,"
-          + "    a.course_id,"
-          + "    a.application_type,"
-          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
-          + "    a.STATUS,"
-          + "    t.GRADE_LETTER                                                                GRADE,"
-          + "    c.course_no,"
-          + "    c.course_title,"
-          + "    STUDENTS.FULL_NAME,"
-          + "    STUDENTS.CURR_YEAR,"
-          + "    STUDENTS.CURR_SEMESTER,"
-          + "    STUDENTS.CURR_ENROLLED_SEMESTER,"
-          + "    to_char(exam_routine.exam_date,  'DD-MM-YYYY')  exam_date"
-          + " FROM  application_cci  a,  mst_course  c,  exam_routine,  UG_REGISTRATION_RESULT  t,  STUDENTS"
-          + " WHERE "
-          + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
-          + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
-          + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 AND c.OFFER_BY= ? ";
+      " SELECT "
+          + "  id, "
+          + "  semester_id, "
+          + "  student_id, "
+          + "  course_id, "
+          + "  application_type, "
+          + "  applied_on, "
+          + "  STATUS, "
+          + "  GRADE, "
+          + "  course_no, "
+          + "  course_title, "
+          + "  FULL_NAME, "
+          + "  CURR_YEAR, "
+          + "  CURR_SEMESTER, "
+          + "  CURR_ENROLLED_SEMESTER, "
+          + "  exam_date, rowno "
+          + "FROM "
+          + "( SELECT b.*,ROWNUM rowno FROM (SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS= 2 "
+          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ? )" + "WHERE rowno >=?";
   // -----------SearchBystudent Id
   String SELECT_ALL_CA_SearchByStudentId =
       " SELECT "
+          + " ROWNUM rowno,  "
           + "  a.id, "
           + "  a.semester_id, "
           + "  a.student_id, "
@@ -102,32 +123,51 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   // Rejected
   String SELECT_ALL_Reject =
-      "SELECT"
-          + "    a.id,"
-          + "    a.semester_id,"
-          + "    a.student_id,"
-          + "    a.course_id,"
-          + "    a.application_type,"
-          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
-          + "    a.STATUS,"
-          + "    t.GRADE_LETTER                                                                GRADE,"
-          + "    c.course_no,"
-          + "    c.course_title,"
-          + "    STUDENTS.FULL_NAME,"
-          + "    STUDENTS.CURR_YEAR,"
-          + "    STUDENTS.CURR_SEMESTER,"
-          + "    STUDENTS.CURR_ENROLLED_SEMESTER,"
-          + "    to_char(exam_routine.exam_date,  'DD-MM-YYYY')  exam_date"
-          + " FROM  application_cci  a,  mst_course  c,  exam_routine,  UG_REGISTRATION_RESULT  t,  STUDENTS"
-          + " WHERE "
-          + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
-          + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
-          + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 AND c.OFFER_BY= ? ";
+      " SELECT "
+          + "  id, "
+          + "  semester_id, "
+          + "  student_id, "
+          + "  course_id, "
+          + "  application_type, "
+          + "  applied_on, "
+          + "  STATUS, "
+          + "  GRADE, "
+          + "  course_no, "
+          + "  course_title, "
+          + "  FULL_NAME, "
+          + "  CURR_YEAR, "
+          + "  CURR_SEMESTER, "
+          + "  CURR_ENROLLED_SEMESTER, "
+          + "  exam_date, rowno "
+          + "FROM "
+          + "( SELECT b.*,ROWNUM rowno FROM (SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND  a.STATUS=9 "
+          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >= ?";
 
   // SearchByStudentId
 
   String SELECT_ALL_REJECT_SearchByStudentId =
       " SELECT  "
+          + " ROWNUM rowno,  "
           + "  a.id,  "
           + "  a.semester_id,  "
           + "  a.student_id,  "
@@ -151,31 +191,50 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   // /////PaymentAndApproved Query
   String SELECT_ALL_Payment_ANd_Approved =
-      "SELECT"
-          + "    a.id,"
-          + "    a.semester_id,"
-          + "    a.student_id,"
-          + "    a.course_id,"
-          + "    a.application_type,"
-          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
-          + "    a.STATUS,"
-          + "    t.GRADE_LETTER                                                                GRADE,"
-          + "    c.course_no,"
-          + "    c.course_title,"
-          + "    STUDENTS.FULL_NAME,"
-          + "    STUDENTS.CURR_YEAR,"
-          + "    STUDENTS.CURR_SEMESTER,"
-          + "    STUDENTS.CURR_ENROLLED_SEMESTER,"
-          + "    to_char(exam_routine.exam_date,  'DD-MM-YYYY')  exam_date"
-          + " FROM  application_cci  a,  mst_course  c,  exam_routine,  UG_REGISTRATION_RESULT  t,  STUDENTS"
-          + " WHERE "
-          + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
-          + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
-          + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND c.OFFER_BY= ? ";
+      " SELECT "
+          + "  id, "
+          + "  semester_id, "
+          + "  student_id, "
+          + "  course_id, "
+          + "  application_type, "
+          + "  applied_on, "
+          + "  STATUS, "
+          + "  GRADE, "
+          + "  course_no, "
+          + "  course_title, "
+          + "  FULL_NAME, "
+          + "  CURR_YEAR, "
+          + "  CURR_SEMESTER, "
+          + "  CURR_ENROLLED_SEMESTER, "
+          + "  exam_date, rowno "
+          + "FROM "
+          + "( SELECT b.*,ROWNUM rowno FROM (SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) "
+          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM <?)" + "WHERE rowno >=?";
   // Payment Approval Search
 
   String SELECT_ALL_Payment_ANd_Approved_SearchByStudentId =
       " SELECT   "
+          + " ROWNUM rowno,  "
           + "  a.id,   "
           + "  a.semester_id,   "
           + "  a.student_id,   "
@@ -198,30 +257,49 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND c.OFFER_BY= ? ";
   // All
   String SELECT_ALL_All_Approval_Status =
-      "SELECT"
-          + "    a.id,"
-          + "    a.semester_id,"
-          + "    a.student_id,"
-          + "    a.course_id,"
-          + "    a.application_type,"
-          + "    to_char(a.applied_on,'DD-MM-YYYY') applied_on,"
-          + "    a.STATUS,"
-          + "    t.GRADE_LETTER                                                                GRADE,"
-          + "    c.course_no,"
-          + "    c.course_title,"
-          + "    STUDENTS.FULL_NAME,"
-          + "    STUDENTS.CURR_YEAR,"
-          + "    STUDENTS.CURR_SEMESTER,"
-          + "    STUDENTS.CURR_ENROLLED_SEMESTER,"
-          + "    to_char(exam_routine.exam_date,  'DD-MM-YYYY')  exam_date"
-          + " FROM  application_cci  a,  mst_course  c,  exam_routine,  UG_REGISTRATION_RESULT  t,  STUDENTS"
-          + " WHERE "
-          + "    a.course_id  =  c.course_id  AND  a.course_id  =  exam_routine.course_id  AND  exam_routine.exam_type  =  2"
-          + "    AND  a.semester_id  =STUDENTS.CURR_ENROLLED_SEMESTER  AND  exam_routine.semester  =  a.semester_id  AND  t.EXAM_TYPE  =  1"
-          + "    AND  t.STUDENT_ID  =  a.STUDENT_ID  AND  t.COURSE_ID  =  a.COURSE_ID  AND  a.STUDENT_ID  =  STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND c.OFFER_BY= ? ";
+      " SELECT "
+          + "  id, "
+          + "  semester_id, "
+          + "  student_id, "
+          + "  course_id, "
+          + "  application_type, "
+          + "  applied_on, "
+          + "  STATUS, "
+          + "  GRADE, "
+          + "  course_no, "
+          + "  course_title, "
+          + "  FULL_NAME, "
+          + "  CURR_YEAR, "
+          + "  CURR_SEMESTER, "
+          + "  CURR_ENROLLED_SEMESTER, "
+          + "  exam_date, rowno "
+          + "FROM "
+          + "( SELECT b.*,ROWNUM rowno FROM (SELECT "
+          + "  a.id, "
+          + "  a.semester_id, "
+          + "  a.student_id, "
+          + "  a.course_id, "
+          + "  a.application_type, "
+          + "  to_char(a.applied_on,'DD-MM-YYYY') applied_on, "
+          + "  a.STATUS, "
+          + "  t.GRADE_LETTER GRADE, "
+          + "  c.course_no, "
+          + "  c.course_title, "
+          + "  STUDENTS.FULL_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.CURR_ENROLLED_SEMESTER, "
+          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+          + "WHERE "
+          + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+          + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+          + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3  "
+          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >=?";
   // SEachByStudent
   String SELECT_ALL_All_Approval_Status_SearchByStudentId =
       " SELECT "
+          + " ROWNUM rowno,  "
           + "  a.id, "
           + "  a.semester_id, "
           + "  a.student_id, "
@@ -279,6 +357,76 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public String getApplicationCCIForCarryLastfdate(Integer pSemesterId) {
+    String x = "10";
+    String query =
+        "SELECT  to_char(MST_PARAMETER_SETTING.END_DATE, 'DD-MM-YYYY') as p FROM MST_PARAMETER_SETTING WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
+    String date = mJdbcTemplate.queryForObject(query, new Object[] {x, pSemesterId}, String.class);
+    return date;
+  }
+
+  @Override
+  public Integer getAllReords(String pApprovalStatus, String empDeptId) {
+    String query = "", SELECT_ALL_CA__RD, SELECT_ALL_Payment_ANd_Approved_RD = "", SELECT_ALL_Reject_RD = "", SELECT_ALL_All_Approval_Status_RD =
+        "";
+
+    SELECT_ALL_CA__RD =
+        "SELECT "
+            + "  count(rownum) as totalItems "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+            + "WHERE "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+            + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 "
+            + "  AND c.OFFER_BY=?";
+    SELECT_ALL_Payment_ANd_Approved_RD =
+        "SELECT "
+            + "  count(rownum) as totalItems "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+            + "WHERE "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+            + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) "
+            + "  AND c.OFFER_BY=?";
+
+    SELECT_ALL_Reject_RD =
+        "SELECT "
+            + "  count(rownum) as totalItems "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+            + "WHERE "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+            + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 "
+            + "  AND c.OFFER_BY=?";
+
+    SELECT_ALL_All_Approval_Status_RD =
+        "SELECT "
+            + "  count(rownum) as totalItems "
+            + "FROM application_cci a, mst_course c, exam_routine, UG_REGISTRATION_RESULT t, STUDENTS "
+            + "WHERE "
+            + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
+            + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
+            + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3"
+            + "  AND c.OFFER_BY=?";
+
+    if(pApprovalStatus.equals("Waiting for head's approval")) {
+      query = SELECT_ALL_CA__RD;
+    }
+    else if(pApprovalStatus.equals("Approved By Head")) {
+      query = SELECT_ALL_Payment_ANd_Approved_RD;
+    }
+    else if(pApprovalStatus.equals("Rejected By Head")) {
+      query = SELECT_ALL_Reject_RD;
+    }
+    else {
+      query = SELECT_ALL_All_Approval_Status_RD;
+    }
+    Integer totalRecords = mJdbcTemplate.queryForObject(query, new Object[] {empDeptId}, Integer.class);
+    return totalRecords;
+
+  }
+
+  @Override
   public List<ApplicationCCI> getTotalCarry(final String pStudentId, final Integer pSemesterId) {
     String query = SELECT_TOTAL_CARRY;
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
@@ -286,8 +434,11 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus, final String empDeptId) {
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus,
+      final Integer pCurentpage, final Integer pItemPerpage, final String empDeptId) {
     String approvalStatus = pApprovalStatus;
+    int startIndex = ((pCurentpage * pItemPerpage) + 1);
+    int endIndex = (((pCurentpage - 1) * pItemPerpage) + 1);
     String query = "";
     if(approvalStatus.equals("Waiting for head's approval")) {
       query = SELECT_ALL_CA;
@@ -301,7 +452,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     else {
       query = SELECT_ALL_All_Approval_Status;
     }
-    return mJdbcTemplate.query(query, new Object[] {empDeptId}, new ApplicationCCICarryRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {empDeptId, startIndex, endIndex},
+        new ApplicationCCICarryRowMapper());
   }
 
   public List<ApplicationCCI> getByStudentId(String pApprovalStatus, String pStudentId, Integer pSemesterId,
@@ -378,8 +530,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   @Override
   public int updatebank(MutableStudentPayment studentPayment) {
     // List<Object[]> parameters = getUpdateParamListBank(MutableStudentPayment);
-    return mJdbcTemplate.update("update APPLICATION_CCI set STATUS=8  where TRANSACTION_ID=?", studentPayment
-        .getTransactionId());
+    return mJdbcTemplate.update("update APPLICATION_CCI set STATUS=8  where TRANSACTION_ID=?",
+        studentPayment.getTransactionId());
   }
 
   @Override
@@ -520,8 +672,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   private List<Object[]> getUpdateParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
-      params.add(new Object[] {app.getCCIStatus(), app.getStudent().getId(), app.getSemester().getId(),
-          app.getCourse().getId()});
+      params.add(new Object[] {app.getCCIStatus(), app.getTransactionID(), app.getStudent().getId(),
+          app.getSemester().getId(), app.getCourse().getId()});
     }
     return params;
   }
@@ -573,7 +725,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setCarrySemester(pResultSet.getInt("CURR_SEMESTER"));
       application.setFullName(pResultSet.getString("FULL_NAME"));
       application.setCurrentEnrolledSemester(pResultSet.getInt("CURR_ENROLLED_SEMESTER"));
-
+      application.setRowNumber(pResultSet.getInt("rowno"));
       return application;
     }
   }
@@ -597,6 +749,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setCarrySemester(pResultSet.getInt("CURR_SEMESTER"));
       application.setFullName(pResultSet.getString("FULL_NAME"));
       application.setCurrentEnrolledSemester(pResultSet.getInt("CURR_ENROLLED_SEMESTER"));
+      application.setRowNumber(pResultSet.getInt("rowno"));
 
       return application;
     }
@@ -618,6 +771,15 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationCCI application = new PersistentApplicationCCI();
       application.setImprovementLimit(pResultSet.getInt("improvement_limit"));
+      return application;
+    }
+  }
+
+  class ApplicationCCIRowMapperForICarrylastDate implements RowMapper<ApplicationCCI> {
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      application.setCarryLastDate(pResultSet.getString("p"));
       return application;
     }
   }

@@ -48,17 +48,18 @@
                 <div class="panel-body">
                     <div align="right">
                         <dir-pagination-controls boundary-links="true"
-                                                 pagination-id="leaveApplication"
+                                                 data-ng-hide="vm.pgDisable"
+                                                 pagination-id="applicationCCI"
                                                  on-page-change="vm.pageChanged(vm.pagination.currentPage)"
                                                  template-url="views\cciManagement\dirPagination.html"></dir-pagination-controls>
                     </div>
 
-                    <table class="table table-bordered" >
+                    <table class="table table-bordered">
                         <thead>
                         <th style="background-color: #FAFAFA; ">#</th>
                         <th style="background-color: #FAFAFA; ">Applied On</th>
                         <th style="background-color: #FAFAFA; ">Applicant Name</th>
-                        <th style="background-color: #FAFAFA; ">Applicant Id</th>
+                        <th style="background-color: #FAFAFA;">Applicant Id</th>
                         <th style="background-color: #FAFAFA; ">Course No</th>
                         <th style="background-color: #FAFAFA; ">Course Title</th>
                         <th style="background-color: #FAFAFA; ">Current Semester</th>
@@ -70,13 +71,13 @@
                         <tr style="border: 1px solid #959ba2"
                             dir-paginate="app in vm.applicationCCI | itemsPerPage: vm.itemsPerPage"
                             current-page="vm.pagination.currentPage"
-                            total-items="totalItems"
-                            pagination-id="leaveApplication"
+                            total-items="vm.totalItems"
+                            pagination-id="applicationCCI"
                             data-toggle="modal"
                             data-target="#myModal"
                             data-ng-click="vm.click(app.studentId,app.semesterId,app.fullName,app.courseTitle,app.courseNo)"
                             style="cursor: pointer">
-                            <td>{{}}</td>
+                            <td>{{app.rowNum}}</td>
                             <td>{{app.applicationDate}}</td>
                             <td>{{app.fullName}}</td>
                             <td>{{app.studentId}}</td>
@@ -113,8 +114,6 @@
                                                         <p>Applicant_ID:  <strong>{{vm.studentIdTA}}</strong></p>
                                                         <p>Semester_ID: <strong> {{vm.semesterIdTA}}</strong></p>
                                                         <p>Applicant_Name: <strong> {{vm.fullNameTA}}</strong></p>
-                                                        <p>CourseNo_ID:  <strong>{{vm.courseNoTA}}</strong></p>
-                                                        <p>Course_Title :  <strong>{{vm.courseTitleTA}}</strong></p>
                                                         <p>Total_Carry :  <strong>{{vm.totalcarry}}</strong></p>
                                                         <p>Total_Applied :  <strong>{{vm.totalApplied}}</strong></p>
                                                     </td>
@@ -143,18 +142,18 @@
                                         <div class="panel-body">
                                             <table class="table table-bordered" >
                                                 <thead>
-                                                <th style="background-color: #FAFAFA; ">Course Id</th>
+                                                <th style="background-color: #FAFAFA; ">Course No</th>
                                                 <th style="background-color: #FAFAFA; ">Course Title</th>
                                                 <th style="background-color: #FAFAFA; ">Current Status</th>
                                                 <th style="background-color: #FAFAFA; ">Response</th>
                                                 </thead>
                                                 <tbody>
                                                 <tr data-ng-repeat="a in vm.applicationModalAppliedInfo">
-                                                    <td>{{a.courseId}}</td>
+                                                    <td>{{a.courseNo}}</td>
                                                     <td>{{a.courseTitle}}</td>
-                                                    <td>{{a.statusName}}</td>
-                                                    <td><input type="checkbox" data-ng-model="a.apply" ng-disabled="a.statusName=='Waiting for payment' || a.statusName=='Approved' ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
-                                                </tr>
+                                                    <td style="background-color: #FAFAFA; "><strong>{{a.statusName}}</strong></td>
+                                                    <td><input type="checkbox" data-ng-model="a.apply" ng-disabled="a.statusName==vm.statusDefaultWaitingForpayment || a.statusName==vm.statusDefaultApproved ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
+                                                </tr>s
                                                 </tbody>
                                             </table>
                                         </div>
@@ -182,8 +181,8 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-success" data-ng-disabled="vm.submit_Button_Disable"   data-ng-click="vm.submitModal('accept')" data-dismiss="modal">Accept</button>
-                                        <button type="button" class="btn btn-primary" data-ng-disabled="vm.submit_Button_Disable"  data-ng-click="vm.submitModal('reject')" data-dismiss="modal">Reject</button>
+                                        <button type="button" class="btn btn-success" data-ng-disabled="vm.submit_Button_Disable"   data-ng-click="vm.submitModal(vm.modalAccept)" data-dismiss="modal">Accept</button>
+                                        <button type="button" class="btn btn-primary" data-ng-disabled="vm.submit_Button_Disable"  data-ng-click="vm.submitModal(vm.modalReject)" data-dismiss="modal">Reject</button>
                                         <button type="button" class="btn btn-info"   data-ng-click="vm.close()" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>

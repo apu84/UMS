@@ -77,4 +77,8 @@ public interface ApplicationCCI extends Serializable, LastModifier, EditType<Mut
   String getTransactionID();
 
   Integer getImprovementLimit();
+
+  String getCarryLastDate();
+
+  Integer getRowNumber();
 }

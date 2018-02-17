@@ -14,6 +14,16 @@ public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
   @Override
+  public Integer getAllReords(String pApprovalStatus, String empDeptId) {
+    return getManager().getAllReords(pApprovalStatus, empDeptId);
+  }
+
+  @Override
+  public String getApplicationCCIForCarryLastfdate(Integer pSemesterId) {
+    return getManager().getApplicationCCIForCarryLastfdate(pSemesterId);
+  }
+
+  @Override
   public int updatebank(MutableStudentPayment MutableStudentPayment) {
     return getManager().updatebank(MutableStudentPayment);
   }
@@ -36,8 +46,9 @@ public class ApplicationCCIDaoDecorator extends
 
   // carryHeadsApproval
   @Override
-  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, String empDeptId) {
-    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, empDeptId);
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, Integer pCurentpage,
+      Integer pItemPerpage, String empDeptId) {
+    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, pCurentpage, pItemPerpage, empDeptId);
   }
 
   @Override

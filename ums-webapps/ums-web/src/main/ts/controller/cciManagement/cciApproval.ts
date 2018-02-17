@@ -28,6 +28,7 @@ module ums{
         carryYear:number;
         carrySemester:number;
         fullName: string;
+        rowNum:number;
 
     }
     interface ImodalTableCarryInfo{
@@ -53,6 +54,9 @@ module ums{
         public semesterApprovalStatus:number;
         public itemsPerPage: number;
         public resultsPerPage: string;
+        public totalItems: number;
+        public pageNumber: number;
+        public pagination: any = {};
         applicationCCI: Array<AppCCI>;
         applicationCCIGetAll: Array<AppCCI>;
         applicationModalTableinfo:Array<ImodalTableCarryInfo>;
@@ -60,11 +64,15 @@ module ums{
         applicationModalAppliedInfoUpdated:Array<ImodalApliedInfo>;
         responseResult:Array<ImodalApliedInfo>;
         approvalStatus:String;
+        modalAccept:string;
+        modalReject:string;
+        statusDefaultWaitingForpayment:string;
+        statusDefaultApproved:string;
         counter:number;
+        itemPerpageChecker:boolean;
         appliedStatus:number;
         approvedStatus:number;
         modalStatus:string;
-        public pagination: any = {};
         studentID:string;
         semesterId:number;
         studentIdTA:string;
@@ -79,11 +87,11 @@ module ums{
         seachByStudentId:string;
         submit_Button_Disable:boolean;
         checkBoxCounter:number;
+        pgDisable:boolean;
 
 
 
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
-
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
                     private $q: ng.IQService,
@@ -103,22 +111,29 @@ module ums{
                     private commonservice: CommonService,
                     private attachmentService: AttachmentService) {
             this.resultsPerPage = "3";
+            this.itemsPerPage = +this.resultsPerPage;
+            this.pagination.currentPage = 1;
+            this.pageNumber = 1;
             this.carryApprovalStatusList = [];
             this.carryApprovalStatusList = this.appConstants.carryApprovalStatus;
             this.carryApprovalStatus = this.carryApprovalStatusList[0];
             this.allSemesters=[];
            // this.semesterApprovalStatus=this.allSemesters[0].id;
-            this.itemsPerPage = +this.resultsPerPage;
             this.applicationCCIGetAll=[];
             this.applicationModalTableinfo=[];
             this.applicationModalAppliedInfo=[];
             this.applicationModalAppliedInfoUpdated=[];
             this.responseResult=[];
             this.approvalStatus="";
+            this.itemPerpageChecker=false;
+            this.totalItems=0;
+            this.modalAccept="accept";
+            this.modalReject="reject";
+            this.statusDefaultWaitingForpayment="Waiting for payment";
+            this.statusDefaultApproved="Approved";
             this.counter=0;
             this.appliedStatus=0;
             this.approvedStatus=0;
-            this.pagination.currentPage=1;
             this.modalStatus="";
             this.studentID="";
             this.semesterId=0;
@@ -129,6 +144,7 @@ module ums{
             this.seachByStudentId="";
             this.submit_Button_Disable=true;
             this.checkBoxCounter=0;
+            this.pgDisable=false;
 
             //Functions
             this.statusChanged(this.carryApprovalStatus);
@@ -160,10 +176,17 @@ module ums{
             return defer.promise;
         }
         private setResultsPerPage(resultsPerPage: number) {
-            if (resultsPerPage >= 3) {
-                this.itemsPerPage = resultsPerPage;
-            alert(this.itemsPerPage);
-            }
+                   if(resultsPerPage>0){
+                       this.itemPerpageChecker=false;
+                       this.itemsPerPage = resultsPerPage;
+                       this.statusChanged(this.carryApprovalStatus);
+                       console.log("status canhed from item per page changed");
+                   }else{
+                       this.itemPerpageChecker=true;
+                   }
+
+           // alert(this.itemsPerPage);
+
 
         }
         private cancel(){
@@ -174,6 +197,8 @@ module ums{
 
         private statusChanged(carryApplicationStatus: IConstants) :ng.IPromise<any> {
             this.carryApprovalStatus= carryApplicationStatus;
+            this.pgDisable=false;
+            console.log("PGdiasbe Result:"+this.pgDisable);
 
             if(this.carryApprovalStatus.name.match("Waiting for head's approval")){
              this.approvalStatus="Waiting for head's approval";
@@ -188,14 +213,21 @@ module ums{
             var defer = this.$q.defer();
             this.applicationCCI=[];
             var appCCIArr: Array<AppCCI> = [];
-            this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/approvalStatus/'+this.approvalStatus, 'application/json',
+            this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/approvalStatus/'+this.approvalStatus+'/currentPage/'+this.pagination.currentPage+'/itemPerPage/'+this.itemsPerPage, 'application/json',
                 (json: any, etag: string) => {
+                console.log("Json");
+                console.log(json);
                     appCCIArr = json.entries;
-                    console.log("*****RRRRRR******");
+                    console.log("*****pppppppp******");
                     console.log("Applicatino cci Updated!!");
 
                     this.applicationCCI=appCCIArr;
-                    console.log(this.applicationCCI);
+                    console.log("Application Size");
+                    console.log(json.appSize);
+
+                    this.totalItems=Number(json.appSize);
+                    console.log("Total items");
+                    console.log(this.totalItems)
                     defer.resolve(appCCIArr);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -238,7 +270,13 @@ module ums{
 
         //-----------------
         private setCurrent(currentPage: number) {
-            this.pagination.currentPage = currentPage;
+            if(this.itemsPerPage>0) {
+                this.pagination.currentPage = currentPage;
+               this.statusChanged(this.carryApprovalStatus);
+            }else{
+                console.log("Nulll Values !!!!")
+            }
+
         }
 
         //---------------
@@ -285,6 +323,7 @@ module ums{
                              if(this.responseResult.length>=1){
                                  console.log("Error in savinf Data");
                              }*/
+                             this.notify.success("Data saved successfully");
                              this.statusChanged(this.carryApprovalStatus);
                          }).error((data) => {
 
@@ -307,6 +346,7 @@ module ums{
                              if(this.responseResult.length>=1){
                                  console.log("Error in savinf Data");
                              }*/
+                             this.notify.success("Data saved successfully");
                              this.statusChanged(this.carryApprovalStatus);
                          }).error((data) => {
 
@@ -344,6 +384,8 @@ module ums{
             this.seachByStudentId=studentId;
 
             if(this.seachByStudentId.length>=9){
+                this.pgDisable=true;
+                console.log("PGdiasbe Result:"+this.pgDisable);
                 console.log(this.seachByStudentId+""+this.approvalStatus);
                 var defer = this.$q.defer();
                 this.applicationCCI=[];

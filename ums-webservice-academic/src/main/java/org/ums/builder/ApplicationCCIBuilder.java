@@ -1,5 +1,6 @@
 package org.ums.builder;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -7,10 +8,12 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
+import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 
 @Component
 public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApplicationCCI> {
@@ -99,6 +102,27 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
 
     if(pReadOnly.getImprovementLimit() != null)
       pBuilder.add("improvement_limit", pReadOnly.getImprovementLimit());
+    if(pReadOnly.getCarryLastDate() != null)
+      pBuilder.add("carryLastdate", pReadOnly.getCarryLastDate());
+    try {
+      if(pReadOnly.getCarryLastDate() != null) {
+        Date lastApplyDate, currentDate;
+        currentDate = new Date();
+
+        lastApplyDate = UmsUtils.convertToDate(pReadOnly.getCarryLastDate(), "dd-MM-yyyy");
+        if(currentDate.compareTo(lastApplyDate) > 0) {
+          pBuilder.add("deadline", "Date Over");
+        }
+        else {
+          pBuilder.add("deadline", "Available");
+        }
+      }
+    } catch(Exception e) {
+
+    }
+
+    if(pReadOnly.getRowNumber() != null)
+      pBuilder.add("rowNum", pReadOnly.getRowNumber());
 
   }
 

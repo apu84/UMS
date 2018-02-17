@@ -6,6 +6,7 @@ module ums {
     registrationResults: Array<IUGRegistrationResult>;
     responseResults: Array<IUGRegistrationResult>;
     applicationCCI: Array<AppCCI>;
+    carryLastdateIn:Array<ICarryLastdate>;
     twoOccuranceCourseList: Array<IUGRegistrationResult>;
     ugResultsForSave:Array<IUGRegistrationResult>;
     moreThanTwoOccuranceCourseList: Array<IUGRegistrationResult>;
@@ -22,6 +23,12 @@ module ums {
     CLEARANCE: number;
     IMPROVEMENT: number;
     SPECIAL_CARRY: number;
+      dateCheckStatus:string;
+      statusApproved:number;
+      statusWaitingForPayment:number;
+      statusWaitingforHeadsApproval:number;
+      statusRejected:number;
+
 
     resultCarryNumber: number;
     resultImprovementNumber: number;
@@ -38,6 +45,10 @@ module ums {
       pendingApprovedStatus:number;
       improvementLimit:number;
       improvementLimitstatic:number;
+      improvemetLimitCrossed:boolean;
+      totalSemesterStatic:string;
+      carrylastDate:string;
+      carrylastDateDeadline:boolean;
 
 
     //booleans
@@ -71,6 +82,7 @@ module ums {
       submitButtonEnable:Function;
       receipt:Function;
       improvementLimitCalculation:Function;
+      carryLastDateFinder:Function;
       insertIntoStudentPayment:Function;
    // alert:Function;
 
@@ -121,6 +133,11 @@ module ums {
 
 }
 
+interface ICarryLastdate{
+    carryLastdate:string;
+    deadLine:boolean;
+}
+
   export class ApplicationCCI {
 
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','FeeReportService', '$sce', '$window'];
@@ -131,6 +148,12 @@ module ums {
     private static SPECIAL_CARRY = 4;
     private static IMPROVEMENT = 5;
     private static LEAVE = 6;
+    private static statusApproved=8;
+    private static dateCheckStatus="Date Over";
+      private static  statusWaitingForPayment=7;
+      private static statusWaitingforHeadsApproval=2;
+      private static statusRejected=9;
+
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationCCIScope,
                 private $q: ng.IQService, private notify: Notify,
@@ -145,6 +168,12 @@ module ums {
       $scope.IMPROVEMENT = 5;
       $scope.SPECIAL_CARRY = 4;
       $scope.CLEARANCE = 2;
+      $scope.statusApproved=8;
+      $scope.statusWaitingForPayment=7;
+      $scope.statusWaitingforHeadsApproval=2;
+      $scope.statusRejected=9;
+      $scope.dateCheckStatus="Date Over";
+      $scope.totalSemesterStatic="From 1.1 to 4.2"
       //rumi
         $scope.carry_status_initial=14;
        // $scope.clerance_status_initial=15;
@@ -152,7 +181,9 @@ module ums {
         $scope.pendingApprovedStatus=0;
         $scope.ugResultsForSave=[];
         $scope.improvementLimitstatic=4;
+        $scope.improvemetLimitCrossed=false;
         $scope.improvementLimit=0;
+        $scope.carrylastDate="";
         $scope.submit_Button_Disable=true;
         //-----
       $scope.submitButtonClicked = false;
@@ -177,6 +208,7 @@ module ums {
       $scope.submit = this.submit.bind(this);
       $scope.receipt=this.receipt.bind(this);
       $scope.improvementLimitCalculation=this.improvementLimitCalculation.bind(this);
+      $scope.carrylastDate=this.carryLastDateFinder.bind(this);
       $scope.submitAndClose = this.submitAndClose.bind(this);
       $scope.close = this.close.bind(this);
       $scope.insertIntoStudentPayment=this.insertIntoStudentPayment.bind(this);
@@ -185,11 +217,39 @@ module ums {
         $scope.finalSave=this.finalSave.bind(this);
       $scope.convertToJson = this.convertToJson.bind(this);
       this.improvementLimitCalculation();
+      this.carryLastDateFinder();
 
     }
 
       private  finalSave(){
           this.submitAndClose();
+      }
+
+      private carryLastDateFinder():ng.IPromise<any>{
+          this.$scope.carrylastDate="";
+          var defer = this.$q.defer();
+          var carryLastDate_check:Array<ICarryLastdate>=[];
+          this.httpClient.get('academic/applicationCCI/carryLastDate', HttpClient.MIME_TYPE_JSON,
+              (json: any, etag: string) => {
+              console.log("Jacksonlll");
+              console.log(json);
+                this.$scope.carrylastDate=json.date;
+                  this.$scope.carrylastDateDeadline=json.deadline;
+                  //console.log(this.$scope.carrylastDate);
+
+                  /*
+                  this.$scope.carrylastDate=json;
+                  console.log("---------------------carrylastdate----------------------");
+                  console.log(this.$scope.carrylastDate);*/
+                  /*this.$scope.carrylastDate=carryLastDate_check;
+                  console.log(this.$scope.carrylastDate);
+                  */
+                  defer.resolve(json.date);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
       }
       private improvementLimitCalculation(): ng.IPromise<any>{
         this.$scope.improvementLimit=0;
@@ -201,6 +261,7 @@ module ums {
                   console.log("---------------------Improvement Limit ---------------------");
 
                   this.$scope.improvementLimit=improvement_limit_check;
+                  this.$scope.improvemetLimitCrossed=this.$scope.improvementLimit<4 ? false:true;
                   console.log(this.$scope.improvementLimit);
                   defer.resolve(this.$scope.improvementLimit);
               },
@@ -331,6 +392,7 @@ module ums {
       this.getParameterInfoForCCIApplication();
       this.getStudentInfo();
         this.improvementLimitCalculation();
+        this.carryLastDateFinder();
     }
 
 
@@ -490,7 +552,7 @@ module ums {
                this.$scope.carry_status_initial=2;
                item["cciStatus"] = this.$scope.carry_status_initial;
            }
-            console.log("Items");
+           console.log("Items");
           console.log(item);
           //this.notify.success("sending./.....");
           jsonObj.push(item);

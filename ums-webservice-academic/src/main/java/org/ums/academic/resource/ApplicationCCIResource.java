@@ -7,6 +7,7 @@ import org.ums.manager.ApplicationCCIManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -57,10 +58,18 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   }
 
   @GET
-  @Path("/approvalStatus/{approval-status}")
+  @Path("/approvalStatus/{approval-status}/currentPage/{current-page}/itemPerPage/{itemPer-page}")
   public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest,
-      final @PathParam("approval-status") String pApprovalStatus) {
-    return mHelper.getApplicationCarryForHeadsApproval(pApprovalStatus, pRequest, mUriInfo);
+      final @PathParam("approval-status") String pApprovalStatus,
+      final @PathParam("current-page") Integer pCurrentpage, final @PathParam("itemPer-page") Integer pItemPerPage) {
+    return mHelper.getApplicationCarryForHeadsApproval(pApprovalStatus, pCurrentpage, pItemPerPage, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/carryLastDate")
+  @Produces(Resource.MIME_TYPE_JSON)
+  public JsonObject getCarryLastdate() throws Exception {
+    return mHelper.getcarryLastdate().build();
   }
 
   @GET

@@ -65,6 +65,8 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mGetTotalRejected;
   private String mTransactionId;
   private Integer mImprovementLimit;
+  private String mCarryLastDate;
+  private Integer mRowNumber;
 
   public PersistentApplicationCCI() {
 
@@ -103,11 +105,33 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mGetTotalRejected = pPersistentApplicationCCI.getTotalRejected();
     mTransactionId = pPersistentApplicationCCI.getTransactionID();
     mImprovementLimit = pPersistentApplicationCCI.getImprovementLimit();
+    mCarryLastDate = pPersistentApplicationCCI.getCarryLastDate();
+    mRowNumber = pPersistentApplicationCCI.getRowNumber();
+  }
+
+  @Override
+  public void setRowNumber(Integer rowNumber) {
+    mRowNumber = rowNumber;
+  }
+
+  @Override
+  public Integer getRowNumber() {
+    return mRowNumber;
   }
 
   @Override
   public void setImprovementLimit(Integer improvementLimit) {
     mImprovementLimit = improvementLimit;
+  }
+
+  @Override
+  public void setCarryLastDate(String carryLastDate) {
+    mCarryLastDate = carryLastDate;
+  }
+
+  @Override
+  public String getCarryLastDate() {
+    return mCarryLastDate;
   }
 
   @Override

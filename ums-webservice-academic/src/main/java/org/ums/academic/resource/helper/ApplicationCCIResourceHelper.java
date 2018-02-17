@@ -1,5 +1,6 @@
 package org.ums.academic.resource.helper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Persistent;
@@ -151,6 +152,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       UriInfo pUriInfo) {
     List<MutableApplicationCCI> applications = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
+    boolean result=false;
     for(int i = 0; i < entries.size(); i++) {
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
@@ -159,9 +161,42 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       getBuilder().build(application, jsonObject, localCache);
       application.setStudentId(studentId);
       application.setSemesterId(semesterId);
+      if(application.getCCIStatus()==7) {
+        result=true;
+        application.setTransactionID(mIdGenerator.getAlphaNumericId());
+      }else{
+        application.setTransactionID(null);
+      }
       applications.add(application);
     }
     mManager.update(applications);
+
+    if(result){
+      List<MutableStudentPayment> studentPayments = new ArrayList<>();
+      applications.forEach(application->{
+
+        MutableStudentPayment studentPayment = new PersistentStudentPayment();
+        FeeCategory.Categories feeCategoryId =FeeCategory.Categories.CARRY;
+        FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
+        List<FeeCategory> feeCategories = new ArrayList<>();
+        feeCategories.add(feeCategory);
+        UGFee fee = mUgFeeManager.getFee(application.getStudent().getProgram().getFacultyId(),
+                application.getStudent().getSemester().getId(),feeCategory);
+        studentPayment.setFeeCategoryId(feeCategory.getId());
+        studentPayment.setStatus(StudentPayment.Status.APPLIED);
+        studentPayment.setSemesterId(application.getSemester().getId());
+        studentPayment.setStudentId(application.getStudent().getId());
+        studentPayment.setAmount(fee.getAmount());
+        String transactionIIIID = application.getTransactionID();
+        studentPayment.setTransactionId(application.getTransactionID());
+        studentPayment.setTransactionValidTill(UmsUtils.addDay(new Date(), 10));
+        studentPayments.add(studentPayment);
+
+      });
+
+      mStudentPaymentManager.create(studentPayments);
+    }
+    result=false;
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
@@ -193,9 +228,9 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       mManager.create(applications);
     List<MutableStudentPayment> studentPayments = new ArrayList<>();
     applications.forEach(application->{
-      if(!application.getApplicationType().equals(ApplicationType.CLEARANCE)){
+      if(application.getApplicationType().equals(ApplicationType.IMPROVEMENT )){
         MutableStudentPayment studentPayment = new PersistentStudentPayment();
-        FeeCategory.Categories feeCategoryId = application.getApplicationType().equals(ApplicationType.CARRY)? FeeCategory.Categories.CARRY:FeeCategory.Categories.IMPROVEMENT;
+        FeeCategory.Categories feeCategoryId =FeeCategory.Categories.IMPROVEMENT;
         FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
         List<FeeCategory> feeCategories = new ArrayList<>();
         feeCategories.add(feeCategory);
@@ -252,7 +287,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       getBuilder().build(application, jsonObject, localCache);
       if(courseIdMapWithUgRegistrationResult.containsKey(application.getCourseId()))
         application.setExamDate(courseIdMapWithUgRegistrationResult.get(application.getCourseId()).getExamDate());
-      if(!application.getApplicationType().equals(ApplicationType.CLEARANCE))
+      if(application.getApplicationType().equals(ApplicationType.IMPROVEMENT))
         application.setTransactionID(mIdGenerator.getAlphaNumericId());
       applications.add(application);
 
@@ -272,18 +307,23 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   }
 
   // CarryApprovaByHeadMethod
-  public JsonObject getApplicationCarryForHeadsApproval(final String pApprovalStatus,final Request pRequest, final UriInfo pUriInfo){
+  public JsonObject getApplicationCarryForHeadsApproval(final String pApprovalStatus,final Integer pCurentpage,
+                                                        final Integer pItemPerpage,
+                                                        final Request pRequest, final UriInfo pUriInfo){
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
+    int counter=0;
     LocalCache localCache = new LocalCache();
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User loggedUser = mUserManager.get(userId);
     Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
     String empDeptId=loggedEmployee.getDepartment().getId();
     //(pApprovalStatus, loggedEmployee.getId())
-    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApproval(pApprovalStatus,empDeptId);
+    List<ApplicationCCI> applications =getContentManager().getApplicationCarryForHeadsApproval(pApprovalStatus,pCurentpage,pItemPerpage,empDeptId);
     applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-    object.add("entries", children);
+    counter=getContentManager().getAllReords(pApprovalStatus,empDeptId);
+    object.add("entries",children);
+    object.add("appSize",counter);
     localCache.invalidate();
     return object.build();
 
@@ -379,6 +419,32 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     List<ApplicationCCI> applications = getContentManager().getApplicationCCIForImprovementLimit(studentId);
     return applications.get(0).getImprovementLimit();
+  }
+
+  public JsonObjectBuilder getcarryLastdate() throws Exception {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    String date = getContentManager().getApplicationCCIForCarryLastfdate(student.getCurrentEnrolledSemester().getId());
+    ObjectMapper mapper = new ObjectMapper();
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    jsonObjectBuilder.add("date", date);
+    try {
+      if(date != null) {
+        Date lastApplyDate, currentDate;
+        currentDate = new Date();
+
+        lastApplyDate = UmsUtils.convertToDate(date, "dd-MM-yyyy");
+        if(currentDate.compareTo(lastApplyDate) > 0) {
+          jsonObjectBuilder.add("deadline", "Date Over");
+        }
+        else {
+          jsonObjectBuilder.add("deadline", "Available");
+        }
+      }
+    } catch(Exception e) {
+
+    }
+    return jsonObjectBuilder;
   }
 
   public JsonObject getApplicationCCIForSeatPlan(final Integer pSemesterId, final String pExamDate,

@@ -76,4 +76,8 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
 
   void setImprovementLimit(final Integer improvementLimit);
 
+  void setCarryLastDate(final String carryLastDate);
+
+  void setRowNumber(final Integer rowNumber);
+
 }
