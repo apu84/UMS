@@ -146,7 +146,7 @@ start_micro_service() {
   echo "${pid}" > "${pid_file}"
   printf "%s" "Starting Microservice "
 
-  ## Wait for few seconds to check if user-manager has started properly
+  ## Wait for few seconds to check if micro-service has started properly
   for i in {0..5}; do
     echo -n "."
     sleep 1
