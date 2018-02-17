@@ -45,14 +45,26 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
     return Response.ok().build();
   }
 
-  public PaginatedVouchers getAll(int itemPerPage, int pageNumber) {
+  public PaginatedVouchers getAll(int itemPerPage, int pageNumber, String voucherNO) {
     Voucher voucher = mVoucherManager.get(JOURNAL_VOUCHER);
-    List<MutableAccountTransaction> mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher);
-    mutableAccountTransactions.forEach(a -> a.setVoucherNo(a.getVoucherNo().substring(2)));
+    List<MutableAccountTransaction> mutableAccountTransactions = new ArrayList<>();
+    int totalNumber = 0;
+    if (voucherNO.equals("undefined")) {
+      mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher);
+      totalNumber = getContentManager().getTotalNumber(voucher);
+    } else {
+      Company company = mCompanyManager.getDefaultCompany();
+      voucherNO = company.getId() + voucherNO;
+      mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher, voucherNO);
+      totalNumber = getContentManager().getTotalNumber(voucher, voucherNO);
+    }
+    mutableAccountTransactions.forEach(a -> {
+      a.setVoucherNo(a.getVoucherNo().substring(2));
+    });
     PaginatedVouchers paginatedVouchers = new PaginatedVouchers();
     List<AccountTransaction> accountTransactions = new ArrayList<>(mutableAccountTransactions);
     paginatedVouchers.setVouchers(accountTransactions);
-    paginatedVouchers.setTotalNumber(getContentManager().getTotalNumber(voucher));
+    paginatedVouchers.setTotalNumber(totalNumber);
     return paginatedVouchers;
   }
 

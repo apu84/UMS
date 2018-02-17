@@ -40,4 +40,15 @@ public class AccountTransactionDaoDecorator extends
   public List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo) {
     return getManager().getByVoucherNo(pVoucherNo);
   }
+
+  @Override
+  public List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher,
+      String voucherNo) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, voucher, voucherNo);
+  }
+
+  @Override
+  public Integer getTotalNumber(Voucher pVoucher, String voucherNo) {
+    return getManager().getTotalNumber(pVoucher, voucherNo);
+  }
 }

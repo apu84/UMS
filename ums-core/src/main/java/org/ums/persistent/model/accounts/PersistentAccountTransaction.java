@@ -3,6 +3,7 @@ package org.ums.persistent.model.accounts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -22,7 +23,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   private static CompanyManager sCompanyManager;
@@ -369,14 +370,14 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getPostDate() {
     return postDate;
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
   public void setPostDate(Date pPostDate) {
     this.postDate = pPostDate;
   }

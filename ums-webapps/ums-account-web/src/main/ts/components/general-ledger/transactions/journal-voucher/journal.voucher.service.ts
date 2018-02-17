@@ -84,9 +84,9 @@ module ums {
       return defer.promise;
     }
 
-    public getAllVouchersPaginated(itemPerPage: number, pageNumber: number): ng.IPromise<IPaginatedVouchers> {
+    public getAllVouchersPaginated(itemPerPage: number, pageNumber: number, voucherNo?: string): ng.IPromise<IPaginatedVouchers> {
       let defer: ng.IDeferred<IPaginatedVouchers> = this.$q.defer();
-      this.httpClient.get(this.url+"/item-per-page/"+itemPerPage+"/page-number/"+pageNumber, HttpClient.MIME_TYPE_JSON,
+      this.httpClient.get(this.url + "/paginated?itemPerPage=" + itemPerPage + "&pageNumber=" + pageNumber + "&voucherNo=" + voucherNo, HttpClient.MIME_TYPE_JSON,
           (respose: IPaginatedVouchers) => {
             console.log("Voucher response");
             console.log(respose);

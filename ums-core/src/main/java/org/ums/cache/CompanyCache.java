@@ -21,4 +21,9 @@ public class CompanyCache extends ContentCache<Company, MutableCompany, String, 
   protected CacheManager<Company, String> getCacheManager() {
     return mCompanyLongCacheManager;
   }
+
+  @Override
+  public Company getDefaultCompany() {
+    return getManager().getDefaultCompany();
+  }
 }

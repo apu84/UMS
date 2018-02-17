@@ -134,13 +134,46 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   @Override
   public Integer getTotalNumber(Voucher pVoucher) {
     String query =
-        "select count(DISTINCT(VOUCHER_NO)) from  DT_TRANSACTION,FIN_ACCOUNT_YEAR where VOUCHER_ID=? and FIN_ACCOUNT_YEAR.YEAR_CLOSING_FLAG='O' and (VOUCHER_DATE>=FIN_ACCOUNT_YEAR.CURRENT_START_DATE and "
+        "select count(DISTINCT(VOUCHER_NO)) from  DT_TRANSACTION,FIN_ACCOUNT_YEAR where VOUCHER_ID=? and FIN_ACCOUNT_YEAR.YEAR_CLOSING_FLAG='O' and balance_type='Dr' and (VOUCHER_DATE>=FIN_ACCOUNT_YEAR.CURRENT_START_DATE and "
             + "VOUCHER_DATE<=FIN_ACCOUNT_YEAR.CURRENT_END_DATE)";
     return mJdbcTemplate.queryForObject(query, new Object[] {pVoucher.getId()}, Integer.class);
   }
 
   @Override
+  public Integer getTotalNumber(Voucher pVoucher, String voucherNo) {
+    String query =
+        "select count(DISTINCT(VOUCHER_NO)) from  DT_TRANSACTION,FIN_ACCOUNT_YEAR where VOUCHER_ID=? AND VOUCHER_NO=? and  BALANCE_TYPE='Dr' and FIN_ACCOUNT_YEAR.YEAR_CLOSING_FLAG='O' and (VOUCHER_DATE>=FIN_ACCOUNT_YEAR.CURRENT_START_DATE and "
+            + "VOUCHER_DATE<=FIN_ACCOUNT_YEAR.CURRENT_END_DATE)";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pVoucher.getId(), voucherNo}, Integer.class);
+  }
+
+  @Override
   public List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher) {
+    int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
+    int endIndex = startIndex + itemPerPage - 1;
+    String query =
+        "SELECT * "
+            + "FROM (SELECT "
+            + "        ROWNUM row_num, "
+            + "        DT_TRANSACTION.* "
+            + "      FROM DT_TRANSACTION "
+            + "      WHERE (VOUCHER_NO, POST_DATE) IN (SELECT "
+            + "                                          DT_TRANSACTION.VOUCHER_NO, "
+            + "                                          MAX(DT_TRANSACTION.POST_DATE) as post_date "
+            + "                                        FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                        WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                              DT_TRANSACTION.POST_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                              DT_TRANSACTION.POST_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
+            + "                                              VOUCHER_ID = ? "
+            + "                                        GROUP BY DT_TRANSACTION.VOUCHER_NO)) temp "
+            + "WHERE row_num >= ? AND row_num <= ? and BALANCE_TYPE='Dr' " + "ORDER BY POST_DATE DESC ";
+    return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
+        new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher,
+      String voucherNo) {
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String query =
@@ -156,10 +189,10 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                                        WHERE YEAR_CLOSING_FLAG = 'O' AND "
             + "                                              DT_TRANSACTION.POST_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
             + "                                              DT_TRANSACTION.POST_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
-            + "                                              VOUCHER_ID = ? "
+            + "                                              VOUCHER_ID = ? AND VOUCHER_NO=?"
             + "                                        GROUP BY DT_TRANSACTION.VOUCHER_NO)) temp "
-            + "WHERE row_num >= ? AND row_num <= ? " + "ORDER BY POST_DATE, SERIAL_NO";
-    return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
+            + "WHERE row_num >= ? AND row_num <= ?  and balance_type='Dr' " + "ORDER BY POST_DATE DESC ";
+    return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
         new PersistentAccountTransactionRowMapper());
   }
 

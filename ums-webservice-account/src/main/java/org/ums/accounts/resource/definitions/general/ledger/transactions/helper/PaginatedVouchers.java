@@ -11,8 +11,7 @@ public class PaginatedVouchers {
   private List<AccountTransaction> vouchers;
   private Integer totalNumber;
 
-  public PaginatedVouchers() {
-  }
+  public PaginatedVouchers() {}
 
   public List<AccountTransaction> getVouchers() {
     return vouchers;

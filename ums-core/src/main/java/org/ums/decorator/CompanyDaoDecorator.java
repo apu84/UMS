@@ -9,4 +9,9 @@ import org.ums.manager.CompanyManager;
  */
 public class CompanyDaoDecorator extends ContentDaoDecorator<Company, MutableCompany, String, CompanyManager> implements
     CompanyManager {
+
+  @Override
+  public Company getDefaultCompany() {
+    return getManager().getDefaultCompany();
+  }
 }

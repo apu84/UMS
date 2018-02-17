@@ -43,7 +43,7 @@ module ums {
       this.showAddSection = false;
       this.pageNumber = 1;
 
-      this.itemsPerPage = 15;
+      this.itemsPerPage = 20;
       this.type = AccountTransactionType.SELLING;
       this.accountService.getAccountsByGroupFlag(JournalVoucherController.JOURNAL_VOUCHER_GROUP_FLAG).then((accounts: IAccount[]) => {
         console.log("Accounts")
@@ -55,10 +55,18 @@ module ums {
     }
 
     public getPaginatedJournalVouchers() {
-      this.journalVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber).then((paginatedVouchers: IPaginatedVouchers) => {
+      this.journalVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedVouchers) => {
         this.existingJournalVouchers = paginatedVouchers.vouchers;
         this.totalVoucherNumber = paginatedVouchers.totalNumber;
       });
+    }
+
+    public searchVoucher() {
+      console.log("In the search voucher");
+      console.log(this.searchVoucherNo)
+      if (this.searchVoucherNo != null) {
+        this.getPaginatedJournalVouchers();
+      }
     }
 
     public pageChanged(pageNumber: number) {
@@ -66,8 +74,8 @@ module ums {
       this.getPaginatedJournalVouchers();
     }
 
-    public convertDateObjectToDateString(date: Date): string {
-      return moment(date).format("DD-MM-YYYY").toString();
+    public changeDateFormat(date: string) {
+      return Utils.convertFromJacksonDate(date);
     }
 
     public saveJournalVoucher() {
@@ -117,6 +125,11 @@ module ums {
         else
           this.totalCredit += this.journalVouchers[i].amount;
       }
+    }
+
+    public showListView() {
+      console.log("in the show list view");
+      this.showAddSection = false;
     }
 
     public addButtonClicked() {

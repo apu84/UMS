@@ -32,11 +32,11 @@ public class CompanyBuilder implements Builder<Company, MutableCompany> {
   }
 
   public void build(MutableCompany pMutableCompany, JsonObject pJsonObject) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutableCompany.setId(pJsonObject.getString("id"));
-    if (pJsonObject.containsKey("name"))
+    if(pJsonObject.containsKey("name"))
       pMutableCompany.setName(pJsonObject.getString("name"));
-    if (pJsonObject.containsKey("shortName"))
+    if(pJsonObject.containsKey("shortName"))
       pMutableCompany.setShortName(pJsonObject.getString("shortName"));
   }
 }

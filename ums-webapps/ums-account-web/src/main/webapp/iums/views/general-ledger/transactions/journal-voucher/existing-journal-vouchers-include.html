@@ -2,7 +2,7 @@
 <div class="col-md-6">
     <div class="input-group">
         <input type="text" ng-model="vm.searchVoucherNo" class="form-control"/><span class="input-group-btn">
-                <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button></span>
+                <button type="button" ng-click="vm.searchVoucher()" class="btn btn-default"><i class="fa fa-search"></i></button></span>
     </div>
 </div>
 <div class="col-md-3"></div>
@@ -27,7 +27,7 @@
         total-items="vm.totalVoucherNumber"
         pagination-id="existing-journal-voucher"
         style="cursor: pointer;">
-        <td>{{p.postDate}}</td>
+        <td> {{p.postDate==null?"Not Posted": vm.changeDateFormat(p.postDate)}}</td>
         <td>{{p.voucherNo}}</td>
     </tr>
 

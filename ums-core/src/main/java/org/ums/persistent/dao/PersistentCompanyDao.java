@@ -26,4 +26,9 @@ public class PersistentCompanyDao extends CompanyDaoDecorator {
     String query = SELECT_ALL + " where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[]{pId}, (rs, rowNum) -> new PersistentCompany(rs.getString("id"), rs.getString("name"), rs.getString("short_name")));
   }
+
+  @Override
+  public Company getDefaultCompany() {
+    return get("01");
+  }
 }

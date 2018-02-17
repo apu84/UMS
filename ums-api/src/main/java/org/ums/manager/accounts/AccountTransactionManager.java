@@ -20,6 +20,10 @@ public interface AccountTransactionManager extends ContentManager<AccountTransac
 
   List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher);
 
+  List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher, String voucherNo);
+
   Integer getTotalNumber(Voucher pVoucher);
+
+  Integer getTotalNumber(Voucher pVoucher, String voucherNo);
 
 }
