@@ -36,6 +36,8 @@ public class PersistentUser implements MutableUser {
   private String mDepartmentId;
   private String mName;
   private String mEmail;
+  private Date mCreatedOn;
+  private String mCreatedBy;
 
   public PersistentUser() {
 
@@ -54,6 +56,8 @@ public class PersistentUser implements MutableUser {
     mPasswordTokenGenerateDateTime = pPersistentUser.getPasswordTokenGenerateDateTime();
     mLastModified = pPersistentUser.getLastModified();
     mEmail = pPersistentUser.getEmail();
+    mCreatedOn = pPersistentUser.getCreatedOn();
+    mCreatedBy = pPersistentUser.getCreatedBy();
   }
 
   @Override
@@ -213,7 +217,27 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
+  public Date getCreatedOn() {
+    return mCreatedOn;
+  }
+
+  @Override
+  public String getCreatedBy() {
+    return mCreatedBy;
+  }
+
+  @Override
   public void setEmail(String pEmail) {
     mEmail = pEmail;
+  }
+
+  @Override
+  public void setCreatedOn(Date pCreatedOn) {
+    mCreatedOn = pCreatedOn;
+  }
+
+  @Override
+  public void setCreatedBy(String pCreatedBy) {
+    mCreatedBy = pCreatedBy;
   }
 }

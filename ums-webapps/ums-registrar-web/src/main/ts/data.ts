@@ -13,8 +13,8 @@
       '/employeePublication': {title: 'Publication Approval', 'breadcrumb': ['Publication Approval']},
       '/meetingSchedule': {title: 'Meeting Management', 'breadcrumb': ['Meeting Schedule & Invite Members']},
       '/agendaAndResolution': {title: 'Meeting Management', 'breadcrumb': ['Prepare Agenda & Resolution']},
-      '/meetingSearch': {title: 'Meeting Management', 'breadcrumb': ['Search']}
-
+      '/meetingSearch': {title: 'Meeting Management', 'breadcrumb': ['Search']},
+      '/newEmployee': {title: 'Create Employee', 'breadcrumb': ['Create Employee']}
   };
 
 

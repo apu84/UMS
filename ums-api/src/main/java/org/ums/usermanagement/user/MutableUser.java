@@ -33,4 +33,8 @@ public interface MutableUser extends User, Editable<String>, MutableIdentifier<S
   void setName(String pName);
 
   void setEmail(String pEmail);
+
+  void setCreatedOn(Date pCreatedOn);
+
+  void setCreatedBy(String pCreatedBy);
 }

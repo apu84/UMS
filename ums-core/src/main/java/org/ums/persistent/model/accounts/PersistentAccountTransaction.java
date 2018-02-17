@@ -3,7 +3,6 @@ package org.ums.persistent.model.accounts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -23,7 +22,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   private static CompanyManager sCompanyManager;
@@ -33,389 +32,389 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private static ReceiptManager sReceiptManager;
   private static AccountTransactionManager sTransactionManager;
 
-  private Long mId;
-  private Company mCompany;
-  private String mCompanyId;
-  private String mDivisionCode;
-  private String mVoucherNo;
-  private Date mVoucherDate;
-  private Integer mSerialNo;
-  private Account mAccount;
-  private Long mAccountId;
-  private Voucher mVoucher;
-  private Long mVoucherId;
-  private BigDecimal mAmount;
-  private BalanceType mBalanceType;
-  private String mNarration;
-  private BigDecimal mForeignCurrency;
-  private Currency mCurrency;
-  private Long mCurrencyId;
-  private BigDecimal mConversionFactor;
-  private String mProjNo;
-  private Company mDefaultCompany;
-  private String mDefaultCompanyId;
-  private String mStatFlag;
-  private String mStatUpFlag;
-  private Receipt mReceipt;
-  private Long mReceiptId;
-  private Date mPostDate;
-  private AccountTransactionType mAccountTransactionType;
-  private Date mModifiedDate;
-  private String mModifiedBy;
-  private String mLastModified;
+  private Long id;
+  private Company company;
+  private String companyId;
+  private String divisionCode;
+  private String voucherNo;
+  private Date voucherDate;
+  private Integer serialNo;
+  private Account account;
+  private Long accountId;
+  private Voucher voucher;
+  private Long voucherId;
+  private BigDecimal amount;
+  private BalanceType balanceType;
+  private String narration;
+  private BigDecimal foreignCurrency;
+  private Currency currency;
+  private Long currencyId;
+  private BigDecimal conversionFactory;
+  private String projNo;
+  private Company defaultCompany;
+  private String defaultCompanyId;
+  private String statFlag;
+  private String statUpFlag;
+  private Receipt receipt;
+  private Long receiptId;
+  private Date postDate;
+  private AccountTransactionType accountTransactionType;
+  private Date modifiedDate;
+  private String modifiedBy;
+  private String lastModified;
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public AccountTransactionType getAccountTransactionType() {
-    return mAccountTransactionType;
+    return accountTransactionType;
   }
 
   @Override
   public void setAccountTransactionType(AccountTransactionType pAccountTransactionType) {
-    mAccountTransactionType = pAccountTransactionType;
+    accountTransactionType = pAccountTransactionType;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getId() {
-    return mId;
+    return id;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setId(Long pId) {
-    this.mId = pId;
+    this.id = pId;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Company getCompany() {
-    return mCompany == null ? sCompanyManager.get(mCompanyId) : sCompanyManager.validate(mCompany);
+    return company == null ? sCompanyManager.get(companyId) : sCompanyManager.validate(company);
   }
 
   @Override
   public void setCompany(Company pCompany) {
-    this.mCompany = pCompany;
+    this.company = pCompany;
   }
 
   @Override
   @JsonIgnore
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getDefaultCompanyId() {
-    return mDefaultCompanyId;
+    return defaultCompanyId;
   }
 
   @Override
   @JsonIgnore
   public void setDefaultCompanyId(String pDefaultCompanyId) {
-    mDefaultCompanyId = pDefaultCompanyId;
+    defaultCompanyId = pDefaultCompanyId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getCompanyId() {
-    return mCompanyId;
+    return companyId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setCompanyId(String pCompanyId) {
-    this.mCompanyId = pCompanyId;
+    this.companyId = pCompanyId;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getDivisionCode() {
-    return mDivisionCode;
+    return divisionCode;
   }
 
   @Override
   @JsonIgnore
   public void setDivisionCode(String pDivisionCode) {
-    this.mDivisionCode = pDivisionCode;
+    this.divisionCode = pDivisionCode;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getVoucherNo() {
-    return mVoucherNo;
+    return voucherNo;
   }
 
   @Override
   public void setVoucherNo(String pVoucherNo) {
-    this.mVoucherNo = pVoucherNo;
+    this.voucherNo = pVoucherNo;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getVoucherDate() {
-    return mVoucherDate;
+    return voucherDate;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setVoucherDate(Date pVoucherDate) {
-    this.mVoucherDate = pVoucherDate;
+    this.voucherDate = pVoucherDate;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Integer getSerialNo() {
-    return mSerialNo;
+    return serialNo;
   }
 
   @Override
   public void setSerialNo(Integer pSerialNo) {
-    this.mSerialNo = pSerialNo;
+    this.serialNo = pSerialNo;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Account getAccount() {
-    return mAccount == null ? sAccountManager.get(mAccountId) : sAccountManager.validate(mAccount);
+    return account == null ? sAccountManager.get(accountId) : sAccountManager.validate(account);
   }
 
   @Override
   public void setAccount(Account pAccount) {
-    this.mAccount = pAccount;
+    this.account = pAccount;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getAccountId() {
-    return mAccountId;
+    return accountId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setAccountId(Long pAccountId) {
-    this.mAccountId = pAccountId;
+    this.accountId = pAccountId;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Voucher getVoucher() {
-    return mVoucher == null ? sVoucherManager.get(mVoucherId) : sVoucherManager.validate(mVoucher);
+    return voucher == null ? sVoucherManager.get(voucherId) : sVoucherManager.validate(voucher);
   }
 
   @Override
   public void setVoucher(Voucher pVoucher) {
-    this.mVoucher = pVoucher;
+    this.voucher = pVoucher;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getVoucherId() {
-    return mVoucherId;
+    return voucherId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setVoucherId(Long pVoucherId) {
-    this.mVoucherId = pVoucherId;
+    this.voucherId = pVoucherId;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getAmount() {
-    return mAmount;
+    return amount;
   }
 
   @Override
   public void setAmount(BigDecimal pAmount) {
-    this.mAmount = pAmount;
+    this.amount = pAmount;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BalanceType getBalanceType() {
-    return mBalanceType;
+    return balanceType;
   }
 
   @Override
   public void setBalanceType(BalanceType pBalanceType) {
-    this.mBalanceType = pBalanceType;
+    this.balanceType = pBalanceType;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getNarration() {
-    return mNarration;
+    return narration;
   }
 
   @Override
   public void setNarration(String pNarration) {
-    this.mNarration = pNarration;
+    this.narration = pNarration;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getForeignCurrency() {
-    return mForeignCurrency;
+    return foreignCurrency;
   }
 
   @Override
   public void setForeignCurrency(BigDecimal pForeignCurrency) {
-    this.mForeignCurrency = pForeignCurrency;
+    this.foreignCurrency = pForeignCurrency;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Currency getCurrency() {
-    return mCurrency == null ? sCurrencyManager.get(mCurrencyId) : sCurrencyManager.validate(mCurrency);
+    return currency == null ? sCurrencyManager.get(currencyId) : sCurrencyManager.validate(currency);
   }
 
   @Override
   public void setCurrency(Currency pCurrency) {
-    this.mCurrency = pCurrency;
+    this.currency = pCurrency;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getCurrencyId() {
-    return mCurrencyId;
+    return currencyId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setCurrencyId(Long pCurrencyId) {
-    this.mCurrencyId = pCurrencyId;
+    this.currencyId = pCurrencyId;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getConversionFactor() {
-    return mConversionFactor;
+    return conversionFactory;
   }
 
   @Override
   public void setConversionFactor(BigDecimal pConversionFactor) {
-    this.mConversionFactor = pConversionFactor;
+    this.conversionFactory = pConversionFactor;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getProjNo() {
-    return mProjNo;
+    return projNo;
   }
 
   @Override
   public void setProjNo(String pProjNo) {
-    this.mProjNo = pProjNo;
+    this.projNo = pProjNo;
   }
 
   @Override
   @JsonIgnore
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Company getDefaultCompany() {
-    return mDefaultCompany == null ? sCompanyManager.get(mDefaultCompanyId) : mDefaultCompany;
+    return defaultCompany == null ? sCompanyManager.get(defaultCompanyId) : defaultCompany;
   }
 
   @Override
   @JsonIgnore
   public void setDefaultCompany(Company pDefaultCompany) {
-    this.mDefaultCompany = pDefaultCompany;
+    this.defaultCompany = pDefaultCompany;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getStatFlag() {
-    return mStatFlag;
+    return statFlag;
   }
 
   @Override
   public void setStatFlag(String pStatFlag) {
-    this.mStatFlag = pStatFlag;
+    this.statFlag = pStatFlag;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getStatUpFlag() {
-    return mStatUpFlag;
+    return statUpFlag;
   }
 
   @Override
   public void setStatUpFlag(String pStatUpFlag) {
-    this.mStatUpFlag = pStatUpFlag;
+    this.statUpFlag = pStatUpFlag;
   }
 
   @Override
-  @JsonIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   public Receipt getReceipt() {
-    return mReceipt == null ? sReceiptManager.get(mReceiptId) : sReceiptManager.validate(mReceipt);
+    return null;// receipt == null ? sReceiptManager.get(receiptId) :
+    // sReceiptManager.validate(receipt);
   }
 
   @Override
   public void setReceipt(Receipt pReceipt) {
-    this.mReceipt = pReceipt;
+    this.receipt = pReceipt;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public Long getReceiptId() {
-    return mReceiptId;
+    return receiptId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   public void setReceiptId(Long pReceiptId) {
-    this.mReceiptId = pReceiptId;
+    this.receiptId = pReceiptId;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getPostDate() {
-    return mPostDate;
+    return postDate;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setPostDate(Date pPostDate) {
-    this.mPostDate = pPostDate;
+    this.postDate = pPostDate;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getModifiedDate() {
-    return mModifiedDate;
+    return modifiedDate;
   }
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   public void setModifiedDate(Date pModifiedDate) {
-    this.mModifiedDate = pModifiedDate;
+    this.modifiedDate = pModifiedDate;
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getModifiedBy() {
-    return mModifiedBy;
+    return modifiedBy;
   }
 
   @Override
   public void setModifiedBy(String pModifiedBy) {
-    this.mModifiedBy = pModifiedBy;
+    this.modifiedBy = pModifiedBy;
   }
 
   @Override
   @JsonIgnore
   public String getLastModified() {
-    return mLastModified;
+    return lastModified;
   }
 
   @Override
   @JsonIgnore
   public void setLastModified(String pLastModified) {
-    this.mLastModified = pLastModified;
+    this.lastModified = pLastModified;
   }
 
   @Override

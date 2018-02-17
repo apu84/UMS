@@ -46,15 +46,15 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
   public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
-    pMutable.setDesignation(pJsonObject.getInt("designation"));
-    pMutable.setEmploymentType(pJsonObject.getString("employmentType"));
+    pMutable.setDesignation(pJsonObject.getJsonObject("designation").getInt("id"));
+    pMutable.setEmploymentType(String.valueOf(pJsonObject.getJsonObject("employmentType").getInt("id")));
     PersistentDepartment dept = new PersistentDepartment();
-    dept.setId(pJsonObject.getString("deptOfficeId"));
+    dept.setId(pJsonObject.getJsonObject("department").getString("id"));
     pMutable.setDepartment(dept);
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
-    pMutable.setStatus(pJsonObject.getInt("status"));
+    pMutable.setStatus(Integer.parseInt(pJsonObject.getString("status")));
     pMutable.setShortName(pJsonObject.getString("shortName"));
-    pMutable.setEmployeeType(pJsonObject.getInt("employeeType"));
+    pMutable.setEmployeeType(Integer.parseInt(pJsonObject.getString("employeeType")));
   }
 
   public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,

@@ -1,25 +1,22 @@
 package org.ums.accounts.resource.definitions.general.ledger.transactions.journal.voucher;
 
-import io.reactivex.Observable;
-import javafx.beans.value.ObservableValue;
 import org.apache.shiro.SecurityUtils;
-import org.apache.zookeeper.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.accounts.resource.definitions.general.ledger.transactions.AccountTransactionCommonResourceHelper;
+import org.ums.accounts.resource.definitions.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.definitions.general.ledger.transactions.helper.TransactionResponse;
 import org.ums.domain.model.immutable.Company;
-import org.ums.domain.model.immutable.accounts.*;
+import org.ums.domain.model.immutable.accounts.Account;
+import org.ums.domain.model.immutable.accounts.AccountTransaction;
+import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
-import org.ums.domain.model.mutable.accounts.MutableMonth;
 import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
-import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
-import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.exceptions.MisMatchException;
-import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.usermanagement.user.User;
@@ -48,10 +45,15 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
     return Response.ok().build();
   }
 
-  public List<MutableAccountTransaction> getAll(int itemPerPage, int pageNumber) {
-    List<MutableAccountTransaction> accountTransactions=getContentManager().getAllPaginated(itemPerPage, pageNumber, mVoucherManager.get(JOURNAL_VOUCHER));
-    accountTransactions.forEach(a->a.setVoucherNo(a.getVoucherNo().substring(2)));
-    return accountTransactions;
+  public PaginatedVouchers getAll(int itemPerPage, int pageNumber) {
+    Voucher voucher = mVoucherManager.get(JOURNAL_VOUCHER);
+    List<MutableAccountTransaction> mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher);
+    mutableAccountTransactions.forEach(a -> a.setVoucherNo(a.getVoucherNo().substring(2)));
+    PaginatedVouchers paginatedVouchers = new PaginatedVouchers();
+    List<AccountTransaction> accountTransactions = new ArrayList<>(mutableAccountTransactions);
+    paginatedVouchers.setVouchers(accountTransactions);
+    paginatedVouchers.setTotalNumber(getContentManager().getTotalNumber(voucher));
+    return paginatedVouchers;
   }
 
   @NotNull
@@ -66,7 +68,6 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
       transaction.setId(mIdGenerator.getNumericId());
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
-      transaction.setPostDate(new Date());
       transaction.setVoucherDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());

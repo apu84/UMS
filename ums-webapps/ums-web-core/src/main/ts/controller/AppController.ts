@@ -76,12 +76,15 @@ module ums {
           this.$scope.header.animation = '';
         }, 100);
         */
-        var abc="";
+        /* We don't use breadcrumb anymore. So, I'm commenting out this block
+        var breadcrumb="";
         if(toState.url =="/gradeSheetSelectionTeacher/:1")
-          abc="/gradeSheetSelectionTeacher/T";
+          breadcrumb="/gradeSheetSelectionTeacher/T";
         else
-          abc =toState.url;
-        this.$scope.data = $.fn.Data.get(abc);
+          breadcrumb =toState.url;
+        this.$scope.data = $.fn.Data.get(breadcrumb);
+        */
+
         $('.sidebar-collapse').removeClass('in').addClass('collapse');
         if (-1 == $.inArray(toState.url, ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])) {
           $('body').removeClass('bounceInLeft');

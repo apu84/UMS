@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.general.ledger.transactions;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.accounts.resource.definitions.general.ledger.transactions.helper.TransactionResponse;
+import org.ums.accounts.resource.general.ledger.transactions.AccountTransactionBuilder;
 import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;

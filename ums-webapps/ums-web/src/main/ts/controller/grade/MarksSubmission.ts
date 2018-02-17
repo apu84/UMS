@@ -264,7 +264,7 @@ module ums {
 
               //To show new features for a certain time
               //Don't remove this code.
-              if(thisScope.data.totalInfoView  == 0) {
+              if(thisScope.data.totalInfoView  == 0 && $scope.currentActor == 'preparer') {
                 $("#modal-feature-info").modal('show');
               }
               thisScope.data.totalInfoView++;

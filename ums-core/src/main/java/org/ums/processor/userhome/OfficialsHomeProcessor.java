@@ -10,10 +10,11 @@ import java.util.Map;
 
 public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
   @Override
-  public List<Map<String, String>> process(Subject pCurrentSubject) {
+  public UserInfo process(Subject pCurrentSubject) {
     String userId = pCurrentSubject.getPrincipal().toString();
     User user = mUserManager.get(userId);
 
+    UserInfo userInfo = new UserInfo();
     List<Map<String, String>> profileContent = new ArrayList<>();
 
     Map<String, String> userName = new HashMap<>();
@@ -26,6 +27,9 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
     department.put("value", user.getDepartment().getLongName());
     profileContent.add(department);
 
-    return profileContent;
+    userInfo.setInfoList(profileContent);
+    userInfo.setUserRole(user.getPrimaryRole().getName());
+
+    return userInfo;
   }
 }

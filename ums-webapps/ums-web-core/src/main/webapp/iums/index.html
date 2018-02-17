@@ -181,46 +181,5 @@
     </div>
 </div>
 
-<!--Modal OTP-->
-<div id="modal-otp" tabindex="-2" role="dialog" aria-labelledby="modal-default-label" aria-hidden="true" class="modal fade" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close" style="opacity: 1;margin-top: 0px;">&times;
-                </button>
-                <h4 id="modal-otp-label" class="modal-title">OTP Verification</h4></div>
-            <div class="modal-body">
-                <div id="otpInput">
-                    One Time Password(OTP) will expire within: <font color="#E41B17" style="font-size:11px;font-weight:bold;"><span id="demo"></span> Sec </font>
-                    <br/><br/>
-                    <div class="progress">
-                        <div role="progressbar" aria-valuetransitiongoal="100" class="progress-bar progress-bar-success"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-md">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <div class="icon-addon addon-md">
-                                <input type="text" placeholder="One Time Password" class="form-control" id="otp">
-                            </div>
-                            <span class="input-group-btn">
-                        <button class="btn btn-green btn-square" type="button">Verify</button>
-                    </span>
-                        </div>
-                    </div>
-                </div>
-                <div id="otpExpired" style="display:none;">
-                    <font color='#E41B17'>Your One Time Password(OTP) has been expired!</font>
-                    <br/><br/>
-                    <a role="button" class="btn btn-green btn-square" data-toggle="modal">
-                        <i class="fa fa-repeat"></i> Resend One Time Password(OTP)</a>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>

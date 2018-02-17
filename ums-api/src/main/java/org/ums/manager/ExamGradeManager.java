@@ -63,6 +63,8 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
 
   int getTotalStudentCount(MarksSubmissionStatus actualStatus);
 
+  int getRegistrationResultCount(String studentIds, int pSemesterId, String pCourseId, ExamType pExamType);
+
   List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId, Integer pExamType);
 
   List<MarksLogDto> getMarksLogs(Integer pSemesterId, String pCourseId, ExamType pExamType, String pStudentId,
@@ -79,4 +81,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
       String pCause, String pActor) throws Exception;
 
   int update(MutableMarksSubmissionStatus pMutable) throws Exception;
+
+  int[] updateRegistrationResultLetterGrade(List<StudentGradeDto> pGradeList, int pSemesterId, String pCourseId,
+      ExamType pExamType) throws Exception;
 }

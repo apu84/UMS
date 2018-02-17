@@ -14,8 +14,12 @@ import java.util.List;
 public interface AccountTransactionManager extends ContentManager<AccountTransaction, MutableAccountTransaction, Long> {
   Integer getTotalVoucherNumberBasedOnCurrentDay(Voucher pVoucher);
 
+  List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo);
+
   Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate);
 
   List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher);
+
+  Integer getTotalNumber(Voucher pVoucher);
 
 }
