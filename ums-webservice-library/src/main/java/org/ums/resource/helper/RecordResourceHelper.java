@@ -102,7 +102,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       records.add(mManager.get(Long.valueOf(document.getId())));
     }
     // queryBuilder(pFilter);
-    return convertToJson(records, mRecordRepository.getTotalCount(queryBuilder(pFilter)), pUriInfo);
+    return convertToJson(records, mRecordRepository.totalDocuments(), pUriInfo);
   }
 
   private String queryBuilder(final String pFilter) {

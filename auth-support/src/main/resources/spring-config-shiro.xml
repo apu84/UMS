@@ -72,8 +72,7 @@
 
     <bean id="tokenRealm" class="org.ums.realm.TokenRealm">
         <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
-        <property name="bearerAccessTokenManager" ref="bearerAccessTokenManager"/>
-        <property name="userRolePermissions" ref="userRolePermissions"/>
+        <property name="signingKey" value="${authentication.token.signing.key}"/>
     </bean>
 
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">

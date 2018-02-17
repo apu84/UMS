@@ -1,5 +1,8 @@
 package org.ums.realm;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -12,19 +15,23 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.token.JwtsToken;
 import org.ums.usermanagement.permission.UserRolePermissions;
 import org.ums.usermanagement.role.Role;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.jsonwebtoken.*;
 
 public class TokenRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenRealm.class);
+  @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
+  @Autowired
   private UserRolePermissions mUserRolePermissions;
+
+  private String mSigningKey;
 
   @Override
   public boolean supports(AuthenticationToken token) {
@@ -61,23 +68,37 @@ public class TokenRealm extends AuthorizingRealm {
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     String userId = (String) getAvailablePrincipal(principals);
-    SimpleAuthorizationInfo info
-        = new SimpleAuthorizationInfo(mUserRolePermissions.getUserRoles(userId).stream()
-        .map(Role::getName)
-        .collect(Collectors.toSet()));
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(
+        mUserRolePermissions.getUserRoles(userId).stream().map(Role::getName).collect(Collectors.toSet()));
     info.setStringPermissions(mUserRolePermissions.getUserRolePermissions(userId));
     return info;
   }
 
+  private String getUserName(final String jwt) throws ExpiredJwtException {
+    Jws<Claims> claims = Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(jwt);
+    return claims.getBody().getSubject();
+  }
+
+  private boolean isExpiredToken(final String jwt) {
+    boolean isExpired = false;
+    try {
+      getUserName(jwt);
+    } catch(JwtException jwte) {
+      isExpired = true;
+    }
+    return isExpired;
+  }
+
   private boolean tokenIsInvalid(JwtsToken token, BearerAccessToken dbToken) {
-    return token == null || dbToken == null || !dbToken.getUserId().equals(token.getPrincipal());
+    return token == null || dbToken == null || isExpiredToken(token.getCredentials())
+        || !dbToken.getUserId().equals(token.getPrincipal());
   }
 
-  public void setBearerAccessTokenManager(BearerAccessTokenManager pBearerAccessTokenManager) {
-    mBearerAccessTokenManager = pBearerAccessTokenManager;
+  public void setSigningKey(String pSigningKey) {
+    mSigningKey = pSigningKey;
   }
 
-  public void setUserRolePermissions(UserRolePermissions pUserRolePermissions) {
-    mUserRolePermissions = pUserRolePermissions;
+  public String getSigningKey() {
+    return mSigningKey;
   }
 }

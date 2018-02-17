@@ -97,8 +97,8 @@ public class UserRolePermissionsImpl implements UserRolePermissions {
     MutableUser user = mUserManager.get(pUserId).edit();
     user.setPrimaryRole(mRoleManager.get(pRoles.get(0).getId()));
     user.update();
+    mAdditionalRolePermissionsManager.removeExistingAdditionalRoles(pUserId);
     if(pRoles.size() > 1) {
-      mAdditionalRolePermissionsManager.removeExistingAdditionalRoles(pUserId);
       for(Role role : pRoles.subList(1, pRoles.size())) {
         mAdditionalRolePermissionsManager.addRole(pUserId, role);
       }

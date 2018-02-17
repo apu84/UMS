@@ -14,8 +14,8 @@ public class EmployeeReIndexer extends AbstractReIndexer<Employee, MutableEmploy
   private ContentManager<Employee, MutableEmployee, String> mContentManager;
 
   public EmployeeReIndexer(final EmployeeRepository pSolrRepository,
-                           final Converter<Employee, EmployeeDocument> pDocumentConverter,
-                           final ContentManager<Employee, MutableEmployee, String> pContentManager) {
+      final Converter<Employee, EmployeeDocument> pDocumentConverter,
+      final ContentManager<Employee, MutableEmployee, String> pContentManager) {
     mSolrCrudRepository = pSolrRepository;
     mDocumentConverter = pDocumentConverter;
     mContentManager = pContentManager;
@@ -38,8 +38,7 @@ public class EmployeeReIndexer extends AbstractReIndexer<Employee, MutableEmploy
 
   @Override
   public ReIndexStatus status() {
-    return new ReIndexStatus(EmployeeDocument.DOCUMENT_TYPE,
-        mTotalDocumentsToReIndex,
+    return new ReIndexStatus(EmployeeDocument.DOCUMENT_TYPE, mTotalDocumentsToReIndex,
         mSolrCrudRepository.totalDocuments());
   }
 }

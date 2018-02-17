@@ -40,7 +40,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
   @Override
   public List<AdditionalRolePermissions> getPermissionsByUser(String pUserId) {
-    String query = SELECT_ALL + "WHERE USER_ID = ? AND STATUS = 1 AND VALID_FROM <= SYSDATE AND VALID_TO > SYSDATE";
+    String query = SELECT_ALL + "WHERE USER_ID = ? AND STATUS = 1";
     return mJdbcTemplate.query(query, new Object[] {pUserId}, new RolePermissionsMapper());
   }
 
@@ -141,12 +141,13 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
   @Override
   public int addRole(String pUserId, Role pRole) {
-    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", new Date(), new Date(), 1, "");
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pUserId, pRole.getId(), "",
+        new Date(), new Date(), 1, "");
   }
 
   @Override
   public int addPermissions(String pUserId, Set<String> pPermissions) {
-    return mJdbcTemplate.update(INSERT_ALL, pUserId, 0,
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pUserId, 0,
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions), new Date(), new Date(), 1, "");
   }
 

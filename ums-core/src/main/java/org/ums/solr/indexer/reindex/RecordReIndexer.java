@@ -14,8 +14,8 @@ public class RecordReIndexer extends AbstractReIndexer<Record, MutableRecord, Lo
   private ContentManager<Record, MutableRecord, Long> mContentManager;
 
   public RecordReIndexer(final RecordRepository pSolrRepository,
-                         final Converter<Record, RecordDocument> pDocumentConverter,
-                         final ContentManager<Record, MutableRecord, Long> pContentManager) {
+      final Converter<Record, RecordDocument> pDocumentConverter,
+      final ContentManager<Record, MutableRecord, Long> pContentManager) {
     mSolrCrudRepository = pSolrRepository;
     mDocumentConverter = pDocumentConverter;
     mContentManager = pContentManager;
@@ -38,8 +38,7 @@ public class RecordReIndexer extends AbstractReIndexer<Record, MutableRecord, Lo
 
   @Override
   public ReIndexStatus status() {
-    return new ReIndexStatus(RecordDocument.DOCUMENT_TYPE,
-        mTotalDocumentsToReIndex,
+    return new ReIndexStatus(RecordDocument.DOCUMENT_TYPE, mTotalDocumentsToReIndex,
         mSolrCrudRepository.totalDocuments());
   }
 }

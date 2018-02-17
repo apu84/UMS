@@ -89,7 +89,8 @@
         org.ums.exception,
         org.ums.employee
         org.ums.twofa,
-        org.ums.logs
+        org.ums.logs,
+        org.ums.usermanagement
       </param-value>
     </init-param>
     <init-param>
