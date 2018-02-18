@@ -108,7 +108,7 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
       accounts.add(a.getAccount());
       accountMapWithTransaction.put(a.getAccount().getId(), a);
 
-      if (a.getBalanceType().equals(BalanceType.Cr))
+      if(a.getBalanceType().equals(BalanceType.Cr))
         totalCredit = totalCredit.add(a.getAmount());
       else
         totalDebit = totalDebit.add(a.getAmount());
@@ -156,7 +156,7 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
   }
 
   private void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
-    if (pTransaction.getBalanceType().equals(BalanceType.Cr)) {
+    if(pTransaction.getBalanceType().equals(BalanceType.Cr)) {
       pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? pTransaction
           .getAmount() : pMonthBalance.getTotalMonthCreditBalance().add(pTransaction.getAmount()));
       pMonthBalance.setTotalMonthDebitBalance(pMonthBalance.getTotalMonthDebitBalance() == null ? new BigDecimal(0)
@@ -202,7 +202,7 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
       List<MutableAccountBalance> pAccountBalanceList) {
     for(MutableAccountBalance a : pAccountBalanceList) {
       MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
-      if (accountTransaction.getBalanceType().equals(BalanceType.Cr))
+      if(accountTransaction.getBalanceType().equals(BalanceType.Cr))
         a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(
             accountTransaction.getAmount()));
       else

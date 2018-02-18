@@ -7,10 +7,12 @@
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Recurrent</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Reverse</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Print</button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined" ng-click="vm.saveJournalVoucher()">
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                        ng-click="vm.saveJournalVoucher()">
                     Save
                 </button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined" ng-click="vm.postJournalVoucher()">
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                        ng-click="vm.postJournalVoucher()">
                     Post
                 </button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined" data-toggle="modal"
@@ -81,7 +83,7 @@
                                                                                                      class="control-label col-md-6">{{vm.totalCredit}}</label><br><br>
                 </div>
                 <div class="alert alert-success" align="center">
-                    <label class="control-label">{{vm.poststatus}}</label>
+                    <label class="control-label">{{vm.poststatus==true?'Posted':'Not posted'}}</label>
                 </div>
             </div>
 

@@ -24,7 +24,7 @@ module ums {
     private itemsPerPage: number;
     private totalVoucherNumber: number;
     private searchVoucherNo: string;
-    private poststatus: string;
+    private poststatus: boolean;
     private accounting: any;
     static JOURNAL_VOUCHER_GROUP_FLAG = GroupFlag.NO;
     static JOURNAL_VOUCHER_ID = '1';
@@ -145,14 +145,17 @@ module ums {
         this.showAddSection = true;
         this.voucherNo = vouchers[0].voucherNo;
         this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
-        this.poststatus = vouchers[0].postDate == null ? "Not posted" : "Posted";
+        this.poststatus = vouchers[0].postDate == null ? false : true;
         this.selectedCurrency = vouchers[0].currency;
         this.calculateTotalDebitAndCredit();
       });
     }
 
+    public edit(voucher: IJournalVoucher) {
+      this.journalVoucherOfAddModal = voucher;
+    }
     public addButtonClicked() {
-      this.poststatus = "Not Posted";
+      this.poststatus = false;
       this.showAddSection = true;
       this.totalCredit = 0;
       this.totalDebit = 0;

@@ -158,21 +158,23 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String query =
-        "SELECT * "
+        "select temp2.* from (SELECT ROWNUM row_num, temp.* "
             + "FROM (SELECT "
-            + "        ROWNUM row_num, "
             + "        DT_TRANSACTION.* "
             + "      FROM DT_TRANSACTION "
-            + "      WHERE (VOUCHER_NO, POST_DATE) IN (SELECT "
-            + "                                          DT_TRANSACTION.VOUCHER_NO, "
-            + "                                          MAX(DT_TRANSACTION.POST_DATE) as post_date "
-            + "                                        FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
-            + "                                        WHERE YEAR_CLOSING_FLAG = 'O' AND "
-            + "                                              DT_TRANSACTION.POST_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
-            + "                                              DT_TRANSACTION.POST_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
-            + "                                              VOUCHER_ID = ? "
-            + "                                        GROUP BY DT_TRANSACTION.VOUCHER_NO)) temp "
-            + "WHERE row_num >= ? AND row_num <= ? and BALANCE_TYPE='Dr' " + "ORDER BY POST_DATE DESC ";
+            + "      WHERE (VOUCHER_NO, MODIFIED_DATE) IN (SELECT "
+            + "                                                                     DT_TRANSACTION.VOUCHER_NO, "
+            + "                                                                    MAX(DT_TRANSACTION.MODIFIED_DATE) "
+            + "                                                                             AS MODIFIED_DATE "
+            + "                                                                   FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                                                   WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                                                         DT_TRANSACTION.MODIFIED_DATE >= "
+            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                                                         DT_TRANSACTION.MODIFIED_DATE <= "
+            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
+            + "                                                                         VOUCHER_ID = ? "
+            + "                                                                   GROUP BY DT_TRANSACTION.VOUCHER_NO ) and BALANCE_TYPE='Dr' ORDER BY MODIFIED_DATE DESC ) temp) temp2 "
+            + "WHERE row_num >= ? AND row_num<= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
         new PersistentAccountTransactionRowMapper());
   }
@@ -183,21 +185,23 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String query =
-        "SELECT * "
+        "select temp2.* from (SELECT ROWNUM row_num, temp.* "
             + "FROM (SELECT "
-            + "        ROWNUM row_num, "
             + "        DT_TRANSACTION.* "
             + "      FROM DT_TRANSACTION "
-            + "      WHERE (VOUCHER_NO, POST_DATE) IN (SELECT "
-            + "                                          DT_TRANSACTION.VOUCHER_NO, "
-            + "                                          MAX(DT_TRANSACTION.POST_DATE) "
-            + "                                        FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
-            + "                                        WHERE YEAR_CLOSING_FLAG = 'O' AND "
-            + "                                              DT_TRANSACTION.POST_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
-            + "                                              DT_TRANSACTION.POST_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
-            + "                                              VOUCHER_ID = ? AND VOUCHER_NO=?"
-            + "                                        GROUP BY DT_TRANSACTION.VOUCHER_NO)) temp "
-            + "WHERE row_num >= ? AND row_num <= ?  and balance_type='Dr' " + "ORDER BY POST_DATE DESC ";
+            + "      WHERE (VOUCHER_NO, MODIFIED_DATE) IN (SELECT "
+            + "                                                                     DT_TRANSACTION.VOUCHER_NO, "
+            + "                                                                    MAX(DT_TRANSACTION.MODIFIED_DATE) "
+            + "                                                                             AS MODIFIED_DATE "
+            + "                                                                   FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                                                   WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                                                         DT_TRANSACTION.MODIFIED_DATE >= "
+            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                                                         DT_TRANSACTION.MODIFIED_DATE <= "
+            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
+            + "                                                                         VOUCHER_ID = ? and VOUCHER_NO=? "
+            + "                                                                   GROUP BY DT_TRANSACTION.VOUCHER_NO ) and BALANCE_TYPE='Dr' ORDER BY MODIFIED_DATE DESC ) temp) temp2 "
+            + "WHERE row_num >= ? AND row_num<= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
         new PersistentAccountTransactionRowMapper());
   }
