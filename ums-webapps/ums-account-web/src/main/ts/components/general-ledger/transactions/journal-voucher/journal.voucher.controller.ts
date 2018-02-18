@@ -1,5 +1,8 @@
 module ums {
-
+  enum SubmissionType {
+    save = "Save",
+    post = "Post"
+  }
 
   export class JournalVoucherController {
 
@@ -86,16 +89,32 @@ module ums {
     }
 
     public saveJournalVoucher() {
+      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.save);
+    }
+
+    public checkVoucherBeforeSaveOrUpdate(submissionType: SubmissionType) {
       if (this.journalVouchers.length == 0)
         this.notify.warn("No journal voucher data");
       else if (this.totalCredit != this.totalDebit)
         this.notify.warn("Total debit and credit must be same");
       else {
-        this.journalVoucherService.saveVoucher(this.journalVouchers).then((response) => {
-          if (response != undefined)
-            this.addButtonClicked();
-        });
+        if (submissionType == SubmissionType.save) {
+          this.journalVoucherService.saveVoucher(this.journalVouchers).then((response) => {
+            if (response != undefined)
+              this.configureAddVoucherSection(this.journalVouchers);
+          });
+        } else {
+          this.journalVoucherService.postVoucher(this.journalVouchers).then((response) => {
+            if (response != undefined)
+              this.configureAddVoucherSection(this.journalVouchers);
+          });
+        }
+
       }
+    }
+
+    public postJournalVoucher() {
+      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.post);
     }
 
     public addData() {
@@ -141,14 +160,19 @@ module ums {
 
     public fetchDetails(journalVoucher: IJournalVoucher) {
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
-        this.journalVouchers = vouchers;
-        this.showAddSection = true;
-        this.voucherNo = vouchers[0].voucherNo;
-        this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
-        this.poststatus = vouchers[0].postDate == null ? false : true;
-        this.selectedCurrency = vouchers[0].currency;
-        this.calculateTotalDebitAndCredit();
+        this.configureAddVoucherSection(vouchers);
       });
+    }
+
+    private configureAddVoucherSection(vouchers: ums.IJournalVoucher[]) {
+      this.journalVouchers = vouchers;
+      this.showAddSection = true;
+      this.voucherNo = vouchers[0].voucherNo;
+      this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
+      this.poststatus = vouchers[0].postDate == null ? false : true;
+      this.selectedCurrency = vouchers[0].currency;
+      this.type = vouchers[0].accountTransactionType;
+      this.calculateTotalDebitAndCredit();
     }
 
     public edit(voucher: IJournalVoucher) {
@@ -159,6 +183,7 @@ module ums {
       this.showAddSection = true;
       this.totalCredit = 0;
       this.totalDebit = 0;
+      this.type = AccountTransactionType.SELLING;
       this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
       let currDate: Date = new Date();
       this.journalVouchers = [];

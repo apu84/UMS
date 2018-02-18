@@ -23,7 +23,6 @@ import org.ums.usermanagement.user.User;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonArray;
-import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,10 +39,10 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
   }
 
   @Transactional
-  public Response save(JsonArray pJsonValues) throws Exception {
+  public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
     updateAccountBalance(transactions);
-    return Response.ok().build();
+    return new ArrayList<>(transactions);
   }
 
   public PaginatedVouchers getAll(int itemPerPage, int pageNumber, String voucherNO) {
@@ -79,23 +78,62 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
 
   @NotNull
   private List<MutableAccountTransaction> createTransactions(JsonArray pJsonValues) throws Exception {
-    List<MutableAccountTransaction> transactions = new ArrayList<>();
+    List<MutableAccountTransaction> newTransactions = new ArrayList<>();
+    List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
     for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
-      transaction.setId(mIdGenerator.getNumericId());
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
-      transactions.add(transaction);
+      if (transaction.getId() == null) {
+        transaction.setId(mIdGenerator.getNumericId());
+        newTransactions.add(transaction);
+      } else {
+        updateTransactions.add(transaction);
+      }
     }
-    mAccountTransactionManager.create(transactions);
-    return transactions;
+    if (newTransactions.size() > 0)
+      mAccountTransactionManager.create(newTransactions);
+    if (updateTransactions.size() > 0)
+      mAccountTransactionManager.update(updateTransactions);
+    newTransactions.addAll(updateTransactions);
+    return newTransactions;
+  }
+
+  public List<AccountTransaction> postTransactions(JsonArray pJsonValues) throws Exception {
+    List<MutableAccountTransaction> newTransactions = new ArrayList<>();
+    List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
+    User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    Company company = mCompanyManager.get("01");
+
+    for (int i = 0; i < pJsonValues.size(); i++) {
+      PersistentAccountTransaction transaction = new PersistentAccountTransaction();
+      mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
+      transaction.setModifiedBy(loggedUser.getEmployeeId());
+      transaction.setModifiedDate(new Date());
+      transaction.setPostDate(new Date());
+      transaction.setCompanyId(company.getId());
+      transaction.setVoucherDate(new Date());
+      transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
+      if (transaction.getId() == null) {
+        transaction.setId(mIdGenerator.getNumericId());
+        newTransactions.add(transaction);
+      } else {
+        updateTransactions.add(transaction);
+      }
+    }
+    if (newTransactions.size() > 0)
+      mAccountTransactionManager.create(newTransactions);
+    if (updateTransactions.size() > 0)
+      mAccountTransactionManager.update(updateTransactions);
+    newTransactions.addAll(updateTransactions);
+    return new ArrayList<>(newTransactions);
   }
 
   private void updateAccountBalance(List<MutableAccountTransaction> pTransactions) {

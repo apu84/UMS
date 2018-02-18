@@ -80,7 +80,7 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
           .toString())));
     if(pJsonObject.containsKey("balanceType"))
       pMutableAccountTransaction.setBalanceType(BalanceType.get(pJsonObject.getString("balanceType")));
-    if(pJsonObject.containsKey("narration"))
+    if(pJsonObject.containsKey("narration") && !pJsonObject.isNull("narration"))
       pMutableAccountTransaction.setNarration(pJsonObject.getString("narration"));
     if(pJsonObject.containsKey("foreignCurrency"))
       pMutableAccountTransaction.setForeignCurrency(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber(
@@ -91,12 +91,12 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
       pMutableAccountTransaction.setConversionFactor(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber(
           "conversionFactor").toString())));
     if(pJsonObject.containsKey("receiptId"))
-      pMutableAccountTransaction.setReceiptId(Long.parseLong("receiptId"));
+      pMutableAccountTransaction.setReceiptId(Long.parseLong(pJsonObject.getString("receiptId")));
     if(pJsonObject.containsKey("postDate"))
       pMutableAccountTransaction.setPostDate(UmsUtils.convertToDate(pJsonObject.getString("postDate"), "dd-MM-yyyy"));
     if(pJsonObject.containsKey("accountTransactionType"))
-      pMutableAccountTransaction.setAccountTransactionType(AccountTransactionType.get(pJsonObject
-          .getString("accountTransactionType")));
+      pMutableAccountTransaction.setAccountTransactionType(pJsonObject.getString("accountTransactionType").equals(
+          "BUYING") ? AccountTransactionType.BUYING : AccountTransactionType.SELLING);
     if(pJsonObject.containsKey("modifiedDate"))
       pMutableAccountTransaction.setModifiedDate(UmsUtils.convertToDate(pJsonObject.getString("modifiedDate"),
           "dd-MM-yyyy"));

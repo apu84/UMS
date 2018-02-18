@@ -53,23 +53,21 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
         "SELECT DT_TRANSACTION.* " + "FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
             + "WHERE VOUCHER_NO=? AND VOUCHER_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
             + "      VOUCHER_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentAccountTransactionRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentJournalVoucherRowMapper());
   }
 
   @Override
   public List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate) {
     String query = "select * from DT_TRANSACTION where VOUCHER_NO=? and trunc(MODIFIED_DATE)=TRUNC(?)";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentAccountTransactionRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentJournalVoucherRowMapper());
   }
 
   @Override
   public List<Long> create(List<MutableAccountTransaction> pMutableList) {
     String query=INSERT_ONE;
-    List<Object[]> params = getCreateParams(pMutableList);
     Map<String, Object>[] paramObjects = getParamObjects(pMutableList);
     mNamedParameterJdbcTemplate.batchUpdate(query, paramObjects);
-    return params.stream().map(param-> (Long) param[0])
-        .collect(Collectors.toCollection(ArrayList::new));
+    return pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
   }
 
   private Map<String, Object>[] getParamObjects(List<MutableAccountTransaction> pMutableList) {
@@ -158,25 +156,30 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String query =
-        "select temp2.* from (SELECT ROWNUM row_num, temp.* "
+        "SELECT temp2.* "
             + "FROM (SELECT "
-            + "        DT_TRANSACTION.* "
-            + "      FROM DT_TRANSACTION "
-            + "      WHERE (VOUCHER_NO, MODIFIED_DATE) IN (SELECT "
-            + "                                                                     DT_TRANSACTION.VOUCHER_NO, "
-            + "                                                                    MAX(DT_TRANSACTION.MODIFIED_DATE) "
-            + "                                                                             AS MODIFIED_DATE "
-            + "                                                                   FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
-            + "                                                                   WHERE YEAR_CLOSING_FLAG = 'O' AND "
-            + "                                                                         DT_TRANSACTION.MODIFIED_DATE >= "
-            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
-            + "                                                                         DT_TRANSACTION.MODIFIED_DATE <= "
-            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
-            + "                                                                         VOUCHER_ID = ? "
-            + "                                                                   GROUP BY DT_TRANSACTION.VOUCHER_NO ) and BALANCE_TYPE='Dr' ORDER BY MODIFIED_DATE DESC ) temp) temp2 "
-            + "WHERE row_num >= ? AND row_num<= ?";
+            + "        ROWNUM row_num, "
+            + "        temp.* "
+            + "      FROM (SELECT DT_TRANSACTION.* "
+            + "            FROM DT_TRANSACTION "
+            + "            WHERE (VOUCHER_NO, SERIAL_NO, MODIFIED_DATE) IN (SELECT "
+            + "                                                               DT_TRANSACTION.VOUCHER_NO, "
+            + "                                                               SERIAL_NO, "
+            + "                                                               MAX(DT_TRANSACTION.MODIFIED_DATE) "
+            + "                                                                 AS MODIFIED_DATE "
+            + "                                                             FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                                             WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                                                   DT_TRANSACTION.MODIFIED_DATE >= "
+            + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                                                   DT_TRANSACTION.MODIFIED_DATE <= "
+            + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
+            + "                                                                   AND SERIAL_NO = 1 AND "
+            + "                                                                   VOUCHER_ID = ? "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
+            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
-        new PersistentAccountTransactionRowMapper());
+        new PersistentJournalVoucherRowMapper());
   }
 
   @Override
@@ -185,31 +188,37 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String query =
-        "select temp2.* from (SELECT ROWNUM row_num, temp.* "
+        "SELECT temp2.* "
             + "FROM (SELECT "
-            + "        DT_TRANSACTION.* "
-            + "      FROM DT_TRANSACTION "
-            + "      WHERE (VOUCHER_NO, MODIFIED_DATE) IN (SELECT "
-            + "                                                                     DT_TRANSACTION.VOUCHER_NO, "
-            + "                                                                    MAX(DT_TRANSACTION.MODIFIED_DATE) "
-            + "                                                                             AS MODIFIED_DATE "
-            + "                                                                   FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
-            + "                                                                   WHERE YEAR_CLOSING_FLAG = 'O' AND "
-            + "                                                                         DT_TRANSACTION.MODIFIED_DATE >= "
-            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
-            + "                                                                         DT_TRANSACTION.MODIFIED_DATE <= "
-            + "                                                                         FIN_ACCOUNT_YEAR.CURRENT_END_DATE AND "
-            + "                                                                         VOUCHER_ID = ? and VOUCHER_NO=? "
-            + "                                                                   GROUP BY DT_TRANSACTION.VOUCHER_NO ) and BALANCE_TYPE='Dr' ORDER BY MODIFIED_DATE DESC ) temp) temp2 "
-            + "WHERE row_num >= ? AND row_num<= ?";
+            + "        ROWNUM row_num, "
+            + "        temp.* "
+            + "      FROM (SELECT DT_TRANSACTION.* "
+            + "            FROM DT_TRANSACTION "
+            + "            WHERE (VOUCHER_NO, SERIAL_NO, MODIFIED_DATE) IN (SELECT "
+            + "                                                               DT_TRANSACTION.VOUCHER_NO, "
+            + "                                                               SERIAL_NO, "
+            + "                                                               MAX(DT_TRANSACTION.MODIFIED_DATE) "
+            + "                                                                 AS MODIFIED_DATE "
+            + "                                                             FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
+            + "                                                             WHERE YEAR_CLOSING_FLAG = 'O' AND "
+            + "                                                                   DT_TRANSACTION.MODIFIED_DATE >= "
+            + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
+            + "                                                                   DT_TRANSACTION.MODIFIED_DATE <= "
+            + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
+            + "                                                                   AND SERIAL_NO = 1 AND "
+            + "                                                                   VOUCHER_ID = ? and VOUCHER_NO=? "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
+            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
-        new PersistentAccountTransactionRowMapper());
+        new PersistentJournalVoucherRowMapper());
   }
 
   private Map getInsertOrUpdateParameters(MutableAccountTransaction pMutableAccountTransaction) {
     Map parameters = new HashMap();
     parameters.put("id", pMutableAccountTransaction.getId());
     parameters.put("compCode", pMutableAccountTransaction.getCompany().getId());
+    parameters.put("divisionCode", pMutableAccountTransaction.getDivisionCode());
     parameters.put("voucherNo", pMutableAccountTransaction.getVoucherNo());
     parameters.put("voucherDate", pMutableAccountTransaction.getVoucherDate());
     parameters.put("serialNo", pMutableAccountTransaction.getSerialNo());
@@ -221,14 +230,18 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     parameters.put("foreignCurrency", pMutableAccountTransaction.getForeignCurrency());
     parameters.put("currencyId", pMutableAccountTransaction.getCurrency().getId());
     parameters.put("conversionFactor", pMutableAccountTransaction.getConversionFactor());
+    parameters.put("projNo", pMutableAccountTransaction.getProjNo());
+    parameters.put("statFlag", pMutableAccountTransaction.getStatFlag());
+    parameters.put("statUpFlag", pMutableAccountTransaction.getStatUpFlag());
     parameters.put("type", pMutableAccountTransaction.getAccountTransactionType().getValue());
     parameters.put("modifiedBy", pMutableAccountTransaction.getModifiedBy());
+    parameters.put("receiptId", pMutableAccountTransaction.getReceiptId());
     parameters.put("modifiedDate", pMutableAccountTransaction.getModifiedDate());
     parameters.put("postDate", pMutableAccountTransaction.getPostDate());
     return parameters;
   }
 
-  class PersistentAccountTransactionRowMapper implements RowMapper<MutableAccountTransaction> {
+  class PersistentJournalVoucherRowMapper implements RowMapper<MutableAccountTransaction> {
     @Override
     public MutableAccountTransaction mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAccountTransaction transaction = new PersistentAccountTransaction();
@@ -249,7 +262,6 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       transaction.setProjNo(pResultSet.getString("proj_no"));
       transaction.setStatFlag(pResultSet.getString("stat_flag"));
       transaction.setStatUpFlag(pResultSet.getString("stat_up_flag"));
-      transaction.setReceiptId(pResultSet.getLong("receipt_id"));
       transaction.setPostDate(pResultSet.getDate("post_date"));
       transaction.setAccountTransactionType(AccountTransactionType.get(pResultSet.getString("type")));
       transaction.setModifiedBy(pResultSet.getString("modified_by"));

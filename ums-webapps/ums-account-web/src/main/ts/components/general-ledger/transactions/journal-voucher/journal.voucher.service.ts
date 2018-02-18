@@ -6,8 +6,8 @@ module ums {
   }
 
   export enum AccountTransactionType{
-    BUYING="B",
-    SELLING="S"
+    BUYING = "BUYING",
+    SELLING = "SELLING"
   }
 
   export interface IPaginatedVouchers {
@@ -58,8 +58,26 @@ module ums {
     public saveVoucher(vouchers: IJournalVoucher[]):ng.IPromise<any>{
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url+"/save", vouchers, HttpClient.MIME_TYPE_JSON)
-          .success((response)=>defer.resolve(response))
+          .success((response) => {
+            this.notify.success("Journal Voucher Data Saved Successfully")
+            defer.resolve(response);
+          })
           .error((error)=>{
+            console.log(error);
+            this.notify.error("Error in saving data");
+            defer.resolve(undefined);
+          });
+      return defer.promise;
+    }
+
+    public postVoucher(vouchers: IJournalVoucher[]): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.httpClient.post(this.url + "/post", vouchers, HttpClient.MIME_TYPE_JSON)
+          .success((response) => {
+            this.notify.success("Journal Voucher Posted Successfully");
+            defer.resolve(response);
+          })
+          .error((error) => {
             console.log(error);
             this.notify.error("Error in saving data");
             defer.resolve(undefined);
