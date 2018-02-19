@@ -11,6 +11,7 @@ module ums {
     'scrollable-table',
     'ui.sortable',
     'ngHandsontableApp',
-    "dirPaginationApp"
+    "dirPaginationApp",
+    'ui.select'
   ]);
 }

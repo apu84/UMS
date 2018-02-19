@@ -105,4 +105,12 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
   Long getPublisherId();
 
   String getLastUpdatedBy();
+
+  int getTotalItems();
+
+  int getTotalAvailable();
+
+  int getTotalCheckedOut();
+
+  int getTotalOnHold();
 }

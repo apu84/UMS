@@ -35,6 +35,27 @@ public class UMSConfiguration {
   @Value("${process.gpa.only}")
   private boolean mProcessGPAOnly;
 
+  @Value("${developer.mode}")
+  private boolean mDeveloperMode;
+
+  @Value("${data.dir}")
+  private String mDataDir;
+
+  @Value("${twoFa.token.lifeTime}")
+  private int mTwoFATokenLifeTime;
+
+  @Value("${twoFa.token.allowable.wrongTry}")
+  private int mTwoFATokenAllowableWrongTry;
+
+  @Value("${accounts.jdbc.url}")
+  private String mAccountJdbcUrl;
+
+  @Value("${accounts.jdbc.username}")
+  private String mAccountJdbcUserName;
+
+  @Value("${accounts.jdbc.password}")
+  private String mAccountJdbcPassword;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -77,5 +98,33 @@ public class UMSConfiguration {
 
   public boolean isProcessGPAOnly() {
     return mProcessGPAOnly;
+  }
+
+  public boolean isDeveloperMode() {
+    return mDeveloperMode;
+  }
+
+  public String getDataDir() {
+    return mDataDir;
+  }
+
+  public int getTwoFATokenLifeTime() {
+    return mTwoFATokenLifeTime * 60;
+  }
+
+  public int getTwoFATokenAllowableWrongTry() {
+    return mTwoFATokenAllowableWrongTry;
+  }
+
+  public String getAccountJdbcUrl() {
+    return mAccountJdbcUrl;
+  }
+
+  public String getAccountJdbcUserName() {
+    return mAccountJdbcUserName;
+  }
+
+  public String getAccountJdbcPassword() {
+    return mAccountJdbcPassword;
   }
 }

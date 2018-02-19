@@ -1,7 +1,7 @@
 package org.ums.manager;
 
-import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.mutable.MutableClassRoom;
 
 import java.util.List;
 
@@ -14,6 +14,8 @@ public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClass
   ClassRoom getByRoomNo(String pRoomNo);
 
   List<ClassRoom> getSeatPlanRooms(Integer pSemesterid, Integer pExamType);
+
+  List<ClassRoom> getAllForSeatPlan();
 
   List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId);
 }

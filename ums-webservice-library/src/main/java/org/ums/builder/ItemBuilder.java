@@ -31,7 +31,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
-    pBuilder.add("mfnNo", pReadOnly.getMfn());
+    pBuilder.add("mfnNo", pReadOnly.getMfn().toString());
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("copyNumber", pReadOnly.getCopyNumber() == 0 ? "0" : pReadOnly.getCopyNumber().toString());
     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
@@ -53,6 +53,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     object.add("name", pReadOnly.getSupplier() == null ? "" : pReadOnly.getSupplier().getName());
     pBuilder.add("supplier", object);
 
+    pBuilder.add("circulationStatus", pReadOnly.getCirculationStatus());
+
   }
 
   @Override
@@ -70,7 +72,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     if(pJsonObject.containsKey("supplier")) {
       JsonObject supplierObject = (JsonObject) (pJsonObject.get("supplier"));
-      pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
+      if(!supplierObject.getString("id").equals("")) {
+        pMutable.setSupplierId(Long.valueOf(supplierObject.getString("id")));
+      }
+      else {
+        pMutable.setSupplierId(null);
+      }
     }
 
     if(pJsonObject.containsKey("barcode"))
@@ -83,7 +90,10 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     // pMutable.setSupplier(pJsonObject.getInt("copyNumber"));
     // pMutable.setSupplierId(pJsonObject.getInt("supplier"));
     pMutable.setStatus(pJsonObject.containsKey("status") ? ItemStatus.get(pJsonObject.getInt("status"))
-        : ItemStatus.ENTRY_MODE);
+        : ItemStatus.AVAILABLE);
+
+    pMutable.setCirculationStatus(pJsonObject.containsKey("circulationStatus") ? pJsonObject
+        .getInt("circulationStatus") : 0);
   }
 
 }

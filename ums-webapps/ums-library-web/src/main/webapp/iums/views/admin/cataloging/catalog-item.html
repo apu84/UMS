@@ -139,7 +139,7 @@
                 </div>
             </div>
 
-            <label class="col-md-1 control-label">Status</label>
+            <label class="col-md-1 control-label" for="itemStatus">Status</label>
             <div class="col-md-3">
                 <select style="width: 98%" class="required" data-ng-model="item.status" id="itemStatus"
                         name="itemStatus" ng-disabled="data.itemReadOnlyMode"
@@ -147,7 +147,6 @@
                     <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
                 </select>
             </div>
-
 
         </div>
 

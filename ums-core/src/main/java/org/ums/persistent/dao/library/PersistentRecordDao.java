@@ -27,7 +27,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
           + "   CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
           + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
-          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, LAST_MODIFIED "
+          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD, LAST_MODIFIED "
           + "FROM RECORDS ";
 
   static String UPDATE_ONE =
@@ -35,18 +35,18 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
           + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
           + "  COPY_RIGHT_DATE=?, MATERIAL_TYPE=?, "
-          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, LAST_UPDATED_ON=sysdate,  "
+          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?, TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate,  "
           + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
           + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
-          + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
+          + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, ?,"
+          + " ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0,"
           + " sysdate, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
@@ -77,9 +77,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
             .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
             .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord.getAcquisitionType().getId(),
-        pRecord.getKeyWords(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord
-            .getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
+        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType()
+            .getId(), pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord.getContributorJsonString(),
+        pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
+            .getTotalItems(), pRecord.getTotalAvailable(), pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(),
+        pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
   @Override
@@ -170,6 +172,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
       record.setSubjectJsonString(resultSet.getString("SUBJECTS"));
       record.setNoteJsonString(resultSet.getString("NOTES"));
+
+      record.setTotalItems(resultSet.getInt("TOTAL_ITEMS"));
+      record.setTotalAvailable(resultSet.getInt("TOTAL_AVAILABLE"));
+      record.setTotalCheckedOut(resultSet.getInt("TOTAL_CHECKED_OUT"));
+      record.setTotalOnHold(resultSet.getInt("TOTAL_ON_HOLD"));
 
       AtomicReference<Record> atomicReference = new AtomicReference<>(record);
       return atomicReference.get();

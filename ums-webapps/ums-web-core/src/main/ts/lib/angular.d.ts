@@ -510,6 +510,7 @@ declare module ng {
     reject(reason?: any): IPromise<any>;
     when<T>(value: IPromise<T>): IPromise<T>;
     when<T>(value: T): IPromise<T>;
+    resolve(any):any;
   }
 
   interface IPromise<T> {

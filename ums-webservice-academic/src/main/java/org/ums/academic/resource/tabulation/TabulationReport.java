@@ -1,11 +1,12 @@
 package org.ums.academic.resource.tabulation;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,27 @@ import org.ums.resource.Resource;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class TabulationReport {
-
   @Autowired
   TabulationService mTabulationService;
 
+  @Autowired
+  TabulationPdf mTabulationPdf;
+
   @GET
-  @Path("/report")
-  public TabulationReportModel getBySyllabus(final @Context Request pRequest) {
-    return mTabulationService.getTabulation(110100, 11012016, 2, 1);
+  @Produces({"application/pdf"})
+  @Path("/report/program/{program-id}/semester/{semester-id}/year/{year}/academic-semester/{academic-semester}")
+  public StreamingOutput get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+      final @PathParam("academic-semester") Integer pAcademicSemester) {
+    return new StreamingOutput() {
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mTabulationPdf.createPdf(mTabulationService.getTabulation(pProgramId, pSemesterId, pYear, pAcademicSemester),
+              output);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 }

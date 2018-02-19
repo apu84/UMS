@@ -18,4 +18,9 @@ public class ItemDaoDecorator extends ContentDaoDecorator<Item, MutableItem, Lon
   public List<Item> getByMfn(final Long pMfn) {
     return getManager().getByMfn(pMfn);
   }
+
+  @Override
+  public Item getByAccessionNumber(String pAccessionNumber) {
+    return getManager().getByAccessionNumber(pAccessionNumber);
+  }
 }

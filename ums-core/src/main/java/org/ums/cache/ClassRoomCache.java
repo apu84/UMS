@@ -39,6 +39,11 @@ public class ClassRoomCache extends ContentCache<ClassRoom, MutableClassRoom, Lo
   }
 
   @Override
+  public List<ClassRoom> getAllForSeatPlan() {
+    return getManager().getAllForSeatPlan();
+  }
+
+  @Override
   protected CacheManager<ClassRoom, Long> getCacheManager() {
     return mCacheManager;
   }

@@ -1,0 +1,144 @@
+<style>
+    .search {
+        width: 130px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-image: url('searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+    }
+
+    .search {
+        width: 80%;
+    }
+
+    thead {
+        background-color: #efefef;
+    }
+
+    .grid {
+        width: 750px;
+        height: 500px;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        height: 450px;
+    }
+
+    #header-fixed {
+        position: fixed;
+        top: 15px;
+    }
+
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
+    /*.animate-if {
+        background: white;
+    }*/
+
+    .animate-if.ng-enter, .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+
+</style>
+
+<link type="text/css" rel="stylesheet" src="account.group.css"/>
+<div class="row" style="padding-right: 3px">
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">
+                    Account
+                </div>
+                <div class="col-md-6" align="right" data-ng-include="'views/definitions/account/menu.html'"></div>
+            </div>
+        </div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row" ng-if="vm.totalAccountSize>0 && vm.searchBar">
+                <div class="col-md-12">
+                    <form>
+                        <input class="search" type="text" name="search" placeholder="Search.."
+                               ng-model="vm.searchValue">
+                        <button class="btn btn-default" ng-click="vm.search()"><i class="fa fa-search"
+                                                                                  aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-4" align="right">
+                    <div class="form-group">
+                        <label for="itemsPerPage" class="col-md-6 control-label">Accounts per page</label>
+                        <div class="col-md-4">
+                            <div class="input-icon right">
+                                <input id="itemsPerPage" ng-model="vm.itemsPerPage" type="text" placeholder=""
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div ng-if="vm.totalAccountSize<1">
+                    <div class="col-md-12">
+                        <div class="alert alert-info" align="center"><strong>No records found of Existing Accounts
+                        </strong>
+                        </div>
+                    </div>
+
+                </div>
+                <div ng-if="vm.totalAccountSize>0">
+                    <div class="col-md-12">
+                        <div ng-include="'views/definitions/account/existingAccountsInclude.html'"></div>
+                    </div>
+                </div>
+                <div ng-if="vm.totalAccountSize>0">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" ng-include="'views/definitions/account/accountAddModalInclude.html'"></div>
+            </div>
+
+            <!-- <div class="row">
+                 <div class="col-md-12">
+                     <hot-table settings="vm.handsOnTableFeature.settings" hot-id="group" datarows="vm.groups"
+                                autoWrapRow="true" columns="vm.handsOnTableFeature.columns"></hot-table>
+                 </div>
+             </div>-->
+
+        </div>
+
+    </div>
+</div>

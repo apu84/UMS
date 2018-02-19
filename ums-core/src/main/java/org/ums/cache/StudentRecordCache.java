@@ -2,14 +2,18 @@ package org.ums.cache;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.CacheManager;
 import org.ums.manager.StudentRecordManager;
+import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.util.CacheUtil;
 
 public class StudentRecordCache extends ContentCache<StudentRecord, MutableStudentRecord, Long, StudentRecordManager>
     implements StudentRecordManager {
+  private static final Logger mLogger = LoggerFactory.getLogger(StudentRecordCache.class);
   private CacheManager<StudentRecord, Long> mCacheManager;
 
   public StudentRecordCache(final CacheManager<StudentRecord, Long> pCacheManager) {
@@ -72,6 +76,7 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
 
   @Override
   public StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId) {
+    mLogger.debug("StudentId: "+ pStudentId + " SemesterId: "+ pSemesterId);
     String cacheKey = getCacheKey(StudentRecord.class.toString(), pStudentId, pSemesterId);
     return cachedEntity(cacheKey, () -> getManager().getStudentRecord(pStudentId, pSemesterId));
   }

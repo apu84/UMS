@@ -24,4 +24,5 @@ public class RecordCache extends ContentCache<Record, MutableRecord, Long, Recor
   protected CacheManager<Record, Long> getCacheManager() {
     return mCacheManager;
   }
+
 }

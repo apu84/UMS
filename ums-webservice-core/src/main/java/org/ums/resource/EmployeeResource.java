@@ -74,4 +74,17 @@ public class EmployeeResource extends MutableEmployeeResource {
   public JsonObject getEmployees(final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
     return mEmployeeResourceHelper.getEmployees(pDepartmentId, mUriInfo);
   }
+
+  @GET
+  @Path("/newId/deptId/{dept-id}/employeeType/{employee-type}")
+  public JsonObject getNewEmployeeId(final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
+      final @PathParam("employee-type") int pEmployeeType) {
+    return mEmployeeResourceHelper.getCurrentMaxEmployeeId(pDeptId, pEmployeeType);
+  }
+
+  @GET
+  @Path("/validate/{short-name}")
+  public boolean validate(final @Context Request pRequest, final @PathParam("short-name") String pShortName) {
+    return mEmployeeResourceHelper.validateShortName(pShortName);
+  }
 }

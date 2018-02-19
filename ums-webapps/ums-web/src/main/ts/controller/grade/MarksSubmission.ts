@@ -255,11 +255,19 @@ module ums {
       $scope.data.recheck_accepted_studentId = "";
       $scope.chartData = [];
       this.initChart();
+      var thisScope = this. $scope;
       $scope.$on('LastRepeaterElement', function () {
         setTimeout(function () {
               $(".img_tooltip").hide();
               $("#panel_top").show();
               $("#loading_panel").hide();
+
+              //To show new features for a certain time
+              //Don't remove this code.
+              if(thisScope.data.totalInfoView  == 0 && $scope.currentActor == 'preparer') {
+                $("#modal-feature-info").modal('show');
+              }
+              thisScope.data.totalInfoView++;
             }
             , 400);
       });
@@ -380,6 +388,10 @@ module ums {
 
       $("#leftDiv").hide();
       $("#arrowDiv").show();
+
+      setTimeout(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      }, 1000);
     }
 
 
@@ -442,6 +454,7 @@ module ums {
             this.$scope.data.semester_name = part_info.semesterName;
             this.$scope.data.dept_short_name = part_info.deptSchoolShortName;
             this.$scope.data.dept_long_name = part_info.deptSchoolLongName;
+            this.$scope.data.status_name = part_info.statusName;
 
             this.$scope.gradeSubmissionStatus = part_info.statusId;
             this.$scope.courseType = part_info.courseType;
@@ -477,15 +490,6 @@ module ums {
       $("#selection2").show();
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
-
-
-      //To show new features for a certain time
-      /* Don't remove this code.
-      if(this. $scope.data.totalInfoView  == 0) {
-        $("#modal-feature-info").modal('show');
-      }
-      this. $scope.data.totalInfoView++;
-      */
     }
 
     private calculateTotalAndGradeLetter(student_id: string, reg_type : number): void {
@@ -1032,7 +1036,6 @@ module ums {
               studentMark.statusId = this.appConstants.marksStatusEnum.SUBMITTED;
           }
         }
-
         gradeList.push(studentMark);
       }
       return gradeList;
@@ -1080,10 +1083,7 @@ module ums {
           return;
         }
       }
-
-
       this.postGradeSheet(gradeList, 'submit');
-
     }
 
     private postGradeSheet(gradeList: Array<IStudentMarks>, action: string): void {
@@ -1093,8 +1093,48 @@ module ums {
           .success(() => {
             this.notify.success("Successfully Saved.");
             this.reloadGradeSheet(this);
-          }).error((data) => {
-      });
+          }).error((data, status) => {
+             this.notify.error(data);
+             /*
+            $('#modal-otp').modal('show');
+            $('.progress-bar').progressbar({display_text: 'fill'});
+
+            var remainingSeconds=1*70;  //We will get this value from backend
+            var clockTimer=+localStorage.getItem("clockTimer");
+            clearInterval(clockTimer);
+            var cTimer = setInterval(function() {
+                var minutes = parseInt((remainingSeconds/60)+'');
+                var seconds =  remainingSeconds%60;
+                document.getElementById("demo").innerHTML =  "00"+" : "+("0" + minutes).slice(-2) + " : " + ("0" + seconds).slice(-2);
+                if (remainingSeconds < 0) {
+                    clearInterval(cTimer);
+                    $("#otpInput").hide();
+                    $("#otpExpired").show();
+                }
+                remainingSeconds = remainingSeconds-1;
+              }, 1000);
+        localStorage["clockTimer"] = cTimer;
+
+        var progressTimer=+localStorage.getItem("progressTimer");
+        clearInterval(progressTimer);
+        var progressRemainingSeconds=1*70;  //We will get this value from backend
+
+        var otpLifeTime = 600; //In Seconds
+        var percentage = (100/otpLifeTime)*(progressRemainingSeconds);
+        var index = progressRemainingSeconds;
+        var pTimer = setInterval(function(){
+          percentage = percentage - 1/6;
+          index --;
+          if (index > 0){
+            $('.progress-bar').css('width', percentage+'%');
+            $('.progress-bar').attr('aria-valuenow', Math.round(percentage));
+            $('.progress-bar').html($('.progress-bar').attr('aria-valuenow') + '%');
+          } else {
+            clearInterval(pTimer);
+          }
+        }, 1000);
+        localStorage["progressTimer"] = pTimer;
+      */});
     }
 
     private createCompleteJson(action: string, gradeList: Array<IStudentMarks>, recheckList: Array<IStudent>, approveList: Array<IStudent>): any {

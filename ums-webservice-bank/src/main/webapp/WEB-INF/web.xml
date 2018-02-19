@@ -17,7 +17,7 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-      classpath:application-context.xml
+      classpath:application-context-webservice-core.xml
       classpath:spring-config-shiro.xml
       /WEB-INF/applicationContext.xml
     </param-value>

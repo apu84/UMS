@@ -106,6 +106,10 @@ module ums {
     public receipt(transactionId: string): void {
       this.feeReportService.receipt(transactionId);
     }
+
+    public printTestimonial(): void{
+      this.certificateFeeService.getTestimonial('130105001');
+    }
   }
 
   UMS.controller('CertificateFeeController', CertificateFeeController);

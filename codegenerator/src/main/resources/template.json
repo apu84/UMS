@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "PaymentStatus",
-    "package": "org.ums.fee.accounts",
+    "name": "MonthBalance",
+    "package": "org.ums.domain.model.immutable.account",
     "fields": [
       {
         "id": {
@@ -10,23 +10,45 @@
         }
       },
       {
-        "account": "String"
+        "AccountBalance": {
+          "type": "Ref",
+          "reference": {
+            "name": "AccountBalance",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "AccountBalanceManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
       },
       {
-        "transactionId": "String"
+        "Month": {
+          "type": "Ref",
+          "reference": {
+            "name": "Month",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "MonthManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
       },
       {
-        "methodOfPayment": "Integer"
+        "totalMonthDebitBalance": "BigDecimal"
       },
       {
-        "paymentComplete": "boolean"
+        "totalMonthCreditBalance": "BigDecimal"
       },
-      {
-        "receivedOn": "Date"
-      },
-      {
-        "completedOn": "Date"
-      }
+
+
     ]
   }
 }

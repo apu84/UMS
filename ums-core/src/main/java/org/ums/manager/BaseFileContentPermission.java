@@ -63,6 +63,7 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
     return false;
   }
 
+  @SuppressWarnings("unchecked")
   protected Object addOwnerToken(final Object folderList) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     String accessToken = getBearerAccessTokenManager().getByUser(userId).get(0).getId();

@@ -17,7 +17,7 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-      classpath:application-context.xml
+      classpath:application-context-webservice-core.xml
       classpath:spring-config-shiro.xml
       /WEB-INF/applicationContext.xml
     </param-value>
@@ -87,7 +87,9 @@
         org.ums.response.type,
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
-        org.ums.employee</param-value>
+        org.ums.employee
+        org.ums.twofa
+      </param-value>
     </init-param>
     <init-param>
       <param-name>javax.json.stream.JsonGenerator.prettyPrinting</param-name>

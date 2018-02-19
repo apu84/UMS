@@ -1,12 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.MarksSubmissionStatusDaoDecorator;
@@ -17,13 +10,19 @@ import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentMarksSubmissionStatus;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL = "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, "
       + "LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_SCR, TOTAL_PART, PART_A_TOTAL, "
       + "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
   String UPDATE_ALL =
       "UPDATE MARKS_SUBMISSION_STATUS_CURR SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
-          + "LAST_SUBMISSION_DATE_PREP = ?, LAST_SUBMISSION_DATE_HEAD = ?, LAST_SUBMISSION_DATE_SCR = ?, "
+          + "LAST_SUBMISSION_DATE_PREP = ?, LAST_SUBMISSION_DATE_HEAD = ?, LAST_SUBMISSION_DATE_SCR = ?, LAST_SUBMISSION_DATE_COE=?, "
           + "TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, " + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
@@ -57,8 +56,9 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(), pMutable.getStatus().getId(),
         pMutable.getExamType().getId(), pMutable.getLastSubmissionDatePrep(), pMutable.getLastSubmissionDateHead(),
-        pMutable.getLastSubmissionDateScr(), pMutable.getTotalPart(), pMutable.getPartATotal(),
-        pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getId());
+        pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateCoe(), pMutable.getTotalPart(),
+        pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
+        pMutable.getId());
   }
 
   @Override
@@ -101,8 +101,9 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
       params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(), pMutable.getStatus().getId(),
           pMutable.getExamType().getId(), pMutable.getLastSubmissionDatePrep(), pMutable.getLastSubmissionDateHead(),
-          pMutable.getLastSubmissionDateScr(), pMutable.getTotalPart(), pMutable.getPartATotal(),
-          pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getId()});
+          pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateCoe(), pMutable.getTotalPart(),
+          pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
+          pMutable.getId()});
     }
 
     return params;

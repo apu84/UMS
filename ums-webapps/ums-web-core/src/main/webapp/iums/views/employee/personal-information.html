@@ -1,3 +1,9 @@
+<style>
+    img {
+        width: 120px;
+        height: 150px;
+    }
+</style>
 <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
     <div class="panel-group">
         <div class="panel panel-default">
@@ -5,101 +11,148 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's First Name"
-                               for="iFirstName">First Name<span data-ng-show="vm.showPersonalInputDiv"
-                                                                class='require'>*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <input type="text"
-                                       name="nFirstName"
-                                       id="iFirstName"
-                                       data-ng-model="vm.entry.personal.firstName"
-                                       placeholder="Name"
-                                       maxlength="75"
-                                       class="form-control" required>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-3 control-label" title="Employee's First Name"
+                                       for="iFirstName">First Name<span data-ng-show="vm.showPersonalInputDiv"
+                                                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <input type="text"
+                                               name="nFirstName"
+                                               id="iFirstName"
+                                               data-ng-model="vm.entry.personal.firstName"
+                                               placeholder="Name"
+                                               maxlength="75"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+                                <div data-ng-show="!vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.personal.firstName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.personal.firstName}}</label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-3 control-label" title="Employee's Last Name" for="iLastName">Last
+                                    Name<span data-ng-show="vm.showPersonalInputDiv"
+                                              class='require'>*</span></label>
+                                <div data-ng-show="vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <input type="text"
+                                               name="nLastName"
+                                               id="iLastName"
+                                               data-ng-model="vm.entry.personal.lastName"
+                                               placeholder="Last Name"
+                                               maxlength="75"
+                                               class="form-control " required>
+                                    </div>
+                                </div>
+                                <div data-ng-show="!vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.personal.lastName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-3 control-label" title="Employee's Father Name" for="iFatherName">Father's
+                                    Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
+                                <div data-ng-show="vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <input type="text"
+                                               name="nFatherName"
+                                               id="iFatherName"
+                                               data-ng-model="vm.entry.personal.fatherName"
+                                               placeholder="Father's Name"
+                                               maxlength="100"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+                                <div data-ng-show="!vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.personal.fatherName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-3 control-label" title="Employee's Mother Name"
+                                       for="iMotherName">Mother's
+                                    Name<span data-ng-show="vm.showPersonalInputDiv"
+                                              class="require">*</span></label>
+                                <div data-ng-show="vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <input type="text"
+                                               name="nMotherName"
+                                               id="iMotherName"
+                                               data-ng-model="vm.entry.personal.motherName"
+                                               placeholder="Mother's Name"
+                                               maxlength="100"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+                                <div data-ng-show="!vm.showPersonalInputDiv">
+                                    <div class="col-md-9">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.personal.motherName}}</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's Father Name" for="iFatherName">Father's
-                            Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <input type="text"
-                                       name="nFatherName"
-                                       id="iFatherName"
-                                       data-ng-model="vm.entry.personal.fatherName"
-                                       placeholder="Father's Name"
-                                       maxlength="100"
-                                       class="form-control" required>
+                        <!-- <a data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer"><b>Change
+                             Picture</b></a>-->
+                        <div data-ng-show="vm.isRegistrar">
+                            <div data-ng-show="vm.showPersonalInputDiv">
+                                <div align="center"  data-ng-if="vm.test==true">
+                                    <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
+                                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
+                                         src=""
+                                         img-id="vm.userId"
+                                         data-profile-picture="">
+                                </div>
+                            </div>
+                            <div data-ng-show="!vm.showPersonalInputDiv">
+                                <div align="center" data-ng-if="vm.test==true">
+                                    <img class="img-square"
+                                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                         src=""
+                                         img-id="vm.userId"
+                                         data-profile-picture="">
+                                </div>
                             </div>
                         </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.personal.fatherName}}</label>
-                                </div>
+                        <div data-ng-show="!vm.isRegistrar">
+                            <div align="center">
+                                <img class="img-square"
+                                     style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                     src=""
+                                     data-profile-picture="">
                             </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's Last Name" for="iLastName">Last
-                            Name<span data-ng-show="vm.showPersonalInputDiv"
-                                      class='require'>*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <input type="text"
-                                       name="nLastName"
-                                       id="iLastName"
-                                       data-ng-model="vm.entry.personal.lastName"
-                                       placeholder="Last Name"
-                                       maxlength="75"
-                                       class="form-control " required>
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.personal.lastName}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's Mother Name" for="iMotherName">Mother's
-                            Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
-                        <div data-ng-show="vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <input type="text"
-                                       name="nMotherName"
-                                       id="iMotherName"
-                                       data-ng-model="vm.entry.personal.motherName"
-                                       placeholder="Mother's Name"
-                                       maxlength="100"
-                                       class="form-control" required>
-                            </div>
-                        </div>
-                        <div data-ng-show="!vm.showPersonalInputDiv">
-                            <div class="col-md-9">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.personal.motherName}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's Gender" for="iGender">Gender<span
+                        <label class="col-md-3 control-label" title="Employee's Gender"
+                               for="iGender">Gender<span
                                 data-ng-show="vm.showPersonalInputDiv"
                                 class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
@@ -122,8 +175,10 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Employee's Blood Group" for="iBloodGroup">Blood
-                            Group<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
+                        <label class="col-md-3 control-label" title="Employee's Blood Group"
+                               for="iBloodGroup">Blood
+                            Group<span data-ng-show="vm.showPersonalInputDiv"
+                                       class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
                             <div class="col-md-9">
                                 <select name="nBloodGroup"
@@ -138,7 +193,8 @@
                         <div data-ng-show="!vm.showPersonalInputDiv">
                             <div class="col-md-9">
                                 <div class="underlineBox">
-                                    <label class="control-label"> {{vm.entry.personal.bloodGroup.name}} </label>
+                                    <label class="control-label">
+                                        {{vm.entry.personal.bloodGroup.name}} </label>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +344,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-md-3 control-label" title="Employee's Date of Birth" for="iBirthDate">Date
-                            Of Birth<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
+                            Of Birth<span data-ng-show="vm.showPersonalInputDiv"
+                                          class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
                             <div class="col-md-9">
                                 <input type="text"
@@ -397,7 +454,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-md-3 control-label" title="Employee's Contact No."
-                               for="iMobile">Mobile<span data-ng-show="vm.showPersonalInputDiv" class='require'>*</span></label>
+                               for="iMobile">Mobile<span data-ng-show="vm.showPersonalInputDiv"
+                                                         class='require'>*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
                             <div class="col-md-9">
                                 <input type="text"
@@ -504,7 +562,7 @@
                                         data-ng-model="vm.entry.personal.preAddressCountry"
                                         data-ng-options="country.name for country in vm.countries track by country.id"
                                         data-ng-change="vm.changePresentAddressFields()"
-                                        class="form-control">
+                                        class="form-control" required>
                                     <option value="">Select Country</option>
                                 </select>
                             </div>
@@ -529,7 +587,7 @@
                                         data-ng-options="division.name for division in vm.divisions track by division.id"
                                         data-ng-change="vm.changePresentAddressDistrict()"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" requried="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -556,7 +614,7 @@
                                         data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
                                         data-ng-change="vm.changePresentAddressThana()"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -580,7 +638,7 @@
                                         data-ng-model="vm.entry.personal.preAddressThana"
                                         data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
                                         data-ng-disabled="vm.disablePresentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.presentRequired">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>
@@ -624,7 +682,8 @@
                     <div class="col-md-12">
                         <label class="col-md-2"><b>Permanent Address:</b></label>
                         <div class="col-md-6" data-ng-show="vm.showPersonalInputDiv">
-                            <input type="checkbox" data-ng-click="vm.sameAsPresentAddress()"/>Same as present
+                            <input type="checkbox" data-ng-model="vm.checkBoxValue"
+                                   data-ng-click="vm.sameAsPresentAddress()"/>Same as present
                             address
                         </div>
                     </div>
@@ -712,7 +771,7 @@
                                         data-ng-options="division.name for division in vm.divisions track by division.id"
                                         data-ng-change="vm.changePermanentAddressDistrict()"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select Division</option>
                                 </select>
                             </div>
@@ -739,7 +798,7 @@
                                         data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
                                         data-ng-change="vm.changePermanentAddressThana()"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" requried="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -763,7 +822,7 @@
                                         data-ng-model="vm.entry.personal.perAddressThana"
                                         data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
                                         data-ng-disabled="vm.disablePermanentAddressDropdown"
-                                        class="form-control" required="vm.required">
+                                        class="form-control" required="vm.permanentRequired">
                                     <option value="">Select Thana</option>
                                 </select>
                             </div>
@@ -834,8 +893,9 @@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-3 control-label" title="Relation With The Employee"
-                               for="iEmergencyContactRelation">Relation<span data-ng-show="vm.showPersonalInputDiv"
-                                                                             class="require">*</span></label>
+                               for="iEmergencyContactRelation">Relation<span
+                                data-ng-show="vm.showPersonalInputDiv"
+                                class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
                             <div class="col-md-9">
                                 <select name="nEmergencyContactRelation"
@@ -858,7 +918,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-md-3 control-label" title="Emergency Contact Person's Phone/Mobile No."
+                        <label class="col-md-3 control-label"
+                               title="Emergency Contact Person's Phone/Mobile No."
                                for="iEmergencyContactPhone">Phone<span data-ng-show="vm.showPersonalInputDiv"
                                                                        class="require">*</span></label>
                         <div data-ng-show="vm.showPersonalInputDiv">
@@ -933,4 +994,46 @@
 </form>
 
 
+<div id="modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="imageupload panel panel-default">
+                    <div class="panel-heading clearfix">
+                        <h3 class="panel-title pull-left">Upload Image</h3>
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default active">File</button>
+                        </div>
+                    </div>
+                    <div class="file-tab panel-body">
+                        <label class="btn btn-default btn-file">
+                            <span>Browse</span>
+                            <input type="file" name="image-file" id="userPhoto">
+                        </label>
+                        <button type="button" class="btn btn-default">Remove</button>
+                    </div>
+                </div>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="vm.uploadImage()">
+                    Upload
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var $imageupload = $('.imageupload');
+    $imageupload.imageupload({
+        allowedFormats: ['jpg', 'png'],
+        maxWidth: 200,
+        maxHeight: 250,
+        maxFileSizeKb: 150,
+        height: 180,
+        width: 150
+    });
+</script>

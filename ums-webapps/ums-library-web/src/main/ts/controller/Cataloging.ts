@@ -141,12 +141,13 @@ module ums {
             $scope.record.language = Utils.NUMBER_SELECT;
             $scope.record.materialType = 1;
             this.setMaterialTypeName(1);
-            $scope.record.status = Utils.NUMBER_SELECT;
+            $scope.record.status = 0;
             $scope.record.bindingType = Utils.NUMBER_SELECT;
             $scope.record.acqType = Utils.NUMBER_SELECT;
 
             $scope.item = <IItem> {};
             $scope.supplier = <ISupplier> {};
+            $scope.item.status = 2;
             $scope.bulk = {
                 config: {}
             };

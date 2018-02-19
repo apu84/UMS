@@ -33,6 +33,15 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
   }
 
   @Override
+  public int saveServiceInformationDetail(MutableServiceInformationDetail pMutableServiceInformationDetail) {
+    String query = INSERT_ONE;
+    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutableServiceInformationDetail
+        .getEmploymentPeriod().getId(), pMutableServiceInformationDetail.getStartDate(),
+        pMutableServiceInformationDetail.getEndDate(), pMutableServiceInformationDetail.getComment(),
+        pMutableServiceInformationDetail.getServiceId());
+  }
+
+  @Override
   public int saveServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
     String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getServiceInformationDetailInsertParams(pMutableServiceInformationDetail)).length;

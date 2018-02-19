@@ -15,6 +15,12 @@ public class TabulationEntryModel {
   private double mGpa;
   private double mCgpa;
   private String mRemarks;
+  private double mPresentCompletedCrHr;
+  private double mPresentCompletedGradePoints;
+  private double mPreviousSemesterCompletedCrHr;
+  private double mPreviousSemesterCompletedGradePoints;
+  private double mCumulativeCrHr;
+  private double mCumulativeGradePoints;
 
   public Student getStudent() {
     return mStudent;
@@ -86,5 +92,53 @@ public class TabulationEntryModel {
 
   public void setRemarks(String pRemarks) {
     mRemarks = pRemarks;
+  }
+
+  public double getPresentCompletedCrHr() {
+    return mPresentCompletedCrHr;
+  }
+
+  public void setPresentCompletedCrHr(double pPresentCompletedCrHr) {
+    mPresentCompletedCrHr = pPresentCompletedCrHr;
+  }
+
+  public double getPresentCompletedGradePoints() {
+    return mPresentCompletedGradePoints;
+  }
+
+  public void setPresentCompletedGradePoints(double pPresentCompletedGradePoints) {
+    mPresentCompletedGradePoints = pPresentCompletedGradePoints;
+  }
+
+  public double getCumulativeCrHr() {
+    return mCumulativeCrHr;
+  }
+
+  public void setCumulativeCrHr(double pCumulativeCrHr) {
+    mCumulativeCrHr = pCumulativeCrHr;
+  }
+
+  public double getCumulativeGradePoints() {
+    return mCumulativeGradePoints;
+  }
+
+  public void setCumulativeGradePoints(double pCumulativeGradePoints) {
+    mCumulativeGradePoints = pCumulativeGradePoints;
+  }
+
+  public double getPreviousSemesterCompletedCrHr() {
+    return mPreviousSemesterCompletedCrHr;
+  }
+
+  public void setPreviousSemesterCompletedCrHr(double pPreviousSemesterCompletedCrHr) {
+    mPreviousSemesterCompletedCrHr = pPreviousSemesterCompletedCrHr;
+  }
+
+  public double getPreviousSemesterCompletedGradePoints() {
+    return mPreviousSemesterCompletedGradePoints;
+  }
+
+  public void setPreviousSemesterCompletedGradePoints(double pPreviousSemesterCompletedGradePoints) {
+    mPreviousSemesterCompletedGradePoints = pPreviousSemesterCompletedGradePoints;
   }
 }

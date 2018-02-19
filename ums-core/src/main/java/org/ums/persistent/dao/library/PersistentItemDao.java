@@ -22,6 +22,7 @@ import org.ums.persistent.model.library.PersistentSupplier;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -31,17 +32,17 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentItemDao extends ItemDaoDecorator {
   static String SELECT_ALL =
       "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, TO_CHAR(ACCESSION_DATE,'DD-MM-YYYY') ACCESSION_DATE, BARCODE,    PRICE, SUPPLIER, INTERNAL_NOTE,  STATUS, INSERTED_BY, INSERTED_ON, "
-          + "   LAST_UPDATED_BY, LAST_UPDATED_ON, LAST_MODIFIED FROM ITEMS ";
+          + "   LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED FROM ITEMS ";
 
   static String UPDATE_ONE =
-      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, LAST_UPDATED_BY=?, "
+      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?, LAST_UPDATED_BY=?, "
           + "   LAST_UPDATED_ON=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO ITEMS(ID, MFN, COPY_NUMBER, ACCESSION_NUMBER, ACCESSION_DATE, BARCODE, PRICE, SUPPLIER, INTERNAL_NOTE, "
-          + "   STATUS, INSERTED_BY, INSERTED_ON, LAST_UPDATED_BY, LAST_UPDATED_ON, LAST_MODIFIED)  " // 15
-                                                                                                      // Fields
-          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, "
+          + "   STATUS, INSERTED_BY, INSERTED_ON, LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED)  " // 15
+          // Fields
+          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
@@ -58,7 +59,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentItemDao.ItemRowMapper());
   }
 
-  public Item getByAccessionNumber(final Long pAccessionNumber) {
+  @Override
+  public Item getByAccessionNumber(final String pAccessionNumber) {
     String query = SELECT_ALL + " Where ACCESSION_NUMBER = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pAccessionNumber}, new PersistentItemDao.ItemRowMapper());
   }
@@ -72,8 +74,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
   public int update(final MutableItem pItem) {
     String query = UPDATE_ONE + "   Where ID= ? ";
     return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
-        pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus()
-            .getId(), "", "", pItem.getId());
+        pItem.getBarcode(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(),
+        pItem.getStatus().getId(), pItem.getCirculationStatus(), "", "", pItem.getId());
   }
 
   @Override
@@ -81,8 +83,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     pItem.setId(id);
     mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
-        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier() == null ? null : pItem
-            .getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus().getId(), "insert", "update");
+        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(),
+        pItem.getStatus().getId(), "insert", "update", 0);
 
     return id;
   }
@@ -90,34 +92,33 @@ public class PersistentItemDao extends ItemDaoDecorator {
   @Override
   public List<Long> create(final List<MutableItem> items) {
 
-    mJdbcTemplate.batchUpdate(INSERT_ONE, new BatchPreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps, int i) throws SQLException {
-        Item item = items.get(i);
-        Long id = mIdGenerator.getNumericId();
-        ps.setLong(1, id);
-        ps.setLong(2, item.getMfn());
-        ps.setInt(3, item.getCopyNumber());
-        ps.setString(4, item.getAccessionNumber());
-        ps.setString(5, item.getAccessionDate());
-        ps.setString(6, id.toString());
-        ps.setDouble(7, item.getPrice());
-        ps.setLong(8, item.getSupplier().getId());
-        ps.setString(9, item.getInternalNote());
-        ps.setInt(10, item.getStatus().getId());
-        ps.setString(11, "insert");
-        ps.setString(12, "update");
+    List<Long> longIds = new ArrayList<>();
+    for(MutableItem item : items) {
+      Long id = create(item);
+      longIds.add(id);
+    }
 
-      }
+    /*
+     * mJdbcTemplate.batchUpdate(INSERT_ONE, new BatchPreparedStatementSetter() {
+     * 
+     * @Override public void setValues(PreparedStatement ps, int i) throws SQLException { Item item
+     * = items.get(i); Long id = mIdGenerator.getNumericId(); ps.setLong(1, id); ps.setLong(2,
+     * item.getMfn()); ps.setInt(3, item.getCopyNumber()); ps.setString(4,
+     * item.getAccessionNumber()); ps.setString(5, item.getAccessionDate()); ps.setString(6,
+     * id.toString()); ps.setDouble(7, item.getPrice()); ps.setLong(8, item.getSupplier().getId());
+     * ps.setString(9, item.getInternalNote()); ps.setInt(10, item.getStatus().getId());
+     * ps.setString(11, "insert"); ps.setInt(12, 0); ps.setString(13, "update");
+     * 
+     * }
+     * 
+     * @Override public int getBatchSize() { return items.size(); }
+     * 
+     * });
+     * 
+     * return null;
+     */
 
-      @Override
-      public int getBatchSize() {
-        return items.size();
-      }
-
-    });
-
-    return null;
+    return longIds;
   }
 
   @Override
@@ -146,6 +147,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
       item.setInsertedOn(resultSet.getString("INSERTED_ON"));
       item.setLastUpdatedBy(resultSet.getString("LAST_UPDATED_BY"));
       item.setLastUpdatedOn(resultSet.getString("LAST_UPDATED_ON"));
+      item.setCirculationStatus(resultSet.getInt("CIRCULATION_STATUS"));
       item.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
       AtomicReference<Item> atomicReference = new AtomicReference<>(item);

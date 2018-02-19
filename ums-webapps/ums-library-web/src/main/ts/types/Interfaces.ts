@@ -4,6 +4,7 @@ module ums {
         id: string,
         viewOrder: number;
         role: number;
+        roleName: string;
         name: string;
         text: string;
         shortName: string;
@@ -86,6 +87,10 @@ module ums {
         noteJsonString: string;
         subjectJsonString: string;
         physicalDescriptionString: string;
+        totalItems: number;
+        totalAvailable: number;
+        totalCheckedOut: number;
+        totalOnHold: number;
     }
 
     export interface IItem {
@@ -100,6 +105,7 @@ module ums {
         supplier: ISupplier;
         status: number;
         statusName: string;
+        circulationStatus: number;
     }
 
     export interface ISupplier {
@@ -134,6 +140,51 @@ module ums {
     export interface IAdvancedSearchMap {
         key: string;
         value: string;
+    }
+
+    export interface ILibraryCirculation{
+        circulationId: string;
+        patronId: string;
+        mfn: string;
+        issueDate: string;
+        dueDate: string;
+        returnDate: string;
+        fineStatus: number;
+        fineStatusString: string;
+        title: string;
+        materialType: string;
+        checkBoxStatus: boolean;
+        itemCode: string;
+        totalItems: number;
+        totalAvailable: number;
+        totalCheckedOut: number;
+        totalOnHold: number;
+        overDueStatus: boolean;
+    }
+
+    export interface ICheckIn{
+        itemCode: string;
+        returnDate: string;
+        dueDate: string;
+        fineStatus: boolean;
+    }
+
+    export interface IFine{
+        id: string;
+        patronId: string;
+        circulationId: string;
+        amount: number;
+        fineCategory: number;
+        description: string;
+        fineAppliedDate: string;
+        fineAppliedBy: string;
+        fineForgivenBy: string;
+        finePaymentDate: string;
+        dueDate: string;
+        mfn: string;
+        status: number;
+        statusName: string;
+        checkBoxStatus: boolean;
     }
 
 }

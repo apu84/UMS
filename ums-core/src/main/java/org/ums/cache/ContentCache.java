@@ -22,7 +22,6 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
   @Override
   public List<R> getAll() {
-    System.out.println("----->>" + this.getClass().getCanonicalName());
     List<R> readOnlys = super.getAll();
     for(R readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
@@ -126,6 +125,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return CacheUtil.getCacheKey(getClassOfR(), pId);
   }
 
+  @SuppressWarnings("unchecked")
   private Class<R> getClassOfR() {
     ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
     return (Class<R>) superclass.getActualTypeArguments()[0];

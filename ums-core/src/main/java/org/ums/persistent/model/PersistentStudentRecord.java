@@ -42,6 +42,10 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private Program mProgram;
   private String mGradesheetRemarks;
   private String mTabulationSheetRemarks;
+  private Double mCompletedCrHr;
+  private Double mCompletedGradePoints;
+  private Double mTotalCompletedCrHr;
+  private Double mTotalCompletedGradePoints;
 
   public PersistentStudentRecord() {}
 
@@ -58,6 +62,10 @@ public class PersistentStudentRecord implements MutableStudentRecord {
     setLastModified(pPersistentStudentRecord.getLastModified());
     setGradesheetRemarks(pPersistentStudentRecord.getGradesheetRemarks());
     setTabulationSheetRemarks(pPersistentStudentRecord.getTabulationSheetRemarks());
+    setCompletedCrHr(pPersistentStudentRecord.getCompletedCrHr());
+    setCompletedGradePoints(pPersistentStudentRecord.getCompletedGradePoints());
+    setTotalCompletedCrHr(pPersistentStudentRecord.getTotalCompletedCrHr());
+    setTotalCompletedGradePoints(pPersistentStudentRecord.getTotalCompletedGradePoints());
   }
 
   @Override
@@ -238,5 +246,45 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   @Override
   public void setTabulationSheetRemarks(String pRemarks) {
     mTabulationSheetRemarks = pRemarks;
+  }
+
+  @Override
+  public Double getCompletedCrHr() {
+    return mCompletedCrHr;
+  }
+
+  @Override
+  public Double getCompletedGradePoints() {
+    return mCompletedGradePoints;
+  }
+
+  @Override
+  public void setCompletedCrHr(Double pCompletedCrHr) {
+    mCompletedCrHr = pCompletedCrHr;
+  }
+
+  @Override
+  public void setCompletedGradePoints(Double pCompletedGradePoints) {
+    mCompletedGradePoints = pCompletedGradePoints;
+  }
+
+  @Override
+  public Double getTotalCompletedCrHr() {
+    return mTotalCompletedCrHr;
+  }
+
+  @Override
+  public Double getTotalCompletedGradePoints() {
+    return mTotalCompletedGradePoints;
+  }
+
+  @Override
+  public void setTotalCompletedCrHr(Double pTotalCompletedCrHr) {
+    mTotalCompletedCrHr = pTotalCompletedCrHr;
+  }
+
+  @Override
+  public void setTotalCompletedGradePoints(Double pTotalCompletedGradePoints) {
+    mTotalCompletedGradePoints = pTotalCompletedGradePoints;
   }
 }

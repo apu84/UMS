@@ -24,7 +24,9 @@ public class MutableItemResource extends Resource {
   @Path(PATH_PARAM_OBJECT_ID)
   public Response updateItem(final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
-    return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
+    /* return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject); */
+
+    return mResourceHelper.updateItem(pJsonObject, mUriInfo);
   }
 
   @POST

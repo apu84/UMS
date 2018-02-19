@@ -20,4 +20,6 @@ public interface MutableCirculation extends Circulation, Editable<Long>, Mutable
   void setReturnDate(final Date pReturnDate);
 
   void setFineStatus(final int pFineStatus);
+
+  void setAccessionNumber(final String pAccessionNumber);
 }

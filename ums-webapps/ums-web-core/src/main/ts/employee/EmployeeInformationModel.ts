@@ -159,4 +159,11 @@ module ums{
         name: string;
         shortName: string;
     }
+
+    export interface IDepartment {
+        id: string;
+        shortName: string;
+        longName: string;
+        type: string;
+    }
 }

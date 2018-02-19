@@ -1,12 +1,14 @@
 package org.ums.resource.leavemanagement;
 
-import com.google.common.collect.Lists;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.expression.common.LiteralExpression;
+import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -87,8 +89,13 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
-  @Qualifier("lmsChannel")
-  MessageChannel lmsChannel;// = applicationContext.getBean("lmsChannel", MessageChannel.class);
+  // @Qualifier("pubSubscribeChannel")
+  // PublishSubscribeChannel lmsChannel;// = applicationContext.getBean("pubSubscribeChannel",
+  // PublishSubscribeChannel.class);
+
+  @Autowired
+  @Lazy
+  private SessionFactory<FTPFile> ftpSessionFactory;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -147,7 +154,16 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     Files.move(pInputStream.toPath(), newFile.toPath());
 
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
-    lmsChannel.send(messageA);
+    FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
+    template.setRemoteDirectoryExpression(new LiteralExpression("files/lms"));
+    template.setUseTemporaryFileName(false);
+    template.execute(session -> {
+      session.mkdir("files/");
+      return session.mkdir("files/lms/");
+    });
+    template.append(messageA);
+    // lmsChannel.send(messageA);
+
 
     PersistentAttachment attachment = new PersistentAttachment();
     attachment.setApplicationType(ApplicationType.LEAVE);
@@ -177,7 +193,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
 
     // todo add more roles, currently mst_role table in db is not complete.
-    String message = "Leave Application from employee: " + employee.getEmployeeName() + " of department: "
+    String message = "Leave Application from employee: " + employee.getPersonalInformation().getFullName() + " of department: "
         + employee.getDepartment().getShortName() + " is waiting for your approval.";
     if (rolePermissionsStream.get(0).getUserId().equals(user.getId())
         || user.getPrimaryRole().getId() == RoleType.COE.getId()
@@ -305,13 +321,13 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     Employee employee =
         mEmployeeManager.get(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     if(employee.getEmploymentType().equals(EmployeeType.TEACHER.getId() + "")) {
-      if(employee.getGender().equals("M"))
+      if(employee.getPersonalInformation().getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.TEACHERS_LEAVE, Gender.FEMALE);
     }
     else {
-      if(employee.getGender().equals("M"))
+      if(employee.getPersonalInformation().getGender().equals("M"))
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.MALE);
       else
         lmsTypes = mLmsTypeManager.getLmsTypes(EmployeeLeaveType.COMMON_LEAVE, Gender.FEMALE);

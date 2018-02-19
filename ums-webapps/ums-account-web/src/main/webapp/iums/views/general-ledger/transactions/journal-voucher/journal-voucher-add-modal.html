@@ -1,0 +1,75 @@
+<div id="addVoucher" class="modal fade" role="dialog">
+    <div class="modal-dialog " >
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="m odal">&times;</button>
+                <h4 class="modal-title">Add Journal Voucher</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" >
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Serial No:</label>
+                        <div class="col-sm-6">
+                            <input type="text" ng-disabled="true" class="form-control" id="serialNo" ng-model="vm.journalVoucherOfAddModal.serialNo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
+                        <div class="col-sm-6">
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="vm.journalVoucherOfAddModal.account"
+                            >
+                                <ui-select-match placeholder="Select Account">{{vm.journalVoucherOfAddModal.account.accountName}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="g in vm.accounts|filter:$select.search">
+                                    <small ng-bind-html="g.accountName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="amountInSpecific">Amount In Specific:</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="amountInSpecific" ng-model="vm.journalVoucherOfAddModal.amount">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="amountInBase">Amount In Base:</label>
+                        <div class="col-sm-6">
+                            <input type="number" ng-disabled="true" class="form-control" id="amountInBase"
+                                   value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.journalVoucherOfAddModal.amount}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="debitOrCredit">Dr/Cr:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control required" name="debitOrCredit" data-ng-model="vm.journalVoucherOfAddModal.balanceType" >
+                                <option value="Dr">Dr</option>
+                                <option value="Cr">Cr</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="narration">Narration:</label>
+                        <div class="col-sm-6">
+                            <input type="text"  class="form-control" id="narration" ng-model="vm.journalVoucherOfAddModal.narration">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="vm.addDataToJournalTable()" data-dismiss="modal">
+                    Add
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+
+</div>

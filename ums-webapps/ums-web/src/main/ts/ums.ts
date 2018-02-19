@@ -215,6 +215,25 @@ module ums {
             }]
           }
         })
+        .state('modifySeatPlan', {
+          url: "/modifySeatPlan",
+          controller: 'ModifySeatPlan',
+          controllerAs:'vm',
+          templateUrl: 'views/semester/modify-seat-plan.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('teachersRoutine', {
           url: "/teachersRoutine",
           controller: 'TeachersRoutine',
@@ -722,6 +741,8 @@ module ums {
                 files: [
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-datetimepicker-malot/css/bootstrap-datetimepicker.min.css',
+                  'vendors/bootstrap-datetimepicker-malot/js/bootstrap-datetimepicker.min.js',
                   'vendors/select2/select2-madmin.css',
                   'vendors/bootstrap-select/bootstrap-select.min.css',
                   'vendors/multi-select/css/multi-select-madmin.css',
@@ -806,9 +827,10 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/course-material/course-material.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+            loadMyCtrl: ['$$animateJs','$ocLazyLoad', function ($$animateJs,$ocLazyLoad) {
               return $ocLazyLoad.load(['FileManagerApp'])
             }]
+
           }
         })
         .state('studentCourseMaterial', {
@@ -1110,11 +1132,19 @@ module ums {
                             'vendors/bootstrap-switch/css/bootstrap-switch.css',
                             'vendors/bootstrap-datepicker/css/datepicker.css',
                             'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
                         ]
                     });
                 }]
             }
+        })
+        .state('twoFATest', {
+          url: "/twoFATest",
+          controller: 'TwoFATestController',
+          controllerAs: 'vm',
+          templateUrl: 'views/twofatest/two.fa.test.html'
         })
 
   });

@@ -39,6 +39,14 @@ public interface StudentRecord extends Serializable, Identifier<Long>, LastModif
 
   String getTabulationSheetRemarks();
 
+  Double getCompletedCrHr();
+
+  Double getCompletedGradePoints();
+
+  Double getTotalCompletedCrHr();
+
+  Double getTotalCompletedGradePoints();
+
   enum Type {
     REGULAR("R"),
     READMISSION_REQUIRED("RR"),

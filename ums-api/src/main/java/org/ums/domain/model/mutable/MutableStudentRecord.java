@@ -36,4 +36,12 @@ public interface MutableStudentRecord extends StudentRecord, Editable<Long>, Mut
   void setGradesheetRemarks(final String pRemarks);
 
   void setTabulationSheetRemarks(final String pRemarks);
+
+  void setCompletedCrHr(final Double pCompletedCrHr);
+
+  void setCompletedGradePoints(final Double pCompletedGradePoints);
+
+  void setTotalCompletedCrHr(final Double pTotalCompletedCrHr);
+
+  void setTotalCompletedGradePoints(final Double pTotalCompletedGradePoints);
 }

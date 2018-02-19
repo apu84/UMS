@@ -25,8 +25,8 @@ public class PersistentUserDao extends UserDaoDecorator {
       "UPDATE USERS SET PR_TOKEN=NULL, TOKEN_GENERATED_ON=NULL, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL =
-      "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD, LAST_MODIFIED) VALUES "
-          + "(?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+      "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD, CREATED_ON, CREATED_BY, EMPLOYEE_ID, LAST_MODIFIED) VALUES "
+          + "(?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String UPDATE_PASSWORD_RESET_TOKEN =
       "Update USERS Set PR_TOKEN=?, TOKEN_GENERATED_ON=SYSDATE, LAST_MODIFIED = " + getLastModifiedSql()
           + " Where User_Id=? ";
@@ -89,10 +89,13 @@ public class PersistentUserDao extends UserDaoDecorator {
 
   @Override
   public String create(MutableUser pMutable) {
+    String defaultPassword =
+        "$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==";
     mJdbcTemplate.update(INSERT_ALL, pMutable.getId(),
-        pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
-        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
+        pMutable.getPassword() == null ? defaultPassword : String.valueOf(pMutable.getPassword()), pMutable
+            .getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()), pMutable
+            .getCreatedOn(), pMutable.getCreatedBy(), pMutable.getEmployeeId() == null ? "" : pMutable.getEmployeeId());
     return pMutable.getId();
   }
 

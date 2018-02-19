@@ -3,29 +3,29 @@ package org.ums.util;
 import java.text.SimpleDateFormat;
 
 public interface Constants {
-  public static final String DATE_FORMAT = "dd/MM/yyyy";
-  public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-  public static final SimpleDateFormat DF_dd_Mon_YY_Time = new SimpleDateFormat("dd MMM, yy HH:mm:ss");
-  public static final String SERVICE_CONTEXT = "services-context.xml";
+  String DATE_FORMAT = "dd/MM/yyyy";
+  SimpleDateFormat DATE_TIME_24H_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+  SimpleDateFormat DATE_TIME_12H_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
+  SimpleDateFormat DF_dd_Mon_YY_Time = new SimpleDateFormat("dd MMM, yy HH:mm:ss");
+  String SERVICE_CONTEXT = "services-context.xml";
 
-  public static final long ONE_MINUTE_IN_MILLIS = 60000;// millisecs
-  public static final long PASSWORD_RESET_TOKEN_LIFE = 60 * 24 * 1;// Minutes*Hours*Days
-  public static final long PASSWORD_RESET_TOKEN_EMAIL_LIFE = 5;// minutes
+  long ONE_MINUTE_IN_MILLIS = 60000;// millisecs
+  long PASSWORD_RESET_TOKEN_LIFE = 60 * 24 * 1;// Minutes*Hours*Days
+  long PASSWORD_RESET_TOKEN_EMAIL_LIFE = 5;// minutes
 
-  public static final String[] validRolesForGradeAccess = {"preparer", "scrutinizer", "courseteacher", "head", "coe",
-      "vc"};
+  String[] validRolesForGradeAccess = {"preparer", "scrutinizer", "courseteacher", "head", "coe", "vc"};
   // Grade Roles
-  public static final String GRADE_PREPARER = "preparer";
-  public static final String GRADE_SCRUTINIZER = "scrutinizer";
-  public static final String COURSE_TEACHER = "courseteacher";
-  public static final String HEAD = "head";
-  public static final String COE = "coe";
-  public static final String VC = "vc";
+  String GRADE_PREPARER = "preparer";
+  String GRADE_SCRUTINIZER = "scrutinizer";
+  String COURSE_TEACHER = "courseteacher";
+  String HEAD = "head";
+  String COE = "coe";
+  String VC = "vc";
 
   // Application Labels
-  public static final String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
-  public static final String University_InitCap = "Ahsanullah University of Science and Technology";
-  public static final String University_Address = "141-142 Love Road, Tejgaon Industrial Area, Dhaka-1208";
-  public static final String ONE_BANK = "One Bank Ltd.";
+  String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
+  String University_InitCap = "Ahsanullah University of Science and Technology";
+  String University_Address = "141-142 Love Road, Tejgaon Industrial Area, Dhaka-1208";
+  String ONE_BANK = "One Bank Ltd.";
 
 }

@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.library.MutableCirculation;
 import org.ums.manager.CacheManager;
 import org.ums.manager.library.CirculationManager;
 
+import java.util.List;
+
 public class CirculationCache extends ContentCache<Circulation, MutableCirculation, Long, CirculationManager> implements
     CirculationManager {
 
@@ -20,4 +22,48 @@ public class CirculationCache extends ContentCache<Circulation, MutableCirculati
     return mCacheManager;
   }
 
+  @Override
+  public int saveCheckout(MutableCirculation pMutableCirculation) {
+    return getManager().saveCheckout(pMutableCirculation);
+  }
+
+  @Override
+  public List<Circulation> getCirculation(String pPatronId) {
+    return getManager().getCirculation(pPatronId);
+  }
+
+  @Override
+  public int updateCirculation(MutableCirculation pMutable) {
+    return getManager().updateCirculation(pMutable);
+  }
+
+  @Override
+  public int batchUpdateCirculation(List<MutableCirculation> pMutable) {
+    return getManager().batchUpdateCirculation(pMutable);
+  }
+
+  @Override
+  public List<Circulation> getAllCirculation(String pPatronId) {
+    return getManager().getAllCirculation(pPatronId);
+  }
+
+  @Override
+  public List<Circulation> getCirculationCheckedInItems(String pPatronId) {
+    return getManager().getCirculationCheckedInItems(pPatronId);
+  }
+
+  @Override
+  public Circulation getSingleCirculation(String pAccessionNumber) {
+    return getManager().getSingleCirculation(pAccessionNumber);
+  }
+
+  @Override
+  public int updateCirculationStatus(MutableCirculation pMutableCirculation) {
+    return getManager().updateCirculationStatus(pMutableCirculation);
+  }
+
+  @Override
+  public Circulation getCirculation(Long pId) {
+    return getManager().getCirculation(pId);
+  }
 }

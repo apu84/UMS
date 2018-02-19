@@ -25,6 +25,7 @@ public class PersistentFine implements MutableFine {
   private Date mFinePaymentDate;
   private String mDescription;
   private double mAmount;
+  private String mPatronId;
   private String mLastModified;
 
   public PersistentFine() {}
@@ -39,6 +40,7 @@ public class PersistentFine implements MutableFine {
     mFinePaymentDate = persistentFine.getFinePaymentDate();
     mDescription = persistentFine.getDescription();
     mAmount = persistentFine.getAmount();
+    mPatronId = persistentFine.getPatronId();
     mLastModified = persistentFine.getLastModified();
   }
 
@@ -123,6 +125,11 @@ public class PersistentFine implements MutableFine {
   }
 
   @Override
+  public void setPatronId(String pPatronId) {
+    mPatronId = pPatronId;
+  }
+
+  @Override
   public Long getCirculationId() {
     return mCheckInId;
   }
@@ -160,5 +167,10 @@ public class PersistentFine implements MutableFine {
   @Override
   public double getAmount() {
     return mAmount;
+  }
+
+  @Override
+  public String getPatronId() {
+    return mPatronId;
   }
 }

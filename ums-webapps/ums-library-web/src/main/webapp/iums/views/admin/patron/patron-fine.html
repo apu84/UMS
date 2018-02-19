@@ -1,27 +1,26 @@
-<div class="row">
-    <br />
-</div>
+<!--
 <div class="row">
     <div class="col-md-12">
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">All Fines</p>
         <table class="table table-bordered">
             <thead style="background-color: whitesmoke">
             <tr>
                 <th>Due Date</th>
-                <th>Title</th>
-                <th>Material Type</th>
-                <th>Barcode</th>
-                <th>Fines</th>
-                <th>Check In</th>
+                <th>MFN</th>
+                <th>Amount</th>
+                <th>status</th>
+                <th>Payment Date</th>
+                <th>Forgive Fine</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
-                <td><input type="checkbox"></td>
+            <tr data-ng-repeat="fine in vm.fines">
+                <td>{{fine.dueDate}}</td>
+                <td>{{fine.mfn}}</td>
+                <td>{{fine.amount}}</td>
+                <td>{{fine.statusName}}</td>
+                <td>{{fine.paymentDate}}</td>
+                <td><span data-ng-if="fine.status==1"><input data-ng-model="fine.checkBoxStatus" type="checkbox"></span></td>
             </tr>
             </tbody>
         </table>
@@ -30,7 +29,27 @@
 
 <div class="row">
     <div class="col-md-12">
-        <button>Check In Selected Rows</button>
-        <button ng-click="vm.checkAll()">Check In All</button>
+        <button type="button" data-ng-click="vm.forgiveFines()">Forgive Fine</button>
+    </div>
+</div>-->
+
+<div class="row">
+    <br /><br />
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div align="center">
+            <p style="font-size: xx-large"><b>Under Construction</b></p>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div align="center">
+            <p style="font-size: large; color: red;"><b>*Content will be available soon.*</b></p>
+        </div>
     </div>
 </div>

@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
-import org.ums.employee.academic.AcademicInformation;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
 import org.ums.manager.common.*;
+import org.ums.mapper.Mapper;
+import org.ums.mapper.MapperDao;
+import org.ums.mapper.MapperEntry;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.*;
 import org.ums.services.NotificationGenerator;
@@ -24,6 +26,7 @@ import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
+import org.ums.twofa.*;
 import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
@@ -32,6 +35,9 @@ import org.ums.usermanagement.role.RolePermissionResolver;
 import org.ums.usermanagement.user.PersistentUserDao;
 import org.ums.usermanagement.user.UserCache;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.usermanagement.userView.PersistentUserViewDao;
+import org.ums.usermanagement.userView.UserViewCache;
+import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
 @Configuration
@@ -53,6 +59,16 @@ public class CoreContext {
   @Lazy
   MongoTemplate mMongoOperations;
 
+  @Autowired
+  @Qualifier("dummyEmail")
+  String emailSender;
+
+  /*
+   * @Bean(name = "ftpSessionFactory") public SessionFactory<FTPFile> ftpSessionFactory() {
+   * DefaultFtpSessionFactory sf = new DefaultFtpSessionFactory(); sf.setHost("localhost");
+   * sf.setUsername("iums"); sf.setPassword("austig100"); return new
+   * CachingSessionFactory<FTPFile>(sf); }
+   */
   @Bean
   @Lazy
   EmployeeManager employeeManager() {
@@ -62,6 +78,20 @@ public class CoreContext {
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(employeeTransaction);
     return employeeCache;
+  }
+
+  @Bean
+  CompanyManager companyManager() {
+    CompanyCache companyCache = new CompanyCache(mCacheFactory.getCacheManager());
+    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return companyCache;
+  }
+
+  @Bean
+  CompanyBranchManager companyBranchManager() {
+    CompanyBranchCache companyBranchCache = new CompanyBranchCache(mCacheFactory.getCacheManager());
+    companyBranchCache.setManager(new PersistentCompanyBranchDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return companyBranchCache;
   }
 
   @Bean
@@ -314,7 +344,34 @@ public class CoreContext {
   }
 
   @Bean
+  UserViewManager userViewManager() {
+    UserViewCache userViewCache = new UserViewCache(mCacheFactory.getCacheManager());
+    userViewCache.setManager(new PersistentUserViewDao(mTemplateFactory.getJdbcTemplate()));
+    return userViewCache;
+  }
+
+  @Bean
   PermissionResolver permissionResolver() {
     return new WildcardPermissionResolver();
+  }
+
+  @Bean
+  Mapper<String, MapperEntry> mapper() {
+    return new MapperDao<String, MapperEntry>(mUMSConfiguration, "twofadata", "twofa");
+  }
+
+  @Bean
+  TwoFATokenManager twoFATokenManager() {
+    return new TwoFATokenDao(mTemplateFactory.getJdbcTemplate(), mUMSConfiguration, mIdGenerator);
+  }
+
+  @Bean
+  TwoFATokenEmailSender twoFATokenEmailSender() {
+    return new TwoFATokenEmailSender();
+  }
+
+  @Bean
+  TwoFATokenGenerator twoFATokenGenerator() {
+    return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager());
   }
 }

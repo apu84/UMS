@@ -20,14 +20,18 @@ import com.google.common.collect.Lists;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, GRADESHEET_REMARKS, TABULATIONSHEET_REMARKS, ID FROM STUDENT_RECORD ";
+      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, "
+          + "GRADESHEET_REMARKS, TABULATIONSHEET_REMARKS, COMPLETED_CRHR, COMPLETED_GRADE_POINTS, "
+          + "TOTAL_COMPLETED_CRHR, TOTAL_COMPLETED_GRADE_POINTS, ID FROM STUDENT_RECORD ";
   String INSERT_ALL =
-      "INSERT INTO STUDENT_RECORD(ID, STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
+      "INSERT INTO STUDENT_RECORD_CURR(ID, STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
           + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, " + "YEAR = ?,"
+  String UPDATE_ALL = "UPDATE STUDENT_RECORD_CURR SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, " + "YEAR = ?,"
       + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?," + "RESULT = ?," + "LAST_MODIFIED = "
-      + getLastModifiedSql() + ", GRADESHEET_REMARKS = ?, TABULATIONSHEET_REMARKS = ? ";
-  String DELETE_ALL = "DELETE FROM STUDENT_RECORD ";
+      + getLastModifiedSql()
+      + ", GRADESHEET_REMARKS = ?, TABULATIONSHEET_REMARKS = ?, COMPLETED_CRHR = ?, COMPLETED_GRADE_POINTS = ?,"
+      + "TOTAL_COMPLETED_CRHR = ?, TOTAL_COMPLETED_GRADE_POINTS = ? ";
+  String DELETE_ALL = "DELETE FROM STUDENT_RECORD_CURR ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -142,7 +146,9 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       params.add(new Object[] {studentRecord.getStudentId(), studentRecord.getSemester().getId(),
           studentRecord.getYear(), studentRecord.getAcademicSemester(), studentRecord.getCGPA(),
           studentRecord.getGPA(), studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),
-          studentRecord.getGradesheetRemarks(), studentRecord.getTabulationSheetRemarks(), studentRecord.getId()});
+          studentRecord.getGradesheetRemarks(), studentRecord.getTabulationSheetRemarks(),
+          studentRecord.getCompletedCrHr(), studentRecord.getCompletedGradePoints(),
+          studentRecord.getTotalCompletedCrHr(), studentRecord.getTotalCompletedGradePoints(), studentRecord.getId()});
     }
 
     return params;
@@ -151,10 +157,11 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableStudentRecord> pStudentRecords) {
     List<Object[]> params = new ArrayList<>();
     for(StudentRecord studentRecord : pStudentRecords) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), studentRecord.getStudent().getId(),
-          studentRecord.getSemester().getId(), studentRecord.getProgram().getId(), studentRecord.getYear(),
-          studentRecord.getAcademicSemester(), studentRecord.getType().getValue(),
-          studentRecord.getStatus().getValue(),});
+      params
+          .add(new Object[] {mIdGenerator.getNumericId(), studentRecord.getStudent().getId(),
+              studentRecord.getSemester().getId(), studentRecord.getProgram().getId(), studentRecord.getYear(),
+              studentRecord.getAcademicSemester(), studentRecord.getType().getValue(),
+              studentRecord.getStatus().getValue()});
     }
 
     return params;
@@ -177,6 +184,10 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       studentRecord.setProgramId(rs.getInt("PROGRAM_ID"));
       studentRecord.setGradesheetRemarks(rs.getString("GRADESHEET_REMARKS"));
       studentRecord.setTabulationSheetRemarks(rs.getString("TABULATIONSHEET_REMARKS"));
+      studentRecord.setCompletedCrHr(rs.getDouble("COMPLETED_CRHR"));
+      studentRecord.setCompletedGradePoints(rs.getDouble("COMPLETED_GRADE_POINTS"));
+      studentRecord.setTotalCompletedCrHr(rs.getDouble("TOTAL_COMPLETED_CRHR"));
+      studentRecord.setTotalCompletedGradePoints(rs.getDouble("TOTAL_COMPLETED_GRADE_POINTS"));
       AtomicReference<StudentRecord> atomicReference = new AtomicReference<>(studentRecord);
       return atomicReference.get();
     }

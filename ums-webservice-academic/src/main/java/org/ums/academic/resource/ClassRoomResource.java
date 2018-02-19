@@ -26,6 +26,12 @@ public class ClassRoomResource extends MutableClassRoomResource {
   }
 
   @GET
+  @Path("/seat-plan/all")
+  public JsonObject getAllForSeatPlan() {
+    return mResourceHelper.getAllForSeatPlan(mUriInfo);
+  }
+
+  @GET
   @Path("/roomNo/{room-no}")
   public JsonObject getByRoomNo(final @Context Request pRequest, final @PathParam("room-no") String roomNo) {
     return mResourceHelper.getByRoomNo(roomNo, mUriInfo);

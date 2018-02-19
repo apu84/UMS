@@ -74,6 +74,50 @@ module ums{
 
           return defer.promise;
       }
+
+      public save(json: any): ng.IPromise<any> {
+          let defer = this.$q.defer();
+          this.httpClient.post("academic/employee/", json, 'application/json')
+              .success(() => {
+                  defer.resolve("Success");
+              })
+              .error((data) => {
+                  console.log(data);
+                  defer.reject();
+              });
+          return defer.promise;
+      }
+
+
+      public getNewEmployeeId(pDept: string, pEmployeeType: number):ng.IPromise<any>{
+          var defer = this.$q.defer();
+          var employees:any={};
+          this.httpClient.get("academic/employee/newId/deptId/" + pDept + "/employeeType/" + pEmployeeType,'application/json',
+              (json:any,etag:string)=>{
+                  defer.resolve(json.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+                  this.notify.error("Error");
+              });
+
+          return defer.promise;
+      }
+
+      public checkDuplicate(pShortName: string):ng.IPromise<any>{
+          var defer = this.$q.defer();
+          var employees:any={};
+          this.httpClient.get("academic/employee/validate/" + pShortName,'application/json',
+              (result:boolean,etag:string)=>{
+                  defer.resolve(result);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+                  this.notify.error("Error");
+              });
+
+          return defer.promise;
+      }
   }
 
   UMS.service("employeeService",EmployeeService);

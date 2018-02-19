@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.json.Json;
@@ -14,14 +15,29 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.employee.personal.MutablePersonalInformation;
+import org.ums.employee.personal.PersistentPersonalInformation;
+import org.ums.employee.personal.PersonalInformation;
+import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.employee.service.*;
+import org.ums.enums.common.EmploymentPeriod;
+import org.ums.enums.common.EmploymentType;
+import org.ums.formatter.DateFormat;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.DesignationManager;
+import org.ums.manager.EmploymentTypeManager;
 import org.ums.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.usermanagement.user.MutableUser;
+import org.ums.usermanagement.user.PersistentUser;
 import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.EmployeeManager;
@@ -46,12 +62,54 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   EmployeeRepository mEmployeeRepository;
 
+  @Autowired
+  PersonalInformationManager mPersonalInformationManager;
+
+  @Autowired
+  DateFormat mDateFormat;
+
+  @Autowired
+  ServiceInformationManager mServiceInformationManager;
+
+  @Autowired
+  ServiceInformationDetailManager mServiceInformationDetailManager;
+
+  @Autowired
+  DepartmentManager mDepartmentManager;
+
+  @Autowired
+  DesignationManager mDesignationManager;
+
+  @Autowired
+  EmploymentTypeManager mEmploymentTypeManager;
+
   @Override
+  @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableEmployee, pJsonObject, localCache);
+    getBuilder().build(mutableEmployee, pJsonObject.getJsonObject("entries"), localCache);
     mutableEmployee.create();
+
+    MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+    preparePersonalInformation(mutablePersonalInformation, pJsonObject.getJsonObject("entries"));
+    mPersonalInformationManager.create(mutablePersonalInformation);
+
+    MutableServiceInformation mutableServiceInformation = new PersistentServiceInformation();
+    MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();
+    prepareServiceInformation(mutableServiceInformation, mutableServiceInformationDetail,
+        pJsonObject.getJsonObject("entries"));
+    Long serviceId = mServiceInformationManager.saveServiceInformation(mutableServiceInformation);
+    mutableServiceInformationDetail.setServiceId(serviceId);
+    mServiceInformationDetailManager.saveServiceInformationDetail(mutableServiceInformationDetail);
+
+    if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
+        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
+      MutableUser mutableUser = new PersistentUser();
+      prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
+      mUserManager.create(mutableUser);
+    }
+
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(EmployeeResource.class).path(EmployeeResource.class, "get")
             .build(mutableEmployee.getId());
@@ -85,6 +143,25 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     employees = getContentManager().getEmployees(pDepartmentId);
 
     return convertToJson(employees, pUriInfo);
+  }
+
+  public JsonObject getCurrentMaxEmployeeId(final String pDepartmentId, final int pEmployeeType) {
+    String currentMax = "";
+    String newId = "";
+    try {
+      currentMax = mEmployeeManager.getLastEmployeeId(pDepartmentId, pEmployeeType);
+      newId = "0" + String.valueOf(Integer.parseInt(currentMax) + 1);
+    } catch(Exception e) {
+      newId = pDepartmentId + pEmployeeType + "001";
+    }
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    object.add("entries", newId);
+    return object.build();
+  }
+
+  public boolean validateShortName(final String pShortName) {
+    return mEmployeeManager.validateShortName(pShortName);
   }
 
   public JsonObject getByDesignation(final String designationId, final Request pRequest, final UriInfo pUriInfo) {
@@ -151,6 +228,82 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
+    pMutablePersonalInformation.setId(pJsonObject.getString("id"));
+    pMutablePersonalInformation.setFirstName(pJsonObject.getString("firstName"));
+    pMutablePersonalInformation.setLastName(pJsonObject.getString("lastName"));
+    pMutablePersonalInformation.setFatherName(" ");
+    pMutablePersonalInformation.setMotherName(" ");
+    pMutablePersonalInformation.setGender(" ");
+    pMutablePersonalInformation.setDateOfBirth(mDateFormat.parse("1/1/1960"));
+    pMutablePersonalInformation.setNationalityId(0);
+    pMutablePersonalInformation.setReligionId(0);
+    pMutablePersonalInformation.setMaritalStatusId(0);
+    pMutablePersonalInformation.setSpouseName(" ");
+    pMutablePersonalInformation.setNidNo(" ");
+    pMutablePersonalInformation.setBloodGroupId(0);
+    pMutablePersonalInformation.setSpouseNidNo(" ");
+    pMutablePersonalInformation.setWebsite(" ");
+    pMutablePersonalInformation.setOrganizationalEmail(" ");
+    pMutablePersonalInformation.setPersonalEmail(pJsonObject.getString("email"));
+    pMutablePersonalInformation.setMobileNumber(" ");
+    pMutablePersonalInformation.setPhoneNumber(" ");
+    pMutablePersonalInformation.setPresentAddressLine1(" ");
+    pMutablePersonalInformation.setPresentAddressLine2(" ");
+    pMutablePersonalInformation.setPresentAddressCountryId(18);
+    pMutablePersonalInformation.setPresentAddressDivision(null);
+    pMutablePersonalInformation.setPresentAddressDistrict(null);
+    pMutablePersonalInformation.setPresentAddressThana(null);
+    pMutablePersonalInformation.setPresentAddressPostCode(" ");
+
+    pMutablePersonalInformation.setPermanentAddressLine1(" ");
+    pMutablePersonalInformation.setPermanentAddressLine2(" ");
+    pMutablePersonalInformation.setPermanentAddressCountryId(18);
+    pMutablePersonalInformation.setPermanentAddressDivision(null);
+    pMutablePersonalInformation.setPermanentAddressDistrict(null);
+    pMutablePersonalInformation.setPermanentAddressThana(null);
+    pMutablePersonalInformation.setPermanentAddressPostCode(" ");
+
+    pMutablePersonalInformation.setEmergencyContactName(" ");
+    pMutablePersonalInformation.setEmergencyContactRelationId(0);
+    pMutablePersonalInformation.setEmergencyContactPhone(" ");
+    pMutablePersonalInformation.setEmergencyContactAddress(" ");
+  }
+
+  private void prepareUserInformation(MutableUser pMutableUser, JsonObject pJsonObject) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+
+    pMutableUser.setId(pJsonObject.getString("shortName"));
+    pMutableUser.setEmployeeId(pJsonObject.getString("id"));
+    pMutableUser.setPrimaryRoleId(pJsonObject.getJsonObject("role").getInt("id"));
+    // pMutableUser.setPassword('A');
+    pMutableUser.setActive(true);
+    pMutableUser.setPassword(null);
+    pMutableUser.setCreatedOn(new Date());
+    pMutableUser.setCreatedBy(user.getId());
+  }
+
+  private void prepareServiceInformation(MutableServiceInformation pMutableServiceInformation,
+      MutableServiceInformationDetail pMutableServiceInformationDetail, JsonObject pJsonObject) {
+    pMutableServiceInformation.setEmployeeId(pJsonObject.getString("id"));
+    pMutableServiceInformation.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString(
+        "id")));
+    pMutableServiceInformation.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt(
+        "id")));
+    pMutableServiceInformation.setEmployment(mEmploymentTypeManager.get(pJsonObject.getJsonObject("employmentType")
+        .getInt("id")));
+    pMutableServiceInformation.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
+    pMutableServiceInformation.setResignDate(null);
+
+    pMutableServiceInformationDetail
+        .setEmploymentPeriod(pJsonObject.getJsonObject("employmentType").getInt("id") == EmploymentType.REGULAR.getId() ? EmploymentPeriod.CONTRACTUAL
+            : EmploymentPeriod.CONTRACT);
+    pMutableServiceInformationDetail.setStartDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
+    pMutableServiceInformationDetail.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));
+    pMutableServiceInformationDetail.setComment(" ");
   }
 
   @Override

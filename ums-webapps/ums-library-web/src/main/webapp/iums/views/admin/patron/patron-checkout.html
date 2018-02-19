@@ -34,24 +34,23 @@
                 <div class="col-md-12">
                     <label for="barCode" class="control-label">Enter Item Code or Bar Code</label>
                     <input id="barCode"
-                           data-ng-model="vm.itemCode"
+                           data-ng-model="vm.circulation.itemCode"
                            type="text"
+                           ng-blur="vm.fetchRecord()"
                            class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label for="dueDate" class="control-label">Specify Due Date</label>
                     <input id="dueDate"
                            type="text"
-                           data-ng-model="vm.itemDueDate"
-                           data-provide="datepicker"
-                           data-date-format="dd/mm/yyyy"
+                           data-ng-model="vm.circulation.dueDate"
                            placeholder="DD/MM/YYYY"
                            autocomplete="off"
-                           class="form-control">
+                           class="datetimepicker-default form-control">
                 </div>
                 <div class="col-md-12"><br/></div>
                 <div class="col-md-4">
-                    <button type="submit" data-ng-click="vm.checkoutSubmit()">Submit</button>
+                    <button type="submit" data-ng-disabled="!vm.showBookInformation" data-ng-click="vm.checkoutSubmit()">Submit</button>
                 </div>
 
             </form>
@@ -59,6 +58,36 @@
     </div>
 
     <div class="col-md-6">
+        <div data-ng-show="vm.showBookInformation">
+            <fieldset>
+                <legend>Book Information</legend>
+                <div class="row">
+                    <div class="col-md-4"><b>Accession:</b></div>
+                    <div class="col-md-8">{{vm.item.accessionNumber}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><b>Title:</b></div>
+                    <div class="col-md-8">{{vm.record.title}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><b>Type:</b></div>
+                    <div class="col-md-8">{{vm.record.materialTypeName}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><b>Call No:</b></div>
+                    <div class="col-md-8">{{vm.record.callNo}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><b>Copies Available:</b></div>
+                    <div class="col-md-8"><b>{{vm.record.totalAvailable}}</b> out of <b>{{vm.record.totalItems}}</b></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><b>Status:</b></div>
+                    <div class="col-md-8"><span data-ng-show="vm.item.circulationStatus==0" style="color: green"><b>Available</b></span>
+                        <span data-ng-show="vm.item.circulationStatus==1" style="color: red"><b>Checked Out</b></span></div>
+                </div>
+            </fieldset>
+        </div>
     </div>
 </div>
 
@@ -66,35 +95,46 @@
 <div class="row">
     <div class="col-md-12">
         <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-out Items</p>
-        <table class="table table-bordered">
-            <thead style="background-color: whitesmoke">
-            <tr>
-                <th>Due Date</th>
-                <th>Title</th>
-                <th>Material Type</th>
-                <th>Barcode</th>
-                <th>Fines</th>
-                <th>Check In</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
-                <td><input type="checkbox"></td>
-            </tr>
-            </tbody>
-        </table>
+        <div data-ng-show="!vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.getCheckedOutItems()">Show Checked-out Items</button>
+        </div>
+        <div data-ng-show="vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.showCheckedOutItems=false">Hide Checked-out Items</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <br/>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-12">
-        <button>Check In Selected Rows</button>
-        <button ng-click="vm.checkAll()">Check In All</button>
+        <div data-ng-show="vm.showCheckedOutItems">
+            <table class="table table-bordered">
+                <thead style="background-color: whitesmoke">
+                <tr>
+                    <th>Due Date</th>
+                    <th>Title</th>
+                    <th>Material Type</th>
+                    <th>MFN</th>
+                    <th>Barcode</th>
+                    <!--<th>Fines</th>-->
+                    <!--<th>Check In</th>-->
+                </tr>
+                </thead>
+                <tbody data-ng-repeat="item in vm.circulations">
+                <tr>
+                    <td>{{item.dueDate}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.materialType}}</td>
+                    <td>{{item.mfn}}</td>
+                    <td>{{item.itemCode}}</td>
+                   <!-- <td>{{item.fineStatusString}}</td>-->
+                    <!--<td><input type="checkbox" data-ng-model="item.checkBoxStatus"></td>-->
+                </tr>
+                </tbody>
+            </table>
+            <!--<button type="button" data-ng-click="vm.checkInSelectedItem()">Check In</button>-->
+        </div>
     </div>
 </div>
 

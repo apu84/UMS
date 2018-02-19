@@ -39,4 +39,6 @@ public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, 
   void setLastUpdatedBy(String pUpdatedBy);
 
   void setLastUpdatedOn(String pLastUpdatedOn);
+
+  void setCirculationStatus(int pCirculationStatus);
 }

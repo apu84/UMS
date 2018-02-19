@@ -35,6 +35,19 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/ChangePassword.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/Logout.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeProfile.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PagerService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/CRUDDetectionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/LeftMenu.ts'/>
@@ -79,14 +92,22 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 
 /// <reference path='data.ts'/>
 
 /// <reference path='controller/Cataloging.ts'/>
 /// <reference path='controller/RecordSearch.ts'/>
 /// <reference path='controller/PatronHome.ts'/>
-/// <reference path='controller/Circulation.ts'/>
+/// <reference path='controller/CirculationHome.ts'/>
+/// <reference path='controller/CirculationCheckOut.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
+/// <reference path='controller/PatronCheckOut.ts'/>
+/// <reference path='controller/Fine.ts'/>
+/// <reference path='controller/CirculationHistory.ts'/>
+/// <reference path='controller/PatronDetails.ts'/>
+/// <reference path='controller/CheckIn.ts'/>
+/// <reference path='controller/PatronSearch.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/service/BaseService.ts'/>
@@ -99,5 +120,6 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CirculationService.ts'/>
 

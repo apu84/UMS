@@ -14,7 +14,7 @@ module ums {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
             'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService'];
+            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
 
         private entry: {
             personal: IPersonalInformationModel,
@@ -42,12 +42,14 @@ module ums {
         private showExperienceInputDiv: boolean = false;
         private showAdditionalInputDiv: boolean = false;
         private showServiceInputDiv: boolean = false;
-        private required: boolean = false;
+        private presentRequired: boolean = false;
+        private permanentRequired: boolean = false;
         private disablePresentAddressDropdown: boolean = false;
         private disablePermanentAddressDropdown: boolean = false;
         private showServiceEditButton: boolean = false;
         private showAcademicEditButton: boolean = false;
         private showExperienceEditButton: boolean = false;
+        private checkBoxValue: boolean;
         private data: any;
         private itemPerPage: number = 2;
         private currentPage: number = 1;
@@ -95,6 +97,8 @@ module ums {
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
+        private isRegistrar: boolean;
+        private test: boolean = true;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -112,7 +116,8 @@ module ums {
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private FileUpload: FileUpload) {
 
             $scope.submitPersonalForm = this.submitPersonalForm.bind(this);
             $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
@@ -154,6 +159,12 @@ module ums {
 
         private initialization() {
             this.userService.fetchCurrentUserInfo().then((user: any) => {
+                if(user.roleId == 82 || user.roleId == 81){
+                    this.isRegistrar = true;
+                }
+                else{
+                    this.isRegistrar = false;
+                }
                 if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
                     this.userId = user.employeeId;
                     this.showServiceEditButton = false;
@@ -601,25 +612,36 @@ module ums {
         }
 
         private sameAsPresentAddress() {
-            this.entry.personal.perAddressLine1 = this.entry.personal.preAddressLine1;
-            this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
-            this.entry.personal.perAddressCountry = this.entry.personal.preAddressCountry;
-            this.entry.personal.perAddressDivision = this.entry.personal.preAddressDivision;
-            this.entry.personal.perAddressDistrict = this.entry.personal.preAddressDistrict;
-            this.entry.personal.perAddressThana = this.entry.personal.preAddressThana;
-            this.entry.personal.perAddressPostCode = this.entry.personal.preAddressPostCode;
-            this.changePermanentAddressFields();
+            if(this.checkBoxValue) {
+                this.entry.personal.perAddressLine1 = this.entry.personal.preAddressLine1;
+                this.entry.personal.perAddressLine2 = this.entry.personal.preAddressLine2;
+                this.entry.personal.perAddressCountry = this.entry.personal.preAddressCountry;
+                this.entry.personal.perAddressDivision = this.entry.personal.preAddressDivision;
+                this.entry.personal.perAddressDistrict = this.entry.personal.preAddressDistrict;
+                this.entry.personal.perAddressThana = this.entry.personal.preAddressThana;
+                this.entry.personal.perAddressPostCode = this.entry.personal.preAddressPostCode;
+                this.changePermanentAddressFields();
+            }
+            else{
+                this.entry.personal.perAddressLine1 = "";
+                this.entry.personal.perAddressLine2 = "";
+                this.entry.personal.perAddressCountry = null;
+                this.entry.personal.perAddressDivision = null;
+                this.entry.personal.perAddressDistrict = null;
+                this.entry.personal.perAddressThana = null;
+                this.entry.personal.perAddressPostCode = "";
+            }
         }
 
         private changePresentAddressFields() {
             if (this.entry.personal.preAddressCountry.name === "Bangladesh") {
-                this.required = true;
+                this.presentRequired = true;
                 this.disablePresentAddressDropdown = false;
                 this.changePresentAddressDistrict();
                 this.changePresentAddressThana();
             }
             else {
-                this.required = false;
+                this.presentRequired = false;
                 this.disablePresentAddressDropdown = true;
                 this.entry.personal.preAddressDivision = null;
                 this.entry.personal.preAddressDistrict = null;
@@ -630,11 +652,13 @@ module ums {
 
         private changePermanentAddressFields() {
             if (this.entry.personal.perAddressCountry.name === "Bangladesh") {
+                this.permanentRequired = true;
                 this.disablePermanentAddressDropdown = false;
                 this.changePermanentAddressDistrict();
                 this.changePermanentAddressThana();
             }
             else {
+                this.permanentRequired = false;
                 this.disablePermanentAddressDropdown = true;
                 this.entry.personal.perAddressDivision = null;
                 this.entry.personal.perAddressDistrict = null;
@@ -929,6 +953,31 @@ module ums {
                     }
                 }
             }
+        }
+
+        private uploadImage() {
+            var id = this.userId;
+            var photoContent : any =$("#userPhoto").contents();
+            var image = photoContent.prevObject[0].files[0];
+            this.getFormData(image, id).then((formData) => {
+                this.FileUpload.uploadPhoto(formData).then(() =>{
+                    this.test = false;
+                    var that = this;
+                    setTimeout(()=> {
+                        that.test = true;
+                    }, 500)
+                });
+            });
+        }
+
+        private getFormData(file, id): ng.IPromise<any> {
+            var formData = new FormData();
+            formData.append('files', file);
+            formData.append('name', file.name);
+            formData.append("id", id);
+            var defer = this.$q.defer();
+            defer.resolve(formData);
+            return defer.promise;
         }
     }
 

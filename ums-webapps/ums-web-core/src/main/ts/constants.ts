@@ -540,15 +540,15 @@ module ums {
                     {id: '05', name: 'Department of Electrical and Electronic Engineering'},
                     {id: '06', name: 'Department of Textile Engineering'},
                     {id: '07', name: 'Department of Mechanical & Production Engineering'},
-                    {id: 'AS', name: 'Department of Arts and Sciences'},
-                    {id: '80', name: 'Office of the Registrar'},
-                    {id: '81', name: 'Office of the Controller of Examinations'},
-                    {id: '82', name: 'Office of the Treasurer'},
-                    {id: '83', name: 'Engineering Office'},
-                    {id: '84', name: "Office of the Advisor of Student's Welfare"},
-                    {id: '85', name: 'Proctor Office'},
-                    {id: '99', name: 'Office of VC'},
-                    {id: '9999', name: 'All Departments'}
+                    {id: '15', name: 'Department of Arts and Sciences'},
+                    {id: '70', name: 'Office of VC'},
+                    {id: '71', name: 'Office of the Treasurer'},
+                    {id: '72', name: 'Office of the Registrar'},
+                    {id: '73', name: 'Office of the Controller of Examinations'},
+                    {id: '74', name: 'Proctor Office'},
+                    {id: '75', name: 'Engineering Office'},
+                    {id: '76', name: "Office of the Advisor of Student's Welfare"},
+                    {id: '77', name: "Kazi Fazlur Rahman Library"}
                 ],
                 certificateStatus: [
                     {id: 1, name: 'Applied'},
@@ -674,16 +674,13 @@ module ums {
                 ],
                 recordStatus: [
                     {id: 101101, name: 'Select Status'},
-
                     {id: 0, name: 'Entry Mode'},
                     {id: 2, name: 'Available'}
                 ],
                 itemStatus: [
                     {id: 101101, name: 'Select a Status'},
-                    {id: 0, name: 'Entry Mode'},
                     {id: 2, name: 'Available'},
-                    {id: 3, name: 'On Hold'},
-                    {id: 4, name: 'Rented'}
+                    {id: 3, name: 'On Hold'}
                 ],
                 materialTypes: [
                     {id: 101101, name: 'Select Material Type'},

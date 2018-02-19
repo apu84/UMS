@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="close" style="opacity: 1;margin-top: 0px;" ng-click="ok()">&times;
+    </button>
+    <h4 id="modal-otp-label" class="modal-title">OTP Verification</h4>
+</div>
+
+<div class="modal-body" style="padding-bottom:4px;">
+    <div id="twoFaInputDiv">
+        One Time Password(OTP) will expire within: <font color="#E41B17" style="font-size:11px;font-weight:bold;"><span id="countDownDiv"></span> Sec </font>
+        <br/><br/>
+        <div class="progress">
+            <div role="progressbar" aria-valuetransitiongoal="100" class="progress-bar progress-bar-success"></div>
+        </div>
+        <div class="form-group">
+            <div class="input-group input-group-md">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <div class="icon-addon addon-md">
+                    <input type="text" id="tokenInput"
+                           maxlength="6" placeholder="One Time Password" class="form-control" id="otp" data-ng-model="tokenRef.twofatoken" autofocus/>
+                </div>
+                <span class="input-group-btn">
+            <button class="btn btn-green btn-square" type="button" ng-click="testTwoFa()">Verify</button>
+            </span>
+            </div>
+            <div></div>
+
+            <div class="alert alert-warning alert-dismissable" style="padding:5px; margin-top:10px;">
+                One-Time Password (OTP) sent to your email address <b>{{tokenRef.emailAddress}}</b>
+            </div>
+
+        </div>
+    </div>
+    <div id="twoFaExpireDiv" style="display:none;">
+        <font color='#E41B17'>Your One Time Password(OTP) has been expired!</font>
+        <br/><br/>
+        <a role="button" class="btn btn-green btn-square" ng-click="resend()">
+            <i class="fa fa-repeat"></i> Resend One Time Password(OTP)</a>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn btn-default" ng-click="ok()">Close</button>
+</div>
+
+
+<script type="text/javascript">
+    $('.progress-bar').progressbar({
+        display_text: 'fill'
+    });
+
+    setTimeout(function () {
+        document.getElementById("tokenInput").focus();
+    }, 500);
+</script>

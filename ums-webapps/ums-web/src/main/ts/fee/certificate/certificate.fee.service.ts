@@ -58,6 +58,23 @@ module ums {
           });
       return defer.promise;
     }
+
+      public getTestimonial(studentId: string): void {
+          let contentType: string = UmsUtil.getFileContentType("pdf");
+          let fileName = "Testimonial";
+
+          this.httpClient.get("certificate-fee/testimonial/" + studentId, 'application/pdf', (data: any, etag: string) => {
+
+                  // var file = new Blob([data], {type: 'application/pdf'});
+                  // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+                  // this.$window.open(fileURL);
+
+                  UmsUtil.writeFileContent(data, contentType, fileName);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              }, 'arraybuffer');
+      }
   }
 
   UMS.service('CertificateFeeService', CertificateFeeService);

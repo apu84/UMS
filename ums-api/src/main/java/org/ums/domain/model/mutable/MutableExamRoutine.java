@@ -33,4 +33,6 @@ public interface MutableExamRoutine extends ExamRoutine, Editable<Integer>, Muta
   void setCourseSemester(final Integer pCourseSemester);
 
   void setExamGroup(final Integer pExamGroup);
+
+  void setAppDeadLineStr(final String pApplicationDeadLine);
 }

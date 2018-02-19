@@ -7,9 +7,6 @@ import org.ums.solr.indexer.resolver.EntityResolver;
 import org.ums.solr.repository.converter.SimpleConverter;
 import org.ums.solr.repository.document.meeting.AgendaResolutionDocument;
 import org.ums.solr.repository.meeting.AgendaResolutionRepository;
-import sun.java2d.pipe.SpanShapeRenderer;
-
-import java.util.List;
 
 public class AgendaResolutionResolver implements EntityResolver {
 

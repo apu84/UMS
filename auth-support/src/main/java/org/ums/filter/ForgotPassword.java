@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 import org.ums.message.MessageResource;
-import org.ums.services.PasswordResetEmailService;
+import org.ums.services.email.PasswordResetEmailService;
 import org.ums.token.TokenBuilder;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.User;

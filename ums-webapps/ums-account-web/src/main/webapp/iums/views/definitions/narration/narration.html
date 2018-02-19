@@ -1,0 +1,50 @@
+<style>
+
+</style>
+
+<div class="row" style="padding-left: 3px">
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">Narrations</div>
+                <div class="col-md-6" align="right" ng-include="'views/definitions/narration/menu.html'"></div>
+            </div>
+        </div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="form-grouop">
+                        <label class="col-md-4">Voucher TYpe</label>
+                        <div class="col-md-6">
+                            <select class="form-control"
+                                    name="voucherType"
+                                    ng-options="n.voucher.name for n in vm.narrations"
+                                    data-ng-model="vm.narration"
+                                    data-ng-change="vm.narrationChanged()"
+                            ></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well">
+                        <div class="form-group">
+                        <textarea style="overflow: hidden" rows="6" class="form-control" data-ng-disabled="vm.disable"
+                                  data-ng-model="vm.narration.narration">
+                       </textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

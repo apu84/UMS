@@ -3,6 +3,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked out & Checked in History</p>
         <table class="table table-bordered">
             <thead style="background-color: whitesmoke">
             <tr>
@@ -10,16 +11,18 @@
                 <th>Title</th>
                 <th>Material Type</th>
                 <th>Barcode</th>
-                <th>Fines</th>
+                <th>Return Date</th>
+                <<!--th>Fines</th>-->
             </tr>
             </thead>
-            <tbody>
+            <tbody data-ng-repeat="item in vm.allCirculation">
             <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
+                <td>{{item.dueDate}}</td>
+                <td>{{item.title}}</td>
+                <td>{{item.materialType}}</td>
+                <td>{{item.mfn}}</td>
+                <td>{{item.returnDate}}</td>
+           <!--     <td>{{item.fineStatusString}}</td>-->
             </tr>
             </tbody>
         </table>

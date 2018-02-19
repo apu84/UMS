@@ -19,12 +19,18 @@
   <context:annotation-config/>
   <context:spring-configured/>
 
-  <bean id="dataSource" name="dataSource" primary="true"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${jdbc.driverClass}"/>
-    <property name="url" value="${jdbc.url}"/>
+  <bean id="dataSource" name="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+    <property name="driverClass" value="${jdbc.driverClass}"/>
+    <property name="jdbcUrl" value="${jdbc.url}"/>
     <property name="username" value="${jdbc.username}"/>
     <property name="password" value="${jdbc.password}"/>
+    <property name="idleConnectionTestPeriodInMinutes" value="60"/>
+    <property name="idleMaxAgeInMinutes" value="240"/>
+    <property name="maxConnectionsPerPartition" value="30"/>
+    <property name="minConnectionsPerPartition" value="10"/>
+    <property name="partitionCount" value="3"/>
+    <property name="acquireIncrement" value="5"/>
+    <property name="statementsCacheSize" value="100"/>
   </bean>
 
   <bean id="libraryDataSource" name="libraryDataSource"
@@ -35,6 +41,13 @@
     <property name="password" value="${lms.jdbc.password}"/>
   </bean>
 
+  <bean id="accountsDataSource" name="accountsDataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClass}"/>
+    <property name="url" value="${accounts.jdbc.url}"/>
+    <property name="username" value="${accounts.jdbc.username}"/>
+    <property name="password" value="${accounts.jdbc.password} "/>
+  </bean>
 
   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
@@ -56,8 +69,26 @@
     <property name="dataSource" ref="libraryDataSource"/>
   </bean>
 
+  <bean id="accountsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="accountsDataSource"/>
+  </bean>
+
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+        id="accountsNamedParameterJdbcTemplate">
+    <constructor-arg ref="accountsDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="lmsNamedParameterJdbcTemplate">
+    <constructor-arg ref="libraryDataSource"/>
+  </bean>
+  <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="namedParameterJdbcTemplate">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
   <bean id="jdbcTemplateFactory" class="org.ums.statistics.JdbcTemplateFactoryImpl">
     <property name="loggingEnabled" value="${enable.query.logging}"/>
+  </bean>
+  <bean id="namedParameterJdbcTemplateFactory" class="org.ums.statistics.NamedParameterJdbcTemplateFactoryImpl">
+    <property name="loggingEnabled" value="false"/>
   </bean>
 
   <bean id="idGenerator" class="org.ums.generator.IdGenerator"/>
@@ -78,6 +109,7 @@
         <value>classpath:caching.properties</value>
         <value>classpath:mongodb.properties</value>
         <value>classpath:notification.properties</value>
+        <value>classpath:ftp.properties</value>
         <value>${UMS_CONFIG}/jdbc.properties</value>
         <value>${UMS_CONFIG}/ftp.properties</value>
         <value>${UMS_CONFIG}/common.properties</value>
@@ -117,6 +149,4 @@
 
   <import resource="caching.xml"/>
   <import resource="application-context.xml"/>
-  <import resource="integration-context.xml"/>
-
 </beans>

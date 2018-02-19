@@ -4,47 +4,64 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
 
 
-  <integration:gateway
-      service-interface="org.ums.integration.FileWriterGateway"
-      default-request-channel="ftpChannel"></integration:gateway>
+    <integration:gateway
+            service-interface="org.ums.integration.FileWriterGateway"
+            default-request-channel="ftpChannel"></integration:gateway>
 
-  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
-    <property name="host" value="${ftp.localhost}"/>
-    <!--<property name="port" value="${ftp.port}"/>-->
-    <property name="username" value="${ftp.username}"/>
-    <property name="password" value="${ftp.password}"/>
-  </bean>
+    <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpSessionFactory">
+        <property name="host" value="${ftp.localhost}"/>
+        <!--<property name="port" value="${ftp.port}"/>-->
+        <property name="username" value="${ftp.username}"/>
+        <property name="password" value="${ftp.password}"/>
+    </bean>
 
-  <ftp:outbound-gateway
-      session-factory="ftpClientFactory"
-      request-channel="ftpChannel"
-      command="get"
-      command-options="-stream"
-      expression="payload"
-      reply-channel="outputChannel">
+    <ftp:outbound-gateway
+            session-factory="ftpSessionFactory"
+            request-channel="ftpChannel"
+            command="get"
+            command-options="-stream"
+            expression="payload"
+            reply-channel="outputChannel">
 
-  </ftp:outbound-gateway>
+    </ftp:outbound-gateway>
 
-  <integration:channel id="lmsChannel"/>
-  <ftp:outbound-channel-adapter
-      session-factory="ftpClientFactory"
-      channel="lmsChannel"
-      remote-directory="files/lms"
-      auto-create-directory="true"
-      remote-filename-generator-expression="headers['fileName']">
+    <integration:channel id="lmsChannel"/>
+    <integration:channel id="photoUploadChannel"/>
 
-  </ftp:outbound-channel-adapter>
+    <!--<integration:recipient-list-router id="router" input-channel="publishSubscribeChannel">
+      <integration:recipient channel="lmsChannel"></integration:recipient>
+      <integration:recipient channel="photoUploadChannel"></integration:recipient>
+    </integration:recipient-list-router>-->
+
+    <!--  <integration:publish-subscribe-channel id="publishSubscribeChannel">
+      </integration:publish-subscribe-channel>
+      <ftp:outbound-channel-adapter
+          session-factory="ftpClientFactory"
+          channel="lmsChannel"
+          remote-directory="files/lms"
+          auto-create-directory="true"
+          remote-filename-generator-expression="headers['fileName']">
+
+      </ftp:outbound-channel-adapter>-->
 
 
-  <bean id="mp" class="org.ums.integration.MessageManipulator"/>
-  <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
+    <ftp:outbound-channel-adapter
+            session-factory="ftpSessionFactory"
+            channel="photoUploadChannel"
+            remote-directory="files/user-photo"
+            auto-create-directory="true"
+            remote-filename-generator-expression="headers['fileName']">
 
-  <integration:channel id="outputChannel"/>
-  <integration:channel id="inputChannel"/>
-  <integration:channel id="ftpChannel"/>
+    </ftp:outbound-channel-adapter>
+
+    <bean id="mp" class="org.ums.integration.MessageManipulator"/>
+    <integration:service-activator ref="mp" method="print" input-channel="outputChannel"/>
+
+    <integration:channel id="outputChannel"/>
+    <integration:channel id="inputChannel"/>
+    <integration:channel id="ftpChannel"/>
 
 </beans>

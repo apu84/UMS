@@ -10,5 +10,4 @@ import org.ums.manager.library.RecordManager;
  */
 public class RecordDaoDecorator extends ContentDaoDecorator<Record, MutableRecord, Long, RecordManager> implements
     RecordManager {
-
 }

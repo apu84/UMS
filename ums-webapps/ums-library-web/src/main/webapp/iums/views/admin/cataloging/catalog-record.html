@@ -244,11 +244,11 @@
             </div>
         </div>
 
-        <div class="form-group" data-ng-if="record.materialTypeName=='Books'">
+        <div class="form-group" data-ng-if="record.materialTypeName=='Books' || record.materialTypeName=='Journals'">
             <label class="col-md-1 control-label">Year</label>
             <div class="col-md-3">
                 <input type="text"
-                       class="form-control dottedInput required"
+                       class="form-control dottedInput"
                        data-ng-model="record.callDate" data-ng-change="makeCallNo()" id="callDate" name="callDate" ng-readonly="data.readOnlyMode"/>
             </div>
 

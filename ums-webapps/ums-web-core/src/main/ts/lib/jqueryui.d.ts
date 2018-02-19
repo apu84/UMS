@@ -507,6 +507,7 @@ declare module JQueryUI {
 
     interface ProgressbarOptions {
         disabled?: boolean;
+        display_text?:string;
         value?: number;
     }
 
@@ -1538,6 +1539,7 @@ interface JQuery {
      * Initialize a datepicker with the given options
      */
     datepicker(options: JQueryUI.DatepickerOptions): JQuery;
+    datetimepicker(options: any): JQuery;
 
     dialog(): JQuery;
     dialog(methodName: 'close'): JQuery;

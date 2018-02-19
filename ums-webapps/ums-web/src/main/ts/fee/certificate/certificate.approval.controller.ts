@@ -68,6 +68,8 @@ module ums {
     private getLoggedUserAndFeeCategories() {
       this.userService.fetchCurrentUserInfo().then((user: LoggedInUser) => {
         this.user = user;
+        console.log("UUUssserrr");
+        console.log(user);
         this.getFeeCategories();
       });
     }
@@ -116,8 +118,9 @@ module ums {
     }
 
     private checkWhetherTheStatusShouldBeDisabledOrEnabled(certificateStatus: CertificateStatus): void {
-      console.log("********");
+      console.log("********HHH*****");
       var enable: boolean = false;
+      console.log(this.user.departmentId);
       for (var i = 0; i < this.certificateOptionsCopy.length; i++) {
 
 

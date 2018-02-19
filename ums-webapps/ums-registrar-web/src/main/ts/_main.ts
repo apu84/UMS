@@ -50,6 +50,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/MaritalStatusService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/RoleService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -116,6 +117,10 @@
 /// <reference path='service/MeetingService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
+
+/// <reference path='controller/NewEmployee.ts'/>
+
+/// <reference path='directive/ElementValidation.ts' />
 
 
 

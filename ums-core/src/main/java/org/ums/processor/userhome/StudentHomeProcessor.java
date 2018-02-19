@@ -15,10 +15,11 @@ public class StudentHomeProcessor extends AbstractUserHomeProcessor {
   private StudentManager mStudentManager;
 
   @Override
-  public List<Map<String, String>> process(Subject pCurrentSubject) {
+  public UserInfo process(Subject pCurrentSubject) {
     String studentId = pCurrentSubject.getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
 
+    UserInfo userInfo = new UserInfo();
     List<Map<String, String>> profileContent = new ArrayList<>();
 
     Map<String, String> studentName = new HashMap<>();
@@ -46,7 +47,9 @@ public class StudentHomeProcessor extends AbstractUserHomeProcessor {
     enrollmentStatus.put("value", student.getEnrollmentType().toString());
     profileContent.add(enrollmentStatus);
 
-    return profileContent;
+    userInfo.setInfoList(profileContent);
+    userInfo.setUserRole("student");
+    return userInfo;
   }
 
   public String getAllowedRole() {

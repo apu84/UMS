@@ -146,6 +146,7 @@
 /// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
 /// <reference path='controller/semester/ExamSeatPlan.ts'/>
+/// <reference path='controller/semester/ModifySeatPlan.ts'/>
 /// <reference path='controller/semester/AppCCI.ts'/>
 /// <reference path='controller/semester/SeatPlanReports.ts'/>
 
@@ -200,8 +201,11 @@
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
 
-
 /// <reference path='dummy/DummyController.ts'/>
+/// <reference path='twofatest/two.fa.test.controller.ts'/>
+/// <reference path='twofa/two.fa.interceptor.ts'/>
+/// <reference path='twofa/two.fa.service.ts'/>
+/// <reference path='twofa/two.fa.modal.controller.ts'/>
 
 /// <reference path='certificate/certificate.service.ts'/>
 

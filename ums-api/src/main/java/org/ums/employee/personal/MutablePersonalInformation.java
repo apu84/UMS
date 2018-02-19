@@ -109,4 +109,6 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
   void setEmergencyContactPhone(final String pEmergencyContactPhone);
 
   void setEmergencyContactAddress(final String pEmergencyContactAddress);
+
+  void setFullName(final String pFullName);
 }

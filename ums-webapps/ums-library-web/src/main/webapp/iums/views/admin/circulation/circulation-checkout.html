@@ -6,7 +6,7 @@
     }
 
     .tabbable.tabs-left > ul {
-        margin-top: 40px;
+        /*margin-top: 40px;*/
     }
 
     .tabbable.tabs-left .tab-content {
@@ -31,9 +31,9 @@
         border: 1px solid #b9d8d9;
         margin: .5em 0;
         padding: .4em .3em;
-        margin-right: -1px;
+        /*margin-right: -1px;*/
         color: #004d99;
-        padding-left: 15px;
+        /*padding-left: 15px;*/
     }
 
     div#menu li a:hover {
@@ -50,8 +50,8 @@
     }
 
     .tabbable.tabs-left .nav-tabs > li {
-        width: 175px;
-        margin-top: 12px;
+        width: 220px;
+        /*margin-top: 4px;*/
     }
 
     div#menu li.active a:hover {
@@ -74,19 +74,34 @@
 
 <div class="tabbable tabs-left" id="menu">
     <ul class="nav nav-tabs">
-        <li><img src="https://image.flaticon.com/icons/svg/16/16480.svg" alt="User Image"
-                 style="width:120px;height:95px;">
-            <label><b>Name:</b> {{vm.user.userName}}</label>
-            <label><b>Category:</b> Student</label>
-            <label><b>Id:</b>{{vm.user.roleId}}</label>
+        <li><img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src=""
+                 img-id="vm.user.userId"
+                 data-profile-picture="">
         </li>
-        <li id="o1" ui-sref-active="active"><a ui-sref=".patronCheckOut">Check Out</a></li>
-        <li id="o2" ui-sref-active="active"><a ui-sref=".patronDetail">Details </a></li>
-        <li id="o3" ui-sref-active="active"><a ui-sref=".patronFines">Fines</a></li>
-        <li id="o4" ui-sref-active="active"><a ui-sref=".circulationHistory">Circulation History </a></li>
-        <!--<li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Purchase Suggestions </a></li>-->
+        <br />
+        <li>
+            <div class="row">
+                <div class="col-md-2"><b>Name: </b></div>
+                <div class="col-md-10">{{vm.user.userName}}</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2"><b>Id: </b></div>
+                <div class="col-md-10">{{vm.user.userId}}</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2"><b>Role: </b></div>
+                <div class="col-md-10">{{vm.user.category}}</div>
+            </div>
+        </li>
+        <li id="o1"><a data-ng-click="vm.changeStateToPatronCheckOut()" data-toggle="tab">Check Out</a></li>
+        <li id="o2"><a data-ng-click="vm.changeStateToPatronDetail()" data-toggle="tab">Details </a></li>
+        <li id="o3"><a data-ng-click="vm.changeStateToPatronFine()" data-toggle="tab">Fines</a></li>
+        <li id="o4"><a data-ng-click="vm.changeStateToCirculationHistory()" data-toggle="tab">Circulation History </a>
+        </li>
     </ul>
-    <div id="myTabContent2" class="tab-content" ui-view style="min-height: 400px;padding-left: 20px;">
+    <div id="myTabContent2" class="tab-content" ui-view style="padding-left: 10px;">
 
     </div>
 </div>

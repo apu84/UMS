@@ -161,9 +161,12 @@
                         <td align="center">{{marksSubmission.year}}-{{marksSubmission.semester}}</td>
                         <td align="center">{{marksSubmission.offeredTo}}</td>
                         <td>
-                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList">
-                                {{courseTeacher.teacher_name}},
+                            <span ng-repeat="courseTeacher in marksSubmission.courseTeacherList  | limitTo:4">
+                                {{courseTeacher.teacher_name}}   {{$last ? '' : ($index==marksSubmission.courseTeacherList.length-2) ? ' and ' : ', '}}
                             </span>
+                            <span  ng-if="marksSubmission.courseTeacherList.length > 4">...
+							<a data-toggle="tooltip" tooltip-trigger="none" data-placement="bottom" title="{{ marksSubmission.courseTeacherStr }}"><i class="fa fa-hand-o-down" aria-hidden="true"></i></a>
+							</span>
 
                         </td>
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
@@ -251,7 +254,7 @@
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>
+                        <td style="font-weight: bold;font-size: 14px;">
                             {{data.crhr}}<!--<a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a>-->
                         </td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
@@ -301,6 +304,10 @@
                                 <i class="fa fa-eraser" style="color: blue;" aria-hidden="true"></i>
                             </a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td  style="height: 30px;"><b>Current Status :</b></td>
+                        <td colspan="3" style="font-weight: bold;color: #E41B17;font-size: 14px;">{{data.status_name}}</td>
                     </tr>
                 </table>
                 <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->
@@ -765,7 +772,7 @@
                                 <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
-                                <th col="recheckAll" width="8%" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor!='coe')">
+                                <th col="recheckAll" width="8%" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
                                     Recheck&nbsp;&nbsp;
                                  <input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox" /></th>
                             </tr>
@@ -780,7 +787,7 @@
                                 <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
-                                <td id="td_recheck_{{response.studentId}}" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor!='coe')">
+                                <td id="td_recheck_{{response.studentId}}" style="text-align: center;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
                                     <input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/>
                                 </td>
                             </tr>
@@ -792,7 +799,7 @@
                         <div class="col-md-6">
                             <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                         </div>
-                        <div class="col-md-6" style="text-align: right;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor!='coe')">
+                        <div class="col-md-6" style="text-align: right;" data-ng-if="gradeSubmissionStatus ='7' && (currentActor=='coe')">
                             <modal  data-handler="modalSettings.recheckHandler" data-body="modalSettings.recheckBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rightButton(currentActor,'recheckAccepted')"></modal>
                             <a data-target="#{{modalSettings.recheckHandler}}" role="button" id="recheckBtn"  class="btn btn-primary btn-square disabled" data-toggle="modal">{{recheckButtonLabel}}</a>
                         </div>
@@ -1170,14 +1177,27 @@
             scope.fetchMarksLog($("#studentId_log").val());
         });
     }
+</script>
 
+
+<script type="text/javascript" data-ng-if="currentActor=='preparer'">
     /*Temporary Modal Setup */
+    /*
     var contents = "<ul class='b'> "+
         "<li>You can now put <b>'Absent'</b> and <b>'Reported'</b> information in online grade sheet.</li>"+
         "<li><b>'Absent'</b> and <b>'Reported'</b> are allowed only for  <b>'Theory'</b> Grade Sheet.</li>"+
         "<li>Provide 'Abs' for Absent and 'Rep' for Reported Students.</li>"+
         "<li>You can put <font color='#A569BD' style='font-size: 15px;font-weight: bold;'>\"Abs\"</font> or <font color='#E74C3C' style='font-size: 15px;font-weight: bold;'>\"Rep\"</font> only for Part-A and Part-B column..</li>"+
     "</ul>";
+    */
+    var contents = "<ul class='b'> "+
+        "<li>Online marks submission is now more <b>secure.</b></li>"+
+        "<li>Each time you save your grades, IUMS will send you an <font color='#E74C3C' style='font-size: 15px;font-weight: bold;'>OTP (One Time Password)</font> to your email address.<br/>"+
+        "You should provide the correct OTP during online marks submission.</li>"+
+        "<li>If you provide the wrong OTP for five (5) times, your account will be locked.<br/>"+
+        "In that case, please contact with IUMS Support.</li>"+
+        "</ul>";
+
     $("#").html("Newly Added Features");
     $("#modal-feature-info-body").html(contents);
 </script>

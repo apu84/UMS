@@ -3,6 +3,7 @@ package org.ums.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.ums.cache.CacheFactory;
 import org.ums.fee.*;
 import org.ums.fee.accounts.PaymentAccountMappingDao;
@@ -31,6 +32,7 @@ import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.user.UserManager;
 
 @Configuration
+@DependsOn("academicConfig")
 public class FeeContext {
   @Autowired
   CacheFactory mCacheFactory;

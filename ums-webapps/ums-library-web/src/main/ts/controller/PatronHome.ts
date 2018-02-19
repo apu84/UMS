@@ -1,59 +1,45 @@
 module ums {
+
     export class PatronHome {
-        public static $inject = ['HttpClient', '$scope', '$q', 'notify'];
+        public static $inject = ['HttpClient', '$scope', '$q', 'notify', 'userService'];
+        private userId: string;
+        private files: any = {};
 
         constructor(private httpClient: HttpClient, private $scope: any,
-                    private $q: ng.IQService, private notify: Notify) {
-            $scope.courses = [];
-            $scope.totalCourses = 0;
-            $scope.orderBy = " Order by course_no asc";
-            $scope.data = {
-                coursePerPage: 5
-            }; // this should match however many results your API puts on one page
-            this.getResultsPage(1);
-            $scope.pageChanged = this.pageChanged.bind(this);
-            $scope.sort = this.sort.bind(this);
+                    private $q: ng.IQService, private notify: Notify, private userService: UserService) {
 
-            $scope.pagination = {
-                current: 1
-            };
-        }
-
-        // common......
-        private sort(field: string): any {
-            console.log("=========>>111");
-            return (order: string) => {
-                console.log("#############3");
-                this.$scope.orderBy = " Order by " + field + " " + order;
-                this.$scope.pageChanged(1);
-            }
-        }
-
-
-        // common
-        private pageChanged(pageNumber) {
-            this.getResultsPage(pageNumber);
-        }
-
-
-        private getResultsPage(pageNumber) {
-            this.getCourseData(pageNumber).then((courseData: any) => {
-                this.$scope.courses = courseData.entries;
-                this.$scope.totalCourses = 100;
+            this.userService.fetchCurrentUserInfo().then((data: any)=> {
+                this.userId = data.employeeId;
             });
         }
 
-        private getCourseData(pageNumber: string): ng.IPromise<any> {
-            var url = "https://localhost//ums-webservice-academic/academic/course/all/ipp/" + this.$scope.data.coursePerPage + "/page/" + pageNumber + "/order/" + this.$scope.orderBy;
+        private uploadImage() {
+            var id = this.userId;
+            var image = $("#userPhoto").contents().prevObject[0].files[0];
+            this.getFormData(image, id).then((formData) => {
+                this.uploadFile(formData);
+            });
+        }
+
+        private getFormData(file, id): ng.IPromise<any> {
+            var formData = new FormData();
+            formData.append('files', file);
+            formData.append('name', file.name);
+            formData.append("id", id);
             var defer = this.$q.defer();
-            this.httpClient.get(url, "application/json",
-                (json: any, etag: string) => {
-                    var courseData: any = json;
-                    defer.resolve(courseData);
-                },
-                (response: ng.IHttpPromiseCallbackArg<any>) => {
-                    console.error(response);
-                });
+            defer.resolve(formData);
+            return defer.promise;
+        }
+
+        public uploadFile(formData: any): ng.IPromise<any> {
+            var defer = this.$q.defer();
+            var url = "profilePicture/upload";
+            this.httpClient.post(url, formData, undefined)
+                .success((response) => {
+                    defer.resolve(response);
+                }).error((data) => {
+                console.error(data);
+            });
             return defer.promise;
         }
 

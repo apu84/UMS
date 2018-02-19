@@ -30,6 +30,7 @@ import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
+import org.ums.services.email.OtpEmailService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -59,6 +60,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   @Autowired
   private ExamGradeManager mExamGradeManager;
+
+  @Autowired
+  private OtpEmailService otpEmailService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -310,13 +314,14 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
-    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
+
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
-
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
+
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
         mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),
@@ -346,12 +351,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
       mutable.update();
-
-      /*
-       * marksSubmissionStatus =
-       * mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-       * requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
-       */
 
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
           CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
@@ -454,12 +453,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
           Stream.concat(recheckList == null ? Stream.empty() : recheckList.stream(), approveList == null ? Stream.empty() : approveList.stream()).collect(Collectors.toList());
 
       gradeSubmissionService.validateGradeSubmission(actingRoleForCurrentUser, requestedStatusDTO, marksSubmissionStatus, allGradeList, action);
-
-/*      marksSubmissionStatus
-          = mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-          requestedStatusDTO.getCourseId(),
-          requestedStatusDTO.getExamType());*/
-
       String notificationConsumer = gradeSubmissionService.getUserIdForNotification(marksSubmissionStatus.getSemesterId(), marksSubmissionStatus.getCourseId(), nextStatus);
 
       if (!StringUtils.isEmpty(userId)) {
@@ -472,6 +465,16 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
 
     if(action.equals("approve") && nextStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE) {
+      List<String> studentList = new ArrayList<>();
+      approveList.forEach(o->studentList.add(o.getStudentId()));
+      String commaSeparatedStudents = String.join("', '", studentList);
+      commaSeparatedStudents = "'"+commaSeparatedStudents+"'";
+      int totalStudents= getContentManager().getRegistrationResultCount(commaSeparatedStudents, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+      getContentManager().updateRegistrationResultLetterGrade(approveList, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+      if(totalStudents !=approveList.size()) {
+        throw new ValidationException("Mismatch found between registration and approved grades. Please contact with IUMS Support.");
+      }
+
       int transferResponse = getContentManager().transferUGGradesToPrivateDB(requestedStatusDTO.getCourseId(), requestedStatusDTO.getSemesterId(), requestedStatusDTO.getExamType().getId());
       if(transferResponse!=200) {
         throw new ValidationException("Sorry, some unexpected error occurred. Please contact IUMS Support.");
@@ -485,6 +488,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   }
 
   @Transactional
+  @Deprecated
   public Response recheckRequestApprove(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");
@@ -506,8 +510,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         gradeSubmissionService.getCourseMarksSubmissionNextStatus(actingRoleForCurrentUser, action,
             marksSubmissionStatus.getStatus());
 
-    // int current_course_status = pJsonObject.getInt("course_current_status");
-
     // Need to improve this if else logic here....
     if(action.equals("recheck_request_rejected")) {// VC sir Rejected the whole recheck request
       getContentManager().rejectRecheckRequest(marksSubmissionStatus);
@@ -520,10 +522,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
     mutable.setStatus(nextStatus);
     mutable.update();
-
-    // marksSubmissionStatus =
-    // mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-    // requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
 
     // Need to put log here....
     String notificationConsumer =
@@ -570,23 +568,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.get(user.getEmployeeId());
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
-    /*
-     * int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
-     * 
-     * if(size == 0) { getContentManager().createGradeSubmissionStatus(pSemesterId, pExamType,
-     * pExamDate); marksSubmissionStatusDtoList =
-     * getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
-     * employee.getDepartment().getId(), pCourseType); } else { marksSubmissionStatusDtoList =
-     * mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
-     * .getDepartment().getId(), pCourseType); }
-     */
 
     marksSubmissionStatusDtoList =
         mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee.getDepartment().getId(),
             pCourseType);
-
     Collections.sort(marksSubmissionStatusDtoList, new Comparator<MarksSubmissionStatusDto>() {
-
       @Override
       public int compare(MarksSubmissionStatusDto o1, MarksSubmissionStatusDto o2) {
         int c;

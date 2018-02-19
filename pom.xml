@@ -65,24 +65,6 @@
     </repository>
   </repositories>
 
-
-  <modules>
-    <module>build-tools</module>
-    <module>ums-api</module>
-    <module>ums-core</module>
-    <module>ums-webservice-core</module>
-    <!--<module>ums-web</module>-->
-    <module>ums-dist</module>
-    <module>ums-webservice-academic</module>
-    <module>ums-webservice-bank</module>
-    <module>ums-webservice-library</module>
-    <module>ums-webservice-registrar</module>
-    <module>codegenerator</module>
-    <module>auth-support</module>
-    <module>microservice</module>
-    <!-- <module>ums-web-templates</module>-->
-  </modules>
-
   <dependencies>
     <!-- Spring 3 dependencies -->
     <dependency>
@@ -281,7 +263,6 @@
       <version>5.1.26</version>
       <scope>provided</scope>
     </dependency>
-
     <!-- testing -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -301,6 +282,33 @@
       <version>1.10.8</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>2.2.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-test-framework</artifactId>
+      <version>1.19.3</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jayway.restassured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>2.9.0</version>
+      <scope>test</scope>
+    </dependency>
+
 
     <!-- LogBack dependencies -->
     <dependency>
@@ -482,6 +490,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.7.4</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
     <dependency>
@@ -501,32 +515,60 @@
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-core</artifactId>
       <version>${spring-integration-version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-ftp</artifactId>
       <version>${spring.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-file</artifactId>
+      <version>${spring.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
       <version>RELEASE</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>RELEASE</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
       <version>1.2.2.RELEASE</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.reactivex.rxjava2</groupId>
+      <artifactId>rxjava</artifactId>
+      <version>2.1.9</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>3.0.5</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -540,6 +582,14 @@
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.12.4</version>
+          <configuration>
+            <skipTests>true</skipTests>
           </configuration>
         </plugin>
         <plugin>
@@ -572,11 +622,32 @@
 
   <profiles>
     <profile>
-      <id>dev</id>
+      <id>all</id>
+      <properties>
+        <assembly.target>all</assembly.target>
+      </properties>
 
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
+
+      <modules>
+        <module>build-tools</module>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <!--<module>ums-web</module>-->
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+        <module>ums-webservice-bank</module>
+        <module>ums-webservice-library</module>
+        <module>ums-webservice-registrar</module>
+        <module>ums-webservice-account</module>
+        <module>codegenerator</module>
+        <module>auth-support</module>
+        <module>microservice</module>
+        <!-- <module>ums-web-templates</module>-->
+      </modules>
 
       <build>
         <plugins>
@@ -598,9 +669,190 @@
     </profile>
 
     <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>academic</id>
+      <properties>
+        <assembly.target>academic</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>accounts</id>
+      <properties>
+        <assembly.target>accounts</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-account</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>library</id>
+      <properties>
+        <assembly.target>library</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-library</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>registrar</id>
+      <properties>
+        <assembly.target>registrar</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-registrar</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--webservice wise build profile. Only api, core and mentioned webservice package will be build-->
+      <id>bank</id>
+      <properties>
+        <assembly.target>bank</assembly.target>
+      </properties>
+
+      <modules>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-bank</module>
+      </modules>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+            <artifactId>maven-java-formatter-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>format</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>test-server</id>
-      <!-- Some other logic here, if necessary.
-           Otherwise, there's no need for another profile. -->
+      <properties>
+        <assembly.target>all</assembly.target>
+      </properties>
+      <modules>
+        <module>build-tools</module>
+        <module>ums-api</module>
+        <module>ums-core</module>
+        <module>ums-webservice-core</module>
+        <module>ums-dist</module>
+        <module>ums-webservice-academic</module>
+        <module>ums-webservice-bank</module>
+        <module>ums-webservice-library</module>
+        <module>ums-webservice-registrar</module>
+        <module>ums-webservice-account</module>
+        <module>codegenerator</module>
+        <module>auth-support</module>
+        <module>microservice</module>
+      </modules>
     </profile>
   </profiles>
 

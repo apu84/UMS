@@ -1326,3 +1326,96 @@ FOR EACH ROW
     FROM dual;
   END;
 /
+
+
+// ************************************** USER_VIEW *************************************************
+
+DROP VIEW DB_IUMS.MVIEW_USERS;
+
+/* Formatted on 12/24/2017 9:50:15 AM (QP5 v5.227.12220.39754) */
+CREATE OR REPLACE FORCE VIEW DB_IUMS.MVIEW_USERS
+(
+   USER_ID,
+   USER_NAME,
+   GENDER,
+   DATE_OF_BIRTH,
+   BLOOD_GROUP,
+   FATHER_NAME,
+   MOTHER_NAME,
+   MOBILE_NUMBER,
+   EMAIL_ADDRESS,
+   DEPARTMENT,
+   DESIGNATION,
+   ROLE_ID,
+   STATUS
+)
+AS
+   SELECT employee.EMPLOYEE_ID AS USER_ID,
+          employee.EMPLOYEE_NAME AS USER_NAME,
+          employee.GENDER AS GENDER,
+          employee.BIRTH_DATE AS DATE_OF_BIRTH,
+          employee.BLOOD_GROUP AS BLOOD_GROUP,
+          employee.FATHER_NAME AS FATHER_NAME,
+          employee.MOTHER_NAME AS MOTHER_NAME,
+          employee.MOBILE_NUMBER AS MOBILE_NUMBER,
+          employee.EMAIL_ADDRESS AS EMAIL_ADDRESS,
+          employee.DEPT_OFFICE AS DEPARTMENT,
+          employee.DESIGNATION AS DESIGNATION,
+          a_user.ROLE_ID AS ROLE_ID,
+          a_user.status
+     FROM EMPLOYEES employee, USERS a_user
+    WHERE a_user.EMPLOYEE_ID = employee.EMPLOYEE_ID
+   UNION
+   SELECT stud.STUDENT_ID AS USER_ID,
+          stud.FULL_NAME AS USER_NAME,
+          stud.GENDER AS GENDER,
+          stud.BIRTH_DATE AS DATE_OF_BIRTH,
+          stud.BLOOD_GROUP AS BLOOD_GROUP,
+          stud.FATHER_NAME AS FATHER_NAME,
+          stud.MOTHER_NAME AS MOTHER_NAME,
+          stud.MOBILE_NUMBER AS MOBILE_NUMBER,
+          stud.EMAIL_ADDRESS AS EMAIL_ADDRESS,
+          stud.DEPT_ID AS DEPARTMENT,
+          NULL,
+          a_user.ROLE_ID AS ROLE_ID,
+          a_user.status
+     FROM STUDENTS stud, USERS a_user
+    WHERE a_user.USER_ID = stud.STUDENT_ID;
+
+
+
+
+// ************************************************ LIBRARY CIRCULATION *******************************************
+
+
+DROP TABLE DB_IUMS_LIBRARY.CIRCULATION CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS_LIBRARY.CIRCULATION
+(
+  ID             NUMBER,
+  PATRON_ID      VARCHAR2(9 BYTE)               NOT NULL,
+  MFN            NUMBER                         NOT NULL,
+  ISSUE_DATE     DATE                           NOT NULL,
+  DUE_DATE       DATE                           NOT NULL,
+  LAST_MODIFIED  VARCHAR2(18 BYTE),
+  RETURN_DATE    DATE,
+  FINE_STATUS    NUMBER
+)
+
+
+
+DROP TABLE DB_IUMS_LIBRARY.FINE CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS_LIBRARY.FINE
+(
+  ID                 NUMBER,
+  CIRCULATION_ID     NUMBER                     NOT NULL,
+  AMOUNT             FLOAT(126)                 NOT NULL,
+  FINE_CATEGORY      NUMBER                     NOT NULL,
+  LAST_MODIFIED      VARCHAR2(18 BYTE),
+  DESCRIPTION        VARCHAR2(80 BYTE),
+  FINE_APPLIED_DATE  DATE,
+  FINE_APPLIED_BY    VARCHAR2(9 BYTE),
+  FINE_FORGIVEN_BY   VARCHAR2(9 BYTE),
+  FINE_PAYMENT_DATE  DATE
+)

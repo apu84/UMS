@@ -31,7 +31,7 @@ import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.services.academic.StudentCarryCourseService;
 import org.ums.statistics.JdbcTemplateFactory;
 
-@Configuration
+@Configuration("academicConfig")
 public class AcademicContext {
   @Autowired
   CacheFactory mCacheFactory;
@@ -188,9 +188,7 @@ public class AcademicContext {
 
   @Bean
   SeatPlanManager seatPlanManager() {
-    SeatPlanCache seatPlanCache = new SeatPlanCache(mCacheFactory.getCacheManager());
-    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
-    return seatPlanCache;
+    return new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
@@ -391,6 +389,6 @@ public class AcademicContext {
   @Bean
   TabulationService tabulationService() {
     return new TabulationServiceImpl(registrationResultManager(), semesterManager(), studentRecordManager(),
-        mCoreContext.studentManager());
+        mCoreContext.studentManager(), courseManager(), programManager());
   }
 }

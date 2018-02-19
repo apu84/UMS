@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4" align="center">
+        <div class="alert alert-success">
+            <div class="btn-group ">
+                <button type="button" class="btn btn-sm btn-default btn-outlined">Replicate</button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined">Recurrent</button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined">Reverse</button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined">Print</button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                        ng-click="vm.saveJournalVoucher()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                        ng-click="vm.postJournalVoucher()">
+                    Post
+                </button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-toggle="modal"
+                        data-target="#searchModal"><a
+                        href=""><i class="fa fa-search"></i></a></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="voucherNo">Voucher No</label>
+                <div class="col-sm-10" align="center">
+                    <input style="text-align: center" type="text" class="form-control" ng-model="vm.voucherNo"
+                           id="voucherNo"
+                           ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Voucher Date</label>
+                <div class="col-sm-10">
+                    <div date-picker date-model="vm.voucherDate" date-format="dd-MM-YYYY" disable="true"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Currency</label>
+                <div class="col-sm-6">
+                    <ui-select id="room" theme="bootstrap"
+                               data-ng-model="vm.selectedCurrency"
+                    >
+                        <ui-select-match placeholder="Select Currency">{{vm.selectedCurrency.currencyDescription}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="g in vm.currencies|filter:$select.search">
+                            <small ng-bind-html="g.currencyDescription | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <label class="control-label col-sm-2">Base:</label>
+                <label class="control-label col-sm-2">{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor}}</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Type</label>
+                <div class="col-sm-10" style="alignment: center">
+                    <select class="form-control required" name="type" data-ng-model="vm.type">
+                        <option align="center" value="">Select Type</option>
+                        <option align="center" value="BUYING">Buying</option>
+                        <option align="center" value="SELLING">Selling</option>
+                    </select>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-md-6" >
+
+        <br>
+
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <label class="control-label col-md-6" align="right">Total Debit : </label><label align="left"
+                                                                                                     class="control-label col-md-6">{{vm.totalDebit}}</label>
+                    <label class="control-label col-md-6" align="right">Total Credit: </label><label align="left"
+                                                                                                     class="control-label col-md-6">{{vm.totalCredit}}</label><br><br>
+                </div>
+                <div class="alert alert-success" align="center">
+                    <label class="control-label">{{vm.poststatus==true?'Posted':'Not posted'}}</label>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="row" ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-info-table-include.html'"></div>
+<div ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-add-modal.html'"></div>
+<div ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-search-modal.html'"></div>
+
+

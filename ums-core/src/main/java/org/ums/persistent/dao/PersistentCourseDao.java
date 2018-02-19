@@ -58,6 +58,14 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       + ")tmp1, MST_SYLLABUS, MST_PROGRAM " + "Where Tmp1.Syllabus_Id = MST_SYLLABUS. Syllabus_Id "
       + "And MST_SYLLABUS.Program_Id = MST_PROGRAM.Program_Id ";
 
+  String SELECT_SEMESTER_WISE_COURSES = "SELECT mst_course.*\n"
+      + "  FROM mst_course, course_syllabus_map, semester_syllabus_map\n"
+      + " WHERE     mst_course.course_id = course_syllabus_map.course_id\n"
+      + "       AND COURSE_SYLLABUS_MAP.SYLLABUS_ID =\n" + "              SEMESTER_SYLLABUS_MAP.SYLLABUS_ID\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER = MST_COURSE.SEMESTER\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.YEAR = MST_COURSE.YEAR\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.PROGRAM_ID = ?\n" + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER_ID = ?\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.YEAR = ?\n" + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER = ?";
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentCourseDao(final JdbcTemplate pJdbcTemplate) {
@@ -238,6 +246,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         .queryForObject(SELECT_OFFERED_TO_PROGRAM, new Object[] {pCourseId, pSemesterId}, Integer.class);
   }
 
+  @Override
+  public List<Course> getSemesterWiseCourseList(int pProgramId, int pSemesterId, int pYear, int pAcademicSemester) {
+    return mJdbcTemplate.query(SELECT_SEMESTER_WISE_COURSES, new Object[] {pProgramId, pSemesterId, pYear,
+        pAcademicSemester}, new SemesterWiseCourseRowMapper());
+  }
+
   class CourseRowMapper implements RowMapper<Course> {
     @Override
     public Course mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -270,4 +284,29 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     }
   }
 
+  class SemesterWiseCourseRowMapper implements RowMapper<Course> {
+    @Override
+    public Course mapRow(ResultSet resultSet, int i) throws SQLException {
+      PersistentCourse course = new PersistentCourse();
+      course.setId(resultSet.getString("COURSE_ID"));
+      course.setNo(resultSet.getString("COURSE_NO"));
+      course.setTitle(resultSet.getString("COURSE_TITLE"));
+      course.setCrHr(resultSet.getFloat("CRHR"));
+      course.setCourseGroupId(resultSet.getInt("OPT_GROUP_ID"));
+      if(resultSet.getObject("OFFER_BY") != null) {
+        course.setOfferedDepartmentId(resultSet.getString("OFFER_BY"));
+      }
+      course.setViewOrder(resultSet.getInt("VIEW_ORDER"));
+      course.setYear(resultSet.getInt("YEAR"));
+      course.setSemester(resultSet.getInt("SEMESTER"));
+      course.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
+      if(resultSet.getObject("COURSE_CATEGORY") != null) {
+        course.setCourseCategory(CourseCategory.get(resultSet.getInt("COURSE_CATEGORY")));
+      }
+      course.setPairCourseId(resultSet.getString("PAIR_COURSE_ID"));
+      course.setLastModified(resultSet.getString("LAST_MODIFIED"));
+      AtomicReference<Course> atomicReference = new AtomicReference<>(course);
+      return atomicReference.get();
+    }
+  }
 }

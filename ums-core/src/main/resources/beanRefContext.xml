@@ -10,6 +10,7 @@
         <constructor-arg>
             <list>
                 <value>classpath*:services-context.xml</value>
+                <value>classpath*:integration-context.xml</value>
             </list>
         </constructor-arg>
     </bean>

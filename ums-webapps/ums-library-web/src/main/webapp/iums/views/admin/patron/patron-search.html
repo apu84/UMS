@@ -1,68 +1,125 @@
-<div class="row">
-    <br />
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <fieldset style="background-color: whitesmoke">
-            <div class="col-md-6">
-                <br/>
-                <img src="https://image.flaticon.com/icons/svg/16/16480.svg" alt="User Image"
-                     style="width:85px;height:95px;">
+<fieldset>
+    <legend>Library use</legend>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-2"><b>Name</b></div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-9">{{vm.user.userName}}</div>
             </div>
-        </fieldset>
-    </div>
+            <div class="row">
+                <div class="col-md-2"><b>Id</b></div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-9">{{vm.user.userId}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><b>Category</b></div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-9">{{vm.user.category}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><b>Email</b></div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-9">{{vm.user.emailAddress}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><b>Contact No</b></div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-9">{{vm.user.mobileNo}}</div>
+            </div>
+        </div>
 
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Name:</b> Kawsur</label><br />
-            <label><b>Category:</b> Student</label><br />
-            <label><b>Patron Card No.</b> 1</label><br />
-            <label><b>Id:</b> 12441223</label>
+        <div class="col-md-2">
+            <div align="right">
+                <img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);"
+                     src=""
+                     img-id="vm.user.userId"
+                     data-profile-picture="">
+            </div>
         </div>
     </div>
+</fieldset>
 
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Contact No:</b> Kawsur</label><br />
-            <label><b>Email:</b> Student</label><br />
-            <label><b>Address</b> 1</label>
-        </div>
+<fieldset>
+    <legend>General</legend>
+    <div class="row">
+        <div class="col-md-2"><b>Gender</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.gender}}</div>
     </div>
-
-    <div class="col-md-3">
-        <div class="col-md-12">
-            <label><b>Contact No:</b> Kawsur</label><br />
-            <label><b>Email:</b> Student</label><br />
-            <label><b>Address</b> 1</label>
-        </div>
+    <div class="row">
+        <div class="col-md-2"><b>Blood Group</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.bloodGroup}}</div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-2"><b>Date of Birth</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.dateOfBirth}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><b>Department</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.department}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><b>Designation</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.designation}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><b>Father Name</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.fatherName}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><b>Mother Name</b></div>
+        <div class="col-md-1"><b>:</b></div>
+        <div class="col-md-9">{{vm.user.motherName}}</div>
+    </div>
+</fieldset>
 
 
-<div class="row">
-    <br />
-</div>
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-bordered">
-            <thead style="background-color: whitesmoke">
-            <tr>
-                <th>Due Date</th>
-                <th>Title</th>
-                <th>Material Type</th>
-                <th>Barcode</th>
-                <th>Fines</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Due Date</td>
-                <td>Title</td>
-                <td>Material Type</td>
-                <td>Barcode</td>
-                <td>Fines</td>
-            </tr>
-            </tbody>
-        </table>
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-out Items</p>
+        <div data-ng-show="!vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.getCirculations()">Show Circulation history</button>
+        </div>
+        <div data-ng-show="vm.showCheckedOutItems">
+            <button type="button" data-ng-click="vm.showCheckedOutItems=false">Hide Circulation history</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <br/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div data-ng-show="vm.showCheckedOutItems">
+            <table class="table table-bordered">
+                <thead style="background-color: whitesmoke">
+                <tr>
+                    <th>Due Date</th>
+                    <th>Title</th>
+                    <th>Material Type</th>
+                    <th>Barcode</th>
+                    <th>Return Date</th>
+                    <!-- <th>Fines</th>-->
+                </tr>
+                </thead>
+                <tbody data-ng-repeat="item in vm.allCirculation">
+                <tr>
+                    <td>{{item.dueDate}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.materialType}}</td>
+                    <td>{{item.mfn}}</td>
+                    <td>{{item.returnDate}}</td>
+                    <!-- <td>{{item.fineStatusString}}</td>-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

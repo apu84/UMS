@@ -1,10 +1,14 @@
 package org.ums.builder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.solr.client.solrj.beans.Field;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.library.ImprintDto;
+import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
@@ -19,6 +23,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.sound.midi.Soundbank;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -39,6 +44,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("mfnNo", pReadOnly.getId().toString());
     pBuilder.add("language", pReadOnly.getLanguage() == null ? 101101 : pReadOnly.getLanguage().getId());
     pBuilder.add("materialType", pReadOnly.getMaterialType() == null ? 101101 : pReadOnly.getMaterialType().getId());
+    pBuilder.add("materialTypeName", pReadOnly.getMaterialType() == null ? "Unknown" : pReadOnly.getMaterialType()
+        .getLabel());
     pBuilder.add("status", pReadOnly.getRecordStatus() == null ? 101101 : pReadOnly.getRecordStatus().getId());
     pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
         .getId());
@@ -97,6 +104,11 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     object.add("publisherName", (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPublisher() == null) ? ""
         : pReadOnly.getImprint().getPublisher().getName());
     pBuilder.add("imprint", object);
+
+    pBuilder.add("totalItems", pReadOnly.getTotalItems());
+    pBuilder.add("totalAvailable", pReadOnly.getTotalAvailable());
+    pBuilder.add("totalCheckedOut", pReadOnly.getTotalCheckedOut());
+    pBuilder.add("totalOnHold", pReadOnly.getTotalOnHold());
 
   }
 
@@ -158,7 +170,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     pMutable.setCallNo(pJsonObject.getString("callNo"));
     pMutable.setClassNo(pJsonObject.getString("classNo"));
-    pMutable.setCallDate(pJsonObject.getString("callDate"));
+    if(pJsonObject.containsKey("callDate"))
+      pMutable.setCallDate(pJsonObject.getString("callDate"));
     pMutable.setAuthorMark(pJsonObject.getString("authorMark"));
     if(pJsonObject.containsKey("callEdition"))
       pMutable.setCallEdition(pJsonObject.getString("callEdition"));

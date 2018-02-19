@@ -45,7 +45,11 @@
 /// <reference path='service/token.model.ts'/>
 /// <reference path='service/refresh.token.service.ts'/>
 /// <reference path='service/EmployeeService.ts'/>
-
+/// <reference path='service/RoleService.ts'/>
+/// <reference path='service/CountryService.ts'/>
+/// <reference path='service/DivisionService.ts'/>
+/// <reference path='service/DistrictService.ts'/>
+/// <reference path='service/ThanaService.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
@@ -81,6 +85,7 @@
 /// <reference path='filter/TrustAsHtml.ts'/>
 
 /// <reference path='model/ChangePasswordModel.ts'/>
+/// <reference path='model/Company.ts'/>
 /// <reference path='model/User.ts'/>
 /// <reference path='model/AdditionalRolePermissions.ts'/>
 /// <reference path='model/AdmissionStudent.ts'/>

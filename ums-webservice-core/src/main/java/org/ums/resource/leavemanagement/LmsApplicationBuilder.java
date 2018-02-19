@@ -35,7 +35,7 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("secondId", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployee().getId());
-    pBuilder.add("employeeName", pReadOnly.getEmployee().getEmployeeName());
+    pBuilder.add("employeeName", pReadOnly.getEmployee().getPersonalInformation().getFullName());
     pBuilder.add("leaveType", pReadOnly.getLeaveTypeId());
     pBuilder.add("leaveTypeName", pReadOnly.getLmsType().getName());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");

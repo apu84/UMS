@@ -4,13 +4,6 @@ module ums {
         filterd: Array<Employee>;
     }
 
-    export interface IDepartment {
-        id: string;
-        shortName: string;
-        longName: string;
-        type: string;
-    }
-
     class EmployeeInformation {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', 'employeeInformationService', '$state', 'allUsers'];
         private searchBy: string = "";
