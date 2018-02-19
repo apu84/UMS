@@ -434,6 +434,20 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public List<ApplicationCCI> getApprovedImprovemntInfo(String pStudentId) {
+    String query =
+        "SELECT "
+            + "a.STUDENT_ID, "
+            + "a.SEMESTER_ID, "
+            + "a.COURSE_ID, "
+            + "b.COURSE_NO, "
+            + "b.COURSE_TITLE, "
+            + "MST_SEMESTER.SEMESTER_NAME "
+            + "FROM APPLICATION_CCI a,MST_COURSE b,MST_SEMESTER WHERE a.APPLICATION_TYPE=5 AND a.STATUS=8 and a.COURSE_ID=b.COURSE_ID AND a.STUDENT_ID=? AND a.SEMESTER_ID=MST_SEMESTER.SEMESTER_ID";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new ApplicationCCIRowMapperForImprovementApproved());
+  }
+
+  @Override
   public List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus,
       final Integer pCurentpage, final Integer pItemPerpage, final String empDeptId) {
     String approvalStatus = pApprovalStatus;
@@ -796,6 +810,20 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setApplicationType(ApplicationType.get(pResultSet.getInt("APPLICATION_TYPE")));
       application.setApplicationDate(pResultSet.getString("APPLIED_ON"));
       application.setCCIStatus(pResultSet.getInt("STATUS"));
+      return application;
+    }
+  }
+
+  class ApplicationCCIRowMapperForImprovementApproved implements RowMapper<ApplicationCCI> {
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      application.setStudentId(pResultSet.getString("STUDENT_ID"));
+      application.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      application.setCourseId(pResultSet.getString("COURSE_ID"));
+      application.setCourseNo(pResultSet.getString("COURSE_NO"));
+      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
+      application.setSemesterName(pResultSet.getString("SEMESTER_NAME"));
       return application;
     }
   }

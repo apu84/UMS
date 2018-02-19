@@ -9,9 +9,9 @@ module ums {
     carryLastdateIn:Array<ICarryLastdate>;
     twoOccuranceCourseList: Array<IUGRegistrationResult>;
     ugResultsForSave:Array<IUGRegistrationResult>;
+    appImpApprove:Array<IAppImprove>;
     moreThanTwoOccuranceCourseList: Array<IUGRegistrationResult>;
     //New property added
-    ballProperties:Array<Rumi>;
     checkBoxCounter: number;
 
 
@@ -49,6 +49,8 @@ module ums {
       totalSemesterStatic:string;
       carrylastDate:string;
       carrylastDateDeadline:boolean;
+      carryStatusShow:string;
+      historyButtonStatus:boolean;
 
 
     //booleans
@@ -84,17 +86,23 @@ module ums {
       improvementLimitCalculation:Function;
       carryLastDateFinder:Function;
       insertIntoStudentPayment:Function;
+      getApplicationCCIImprovemnetApproved:Function;
    // alert:Function;
 
   }
   //New interface
-  interface  Rumi{
-      ballId:number;
-      ballSize:number;
-      ballName:String;
+  interface IAppImprove{
+      studentId: string;
+      semesterId:number;
+      courseId: number;
+      courseNo: string;
+      courseTitle:string;
+      courseYear:number;
+      courseSemester:number;
+      semesterName:string;
   }
 
-  interface IUGRegistrationResult {
+  interface IUGRegistrationResult{
     studentId: string;
     courseId: string;
     gradeLetter: string;
@@ -111,7 +119,7 @@ module ums {
     courseYear:number;
     courseSemester:number;
     deadline:string;
-
+    deadLineBol:boolean;
     //status and pending status
   }
 
@@ -210,6 +218,7 @@ interface ICarryLastdate{
       $scope.improvementLimitCalculation=this.improvementLimitCalculation.bind(this);
       $scope.carrylastDate=this.carryLastDateFinder.bind(this);
       $scope.submitAndClose = this.submitAndClose.bind(this);
+      $scope.getApplicationCCIImprovemnetApproved=this.getApplicationCCIImprovemnetApproved.bind(this);
       $scope.close = this.close.bind(this);
       $scope.insertIntoStudentPayment=this.insertIntoStudentPayment.bind(this);
      // $scope.submitButtonEnable=this.submitButtonEnable.bind(this);
@@ -235,15 +244,8 @@ interface ICarryLastdate{
               console.log(json);
                 this.$scope.carrylastDate=json.date;
                   this.$scope.carrylastDateDeadline=json.deadline;
-                  //console.log(this.$scope.carrylastDate);
-
-                  /*
-                  this.$scope.carrylastDate=json;
-                  console.log("---------------------carrylastdate----------------------");
-                  console.log(this.$scope.carrylastDate);*/
-                  /*this.$scope.carrylastDate=carryLastDate_check;
-                  console.log(this.$scope.carrylastDate);
-                  */
+                  console.log("-----"+this.$scope.carrylastDateDeadline);
+                  this.$scope.carryStatusShow=this.$scope.carrylastDateDeadline==true? "Date Over":"Available";
                   defer.resolve(json.date);
               },
               (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -259,8 +261,8 @@ interface ICarryLastdate{
               (json: any, etag: string) => {
                   improvement_limit_check = json;
                   console.log("---------------------Improvement Limit ---------------------");
-
                   this.$scope.improvementLimit=improvement_limit_check;
+                  this.$scope.historyButtonStatus=this.$scope.improvementLimit>0 ? false:true;
                   this.$scope.improvemetLimitCrossed=this.$scope.improvementLimit<4 ? false:true;
                   console.log(this.$scope.improvementLimit);
                   defer.resolve(this.$scope.improvementLimit);
@@ -522,6 +524,24 @@ interface ICarryLastdate{
           });
       return defer.promise;
     }
+      private getApplicationCCIImprovemnetApproved(): ng.IPromise<any> {
+          var defer = this.$q.defer();
+          var appCCIArr: Array<IAppImprove> = [];
+          this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/ApprovedImprovementInfo', 'application/json',
+              (json: any, etag: string) => {
+                  appCCIArr = json.entries;
+                  console.log("****zzzzzzzz******");
+                  console.log(json.semesterName);
+                  console.log("Applicatino cci Updated!!");
+                  console.log(json);
+                  this.$scope.appImpApprove=appCCIArr;
+                  defer.resolve(appCCIArr);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
+      }
 
     private convertToJson(result: Array<IUGRegistrationResult>): ng.IPromise<any> {
         let defer:ng.IDeferred<any> = this.$q.defer();

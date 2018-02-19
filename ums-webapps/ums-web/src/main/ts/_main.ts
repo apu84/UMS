@@ -192,7 +192,7 @@
 /// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
 
 /// <reference path='controller/cciManagement/cciApproval.ts'/>
-
+/// <reference path='controller/tesController/studentTes.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>

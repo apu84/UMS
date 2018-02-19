@@ -80,4 +80,6 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
 
   void setRowNumber(final Integer rowNumber);
 
+  void setSemesterName(final String semesterName);
+
 }

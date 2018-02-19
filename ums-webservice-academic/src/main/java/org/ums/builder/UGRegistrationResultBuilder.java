@@ -39,9 +39,11 @@ public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult
 
       if(currentDate.compareTo(lastApplyDate) > 0) {
         pBuilder.add("deadline", "Date Over");
+        pBuilder.add("deadLineBol", true);
       }
       else {
         pBuilder.add("deadline", "Available");
+        pBuilder.add("deadLineBol", false);
       }
 
     } catch(Exception e) {

@@ -80,6 +80,12 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   }
 
   @GET
+  @Path("/ApprovedImprovementInfo")
+  public JsonObject getApprovedImprovemntInfo(@Context Request pRequest) {
+    return mHelper.getApprovedImprovemntInfo(pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getAllcarryInfo/studentId/{student-id}/semesterId/{semester-id}")
   public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(@Context Request pRequest,
       final @PathParam("student-id") String pStudentId, final @PathParam("semester-id") Integer pSemesterid) {

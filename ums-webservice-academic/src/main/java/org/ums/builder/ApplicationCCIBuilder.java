@@ -35,6 +35,8 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
       pBuilder.add("courseNo", pReadOnly.getCourseNo());
     if(pReadOnly.getCourseTitle() != null)
       pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
+    pBuilder.add("courseYear", pReadOnly.getCourse().getYear());
+    pBuilder.add("courseSemester", pReadOnly.getCourse().getSemester());
     if(pReadOnly.getExamDate() != null) {
       pBuilder.add("examDate", pReadOnly.getExamDate());
       pBuilder.add("examDateOriginal", pReadOnly.getExamDate());
@@ -102,8 +104,13 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
 
     if(pReadOnly.getImprovementLimit() != null)
       pBuilder.add("improvement_limit", pReadOnly.getImprovementLimit());
+
     if(pReadOnly.getCarryLastDate() != null)
       pBuilder.add("carryLastdate", pReadOnly.getCarryLastDate());
+
+    if(pReadOnly.getSemesterName() != null)
+      pBuilder.add("semesterName", pReadOnly.getSemesterName());
+
     try {
       if(pReadOnly.getCarryLastDate() != null) {
         Date lastApplyDate, currentDate;

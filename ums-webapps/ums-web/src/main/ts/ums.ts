@@ -325,6 +325,24 @@ module ums {
             }]
           }
         })
+        .state('applicationTES', {
+            url: "/applicationTES",
+            controller: 'studentTES',
+            controllerAs: 'vm',
+            templateUrl: 'views/teachers-Evalution-System/student-tes.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
         .state('showSyllabusList', {
           url: "/showSyllabusList",
           controller: "GridSyllabus",

@@ -67,6 +67,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mImprovementLimit;
   private String mCarryLastDate;
   private Integer mRowNumber;
+  private String mSemesterName;
 
   public PersistentApplicationCCI() {
 
@@ -107,6 +108,17 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mImprovementLimit = pPersistentApplicationCCI.getImprovementLimit();
     mCarryLastDate = pPersistentApplicationCCI.getCarryLastDate();
     mRowNumber = pPersistentApplicationCCI.getRowNumber();
+    mSemesterName = pPersistentApplicationCCI.getSemesterName();
+  }
+
+  @Override
+  public void setSemesterName(String semesterName) {
+    mSemesterName = semesterName;
+  }
+
+  @Override
+  public String getSemesterName() {
+    return mSemesterName;
   }
 
   @Override

@@ -20,6 +20,11 @@ public class ApplicationCCICache extends
   CacheManager<ApplicationCCI, Long> mCacheManager;
 
   @Override
+  public List<ApplicationCCI> getApprovedImprovemntInfo(String pStudentId) {
+    return getManager().getApprovedImprovemntInfo(pStudentId);
+  }
+
+  @Override
   public Integer getAllReords(String pApprovalStatus, String empDeptId) {
     return getManager().getAllReords(pApprovalStatus, empDeptId);
   }

@@ -215,19 +215,19 @@ module ums{
             var appCCIArr: Array<AppCCI> = [];
             this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/approvalStatus/'+this.approvalStatus+'/currentPage/'+this.pagination.currentPage+'/itemPerPage/'+this.itemsPerPage, 'application/json',
                 (json: any, etag: string) => {
-                console.log("Json");
-                console.log(json);
+                //console.log("Json");
+                //console.log(json);
                     appCCIArr = json.entries;
-                    console.log("*****pppppppp******");
-                    console.log("Applicatino cci Updated!!");
+                    //console.log("*****pppppppp******");
+                    //console.log("Applicatino cci Updated!!");
 
                     this.applicationCCI=appCCIArr;
-                    console.log("Application Size");
-                    console.log(json.appSize);
+                    //console.log("Application Size");
+                    //console.log(json.appSize);
 
                     this.totalItems=Number(json.appSize);
-                    console.log("Total items");
-                    console.log(this.totalItems)
+                    //console.log("Total items");
+                    //console.log(this.totalItems)
                     defer.resolve(appCCIArr);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -398,6 +398,9 @@ module ums{
 
                         this.applicationCCI=appCCIArr;
                         console.log(this.applicationCCI);
+                        if(this.applicationCCI.length<1){
+                            this.notify.error("No Students Records Found");
+                        }
                         defer.resolve(appCCIArr);
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {

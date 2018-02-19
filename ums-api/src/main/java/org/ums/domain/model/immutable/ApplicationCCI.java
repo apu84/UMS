@@ -81,4 +81,6 @@ public interface ApplicationCCI extends Serializable, LastModifier, EditType<Mut
   String getCarryLastDate();
 
   Integer getRowNumber();
+
+  String getSemesterName();
 }

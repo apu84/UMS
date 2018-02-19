@@ -353,7 +353,19 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
 
+  public JsonObject getApprovedImprovemntInfo(final Request pRequest, final UriInfo pUriInfo){
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    LocalCache localCache = new LocalCache();
+    List<ApplicationCCI> applications =getContentManager().getApprovedImprovemntInfo(studentId);
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   // Total carry From UG_Registration Result
@@ -435,10 +447,10 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
         lastApplyDate = UmsUtils.convertToDate(date, "dd-MM-yyyy");
         if(currentDate.compareTo(lastApplyDate) > 0) {
-          jsonObjectBuilder.add("deadline", "Date Over");
+          jsonObjectBuilder.add("deadline", true);
         }
         else {
-          jsonObjectBuilder.add("deadline", "Available");
+          jsonObjectBuilder.add("deadline", false);
         }
       }
     } catch(Exception e) {

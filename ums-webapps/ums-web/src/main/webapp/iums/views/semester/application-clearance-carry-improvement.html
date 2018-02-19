@@ -28,7 +28,7 @@
                             <th>Exam Date</th>
                             <th>Last Apply Date</th>
                             <th>Deadline</th>
-                            <th style="width:180px; max-width: 180px;">Status</th>
+                            <th style="width:220px; max-width: 220px;">Status</th>
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==CLEARANCE"
@@ -38,7 +38,7 @@
                                 <td>{{app.examDate}}</td>
                                 <td>{{app.lastApplyDate}}</td>
                                 <td>{{app.deadline}}</td>
-                                <td><input type="checkbox" ng-disabled="app.deadline==dateCheckStatus ?  true : false" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <td><input type="checkbox" data-ng-hide="app.deadLineBol" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
                                 <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
                             </tr>
                             <tr data-ng-repeat="app in applicationCCI" data-ng-if="app.cciStatus==statusApproved && app.applicationType==CLEARANCE">
@@ -69,7 +69,7 @@
                             <th>Last Apply Date</th>
                             <th>Deadline</th>
                             <th style="width:180px; max-width: 180px;">Status</th>
-                            <th>Slip {{improvemetLimitCrossed}}</th>
+                            <th style="width:20px; max-width: 20px;">Slip</th>
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in registrationResults" data-ng-if="app.type==IMPROVEMENT"
@@ -80,8 +80,8 @@
                                 <td>{{app.examDate}}</td>
                                 <td>{{app.lastApplyDate}}</td>
                                 <td>{{app.deadline}}</td>
-                                <td><input type="checkbox"  ng-disabled="app.deadline==dateCheckStatus ?  true : false" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
-                                <td>Not Applied Yet</td>
+                                <td><input type="checkbox"  data-ng-hide="app.deadLineBol" data-ng-model="app.apply" data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
+                                <td>N/A</td>
                                 <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
                             </tr>
                             <tr data-ng-repeat="app in applicationCCI" data-ng-if="(app.cciStatus==statusWaitingForPayment || app.cciStatus==statusApproved) && app.applicationType==IMPROVEMENT">
@@ -98,14 +98,62 @@
                             </tr>
                             </tbody>
 
-                        </table><p align="center" style="color:gray;font-size: 15px">Improvement Examination  Limit ({{totalSemesterStatic}}): <strong style="font-size: 15px;color: black">{{improvementLimitstatic}} </strong> And You have already Given:  <strong style="font-size: 15px;color: black">{{improvementLimit}}</strong></p>
+                        </table><p align="center" style="color:gray;font-size: 15px">Improvement Examination  Limit ({{totalSemesterStatic}}): <strong style="font-size: 15px;color: black">{{improvementLimitstatic}} </strong> And You have already Given:  <strong style="font-size: 15px;color: black">{{improvementLimit}}</strong>
+                    </p><div align="right"><button type="button"
+                                                   data-toggle="modal"
+                                                   data-ng-disabled="historyButtonStatus"
+                                                   data-target="#myModal"
+                                                   data-ng-click="getApplicationCCIImprovemnetApproved()"
+                                                   class="btn btn-primary btn-xs">History
+                                            </button>
+                    </div>
+                        <div class="modal fade" id="myModal" role="dialog" >
+                            <!--   <div class="modal-backdrop"> -->
+                            <div class="modal-dialog ">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" >
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Improvement Exam History</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="panel panel-danger">
+                                            <div class="panel-heading" align="center">
+                                                Applicant's Approved Improvement Courses
+                                            </div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <th style="background-color: #FAFAFA; ">Course No</th>
+                                                    <th style="background-color: #FAFAFA; ">Course Title</th>
+                                                    <th style="background-color: #FAFAFA;">Approved Semester</th>
+                                                    <th>Semester Info</th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr data-ng-repeat="app in appImpApprove">
+                                                        <td>{{app.courseNo}}</td>
+                                                        <td>{{app.courseTitle}}</td>
+                                                        <td>{{app.courseYear}}-{{app.courseSemester}}</td>
+                                                        <td>{{app.semesterName}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
-                <div class="panel panel-info" data-ng-if="(resultCarryNumber>0 || appCCICarryNumber>0) && carrylastDateDeadline !=dateCheckStatus">
+                <div class="panel panel-info" data-ng-if="resultCarryNumber>0 || appCCICarryNumber>0">
                     <div class="panel-heading" align="center">
                         Candidate Carry Courses
-
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered">
@@ -115,7 +163,7 @@
                             <th>Failed Course Semester</th>
                             <th>Exam Date</th>
                             <th style="width:180px; max-width: 180px;">Status</th>
-                            <th>Slip</th>
+                            <th style="width:20px; max-width: 20px;">Slip</th>
                             </thead>
                             <tbody>
                             <tr id="{{app.courseNo}}" data-ng-repeat="app in registrationResults"
@@ -125,7 +173,7 @@
                                 <td>{{app.courseTitle}}</td>
                                 <td>{{app.courseYear+"-"+app.courseSemester}}</td>
                                 <td>{{app.examDate}}</td>
-                                <td ><input type="checkbox" data-ng-model="app.apply"
+                                <td ><input type="checkbox" data-ng-model="app.apply" data-ng-hide="carrylastDateDeadline"
                                            data-ng-click="checkMoreThanOneSelectionSubmit(app)"></td>
                                 <td>{{'N/A'}}</td>
                                 <!--<th><div ><label><input type="checkbox" data-ng-model="app.apply"></label></div></th>-->
@@ -141,7 +189,7 @@
                                          data-ng-click="receipt(app.transactionId)"><p  data-ng-if="app.cciStatus!=statusWaitingForPayment && app.applicationType==CARRY">N/A</p></td>
                             </tr>
                             </tbody>
-                        </table><p align="center" style="color:gray;font-size: 15px">Last Date of Apply:<strong style="font-size: 15px;color: black">{{carrylastDate}}</strong></p>
+                        </table><p align="center" style="color:gray;font-size: 15px">Last Date of Apply:<strong style="font-size: 15px;color: black">{{carrylastDate}}</strong> Deadline Status:<strong style="font-size: 15px;color: black">{{carryStatusShow}}</strong></p>
 
                     </div>
 

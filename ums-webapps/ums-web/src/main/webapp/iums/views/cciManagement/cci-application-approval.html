@@ -69,7 +69,7 @@
                         <tbody>
 
                         <tr style="border: 1px solid #959ba2"
-                            dir-paginate="app in vm.applicationCCI | itemsPerPage: vm.itemsPerPage"
+                            dir-paginate="app in vm.applicationCCI | itemsPerPage: vm.itemsPerPage | orderBy :'statusName'"
                             current-page="vm.pagination.currentPage"
                             total-items="vm.totalItems"
                             pagination-id="applicationCCI"
@@ -100,11 +100,6 @@
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title">Carry Applications Approval</h4>
                                     </div>
-                                    <div>
-
-                                    </div>
-
-
                                     <div class="modal-body">
                                         <div class="panel-body">
                                             <table class="table table-borderless table-condensed table-hover">
@@ -152,7 +147,7 @@
                                                     <td>{{a.courseNo}}</td>
                                                     <td>{{a.courseTitle}}</td>
                                                     <td style="background-color: #FAFAFA; "><strong>{{a.statusName}}</strong></td>
-                                                    <td><input type="checkbox" data-ng-model="a.apply" ng-disabled="a.statusName==vm.statusDefaultWaitingForpayment || a.statusName==vm.statusDefaultApproved ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
+                                                    <td><input type="checkbox" data-ng-model="a.apply" data-ng-hide="a.statusName==vm.statusDefaultWaitingForpayment || a.statusName==vm.statusDefaultApproved ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
                                                 </tr>s
                                                 </tbody>
                                             </table>

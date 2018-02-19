@@ -22,6 +22,8 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
 
   List<ApplicationCCI> getApplicationCCIForImprovementLimit(final String pStudentId);
 
+  List<ApplicationCCI> getApprovedImprovemntInfo(final String pStudentId);
+
   int updatebank(MutableStudentPayment MutableStudentPayment);
 
   String getApplicationCCIForCarryLastfdate(final Integer pSemesterId);
