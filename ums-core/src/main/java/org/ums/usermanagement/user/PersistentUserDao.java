@@ -89,13 +89,12 @@ public class PersistentUserDao extends UserDaoDecorator {
 
   @Override
   public String create(MutableUser pMutable) {
-    String defaultPassword =
-        "$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==";
     mJdbcTemplate.update(INSERT_ALL, pMutable.getId(),
-        pMutable.getPassword() == null ? defaultPassword : String.valueOf(pMutable.getPassword()), pMutable
-            .getPrimaryRole().getId(), pMutable.isActive(),
-        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()), pMutable
-            .getCreatedOn(), pMutable.getCreatedBy(), pMutable.getEmployeeId() == null ? "" : pMutable.getEmployeeId());
+        pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()),
+        pMutable.getCreatedOn(), pMutable.getCreatedBy(),
+        pMutable.getEmployeeId() == null ? "" : pMutable.getEmployeeId());
     return pMutable.getId();
   }
 

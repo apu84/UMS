@@ -10,5 +10,5 @@ import java.io.Serializable;
 public interface Designation extends Serializable, EditType<MutableDesignation>, LastModifier, Identifier<Integer> {
   String getDesignationName();
 
-  String getEmployeeType();
+  int getEmployeeType();
 }

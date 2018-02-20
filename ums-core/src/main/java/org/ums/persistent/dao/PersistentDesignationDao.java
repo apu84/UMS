@@ -40,7 +40,7 @@ public class PersistentDesignationDao extends DesignationDaoDecorator {
       PersistentDesignation designation = new PersistentDesignation();
       designation.setId(resultSet.getInt("DESIGNATION_ID"));
       designation.setDesignationName(resultSet.getString("DESIGNATION_NAME"));
-      designation.setEmployeeType(resultSet.getString("EMPLOYEE_TYPE"));
+      designation.setEmployeeType(resultSet.getInt("EMPLOYEE_TYPE"));
       return designation;
     }
   }

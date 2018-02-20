@@ -16,7 +16,12 @@ module ums {
 
         private allDepartments = [];
         private allDesignations = [];
+        private changedDesignationTypes = [];
         private allEmploymentTypes = [];
+        private allEmployeeTypes = [];
+        private changedEmployeeTypes = [];
+        private academicEmployeeTypes = [];
+        private officialEmployeeTypes = [];
         private allRoles = [];
         private showRightDiv: boolean = false;
         private newEmployee: INewEmployee;
@@ -35,6 +40,9 @@ module ums {
                     private roles: any) {
 
             this.newEmployee = <INewEmployee>{};
+            this.allEmployeeTypes = appConstants.employeeTypes;
+            this.academicEmployeeTypes = appConstants.academicEmployeeTypes;
+            this.officialEmployeeTypes = appConstants.officialEmployeeTypes;
             this.allDepartments = departments;
             this.allDesignations = designations;
             this.allEmploymentTypes = employmentTypes;
@@ -67,7 +75,7 @@ module ums {
         public createId(): void {
             if (this.newEmployee.department && this.newEmployee.employeeType) {
                 this.employeeService.getNewEmployeeId(this.newEmployee.department["id"],
-                    +this.newEmployee.employeeType).then((result: any) => {
+                    this.newEmployee.employeeType["id"]).then((result: any) => {
                     this.newEmployee.id = result;
                     this.showRightDiv = true;
                 });
@@ -84,6 +92,18 @@ module ums {
                     this.notify.error("Short name already exists");
                 }
             });
+        }
+
+        public changeDesignationSelection(): void{
+            this.changedDesignationTypes = [];
+            this.changedDesignationTypes = this.allDesignations.filter(value => {
+                return value["employeeType"] == this.newEmployee.employeeType["id"];
+            });
+        }
+
+        public changeEmployeeTypeSelection(): void{
+            this.changedEmployeeTypes = [];
+            this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
         }
 
         private convertToJson(): ng.IPromise<any> {

@@ -1,6 +1,6 @@
 <style type="text/css">
     .form-control {
-        border-radius: 15px !important;
+        border-radius: 5px !important;
     }
 
     .btn {
@@ -70,13 +70,32 @@
                                     <select name="nDepartment"
                                             id="iDepartment"
                                             data-ng-model="vm.newEmployee.department"
-                                            data-ng-options="depts.longName for depts in vm.allDepartments track by depts.id"
-                                            data-ng-change="vm.createId()"
+                                            data-ng-options="depts.longName group by depts.category for depts in vm.allDepartments | orderBy: 'id' track by depts.id"
+                                            data-ng-change="vm.createId(); vm.changeEmployeeTypeSelection()"
                                             class="form-control" required>
                                         <option value="">Select Department</option>
                                     </select>
                                     <label data-ng-show="nEmployeeForm.nDepartment.$invalid && !nEmployeeForm.nDepartment.$pristine"
                                            class="help-block control-label">Select a department.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine}">
+                                    <label class="control-label" for="iEmployeeType">Employee Type<span
+                                            class="require">*</span></label>
+                                    <select name="nEmployeeType"
+                                            id="iEmployeeType"
+                                            data-ng-model="vm.newEmployee.employeeType"
+                                            data-ng-options="employeeTypes.name for employeeTypes in vm.changedEmployeeTypes track by employeeTypes.id"
+                                            data-ng-change="vm.createId(); vm.changeDesignationSelection();"
+                                            class="form-control" required>
+                                        <option value="">Select A Employee Type</option>
+                                    </select>
+                                    <label data-ng-show="nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine"
+                                           class="help-block control-label">Select Employee Type.</label>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +108,7 @@
                                     <select name="nDesignation"
                                             id="iDesignation"
                                             data-ng-model="vm.newEmployee.designation"
-                                            data-ng-options="designations.name for designations in vm.allDesignations track by designations.id"
+                                            data-ng-options="designations.name for designations in vm.changedDesignationTypes track by designations.id"
                                             class="form-control" required>
                                         <option value="">Select Designation</option>
                                     </select>
@@ -98,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                    <!--    <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine}">
@@ -115,7 +134,7 @@
                                            class="help-block control-label">Select Role.</label>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group"
@@ -134,28 +153,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine}">
-                                    <label class="control-label" for="iEmployeeType">Employee Type<span
-                                            class="require">*</span></label>
-                                    <select name="nEmployeeType"
-                                            id="iEmployeeType"
-                                            data-ng-model="vm.newEmployee.employeeType"
-                                            data-ng-change="vm.createId()"
-                                            class="form-control" required>
-                                        <option value="">Select A Employee Type</option>
-                                        <option value="1">Teacher</option>
-                                        <option value="2">Officer</option>
-                                        <option value="3">Staff</option>
-                                        <option value="9">Top Management</option>
-                                    </select>
-                                    <label data-ng-show="nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine"
-                                           class="help-block control-label">Select Employee Type.</label>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -267,26 +265,6 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine}">
-                                    <label class="control-label" for="iEmploymentType">Status<span
-                                            class="require">*</span></label>
-                                    <select name="nStatus"
-                                            id="iStatus"
-                                            data-ng-model="vm.newEmployee.status"
-                                            class="form-control" required>
-
-                                        <option value="">Select A Status</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">On Leave</option>
-                                        <option value="3">Inactive</option>
-                                    </select>
-                                    <label data-ng-show="nEmployeeForm.nStatus.$invalid && !nEmployeeForm.nStatus.$pristine"
-                                           class="help-block control-label">Select Status.</label>
-                                </div>
-                            </div>
-
                             <div class="col-md-6">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine }">
