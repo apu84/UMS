@@ -116,6 +116,9 @@
             <list>
                 <value>/changePassword</value>
                 <value>/mainNavigation</value>
+                <value>/userHome</value>
+                <value>/settings</value>
+                <value>/profilePicture/0</value>
             </list>
         </property>
     </bean>

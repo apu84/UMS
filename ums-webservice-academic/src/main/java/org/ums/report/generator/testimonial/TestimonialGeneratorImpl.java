@@ -50,10 +50,10 @@ public class TestimonialGeneratorImpl implements TestimonialGenerator {
 
     List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionManager.getAll();
 
-    for (AdditionalRolePermissions additionalRolePermissions1 : additionalRolePermissions) {
+    for(AdditionalRolePermissions additionalRolePermissions1 : additionalRolePermissions) {
       user = mUserManager.get(additionalRolePermissions1.getUserId());
       employee = mEmployeeManager.get(user.getEmployeeId());
-      if (student.getDepartment().getId().equals(employee.getDepartment().getId()))
+      if(student.getDepartment().getId().equals(employee.getDepartment().getId()))
         deptHead = employee;
     }
 
@@ -162,7 +162,7 @@ public class TestimonialGeneratorImpl implements TestimonialGenerator {
   }
 
   void emptyLine(Paragraph p, int number) {
-    for (int i = 0; i < number; i++) {
+    for(int i = 0; i < number; i++) {
       p.add(new Paragraph(" "));
     }
   }

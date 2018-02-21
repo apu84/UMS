@@ -7,11 +7,9 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.ums.usermanagement.user.User;
 
 public class NewUserRealm extends UserRealm {
-  private static final String LOGIN_AS_SEPARATOR = ">";
-
   @Override
   public boolean supports(AuthenticationToken token) {
-    if(super.supports(token) && !token.getPrincipal().toString().contains(LOGIN_AS_SEPARATOR)) {
+    if(super.supports(token)) {
       User user = getUser(token.getPrincipal().toString());
       return user.getPassword() == null && user.getTemporaryPassword() != null;
     }
