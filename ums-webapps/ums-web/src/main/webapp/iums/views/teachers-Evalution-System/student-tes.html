@@ -1,11 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>Hello TES!!!</p>
-<p>{{vm.value}}</p>
-</body>
-</html>
+<div class="container-fluid" data-ng-init="vm.getAllQuestions()">
+    <div  class="panel panel-green">
+        <div class="panel-heading" align="center">
+            <h4 class="panel-title">Application For Teachers Evalution System</h4>
+        </div>
+    <div style="padding-top:20px;padding-bottom: 40px"
+         data-ng-include="'views/teachers-Evalution-System/student-tes-with-status-selection.html'">
+
+    </div>
+        <form name="frm" >
+                    <div class="panel-body">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <th style="width:400px; max-width: 400px;">Questions</th>
+                            <th style="width:30px; max-width: 30px;">Point</th>
+                            <th style="width:200px; max-width: 200px;">comment</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in vm.questionListAndReview">
+                                <td>{{app.questionDetails}}</td>
+                                <td>
+                                    <input
+                                            type="number"
+                                            max="5"
+                                            min="1"
+                                            ng-init="app.point=5"
+                                            ng-bind="app.point==1 ? '':app.comment=' '"
+                                            data-ng-model="app.point">
+                                </td>
+                                <td>
+                             <textarea
+
+                                 data-ng-hide="app.point==1 ? false:true"
+                                 data-ng-model="app.comment"
+                                 minlength="1"
+                                 style="resize:none;height:40px;width:200px"
+                                     required>
+                             </textarea><span ng-show="frm.app.comment.$dirty && frm.app.comment.$error.required"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <div align="right" style="padding-bottom: 5px;padding-right: 5px">
+                    <button class="btn btn-primary"  data-ng-disabled="frm.$invalid" data-ng-click="vm.submit()">Submit</button>
+                </div>
+        </form>
+    </div>
+</div>

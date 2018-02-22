@@ -450,8 +450,6 @@ module ums{
             }
         }
 
-
-
 //ng-disabled="a.statusName=='Waiting for payment' || a.statusName=='Approved' ?  true : false"
 
     }

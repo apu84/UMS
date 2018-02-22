@@ -237,7 +237,7 @@ interface ICarryLastdate{
       private carryLastDateFinder():ng.IPromise<any>{
           this.$scope.carrylastDate="";
           var defer = this.$q.defer();
-          var carryLastDate_check:Array<ICarryLastdate>=[];
+          /*var carryLastDate_check:Array<ICarryLastdate>=[];
           this.httpClient.get('academic/applicationCCI/carryLastDate', HttpClient.MIME_TYPE_JSON,
               (json: any, etag: string) => {
               console.log("Jacksonlll");
@@ -250,7 +250,7 @@ interface ICarryLastdate{
               },
               (response: ng.IHttpPromiseCallbackArg<any>) => {
                   console.error(response);
-              });
+              });*/
           return defer.promise;
       }
       private improvementLimitCalculation(): ng.IPromise<any>{

@@ -60,7 +60,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
 
   /**
    * Transaction always needs to be in a public method
-   *
+   * 
    * @param pStudentId
    * @param pJsonObject
    * @return

@@ -91,16 +91,17 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
       transaction.setVoucherDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
-      if (transaction.getId() == null) {
+      if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
-      } else {
+      }
+      else {
         updateTransactions.add(transaction);
       }
     }
-    if (newTransactions.size() > 0)
+    if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if (updateTransactions.size() > 0)
+    if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     return newTransactions;
@@ -112,7 +113,7 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
-    for (int i = 0; i < pJsonValues.size(); i++) {
+    for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
@@ -121,16 +122,17 @@ public class JournalVoucherResourceHelper extends AccountTransactionCommonResour
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
-      if (transaction.getId() == null) {
+      if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
-      } else {
+      }
+      else {
         updateTransactions.add(transaction);
       }
     }
-    if (newTransactions.size() > 0)
+    if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if (updateTransactions.size() > 0)
+    if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     return new ArrayList<>(newTransactions);

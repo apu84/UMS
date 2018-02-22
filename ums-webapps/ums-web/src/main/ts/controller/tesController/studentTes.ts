@@ -3,9 +3,30 @@
 * carry Approval Controller
 * */
 module ums{
+    interface IQuestions{
+        questionId:number;
+        questionDetails:string;
+        point:number;
+        comment:string;
+    }
+    interface IConstants {
+        id: any;
+        name: string;
+    }
+    interface IReviewEligibleCourses{
+        courseName:string;
+        courseTitle:string;
+        courseNo:string;
+    }
 
     class studentTES{
-        public  value:string;
+        public courseTypeList: Array<IConstants>;
+        public courseApprovalStatus: IConstants;
+        public courseSelectedStatus:IReviewEligibleCourses;
+        public  questionListAndReview:Array<IQuestions>;
+        public allReviewEligibleCourses:Array<IReviewEligibleCourses>;
+        public courseType:string;
+        public semesterNameCurrent:string;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -25,8 +46,73 @@ module ums{
                     private userService: UserService,
                     private commonservice: CommonService,
                     private attachmentService: AttachmentService) {
-            this.value="hello world";
 
+            this.courseTypeList = [];
+            this.courseTypeList = this.appConstants.courseTypeTES;
+            this.courseApprovalStatus = this.courseTypeList[0];
+            this.allReviewEligibleCourses=[];
+            this.courseType="";
+           this.statusChanged(this.courseApprovalStatus);
+        }
+        private statusChanged(courseApplicationStatus: IConstants){
+            this.courseApprovalStatus= courseApplicationStatus;
+            console.log(this.courseApprovalStatus);
+            if(this.courseApprovalStatus.name.match("Lab")){
+           this.courseType="Lab";
+            }else{
+           this.courseType="Theory";
+            }
+
+            var appTES:Array<IReviewEligibleCourses>=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReviewEligibleCourses/courseType/'+this.courseType, 'application/json',
+                (json: any, etag: string) => {
+                    appTES=json.entries;
+                    console.log("****Q1Q****");
+                    console.log("Applicatino TES Get Questions!!!!");
+                    this.allReviewEligibleCourses=appTES;
+                    this.courseSelectedStatus=this.allReviewEligibleCourses[0];
+                    this.semesterNameCurrent=json.semesterName;
+                    console.log(this.semesterNameCurrent);
+                    console.log(this.allReviewEligibleCourses);
+                    defer.resolve(json);
+
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
+
+        private getAllQuestions(){
+         var appTES:Array<IQuestions>=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAllQuestions', 'application/json',
+                (json: any, etag: string) => {
+                   appTES=json.entries;
+                    console.log("****Q1Q****");
+                    console.log("Applicatino TES Get Questions!!!!");
+                  this.questionListAndReview=appTES;
+                    console.log(this.questionListAndReview);
+                    defer.resolve(json.entries);
+
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+        private courseChanged(value:any){
+            console.log("--->"+value);
+        }
+        private F(va:string){
+            console.log(""+va);
+        }
+
+        private submit(){
+         console.log("Submit");
+         console.log(this.questionListAndReview);
         }
     }
     UMS.controller("studentTES",studentTES);

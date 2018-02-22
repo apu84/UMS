@@ -102,6 +102,7 @@ public class ApplicationCCICache extends
 
   @Override
   protected CacheManager<ApplicationCCI, Long> getCacheManager() {
+
     return mCacheManager;
   }
 

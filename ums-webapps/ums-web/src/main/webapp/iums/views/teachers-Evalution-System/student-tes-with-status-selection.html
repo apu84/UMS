@@ -1,0 +1,42 @@
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <label class="col-md-4 control-label"><strong style="color: slategray;">Course Type</strong></label>
+        <div class="col-md-8">
+            <select
+                    class="form-control required"
+                    name="leaveType"
+                    id="leaveType"
+                    data-ng-options="L.name for L in vm.courseTypeList track by L.id"
+                    data-ng-model="vm.courseApprovalStatus"
+                    data-ng-change="vm.statusChanged(vm.courseApprovalStatus)"
+            ></select>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <label class="col-md-4 control-label"><strong style="color: slategray;">Enrolled CoursesY</strong></label>
+        <div class="col-md-8">
+            <select
+                    class="form-control required"
+                    name="A"
+                    id="A"
+                    data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses track by L.key"
+                    data-ng-model="A.L"
+                    data-ng-change="vm.courseChanged(A.L)"
+            ></select>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-4" style="padding-bottom: 25px">
+    <div class="form-group" align="right">
+        <label class="col-md-8 control-label"><strong style="color: slategray;">Session:</strong><b style="font-size: 15px" >{{vm.semesterNameCurrent}}</b></label>
+
+        <div class="col-md-4">
+            <button class="bbtn btn-primary btn-xs" data-ng-disabled="vm.itemPerpageChecker"  data-ng-click="vm.searchByStudentId(vm.seachByStudentId)">Reviewed</button>
+        </div>
+    </div>
+</div>
+<br/>

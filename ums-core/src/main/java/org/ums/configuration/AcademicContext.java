@@ -199,6 +199,13 @@ public class AcademicContext {
   }
 
   @Bean
+  ApplicationTESManager applicationTESManager() {
+    ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));
+    applicationTESCache.setManager(new PersistentApplicationTESDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return applicationTESCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
