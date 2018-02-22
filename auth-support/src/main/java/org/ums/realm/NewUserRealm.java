@@ -9,7 +9,7 @@ import org.ums.usermanagement.user.User;
 public class NewUserRealm extends UserRealm {
   @Override
   public boolean supports(AuthenticationToken token) {
-    if(super.supports(token)) {
+    if(super.supports(token) && !token.getPrincipal().toString().contains(LOGIN_AS_SEPARATOR)) {
       User user = getUser(token.getPrincipal().toString());
       return user.getPassword() == null && user.getTemporaryPassword() != null;
     }
