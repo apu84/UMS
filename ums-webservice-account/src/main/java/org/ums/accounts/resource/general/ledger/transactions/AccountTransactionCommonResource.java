@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.definitions.general.ledger.transactions;
+package org.ums.accounts.resource.general.ledger.transactions;
 
 import org.springframework.stereotype.Component;
 import org.ums.resource.Resource;

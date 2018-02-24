@@ -85,7 +85,7 @@ public class AccountsContext {
     PredefinedNarrationCache predefinedNarrationCache = new PredefinedNarrationCache(mCacheFactory.getCacheManager());
     predefinedNarrationCache.setManager(new PersistentPredefinedNarrationDao(
         mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory
-            .getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+        .getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return predefinedNarrationCache;
   }
 
@@ -108,6 +108,11 @@ public class AccountsContext {
   @Bean(name = "accountTransactionManager")
   AccountTransactionManager accountTransactionManager() {
     return new PersistantAccountTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  ChequeRegisterManager checkRegisterManager() {
+    return new PersistentChequeRegisterDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 

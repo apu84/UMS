@@ -120,6 +120,10 @@
 
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/payment-voucher/payment.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/payment-voucher/payment.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.service.ts'/>
 
 
 /// <reference path="components/directives/balance.type.directive.ts"/>

@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.definitions.general.ledger.transactions.helper;
+package org.ums.accounts.resource.general.ledger.transactions.helper;
 
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 
@@ -11,7 +11,8 @@ public class PaginatedVouchers {
   private List<AccountTransaction> vouchers;
   private Integer totalNumber;
 
-  public PaginatedVouchers() {}
+  public PaginatedVouchers() {
+  }
 
   public List<AccountTransaction> getVouchers() {
     return vouchers;

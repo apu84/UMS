@@ -137,6 +137,18 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/general-ledger/transactions/journal-voucher/journal-voucher.html'
         })
+        .state('contraVoucher', {
+          url: "/contraVoucher",
+          controller: 'ContraVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/contra-voucher/contra-voucher.html'
+        })
+        .state('paymentVoucher', {
+          url: "/paymentVoucher",
+          controller: 'PaymentVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/payment-voucher/payment-voucher.html'
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'
