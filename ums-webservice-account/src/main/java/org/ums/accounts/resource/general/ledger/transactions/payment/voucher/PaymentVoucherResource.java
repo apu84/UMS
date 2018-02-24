@@ -25,7 +25,7 @@ public class PaymentVoucherResource extends MutablePaymentVoucherResource {
   @GET
   @Path("paginated")
   public PaginatedVouchers getAllPaginated(@QueryParam("itemPerPage") Integer itemPerPage,
-                                           @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
+      @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
     PaginatedVouchers paginatedVouchers = mHelper.getAllPaymentVouchers(itemPerPage, pageNumber, pVoucherNo);
     return paginatedVouchers;
   }

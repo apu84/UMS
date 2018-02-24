@@ -7,8 +7,7 @@ public class TransactionResponse {
   private String voucherNo;
   private String message;
 
-  public TransactionResponse() {
-  }
+  public TransactionResponse() {}
 
   public TransactionResponse(String pVoucherNo, String pMessage) {
     voucherNo = pVoucherNo;

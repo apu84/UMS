@@ -1,6 +1,6 @@
 /*
  * package org.ums.accounts.resource.general.ledger.transactions;
- *
+ * 
  * import org.junit.Before; import org.junit.Test; import org.junit.runner.RunWith; import
  * org.powermock.core.classloader.annotations.SuppressStaticInitializationFor; import
  * org.springframework.test.context.ContextConfiguration; import
@@ -17,50 +17,50 @@
  * org.ums.persistent.model.accounts.PersistentFinancialAccountYear; import
  * org.ums.persistent.model.accounts.PersistentVoucher; import
  * org.ums.usermanagement.user.UserManager; import org.ums.util.UmsUtils;
- *
+ * 
  * import java.util.Calendar; import java.util.Date;
- *
+ * 
  * import static org.junit.Assert.assertNotNull; import static org.mockito.Mockito.mock;
  */
 /**
  * Created by Monjur-E-Morshed on 19-Feb-18.
  */
 /*
- *
+ * 
  * @SuppressStaticInitializationFor({"org.ums.persistent.model.accounts"})
- *
+ * 
  * @RunWith(SpringJUnit4ClassRunner.class)
- *
+ * 
  * @ContextConfiguration(locations = {"classpath:services-context.xml",
  * "classpath:integration-context.xml", "classpath:application-context-webservice-core.xml",
  * "classpath:applicationContext.xml"}) public class AccountTransactionCommonResourceHelperTest {
- *
+ * 
  * protected AccountTransactionManager mAccountTransactionManager;
- *
+ * 
  * protected AccountTransactionBuilder mAccountTransactionBuilder;
- *
+ * 
  * protected VoucherManager mVoucherManager;
- *
+ * 
  * protected FinancialAccountYearManager mFinancialAccountYearManager;
- *
+ * 
  * protected VoucherNumberControlManager mVoucherNumberControlManager;
- *
+ * 
  * protected CompanyManager mCompanyManager;
- *
+ * 
  * protected AccountManager mAccountManager;
- *
+ * 
  * protected AccountBalanceManager mAccountBalanceManager;
- *
+ * 
  * protected UserManager mUserManager;
- *
+ * 
  * protected IdGenerator mIdGenerator;
- *
+ * 
  * protected MonthBalanceManager mMonthBalanceManager;
- *
+ * 
  * protected AccountTransactionCommonResourceHelper mAccountTransactionCommonResourceHelper;
- *
+ * 
  * private Voucher voucher; private FinancialAccountYear mFinancialAccountYear;
- *
+ * 
  * @Before public void initialize() throws Exception { mAccountBalanceManager =
  * mock(AccountBalanceManager.class); mAccountTransactionManager =
  * mock(AccountTransactionManager.class); mAccountTransactionBuilder =
@@ -72,19 +72,19 @@
  * mock(MonthBalanceManager.class); mAccountTransactionCommonResourceHelper =
  * mock(AccountTransactionCommonResourceHelper.class); initializeVoucher();
  * initializeOpenFinancialAccountYear(); }
- *
+ * 
  * @Test public void initialTest() { assertNotNull(mAccountBalanceManager);
  * assertNotNull(mAccountTransactionManager);
  * assertNotNull(mAccountTransactionCommonResourceHelper); }
- *
+ * 
  * @Test public void testIntegration() throws Exception {
- *
+ * 
  * }
- *
+ * 
  * public void initializeVoucher() { PersistentVoucher persistentVoucher = new PersistentVoucher();
  * persistentVoucher.setId(1L); persistentVoucher.setName("Journal Voucher");
  * persistentVoucher.setShortName("JN"); voucher = persistentVoucher; }
- *
+ * 
  * public void initializeOpenFinancialAccountYear() throws Exception { MutableFinancialAccountYear
  * mutableFinancialAccountYear = new PersistentFinancialAccountYear();
  * mutableFinancialAccountYear.setId(1L); Date currentdate = new Date(); Calendar calendar =
@@ -102,6 +102,6 @@
  * mutableFinancialAccountYear.setModifiedDate(new Date());
  * mutableFinancialAccountYear.setModifiedBy("711002"); mFinancialAccountYear =
  * mutableFinancialAccountYear; }
- *
+ * 
  * }
  */

@@ -197,8 +197,7 @@ public class PersistentChequeRegister implements MutableChequeRegister {
     sCheckRegisterManager.delete(this);
   }
 
-  public PersistentChequeRegister() {
-  }
+  public PersistentChequeRegister() {}
 
   public PersistentChequeRegister(MutableChequeRegister pCheckRegister) {
     setId(pCheckRegister.getId());

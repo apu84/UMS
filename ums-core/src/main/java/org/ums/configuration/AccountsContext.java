@@ -85,7 +85,7 @@ public class AccountsContext {
     PredefinedNarrationCache predefinedNarrationCache = new PredefinedNarrationCache(mCacheFactory.getCacheManager());
     predefinedNarrationCache.setManager(new PersistentPredefinedNarrationDao(
         mTemplateFactory.getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory
-        .getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+            .getAccountNamedParameterJdbcTemplate(), mIdGenerator));
     return predefinedNarrationCache;
   }
 

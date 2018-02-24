@@ -27,7 +27,7 @@ public class JournalVoucherResource extends MutableJournalVoucherResource {
   @GET
   @Path("paginated")
   public PaginatedVouchers getAllPaginated(@QueryParam("itemPerPage") Integer itemPerPage,
-                                           @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
+      @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
     PaginatedVouchers paginatedVouchers =
         mJournalVoucherResourceHelper.getAllJournalVouchers(itemPerPage, pageNumber, pVoucherNo);
     return paginatedVouchers;
@@ -36,7 +36,7 @@ public class JournalVoucherResource extends MutableJournalVoucherResource {
   @GET
   @Path("/voucher-no/{voucher-no}/date/{date}")
   public List<AccountTransaction> getVouchers(@PathParam("voucher-no") String pVoucherNo,
-                                              @PathParam("date") String pDate) throws Exception {
+      @PathParam("date") String pDate) throws Exception {
     return mJournalVoucherResourceHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
   }
 

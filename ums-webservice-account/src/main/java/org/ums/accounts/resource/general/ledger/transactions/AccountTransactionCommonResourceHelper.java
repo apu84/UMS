@@ -75,7 +75,7 @@ public class AccountTransactionCommonResourceHelper extends
     Date currentDay = new Date();
     TransactionResponse transactionResponse = new TransactionResponse();
     Company usersCompany = mCompanyManager.get("01");
-    if (currentDay.after(getPreviousDate(openFinancialYear.getCurrentStartDate(), DateCondition.Previous))
+    if(currentDay.after(getPreviousDate(openFinancialYear.getCurrentStartDate(), DateCondition.Previous))
         && currentDay.before(getPreviousDate(openFinancialYear.getCurrentEndDate(), DateCondition.Next))) {
       VoucherNumberControl voucherNumberControl = mVoucherNumberControlManager.getByVoucher(voucher, usersCompany);
       Calendar calendar = Calendar.getInstance();
@@ -83,7 +83,8 @@ public class AccountTransactionCommonResourceHelper extends
       calendar.setTime(currentDate);
       return createVoucherNumber(voucher, transactionResponse, voucherNumberControl, calendar, currentDate);
 
-    } else {
+    }
+    else {
       transactionResponse.setMessage("Current year is not opened");
       transactionResponse.setVoucherNo("");
       return transactionResponse;
@@ -92,12 +93,13 @@ public class AccountTransactionCommonResourceHelper extends
 
   @NotNull
   private TransactionResponse createVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
-                                                  VoucherNumberControl pVoucherNumberControl, Calendar pCalendar, Date pCurrentDate) throws Exception {
-    if (pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
+      VoucherNumberControl pVoucherNumberControl, Calendar pCalendar, Date pCurrentDate) throws Exception {
+    if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
       Date firstDate = UmsUtils.convertToDate("01-01-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
       Date lastDate = UmsUtils.convertToDate("31-12-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
       return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
-    } else if (pVoucherNumberControl.getResetBasis().equals(ResetBasis.MONTHLY)) {
+    }
+    else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.MONTHLY)) {
       Date firstDate =
           UmsUtils.convertToDate("01-" + pCalendar.get(Calendar.MONTH) + "-" + pCalendar.get(Calendar.YEAR),
               "dd-MM-yyyy");
@@ -105,30 +107,33 @@ public class AccountTransactionCommonResourceHelper extends
           UmsUtils.convertToDate(pCalendar.get(Calendar.DAY_OF_MONTH) + "-" + pCalendar.get(Calendar.MONTH) + "-"
               + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
       return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
-    } else if (pVoucherNumberControl.getResetBasis().equals(ResetBasis.WEEKLY)) {
+    }
+    else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.WEEKLY)) {
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek());
       Date firstDate = pCalendar.getTime();
       pCalendar.setTime(pCurrentDate);
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek() + 6);
       Date lastDate = pCalendar.getTime();
       return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
-    } else if (pVoucherNumberControl.getResetBasis().equals(ResetBasis.DAILY)) {
+    }
+    else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.DAILY)) {
       return getVoucherNumber(pVoucher, pTransactionResponse, pCurrentDate, pCurrentDate);
-    } else {
+    }
+    else {
       Integer nextVoucherNumber = mAccountTransactionManager.getTotalVoucherNumberBasedOnCurrentDay(pVoucher) + 1;
       return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucherNumber);
     }
   }
 
   private TransactionResponse getVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
-                                               Date pFirstDate, Date pLastDate) {
+      Date pFirstDate, Date pLastDate) {
     Integer nextVoucher = getContentManager().getVoucherNumber(pVoucher, pFirstDate, pLastDate) + 1;
     return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucher);
   }
 
   @NotNull
   private TransactionResponse getVoucherNumberGenerationResponse(Voucher pVoucher,
-                                                                 TransactionResponse pTransactionResponse, Integer pNextVoucher) {
+      TransactionResponse pTransactionResponse, Integer pNextVoucher) {
     String voucherNumber = generateVoucherNumber(pVoucher, pNextVoucher);
     pTransactionResponse.setMessage("");
     pTransactionResponse.setVoucherNo(voucherNumber);
@@ -138,7 +143,7 @@ public class AccountTransactionCommonResourceHelper extends
   @NotNull
   private String generateVoucherNumber(Voucher pVoucher, Integer pNextVoucher) {
     String voucherNumber = "" + pNextVoucher;
-    for (int i = 0; i < (6 - pNextVoucher.toString().length()); i++) {
+    for(int i = 0; i < (6 - pNextVoucher.toString().length()); i++) {
       voucherNumber = "0" + voucherNumber;
     }
     voucherNumber = pVoucher.getShortName() + voucherNumber;
@@ -148,7 +153,7 @@ public class AccountTransactionCommonResourceHelper extends
   private Date getPreviousDate(Date pDate, DateCondition pDateCondition) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(pDate);
-    if (pDateCondition.equals(DateCondition.Previous))
+    if(pDateCondition.equals(DateCondition.Previous))
       calendar.add(Calendar.DATE, -1);
     else
       calendar.add(Calendar.DATE, +1);
@@ -199,7 +204,7 @@ public class AccountTransactionCommonResourceHelper extends
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
-    for (int i = 0; i < pJsonValues.size(); i++) {
+    for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
@@ -207,16 +212,17 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setVoucherDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
-      if (transaction.getId() == null) {
+      if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
-      } else {
+      }
+      else {
         updateTransactions.add(transaction);
       }
     }
-    if (newTransactions.size() > 0)
+    if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if (updateTransactions.size() > 0)
+    if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     return newTransactions;
@@ -228,7 +234,7 @@ public class AccountTransactionCommonResourceHelper extends
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
-    for (int i = 0; i < pJsonValues.size(); i++) {
+    for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
@@ -237,16 +243,17 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
       transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
-      if (transaction.getId() == null) {
+      if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
-      } else {
+      }
+      else {
         updateTransactions.add(transaction);
       }
     }
-    if (newTransactions.size() > 0)
+    if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if (updateTransactions.size() > 0)
+    if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     updateAccountBalance(newTransactions);
@@ -259,16 +266,16 @@ public class AccountTransactionCommonResourceHelper extends
     Map<Long, MutableAccountTransaction> accountMapWithTransaction = new HashMap<>();
     BigDecimal totalDebit = BigDecimal.valueOf(0.00);
     BigDecimal totalCredit = BigDecimal.valueOf(0.00);
-    for (MutableAccountTransaction a : pTransactions) {
+    for(MutableAccountTransaction a : pTransactions) {
       accounts.add(a.getAccount());
       accountMapWithTransaction.put(a.getAccount().getId(), a);
 
-      if (a.getBalanceType().equals(BalanceType.Cr))
+      if(a.getBalanceType().equals(BalanceType.Cr))
         totalCredit = totalCredit.add(a.getAmount());
       else
         totalDebit = totalDebit.add(a.getAmount());
     }
-    if (!totalCredit.equals(totalDebit))
+    if(!totalCredit.equals(totalDebit))
       throw new MisMatchException("Credit and Debit should be equal");
 
     List<MutableAccountBalance> accountBalanceList =
@@ -303,20 +310,21 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   private void insertNewOrUpdatedMonthBalance(List<MutableMonthBalance> pNewMonthBalance,
-                                              List<MutableMonthBalance> pUpdatedMonthBalance) {
-    if (pNewMonthBalance.size() > 0)
+      List<MutableMonthBalance> pUpdatedMonthBalance) {
+    if(pNewMonthBalance.size() > 0)
       mMonthBalanceManager.create(pNewMonthBalance);
-    if (pUpdatedMonthBalance.size() > 0)
+    if(pUpdatedMonthBalance.size() > 0)
       mMonthBalanceManager.update(pUpdatedMonthBalance);
   }
 
   private void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
-    if (pTransaction.getBalanceType().equals(BalanceType.Cr)) {
+    if(pTransaction.getBalanceType().equals(BalanceType.Cr)) {
       pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? pTransaction
           .getAmount() : pMonthBalance.getTotalMonthCreditBalance().add(pTransaction.getAmount()));
       pMonthBalance.setTotalMonthDebitBalance(pMonthBalance.getTotalMonthDebitBalance() == null ? new BigDecimal(0)
           : pMonthBalance.getTotalMonthDebitBalance());
-    } else {
+    }
+    else {
       pMonthBalance.setTotalMonthDebitBalance(pMonthBalance.getTotalMonthDebitBalance() == null ? pTransaction
           .getAmount() : pMonthBalance.getTotalMonthDebitBalance().add(pTransaction.getAmount()));
       pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? new BigDecimal(0)
@@ -326,11 +334,12 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   private MutableMonthBalance initializeMonthBalance(int pMonth,
-                                                     Map<Long, MutableMonthBalance> pAccountBalanceIdMapWithMonthBalance, MutableAccountBalance a,
-                                                     MutableMonthBalance pMonthBalance) {
-    if (pAccountBalanceIdMapWithMonthBalance.containsKey(a.getId())) {
+      Map<Long, MutableMonthBalance> pAccountBalanceIdMapWithMonthBalance, MutableAccountBalance a,
+      MutableMonthBalance pMonthBalance) {
+    if(pAccountBalanceIdMapWithMonthBalance.containsKey(a.getId())) {
       pMonthBalance = pAccountBalanceIdMapWithMonthBalance.get(a.getId());
-    } else {
+    }
+    else {
       pMonthBalance.setId(mIdGenerator.getNumericId());
       pMonthBalance.setMonthId(new Long(pMonth));
       pMonthBalance.setAccountBalanceId(a.getId());
@@ -340,7 +349,7 @@ public class AccountTransactionCommonResourceHelper extends
 
   @NotNull
   private List<MutableAccountBalance> generateUpdatedAccountBalance(FinancialAccountYear pCurrentFinancialAccountYear,
-                                                                    List<Account> pAccounts, Map<Long, MutableAccountTransaction> pAccountMapWithTransaction) {
+      List<Account> pAccounts, Map<Long, MutableAccountTransaction> pAccountMapWithTransaction) {
     List<MutableAccountBalance> accountBalanceList =
         mAccountBalanceManager.getAccountBalance(pCurrentFinancialAccountYear.getCurrentStartDate(),
             pCurrentFinancialAccountYear.getCurrentEndDate(), pAccounts);
@@ -351,10 +360,10 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   private void updateTotalBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction,
-                                  List<MutableAccountBalance> pAccountBalanceList) {
-    for (MutableAccountBalance a : pAccountBalanceList) {
+      List<MutableAccountBalance> pAccountBalanceList) {
+    for(MutableAccountBalance a : pAccountBalanceList) {
       MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
-      if (accountTransaction.getBalanceType().equals(BalanceType.Cr))
+      if(accountTransaction.getBalanceType().equals(BalanceType.Cr))
         a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(
             accountTransaction.getAmount()));
       else

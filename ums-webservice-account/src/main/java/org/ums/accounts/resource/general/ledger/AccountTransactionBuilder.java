@@ -58,49 +58,49 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
   }
 
   public void build(MutableAccountTransaction pMutableAccountTransaction, JsonObject pJsonObject) throws Exception {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutableAccountTransaction.setId(Long.parseLong(pJsonObject.getString("id")));
-    if (pJsonObject.containsKey("companyId"))
+    if(pJsonObject.containsKey("companyId"))
       pMutableAccountTransaction.setCompanyId(pJsonObject.getString("companyId"));
-    if (pJsonObject.containsKey("divisionCode"))
+    if(pJsonObject.containsKey("divisionCode"))
       pMutableAccountTransaction.setDivisionCode(pJsonObject.getString("divisionCode"));
-    if (pJsonObject.containsKey("voucherNo"))
+    if(pJsonObject.containsKey("voucherNo"))
       pMutableAccountTransaction.setVoucherNo(pJsonObject.getString("voucherNo"));
-    if (pJsonObject.containsKey("voucherDate"))
+    if(pJsonObject.containsKey("voucherDate"))
       pMutableAccountTransaction.setVoucherDate(UmsUtils.convertToDate(pJsonObject.getString("voucherDate"),
           "dd-MM-yyyy"));
-    if (pJsonObject.containsKey("serialNo"))
+    if(pJsonObject.containsKey("serialNo"))
       pMutableAccountTransaction.setSerialNo(pJsonObject.getInt("serialNo"));
-    if (pJsonObject.containsKey("accountId"))
+    if(pJsonObject.containsKey("accountId"))
       pMutableAccountTransaction.setAccountId(Long.parseLong(pJsonObject.getString("accountId")));
-    if (pJsonObject.containsKey("voucherId"))
+    if(pJsonObject.containsKey("voucherId"))
       pMutableAccountTransaction.setVoucherId(Long.parseLong(pJsonObject.getString("voucherId")));
-    if (pJsonObject.containsKey("amount"))
+    if(pJsonObject.containsKey("amount"))
       pMutableAccountTransaction.setAmount(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber("amount")
           .toString())));
-    if (pJsonObject.containsKey("balanceType"))
+    if(pJsonObject.containsKey("balanceType"))
       pMutableAccountTransaction.setBalanceType(BalanceType.get(pJsonObject.getString("balanceType")));
-    if (pJsonObject.containsKey("narration") && !pJsonObject.isNull("narration"))
+    if(pJsonObject.containsKey("narration") && !pJsonObject.isNull("narration"))
       pMutableAccountTransaction.setNarration(pJsonObject.getString("narration"));
-    if (pJsonObject.containsKey("foreignCurrency"))
+    if(pJsonObject.containsKey("foreignCurrency"))
       pMutableAccountTransaction.setForeignCurrency(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber(
           "foreignCurrency").toString())));
-    if (pJsonObject.containsKey("currencyId"))
+    if(pJsonObject.containsKey("currencyId"))
       pMutableAccountTransaction.setCurrencyId(Long.parseLong(pJsonObject.getString("currencyId")));
-    if (pJsonObject.containsKey("conversionFactor"))
+    if(pJsonObject.containsKey("conversionFactor"))
       pMutableAccountTransaction.setConversionFactor(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber(
           "conversionFactor").toString())));
-    if (pJsonObject.containsKey("receiptId"))
+    if(pJsonObject.containsKey("receiptId"))
       pMutableAccountTransaction.setReceiptId(Long.parseLong(pJsonObject.getString("receiptId")));
-    if (pJsonObject.containsKey("postDate"))
+    if(pJsonObject.containsKey("postDate"))
       pMutableAccountTransaction.setPostDate(UmsUtils.convertToDate(pJsonObject.getString("postDate"), "dd-MM-yyyy"));
-    if (pJsonObject.containsKey("accountTransactionType"))
+    if(pJsonObject.containsKey("accountTransactionType"))
       pMutableAccountTransaction.setAccountTransactionType(pJsonObject.getString("accountTransactionType").equals(
           "BUYING") ? AccountTransactionType.BUYING : AccountTransactionType.SELLING);
-    if (pJsonObject.containsKey("modifiedDate"))
+    if(pJsonObject.containsKey("modifiedDate"))
       pMutableAccountTransaction.setModifiedDate(UmsUtils.convertToDate(pJsonObject.getString("modifiedDate"),
           "dd-MM-yyyy"));
-    if (pJsonObject.containsKey("modifiedBy"))
+    if(pJsonObject.containsKey("modifiedBy"))
       pMutableAccountTransaction.setModifiedBy(pJsonObject.getString("modifiedBy"));
   }
 }

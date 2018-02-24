@@ -24,7 +24,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
   private IdGenerator mIdGenerator;
 
   public PersistentChequeRegisterDao(JdbcTemplate pJdbcTemplate,
-                                     NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -78,7 +78,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   private Map<String, Object>[] getParamObjects(List<MutableChequeRegister> pMutableList) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableList.size()];
-    for (int i = 0; i < pMutableList.size(); i++) {
+    for(int i = 0; i < pMutableList.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableList.get(i));
     }
     return parameterMaps;
