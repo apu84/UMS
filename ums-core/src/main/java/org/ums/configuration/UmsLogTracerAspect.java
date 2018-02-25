@@ -23,16 +23,30 @@ public class UmsLogTracerAspect {
 
   Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
 
-  @Before("@annotation(log) && execution(* org.ums.accounts..*(..)) && args(pHttpServletRequest,pJsonArray,..)")
+  /*
+   * This aspect is for post request
+   */
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray,
-                     UmsLogMessage log) throws Throwable, Exception, IOException {
+      UmsLogMessage log) throws Throwable, Exception, IOException {
     HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
     mLogger.info("****UMS-Common-LOG****");
     mLogger.info(log.message());
     mLogger.info(mapper.getRequestURI());
-    if (mapper.getMethod().equals("POST")) {
-      mLogger.info(pJsonArray.toString());
-    }
+    mLogger.info(pJsonArray.toString());
+    mLogger.info(SecurityUtils.getSubject().getPrincipal().toString());
+  }
+
+  /*
+   * This aspect for get request
+   */
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,..)")
+  public void callGet(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, UmsLogMessage log)
+      throws Throwable, Exception, IOException {
+    HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
+    mLogger.info("****UMS-Common-LOG****");
+    mLogger.info(log.message());
+    mLogger.info(mapper.getRequestURI());
     mLogger.info(SecurityUtils.getSubject().getPrincipal().toString());
   }
 
