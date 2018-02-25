@@ -7,7 +7,6 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.meeting.Schedule;
 import org.ums.domain.model.mutable.meeting.MutableSchedule;
-import org.ums.enums.meeting.MeetingType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.meeting.ScheduleManager;
 import org.ums.persistent.model.meeting.PersistentSchedule;

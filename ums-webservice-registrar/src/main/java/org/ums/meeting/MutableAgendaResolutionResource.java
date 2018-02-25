@@ -3,7 +3,6 @@ package org.ums.meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.Resource;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;

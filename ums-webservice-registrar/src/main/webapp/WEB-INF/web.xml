@@ -82,6 +82,7 @@
           org.ums.employee,
           org.codehaus.jackson.jaxrs,
           org.ums.exception
+          org.ums.common
       </param-value>
     </init-param>
     <init-param>
