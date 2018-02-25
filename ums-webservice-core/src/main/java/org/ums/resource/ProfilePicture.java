@@ -64,14 +64,13 @@ public class ProfilePicture extends Resource {
   @GET
   @Path("/{image-id}")
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
-      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
+                      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
     String userId = "";
-    if(pImageId.equals("0")) {
+    if (pImageId.equals("0")) {
       Subject subject = SecurityUtils.getSubject();
       User user = mUserManager.get(subject.getPrincipal().toString());
       userId = user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId();
-    }
-    else {
+    } else {
       userId = pImageId;
     }
     InputStream imageData = null;
@@ -84,14 +83,14 @@ public class ProfilePicture extends Resource {
 
       ObjectMapper mapper = new ObjectMapper();
 
-    } catch(Exception fl) {
-      //fl.printStackTrace();
+    } catch (Exception fl) {
+      // fl.printStackTrace();
       mLogger.error(userId + ".jpg image not found");
       // return Response.status(Response.Status.NOT_FOUND).build();
       try {
 
         imageData = mGateway.read("files/user.png");
-      } catch(Exception e) {
+      } catch (Exception e) {
         return Response.status(Response.Status.NOT_FOUND).build();
       }
     }
@@ -123,7 +122,7 @@ public class ProfilePicture extends Resource {
   @Path("/upload")
   @Consumes({MediaType.MULTIPART_FORM_DATA})
   public Response uploadFile(@FormDataParam("files") File pInputStream, @FormDataParam("id") String id,
-      @FormDataParam("name") String name) throws IOException {
+                             @FormDataParam("name") String name) throws IOException {
 
     File newFile = new File(pInputStream.getParent(), id + ".jpg");
     Files.move(pInputStream.toPath(), newFile.toPath());
@@ -138,13 +137,11 @@ public class ProfilePicture extends Resource {
         session.mkdir("files/");
         return session.mkdir("files/user-photo/");
       });
-    template.send(messageA);
-    }
-    catch (Exception e){
+      template.send(messageA);
+    } catch (Exception e) {
       mLogger.error(e.getMessage());
       e.printStackTrace();
-    }
-    finally {
+    } finally {
       pInputStream.deleteOnExit();
       newFile.delete();
     }
