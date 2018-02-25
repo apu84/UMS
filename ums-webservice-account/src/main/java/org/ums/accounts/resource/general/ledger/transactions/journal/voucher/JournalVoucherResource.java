@@ -3,7 +3,7 @@ package org.ums.accounts.resource.general.ledger.transactions.journal.voucher;
 import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
-import org.ums.accounts.tracer.AccountLogMessage;
+import org.ums.configuration.UmsLogMessage;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.resource.Resource;
 
@@ -23,7 +23,7 @@ public class JournalVoucherResource extends MutableJournalVoucherResource {
 
   @GET
   @Path("/voucher-number")
-  @AccountLogMessage(message = "Getting journal Voucher")
+  @UmsLogMessage(message = "Getting journal Voucher")
   public TransactionResponse getVoucherNumber(@Context HttpServletRequest pHttpServletRequest) throws Exception {
     TransactionResponse transactionResponse = mJournalVoucherResourceHelper.getJournalVoucherNo();
     return mJournalVoucherResourceHelper.getJournalVoucherNo();

@@ -64,13 +64,14 @@ public class ProfilePicture extends Resource {
   @GET
   @Path("/{image-id}")
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
-                      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
+      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
     String userId = "";
-    if (pImageId.equals("0")) {
+    if(pImageId.equals("0")) {
       Subject subject = SecurityUtils.getSubject();
       User user = mUserManager.get(subject.getPrincipal().toString());
       userId = user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId();
-    } else {
+    }
+    else {
       userId = pImageId;
     }
     InputStream imageData = null;
@@ -83,14 +84,14 @@ public class ProfilePicture extends Resource {
 
       ObjectMapper mapper = new ObjectMapper();
 
-    } catch (Exception fl) {
+    } catch(Exception fl) {
       // fl.printStackTrace();
       mLogger.error(userId + ".jpg image not found");
       // return Response.status(Response.Status.NOT_FOUND).build();
       try {
 
         imageData = mGateway.read("files/user.png");
-      } catch (Exception e) {
+      } catch(Exception e) {
         return Response.status(Response.Status.NOT_FOUND).build();
       }
     }
