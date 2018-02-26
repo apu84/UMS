@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.ChequeRegisterDaoDecorator;
+import org.ums.domain.model.immutable.accounts.ChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
@@ -38,6 +39,14 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
       "INSERT INTO DT_CHEQUE_REGISTER(ID, COMP_CODE, TRANSACTION_ID, CHEQUE_NO, CHEQUE_DATE, STATUS, REALIZATION_DATE, STAT_FLAG, STAT_UP_FLAG, MODIFICATION_DATE, MODIFIED_BY, LAST_MODIFIED)  "
           + "VALUES (:id, :compCode, :transactionId, :chequeNo, :chequeDate, :status, :realizationDate,  :statFlag, :statUpFlag, :modificationDate, :modifiedBy, :lastModified)";
   String DELETE_ONE = "DELETE FROM DT_CHEQUE_REGISTER WHERE ID=?";
+
+  @Override
+  public List<ChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
+    String query = SELECT_ALL + " WHERE TRANSACTION_ID=:transactionIdList";
+    Map parameterMap = new HashMap();
+    parameterMap.put("transactionIdList", pTransactionIdList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentCheckRegisterRowMapper());
+  }
 
   @Override
   public int update(MutableChequeRegister pMutable) {

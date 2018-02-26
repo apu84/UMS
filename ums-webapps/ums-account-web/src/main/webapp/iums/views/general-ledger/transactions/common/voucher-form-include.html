@@ -56,16 +56,6 @@
                 <label class="control-label col-sm-2">Base:</label>
                 <label class="control-label col-sm-2">{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor}}</label>
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2">Type</label>
-                <div class="col-sm-10" style="alignment: center">
-                    <select class="form-control required" name="type" data-ng-model="vm.type">
-                        <option align="center" value="">Select Type</option>
-                        <option align="center" value="BUYING">Buying</option>
-                        <option align="center" value="SELLING">Selling</option>
-                    </select>
-                </div>
-            </div>
 
         </form>
     </div>
@@ -76,12 +66,27 @@
         <br>
         <div class="row">
             <div class="col-md-12">
-                <div class="well">
-                    <label class="control-label col-md-6" align="right">Total Debit : </label><label align="left"
-                                                                                                     class="control-label col-md-6">{{vm.totalDebit}}</label>
-                    <label class="control-label col-md-6" align="right">Total Credit: </label><label align="left"
-                                                                                                     class="control-label col-md-6">{{vm.totalCredit}}</label><br><br>
-                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
+                        <div class="col-sm-6">
+                            <ui-select id="paymentAccount" theme="bootstrap"
+                                       data-ng-model="vm.paymentVoucherMain.account" ng-change="vm.getAccountBalance()"
+                            >
+                                <ui-select-match placeholder="Select Account">
+                                    {{vm.paymentVoucherMain.account.accountName}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="g in vm.paymentAccounts|filter:$select.search">
+                                    <small ng-bind-html="g.accountName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Current Balance:</label>
+                        <label class="control-label col-sm-6">{{vm.formatCurrency(selectedPaymentAccountCurrentBalance)}}</label>
+                    </div>
+                </form>
                 <div class="alert alert-success" align="center">
                     <label class="control-label">{{vm.poststatus==true?'Posted':'Not posted'}}</label>
                 </div>

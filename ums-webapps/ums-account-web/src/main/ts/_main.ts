@@ -1,4 +1,5 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/AccountingLib.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-route.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.validate.d.ts'/>
@@ -103,6 +104,7 @@
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
 /// <reference path='components/definitions/account/account.service.ts'/>
+/// <reference path='components/definitions/account/account.balance.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>
 /// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>

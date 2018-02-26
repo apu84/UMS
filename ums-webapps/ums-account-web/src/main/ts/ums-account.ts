@@ -15,7 +15,8 @@ module ums {
     "angularUtils.directives.dirPagination",
     'smart-table',
     'ui.grid',
-    'ui.select'
+    'ui.select',
+    'angularAccounting'
   ]);
 
 

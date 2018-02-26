@@ -1,10 +1,8 @@
 package org.ums.persistent.dao.accounts;
 
-import io.reactivex.Observable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.util.StringUtils;
 import org.ums.decorator.accounts.AccountBalanceDaoDecorator;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
@@ -48,7 +46,9 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
 
   @Override
   public AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount) {
-    return super.getAccountBalance(pFinancialStartDate, pFinancialEndDate, pAccount);
+    String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFinancialStartDate, pFinancialEndDate, pAccount.getId()},
+        new AccountBalanceRowMapper());
   }
 
   @Override

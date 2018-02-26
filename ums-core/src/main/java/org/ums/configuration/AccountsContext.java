@@ -111,7 +111,8 @@ public class AccountsContext {
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
-  ChequeRegisterManager checkRegisterManager() {
+  @Bean
+  ChequeRegisterManager chequeRegisterManager() {
     return new PersistentChequeRegisterDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
