@@ -2,7 +2,9 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.DeptDesignationMap;
+import org.ums.domain.model.immutable.Designation;
 import org.ums.domain.model.mutable.MutableDeptDesignationMap;
 import org.ums.manager.DeptDesignationMapManager;
 
@@ -17,6 +19,11 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   }
 
   private int mId;
+  private Department mDepartment;
+  private String mDepartmentId;
+  private int mEmployeeTypeId;
+  private int mDesignationId;
+  private Designation mDesignation;
   private String mLastModified;
 
   public PersistentDeptDesignationMap() {
@@ -25,6 +32,11 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
 
   public PersistentDeptDesignationMap(final PersistentDeptDesignationMap pPersistentDeptDesignationMap) {
     mId = pPersistentDeptDesignationMap.getId();
+    mDepartment = pPersistentDeptDesignationMap.getDepartment();
+    mDepartmentId = pPersistentDeptDesignationMap.getDepartmentId();
+    mEmployeeTypeId = pPersistentDeptDesignationMap.getEmployeeTypeId();
+    mDesignationId = pPersistentDeptDesignationMap.getEmployeeTypeId();
+    mDesignation = pPersistentDeptDesignationMap.getDesignation();
     mLastModified = pPersistentDeptDesignationMap.getLastModified();
   }
 
@@ -66,5 +78,55 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public void setDepartment(Department pDepartment) {
+    mDepartment = pDepartment;
+  }
+
+  @Override
+  public void setDepartmentId(String pDepartmentId) {
+    mDepartmentId = pDepartmentId;
+  }
+
+  @Override
+  public void setEmployeeTypeId(int pEmployeeTypeId) {
+    mEmployeeTypeId = pEmployeeTypeId;
+  }
+
+  @Override
+  public void setDesignationId(int pDesignationId) {
+    mDesignationId = pDesignationId;
+  }
+
+  @Override
+  public void setDesignation(Designation pDesignation) {
+    mDesignation = pDesignation;
+  }
+
+  @Override
+  public Department getDepartment() {
+    return mDepartment;
+  }
+
+  @Override
+  public String getDepartmentId() {
+    return mDepartmentId;
+  }
+
+  @Override
+  public int getEmployeeTypeId() {
+    return mEmployeeTypeId;
+  }
+
+  @Override
+  public int getDesignationId() {
+    return mDesignationId;
+  }
+
+  @Override
+  public Designation getDesignation() {
+    return mDesignation;
   }
 }

@@ -14,7 +14,11 @@ import javax.ws.rs.core.UriInfo;
 public class DeptDesignationMapBuilder implements Builder<DeptDesignationMap, MutableDeptDesignationMap> {
   @Override
   public void build(JsonObjectBuilder pBuilder, DeptDesignationMap pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("departmentId", pReadOnly.getDepartmentId());
+    pBuilder.add("employeeTypeId", pReadOnly.getEmployeeTypeId());
+    pBuilder.add("designationId", pReadOnly.getDesignationId());
+    pBuilder.add("lastModified", pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
   }
 
   @Override

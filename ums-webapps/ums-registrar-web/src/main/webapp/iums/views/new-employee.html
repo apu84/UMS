@@ -71,7 +71,7 @@
                                             id="iDepartment"
                                             data-ng-model="vm.newEmployee.department"
                                             data-ng-options="depts.longName group by depts.category for depts in vm.allDepartments | orderBy: 'id' track by depts.id"
-                                            data-ng-change="vm.createId(); vm.changeEmployeeTypeSelection()"
+                                            data-ng-change="vm.createId(); vm.changeEmployeeTypeSelection(); vm.changeDesignationSelection()"
                                             class="form-control" required>
                                         <option value="">Select Department</option>
                                     </select>

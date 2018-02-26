@@ -11,4 +11,14 @@ import java.io.Serializable;
 public interface DeptDesignationMap extends Serializable, EditType<MutableDeptDesignationMap>, LastModifier,
     Identifier<Integer> {
 
+  Department getDepartment();
+
+  String getDepartmentId();
+
+  int getEmployeeTypeId();
+
+  int getDesignationId();
+
+  Designation getDesignation();
+
 }

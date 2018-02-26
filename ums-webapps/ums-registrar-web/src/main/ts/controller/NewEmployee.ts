@@ -94,14 +94,25 @@ module ums {
             });
         }
 
-        public changeDesignationSelection(): void{
+        public changeDesignationSelection(): void {
             this.changedDesignationTypes = [];
-            this.changedDesignationTypes = this.allDesignations.filter(value => {
-                return value["employeeType"] == this.newEmployee.employeeType["id"];
+            this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
+                if (response.length < 1) {
+                    this.notify.error("No designation found");
+                }
+                else {
+                    for (let i = 0; i < response.length; i++) {
+                        for (let j = 0; j < this.allDesignations.length; j++) {
+                            if (response[i].designationId == this.allDesignations[j].id) {
+                                this.changedDesignationTypes.push(this.allDesignations[j]);
+                            }
+                        }
+                    }
+                }
             });
         }
 
-        public changeEmployeeTypeSelection(): void{
+        public changeEmployeeTypeSelection(): void {
             this.changedEmployeeTypes = [];
             this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
         }

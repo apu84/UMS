@@ -100,11 +100,14 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     String queryString = "";
 
     if(filterDto.getSearchType().equalsIgnoreCase("basic")) {
-      String queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*:*" : filterDto.getBasicQueryTerm();
+      String queryTerm;
       if(filterDto.getBasicQueryField().equals("any")) {
+        /* queryString = String.format("%s AND type_s:Record", queryTerm); */
+        queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*:*" : filterDto.getBasicQueryTerm();
         queryString = String.format("%s AND type_s:Record", queryTerm);
       }
       else {
+        queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*" : filterDto.getBasicQueryTerm();
         queryString = String.format(filterDto.getBasicQueryField() + " : %s AND type_s:Record", queryTerm);
       }
 

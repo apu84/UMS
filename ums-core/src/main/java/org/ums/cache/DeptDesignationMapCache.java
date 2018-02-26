@@ -5,6 +5,8 @@ import org.ums.domain.model.mutable.MutableDeptDesignationMap;
 import org.ums.manager.CacheManager;
 import org.ums.manager.DeptDesignationMapManager;
 
+import java.util.List;
+
 public class DeptDesignationMapCache extends
     ContentCache<DeptDesignationMap, MutableDeptDesignationMap, Integer, DeptDesignationMapManager> implements
     DeptDesignationMapManager {
@@ -18,5 +20,10 @@ public class DeptDesignationMapCache extends
   @Override
   protected CacheManager<DeptDesignationMap, Integer> getCacheManager() {
     return mCacheManager;
+  }
+
+  @Override
+  public List<DeptDesignationMap> getDeptDesignationMap(String departmentId, int pEmployeeId) {
+    return getManager().getDeptDesignationMap(departmentId, pEmployeeId);
   }
 }
