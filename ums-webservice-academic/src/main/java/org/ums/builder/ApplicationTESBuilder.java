@@ -36,6 +36,24 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pReadOnly.getCourseNo() != null)
       pBuilder.add("courseNo", pReadOnly.getCourseNo());
+
+    if(pReadOnly.getTeacherId() != null)
+      pBuilder.add("teacherId", pReadOnly.getTeacherId());
+
+    if(pReadOnly.getSection() != null)
+      pBuilder.add("section", pReadOnly.getSection());
+
+    if(pReadOnly.getDeptId() != null)
+      pBuilder.add("deptId", pReadOnly.getDeptId());
+
+    if(pReadOnly.getDeptShortName() != null)
+      pBuilder.add("deptShortName", pReadOnly.getDeptShortName());
+
+    if(pReadOnly.getFirstName() != null)
+      pBuilder.add("firstName", pReadOnly.getFirstName());
+
+    if(pReadOnly.getLastName() != null)
+      pBuilder.add("lastName", pReadOnly.getLastName());
   }
 
   @Override

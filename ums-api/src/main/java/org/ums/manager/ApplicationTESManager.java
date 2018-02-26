@@ -15,6 +15,8 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   List<ApplicationTES> getReviewEligibleCourses(final String pStudentId, final Integer pSemesterId,
       final String pCourseType);
 
+  List<ApplicationTES> getTeachersInfo(final String pCourseId, final Integer pSemesterId, final String pSection);
+
   String getSemesterName(final Integer pCurrentSemester);
 
 }

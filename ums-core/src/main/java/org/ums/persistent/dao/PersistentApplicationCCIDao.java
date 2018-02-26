@@ -95,7 +95,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
           + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS= 2 "
-          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ? )" + "WHERE rowno >=?";
+          + "  AND STUDENTS.DEPT_ID=? ) b " + "   WHERE ROWNUM < ? )" + "WHERE rowno >=?";
   // -----------SearchBystudent Id
   String SELECT_ALL_CA_SearchByStudentId =
       " SELECT "
@@ -119,7 +119,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE "
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1 "
-          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 AND c.OFFER_BY= ? ";
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 AND STUDENTS.DEPT_ID=?  ";
 
   // Rejected
   String SELECT_ALL_Reject =
@@ -161,7 +161,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
           + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND  a.STATUS=9 "
-          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >= ?";
+          + "  AND STUDENTS.DEPT_ID=? ) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >= ?";
 
   // SearchByStudentId
 
@@ -187,7 +187,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE  "
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2  "
           + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1  "
-          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 AND c.OFFER_BY= ? ";
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 AND STUDENTS.DEPT_ID=?  ";
 
   // /////PaymentAndApproved Query
   String SELECT_ALL_Payment_ANd_Approved =
@@ -229,7 +229,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
           + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) "
-          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM <?)" + "WHERE rowno >=?";
+          + "  AND STUDENTS.DEPT_ID=? ) b " + "   WHERE ROWNUM <?)" + "WHERE rowno >=?";
   // Payment Approval Search
 
   String SELECT_ALL_Payment_ANd_Approved_SearchByStudentId =
@@ -254,7 +254,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE   "
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2   "
           + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1   "
-          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND c.OFFER_BY= ? ";
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) AND STUDENTS.DEPT_ID=?  ";
   // All
   String SELECT_ALL_All_Approval_Status =
       " SELECT "
@@ -295,7 +295,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
           + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3  "
-          + "  AND c.OFFER_BY=?) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >=?";
+          + "  AND STUDENTS.DEPT_ID=? ) b " + "   WHERE ROWNUM < ?)" + "WHERE rowno >=?";
   // SEachByStudent
   String SELECT_ALL_All_Approval_Status_SearchByStudentId =
       " SELECT "
@@ -319,7 +319,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + "WHERE "
           + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
           + "  AND a.semester_id = ? AND STUDENTS.CURR_ENROLLED_SEMESTER= ? AND exam_routine.semester = ? AND a.semester_id= ? AND t.EXAM_TYPE = 1 "
-          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3  AND c.OFFER_BY= ?";
+          + "  AND t.STUDENT_ID = ? AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = ? AND STUDENTS.STUDENT_ID= ? AND  a.APPLICATION_TYPE=3  AND STUDENTS.DEPT_ID=? ";
 
   // GetAllInfo
   String SELECT_ALL_INFO =
@@ -335,10 +335,11 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + " from APPLICATION_CCI a,MST_COURSE b where a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=b.COURSE_ID  and a.APPLICATION_TYPE=3 ";
   // GetTotalcarry
   String SELECT_TOTAL_CARRY =
-      "SELECT COURSE_NO,COURSE_TITLE, YEAR, SEMESTER from MST_COURSE where COURSE_ID in(SELECT COURSE_ID "
-          + "FROM UG_REGISTRATION_RESULT "
-          + "WHERE UG_REGISTRATION_RESULT.Student_id = ? AND UG_REGISTRATION_RESULT.Semester_Id != ? AND "
-          + "UG_REGISTRATION_RESULT.Exam_Type = 1 AND " + "UG_REGISTRATION_RESULT.GRADE_LETTER = 'F')";
+      "SELECT MST_COURSE.COURSE_NO,MST_COURSE.COURSE_TITLE, MST_COURSE.YEAR, MST_COURSE.SEMESTER from MST_COURSE where MST_COURSE.COURSE_ID in( "
+          + "SELECT COURSE_ID "
+          + "          FROM UG_REGISTRATION_RESULT "
+          + "          WHERE UG_REGISTRATION_RESULT.Student_id = ? AND UG_REGISTRATION_RESULT.Semester_Id NOT IN  ? AND "
+          + "          UG_REGISTRATION_RESULT.Exam_Type = 1 AND UG_REGISTRATION_RESULT.GRADE_LETTER = 'F' )";
 
   // Improvement_Limit_Calculation_Theory
   String SELECT_IMPROVEMENT_LIMIT =
@@ -378,7 +379,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
             + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
             + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=2 "
-            + "  AND c.OFFER_BY=?";
+            + "  AND STUDENTS.DEPT_ID=? ";
     SELECT_ALL_Payment_ANd_Approved_RD =
         "SELECT "
             + "  count(rownum) as totalItems "
@@ -387,7 +388,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
             + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
             + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND (a.STATUS=7 OR a.STATUS=8) "
-            + "  AND c.OFFER_BY=?";
+            + "  AND STUDENTS.DEPT_ID=? ";
 
     SELECT_ALL_Reject_RD =
         "SELECT "
@@ -397,7 +398,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
             + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
             + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3 AND a.STATUS=9 "
-            + "  AND c.OFFER_BY=?";
+            + "  AND STUDENTS.DEPT_ID=? ";
 
     SELECT_ALL_All_Approval_Status_RD =
         "SELECT "
@@ -407,7 +408,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "  a.course_id = c.course_id AND a.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 "
             + "  AND a.semester_id =STUDENTS.CURR_ENROLLED_SEMESTER AND exam_routine.semester = a.semester_id AND t.EXAM_TYPE = 1 "
             + "  AND t.STUDENT_ID = a.STUDENT_ID AND t.COURSE_ID = a.COURSE_ID AND a.STUDENT_ID = STUDENTS.STUDENT_ID AND  a.APPLICATION_TYPE=3"
-            + "  AND c.OFFER_BY=?";
+            + "  AND STUDENTS.DEPT_ID=? ";
 
     if(pApprovalStatus.equals("Waiting for head's approval")) {
       query = SELECT_ALL_CA__RD;

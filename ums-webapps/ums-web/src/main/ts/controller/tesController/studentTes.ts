@@ -18,15 +18,25 @@ module ums{
         courseTitle:string;
         courseNo:string;
     }
+    interface  IteacherInfo{
+        teacherId:string;
+        section:string;
+        deptId:string;
+        deptShortName:string;
+        firstName:string;
+        lastName:string;
+    }
 
     class studentTES{
         public courseTypeList: Array<IConstants>;
         public courseApprovalStatus: IConstants;
-        public courseSelectedStatus:IReviewEligibleCourses;
         public  questionListAndReview:Array<IQuestions>;
         public allReviewEligibleCourses:Array<IReviewEligibleCourses>;
         public courseType:string;
         public semesterNameCurrent:string;
+        public selectedCourseByStudent:string;
+        public getFacultyInfo:Array<IteacherInfo>;
+        public enrolledCourse: IReviewEligibleCourses;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -47,12 +57,16 @@ module ums{
                     private commonservice: CommonService,
                     private attachmentService: AttachmentService) {
 
+            //this.enrolledCourse=<IReviewEligibleCourses>{};
             this.courseTypeList = [];
             this.courseTypeList = this.appConstants.courseTypeTES;
             this.courseApprovalStatus = this.courseTypeList[0];
             this.allReviewEligibleCourses=[];
+            this.getFacultyInfo=[];
             this.courseType="";
-           this.statusChanged(this.courseApprovalStatus);
+           this.statusChanged(this.courseApprovalStatus).then((a:any)=>{
+               this.courseChanged();
+           })
         }
         private statusChanged(courseApplicationStatus: IConstants){
             this.courseApprovalStatus= courseApplicationStatus;
@@ -71,10 +85,14 @@ module ums{
                     console.log("****Q1Q****");
                     console.log("Applicatino TES Get Questions!!!!");
                     this.allReviewEligibleCourses=appTES;
-                    this.courseSelectedStatus=this.allReviewEligibleCourses[0];
+                    this.enrolledCourse=this.allReviewEligibleCourses[0];
+                    this.selectedCourseByStudent=this.enrolledCourse.courseTitle;
                     this.semesterNameCurrent=json.semesterName;
                     console.log(this.semesterNameCurrent);
+                    console.log(this.selectedCourseByStudent);
                     console.log(this.allReviewEligibleCourses);
+                    this.courseChanged();
+                    //
                     defer.resolve(json);
 
                 },
@@ -103,12 +121,28 @@ module ums{
                 });
             return defer.promise;
         }
-        private courseChanged(value:any){
-            console.log("--->"+value);
+        private courseChanged(){
+            console.log("selected course");
+            this.selectedCourseByStudent=this.enrolledCourse.courseName;
+           console.log(this.selectedCourseByStudent);
+            var appTES:Array<IteacherInfo>=[];
+            this.getFacultyInfo=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getFacultyInfo/courseId/'+this.selectedCourseByStudent+'/courseType/'+this.courseType,'application/json',
+                (json: any, etag: string) => {
+                    appTES=json.entries;
+                    console.log("****T1T****");
+                    console.log("Applicatin TES Get FacultyInfo!!!!");
+                    this.getFacultyInfo=appTES;
+                    console.log(this.getFacultyInfo);
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
         }
-        private F(va:string){
-            console.log(""+va);
-        }
+
 
         private submit(){
          console.log("Submit");

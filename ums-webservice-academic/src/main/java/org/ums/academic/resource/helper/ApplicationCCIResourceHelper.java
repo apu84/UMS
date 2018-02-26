@@ -11,10 +11,7 @@ import org.ums.builder.ApplicationCCIBuilder;
 import org.ums.builder.Builder;
 import org.ums.builder.UGRegistrationResultBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.ApplicationCCI;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.UGRegistrationResult;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationType;
 import org.ums.fee.FeeCategory;
@@ -26,10 +23,7 @@ import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.ApplicationCCIManager;
-import org.ums.manager.EmployeeManager;
-import org.ums.manager.StudentManager;
-import org.ums.manager.UGRegistrationResultManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentApplicationCCI;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
 import org.ums.resource.ResourceHelper;
@@ -96,6 +90,9 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
   @Autowired
   FeeCategoryManager mFeeCategoryManager;
+
+  @Autowired
+  SemesterManager mSemesterManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -226,18 +223,23 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       List<PersistentApplicationCCI> applicationAfterValidationByService =
         persistentApplicationCCIs;
       mManager.create(applications);
+
+
     List<MutableStudentPayment> studentPayments = new ArrayList<>();
-    applications.forEach(application->{
-      if(application.getApplicationType().equals(ApplicationType.IMPROVEMENT )){
-        MutableStudentPayment studentPayment = new PersistentStudentPayment();
+
+    applications.forEach(application->{ if(application.getApplicationType().equals(ApplicationType.IMPROVEMENT )){
+        MutableStudentPayment  studentPayment = new PersistentStudentPayment();
         FeeCategory.Categories feeCategoryId =FeeCategory.Categories.IMPROVEMENT;
         FeeCategory feeCategory = mFeeCategoryManager.getByFeeId(feeCategoryId.toString());
         List<FeeCategory> feeCategories = new ArrayList<>();
         feeCategories.add(feeCategory);
+
 //      List<UGFee> fees = mUgFeeManager.getFee(
 //              application.getStudent().getProgram().getFacultyId(),
 //              application.getStudent().getSemester().getId(),
 //              feeCategories);
+
+
         UGFee fee = mUgFeeManager.getFee(application.getStudent().getProgram().getFacultyId(),
                 application.getStudent().getSemester().getId(),feeCategory);
         studentPayment.setFeeCategoryId(feeCategory.getId());
@@ -434,9 +436,15 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   }
 
   public JsonObjectBuilder getcarryLastdate() throws Exception {
-    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
-    Student student = mStudentManager.get(studentId);
-    String date = getContentManager().getApplicationCCIForCarryLastfdate(student.getCurrentEnrolledSemester().getId());
+    // Integer programType = 11;
+    // String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    // Student student = mStudentManager.get(studentId);
+
+    /*
+     * getActive semester will be assigned int semester=
+     * mSemesterManager.getActiveSemester(11).getId(); student.getCurrentEnrolledSemester().getId()
+     */
+    String date = getContentManager().getApplicationCCIForCarryLastfdate(11012017);
     ObjectMapper mapper = new ObjectMapper();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("date", date);

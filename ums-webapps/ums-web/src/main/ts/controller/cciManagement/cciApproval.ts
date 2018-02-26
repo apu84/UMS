@@ -88,6 +88,9 @@ module ums{
         submit_Button_Disable:boolean;
         checkBoxCounter:number;
         pgDisable:boolean;
+        carrylastDate:string;
+        carrylastDateDeadline:boolean;
+        carryStatusShow:string;
 
 
 
@@ -148,7 +151,31 @@ module ums{
 
             //Functions
             this.statusChanged(this.carryApprovalStatus);
+            this.carryLastDateFinder();
         }
+
+        private carryLastDateFinder():ng.IPromise<any>{
+            this.carrylastDate="";
+            var defer = this.$q.defer();
+            this.httpClient.get('academic/applicationCCI/carryLastDate', HttpClient.MIME_TYPE_JSON,
+                (json: any, etag: string) => {
+                    console.log("Jacksonlll-head-Show");
+                    console.log(json);
+                    this.carrylastDate=json.date;
+                    this.carrylastDateDeadline=json.deadline;
+                    console.log("-----"+this.carrylastDateDeadline);
+                    this.carryStatusShow=this.carrylastDateDeadline==true? "Date Over":"Available";
+                    defer.resolve(json.date);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
+
+
+
 
         private getSemester(studentidTa:string,semesteridTa:number):ng.IPromise<any>{
             this.studentID=studentidTa;
@@ -170,7 +197,7 @@ module ums{
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);
-                    this.notify.error("Error in getting leave applications");
+                    this.notify.error("Error in getting carry data applications");
                 });
 
             return defer.promise;

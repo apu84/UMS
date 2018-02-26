@@ -68,9 +68,25 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        applications.forEach(a-> children.add(toJson(a,pUriInfo,localCache)));
         object.add("entries", children);
         object.add("semesterName",semesterName);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getFacultyInfo(final String courseId,final String courseType,final Request pRequest, final UriInfo pUriInfo){
+        String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+        Student student = mStudentManager.get(studentId);
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+
+        String section = courseType.equals("Theory") ? student.getTheorySection() : student.getSessionalSection();
+
+        List<ApplicationTES> facultyInfo=getContentManager().getTeachersInfo(courseId,student.getCurrentEnrolledSemester().getId(),section);
+        facultyInfo.forEach( a-> children.add(toJson(a,pUriInfo,localCache)));
+        object.add("entries",children);
         localCache.invalidate();
         return object.build();
     }

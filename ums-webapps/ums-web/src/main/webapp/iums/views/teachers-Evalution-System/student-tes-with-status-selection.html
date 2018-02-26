@@ -16,15 +16,15 @@
 
 <div class="col-sm-4">
     <div class="form-group" align="right">
-        <label class="col-md-4 control-label"><strong style="color: slategray;">Enrolled CoursesY</strong></label>
+        <label class="col-md-4 control-label"><strong style="color: slategray;">Enrolled Courses</strong></label>
         <div class="col-md-8">
             <select
                     class="form-control required"
-                    name="A"
-                    id="A"
-                    data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses track by L.key"
-                    data-ng-model="A.L"
-                    data-ng-change="vm.courseChanged(A.L)"
+                    name="selectedCourse"
+                    id="selectedCourse"
+                    data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses "
+                    data-ng-model="vm.enrolledCourse"
+                    data-ng-change="vm.courseChanged()"
             ></select>
         </div>
     </div>

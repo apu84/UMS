@@ -19,33 +19,48 @@ import java.util.Date;
 public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApplicationCCI> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ApplicationCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
+
     if(pReadOnly.getSemesterId() != null)
       pBuilder.add("semesterId", pReadOnly.getSemesterId());
+
     if(pReadOnly.getStudentId() != null)
       pBuilder.add("studentId", pReadOnly.getStudentId());
+
     if(pReadOnly.getCourseId() != null)
       pBuilder.add("courseId", pReadOnly.getCourseId());
+
     if(pReadOnly.getApplicationType() != null)
       pBuilder.add("applicationType", pReadOnly.getApplicationType().getValue());
+
     if(pReadOnly.getApplicationDate() != null)
       pBuilder.add("applicationDate", pReadOnly.getApplicationDate());
+
     if(pReadOnly.getCourseNo() != null)
       pBuilder.add("courseNo", pReadOnly.getCourseNo());
+
     if(pReadOnly.getCourseTitle() != null)
       pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
-    pBuilder.add("courseYear", pReadOnly.getCourse().getYear());
-    pBuilder.add("courseSemester", pReadOnly.getCourse().getSemester());
-    if(pReadOnly.getExamDate() != null) {
-      pBuilder.add("examDate", pReadOnly.getExamDate());
-      pBuilder.add("examDateOriginal", pReadOnly.getExamDate());
-    }
+
+    if(pReadOnly.getCourseNo() != null)
+      // pBuilder.add("courseYear", pReadOnly.getCourse().getYear());
+
+      if(pReadOnly.getCourseNo() != null)
+        // pBuilder.add("courseSemester", pReadOnly.getCourse().getSemester());
+
+        if(pReadOnly.getExamDate() != null) {
+          pBuilder.add("examDate", pReadOnly.getExamDate());
+          pBuilder.add("examDateOriginal", pReadOnly.getExamDate());
+        }
+
     if(pReadOnly.totalStudent() != null) {
       pBuilder.add("totalStudent", pReadOnly.totalStudent());
       pBuilder.add("studentNumber", pReadOnly.totalStudent());
 
     }
+
     if(pReadOnly.getCourseYear() != null) {
       pBuilder.add("year", pReadOnly.getCourseYear());
     }

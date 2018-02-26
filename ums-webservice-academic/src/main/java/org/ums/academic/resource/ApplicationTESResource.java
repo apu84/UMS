@@ -1,6 +1,8 @@
 package org.ums.academic.resource;
 
 import javax.json.JsonObject;
+
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.ApplicationTESManager;
@@ -32,6 +34,13 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @Path("/getReviewEligibleCourses/courseType/{course-type}")
   public JsonObject getReviewEligibleCourses(@Context Request pRequest, @PathParam("course-type") String pCourseType) {
     return mHelper.getReviewEligibleCourses(pCourseType, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getFacultyInfo/courseId/{course-id}/courseType/{course-type}")
+  public JsonObject getfacultyInfo(@Context Request pRequest, @PathParam("course-id") String pCourseId,
+      @PathParam("course-type") String pCourseType) {
+    return mHelper.getFacultyInfo(pCourseId, pCourseType, pRequest, mUriInfo);
   }
 
 }

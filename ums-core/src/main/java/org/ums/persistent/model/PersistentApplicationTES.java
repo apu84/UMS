@@ -28,6 +28,12 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mSemesterName;
   private String mCourseTitle;
   private String mCourseNo;
+  private String mTeacherId;
+  private String mSection;
+  private String mDeptId;
+  private String mDeptShortName;
+  private String mFirstName;
+  private String mLastName;
 
   public PersistentApplicationTES() {
 
@@ -42,6 +48,72 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mSemesterName = persistentApplicationTES.getSemesterName();
     mCourseTitle = persistentApplicationTES.getCourseTitle();
     mCourseNo = persistentApplicationTES.getCourseNo();
+    mTeacherId = persistentApplicationTES.getTeacherId();
+    mSection = persistentApplicationTES.getSection();
+    mDeptId = persistentApplicationTES.getDeptId();
+    mDeptShortName = persistentApplicationTES.getDeptShortName();
+    mFirstName = persistentApplicationTES.getFirstName();
+    mLastName = persistentApplicationTES.getLastName();
+  }
+
+  @Override
+  public void setTeacherId(String pTeacherId) {
+    mTeacherId = pTeacherId;
+  }
+
+  @Override
+  public void setSection(String pSection) {
+    mSection = pSection;
+  }
+
+  @Override
+  public void setDeptId(String pDeptId) {
+    mDeptId = pDeptId;
+  }
+
+  @Override
+  public void setDeptShortName(String pDeptShortName) {
+    mDeptShortName = pDeptShortName;
+  }
+
+  @Override
+  public void setFirstName(String pFirstName) {
+    mFirstName = pFirstName;
+  }
+
+  @Override
+  public void setLastName(String pLastName) {
+    mLastName = pLastName;
+  }
+
+  @Override
+  public String getTeacherId() {
+    return mTeacherId;
+  }
+
+  @Override
+  public String getSection() {
+    return mSection;
+  }
+
+  @Override
+  public String getDeptId() {
+    return mDeptId;
+  }
+
+  @Override
+  public String getDeptShortName() {
+    return mDeptShortName;
+  }
+
+  @Override
+  public String getFirstName() {
+    return mFirstName;
+  }
+
+  @Override
+  public String getLastName() {
+    return mLastName;
   }
 
   @Override

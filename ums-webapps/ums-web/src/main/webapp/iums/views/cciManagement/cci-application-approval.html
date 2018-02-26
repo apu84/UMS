@@ -37,14 +37,15 @@
 
         <div style="padding: 0px">
 
-            <div class="panel panel-info">
+            <div class="panel panel-info" >
                 <div class="panel-heading" align="center">
                     Carry Application Approval
                 </div>
-                <div style="padding-top:20px;padding-bottom: 40px" data-ng-include="'views/cciManagement/carry-application-with-status-selection.html'">
+
+                <div style="padding-top:20px;padding-bottom: 40px"  data-ng-hide="vm.carrylastDateDeadline" data-ng-include="'views/cciManagement/carry-application-with-status-selection.html'">
 
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" >
                     <div align="right">
                         <dir-pagination-controls boundary-links="true"
                                                  data-ng-hide="vm.pgDisable"
@@ -53,7 +54,7 @@
                                                  template-url="views\cciManagement\dirPagination.html"></dir-pagination-controls>
                     </div>
 
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" data-ng-hide="vm.carrylastDateDeadline">
                         <thead>
                         <th style="background-color: #FAFAFA; ">#</th>
                         <th style="background-color: #FAFAFA; ">Applied On</th>
@@ -87,7 +88,9 @@
                             <td>{{app.statusName}}</td>
                         </tr>
                         </tbody>
-                    </table>
+                    </table><p align="center" style="color:gray;font-size: 15px">
+                    Last Date of Apply:<strong style="font-size: 15px;color: black">{{vm.carrylastDate}}</strong>
+                    Deadline Status:<strong style="font-size: 15px;color: black">{{vm.carryStatusShow}}</strong></p>
 
                         <div class="modal fade" id="myModal" role="dialog" >
                          <!--   <div class="modal-backdrop"> -->

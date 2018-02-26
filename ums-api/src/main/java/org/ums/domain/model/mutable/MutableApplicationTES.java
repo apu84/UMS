@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.ApplicationTES;
  */
 public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
+
   void setApplicationDate(final String pApplicationDate);
 
   void setQuestionId(final Integer pQuestionId);
@@ -22,4 +23,17 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
   void setCourseTitle(final String pCoursetitle);
 
   void setCourseNo(final String pCourseNo);
+
+  void setTeacherId(final String pTeacherId);
+
+  void setSection(final String pSection);
+
+  void setDeptId(final String pDeptId);
+
+  void setDeptShortName(final String pDeptShortName);
+
+  void setFirstName(final String pFirstName);
+
+  void setLastName(final String pLastName);
+
 }

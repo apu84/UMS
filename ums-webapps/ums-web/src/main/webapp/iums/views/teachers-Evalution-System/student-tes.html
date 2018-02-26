@@ -7,6 +7,22 @@
          data-ng-include="'views/teachers-Evalution-System/student-tes-with-status-selection.html'">
 
     </div>
+        <div class="panel-body" style="padding-bottom: 10px">
+            <table class="table table-bordered">
+                <thead>
+                <th >Faculty Name</th>
+                <th >Department</th>
+                <th>Assigned Section</th>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="app in vm.getFacultyInfo">
+                    <td>{{app.firstName+' '+app.lastName}}</td>
+                    <td>{{app.deptShortName}}</td>
+                    <td>{{app.section}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <form name="frm" >
                     <div class="panel-body">
 
@@ -25,25 +41,23 @@
                                             max="5"
                                             min="1"
                                             ng-init="app.point=5"
-                                            ng-bind="app.point==1 ? '':app.comment=' '"
+                                            ng-bind="app.point==1 ? ' ':app.comment='why?'"
                                             data-ng-model="app.point">
                                 </td>
                                 <td>
                              <textarea
-
                                  data-ng-hide="app.point==1 ? false:true"
                                  data-ng-model="app.comment"
-                                 minlength="1"
                                  style="resize:none;height:40px;width:200px"
                                      required>
-                             </textarea><span ng-show="frm.app.comment.$dirty && frm.app.comment.$error.required"></span>
+                             </textarea>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 <div align="right" style="padding-bottom: 5px;padding-right: 5px">
-                    <button class="btn btn-primary"  data-ng-disabled="frm.$invalid" data-ng-click="vm.submit()">Submit</button>
+                    <button class="btn btn-primary"   data-ng-click="vm.submit()">Submit</button>
                 </div>
         </form>
     </div>

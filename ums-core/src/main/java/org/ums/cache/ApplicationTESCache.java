@@ -18,6 +18,11 @@ public class ApplicationTESCache extends
   CacheManager<ApplicationTES, Long> mCacheManager;
 
   @Override
+  public List<ApplicationTES> getTeachersInfo(String pCourseId, Integer pSemesterId, String pSection) {
+    return getManager().getTeachersInfo(pCourseId, pSemesterId, pSection);
+  }
+
+  @Override
   public List<ApplicationTES> getAllQuestions(Integer pSemesterId) {
     return getManager().getAllQuestions(pSemesterId);
   }
