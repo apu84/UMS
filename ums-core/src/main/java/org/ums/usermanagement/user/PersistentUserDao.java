@@ -60,7 +60,8 @@ public class PersistentUserDao extends UserDaoDecorator {
   public int update(MutableUser pMutable) {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getPrimaryRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword(),
+        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()),
         pMutable.getPasswordResetToken(), pMutable.getPasswordTokenGenerateDateTime(), pMutable.getId());
   }
 
