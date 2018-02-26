@@ -54,7 +54,6 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
   public JsonObject getNextMeetingNo(final int pMeetingTypeId, final UriInfo pUriInfo) {
     int meetingNo = 0;
     meetingNo = mManager.getNextMeetingNo(pMeetingTypeId);
-    System.out.println(meetingNo);
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("nextMeetingNumber", meetingNo + 1);
     return jsonObjectBuilder.build();
