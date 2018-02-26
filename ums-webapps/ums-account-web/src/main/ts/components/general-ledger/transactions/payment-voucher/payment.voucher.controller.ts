@@ -9,6 +9,7 @@ module ums {
     private voucherDate: string;
     private currencies: ICurrency[];
     private selectedCurrency: ICurrency;
+    private baseCurrency: ICurrency;
     private currencyConversions: ICurrencyConversion[];
     private currencyConversionMapWithCurrency: any;
     private postStatus: boolean;
@@ -16,6 +17,7 @@ module ums {
     private totalDebit: number;
     private paymentVouchers: IPaymentVoucher[];
     private paymentVoucherDetail: IPaymentVoucher;
+    private detailVouchers: IPaymentVoucher[];
     private paymentVoucherMain: IPaymentVoucher;
     static PAYMENT_VOUCHER_GROUP_FLAG = GroupFlag.YES;
     static PAYMENT_VOUCHER_ID = '6';
@@ -23,6 +25,8 @@ module ums {
     private selectedPaymentAccount: IAccount;
     private selectedPaymentAccountCurrentBalance: number;
     private paymentDetailAccounts: IAccount[];
+    private totalAmount: number;
+    private voucherOfAddModal: IPaymentVoucher;
 
 
     constructor($scope: ng.IScope,
@@ -43,6 +47,7 @@ module ums {
       this.showAddSection = false;
       this.getCurrencyConversions();
       this.getAccounts();
+      this.getCurrencies();
     }
 
     private getAccounts() {
@@ -65,7 +70,12 @@ module ums {
     }
 
     public formatCurrency(currency: number): any {
-      return accounting.formatNumber(currency);
+      return accounting.formatMoney(currency, this.selectedCurrency.notation + " ");
+    }
+
+    public formatBaseCurrency(currency: number): any {
+      let baseCurrencyConversion = currency * this.currencyConversionMapWithCurrency[this.selectedCurrency.id].base;
+      return accounting.formatMoney(baseCurrencyConversion, this.baseCurrency.notation + " ");
     }
 
     private getCurrencyConversions() {
@@ -79,17 +89,49 @@ module ums {
       });
     }
 
+
+    private getCurrencies() {
+      this.currencyService.getAllCurrencies().then((currencies: ICurrency[]) => {
+        this.currencies = currencies;
+        this.selectedCurrency = currencies[0];
+        this.baseCurrency = currencies.filter((c: ICurrency) => c.currencyFlag == 'B')[0];
+      });
+    }
+
     public addButtonClicked() {
       this.postStatus = false;
       this.showAddSection = true;
       this.totalCredit = 0;
       this.totalDebit = 0;
+      this.totalAmount = 0;
       this.paymentVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
       let currDate: Date = new Date();
       this.paymentVouchers = [];
       this.paymentVoucherMain = <IPaymentVoucher>{};
       this.paymentVoucherDetail = <IPaymentVoucher>{};
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
+      this.detailVouchers = [];
+    }
+
+    public addData() {
+      this.voucherOfAddModal = <IPaymentVoucher>{};
+      this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
+      this.voucherOfAddModal.balanceType = BalanceType.Cr;
+    }
+
+    public addDataToVoucherTable() {
+      this.voucherOfAddModal.accountId = this.voucherOfAddModal.account.id;
+      this.voucherOfAddModal.voucherNo = this.voucherNo;
+      this.voucherOfAddModal.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
+      this.detailVouchers.push(this.voucherOfAddModal);
+      this.countTotalAmount();
+    }
+
+    public countTotalAmount() {
+      this.detailVouchers.forEach((v: IPaymentVoucher) => {
+        this.totalAmount = v.amount;
+        console.log(this.totalAmount);
+      });
     }
 
   }

@@ -13,19 +13,19 @@
                         <label class="control-label col-sm-4" for="serialNo">Serial No:</label>
                         <div class="col-sm-6">
                             <input type="text" ng-disabled="true" class="form-control" id="serialNo"
-                                   ng-model="vm.journalVoucherOfAddModal.serialNo">
+                                   ng-model="vm.voucherOfAddModal.serialNo">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
                         <div class="col-sm-6">
                             <ui-select id="room" theme="bootstrap"
-                                       data-ng-model="vm.journalVoucherOfAddModal.account"
+                                       data-ng-model="vm.voucherOfAddModal.account"
                             >
                                 <ui-select-match placeholder="Select Account">
-                                    {{vm.journalVoucherOfAddModal.account.accountName}}
+                                    {{vm.voucherOfAddModal.account.accountName}}
                                 </ui-select-match>
-                                <ui-select-choices repeat="g in vm.accounts|filter:$select.search">
+                                <ui-select-choices repeat="g in vm.paymentDetailAccounts|filter:$select.search">
                                     <small ng-bind-html="g.accountName | highlight:$select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
@@ -35,21 +35,35 @@
                         <label class="control-label col-sm-4" for="amountInSpecific">Amount In Specific:</label>
                         <div class="col-sm-6">
                             <input type="number" class="form-control" id="amountInSpecific"
-                                   ng-model="vm.journalVoucherOfAddModal.amount">
+                                   ng-model="vm.voucherOfAddModal.amount">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="amountInBase">Amount In Base:</label>
                         <div class="col-sm-6">
                             <input type="number" ng-disabled="true" class="form-control" id="amountInBase"
-                                   value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.journalVoucherOfAddModal.amount}}">
+                                   value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.voucherOfAddModal.amount}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="narration">Cheque No:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="chequeNo"
+                                   ng-model="vm.voucherOfAddModal.chequeNo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="narration">Cheque Date:</label>
+                        <div class="col-sm-6">
+                            <div date-picker date-model="vm.voucherOfAddModal.chequeDate" date-format="'dd-mm-yyyy'"
+                                 ng-disabled="!vm.enableEdit"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="debitOrCredit">Dr/Cr:</label>
                         <div class="col-sm-6">
-                            <select class="form-control required" name="debitOrCredit"
-                                    data-ng-model="vm.journalVoucherOfAddModal.balanceType">
+                            <select ng-disabled="true" class="form-control required" name="debitOrCredit"
+                                    data-ng-model="vm.voucherOfAddModal.balanceType">
                                 <option value="Dr">Dr</option>
                                 <option value="Cr">Cr</option>
                             </select>
@@ -59,13 +73,13 @@
                         <label class="control-label col-sm-4" for="narration">Narration:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="narration"
-                                   ng-model="vm.journalVoucherOfAddModal.narration">
+                                   ng-model="vm.voucherOfAddModal.narration">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" ng-click="vm.addDataToJournalTable()"
+                <button type="button" class="btn btn-success" ng-click="vm.addDataToVoucherTable()"
                         data-dismiss="modal">
                     Add
                 </button>

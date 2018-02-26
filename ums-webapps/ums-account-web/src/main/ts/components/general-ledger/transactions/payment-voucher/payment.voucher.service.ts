@@ -2,7 +2,7 @@ module ums {
 
   export interface IPaginatedPaymentVoucher {
     totalNumber: number;
-    vouchers: IJournalVoucher[];
+    vouchers: IPaymentVoucher[];
   }
 
 
@@ -33,6 +33,8 @@ module ums {
     accountTransactionType: AccountTransactionType;
     modifiedDate: string;
     modifiedBy: string;
+    chequeNo: string;
+    chequeDate: string;
   }
 
 
@@ -52,7 +54,7 @@ module ums {
       this.url = "account/general-ledger/transaction/payment-voucher";
     }
 
-    public saveVoucher(vouchers: IJournalVoucher[]): ng.IPromise<any> {
+    public saveVoucher(vouchers: IPaymentVoucher[]): ng.IPromise<any> {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/save", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {

@@ -84,7 +84,11 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4">Current Balance:</label>
-                        <label class="control-label col-sm-6">{{vm.formatCurrency(selectedPaymentAccountCurrentBalance)}}</label>
+                        <label class="control-label col-sm-6">{{vm.formatCurrency(vm.selectedPaymentAccountCurrentBalance)}}</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Amount:</label>
+                        <label class="control-label col-sm-6">{{vm.formatCurrency(vm.totalAmount)}}</label>
                     </div>
                 </form>
                 <div class="alert alert-success" align="center">
@@ -97,8 +101,8 @@
     </div>
 </div>
 <div class="row"
-     ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-info-table-include.html'"></div>
-<div ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-add-modal.html'"></div>
-<div ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-search-modal.html'"></div>
+     ng-include="'views/general-ledger/transactions/common/voucher-info-table-include.html'"></div>
+<div ng-include="'views/general-ledger/transactions/common/voucher-add-modal.html'"></div>
+<div ng-include="'views/general-ledger/transactions/common/voucher-search-modal.html'"></div>
 
 
