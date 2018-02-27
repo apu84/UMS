@@ -37,6 +37,7 @@ module ums{
         public selectedCourseByStudent:string;
         public getFacultyInfo:Array<IteacherInfo>;
         public enrolledCourse: IReviewEligibleCourses;
+        public selectedRow:any;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -64,6 +65,7 @@ module ums{
             this.allReviewEligibleCourses=[];
             this.getFacultyInfo=[];
             this.courseType="";
+            this.selectedRow=null;
            this.statusChanged(this.courseApprovalStatus).then((a:any)=>{
                this.courseChanged();
            })
@@ -76,7 +78,7 @@ module ums{
             }else{
            this.courseType="Theory";
             }
-
+            this.getFacultyInfo=[];
             var appTES:Array<IReviewEligibleCourses>=[];
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReviewEligibleCourses/courseType/'+this.courseType, 'application/json',
@@ -127,6 +129,7 @@ module ums{
            console.log(this.selectedCourseByStudent);
             var appTES:Array<IteacherInfo>=[];
             this.getFacultyInfo=[];
+            this.selectedRow=null;
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getFacultyInfo/courseId/'+this.selectedCourseByStudent+'/courseType/'+this.courseType,'application/json',
                 (json: any, etag: string) => {
@@ -141,6 +144,12 @@ module ums{
                     console.error(response);
                 });
             return defer.promise;
+        }
+        private getInfo(point:any,cmn:any,id:any){
+            this.selectedRow=null;
+            console.log("Faculty_Id:"+point+"\nCourse_ID:"+cmn+"\nRow_ID:"+id);
+            this.selectedRow=id;
+
         }
 
 

@@ -1,3 +1,10 @@
+<style>
+    .selected {
+        background-color:#e7f5fe;
+        color:deeppink;
+        font-weight:bold;
+    }
+</style>
 <div class="container-fluid" data-ng-init="vm.getAllQuestions()">
     <div  class="panel panel-green">
         <div class="panel-heading" align="center">
@@ -10,12 +17,15 @@
         <div class="panel-body" style="padding-bottom: 10px">
             <table class="table table-bordered">
                 <thead>
-                <th >Faculty Name</th>
-                <th >Department</th>
-                <th>Assigned Section</th>
+                <td style="background-color: #f4fef3;width:20px; max-width: 20px;">#</td>
+                <th style="background-color: #f4fef3; ">Faculty Name</th>
+                <th style="background-color: #f4fef3; ">Department</th>
+                <th style="background-color: #f4fef3;">Assigned Section</th>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="app in vm.getFacultyInfo">
+                <tr data-ng-repeat="app in vm.getFacultyInfo"  ng-class="{'selected':$index == vm.selectedRow}"
+                    data-ng-click="vm.getInfo(app.teacherId,app.courseName,$index)">
+                    <td>{{$index+1}}</td>
                     <td>{{app.firstName+' '+app.lastName}}</td>
                     <td>{{app.deptShortName}}</td>
                     <td>{{app.section}}</td>
@@ -28,12 +38,14 @@
 
                         <table class="table table-bordered">
                             <thead>
-                            <th style="width:400px; max-width: 400px;">Questions</th>
-                            <th style="width:30px; max-width: 30px;">Point</th>
-                            <th style="width:200px; max-width: 200px;">comment</th>
+                            <th style="background-color: #eafee8;width:20px; max-width: 20px;">#</th>
+                            <th style="background-color: #eafee8;width:400px; max-width: 400px;">Questions</th>
+                            <th style="background-color: #eafee8;width:30px; max-width: 30px;">Point</th>
+                            <th style="background-color: #eafee8;width:200px; max-width: 200px;">Comment</th>
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in vm.questionListAndReview">
+                                <td>{{$index+1}}</td>
                                 <td>{{app.questionDetails}}</td>
                                 <td>
                                     <input
@@ -57,8 +69,31 @@
                         </table>
                     </div>
                 <div align="right" style="padding-bottom: 5px;padding-right: 5px">
-                    <button class="btn btn-primary"   data-ng-click="vm.submit()">Submit</button>
+                    <button class="btn btn-info"
+                            data-toggle="modal"
+                            data-target="#myModal">Submit</button>
                 </div>
+            <div class="modal fade" id="myModal" role="dialog" >
+                <!--   <div class="modal-backdrop"> -->
+                <div class="modal-dialog ">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Application For Teachers Evalution System</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h3><strong>Confirm?</strong></h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-ng-click="vm.submit()"  data-dismiss="modal">Confirm</button>
+                            <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
