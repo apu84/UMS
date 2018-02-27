@@ -74,7 +74,8 @@ module ums {
     }
 
     public formatBaseCurrency(currency: number): any {
-      let baseCurrencyConversion = currency * this.currencyConversionMapWithCurrency[this.selectedCurrency.id].base;
+      let baseCurrencyConversion = currency * (this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor);
+
       return accounting.formatMoney(baseCurrencyConversion, this.baseCurrency.notation + " ");
     }
 
@@ -93,8 +94,10 @@ module ums {
     private getCurrencies() {
       this.currencyService.getAllCurrencies().then((currencies: ICurrency[]) => {
         this.currencies = currencies;
+        console.log("Currencies");
+        console.log(currencies);
         this.selectedCurrency = currencies[0];
-        this.baseCurrency = currencies.filter((c: ICurrency) => c.currencyFlag == 'B')[0];
+        this.baseCurrency = currencies.filter((c: ICurrency) => c.currencyFlag == CurrencyFlag.BASE)[0];
       });
     }
 
@@ -123,9 +126,20 @@ module ums {
       this.voucherOfAddModal.accountId = this.voucherOfAddModal.account.id;
       this.voucherOfAddModal.voucherNo = this.voucherNo;
       this.voucherOfAddModal.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
+      this.voucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
+      this.voucherOfAddModal.foreignCurrency = this.voucherOfAddModal.amount * this.voucherOfAddModal.conversionFactor;
+      this.voucherOfAddModal.voucherDate = this.voucherDate;
+      this.voucherOfAddModal.currencyId = this.selectedCurrency.id;
       this.detailVouchers.push(this.voucherOfAddModal);
       this.countTotalAmount();
     }
+
+
+    public saveVoucher() {
+
+    }
+
+
 
     public countTotalAmount() {
       this.detailVouchers.forEach((v: IPaymentVoucher) => {

@@ -1,5 +1,7 @@
 package org.ums.enums.accounts.definitions.currency;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ public enum CurrencyFlag {
     return Lookup.get(pTypeValue);
   }
 
+  @JsonValue
   public String getValue() {
     return this.typeValue;
   }
