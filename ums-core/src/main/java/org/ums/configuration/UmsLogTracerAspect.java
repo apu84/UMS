@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -34,6 +35,17 @@ public class UmsLogTracerAspect {
     mLogger.info(log.message());
     mLogger.info(mapper.getRequestURI());
     mLogger.info(pJsonArray.toString());
+    mLogger.info(SecurityUtils.getSubject().getPrincipal().toString());
+  }
+
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject,
+      UmsLogMessage log) throws Throwable, Exception, IOException {
+    HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
+    mLogger.info("****UMS-Common-LOG****");
+    mLogger.info(log.message());
+    mLogger.info(mapper.getRequestURI());
+    mLogger.info(pJsonObject.toString());
     mLogger.info(SecurityUtils.getSubject().getPrincipal().toString());
   }
 
