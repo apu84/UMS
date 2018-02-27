@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class PersistentPersonalInformationDao extends PersonalInformationDaoDecorator {
 
@@ -58,7 +59,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   /*
    * @Override public PersonalInformation getPersonalInformation(final String pId) { String query =
    * GET_ONE + " WHERE EMPLOYEE_ID = ?"; return mJdbcTemplate .queryForObject(query, new Object[]
-   * {pId}, new PersistentPersonalInformationDao.RoleRowMapper()); }
+   * {pId}, new PersistentPersonalInformationDao.PersonalInformationRowMapper()); }
    * 
    * @Override public int deletePersonalInformation(final MutablePersonalInformation
    * pMutablePersonalInformation) { String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?"; return
@@ -131,19 +132,27 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   @Override
   public PersonalInformation get(String pId) {
     String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RoleRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersonalInformationRowMapper());
   }
 
   @Override
   public List<PersonalInformation> getAll() {
     String query = GET_ONE;
-    return mJdbcTemplate.query(query, new PersistentPersonalInformationDao.RoleRowMapper());
+    return mJdbcTemplate.query(query, new PersistentPersonalInformationDao.PersonalInformationRowMapper());
   }
 
   @Override
   public int delete(final MutablePersonalInformation pMutablePersonalInformation) {
     String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutablePersonalInformation.getId());
+  }
+
+  @Override
+  public Optional<PersonalInformation> getByEmail(String pEmailAddress) {
+    String query = GET_ONE + " WHERE PERSONAL_EMAIL = ? ";
+    List<PersonalInformation> personalInformationList =
+        mJdbcTemplate.query(query, new Object[] {pEmailAddress}, new PersonalInformationRowMapper());
+    return personalInformationList.size() == 1 ? Optional.of(personalInformationList.get(0)) : Optional.empty();
   }
 
   @Override
@@ -208,7 +217,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
         pMutablePersonalInformation.getEmergencyContactAddress(), pMutablePersonalInformation.getId());
   }
 
-  class RoleRowMapper implements RowMapper<PersonalInformation> {
+  class PersonalInformationRowMapper implements RowMapper<PersonalInformation> {
 
     @Override
     public PersonalInformation mapRow(ResultSet resultSet, int i) throws SQLException {

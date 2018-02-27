@@ -54,58 +54,6 @@ public class RegistrarContext {
   IdGenerator mIdGenerator;
 
   @Bean
-  AcademicInformationManager academicInformationManager() {
-    return new PersistentAcademicInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  AwardInformationManager awardInformationManager() {
-    return new PersistentAwardInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  ServiceInformationManager serviceInformationManager() {
-    return new PersistentServiceInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  ServiceInformationDetailManager serviceInformationDetailManager() {
-    return new PersistentServiceInformationDetailDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  ExperienceInformationManager experienceInformationManager() {
-    return new PersistentExperienceInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  PersonalInformationManager personalInformationManager() {
-    PersonalInformationCache personalInformationCache = new PersonalInformationCache(mCacheFactory.getCacheManager());
-    personalInformationCache.setManager(new PersistentPersonalInformationDao(mTemplateFactory.getJdbcTemplate()));
-    return personalInformationCache;
-  }
-
-  @Bean
-  PublicationInformationManager publicationInformationManager() {
-    return new PersistentPublicationInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  TrainingInformationManager trainingInformationManager() {
-    return new PersistentTrainingInformationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
-
-  @Bean
-  AreaOfInterestInformationManager areaOfInterestInformationManager() {
-    return new PersistentAreaOfInterestInformationDao(mTemplateFactory.getJdbcTemplate());
-  }
-
-  @Bean
-  AdditionalInformationManager additionalInformationManager() {
-    return new PersistentAdditionalInformationDao(mTemplateFactory.getJdbcTemplate());
-  }
-
-  @Bean
   ScheduleManager scheduleManager() {
     ScheduleCache scheduleCache = new ScheduleCache(mCacheFactory.getCacheManager());
     scheduleCache.setManager(new PersistentScheduleDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
