@@ -14,7 +14,7 @@ public class ChequeRegisterDaoDecorator extends
     ContentDaoDecorator<ChequeRegister, MutableChequeRegister, Long, ChequeRegisterManager> implements
     ChequeRegisterManager {
   @Override
-  public List<ChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
+  public List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
     return getManager().getByTransactionIdList(pTransactionIdList);
   }
 }

@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.ChequeRegisterDaoDecorator;
-import org.ums.domain.model.immutable.accounts.ChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
@@ -41,7 +40,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
   String DELETE_ONE = "DELETE FROM DT_CHEQUE_REGISTER WHERE ID=?";
 
   @Override
-  public List<ChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
+  public List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
     String query = SELECT_ALL + " WHERE TRANSACTION_ID=:transactionIdList";
     Map parameterMap = new HashMap();
     parameterMap.put("transactionIdList", pTransactionIdList);
@@ -98,7 +97,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
     parameter.put("id", pMutableCheckRegister.getId());
     parameter.put("compCode", pMutableCheckRegister.getCompany().getId());
     parameter.put("transactionId", pMutableCheckRegister.getAccountTransaction().getId());
-    parameter.put("chequeNo", pMutableCheckRegister.getCheckNo());
+    parameter.put("chequeNo", pMutableCheckRegister.getChequeNo());
     parameter.put("chequeDate", pMutableCheckRegister.getChequeDate());
     parameter.put("status", pMutableCheckRegister.getStatus());
     parameter.put("realizationDate", pMutableCheckRegister.getRealizationDate());
@@ -117,7 +116,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
       checkRegister.setId(rs.getLong("id"));
       checkRegister.setCompanyId(rs.getString("comp_code"));
       checkRegister.setAccountTransactionId(rs.getLong("transaction_id"));
-      checkRegister.setCheckNo(rs.getString("cheque_no"));
+      checkRegister.setChequeNo(rs.getString("cheque_no"));
       checkRegister.setChequeDate(rs.getDate("cheque_date"));
       checkRegister.setStatus(rs.getString("status"));
       checkRegister.setRealizationDate(rs.getDate("realization_date"));

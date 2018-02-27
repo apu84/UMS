@@ -12,6 +12,8 @@ import org.ums.resource.ResourceHelper;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 26-Feb-18.
@@ -23,6 +25,10 @@ public class ChequeRegisterResourceHelper extends ResourceHelper<ChequeRegister,
   private ChequeRegisterManager mChequeRegisterManager;
   @Autowired
   private ChequeRegisterBuilder mChequeRegisterBuilder;
+
+  public List<ChequeRegister> getChequeRegisterList(final List<Long> pTransactionIdList) {
+    return new ArrayList<>(mChequeRegisterManager.getByTransactionIdList(pTransactionIdList));
+  }
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {

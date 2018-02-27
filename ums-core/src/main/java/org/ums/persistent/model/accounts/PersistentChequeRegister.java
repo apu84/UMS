@@ -88,12 +88,12 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
-  public String getCheckNo() {
+  public String getChequeNo() {
     return mCheckNo;
   }
 
   @Override
-  public void setCheckNo(String pCheckNo) {
+  public void setChequeNo(String pCheckNo) {
     this.mCheckNo = pCheckNo;
   }
 
@@ -205,7 +205,7 @@ public class PersistentChequeRegister implements MutableChequeRegister {
     setCompanyId(pCheckRegister.getCompanyId());
     setAccountTransaction(pCheckRegister.getAccountTransaction());
     setAccountTransactionId(pCheckRegister.getAccountTransactionId());
-    setCheckNo(pCheckRegister.getCheckNo());
+    setChequeNo(pCheckRegister.getChequeNo());
     setChequeDate(pCheckRegister.getChequeDate());
     setStatus(pCheckRegister.getStatus());
     setRealizationDate(pCheckRegister.getRealizationDate());

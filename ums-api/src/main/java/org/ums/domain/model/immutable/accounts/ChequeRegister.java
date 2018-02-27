@@ -22,7 +22,7 @@ public interface ChequeRegister extends Serializable, EditType<MutableChequeRegi
 
   Long getAccountTransactionId();
 
-  String getCheckNo();
+  String getChequeNo();
 
   Date getChequeDate();
 

@@ -23,7 +23,7 @@ public interface MutableChequeRegister extends ChequeRegister, Editable<Long>, M
 
   void setAccountTransactionId(Long pAccountTransactionId);
 
-  void setCheckNo(String pCheckNo);
+  void setChequeNo(String pCheckNo);
 
   void setChequeDate(Date pChequeDate);
 

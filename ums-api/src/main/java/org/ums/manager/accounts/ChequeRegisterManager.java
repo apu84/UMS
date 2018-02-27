@@ -10,5 +10,5 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 20-Feb-18.
  */
 public interface ChequeRegisterManager extends ContentManager<ChequeRegister, MutableChequeRegister, Long> {
-  List<ChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList);
+  List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList);
 }

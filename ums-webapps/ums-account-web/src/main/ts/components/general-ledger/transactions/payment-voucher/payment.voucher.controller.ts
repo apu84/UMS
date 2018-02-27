@@ -3,7 +3,7 @@ module ums {
 
 
   export class PaymentVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -12,6 +12,7 @@ module ums {
     private baseCurrency: ICurrency;
     private currencyConversions: ICurrencyConversion[];
     private currencyConversionMapWithCurrency: any;
+    private voucherMapWithId: any;
     private postStatus: boolean;
     private totalCredit: number;
     private totalDebit: number;
@@ -27,7 +28,7 @@ module ums {
     private paymentDetailAccounts: IAccount[];
     private totalAmount: number;
     private voucherOfAddModal: IPaymentVoucher;
-
+    private dateFormat: string;
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -39,11 +40,13 @@ module ums {
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
                 private currencyConversionService: CurrencyConversionService,
-                private accountBalanceService: AccountBalanceService) {
+                private accountBalanceService: AccountBalanceService,
+                private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService) {
       this.initialize();
     }
 
     public initialize() {
+      this.dateFormat = "dd-mm-yyyy";
       this.showAddSection = false;
       this.getCurrencyConversions();
       this.getAccounts();
@@ -62,6 +65,7 @@ module ums {
     }
 
     public getAccountBalance() {
+      this.paymentVoucherMain.balanceType = BalanceType.Dr;
       this.accountBalanceService.getAccountBalance(this.paymentVoucherMain.account.id).then((currentBalance: number) => {
         this.selectedPaymentAccountCurrentBalance = currentBalance;
         console.log(accounting.formatNumber(10000));
@@ -123,20 +127,67 @@ module ums {
     }
 
     public addDataToVoucherTable() {
-      this.voucherOfAddModal.accountId = this.voucherOfAddModal.account.id;
-      this.voucherOfAddModal.voucherNo = this.voucherNo;
-      this.voucherOfAddModal.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
-      this.voucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
-      this.voucherOfAddModal.foreignCurrency = this.voucherOfAddModal.amount * this.voucherOfAddModal.conversionFactor;
-      this.voucherOfAddModal.voucherDate = this.voucherDate;
-      this.voucherOfAddModal.currencyId = this.selectedCurrency.id;
+      this.voucherOfAddModal = this.addNecessaryAttributesToVoucher(this.voucherOfAddModal);
       this.detailVouchers.push(this.voucherOfAddModal);
       this.countTotalAmount();
     }
 
+    private addNecessaryAttributesToVoucher(voucher: IPaymentVoucher): IPaymentVoucher {
+      console.log("*****************");
+      console.log(voucher);
+      voucher.accountId = voucher.account.id;
+      voucher.voucherNo = this.voucherNo;
+      voucher.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
+      voucher.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
+      voucher.foreignCurrency = voucher.amount * voucher.conversionFactor;
+      voucher.voucherDate = this.voucherDate;
+      voucher.currencyId = this.selectedCurrency.id;
+      return voucher;
+    }
+
 
     public saveVoucher() {
+      if (this.paymentVoucherMain == null)
+        this.notify.error("Account Name is not selected");
+      else {
+        this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
+        this.paymentVoucherMain.amount = this.selectedPaymentAccountCurrentBalance + this.totalAmount;
+        this.detailVouchers.push(this.paymentVoucherMain);
+        this.paymentVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
+          this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
+            this.assignChequeNumberToVouchers(vouchers);
+          });
+        });
+      }
+    }
 
+    private extractMainAndDetailSectionFromVouchers(vouchers: IPaymentVoucher[]): ng.IPromise<IPaymentVoucher[]> {
+      let defer: ng.IDeferred<IPaymentVoucher[]> = this.$q.defer();
+      this.detailVouchers = [];
+      this.voucherMapWithId = {};
+      vouchers.forEach((v: IPaymentVoucher) => {
+        this.voucherMapWithId[v.id] = v;
+        if (v.serialNo == null)
+          this.paymentVoucherMain = v;
+        else
+          this.detailVouchers.push(v);
+      });
+      defer.resolve(vouchers);
+
+      return defer.promise;
+    }
+
+    private assignChequeNumberToVouchers(vouchers: IPaymentVoucher[]) {
+      let transactionIdList: string[] = [];
+      vouchers.forEach((v: IPaymentVoucher) => transactionIdList.push(v.id));
+
+      this.chequeRegisterService.getChequeRegisterList(transactionIdList).then((chequeList: IChequeRegister[]) => {
+        chequeList.forEach((c: IChequeRegister) => {
+          let voucher: IPaymentVoucher = this.voucherMapWithId[c.accountTransactionId];
+          voucher.chequeNo = c.chequeNo;
+          voucher.chequeDate = c.chequeDate;
+        });
+      });
     }
 
 

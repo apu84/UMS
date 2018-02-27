@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.accounts.resource.cheque.register.ChequeRegisterBuilder;
 import org.ums.accounts.resource.general.ledger.AccountTransactionBuilder;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
@@ -12,6 +13,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
+import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
@@ -20,6 +22,7 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
+import org.ums.persistent.model.accounts.PersistentChequeRegister;
 import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
@@ -63,6 +66,10 @@ public class AccountTransactionCommonResourceHelper extends
   protected IdGenerator mIdGenerator;
   @Autowired
   protected MonthBalanceManager mMonthBalanceManager;
+  @Autowired
+  protected ChequeRegisterManager mChequeRegisterManager;
+  @Autowired
+  protected ChequeRegisterBuilder mChequeRegisterBuilder;
 
   private enum DateCondition {
     Previous,
@@ -201,12 +208,15 @@ public class AccountTransactionCommonResourceHelper extends
   private List<MutableAccountTransaction> createTransactions(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
+    List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
     for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
+      PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
+      mChequeRegisterBuilder.build(chequeRegister, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
@@ -219,13 +229,47 @@ public class AccountTransactionCommonResourceHelper extends
       else {
         updateTransactions.add(transaction);
       }
+      chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
+      if(chequeRegister.getChequeNo() != null)
+        chequeRegisters.add(chequeRegister);
     }
     if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
     if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
+    updateOrSaveChequeRegister(chequeRegisters, newTransactions);
     return newTransactions;
+  }
+
+  private void updateOrSaveChequeRegister(List<MutableChequeRegister> pChequeRegisters, List<MutableAccountTransaction> pAccountTransactions) {
+    List<Long> transactionIdList = pAccountTransactions.stream().map(t -> t.getId()).collect(Collectors.toList());
+    List<MutableChequeRegister> existingChequeRegisterList = mChequeRegisterManager.getByTransactionIdList(transactionIdList);
+    if (existingChequeRegisterList.size() == 0) {
+      pChequeRegisters.forEach(c -> c.setId(mIdGenerator.getNumericId()));
+      mChequeRegisterManager.create(pChequeRegisters);
+    } else {
+      Map<Long, MutableChequeRegister> newChequeRegisterMap = pChequeRegisters.stream().collect(Collectors.toMap(ChequeRegister::getId, p -> p));
+      existingChequeRegisterList.forEach(e -> {
+        ChequeRegister chequeRegister = newChequeRegisterMap.get(e.getId());
+        e.setChequeNo(chequeRegister.getChequeNo());
+        e.setChequeDate(chequeRegister.getChequeDate());
+        e.setModificationDate(chequeRegister.getModificationDate());
+        e.setModifiedBy(chequeRegister.getModifiedBy());
+      });
+      mChequeRegisterManager.update(existingChequeRegisterList);
+    }
+  }
+
+  private PersistentChequeRegister assignInfoToChequeRegisterFromTransaction(
+      PersistentChequeRegister pPersistentChequeRegister, PersistentAccountTransaction pPersistentAccountTransaction) {
+    if(pPersistentChequeRegister == null)
+      return null;
+    pPersistentChequeRegister.setAccountTransactionId(pPersistentAccountTransaction.getId());
+    pPersistentChequeRegister.setCompanyId(pPersistentAccountTransaction.getCompanyId());
+    pPersistentChequeRegister.setModifiedBy(pPersistentAccountTransaction.getModifiedBy());
+    pPersistentChequeRegister.setModificationDate(pPersistentAccountTransaction.getModifiedDate());
+    return pPersistentChequeRegister;
   }
 
   public List<AccountTransaction> postTransactions(JsonArray pJsonValues) throws Exception {
