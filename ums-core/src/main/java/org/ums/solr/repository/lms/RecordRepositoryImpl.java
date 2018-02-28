@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.TermsOptions;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
 import org.ums.solr.repository.document.EmployeeDocument;
 import org.ums.solr.repository.document.lms.RecordDocument;
@@ -34,6 +36,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
     // SimpleQuery(String.format("{!parent which=\"type_s:Record AND (changedTitle_txt:%s OR acquisitionType_txt:%s)\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
     // "Chaneged", "Purchase", "ifti", "Apu"));
     basicSearch.setPageRequest(pageable);
+    /*basicSearch.addSort(sort("cTitle_s"));*/
     return search(basicSearch);
 
   }
@@ -58,5 +61,9 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
 
   private Criteria createSearchConditions(String term) {
     return new Criteria("type_s").is("Record").and(new Criteria("title_txt").contains(term));
+  }
+
+  private Sort sort(String pFiled) {
+    return new Sort(Sort.Direction.ASC, pFiled);
   }
 }
