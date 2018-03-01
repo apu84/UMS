@@ -149,10 +149,12 @@ module ums {
     }
 
     public addDataToVoucherTable() {
-      if (!this.voucherMapWithId[this.voucherOfAddModal.id]) {
+      if (this.voucherOfAddModal.id==undefined) {
         this.voucherOfAddModal = this.addNecessaryAttributesToVoucher(this.voucherOfAddModal);
         this.detailVouchers.push(this.voucherOfAddModal);
-        this.voucherMapWithId[this.voucherOfAddModal.id] = this.voucherOfAddModal;
+      }
+      else{
+        this.voucherMapWithId[this.voucherOfAddModal.id]=this.voucherOfAddModal;
       }
       this.countTotalAmount();
     }

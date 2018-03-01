@@ -230,7 +230,7 @@ public class AccountTransactionCommonResourceHelper extends
         updateTransactions.add(transaction);
       }
       chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
-      if (chequeRegister.getChequeNo() != null) {
+      if(chequeRegister.getChequeNo() != null) {
         chequeRegister.setAccountTransactionId(transaction.getId());
         chequeRegisters.add(chequeRegister);
       }

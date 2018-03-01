@@ -69,7 +69,7 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
     if(pJsonObject.containsKey("voucherDate"))
       pMutableAccountTransaction.setVoucherDate(UmsUtils.convertToDate(pJsonObject.getString("voucherDate"),
           "dd-MM-yyyy"));
-    if(pJsonObject.containsKey("serialNo"))
+    if(pJsonObject.containsKey("serialNo") && !pJsonObject.isNull("serialNo"))
       pMutableAccountTransaction.setSerialNo(pJsonObject.getInt("serialNo"));
     if(pJsonObject.containsKey("accountId"))
       pMutableAccountTransaction.setAccountId(Long.parseLong(pJsonObject.getString("accountId")));
