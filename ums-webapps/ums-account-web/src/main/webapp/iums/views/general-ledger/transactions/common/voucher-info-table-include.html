@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="v in vm.detailVouchers">
+    <tr ng-repeat="v in vm.detailVouchers track by v.serialNo">
         <td>{{v.serialNo}}</td>
         <td>{{v.account.accountName}}</td>
         <td>{{vm.formatCurrency( v.amount)}}</td>

@@ -1,5 +1,6 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
@@ -137,6 +138,7 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }

@@ -11,7 +11,7 @@
     <dir-pagination-controls boundary-links="true"
                              pagination-id="existing-journal-voucher"
                              on-page-change="vm.pageChanged(vm.pageNumber)"
-                             template-url="views\general-ledger\transactions\journal-voucher\dirPagination.html"></dir-pagination-controls>
+                             template-url="views\general-ledger\transactions\common\dirPagination.html"></dir-pagination-controls>
 </div>
 
 <table class="table table-bordered  table-hover ">
@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr dir-paginate="p in vm.existingJournalVouchers | itemsPerPage: vm.itemsPerPage"
+    <tr dir-paginate="p in vm.existingVouchers | itemsPerPage: vm.itemsPerPage"
         current-page="vm.pageNumber"
         total-items="vm.totalVoucherNumber"
         pagination-id="existing-journal-voucher"

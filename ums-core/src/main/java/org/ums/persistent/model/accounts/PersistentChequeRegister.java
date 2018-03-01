@@ -1,6 +1,8 @@
 package org.ums.persistent.model.accounts;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -15,7 +17,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 20-Feb-18.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class PersistentChequeRegister implements MutableChequeRegister {
 
   private static CompanyManager sCompanyManager;
@@ -26,7 +28,7 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   private String mCompanyId;
   private AccountTransaction mAccountTransaction;
   private Long mAccountTransactionId;
-  private String mCheckNo;
+  private String mChequeNo;
   private Date mChequeDate;
   private String mStatus;
   private Date mRealizationDate;
@@ -37,11 +39,13 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   private String mLastModified;
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }
 
   @Override
+  @JsonIgnore
   public void setId(Long pId) {
     this.mId = pId;
   }
@@ -52,11 +56,13 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
+  @JsonIgnore
   public void setCompany(Company pCompany) {
     this.mCompany = pCompany;
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public String getCompanyId() {
     return mCompanyId;
   }
@@ -73,11 +79,13 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
+  @JsonIgnore
   public void setAccountTransaction(AccountTransaction pAccountTransaction) {
     this.mAccountTransaction = pAccountTransaction;
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getAccountTransactionId() {
     return mAccountTransactionId;
   }
@@ -88,21 +96,25 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public String getChequeNo() {
-    return mCheckNo;
+    return mChequeNo;
   }
 
   @Override
+  @JsonIgnore
   public void setChequeNo(String pCheckNo) {
-    this.mCheckNo = pCheckNo;
+    this.mChequeNo = pCheckNo;
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
   public Date getChequeDate() {
     return mChequeDate;
   }
 
   @Override
+  @JsonIgnore
   public void setChequeDate(Date pChequeDate) {
     this.mChequeDate = pChequeDate;
   }
@@ -113,6 +125,7 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
+  @JsonIgnore
   public void setStatus(String pStatus) {
     this.mStatus = pStatus;
   }
@@ -178,25 +191,30 @@ public class PersistentChequeRegister implements MutableChequeRegister {
   }
 
   @Override
+  @JsonIgnore
   public Long create() {
     return sCheckRegisterManager.create(this);
   }
 
   @Override
+  @JsonIgnore
   public void update() {
     sCheckRegisterManager.update(this);
   }
 
   @Override
+  @JsonIgnore
   public MutableChequeRegister edit() {
     return new PersistentChequeRegister(this);
   }
 
   @Override
+  @JsonIgnore
   public void delete() {
     sCheckRegisterManager.delete(this);
   }
 
+  @JsonIgnore
   public PersistentChequeRegister() {}
 
   public PersistentChequeRegister(MutableChequeRegister pCheckRegister) {

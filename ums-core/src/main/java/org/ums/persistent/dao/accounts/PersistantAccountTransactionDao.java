@@ -175,8 +175,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
             + "                                                                   AND SERIAL_NO = 1 AND "
             + "                                                                   VOUCHER_ID = ? "
-            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
-            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO)  "
+            + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
         new PersistentJournalVoucherRowMapper());
@@ -207,8 +207,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
             + "                                                                   AND SERIAL_NO = 1 AND "
             + "                                                                   VOUCHER_ID = ? and VOUCHER_NO=? "
-            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
-            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO)  "
+            + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
         new PersistentJournalVoucherRowMapper());
@@ -233,7 +233,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     parameters.put("projNo", pMutableAccountTransaction.getProjNo());
     parameters.put("statFlag", pMutableAccountTransaction.getStatFlag());
     parameters.put("statUpFlag", pMutableAccountTransaction.getStatUpFlag());
-    parameters.put("type", pMutableAccountTransaction.getAccountTransactionType().getValue());
+    parameters.put("type", pMutableAccountTransaction.getAccountTransactionType() == null ? null
+        : pMutableAccountTransaction.getAccountTransactionType().getValue());
     parameters.put("modifiedBy", pMutableAccountTransaction.getModifiedBy());
     parameters.put("receiptId", pMutableAccountTransaction.getReceiptId());
     parameters.put("modifiedDate", pMutableAccountTransaction.getModifiedDate());
