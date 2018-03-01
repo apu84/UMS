@@ -58,6 +58,7 @@ module ums {
       this.itemsPerPage = 20;
       this.dateFormat = "dd-mm-yyyy";
       this.showAddSection = false;
+      this.postStatus=false;
       this.getCurrencyConversions();
       this.getAccounts();
       this.getCurrencies();
@@ -171,8 +172,6 @@ module ums {
     }
 
     private addNecessaryAttributesToVoucher(voucher: IPaymentVoucher): IPaymentVoucher {
-      console.log("*****************");
-      console.log(voucher);
       voucher.accountId = voucher.account.id;
       voucher.voucherNo = this.voucherNo;
       voucher.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
@@ -182,7 +181,6 @@ module ums {
       voucher.currencyId = this.selectedCurrency.id;
       return voucher;
     }
-
 
     public saveVoucher() {
       if (this.paymentVoucherMain == null)
@@ -217,7 +215,12 @@ module ums {
     private configureVouchers(vouchers: IPaymentVoucher[]) {
       this.totalAmount = 0;
       this.voucherMapWithId = {};
-      vouchers.forEach((v: IPaymentVoucher) => this.voucherMapWithId[v.id] = v);
+      this.postStatus=vouchers[0].postDate!=null?true:false;
+      this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
+      vouchers.forEach((v: IPaymentVoucher) =>{
+        this.voucherMapWithId[v.id] = v;
+        v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
+      });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
         this.assignChequeNumberToVouchers(vouchers);

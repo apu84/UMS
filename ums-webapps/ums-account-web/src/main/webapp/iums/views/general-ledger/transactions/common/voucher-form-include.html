@@ -7,17 +7,14 @@
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Recurrent</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Reverse</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Print</button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.postStatus"
                         ng-click="vm.saveVoucher()">
                     Save
                 </button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.poststatus"
+                <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.postStatus"
                         ng-click="vm.postVoucher()">
                     Post
                 </button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined" data-toggle="modal"
-                        data-target="#searchModal"><a
-                        href=""><i class="fa fa-search"></i></a></button>
             </div>
         </div>
     </div>
@@ -92,7 +89,7 @@
                     </div>
                 </form>
                 <div class="alert alert-success" align="center">
-                    <label class="control-label">{{vm.poststatus==true?'Posted':'Not posted'}}</label>
+                    <label class="control-label">{{vm.postStatus==true?'Posted':'Not posted'}}</label>
                 </div>
             </div>
 
