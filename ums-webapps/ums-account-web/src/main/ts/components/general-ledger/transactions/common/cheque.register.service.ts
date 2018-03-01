@@ -27,8 +27,17 @@ module ums {
 
     public getChequeRegisterList(transactionIdList: string[]): ng.IPromise<IChequeRegister[]> {
       let defer: ng.IDeferred<IChequeRegister[]> = this.$q.defer();
-      this.httpClient.get(this.url + "/transactionIdList?transactionIdList=" + transactionIdList, HttpClient.MIME_TYPE_JSON,
-          (response: IChequeRegister[]) => defer.resolve(response));
+      this.httpClient.post(this.url + "/transactionIdList", transactionIdList, HttpClient.MIME_TYPE_JSON)
+          .success((response: any) => {
+            console.log(response);
+            defer.resolve(response);
+          })
+          .error((response) => {
+            console.log(response);
+            this.notify.error("Error in fetching cheque register list");
+            defer.resolve(undefined);
+          })
+
       return defer.promise;
     }
   }

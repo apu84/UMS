@@ -32,16 +32,16 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   String UPDATE_ONE =
       "update DT_CHEQUE_REGISTER set COMP_CODE=:compCode, TRANSACTION_ID=:transactionId, CHEQUE_NO=:chequeNo, CHEQUE_DATE=:chequeDate, STATUS=:status, REALIZATION_DATE=:realizationDate, "
-          + "  STAT_FLAG=:statFlag, STAT_UP_FLAG=:statUpFlag, MODIFICATION_DATE=:modificationDate, MODIFIED_BY=:modifiedBy, LAST_MODIFIED=:lastModified where id=:id";
+          + "  STAT_FLAG=:statFlag, STAT_UP_FLAG=:statUpFlag, MODIFICATION_DATE=:modificationDate, MODIFIED_BY=:modifiedBy, LAST_MODIFIED=to_char(sysdate,'YYYYMMDDHHMISS') where id=:id";
   String SELECT_ALL = "SELECT * FROM DT_CHEQUE_REGISTER";
   String INSERT_ONE =
       "INSERT INTO DT_CHEQUE_REGISTER(ID, COMP_CODE, TRANSACTION_ID, CHEQUE_NO, CHEQUE_DATE, STATUS, REALIZATION_DATE, STAT_FLAG, STAT_UP_FLAG, MODIFICATION_DATE, MODIFIED_BY, LAST_MODIFIED)  "
-          + "VALUES (:id, :compCode, :transactionId, :chequeNo, :chequeDate, :status, :realizationDate,  :statFlag, :statUpFlag, :modificationDate, :modifiedBy, :lastModified)";
+          + "VALUES (:id, :compCode, :transactionId, :chequeNo, :chequeDate, :status, :realizationDate,  :statFlag, :statUpFlag, :modificationDate, :modifiedBy, to_char(sysdate,'YYYYMMDDHHMISS'))";
   String DELETE_ONE = "DELETE FROM DT_CHEQUE_REGISTER WHERE ID=?";
 
   @Override
   public List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
-    String query = SELECT_ALL + " WHERE TRANSACTION_ID=:transactionIdList";
+    String query = SELECT_ALL + " WHERE TRANSACTION_ID in (:transactionIdList)";
     Map parameterMap = new HashMap();
     parameterMap.put("transactionIdList", pTransactionIdList);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentCheckRegisterRowMapper());
@@ -96,7 +96,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
     Map parameter = new HashMap();
     parameter.put("id", pMutableCheckRegister.getId());
     parameter.put("compCode", pMutableCheckRegister.getCompany().getId());
-    parameter.put("transactionId", pMutableCheckRegister.getAccountTransaction().getId());
+    parameter.put("transactionId", pMutableCheckRegister.getAccountTransactionId());
     parameter.put("chequeNo", pMutableCheckRegister.getChequeNo());
     parameter.put("chequeDate", pMutableCheckRegister.getChequeDate());
     parameter.put("status", pMutableCheckRegister.getStatus());
@@ -105,7 +105,6 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
     parameter.put("statUpFlag", pMutableCheckRegister.getStatUpFlag());
     parameter.put("modificationDate", pMutableCheckRegister.getModificationDate());
     parameter.put("modifiedBy", pMutableCheckRegister.getModifiedBy());
-    parameter.put("lastModified", getLastModifiedSql());
     return parameter;
   }
 

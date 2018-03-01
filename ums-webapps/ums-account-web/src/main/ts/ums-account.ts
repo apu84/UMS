@@ -142,13 +142,29 @@ module ums {
           url: "/contraVoucher",
           controller: 'ContraVoucherController',
           controllerAs: 'vm',
-          templateUrl: 'views/general-ledger/transactions/contra-voucher/contra-voucher.html'
+          templateUrl: 'views/general-ledger/transactions/contra-voucher/contra-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
         })
         .state('paymentVoucher', {
           url: "/paymentVoucher",
           controller: 'PaymentVoucherController',
           controllerAs: 'vm',
-          templateUrl: 'views/general-ledger/transactions/payment-voucher/payment-voucher.html'
+          templateUrl: 'views/general-ledger/transactions/payment-voucher/payment-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
         })
         .state('logout', {
           url: "/logout",

@@ -3,9 +3,11 @@ package org.ums.accounts.resource.general.ledger.transactions.payment.voucher;
 import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
+import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 19-Feb-18.
@@ -28,5 +30,12 @@ public class PaymentVoucherResource extends MutablePaymentVoucherResource {
       @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
     PaginatedVouchers paginatedVouchers = mHelper.getAllPaymentVouchers(itemPerPage, pageNumber, pVoucherNo);
     return paginatedVouchers;
+  }
+
+  @GET
+  @Path("/voucher-no/{voucher-no}/date/{date}")
+  public List<AccountTransaction> getVouchers(@PathParam("voucher-no") String pVoucherNo,
+      @PathParam("date") String pDate) throws Exception {
+    return mHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
   }
 }

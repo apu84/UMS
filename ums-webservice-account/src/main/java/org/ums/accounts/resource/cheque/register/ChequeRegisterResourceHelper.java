@@ -26,8 +26,10 @@ public class ChequeRegisterResourceHelper extends ResourceHelper<ChequeRegister,
   @Autowired
   private ChequeRegisterBuilder mChequeRegisterBuilder;
 
-  public List<ChequeRegister> getChequeRegisterList(final List<Long> pTransactionIdList) {
-    return new ArrayList<>(mChequeRegisterManager.getByTransactionIdList(pTransactionIdList));
+  public List<MutableChequeRegister> getChequeRegisterList(final List<Long> pTransactionIdList) {
+    List<ChequeRegister> transactions =
+        new ArrayList<>(mChequeRegisterManager.getByTransactionIdList(pTransactionIdList));
+    return mChequeRegisterManager.getByTransactionIdList(pTransactionIdList);
   }
 
   @Override

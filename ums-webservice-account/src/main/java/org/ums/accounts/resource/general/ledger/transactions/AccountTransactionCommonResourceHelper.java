@@ -17,7 +17,6 @@ import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
-import org.ums.exceptions.MisMatchException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -170,6 +169,7 @@ public class AccountTransactionCommonResourceHelper extends
   @Transactional
   public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
+    transactions.forEach(t -> t.setVoucherNo(t.getVoucherNo().substring(2)));
     return new ArrayList<>(transactions);
   }
 
@@ -230,8 +230,10 @@ public class AccountTransactionCommonResourceHelper extends
         updateTransactions.add(transaction);
       }
       chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
-      if(chequeRegister.getChequeNo() != null)
+      if (chequeRegister.getChequeNo() != null) {
+        chequeRegister.setAccountTransactionId(transaction.getId());
         chequeRegisters.add(chequeRegister);
+      }
     }
     if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
@@ -249,9 +251,9 @@ public class AccountTransactionCommonResourceHelper extends
       pChequeRegisters.forEach(c -> c.setId(mIdGenerator.getNumericId()));
       mChequeRegisterManager.create(pChequeRegisters);
     } else {
-      Map<Long, MutableChequeRegister> newChequeRegisterMap = pChequeRegisters.stream().collect(Collectors.toMap(ChequeRegister::getId, p -> p));
+      Map<Long, MutableChequeRegister> newChequeRegisterMap = pChequeRegisters.stream().collect(Collectors.toMap(ChequeRegister::getAccountTransactionId, p -> p));
       existingChequeRegisterList.forEach(e -> {
-        ChequeRegister chequeRegister = newChequeRegisterMap.get(e.getId());
+        ChequeRegister chequeRegister = newChequeRegisterMap.get(e.getAccountTransactionId());
         e.setChequeNo(chequeRegister.getChequeNo());
         e.setChequeDate(chequeRegister.getChequeDate());
         e.setModificationDate(chequeRegister.getModificationDate());
@@ -319,9 +321,7 @@ public class AccountTransactionCommonResourceHelper extends
       else
         totalDebit = totalDebit.add(a.getAmount());
     }
-    if(!totalCredit.equals(totalDebit))
-      throw new MisMatchException("Credit and Debit should be equal");
-
+    // todo apply debit and credit equal exception for journal vouchers
     List<MutableAccountBalance> accountBalanceList =
         generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
     mAccountBalanceManager.update(accountBalanceList);
