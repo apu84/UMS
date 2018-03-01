@@ -78,6 +78,7 @@ module ums {
                     this.newEmployee.employeeType["id"]).then((result: any) => {
                     this.newEmployee.id = result;
                     this.showRightDiv = true;
+                    this.newEmployee.IUMSAccount = true;
                 });
             }
             else {
@@ -96,20 +97,22 @@ module ums {
 
         public changeDesignationSelection(): void {
             this.changedDesignationTypes = [];
-            this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
-                if (response.length < 1) {
-                    this.notify.error("No designation found");
-                }
-                else {
-                    for (let i = 0; i < response.length; i++) {
-                        for (let j = 0; j < this.allDesignations.length; j++) {
-                            if (response[i].designationId == this.allDesignations[j].id) {
-                                this.changedDesignationTypes.push(this.allDesignations[j]);
+            if(this.newEmployee.department != undefined && this.newEmployee.employeeType != undefined) {
+                this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
+                    if (response.length < 1) {
+                        this.notify.error("No designation found");
+                    }
+                    else {
+                        for (let i = 0; i < response.length; i++) {
+                            for (let j = 0; j < this.allDesignations.length; j++) {
+                                if (response[i].designationId == this.allDesignations[j].id) {
+                                    this.changedDesignationTypes.push(this.allDesignations[j]);
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         public changeEmployeeTypeSelection(): void {

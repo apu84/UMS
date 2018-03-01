@@ -117,24 +117,24 @@
                                 </div>
                             </div>
                         </div>
-                    <!--    <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine}">
-                                    <label class="control-label" for="iRole">IUMS Role<span
-                                            class="require">*</span></label>
-                                    <select name="nRole"
-                                            id="iRole"
-                                            data-ng-model="vm.newEmployee.role"
-                                            data-ng-options="roles.name for roles in vm.allRoles track by roles.id"
-                                            class="form-control" required>
-                                        <option value="">Select A Role</option>
-                                    </select>
-                                    <label data-ng-show="nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine"
-                                           class="help-block control-label">Select Role.</label>
+                        <!--    <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-error' : nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine}">
+                                        <label class="control-label" for="iRole">IUMS Role<span
+                                                class="require">*</span></label>
+                                        <select name="nRole"
+                                                id="iRole"
+                                                data-ng-model="vm.newEmployee.role"
+                                                data-ng-options="roles.name for roles in vm.allRoles track by roles.id"
+                                                class="form-control" required>
+                                            <option value="">Select A Role</option>
+                                        </select>
+                                        <label data-ng-show="nEmployeeForm.nRole.$invalid && !nEmployeeForm.nRole.$pristine"
+                                               class="help-block control-label">Select Role.</label>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>-->
+                            </div>-->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group"
@@ -294,7 +294,8 @@
                                 <div align="left">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" data-ng-model="vm.newEmployee.IUMSAccount">
+                                            <input id="iIUMSAccount" name="nIUMSACCOUNT" type="checkbox"
+                                                   data-ng-model="vm.newEmployee.IUMSAccount">
                                             <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
                                             <b>Create IUMS account</b>
                                         </label>
