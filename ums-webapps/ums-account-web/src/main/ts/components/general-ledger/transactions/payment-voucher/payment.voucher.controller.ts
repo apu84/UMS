@@ -64,6 +64,17 @@ module ums {
       this.getPaginatedVouchers();
     }
 
+    public searchVoucher() {
+      console.log("In the search voucher");
+      console.log(this.searchVoucherNo)
+      this.searchVoucherNo=this.searchVoucherNo==''?undefined:this.searchVoucherNo;
+      if (this.searchVoucherNo != null) {
+        this.getPaginatedVouchers();
+      }
+      if(this.searchVoucherNo==undefined)
+        this.getPaginatedVouchers();
+    }
+
     public showListView() {
       this.initialize();
     }
