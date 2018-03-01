@@ -193,7 +193,9 @@ module ums {
         this.notify.error("Account Name is not selected");
       else {
         this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
-        this.paymentVoucherMain.amount = this.selectedPaymentAccountCurrentBalance + this.totalAmount;
+        this.paymentVoucherMain.amount = this.totalAmount;
+        console.log("Payment voucher amount");
+        console.log(this.paymentVoucherMain.amount);
         this.detailVouchers.push(this.paymentVoucherMain);
         this.paymentVoucherService.postVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
           this.configureVouchers(vouchers);
