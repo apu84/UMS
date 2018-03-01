@@ -53,11 +53,20 @@
         border-right: 5px solid grey;
         padding-right: 25px;
     }
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
 </style>
-<form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm(nEmployeeForm)" novalidate>
-    <div class="panel panel-default">
-        <div class="panel-heading">New Employee Form</div>
-        <div class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">New Employee Form</div>
+    <div class="panel-body">
+        <form name="nEmployeeForm" ng-submit="vm.submitNewEmployeeForm(nEmployeeForm)" novalidate>
             <div class="row">
                 <div class="col-md-5">
                     <div class="v1">
@@ -201,6 +210,7 @@
                                            id="iFirstName"
                                            name="nFirstName"
                                            class="form-control"
+                                           ng-blur="vm.findSimilarUsers()"
                                            ng-model="vm.newEmployee.firstName" required>
                                     <label data-ng-show="nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine"
                                            class="help-block control-label">First Name is required.</label>
@@ -215,6 +225,7 @@
                                            id="iLastName"
                                            name="nLastName"
                                            class="form-control"
+                                           ng-blur="vm.findSimilarUsers()"
                                            ng-model="vm.newEmployee.lastName" required>
                                     <label data-ng-show="nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine"
                                            class="help-block control-label">Last Name is required.</label>
@@ -313,9 +324,31 @@
                     </div>
                 </div>
             </div>
+        </form>
+
+
+        <!--<div class="row">
+            <div class="col-md-12">
+                <br/>
+            </div>
         </div>
+
+        <div class="row">
+            <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src=""
+                             img-id="vm.user.employeeId"
+                             data-profile-picture="">
+                        <h4><b>{{user.firstName}}</b></h4>
+                        <p>{{user.employeeId}}</p>
+                        <p>{{user.score}}% similar</p>
+                    </div>
+                </div>
+            </div>
+        </div>-->
     </div>
-</form>
+</div>
 
 
 

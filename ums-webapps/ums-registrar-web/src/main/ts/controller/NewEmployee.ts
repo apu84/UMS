@@ -26,6 +26,7 @@ module ums {
         private showRightDiv: boolean = false;
         private newEmployee: INewEmployee;
         private isNotUniqueShortName: boolean = false;
+        private similarUsers = [];
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -118,6 +119,16 @@ module ums {
         public changeEmployeeTypeSelection(): void {
             this.changedEmployeeTypes = [];
             this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
+        }
+
+        public findSimilarUsers(): void{
+            this.similarUsers = [];
+            if(this.newEmployee.firstName != undefined && this.newEmployee.lastName != undefined){
+                this.employeeService.getSimilarUsers(this.newEmployee.firstName, this.newEmployee.lastName).then((data: any) =>{
+                    this.similarUsers = data;
+                    console.log(data);
+                });
+            }
         }
 
         private convertToJson(): ng.IPromise<any> {

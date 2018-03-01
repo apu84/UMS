@@ -106,7 +106,6 @@ module ums{
 
       public checkDuplicate(pShortName: string):ng.IPromise<any>{
           var defer = this.$q.defer();
-          var employees:any={};
           this.httpClient.get("academic/employee/validate/" + pShortName,'application/json',
               (result:boolean,etag:string)=>{
                   defer.resolve(result);
@@ -121,8 +120,20 @@ module ums{
 
       public getFilteredDesignation(pDeptId: string, pEmployeeTypeId: number): ng.IPromise<any>{
           var defer = this.$q.defer();
-          var employees:any={};
           this.httpClient.get("deptDesignationMap/dept/" + pDeptId + "/employeeType/" + pEmployeeTypeId, 'application/json',
+              (result:any,etag:string)=>{
+                  defer.resolve(result.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+              });
+
+          return defer.promise;
+      }
+
+      public getSimilarUsers(firstName: string, lastName: string): ng.IPromise<any>{
+          var defer = this.$q.defer();
+          this.httpClient.get("employee/personal/firstName/" + firstName + "/lastName/" + lastName, 'application/json',
               (result:any,etag:string)=>{
                   defer.resolve(result.entries);
               },
