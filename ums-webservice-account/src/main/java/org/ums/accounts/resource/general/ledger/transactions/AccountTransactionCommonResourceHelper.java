@@ -321,7 +321,7 @@ public class AccountTransactionCommonResourceHelper extends
       else
         totalDebit = totalDebit.add(a.getAmount());
     }
-    // todo apply debit and credit equal exception for journal vouchers
+    // todo apply debit and credit equal exception for only journal vouchers.
     List<MutableAccountBalance> accountBalanceList =
         generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
     mAccountBalanceManager.update(accountBalanceList);
