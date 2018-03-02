@@ -3,9 +3,11 @@ package org.ums.accounts.resource.general.ledger.transactions.contra.voucher;
 import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
+import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 22-Feb-18.
@@ -16,7 +18,7 @@ import javax.ws.rs.*;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ContraVoucherResource extends MutableContraVoucher {
   @GET
-  @Path("/voucher-no")
+  @Path("/voucher-number")
   public TransactionResponse getVoucherNo() throws Exception {
     return mHelper.getContraVoucherNo();
   }
@@ -27,5 +29,12 @@ public class ContraVoucherResource extends MutableContraVoucher {
       @QueryParam("pageNumber") Integer pageNumber, @QueryParam("voucherNo") String pVoucherNo) throws Exception {
     PaginatedVouchers paginatedVouchers = mHelper.getAllContraVouchers(itemPerPage, pageNumber, pVoucherNo);
     return paginatedVouchers;
+  }
+
+  @GET
+  @Path("/voucher-no/{voucher-no}/date/{date}")
+  public List<AccountTransaction> getVouchers(@PathParam("voucher-no") String pVoucherNo,
+      @PathParam("date") String pDate) throws Exception {
+    return mHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
   }
 }
