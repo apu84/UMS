@@ -27,6 +27,7 @@ module ums {
         private newEmployee: INewEmployee;
         private isNotUniqueShortName: boolean = false;
         private similarUsers = [];
+        private showSimilarUsersPortion: boolean = false;
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -98,7 +99,7 @@ module ums {
 
         public changeDesignationSelection(): void {
             this.changedDesignationTypes = [];
-            if(this.newEmployee.department != undefined && this.newEmployee.employeeType != undefined) {
+            if (this.newEmployee.department != undefined && this.newEmployee.employeeType != undefined) {
                 this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
                     if (response.length < 1) {
                         this.notify.error("No designation found");
@@ -121,12 +122,13 @@ module ums {
             this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
         }
 
-        public findSimilarUsers(): void{
+        public findSimilarUsers(): void {
             this.similarUsers = [];
-            if(this.newEmployee.firstName != undefined && this.newEmployee.lastName != undefined){
-                this.employeeService.getSimilarUsers(this.newEmployee.firstName, this.newEmployee.lastName).then((data: any) =>{
+            this.showSimilarUsersPortion = false;
+            if (this.newEmployee.firstName != undefined && this.newEmployee.lastName != undefined) {
+                this.employeeService.getSimilarUsers(this.newEmployee.firstName, this.newEmployee.lastName).then((data: any) => {
                     this.similarUsers = data;
-                    console.log(data);
+                    this.showSimilarUsersPortion = true;
                 });
             }
         }

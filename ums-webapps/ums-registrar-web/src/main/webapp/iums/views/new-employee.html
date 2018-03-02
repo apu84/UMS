@@ -55,12 +55,12 @@
     }
 
     .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
         transition: 0.3s;
     }
 
     .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
     }
 </style>
 <div class="panel panel-default">
@@ -327,26 +327,29 @@
         </form>
 
 
-        <!--<div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <br/>
             </div>
         </div>
 
-        <div class="row">
-            <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
-                <div class="col-md-3">
-                    <div class="card">
-                        <img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src=""
-                             img-id="vm.user.employeeId"
-                             data-profile-picture="">
-                        <h4><b>{{user.firstName}}</b></h4>
-                        <p>{{user.employeeId}}</p>
-                        <p>{{user.score}}% similar</p>
+
+        <div data-ng-show="vm.showSimilarUsersPortion">
+            <fieldset>
+                <legend>Similar Employees</legend>
+<div class="row">
+                <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" alt="John" style="width:15%">
+                            <h4>{{$index + 1}}. {{user.firstName}}{{user.lastName}}</h4>({{user.employeeId}})
+                            {{user.score}}% similar
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>-->
+            </fieldset>
+        </div>
+        </div>
     </div>
 </div>
 
