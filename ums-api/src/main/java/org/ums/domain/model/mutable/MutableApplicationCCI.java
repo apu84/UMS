@@ -71,7 +71,7 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
 
   void setTotalApproved(final Integer totalApproved);
 
-  void setTotalRejected(final Integer totalrejected);
+  void setStartDate(final String pStartdate);
 
   void setTransactionID(final String transactionId);
 

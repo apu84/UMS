@@ -43,4 +43,10 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
     return mHelper.getFacultyInfo(pCourseId, pCourseType, pRequest, mUriInfo);
   }
 
+  @GET
+  @Path("/alreadyReviewedCourses")
+  public JsonObject getAlreadyReviewdCourses(@Context Request pRequest) {
+    return mHelper.getAlreadyReviewedCoursesInfo(pRequest, mUriInfo);
+  }
+
 }

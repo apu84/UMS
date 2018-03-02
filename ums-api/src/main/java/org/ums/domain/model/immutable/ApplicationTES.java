@@ -17,6 +17,12 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
 
   String getQuestionDetails();
 
+  Integer getObservationType();
+
+  Integer getPoint();
+
+  String getComment();
+
   String getReviewEligibleCourses();
 
   String getSemesterName();
@@ -36,5 +42,9 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
   String getFirstName();
 
   String getLastName();
+
+  String getStudentId();
+
+  Integer getSemester();
 
 }

@@ -25,6 +25,9 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getQuestionDetails() != null)
       pBuilder.add("questionDetails", pReadOnly.getQuestionDetails());
 
+    if(pReadOnly.getObservationType() != null)
+      pBuilder.add("observationType", pReadOnly.getObservationType());
+
     if(pReadOnly.getReviewEligibleCourses() != null)
       pBuilder.add("courseName", pReadOnly.getReviewEligibleCourses());
 
@@ -54,10 +57,33 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pReadOnly.getLastName() != null)
       pBuilder.add("lastName", pReadOnly.getLastName());
+
+    if(pReadOnly.getStudentId() != null)
+      pBuilder.add("studentId", pReadOnly.getStudentId());
+
+    if(pReadOnly.getSemester() != null)
+      pBuilder.add("semesterId", pReadOnly.getSemester());
   }
 
   @Override
   public void build(MutableApplicationTES pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+    if(pJsonObject.containsKey("questionId"))
+      pMutable.setQuestionId(pJsonObject.getInt("questionId"));
+
+    if(pJsonObject.containsKey("point"))
+      pMutable.setPoint(pJsonObject.getInt("point"));
+
+    if(pJsonObject.containsKey("comment"))
+      pMutable.setComment(pJsonObject.getString("comment"));
+
+    if(pJsonObject.containsKey("observationType"))
+      pMutable.setObservationType(pJsonObject.getInt("observationType"));
+
+    if(pJsonObject.containsKey("courseId"))
+      pMutable.setReviewEligibleCourses(pJsonObject.getString("courseId"));
+
+    if(pJsonObject.containsKey("teacherId"))
+      pMutable.setTeacherId(pJsonObject.getString("teacherId"));
 
   }
 }

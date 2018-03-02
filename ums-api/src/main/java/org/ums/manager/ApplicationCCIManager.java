@@ -29,6 +29,8 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
 
   String getApplicationCCIForCarryLastfdate(final Integer pSemesterId);
 
+  String getStartdate(final Integer pSemesterId);
+
   Integer getAllReords(final String pApprovalStatus, final String empDeptId);
 
   List<ApplicationCCI> getApplicationCarryForHeadsApproval(final String pApprovalStatus, final Integer pCurentpage,

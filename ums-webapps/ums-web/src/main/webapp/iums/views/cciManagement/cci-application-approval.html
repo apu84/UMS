@@ -89,8 +89,14 @@
                         </tr>
                         </tbody>
                     </table><p align="center" style="color:gray;font-size: 15px">
-                    Last Date of Apply:<strong style="font-size: 15px;color: black">{{vm.carrylastDate}}</strong>
-                    Deadline Status:<strong style="font-size: 15px;color: black">{{vm.carryStatusShow}}</strong></p>
+                    Start Date of CarryApporval:
+                    <span style="font-size: 15px" class="label label-info badge-info">{{vm.carryStartDate}}</span>
+                    Last Date of CarryApporval:
+                    <span style="font-size: 15px" class="label label-warning badge-warning">{{vm.carrylastDate}}</span>
+                    Current Status:
+                    <span style="font-size: 15px" data-ng-if="vm.carryStatusShow=='Available'" class="label label-success badge-success">{{vm.carryStatusShow}}</span>
+                    <span style="font-size: 15px" data-ng-if="vm.carryStatusShow=='Not Allowed'" class="label label-danger badge-danger">{{vm.carryStatusShow}}</span>
+                    </p>
 
                         <div class="modal fade" id="myModal" role="dialog" >
                          <!--   <div class="modal-backdrop"> -->

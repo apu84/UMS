@@ -34,6 +34,11 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mDeptShortName;
   private String mFirstName;
   private String mLastName;
+  private Integer mObservationType;
+  private Integer mPoint;
+  private String mComment;
+  private String mStudentId;
+  private Integer mSemesterId;
 
   public PersistentApplicationTES() {
 
@@ -54,6 +59,61 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mDeptShortName = persistentApplicationTES.getDeptShortName();
     mFirstName = persistentApplicationTES.getFirstName();
     mLastName = persistentApplicationTES.getLastName();
+    mObservationType = persistentApplicationTES.getObservationType();
+    mPoint = persistentApplicationTES.getPoint();
+    mComment = persistentApplicationTES.getComment();
+    mStudentId = persistentApplicationTES.getStudentId();
+    mSemesterId = persistentApplicationTES.getSemester();
+  }
+
+  @Override
+  public void setStudentId(String pStudentId) {
+    mStudentId = pStudentId;
+  }
+
+  @Override
+  public void setSemester(Integer pSemesterId) {
+    mSemesterId = pSemesterId;
+  }
+
+  @Override
+  public String getStudentId() {
+    return mStudentId;
+  }
+
+  @Override
+  public Integer getSemester() {
+    return mSemesterId;
+  }
+
+  @Override
+  public void setPoint(Integer pPoint) {
+    mPoint = pPoint;
+  }
+
+  @Override
+  public void setComment(String pComment) {
+    mComment = pComment;
+  }
+
+  @Override
+  public Integer getPoint() {
+    return mPoint;
+  }
+
+  @Override
+  public String getComment() {
+    return mComment;
+  }
+
+  @Override
+  public void setObservationType(Integer pObservationType) {
+    mObservationType = pObservationType;
+  }
+
+  @Override
+  public Integer getObservationType() {
+    return mObservationType;
   }
 
   @Override

@@ -62,7 +62,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mGetTotalcarry;
   private Integer mGetTotalApplied;
   private Integer mGetTotalApproved;
-  private Integer mGetTotalRejected;
+  private String mGetStartDate;
   private String mTransactionId;
   private Integer mImprovementLimit;
   private String mCarryLastDate;
@@ -103,7 +103,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mGetTotalcarry = pPersistentApplicationCCI.getTotalcarry();
     mGetTotalApplied = pPersistentApplicationCCI.getTotalApplied();
     mGetTotalApproved = pPersistentApplicationCCI.getTotalApproved();
-    mGetTotalRejected = pPersistentApplicationCCI.getTotalRejected();
+    mGetStartDate = pPersistentApplicationCCI.getStartDate();
     mTransactionId = pPersistentApplicationCCI.getTransactionID();
     mImprovementLimit = pPersistentApplicationCCI.getImprovementLimit();
     mCarryLastDate = pPersistentApplicationCCI.getCarryLastDate();
@@ -177,8 +177,8 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void setTotalRejected(Integer totalrejected) {
-    mGetTotalRejected = totalrejected;
+  public void setStartDate(String pStartdate) {
+    mGetStartDate = pStartdate;
   }
 
   @Override
@@ -197,8 +197,8 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public Integer getTotalRejected() {
-    return mGetTotalRejected;
+  public String getStartDate() {
+    return mGetStartDate;
   }
 
   @Override

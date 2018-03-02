@@ -189,7 +189,16 @@
                                          data-ng-click="receipt(app.transactionId)"><p  data-ng-if="app.cciStatus!=statusWaitingForPayment && app.applicationType==CARRY">N/A</p></td>
                             </tr>
                             </tbody>
-                        </table><p align="center" style="color:gray;font-size: 15px">Last Date of Apply:<strong style="font-size: 15px;color: black">{{carrylastDate}}</strong> Deadline Status:<strong style="font-size: 15px;color: black">{{carryStatusShow}}</strong></p>
+                        </table>
+                        <p align="center" style="color:gray;font-size: 15px">
+                            Start Date of Carryover Exam's:
+                            <span style="font-size: 15px" class="label label-info badge-info">{{carryStartDate}}</span>
+                            Last Date of Carryover Exam's:
+                            <span style="font-size: 15px" class="label label-warning badge-warning">{{carrylastDate}}</span>
+                            Current Status:
+                            <span style="font-size: 15px" data-ng-if="carryStatusShow=='Available'" class="label label-success badge-success">{{carryStatusShow}}</span>
+                            <span style="font-size: 15px" data-ng-if="carryStatusShow=='Not Allowed'" class="label label-danger badge-danger">{{carryStatusShow}}</span>
+                        </p>
 
                     </div>
 

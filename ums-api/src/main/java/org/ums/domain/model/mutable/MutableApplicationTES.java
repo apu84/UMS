@@ -20,7 +20,7 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
 
   void setSemesterName(final String pSemesterName);
 
-  void setCourseTitle(final String pCoursetitle);
+  void setCourseTitle(final String pCourseTitle);
 
   void setCourseNo(final String pCourseNo);
 
@@ -35,5 +35,15 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
   void setFirstName(final String pFirstName);
 
   void setLastName(final String pLastName);
+
+  void setObservationType(final Integer pObservationType);
+
+  void setPoint(final Integer pPoint);
+
+  void setComment(final String pComment);
+
+  void setStudentId(final String pStudentId);
+
+  void setSemester(final Integer pSemesterId);
 
 }

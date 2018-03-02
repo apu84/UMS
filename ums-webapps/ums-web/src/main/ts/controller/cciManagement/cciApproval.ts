@@ -91,6 +91,7 @@ module ums{
         carrylastDate:string;
         carrylastDateDeadline:boolean;
         carryStatusShow:string;
+        carryStartDate:any;
 
 
 
@@ -162,9 +163,10 @@ module ums{
                     console.log("Jacksonlll-head-Show");
                     console.log(json);
                     this.carrylastDate=json.date;
+                    this.carryStartDate=json.StartDate;
                     this.carrylastDateDeadline=json.deadline;
                     console.log("-----"+this.carrylastDateDeadline);
-                    this.carryStatusShow=this.carrylastDateDeadline==true? "Date Over":"Available";
+                    this.carryStatusShow=this.carrylastDateDeadline==true? "Not Allowed":"Available";
                     defer.resolve(json.date);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

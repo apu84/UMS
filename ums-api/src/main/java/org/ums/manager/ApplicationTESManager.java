@@ -19,4 +19,6 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   String getSemesterName(final Integer pCurrentSemester);
 
+  List<ApplicationTES> getAlreadyReviewdCourses(final String pStudentId, final Integer pSemesterId);
+
 }

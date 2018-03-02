@@ -48,6 +48,7 @@ module ums {
       improvemetLimitCrossed:boolean;
       totalSemesterStatic:string;
       carrylastDate:string;
+      carryStartDate:string;
       carrylastDateDeadline:boolean;
       carryStatusShow:string;
       historyButtonStatus:boolean;
@@ -243,9 +244,10 @@ interface ICarryLastdate{
               console.log("Jacksonlll");
               console.log(json);
                 this.$scope.carrylastDate=json.date;
+                this.$scope.carryStartDate=json.StartDate;
                   this.$scope.carrylastDateDeadline=json.deadline;
                   console.log("-----"+this.$scope.carrylastDateDeadline);
-                  this.$scope.carryStatusShow=this.$scope.carrylastDateDeadline==true? "Date Over":"Available";
+                  this.$scope.carryStatusShow=this.$scope.carrylastDateDeadline==true? "Not Allowed":"Available";
                   defer.resolve(json.date);
               },
               (response: ng.IHttpPromiseCallbackArg<any>) => {

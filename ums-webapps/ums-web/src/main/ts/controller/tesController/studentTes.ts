@@ -8,6 +8,7 @@ module ums{
         questionDetails:string;
         point:number;
         comment:string;
+        observationType:number;
     }
     interface IConstants {
         id: any;
@@ -26,18 +27,33 @@ module ums{
         firstName:string;
         lastName:string;
     }
+    interface IAlreadyReviwed{
+        teacherId:string;
+        courseName:string;
+        courseTitle:string;
+        studentId:string;
+        semesterId:number;
+        firstName:string;
+        lastName:string;
+    }
 
     class studentTES{
         public courseTypeList: Array<IConstants>;
         public courseApprovalStatus: IConstants;
         public  questionListAndReview:Array<IQuestions>;
         public allReviewEligibleCourses:Array<IReviewEligibleCourses>;
+        public reviewedCourses:Array<IAlreadyReviwed>;
         public courseType:string;
         public semesterNameCurrent:string;
         public selectedCourseByStudent:string;
         public getFacultyInfo:Array<IteacherInfo>;
         public enrolledCourse: IReviewEligibleCourses;
         public selectedRow:any;
+        public selectedFacultyid:string;
+        public selectedCourseId:string;
+        public checkSelectTeacher:boolean;
+        public checkComment:boolean;
+        public checkCourseTeacher:boolean;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -66,6 +82,9 @@ module ums{
             this.getFacultyInfo=[];
             this.courseType="";
             this.selectedRow=null;
+            this.checkCourseTeacher=false;
+            this.checkComment=true;
+            this.checkSelectTeacher=true;
            this.statusChanged(this.courseApprovalStatus).then((a:any)=>{
                this.courseChanged();
            })
@@ -79,6 +98,7 @@ module ums{
            this.courseType="Theory";
             }
             this.getFacultyInfo=[];
+            //this.checkSelectTeacher=false;
             var appTES:Array<IReviewEligibleCourses>=[];
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReviewEligibleCourses/courseType/'+this.courseType, 'application/json',
@@ -88,8 +108,9 @@ module ums{
                     console.log("Applicatino TES Get Questions!!!!");
                     this.allReviewEligibleCourses=appTES;
                     this.enrolledCourse=this.allReviewEligibleCourses[0];
-                    this.selectedCourseByStudent=this.enrolledCourse.courseTitle;
+                    //this.selectedCourseByStudent=this.enrolledCourse.courseTitle;
                     this.semesterNameCurrent=json.semesterName;
+                    this.checkCourseTeacher=false;
                     console.log(this.semesterNameCurrent);
                     console.log(this.selectedCourseByStudent);
                     console.log(this.allReviewEligibleCourses);
@@ -123,39 +144,124 @@ module ums{
                 });
             return defer.promise;
         }
-        private courseChanged(){
-            console.log("selected course");
-            this.selectedCourseByStudent=this.enrolledCourse.courseName;
-           console.log(this.selectedCourseByStudent);
-            var appTES:Array<IteacherInfo>=[];
-            this.getFacultyInfo=[];
-            this.selectedRow=null;
+        private getReviewedCourses(){
+            var appTES:Array<IAlreadyReviwed>=[];
+            this.reviewedCourses=[];
             var defer = this.$q.defer();
-            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getFacultyInfo/courseId/'+this.selectedCourseByStudent+'/courseType/'+this.courseType,'application/json',
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/alreadyReviewedCourses', 'application/json',
                 (json: any, etag: string) => {
                     appTES=json.entries;
-                    console.log("****T1T****");
-                    console.log("Applicatin TES Get FacultyInfo!!!!");
-                    this.getFacultyInfo=appTES;
-                    console.log(this.getFacultyInfo);
+                    console.log("****Z1Z****");
+                    console.log("Applicatino TES Reviewed Courses!!!!");
+                    this.reviewedCourses=appTES;
+                    console.log(this.reviewedCourses);
+                    console.log(this.reviewedCourses.length);
                     defer.resolve(json.entries);
+
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);
                 });
             return defer.promise;
         }
-        private getInfo(point:any,cmn:any,id:any){
+        private courseChanged(){
+            console.log("selected course");
+            if(this.enrolledCourse !=null) {
+                this.selectedCourseByStudent = this.enrolledCourse.courseName;
+                console.log(this.selectedCourseByStudent);
+                var appTES: Array<IteacherInfo> = [];
+                this.getFacultyInfo = [];
+                this.selectedRow = null;
+                var defer = this.$q.defer();
+                this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getFacultyInfo/courseId/' + this.selectedCourseByStudent + '/courseType/' + this.courseType, 'application/json',
+                    (json: any, etag: string) => {
+                        appTES = json.entries;
+                        console.log("****T1T****");
+                        console.log("Applicatin TES Get FacultyInfo!!!!");
+                        this.getFacultyInfo = appTES;
+                        console.log(this.getFacultyInfo);
+                        this.checkCourseTeacher = this.getFacultyInfo.length >= 1 ? true : false;
+                        this.checkCourseTeacher=false;
+                        defer.resolve(json.entries);
+                    },
+                    (response: ng.IHttpPromiseCallbackArg<any>) => {
+                        console.error(response);
+                    });
+                return defer.promise;
+            }else{
+                this.notify.success("No specific course found!!");
+                this.checkCourseTeacher=true;
+                this.checkSelectTeacher=true;
+            }
+        }
+        private getInfo(pFacultyId:any,pCourseId:any,id:any){
             this.selectedRow=null;
-            console.log("Faculty_Id:"+point+"\nCourse_ID:"+cmn+"\nRow_ID:"+id);
+            console.log("Faculty_Id:"+pFacultyId+"\nCourse_ID:"+pCourseId+"\nRow_ID:"+id);
             this.selectedRow=id;
+            this.selectedFacultyid=pFacultyId;
+            this.selectedCourseId=pCourseId;
+            this.checkSelectTeacher=false;
 
         }
 
 
-        private submit(){
-         console.log("Submit");
-         console.log(this.questionListAndReview);
+
+        private submit() {
+            console.log("Submit");
+            for (let i = 0; i < this.questionListAndReview.length; i++) {
+                if (this.questionListAndReview[i].point == 1 && this.questionListAndReview[i].comment == "write your reason") {
+                    this.checkComment = false;
+                }
+            }
+            if (this.checkComment) {
+                console.log(this.questionListAndReview);
+                this.convertToJson(this.questionListAndReview).then((app: any) => {
+                    console.log("hello From Another Side!!!")
+                    console.log(app);
+                    this.httpClient.post('academic/applicationTES/saveTES', app, 'application/json')
+                        .success((data, status, header, config) => {
+                            this.notify.success("Data saved successfully");
+                        }).error((data) => {
+
+                    });
+                })
+                this.checkSelectTeacher = true;
+                this.statusChanged(this.courseApprovalStatus);
+                this.getAllQuestions();
+            }else{
+                this.notify.error("If you rate poor then you must write the reason");
+                this.checkComment=true;
+        }
+
+    }
+
+        private convertToJson(result: Array<IQuestions>): ng.IPromise<any> {
+            let defer:ng.IDeferred<any> = this.$q.defer();
+            var completeJson = {};
+            console.log("result in converto Json");
+            console.log(result);
+            console.log(result.length);
+            var jsonObj = [];
+            for(var i=0;i<result.length;i++){
+                var item = {};
+                item["questionId"]=result[i].questionId ;
+                item["point"]=result[i].point;
+                item["comment"]=result[i].comment=="write your reason" ? 'null':result[i].comment;
+                item["observationType"]=result[i].observationType;
+                item["courseId"]=this.selectedCourseId;
+                item["teacherId"]=this.selectedFacultyid;
+                    console.log("Items");
+                    console.log(item);
+                    //this.notify.success("sending./.....");
+                    jsonObj.push(item);
+
+            }
+            completeJson["entries"] = jsonObj;
+            console.log("Complete json!!!!!!!!!!!!!!!")
+            console.log(completeJson);
+            defer.resolve(completeJson);
+            return defer.promise;
+
         }
     }
     UMS.controller("studentTES",studentTES);

@@ -4,12 +4,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationTESDaoDecorator;
 import org.ums.domain.model.immutable.ApplicationTES;
+import org.ums.domain.model.mutable.MutableApplicationTES;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationTES;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 2/20/2018.
@@ -23,15 +26,28 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
-  String getAllQuestions = "SELECT QUESTION_ID,QUESTION_DETAILS from APPLICATION_TES_QUESTIONS";
+  String getAllQuestions = "SELECT QUESTION_ID,QUESTION_DETAILS,OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS";
+
+  String INSERT_ONE =
+      "Insert  into  APPLICATION_TES_QINFO  (ID,QUESTION_ID,POINT,STUDENT_COMMENT,FACULTY_ID,OBSERVATION_TYPE)  values  (?,?,?,?,?,?)";
+  String INSERT_TWO =
+      "Insert  into  APPLICATION_TES_S_INFO  (COURSE_ID,STUDENT_ID,SEMESTER_ID,FACULTY_ID,APPLIED_ON)  values  (?,?,?,?,systimestamp)";
+  String ALREADY_REVIEWED =
+      "SELECT  DISTINCT a.FACULTY_ID,a.COURSE_ID,MST_COURSE.COURSE_TITLE,a.STUDENT_ID,a.SEMESTER_ID,b.FIRST_NAME,b.LAST_NAME "
+          + "FROM APPLICATION_TES_S_INFO a,EMP_PERSONAL_INFO b,MST_COURSE WHERE STUDENT_ID=? and SEMESTER_ID=? "
+          + "AND a.FACULTY_ID=b.EMPLOYEE_ID AND  a.COURSE_ID=MST_COURSE.COURSE_ID";
 
   String getAllReviewEligibleCoures =
-      "SELECT  DISTINCT  UG_REGISTRATION_RESULT.COURSE_ID,MST_COURSE.COURSE_TITLE,MST_COURSE.COURSE_NO  "
+      "select* from (  "
+          + "SELECT DISTINCT  UG_REGISTRATION_RESULT.COURSE_ID,MST_COURSE.COURSE_TITLE,MST_COURSE.COURSE_NO  "
           + "FROM UG_REGISTRATION_RESULT, COURSE_TEACHER,MST_COURSE  "
           + "WHERE  "
           + "  UG_REGISTRATION_RESULT.SEMESTER_ID = ? AND UG_REGISTRATION_RESULT.SEMESTER_ID = COURSE_TEACHER.SEMESTER_ID AND  "
           + "  UG_REGISTRATION_RESULT.COURSE_ID = COURSE_TEACHER.COURSE_ID AND UG_REGISTRATION_RESULT.STUDENT_ID = ? AND  "
-          + "  UG_REGISTRATION_RESULT.COURSE_ID=MST_COURSE.COURSE_ID AND MST_COURSE.COURSE_TYPE=?";
+          + "  UG_REGISTRATION_RESULT.COURSE_ID=MST_COURSE.COURSE_ID AND MST_COURSE.COURSE_TYPE=? AND COURSE_TEACHER.COURSE_ID=MST_COURSE.COURSE_ID  "
+          + "minus  "
+          + "SELECT DISTINCT a.COURSE_ID,MST_COURSE.COURSE_TITLE,MST_COURSE.COURSE_NO FROM APPLICATION_TES_S_INFO a,MST_COURSE  "
+          + "WHERE STUDENT_ID=150204035 AND SEMESTER_ID=11012017 AND a.COURSE_ID =MST_COURSE.COURSE_ID) tmp";
 
   String getSemesterName = "SELECT SEMESTER_NAME from MST_SEMESTER WHERE SEMESTER_ID=?";
 
@@ -47,6 +63,44 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "FROM COURSE_TEACHER,EMPLOYEES,EMP_PERSONAL_INFO,MST_DEPT_OFFICE "
           + "WHERE COURSE_TEACHER.TEACHER_ID=EMPLOYEES.EMPLOYEE_ID AND COURSE_TEACHER.TEACHER_ID=EMP_PERSONAL_INFO.EMPLOYEE_ID AND "
           + "MST_DEPT_OFFICE.DEPT_ID=EMPLOYEES.DEPT_OFFICE AND COURSE_TEACHER.SEMESTER_ID=? and COURSE_TEACHER.COURSE_ID=? and COURSE_TEACHER.\"SECTION\"=?";
+
+  @Override
+  public List<ApplicationTES> getAlreadyReviewdCourses(String pStudentId, Integer pSemesterId) {
+    String query = ALREADY_REVIEWED;
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
+        new ApplicationCCIRowMapperForGetAlreadyReviewedCourses());
+  }
+
+  @Override
+  public  List<Long>  create(List<MutableApplicationTES>  pMutableList)  {
+    List<Object[]>  parameters  =  getInsertParamList(pMutableList);
+    List<Object[]>  parametersNew  =  getInsertParamListNew(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ONE,  parameters);
+    mJdbcTemplate.batchUpdate(INSERT_TWO,  parametersNew);
+    return  parameters.stream()
+            .map(paramArray  ->  (Long)  paramArray[0])
+            .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  private List<Object[]> getInsertParamList(List<MutableApplicationTES> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(ApplicationTES app : pMutableApplicationTES) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getPoint(), app.getComment(),
+          app.getTeacherId(), app.getObservationType()});
+    }
+
+    return params;
+  }
+
+  private List<Object[]> getInsertParamListNew(List<MutableApplicationTES> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(ApplicationTES app : pMutableApplicationTES) {
+      params.add(new Object[] {app.getReviewEligibleCourses(), app.getStudentId(), app.getSemester(),
+          app.getTeacherId()});
+    }
+
+    return params;
+  }
 
   @Override
   public List<ApplicationTES> getAllQuestions(Integer pSemesterId) {
@@ -81,6 +135,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       PersistentApplicationTES application = new PersistentApplicationTES();
       application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
       application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
+      application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
       return application;
     }
   }
@@ -92,6 +147,20 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
       application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
+      return application;
+    }
+  }
+  class ApplicationCCIRowMapperForGetAlreadyReviewedCourses implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setTeacherId(pResultSet.getString("FACULTY_ID"));
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
+      application.setStudentId(pResultSet.getString("STUDENT_ID"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setFirstName(pResultSet.getString("FIRST_NAME"));
+      application.setLastName(pResultSet.getString("LAST_NAME"));
       return application;
     }
   }

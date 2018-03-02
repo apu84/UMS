@@ -70,9 +70,16 @@ public class UGRegistrationResultResourceHelper extends
                         if(p.getType().equals(CourseRegType.CARRY)){
                           if(student.getDepartmentId()=="01"){
                             if(student.getCurrentYear()==5 && student.getCurrentAcademicSemester()==2){
-                              return  cciTakenCourses.contains(p.getCourse().getId())==false ;
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false ;
                             }else{
-                              return  cciTakenCourses.contains(p.getCourse().getId())==false && p.getCourse().getSemester()
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }else if(student.getDepartmentId()=="06"){//for textile department 4.1 && 4.2 can give all carryover exam's
+                            if(student.getCurrentYear()==4 && (student.getCurrentAcademicSemester()==1 || student.getCurrentAcademicSemester()==2)){
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false ;
+                            }else{
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false && p.getCourse().getSemester()
                                       != student.getCurrentAcademicSemester();
                             }
                           }else{

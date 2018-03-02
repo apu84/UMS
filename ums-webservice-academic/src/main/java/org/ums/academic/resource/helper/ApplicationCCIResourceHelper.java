@@ -444,21 +444,23 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
      * getActive semester will be assigned int semester=
      * mSemesterManager.getActiveSemester(11).getId(); student.getCurrentEnrolledSemester().getId()
      */
-    String date = getContentManager().getApplicationCCIForCarryLastfdate(11012017);
+    String end_date = getContentManager().getApplicationCCIForCarryLastfdate(11012017);
+    String start_date = getContentManager().getStartdate(11012017);
     ObjectMapper mapper = new ObjectMapper();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-    jsonObjectBuilder.add("date", date);
+    jsonObjectBuilder.add("date", end_date);
+    jsonObjectBuilder.add("StartDate", start_date);
     try {
-      if(date != null) {
-        Date lastApplyDate, currentDate;
+      if(start_date != null && end_date != null) {
+        Date startDate, lastApplyDate, currentDate;
         currentDate = new Date();
-
-        lastApplyDate = UmsUtils.convertToDate(date, "dd-MM-yyyy");
-        if(currentDate.compareTo(lastApplyDate) > 0) {
-          jsonObjectBuilder.add("deadline", true);
+        startDate = UmsUtils.convertToDate(start_date, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(end_date, "dd-MM-yyyy");
+        if(currentDate.compareTo(startDate) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+          jsonObjectBuilder.add("deadline", false);
         }
         else {
-          jsonObjectBuilder.add("deadline", false);
+          jsonObjectBuilder.add("deadline", true);
         }
       }
     } catch(Exception e) {

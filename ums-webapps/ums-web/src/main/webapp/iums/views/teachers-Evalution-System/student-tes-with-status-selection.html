@@ -32,11 +32,51 @@
 
 <div class="col-sm-4" style="padding-bottom: 25px">
     <div class="form-group" align="right">
-        <label class="col-md-8 control-label"><strong style="color: slategray;">Session:</strong><b style="font-size: 15px" >{{vm.semesterNameCurrent}}</b></label>
+        <label class="col-md-8 control-label">
+           <strong style="color: slategray;">Session:</strong>
+            <span  style="font-size: 12px" class="label label-success badge-success">{{vm.semesterNameCurrent}}</span>
+        </label>
 
         <div class="col-md-4">
-            <button class="bbtn btn-primary btn-xs" data-ng-disabled="vm.itemPerpageChecker"  data-ng-click="vm.searchByStudentId(vm.seachByStudentId)">Reviewed</button>
+            <button class="bbtn btn-primary btn-xs" data-toggle="modal" data-target="#myModalNew" data-ng-click="vm.getReviewedCourses()">Reviewed</button>
         </div>
     </div>
 </div>
 <br/>
+<div class="modal fade" id="myModalNew" role="dialog" >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Application For Teachers Evalution System</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-warning">
+                    <div class="panel-heading" align="center">
+                        Applicant ReviewedCourses
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered" >
+                            <thead>
+                            <th style="background-color: #FAFAFA; ">Course Title</th>
+                            <th style="background-color: #FAFAFA; ">Faculty Name</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="a in vm.reviewedCourses">
+                                <td>{{a.courseTitle}}</td>
+                                <td>{{a.firstName+" "+a.lastName}}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"   data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

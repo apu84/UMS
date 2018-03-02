@@ -367,6 +367,15 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public String getStartdate(Integer pSemesterId) {
+    String x = "10";
+    String query =
+        "SELECT  to_char(MST_PARAMETER_SETTING.START_DATE, 'DD-MM-YYYY') as p FROM MST_PARAMETER_SETTING WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
+    String date = mJdbcTemplate.queryForObject(query, new Object[] {x, pSemesterId}, String.class);
+    return date;
+  }
+
+  @Override
   public Integer getAllReords(String pApprovalStatus, String empDeptId) {
     String query = "", SELECT_ALL_CA__RD, SELECT_ALL_Payment_ANd_Approved_RD = "", SELECT_ALL_Reject_RD = "", SELECT_ALL_All_Approval_Status_RD =
         "";

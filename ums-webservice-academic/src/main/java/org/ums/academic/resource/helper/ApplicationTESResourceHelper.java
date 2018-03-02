@@ -13,6 +13,7 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.ApplicationTESManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.StudentManager;
+import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
@@ -22,7 +23,10 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Created by Monjur-E-Morshed on 2/20/2018.
@@ -47,6 +51,27 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return null;
   }
 
+  public Response saveToTes(JsonObject pJsonObject, UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    List<MutableApplicationTES> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      getBuilder().build(application, jsonObject, localCache);
+      application.setStudentId(studentId);
+      application.setSemester(student.getCurrentEnrolledSemester().getId());
+      applications.add(application);
+    }
+    mManager.create(applications);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public JsonObject getAllQuestions(final Request pRequest, final UriInfo pUriInfo){
         String studentId = SecurityUtils.getSubject().getPrincipal().toString();
         Student student = mStudentManager.get(studentId);
@@ -63,7 +88,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public JsonObject getReviewEligibleCourses(final String pCourseType,final Request pRequest, final UriInfo pUriInfo){
         String studentId = SecurityUtils.getSubject().getPrincipal().toString();
         Student student = mStudentManager.get(studentId);
-        List<ApplicationTES> applications=getContentManager().getReviewEligibleCourses(studentId,student.getCurrentEnrolledSemester().getId(),pCourseType);
+        List<ApplicationTES> applications=getContentManager().
+                getReviewEligibleCourses(studentId,student.getCurrentEnrolledSemester().getId(),pCourseType);
         String semesterName=getContentManager().getSemesterName(student.getCurrentEnrolledSemester().getId());
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
@@ -81,11 +107,22 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
-
         String section = courseType.equals("Theory") ? student.getTheorySection() : student.getSessionalSection();
-
         List<ApplicationTES> facultyInfo=getContentManager().getTeachersInfo(courseId,student.getCurrentEnrolledSemester().getId(),section);
         facultyInfo.forEach( a-> children.add(toJson(a,pUriInfo,localCache)));
+            object.add("entries",children);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getAlreadyReviewedCoursesInfo(final Request pRequest, final UriInfo pUriInfo){
+        String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+        Student student = mStudentManager.get(studentId);
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        List<ApplicationTES> applications=getContentManager().getAlreadyReviewdCourses(studentId,student.getCurrentEnrolledSemester().getId());
+        applications.forEach( a-> children.add(toJson(a,pUriInfo,localCache)));
         object.add("entries",children);
         localCache.invalidate();
         return object.build();
