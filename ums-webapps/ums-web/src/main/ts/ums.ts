@@ -957,8 +957,25 @@ module ums {
                     });
                 }]
             }
-        })
-        .state('userGuide', {
+        }).state('tes', {
+        url: "/tes",
+        controller: 'HeadTES',
+        controllerAs: 'vm',
+        templateUrl: 'views/teachers-Evalution-System/head-tes.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    files: [
+                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                        'vendors/bootstrap-datepicker/css/datepicker.css',
+                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                    ]
+                });
+            }]
+        }
+    }).state('userGuide', {
           url: "/userGuide",
           controller: 'UserGuide',
           templateUrl: 'views/common/user-guide.html'

@@ -182,6 +182,7 @@ module ums{
                         console.log(this.getFacultyInfo);
                         this.checkCourseTeacher = this.getFacultyInfo.length >= 1 ? true : false;
                         this.checkCourseTeacher=false;
+                        this.checkSelectTeacher=true;
                         defer.resolve(json.entries);
                     },
                     (response: ng.IHttpPromiseCallbackArg<any>) => {

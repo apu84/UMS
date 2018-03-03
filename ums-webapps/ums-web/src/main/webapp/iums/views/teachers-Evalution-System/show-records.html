@@ -1,0 +1,59 @@
+<div class="container-fluid">
+        <div  class="panel panel-gray" data-ng-hide="vm.checkShowRecords">
+            <div class="panel-heading" align="center">
+                <h4 class="panel-title">SHOW RECORDS</h4>
+            </div >
+        <div class="panel-body">
+            <div class="col-sm-4">
+                <div class="form-group" align="right">
+                    <label class="col-md-4 control-label"><strong style="color: slategray;">Select Faculty</strong></label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="leaveType"
+                                id="leaveType"
+                                data-ng-options="L.name for L in vm.courseTypeList track by L.id"
+                                data-ng-model="vm.courseApprovalStatus"
+                                data-ng-change="vm.statusChanged(vm.courseApprovalStatus)"
+                        ></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group" align="right">
+                    <label class="col-md-4 control-label"><strong style="color: slategray;">Select Courses</strong></label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="selectedCourse"
+                                id="selectedCourse"
+                                data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses "
+                                data-ng-model="vm.enrolledCourse"
+                                data-ng-change="vm.courseChanged()"
+                        ></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group" align="right">
+                    <label class="col-md-4 control-label"><strong style="color: slategray;">select Semster</strong></label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="selectedCourse"
+                                id="selectedCourse11"
+                                data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses "
+                                data-ng-model="vm.enrolledCourse"
+                                data-ng-change="vm.courseChanged()"
+                        ></select>
+                        <button class="bbtn btn-primary btn-xs"  data-ng-click="vm.getReviewedCourses()">Search</button>
+                    </div>
+                </div>
+            </div><br>
+            <br>
+
+        </div>
+    </div>
+</div>
