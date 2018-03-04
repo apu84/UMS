@@ -244,7 +244,7 @@ module ums {
       this.voucherMapWithId = {};
       vouchers.forEach((v: IPaymentVoucher) => {
         this.voucherMapWithId[v.id] = v;
-        if (v.serialNo == null) {
+        if (v.balanceType == BalanceType.Cr) {
           this.paymentVoucherMain = v;
           this.getAccountBalance();
         }

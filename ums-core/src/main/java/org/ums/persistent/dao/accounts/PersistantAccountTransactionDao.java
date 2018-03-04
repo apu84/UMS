@@ -28,8 +28,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   private IdGenerator mIdGenerator;
 
   String INSERT_ONE =
-      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE) VALUES "
-          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate)";
+      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE) VALUES "
+          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType,:receiptId, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate)";
   String UPDATE_ONE = "UPDATE DT_TRANSACTION " + "SET " + "  COMP_CODE     = :compCode, "
       + "  DIVISION_CODE = :divisionCode, " + "  VOUCHER_NO    = :voucherNo, " + "  VOUCHER_DATE  = :voucherDate, "
       + "  SERIAL_NO     = :serialNo, " + "  ACCOUNT_ID    = :accountId, " + "  VOUCHER_ID    = :voucherId, "
@@ -235,6 +235,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     parameters.put("statUpFlag", pMutableAccountTransaction.getStatUpFlag());
     parameters.put("type", pMutableAccountTransaction.getAccountTransactionType() == null ? null
         : pMutableAccountTransaction.getAccountTransactionType().getValue());
+
     parameters.put("modifiedBy", pMutableAccountTransaction.getModifiedBy());
     parameters.put("receiptId", pMutableAccountTransaction.getReceiptId());
     parameters.put("modifiedDate", pMutableAccountTransaction.getModifiedDate());

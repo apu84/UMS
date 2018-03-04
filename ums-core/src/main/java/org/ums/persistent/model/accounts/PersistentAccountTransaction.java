@@ -3,6 +3,7 @@ package org.ums.persistent.model.accounts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
@@ -56,6 +57,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private String defaultCompanyId;
   private String statFlag;
   private String statUpFlag;
+  @JsonProperty("receipt")
   private Receipt receipt;
   private Long receiptId;
   private Date postDate;
@@ -65,7 +67,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private String lastModified;
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   public AccountTransactionType getAccountTransactionType() {
     return accountTransactionType;
   }
@@ -89,7 +90,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Company getCompany() {
     return company == null ? sCompanyManager.get(companyId) : sCompanyManager.validate(company);
   }
@@ -101,7 +101,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonIgnore
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getDefaultCompanyId() {
     return defaultCompanyId;
   }
@@ -114,7 +113,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getCompanyId() {
     return companyId;
   }
@@ -126,7 +124,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getDivisionCode() {
     return divisionCode;
   }
@@ -138,7 +135,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getVoucherNo() {
     return voucherNo;
   }
@@ -150,7 +146,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getVoucherDate() {
     return voucherDate;
   }
@@ -162,7 +157,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Integer getSerialNo() {
     return serialNo;
   }
@@ -173,7 +167,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Account getAccount() {
     return account == null ? sAccountManager.get(accountId) : sAccountManager.validate(account);
   }
@@ -185,7 +178,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getAccountId() {
     return accountId;
   }
@@ -197,7 +189,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Voucher getVoucher() {
     return voucher == null ? sVoucherManager.get(voucherId) : sVoucherManager.validate(voucher);
   }
@@ -209,7 +200,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getVoucherId() {
     return voucherId;
   }
@@ -221,7 +211,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getAmount() {
     return amount;
   }
@@ -232,7 +221,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BalanceType getBalanceType() {
     return balanceType;
   }
@@ -243,7 +231,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getNarration() {
     return narration;
   }
@@ -254,7 +241,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getForeignCurrency() {
     return foreignCurrency;
   }
@@ -265,7 +251,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Currency getCurrency() {
     return currency == null ? sCurrencyManager.get(currencyId) : sCurrencyManager.validate(currency);
   }
@@ -277,7 +262,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING)
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Long getCurrencyId() {
     return currencyId;
   }
@@ -289,7 +273,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public BigDecimal getConversionFactor() {
     return conversionFactory;
   }
@@ -300,7 +283,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getProjNo() {
     return projNo;
   }
@@ -312,7 +294,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonIgnore
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Company getDefaultCompany() {
     return defaultCompany == null ? sCompanyManager.get(defaultCompanyId) : defaultCompany;
   }
@@ -324,7 +305,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getStatFlag() {
     return statFlag;
   }
@@ -335,7 +315,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getStatUpFlag() {
     return statUpFlag;
   }
@@ -346,9 +325,8 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   public Receipt getReceipt() {
-    return receipt == null ? sReceiptManager.get(receiptId) : null;
+    return receiptId != null ? sReceiptManager.get(receiptId) : null;
   }
 
   @Override
@@ -371,7 +349,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getPostDate() {
     return postDate;
   }
@@ -384,7 +361,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   @Override
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public Date getModifiedDate() {
     return modifiedDate;
   }
@@ -396,7 +372,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   public String getModifiedBy() {
     return modifiedBy;
   }

@@ -35,6 +35,7 @@ public class ReceiptVoucherResource extends MutableReceiptVoucherResource {
   @Path("/voucher-no/{voucher-no}/date/{date}")
   public List<AccountTransaction> getVouchers(@PathParam("voucher-no") String pVoucherNo,
       @PathParam("date") String pDate) throws Exception {
-    return mHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
+    List<AccountTransaction> accountTransactions = mHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
+    return accountTransactions;
   }
 }

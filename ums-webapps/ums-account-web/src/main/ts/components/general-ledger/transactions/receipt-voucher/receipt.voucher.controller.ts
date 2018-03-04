@@ -250,7 +250,7 @@ module ums {
       this.voucherMapWithId = {};
       vouchers.forEach((v: IReceiptVoucher) => {
         this.voucherMapWithId[v.id] = v;
-        if (v.serialNo == null) {
+        if (v.balanceType == BalanceType.Dr) {
           this.paymentVoucherMain = v;
           this.getAccountBalance();
         }
