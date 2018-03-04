@@ -337,18 +337,19 @@
         <div data-ng-show="vm.showSimilarUsersPortion">
             <fieldset>
                 <legend>Similar Employees</legend>
-<div class="row">
-                <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" alt="John" style="width:15%">
-                            <h4>{{$index + 1}}. {{user.firstName}}{{user.lastName}}</h4>({{user.employeeId}})
-                            {{user.score}}% similar
+                <div class="row">
+                    <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"
+                                     alt="John" style="width:15%">
+                                <h4>{{$index + 1}}. {{user.firstName}}{{user.lastName}}</h4>({{user.employeeId}})
+                                {{user.score}}% similar
+                            </div>
                         </div>
                     </div>
                 </div>
             </fieldset>
-        </div>
         </div>
     </div>
 </div>
