@@ -81,8 +81,9 @@
           org.ums.meeting,
           org.ums.employee,
           org.codehaus.jackson.jaxrs,
-          org.ums.exception
-          org.ums.common
+        org.ums.exception,
+        org.ums.common,
+        org.ums.logs
       </param-value>
     </init-param>
     <init-param>

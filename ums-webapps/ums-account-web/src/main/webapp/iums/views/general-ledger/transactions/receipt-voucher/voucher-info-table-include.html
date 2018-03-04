@@ -9,6 +9,7 @@
         <th>Amount In Specific</th>
         <th>Account In Base</th>
         <th>Dr/Cr</th>
+        <th>Receipt Type</th>
         <th>Cheque No</th>
         <th>Cheque Date</th>
         <th>Narration</th>
@@ -23,6 +24,7 @@
         <td>{{vm.formatBaseCurrency(v.amount)}}
         </td>
         <td>{{v.balanceType}}</td>
+        <td>{{v.receipt.name}}</td>
         <td>{{v.chequeNo}}</td>
         <td>{{v.chequeDate}}</td>
         <td>{{v.narration}}</td>

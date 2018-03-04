@@ -166,6 +166,20 @@ module ums {
             }]
           }
         })
+        .state('receiptVoucher', {
+          url: "/receiptVoucher",
+          controller: 'ReceiptVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/receipt-voucher/receipt-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'

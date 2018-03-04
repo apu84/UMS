@@ -2,7 +2,7 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.GradeSubmissionResourceHelper;
-import org.ums.configuration.UmsLogMessage;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 import org.ums.twofa.TwoFA;
 

@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.definitions.account;
+package org.ums.accounts.resource.definitions.receipt;
 
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;

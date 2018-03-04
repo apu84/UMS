@@ -1,8 +1,8 @@
 package org.ums.accounts.resource.general.ledger.transactions.journal.voucher;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.configuration.UmsLogMessage;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
+import org.ums.logs.UmsLogMessage;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;

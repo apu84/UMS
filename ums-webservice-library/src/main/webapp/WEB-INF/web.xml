@@ -79,7 +79,8 @@
         org.ums.filter.cors,
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
-        org.ums.employee
+        org.ums.employee,
+        org.ums.logs
       </param-value>
     </init-param>
     <init-param>

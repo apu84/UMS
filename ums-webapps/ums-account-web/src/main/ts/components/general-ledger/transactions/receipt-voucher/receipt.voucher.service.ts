@@ -30,6 +30,7 @@ module ums {
     statFlag: string;
     statUpFlag: string;
     receiptId: string;
+    receipt: IReceipt;
     postDate: string;
     accountTransactionType: AccountTransactionType;
     modifiedDate: string;

@@ -1,4 +1,4 @@
-package org.ums.configuration;
+package org.ums.logs;
 
 /*
  * Created by Monjur-E-Morshed on 08-Aug-17.

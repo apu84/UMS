@@ -4,7 +4,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="m odal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add Voucher</h4>
             </div>
             <div class="modal-body">
@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="serialNo">Serial No:</label>
                         <div class="col-sm-6">
-                            <input type="text" ng-disabled="true" class="form-control" id="serialNo"
+                            <input ng-required="true" type="text" ng-disabled="true" class="form-control" id="serialNo"
                                    ng-model="vm.voucherOfAddModal.serialNo">
                         </div>
                     </div>
@@ -34,21 +34,37 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="amountInSpecific">Amount In Specific:</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" id="amountInSpecific"
+                            <input ng-required="true" type="number" class="form-control" id="amountInSpecific"
                                    ng-model="vm.voucherOfAddModal.amount">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="amountInBase">Amount In Base:</label>
                         <div class="col-sm-6">
-                            <input type="number" ng-disabled="true" class="form-control" id="amountInBase"
+                            <input ng-required="true" type="number" ng-disabled="true" class="form-control"
+                                   id="amountInBase"
                                    value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.voucherOfAddModal.amount}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Receipt Type:</label>
+                        <div class="col-sm-6">
+                            <ui-select id="receiptType" theme="bootstrap"
+                                       data-ng-model="vm.voucherOfAddModal.receipt"
+                            >
+                                <ui-select-match placeholder="Select Receipt Type">
+                                    {{vm.voucherOfAddModal.receipt.name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="g in vm.receipts|filter:$select.search">
+                                    <small ng-bind-html="g.name | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="narration">Cheque No:</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="chequeNo"
+                            <input ng-required="true" type="text" class="form-control" id="chequeNo"
                                    ng-model="vm.voucherOfAddModal.chequeNo">
                         </div>
                     </div>
@@ -72,7 +88,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="narration">Narration:</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="narration"
+                            <input ng-required="true" type="text" class="form-control" id="narration"
                                    ng-model="vm.voucherOfAddModal.narration">
                         </div>
                     </div>

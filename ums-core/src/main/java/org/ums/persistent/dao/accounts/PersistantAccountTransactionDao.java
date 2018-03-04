@@ -256,6 +256,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       transaction.setVoucherId(pResultSet.getLong("voucher_id"));
       transaction.setAmount(pResultSet.getBigDecimal("amount"));
       transaction.setBalanceType(BalanceType.get(pResultSet.getString("balance_type")));
+      transaction.setReceiptId(pResultSet.getLong("receipt_id") == 0 ? null : pResultSet.getLong("receipt_id"));
       transaction.setNarration(pResultSet.getString("narration"));
       transaction.setForeignCurrency(pResultSet.getBigDecimal("f_currency"));
       transaction.setCurrencyId(pResultSet.getLong("currency_id"));
