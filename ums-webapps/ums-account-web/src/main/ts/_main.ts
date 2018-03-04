@@ -126,6 +126,8 @@
 /// <reference path='components/general-ledger/transactions/payment-voucher/payment.voucher.service.ts'/>
 /// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.service.ts'/>
 /// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
 
 

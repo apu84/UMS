@@ -277,12 +277,15 @@ public class AccountTransactionCommonResourceHelper extends
   public List<AccountTransaction> postTransactions(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
+    List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
 
     for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
+      PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
+      mChequeRegisterBuilder.build(chequeRegister, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setPostDate(new Date());
@@ -296,12 +299,18 @@ public class AccountTransactionCommonResourceHelper extends
       else {
         updateTransactions.add(transaction);
       }
+      chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
+      if(chequeRegister.getChequeNo() != null) {
+        chequeRegister.setAccountTransactionId(transaction.getId());
+        chequeRegisters.add(chequeRegister);
+      }
     }
     if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
     if(updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
+    updateOrSaveChequeRegister(chequeRegisters, newTransactions);
     updateAccountBalance(newTransactions);
     return new ArrayList<>(newTransactions);
   }
@@ -316,10 +325,12 @@ public class AccountTransactionCommonResourceHelper extends
       accounts.add(a.getAccount());
       accountMapWithTransaction.put(a.getAccount().getId(), a);
 
-      if(a.getBalanceType().equals(BalanceType.Cr))
+      if(a.getBalanceType().equals(BalanceType.Cr)) {
         totalCredit = totalCredit.add(a.getAmount());
-      else
+      }
+      else {
         totalDebit = totalDebit.add(a.getAmount());
+      }
     }
     // todo apply debit and credit equal exception for only journal vouchers.
     List<MutableAccountBalance> accountBalanceList =

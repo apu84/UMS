@@ -1,11 +1,6 @@
-
 module ums {
-
-
-  import IPaymentVoucher = ums.IPaymentVoucher;
-
-  export class PaymentVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q'];
+  export class ReceiptVoucherController {
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ReceiptVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -21,19 +16,19 @@ module ums {
     private pageNumber: number;
     private itemsPerPage: number;
     private totalVoucherNumber: number;
-    private paymentVouchers: IPaymentVoucher[];
-    private existingVouchers: IPaymentVoucher[];
-    private paymentVoucherDetail: IPaymentVoucher;
-    private detailVouchers: IPaymentVoucher[];
-    private paymentVoucherMain: IPaymentVoucher;
+    private contraVouchers: IContraVoucher[];
+    private existingVouchers: IContraVoucher[];
+    private contraVoucherDetail: IContraVoucher;
+    private detailVouchers: IContraVoucher[];
+    private paymentVoucherMain: IContraVoucher;
     static PAYMENT_VOUCHER_GROUP_FLAG = GroupFlag.YES;
-    static PAYMENT_VOUCHER_ID = '6';
+    static RECEIPT_VOUCHER_ID = '7';
     private paymentAccounts: IAccount[];
     private selectedPaymentAccount: IAccount;
     private selectedPaymentAccountCurrentBalance: number;
     private paymentDetailAccounts: IAccount[];
     private totalAmount: number;
-    private voucherOfAddModal: IPaymentVoucher;
+    private voucherOfAddModal: IContraVoucher;
     private dateFormat: string;
     private searchVoucherNo: string;
 
@@ -43,7 +38,7 @@ module ums {
                 private accountService: AccountService,
                 private groupService: GroupService,
                 private $timeout: ng.ITimeoutService,
-                private paymentVoucherService: PaymentVoucherService,
+                private receiptVoucherService: ReceiptVoucherService,
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
                 private currencyConversionService: CurrencyConversionService,
@@ -81,7 +76,7 @@ module ums {
     }
 
     public getPaginatedVouchers() {
-      this.paymentVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedPaymentVoucher) => {
+      this.receiptVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedPaymentVoucher) => {
         this.existingVouchers = paginatedVouchers.vouchers;
         this.totalVoucherNumber = paginatedVouchers.totalNumber;
       });
@@ -99,7 +94,7 @@ module ums {
     }
 
     public getAccountBalance() {
-      this.paymentVoucherMain.balanceType = BalanceType.Cr;
+      this.paymentVoucherMain.balanceType = BalanceType.Dr;
       this.accountBalanceService.getAccountBalance(this.paymentVoucherMain.account.id).then((currentBalance: number) => {
         this.selectedPaymentAccountCurrentBalance = currentBalance;
         console.log(accounting.formatNumber(10000));
@@ -145,19 +140,19 @@ module ums {
       this.totalCredit = 0;
       this.totalDebit = 0;
       this.totalAmount = 0;
-      this.paymentVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
+      this.receiptVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
       let currDate: Date = new Date();
-      this.paymentVouchers = [];
-      this.paymentVoucherMain = <IPaymentVoucher>{};
-      this.paymentVoucherDetail = <IPaymentVoucher>{};
+      this.contraVouchers = [];
+      this.paymentVoucherMain = <IContraVoucher>{};
+      this.contraVoucherDetail = <IContraVoucher>{};
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
       this.detailVouchers = [];
     }
 
     public addData() {
-      this.voucherOfAddModal = <IPaymentVoucher>{};
+      this.voucherOfAddModal = <IContraVoucher>{};
       this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
-      this.voucherOfAddModal.balanceType = BalanceType.Dr;
+      this.voucherOfAddModal.balanceType = BalanceType.Cr;
     }
 
     public addDataToVoucherTable() {
@@ -171,10 +166,10 @@ module ums {
       this.countTotalAmount();
     }
 
-    private addNecessaryAttributesToVoucher(voucher: IPaymentVoucher): IPaymentVoucher {
+    private addNecessaryAttributesToVoucher(voucher: IContraVoucher): IContraVoucher {
       voucher.accountId = voucher.account.id;
       voucher.voucherNo = this.voucherNo;
-      voucher.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
+      voucher.voucherId = ReceiptVoucherController.RECEIPT_VOUCHER_ID;
       voucher.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
       voucher.foreignCurrency = voucher.amount != null ? voucher.amount * voucher.conversionFactor : this.selectedPaymentAccountCurrentBalance * voucher.conversionFactor;
       voucher.voucherDate = this.voucherDate;
@@ -191,7 +186,7 @@ module ums {
         console.log(this.paymentVoucherMain);
         //this.paymentVoucherMain.amount = this.selectedPaymentAccountCurrentBalance + this.totalAmount;
         this.detailVouchers.push(this.paymentVoucherMain);
-        this.paymentVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
+        this.receiptVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IContraVoucher[]) => {
           this.configureVouchers(vouchers);
         });
       }
@@ -206,43 +201,43 @@ module ums {
         console.log("Payment voucher amount");
         console.log(this.paymentVoucherMain.amount);
         this.detailVouchers.push(this.paymentVoucherMain);
-        this.paymentVoucherService.postVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
+        this.receiptVoucherService.postVoucher(this.detailVouchers).then((vouchers: IContraVoucher[]) => {
           this.configureVouchers(vouchers);
         });
       }
     }
 
-    private configureVouchers(vouchers: IPaymentVoucher[]) {
+    private configureVouchers(vouchers: IContraVoucher[]) {
       this.totalAmount = 0;
       this.voucherMapWithId = {};
       this.postStatus=vouchers[0].postDate!=null?true:false;
       this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
-      vouchers.forEach((v: IPaymentVoucher) =>{
+      vouchers.forEach((v: IContraVoucher) =>{
         this.voucherMapWithId[v.id] = v;
         v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
       });
       this.voucherDate = vouchers[0].voucherDate;
-      this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
+      this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IContraVoucher[]) => {
         this.assignChequeNumberToVouchers(vouchers);
       });
       this.voucherNo = vouchers[0].voucherNo;
     }
 
 
-    public fetchDetails(paymentVoucher: IPaymentVoucher) {
+    public fetchDetails(paymentVoucher: IContraVoucher) {
       this.showAddSection = true;
-      this.paymentVoucherService.getVouchersByVoucherNoAndDate(paymentVoucher.voucherNo, paymentVoucher.postDate == null ? paymentVoucher.modifiedDate : paymentVoucher.postDate).then((vouchers: IPaymentVoucher[]) => {
+      this.receiptVoucherService.getVouchersByVoucherNoAndDate(paymentVoucher.voucherNo, paymentVoucher.postDate == null ? paymentVoucher.modifiedDate : paymentVoucher.postDate).then((vouchers: IContraVoucher[]) => {
         console.log("details fetched");
         console.log(vouchers);
         this.configureVouchers(vouchers);
       });
     }
 
-    private extractMainAndDetailSectionFromVouchers(vouchers: IPaymentVoucher[]): ng.IPromise<IPaymentVoucher[]> {
-      let defer: ng.IDeferred<IPaymentVoucher[]> = this.$q.defer();
+    private extractMainAndDetailSectionFromVouchers(vouchers: IContraVoucher[]): ng.IPromise<IContraVoucher[]> {
+      let defer: ng.IDeferred<IContraVoucher[]> = this.$q.defer();
       this.detailVouchers = [];
       this.voucherMapWithId = {};
-      vouchers.forEach((v: IPaymentVoucher) => {
+      vouchers.forEach((v: IContraVoucher) => {
         this.voucherMapWithId[v.id] = v;
         if (v.serialNo == null) {
           this.paymentVoucherMain = v;
@@ -258,22 +253,22 @@ module ums {
       return defer.promise;
     }
 
-    public edit(voucher: IPaymentVoucher) {
+    public edit(voucher: IContraVoucher) {
       this.voucherOfAddModal = voucher;
     }
 
     public changeDateFormat(date: string) {
       return Utils.convertFromJacksonDate(date);
     }
-    private assignChequeNumberToVouchers(vouchers: IPaymentVoucher[]) {
+    private assignChequeNumberToVouchers(vouchers: IContraVoucher[]) {
       let transactionIdList: string[] = [];
-      vouchers.forEach((v: IPaymentVoucher) => transactionIdList.push(v.id));
+      vouchers.forEach((v: IContraVoucher) => transactionIdList.push(v.id));
 
       this.chequeRegisterService.getChequeRegisterList(transactionIdList).then((chequeList: IChequeRegister[]) => {
         console.log("cheque list");
         console.log(chequeList);
         chequeList.forEach((c: IChequeRegister) => {
-          let voucher: IPaymentVoucher = this.voucherMapWithId[c.accountTransactionId];
+          let voucher: IContraVoucher = this.voucherMapWithId[c.accountTransactionId];
           console.log("Cheque voucher");
           console.log(voucher);
           voucher.chequeNo = c.chequeNo;
@@ -285,14 +280,13 @@ module ums {
 
 
     public countTotalAmount() {
-      this.detailVouchers.forEach((v: IPaymentVoucher) => {
+      this.detailVouchers.forEach((v: IContraVoucher) => {
         this.totalAmount = this.totalAmount + v.amount;
         console.log("total amount");
         console.log(this.totalAmount);
       });
     }
-
   }
 
-  UMS.controller("PaymentVoucherController", PaymentVoucherController);
+  UMS.controller("ReceiptVoucherController", ReceiptVoucherController);
 }

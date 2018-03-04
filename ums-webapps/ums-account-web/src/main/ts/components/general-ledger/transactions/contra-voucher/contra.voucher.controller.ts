@@ -94,7 +94,7 @@ module ums {
     }
 
     public getAccountBalance() {
-      this.paymentVoucherMain.balanceType = BalanceType.Cr;
+      this.paymentVoucherMain.balanceType = BalanceType.Dr;
       this.accountBalanceService.getAccountBalance(this.paymentVoucherMain.account.id).then((currentBalance: number) => {
         this.selectedPaymentAccountCurrentBalance = currentBalance;
         console.log(accounting.formatNumber(10000));
@@ -152,7 +152,7 @@ module ums {
     public addData() {
       this.voucherOfAddModal = <IContraVoucher>{};
       this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
-      this.voucherOfAddModal.balanceType = BalanceType.Dr;
+      this.voucherOfAddModal.balanceType = BalanceType.Cr;
     }
 
     public addDataToVoucherTable() {
