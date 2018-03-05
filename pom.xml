@@ -222,12 +222,7 @@
       <version>${jersey.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>javax.json</groupId>
-      <artifactId>javax.json-api</artifactId>
-      <version>1.0</version>
-      <scope>provided</scope>
-    </dependency>
+
     <!--Apache Shiro-->
     <dependency>
       <groupId>org.apache.shiro</groupId>

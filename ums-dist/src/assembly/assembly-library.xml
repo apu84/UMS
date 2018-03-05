@@ -32,7 +32,6 @@
                 <include>org.glassfish.jersey.media:jersey-media-json-jackson</include>
               <include>com.fasterxml.jackson.core:jackson-databind</include>
               <include>org.apache.shiro:shiro-core</include>
-              <include>javax.json:javax.json-api</include>
               <include>org.apache.shiro:shiro-web</include>
                 <include>org.apache.shiro:shiro-spring</include>
                 <include>org.apache.shiro:shiro-aspectj</include>
