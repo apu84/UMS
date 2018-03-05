@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /*
@@ -515,6 +516,12 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public ApplicationCCI getByTransactionId(String ptransactionId) {
+    String query = "SELECT COURSE_ID from APPLICATION_CCI WHERE TRANSACTION_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {ptransactionId}, new ApplicationCCIRowMapperForCourse());
+  }
+
+  @Override
     public  List<Long>  create(List<MutableApplicationCCI>  pMutableList)  {
         List<Object[]>  parameters  =  getInsertParamList(pMutableList);
         mJdbcTemplate.batchUpdate(INSERT_ONE,  parameters);
@@ -796,6 +803,17 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       PersistentApplicationCCI application = new PersistentApplicationCCI();
       application.setImprovementLimit(pResultSet.getInt("improvement_limit"));
       return application;
+    }
+  }// ApplicationCCIRowMapperForCourse
+
+  class ApplicationCCIRowMapperForCourse implements RowMapper<ApplicationCCI> {
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI application = new PersistentApplicationCCI();
+      application.setCourseId(pResultSet.getString("course_Id"));
+      AtomicReference<ApplicationCCI> atomicReference;
+      atomicReference = new AtomicReference<>(application);
+      return atomicReference.get();
     }
   }
 

@@ -92,6 +92,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
+
       /*
        * if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
        * payment.setStatus(StudentPayment.Status.VERIFIED); } else {

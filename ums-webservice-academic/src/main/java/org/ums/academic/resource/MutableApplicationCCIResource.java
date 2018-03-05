@@ -20,7 +20,7 @@ public class MutableApplicationCCIResource extends Resource {
 
   @POST
   @Produces({MediaType.APPLICATION_JSON})
-  public JsonObject createApplicationCCI(final JsonObject pJsonObject) {
+  public JsonObject createApplicationCCI(final JsonObject pJsonObject) throws Exception {
     return mHelper.saveAndReturn(pJsonObject, mUriInfo);
   }
 

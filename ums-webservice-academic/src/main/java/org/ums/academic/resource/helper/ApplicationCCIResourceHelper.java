@@ -3,7 +3,6 @@ package org.ums.academic.resource.helper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Persistent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.academic.resource.ApplicationCCIResource;
@@ -33,7 +32,6 @@ import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -42,8 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -201,8 +199,8 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
   }
 
   @Transactional
-  public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) {
-
+  public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    boolean carryValidation=false;
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
 
@@ -211,6 +209,21 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
+    String end_date = getContentManager().getApplicationCCIForCarryLastfdate(11012017);
+    String start_date = getContentManager().getStartdate(11012017);
+    try{
+      if(start_date != null && end_date != null) {
+        Date startDate, lastApplyDate, currentDate;
+        currentDate = new Date();
+        startDate = UmsUtils.convertToDate(start_date, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(end_date, "dd-MM-yyyy");
+        if (currentDate.compareTo(startDate) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+             carryValidation=true;
+        }
+      }
+    }catch (Exception e){
+
+    }
 
     List<UGRegistrationResult> results =
         mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getCurrentEnrolledSemester().getId(), studentId);
@@ -222,9 +235,18 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
       List<PersistentApplicationCCI> applicationAfterValidationByService =
         persistentApplicationCCIs;
-      mManager.create(applications);
 
+    boolean finalCarryValidation = carryValidation;
+    AtomicInteger co = new AtomicInteger();
+    applications.forEach(a->{
+       if(a.getApplicationType().equals(ApplicationType.CARRY)){
 
+       }else{
+
+       }
+     });
+
+   mManager.create(applications);
     List<MutableStudentPayment> studentPayments = new ArrayList<>();
 
     applications.forEach(application->{ if(application.getApplicationType().equals(ApplicationType.IMPROVEMENT )){
@@ -277,6 +299,10 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     object.add("entries", children);
     localCache.invalidate();
     return mResultHelper.getResultForApplicationCCIOfCarryClearanceAndImprovement(resultForWorkingAsResponse, pUriInfo);
+  }
+
+  public void getResult(List<MutableApplicationCCI> applications) {
+
   }
 
   private void retrieveObjectFromJson(List<MutableApplicationCCI> applications,

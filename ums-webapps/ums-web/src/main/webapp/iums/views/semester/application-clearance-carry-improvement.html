@@ -1,5 +1,5 @@
 <div class="container-fluid" data-ng-init="initialization()">
-    <div class="panel panel-blue">
+    <div class="panel panel-green">
         <div class="panel-heading" align="center">
             <h4 class="panel-title">Application System for Clearance/Carry/Improvement</h4>
         </div>
@@ -127,14 +127,12 @@
                                                     <thead>
                                                     <th style="background-color: #FAFAFA; ">Course No</th>
                                                     <th style="background-color: #FAFAFA; ">Course Title</th>
-                                                    <th style="background-color: #FAFAFA;">Approved Semester</th>
                                                     <th>Semester Info</th>
                                                     </thead>
                                                     <tbody>
                                                     <tr data-ng-repeat="app in appImpApprove">
                                                         <td>{{app.courseNo}}</td>
                                                         <td>{{app.courseTitle}}</td>
-                                                        <td>{{app.courseYear}}-{{app.courseSemester}}</td>
                                                         <td>{{app.semesterName}}</td>
                                                     </tr>
                                                     </tbody>
@@ -204,8 +202,8 @@
 
                 </div>
                 <div align="right" style="padding-bottom:5px" data-ng-if="resultCarryNumber>0 || resultImprovementNumber>0 || resultClearanceNumber>0" >
-                    <button class="btn btn-primary" data-ng-disabled="submit_Button_Disable"  data-ng-click="submit()">Submit</button>
-                    <button class="btn btn-success" data-ng-disabled="submit_Button_Disable" data-ng-click="cancel()">Cancel</button>
+                    <button class="btn btn-success" data-ng-disabled="submit_Button_Disable"  data-ng-click="submit()">Submit</button>
+                    <button class="btn btn-primary" data-ng-disabled="submit_Button_Disable" data-ng-click="cancel()">Cancel</button>
                 </div>
 
             </div>

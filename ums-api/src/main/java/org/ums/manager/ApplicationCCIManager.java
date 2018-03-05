@@ -17,6 +17,8 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI, Mu
 
   List<ApplicationCCI> getBySemesterAndType(final int pSemesterId, final int pExamType);
 
+  ApplicationCCI getByTransactionId(final String ptransactionId);
+
   List<ApplicationCCI> getByProgramAndSemesterAndType(final int pProgramId, final int pSemesterId, final int pExamType);
 
   List<ApplicationCCI> getByStudentIdAndSemester(final String pStudentId, final int pSemesterId);

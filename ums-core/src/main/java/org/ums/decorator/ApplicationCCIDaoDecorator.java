@@ -14,6 +14,11 @@ public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
   @Override
+  public ApplicationCCI getByTransactionId(String ptransactionId) {
+    return getManager().getByTransactionId(ptransactionId);
+  }
+
+  @Override
   public String getStartdate(Integer pSemesterId) {
     return getManager().getStartdate(pSemesterId);
   }

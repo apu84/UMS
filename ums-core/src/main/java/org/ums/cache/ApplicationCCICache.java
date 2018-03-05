@@ -30,6 +30,11 @@ public class ApplicationCCICache extends
   }
 
   @Override
+  public ApplicationCCI getByTransactionId(String ptransactionId) {
+    return getManager().getByTransactionId(ptransactionId);
+  }
+
+  @Override
   public Integer getAllReords(String pApprovalStatus, String empDeptId) {
     return getManager().getAllReords(pApprovalStatus, empDeptId);
   }

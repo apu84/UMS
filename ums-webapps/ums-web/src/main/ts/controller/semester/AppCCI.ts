@@ -317,9 +317,10 @@ interface ICarryLastdate{
                this.initializatino();
 
                   this.$scope.loadingVisibility = false;
+                  this.notify.success("Data Saved successfully");
 
               }).error((data) => {
-
+              this.notify.error("An error has stoped saving data");
           });
       })
         this.insertIntoStudentPayment();
@@ -536,6 +537,7 @@ interface ICarryLastdate{
                   console.log(json.semesterName);
                   console.log("Applicatino cci Updated!!");
                   console.log(json);
+                  console.log("");
                   this.$scope.appImpApprove=appCCIArr;
                   defer.resolve(appCCIArr);
               },
