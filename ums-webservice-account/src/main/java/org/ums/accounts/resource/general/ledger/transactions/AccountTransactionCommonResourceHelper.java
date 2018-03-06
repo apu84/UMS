@@ -327,6 +327,7 @@ public class AccountTransactionCommonResourceHelper extends
 
       if(a.getBalanceType().equals(BalanceType.Cr)) {
         totalCredit = totalCredit.add(a.getAmount());
+
       }
       else {
         totalDebit = totalDebit.add(a.getAmount());
@@ -344,7 +345,7 @@ public class AccountTransactionCommonResourceHelper extends
     Date date = new Date();
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
-    int month = calendar.get(Calendar.MONTH);
+    int month = calendar.get(Calendar.MONTH) + 1;
     List<MutableMonthBalance> existingMonthBalance = mMonthBalanceManager.getExistingMonthBalanceBasedOnAccountBalance(pAccountBalanceList, new Long(month));
     Map<Long, MutableMonthBalance> accountBalanceIdMapWithMonthBalance = existingMonthBalance.stream()
         .collect(Collectors.toMap(i -> i.getAccountBalanceId(), i -> i));
@@ -417,6 +418,7 @@ public class AccountTransactionCommonResourceHelper extends
   private void updateTotalBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction,
       List<MutableAccountBalance> pAccountBalanceList) {
     for(MutableAccountBalance a : pAccountBalanceList) {
+      a.setModifiedDate(new Date());
       MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
       if(accountTransaction.getBalanceType().equals(BalanceType.Cr))
         a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(

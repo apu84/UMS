@@ -43,9 +43,11 @@
                     <ui-select id="room" theme="bootstrap"
                                data-ng-model="vm.selectedCurrency"
                     >
-                        <ui-select-match placeholder="Select Currency">{{vm.selectedCurrency.currencyDescription}}
+                        <ui-select-match placeholder="Select Currency">
+                            {{vm.selectedCurrency.currencyDescription}}
                         </ui-select-match>
-                        <ui-select-choices repeat="g in vm.currencies|filter:$select.search">
+                        <ui-select-choices ng-disabled="vm.postStatus"
+                                           repeat="g in vm.currencies|filter:$select.search">
                             <small ng-bind-html="g.currencyDescription | highlight:$select.search"></small>
                         </ui-select-choices>
                     </ui-select>
