@@ -54,13 +54,14 @@ module ums {
     constructor(private $q: ng.IQService, private httpClient: HttpClient, private notify: Notify) {
       this.url = "account/general-ledger/transaction/journal-voucher";
     }
-    
+
 
     public saveVoucher(vouchers: IJournalVoucher[]): ng.IPromise<any> {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/save", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
             this.notify.success("Journal Voucher Data Saved Successfully")
+            console.log("Successss");
             defer.resolve(response);
           })
           .error((error) => {
@@ -76,6 +77,7 @@ module ums {
       this.httpClient.post(this.url + "/post", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
             this.notify.success("Journal Voucher Posted Successfully");
+            console.log("posting");
             defer.resolve(response);
           })
           .error((error) => {

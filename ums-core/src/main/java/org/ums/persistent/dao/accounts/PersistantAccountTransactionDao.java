@@ -28,8 +28,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   private IdGenerator mIdGenerator;
 
   String INSERT_ONE =
-      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE) VALUES "
-          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType,:receiptId, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate)";
+      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE,LAST_MODIFIED) VALUES "
+          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType,:receiptId, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate,"
+          + getLastModifiedSql() + ")";
   String UPDATE_ONE = "UPDATE DT_TRANSACTION " + "SET " + "  COMP_CODE     = :compCode, "
       + "  DIVISION_CODE = :divisionCode, " + "  VOUCHER_NO    = :voucherNo, " + "  VOUCHER_DATE  = :voucherDate, "
       + "  SERIAL_NO     = :serialNo, " + "  ACCOUNT_ID    = :accountId, " + "  VOUCHER_ID    = :voucherId, "
@@ -37,8 +38,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       + "  F_CURRENCY    = :foreignCurrency, " + "  CURRENCY_ID   = :currencyId, "
       + "  CONV_FACTOR   = :conversionFactor, " + "  PROJ_NO       = :projNo, " + "  STAT_FLAG     = :statFlag, "
       + "  STAT_UP_FLAG  = :statUpFlag, " + "  RECEIPT_ID    = :receiptId, " + "  POST_DATE     = :postDate, "
-      + "  MODIFIED_BY   = :modifiedBy, " + "  MODIFIED_DATE = :modifiedDate, " + "  TYPE          = :type "
-      + "WHERE ID = :id";
+      + "  MODIFIED_BY   = :modifiedBy, " + "  MODIFIED_DATE = :modifiedDate, "
+      + "  TYPE          = :type , last_modified=" + getLastModifiedSql() + "  WHERE ID = :id";
 
   public PersistantAccountTransactionDao(JdbcTemplate pJdbcTemplate,
       NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
