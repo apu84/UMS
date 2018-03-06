@@ -13,9 +13,7 @@ import org.ums.persistent.model.accounts.PersistentAccountBalance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,9 +53,12 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, List<Account> pAccounts) {
    List<Long> accountCode= new ArrayList<>();
    accountCode = pAccounts.stream().map(a->a.getId()).collect(Collectors.toList());
-    String query="select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE in (" + org.apache.commons.lang.StringUtils.join(accountCode,",") +
-        ")";
-    return mJdbcTemplate.query(query, new Object[]{pFinancialStartDate, pFinancialEndDate}, new AccountBalanceRowMapper());
+    String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=:finStartDate and FIN_END_DATE=:finEndDate and ACCOUNT_CODE in (:accountCodeList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("finStartDate", pFinancialStartDate);
+    parameterMap.put("finEndDate", pFinancialEndDate);
+    parameterMap.put("accountCodeList", accountCode);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new AccountBalanceRowMapper());
   }
 
   @Override
@@ -76,7 +77,8 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   @Override
   public int update(List<MutableAccountBalance> pMutableList) {
     String query =
-        "UPDATE MST_ACCOUNT_BALANCE SET TOT_DEBIT_TRANS=?, TOT_CREDIT_TRANS=?, MODIFIED_DATE=?, MODIFIED_BY=? WHERE ID=?";
+        "UPDATE MST_ACCOUNT_BALANCE SET TOT_DEBIT_TRANS=?, TOT_CREDIT_TRANS=?, MODIFIED_DATE=?, MODIFIED_BY=?,last_modified="
+            + getLastModifiedSql() + " WHERE ID=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
   }
 
@@ -129,6 +131,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       accountBalance.setStatUpFlag(rs.getString("stat_up_flag"));
       accountBalance.setModifiedDate(rs.getDate("modified_date"));
       accountBalance.setModifiedBy(rs.getString("modified_by"));
+      accountBalance.setLastModified(rs.getString("last_modified"));
       return accountBalance;
     }
   }

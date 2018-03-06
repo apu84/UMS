@@ -160,6 +160,8 @@ module ums {
 
     public addData() {
       this.voucherOfAddModal = <IReceiptVoucher>{};
+      this.selectedPaymentAccountCurrentBalance = 0;
+      this.selectedPaymentAccount = <IAccount>{};
       this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
       this.voucherOfAddModal.balanceType = BalanceType.Cr;
     }
