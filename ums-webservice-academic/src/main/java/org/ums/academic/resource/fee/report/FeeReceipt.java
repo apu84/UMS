@@ -288,14 +288,17 @@ public class FeeReceipt {
       cell.setBorder(Rectangle.NO_BORDER);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-      if(payment.getFeeCategory().getName().equals("Improvememt exam fee") || payment.getFeeCategory().getName().equals("Carry over exam fee")) {
+      if(payment.getFeeCategory().getName().equals("Improvememt exam fee")
+          || payment.getFeeCategory().getName().equals("Carry over exam fee")) {
         ApplicationCCI x = mApplicationCCIManager.getByTransactionId(payment.getTransactionId());
         x.getCourseId();
         // mCourseManager.get(x.getCourseId()).getTitle();
-        if (mCourseManager.get(x.getCourseId()) != null) {
-          paragraph = new Paragraph("Course Title: "+mCourseManager.get(x.getCourseId()).getTitle(), infoFont);
+        if(mCourseManager.get(x.getCourseId()) != null) {
+          paragraph =
+              new Paragraph("Course Title: " + mCourseManager.get(x.getCourseId()).getTitle() + " ("
+                  + mCourseManager.get(x.getCourseId()).getNo() + ")", infoFont);
         }// ------------------fee
-        // category
+         // category
         paragraph.setAlignment(Element.ALIGN_LEFT);
         cell.addElement(paragraph);
         paymentTable.addCell(cell);

@@ -63,6 +63,9 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pReadOnly.getSemester() != null)
       pBuilder.add("semesterId", pReadOnly.getSemester());
+
+    if(pReadOnly.getDesignation() != null)
+      pBuilder.add("designation", pReadOnly.getDesignation());
   }
 
   @Override

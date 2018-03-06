@@ -236,16 +236,6 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
       List<PersistentApplicationCCI> applicationAfterValidationByService =
         persistentApplicationCCIs;
 
-    boolean finalCarryValidation = carryValidation;
-    AtomicInteger co = new AtomicInteger();
-    applications.forEach(a->{
-       if(a.getApplicationType().equals(ApplicationType.CARRY)){
-
-       }else{
-
-       }
-     });
-
    mManager.create(applications);
     List<MutableStudentPayment> studentPayments = new ArrayList<>();
 

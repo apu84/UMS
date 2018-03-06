@@ -15,6 +15,16 @@ import java.util.List;
 public class ApplicationTESCache extends
     ContentCache<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements ApplicationTESManager {
   @Override
+  public List<ApplicationTES> getAssignedCourses(String pFacultyId, Integer pSemesterId) {
+    return getManager().getAssignedCourses(pFacultyId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationTES> getFacultyMembers(String pDeptId) {
+    return getManager().getFacultyMembers(pDeptId);
+  }
+
+  @Override
   public List<ApplicationTES> getAlreadyReviewdCourses(String pStudentId, Integer pSemesterId) {
     return getManager().getAlreadyReviewdCourses(pStudentId, pSemesterId);
   }

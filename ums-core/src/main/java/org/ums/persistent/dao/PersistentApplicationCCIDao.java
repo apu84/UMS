@@ -336,11 +336,20 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
           + " from APPLICATION_CCI a,MST_COURSE b where a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=b.COURSE_ID  and a.APPLICATION_TYPE=3 ";
   // GetTotalcarry
   String SELECT_TOTAL_CARRY =
-      "SELECT MST_COURSE.COURSE_NO,MST_COURSE.COURSE_TITLE, MST_COURSE.YEAR, MST_COURSE.SEMESTER from MST_COURSE where MST_COURSE.COURSE_ID in( "
-          + "SELECT COURSE_ID "
-          + "          FROM UG_REGISTRATION_RESULT "
-          + "          WHERE UG_REGISTRATION_RESULT.Student_id = ? AND UG_REGISTRATION_RESULT.Semester_Id NOT IN  ? AND "
-          + "          UG_REGISTRATION_RESULT.Exam_Type = 1 AND UG_REGISTRATION_RESULT.GRADE_LETTER = 'F' )";
+      "SELECT MST_COURSE.COURSE_NO, MST_COURSE.COURSE_TITLE, MST_COURSE.YEAR, MST_COURSE.SEMESTER from MST_COURSE where MST_COURSE.COURSE_ID in( "
+          + "select * from ( "
+          + "SELECT "
+          + "                       course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE Student_id = ? AND Semester_Id NOT IN ? AND GRADE_LETTER = 'F' "
+          + " minus "
+          + "SELECT "
+          + "                       course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE course_id in "
+          + "                     (SELECT "
+          + "                       course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE Student_id = ? AND Semester_Id NOT IN ? AND GRADE_LETTER = 'F') "
+          + "                     and Student_id = ? AND Semester_Id NOT IN ?  and GRADE_LETTER!='F' "
+          + "                     ) tmp " + "                     )";
 
   // Improvement_Limit_Calculation_Theory
   String SELECT_IMPROVEMENT_LIMIT =
@@ -440,8 +449,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   @Override
   public List<ApplicationCCI> getTotalCarry(final String pStudentId, final Integer pSemesterId) {
     String query = SELECT_TOTAL_CARRY;
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
-        new ApplicationCCIRowMapperForTotalCarry());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pStudentId, pSemesterId, pStudentId,
+        pSemesterId}, new ApplicationCCIRowMapperForTotalCarry());
   }
 
   @Override

@@ -7,14 +7,15 @@ import org.ums.builder.ApplicationTESBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationTES;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.ApplicationTESManager;
-import org.ums.manager.ContentManager;
-import org.ums.manager.StudentManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.json.JsonArrayBuilder;
@@ -46,6 +47,15 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   @Autowired
   IdGenerator mIdGenerator;
 
+  @Autowired
+  EmployeeManager mEmployeeManager;
+
+  @Autowired
+  UserManager mUserManager;
+
+  @Autowired
+  SemesterManager mSemesterManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
@@ -76,6 +86,33 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         String studentId = SecurityUtils.getSubject().getPrincipal().toString();
         Student student = mStudentManager.get(studentId);
         List<ApplicationTES> applications=getContentManager().getAllQuestions(student.getCurrentEnrolledSemester().getId());
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getAssignedCourses(final String pFacultyId,final Request pRequest, final UriInfo pUriInfo){
+         // Integer sem= mSemesterManager.getActiveSemester(11).getId();11022017
+        List<ApplicationTES> applications=getContentManager().getAssignedCourses(pFacultyId,11012017);
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getAllFacultyMembers(final Request pRequest, final UriInfo pUriInfo){
+        String userId = SecurityUtils.getSubject().getPrincipal().toString();
+        User loggedUser = mUserManager.get(userId);
+        Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+        String empDeptId=loggedEmployee.getDepartment().getId();
+        List<ApplicationTES> applications=getContentManager().getFacultyMembers(empDeptId);
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();

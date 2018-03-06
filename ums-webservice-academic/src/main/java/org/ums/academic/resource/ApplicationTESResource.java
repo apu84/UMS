@@ -31,6 +31,18 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getAllFacultyMembers")
+  public JsonObject getFacultyMembers(@Context Request pRequest) {
+    return mHelper.getAllFacultyMembers(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getAssignedCourses/facultyId/{faculty-id}")
+  public JsonObject getAssignedCourses(@Context Request pRequest, @PathParam("faculty-id") String pFacultyId) {
+    return mHelper.getAssignedCourses(pFacultyId, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getReviewEligibleCourses/courseType/{course-type}")
   public JsonObject getReviewEligibleCourses(@Context Request pRequest, @PathParam("course-type") String pCourseType) {
     return mHelper.getReviewEligibleCourses(pCourseType, pRequest, mUriInfo);

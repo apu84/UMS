@@ -1,20 +1,126 @@
-<div class="container-fluid">
-    <div  class="panel panel-green">
-        <div class="panel-heading" align="center">
-            <h4 class="panel-title">Application For Teachers Evalution System</h4>
-        </div >
-        <div style="padding-top:20px;padding-bottom: 40px"
-             data-ng-include="'views/teachers-Evalution-System/head-tes-selection.html'">
-        </div>
-        <div
-                data-ng-include="'views/teachers-Evalution-System/course-assign.html'">
-        </div>
-        <div
-                data-ng-include="'views/teachers-Evalution-System/show-result.html'">
-        </div>
-        <div
-                data-ng-include="'views/teachers-Evalution-System/show-records.html'">
-        </div>
-    </div>
+<style>
+    .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    }
 
+    .animate-if.ng-enter {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+    .modal-header,h4 {
+        color:white;
+        text-align: center;
+        font-size: 20px;
+        padding:5px 10px;
+    }
+
+
+
+</style>
+
+<div class="row" data-ng-init="vm.getAllFacultyMembers()">
+    <div class="panel">
+        <div class="panel-body shadowPanel" style="min-height: 590px;">
+
+            <div style="padding: 0px">
+
+                <div class="panel panel-info" >
+                    <div class="panel-heading" align="center">
+                        Teachers Evalution System
+                    </div>
+
+                    <div style="padding-top:20px;padding-bottom: 40px"  data-ng-hide="vm.carrylastDateDeadline" data-ng-include="'views/teachers-Evalution-System/head-tes-selection.html'">
+
+                    </div>
+                    <div class="panel-body" >
+
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <th style="background-color: #FAFAFA; ">#</th>
+                            <th style="background-color: #FAFAFA; ">Faculty Name</th>
+                            <th style="background-color: #FAFAFA; ">Department</th>
+                            <th style="background-color: #FAFAFA; ">Designation</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in vm.facultyList | orderBy :'designation' | filter: vm.facultyName "
+                                data-ng-click="vm.getAssignedCourses(app.teacherId)"
+                                data-toggle="modal"
+                                data-target="#myModalNew">
+                                <td>{{$index+1}}</td>
+                                <td>{{app.firstName+" "+app.lastName}}</td>
+                                <td>{{app.deptShortName}}</td>
+                                <td>{{app.designation}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+                <div class="modal fade" id="myModalNew" role="dialog" >
+                    <!--   <div class="modal-backdrop"> -->
+                    <div class="modal-dialog ">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" >
+                                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Assign Course</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="panel-body" >
+
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <th style="background-color: #FAFAFA; ">#</th>
+                                        <th style="background-color: #FAFAFA; ">Course No</th>
+                                        <th style="background-color: #FAFAFA; ">Course Title</th>
+                                        <th style="background-color: #FAFAFA; ">Section</th>
+                                        <th style="background-color: #FAFAFA; ">Apply</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
+                                              <td>{{$index}}</td>
+                                            <td>{{app.courseNo }}</td>
+                                            <td>{{app.courseTitle}}</td>
+                                            <td>{{app.section}}</td>
+                                            <td><input type="checkbox" data-ng-model="app.apply"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
 </div>
+
+
+
+
+
+

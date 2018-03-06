@@ -39,6 +39,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mComment;
   private String mStudentId;
   private Integer mSemesterId;
+  private String mDesignation;
 
   public PersistentApplicationTES() {
 
@@ -64,6 +65,17 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mComment = persistentApplicationTES.getComment();
     mStudentId = persistentApplicationTES.getStudentId();
     mSemesterId = persistentApplicationTES.getSemester();
+    mDesignation = persistentApplicationTES.getDesignation();
+  }
+
+  @Override
+  public void setDesignation(String pDesignation) {
+    mDesignation = pDesignation;
+  }
+
+  @Override
+  public String getDesignation() {
+    return mDesignation;
   }
 
   @Override
