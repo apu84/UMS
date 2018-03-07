@@ -41,11 +41,11 @@ public class PersonalInformationResourceHelper extends
   public JsonObject getSimilarUsers(final String pFirstName, final String pLastName, UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
     Map<PersonalInformation, Double> similarUsers = new HashMap<>();
-    String fullName = (pFirstName.trim().concat(" " + pLastName.trim()));
+    String fullName = (pFirstName.trim().concat(" " + pLastName.trim())).toLowerCase();
     List<PersonalInformation> personalInformationList = mManager.getAll();
     for(PersonalInformation personalInformation : personalInformationList) {
       JaccardDistance jaccardDistance = new JaccardDistance();
-      Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName());
+      Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName().toLowerCase());
       if(score > 0.70) {
         similarUsers.put(personalInformation, score);
       }
