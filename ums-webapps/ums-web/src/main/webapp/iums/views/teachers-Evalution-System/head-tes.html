@@ -54,7 +54,7 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in vm.facultyList | orderBy :'designation' | filter: vm.facultyName "
-                                data-ng-click="vm.getAssignedCourses(app.teacherId)"
+                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName)"
                                 data-toggle="modal"
                                 data-target="#myModalNew">
                                 <td>{{$index+1}}</td>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="panel-body" >
-
+                                   <h3>Faculty Name: {{vm.fName}}</h3><br>
 
                                     <table class="table table-bordered">
                                         <thead>
@@ -92,7 +92,7 @@
                                         </thead>
                                         <tbody>
                                         <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
-                                              <td>{{$index}}</td>
+                                              <td>{{$index+1}}</td>
                                             <td>{{app.courseNo }}</td>
                                             <td>{{app.courseTitle}}</td>
                                             <td>{{app.section}}</td>
@@ -105,6 +105,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
+                                <button type="button" class="btn btn-success"   data-dismiss="modal">submit</button>
                                 <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
 
                             </div>

@@ -23,6 +23,7 @@ module ums{
         public assignedCourses:Array<IAssignedCourses>;
         public facultyName:string;
         public facultyId:string;
+        public fName:string;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -64,8 +65,9 @@ module ums{
            });
        return defer.promise;
    }
-   private getAssignedCourses(teacher_id:string){
+   private getAssignedCourses(teacher_id:string,firstname:string,lastName:string){
             this.facultyId=teacher_id;
+            this.fName=firstname+" "+lastName;
        this.assignedCourses=[];
        var appTES:Array<IAssignedCourses>=[];
        var defer = this.$q.defer();
@@ -82,6 +84,16 @@ module ums{
            });
        return defer.promise;
 
+   }
+
+   private submit(){
+
+            for(var i=0;i<this.assignedCourses.length;i++){
+                if(this.assignedCourses[i].apply==true){
+                    console.log("-------");
+                    console.log(this.assignedCourses[i]);
+                }
+            }
    }
 
 
