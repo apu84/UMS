@@ -208,6 +208,18 @@ module ums {
         }
 
 
+        public deleteRecord(mfnNo: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete("record/" + mfnNo)
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve();
+                })
+                .error((data) => {
+                    this.notify.error("Error in Deleting");
+                });
+            return defer.promise;
+        }
     }
 
     UMS.service("catalogingService", CatalogingService);

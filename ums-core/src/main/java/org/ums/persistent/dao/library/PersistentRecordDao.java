@@ -50,6 +50,8 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + " sysdate, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
+  static String DELETE_ONE = "DELETE FROM RECORDS ";
+
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
 
@@ -110,6 +112,12 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   public List<Record> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new PersistentRecordDao.RecordRowMapper());
+  }
+
+  @Override
+  public int delete(final MutableRecord pRecord) {
+    String query = DELETE_ONE + " WHERE MFN = ?";
+    return mJdbcTemplate.update(query, pRecord.getMfn());
   }
 
   class RecordRowMapper implements RowMapper<Record> {

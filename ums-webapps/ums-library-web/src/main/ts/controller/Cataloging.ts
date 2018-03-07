@@ -51,6 +51,7 @@ module ums {
         resetItemForm: Function;
         enableEdit: Function;
         makeCallNo: Function;
+        deleteRecord: Function;
     }
 
     export class Cataloging {
@@ -76,6 +77,7 @@ module ums {
             $scope.reloadPublishers = this.reloadPublishers.bind(this);
             $scope.reloadContributors = this.reloadContributors.bind(this);
             $scope.makeCallNo = this.makeCallNo.bind(this);
+            $scope.deleteRecord = this.deleteRecord.bind(this);
 
             $scope.goNext = this.goNext.bind(this);
             $scope.goPrevious = this.goPrevious.bind(this);
@@ -838,6 +840,11 @@ module ums {
             this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
+        }
+
+        public deleteRecord() : void{
+            this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then(() => {
+            });
         }
     }
 
