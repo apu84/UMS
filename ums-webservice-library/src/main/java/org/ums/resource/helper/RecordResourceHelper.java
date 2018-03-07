@@ -84,8 +84,10 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
   }
 
   public JsonObject searchRecord(int pPage, int pItemPerPage, final String pFilter, final UriInfo pUriInfo) {
+    String query = queryBuilder(pFilter);
     List<RecordDocument> recordDocuments =
-        mRecordRepository.findByCustomQuery(queryBuilder(pFilter), new PageRequest(pPage, pItemPerPage));
+        mRecordRepository.findByCustomQuery(query, new PageRequest(pPage, pItemPerPage),
+                query.contains("*:*"));
     List<Record> records = new ArrayList<>();
     for(RecordDocument document : recordDocuments) {
       records.add(mManager.get(Long.valueOf(document.getId())));
@@ -108,7 +110,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       }
       else {
         queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*" : filterDto.getBasicQueryTerm();
-        queryString = String.format(filterDto.getBasicQueryField() + " : %s AND type_s:Record", queryTerm);
+        queryString = String.format(filterDto.getBasicQueryField() + ":%s AND type_s:Record", queryTerm);
       }
 
       // queryString =

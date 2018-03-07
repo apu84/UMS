@@ -694,8 +694,8 @@ module ums {
                 ],
                 materialTypes: [
                     {id: 101101, name: 'Select Material Type'},
-                    {id: 1, name: 'Books'},
-                    {id: 2, name: 'Journals'},
+                    {id: 1, name: 'Book'},
+                    {id: 2, name: 'Journal'},
                     {id: 3, name: 'Thesis/Project'}
                 ], /*
                  materialTypes: [
