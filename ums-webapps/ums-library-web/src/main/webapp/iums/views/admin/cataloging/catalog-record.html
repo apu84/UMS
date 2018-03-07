@@ -84,7 +84,7 @@
                    name="subTitle" id="subTitle" ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
-    <div class="form-group" data-ng-if="record.materialTypeName=='Books'">
+    <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label">Series Title</label>
         <div class="col-md-3">
             <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.seriesTitle"
@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    <div class="form-group" data-ng-if="record.materialTypeName=='Journals'">
+    <div class="form-group" data-ng-if="record.materialTypeName=='Journal'">
         <label class="col-md-1 control-label" for="serialIssueNo">SL. Issue No</label>
         <div class="col-md-3">
             <input type="text" placeholder="" class="form-control dottedInput required"
@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    <div class="form-group" data-ng-if="record.materialTypeName=='Books'">
+    <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label" for="libraryLacks">Library Lacks</label>
         <div class="col-md-3">
             <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.libraryLacks"
@@ -144,7 +144,7 @@
                    id="isbn" ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
-    <div class="form-group" data-ng-if="record.materialTypeName=='Books'">
+    <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label" for="corpAuthorMain">Cor. A. Main
             <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
                  style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
@@ -176,20 +176,20 @@
             <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.edition"
                    name="edition" id="edition" ng-readonly="data.readOnlyMode"/>
         </div>
-        <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Books'" for="translateTitleEdition">T.
+        <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Book'" for="translateTitleEdition">T.
             T. Edition
             <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
                  style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
                  title="Translation Title Edition"/>
         </label>
-        <div class="col-md-3" data-ng-if="record.materialTypeName=='Books'">
+        <div class="col-md-3" data-ng-if="record.materialTypeName=='Book'">
             <input type="text" placeholder="" class="form-control dottedInput"
                    data-ng-model="record.translateTitleEdition" name="translateTitleEdition" id="translateTitleEdition"
                    ng-readonly="data.readOnlyMode"/>
         </div>
-        <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Journals'" for="frequency">Frequency
+        <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Journal'" for="frequency">Frequency
         </label>
-        <div class="col-md-3" data-ng-if="record.materialTypeName=='Journals'">
+        <div class="col-md-3" data-ng-if="record.materialTypeName=='Journal'">
             <select style="width: 98%" data-ng-model="record.frequency" name="frequency" id="frequency"
                     ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
                 <option value="">Select Frequency</option>
@@ -198,8 +198,8 @@
                 </option>
             </select>
         </div>
-        <label class="col-md-1 control-label" for="issn" data-ng-if="record.materialTypeName=='Journals'">ISSN</label>
-        <div class="col-md-3" data-ng-if="record.materialTypeName=='Journals'">
+        <label class="col-md-1 control-label" for="issn" data-ng-if="record.materialTypeName=='Journal'">ISSN</label>
+        <div class="col-md-3" data-ng-if="record.materialTypeName=='Journal'">
             <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.isbn" name="issn"
                    id="issn" ng-readonly="data.readOnlyMode"/>
         </div>
@@ -244,7 +244,7 @@
             </div>
         </div>
 
-        <div class="form-group" data-ng-if="record.materialTypeName=='Books' || record.materialTypeName=='Journals'">
+        <div class="form-group" data-ng-if="record.materialTypeName=='Book' || record.materialTypeName=='Journal'">
             <label class="col-md-1 control-label">Year</label>
             <div class="col-md-3">
                 <input type="text"
@@ -475,7 +475,12 @@
     </fieldset>
 
     <div class="row">
-        <div class="text-right col-md-12" style="padding-top: 45px;padding-left: 2%;"
+        <div class="text-left col-md-6" style="padding-top: 45px;padding-left: 2%;"
+             data-ng-if="data.readOnlyMode==false">
+            <button type="button" class="btn btn-red" value="save_edit_record">Delete Record
+            </button>
+        </div>
+        <div class="text-right col-md-6" style="padding-top: 45px;padding-left: 2%;"
              data-ng-if="data.readOnlyMode==false">
             <button type="button" class="btn btn-dark btn-success" value="save_edit_record">Save & Continue Editing
             </button>&nbsp;&nbsp;&nbsp;
