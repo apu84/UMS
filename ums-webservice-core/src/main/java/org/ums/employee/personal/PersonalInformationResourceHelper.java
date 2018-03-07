@@ -1,9 +1,8 @@
 package org.ums.employee.personal;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.text.similarity.JaccardSimilarity;
-import org.apache.commons.text.similarity.JaroWinklerDistance;
-import org.apache.commons.text.similarity.SimilarityScore;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.similarity.*;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
@@ -45,9 +44,9 @@ public class PersonalInformationResourceHelper extends
     String fullName = (pFirstName.trim().concat(" " + pLastName.trim()));
     List<PersonalInformation> personalInformationList = mManager.getAll();
     for(PersonalInformation personalInformation : personalInformationList) {
-      JaccardSimilarity jaccardSimilarity = new JaccardSimilarity();
-      double score = jaccardSimilarity.apply(fullName, personalInformation.getFullName());
-      if(score > 0.6) {
+      JaccardDistance jaccardDistance = new JaccardDistance();
+      Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName());
+      if(score > 0.70) {
         similarUsers.put(personalInformation, score);
       }
     }
