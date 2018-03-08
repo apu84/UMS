@@ -145,7 +145,7 @@ module ums {
       this.totalCredit = 0;
       this.totalDebit = 0;
       this.totalAmount = 0;
-      this.paymentVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
+      this.voucherNo = "";
       let currDate: Date = new Date();
       this.paymentVouchers = [];
       this.paymentVoucherMain = <IPaymentVoucher>{};

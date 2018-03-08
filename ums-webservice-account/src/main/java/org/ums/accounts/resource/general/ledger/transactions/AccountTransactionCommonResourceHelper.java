@@ -17,6 +17,7 @@ import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -211,6 +212,7 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
+    String voucherNo = "";
 
     for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
@@ -221,7 +223,11 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
       transaction.setCompanyId(company.getId());
-      transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
+      if(i == 0)
+        voucherNo =
+            transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
+                transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
+      transaction.setVoucherNo(company.getId() + voucherNo);
       if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
@@ -312,6 +318,7 @@ public class AccountTransactionCommonResourceHelper extends
     newTransactions.addAll(updateTransactions);
     updateOrSaveChequeRegister(chequeRegisters, newTransactions);
     updateAccountBalance(newTransactions);
+    newTransactions.forEach(a -> a.setVoucherNo(a.getVoucherNo().substring(2)));
     return new ArrayList<>(newTransactions);
   }
 
@@ -324,16 +331,15 @@ public class AccountTransactionCommonResourceHelper extends
     for(MutableAccountTransaction a : pTransactions) {
       accounts.add(a.getAccount());
       accountMapWithTransaction.put(a.getAccount().getId(), a);
-
       if(a.getBalanceType().equals(BalanceType.Cr)) {
         totalCredit = totalCredit.add(a.getAmount());
-
       }
       else {
         totalDebit = totalDebit.add(a.getAmount());
       }
     }
-    // todo apply debit and credit equal exception for only journal vouchers.
+    if(!totalCredit.equals(totalDebit) && pTransactions.get(0).getVoucher().getId().equals(VoucherType.JOURNAL_VOUCHER))
+      new Exception(new Throwable("Debit and credit must be same for journal voucher"));
     List<MutableAccountBalance> accountBalanceList =
         generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
     mAccountBalanceManager.update(accountBalanceList);
