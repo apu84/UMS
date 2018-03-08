@@ -37,7 +37,7 @@ public class AccountBalanceResourceHelper extends ResourceHelper<AccountBalance,
     AccountBalance accountBalance =
         mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(),
             financialAccountYear.getCurrentEndDate(), account);
-    return accountBalance.getTotCreditTrans();
+    return accountBalance.getTotDebitTrans().subtract(accountBalance.getTotCreditTrans());
   }
 
   @Override

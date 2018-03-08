@@ -100,13 +100,12 @@ module ums {
       else {
         if (submissionType == SubmissionType.save) {
           this.journalVoucherService.saveVoucher(this.journalVouchers).then((response) => {
-            if (response != undefined)
-              this.configureAddVoucherSection(this.journalVouchers);
+            this.configureAddVoucherSection(response);
           });
         } else {
           this.journalVoucherService.postVoucher(this.journalVouchers).then((response) => {
-            if (response != undefined)
-              this.configureAddVoucherSection(this.journalVouchers);
+
+            this.configureAddVoucherSection(response);
           });
         }
 
@@ -129,16 +128,19 @@ module ums {
     }
 
     public addDataToJournalTable() {
-      this.journalVoucherOfAddModal.voucherNo = this.voucherNo;
-      this.journalVoucherOfAddModal.currency = this.selectedCurrency;
-      this.journalVoucherOfAddModal.currencyId = this.selectedCurrency.id.toString();
-      this.journalVoucherOfAddModal.accountId = this.journalVoucherOfAddModal.account.id;
-      this.journalVoucherOfAddModal.voucherId = JournalVoucherController.JOURNAL_VOUCHER_ID;
-      this.journalVoucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
-      this.journalVoucherOfAddModal.accountTransactionType = this.type;
-      this.journalVoucherOfAddModal.foreignCurrency = this.journalVoucherOfAddModal.amount * this.journalVoucherOfAddModal.conversionFactor;
-      this.journalVoucherOfAddModal.accountTransactionType = this.type;
-      this.journalVouchers.push(this.journalVoucherOfAddModal);
+      if (this.journalVouchers.filter((f: IJournalVoucher) => f.serialNo === this.journalVoucherOfAddModal.serialNo).length === 0) {
+        this.journalVoucherOfAddModal.voucherNo = this.voucherNo;
+        this.journalVoucherOfAddModal.currency = this.selectedCurrency;
+        this.journalVoucherOfAddModal.currencyId = this.selectedCurrency.id.toString();
+        this.journalVoucherOfAddModal.accountId = this.journalVoucherOfAddModal.account.id;
+        this.journalVoucherOfAddModal.voucherId = JournalVoucherController.JOURNAL_VOUCHER_ID;
+        this.journalVoucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
+        this.journalVoucherOfAddModal.accountTransactionType = this.type;
+        this.journalVoucherOfAddModal.foreignCurrency = this.journalVoucherOfAddModal.amount * this.journalVoucherOfAddModal.conversionFactor;
+        this.journalVoucherOfAddModal.accountTransactionType = this.type;
+        this.journalVouchers.push(this.journalVoucherOfAddModal);
+      }
+
       this.calculateTotalDebitAndCredit();
     }
 
@@ -146,7 +148,7 @@ module ums {
       this.totalCredit = 0;
       this.totalDebit = 0;
       for (var i = 0; i < this.journalVouchers.length; i++) {
-        if (this.journalVouchers[i].balanceType == BalanceType.Dr)
+        if (this.journalVouchers[i].balanceType === BalanceType.Dr)
           this.totalDebit += this.journalVouchers[i].amount;
         else
           this.totalCredit += this.journalVouchers[i].amount;
@@ -164,10 +166,14 @@ module ums {
       });
     }
 
-    private configureAddVoucherSection(vouchers: ums.IJournalVoucher[]) {
+    private configureAddVoucherSection(vouchers: IJournalVoucher[]) {
+      console.log("In the configure add vocher section");
+      console.log(vouchers);
       this.journalVouchers = vouchers;
       this.showAddSection = true;
-      this.voucherNo = vouchers[0].voucherNo;
+      this.voucherNo = this.journalVouchers[0].voucherNo;
+      console.log(vouchers[0].voucherNo);
+      console.log("This voucher no: " + this.voucherNo);
       this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
       this.poststatus = vouchers[0].postDate == null ? false : true;
       this.selectedCurrency = vouchers[0].currency;
@@ -184,7 +190,7 @@ module ums {
       this.totalCredit = 0;
       this.totalDebit = 0;
       this.type = AccountTransactionType.SELLING;
-      this.journalVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
+      this.voucherNo = "";
       let currDate: Date = new Date();
       this.journalVouchers = [];
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");

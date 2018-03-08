@@ -73,4 +73,6 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
   Date getModifiedDate();
 
   String getModifiedBy();
+
+  String getMessage();
 }

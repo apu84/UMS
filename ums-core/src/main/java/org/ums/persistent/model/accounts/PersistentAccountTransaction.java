@@ -65,6 +65,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private Date modifiedDate;
   private String modifiedBy;
   private String lastModified;
+  private String message;
 
   @Override
   public AccountTransactionType getAccountTransactionType() {
@@ -103,6 +104,16 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   @JsonIgnore
   public String getDefaultCompanyId() {
     return defaultCompanyId;
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
+  }
+
+  @Override
+  public void setMessage(String pMessage) {
+    message = pMessage;
   }
 
   @Override
