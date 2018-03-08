@@ -98,6 +98,20 @@ public class PersistentItemDao extends ItemDaoDecorator {
   }
 
   @Override
+  public int delete(final List<MutableItem> pItemList) {
+    String query = DELETE_ONE + " WHERE ID = ? AND ACCESSION_NUMBER = ?";
+    return mJdbcTemplate.batchUpdate(query, getParams(pItemList)).length;
+  }
+
+  private List<Object[]> getParams(List<MutableItem> pMutableItem) {
+    List<Object[]> params = new ArrayList<>();
+    for(Item item : pMutableItem) {
+      params.add(new Object[] {item.getId(), item.getAccessionNumber()});
+    }
+    return params;
+  }
+
+  @Override
   public List<Long> create(final List<MutableItem> items) {
 
     List<Long> longIds = new ArrayList<>();

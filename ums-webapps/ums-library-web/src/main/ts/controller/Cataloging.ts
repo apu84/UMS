@@ -55,6 +55,8 @@ module ums {
         deleteRecord: Function;
         validateRecordBeforeDelete: Function;
         deleteItem: Function;
+        confirmation: Function;
+        itemId: string;
     }
 
     export class Cataloging {
@@ -83,6 +85,7 @@ module ums {
             $scope.deleteRecord = this.deleteRecord.bind(this);
             $scope.validateRecordBeforeDelete = this.validateRecordBeforeDelete.bind(this);
             $scope.deleteItem = this.deleteItem.bind(this);
+            $scope.confirmation = this.confirmation.bind(this);
 
             $scope.goNext = this.goNext.bind(this);
             $scope.goPrevious = this.goPrevious.bind(this);
@@ -847,8 +850,12 @@ module ums {
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }
 
-        private deleteItem(itemId: string): void{
-            this.catalogingService.deleteItem(itemId).then(() => {
+        public deleteItem(itemId: string): void {
+            this.$scope.itemId = itemId;
+        }
+
+        public confirmation(): void{
+            this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
             });
         }
 
