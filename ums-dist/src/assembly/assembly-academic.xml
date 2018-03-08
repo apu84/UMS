@@ -41,6 +41,7 @@
                 <include>org.glassfish.jersey.media:jersey-media-json-processing</include>
                 <include>ch.qos.logback:logback-classic</include>
                 <include>ch.qos.logback:logback-core</include>
+                <include>net.logstash.logback:logstash-logback-encoder</include>
                 <include>org.slf4j:slf4j-api</include>
                 <include>org.slf4j:slf4j-jdk14</include>
                 <include>commons-logging:commons-logging</include>

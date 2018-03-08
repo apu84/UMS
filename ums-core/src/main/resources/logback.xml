@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="true">
  <!-- scan="true" debug="true" -->
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
@@ -54,6 +54,36 @@
     <appender-ref ref="fileAppender"/>
   </appender>
 
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:5000</destination>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/>
+                <context/>
+                <version/>
+                <logLevel/>
+                <loggerName/>
+
+                <pattern>
+                    <pattern>
+                    {
+                        "appName": "iums",
+                        "appVersion": "1.0"
+                        }
+                    </pattern>
+                </pattern>
+
+                <threadName/>
+                <message/>
+
+                <logstashMarkers/>
+                <arguments/>
+
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
   <!--
   <root level="error">
     <appender-ref ref="ASYNC"/>
@@ -72,6 +102,7 @@
   <logger name="org.ums" level="debug" additivity="false">
     <appender-ref ref="fileAppender"/>
     <appender-ref ref="STDOUT" />
+      <appender-ref ref="STASH"/>
   </logger>
 
    <!--Comment out this block to debug sql query and prepared statements-->
