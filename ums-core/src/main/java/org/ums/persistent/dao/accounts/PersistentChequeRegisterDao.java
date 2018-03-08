@@ -62,12 +62,18 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   @Override
   public int delete(MutableChequeRegister pMutable) {
-    return super.delete(pMutable);
+    String query = "delete from dt_cheque_register where id in (:id)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pMutable.getId());
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override
   public int delete(List<MutableChequeRegister> pMutableList) {
-    return super.delete(pMutableList);
+    String query = "delete from dt_cheque_register where id in (:id)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pMutableList.stream().map(t -> t.getId()).collect(Collectors.toList()));
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override

@@ -2,16 +2,15 @@ package org.ums.accounts.resource.general.ledger.transactions.journal.voucher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
+import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.logs.UmsLogMessage;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -25,6 +24,12 @@ public class MutableJournalVoucherResource {
   @Path("/save")
   public List<AccountTransaction> save(JsonArray pJsonArray) throws Exception {
     return mJournalVoucherResourceHelper.save(pJsonArray);
+  }
+
+  @DELETE
+  @Path("/delete")
+  public Response delete(final MutableAccountTransaction pMutableAccountTransaction) {
+    return mJournalVoucherResourceHelper.delete(pMutableAccountTransaction);
   }
 
   @POST

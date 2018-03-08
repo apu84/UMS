@@ -96,6 +96,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setCompany(Company pCompany) {
     this.company = pCompany;
   }
@@ -162,7 +163,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-DD-YYYY")
   public void setVoucherDate(Date pVoucherDate) {
     this.voucherDate = pVoucherDate;
   }
@@ -183,6 +184,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setAccount(Account pAccount) {
     this.account = pAccount;
   }
@@ -205,6 +207,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setVoucher(Voucher pVoucher) {
     this.voucher = pVoucher;
   }
@@ -267,6 +270,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonIgnore
   public void setCurrency(Currency pCurrency) {
     this.currency = pCurrency;
   }

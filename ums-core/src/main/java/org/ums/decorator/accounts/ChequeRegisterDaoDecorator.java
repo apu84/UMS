@@ -17,4 +17,5 @@ public class ChequeRegisterDaoDecorator extends
   public List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
     return getManager().getByTransactionIdList(pTransactionIdList);
   }
+
 }

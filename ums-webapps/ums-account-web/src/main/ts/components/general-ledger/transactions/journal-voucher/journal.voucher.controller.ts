@@ -168,12 +168,27 @@ module ums {
     public showListView() {
       console.log("in the show list view");
       this.showAddSection = false;
+      this.getPaginatedJournalVouchers();
+
     }
 
     public fetchDetails(journalVoucher: IJournalVoucher) {
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
         this.configureAddVoucherSection(vouchers);
       });
+    }
+
+    public deleteVoucher(journalVoucher: IJournalVoucher) {
+      if (journalVoucher.id === null)
+        this.journalVouchers.splice(this.journalVouchers.indexOf(journalVoucher), 1);
+      else {
+        this.journalVoucherService.deleteVoucher(journalVoucher).then((response) => {
+          if (response != undefined) {
+            this.notify.success("Successfully Deleted");
+            this.journalVouchers.splice(this.journalVouchers.indexOf(journalVoucher), 1);
+          }
+        });
+      }
     }
 
     private configureAddVoucherSection(vouchers: IJournalVoucher[]) {

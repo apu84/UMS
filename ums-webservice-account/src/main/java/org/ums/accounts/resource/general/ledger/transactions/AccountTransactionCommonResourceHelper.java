@@ -174,6 +174,17 @@ public class AccountTransactionCommonResourceHelper extends
     return new ArrayList<>(transactions);
   }
 
+  @Transactional
+  public Response delete(final MutableAccountTransaction pAccountTransaction) {
+    mAccountTransactionManager.delete(pAccountTransaction);
+    List<Long> accountTransactionIdList = new ArrayList<>();
+    accountTransactionIdList.add(pAccountTransaction.getId());
+    List<MutableChequeRegister> chequeRegisterlist =
+        mChequeRegisterManager.getByTransactionIdList(accountTransactionIdList);
+    mChequeRegisterManager.delete(chequeRegisterlist);
+    return Response.accepted().build();
+  }
+
   public PaginatedVouchers getAll(int itemPerPage, int pageNumber, String voucherNO, Long voucherId) {
     Voucher voucher = mVoucherManager.get(voucherId);
     List<MutableAccountTransaction> mutableAccountTransactions = new ArrayList<>();
