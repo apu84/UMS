@@ -17,8 +17,9 @@
     <tr ng-repeat="v in vm.journalVouchers">
         <td>{{v.serialNo}}</td>
         <td>{{v.account.accountName}}</td>
-        <td>{{v.amount}}</td>
-        <td>{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * v.amount}}</td>
+        <td>{{vm.formatCurrency( v.amount)}}</td>
+        <td>{{vm.formatBaseCurrency(v.amount)}}
+        </td>
         <td>{{v.balanceType}}</td>
         <td>{{v.narration}}</td>
         <td>

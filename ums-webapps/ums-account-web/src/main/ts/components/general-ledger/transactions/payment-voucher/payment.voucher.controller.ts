@@ -108,6 +108,7 @@ module ums {
     }
 
     public formatCurrency(currency: number): any {
+
       return accounting.formatMoney(currency, this.selectedCurrency.notation + " ");
     }
 

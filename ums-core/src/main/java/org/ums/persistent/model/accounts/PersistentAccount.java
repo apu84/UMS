@@ -34,6 +34,7 @@ public class PersistentAccount implements MutableAccount {
   private String mStatUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
+  private String mLastModified;
 
   public PersistentAccount() {}
 
@@ -145,7 +146,7 @@ public class PersistentAccount implements MutableAccount {
 
   @Override
   public String getLastModified() {
-    return null;
+    return mLastModified;
   }
 
   @Override
@@ -210,6 +211,6 @@ public class PersistentAccount implements MutableAccount {
 
   @Override
   public void setLastModified(String pLastModified) {
-
+    mLastModified = pLastModified;
   }
 }

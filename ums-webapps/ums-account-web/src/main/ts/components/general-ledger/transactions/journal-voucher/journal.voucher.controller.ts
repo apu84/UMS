@@ -31,6 +31,8 @@ module ums {
     private accounting: any;
     static JOURNAL_VOUCHER_GROUP_FLAG = GroupFlag.NO;
     static JOURNAL_VOUCHER_ID = '1';
+    private baseCurrency: ICurrency;
+
 
 
     constructor($scope: ng.IScope,
@@ -47,7 +49,6 @@ module ums {
     }
 
     public initialize() {
-
       this.showAddSection = false;
       this.pageNumber = 1;
 
@@ -79,6 +80,15 @@ module ums {
       }
     }
 
+    public formatCurrency(currency: number): any {
+      return accounting.formatMoney(currency, this.selectedCurrency.notation + " ");
+    }
+
+    public formatBaseCurrency(currency: number): any {
+      let baseCurrencyConversion = currency * (this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor);
+
+      return accounting.formatMoney(baseCurrencyConversion, this.baseCurrency.notation + " ");
+    }
     public pageChanged(pageNumber: number) {
       this.pageNumber = pageNumber;
       this.getPaginatedJournalVouchers();
@@ -211,6 +221,7 @@ module ums {
       this.currencyService.getAllCurrencies().then((currencies: ICurrency[]) => {
         this.currencies = currencies;
         this.selectedCurrency = currencies[0];
+        this.baseCurrency = currencies.filter((c: ICurrency) => c.currencyFlag == CurrencyFlag.BASE)[0];
       });
     }
   }

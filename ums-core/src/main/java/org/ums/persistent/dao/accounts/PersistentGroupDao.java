@@ -125,6 +125,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
       group.setStatUpFlag(rs.getString("stat_up_flag"));
       group.setModifiedDate(rs.getDate("modified_date"));
       group.setModifiedBy(rs.getString("modified_by"));
+      group.setLastModified(rs.getString("last_modified"));
       return group;
     }
   }
