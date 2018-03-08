@@ -50,8 +50,8 @@
                         <i class="fa fa-eye" style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
                         <i class="fa fa-pencil-square-o" style="cursor: pointer;"
                            data-ng-click="fetchItem(item.id, 'edit')"></i>
-                       <!-- <a class="fa fa-trash-o" data-target="#modal-confirm" data-toggle="modal"
-                           style="cursor: pointer"></a>-->
+                        <a data-target="#modal-confirm1" data-toggle="modal"
+                        style="cursor: pointer" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
 
@@ -279,13 +279,13 @@
     </div>
 </fieldset>
 
-<div id="modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+<div id="modal-confirm1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">Are you sure? You want to delete this item</div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
-                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="deleteItem(item.id)">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
                     Yes, Delete It
                 </button>
             </div>

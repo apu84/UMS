@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.json.Json;
@@ -16,12 +17,17 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.RecordBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.library.FilterDto;
+import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Record;
+import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.manager.library.ItemManager;
 import org.ums.manager.library.RecordManager;
+import org.ums.persistent.model.library.PersistentItem;
 import org.ums.persistent.model.library.PersistentRecord;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
@@ -52,6 +58,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
 
   @Autowired
   RecordRepository mRecordRepository;
+
+  @Autowired
+  ItemManager mItemManger;
 
   @Override
   public RecordManager getContentManager() {
@@ -125,11 +134,17 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     return queryString;
   }
 
+  @Transactional
   public Response deleteRecord(String pMfnNo) {
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));
+    List<Item> itemList = new ArrayList<>();
     if(record.getTotalItems() == record.getTotalAvailable()) {
+      itemList = mItemManger.getByMfn(record.getMfn());
       mManager.delete(record);
+      for(Item item : itemList) {
+          mItemManger.delete((MutableItem) item);
+      }
       return Response.noContent().build();
     }
 
