@@ -106,8 +106,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     prepareGradeGroups(objectBuilder,
         getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
-
-    return objectBuilder.build();
+    JsonObject responseObject = objectBuilder.build();
+    log.debug("User : {}, Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}",SecurityUtils.getSubject().getPrincipal().toString(),currentActor,
+        marksSubmissionStatusDto.getCourseTitle(), marksSubmissionStatusDto.getCourseNo(), marksSubmissionStatusDto.getSemesterName());
+    log.debug("Returned Course List :{}", responseObject.toString());
+    return responseObject;
   }
 
   public JsonObject enrich(JsonObject source, String key, String value) {

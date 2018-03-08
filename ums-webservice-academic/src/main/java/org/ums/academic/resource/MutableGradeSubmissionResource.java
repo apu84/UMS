@@ -23,13 +23,14 @@ public class MutableGradeSubmissionResource extends Resource {
 
   @PUT
   @TwoFA(type = "marks_submission")
-  @UmsLogMessage(message = "Saving gradesheet")
+  @UmsLogMessage(message = "Save/Submit Grade Sheet")
   public Response saveGradeSheet(@Context HttpServletRequest pHttpServletRequest, JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }
 
   @PUT
   @Path("/recheckApprove")
+  @UmsLogMessage(message = "Grade Sheet Recheck/Approval")
   public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.updateGradeStatus(pJsonObject);
   }
@@ -42,6 +43,7 @@ public class MutableGradeSubmissionResource extends Resource {
 
   @PUT
   @Path("/gradeSubmissionDeadLine")
+  @UmsLogMessage(message = "Grade Submission Deadline Update")
   public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) {
     return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject, mUriInfo);
   }

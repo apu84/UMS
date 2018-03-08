@@ -3,6 +3,7 @@ package org.ums.academic.resource;
 import org.springframework.stereotype.Component;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -22,6 +23,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/role/{role}")
+  @UmsLogMessage(message = "Grade Sheet")
   public JsonObject getExamGrade(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -32,6 +34,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/yearsemester/{year-semester}/role/{role}/status/{status}")
+  @UmsLogMessage(message = "Course List for Grade Submission")
   public JsonObject getGradeSubmissionStatus(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId,
@@ -45,6 +48,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/yearsemester/{year-semester}/role/{role}/status/{status}/courseno/{course-no}")
+  @UmsLogMessage(message = "Course List for Grade Submission(by Course Number)")
   public JsonObject getGradeSubmissionStatus(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId,
@@ -58,6 +62,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/chartdata/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}")
+  @UmsLogMessage(message = "Chart Data for Grade Sheet")
   public JsonObject getChartData(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -67,6 +72,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/deadline/semester/{semester-id}/examType/{exam-type}/courseType/{course-type}/examDate/{exam-date}")
+  @UmsLogMessage(message = "Grade Submission Deadline")
   public JsonObject getGradeSubmissionDeadLine(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamType,
@@ -77,6 +83,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examType/{exam-type}")
+  @UmsLogMessage(message = "Marks Submission Log")
   public JsonObject getMarksSubmissionLogs(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -86,6 +93,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examType/{exam-type}/studentid/{student-id}")
+  @UmsLogMessage(message = "Grade Log for Student")
   public JsonObject getMarksLogs(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -95,6 +103,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/submissionstat/programtype/{program-type}/semester/{semester-id}/dept/{dept-id}/examtype/{exam-type}/status/{status}")
+  @UmsLogMessage(message = "Grade Submission Statistics")
   public JsonObject getMarksSubmissionStat(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("program-type") Integer programType, final @PathParam("semester-id") Integer pSemesterId,
