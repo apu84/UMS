@@ -220,6 +220,19 @@ module ums {
                 });
             return defer.promise;
         }
+
+        public deleteItem(itemId: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete("item/" + itemId)
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve();
+                })
+                .error((data) => {
+                    this.notify.error("Error in Deleting");
+                });
+            return defer.promise;
+        }
     }
 
     UMS.service("catalogingService", CatalogingService);

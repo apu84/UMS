@@ -233,7 +233,8 @@
             <label for="classNo" class="col-md-1 control-label">Class No</label>
             <div class="col-md-3">
                 <input type="text" placeholder="" class="form-control dottedInput required"
-                       data-ng-model="record.classNo" data-ng-change="makeCallNo()" name="classNo" id="classNo" ng-readonly="data.readOnlyMode"/>
+                       data-ng-model="record.classNo" data-ng-change="makeCallNo()" name="classNo" id="classNo"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="authorMark" class="col-md-1 control-label">Author Mark</label>
@@ -249,13 +250,15 @@
             <div class="col-md-3">
                 <input type="text"
                        class="form-control dottedInput"
-                       data-ng-model="record.callDate" data-ng-change="makeCallNo()" id="callDate" name="callDate" ng-readonly="data.readOnlyMode"/>
+                       data-ng-model="record.callDate" data-ng-change="makeCallNo()" id="callDate" name="callDate"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="callEdition" class="col-md-1 control-label">Edition</label>
             <div class="col-md-3">
                 <input type="text" class="form-control dottedInput" id="callEdition" name="callEdition"
-                       data-ng-model="record.callEdition" data-ng-change="makeCallNo()" cRequired="" ng-readonly="data.readOnlyMode"/>
+                       data-ng-model="record.callEdition" data-ng-change="makeCallNo()" cRequired=""
+                       ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="callVolume" class="col-md-1 control-label">Volume</label>
@@ -476,9 +479,9 @@
 
     <div class="row">
         <div class="text-left col-md-6" style="padding-top: 45px;padding-left: 2%;"
-             data-ng-if="data.readOnlyMode==false">
-            <button type="button" class="btn btn-red" value="delete_record" data-ng-click="deleteRecord()">Delete Record
-            </button>
+             data-ng-if="data.readOnlyMode==false"><!--
+            <button data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer"
+                    data-ng-click="validateRecordBeforeDelete()"><b>Delete Record</b></button>-->
         </div>
         <div class="text-right col-md-6" style="padding-top: 45px;padding-left: 2%;"
              data-ng-if="data.readOnlyMode==false">
@@ -490,6 +493,77 @@
     </div>
 
 </form>
+
+<div id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;
+                </button>
+                <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number :
+                    {{record.callNo}}</h4></div>
+            <div class="modal-body">
+                <div data-ng-if="items.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                            <tr style="background-color: #EEE">
+                                <th style="text-align: center">SL</th>
+                                <th style="text-align: center">Copy No</th>
+                                <th class="numeric">Accession No</th>
+                                <th class="numeric">Accession Date</th>
+                                <th class="numeric" style="text-align: center">Purchase Price</th>
+                                <th class="numeric">Supplier</th>
+                                <th class="numeric" style="text-align: center">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in items">
+                                <td data-title="SL" style="text-align: center">{{$index+1}}</td>
+                                <td data-title="Copy No" style="text-align: center">{{item.copyNumber}}</td>
+                                <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
+                                <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
+                                <td data-title="Purchase Price" class="numeric" style="text-align: right">
+                                    {{item.price}}
+                                </td>
+                                <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
+                                <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong style="color: red">Force Delete</strong> will also delete these items. Are you sure
+                            to do force delete?
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-primary"
+                                data-ng-click="deleteRecord()">Force Delete
+                        </button>
+                    </div>
+                </div>
+                <div data-ng-if="items.length==0">
+                    <div class="row">
+                        <div class="col-md-12">Record doesn't have any items. Proceed to delete?</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-primary"
+                                data-ng-click="deleteRecord()">Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     $('#keywords').tokenfield();
