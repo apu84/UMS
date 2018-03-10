@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
+import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
@@ -79,6 +80,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
       accountBalance.setId(mIdGenerator.getNumericId());
+      accountBalance.setYearOpenBalanceType(BalanceType.Dr);
+      accountBalance.setYearOpenBalance(new BigDecimal(0.00));
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
       accountBalance.setAccountCode(id);

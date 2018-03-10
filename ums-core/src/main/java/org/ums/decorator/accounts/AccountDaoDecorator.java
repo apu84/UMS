@@ -33,4 +33,9 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   public List<Account> getAccounts(GroupFlag pGroupFlag) {
     return getManager().getAccounts(pGroupFlag);
   }
+
+  @Override
+  public List<Account> getExcludingGroups(List<Long> groupIdList) {
+    return getManager().getExcludingGroups(groupIdList);
+  }
 }

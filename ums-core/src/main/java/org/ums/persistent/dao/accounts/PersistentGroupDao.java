@@ -24,10 +24,12 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   private IdGenerator mIdGenerator;
   private SimpleJdbcInsert mSimpleJdbcInsert;
 
-  private String INSERT_ONE = "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
-      + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by)"
-      + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
-      + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
+  private String INSERT_ONE =
+      "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
+          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, last_modified)"
+          + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
+          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy,"
+          + getLastModifiedSql() + ")";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -38,7 +40,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getAll() {
-    String query = "select * from mst_group";
+    String query = "select * from mst_group order by modified_date DESC ";
     return mJdbcTemplate.query(query, new PersistentGroupRowMapper());
   }
 
