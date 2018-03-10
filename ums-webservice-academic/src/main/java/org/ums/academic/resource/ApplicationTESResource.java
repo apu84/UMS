@@ -31,6 +31,12 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getRecordsOfAssignedCoursesByHead")
+  public JsonObject getRecordsOfAssignedCoursesByHead(@Context Request pRequest) {
+    return mHelper.getRecordsOfAssignedCoursesByHead(pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getAllFacultyMembers")
   public JsonObject getFacultyMembers(@Context Request pRequest) {
     return mHelper.getAllFacultyMembers(pRequest, mUriInfo);
@@ -56,9 +62,10 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/alreadyReviewedCourses")
-  public JsonObject getAlreadyReviewdCourses(@Context Request pRequest) {
-    return mHelper.getAlreadyReviewedCoursesInfo(pRequest, mUriInfo);
+  @Path("/getAllQuestions/courseId/{course-id}/teacherId/{teacher-id}")
+  public JsonObject getAlreadyReviewedCourses(@Context Request pRequest, @PathParam("course-id") String pCourseId,
+      @PathParam("teacher-id") String pTeacherId) {
+    return mHelper.getAlreadyReviewedCoursesInfo(pCourseId, pTeacherId, pRequest, mUriInfo);
   }
 
 }

@@ -43,9 +43,12 @@
 
                     </div>
                     <div class="panel-body" >
+                        <pagination total-items="vm.getTotalRecords" ng-model="vm.currentPageNumber" max-size="7"
+                                    class="pagination-sm" boundary-links="true" rotate="false"
+                                    class="pagination-page"
+                                    items-per-page="vm.itemPerPage"></pagination>
 
-
-                        <table class="table table-bordered">
+                        <table class="table table-striped">
                             <thead>
                             <th style="background-color: #FAFAFA; ">#</th>
                             <th style="background-color: #FAFAFA; ">Faculty Name</th>
@@ -53,11 +56,11 @@
                             <th style="background-color: #FAFAFA; ">Designation</th>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="app in vm.facultyList | orderBy :'designation' | filter: vm.facultyName "
-                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName)"
+                            <tr data-ng-repeat="app in (filterd =  vm.facultyList | orderBy :'designation' | filter: vm.facultyName | limitTo:vm.itemPerPage:vm.itemPerPage*(vm.currentPageNumber - 1)) "
+                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId)"
                                 data-toggle="modal"
                                 data-target="#myModalNew">
-                                <td>{{$index+1}}</td>
+                                <td>{{(vm.currentPageNumber - 1) * vm.itemPerPage + $index + 1}}</td>
                                 <td>{{app.firstName+" "+app.lastName}}</td>
                                 <td>{{app.deptShortName}}</td>
                                 <td>{{app.designation}}</td>
@@ -82,13 +85,15 @@
                                 <div class="panel-body" >
                                    <h3>Faculty Name: {{vm.fName}}</h3><br>
 
+
                                     <table class="table table-bordered">
                                         <thead>
                                         <th style="background-color: #FAFAFA; ">#</th>
                                         <th style="background-color: #FAFAFA; ">Course No</th>
                                         <th style="background-color: #FAFAFA; ">Course Title</th>
                                         <th style="background-color: #FAFAFA; ">Section</th>
-                                        <th style="background-color: #FAFAFA; ">Apply</th>
+                                        <th style="background-color: #FAFAFA; ">Evaluate</th>
+                                        <th style="background-color: #FAFAFA; ">Status</th>
                                         </thead>
                                         <tbody>
                                         <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
@@ -96,7 +101,13 @@
                                             <td>{{app.courseNo }}</td>
                                             <td>{{app.courseTitle}}</td>
                                             <td>{{app.section}}</td>
-                                            <td><input type="checkbox" data-ng-model="app.apply"></td>
+                                            <td><input data-ng-hide="app.status==vm.statusValue ? true:false"
+                                                       type="checkbox"
+                                                       data-ng-model="app.apply"
+                                                       data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
+                                            <td><span ng-if="app.status==vm.statusValue" class="label label-success badge-success">Set For Evaluation</span>
+                                                <span ng-if="app.status!=vm.statusValue" class="label label-danger badge-danger">Not Assigned</span>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -105,8 +116,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-success"  data-ng-click="vm.submit()" data-dismiss="modal">submit</button>
-                                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success"  data-ng-disabled="vm.submit_Button_Disable" data-ng-click="vm.submit()" data-dismiss="modal" >submit</button>
+                                <button type="button" class="btn btn-info"   data-ng-click="vm.close()"   data-dismiss="modal">Close</button>
 
                             </div>
                         </div>

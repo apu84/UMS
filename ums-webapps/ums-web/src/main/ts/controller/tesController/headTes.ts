@@ -4,6 +4,7 @@ module ums{
         teacherId:string;
         firstName:string;
         lastName:string;
+        deptId:number;
         deptShortName:string;
         designation:string;
     }
@@ -16,14 +17,32 @@ module ums{
         section:string;
         semesterId:number;
         apply:boolean;
+        status:number;
+    }
 
+    interface ISetForReview{
+        firstName:string;
+        lastName:string;
+        courseNo:string;
+        courseTitle:string;
+        section:string;
+        date:string;
     }
     class HeadTES{
         public facultyList:Array<IFacultyList>;
         public assignedCourses:Array<IAssignedCourses>;
+        public setRivewedCoursesHistory:Array<ISetForReview>;
         public facultyName:string;
         public facultyId:string;
         public fName:string;
+        public statusValue:number;
+        public semesterName:string;
+        public getTotalRecords:any;
+        public itemPerPage:number;
+        public currentPageNumber:number;
+        public deptId:string;
+         submit_Button_Disable:boolean;
+         checkBoxCounter:number;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -45,6 +64,11 @@ module ums{
                     private attachmentService: AttachmentService){
             this.facultyName="";
             this.facultyId="";
+            this.statusValue=1;
+            this.itemPerPage=10;
+            this.currentPageNumber=1;
+            this.submit_Button_Disable=true;
+            this.checkBoxCounter=0;
 
         }
    private getAllFacultyMembers(){
@@ -56,6 +80,8 @@ module ums{
                appTES=json.entries;
                console.log("Faculty Members!!!!");
                this.facultyList=appTES;
+               this.getTotalRecords=json.totalRecords;
+               console.log(this.getTotalRecords);
                console.log(this.facultyList);
                defer.resolve(json.entries);
 
@@ -65,9 +91,32 @@ module ums{
            });
        return defer.promise;
    }
-   private getAssignedCourses(teacher_id:string,firstname:string,lastName:string){
+
+   private getRecordsOfAssignedCoursesByHead(){
+     var  appTES:Array<ISetForReview>=[];
+       var defer = this.$q.defer();
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getRecordsOfAssignedCoursesByHead', 'application/json',
+           (json: any, etag: string) => {
+               appTES=json.entries;//semesterName
+               console.log("Set Evaluation Courses!!!!");
+               this.setRivewedCoursesHistory=appTES;
+               console.log(this.setRivewedCoursesHistory);
+               this.semesterName=json.semesterName;
+               defer.resolve(json.entries);
+           },
+           (response: ng.IHttpPromiseCallbackArg<any>) => {
+               console.error(response);
+           });
+       return defer.promise;
+
+   }
+   private getAssignedCourses(teacher_id:string,firstname:string,lastName:string,deptId:string){
+       this.checkBoxCounter=0;
+       this.submit_Button_Disable=true;
             this.facultyId=teacher_id;
             this.fName=firstname+" "+lastName;
+            this.deptId=deptId;
+            console.log("Department Id"+this.deptId);
        this.assignedCourses=[];
        var appTES:Array<IAssignedCourses>=[];
        var defer = this.$q.defer();
@@ -82,19 +131,80 @@ module ums{
            (response: ng.IHttpPromiseCallbackArg<any>) => {
                console.error(response);
            });
+
+
        return defer.promise;
 
    }
 
    private submit(){
-
-            for(var i=0;i<this.assignedCourses.length;i++){
-                if(this.assignedCourses[i].apply==true){
-                    console.log("-------");
-                    console.log(this.assignedCourses[i]);
-                }
-            }
+            this.convertToJson(this.assignedCourses).then((app)=>{
+                console.log("hello from another side");
+                console.log(app);
+                this.httpClient.post('academic/applicationTES/saveAssignedCoursesByHead', app, 'application/json')
+                    .success((data, status, header, config) => {
+                        this.notify.success("Data saved successfully");
+                        this.checkBoxCounter=0;
+                        this.submit_Button_Disable=true;
+                    }).error((data) => {
+                    this.notify.error("Error in Saving Data");
+                });
+       });
    }
+
+        private convertToJson(result: Array<IAssignedCourses>): ng.IPromise<any> {
+            let defer:ng.IDeferred<any> = this.$q.defer();
+            var completeJson = {};
+            console.log("result in convert to Json");
+            console.log(result);
+            console.log(result.length);
+            var jsonObj = [];
+            for(var i=0;i<result.length;i++){
+                var item = {};
+                if(result[i].apply==true) {
+                    item["courseId"] = result[i].courseName;
+                    item["teacherId"] = result[i].teacherId;
+                    item["semesterid"] = result[i].semesterId;
+                    item["section"]=result[i].section;
+                    item["status"] = this.statusValue;
+                    item["deptId"]=this.deptId;
+                    console.log("Items");
+                    console.log(item);
+                    //this.notify.success("sending./.....");
+                    jsonObj.push(item);
+                }
+
+            }
+            completeJson["entries"] = jsonObj;
+            console.log("Complete json!!!!!!!!!!!!!!!")
+            console.log(completeJson);
+            defer.resolve(completeJson);
+            return defer.promise;
+
+        }
+        private checkMoreThanOneSelectionSubmit(result:IAssignedCourses){
+            if(result.apply){
+                this.checkBoxCounter++;
+                this.enableOrDisableSubmitButton();
+            }
+            else{
+                this.checkBoxCounter--;
+                this.enableOrDisableSubmitButton();
+            }
+
+            console.log("value: "+this.submit_Button_Disable);
+        }
+        private enableOrDisableSubmitButton(): void{
+            if( this.checkBoxCounter > 0){
+                this.submit_Button_Disable=false;
+            }else{
+                this.submit_Button_Disable=true;
+            }
+        }
+        private close(){
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
+        }
 
 
     }

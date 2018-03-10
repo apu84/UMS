@@ -1,9 +1,7 @@
 package org.ums.cache;
 
-import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.mutable.MutableApplicationTES;
-import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ApplicationTESManager;
 import org.ums.manager.CacheManager;
 
@@ -14,8 +12,35 @@ import java.util.List;
  */
 public class ApplicationTESCache extends
     ContentCache<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements ApplicationTESManager {
+
   @Override
-  public List<ApplicationTES> getAssignedCourses(String pFacultyId, Integer pSemesterId) {
+  public List<ApplicationTES> getRivewedCoursesForReadOnlyMode(String pCourseId, String pTeacherId, String pStudentId,
+      Integer pSemesterId) {
+    return getManager().getRivewedCoursesForReadOnlyMode(pCourseId, pTeacherId, pStudentId, pSemesterId);
+  }
+
+  @Override
+  public Integer getTotalRecords(String pDeptId) {
+    return getManager().getTotalRecords(pDeptId);
+  }
+
+  @Override
+  public List<ApplicationTES> getRecordsOfAssignedCoursesByHead(Integer pSemesterId, String pDeptId) {
+    return getManager().getRecordsOfAssignedCoursesByHead(pSemesterId, pDeptId);
+  }
+
+  @Override
+  public List<ApplicationTES> getAssignedCoursesByHead(String pFacultyId, Integer pSemesterId) {
+    return getManager().getAssignedCoursesByHead(pFacultyId, pSemesterId);
+  }
+
+  @Override
+  public List<Long> saveAssignedCourses(List<MutableApplicationTES> pMutableList) {
+    return getManager().saveAssignedCourses(pMutableList);
+  }
+
+  @Override
+  public List<MutableApplicationTES> getAssignedCourses(String pFacultyId, Integer pSemesterId) {
     return getManager().getAssignedCourses(pFacultyId, pSemesterId);
   }
 
@@ -42,8 +67,9 @@ public class ApplicationTESCache extends
   }
 
   @Override
-  public List<ApplicationTES> getReviewEligibleCourses(String pStudentId, Integer pSemesterId, String pCourseType) {
-    return getManager().getReviewEligibleCourses(pStudentId, pSemesterId, pCourseType);
+  public List<MutableApplicationTES> getReviewEligibleCourses(String pStudentId, Integer pSemesterId,
+      String pCourseType, String pSection) {
+    return getManager().getReviewEligibleCourses(pStudentId, pSemesterId, pCourseType, pSection);
   }
 
   @Override

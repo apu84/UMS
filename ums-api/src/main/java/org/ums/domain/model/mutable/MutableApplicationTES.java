@@ -48,4 +48,7 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
 
   void setDesignation(final String pDesignation);
 
+  void setStatus(final Integer pStatus);
+
+  void setAppliedDate(final String pAppliedDate);
 }

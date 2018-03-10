@@ -211,6 +211,7 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     String end_date = getContentManager().getApplicationCCIForCarryLastfdate(11012017);
     String start_date = getContentManager().getStartdate(11012017);
+    
     try{
       if(start_date != null && end_date != null) {
         Date startDate, lastApplyDate, currentDate;

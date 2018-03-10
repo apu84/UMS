@@ -1,7 +1,20 @@
 <div class="col-sm-4">
     <div class="form-group" align="right">
+        <label class="col-md-8 control-label"><input type="text"
+                                                     class="form-control required"
+                                                     id="resultsPerPloage"
+                                                     placeholder='Search by student Id'
+                                                     data-ng-model="vm.facultyName"/></label>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
         <div class="col-md-8">
-            <input type="text" data-ng-model="vm.facultyName" size="30" placeholder="Search By Faculty Name">
+           <button type="button" data-toggle="modal"
+                   data-ng-click="vm.getRecordsOfAssignedCoursesByHead()"
+                   data-target="#myModal"
+                   class="btn btn-success btn-sm" data-ng-model="kko">List of Teachers Requiring Evaluation</button>
         </div>
     </div>
 </div>
@@ -9,22 +22,14 @@
 <div class="col-sm-4">
     <div class="form-group" align="right">
         <div class="col-md-8">
-           <button type="button" data-toggle="modal"   data-target="#myModal" class="btn btn-success btn-sm" data-ng-model="kko">Already Assigned Courses</button>
-        </div>
-    </div>
-</div>
-
-<div class="col-sm-4">
-    <div class="form-group" align="right">
-        <div class="col-md-8">
-            <button type="button" class="btn btn-info btn-sm" data-ng-model="kk">Evaluation Result's</button>
+            <button type="button" class="btn btn-info btn-sm" data-ng-model="kk">Evaluation Score</button>
         </div>
     </div>
 </div>
 <br/>
 <div class="modal fade" id="myModal" role="dialog" >
     <!--   <div class="modal-backdrop"> -->
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-lg ">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -34,19 +39,30 @@
             </div>
             <div class="modal-body">
                 <div class="panel-body" >
-
-
-                    <table class="table table-bordered">
+                    <span  style="font-size: 14px" class="label label-success badge-success">Session: <strong>{{vm.semesterName}}</strong></span>
+                    <label ><input type="text"
+                                   size="120"
+                                   class="form-control required"
+                                   id="search"
+                                   placeholder='Search by Teacher Name'
+                                   data-ng-model="assignedCourseSearch"/></label><br>
+                    <table class="table table-striped">
                         <thead>
                         <th style="background-color: #FAFAFA; ">#</th>
                         <th style="background-color: #FAFAFA; ">Faculty Name</th>
                         <th style="background-color: #FAFAFA; ">CourseNo</th>
                         <th style="background-color: #FAFAFA; ">CourseTitle</th>
+                        <th style="background-color: #FAFAFA; ">Section</th>
                         <th style="background-color: #FAFAFA; ">Approved Date</th>
                         </thead>
                         <tbody>
-                        <tr>
-
+                        <tr data-ng-repeat="app in vm.setRivewedCoursesHistory | filter:assignedCourseSearch ">
+                        <td>{{$index+1}}</td>
+                         <td>{{app.firstName+" "+app.lastName}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.section}}</td>
+                            <td>{{app.date}}</td>
                         </tr>
                         </tbody>
                     </table>

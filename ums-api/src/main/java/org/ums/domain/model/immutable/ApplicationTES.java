@@ -49,4 +49,8 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
 
   String getDesignation();
 
+  Integer getStatus();
+
+  String getAppliedDate();
+
 }

@@ -14,33 +14,46 @@
          data-ng-include="'views/teachers-Evalution-System/student-tes-with-status-selection.html'">
 
     </div>
+
         <div class="panel-body" style="padding-bottom: 10px" >
+            <span  style="font-size: 14px" class="label label-success badge-success">Available Courses for Evaluation <span style="color: black" class="badge">{{vm.totalReviewEligibleCourseLength}}</span></span>
             <table class="table table-bordered"  data-ng-hide="vm.checkCourseTeacher">
                 <thead>
                 <td style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</td>
-                <th style="background-color: #e7f5fe; ">Faculty Name</th>
-                <th style="background-color: #e7f5fe; ">Department</th>
-                <th style="background-color: #e7f5fe;">Assigned Section</th>
+                <th style="background-color: #e7f5fe; ">Course No</th>
+                <th style="background-color: #e7f5fe;">Course Title</th>
+                <th style="background-color: #e7f5fe;">Teacher Name</th>
+                <th style="background-color: #e7f5fe; ">Status</th>
+
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="app in vm.getFacultyInfo"  ng-class="{'selected':$index == vm.selectedRow}"
-                    data-ng-click="vm.getInfo(app.teacherId,app.courseName,$index)">
+                <tr data-ng-repeat="app in vm.allReviewEligibleCourses"   ng-class="{'selected':$index == vm.selectedRow}"
+                    data-ng-click="vm.getInfo(app.teacherId,app.courseName,$index,app.status)">
                     <td>{{$index+1}}</td>
+                    <td>{{app.courseNo}}</td>
+                    <td>{{app.courseTitle}}</td>
                     <td>{{app.firstName+' '+app.lastName}}</td>
-                    <td>{{app.deptShortName}}</td>
-                    <td>{{app.section}}</td>
+                    <td><span ng-if="app.status==1" class="label label-success badge-success">Evaluated</span>
+                        <span ng-if="app.status!=1" class="label label-danger badge-danger">Not Evaluated</span></td>
+
                 </tr>
                 </tbody>
             </table>
-        </div><form name="frm" >
+        </div>
+
                     <div class="panel-body" data-ng-hide="vm.checkSelectTeacher">
 
                         <span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span>
+                        <span style="color: black" class="badge">1</span>  <span class="label label-danger badge-danger">Poor</span>
+                        <span style="color: black" class="badge">2</span>  <span class="label label-warning badge-warning">Below Average</span>
+                        <span style="color: black" class="badge">3</span>  <span class="label label-info badge-info">Average</span>
+                        <span style="color: black" class="badge">4</span>  <span class="label label-primary badge-primary">Above Average</span>
+                        <span style="color: black" class="badge">5</span>  <span class="label label-success badge-success">Excellent</span>
                         <table class="table table-bordered">
                             <thead>
                             <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
                             <th style="background-color: #e7f5fe;width:400px; max-width: 400px;">Questions</th>
-                            <th style="background-color: #e7f5fe;width:80px; max-width: 30px;">Point</th>
+                            <th style="background-color: #e7f5fe;width:200px;">Point</th>
                             <th style="background-color: #e7f5fe;width:200px; max-width: 200px;">Comment</th>
                             </thead>
                             <tbody>
@@ -48,11 +61,11 @@
                                 <td>{{$index+1}}</td>
                                 <td>{{app.questionDetails}}</td>
                                 <td>
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="1">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="2">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="3" ng-init="app.point=3">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="4" >
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="5">
+                                    <input type="radio"  ng-model="app.point" ng-value="1">
+                                    <input type="radio"  ng-model="app.point" ng-value="2">
+                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=3">
+                                    <input type="radio"  ng-model="app.point" ng-value="4" >
+                                    <input type="radio"  ng-model="app.point" ng-value="5">
                                     <span ng-if="app.point==1" class="label label-danger badge-danger">Poor</span>
                                     <span ng-if="app.point==2" class="label label-warning badge-warning">Below Average</span>
                                     <span ng-if="app.point==3" class="label label-info badge-info">Average</span>
@@ -64,7 +77,9 @@
                              <textarea
                                  data-ng-hide="app.point==1 ? false:true"
                                  data-ng-model="app.comment"
+                                 placeholder="write your comment"
                                  ng-minlength="5"
+                                 ng-maxlength="100"
                                  style="resize:none;height:40px;width:200px"
                                  required>
                              </textarea>
@@ -77,7 +92,7 @@
                             <thead>
                             <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
                             <th style="background-color: #e7f5fe;width:400px; max-width: 400px;">Questions</th>
-                            <th style="background-color: #e7f5fe;width:80px; max-width: 30px;">Point</th>
+                            <th style="background-color: #e7f5fe;width:200px;">Point</th>
                             <th style="background-color: #e7f5fe;width:200px; max-width: 200px;">Comment</th>
                             </thead>
                             <tbody>
@@ -85,11 +100,11 @@
                                 <td>{{$index+1}}</td>
                                 <td>{{app.questionDetails}}</td>
                                 <td>
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="1">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="2">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="3" ng-init="app.point=3">
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="4" >
-                                    <input type="radio" ng-bind="app.point==1 ? '':app.comment='write your reason'" ng-model="app.point" ng-value="5" >
+                                    <input type="radio"  ng-model="app.point" ng-value="1">
+                                    <input type="radio"  ng-model="app.point" ng-value="2">
+                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=3">
+                                    <input type="radio"  ng-model="app.point" ng-value="4" >
+                                    <input type="radio"  ng-model="app.point" ng-value="5" >
                                     <span ng-if="app.point==1" class="label label-danger badge-danger">Poor</span>
                                     <span ng-if="app.point==2" class="label label-warning badge-warning">Below Average</span>
                                     <span ng-if="app.point==3" class="label label-info badge-info">Average</span>
@@ -102,6 +117,7 @@
                                      data-ng-hide="app.point==1 ? false:true"
                                      data-ng-model="app.comment"
                                      ng-minlength="5"
+                                     ng-maxlength="100"
                                      style="resize:none;height:40px;width:200px"
                                      required>
                              </textarea>
@@ -111,14 +127,21 @@
                         </table>
 
                     </div>
+        <div data-ng-hide="vm.readOnlyViewCheck">
+            <div
+                    data-ng-include="'views/teachers-Evalution-System/after-evalutaion-read-only.html'">
+            </div>
+        </div>
+
                 <div align="right" style="padding-bottom: 10px;padding-right: 10px" data-ng-hide="vm.checkSelectTeacher">
                     <button class="btn btn-success btn-sm"
                             data-toggle="modal"
-                            data-ng-disabled="frm.$invalid"
+                            data-ng-click="vm.checkNullComments()"
                             data-target="#myModal">Submit</button>
                 </div>
-        </form>
-            <div class="modal fade" id="myModal" role="dialog" >
+
+        <div data-ng-if="vm.checkComment==true">
+            <div class="modal fade" id="myModal" role="dialog"  >
                 <!--   <div class="modal-backdrop"> -->
                 <div class="modal-dialog ">
 
@@ -129,13 +152,17 @@
                             <h4 class="modal-title">Application For Teachers Evalution System</h4>
                         </div>
                         <div class="modal-body">
-                            <h3><strong>Confirm?</strong></h3>
+                            <div
+                                 data-ng-include="'views/teachers-Evalution-System/confirmation-box.html'">
+
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success"  data-ng-click="vm.submit()"  data-dismiss="modal">Confirm</button>
                             <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
 
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -23,7 +23,14 @@ public class MutableApplicationTESResource extends Resource {
   @POST
   @Path("/saveTES")
   @Produces({MediaType.APPLICATION_JSON})
-  public Response cciApprovalbank(final JsonObject pJsonObject) {
+  public Response saveTes(final JsonObject pJsonObject) {
     return mHelper.saveToTes(pJsonObject, mUriInfo);
+  }
+
+  @POST
+  @Path("/saveAssignedCoursesByHead")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response saveAssignedCourses(final JsonObject pJsonObject) {
+    return mHelper.saveAssignedCourses(pJsonObject, mUriInfo);
   }
 }

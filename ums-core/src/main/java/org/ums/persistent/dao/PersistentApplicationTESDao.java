@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationTESDaoDecorator;
@@ -29,27 +30,34 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getAllQuestions = "SELECT QUESTION_ID,QUESTION_DETAILS,OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS";
 
   String INSERT_ONE =
-      "Insert  into  APPLICATION_TES_QINFO  (ID,QUESTION_ID,POINT,STUDENT_COMMENT,FACULTY_ID,OBSERVATION_TYPE)  values  (?,?,?,?,?,?)";
-  String INSERT_TWO =
-      "Insert  into  APPLICATION_TES_S_INFO  (COURSE_ID,STUDENT_ID,SEMESTER_ID,FACULTY_ID,APPLIED_ON)  values  (?,?,?,?,systimestamp)";
+      "Insert  into  APPLICATION_TES_QINFO  (ID,QUESTION_ID,POINT,STUDENT_COMMENT,FACULTY_ID,OBSERVATION_TYPE,COURSE_ID,STUDENT_ID,SEMESTER_ID,APPLIED_ON)  values  (?,?,?,?,?,?,?,?,?,systimestamp)";
+  String INSERT_ASSIGNED_COURSES =
+      "Insert  into  TES_COURSE_ASSIGN  (ID,COURSE_ID,TEACHER_ID,SEMESTER_ID,ASSIGNED_SECTION,DEPT_ID,STATUS,APPLIED_ON)  values  (?,?,?,?,?,?,?,systimestamp)";
   String ALREADY_REVIEWED =
-      "SELECT  DISTINCT a.FACULTY_ID,a.COURSE_ID,MST_COURSE.COURSE_TITLE,a.STUDENT_ID,a.SEMESTER_ID,b.FIRST_NAME,b.LAST_NAME "
-          + "FROM APPLICATION_TES_S_INFO a,EMP_PERSONAL_INFO b,MST_COURSE WHERE STUDENT_ID=? and SEMESTER_ID=? "
-          + "AND a.FACULTY_ID=b.EMPLOYEE_ID AND  a.COURSE_ID=MST_COURSE.COURSE_ID";
+      "SELECT  DISTINCT  COURSE_ID,STUDENT_ID,SEMESTER_ID,FACULTY_ID from APPLICATION_TES_QINFO WHERE STUDENT_ID=? AND SEMESTER_ID=?";
+  String getCoursesForMapping =
+      "SELECT COURSE_ID,TEACHER_ID,SEMESTER_ID,ASSIGNED_SECTION,STATUS FROM TES_COURSE_ASSIGN WHERE TEACHER_ID=? and SEMESTER_ID=?";
 
   String getAllReviewEligibleCoures =
-      "select* from (  "
-          + "SELECT DISTINCT  UG_REGISTRATION_RESULT.COURSE_ID,MST_COURSE.COURSE_TITLE,MST_COURSE.COURSE_NO  "
-          + "FROM UG_REGISTRATION_RESULT, COURSE_TEACHER,MST_COURSE  "
-          + "WHERE  "
-          + "  UG_REGISTRATION_RESULT.SEMESTER_ID = ? AND UG_REGISTRATION_RESULT.SEMESTER_ID = COURSE_TEACHER.SEMESTER_ID AND  "
-          + "  UG_REGISTRATION_RESULT.COURSE_ID = COURSE_TEACHER.COURSE_ID AND UG_REGISTRATION_RESULT.STUDENT_ID = ? AND  "
-          + "  UG_REGISTRATION_RESULT.COURSE_ID=MST_COURSE.COURSE_ID AND MST_COURSE.COURSE_TYPE=? AND COURSE_TEACHER.COURSE_ID=MST_COURSE.COURSE_ID  "
-          + "minus  "
-          + "SELECT DISTINCT a.COURSE_ID,MST_COURSE.COURSE_TITLE,MST_COURSE.COURSE_NO FROM APPLICATION_TES_S_INFO a,MST_COURSE  "
-          + "WHERE STUDENT_ID=150204035 AND SEMESTER_ID=11012017 AND a.COURSE_ID =MST_COURSE.COURSE_ID) tmp";
+      "SELECT DISTINCT  a.STUDENT_ID, a.SEMESTER_ID,a.COURSE_ID, b.COURSE_NO,b.COURSE_TITLE,c.TEACHER_ID,d.ASSIGNED_SECTION,e.FIRST_NAME,e.LAST_NAME "
+          + "FROM UG_REGISTRATION_RESULT a,MST_COURSE b,COURSE_TEACHER c,TES_COURSE_ASSIGN d,EMP_PERSONAL_INFO e "
+          + "WHERE "
+          + "  a.SEMESTER_ID = ? ANd a.STUDENT_ID= ? AND b.COURSE_TYPE= ? AND a.COURSE_ID=b.COURSE_ID  AND "
+          + "  a.SEMESTER_ID=c.SEMESTER_ID AND a.COURSE_ID=c.COURSE_ID AND  a.SEMESTER_ID=c.SEMESTER_ID AND c.\"SECTION\"= ? AND "
+          + "  d.COURSE_ID=a.COURSE_ID AND (c.COURSE_ID=d.COURSE_ID and c.TEACHER_ID=d.TEACHER_ID AND c.\"SECTION\"=d.ASSIGNED_SECTION) AND "
+          + "  e.EMPLOYEE_ID=d.TEACHER_ID";
 
   String getSemesterName = "SELECT SEMESTER_NAME from MST_SEMESTER WHERE SEMESTER_ID=?";
+
+  String getTotalTeachersRecords =
+      "select DISTINCT  COUNT (a.EMPLOYEE_ID) "
+          + "from EMPLOYEES a,EMP_PERSONAL_INFO b,MST_DESIGNATION c,MST_DEPT_OFFICE WHERE a.DEPT_OFFICE=?  AND a.EMPLOYEE_TYPE=1 AND "
+          + "a.EMPLOYEE_ID=b.EMPLOYEE_ID AND " + "a.DESIGNATION=c.DESIGNATION_ID AND "
+          + "MST_DEPT_OFFICE.DEPT_ID=a.DEPT_OFFICE";
+
+  String getRecords =
+      "SELECT c.FIRST_NAME,c.LAST_NAME,b.COURSE_NO,b.COURSE_TITLE,a.SEMESTER_ID,a.ASSIGNED_SECTION,to_char(a.applied_on,'DD-MM-YYYY') applied_on FROM TES_COURSE_ASSIGN a,MST_COURSE b,EMP_PERSONAL_INFO c "
+          + "WHERE   a.SEMESTER_ID=? AND  a.COURSE_ID=b.COURSE_ID AND a.TEACHER_ID=c.EMPLOYEE_ID AND a.DEPT_ID=?";
 
   String getTeachersInfo =
       "SELECT "
@@ -69,6 +77,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "b.FIRST_NAME, "
           + "b.LAST_NAME, "
           + "MST_DEPT_OFFICE.SHORT_NAME, "
+          + " a.DEPT_OFFICE, "
           + "c.DESIGNATION_NAME "
           + "from EMPLOYEES a,EMP_PERSONAL_INFO b,MST_DESIGNATION c,MST_DEPT_OFFICE WHERE a.DEPT_OFFICE=?  AND a.EMPLOYEE_TYPE=1 AND "
           + "a.EMPLOYEE_ID=b.EMPLOYEE_ID AND " + "a.DESIGNATION=c.DESIGNATION_ID AND "
@@ -78,8 +87,27 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       "SELECT a.TEACHER_ID,a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.\"SECTION\",a.SEMESTER_ID from COURSE_TEACHER a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? "
           + " AND a.COURSE_ID=b.COURSE_ID AND b.COURSE_TYPE=1";
 
+  String getDataForReadOnly =
+      " SELECT  a.QUESTION_ID,b.QUESTION_DETAILS, a.POINT,a.STUDENT_COMMENT,a.OBSERVATION_TYPE from APPLICATION_TES_QINFO a,APPLICATION_TES_QUESTIONS b "
+          + " WHERE a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=? AND a.FACULTY_ID=? AND a.QUESTION_ID=b.QUESTION_ID";
+
   @Override
-  public List<ApplicationTES> getAssignedCourses(String pFacultyId, Integer pSemesterId) {
+  public List<ApplicationTES> getRivewedCoursesForReadOnlyMode(String pCourseId, String pTeacherId, String pStudentId,
+      Integer pSemesterId) {
+    String query = getDataForReadOnly;
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId,pCourseId, pTeacherId},
+        new ApplicationTESRowMapperForGetAllQuestionsReadOnly());
+  }
+
+  @Override
+  public List<ApplicationTES> getAssignedCoursesByHead(String pFacultyId, Integer pSemesterId) {
+    String query = getCoursesForMapping;
+    return mJdbcTemplate.query(query, new Object[] {pFacultyId, pSemesterId},
+        new ApplicationTESRowMapperForAssignedCoursesForMapping());
+  }
+
+  @Override
+  public List<MutableApplicationTES> getAssignedCourses(String pFacultyId, Integer pSemesterId) {
     String query = getAssignedCourses;
     return mJdbcTemplate.query(query, new Object[] {pFacultyId, pSemesterId},
         new ApplicationTESRowMapperForAssignedCourses());
@@ -99,11 +127,18 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
+  public List<Long> saveAssignedCourses(List<MutableApplicationTES> pMutableList) {
+    List<Object[]>  parameters  =  getInsertParamListForHeadTes(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ASSIGNED_COURSES,  parameters);
+    return  parameters.stream()
+            .map(paramArray  ->  (Long)  paramArray[0])
+            .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  @Override
   public  List<Long>  create(List<MutableApplicationTES>  pMutableList)  {
     List<Object[]>  parameters  =  getInsertParamList(pMutableList);
-    List<Object[]>  parametersNew  =  getInsertParamListNew(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ONE,  parameters);
-    mJdbcTemplate.batchUpdate(INSERT_TWO,  parametersNew);
     return  parameters.stream()
             .map(paramArray  ->  (Long)  paramArray[0])
             .collect(Collectors.toCollection(ArrayList::new));
@@ -113,17 +148,18 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
       params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getPoint(), app.getComment(),
-          app.getTeacherId(), app.getObservationType()});
+          app.getTeacherId(), app.getObservationType(), app.getReviewEligibleCourses(), app.getStudentId(),
+          app.getSemester()});
     }
 
     return params;
   }
 
-  private List<Object[]> getInsertParamListNew(List<MutableApplicationTES> pMutableApplicationTES) {
+  private List<Object[]> getInsertParamListForHeadTes(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
-      params.add(new Object[] {app.getReviewEligibleCourses(), app.getStudentId(), app.getSemester(),
-          app.getTeacherId()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourses(), app.getTeacherId(),
+          app.getSemester(), app.getSection(), app.getDeptId(), app.getStatus()});
     }
 
     return params;
@@ -136,17 +172,31 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
-  public List<ApplicationTES> getReviewEligibleCourses(String pStudentId, Integer pSemesterId, String pCourseType) {
+  public List<MutableApplicationTES> getReviewEligibleCourses(String pStudentId, Integer pSemesterId,
+      String pCourseType, String pSection) {
     String query = getAllReviewEligibleCoures;
     Integer cType = pCourseType.equals("Theory") ? 1 : 2;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, cType},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, cType, pSection},
         new ApplicationTESRowMapperForGetAllReviewEligiblecourses());
+  }
+
+  @Override
+  public List<ApplicationTES> getRecordsOfAssignedCoursesByHead(Integer pSemesterId, String pDeptId) {
+    String query = getRecords;// ApplicationTESRowMapperForAssignedCourses
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pDeptId},
+        new ApplicationTESRowMapperForAssignedCoursesForRecords());
   }
 
   @Override
   public String getSemesterName(Integer pCurrentSemester) {
     String query = getSemesterName;
     return mJdbcTemplate.queryForObject(query, new Object[] {pCurrentSemester}, String.class);
+  }
+
+  @Override
+  public Integer getTotalRecords(String pDeptId) {
+    String query = getTotalTeachersRecords;
+    return mJdbcTemplate.queryForObject(query, new Object[] {pDeptId}, Integer.class);
   }
 
   @Override
@@ -163,23 +213,42 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
       application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
       application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
+
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForGetAllQuestionsReadOnly implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
+      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
+      application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
+      application.setPoint(pResultSet.getInt("POINT"));
+      application.setComment(pResultSet.getString("STUDENT_COMMENT"));
       return application;
     }
   }
 
-  class ApplicationTESRowMapperForGetAllReviewEligiblecourses implements RowMapper<ApplicationTES> {
+  class ApplicationTESRowMapperForGetAllReviewEligiblecourses implements RowMapper<MutableApplicationTES> {
     @Override
-    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+    public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setStudentId(pResultSet.getString("STUDENT_ID"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
-      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
+      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
+      application.setTeacherId(pResultSet.getString("TEACHER_ID"));
+      application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
+      application.setFirstName(pResultSet.getString("FIRST_NAME"));
+      application.setLastName(pResultSet.getString("LAST_NAME"));
       return application;
     }
   }
-  class ApplicationTESRowMapperForAssignedCourses implements RowMapper<ApplicationTES> {
+  class ApplicationTESRowMapperForAssignedCourses implements RowMapper<MutableApplicationTES> {
     @Override
-    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+    public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
       application.setTeacherId(pResultSet.getString("TEACHER_ID"));
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
@@ -190,6 +259,34 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       return application;
     }
   }
+
+  class ApplicationTESRowMapperForAssignedCoursesForMapping implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setTeacherId(pResultSet.getString("TEACHER_ID"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
+      application.setStatus(pResultSet.getInt("STATUS"));
+      return application;
+    }
+  }
+
+  class ApplicationTESRowMapperForAssignedCoursesForRecords implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setFirstName(pResultSet.getString("FIRST_NAME"));
+      application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
+      application.setCourseNo(pResultSet.getString("COURSE_NO"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
+      application.setAppliedDate(pResultSet.getString("applied_on"));
+      return application;
+    }
+  }
   class ApplicationTESRowMapperForFacultyMembers implements RowMapper<ApplicationTES> {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -197,6 +294,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setTeacherId(pResultSet.getString("EMPLOYEE_ID"));
       application.setFirstName(pResultSet.getString("FIRST_NAME"));
       application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setDeptId(pResultSet.getString("DEPT_OFFICE"));
       application.setDeptShortName(pResultSet.getString("SHORT_NAME"));
       application.setDesignation(pResultSet.getString("DESIGNATION_NAME"));
       return application;
@@ -206,13 +304,10 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setTeacherId(pResultSet.getString("FACULTY_ID"));
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
-      application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setStudentId(pResultSet.getString("STUDENT_ID"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
-      application.setFirstName(pResultSet.getString("FIRST_NAME"));
-      application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setTeacherId(pResultSet.getString("FACULTY_ID"));
       return application;
     }
   }

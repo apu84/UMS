@@ -14,32 +14,12 @@
     </div>
 </div>
 
-<div class="col-sm-4">
-    <div class="form-group" align="right">
-        <label class="col-md-4 control-label"><strong style="color: slategray;">Enrolled Courses</strong></label>
-        <div class="col-md-8">
-            <select
-                    class="form-control required"
-                    name="selectedCourse"
-                    id="selectedCourse"
-                    data-ng-options="L.courseTitle for L in vm.allReviewEligibleCourses "
-                    data-ng-model="vm.enrolledCourse"
-                    data-ng-change="vm.courseChanged()"
-            ></select>
-        </div>
-    </div>
-</div>
-
 <div class="col-sm-4" style="padding-bottom: 25px">
     <div class="form-group" align="right">
         <label class="col-md-8 control-label">
            <strong style="color: slategray;">Session:</strong>
-            <span  style="font-size: 12px" class="label label-success badge-success">{{vm.semesterNameCurrent}}</span>
+            <span  style="font-size: 14px" class="label label-success badge-success">{{vm.semesterNameCurrent}}</span>
         </label>
-
-        <div class="col-md-4">
-            <button class="bbtn btn-primary btn-xs" data-toggle="modal" data-target="#myModalNew" data-ng-click="vm.getReviewedCourses()">Reviewed</button>
-        </div>
     </div>
 </div>
 <br/>

@@ -40,6 +40,8 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mStudentId;
   private Integer mSemesterId;
   private String mDesignation;
+  private Integer mStatus;
+  private String mAppliedDate;
 
   public PersistentApplicationTES() {
 
@@ -66,6 +68,28 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mStudentId = persistentApplicationTES.getStudentId();
     mSemesterId = persistentApplicationTES.getSemester();
     mDesignation = persistentApplicationTES.getDesignation();
+    mStatus = persistentApplicationTES.getStatus();
+    mAppliedDate = persistentApplicationTES.getAppliedDate();
+  }
+
+  @Override
+  public void setAppliedDate(String pAppliedDate) {
+    mAppliedDate = pAppliedDate;
+  }
+
+  @Override
+  public String getAppliedDate() {
+    return mAppliedDate;
+  }
+
+  @Override
+  public void setStatus(Integer pStatus) {
+    mStatus = pStatus;
+  }
+
+  @Override
+  public Integer getStatus() {
+    return mStatus;
   }
 
   @Override

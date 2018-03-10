@@ -22,6 +22,12 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getQuestionId() != null)
       pBuilder.add("questionId", pReadOnly.getQuestionId());
 
+    if(pReadOnly.getPoint() !=null)
+      pBuilder.add("point",pReadOnly.getPoint());
+
+    if(pReadOnly.getComment() !=null)
+      pBuilder.add("comment",pReadOnly.getComment());
+
     if(pReadOnly.getQuestionDetails() != null)
       pBuilder.add("questionDetails", pReadOnly.getQuestionDetails());
 
@@ -66,6 +72,12 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pReadOnly.getDesignation() != null)
       pBuilder.add("designation", pReadOnly.getDesignation());
+
+    if(pReadOnly.getStatus() != null)
+      pBuilder.add("status", pReadOnly.getStatus());
+
+    if(pReadOnly.getAppliedDate() != null)
+      pBuilder.add("date", pReadOnly.getAppliedDate());
   }
 
   @Override
@@ -87,6 +99,18 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pJsonObject.containsKey("teacherId"))
       pMutable.setTeacherId(pJsonObject.getString("teacherId"));
+
+    if(pJsonObject.containsKey("status"))
+      pMutable.setStatus(pJsonObject.getInt("status"));
+
+    if(pJsonObject.containsKey("semesterid"))
+      pMutable.setSemester(pJsonObject.getInt("semesterid"));
+
+    if(pJsonObject.containsKey("section"))
+      pMutable.setSection(pJsonObject.getString("section"));
+
+    if(pJsonObject.containsKey("deptId"))
+      pMutable.setDeptId(pJsonObject.getString("deptId"));
 
   }
 }
