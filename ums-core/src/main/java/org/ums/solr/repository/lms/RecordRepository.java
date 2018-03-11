@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Ifti on 15-Apr-17.
  */
 public interface RecordRepository extends SolrCrudRepository<RecordDocument, Long> {
-  List<RecordDocument> findByCustomQuery(String searchTerm, Pageable pageable);
+  List<RecordDocument> findByCustomQuery(String searchTerm, Pageable pageable, boolean enableSort);
 
   Long getTotalCount(String searchTerm);
 

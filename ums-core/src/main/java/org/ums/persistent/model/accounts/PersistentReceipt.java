@@ -1,5 +1,7 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableReceipt;
@@ -8,6 +10,7 @@ import org.ums.manager.accounts.ReceiptManager;
 /**
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersistentReceipt implements MutableReceipt {
 
   private static ReceiptManager sReceiptManager;
@@ -17,6 +20,7 @@ public class PersistentReceipt implements MutableReceipt {
   private String mLastModified;
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
     return mId;
   }

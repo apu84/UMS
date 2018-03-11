@@ -1,0 +1,471 @@
+<style>
+    #rcorners1 {
+        border-radius: 15px;
+        background: #eee;
+        padding: 16px 12px;
+        height: 64px;
+    }
+
+    .btn-round {
+        border-radius: 0.5em !important;
+    }
+
+    .btn-group > .btn {
+        -webkit-border-radius: 14px !important;
+    }
+
+    .btn-group {
+        width: 80% !important;
+    }
+
+    a:hover, a:active {
+        color: #538200;
+        text-decoration: none;
+    }
+
+    a, a:link, a:visited {
+        color: #004d99;
+        text-decoration: none;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 105%;
+    }
+
+    .results_summary {
+        font-size: 85%;
+        color: #707070;
+        padding: 0 0 .5em 0;
+    }
+
+    .hold {
+        float: right;
+        font-size: 90%;
+        margin: 0;
+    }
+
+    ul.list-unstyled.desc > li {
+        margin-top: 4px;
+    }
+</style>
+
+
+<div class="panel">
+    <div class="panel-body shadowPanel" style="min-height: 490px;">
+        <div class="container-fluid">
+            <form ng-submit="doSearch()">
+                <div id="rcorners1" style="width: 727px;float: left">
+            <span style="float: left;margin-top: 5px;">
+                    <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
+            </span>
+                    <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
+            margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
+                           data-ng-model="search.queryTerm"/>
+
+                    <select data-style="btn-white" data-ng-model="search.searchType"
+                            class="selectpier"
+                            style="width: 200px;float: left;margin-left: 20px;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
+                            onchange="searchSelection(this.value)" autocomplete="off">
+                        <option value="basic">Basic Search</option>
+                        <option value="advanced">Advanced Search</option>
+                        <optgroup label="Camping">
+                            <option value="authors">Authors</option>
+                            <option value="corporate_authors">Corporate Authors</option>
+                            <option value="subjects">Subjects</option>
+                            <option value="titles">Titles</option>
+                            <!--<option value="7">Series</option>-->
+                        </optgroup>
+                    </select>
+                    <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-click="doSearch()"
+                       style="border-radius: 0.5em;padding: 8px 10px;background-color: white;margin-left: 5px;margin-top: -1px;">
+                        <i class="fa fa-search fa-lg" style="color: #0093d9;"></i>
+                    </a>
+                </div>
+            </form>
+            <!--<span style="float: left;margin-top: 21px;">
+            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+               style="border-radius: 0.5em;padding: 8px 10px;background-color: #eee;margin-left: 5px;margin-top: -5px;">
+                            <img src="https://cdn2.iconfinder.com/data/icons/flaticons-solid/16/backspace-1-512.png" height="16px"/>
+                        </a>
+                </span>
+            <span style="float: left;margin-top: 21px;">
+            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+               style="border-radius: 0.5em;padding: 8px 10px;background-color: #eee;margin-left: 5px;margin-top: -5px;">
+                            <img src="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png"
+                                 height="16px"/>
+                        </a>
+                </span>-->
+
+
+            <div style="vertical-align: top;position: relative;clear: both;">
+                <div class="row" id="advancedSearchDiv"
+                     style="display: none; padding-top: 4px;padding-left: 2%;position: absolute;width: 100%;">
+                    <div class="col-md-12">
+                        <p style="font-size: 16px;font-weight: bold;margin-top: 10px;">Advanced Search</p>
+                        <hr style="margin-top: 0px;"/>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select data-style="btn-white"
+                                        class="selectpicker"
+                                        style="width: 80%;float: left;-webkit-border-radius: 0.8em;height: 34px;padding-left: 15px;"
+                                        onchange="searchSelection(this.value)">
+                                    <option>Basic Search</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select multiple="multiple"
+                                        class="selectpicker" id="selectType" title="Select a Type ...">
+                                    <option data-hidden="true"></option>
+                                    <option data-icon="fa-book">Books</option>
+                                    <option>Maps</option>
+                                    <option>Journals</option>
+                                    <option>Thesis</option>
+                                    <option>CD-DVD</option>
+                                    <option>Magazine</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Title ... enter here"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Author ... enter here"/>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Subject ... enter here"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Corporate Author ... enter here"/>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Publisher ... enter here"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="float: left;width: 80%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Series ... enter here"/>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-4">
+                                <input id="searchBox1" type="text"
+                                       style="width: 30%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Year From"/>
+                                &nbsp;&nbsp;-&nbsp;&nbsp;
+                                <input id="searchBox1" type="text"
+                                       style="width: 30%;border-radius: 0.8em;padding: 6px 2px;height: 34px;border: 1px solid rgb(169, 169, 169);padding-left: 10px;"
+                                       placeholder="Year To"/>
+                            </div>
+                            <div class="col-md-4">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="generalSearchDiv"
+                     style="padding-top: 8px;padding-left: 2%;position: absolute;width: 100%;clear: both;">
+                    <div class="col-md-12" id="squareRadio">
+                        <input type="radio" id="square-radio-1" name="choice" ng-model="choice" value="subjects_txt"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
+                        <input type="radio" id="square-radio-2" name="choice" ng-model="choice" value="title_txt"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
+                        <input type="radio" id="square-radio-3" name="choice" ng-model="choice" value="contributors_txt"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
+                        <input type="radio" id="square-radio-4" name="choice" ng-model="choice" value="any"
+                               checked="checked"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-3">Any Field</label>&nbsp;&nbsp;
+                    </div>
+
+
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+
+            </div>
+            <div id="bbcd">
+                <div class="row" style="clear: both;margin-top: 40px;">
+                    <div class="col-md-8">
+
+                        <div style="background-color:#E6F0F2;border: 1px solid #B9D8D9;border-radius: 5px 5px 0 0;color: black;font-size: 100%;padding: .4em 0 .4em 1em;min-height: 50px;">
+                            <strong> Total {{data.totalRecord}} records found.
+                                <!--26 result(s) found for 'kw,wrdl: work'.--></strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-right">
+                            <!--
+                            <ul class="pagination mtm mbm">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li class="active"><a href="#">5</a></li>
+                                <li class="disabled"><a href="#">&raquo;</a></li>
+                            </ul>
+                            -->
+                            <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
+                                                     on-page-change="pageChanged(newPageNumber)"
+                                                     template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="margin-top: 0px;">
+                            <table class="table table-bordered table-striped table-condensed cf">
+                                <thead class="cf">
+                                <tr>
+                                    <th width="70%">Results</th>
+                                    <th width="30%">Available</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr dir-paginate="rec in recordList | itemsPerPage: data.itemPerPage"
+                                    current-page="pagination.currentPage" total-items="data.totalRecord"
+                                    pagination-id="mainRecordPaginator">
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            <li><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.  </span><a
+                                                    style="cursor: pointer" data-toggle="modal"
+                                                    data-target="#bookPreview"
+                                                    data-ng-click="recordDetails($index)"
+                                                    href="javascript:void()" class="title">{{rec.title}}</a></li>
+                                            <!--<li>by <span data-ng-repreat="con in rec.contributorList">{{con}}</span></li>-->
+                                            <li> Material type: {{rec.materialTypeName}}</li>
+                                            <!--<li>Publisher: {{rec.imprint}}<span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span>-->
+                                            <!--</li>-->
+                                        </ul>
+                                        <p class="hold">
+                                            <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
+                                               href="javascript:void()">
+                                                <img src="https://cdn3.iconfinder.com/data/icons/outline-location-icon-set/64/Library_1-128.png"
+                                                     height="20" width="20"/>
+                                            </a>
+                                            | <!--<a href=""
+                                                 data-ng-click="navigateRecord('view', rec.mfnNo, pagination.currentPage, $index)">View
+                                            record</a>
+                                            | <a href=""
+                                                 data-ng-click="navigateRecord('edit', rec.mfnNo, pagination.currentPage, $index)">Edit
+                                            record</a>
+                                            | <a href=""
+                                                 data-ng-click="navigateRecord(rec.mfnNo, pagination.currentPage, $index)">Add/Edit
+                                            item(s)</a>
+                                        </p>-->
+                                    </td>
+                                    <td style="text-align: right;padding-right: 20px;">
+                                        <ul class="list-unstyled">
+                                            <li><span style="font-size: 100%;width: 50%;">Total : </span> <span
+                                                    style="font-size: 90%;width: 50%;">{{rec.totalItems}} Copies</span>
+                                            </li>
+                                            <li><span style="font-size: 100%;width: 50%;">Available : </span> <span
+                                                    style="font-size: 90%;width: 50%;">{{rec.totalAvailable}} Copies</span>
+                                            </li>
+                                            <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span
+                                                    style="font-size: 90%;width: 50%;">{{rec.totalCheckedOut}} Copies</span>
+                                            </li>
+                                            <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span
+                                                    style="font-size: 90%;width: 50%;">{{rec.totalOnHold}} Copies</span>
+                                            </li>
+                                        </ul>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <!--
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                            <tr>
+                                <th width="70%">Results</th>
+                                <th width="30%">Available</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 110%;">1. </span><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">The Ladies' Work-Book [electronic resource]</a></li>
+                                        <li>by <a>Unknown (Musician) [author.]</a></li>
+                                        <li> Material type: book Book</li>
+                                        <li>Publisher: <span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span></li>
+                                    </ul>
+                                    <p class="hold">
+                                        <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview" href="javascript:void()">
+                                        <img src="https://cdn3.iconfinder.com/data/icons/outline-location-icon-set/64/Library_1-128.png"
+                                             height="20" width="20" />
+                                        </a>
+                                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">View record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">Edit record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=83">Add/Edit item(s)</a>
+                                    </p>
+                                </td>
+                                <td style="text-align: right;padding-right: 20px;">
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 100%;width: 50%;">Total : </span> <span style="font-size: 90%;width: 50%;">10 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span style="font-size: 90%;width: 50%;">3 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Available : </span> <span style="font-size: 90%;width: 50%;">6 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span style="font-size: 90%;width: 50%;">1 Copies</span></li>
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 110%;">1. </span><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">The Ladies' Work-Book [electronic resource]</a></li>
+                                        <li>by <a>Unknown (Musician) [author.]</a></li>
+                                        <li> Material type: book Book</li>
+                                        <li>Publisher: <span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span></li>
+                                    </ul>
+                                    <p class="hold">
+                                        <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">View record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">Edit record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=83">Add/Edit item(s)</a>
+                                    </p>
+                                </td>
+                                <td style="text-align: right;padding-right: 20px;">
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 100%;width: 50%;">Total : </span> <span style="font-size: 90%;width: 50%;">10 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span style="font-size: 90%;width: 50%;">3 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Available : </span> <span style="font-size: 90%;width: 50%;">6 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span style="font-size: 90%;width: 50%;">1 Copies</span></li>
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 110%;">1. </span><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">The Ladies' Work-Book [electronic resource]</a></li>
+                                        <li>by <a>Unknown (Musician) [author.]</a></li>
+                                        <li> Material type: book Book</li>
+                                        <li>Publisher: <span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span></li>
+                                    </ul>
+                                    <p class="hold">
+                                        <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">View record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=83">Edit record</a>
+                                        | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=83">Add/Edit item(s)</a>
+                                    </p>
+                                </td>
+                                <td style="text-align: right;padding-right: 20px;">
+                                    <ul class="list-unstyled">
+                                        <li><span style="font-size: 100%;width: 50%;">Total : </span> <span style="font-size: 90%;width: 50%;">10 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span style="font-size: 90%;width: 50%;">3 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">Available : </span> <span style="font-size: 90%;width: 50%;">6 Copies</span></li>
+                                        <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span style="font-size: 90%;width: 50%;">1 Copies</span></li>
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bookPreview" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+                 aria-hidden="true" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" data-dismiss="modal" aria-hidden="true"
+                                    class="close" style="opacity: 1;margin-top: 0px;">&times;
+                            </button>
+                            <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number :
+                                {{record.callNo}}</h4></div>
+                        <div class="modal-body">
+                            <ul class="list-unstyled desc">
+                                <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a>
+                                </li>
+                                <li>by &nbsp;<span data-ng-repeat="con in record.contributorList">{{con.name}}[{{con.roleName}}]</span>
+                                </li>
+                                <li><b>Material type:</b>{{record.materialTypeName}}</li>
+                                <li><b>Edition:</b> {{record.edition}}</li>
+                                <li><b>ISBN:</b> {{record.isbn}}</li>
+                                <li><b>Imprint:</b> {{record.imprint.publisherName}}, &nbsp;
+                                    {{record.imprint.yearDateOfPublication}}, &nbsp;{{record.imprint.placeOfPublication}}
+                                </li>
+                                <li><b>Subject:</b> <span data-ng-repeat="sub in record.subjectList">{{sub.subject}}, &nbsp;</span>
+                                </li>
+                                <li><b>keywords:</b> {{record.keywords}}</li>
+                                <li><b>Notes:</b><span data-ng-repeat="note in record.noteList">{{note.note}}</span>
+                                </li>
+                                <li><b>Physical Description:</b>Pagination: {{record.physicalDescription.pagination}},
+                                    Illustrations: {{record.physicalDescription.illustrations}},
+                                    AccompanyingMaterials: {{record.physicalDescription.accompanyingMaterials}},
+                                    Dimensions: {{record.physicalDescription.dimensions}},
+                                    PaperQuality: {{record.physicalDescription.paperQuality}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var currentSearchType;
+
+    function searchSelection(id) {
+        var offset = $("#bbcd").offset();
+        console.log(currentSearchType);
+        if (id == "advanced_search") {
+            $("#bbcd").offset({top: offset.top + 260});
+            $("#generalSearchDiv").hide("slide", {direction: "right"}, 600);
+            $("#advancedSearchDiv").show("slide", {direction: "left"}, 600);
+        }
+        else {
+
+            $("#advancedSearchDiv").hide("slide", {direction: "left"}, 600);
+            $("#generalSearchDiv").show("slide", {direction: "right"}, 600);
+
+            if (currentSearchType == "advanced_search") {
+                setTimeout(function () {
+                    $("#bbcd").offset({top: offset.top - 260});
+
+                }, 600);
+            }
+        }
+        currentSearchType = id;
+    }
+
+    $("#searchBox").focus();
+    $('#squareRadio input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue'
+    });
+
+    $('.selectpicker').selectpicker({
+        iconBase: 'fa',
+        tickIcon: 'fa-check'
+    });
+
+</script>
+

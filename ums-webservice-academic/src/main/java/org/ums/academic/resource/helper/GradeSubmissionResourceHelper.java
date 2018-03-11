@@ -12,6 +12,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,6 +28,7 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.*;
 import org.ums.enums.academic.GradeSubmissionColorCode;
 import org.ums.exceptions.ValidationException;
+import org.ums.filter.LogoutFilter;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
@@ -36,7 +39,7 @@ import org.ums.usermanagement.user.UserManager;
 
 @Component
 public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {
-
+  private static final Logger log = LoggerFactory.getLogger(GradeSubmissionResourceHelper.class);
   @Autowired
   private ExamGradeManager mManager;
 
@@ -86,7 +89,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   public JsonObject getGradeList(final String pRequestedRoleId, final Integer pSemesterId, final String pCourseId,
       final ExamType pExamType) {
-
     MarksSubmissionStatusDto marksSubmissionStatusDto =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
     String currentActor =
@@ -104,8 +106,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     prepareGradeGroups(objectBuilder,
         getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
-
-    return objectBuilder.build();
+    JsonObject responseObject = objectBuilder.build();
+    log.debug("User : {}, Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}",SecurityUtils.getSubject().getPrincipal().toString(),currentActor,
+        marksSubmissionStatusDto.getCourseTitle(), marksSubmissionStatusDto.getCourseNo(), marksSubmissionStatusDto.getSemesterName());
+    log.debug("Returned Course List :{}", responseObject.toString());
+    return responseObject;
   }
 
   public JsonObject enrich(JsonObject source, String key, String value) {

@@ -139,6 +139,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setStatUpFlag(rs.getString("stat_up_flag"));
       account.setModifiedDate(rs.getDate("modified_date"));
       account.setModifiedBy("modified_by");
+      account.setLastModified("last_modified");
       return account;
     }
   }

@@ -38,6 +38,9 @@ public class RecordDocument implements SearchDocument<String> {
   @Field("title_txt")
   private List<String> title;
 
+  @Field("cTitle_s")
+  private String cTitle;
+
   @Field("type_s")
   private String type = "Record";
 
@@ -103,6 +106,7 @@ public class RecordDocument implements SearchDocument<String> {
   public RecordDocument(final Record pRecord) {
     id = pRecord.getMfn().toString();
     title = Lists.newArrayList(pRecord.getTitle());
+    cTitle = pRecord.getTitle();
     materialType = Lists.newArrayList(MaterialType.get(pRecord.getMaterialType().getId()).getLabel());
     seriesTitle = Lists.newArrayList(pRecord.getSeriesTitle());
     volumeTitle = Lists.newArrayList(pRecord.getVolumeTitle());

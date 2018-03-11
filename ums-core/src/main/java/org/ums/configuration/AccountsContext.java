@@ -112,6 +112,12 @@ public class AccountsContext {
   }
 
   @Bean
+  ChequeRegisterManager chequeRegisterManager() {
+    return new PersistentChequeRegisterDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
   PeriodCloseManager periodCloseManager() {
     return new PersistentPeriodCloseDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);

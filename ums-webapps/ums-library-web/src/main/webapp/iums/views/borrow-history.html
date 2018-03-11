@@ -1,0 +1,35 @@
+<div class="panel">
+    <div class="panel-body shadowPanel" style="min-height: 490px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked out & Checked in History</p>
+                    <table class="table table-bordered">
+                        <thead style="background-color: whitesmoke">
+                        <tr>
+                            <th>Due Date</th>
+                            <th>Title</th>
+                            <th>Material Type</th>
+                            <th>Barcode</th>
+                            <th>Borrowed On</th>
+                            <th>Return Date</th>
+                            <!--th>Fines</th>-->
+                        </tr>
+                        </thead>
+                        <tbody data-ng-repeat="item in vm.allCirculation">
+                        <tr>
+                            <td>{{item.dueDate}}</td>
+                            <td>{{item.title}}</td>
+                            <td>{{item.materialType}}</td>
+                            <td>{{item.itemCode}}</td>
+                            <td>{{item.issueDate}}</td>
+                            <td>{{item.returnDate}}</td>
+                            <!--     <td>{{item.fineStatusString}}</td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,8 @@ module ums {
     "angularUtils.directives.dirPagination",
     'smart-table',
     'ui.grid',
-    'ui.select'
+    'ui.select',
+    'angularAccounting'
   ]);
 
 
@@ -136,6 +137,48 @@ module ums {
           controller: 'JournalVoucherController',
           controllerAs: 'vm',
           templateUrl: 'views/general-ledger/transactions/journal-voucher/journal-voucher.html'
+        })
+        .state('contraVoucher', {
+          url: "/contraVoucher",
+          controller: 'ContraVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/contra-voucher/contra-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
+        .state('paymentVoucher', {
+          url: "/paymentVoucher",
+          controller: 'PaymentVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/payment-voucher/payment-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
+        .state('receiptVoucher', {
+          url: "/receiptVoucher",
+          controller: 'ReceiptVoucherController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/transactions/receipt-voucher/receipt-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
         })
         .state('logout', {
           url: "/logout",

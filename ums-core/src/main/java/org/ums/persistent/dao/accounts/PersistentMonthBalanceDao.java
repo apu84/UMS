@@ -46,8 +46,8 @@ public class PersistentMonthBalanceDao extends MonthBalanceDaoDecorator {
 
   @Override
   public List<Long> create(List<MutableMonthBalance> pMutableList) {
-    String query="insert into DT_MONTH_BALANCE(ID, ACCOUNT_BALANCE_ID, MONTH_ID, TOT_MONTH_DB_BALANCE, TOT_MONTH_CR_BALANCE)   " +
-        "    VALUES (?,?,?,?,?)";
+    String query="insert into DT_MONTH_BALANCE(ID, ACCOUNT_BALANCE_ID, MONTH_ID, TOT_MONTH_DB_BALANCE, TOT_MONTH_CR_BALANCE,LAST_MODIFIED)   " +
+        "    VALUES (?,?,?,?,?,"+getLastModifiedSql()+")";
     List<Object[]> params = getCreateParamList(pMutableList);
     mJdbcTemplate.batchUpdate(query, params);
     return params.stream().map(param-> (Long) param[0])
@@ -57,8 +57,8 @@ public class PersistentMonthBalanceDao extends MonthBalanceDaoDecorator {
   @Override
   public int update(List<MutableMonthBalance> pMutableList) {
     String query =
-        "UPDATE DT_MONTH_BALANCE SET TOT_MONTH_CR_BALANCE=?, TOT_MONTH_DB_BALANCE=? WHERE  "
-            + "ACCOUNT_BALANCE_ID=? AND MONTH_ID=?";
+        "UPDATE DT_MONTH_BALANCE SET TOT_MONTH_CR_BALANCE=?, TOT_MONTH_DB_BALANCE=?, last_modified="
+            + getLastModifiedSql() + " WHERE  " + "ACCOUNT_BALANCE_ID=? AND MONTH_ID=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
   }
 
@@ -90,6 +90,7 @@ public class PersistentMonthBalanceDao extends MonthBalanceDaoDecorator {
       monthBalance.setMonthId(pResultSet.getLong("month_id"));
       monthBalance.setTotalMonthDebitBalance(pResultSet.getBigDecimal("tot_month_db_balance"));
       monthBalance.setTotalMonthCreditBalance(pResultSet.getBigDecimal("tot_month_cr_balance"));
+      monthBalance.setLastModified(pResultSet.getString("last_modified"));
       return monthBalance;
     }
   }

@@ -108,6 +108,9 @@
 /// <reference path='controller/PatronDetails.ts'/>
 /// <reference path='controller/CheckIn.ts'/>
 /// <reference path='controller/PatronSearch.ts'/>
+/// <reference path='controller/SearchLibrary.ts'/>
+/// <reference path='controller/BorrowHistory.ts'/>
+
 /// <reference path='directive/ColumnSorter.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/service/BaseService.ts'/>

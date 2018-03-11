@@ -15,6 +15,7 @@
 /// <reference path='lib/jquery.jqGrid.d.ts'/>
 ///<reference path='lib/angular-ui-sortable.d.ts'/>
 ///<reference path='lib/moment.d.ts'/>
+///<reference path='lib/AccountingLib.d.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>

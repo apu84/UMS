@@ -7,7 +7,7 @@ import org.ums.usermanagement.user.UserEmail;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String>, UserEmail<Employee> {
+public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String> {
   List<Employee> getByDesignation(final String pDesignationId);
 
   List<Employee> getActiveTeachersOfDept(String deptId);

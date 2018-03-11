@@ -50,6 +50,8 @@
                         <i class="fa fa-eye" style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
                         <i class="fa fa-pencil-square-o" style="cursor: pointer;"
                            data-ng-click="fetchItem(item.id, 'edit')"></i>
+                        <a data-target="#modal-confirm1" data-toggle="modal"
+                        style="cursor: pointer" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
 
@@ -232,7 +234,6 @@
     <a href="#" id="cancel_add_multiple" class="cancel"
        ng-click="data.showItemMainButtonPanel=true;data.multipleItemAdd=false;showHideItemsTable('show');">Cancel</a>
     <div class="hint">
-        <p>
         <table>
             <tr>
                 <td width="10%" style="height: 28px;">Copy Start From :</td>
@@ -275,5 +276,19 @@
                 <td><input type="button" value="Set Values" ng-click="setBulkItemsValue()"></td>
             </tr>
         </table>
-        </p></div>
+    </div>
 </fieldset>
+
+<div id="modal-confirm1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">Are you sure? You want to delete this item</div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
+                    Yes, Delete It
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

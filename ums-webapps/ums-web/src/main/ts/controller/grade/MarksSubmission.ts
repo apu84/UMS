@@ -155,6 +155,8 @@ module ums {
   export class MarksSubmission {
     public static $inject = ['$scope', 'appConstants', 'HttpClient', '$stateParams', '$window', '$sce', '$q', 'notify', 'commonService', 'semesterService'];
 
+    static AS_DEPT_ID = '15';
+
     constructor(private $scope: IMarksSubmissionScope,
                 private appConstants: any,
                 private httpClient: HttpClient, private $stateParams: any, private $window: ng.IWindowService, private $sce: ng.ISCEService, private $q: ng.IQService, private notify: Notify, private commonService: CommonService,
@@ -361,7 +363,7 @@ module ums {
         deptId = "NA";
       }
       else {
-        if(this.$scope.inputParams.dept_id!="AS") {
+        if (this.$scope.inputParams.dept_id != MarksSubmission.AS_DEPT_ID) {
           deptId = this.commonService.padLeft(Number(this.$scope.inputParams.dept_id), 2, '0');
           programId  =  this.$scope.inputParams.program_id;
         }

@@ -18,4 +18,11 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
       final @Context Request pRequest) {
     return mHelper.getPersonalInformation(pEmployeeId, mUriInfo);
   }
+
+  @GET
+  @Path("/firstName/{first-name}/lastName/{last-name}")
+  public JsonObject getSimilarUsers(final @Context Request pRequest, final @PathParam("first-name") String pFirstName,
+      final @PathParam("last-name") String pLastName) {
+    return mHelper.getSimilarUsers(pFirstName, pLastName, mUriInfo);
+  }
 }

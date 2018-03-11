@@ -16,6 +16,7 @@ module ums {
         setMaterialTypeName: Function;
         record: IRecord;
         item: IItem;
+        items: Array<IItem>;
         supplier: ISupplier;
         saveRecord: Function;
         saveItem: Function;
@@ -51,6 +52,11 @@ module ums {
         resetItemForm: Function;
         enableEdit: Function;
         makeCallNo: Function;
+        deleteRecord: Function;
+        validateRecordBeforeDelete: Function;
+        deleteItem: Function;
+        confirmation: Function;
+        itemId: string;
     }
 
     export class Cataloging {
@@ -76,6 +82,10 @@ module ums {
             $scope.reloadPublishers = this.reloadPublishers.bind(this);
             $scope.reloadContributors = this.reloadContributors.bind(this);
             $scope.makeCallNo = this.makeCallNo.bind(this);
+            $scope.deleteRecord = this.deleteRecord.bind(this);
+            $scope.validateRecordBeforeDelete = this.validateRecordBeforeDelete.bind(this);
+            $scope.deleteItem = this.deleteItem.bind(this);
+            $scope.confirmation = this.confirmation.bind(this);
 
             $scope.goNext = this.goNext.bind(this);
             $scope.goPrevious = this.goPrevious.bind(this);
@@ -93,6 +103,7 @@ module ums {
             this.$scope.showItemInfo = false;
 
 
+            $scope.items = Array<IItem>();
             $scope.contributors = Array<IContributor>();
             $scope.bulkItemList = Array<IItem>();
             $scope.recordList = Array<IRecord>();
@@ -348,7 +359,6 @@ module ums {
                 this.notify.error(response);
             });
         }
-
 
         private goPrevious() {
 
@@ -838,6 +848,30 @@ module ums {
             this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
+        }
+
+        public deleteItem(itemId: string): void {
+            this.$scope.itemId = itemId;
+        }
+
+        public confirmation(): void{
+            this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
+            });
+        }
+
+
+        public deleteRecord(): void {
+            this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then(() => {
+            });
+        }
+
+        public validateRecordBeforeDelete(): void {
+            this.$scope.items = Array<IItem>();
+            this.catalogingService.fetchItems(this.$scope.record.mfnNo).then((results: any) => {
+                this.$scope.items = results;
+                console.log(this.$scope.items);
+                console.log(this.$scope.items.length);
+            })
         }
     }
 

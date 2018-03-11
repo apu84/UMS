@@ -88,7 +88,8 @@
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
         org.ums.employee
-        org.ums.twofa
+        org.ums.twofa,
+        org.ums.logs
       </param-value>
     </init-param>
     <init-param>

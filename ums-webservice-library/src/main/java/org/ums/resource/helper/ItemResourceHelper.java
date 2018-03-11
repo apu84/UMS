@@ -10,6 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.library.ItemStatus;
 import org.ums.manager.library.RecordManager;
+import org.ums.persistent.model.library.PersistentRecord;
 import org.ums.usermanagement.user.User;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.mutable.library.MutableItem;
@@ -185,6 +186,25 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long> 
     // Response.ResponseBuilder builder = Response.created(contextURI);
     // builder.status(Response.Status.CREATED);
     // return builder.build();
+  }
+
+  @Transactional
+  public Response deleteItem(String pItemId) {
+    LocalCache localCache = new LocalCache();
+    PersistentItem item = new PersistentItem();
+    PersistentRecord record = new PersistentRecord();
+    item = (PersistentItem) mManager.get(Long.parseLong(pItemId));
+    if(item.getCirculationStatus() == 0) {
+      record = (PersistentRecord) mRecordManager.get(item.getMfn());
+      mManager.delete(item);
+      record.setTotalItems(record.getTotalItems() - 1);
+      record.setTotalAvailable(record.getTotalAvailable() - 1);
+      mRecordManager.update(record);
+      localCache.invalidate();
+      return Response.noContent().build();
+    }
+
+    return Response.notModified().build();
   }
 
   @Override

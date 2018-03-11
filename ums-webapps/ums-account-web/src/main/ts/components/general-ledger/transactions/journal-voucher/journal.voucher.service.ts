@@ -5,7 +5,7 @@ module ums {
     message: string;
   }
 
-  export enum AccountTransactionType{
+  export enum AccountTransactionType {
     BUYING = "BUYING",
     SELLING = "SELLING"
   }
@@ -15,11 +15,11 @@ module ums {
     vouchers: IJournalVoucher[];
   }
 
-  export interface IJournalVoucher{
+  export interface IJournalVoucher {
     id: string;
     company: ICompany;
     companyId: string;
-    divisionCode:string;
+    divisionCode: string;
     voucherNo: string;
     voucherDate: string;
     serialNo: number;
@@ -39,9 +39,10 @@ module ums {
     statUpFlag: string;
     receiptId: string;
     postDate: string;
-    accountTransactionType:AccountTransactionType;
+    accountTransactionType: AccountTransactionType;
     modifiedDate: string;
     modifiedBy: string;
+    message: string;
   }
 
   export class JournalVoucherService {
@@ -55,14 +56,17 @@ module ums {
       this.url = "account/general-ledger/transaction/journal-voucher";
     }
 
-    public saveVoucher(vouchers: IJournalVoucher[]):ng.IPromise<any>{
+
+    public saveVoucher(vouchers: IJournalVoucher[]): ng.IPromise<any> {
       let defer: ng.IDeferred<any> = this.$q.defer();
-      this.httpClient.post(this.url+"/save", vouchers, HttpClient.MIME_TYPE_JSON)
-          .success((response) => {
+      this.httpClient.post(this.url + "/save", vouchers, HttpClient.MIME_TYPE_JSON)
+          .success((response: IJournalVoucher[]) => {
             this.notify.success("Journal Voucher Data Saved Successfully")
+            console.log("Successss");
+            console.log(response);
             defer.resolve(response);
           })
-          .error((error)=>{
+          .error((error) => {
             console.log(error);
             this.notify.error("Error in saving data");
             defer.resolve(undefined);
@@ -73,8 +77,9 @@ module ums {
     public postVoucher(vouchers: IJournalVoucher[]): ng.IPromise<any> {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/post", vouchers, HttpClient.MIME_TYPE_JSON)
-          .success((response) => {
+          .success((response: IJournalVoucher[]) => {
             this.notify.success("Journal Voucher Posted Successfully");
+            console.log("posting");
             defer.resolve(response);
           })
           .error((error) => {
@@ -82,6 +87,14 @@ module ums {
             this.notify.error("Error in saving data");
             defer.resolve(undefined);
           });
+      return defer.promise;
+    }
+
+    public deleteVoucher(voucher: IJournalVoucher): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.httpClient.put(this.url + "/delete", voucher, HttpClient.MIME_TYPE_JSON)
+          .success((response) => defer.resolve(response))
+          .error((response) => defer.resolve(response));
       return defer.promise;
     }
 

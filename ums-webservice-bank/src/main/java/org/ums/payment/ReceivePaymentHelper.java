@@ -56,7 +56,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
 
   /**
    * Transaction always needs to be in a public method
-   *
+   * 
    * @param pStudentId
    * @param pJsonObject
    * @return
@@ -75,11 +75,11 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     Validate.notNull(pJsonObject.get("receiptNo"));
     String receiptNo = pJsonObject.getString("receiptNo");
     String paymentDetails = null;
-    if (pJsonObject.containsKey("paymentDetails")) {
+    if(pJsonObject.containsKey("paymentDetails")) {
       paymentDetails = pJsonObject.getString("paymentDetails");
     }
 
-    for (JsonValue entry : entries) {
+    for(JsonValue entry : entries) {
       MutableStudentPayment payment = new PersistentStudentPayment();
       getBuilder().build(payment, (JsonObject) entry, cache);
       payment.setStudentId(pStudentId);
@@ -101,7 +101,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     }
 
     validatePayment(pStudentId, latestPayments, payments);
-    if (certificateStatusList.size() > 0)
+    if(certificateStatusList.size() > 0)
       mCertificateStatusManager.create(certificateStatusList);
     mStudentPaymentManager.update(payments);
     updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);
