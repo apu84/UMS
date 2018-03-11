@@ -54,7 +54,7 @@ module ums {
 
       this.itemsPerPage = 20;
       this.type = AccountTransactionType.SELLING;
-      this.accountService.getAccountsByGroupFlag(JournalVoucherController.JOURNAL_VOUCHER_GROUP_FLAG).then((accounts: IAccount[]) => {
+      this.accountService.getExcludingBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         console.log("Accounts")
         console.log(accounts);
         this.accounts = accounts;

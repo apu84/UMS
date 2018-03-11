@@ -17,4 +17,14 @@ public class GroupDaoDecorator extends ContentDaoDecorator<Group, MutableGroup, 
   public List<Group> getGroups(Group pGroup) {
     return getManager().getGroups(pGroup);
   }
+
+  @Override
+  public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
+    return getManager().getExcludingMainGroupList(pMainGroupCodeList);
+  }
+
+  @Override
+  public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
+    return getManager().getIncludingMainGroupList(pMainGroupCodeList);
+  }
 }

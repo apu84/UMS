@@ -12,7 +12,9 @@ import org.ums.persistent.model.accounts.PersistentGroup;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Monjur-E-Morshed on 20-Dec-17.
@@ -36,6 +38,34 @@ public class PersistentGroupDao extends GroupDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
+    String query =
+        "SELECT * "
+            + "FROM MST_GROUP "
+            + "WHERE (GROUP_CODE not IN (:groupCodeList)) OR (GROUP_CODE not IN (SELECT GROUP_CODE "
+            + "                                                    FROM MST_GROUP "
+            + "                                                    START WITH MAIN_GROUP not in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
+            + "                                                                                                 MAIN_GROUP))";
+    Map parameterMap = new HashMap();
+    parameterMap.put("groupCodeList", pMainGroupCodeList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
+  }
+
+  @Override
+  public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
+    String query =
+        "SELECT * "
+            + "FROM MST_GROUP "
+            + "WHERE (GROUP_CODE IN (:groupCodeList)) OR (GROUP_CODE IN (SELECT GROUP_CODE "
+            + "                                                    FROM MST_GROUP "
+            + "                                                    START WITH MAIN_GROUP in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
+            + "                                                                                                 MAIN_GROUP))";
+    Map parameterMap = new HashMap();
+    parameterMap.put("groupCodeList", pMainGroupCodeList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
   }
 
   @Override

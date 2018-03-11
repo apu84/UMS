@@ -8,11 +8,13 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
@@ -28,6 +30,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +59,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private MonthManager mMonthManager;
   @Autowired
   private MonthBalanceManager mMonthBalanceManager;
+  @Autowired
+  private GroupManager mGroupManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -115,6 +120,24 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAccounts(pGroupFlag);
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  public JsonObject getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<String>();
+    groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
+    groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    List<Group> groups = mGroupManager.getIncludingMainGroupList(groupCodeList);
+    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  public JsonObject getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<String>();
+    groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
+    groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    List<Group> groups = mGroupManager.getExcludingMainGroupList(groupCodeList);
+    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
     return getJsonObject(pUriInfo, accounts);
   }
 

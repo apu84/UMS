@@ -82,6 +82,20 @@ module ums{
           ((response: IAccountResponse) => defer.resolve(response.entries)));
       return defer.promise;
     }
+
+    public getBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccountResponse) => defer.resolve(response.entries)));
+      return defer.promise;
+    }
+
+    public getExcludingBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/excluding-bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccountResponse) => defer.resolve(response.entries)));
+      return defer.promise;
+    }
   }
 
   UMS.service("AccountService", AccountService);

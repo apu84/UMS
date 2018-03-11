@@ -191,8 +191,8 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
         entities.add(entity);
       }
       long afterTime = System.currentTimeMillis();
-      if((afterTime - currentTime)>100)
-          mLogger.debug("Time taken to build cached list: {} ms", (afterTime - currentTime));
+      if((afterTime - currentTime) > 100)
+        mLogger.debug("Time taken to build cached list: {} ms", (afterTime - currentTime));
       return entities;
 
     }
