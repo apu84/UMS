@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.UGRegistrationResult;
+import org.ums.enums.CourseRegType;
+import org.ums.enums.CourseType;
 
 public class RemarksBuilderImpl implements RemarksBuilder {
   @Override
@@ -28,7 +30,8 @@ public class RemarksBuilderImpl implements RemarksBuilder {
       Integer pSemesterId) {
     String promotionStatus = null, carryOverText = null;
     if(pStudentRecord.getStatus() == StudentRecord.Status.FAILED) {
-      return "Failed";
+      promotionStatus = "Failed ";
+      carryOverText = getCarryOverText(pResults, pSemesterId, false);
     }
     else if(pStudentRecord.getStatus() == StudentRecord.Status.PASSED) {
       promotionStatus = promotionText(pStudentRecord);
@@ -43,14 +46,22 @@ public class RemarksBuilderImpl implements RemarksBuilder {
     StringBuilder builder = new StringBuilder();
 
     for(UGRegistrationResult result : pResults) {
-      if(result.getSemesterId().intValue() != pSemesterId) {
-        if(result.getGradeLetter().equalsIgnoreCase("F")) {
-          buildRemarks(builder, result);
+      if(result.getCourse().getCourseType() == CourseType.THEORY) {
+        if(result.getSemesterId().intValue() != pSemesterId) {
+          if(result.getGradeLetter().equalsIgnoreCase("F")) {
+            buildRemarks(builder, result);
+          }
         }
-      }
-      else {
-        if(isSemesterPassed && !isPassed(result, pResults, pSemesterId)) {
-          buildRemarks(builder, result);
+        else {
+          if(!isPassed(result, pResults, pSemesterId)) {
+            if(isSemesterPassed) {
+              buildRemarks(builder, result);
+            }
+            else if(result.getType() == CourseRegType.CARRY) {
+              buildRemarks(builder, result);
+            }
+          }
+
         }
       }
     }
@@ -83,12 +94,12 @@ public class RemarksBuilderImpl implements RemarksBuilder {
   private String promotionText(StudentRecord pStudentRecord) {
     if(pStudentRecord.getStudent().getProgram().getShortName().equalsIgnoreCase("BSc in ARC")) {
       if(pStudentRecord.getYear() == 5 && pStudentRecord.getAcademicSemester() == 2) {
-        return "Passed";
+        return "Completed Fifth Year Second Semester";
       }
     }
     else {
       if(pStudentRecord.getYear() == 4 && pStudentRecord.getAcademicSemester() == 2) {
-        return "Passed";
+        return "Completed Fourth Year Second Semester";
       }
     }
     return incrementYearSemester(pStudentRecord);

@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "MonthBalance",
-    "package": "org.ums.domain.model.immutable.account",
+    "name": "LegacyTabulation",
+    "package": "org.ums.result.legacy",
     "fields": [
       {
         "id": {
@@ -10,46 +10,52 @@
         }
       },
       {
-        "AccountBalance": {
+        "gpa": "Double"
+      },
+      {
+        "cgpa": "Double"
+      },
+      {
+        "comment": "String"
+      },
+      {
+        "year" : "Integer"
+      },
+      {
+        "academicSemester": "Integer"
+      },
+      {
+        "semester": {
           "type": "Ref",
           "reference": {
-            "name": "AccountBalance",
+            "name": "Semester",
             "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "Long"
+              "type": "Integer"
             },
             "manager": {
-              "name": "AccountBalanceManager",
+              "name": "SemesterManager",
               "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "Month": {
+        "student": {
           "type": "Ref",
           "reference": {
-            "name": "Month",
+            "name": "Student",
             "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "Long"
+              "type": "String"
             },
             "manager": {
-              "name": "MonthManager",
+              "name": "StudentManager",
               "package": "org.ums.manager"
             }
           }
         }
-      },
-      {
-        "totalMonthDebitBalance": "BigDecimal"
-      },
-      {
-        "totalMonthCreditBalance": "BigDecimal"
-      },
-
-
+      }
     ]
   }
 }
-

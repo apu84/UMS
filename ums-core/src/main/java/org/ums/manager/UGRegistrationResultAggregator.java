@@ -15,6 +15,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableTaskStatus;
+import org.ums.enums.CourseRegType;
 import org.ums.persistent.model.PersistentTaskStatus;
 import org.ums.services.academic.ProcessResult;
 import org.ums.services.academic.StudentCarryCourseService;

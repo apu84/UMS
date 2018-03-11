@@ -26,6 +26,8 @@ import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
 import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
+import org.ums.result.legacy.LegacyTabulationDao;
+import org.ums.result.legacy.LegacyTabulationManager;
 import org.ums.services.academic.RemarksBuilder;
 import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.services.academic.StudentCarryCourseService;
@@ -390,5 +392,10 @@ public class AcademicContext {
   TabulationService tabulationService() {
     return new TabulationServiceImpl(registrationResultManager(), semesterManager(), studentRecordManager(),
         mCoreContext.studentManager(), courseManager(), programManager());
+  }
+
+  @Bean
+  LegacyTabulationManager legacyTabulationManager() {
+    return new LegacyTabulationDao(mTemplateFactory.getJdbcTemplate());
   }
 }
