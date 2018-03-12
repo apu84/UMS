@@ -143,7 +143,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       itemList = mItemManger.getByMfn(record.getMfn());
       mManager.delete(record);
       for(Item item : itemList) {
-          mItemManger.delete((MutableItem) item);
+        mItemManger.delete((MutableItem) item);
       }
       return Response.noContent().build();
     }

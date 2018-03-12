@@ -95,19 +95,6 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
       mAccountBalanceManager.insertFromAccount(accountBalance);
-
-//      List<Month> months = mMonthManager.getAll();
-//      List<MutableMonthBalance> monthBalances = new ArrayList<>();
-//      for(Month month: months){
-//        MutableMonthBalance monthBalance = new PersistentMonthBalance();
-//        monthBalance.setId(mIdGenerator.getNumericId());
-//        monthBalance.setAccountBalanceId(accountBalance.getId());
-//        monthBalance.setMonthId(month.getId());
-//        monthBalance.setTotalMonthCreditBalance(new BigDecimal(0));
-//        monthBalance.setTotalMonthDebitBalance(new BigDecimal(0));
-//        monthBalances.add(monthBalance);
-//      }
-//      mMonthBalanceManager.create(monthBalances);
     }
 
     return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
@@ -120,6 +107,15 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAccounts(pGroupFlag);
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  public JsonObject getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
+    groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    List<Group> groups = mGroupManager.getIncludingMainGroupList(groupCodeList);
+    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
     return getJsonObject(pUriInfo, accounts);
   }
 
