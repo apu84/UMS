@@ -1,9 +1,9 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.teacher.evaluation.system;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.ApplicationTESBuilder;
+import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -26,9 +26,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /*
@@ -57,6 +57,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   @Autowired
   SemesterManager mSemesterManager;
+
+  @Autowired
+  ApplicationTESManager applicationTESManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -112,6 +115,70 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         object.add("entries", children);
         localCache.invalidate();
         return object.build();
+    }
+
+  public List<Report> getResult(final Request pRequest, final UriInfo pUriInfo){
+      double cRoombservation=0,noncRoomObservation=0;
+      Integer countercR=0,counterncR=0;
+      HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
+      List<Report> reportList= new ArrayList<Report>();
+      List<Report> reportListValue= new ArrayList<Report>();
+      Integer studentNo=getContentManager().getTotalStudentNumber("","",11);
+        List<ApplicationTES> getDetailedResult=getContentManager().getDetailedResult("","",11).
+                stream().
+                filter(a->a.getComment() !=null).collect(Collectors.toList());
+        List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
+
+        applications.forEach(a->{
+            double value=getContentManager().getAverageScore("","",a.getQuestionId(),11);
+            String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
+            Integer observationType=getContentManager().getObservationType(a.getQuestionId());
+            reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(value/studentNo),observationType));
+            mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+        });
+      for(Map.Entry m:mapForCalculateResult.entrySet()){
+          Integer questionId=(Integer)m.getKey();
+          if(getContentManager().getObservationType(questionId) ==1){
+              countercR++;
+           cRoombservation=cRoombservation+(double)m.getValue();
+          }else {
+              counterncR++;
+              noncRoomObservation=noncRoomObservation+(double)m.getValue();
+          }
+      }
+      cRoombservation=(cRoombservation/countercR);
+      noncRoomObservation=(noncRoomObservation/counterncR);
+      reportListValue.add(new Report(cRoombservation));
+      int x=0;
+      return reportList;
+    }
+
+  public HashMap<Integer,String[]> getComments(final Request pRequest, final UriInfo pUriInfo){
+        List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
+      HashMap<Integer,String[]> ob=new HashMap<Integer,String[]>();
+      List<ApplicationTES> getDetailedResult=null;
+
+
+        for(int i=0;i<applications.size();i++){
+            Integer qId=applications.get(i).getQuestionId();
+             getDetailedResult=getContentManager().getDetailedResult("","",11).
+                    stream().
+                    filter(a->a.getComment() !=null && a.getQuestionId()==qId).collect(Collectors.toList());
+            int x=getDetailedResult.size();
+
+            if(getDetailedResult.size() !=0){
+                String arr[] =new String[x];
+                for(int j=0;j<x;j++){
+                    arr[j]=getDetailedResult.get(j).getComment();
+                }
+                ob.put(qId,arr);
+            }
+
+
+        }
+
+
+        return ob;
     }
 
   // getRecordsOfAssignedCoursesByHead

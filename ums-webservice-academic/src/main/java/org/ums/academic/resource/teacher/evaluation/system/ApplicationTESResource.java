@@ -1,16 +1,18 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.teacher.evaluation.system;
 
 import javax.json.JsonObject;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.manager.ApplicationTESManager;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 2/20/2018.
@@ -28,6 +30,18 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @Path("/getAllQuestions")
   public JsonObject getAllQuestions(@Context Request pRequest) {
     return mHelper.getAllQuestions(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getResult")
+  public List<Report> getResult(@Context Request pRequest) {
+    return mHelper.getResult(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getComment")
+  public HashMap<Integer, String[]> getComment(@Context Request pRequest) {
+    return mHelper.getComments(pRequest, mUriInfo);
   }
 
   @GET

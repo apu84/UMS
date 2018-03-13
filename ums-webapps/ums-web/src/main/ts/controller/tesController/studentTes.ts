@@ -124,7 +124,6 @@ module ums{
             return defer.promise;
         }
 
-
         private getAllQuestions(){
          var appTES:Array<IQuestions>=[];
 
@@ -133,7 +132,7 @@ module ums{
                 (json: any, etag: string) => {
                    appTES=json.entries;
                     console.log("****Q1Q****");
-                    console.log("Applicatino TES Get Questions!!!!");
+                    console.log("Applicatino TES--->Get Questions!!!!");
                   this.questionListAndReview=appTES;
                     console.log(this.questionListAndReview);
                     defer.resolve(json.entries);
@@ -188,7 +187,7 @@ module ums{
                 }
             }
             if (!this.checkComment) {
-                this.notify.error("If you rate poor then you must write the reason");
+                this.notify.error("Write your reason between 5 to 100 words");
             }
     }
 

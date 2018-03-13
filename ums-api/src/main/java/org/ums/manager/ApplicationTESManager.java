@@ -1,5 +1,6 @@
 package org.ums.manager;
 
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 
@@ -11,6 +12,17 @@ import java.util.List;
 public interface ApplicationTESManager extends ContentManager<ApplicationTES, MutableApplicationTES, Long> {
 
   List<ApplicationTES> getAllQuestions(final Integer pSemesterId);
+
+  Integer getObservationType(final Integer pQuestionId);
+
+  String getQuestionDetails(final Integer pQuestionId);
+
+  Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
+
+  Double getAverageScore(final String pTeacherId, final String pCourseId, final Integer pQuestionId,
+      final Integer pSemesterId);
+
+  List<ApplicationTES> getDetailedResult(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 
   List<ApplicationTES> getRivewedCoursesForReadOnlyMode(final String pCourseId, final String pTeacherId,
       final String pStudentId, final Integer pSemesterId);

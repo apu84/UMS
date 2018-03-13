@@ -1,6 +1,7 @@
-package org.ums.builder;
+package org.ums.academic.resource.teacher.evaluation.system;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.mutable.MutableApplicationTES;
@@ -22,11 +23,11 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getQuestionId() != null)
       pBuilder.add("questionId", pReadOnly.getQuestionId());
 
-    if(pReadOnly.getPoint() !=null)
-      pBuilder.add("point",pReadOnly.getPoint());
+    if(pReadOnly.getPoint() != null)
+      pBuilder.add("point", pReadOnly.getPoint());
 
-    if(pReadOnly.getComment() !=null)
-      pBuilder.add("comment",pReadOnly.getComment());
+    if(pReadOnly.getComment() != null)
+      pBuilder.add("comment", pReadOnly.getComment());
 
     if(pReadOnly.getQuestionDetails() != null)
       pBuilder.add("questionDetails", pReadOnly.getQuestionDetails());

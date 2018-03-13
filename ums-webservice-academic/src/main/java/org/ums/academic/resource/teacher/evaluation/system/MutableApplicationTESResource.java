@@ -1,8 +1,7 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.teacher.evaluation.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.academic.resource.helper.ApplicationCCIResourceHelper;
-import org.ums.academic.resource.helper.ApplicationTESResourceHelper;
+import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

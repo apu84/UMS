@@ -13,6 +13,31 @@ public class ApplicationTESDaoDecorator extends
     ContentDaoDecorator<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements
     ApplicationTESManager {
   @Override
+  public String getQuestionDetails(Integer pQuestionId) {
+    return getManager().getQuestionDetails(pQuestionId);
+  }
+
+  @Override
+  public Integer getObservationType(Integer pQuestionId) {
+    return getManager().getObservationType(pQuestionId);
+  }
+
+  @Override
+  public Integer getTotalStudentNumber(String pTeacherId, String pCourseId, Integer pSemesterId) {
+    return getManager().getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
+  }
+
+  @Override
+  public Double getAverageScore(String pTeacherId, String pCourseId, Integer pQuestionId, Integer pSemesterId) {
+    return getManager().getAverageScore(pTeacherId, pCourseId, pQuestionId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationTES> getDetailedResult(String pTeacherId, String pCourseId, Integer pSemesterId) {
+    return getManager().getDetailedResult(pTeacherId, pCourseId, pSemesterId);
+  }
+
+  @Override
   public List<ApplicationTES> getRivewedCoursesForReadOnlyMode(String pCourseId, String pTeacherId, String pStudentId,
       Integer pSemesterId) {
     return getManager().getRivewedCoursesForReadOnlyMode(pCourseId, pTeacherId, pStudentId, pSemesterId);

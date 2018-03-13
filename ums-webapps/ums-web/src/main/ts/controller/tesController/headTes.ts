@@ -20,6 +20,15 @@ module ums{
         status:number;
     }
 
+    interface IReport{
+        questionId:number;
+        questionDetails:string;
+        totalScore:number;
+        studentNo:number;
+        averageScore:number;
+        observationType:number;
+    }
+
     interface ISetForReview{
         firstName:string;
         lastName:string;
@@ -28,10 +37,18 @@ module ums{
         section:string;
         date:string;
     }
+
+    interface IComment{
+        questionId:number;
+        questionDetails:string;
+        comment:string;
+        observationType:number;
+    }
     class HeadTES{
         public facultyList:Array<IFacultyList>;
         public assignedCourses:Array<IAssignedCourses>;
         public setRivewedCoursesHistory:Array<ISetForReview>;
+        public studentComments:Array<IReport>;
         public facultyName:string;
         public facultyId:string;
         public fName:string;
@@ -41,8 +58,16 @@ module ums{
         public itemPerPage:number;
         public currentPageNumber:number;
         public deptId:string;
-         submit_Button_Disable:boolean;
-         checkBoxCounter:number;
+        public submit_Button_Disable:boolean;
+        public checkBoxCounter:number;
+        public resultView:boolean;
+        public classObservationTotalSPoints:number;
+        public classObservationTotalStudent:number;
+        public classObservationAverage:number;
+        public nonClassObservationTotalSPoints:number;
+        public nonClassObservationTotalStudent:number;
+        public nonClassObservationAverage:number;
+
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -68,6 +93,7 @@ module ums{
             this.itemPerPage=10;
             this.currentPageNumber=1;
             this.submit_Button_Disable=true;
+            this.resultView=true;
             this.checkBoxCounter=0;
 
         }
@@ -133,6 +159,64 @@ module ums{
            });
 
 
+       return defer.promise;
+
+   }
+
+   private getResults(){
+            this.studentComments=[];
+       this.classObservationTotalSPoints=0;
+       this.classObservationTotalStudent=0;
+       this.classObservationAverage=0;
+       this.nonClassObservationTotalSPoints=0;
+       this.nonClassObservationTotalStudent=0;
+       this.nonClassObservationAverage=0;
+       var appTES:Array<IReport>=[];
+       var defer = this.$q.defer();
+       var counterObType1=0;
+       var counterObType2=0;
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getResult', 'application/json',
+           (json: any, etag: string) => {
+                console.log(json);
+                appTES=json;
+               this.studentComments=appTES;
+               for(let i=0;i<this.studentComments.length;i++){
+                   if(this.studentComments[i].observationType==1){
+                       counterObType1++;
+                       this.classObservationTotalSPoints =this.classObservationTotalSPoints+this.studentComments[i].totalScore;
+                       this.classObservationTotalStudent =this.classObservationTotalStudent+this.studentComments[i].studentNo;
+                       this.classObservationAverage=this.classObservationAverage+this.studentComments[i].averageScore;
+                   }else{
+                       counterObType2++;
+                       this.nonClassObservationTotalSPoints =this.nonClassObservationTotalSPoints+this.studentComments[i].totalScore;
+                       this.nonClassObservationTotalStudent=this.nonClassObservationTotalStudent+this.studentComments[i].studentNo;
+                       this.nonClassObservationAverage=this.nonClassObservationAverage+this.studentComments[i].averageScore;
+                   }
+               }
+               this.classObservationAverage=(this.classObservationAverage/counterObType1);
+               this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2)
+               this.getComment();
+               defer.resolve(json);
+           },
+           (response: ng.IHttpPromiseCallbackArg<any>) => {
+               console.error(response);
+           });
+       return defer.promise;
+   }
+   private  getComment(){
+       var defer = this.$q.defer();
+       var counterObType1=0;
+       var counterObType2=0;
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComment', 'application/json',
+           (json: any, etag: string) => {
+           console.log("comment---------");
+               console.log(json);
+
+               defer.resolve(json);
+           },
+           (response: ng.IHttpPromiseCallbackArg<any>) => {
+               console.error(response);
+           });
        return defer.promise;
 
    }
