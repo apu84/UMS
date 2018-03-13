@@ -22,7 +22,7 @@ public interface MutableDebtorLedger extends DebtorLedger, Editable<Long>, Mutab
 
   void setDivisionCode(String pDivisionCode);
 
-  void setCustomerCode(Date pCustomerCode);
+  void setCustomerCode(String pCustomerCode);
 
   void setAccountTransaction(AccountTransaction pAccountTransaction);
 
@@ -36,7 +36,7 @@ public interface MutableDebtorLedger extends DebtorLedger, Editable<Long>, Mutab
 
   void setInvoiceNo(String pInvoiceNo);
 
-  void setInvoiceDate(String pInvoiceDate);
+  void setInvoiceDate(Date pInvoiceDate);
 
   void setAmount(BigDecimal pAmount);
 

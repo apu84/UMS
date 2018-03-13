@@ -22,7 +22,7 @@ public interface DebtorLedger extends Serializable, EditType<MutableDebtorLedger
 
   String getDivisionCode();
 
-  Date getCustomerCode();
+  String getCustomerCode();
 
   AccountTransaction getAccountTransaction();
 
@@ -36,7 +36,7 @@ public interface DebtorLedger extends Serializable, EditType<MutableDebtorLedger
 
   String getInvoiceNo();
 
-  String getInvoiceDate();
+  Date getInvoiceDate();
 
   BigDecimal getAmount();
 

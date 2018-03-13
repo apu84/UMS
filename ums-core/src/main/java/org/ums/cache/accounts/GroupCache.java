@@ -31,11 +31,11 @@ public class GroupCache extends ContentCache<Group, MutableGroup, Long, GroupMan
 
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
-    return getExcludingMainGroupList(pMainGroupCodeList);
+    return getManager().getExcludingMainGroupList(pMainGroupCodeList);
   }
 
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
-    return getIncludingMainGroupList(pMainGroupCodeList);
+    return getManager().getIncludingMainGroupList(pMainGroupCodeList);
   }
 }

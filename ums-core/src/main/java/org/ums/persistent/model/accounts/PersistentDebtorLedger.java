@@ -25,14 +25,14 @@ public class PersistentDebtorLedger implements MutableDebtorLedger {
   private Company mCompany;
   private String mCompanyId;
   private String mDivisionCode;
-  private Date mCustomerCode;
+  private String mCustomerCode;
   private AccountTransaction mAccountTransaction;
   private Long mAccountTransactionId;
   private String mVoucherNo;
   private Date mVoucherDate;
   private Integer mSerialNo;
   private String mInvoiceNo;
-  private String mInvoiceDate;
+  private Date mInvoiceDate;
   private BigDecimal mAmount;
   private BigDecimal mPaidAmount;
   private Date mDueDate;
@@ -86,12 +86,12 @@ public class PersistentDebtorLedger implements MutableDebtorLedger {
   }
 
   @Override
-  public Date getCustomerCode() {
+  public String getCustomerCode() {
     return mCustomerCode;
   }
 
   @Override
-  public void setCustomerCode(Date pCustomerCode) {
+  public void setCustomerCode(String pCustomerCode) {
     this.mCustomerCode = pCustomerCode;
   }
 
@@ -157,12 +157,12 @@ public class PersistentDebtorLedger implements MutableDebtorLedger {
   }
 
   @Override
-  public String getInvoiceDate() {
+  public Date getInvoiceDate() {
     return mInvoiceDate;
   }
 
   @Override
-  public void setInvoiceDate(String pInvoiceDate) {
+  public void setInvoiceDate(Date pInvoiceDate) {
     this.mInvoiceDate = pInvoiceDate;
   }
 
@@ -296,7 +296,8 @@ public class PersistentDebtorLedger implements MutableDebtorLedger {
     sDebtorLedgerManager.delete(this);
   }
 
-  public PersistentDebtorLedger() {}
+  public PersistentDebtorLedger() {
+  }
 
   public PersistentDebtorLedger(MutableDebtorLedger pDebtorLedger) {
     setId(pDebtorLedger.getId());

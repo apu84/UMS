@@ -21,6 +21,8 @@ module ums {
     private journalVouchers: IJournalVoucher[];
     private existingJournalVouchers: IJournalVoucher[];
     private accounts: IAccount[];
+    private bankAndCustomerAccounts: IAccount[];
+    private bankAndCustomerAccountMapWithAccountId: any;
     private totalDebit: number;
     private totalCredit: number;
     private pageNumber: number;
@@ -219,6 +221,14 @@ module ums {
       let currDate: Date = new Date();
       this.journalVouchers = [];
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
+    }
+
+    private getBankAndCustomerAccounts(){
+      this.accountService.getBankAndCostTypeAccounts().then((accounts:IAccount[])=>{
+        this.bankAndCustomerAccounts = accounts;
+        this.bankAndCustomerAccountMapWithAccountId={};
+        accounts.forEach((f:IAccount)=>this.bankAndCustomerAccountMapWithAccountId[f.id]=f);
+      });
     }
 
     private getCurrencyConversions() {
