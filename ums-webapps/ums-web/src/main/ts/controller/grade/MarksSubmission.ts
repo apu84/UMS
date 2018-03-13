@@ -969,16 +969,10 @@ module ums {
 
     }
 
-    private validateGradeSheet(): boolean {
-      return false;
-    }
-
 
     private saveGradeSheet(): boolean {
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(1);
       this.postGradeSheet(gradeList, 'save');
-
-
       return false;
     }
 
@@ -1086,6 +1080,11 @@ module ums {
         }
       }
       this.postGradeSheet(gradeList, 'submit');
+    }
+
+
+    private validateGradeSheet(): boolean {
+      return false;
     }
 
     private postGradeSheet(gradeList: Array<IStudentMarks>, action: string): void {

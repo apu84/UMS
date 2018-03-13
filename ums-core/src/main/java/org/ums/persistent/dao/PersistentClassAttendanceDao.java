@@ -31,11 +31,6 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       + "From MST_CLASS_ATTENDANCE Where Semester_Id=? And Course_id=? And Section=? )tmp1  "
       + "Left Outer Join DTL_CLASS_ATTENDANCE " + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
 
-  String ATTENDANCE_DATE_QUERY =
-      "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,EMPLOYEE_NAME,SHORT_NAME  "
-          + "From MST_CLASS_ATTENDANCE,EMPLOYEES Where Semester_Id= ? And Course_id=? And Section=? And EMPLOYEE_ID=Teacher_Id "
-          + "Order by Serial desc";
-
   String ATTENDANCE_STUDENTS_ALL =
       "Select * From ( "
           + "Select Students.Student_Id,Full_Name From ( "
@@ -63,6 +58,10 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
 
   @Override
   public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection) {
+    String ATTENDANCE_DATE_QUERY =
+        "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,FIRST_NAME|| LAST_NAME EMPLOYEES,SHORT_NAME  "
+            + "From MST_CLASS_ATTENDANCE,EMP_PERSONAL_INFO, EMPLOYEES Where Semester_Id= ? And Course_id=? And Section=? And EMPLOYEES.EMPLOYEE_ID=Teacher_Id and EMP_PERSONAL_INFO.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID AND MST_CLASS_ATTENDANCE.TEACHER_ID=EMPLOYEES.EMPLOYEE_ID "
+            + "Order by Serial desc";
     String query = ATTENDANCE_DATE_QUERY;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection}, new AttendanceDateRowMapper());
   }
