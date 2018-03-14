@@ -348,7 +348,7 @@ module ums {
             url: "/applicationTES",
             controller: 'studentTES',
             controllerAs: 'vm',
-            templateUrl: 'views/teachers-Evalution-System/student-tes.html',
+            templateUrl: 'views/teachers-Evaluation-System/student-tes.html',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -961,7 +961,7 @@ module ums {
         url: "/tes",
         controller: 'HeadTES',
         controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evalution-System/head-tes.html',
+        templateUrl: 'views/teachers-Evaluation-System/head-tes.html',
         resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                 return $ocLazyLoad.load({

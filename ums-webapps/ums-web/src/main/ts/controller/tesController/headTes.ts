@@ -41,14 +41,15 @@ module ums{
     interface IComment{
         questionId:number;
         questionDetails:string;
-        comment:string;
+        comment:string[];
         observationType:number;
     }
     class HeadTES{
         public facultyList:Array<IFacultyList>;
         public assignedCourses:Array<IAssignedCourses>;
         public setRivewedCoursesHistory:Array<ISetForReview>;
-        public studentComments:Array<IReport>;
+        public studentResult:Array<IReport>;
+        public studentComments:Array<IComment>;
         public facultyName:string;
         public facultyId:string;
         public fName:string;
@@ -67,6 +68,11 @@ module ums{
         public nonClassObservationTotalSPoints:number;
         public nonClassObservationTotalStudent:number;
         public nonClassObservationAverage:number;
+        public commentPgCurrentPage:number;
+        public commentPgItemsPerPage:number;
+        public innerCommentPgCurrentPage:number;
+        public innerCommentPgItemsPerPage:number;
+        public commentPgTotalRecords:number;
 
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
@@ -95,6 +101,11 @@ module ums{
             this.submit_Button_Disable=true;
             this.resultView=true;
             this.checkBoxCounter=0;
+        this.commentPgCurrentPage=1
+        this.commentPgItemsPerPage=1;
+        this.innerCommentPgCurrentPage=1;
+        this.innerCommentPgItemsPerPage=1;
+        this.commentPgTotalRecords=0;
 
         }
    private getAllFacultyMembers(){
@@ -179,24 +190,24 @@ module ums{
            (json: any, etag: string) => {
                 console.log(json);
                 appTES=json;
-               this.studentComments=appTES;
-               for(let i=0;i<this.studentComments.length;i++){
-                   if(this.studentComments[i].observationType==1){
+               this.studentResult=appTES;
+               for(let i=0;i<this.studentResult.length;i++){
+                   if(this.studentResult[i].observationType==1){
                        counterObType1++;
-                       this.classObservationTotalSPoints =this.classObservationTotalSPoints+this.studentComments[i].totalScore;
-                       this.classObservationTotalStudent =this.classObservationTotalStudent+this.studentComments[i].studentNo;
-                       this.classObservationAverage=this.classObservationAverage+this.studentComments[i].averageScore;
+                       this.classObservationTotalSPoints =this.classObservationTotalSPoints+this.studentResult[i].totalScore;
+                       this.classObservationTotalStudent =this.classObservationTotalStudent+this.studentResult[i].studentNo;
+                       this.classObservationAverage=this.classObservationAverage+this.studentResult[i].averageScore;
                    }else{
                        counterObType2++;
-                       this.nonClassObservationTotalSPoints =this.nonClassObservationTotalSPoints+this.studentComments[i].totalScore;
-                       this.nonClassObservationTotalStudent=this.nonClassObservationTotalStudent+this.studentComments[i].studentNo;
-                       this.nonClassObservationAverage=this.nonClassObservationAverage+this.studentComments[i].averageScore;
+                       this.nonClassObservationTotalSPoints =this.nonClassObservationTotalSPoints+this.studentResult[i].totalScore;
+                       this.nonClassObservationTotalStudent=this.nonClassObservationTotalStudent+this.studentResult[i].studentNo;
+                       this.nonClassObservationAverage=this.nonClassObservationAverage+this.studentResult[i].averageScore;
                    }
                }
                this.classObservationAverage=(this.classObservationAverage/counterObType1);
                this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2)
                this.getComment();
-               defer.resolve(json);
+               defer.resolve(this.studentResult);
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {
                console.error(response);
@@ -204,14 +215,15 @@ module ums{
        return defer.promise;
    }
    private  getComment(){
+       var appTES:Array<IComment>=[];
        var defer = this.$q.defer();
-       var counterObType1=0;
-       var counterObType2=0;
        this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComment', 'application/json',
            (json: any, etag: string) => {
            console.log("comment---------");
-               console.log(json);
-
+               appTES=json;
+               this.studentComments=appTES;
+              // this.commentPgTotalRecords=this.studentComments.length;
+               console.log(this.studentComments);
                defer.resolve(json);
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {

@@ -5,6 +5,7 @@ import javax.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
+import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.manager.ApplicationTESManager;
 import org.ums.resource.Resource;
 
@@ -40,7 +41,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getComment")
-  public HashMap<Integer, String[]> getComment(@Context Request pRequest) {
+  public List<StudentComment> getComment(@Context Request pRequest) {
     return mHelper.getComments(pRequest, mUriInfo);
   }
 

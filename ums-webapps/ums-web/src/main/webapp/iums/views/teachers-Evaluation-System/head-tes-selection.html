@@ -1,0 +1,141 @@
+<style>
+    .score{
+        color: deeppink;
+    }
+</style>
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <label class="col-md-8 control-label"><input type="text"
+                                                     class="form-control required"
+                                                     id="resultsPerPloage"
+                                                     placeholder='Search by student Id'
+                                                     data-ng-model="vm.facultyName"/></label>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <div class="col-md-8">
+           <button type="button"
+                   data-toggle="modal"
+                   data-ng-click="vm.getRecordsOfAssignedCoursesByHead()"
+                   data-target="#myModal"
+                   class="btn btn-success btn-sm" data-ng-model="kko">List of Teachers Requiring Evaluation</button>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <div class="col-md-8">
+            <button type="button"
+                    class="btn btn-info btn-sm"
+                    data-ng-click="vm.getResults()"
+                    data-toggle="modal"
+                    data-target="#myModalResult"
+                    data-ng-model="kk">Evaluation Score</button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="modal fade" id="myModal" role="dialog" >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog modal-lg ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Courses Assigned For Evaluation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body" >
+                    <span  style="font-size: 14px" class="label label-success badge-success">Session: <strong>{{vm.semesterName}}</strong></span>
+                    <label ><input type="text"
+                                   size="120"
+                                   class="form-control required"
+                                   id="search"
+                                   placeholder='Search by Teacher Name'
+                                   data-ng-model="assignedCourseSearch"/></label><br>
+                    <table class="table table-striped">
+                        <thead>
+                        <th style="background-color: #FAFAFA; ">#</th>
+                        <th style="background-color: #FAFAFA; ">Faculty Name</th>
+                        <th style="background-color: #FAFAFA; ">CourseNo</th>
+                        <th style="background-color: #FAFAFA; ">CourseTitle</th>
+                        <th style="background-color: #FAFAFA; ">Section</th>
+                        <th style="background-color: #FAFAFA; ">Approved Date</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.setRivewedCoursesHistory | filter:assignedCourseSearch ">
+                        <td>{{$index+1}}</td>
+                         <td>{{app.firstName+" "+app.lastName}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.section}}</td>
+                            <td>{{app.date}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModalResult" role="dialog" >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog modal-lg ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Courses Assigned For Evaluation</h4>
+            </div>
+            <div class="modal-body">
+                <div style="padding-top:20px;padding-bottom: 40px"  data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
+
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <th style="background-color: #FAFAFA; ">SL</th>
+                        <th style="background-color: #FAFAFA; ">Questions</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.studentComments">
+                            <td>{{$index+1}}</td>
+                            <td><strong>{{app.questionDetails}}</strong> <span></span>
+                                <table class="table table-bordered">
+                                    <tr  data-ng-repeat="items in app.comments">
+                                        <td style="width: 20px">{{$index+1}}</td>
+                                        <td>{{items}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
+import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -148,37 +149,34 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       }
       cRoombservation=(cRoombservation/countercR);
       noncRoomObservation=(noncRoomObservation/counterncR);
-      reportListValue.add(new Report(cRoombservation));
-      int x=0;
       return reportList;
     }
 
-  public HashMap<Integer,String[]> getComments(final Request pRequest, final UriInfo pUriInfo){
+  public List<StudentComment> getComments(final Request pRequest, final UriInfo pUriInfo){
         List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
-      HashMap<Integer,String[]> ob=new HashMap<Integer,String[]>();
       List<ApplicationTES> getDetailedResult=null;
+      List<StudentComment> commentList= new ArrayList<StudentComment>();
 
 
         for(int i=0;i<applications.size();i++){
-            Integer qId=applications.get(i).getQuestionId();
+            Integer questionId=applications.get(i).getQuestionId();
+            Integer observationType=getContentManager().getObservationType(questionId);
+            String questionDetails=getContentManager().getQuestionDetails(questionId);
              getDetailedResult=getContentManager().getDetailedResult("","",11).
                     stream().
-                    filter(a->a.getComment() !=null && a.getQuestionId()==qId).collect(Collectors.toList());
-            int x=getDetailedResult.size();
+                    filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+            int size=getDetailedResult.size();
 
             if(getDetailedResult.size() !=0){
-                String arr[] =new String[x];
-                for(int j=0;j<x;j++){
-                    arr[j]=getDetailedResult.get(j).getComment();
+                String comments[] =new String[size];
+                for(int j=0;j<size;j++){
+                    comments[j]=getDetailedResult.get(j).getComment();
                 }
-                ob.put(qId,arr);
+                commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
             }
-
-
         }
 
-
-        return ob;
+        return commentList;
     }
 
   // getRecordsOfAssignedCoursesByHead
