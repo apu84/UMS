@@ -36,14 +36,14 @@ public class AccountResource extends MutableAccountResource {
   @GET
   @Path("/paginated/item-per-page/{item-per-page}/page-number/{page-number}")
   public JsonObject getAllPaginated(@PathParam("item-per-page") int pItemPerPage,
-                                    @PathParam("page-number") int pPageNumber, final @Context Request pRequest) {
+      @PathParam("page-number") int pPageNumber, final @Context Request pRequest) {
     return mHelper.getAllPaginated(pItemPerPage, pPageNumber, mUriInfo);
   }
 
   @GET
   @Path("search/account-name/{account-name}")
   public JsonObject getAccountsByAccountName(@PathParam("account-name") String pAccountName,
-                                             final @Context Request pRequest) {
+      final @Context Request pRequest) {
     return mHelper.getAccountsByAccountName(pAccountName, mUriInfo);
   }
 
@@ -70,6 +70,18 @@ public class AccountResource extends MutableAccountResource {
   public JsonObject getCustomerAndVendorAccounts(final @Context HttpServletRequest pHttpServletRequest)
       throws Exception {
     return mHelper.getCustomerAndVendorAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/vendor-accounts")
+  public JsonObject getVendorAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getVendorAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/customer-accounts")
+  public JsonObject getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getCustomerAccounts(mUriInfo);
   }
 
 }

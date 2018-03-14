@@ -66,10 +66,32 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private String modifiedBy;
   private String lastModified;
   private String message;
+  private String supplierCode;
+  private String customerCode;
 
   @Override
   public AccountTransactionType getAccountTransactionType() {
     return accountTransactionType;
+  }
+
+  @Override
+  public String getSupplierCode() {
+    return supplierCode;
+  }
+
+  @Override
+  public void setSupplierCode(String pSupplierCode) {
+    supplierCode = pSupplierCode;
+  }
+
+  @Override
+  public String getCustomerCode() {
+    return customerCode;
+  }
+
+  @Override
+  public void setCustomerCode(String pCustomerCode) {
+    customerCode = pCustomerCode;
   }
 
   @Override

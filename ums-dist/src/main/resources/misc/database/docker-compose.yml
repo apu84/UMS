@@ -1,10 +1,10 @@
 version: "2"
 services:
   oraclexe:
-    image: sath89/oracle-xe-11g
-    ports:
-    - "8080:8999"
-    - "1521:1521"
+    image: webdizz/oracle-xe-11g-sa:latest
+      ports:
+        - "15080:8080"
+        - "1521:1521"
     volumes:
     - "F:/oradata:/u01/app/oracle"
 

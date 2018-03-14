@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.CreditorLedgerDaoDecorator;
+import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.immutable.accounts.CreditorLedger;
 import org.ums.domain.model.mutable.accounts.MutableCreditorLedger;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
@@ -44,7 +45,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
   String DELETE_ONE = "DELETE FROM dt_creditor_ledger WHERE ID=:id";
 
   public PersistentCreditorLedgerDao(JdbcTemplate pJdbcTemplate,
-                                     NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -106,6 +107,14 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
   }
 
   @Override
+  public List<MutableCreditorLedger> get(List<AccountTransaction> pAccountTransactions) {
+    String query = SELECT_ALL + " WHERE TRANSACTION_ID IN (:TRANSACTION_ID_LIST)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("TRANSACTION_ID_LIST", pAccountTransactions.stream().map(p -> p.getId()).collect(Collectors.toList()));
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentCreditorLedgerRowMapper());
+  }
+
+  @Override
   public boolean exists(Long pId) {
     return super.exists(pId);
   }
@@ -120,7 +129,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
 
   private Map<String, Object>[] getParameterObjects(List<MutableCreditorLedger> pMutableCreditorLedgers) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableCreditorLedgers.size()];
-    for (int i = 0; i < pMutableCreditorLedgers.size(); i++) {
+    for(int i = 0; i < pMutableCreditorLedgers.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableCreditorLedgers.get(i));
     }
     return parameterMaps;
@@ -150,7 +159,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
     parameters.put("statUpFlag", pMutableCreditorLedger.getStatUpFlag());
     parameters.put("modifiedDate", pMutableCreditorLedger.getModificationDate());
     parameters.put("modifiedBy", pMutableCreditorLedger.getModifiedBy());
-    parameters.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMISS"));
+    parameters.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     parameters.put("transactionId", pMutableCreditorLedger.getAccountTransactionId());
     return parameters;
   }

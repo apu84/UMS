@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.DebtorLedgerDaoDecorator;
+import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.immutable.accounts.DebtorLedger;
 import org.ums.domain.model.mutable.accounts.MutableDebtorLedger;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
@@ -43,7 +44,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
   String DELETE_ONE = "DELETE FROM DT_DEBTOR_LEDGER WHERE ID=:id";
 
   public PersistentDebtorLedgerDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-                                   IdGenerator pIdGenerator) {
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
@@ -53,6 +54,14 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
   public List<DebtorLedger> getAll() {
     String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new PersistentDebtorLedgerRowMapper());
+  }
+
+  @Override
+  public List<MutableDebtorLedger> get(List<AccountTransaction> pAccountTransactions) {
+    String query = SELECT_ALL + " WHERE TRANSACTION_ID IN (:TRANSACTION_ID_LIST)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("TRANSACTION_ID_LIST", pAccountTransactions.stream().map(p -> p.getId()).collect(Collectors.toList()));
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentDebtorLedgerRowMapper());
   }
 
   @Override
@@ -122,7 +131,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
 
   private Map<String, Object>[] getParameterObjects(List<MutableDebtorLedger> pMutableDebtorLedgers) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableDebtorLedgers.size()];
-    for (int i = 0; i < pMutableDebtorLedgers.size(); i++) {
+    for(int i = 0; i < pMutableDebtorLedgers.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableDebtorLedgers.get(i));
     }
     return parameterMaps;
@@ -149,7 +158,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
     parameters.put("statUpFlag", pMutableDebtorLedger.getStatUpFlag());
     parameters.put("modifiedDate", pMutableDebtorLedger.getModificationDate());
     parameters.put("modifiedBy", pMutableDebtorLedger.getModifiedBy());
-    parameters.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMISS"));
+    parameters.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     parameters.put("transactionId", pMutableDebtorLedger.getAccountTransactionId());
     return parameters;
   }

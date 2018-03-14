@@ -21,8 +21,11 @@ module ums {
     private journalVouchers: IJournalVoucher[];
     private existingJournalVouchers: IJournalVoucher[];
     private accounts: IAccount[];
-    private bankAndCustomerAccounts: IAccount[];
-    private bankAndCustomerAccountMapWithAccountId: any;
+    private customerAndVendorAccounts: IAccount[];
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
     private totalDebit: number;
     private totalCredit: number;
     private pageNumber: number;
@@ -132,6 +135,7 @@ module ums {
       this.journalVoucherOfAddModal = <IJournalVoucher>{};
       this.journalVoucherOfAddModal.serialNo = this.journalVouchers.length + 1;
       this.journalVoucherOfAddModal.balanceType = BalanceType.Dr;
+      this.getVendorAndCustomerAccounts();
     }
 
     //todo use accounting library
@@ -223,11 +227,19 @@ module ums {
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
     }
 
-    private getBankAndCustomerAccounts(){
-      this.accountService.getBankAndCostTypeAccounts().then((accounts:IAccount[])=>{
-        this.bankAndCustomerAccounts = accounts;
-        this.bankAndCustomerAccountMapWithAccountId={};
-        accounts.forEach((f:IAccount)=>this.bankAndCustomerAccountMapWithAccountId[f.id]=f);
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accounts: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accounts;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+
+      this.accountService.getCustomerAccounts().then((accounts: IAccount[]) => {
+        this.customerAccounts = [];
+        this.customerAccountMapWithId = {};
+        this.customerAccounts = accounts;
+        this.customerAccounts.forEach((v: IAccount) => this.customerAccountMapWithId[v.id] = v);
       });
     }
 

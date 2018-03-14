@@ -5,16 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.accounts.resource.cheque.register.ChequeRegisterBuilder;
+import org.ums.accounts.resource.definitions.account.balance.AccountBalanceResourceHelper;
 import org.ums.accounts.resource.general.ledger.AccountTransactionBuilder;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
 import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
-import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
-import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
-import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
-import org.ums.domain.model.mutable.accounts.MutableMonthBalance;
+import org.ums.domain.model.mutable.accounts.*;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
@@ -23,6 +21,7 @@ import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
+import org.ums.persistent.model.accounts.PersistentDebtorLedger;
 import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
@@ -70,6 +69,14 @@ public class AccountTransactionCommonResourceHelper extends
   protected ChequeRegisterManager mChequeRegisterManager;
   @Autowired
   protected ChequeRegisterBuilder mChequeRegisterBuilder;
+  @Autowired
+  protected AccountBalanceResourceHelper mAccountBalanceResourceHelper;
+
+  @Autowired
+  protected DebtorLedgerManager mDebtorLedgerManager;
+
+  @Autowired
+  protected CreditorLedgerManager mCreditorLedgerManager;
 
   private enum DateCondition {
     Previous,
@@ -355,7 +362,45 @@ public class AccountTransactionCommonResourceHelper extends
         generateUpdatedAccountBalance(currentFinancialAccountYear, accounts, accountMapWithTransaction);
     mAccountBalanceManager.update(accountBalanceList);
 
-    createOrUpdateMonthBalance(accountMapWithTransaction, accountBalanceList);
+    // createOrUpdateMonthBalance(accountMapWithTransaction, accountBalanceList);
+  }
+
+  private void createOrUpdateDebtorLedger(List<AccountTransaction> pAccountTransactions) {
+    List<MutableDebtorLedger> existingDebtorLedgers = mDebtorLedgerManager.get(pAccountTransactions);
+    Map<Long, MutableDebtorLedger> existingDebtorLedgerMap = existingDebtorLedgers.stream().collect(Collectors.toMap(p -> p.getAccountTransactionId(), p -> p));
+    List<MutableDebtorLedger> updateList = new ArrayList<>();
+    List<MutableDebtorLedger> newList = new ArrayList<>();
+    pAccountTransactions.forEach(t -> {
+      if (existingDebtorLedgerMap.containsKey(t.getId())) {
+        MutableDebtorLedger debtorLedger = assignValuesToDebtorLedger(existingDebtorLedgerMap.get(t.getId()), t);
+        updateList.add(debtorLedger);
+      } else {
+        MutableDebtorLedger debtorLedger = new PersistentDebtorLedger();
+        debtorLedger = assignValuesToDebtorLedger(debtorLedger, t);
+        debtorLedger.setId(mIdGenerator.getNumericId());
+        newList.add(debtorLedger);
+      }
+    });
+    if(updateList.size()>0)
+      mDebtorLedgerManager.update(updateList);
+    if(newList.size()>0)
+      mDebtorLedgerManager.create(newList);
+  }
+
+  private MutableDebtorLedger assignValuesToDebtorLedger(MutableDebtorLedger pMutableDebtorLedger,
+      AccountTransaction pAccountTransaction) {
+    MutableDebtorLedger debtorLedger = pMutableDebtorLedger;
+    debtorLedger.setCustomerCode(pAccountTransaction.getCustomerCode());
+    debtorLedger.setAccountTransactionId(pAccountTransaction.getId());
+    debtorLedger.setModifiedBy(pAccountTransaction.getModifiedBy());
+    debtorLedger.setModificationDate(pAccountTransaction.getModifiedDate());
+    debtorLedger.setBalanceType(pAccountTransaction.getBalanceType());
+    debtorLedger.setPaidAmount(pAccountTransaction.getAmount());
+    debtorLedger.setSerialNo(pAccountTransaction.getSerialNo());
+    debtorLedger.setVoucherDate(pAccountTransaction.getVoucherDate());
+    debtorLedger.setVoucherNo(pAccountTransaction.getVoucherNo());
+    debtorLedger.setCompanyId(pAccountTransaction.getCompanyId());
+    return debtorLedger;
   }
 
   private void createOrUpdateMonthBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction, List<MutableAccountBalance> pAccountBalanceList) {
@@ -437,6 +482,9 @@ public class AccountTransactionCommonResourceHelper extends
     for(MutableAccountBalance a : pAccountBalanceList) {
       a.setModifiedDate(new Date());
       MutableAccountTransaction accountTransaction = pAccountMapWithTransaction.get(a.getAccountCode());
+      a =
+          mAccountBalanceResourceHelper.updateMonthlyDebitAndCreditBalance(a, accountTransaction,
+              accountTransaction.getAmount());
       if(accountTransaction.getBalanceType().equals(BalanceType.Cr))
         a.setTotCreditTrans(a.getTotCreditTrans() == null ? accountTransaction.getAmount() : a.getTotCreditTrans().add(
             accountTransaction.getAmount()));

@@ -296,8 +296,7 @@ public class PersistentDebtorLedger implements MutableDebtorLedger {
     sDebtorLedgerManager.delete(this);
   }
 
-  public PersistentDebtorLedger() {
-  }
+  public PersistentDebtorLedger() {}
 
   public PersistentDebtorLedger(MutableDebtorLedger pDebtorLedger) {
     setId(pDebtorLedger.getId());

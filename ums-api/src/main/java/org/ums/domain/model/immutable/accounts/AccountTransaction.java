@@ -24,6 +24,10 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
 
   String getDivisionCode();
 
+  String getCustomerCode();
+
+  String getSupplierCode();
+
   String getVoucherNo();
 
   Date getVoucherDate();

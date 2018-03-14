@@ -86,7 +86,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
       accountBalance.setId(mIdGenerator.getNumericId());
       accountBalance.setYearOpenBalanceType(BalanceType.Dr);
-      accountBalance.setYearOpenBalance(new BigDecimal(0.00));
+      accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
       accountBalance.setAccountCode(id);
@@ -114,7 +114,29 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     List<String> groupCodeList = new ArrayList<>();
     groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
     groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    List<Group> groups = mGroupManager.getIncludingMainGroupList(groupCodeList);
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public JsonObject getVendorAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public JsonObject getCustomerAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  private JsonObject getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+    List<Group> groups = mGroupManager.getIncludingMainGroupList(pGroupCodeList);
+    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    return getJsonObject(pUriInfo, accounts);
+  }
+
+  private JsonObject getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+    List<Group> groups = mGroupManager.getExcludingMainGroupList(pGroupCodeList);
     List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
     return getJsonObject(pUriInfo, accounts);
   }
@@ -123,18 +145,15 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     List<String> groupCodeList = new ArrayList<String>();
     groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
     groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    List<Group> groups = mGroupManager.getIncludingMainGroupList(groupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+
   }
 
   public JsonObject getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
     groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
     groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    List<Group> groups = mGroupManager.getExcludingMainGroupList(groupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    return getAccountExcludingGroupList(groupCodeList, pUriInfo);
   }
 
   private JsonObject getJsonObject(UriInfo pUriInfo, List<Account> pAccounts) {

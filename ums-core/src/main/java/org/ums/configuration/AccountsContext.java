@@ -82,11 +82,13 @@ public class AccountsContext {
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
+  @Bean
   DebtorLedgerManager debtorLedgerManager() {
     return new PersistentDebtorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
+  @Bean
   CreditorLedgerManager creditorLedgerManager() {
     return new PersistentCreditorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);

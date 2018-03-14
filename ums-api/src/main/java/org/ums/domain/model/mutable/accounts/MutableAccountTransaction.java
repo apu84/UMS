@@ -23,6 +23,10 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
 
   void setDivisionCode(String pDivisionCode);
 
+  void setCustomerCode(String pCustomerCode);
+
+  void setSupplierCode(String pSupplierCode);
+
   void setVoucherNo(String pVoucherNo);
 
   void setVoucherDate(Date pVoucherDate);

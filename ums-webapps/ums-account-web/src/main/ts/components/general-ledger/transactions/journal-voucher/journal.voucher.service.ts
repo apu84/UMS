@@ -25,6 +25,9 @@ module ums {
     serialNo: number;
     account: IAccount;
     accountId: string;
+    customerId: string;
+    supplierId: string;
+    vendorId: string;
     voucher: IVoucher;
     voucherId: string;
     amount: number;

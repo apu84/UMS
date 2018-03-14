@@ -102,5 +102,9 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
           "dd-MM-yyyy"));
     if(pJsonObject.containsKey("modifiedBy"))
       pMutableAccountTransaction.setModifiedBy(pJsonObject.getString("modifiedBy"));
+    if(pJsonObject.containsKey("supplierCode"))
+      pMutableAccountTransaction.setSupplierCode(pJsonObject.getString("supplierCode"));
+    if(pJsonObject.containsKey("customerCode"))
+      pMutableAccountTransaction.setCustomerCode(pJsonObject.getString("customerCode"));
   }
 }

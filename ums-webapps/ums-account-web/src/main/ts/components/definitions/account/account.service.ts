@@ -103,6 +103,20 @@ module ums{
           ((response: IAccountResponse) => defer.resolve(response.entries)));
       return defer.promise;
     }
+
+    public getVendorAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/vendor-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccountResponse) => defer.resolve(response.entries)));
+      return defer.promise;
+    }
+
+    public getCustomerAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/customer-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccountResponse) => defer.resolve(response.entries)));
+      return defer.promise;
+    }
   }
 
   UMS.service("AccountService", AccountService);
