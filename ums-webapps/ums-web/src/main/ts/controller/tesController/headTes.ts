@@ -222,7 +222,7 @@ module ums{
            console.log("comment---------");
                appTES=json;
                this.studentComments=appTES;
-              // this.commentPgTotalRecords=this.studentComments.length;
+              this.commentPgTotalRecords=this.studentComments.length;
                console.log(this.studentComments);
                defer.resolve(json);
            },
