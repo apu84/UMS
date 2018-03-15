@@ -14,10 +14,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +27,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
 
   String SELECT_ALL = "select * from dt_creditor_ledger";
   String UPDATE_ONE = "UPDATE DT_CREDITOR_LEDGER SET " + "COMP_CODE=:compCode, " + "  DIVISION_CODE=:divisionCode, "
-      + "  CUSTOMER_CODE=:customerCode, " + "  VOUCHER_NO=:voucherNo, " + "  VOUCHER_DATE=:voucherDate, "
+      + "  SUPPLIER_CODE=:supplierCode, " + "  VOUCHER_NO=:voucherNo, " + "  VOUCHER_DATE=:voucherDate, "
       + "  SR_NO=:serialNo, " + "  BILL_NO=:billNo, " + "  bill_date=:billDate, " + "  AMOUNT=:amount, "
       + "  PAID_AMOUNT=:paidAmount, " + "  DUE_DATE=:dueDate, " + "  BALANCE_TYPE=:balanceType, "
       + "  bill_close_flag=:billCloseFlag, " + "  CURRENCY_CODE=:currencyCode, " + "  vat_no=:vatNo, "
@@ -39,8 +36,8 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
       + "  last_modified=:lastModified, " + "  TRANSACTION_ID=:transactionId " + "where id=:id";
 
   String INSERT_ONE =
-      "INSERT INTO dt_creditor_ledger(ID, COMP_CODE, DIVISION_CODE, VOUCHER_NO, VOUCHER_DATE, SR_NO, bill_no, bill_date, AMOUNT, PAID_AMOUNT, DUE_DATE, BALANCE_TYPE, bill_close_flag, CURRENCY_CODE, vat_no, cont_code, order_no, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED, TRANSACTION_ID) VALUES "
-          + "  (:id, :compCode, :divisionCode, :voucherNo, :voucherDate, :srNo, :billNo, :billDate, :amount, :paidAmount, :dueDate, :balanceType, :billCloseFlag, :currencyCode,:vatNo, :contCode, :orderNo, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
+      "INSERT INTO dt_creditor_ledger(ID, COMP_CODE, DIVISION_CODE, SUPPLIER_CODE, VOUCHER_NO, VOUCHER_DATE, SR_NO, bill_no, bill_date, AMOUNT, PAID_AMOUNT, DUE_DATE, BALANCE_TYPE, bill_close_flag, CURRENCY_CODE, vat_no, cont_code, order_no, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED, TRANSACTION_ID) VALUES "
+          + "  (:id, :compCode, :divisionCode,:supplierCode, :voucherNo, :voucherDate, :serialNo, :billNo, :billDate, :amount, :paidAmount, :dueDate, :balanceType, :billCloseFlag, :currencyCode,:vatNo, :contCode, :orderNo, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
 
   String DELETE_ONE = "DELETE FROM dt_creditor_ledger WHERE ID=:id";
 
@@ -108,6 +105,8 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
 
   @Override
   public List<MutableCreditorLedger> get(List<AccountTransaction> pAccountTransactions) {
+    if (pAccountTransactions.size() == 0)
+      return new ArrayList<>();
     String query = SELECT_ALL + " WHERE TRANSACTION_ID IN (:TRANSACTION_ID_LIST)";
     Map parameterMap = new HashMap();
     parameterMap.put("TRANSACTION_ID_LIST", pAccountTransactions.stream().map(p -> p.getId()).collect(Collectors.toList()));
@@ -143,7 +142,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
     parameters.put("supplierCode", pMutableCreditorLedger.getSupplierCode());
     parameters.put("voucherNo", pMutableCreditorLedger.getVoucherNo());
     parameters.put("voucherDate", pMutableCreditorLedger.getVoucherDate());
-    parameters.put("srNo", pMutableCreditorLedger.getSerialNo());
+    parameters.put("serialNo", pMutableCreditorLedger.getSerialNo());
     parameters.put("billNo", pMutableCreditorLedger.getBillNo());
     parameters.put("billDate", pMutableCreditorLedger.getBillDate());
     parameters.put("amount", pMutableCreditorLedger.getAmount());

@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Add Journal Voucher</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" >
+                <form class="form-horizontal" name="addForm">
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="serialNo">Serial No:</label>
                         <div class="col-sm-6">
@@ -19,34 +19,88 @@
                         <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
                         <div class="col-sm-6">
                             <ui-select id="room" theme="bootstrap"
-                                       data-ng-model="vm.journalVoucherOfAddModal.account"
+                                       data-ng-model="vm.journalVoucherOfAddModal.account" name="accountName"
                             >
                                 <ui-select-match placeholder="Select Account">{{vm.journalVoucherOfAddModal.account.accountName}}
                                 </ui-select-match>
-                                <ui-select-choices repeat="g in vm.accounts|filter:$select.search">
+                                <ui-select-choices repeat="g in vm.accounts|filter:$select.search"
+                                                   required>
                                     <small ng-bind-html="g.accountName | highlight:$select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
                         </div>
                     </div>
-                    <div class="form-group" ng-if="vm.customerAccountMapWithId[vm.journalVoucherOfAddModal.account.id]">
-                        <label class="control-label col-sm-4" for="customerAccount">Customer Id:</label>
-                        <div class="col-sm-6">
-                            <input type="number" class="form-control" id="customerAccount"
-                                   ng-model="vm.journalVoucherOfAddModal.customerId">
+                    <span ng-show="addForm.accountName.$touched && addForm.accountName.$invalid">Account is required</span>
+                    <div ng-if="vm.vendorAccountMapWithId[vm.journalVoucherOfAddModal.account.id]">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Customer Id:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="customerAccount" name="customerId"
+                                       ng-model="vm.journalVoucherOfAddModal.customerCode" required>
+                                <span ng-show="addForm.customerId.$touched && addForm.customerId.$invalid">Customer Id is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Bill No:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="billNo"
+                                       ng-model="vm.journalVoucherOfAddModal.billNo" name="billNo" required>
+                                <span ng-show="addForm.billNo.$touched && addForm.billNo.$invalid">Bill No is required</span>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Bill Date:</label>
+                            <div class="col-sm-6">
+                                <div date-picker date-model="vm.journalVoucherOfAddModal.billDate"
+                                     date-format="DD-MM-YYYY" name="billDate" required></div>
+                                <span ng-show="addForm.billDate.$touched && addForm.billDate.$invalid">Bill date is required</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group" ng-if="vm.vendorAccountMapWithId[vm.journalVoucherOfAddModal.account.id]">
-                        <label class="control-label col-sm-4" for="vendorAccount">Vendor Id:</label>
-                        <div class="col-sm-6">
-                            <input type="number" class="form-control" id="vendorAccount"
-                                   ng-model="vm.journalVoucherOfAddModal.supplierId">
+                    <div ng-if="vm.customerAccountMapWithId[vm.journalVoucherOfAddModal.account.id]">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="vendorAccount">Vendor Id:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="vendorAccount"
+                                       ng-model="vm.journalVoucherOfAddModal.supplierCode" name="vendorId" required>
+                                <span ng-show="addForm.vendorId.$touched && addForm.vendorId.$invalid">Vendor Id is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Invoice No:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="invoiceNo"
+                                       ng-model="vm.journalVoucherOfAddModal.invoiceNo" required name="invoiceNo">
+                                <span ng-show="addForm.invoiceNo.$touched && addForm.invoiceNo.$invalid">Invoice No is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Invoice Date:</label>
+                            <div class="col-sm-6">
+                                <div date-picker date-model="vm.journalVoucherOfAddModal.invoiceDate"
+                                     date-format="DD-MM-YYYY" requierd name="invoiceDate"></div>
+                                <span ng-show="addForm.invoiceDate.$touched && addForm.invoiceDate.$invalid">Invoice Date is required</span>
+                            </div>
                         </div>
                     </div>
+
+
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="amountInSpecific">Amount In Specific:</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" id="amountInSpecific" ng-model="vm.journalVoucherOfAddModal.amount">
+                            <input type="number" class="form-control" id="amountInSpecific"
+                                   ng-model="vm.journalVoucherOfAddModal.amount" required name="amount">
+                            <span ng-show="addForm.amount.$touched && addForm.amount.$invalid">Amount is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-if="(vm.vendorAccountMapWithId[vm.journalVoucherOfAddModal.account.id] || vm.customerAccountMapWithId[vm.journalVoucherOfAddModal.account.id])">
+                        <label class="control-label col-sm-4" for="amountInSpecific">Paid Amount:</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="paidAmount"
+                                   ng-model="vm.journalVoucherOfAddModal.paidAmount" required name="paidAmount">
+                            <span ng-show="addForm.paidAmount.$touched && addForm.paidAmount.$invalid">Paid amount is required</span>
                         </div>
                     </div>
                     <div class="form-group">

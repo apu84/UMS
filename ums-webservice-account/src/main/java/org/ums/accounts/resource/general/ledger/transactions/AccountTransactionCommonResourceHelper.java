@@ -21,8 +21,8 @@ import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
+import org.ums.persistent.model.accounts.PersistentCreditorLedger;
 import org.ums.persistent.model.accounts.PersistentDebtorLedger;
-import org.ums.persistent.model.accounts.PersistentMonthBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
@@ -177,6 +177,8 @@ public class AccountTransactionCommonResourceHelper extends
   @Transactional
   public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
+    createOrUpdateCreditorLedger(transactions.stream().filter(t -> t.getSupplierCode() != null).collect(Collectors.toList()));
+    createOrUpdateDebtorLedger(transactions.stream().filter(t -> t.getCustomerCode() != null).collect(Collectors.toList()));
     transactions.forEach(t -> t.setVoucherNo(t.getVoucherNo().substring(2)));
     return new ArrayList<>(transactions);
   }
@@ -219,7 +221,17 @@ public class AccountTransactionCommonResourceHelper extends
     Date dateObj = UmsUtils.convertToDate(pDate, "yyyy-MM-dd");
     Company company = mCompanyManager.getDefaultCompany();
     List<MutableAccountTransaction> mutableAccountTransactions = getContentManager().getByVoucherNoAndDate(company.getId() + pVoucherNo, dateObj);
-    mutableAccountTransactions.forEach(a -> a.setVoucherNo(a.getVoucherNo().substring(2)));
+    List<MutableDebtorLedger> debtorLedgers = mDebtorLedgerManager.get(new ArrayList<>(mutableAccountTransactions));
+    List<MutableCreditorLedger> creditorLedgers = mCreditorLedgerManager.get(new ArrayList<>(mutableAccountTransactions));
+    Map<Long, DebtorLedger> debtorLedgerMapWithTransaction = debtorLedgers.stream().collect(Collectors.toMap(d -> d.getAccountTransactionId(), d -> d));
+    Map<Long, CreditorLedger> creditorLedgerMapWithTransaction = creditorLedgers.stream().collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
+    mutableAccountTransactions.forEach(a -> {
+      a.setVoucherNo(a.getVoucherNo().substring(2));
+      if (debtorLedgerMapWithTransaction.containsKey(a.getId()))
+        a.setCustomerCode(debtorLedgerMapWithTransaction.get(a.getId()).getCustomerCode());
+      if (creditorLedgerMapWithTransaction.containsKey(a.getId()))
+        a.setSupplierCode(creditorLedgerMapWithTransaction.get(a.getId()).getSupplierCode());
+    });
     return new ArrayList<>(mutableAccountTransactions);
   }
 
@@ -298,6 +310,7 @@ public class AccountTransactionCommonResourceHelper extends
     return pPersistentChequeRegister;
   }
 
+  @Transactional
   public List<AccountTransaction> postTransactions(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
@@ -319,8 +332,7 @@ public class AccountTransactionCommonResourceHelper extends
       if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
-      }
-      else {
+      } else {
         updateTransactions.add(transaction);
       }
       chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
@@ -336,6 +348,8 @@ public class AccountTransactionCommonResourceHelper extends
     newTransactions.addAll(updateTransactions);
     updateOrSaveChequeRegister(chequeRegisters, newTransactions);
     updateAccountBalance(newTransactions);
+    createOrUpdateCreditorLedger(newTransactions.stream().filter(t -> t.getSupplierCode() != null).collect(Collectors.toList()));
+    createOrUpdateDebtorLedger(newTransactions.stream().filter(t -> t.getCustomerCode() != null).collect(Collectors.toList()));
     newTransactions.forEach(a -> a.setVoucherNo(a.getVoucherNo().substring(2)));
     return new ArrayList<>(newTransactions);
   }
@@ -387,6 +401,28 @@ public class AccountTransactionCommonResourceHelper extends
       mDebtorLedgerManager.create(newList);
   }
 
+  private void createOrUpdateCreditorLedger(List<AccountTransaction> pAccountTransactions) {
+    List<MutableCreditorLedger> existingDebtorLedgers = mCreditorLedgerManager.get(pAccountTransactions);
+    Map<Long, MutableCreditorLedger> existingCreditorLedgerMap = existingDebtorLedgers.stream().collect(Collectors.toMap(p -> p.getAccountTransactionId(), p -> p));
+    List<MutableCreditorLedger> updateList = new ArrayList<>();
+    List<MutableCreditorLedger> newList = new ArrayList<>();
+    pAccountTransactions.forEach(t -> {
+      if (existingCreditorLedgerMap.containsKey(t.getId())) {
+        MutableCreditorLedger creditorLedger = assignValuesToCreditorLedger(existingCreditorLedgerMap.get(t.getId()), t);
+        updateList.add(creditorLedger);
+      } else {
+        MutableCreditorLedger creditorLedger = new PersistentCreditorLedger();
+        creditorLedger = assignValuesToCreditorLedger(creditorLedger, t);
+        creditorLedger.setId(mIdGenerator.getNumericId());
+        newList.add(creditorLedger);
+      }
+    });
+    if (updateList.size() > 0)
+      mCreditorLedgerManager.update(updateList);
+    if (newList.size() > 0)
+      mCreditorLedgerManager.create(newList);
+  }
+
   private MutableDebtorLedger assignValuesToDebtorLedger(MutableDebtorLedger pMutableDebtorLedger,
       AccountTransaction pAccountTransaction) {
     MutableDebtorLedger debtorLedger = pMutableDebtorLedger;
@@ -400,39 +436,29 @@ public class AccountTransactionCommonResourceHelper extends
     debtorLedger.setVoucherDate(pAccountTransaction.getVoucherDate());
     debtorLedger.setVoucherNo(pAccountTransaction.getVoucherNo());
     debtorLedger.setCompanyId(pAccountTransaction.getCompanyId());
+    debtorLedger.setInvoiceNo(pAccountTransaction.getInvoiceNo());
+    debtorLedger.setInvoiceDate(pAccountTransaction.getInvoiceDate());
+    debtorLedger.setPaidAmount(pAccountTransaction.getPaidAmount());
     return debtorLedger;
   }
 
-  private void createOrUpdateMonthBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction, List<MutableAccountBalance> pAccountBalanceList) {
-    Date date = new Date();
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(date);
-    int month = calendar.get(Calendar.MONTH) + 1;
-    List<MutableMonthBalance> existingMonthBalance = mMonthBalanceManager.getExistingMonthBalanceBasedOnAccountBalance(pAccountBalanceList, new Long(month));
-    Map<Long, MutableMonthBalance> accountBalanceIdMapWithMonthBalance = existingMonthBalance.stream()
-        .collect(Collectors.toMap(i -> i.getAccountBalanceId(), i -> i));
-    List<MutableMonthBalance> newMonthBalance = new ArrayList<>();
-    List<MutableMonthBalance> updatedMonthBalance = new ArrayList<>();
-    pAccountBalanceList.forEach(a -> {
-      MutableAccountTransaction transaction = pAccountMapWithTransaction.get(a.getAccountCode());
-      MutableMonthBalance monthBalance = new PersistentMonthBalance();
-      monthBalance = initializeMonthBalance(month, accountBalanceIdMapWithMonthBalance, a, monthBalance);
-      adjustTotalDebitOrCreditBalance(transaction, monthBalance);
-      if (accountBalanceIdMapWithMonthBalance.containsKey(a.getId()))
-        updatedMonthBalance.add(monthBalance);
-      else
-        newMonthBalance.add(monthBalance);
-    });
-
-    insertNewOrUpdatedMonthBalance(newMonthBalance, updatedMonthBalance);
-  }
-
-  private void insertNewOrUpdatedMonthBalance(List<MutableMonthBalance> pNewMonthBalance,
-      List<MutableMonthBalance> pUpdatedMonthBalance) {
-    if(pNewMonthBalance.size() > 0)
-      mMonthBalanceManager.create(pNewMonthBalance);
-    if(pUpdatedMonthBalance.size() > 0)
-      mMonthBalanceManager.update(pUpdatedMonthBalance);
+  private MutableCreditorLedger assignValuesToCreditorLedger(MutableCreditorLedger pMutableCreditorLedger,
+      AccountTransaction pAccountTransaction) {
+    MutableCreditorLedger creditorLedger = pMutableCreditorLedger;
+    creditorLedger.setSupplierCode(pAccountTransaction.getSupplierCode());
+    creditorLedger.setAccountTransactionId(pAccountTransaction.getId());
+    creditorLedger.setModifiedBy(pAccountTransaction.getModifiedBy());
+    creditorLedger.setModificationDate(pAccountTransaction.getModifiedDate());
+    creditorLedger.setBalanceType(pAccountTransaction.getBalanceType());
+    creditorLedger.setPaidAmount(pAccountTransaction.getAmount());
+    creditorLedger.setSerialNo(pAccountTransaction.getSerialNo());
+    creditorLedger.setVoucherDate(pAccountTransaction.getVoucherDate());
+    creditorLedger.setVoucherNo(pAccountTransaction.getVoucherNo());
+    creditorLedger.setCompanyId(pAccountTransaction.getCompanyId());
+    creditorLedger.setBillNo(pAccountTransaction.getBillNo());
+    creditorLedger.setBillDate(pAccountTransaction.getBillDate());
+    creditorLedger.setPaidAmount(pAccountTransaction.getPaidAmount());
+    return creditorLedger;
   }
 
   private void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
@@ -449,20 +475,6 @@ public class AccountTransactionCommonResourceHelper extends
           : pMonthBalance.getTotalMonthCreditBalance());
     }
 
-  }
-
-  private MutableMonthBalance initializeMonthBalance(int pMonth,
-      Map<Long, MutableMonthBalance> pAccountBalanceIdMapWithMonthBalance, MutableAccountBalance a,
-      MutableMonthBalance pMonthBalance) {
-    if(pAccountBalanceIdMapWithMonthBalance.containsKey(a.getId())) {
-      pMonthBalance = pAccountBalanceIdMapWithMonthBalance.get(a.getId());
-    }
-    else {
-      pMonthBalance.setId(mIdGenerator.getNumericId());
-      pMonthBalance.setMonthId(new Long(pMonth));
-      pMonthBalance.setAccountBalanceId(a.getId());
-    }
-    return pMonthBalance;
   }
 
   @NotNull

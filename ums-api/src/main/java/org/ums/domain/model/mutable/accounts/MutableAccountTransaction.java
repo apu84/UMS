@@ -27,6 +27,14 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
 
   void setSupplierCode(String pSupplierCode);
 
+  void setBillNo(String pBillNo);
+
+  void setBillDate(Date pBillDate);
+
+  void setInvoiceNo(String pInvoiceNo);
+
+  void setInvoiceDate(Date pInvoiceDate);
+
   void setVoucherNo(String pVoucherNo);
 
   void setVoucherDate(Date pVoucherDate);
@@ -42,6 +50,8 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
   void setVoucherId(Long pVoucherId);
 
   void setAmount(BigDecimal pAmount);
+
+  void setPaidAmount(BigDecimal pPaidAmount);
 
   void setBalanceType(BalanceType pBalanceType);
 

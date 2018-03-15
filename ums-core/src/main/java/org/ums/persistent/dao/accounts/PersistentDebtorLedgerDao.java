@@ -14,10 +14,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +36,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
 
   String INSERT_ONE =
       "INSERT INTO DT_DEBTOR_LEDGER(ID, COMP_CODE, DIVISION_CODE, VOUCHER_NO, VOUCHER_DATE, SR_NO, INVOICE_NO, INVOICE_DATE, AMOUNT, PAID_AMOUNT, DUE_DATE, BALANCE_TYPE, INVOICE_CLOSE_FLAG, CURRENCY_CODE, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED, TRANSACTION_ID) VALUES "
-          + "  (:id, :compCode, :divisionCode, :voucherNo, :voucherDate, :srNo, :invoiceNo, :invoiceDate, :amount, :paidAmount, :dueDate, :balanceType, :invoiceCloseFlag, :currencyCode, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
+          + "  (:id, :compCode, :divisionCode, :voucherNo, :voucherDate, :serialNo, :invoiceNo, :invoiceDate, :amount, :paidAmount, :dueDate, :balanceType, :invoiceCloseFlag, :currencyCode, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
 
   String DELETE_ONE = "DELETE FROM DT_DEBTOR_LEDGER WHERE ID=:id";
 
@@ -58,6 +55,8 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
 
   @Override
   public List<MutableDebtorLedger> get(List<AccountTransaction> pAccountTransactions) {
+    if (pAccountTransactions.size() == 0)
+      return new ArrayList<>();
     String query = SELECT_ALL + " WHERE TRANSACTION_ID IN (:TRANSACTION_ID_LIST)";
     Map parameterMap = new HashMap();
     parameterMap.put("TRANSACTION_ID_LIST", pAccountTransactions.stream().map(p -> p.getId()).collect(Collectors.toList()));
@@ -145,7 +144,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
     parameters.put("customerCode", pMutableDebtorLedger.getCustomerCode());
     parameters.put("voucherNo", pMutableDebtorLedger.getVoucherNo());
     parameters.put("voucherDate", pMutableDebtorLedger.getVoucherDate());
-    parameters.put("srNo", pMutableDebtorLedger.getSerialNo());
+    parameters.put("serialNo", pMutableDebtorLedger.getSerialNo());
     parameters.put("invoiceNo", pMutableDebtorLedger.getInvoiceNo());
     parameters.put("invoiceDate", pMutableDebtorLedger.getInvoiceDate());
     parameters.put("amount", pMutableDebtorLedger.getAmount());

@@ -179,7 +179,11 @@ module ums {
     }
 
     public fetchDetails(journalVoucher: IJournalVoucher) {
+      console.log("Selected currency");
+      console.log(this.selectedCurrency);
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
+        console.log("Fetch vouchers");
+        console.log(vouchers);
         this.configureAddVoucherSection(vouchers);
       });
     }

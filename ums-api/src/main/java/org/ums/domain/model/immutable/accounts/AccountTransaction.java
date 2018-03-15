@@ -26,6 +26,14 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
 
   String getCustomerCode();
 
+  String getInvoiceNo();
+
+  Date getInvoiceDate();
+
+  String getBillNo();
+
+  Date getBillDate();
+
   String getSupplierCode();
 
   String getVoucherNo();
@@ -43,6 +51,8 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
   Long getVoucherId();
 
   BigDecimal getAmount();
+
+  BigDecimal getPaidAmount();
 
   BalanceType getBalanceType();
 
