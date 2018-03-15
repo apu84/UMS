@@ -480,7 +480,7 @@
     <div class="row">
         <div class="text-left col-md-6" style="padding-top: 45px;padding-left: 2%;"
              data-ng-if="data.readOnlyMode==false">
-            <button data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer"
+            <button data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer" class="btn btn-dark btn-success"
                     data-ng-click="validateRecordBeforeDelete()"><b>Delete Record</b></button>
         </div>
         <div class="text-right col-md-6" style="padding-top: 45px;padding-left: 2%;"
@@ -537,16 +537,28 @@
                         </table>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <strong style="color: red">Force Delete</strong> will also delete those items. Are you sure
-                            to do force delete?
+                        <div data-ng-show="canRecordDelete">
+                            <div class="col-md-12">
+                                <strong style="color: red">Force Delete</strong> will also delete those items. Are you
+                                sure
+                                to do force delete?
+                            </div>
+                        </div>
+                        <div data-ng-show="!canRecordDelete">
+                            <div class="col-md-12">
+                                You can not perform <strong style="color: red">Delete</strong>. One of the item is
+                                <strong>borrowed </strong> or <strong>on Hold</strong>.
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-primary"
-                                data-ng-click="deleteRecord()">Force Delete
-                        </button>
+                        <div data-ng-show="canRecordDelete">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                            <button type="button" data-dismiss="modal"
+                                    class="btn btn-primary"
+                                    data-ng-click="deleteRecord()">Force Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div data-ng-if="items.length==0">

@@ -51,7 +51,7 @@
                         <i class="fa fa-pencil-square-o" style="cursor: pointer;"
                            data-ng-click="fetchItem(item.id, 'edit')"></i>
                         <a data-target="#modal-confirm1" data-toggle="modal"
-                        style="cursor: pointer" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
+                           style="cursor: pointer" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
 
@@ -282,12 +282,16 @@
 <div id="modal-confirm1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">Are you sure? You want to delete this item</div>
+            <div class="modal-body"><span data-ng-show="canItemDelete">Are you sure? You want to delete this item</span>
+                <span data-ng-show="!canItemDelete">You can not perform <strong style="color: red">delete</strong>. Item is <strong>borrowed</strong> or <strong>on Hold</strong>.</span>
+            </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
-                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
-                    Yes, Delete It
-                </button>
+                <div data-ng-show="canItemDelete">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
+                        Yes, Delete It
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -57,6 +57,8 @@ module ums {
         deleteItem: Function;
         confirmation: Function;
         itemId: string;
+        canRecordDelete: boolean;
+        canItemDelete: boolean;
     }
 
     export class Cataloging {
@@ -851,7 +853,13 @@ module ums {
         }
 
         public deleteItem(itemId: string): void {
+            this.$scope.canItemDelete = true;
             this.$scope.itemId = itemId;
+            this.catalogingService.fetchItem(itemId).then((data: any) => {
+                if(data.circulationStatus != 0){
+                    this.$scope.canItemDelete = false;
+                }
+            });
         }
 
         public confirmation(): void{
@@ -866,12 +874,19 @@ module ums {
         }
 
         public validateRecordBeforeDelete(): void {
+            this.$scope.canRecordDelete = true;
             this.$scope.items = Array<IItem>();
             this.catalogingService.fetchItems(this.$scope.record.mfnNo).then((results: any) => {
                 this.$scope.items = results;
-                console.log(this.$scope.items);
-                console.log(this.$scope.items.length);
-            })
+                if(this.$scope.items.length > 0){
+                    for(var i = 0; i < this.$scope.items.length; i++){
+                        if(this.$scope.items[i].circulationStatus != 0){
+                            this.$scope.canRecordDelete = false;
+                            break;
+                        }
+                    }
+                }
+            });
         }
     }
 
