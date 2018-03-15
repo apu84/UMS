@@ -60,6 +60,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   @JsonProperty("receipt")
   private Receipt receipt;
   private Long receiptId;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   private Date postDate;
   private AccountTransactionType accountTransactionType;
   private Date modifiedDate;
@@ -68,6 +69,14 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private String message;
   private String supplierCode;
   private String customerCode;
+  private String billNo;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  private Date billDate;
+  private String invoiceNo;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  private Date invoiceDate;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  private BigDecimal paidAmount;
 
   @Override
   public AccountTransactionType getAccountTransactionType() {
@@ -77,6 +86,56 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   @Override
   public String getSupplierCode() {
     return supplierCode;
+  }
+
+  @Override
+  public String getBillNo() {
+    return billNo;
+  }
+
+  @Override
+  public void setBillNo(String pBillNo) {
+    billNo = pBillNo;
+  }
+
+  @Override
+  public Date getBillDate() {
+    return billDate;
+  }
+
+  @Override
+  public void setBillDate(Date pBillDate) {
+    billDate = pBillDate;
+  }
+
+  @Override
+  public String getInvoiceNo() {
+    return invoiceNo;
+  }
+
+  @Override
+  public void setInvoiceNo(String pInvoiceNo) {
+    invoiceNo = pInvoiceNo;
+  }
+
+  @Override
+  public Date getInvoiceDate() {
+    return invoiceDate;
+  }
+
+  @Override
+  public void setInvoiceDate(Date pInvoiceDate) {
+    invoiceDate = pInvoiceDate;
+  }
+
+  @Override
+  public BigDecimal getPaidAmount() {
+    return paidAmount;
+  }
+
+  @Override
+  public void setPaidAmount(BigDecimal pPaidAmount) {
+    paidAmount = pPaidAmount;
   }
 
   @Override
@@ -118,7 +177,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setCompany(Company pCompany) {
     this.company = pCompany;
   }
@@ -140,7 +198,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setDefaultCompanyId(String pDefaultCompanyId) {
     defaultCompanyId = pDefaultCompanyId;
   }
@@ -163,7 +220,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setDivisionCode(String pDivisionCode) {
     this.divisionCode = pDivisionCode;
   }
@@ -206,7 +262,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setAccount(Account pAccount) {
     this.account = pAccount;
   }
@@ -229,7 +284,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setVoucher(Voucher pVoucher) {
     this.voucher = pVoucher;
   }
@@ -292,7 +346,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonIgnore
   public void setCurrency(Currency pCurrency) {
     this.currency = pCurrency;
   }
@@ -385,7 +438,6 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   public Date getPostDate() {
     return postDate;
   }
