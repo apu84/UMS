@@ -8,14 +8,22 @@
     <div class="form-group">
         <label for="mfnNo" class="col-md-1 control-label">MFN No</label>
         <div class="col-md-3">
-            <input type="text" class="form-control dottedInput" disabled="disabled" data-ng-model="record.mfnNo"
+            <input type="text"
+                   class="form-control dottedInput"
+                   disabled="disabled"
+                   data-ng-model="record.mfnNo"
                    id="mfnNo" style="border:1px dashed;"/>
         </div>
 
         <label for="language" class="col-md-1 control-label">Language</label>
         <div class="col-md-3">
-            <select style="width: 98%" data-ng-model="record.language" id="language" name="language" cRequired=" "
-                    ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}"
+            <select style="width: 98%"
+                    data-ng-model="record.language"
+                    id="language"
+                    name="language"
+                    cRequired=" "
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}"
                     data-convert-to-number>
                 <option data-ng-repeat="lang in data.languageOptions" value="{{lang.id}}">{{lang.name}}</option>
             </select>
@@ -23,10 +31,15 @@
 
         <label for="materialType" class="col-md-1 control-label">Material Type</label>
         <div class="col-md-3">
-            <select class="required" style="width: 98%" data-ng-model="record.materialType"
-                    data-ng-change="setMaterialTypeName(record.materialType)" ng-disabled="data.readOnlyMode"
+            <select class="required"
+                    style="width: 98%"
+                    data-ng-model="record.materialType"
+                    data-ng-change="setMaterialTypeName(record.materialType)"
+                    ng-disabled="data.readOnlyMode"
                     ng-class="{'disabledElement': data.readOnlyMode}"
-                    id="materialType" name="materialType" data-convert-to-number>
+                    id="materialType"
+                    name="materialType"
+                    data-convert-to-number>
                 <option data-ng-repeat="material in data.materialTypeOptions" value="{{material.id}}">
                     {{material.name}}
                 </option>
@@ -37,8 +50,13 @@
     <div class="form-group">
         <label class="col-md-1 control-label" for="recordStatus">Library Status</label>
         <div class="col-md-3">
-            <select style="width: 98%" data-ng-model="record.status" id="recordStatus" name="recordStatus" cRequired=" "
-                    ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}"
+            <select style="width: 98%"
+                    data-ng-model="record.status"
+                    id="recordStatus"
+                    name="recordStatus"
+                    cRequired=" "
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}"
                     data-convert-to-number>
                 <option data-ng-repeat="record in data.recordStatusOptions" value="{{record.id}}">{{record.name}}
                 </option>
@@ -47,22 +65,35 @@
 
         <label class="col-md-1 control-label" for="bindingType">Binding Type</label>
         <div class="col-md-3">
-            <select style="width: 98%" data-ng-model="record.bindingType" id="bindingType" name="bindingType"
-                    cRequired=" " ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}"
+            <select style="width: 98%"
+                    data-ng-model="record.bindingType"
+                    id="bindingType"
+                    name="bindingType"
+                    cRequired=" "
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}"
                     data-convert-to-number>
                 <option data-ng-repeat="binding in data.bindingTypeOptions" value="{{binding.id}}">{{binding.name}}
                 </option>
             </select>
         </div>
         <label class="col-md-1 control-label" for="acqType">Acqui. Type
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
+                 height="16" width="16"
+                 style="float: right;cursor: pointer;margin-left: 5px;"
+                 data-toggle="tooltip"
+                 data-placement="top"
                  title="Acquisition Type"/>
         </label>
 
         <div class="col-md-3">
-            <select style="width: 98%" data-ng-model="record.acqType" id="acqType" name="acqType" cRequired=" "
-                    ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}"
+            <select style="width: 98%"
+                    data-ng-model="record.acqType"
+                    id="acqType"
+                    name="acqType"
+                    cRequired=" "
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}"
                     data-convert-to-number>
                 <option data-ng-repeat="acqType in data.acquisitionTypeOptions" value="{{acqType.id}}">
                     {{acqType.name}}
@@ -73,125 +104,214 @@
     <div class="form-group">
         <label class="col-md-1 control-label" for="title">Title</label>
         <div class="col-md-11">
-            <input type="text" placeholder="" class="form-control dottedInput required" data-ng-model="record.title"
-                   name="title" id="title" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput required"
+                   data-ng-model="record.title"
+                   name="title"
+                   id="title"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-1 control-label" for="subTitle">Sub Title</label>
         <div class="col-md-11">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.subTitle"
-                   name="subTitle" id="subTitle" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.subTitle"
+                   name="subTitle"
+                   id="subTitle"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
     <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label">Series Title</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.seriesTitle"
-                   name="seriesTitle" id="seriesTitle" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.seriesTitle"
+                   name="seriesTitle"
+                   id="seriesTitle"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label">Volume No.</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.volumeNo"
-                   name="volumeNo" id="volumeNo" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.volumeNo"
+                   name="volumeNo"
+                   id="volumeNo"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label">Volume Title</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.volumeTitle"
-                   name="volumeTitle" id="volumeTitle" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.volumeTitle"
+                   name="volumeTitle"
+                   id="volumeTitle"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
 
     <div class="form-group" data-ng-if="record.materialTypeName=='Journal'">
         <label class="col-md-1 control-label" for="serialIssueNo">SL. Issue No</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput required"
-                   data-ng-model="record.serialIssueNo" name="serialIssueNo" id="serialIssueNo"
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput required"
+                   data-ng-model="record.serialIssueNo"
+                   name="serialIssueNo"
+                   id="serialIssueNo"
                    ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="serialNumber">SL. Number</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.serialNumber"
-                   name="serialNumber" id="serialNumber" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.serialNumber"
+                   name="serialNumber"
+                   id="serialNumber"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="serialSpecial">SL. Special</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.serialSpecial"
-                   name="serialSpecial" id="serialSpecial" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.serialSpecial"
+                   name="serialSpecial"
+                   id="serialSpecial"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
 
     <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label" for="libraryLacks">Library Lacks</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.libraryLacks"
-                   name="libraryLacks" id="libraryLacks" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.libraryLacks"
+                   name="libraryLacks"
+                   id="libraryLacks"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="changedTitle">Changed Titles</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.changedTitle"
-                   name="changedTitle" id="changedTitle" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.changedTitle"
+                   name="changedTitle"
+                   id="changedTitle"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="isbn">ISBN</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.isbn" name="isbn"
-                   id="isbn" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.isbn"
+                   name="isbn"
+                   id="isbn"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
     <div class="form-group" data-ng-if="record.materialTypeName=='Book'">
         <label class="col-md-1 control-label" for="corpAuthorMain">Cor. A. Main
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
+                 height="16"
+                 width="16"
+                 style="float: right;cursor: pointer;margin-left: 5px;"
+                 data-toggle="tooltip"
+                 data-placement="top"
                  title="Corporate Author Main"/>
         </label>
 
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.corpAuthorMain"
-                   name="corpAuthorMain" id="corpAuthorMain" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.corpAuthorMain"
+                   name="corpAuthorMain"
+                   id="corpAuthorMain"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="corpSubBody">Sub Body</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.corpSubBody"
-                   name="corpSubBody" id="corpSubBody" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.corpSubBody"
+                   name="corpSubBody"
+                   id="corpSubBody"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
 
         <label class="col-md-1 control-label" for="corpCityCountry">City, Country</label>
         <div class="col-md-3">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.corpCityCountry"
-                   name="corpCityCountry" id="corpCityCountry" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.corpCityCountry"
+                   name="corpCityCountry"
+                   id="corpCityCountry"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
-
 
     <div class="form-group">
         <label class="col-md-1 control-label" for="edition" data-ng-if="record.materialTypeName!='Thesis/Project'">Edition</label>
         <div class="col-md-3" data-ng-if="record.materialTypeName != 'Thesis/Project'">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.edition"
-                   name="edition" id="edition" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.edition"
+                   name="edition"
+                   id="edition"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
         <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Book'" for="translateTitleEdition">T.
             T. Edition
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
+                 height="16"
+                 width="16"
+                 style="float: right;cursor: pointer;margin-left: 5px;"
+                 data-toggle="tooltip"
+                 data-placement="top"
                  title="Translation Title Edition"/>
         </label>
         <div class="col-md-3" data-ng-if="record.materialTypeName=='Book'">
-            <input type="text" placeholder="" class="form-control dottedInput"
-                   data-ng-model="record.translateTitleEdition" name="translateTitleEdition" id="translateTitleEdition"
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.translateTitleEdition"
+                   name="translateTitleEdition"
+                   id="translateTitleEdition"
                    ng-readonly="data.readOnlyMode"/>
         </div>
         <label class="col-md-1 control-label" data-ng-if="record.materialTypeName=='Journal'" for="frequency">Frequency
         </label>
         <div class="col-md-3" data-ng-if="record.materialTypeName=='Journal'">
-            <select style="width: 98%" data-ng-model="record.frequency" name="frequency" id="frequency"
-                    ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
+            <select style="width: 98%"
+                    data-ng-model="record.frequency"
+                    name="frequency"
+                    id="frequency"
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}">
                 <option value="">Select Frequency</option>
                 <option data-ng-repeat="frequency in data.journalFrequencyOptions" value="{{frequency.id}}">
                     {{frequency.name}}
@@ -200,14 +320,23 @@
         </div>
         <label class="col-md-1 control-label" for="issn" data-ng-if="record.materialTypeName=='Journal'">ISSN</label>
         <div class="col-md-3" data-ng-if="record.materialTypeName=='Journal'">
-            <input type="text" placeholder="" class="form-control dottedInput" data-ng-model="record.isbn" name="issn"
-                   id="issn" ng-readonly="data.readOnlyMode"/>
+            <input type="text"
+                   placeholder=""
+                   class="form-control dottedInput"
+                   data-ng-model="record.isbn"
+                   name="issn"
+                   id="issn"
+                   ng-readonly="data.readOnlyMode"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-1 control-label" for="gmd">GMD
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
+                 height="16"
+                 width="16"
+                 style="float: right;cursor: pointer;margin-left: 5px;"
+                 data-toggle="tooltip"
+                 data-placement="top"
                  title="General Material Description"/>
         </label>
         <div class="col-md-3">
@@ -226,21 +355,37 @@
         <div class="form-group">
             <label for="callNo" class="col-md-1 control-label">Call No</label>
             <div class="col-md-3">
-                <input type="text" placeholder="" disabled="disabled" class="form-control dottedInput required"
-                       data-ng-model="record.callNo" id="callNo" name="callNo" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       placeholder=""
+                       disabled="disabled"
+                       class="form-control dottedInput required"
+                       data-ng-model="record.callNo"
+                       id="callNo"
+                       name="callNo"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="classNo" class="col-md-1 control-label">Class No</label>
             <div class="col-md-3">
-                <input type="text" placeholder="" class="form-control dottedInput required"
-                       data-ng-model="record.classNo" data-ng-change="makeCallNo()" name="classNo" id="classNo"
+                <input type="text"
+                       placeholder=""
+                       class="form-control dottedInput required"
+                       data-ng-model="record.classNo"
+                       data-ng-change="makeCallNo()"
+                       name="classNo"
+                       id="classNo"
                        ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="authorMark" class="col-md-1 control-label">Author Mark</label>
             <div class="col-md-3">
-                <input type="text" placeholder="" class="form-control dottedInput required"
-                       data-ng-model="record.authorMark" data-ng-change="makeCallNo()" name="authorMark" id="authorMark"
+                <input type="text"
+                       placeholder=""
+                       class="form-control dottedInput required"
+                       data-ng-model="record.authorMark"
+                       data-ng-change="makeCallNo()"
+                       name="authorMark"
+                       id="authorMark"
                        ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
@@ -250,48 +395,91 @@
             <div class="col-md-3">
                 <input type="text"
                        class="form-control dottedInput"
-                       data-ng-model="record.callDate" data-ng-change="makeCallNo()" id="callDate" name="callDate"
+                       data-ng-model="record.callDate"
+                       data-ng-change="makeCallNo()"
+                       id="callDate"
+                       name="callDate"
                        ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="callEdition" class="col-md-1 control-label">Edition</label>
             <div class="col-md-3">
-                <input type="text" class="form-control dottedInput" id="callEdition" name="callEdition"
-                       data-ng-model="record.callEdition" data-ng-change="makeCallNo()" cRequired=""
+                <input type="text"
+                       class="form-control dottedInput"
+                       id="callEdition"
+                       name="callEdition"
+                       data-ng-model="record.callEdition"
+                       data-ng-change="makeCallNo()" cRequired=""
                        ng-readonly="data.readOnlyMode"/>
             </div>
 
             <label for="callVolume" class="col-md-1 control-label">Volume</label>
             <div class="col-md-3">
-                <input type="text" class="form-control dottedInput" id="callVolume" name="callVolume"
-                       data-ng-model="record.callVolume" data-ng-change="makeCallNo()" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       class="form-control dottedInput"
+                       id="callVolume"
+                       name="callVolume"
+                       data-ng-model="record.callVolume"
+                       data-ng-change="makeCallNo()"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
     </fieldset>
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>Contributors
-            &nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer" data-toggle="modal"
-                     data-target="#modal-contributor" data-ng-if="data.readOnlyMode==false"></i>
-            <i class="fa fa-refresh" style="cursor: pointer" data-ng-click="reloadContributors()"
-               data-ng-if="data.readOnlyMode==false"></i>
-            <span style="float: right;" data-ng-if="data.readOnlyMode==false">[ <a
-                    ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true"
-                                                           style="cursor: pointer;color: white;"></i></a> ]</span>
+            &nbsp;<span data-toggle="tooltip"
+                        title="Create New Contributor">
+                <i class="fa fa-wpforms  fa-md"
+                   aria-hidden="true"
+                   style="cursor: pointer"
+                   data-toggle="modal"
+                   data-target="#modal-contributor"
+                   data-ng-if="data.readOnlyMode==false">
+
+            </i>
+            </span>
+            <i class="fa fa-refresh"
+               data-toggle="tooltip"
+               title="Refresh"
+               style="cursor: pointer"
+               data-ng-click="reloadContributors()"
+               data-ng-if="data.readOnlyMode==false">
+
+            </i>
+            <span style="float: right;"
+                  data-ng-if="data.readOnlyMode==false">
+                [ <a ng-click="addNewRow('contributor')">
+                <i class="fa fa-plus-circle"
+                   data-toggle="tooltip"
+                   title="Add Contributor"
+                   aria-hidden="true"
+                   style="cursor: pointer;color: white;">
+
+                </i>
+            </a> ]
+            </span>
         </legend>
 
         <div class="form-group" ng-repeat="contributor in record.contributorList track by $index">
             <label class="col-md-1 control-label" for="contributorViewOrder{{$index}}">View Order</label>
             <div class="col-md-1">
-                <input type="text" class="form-control dottedInput" value="{{contributor.viewOrder}}"
-                       style="text-align:center;" id="contributorViewOrder{{$index}}"
-                       name="contributorViewOrder{{$index}}" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       class="form-control dottedInput"
+                       value="{{contributor.viewOrder}}"
+                       style="text-align:center;"
+                       id="contributorViewOrder{{$index}}"
+                       name="contributorViewOrder{{$index}}"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
             <label for="contributorRole{{$index}}" class="col-md-1 control-label">Role</label>
             <div class="col-md-2">
-                <select class="required" style="width: 100%" name="contributorRole{{$index}}"
+                <select class="required"
+                        style="width: 100%"
+                        name="contributorRole{{$index}}"
                         id="contributorRole{{$index}}"
                         data-ng-model="contributor.role"
-                        ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
+                        ng-disabled="data.readOnlyMode"
+                        ng-class="{'disabledElement': data.readOnlyMode}">
                     <option data-ng-repeat="role in data.contributorRoleOptions" value="{{role.id}}">{{role.name}}
                     </option>
                 </select>
@@ -301,10 +489,16 @@
             <div class="col-md-4" id="recordContributorDiv{{$index}}">
 
                 <span data-ng-if="showContributorSelect2">
-                    <input type="text" class="form-control required" style="width: 98%" data-select="select2"
+                    <input type="text"
+                           class="form-control required"
+                           style="width: 98%"
+                           data-select="select2"
                            page="true"
-                           datas="contributorList" placeholder="Select a Contributor" data-ng-model="contributor.id"
-                           id="contributor{{$index}}" name="contributor{{$index}}"/>
+                           datas="contributorList"
+                           placeholder="Select a Contributor"
+                           data-ng-model="contributor.id"
+                           id="contributor{{$index}}"
+                           name="contributor{{$index}}"/>
                 </span>
                 <!--
                 <div  data-ng-if="!data.readOnlyMode">
@@ -315,8 +509,11 @@
                 -->
             </div>
             <div class="col-md-1s" style="width: 7%">
-                <i ng-click="deleteRow('contributor',$index)" class="fa fa-times fa-lg" aria-hidden="true"
-                   style="color:red;cursor:pointer;" data-ng-if="!data.readOnlyMode"></i>
+                <i ng-click="deleteRow('contributor',$index)"
+                   class="fa fa-times fa-lg"
+                   aria-hidden="true"
+                   style="color:red;cursor:pointer;"
+                   data-ng-if="!data.readOnlyMode"></i>
             </div>
 
         </div>
@@ -326,17 +523,33 @@
               data-ng-if="record.materialTypeName != 'Thesis/Project'">
         <legend>Imprint</legend>
         <div class="form-group">
-            <label class="col-md-1 control-label" for="publisher">Publisher
-                &nbsp<i class="fa fa-wpforms  fa-md" style="cursor: pointer" data-toggle="modal"
-                        data-target="#modal-publisher"></i>
-                &nbsp;<i class="fa fa-refresh" data-ng-click="reloadPublishers()"
+            <label class="col-md-2 control-label" for="publisher">Publisher
+                &nbsp<span data-toggle="tooltip"
+                           title="Create New Publisher">
+                    <i class="fa fa-wpforms  fa-md"
+                        style="cursor: pointer"
+                        data-toggle="modal"
+                       data-target="#modal-publisher"></i></span>
+                &nbsp;<i class="fa fa-refresh"
+                         style="cursor: pointer;"
+                         data-ng-click="reloadPublishers()"
+                         data-toggle="tooltip"
+                         title="Refresh"
                          data-ng-if="data.readOnlyMode==false"></i>
             </label>
-            <div class="col-md-5" id="recordPublisherDiv">
+            <div class="col-md-4" id="recordPublisherDiv">
                 <span data-ng-if="showPublisherSelect2">
-                <input type="text" class="form-control" style="width: 98%" data-select="select2" page="true"
-                       datas="publisherList" placeholder="Select a Publisher" data-ng-model="record.imprint.publisher"
-                       id="publisher" name="publisher" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       class="form-control"
+                       style="width: 98%"
+                       data-select="select2"
+                       page="true"
+                       datas="publisherList"
+                       placeholder="Select a Publisher"
+                       data-ng-model="record.imprint.publisher"
+                       id="publisher"
+                       name="publisher"
+                       ng-readonly="data.readOnlyMode"/>
             </span>
 
             </div>
@@ -345,20 +558,32 @@
                     style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
                     title="Place of Publication"/></label>
             <div class="col-md-4">
-                <input type="text" placeholder="" class="form-control dottedInput"
-                       data-ng-model="record.imprint.placeOfPublication" id="placeOfPublication"
-                       name="placeOfPublication" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       placeholder=""
+                       class="form-control dottedInput"
+                       data-ng-model="record.imprint.placeOfPublication"
+                       id="placeOfPublication"
+                       name="placeOfPublication"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-1 control-label" for="yearDateOfPublication">YoP
-                <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                     style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
-                     title="Year of Publication"/></label>
+                <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
+                     height="16" width="16"
+                     style="float: right;cursor: pointer;margin-left: 5px;"
+                     data-toggle="tooltip"
+                     data-placement="top"
+                     title="Year of Publication"/>
+            </label>
             <div class="col-md-2">
-                <input type="text" placeholder="" class="form-control dottedInput"
-                       data-ng-model="record.imprint.yearDateOfPublication" id="yearDateOfPublication"
-                       name="yearDateOfPublication" ng-readonly="data.readOnlyMode"/>
+                <input type="text"
+                       placeholder=""
+                       class="form-control dottedInput"
+                       data-ng-model="record.imprint.yearDateOfPublication"
+                       id="yearDateOfPublication"
+                       name="yearDateOfPublication"
+                       ng-readonly="data.readOnlyMode"/>
             </div>
             <label class="col-md-1 control-label" for="copyRightDate">YoC
                 <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
@@ -419,7 +644,8 @@
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>
             Subjects <span style="float: right;">
-            [ <a ng-click="addNewRow('subject')"><i class="fa fa-plus-circle" aria-hidden="true"
+            [ <a ng-click="addNewRow('subject')"><i class="fa fa-plus-circle" data-toggle="tooltip"
+                                                    title="Add Subject" aria-hidden="true"
                                                     style="cursor: pointer;color: white;"></i></a> ]
             </span>
         </legend>
@@ -454,7 +680,8 @@
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
         <legend>
             Notes <span style="float: right;">
-            [ <a ng-click="addNewRow('note')"><i class="fa fa-plus-circle" aria-hidden="true"
+            [ <a ng-click="addNewRow('note')"><i class="fa fa-plus-circle" data-toggle="tooltip"
+                                                 title="Add Note" aria-hidden="true"
                                                  style="cursor: pointer;color: white;"></i></a> ]
             </span>
         </legend>
@@ -480,7 +707,8 @@
     <div class="row">
         <div class="text-left col-md-6" style="padding-top: 45px;padding-left: 2%;"
              data-ng-if="data.readOnlyMode==false">
-            <button data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer" class="btn btn-dark btn-success"
+            <button data-target="#modal-confirm" data-toggle="modal" style="cursor: pointer"
+                    class="btn btn-dark btn-success"
                     data-ng-click="validateRecordBeforeDelete()"><b>Delete Record</b></button>
         </div>
         <div class="text-right col-md-6" style="padding-top: 45px;padding-left: 2%;"
