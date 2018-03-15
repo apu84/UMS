@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,6 +137,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
 
   @Transactional
   public Response deleteRecord(String pMfnNo) {
+    LocalCache localCache = new LocalCache();
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));
     List<Item> itemList = new ArrayList<>();
@@ -145,6 +147,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       for(Item item : itemList) {
         mItemManger.delete((MutableItem) item);
       }
+      localCache.invalidate();
       return Response.noContent().build();
     }
 

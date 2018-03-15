@@ -213,7 +213,7 @@ module ums {
             this.httpClient.doDelete("record/" + mfnNo)
                 .success(() => {
                     this.notify.success("Delete Successful");
-                    defer.resolve();
+                    defer.resolve("Success");
                 })
                 .error((data) => {
                     this.notify.error("Error in Deleting");

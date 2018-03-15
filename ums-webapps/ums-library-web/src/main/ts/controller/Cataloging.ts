@@ -59,16 +59,19 @@ module ums {
         itemId: string;
         canRecordDelete: boolean;
         canItemDelete: boolean;
+        state: any;
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any) {
 
+
+            $scope.state = $state;
 
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
@@ -869,7 +872,12 @@ module ums {
 
 
         public deleteRecord(): void {
-            this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then(() => {
+            this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then((response: any) => {
+                if(response == "Success") {
+                    setTimeout(() => {
+                        this.$scope.state.go("cataloging.search", {1: 'new'});
+                    }, 1000)
+                }
             });
         }
 
