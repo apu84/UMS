@@ -31,7 +31,6 @@ public class UmsLogTracerAspect {
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray,
       UmsLogMessage log) throws Throwable, Exception, IOException {
     HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
-    mLogger.info("****UMS-Common-LOG****");
     mLogger.info(log.message());
     mLogger.info(mapper.getRequestURI());
     mLogger.info(pJsonArray.toString());
@@ -42,7 +41,6 @@ public class UmsLogTracerAspect {
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject,
       UmsLogMessage log) throws Throwable, Exception, IOException {
     HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
-    mLogger.info("****UMS-Common-LOG****");
     mLogger.info(log.message());
     mLogger.info(mapper.getRequestURI());
     mLogger.info(pJsonObject.toString());
@@ -56,7 +54,6 @@ public class UmsLogTracerAspect {
   public void callGet(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, UmsLogMessage log)
       throws Throwable, Exception, IOException {
     HttpServletRequest mapper = new ContentCachingRequestWrapper(pHttpServletRequest);
-    mLogger.info("****UMS-Common-LOG****");
     mLogger.info(log.message());
     mLogger.info(mapper.getRequestURI());
     mLogger.info(SecurityUtils.getSubject().getPrincipal().toString());

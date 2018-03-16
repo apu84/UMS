@@ -1,5 +1,7 @@
 package org.ums.persistent.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +14,7 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.ClassAttendanceManager;
+import org.ums.services.academic.GradeSubmissionService;
 import org.ums.util.Constants;
 
 import java.sql.PreparedStatement;
@@ -25,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by Ifti on 29-Oct-16.
  */
 public class PersistentClassAttendanceDao implements ClassAttendanceManager {
+  private Logger mLogger = LoggerFactory.getLogger(PersistentClassAttendanceDao.class);
 
   String ATTENDANCE_QUERY = "Select Course_Id,Class_Date,Serial,Student_Id,Attendance From  "
       + "(Select Course_id,Id,to_char(Class_Date,'DDMMYYYY') class_date,serial,Teacher_Id  "
@@ -58,11 +62,11 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
 
   @Override
   public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection) {
-    String ATTENDANCE_DATE_QUERY =
-        "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,FIRST_NAME|| LAST_NAME EMPLOYEES,SHORT_NAME  "
+    String query =
+        "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,FIRST_NAME|| LAST_NAME EMPLOYEE_NAME,SHORT_NAME  "
             + "From MST_CLASS_ATTENDANCE,EMP_PERSONAL_INFO, EMPLOYEES Where Semester_Id= ? And Course_id=? And Section=? And EMPLOYEES.EMPLOYEE_ID=Teacher_Id and EMP_PERSONAL_INFO.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID AND MST_CLASS_ATTENDANCE.TEACHER_ID=EMPLOYEES.EMPLOYEE_ID "
             + "Order by Serial desc";
-    String query = ATTENDANCE_DATE_QUERY;
+    mLogger.debug(query + "; SemesterId :{}; CourseId: {}; Section: {} ", pSemesterId, pCourseId, pSection);
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection}, new AttendanceDateRowMapper());
   }
 
@@ -174,6 +178,12 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
     return attendanceId;
   }
 
+  @Override
+  public ClassAttendanceDto getAttendanceInfo(final Long attendanceId) {
+    String query = "Select Semester_Id, Course_Id, Section, Serial, Teacher_Id from MST_CLASS_ATTENDANCE where Id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {attendanceId}, new AttendanceMstRowMapper());
+  }
+
   class AttendanceStudentRowMapper implements RowMapper<ClassAttendanceDto> {
     @Override
     public ClassAttendanceDto mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -211,6 +221,19 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
         mapRet.put(key, rs.getString("ATTENDANCE"));
       }
       return mapRet;
+    }
+  }
+
+  class AttendanceMstRowMapper implements RowMapper<ClassAttendanceDto> {
+    @Override
+    public ClassAttendanceDto mapRow(ResultSet resultSet, int i) throws SQLException {
+      ClassAttendanceDto attendanceDto = new ClassAttendanceDto();
+      attendanceDto.setSemesterId(resultSet.getInt("SEMESTER_ID"));
+      attendanceDto.setCourseId(resultSet.getString("COURSE_ID"));
+      attendanceDto.setSection(resultSet.getString("SECTION"));
+      attendanceDto.setTeacherId(resultSet.getString("TEACHER_ID"));
+      AtomicReference<ClassAttendanceDto> atomicReference = new AtomicReference<>(attendanceDto);
+      return atomicReference.get();
     }
   }
 }
