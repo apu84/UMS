@@ -60,6 +60,9 @@ module ums {
         canRecordDelete: boolean;
         canItemDelete: boolean;
         state: any;
+        showContributorLoader: boolean;
+        showPublisherLoader: boolean;
+        showSupplierLoader: boolean;
     }
 
     export class Cataloging {
@@ -103,10 +106,12 @@ module ums {
             $scope.publisherService = publisherService;
             $scope.contributorService = contributorService;
             $scope.notifyService = notify;
+            $scope.showContributorLoader = false;
+            $scope.showPublisherLoader = false;
+            $scope.showSupplierLoader = false;
 
             this.$scope.showRecordInfo = true;
             this.$scope.showItemInfo = false;
-
 
             $scope.items = Array<IItem>();
             $scope.contributors = Array<IContributor>();
@@ -700,43 +705,51 @@ module ums {
         }
 
         private reloadSuppliers(): void {
+            this.$scope.showSupplierLoader = true;
             let data = $("#supplier").select2("data");
             if (data == null || data == undefined) {
                 this.getAllSuppliers();
+                this.$scope.showSupplierLoader = false;
             }
             else {
                 let searchTerm = data.text;
-                this.$scope.showSupplierSelect2 = false;
                 this.getAllSuppliers();
+                /*this.$scope.showSupplierSelect2 = false;*/
                 setTimeout(() => {
-                    this.$scope.showSupplierSelect2 = true;
+                    console.log("In set Timeout 1");
                     setTimeout(() => {
                         Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
                     }, 4000);
+                    this.$scope.showSupplierLoader = false;
+                    /*this.$scope.showSupplierSelect2 = true;*/
                 }, 6000);
             }
         }
 
 
         private reloadPublishers(): void {
+            this.$scope.showPublisherLoader = true;
             let data = $("#publisher").select2("data");
             if (data == null || data == undefined) {
                 this.getAllPublishers();
+                this.$scope.showPublisherLoader = false;
             }
             else {
                 let searchTerm = data.text;
-                this.$scope.showPublisherSelect2 = false;
                 this.getAllPublishers();
+               /* this.$scope.showPublisherSelect2 = false;*/
                 setTimeout(() => {
-                    this.$scope.showPublisherSelect2 = true;
                     setTimeout(() => {
                         Utils.setSelect2Value("recordPublisherDiv", "publisher", searchTerm);
                     }, 4000);
+                    this.$scope.showPublisherLoader = false;
+                   /* this.$scope.showPublisherSelect2 = true;*/
                 }, 6000)
             }
         }
 
         private reloadContributors(): void {
+            this.$scope.showContributorLoader = true;
             var text: string[] = new Array(this.$scope.record.contributorList.length);
 
             for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
@@ -749,18 +762,18 @@ module ums {
                 }
             }
 
-            this.$scope.showContributorSelect2 = false;
             this.getAllContributors();
+           /* this.$scope.showContributorSelect2 = false;*/
             setTimeout(() => {
-                this.$scope.showContributorSelect2 = true;
                 setTimeout(() => {
                     for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
                         if (text[i] != "") {
                             Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
                         }
                     }
-
                 }, 4000);
+                this.$scope.showContributorLoader = false;
+                /*this.$scope.showContributorSelect2 = true;*/
             }, 6000);
         }
 
