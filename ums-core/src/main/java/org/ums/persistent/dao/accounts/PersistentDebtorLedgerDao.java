@@ -111,7 +111,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
   @Override
   public List<Long> create(List<MutableDebtorLedger> pMutableList) {
     Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
-    mNamedParameterJdbcTemplate.batchUpdate(UPDATE_ONE, parameterObjects);
+    mNamedParameterJdbcTemplate.batchUpdate(INSERT_ONE, parameterObjects);
     return pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
   }
 

@@ -431,7 +431,8 @@ public class AccountTransactionCommonResourceHelper extends
     debtorLedger.setModifiedBy(pAccountTransaction.getModifiedBy());
     debtorLedger.setModificationDate(pAccountTransaction.getModifiedDate());
     debtorLedger.setBalanceType(pAccountTransaction.getBalanceType());
-    debtorLedger.setPaidAmount(pAccountTransaction.getAmount());
+    debtorLedger.setPaidAmount(pAccountTransaction.getPaidAmount());
+    debtorLedger.setAmount(pAccountTransaction.getAmount());
     debtorLedger.setSerialNo(pAccountTransaction.getSerialNo());
     debtorLedger.setVoucherDate(pAccountTransaction.getVoucherDate());
     debtorLedger.setVoucherNo(pAccountTransaction.getVoucherNo());
@@ -442,7 +443,7 @@ public class AccountTransactionCommonResourceHelper extends
     return debtorLedger;
   }
 
-  private MutableCreditorLedger assignValuesToCreditorLedger(MutableCreditorLedger pMutableCreditorLedger,
+  public MutableCreditorLedger assignValuesToCreditorLedger(MutableCreditorLedger pMutableCreditorLedger,
       AccountTransaction pAccountTransaction) {
     MutableCreditorLedger creditorLedger = pMutableCreditorLedger;
     creditorLedger.setSupplierCode(pAccountTransaction.getSupplierCode());
@@ -450,7 +451,8 @@ public class AccountTransactionCommonResourceHelper extends
     creditorLedger.setModifiedBy(pAccountTransaction.getModifiedBy());
     creditorLedger.setModificationDate(pAccountTransaction.getModifiedDate());
     creditorLedger.setBalanceType(pAccountTransaction.getBalanceType());
-    creditorLedger.setPaidAmount(pAccountTransaction.getAmount());
+    creditorLedger.setPaidAmount(pAccountTransaction.getPaidAmount());
+    creditorLedger.setAmount(pAccountTransaction.getAmount());
     creditorLedger.setSerialNo(pAccountTransaction.getSerialNo());
     creditorLedger.setVoucherDate(pAccountTransaction.getVoucherDate());
     creditorLedger.setVoucherNo(pAccountTransaction.getVoucherNo());
@@ -461,7 +463,7 @@ public class AccountTransactionCommonResourceHelper extends
     return creditorLedger;
   }
 
-  private void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
+  public void adjustTotalDebitOrCreditBalance(MutableAccountTransaction pTransaction, MutableMonthBalance pMonthBalance) {
     if(pTransaction.getBalanceType().equals(BalanceType.Cr)) {
       pMonthBalance.setTotalMonthCreditBalance(pMonthBalance.getTotalMonthCreditBalance() == null ? pTransaction
           .getAmount() : pMonthBalance.getTotalMonthCreditBalance().add(pTransaction.getAmount()));
@@ -478,7 +480,7 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @NotNull
-  private List<MutableAccountBalance> generateUpdatedAccountBalance(FinancialAccountYear pCurrentFinancialAccountYear,
+  public List<MutableAccountBalance> generateUpdatedAccountBalance(FinancialAccountYear pCurrentFinancialAccountYear,
       List<Account> pAccounts, Map<Long, MutableAccountTransaction> pAccountMapWithTransaction) {
     List<MutableAccountBalance> accountBalanceList =
         mAccountBalanceManager.getAccountBalance(pCurrentFinancialAccountYear.getCurrentStartDate(),
@@ -489,7 +491,7 @@ public class AccountTransactionCommonResourceHelper extends
     return accountBalanceList;
   }
 
-  private void updateTotalBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction,
+  public void updateTotalBalance(Map<Long, MutableAccountTransaction> pAccountMapWithTransaction,
       List<MutableAccountBalance> pAccountBalanceList) {
     for(MutableAccountBalance a : pAccountBalanceList) {
       a.setModifiedDate(new Date());

@@ -25,33 +25,33 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   @Qualifier("fileContentManager")
   private BinaryContentManager<byte[]> mBinaryContentManager;
 
-  public void build(final JsonObjectBuilder pBuilder, final Student pStudent,
-      final UriInfo pUriInfo, final LocalCache pLocalCache) {
+  public void build(final JsonObjectBuilder pBuilder, final Student pStudent, final UriInfo pUriInfo,
+      final LocalCache pLocalCache) {
 
     pBuilder.add("id", pStudent.getId());
     pBuilder.add("fullName", pStudent.getFullName());
 
     Department department = pStudent.getDepartment();
     pBuilder.add("departmentId", department.getId());
-    pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
-        .path(String.valueOf(department.getId())).build().toString());
+    pBuilder.add("department",
+        pUriInfo.getBaseUriBuilder().path("academic").path("department").path(String.valueOf(department.getId()))
+            .build().toString());
     pBuilder.add("departmentName", department.getLongName());
     pBuilder.add("departmentShortName", department.getShortName());
 
     Semester semester = pStudent.getSemester();
     pBuilder.add("semesterId", semester.getId());
     pBuilder.add("semesterName", semester.getName());
-    pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
-        .path(String.valueOf(semester.getId())).build().toString());
-
+    pBuilder.add("semester",
+        pUriInfo.getBaseUriBuilder().path("academic").path("semester").path(String.valueOf(semester.getId())).build()
+            .toString());
 
     pBuilder.add("currentEnrolledSemesterId", pStudent.getCurrentEnrolledSemester().getId());
     pBuilder.add("currentEnrolledSemesterName", pStudent.getCurrentEnrolledSemester().getName());
 
-
     pBuilder.add("programId", pStudent.getProgram().getId());
-//    pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
-//        .path(String.valueOf(program.getId())).build().toString());
+    // pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
+    // .path(String.valueOf(program.getId())).build().toString());
     pBuilder.add("programName", pStudent.getProgram().getLongName());
     pBuilder.add("programShortName", pStudent.getProgram().getShortName());
     pBuilder.add("programTypeId", pStudent.getProgram().getProgramTypeId());

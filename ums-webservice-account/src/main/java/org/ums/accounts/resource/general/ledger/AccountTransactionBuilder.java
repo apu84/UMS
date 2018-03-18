@@ -115,5 +115,8 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
       pMutableAccountTransaction.setBillNo(pJsonObject.getString("billNo"));
     if(pJsonObject.containsKey("billDate"))
       pMutableAccountTransaction.setBillDate(UmsUtils.convertToDate(pJsonObject.getString("billDate"), "dd-MM-yyyy"));
+    if(pJsonObject.containsKey("paidAmount"))
+      pMutableAccountTransaction.setPaidAmount(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber(
+          "paidAmount").toString())));
   }
 }
