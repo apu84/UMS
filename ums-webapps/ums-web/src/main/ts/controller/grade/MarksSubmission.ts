@@ -988,7 +988,7 @@ module ums {
     }
 
     private validateGrades(): boolean {
-      var validate = false;
+      var validate = true;
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
       if (this.$scope.courseType == "THEORY") {
         for (var ind in gradeList) {
