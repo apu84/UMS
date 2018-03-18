@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 31-Dec-17.
@@ -48,75 +47,75 @@ public class AccountBalanceResourceHelper extends ResourceHelper<AccountBalance,
   public MutableAccountBalance updateMonthlyDebitAndCreditBalance(MutableAccountBalance pAccountBalance,
       AccountTransaction pAccountTransaction, BigDecimal pAmount) {
     Calendar calendar = Calendar.getInstance();
-    calendar.setTime(new Date());
-    Integer day = calendar.getTime().getDay() + 1;
-    if(day.equals(MonthType.JANUARY)) {
+    calendar.setTime(pAccountTransaction.getVoucherDate());
+    Integer month = calendar.getTime().getMonth() + 1;
+    if(month.equals(MonthType.JANUARY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal01(pAmount);
       else
         pAccountBalance.setTotMonthDbBal01(pAmount);
     }
-    if(day.equals(MonthType.FEBRUARY)) {
+    if(month.equals(MonthType.FEBRUARY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal02(pAmount);
       else
         pAccountBalance.setTotMonthDbBal02(pAmount);
     }
-    if(day.equals(MonthType.MARCH)) {
+    if(month.equals(MonthType.MARCH.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal03(pAmount);
       else
         pAccountBalance.setTotMonthDbBal03(pAmount);
     }
-    if(day.equals(MonthType.APRIL)) {
+    if(month.equals(MonthType.APRIL.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal04(pAmount);
       else
         pAccountBalance.setTotMonthDbBal04(pAmount);
     }
-    if(day.equals(MonthType.MAY)) {
+    if(month.equals(MonthType.MAY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal05(pAmount);
       else
         pAccountBalance.setTotMonthDbBal05(pAmount);
     }
-    if(day.equals(MonthType.JUNE)) {
+    if(month.equals(MonthType.JUNE.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal06(pAmount);
       else
         pAccountBalance.setTotMonthDbBal06(pAmount);
     }
-    if(day.equals(MonthType.JULY)) {
+    if(month.equals(MonthType.JULY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal07(pAmount);
       else
         pAccountBalance.setTotMonthDbBal07(pAmount);
     }
-    if(day.equals(MonthType.AUGUST)) {
+    if(month.equals(MonthType.AUGUST.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal08(pAmount);
       else
         pAccountBalance.setTotMonthDbBal08(pAmount);
     }
-    if(day.equals(MonthType.SEPTEMBER)) {
+    if(month.equals(MonthType.SEPTEMBER.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal09(pAmount);
       else
         pAccountBalance.setTotMonthDbBal09(pAmount);
     }
-    if(day.equals(MonthType.OCTOBER)) {
+    if(month.equals(MonthType.OCTOBER.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal10(pAmount);
       else
         pAccountBalance.setTotMonthDbBal10(pAmount);
     }
-    if(day.equals(MonthType.NOVEMBER)) {
+    if(month.equals(MonthType.NOVEMBER.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal11(pAmount);
       else
         pAccountBalance.setTotMonthDbBal11(pAmount);
     }
-    if(day.equals(MonthType.DECEMBER)) {
+    if(month.equals(MonthType.DECEMBER.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal12(pAmount);
       else
