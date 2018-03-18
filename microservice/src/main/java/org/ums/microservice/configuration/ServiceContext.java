@@ -12,7 +12,10 @@ import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
+import org.ums.manager.library.ContributorManager;
+import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
+import org.ums.manager.library.SupplierManager;
 import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.microservice.instance.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.microservice.instance.consumeindex.ConsumeIndex;
@@ -97,6 +100,12 @@ public class ServiceContext {
   @Autowired
   private UserManager mUserManager;
   @Autowired
+  ContributorManager mContributorManager;
+  @Autowired
+  SupplierManager mSupplierManager;
+  @Autowired
+  PublisherManager mPublisherManager;
+  @Autowired
   private RecordManager mRecordManager;
   @Autowired
   AgendaResolutionManager mAgendaResolutionManager;
@@ -123,7 +132,8 @@ public class ServiceContext {
         mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
-        mPersonalInformationManager, mUserManager, mRecordManager);
+        mPersonalInformationManager, mUserManager, mContributorManager, mSupplierManager, mPublisherManager,
+        mRecordManager);
     // , mAgendaResolutionManager
   }
 
