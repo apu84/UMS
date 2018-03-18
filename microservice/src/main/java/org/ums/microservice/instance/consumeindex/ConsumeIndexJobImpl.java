@@ -18,6 +18,7 @@ import org.ums.lock.LockManager;
 import org.ums.lock.MutableLock;
 import org.ums.lock.PersistentLock;
 import org.ums.microservice.AbstractService;
+import org.ums.microservice.configuration.ServiceConfiguration;
 import org.ums.solr.indexer.PersistentIndexConsumer;
 import org.ums.solr.indexer.manager.IndexConsumerManager;
 import org.ums.solr.indexer.manager.IndexManager;
@@ -35,22 +36,24 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
   private EntityResolverFactory mEntityResolverFactory;
   private SecurityManager mSecurityManager;
   private UMSConfiguration mUMSConfiguration;
+  private ServiceConfiguration mServiceConfiguration;
 
   public ConsumeIndexJobImpl(IndexManager pIndexManager, IndexConsumerManager pIndexConsumerManager,
       EntityResolverFactory pEntityResolverFactory, LockManager pLockManager, SecurityManager pSecurityManager,
-      UMSConfiguration pUMSConfiguration) {
+      UMSConfiguration pUMSConfiguration, ServiceConfiguration pServiceConfiguration) {
     mIndexManager = pIndexManager;
     mIndexConsumerManager = pIndexConsumerManager;
     mEntityResolverFactory = pEntityResolverFactory;
     mLockManager = pLockManager;
     mSecurityManager = pSecurityManager;
     mUMSConfiguration = pUMSConfiguration;
+    mServiceConfiguration = pServiceConfiguration;
   }
 
   @Override
   @Scheduled(fixedDelay = 30000, initialDelay = 0)
   public void consume() {
-    if(login()) {
+    if(login(mServiceConfiguration.getIndexerAppId(), mServiceConfiguration.getIndexerAppToken())) {
       // acquire lock
       // MutableLock lock = new PersistentLock();
       // lock.setId("indexLock");

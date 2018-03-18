@@ -9,11 +9,11 @@ import org.ums.solr.repository.document.lms.RecordDocument;
 import org.ums.solr.repository.lms.RecordRepository;
 
 public class RecordReIndexer extends AbstractReIndexer<Record, MutableRecord, Long, RecordDocument> {
-  private RecordRepository mSolrCrudRepository;
+  private CustomSolrCrudRepository<RecordDocument, Long> mSolrCrudRepository;
   private Converter<Record, RecordDocument> mDocumentConverter;
   private ContentManager<Record, MutableRecord, Long> mContentManager;
 
-  public RecordReIndexer(final RecordRepository pSolrRepository,
+  public RecordReIndexer(final CustomSolrCrudRepository<RecordDocument, Long> pSolrRepository,
       final Converter<Record, RecordDocument> pDocumentConverter,
       final ContentManager<Record, MutableRecord, Long> pContentManager) {
     mSolrCrudRepository = pSolrRepository;

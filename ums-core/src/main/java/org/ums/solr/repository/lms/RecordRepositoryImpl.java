@@ -1,16 +1,15 @@
 package org.ums.solr.repository.lms;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
-import org.springframework.data.solr.core.query.TermsOptions;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
 import org.ums.solr.repository.document.lms.RecordDocument;
-
-import java.util.List;
 
 /**
  * Created by Ifti on 17-Apr-17.

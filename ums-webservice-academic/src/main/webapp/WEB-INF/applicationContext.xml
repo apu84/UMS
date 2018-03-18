@@ -19,7 +19,7 @@
   <context:component-scan
       base-package="org.ums.login,org.ums.login.helper,org.ums.navigation,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.dummy.webservice,org.ums.academic.resource,org.ums.academic.resource.helper,org.ums.academic.resource.student.gradesheet,org.ums.login,org.ums.report.generator.seatPlan.support,org.ums.report.generator.seatPlan,org.ums.cachewarmer,org.ums.report,org.ums.navigation,org.ums.resource,org.ums.builder,org.ums.services,org.ums.validator,org.ums.readmission.student,org.ums.kafka,org.ums.employee,org.ums.usermanagement"/>
 
-  <task:annotation-driven executor="asynExecutor"/>
-  <task:executor id="asynExecutor" pool-size="25" />
-  <task:executor id="myExecutor" pool-size="10" />
+  <!--<task:annotation-driven executor="asynExecutor"/>-->
+  <!--<task:executor id="asynExecutor" pool-size="25" />-->
+  <!--<task:executor id="myExecutor" pool-size="10" />-->
 </beans>

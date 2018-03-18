@@ -1,23 +1,22 @@
 package org.ums.microservice;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.ums.configuration.UMSConfiguration;
+import org.ums.token.JwtsToken;
 
 public abstract class AbstractService implements Service {
-  protected boolean login() {
+  protected boolean login(String pAppId, String pToken) {
     SecurityUtils.setSecurityManager(getSecurityManager());
     Subject subject = SecurityUtils.getSubject();
-    UsernamePasswordToken token =
-        new UsernamePasswordToken(getUMSConfiguration().getBackendUser(), getUMSConfiguration()
-            .getBackendUserPassword());
+
+    JwtsToken jwts = new JwtsToken(pAppId, pToken);
 
     try {
       ensureUserIsLoggedOut();
-      subject.login(token);
+      subject.login(jwts);
       return true;
     } catch(Exception e) {
       e.printStackTrace();
