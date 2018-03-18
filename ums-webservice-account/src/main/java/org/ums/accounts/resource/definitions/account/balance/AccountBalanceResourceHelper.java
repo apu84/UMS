@@ -51,21 +51,21 @@ public class AccountBalanceResourceHelper extends ResourceHelper<AccountBalance,
     Integer month = calendar.getTime().getMonth() + 1;
     if(month.equals(MonthType.JANUARY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
-        pAccountBalance.setTotMonthCrBal01(pAmount);
+        pAccountBalance.setTotMonthCrBal01(pAccountBalance.getTotMonthCrBal01() == null ? pAmount : pAccountBalance.getTotMonthCrBal01().add(pAmount));
       else
-        pAccountBalance.setTotMonthDbBal01(pAmount);
+        pAccountBalance.setTotMonthDbBal01(pAccountBalance.getTotMonthDbBal01() == null ? pAmount : pAccountBalance.getTotMonthDbBal01().add(pAmount));
     }
     if(month.equals(MonthType.FEBRUARY.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
-        pAccountBalance.setTotMonthCrBal02(pAmount);
+        pAccountBalance.setTotMonthCrBal02(pAccountBalance.getTotMonthCrBal02() == null ? pAmount : pAccountBalance.getTotMonthCrBal02().add(pAmount));
       else
-        pAccountBalance.setTotMonthDbBal02(pAmount);
+        pAccountBalance.setTotMonthDbBal02(pAccountBalance.getTotMonthDbBal02() == null ? pAmount : pAccountBalance.getTotMonthDbBal02().add(pAmount));
     }
     if(month.equals(MonthType.MARCH.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))
-        pAccountBalance.setTotMonthCrBal03(pAmount);
+        pAccountBalance.setTotMonthCrBal03(pAccountBalance.getTotMonthCrBal03() == null ? pAmount : pAccountBalance.getTotMonthCrBal03().add(pAmount));
       else
-        pAccountBalance.setTotMonthDbBal03(pAmount);
+        pAccountBalance.setTotMonthDbBal03(pAccountBalance.getTotMonthDbBal03() == null ? pAmount : pAccountBalance.getTotMonthDbBal03().add(pAmount));
     }
     if(month.equals(MonthType.APRIL.getValue())) {
       if(pAccountTransaction.getBalanceType().equals(BalanceType.Cr))

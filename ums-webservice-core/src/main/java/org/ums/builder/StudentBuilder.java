@@ -1,24 +1,20 @@
 package org.ums.builder;
 
-import java.text.ParseException;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.BinaryContentManager;
 import org.ums.persistent.model.PersistentTeacher;
+
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
 
 @Component
 @Qualifier("StudentBuilder")
@@ -35,34 +31,30 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("id", pStudent.getId());
     pBuilder.add("fullName", pStudent.getFullName());
 
-    Department department = (Department) pLocalCache.cache(() -> pStudent.getDepartment(),
-        pStudent.getDepartmentId(), Department.class);
+    Department department = pStudent.getDepartment();
     pBuilder.add("departmentId", department.getId());
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
     pBuilder.add("departmentName", department.getLongName());
     pBuilder.add("departmentShortName", department.getShortName());
 
-    Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(),
-        pStudent.getSemesterId(), Semester.class);
+    Semester semester = pStudent.getSemester();
     pBuilder.add("semesterId", semester.getId());
     pBuilder.add("semesterName", semester.getName());
     pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(semester.getId())).build().toString());
 
-    Semester currentSemester = (Semester) pLocalCache.cache(() -> pStudent.getCurrentEnrolledSemester(),
-        pStudent.getCurrentEnrolledSemesterId(), Semester.class);
-    pBuilder.add("currentEnrolledSemesterId", currentSemester.getId());
-    pBuilder.add("currentEnrolledSemesterName", currentSemester.getName());
 
-    Program program = (Program) pLocalCache.cache(() -> pStudent.getProgram(),
-        pStudent.getProgramId(), Program.class);
-    pBuilder.add("programId", program.getId());
-    pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
-        .path(String.valueOf(program.getId())).build().toString());
-    pBuilder.add("programName", program.getLongName());
-    pBuilder.add("programShortName", program.getShortName());
-    pBuilder.add("programTypeId", program.getProgramTypeId());
+    pBuilder.add("currentEnrolledSemesterId", pStudent.getCurrentEnrolledSemester().getId());
+    pBuilder.add("currentEnrolledSemesterName", pStudent.getCurrentEnrolledSemester().getName());
+
+
+    pBuilder.add("programId", pStudent.getProgram().getId());
+//    pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
+//        .path(String.valueOf(program.getId())).build().toString());
+    pBuilder.add("programName", pStudent.getProgram().getLongName());
+    pBuilder.add("programShortName", pStudent.getProgram().getShortName());
+    pBuilder.add("programTypeId", pStudent.getProgram().getProgramTypeId());
     pBuilder.add("year", pStudent.getCurrentYear());
     pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());
 
