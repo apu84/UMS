@@ -129,7 +129,7 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("P. GPA", infoFont);
+      paragraph = new Paragraph("P. CGPA", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       cell.setColspan(1);
@@ -179,12 +179,11 @@ public class LegacyDataComparer extends AbstractService {
       cell.addElement(paragraph);
       cell.setColspan(1);
       contentTable.addCell(cell);
+      contentTable.setHeaderRows(1);
       int serial = 0;
       for(int i = 0; i < legacyTabulationList.size(); i++) {
         LegacyTabulation legacyTabulation = legacyTabulationList.get(i);
-        if(!legacyTabulation.getStudentId().startsWith("08") && !legacyTabulation.getStudentId().startsWith("09")
-            && !legacyTabulation.getStudentId().startsWith("10") && !legacyTabulation.getStudentId().startsWith("12")
-            && !legacyTabulation.getStudentId().startsWith("11")) {
+        if(Integer.parseInt(legacyTabulation.getStudentId().substring(0,2)) >= 13) {
           List<StudentRecord> studentRecords = studentRecordMap.get(legacyTabulation.getStudentId());
           boolean found = false;
           if(studentRecords != null) {
