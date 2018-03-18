@@ -30,8 +30,10 @@ public class AccountsContext {
 
   @Bean
   GroupManager groupManager() {
-    return new PersistentGroupDao(mTemplateFactory.getAccountsJdbcTemplate(),
-        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+    GroupCache groupCache = new GroupCache(mCacheFactory.getCacheManager());
+    groupCache.setManager(new PersistentGroupDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return groupCache;
   }
 
   @Bean
@@ -77,6 +79,18 @@ public class AccountsContext {
   @Bean
   MonthBalanceManager monthBalanceManager() {
     return new PersistentMonthBalanceDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  DebtorLedgerManager debtorLedgerManager() {
+    return new PersistentDebtorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  CreditorLedgerManager creditorLedgerManager() {
+    return new PersistentCreditorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 

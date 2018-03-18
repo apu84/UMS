@@ -63,7 +63,6 @@ public class PersistentRecordDao extends RecordDaoDecorator {
 
   @Override
   public Record get(final Long pId) {
-    System.out.println("Culprit ID Is: ---------------------------------------------- " + pId);
     String query = SELECT_ALL + " Where MFN = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentRecordDao.RecordRowMapper());
   }

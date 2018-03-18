@@ -36,6 +36,8 @@ public interface ClassAttendanceManager {
 
   public String getAttendanceId();
 
+  public ClassAttendanceDto getAttendanceInfo(final Long attendanceId);
+
   public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId, String pSection,
       String pClassDate, Integer pSerial, String pTeacherId);
 

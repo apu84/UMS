@@ -25,6 +25,9 @@ module ums {
     serialNo: number;
     account: IAccount;
     accountId: string;
+    customerCode: string;
+    supplierCode: string;
+    vendorId: string;
     voucher: IVoucher;
     voucherId: string;
     amount: number;
@@ -43,6 +46,11 @@ module ums {
     modifiedDate: string;
     modifiedBy: string;
     message: string;
+    billNo: string;
+    billDate: string;
+    invoiceNo: string;
+    invoiceDate: string;
+    paidAmount: number;
   }
 
   export class JournalVoucherService {

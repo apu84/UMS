@@ -12,4 +12,7 @@ import java.util.List;
 public interface GroupManager extends ContentManager<Group, MutableGroup, Long> {
   List<Group> getGroups(Group pGroup);
 
+  List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList);
+
+  List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList);
 }

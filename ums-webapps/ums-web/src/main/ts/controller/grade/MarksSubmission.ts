@@ -901,8 +901,12 @@ module ums {
               message = "Provide marks.";
             else if (this.checkNumber(total) == false)
               message = "Not a valid Number.";
-            else if (Number(total) > 100)
-              message = "Maximum can be 100.";
+            this.showErrorTooltip("total", student_id, message);
+          }
+          else if (Number(total) > 100) {
+            $("#total_" + student_id).css(border_error);
+            message = "Maximum can be 100.";
+            row_error = true;
             this.showErrorTooltip("total", student_id, message);
           }
           else {
@@ -969,17 +973,38 @@ module ums {
 
     }
 
-    private validateGradeSheet(): boolean {
-      return false;
-    }
-
 
     private saveGradeSheet(): boolean {
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(1);
-      this.postGradeSheet(gradeList, 'save');
-
-
+      if(this.validateGrades(false))
+          this.postGradeSheet(gradeList, 'save');
+      else {
+        $("#alertMessage").html("There are some problem with your grades. Please check and correct them at first.");
+        setTimeout(function () {
+          $("#modal-alert").modal('show');
+        }, 200);
+      }
       return false;
+    }
+
+    private validateGrades(force_validate:boolean): boolean {
+      var validate = true;
+      var gradeList: Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
+      if (this.$scope.courseType == "THEORY") {
+        for (var ind in gradeList) {
+          var studentMark: IStudentMarks = gradeList[ind];
+          if (this.validateGrade(force_validate, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
+            validate = false;
+        }
+      }
+      else if (this.$scope.courseType == "SESSIONAL") {
+        for (var ind in gradeList) {
+          var studentMark: IStudentMarks = gradeList[ind];
+          if (this.validateGrade(force_validate, studentMark.studentId, "", "", "", "", studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
+            validate = false;
+        }
+      }
+      return validate;
     }
 
     private getTargetGradeList(status: number): Array<IStudentMarks> {
@@ -1056,19 +1081,8 @@ module ums {
           $("html, body").animate({scrollTop: 0}, "slow");
           return;
         }
-        for (var ind in gradeList) {
-          var studentMark: IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
-            validate = false;
-        }
       }
-      else if (this.$scope.courseType == "SESSIONAL") {
-        for (var ind in gradeList) {
-          var studentMark: IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId, "", "", "", "", studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
-            validate = false;
-        }
-      }
+      validate = this.validateGrades(true);
       if (validate == false) {
         alert("There are some problem with the data you submitted. Please check and correct. Then submit it again.");
         return;
@@ -1086,6 +1100,11 @@ module ums {
         }
       }
       this.postGradeSheet(gradeList, 'submit');
+    }
+
+
+    private validateGradeSheet(): boolean {
+      return false;
     }
 
     private postGradeSheet(gradeList: Array<IStudentMarks>, action: string): void {

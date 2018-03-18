@@ -58,9 +58,11 @@
                                     class="form-control required"
                                     name="examDate"
                                     id="examDate"
-                                    data-ng-options="examRoutine.examDate for examRoutine in vm.examRoutineList "
+                                    data-ng-options="examRoutine.examDate for examRoutine in vm.distinctExamRoutineList"
                                     data-ng-model="vm.selectedExamRoutine"
+                                    data-ng-change="vm.modifyDateFormat()"
                             >
+                                <option value="">Select Exam Date</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -99,7 +101,7 @@
                         </td>
                         <td>{{vm.selectedRoom.capacity}}</td>
                         <td><input type="number" class="form-control" ng-model="vm.seatPlan.rowNo"/></td>
-                        <td><input type="number" class="form-control" ng-model="vm.seatPlan.colNo"</td>
+                        <td><input type="number" class="form-control" ng-model="vm.seatPlan.colNo"/></td>
 
                     </tr>
                     </tbody>

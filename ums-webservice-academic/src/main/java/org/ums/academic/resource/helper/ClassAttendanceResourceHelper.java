@@ -8,13 +8,18 @@ import java.util.Map;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 
+import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.ClassAttendanceBuilder;
+import org.ums.exceptions.ValidationException;
+import org.ums.manager.CourseTeacherManager;
 import org.ums.report.generator.AttendanceSheetGenerator;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.immutable.Course;
+import org.ums.statistics.TextLogger;
 import org.ums.usermanagement.user.User;
 import org.ums.manager.ClassAttendanceManager;
 import org.ums.manager.CourseManager;
@@ -28,7 +33,7 @@ import com.itextpdf.text.DocumentException;
  */
 @Component
 public class ClassAttendanceResourceHelper {
-
+  private static final Logger mLogger = org.slf4j.LoggerFactory.getLogger(ClassAttendanceResourceHelper.class);
   @Autowired
   private ClassAttendanceManager mManager;
 
@@ -46,6 +51,9 @@ public class ClassAttendanceResourceHelper {
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  private CourseTeacherManager courseTeacherManager;
 
   public ClassAttendanceManager getContentManager() {
     return mManager;
@@ -158,14 +166,17 @@ public class ClassAttendanceResourceHelper {
   public Response saveNewAttendance(final JsonObject pJsonObject) {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 
-    Integer semester = pJsonObject.getInt("semester");
-    String course = pJsonObject.getString("course");
+    Integer semesterId = pJsonObject.getInt("semester");
+    String courseId = pJsonObject.getString("course");
     String section = pJsonObject.getString("section");
     String classDate = pJsonObject.getString("classDate");
     Integer serial = pJsonObject.getInt("serial");
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    validateCourseForAttendance(semesterId, user.getEmployeeId(), courseId, section);
 
     String attendanceId = getContentManager().getAttendanceId();
-    getContentManager().insertAttendanceMaster(attendanceId, semester, course, section, classDate, serial, "41");
+    getContentManager().insertAttendanceMaster(attendanceId, semesterId, courseId, section, classDate, serial,
+        user.getEmployeeId());
     getContentManager().upsertAttendanceDtl(attendanceId, attendanceList);
 
     Response.ResponseBuilder builder = Response.created(null);
@@ -176,15 +187,18 @@ public class ClassAttendanceResourceHelper {
 
   @Transactional
   public Response updateClassAttendance(final JsonObject pJsonObject) {
-    List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 
-    Integer semester = pJsonObject.getInt("semester");
-    String course = pJsonObject.getString("course");
+    Integer semesterId = pJsonObject.getInt("semester");
+    String courseId = pJsonObject.getString("course");
     String section = pJsonObject.getString("section");
     String classDate = pJsonObject.getString("classDate");
     Integer serial = pJsonObject.getInt("serial");
     String attendanceId = pJsonObject.getString("id");
 
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    validateCourseForAttendance(semesterId, user.getEmployeeId(), courseId, section);
+
+    List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
     getContentManager().updateAttendanceMaster(classDate, serial, attendanceId);
     getContentManager().upsertAttendanceDtl(attendanceId, attendanceList);
 
@@ -193,6 +207,10 @@ public class ClassAttendanceResourceHelper {
 
   @Transactional(rollbackFor = Exception.class)
   public Response deleteClassAttendance(final String attendanceId) {
+    ClassAttendanceDto attendanceMst = getContentManager().getAttendanceInfo(Long.valueOf(attendanceId));
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    validateCourseForAttendance(attendanceMst.getSemesterId(), user.getEmployeeId(), attendanceMst.getCourseId(),
+        attendanceMst.getSection());
 
     getContentManager().deleteAttendanceMaster(attendanceId);
     getContentManager().deleteAttendanceDtl(attendanceId);
@@ -203,5 +221,18 @@ public class ClassAttendanceResourceHelper {
   public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId, final String pCourseId,
       final String pSection, final String pStudentCategory) throws DocumentException, IOException {
     mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection, pStudentCategory);
+  }
+
+  public void validateCourseForAttendance(final Integer pSemesterId, final String pTeacherId, final String pCourseId,
+      final String pSectionId) {
+    try {
+      courseTeacherManager.getAssignedCourse(pSemesterId, pTeacherId, pCourseId, pSectionId);
+    } catch(Exception ex) {
+      mLogger
+          .debug(
+              "Unauthorized access detected for class attendance. SemesterId: {}, TeacherId: {}, CourseId: {}, Section: {}",
+              pSemesterId, pTeacherId, pCourseId, pSectionId);
+      throw new ValidationException("Unauthorized access detected");
+    }
   }
 }

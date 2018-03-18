@@ -39,7 +39,7 @@ import org.ums.usermanagement.user.UserManager;
 
 @Component
 public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {
-  private static final Logger log = LoggerFactory.getLogger(GradeSubmissionResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(GradeSubmissionResourceHelper.class);
   @Autowired
   private ExamGradeManager mManager;
 
@@ -107,10 +107,10 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
     JsonObject responseObject = objectBuilder.build();
-    log.debug("User : {}, Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}", SecurityUtils.getSubject()
+    mLogger.debug("User: {}, Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}", SecurityUtils.getSubject()
         .getPrincipal().toString(), currentActor, marksSubmissionStatusDto.getCourseTitle(),
         marksSubmissionStatusDto.getCourseNo(), marksSubmissionStatusDto.getSemesterName());
-    log.debug("Returned Course List :{}", responseObject.toString());
+    mLogger.debug("Returned Course List :{}", responseObject.toString());
     return responseObject;
   }
 

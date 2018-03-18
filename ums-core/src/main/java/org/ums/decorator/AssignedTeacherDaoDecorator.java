@@ -51,4 +51,9 @@ public class AssignedTeacherDaoDecorator<R, M, I, C extends AssignedTeacherManag
   public List<R> getAssignedCourses(Integer pSemesterId, String pTeacherId) {
     return getManager().getAssignedCourses(pSemesterId, pTeacherId);
   }
+
+  @Override
+  public R getAssignedCourse(Integer pSemesterId, String pTeacherId, String pCourseId, String pSection) {
+    return getManager().getAssignedCourse(pSemesterId, pTeacherId, pCourseId, pSection);
+  }
 }

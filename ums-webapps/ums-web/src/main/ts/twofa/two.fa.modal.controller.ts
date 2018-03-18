@@ -102,8 +102,15 @@ module ums {
               this.currentDefer.resolve(response);
               this.ok();
             })
-          .error((errorResponse) => {
-            this.notify.error("Wrong OTP");
+          .error((error, status) => {
+            console.log(error);
+            console.log(status);
+            if(status==401)
+              this.notify.error("Wrong OTP(One time password)");
+            else {
+              this.currentDefer.reject("");
+              this.ok();
+            }
           });
     }
   }

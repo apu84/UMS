@@ -102,5 +102,18 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
           "dd-MM-yyyy"));
     if(pJsonObject.containsKey("modifiedBy"))
       pMutableAccountTransaction.setModifiedBy(pJsonObject.getString("modifiedBy"));
+    if(pJsonObject.containsKey("supplierCode"))
+      pMutableAccountTransaction.setSupplierCode(pJsonObject.getString("supplierCode"));
+    if(pJsonObject.containsKey("customerCode"))
+      pMutableAccountTransaction.setCustomerCode(pJsonObject.getString("customerCode"));
+    if(pJsonObject.containsKey("invoiceNo"))
+      pMutableAccountTransaction.setInvoiceNo(pJsonObject.getString("invoiceNo"));
+    if(pJsonObject.containsKey("invoiceDate"))
+      pMutableAccountTransaction.setInvoiceDate(UmsUtils.convertToDate(pJsonObject.getString("invoiceDate"),
+          "dd-MM-yyyy"));
+    if(pJsonObject.containsKey("billNo"))
+      pMutableAccountTransaction.setBillNo(pJsonObject.getString("billNo"));
+    if(pJsonObject.containsKey("billDate"))
+      pMutableAccountTransaction.setBillDate(UmsUtils.convertToDate(pJsonObject.getString("billDate"), "dd-MM-yyyy"));
   }
 }

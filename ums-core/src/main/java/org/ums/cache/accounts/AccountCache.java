@@ -46,7 +46,12 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   }
 
   @Override
-  public List<Account> getExcludingGroups(List<Long> groupIdList) {
-    return getManager().getExcludingGroups(groupIdList);
+  public List<Account> getExcludingGroups(List<String> groupCodeList) {
+    return getManager().getExcludingGroups(groupCodeList);
+  }
+
+  @Override
+  public List<Account> getIncludingGroups(List<String> groupCodeList) {
+    return getManager().getIncludingGroups(groupCodeList);
   }
 }

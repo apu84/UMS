@@ -21,6 +21,11 @@ module ums {
     private journalVouchers: IJournalVoucher[];
     private existingJournalVouchers: IJournalVoucher[];
     private accounts: IAccount[];
+    private customerAndVendorAccounts: IAccount[];
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
     private totalDebit: number;
     private totalCredit: number;
     private pageNumber: number;
@@ -54,7 +59,7 @@ module ums {
 
       this.itemsPerPage = 20;
       this.type = AccountTransactionType.SELLING;
-      this.accountService.getAccountsByGroupFlag(JournalVoucherController.JOURNAL_VOUCHER_GROUP_FLAG).then((accounts: IAccount[]) => {
+      this.accountService.getExcludingBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         console.log("Accounts")
         console.log(accounts);
         this.accounts = accounts;
@@ -130,6 +135,7 @@ module ums {
       this.journalVoucherOfAddModal = <IJournalVoucher>{};
       this.journalVoucherOfAddModal.serialNo = this.journalVouchers.length + 1;
       this.journalVoucherOfAddModal.balanceType = BalanceType.Dr;
+      this.getVendorAndCustomerAccounts();
     }
 
     //todo use accounting library
@@ -173,7 +179,11 @@ module ums {
     }
 
     public fetchDetails(journalVoucher: IJournalVoucher) {
+      console.log("Selected currency");
+      console.log(this.selectedCurrency);
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
+        console.log("Fetch vouchers");
+        console.log(vouchers);
         this.configureAddVoucherSection(vouchers);
       });
     }
@@ -219,6 +229,22 @@ module ums {
       let currDate: Date = new Date();
       this.journalVouchers = [];
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
+    }
+
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accounts: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accounts;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+
+      this.accountService.getCustomerAccounts().then((accounts: IAccount[]) => {
+        this.customerAccounts = [];
+        this.customerAccountMapWithId = {};
+        this.customerAccounts = accounts;
+        this.customerAccounts.forEach((v: IAccount) => this.customerAccountMapWithId[v.id] = v);
+      });
     }
 
     private getCurrencyConversions() {

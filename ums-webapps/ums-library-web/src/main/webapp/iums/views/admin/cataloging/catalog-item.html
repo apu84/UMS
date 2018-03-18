@@ -47,11 +47,14 @@
                     <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
                     <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
                     <td data-title="Action" class="numeric" style="text-align: center">
-                        <i class="fa fa-eye" style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
-                        <i class="fa fa-pencil-square-o" style="cursor: pointer;"
+                        <i class="fa fa-eye" data-toggle="tooltip"
+                           title="View Item" style="cursor: pointer;" data-ng-click="fetchItem(item.id,'view')"></i>
+                        <i class="fa fa-pencil-square-o" style="cursor: pointer;" data-toggle="tooltip"
+                           title="Edit Item"
                            data-ng-click="fetchItem(item.id, 'edit')"></i>
                         <a data-target="#modal-confirm1" data-toggle="modal"
-                        style="cursor: pointer" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
+                           style="cursor: pointer" data-toggle="tooltip"
+                           title="Delete Item" data-ng-click="deleteItem(item.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
 
@@ -72,7 +75,7 @@
 
             <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
                data-ng-click="resetItemForm()" style="background-color: white;">
-                <i data-toggle="tooltip" title="Clear & Add Item" class="fa fa-plus-square" aria-hidden="true"></i>
+                <i data-toggle="tooltip" title="Clear & Add New Item" class="fa fa-plus-square" aria-hidden="true"></i>
             </a>
         </p>
         <!--Edit Item # 3 / Barcode 3 -->
@@ -127,9 +130,11 @@
         <div class="form-group">
 
             <label class="col-md-1 control-label">Supplier
-                &nbsp;&nbsp;<i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer"
-                               data-toggle="modal" data-target="#modal-supplier"></i>
-                &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
+                &nbsp;&nbsp;<span data-toggle="tooltip"
+                                  title="Create New Supplier"><i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer"
+                                                                  data-toggle="modal" data-target="#modal-supplier"></i></span>
+                &nbsp;&nbsp;<i class="fa fa-refresh" style="cursor: pointer" data-toggle="tooltip"
+                               title="Refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
 
             </label>
             <div class="col-md-3" id="supplierSelect2Div">
@@ -282,12 +287,16 @@
 <div id="modal-confirm1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">Are you sure? You want to delete this item</div>
+            <div class="modal-body"><span data-ng-show="canItemDelete">Are you sure? You want to delete this item</span>
+                <span data-ng-show="!canItemDelete">You can not perform <strong style="color: red">delete</strong>. Item is <strong>borrowed</strong> or <strong>on Hold</strong>.</span>
+            </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
-                <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
-                    Yes, Delete It
-                </button>
+                <div data-ng-show="canItemDelete">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" data-ng-click="confirmation()">
+                        Yes, Delete It
+                    </button>
+                </div>
             </div>
         </div>
     </div>

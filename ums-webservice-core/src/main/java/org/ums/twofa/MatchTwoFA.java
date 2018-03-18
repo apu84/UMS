@@ -51,14 +51,15 @@ public class MatchTwoFA extends Resource {
     String userProvidedPlainTextToken = pJsonObject.getString(TwoFAConstants.TWO_FA_TOKEN);
     String userProvidedHashedToken = "";
     TwoFAToken dbToken = mTwoFATokenGenerator.getTokenForValidation(getLoggedInUserId(), state);
-    if(mMapper.contains(state) && dbToken != null) {
+    if(mMapper.contains(state) && dbToken != null && !userProvidedPlainTextToken.trim().equals("")
+        && dbToken.getUsedOn() == null) {
       userProvidedHashedToken = DigestUtils.sha256Hex(String.valueOf(userProvidedPlainTextToken));
       if(!userProvidedHashedToken.equals(dbToken.getOtp())) {
         mTwoFATokenManager.updateWrongTryCount(Long.valueOf(state));
         TwoFAToken token = mTwoFATokenManager.get(Long.valueOf(state));
         if(token.getTryCount() > mUMSConfiguration.getTwoFATokenAllowableWrongTry())
           throw new ExcessiveAttemptsException();
-        return Response.status(Response.Status.BAD_REQUEST).build();
+        return Response.status(Response.Status.UNAUTHORIZED).build();
       }
       mTwoFATokenManager.updateRightTryCount(Long.valueOf(state));
 
@@ -74,7 +75,7 @@ public class MatchTwoFA extends Resource {
               Entity.entity(mapperEntry.getEntity(), MediaType.valueOf(mapperEntry.getMediaType()))).invoke();
     }
     else {
-      return Response.status(Response.Status.BAD_REQUEST).build();
+      return Response.status(Response.Status.UNAUTHORIZED).build();
     }
   }
 

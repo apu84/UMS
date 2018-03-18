@@ -2,9 +2,11 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.ClassAttendanceResourceHelper;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -19,19 +21,25 @@ public class MutableClassAttendanceResource extends Resource {
   ClassAttendanceResourceHelper mResourceHelper;
 
   @POST
-  public Response createNewClassAttendance(final JsonObject pJsonObject) {
+  @UmsLogMessage(message = "::: Create new Class Attendance :::")
+  public Response createNewClassAttendance(@Context HttpServletRequest pHttpServletRequest,
+      @HeaderParam("user-agent") String userAgent, final JsonObject pJsonObject) {
     return mResourceHelper.saveNewAttendance(pJsonObject);
   }
 
   @PUT
-  public Response updateClassAttendance(final @Context Request pRequest,
+  @UmsLogMessage(message = "::: Update Class Attendance :::")
+  public Response updateClassAttendance(@Context HttpServletRequest pHttpServletRequest,
+      @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) {
     return mResourceHelper.updateClassAttendance(pJsonObject);
   }
 
   @DELETE
+  @UmsLogMessage(message = "::: Delete Class Attendance :::")
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteClassAttendance(final @PathParam("object-id") String objectId) {
+  public Response deleteClassAttendance(@Context HttpServletRequest pHttpServletRequest,
+      @HeaderParam("user-agent") String userAgent, final @PathParam("object-id") String objectId) {
     return mResourceHelper.deleteClassAttendance(objectId);
   }
 

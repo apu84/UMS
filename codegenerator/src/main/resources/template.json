@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "LegacyTabulation",
-    "package": "org.ums.result.legacy",
+    "name": "CreditorLedger",
+    "package": "org.ums.domain.model.immutable",
     "fields": [
       {
         "id": {
@@ -10,51 +10,96 @@
         }
       },
       {
-        "gpa": "Double"
-      },
-      {
-        "cgpa": "Double"
-      },
-      {
-        "comment": "String"
-      },
-      {
-        "year" : "Integer"
-      },
-      {
-        "academicSemester": "Integer"
-      },
-      {
-        "semester": {
+        "Company": {
           "type": "Ref",
           "reference": {
-            "name": "Semester",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "Integer"
-            },
-            "manager": {
-              "name": "SemesterManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "student": {
-          "type": "Ref",
-          "reference": {
-            "name": "Student",
+            "name": "Company",
             "package": "org.ums.domain.model.immutable",
             "id": {
               "type": "String"
             },
             "manager": {
-              "name": "StudentManager",
+              "name": "CompanyManager",
               "package": "org.ums.manager"
             }
           }
         }
+      },
+      {
+        "divisionCode": "String"
+      },
+      {
+        "supplierCode": "String"
+      },
+      {
+        "AccountTransaction": {
+          "type": "Ref",
+          "reference": {
+            "name": "AccountTransaction",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "AccountTransactionManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "voucherNo": "String"
+      },
+      {
+        "voucherDate": "Date"
+      },
+      {
+        "serialNo": "Integer"
+      },
+      {
+        "billNo": "String"
+      },
+      {
+        "billDate": "Date"
+      },
+      {
+        "amount": "BigDecimal"
+      },
+      {
+        "paidAmount": "BigDecimal"
+      },
+      {
+        "dueDate": "Date"
+      },
+      {
+        "balanceType": "BalanceType"
+      },
+      {
+        "billClosingFlag": "String"
+      },
+      {
+        "currencyCode": "String"
+      },
+      {
+        "vatNo": "String"
+      },
+      {
+        "contCode": "String"
+      },
+      {
+        "orderNo": "String"
+      },
+      {
+        "statFlag": "String"
+      },
+      {
+        "statUpFlag": "String"
+      },
+      {
+        "modificationDate": "Date"
+      },
+      {
+        "modifiedBy": "String"
       }
     ]
   }

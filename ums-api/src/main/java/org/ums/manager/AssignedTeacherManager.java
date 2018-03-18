@@ -1,5 +1,6 @@
 package org.ums.manager;
 
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.enums.CourseCategory;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface AssignedTeacherManager<R, M, I> extends ContentManager<R, M, I>
       String pOfferedBy);
 
   List<R> getAssignedCourses(final Integer pSemesterId, final String pTeacherId);
+
+  R getAssignedCourse(final Integer pSemesterId, final String pTeacherId, final String pCourseId,
+      final String pSectionId);
 }
