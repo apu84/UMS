@@ -2,16 +2,23 @@ package org.ums.academic.resource.teacher.evaluation.system;
 
 import javax.json.JsonObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
+import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.manager.ApplicationTESManager;
+import org.ums.report.generator.teachersEvaluationReport.TesGenerator;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,8 +31,11 @@ import java.util.List;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ApplicationTESResource extends MutableApplicationTESResource {
+  private final Logger mLogger = LoggerFactory.getLogger(ApplicationTESResource.class);
   @Autowired
   ApplicationTESManager mApplicationTESManager;
+  @Autowired
+  TesGenerator mTesGeneratorManager;
 
   @GET
   @Path("/getAllQuestions")
@@ -83,4 +93,21 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
     return mHelper.getAlreadyReviewedCoursesInfo(pCourseId, pTeacherId, pRequest, mUriInfo);
   }
 
+  @GET
+  @Path("/getReport/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createCertificateReport(@QueryParam("course-id") String pCourseId,
+      @QueryParam("teacher-id") String pTeacherId, @QueryParam("semester-id") Integer pSemesterId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mTesGeneratorManager.createTesReport(pCourseId, pTeacherId, pSemesterId, output);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
 }

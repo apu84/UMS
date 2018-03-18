@@ -102,6 +102,9 @@
                 <button type="button"  class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Courses Assigned For Evaluation</h4>
             </div>
+            <div>
+                <button type="button" class="btn btn-info btn-sm" data-ng-click="vm.getReport()">Download As PDF</button>
+            </div>
             <div class="modal-body">
                 <div style="padding-top:20px;padding-bottom: 40px"  data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
 
@@ -133,7 +136,9 @@
 
                                 <table class="table table-bordered">
                                     <tr  data-ng-repeat="items in (filterd = app.comments | limitTo:vm.innerCommentPgItemsPerPage:vm.innerCommentPgItemsPerPage*(vm.innerCommentPgCurrentPage - 1))">
-                                        <td style="width: 20px">{{$index+1}}</td>
+                                        <td style="width: 20px">
+                                            {{(vm.innerCommentPgCurrentPage - 1) * vm.innerCommentPgItemsPerPage + $index + 1}}
+                                        </td>
                                         <td>{{items}}</td>
                                     </tr>
                                 </table>

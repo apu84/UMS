@@ -201,11 +201,13 @@ module ums{
                        counterObType2++;
                        this.nonClassObservationTotalSPoints =this.nonClassObservationTotalSPoints+this.studentResult[i].totalScore;
                        this.nonClassObservationTotalStudent=this.nonClassObservationTotalStudent+this.studentResult[i].studentNo;
-                       this.nonClassObservationAverage=this.nonClassObservationAverage+this.studentResult[i].averageScore;
+                       this.nonClassObservationAverage=(this.nonClassObservationAverage+this.studentResult[i].averageScore);
                    }
                }
                this.classObservationAverage=(this.classObservationAverage/counterObType1);
-               this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2)
+               this.classObservationAverage=Number(this.classObservationAverage.toFixed(2));
+               this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2);
+               this.nonClassObservationAverage=Number(this.nonClassObservationAverage.toFixed(2))
                this.getComment();
                defer.resolve(this.studentResult);
            },
@@ -231,6 +233,20 @@ module ums{
            });
        return defer.promise;
 
+   }
+   private  getReport(){
+       let contentType: string = UmsUtil.getFileContentType("pdf");
+       let fileName = "Evaluation Report";
+       var defer = this.$q.defer();
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReport/courseId/'+'CSE4266'+'/teacherId/'+'0976'+'/semesterId/'+9, 'application/pdf',
+           (data: any, etag: string) => {
+               console.log("pdf");
+               UmsUtil.writeFileContent(data, contentType, fileName);
+           },
+           (response: ng.IHttpPromiseCallbackArg<any>) => {
+               console.error(response);
+           }, 'arraybuffer');
+       return defer.promise;
    }
 
    private submit(){

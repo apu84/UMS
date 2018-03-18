@@ -26,6 +26,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +122,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public List<Report> getResult(final Request pRequest, final UriInfo pUriInfo){
       double cRoombservation=0,noncRoomObservation=0;
       Integer countercR=0,counterncR=0;
+      DecimalFormat newFormat = new DecimalFormat("#.##");
       HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
       List<Report> reportList= new ArrayList<Report>();
       List<Report> reportListValue= new ArrayList<Report>();
@@ -134,7 +136,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             double value=getContentManager().getAverageScore("","",a.getQuestionId(),11);
             String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
             Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-            reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(value/studentNo),observationType));
+            reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
             mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
         });
       for(Map.Entry m:mapForCalculateResult.entrySet()){
@@ -156,7 +158,6 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
       List<ApplicationTES> getDetailedResult=null;
       List<StudentComment> commentList= new ArrayList<StudentComment>();
-
 
         for(int i=0;i<applications.size();i++){
             Integer questionId=applications.get(i).getQuestionId();
