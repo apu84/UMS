@@ -976,7 +976,7 @@ module ums {
 
     private saveGradeSheet(): boolean {
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(1);
-      if(this.validateGrades())
+      if(this.validateGrades(false))
           this.postGradeSheet(gradeList, 'save');
       else {
         $("#alertMessage").html("There are some problem with your grades. Please check and correct them at first.");
@@ -987,20 +987,20 @@ module ums {
       return false;
     }
 
-    private validateGrades(): boolean {
+    private validateGrades(force_validate:boolean): boolean {
       var validate = true;
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
       if (this.$scope.courseType == "THEORY") {
         for (var ind in gradeList) {
           var studentMark: IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
+          if (this.validateGrade(force_validate, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
             validate = false;
         }
       }
       else if (this.$scope.courseType == "SESSIONAL") {
         for (var ind in gradeList) {
           var studentMark: IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId, "", "", "", "", studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
+          if (this.validateGrade(force_validate, studentMark.studentId, "", "", "", "", studentMark.total.toString(), studentMark.gradeLetter, studentMark.regType) == true)
             validate = false;
         }
       }
@@ -1082,7 +1082,7 @@ module ums {
           return;
         }
       }
-      validate = this.validateGrades();
+      validate = this.validateGrades(true);
       if (validate == false) {
         alert("There are some problem with the data you submitted. Please check and correct. Then submit it again.");
         return;
