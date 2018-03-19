@@ -21,6 +21,8 @@ public interface AccountTransactionManager extends ContentManager<AccountTransac
 
   Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate);
 
+  List<String> getVouchers(Voucher pVoucher, Date pStartDate, Date pEndDate);
+
   List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher);
 
   List<MutableAccountTransaction> getAllPaginated(int itemPerPage, int pageNumber, Voucher voucher, String voucherNo);

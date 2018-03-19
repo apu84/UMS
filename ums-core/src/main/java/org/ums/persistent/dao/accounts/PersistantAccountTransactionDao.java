@@ -49,18 +49,26 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   }
 
   @Override
+  public AccountTransaction get(Long pId) {
+    String query = "SELECT * FROM DT_TRANSACTION WHERE ID=:ID";
+    Map parameterMap = new HashMap();
+    parameterMap.put("ID", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
   public List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo) {
     String query =
         "SELECT DT_TRANSACTION.* " + "FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
             + "WHERE VOUCHER_NO=? AND VOUCHER_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
             + "      VOUCHER_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentJournalVoucherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentAccountTransactionRowMapper());
   }
 
   @Override
   public List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate) {
     String query = "select * from DT_TRANSACTION where VOUCHER_NO=? and trunc(MODIFIED_DATE)=TRUNC(?)";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentJournalVoucherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentAccountTransactionRowMapper());
   }
 
   @Override
@@ -137,6 +145,15 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   }
 
   @Override
+  public List<String> getVouchers(Voucher pVoucher, Date pStartDate, Date pEndDate) {
+    String query =
+        "SELECT DISTINCT (VOUCHER_NO) VOUCHER_NO " +
+            "      FROM DT_TRANSACTION " +
+            "      WHERE VOUCHER_ID = ? AND (MODIFIED_DATE >= ? OR MODIFIED_DATE <=?)";
+    return mJdbcTemplate.query(query, new Object[]{pVoucher.getId(), pStartDate, pEndDate}, (rs, i) -> rs.getString("voucher_no"));
+  }
+
+  @Override
   public Integer getTotalNumber(Voucher pVoucher) {
     String query =
         "select count(DISTINCT(VOUCHER_NO)) from  DT_TRANSACTION,FIN_ACCOUNT_YEAR where VOUCHER_ID=? and FIN_ACCOUNT_YEAR.YEAR_CLOSING_FLAG='O' and balance_type='Dr' and (VOUCHER_DATE>=FIN_ACCOUNT_YEAR.CURRENT_START_DATE and "
@@ -180,7 +197,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
-        new PersistentJournalVoucherRowMapper());
+        new PersistentAccountTransactionRowMapper());
   }
 
   @Override
@@ -212,7 +229,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
-        new PersistentJournalVoucherRowMapper());
+        new PersistentAccountTransactionRowMapper());
   }
 
   private Map getInsertOrUpdateParameters(MutableAccountTransaction pMutableAccountTransaction) {
@@ -244,7 +261,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     return parameters;
   }
 
-  class PersistentJournalVoucherRowMapper implements RowMapper<MutableAccountTransaction> {
+  class PersistentAccountTransactionRowMapper implements RowMapper<MutableAccountTransaction> {
     @Override
     public MutableAccountTransaction mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAccountTransaction transaction = new PersistentAccountTransaction();

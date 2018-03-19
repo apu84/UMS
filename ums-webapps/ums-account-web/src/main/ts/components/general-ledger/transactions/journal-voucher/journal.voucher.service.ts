@@ -100,7 +100,7 @@ module ums {
 
     public deleteVoucher(voucher: IJournalVoucher): ng.IPromise<any> {
       let defer: ng.IDeferred<any> = this.$q.defer();
-      this.httpClient.put(this.url + "/delete", voucher, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.put(this.url + "/delete", voucher.id, HttpClient.MIME_TYPE_JSON)
           .success((response) => defer.resolve(response))
           .error((response) => defer.resolve(response));
       return defer.promise;

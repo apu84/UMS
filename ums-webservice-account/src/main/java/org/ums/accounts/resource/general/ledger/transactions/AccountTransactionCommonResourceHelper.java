@@ -141,7 +141,13 @@ public class AccountTransactionCommonResourceHelper extends
 
   private TransactionResponse getVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
       Date pFirstDate, Date pLastDate) {
-    Integer nextVoucher = getContentManager().getVoucherNumber(pVoucher, pFirstDate, pLastDate) + 1;
+    List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, pLastDate);
+    List<Integer> voucherNoListInNumber = new ArrayList<>();
+    accountTransactions.forEach(a -> {
+      voucherNoListInNumber.add(Integer.parseInt(a.substring(4)));
+    });
+
+    Integer nextVoucher = Collections.max(voucherNoListInNumber) + 1;
     return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucher);
   }
 
@@ -184,13 +190,17 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @Transactional
-  public Response delete(final MutableAccountTransaction pAccountTransaction) {
-    mAccountTransactionManager.delete(pAccountTransaction);
+  public Response delete(final AccountTransaction pAccountTransaction) {
+    mAccountTransactionManager.delete(new PersistentAccountTransaction(pAccountTransaction));
     List<Long> accountTransactionIdList = new ArrayList<>();
     accountTransactionIdList.add(pAccountTransaction.getId());
     List<MutableChequeRegister> chequeRegisterlist =
         mChequeRegisterManager.getByTransactionIdList(accountTransactionIdList);
     mChequeRegisterManager.delete(chequeRegisterlist);
+    List<MutableDebtorLedger> debtorLedgers = mDebtorLedgerManager.get(Arrays.asList(pAccountTransaction));
+    mDebtorLedgerManager.delete(debtorLedgers);
+    List<MutableCreditorLedger> creditorLedgers = mCreditorLedgerManager.get(Arrays.asList(pAccountTransaction));
+    mCreditorLedgerManager.delete(creditorLedgers);
     return Response.accepted().build();
   }
 
@@ -227,10 +237,21 @@ public class AccountTransactionCommonResourceHelper extends
     Map<Long, CreditorLedger> creditorLedgerMapWithTransaction = creditorLedgers.stream().collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
     mutableAccountTransactions.forEach(a -> {
       a.setVoucherNo(a.getVoucherNo().substring(2));
-      if (debtorLedgerMapWithTransaction.containsKey(a.getId()))
-        a.setCustomerCode(debtorLedgerMapWithTransaction.get(a.getId()).getCustomerCode());
-      if (creditorLedgerMapWithTransaction.containsKey(a.getId()))
-        a.setSupplierCode(creditorLedgerMapWithTransaction.get(a.getId()).getSupplierCode());
+      if (debtorLedgerMapWithTransaction.containsKey(a.getId())) {
+        DebtorLedger debtorLedger = debtorLedgerMapWithTransaction.get(a.getId());
+        a.setCustomerCode(debtorLedger.getCustomerCode());
+        a.setInvoiceNo(debtorLedger.getInvoiceNo());
+        a.setInvoiceDate(debtorLedger.getInvoiceDate());
+        a.setPaidAmount(debtorLedger.getPaidAmount());
+      }
+      if (creditorLedgerMapWithTransaction.containsKey(a.getId())) {
+        CreditorLedger creditorLedger = creditorLedgerMapWithTransaction.get(a.getId());
+        a.setSupplierCode(creditorLedger.getSupplierCode());
+        a.setBillNo(creditorLedger.getBillNo());
+        a.setBillDate(creditorLedger.getBillDate());
+        a.setPaidAmount(creditorLedger.getPaidAmount());
+      }
+
     });
     return new ArrayList<>(mutableAccountTransactions);
   }

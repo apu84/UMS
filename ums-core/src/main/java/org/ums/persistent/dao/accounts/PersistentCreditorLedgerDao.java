@@ -70,6 +70,8 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
 
   @Override
   public int update(List<MutableCreditorLedger> pMutableList) {
+    if(pMutableList.size() == 0)
+      return UmsUtils.NO_VALUE;
     Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
     return mNamedParameterJdbcTemplate.batchUpdate(UPDATE_ONE, parameterObjects).length;
   }
@@ -83,6 +85,7 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
 
   @Override
   public int delete(List<MutableCreditorLedger> pMutableList) {
+    if(pMutableList.size()==0) return UmsUtils.NO_VALUE;
     String query = DELETE_ONE + " where id in (:idList)";
     Map parameterMap = new HashMap();
     parameterMap.put("idList", pMutableList.stream().map(i -> i.getId()).collect(Collectors.toList()));

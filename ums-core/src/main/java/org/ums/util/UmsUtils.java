@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 
 public class UmsUtils {
   public static int FIRST = 1;
+  public static int NO_VALUE = 0;
 
   public static String getNumberWithSuffix(final int pNumber) {
     String suffix = "";

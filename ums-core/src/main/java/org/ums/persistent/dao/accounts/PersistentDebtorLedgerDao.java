@@ -35,8 +35,8 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
       + "  last_modified=:lastModified, " + "  TRANSACTION_ID=:transactionId " + "where id=:id";
 
   String INSERT_ONE =
-      "INSERT INTO DT_DEBTOR_LEDGER(ID, COMP_CODE, DIVISION_CODE, VOUCHER_NO, VOUCHER_DATE, SR_NO, INVOICE_NO, INVOICE_DATE, AMOUNT, PAID_AMOUNT, DUE_DATE, BALANCE_TYPE, INVOICE_CLOSE_FLAG, CURRENCY_CODE, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED, TRANSACTION_ID) VALUES "
-          + "  (:id, :compCode, :divisionCode, :voucherNo, :voucherDate, :serialNo, :invoiceNo, :invoiceDate, :amount, :paidAmount, :dueDate, :balanceType, :invoiceCloseFlag, :currencyCode, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
+      "INSERT INTO DT_DEBTOR_LEDGER(ID, COMP_CODE, DIVISION_CODE, CUSTOMER_CODE, VOUCHER_NO, VOUCHER_DATE, SR_NO, INVOICE_NO, INVOICE_DATE, AMOUNT, PAID_AMOUNT, DUE_DATE, BALANCE_TYPE, INVOICE_CLOSE_FLAG, CURRENCY_CODE, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED, TRANSACTION_ID) VALUES "
+          + "  (:id, :compCode, :divisionCode,:customerCode, :voucherNo, :voucherDate, :serialNo, :invoiceNo, :invoiceDate, :amount, :paidAmount, :dueDate, :balanceType, :invoiceCloseFlag, :currencyCode, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :lastModified, :transactionId)";
 
   String DELETE_ONE = "DELETE FROM DT_DEBTOR_LEDGER WHERE ID=:id";
 
@@ -79,6 +79,8 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
 
   @Override
   public int update(List<MutableDebtorLedger> pMutableList) {
+    if(pMutableList.size() == 0)
+      return UmsUtils.NO_VALUE;
     Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
     return mNamedParameterJdbcTemplate.batchUpdate(UPDATE_ONE, parameterObjects).length;
   }
@@ -93,6 +95,7 @@ public class PersistentDebtorLedgerDao extends DebtorLedgerDaoDecorator {
 
   @Override
   public int delete(List<MutableDebtorLedger> pMutableList) {
+    if(pMutableList.size()==0) return UmsUtils.NO_VALUE;
     String query = DELETE_ONE + " where id in (:idList)";
     List<Long> idList = pMutableList.stream().map(d -> d.getId()).collect(Collectors.toList());
     Map parameterMap = new HashMap();

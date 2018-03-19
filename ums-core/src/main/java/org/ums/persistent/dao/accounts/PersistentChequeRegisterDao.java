@@ -7,6 +7,7 @@ import org.ums.decorator.accounts.ChequeRegisterDaoDecorator;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +56,8 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   @Override
   public int update(List<MutableChequeRegister> pMutableList) {
+    if(pMutableList.size() == 0)
+      return UmsUtils.NO_VALUE;
     String query = UPDATE_ONE;
     Map<String, Object>[] paramObjects = getParamObjects(pMutableList);
     return mNamedParameterJdbcTemplate.batchUpdate(query, paramObjects).length;
@@ -62,7 +65,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   @Override
   public int delete(MutableChequeRegister pMutable) {
-    String query = "delete from dt_cheque_register where id in (:id)";
+    String query = "delete from dt_cheque_register where id =:id";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pMutable.getId());
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
@@ -70,6 +73,7 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   @Override
   public int delete(List<MutableChequeRegister> pMutableList) {
+    if (pMutableList.size() == 0) return UmsUtils.NO_VALUE;
     String query = "delete from dt_cheque_register where id in (:id)";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pMutableList.stream().map(t -> t.getId()).collect(Collectors.toList()));

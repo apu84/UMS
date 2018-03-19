@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.logs.UmsLogMessage;
+import org.ums.manager.accounts.AccountTransactionManager;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ import java.util.List;
 public class MutableJournalVoucherResource {
   @Autowired
   protected JournalVoucherResourceHelper mJournalVoucherResourceHelper;
+  @Autowired
+  protected AccountTransactionManager mAccountTransactionManager;
 
   @POST
   @Path("/save")
@@ -26,9 +29,10 @@ public class MutableJournalVoucherResource {
     return mJournalVoucherResourceHelper.save(pJsonArray);
   }
 
-  @DELETE
+  @PUT
   @Path("/delete")
-  public Response delete(final MutableAccountTransaction pMutableAccountTransaction) {
+  public Response delete(final String pTransactionId) {
+    AccountTransaction pMutableAccountTransaction = mAccountTransactionManager.get(Long.parseLong(pTransactionId));
     return mJournalVoucherResourceHelper.delete(pMutableAccountTransaction);
   }
 

@@ -8,10 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
-import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.Currency;
-import org.ums.domain.model.immutable.accounts.Receipt;
-import org.ums.domain.model.immutable.accounts.Voucher;
+import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
@@ -531,6 +528,36 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
     setConversionFactor(pTransaction.getConversionFactor());
     setProjNo(pTransaction.getProjNo());
     setDefaultCompany(pTransaction.getDefaultCompany());
+    setStatFlag(pTransaction.getStatFlag());
+    setStatUpFlag(pTransaction.getStatUpFlag());
+    setReceipt(pTransaction.getReceipt());
+    setReceiptId(pTransaction.getReceiptId());
+    setPostDate(pTransaction.getPostDate());
+    setModifiedDate(pTransaction.getModifiedDate());
+    setModifiedBy(pTransaction.getModifiedBy());
+    setLastModified(pTransaction.getLastModified());
+  }
+
+  public PersistentAccountTransaction(AccountTransaction pTransaction) {
+    setId(pTransaction.getId());
+    setCompany(pTransaction.getCompany());
+    setCompanyId(pTransaction.getCompanyId());
+    setDivisionCode(pTransaction.getDivisionCode());
+    setVoucherNo(pTransaction.getVoucherNo());
+    setVoucherDate(pTransaction.getVoucherDate());
+    setSerialNo(pTransaction.getSerialNo());
+    setAccount(pTransaction.getAccount());
+    setAccountId(pTransaction.getAccountId());
+    setVoucher(pTransaction.getVoucher());
+    setVoucherId(pTransaction.getVoucherId());
+    setAmount(pTransaction.getAmount());
+    setBalanceType(pTransaction.getBalanceType());
+    setNarration(pTransaction.getNarration());
+    setForeignCurrency(pTransaction.getForeignCurrency());
+    setCurrency(pTransaction.getCurrency());
+    setCurrencyId(pTransaction.getCurrencyId());
+    setConversionFactor(pTransaction.getConversionFactor());
+    setProjNo(pTransaction.getProjNo());
     setStatFlag(pTransaction.getStatFlag());
     setStatUpFlag(pTransaction.getStatUpFlag());
     setReceipt(pTransaction.getReceipt());
