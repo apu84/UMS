@@ -8,7 +8,7 @@
         <label class="col-md-8 control-label"><input type="text"
                                                      class="form-control required"
                                                      id="resultsPerPloage"
-                                                     placeholder='Search by student Id'
+                                                     placeholder='Search by Teacher Name'
                                                      data-ng-model="vm.facultyName"/></label>
     </div>
 </div>
@@ -60,12 +60,12 @@
                                    data-ng-model="assignedCourseSearch"/></label><br>
                     <table class="table table-striped">
                         <thead>
-                        <th style="background-color: #FAFAFA; ">#</th>
+                        <th style="background-color: #FAFAFA; ">SL</th>
                         <th style="background-color: #FAFAFA; ">Faculty Name</th>
                         <th style="background-color: #FAFAFA; ">CourseNo</th>
                         <th style="background-color: #FAFAFA; ">CourseTitle</th>
                         <th style="background-color: #FAFAFA; ">Section</th>
-                        <th style="background-color: #FAFAFA; ">Approved Date</th>
+                        <th style="background-color: #FAFAFA; ">Assigned Date</th>
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="app in vm.setRivewedCoursesHistory | filter:assignedCourseSearch ">
