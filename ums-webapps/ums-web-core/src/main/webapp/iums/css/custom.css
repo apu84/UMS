@@ -470,3 +470,13 @@ angular-filemanager .breadcrumb{
 .has-success .form-control:focus{
     box-shadow: 0 0 5px #18bc9c !important;
 }
+
+/*  2nd Level Side bar Navigation Selected List will show in White color - font awesome icons */
+body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.active > a i:before, body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-third-level li > a i:before {
+    color: #FFFFFF;
+}
+/*  2nd Level Side bar Navigation on hover will show in White color - font awesome icons */
+body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.active a i:before,
+body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li:hover a i:before {
+    color: #FFFFFF;
+}
