@@ -46,7 +46,7 @@
     '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
     '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
-    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet'], 'navId': '1111'},
+    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet'], 'navId': '2069'},
     '/roomBasedRoutine': {title: 'Room-wise Routine', 'breadcrumb': ['Routine', 'Room-wise']},
     '/marksSubmissionStat': {title: 'Marks Submission Statistics', 'breadcrumb': ['Marks Submission Stat.']},
     '/uploadMeritList': {title: 'Upload Admission Merit List', 'breadcrumb': ['Admission Merit List']},
@@ -75,3 +75,4 @@
     }
   };
 })(jQuery);
+
