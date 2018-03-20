@@ -32,11 +32,7 @@ public class GradeSubmissionService {
   @Autowired
   private UserManager mUserManager;
   @Autowired
-  private MessageResource mMessageResource;
-
-  @Autowired
   private UtilsService mUtilsService;
-
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
@@ -369,6 +365,7 @@ public class GradeSubmissionService {
   }
 
   public void sendNotification(String userId, String courseNumber) {
+    String producer = SecurityUtils.getSubject().getPrincipal().toString();
     Notifier notifier = new Notifier() {
       @Override
       public List<String> consumers() {
@@ -379,7 +376,8 @@ public class GradeSubmissionService {
 
       @Override
       public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
+        mLogger.info("Notification Producer for '{}' : {}", notificationType(), producer);
+        return producer;
       }
 
       @Override

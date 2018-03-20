@@ -24,4 +24,6 @@ public interface ContentManager<R, M, I> {
   boolean exists(final I pId);
 
   int count(final List<M> pMutableList);
+
+  void invalidateCache(M pMutable);
 }

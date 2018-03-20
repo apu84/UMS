@@ -90,6 +90,12 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
+  public void invalidateCache(M pMutable) {
+    invalidate(pMutable);
+    getCacheManager().invalidateList(getCachedListKey());
+  }
+
+  @Override
   public R validate(R pReadonly) {
     String cacheKey = getCacheKey(pReadonly.getId());
     String lastModified = getCacheManager().getLastModified(cacheKey);

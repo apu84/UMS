@@ -104,6 +104,10 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
     sMarksSubmissionStatusManager.update(this);
   }
 
+  public void invalidateCache() {
+    sMarksSubmissionStatusManager.invalidateCache(this);
+  }
+
   @Override
   public MutableMarksSubmissionStatus edit() {
     return new PersistentMarksSubmissionStatus(this);

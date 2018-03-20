@@ -435,18 +435,34 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         }
         getContentManager().updateGradeStatus_Recheck(marksSubmissionStatus, gradeList.get(0), gradeList.get(1));
       }
-      MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
-      mutable.setStatus(nextStatus);
-      if(nextStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+
+      if(marksSubmissionStatus.getStatus() == CourseMarksSubmissionStatus.ACCEPTED_BY_COE  && nextStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+        marksSubmissionStatus
+            = mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
+            requestedStatusDTO.getCourseId(),
+            requestedStatusDTO.getExamType());
+
+        MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
         mutable.setLastSubmissionDatePrep(requestedStatusDTO.getLastSubmissionDatePrep());
         mutable.setLastSubmissionDateScr(requestedStatusDTO.getLastSubmissionDateScr());
         mutable.setLastSubmissionDateHead(requestedStatusDTO.getLastSubmissionDateHead());
+        mutable.setStatus(nextStatus);
+//        mutable.update();
         if(getContentManager().update(mutable)==0)
-         // throw new ValidationException("Failed to update makrs submission status..");
-        System.out.println("abcddd");
+          System.out.println("abcddd");
+        mutable.invalidateCache();
+        // throw new ValidationException("Failed to update makrs submission status..");
+      } else  {
+        MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
+        mutable.setStatus(nextStatus);
+        if((nextStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE)) {
+          mutable.setLastSubmissionDatePrep(requestedStatusDTO.getLastSubmissionDatePrep());
+          mutable.setLastSubmissionDateScr(requestedStatusDTO.getLastSubmissionDateScr());
+          mutable.setLastSubmissionDateHead(requestedStatusDTO.getLastSubmissionDateHead());
+        }
+        mutable.update();
+        mutable.invalidateCache();
       }
-      else
-       mutable.update();
 
 
       if (recheckList != null) recheckList.stream().forEach(g -> {

@@ -42,4 +42,7 @@ public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Edi
   void setAcademicSemester(Integer pSemester);
 
   void setTotalPart(Integer pTotalPart);
+
+  void invalidateCache();
+
 }

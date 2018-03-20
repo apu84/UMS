@@ -25,22 +25,6 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     return mJdbcTemplate.update(query, pMutable.getStatus().getId(), pMutable.getLastSubmissionDatePrep(),
         pMutable.getLastSubmissionDateScr(), pMutable.getLastSubmissionDateHead(), pMutable.getLastSubmissionDateCoe(),
         pMutable.getCourseId(), pMutable.getSemesterId(), pMutable.getExamType().getId());
-    /*
-     * List<MutableMarksSubmissionStatus> abc = new ArrayList<>(); abc.add(pMutable); int[] a =
-     * mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
-     * 
-     * @Override public void setValues(PreparedStatement ps, int i) throws SQLException {
-     * MutableMarksSubmissionStatus aa = abc.get(i); ps.setInt(1, aa.getSemesterId());
-     * ps.setString(2, aa.getCourseId()); ps.setInt(3, aa.getStatus().getId()); ps.setInt(4,
-     * aa.getExamType().getId()); ps.setString(5, null); ps.setString(6, null); ps.setDate(7, null);
-     * ps.setInt(8, aa.getTotalPart()); ps.setInt(9, aa.getPartATotal()); ps.setInt(10,
-     * aa.getPartBTotal()); ps.setInt(11, aa.getYear()); ps.setInt(12, aa.getAcademicSemester());
-     * ps.setLong(13, aa.getId()); }
-     * 
-     * @Override public int getBatchSize() { return abc.size(); } });
-     * 
-     * return a.length;
-     */
   }
 
   String SELECT_THEORY_MARKS =
