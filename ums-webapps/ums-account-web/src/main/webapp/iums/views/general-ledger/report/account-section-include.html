@@ -1,0 +1,49 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Accounts</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3" align="right">Account Type</div>
+            <div class="col-md-9" align="left">
+                <select theme="bootstrap" class="form-control required" data-ng-model="vm.accountType"
+                        data-ng-change="vm.accountTypeChanged()">
+                    <option value="1">All</option>
+                    <option value="2">Specific</option>
+                    <option value="3">Group</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row" ng-if="vm.SPECIFIC==vm.accountType">
+            <div class="form-group">
+                <label for="groupName" class="col-md-3 control-label" align="right">Account Name</label>
+                <div class="col-md-9">
+                    <ui-select id="accountName" theme="bootstrap"
+                               data-ng-model="vm.selectedAccount"
+                    >
+                        <ui-select-match placeholder="Select Account">{{vm.selectedAccount.accountName}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="g in vm.accounts|filter:$select.search">
+                            <small ng-bind-html="g.accountName | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="vm.GROUP==vm.accountType">
+            <div class="form-group">
+                <label for="groupName" class="col-md-3 control-label" align="right">Group Name</label>
+                <div class="col-md-9">
+                    <ui-select id="groupName" theme="bootstrap"
+                               data-ng-model="vm.selectedGroup"
+                    >
+                        <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="g in vm.groups|filter:$select.search">
+                            <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

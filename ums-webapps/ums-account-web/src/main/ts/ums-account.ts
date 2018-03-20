@@ -146,6 +146,20 @@ module ums {
             }]
           }
         })
+        .state('generalLedgerReport', {
+          url: "/generalLedgerReport",
+          controller: 'GeneralLedgerReportController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/report/general-ledger-report.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
         .state('contraVoucher', {
           url: "/contraVoucher",
           controller: 'ContraVoucherController',

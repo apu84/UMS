@@ -132,6 +132,9 @@
 /// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.service.ts'/>
 /// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
+/// <reference path='components/general-ledger/reports/general.ledger.report.controller.ts'/>
+/// <reference path='components/general-ledger/reports/general.ledger.report.service.ts'/>
+
 
 
 /// <reference path="components/directives/balance.type.directive.ts"/>

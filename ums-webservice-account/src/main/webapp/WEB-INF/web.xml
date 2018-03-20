@@ -83,6 +83,7 @@
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
         org.ums.accounts,
+        org.ums.service,
         org.ums.logs
       </param-value>
     </init-param>
