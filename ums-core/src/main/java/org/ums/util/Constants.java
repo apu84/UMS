@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 public interface Constants {
   String DATE_FORMAT = "dd/MM/yyyy";
   SimpleDateFormat DATE_TIME_24H_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-  SimpleDateFormat DATE_TIME_12H_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
+  SimpleDateFormat DATE_TIME_12H_FORMAT = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa");
   SimpleDateFormat DF_dd_Mon_YY_Time = new SimpleDateFormat("dd MMM, yy HH:mm:ss");
   String SERVICE_CONTEXT = "services-context.xml";
 
