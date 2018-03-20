@@ -7,7 +7,6 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.meeting.Schedule;
 import org.ums.domain.model.mutable.meeting.MutableSchedule;
-import org.ums.enums.meeting.MeetingType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.meeting.ScheduleManager;
 import org.ums.persistent.model.meeting.PersistentSchedule;
@@ -55,7 +54,6 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
   public JsonObject getNextMeetingNo(final int pMeetingTypeId, final UriInfo pUriInfo) {
     int meetingNo = 0;
     meetingNo = mManager.getNextMeetingNo(pMeetingTypeId);
-    System.out.println(meetingNo);
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("nextMeetingNumber", meetingNo + 1);
     return jsonObjectBuilder.build();

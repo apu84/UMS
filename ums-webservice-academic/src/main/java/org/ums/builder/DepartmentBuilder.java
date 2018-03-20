@@ -18,6 +18,7 @@ public class DepartmentBuilder implements Builder<Department, MutableDepartment>
     pBuilder.add("shortName", pReadOnly.getShortName());
     pBuilder.add("longName", pReadOnly.getLongName());
     pBuilder.add("type", pReadOnly.getType());
+    pBuilder.add("category", pReadOnly.getType() == 1 ? "Departments" : "Offices");
     pBuilder.add("self",
         pUriInfo.getBaseUriBuilder().path("academic").path("department").path(String.valueOf(pReadOnly.getId()))
             .build().toString());

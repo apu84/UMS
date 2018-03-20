@@ -16,11 +16,18 @@ module ums {
 
         private allDepartments = [];
         private allDesignations = [];
+        private changedDesignationTypes = [];
         private allEmploymentTypes = [];
+        private allEmployeeTypes = [];
+        private changedEmployeeTypes = [];
+        private academicEmployeeTypes = [];
+        private officialEmployeeTypes = [];
         private allRoles = [];
         private showRightDiv: boolean = false;
         private newEmployee: INewEmployee;
         private isNotUniqueShortName: boolean = false;
+        private similarUsers = [];
+        private showSimilarUsersPortion: boolean = false;
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -35,6 +42,9 @@ module ums {
                     private roles: any) {
 
             this.newEmployee = <INewEmployee>{};
+            this.allEmployeeTypes = appConstants.employeeTypes;
+            this.academicEmployeeTypes = appConstants.academicEmployeeTypes;
+            this.officialEmployeeTypes = appConstants.officialEmployeeTypes;
             this.allDepartments = departments;
             this.allDesignations = designations;
             this.allEmploymentTypes = employmentTypes;
@@ -67,9 +77,10 @@ module ums {
         public createId(): void {
             if (this.newEmployee.department && this.newEmployee.employeeType) {
                 this.employeeService.getNewEmployeeId(this.newEmployee.department["id"],
-                    +this.newEmployee.employeeType).then((result: any) => {
+                    this.newEmployee.employeeType["id"]).then((result: any) => {
                     this.newEmployee.id = result;
                     this.showRightDiv = true;
+                    this.newEmployee.IUMSAccount = true;
                 });
             }
             else {
@@ -84,6 +95,42 @@ module ums {
                     this.notify.error("Short name already exists");
                 }
             });
+        }
+
+        public changeDesignationSelection(): void {
+            this.changedDesignationTypes = [];
+            if (this.newEmployee.department != undefined && this.newEmployee.employeeType != undefined) {
+                this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
+                    if (response.length < 1) {
+                        this.notify.error("No designation found");
+                    }
+                    else {
+                        for (let i = 0; i < response.length; i++) {
+                            for (let j = 0; j < this.allDesignations.length; j++) {
+                                if (response[i].designationId == this.allDesignations[j].id) {
+                                    this.changedDesignationTypes.push(this.allDesignations[j]);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        public changeEmployeeTypeSelection(): void {
+            this.changedEmployeeTypes = [];
+            this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
+        }
+
+        public findSimilarUsers(): void {
+            this.similarUsers = [];
+            this.showSimilarUsersPortion = false;
+            if (this.newEmployee.firstName != undefined && this.newEmployee.lastName != undefined) {
+                this.employeeService.getSimilarUsers(this.newEmployee.firstName, this.newEmployee.lastName).then((data: any) => {
+                    this.similarUsers = data;
+                    this.showSimilarUsersPortion = true;
+                });
+            }
         }
 
         private convertToJson(): ng.IPromise<any> {

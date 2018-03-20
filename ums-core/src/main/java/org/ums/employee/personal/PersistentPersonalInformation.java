@@ -558,7 +558,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
 
   @Override
   public String getFullName() {
-    return mFirstName.concat(mLastName == null ? "" : (" " + mLastName));
+    return mFirstName.trim().concat(mLastName == null ? "" : (" " + mLastName.trim()));
   }
 
   @Override

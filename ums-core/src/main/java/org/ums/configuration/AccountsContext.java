@@ -30,8 +30,10 @@ public class AccountsContext {
 
   @Bean
   GroupManager groupManager() {
-    return new PersistentGroupDao(mTemplateFactory.getAccountsJdbcTemplate(),
-        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+    GroupCache groupCache = new GroupCache(mCacheFactory.getCacheManager());
+    groupCache.setManager(new PersistentGroupDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return groupCache;
   }
 
   @Bean
@@ -81,6 +83,18 @@ public class AccountsContext {
   }
 
   @Bean
+  DebtorLedgerManager debtorLedgerManager() {
+    return new PersistentDebtorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  CreditorLedgerManager creditorLedgerManager() {
+    return new PersistentCreditorLedgerDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
   PredefinedNarrationManager predefinedNarrationManager() {
     PredefinedNarrationCache predefinedNarrationCache = new PredefinedNarrationCache(mCacheFactory.getCacheManager());
     predefinedNarrationCache.setManager(new PersistentPredefinedNarrationDao(
@@ -108,6 +122,12 @@ public class AccountsContext {
   @Bean(name = "accountTransactionManager")
   AccountTransactionManager accountTransactionManager() {
     return new PersistantAccountTransactionDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  ChequeRegisterManager chequeRegisterManager() {
+    return new PersistentChequeRegisterDao(mTemplateFactory.getAccountsJdbcTemplate(),
         mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator);
   }
 

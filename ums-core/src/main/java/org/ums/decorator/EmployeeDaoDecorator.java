@@ -11,11 +11,6 @@ public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableE
     implements EmployeeManager {
 
   @Override
-  public Optional<Employee> getByEmail(final String pEmailAddress) {
-    return getManager().getByEmail(pEmailAddress);
-  }
-
-  @Override
   public List<Employee> getByDesignation(String pDesignationId) {
     return getManager().getByDesignation(pDesignationId);
   }

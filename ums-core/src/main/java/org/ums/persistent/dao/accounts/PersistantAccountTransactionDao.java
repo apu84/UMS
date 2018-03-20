@@ -28,8 +28,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   private IdGenerator mIdGenerator;
 
   String INSERT_ONE =
-      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE) VALUES "
-          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate)";
+      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE,LAST_MODIFIED) VALUES "
+          + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType,:receiptId, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate,"
+          + getLastModifiedSql() + ")";
   String UPDATE_ONE = "UPDATE DT_TRANSACTION " + "SET " + "  COMP_CODE     = :compCode, "
       + "  DIVISION_CODE = :divisionCode, " + "  VOUCHER_NO    = :voucherNo, " + "  VOUCHER_DATE  = :voucherDate, "
       + "  SERIAL_NO     = :serialNo, " + "  ACCOUNT_ID    = :accountId, " + "  VOUCHER_ID    = :voucherId, "
@@ -37,8 +38,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       + "  F_CURRENCY    = :foreignCurrency, " + "  CURRENCY_ID   = :currencyId, "
       + "  CONV_FACTOR   = :conversionFactor, " + "  PROJ_NO       = :projNo, " + "  STAT_FLAG     = :statFlag, "
       + "  STAT_UP_FLAG  = :statUpFlag, " + "  RECEIPT_ID    = :receiptId, " + "  POST_DATE     = :postDate, "
-      + "  MODIFIED_BY   = :modifiedBy, " + "  MODIFIED_DATE = :modifiedDate, " + "  TYPE          = :type "
-      + "WHERE ID = :id";
+      + "  MODIFIED_BY   = :modifiedBy, " + "  MODIFIED_DATE = :modifiedDate, "
+      + "  TYPE          = :type , last_modified=" + getLastModifiedSql() + "  WHERE ID = :id";
 
   public PersistantAccountTransactionDao(JdbcTemplate pJdbcTemplate,
       NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
@@ -48,18 +49,26 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   }
 
   @Override
+  public AccountTransaction get(Long pId) {
+    String query = "SELECT * FROM DT_TRANSACTION WHERE ID=:ID";
+    Map parameterMap = new HashMap();
+    parameterMap.put("ID", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
   public List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo) {
     String query =
         "SELECT DT_TRANSACTION.* " + "FROM DT_TRANSACTION, FIN_ACCOUNT_YEAR "
             + "WHERE VOUCHER_NO=? AND VOUCHER_DATE >= FIN_ACCOUNT_YEAR.CURRENT_START_DATE AND "
             + "      VOUCHER_DATE <= FIN_ACCOUNT_YEAR.CURRENT_END_DATE";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentJournalVoucherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo}, new PersistentAccountTransactionRowMapper());
   }
 
   @Override
   public List<MutableAccountTransaction> getByVoucherNoAndDate(String pVoucherNo, Date pDate) {
     String query = "select * from DT_TRANSACTION where VOUCHER_NO=? and trunc(MODIFIED_DATE)=TRUNC(?)";
-    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentJournalVoucherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pVoucherNo, pDate}, new PersistentAccountTransactionRowMapper());
   }
 
   @Override
@@ -136,6 +145,15 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   }
 
   @Override
+  public List<String> getVouchers(Voucher pVoucher, Date pStartDate, Date pEndDate) {
+    String query =
+        "SELECT DISTINCT (VOUCHER_NO) VOUCHER_NO " +
+            "      FROM DT_TRANSACTION " +
+            "      WHERE VOUCHER_ID = ? AND (MODIFIED_DATE >= ? OR MODIFIED_DATE <=?)";
+    return mJdbcTemplate.query(query, new Object[]{pVoucher.getId(), pStartDate, pEndDate}, (rs, i) -> rs.getString("voucher_no"));
+  }
+
+  @Override
   public Integer getTotalNumber(Voucher pVoucher) {
     String query =
         "select count(DISTINCT(VOUCHER_NO)) from  DT_TRANSACTION,FIN_ACCOUNT_YEAR where VOUCHER_ID=? and FIN_ACCOUNT_YEAR.YEAR_CLOSING_FLAG='O' and balance_type='Dr' and (VOUCHER_DATE>=FIN_ACCOUNT_YEAR.CURRENT_START_DATE and "
@@ -175,11 +193,11 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
             + "                                                                   AND SERIAL_NO = 1 AND "
             + "                                                                   VOUCHER_ID = ? "
-            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
-            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO)  "
+            + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), startIndex, endIndex},
-        new PersistentJournalVoucherRowMapper());
+        new PersistentAccountTransactionRowMapper());
   }
 
   @Override
@@ -207,11 +225,11 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
             + "                                                                   FIN_ACCOUNT_YEAR.CURRENT_END_DATE "
             + "                                                                   AND SERIAL_NO = 1 AND "
             + "                                                                   VOUCHER_ID = ? and VOUCHER_NO=? "
-            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO) AND "
-            + "                  BALANCE_TYPE = 'Dr' " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
+            + "                                                             GROUP BY DT_TRANSACTION.VOUCHER_NO, SERIAL_NO)  "
+            + "                   " + "            ORDER BY MODIFIED_DATE DESC) temp) temp2 "
             + "WHERE row_num >= ? AND row_num <= ?";
     return mJdbcTemplate.query(query, new Object[] {voucher.getId(), voucherNo, startIndex, endIndex},
-        new PersistentJournalVoucherRowMapper());
+        new PersistentAccountTransactionRowMapper());
   }
 
   private Map getInsertOrUpdateParameters(MutableAccountTransaction pMutableAccountTransaction) {
@@ -233,7 +251,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     parameters.put("projNo", pMutableAccountTransaction.getProjNo());
     parameters.put("statFlag", pMutableAccountTransaction.getStatFlag());
     parameters.put("statUpFlag", pMutableAccountTransaction.getStatUpFlag());
-    parameters.put("type", pMutableAccountTransaction.getAccountTransactionType().getValue());
+    parameters.put("type", pMutableAccountTransaction.getAccountTransactionType() == null ? null
+        : pMutableAccountTransaction.getAccountTransactionType().getValue());
+
     parameters.put("modifiedBy", pMutableAccountTransaction.getModifiedBy());
     parameters.put("receiptId", pMutableAccountTransaction.getReceiptId());
     parameters.put("modifiedDate", pMutableAccountTransaction.getModifiedDate());
@@ -241,7 +261,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     return parameters;
   }
 
-  class PersistentJournalVoucherRowMapper implements RowMapper<MutableAccountTransaction> {
+  class PersistentAccountTransactionRowMapper implements RowMapper<MutableAccountTransaction> {
     @Override
     public MutableAccountTransaction mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAccountTransaction transaction = new PersistentAccountTransaction();
@@ -255,6 +275,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       transaction.setVoucherId(pResultSet.getLong("voucher_id"));
       transaction.setAmount(pResultSet.getBigDecimal("amount"));
       transaction.setBalanceType(BalanceType.get(pResultSet.getString("balance_type")));
+      transaction.setReceiptId(pResultSet.getLong("receipt_id") == 0 ? null : pResultSet.getLong("receipt_id"));
       transaction.setNarration(pResultSet.getString("narration"));
       transaction.setForeignCurrency(pResultSet.getBigDecimal("f_currency"));
       transaction.setCurrencyId(pResultSet.getLong("currency_id"));

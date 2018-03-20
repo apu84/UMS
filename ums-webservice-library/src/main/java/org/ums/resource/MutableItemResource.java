@@ -41,4 +41,10 @@ public class MutableItemResource extends Resource {
     return mResourceHelper.batchPost(pJsonObject, mUriInfo);
   }
 
+  @DELETE
+  @Path(PATH_PARAM_OBJECT_ID)
+  public Response deleteItem(final @PathParam("object-id") String pItemNo) throws Exception {
+    return mResourceHelper.deleteItem(pItemNo);
+  }
+
 }

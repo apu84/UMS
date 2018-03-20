@@ -13,12 +13,15 @@ public class ClassAttendanceDto {
   private String classDate;
   private String classDateFormat1;
   private Integer serial;
+  private String section;
   private String teacherId;
   private String teacherName;
   private String teacherShortName;
   private String studentId;
   private String studentName;
   private Integer attendance;
+  private String courseId;
+  private Integer semesterId;
   private List<String> attendances;
 
   public String getClassDate() {
@@ -107,6 +110,30 @@ public class ClassAttendanceDto {
 
   public void setTeacherShortName(String teacherShortName) {
     this.teacherShortName = teacherShortName;
+  }
+
+  public String getCourseId() {
+    return courseId;
+  }
+
+  public void setCourseId(String courseId) {
+    this.courseId = courseId;
+  }
+
+  public Integer getSemesterId() {
+    return semesterId;
+  }
+
+  public void setSemesterId(Integer semesterId) {
+    this.semesterId = semesterId;
+  }
+
+  public String getSection() {
+    return section;
+  }
+
+  public void setSection(String section) {
+    this.section = section;
   }
 
   public String toString() {

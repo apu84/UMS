@@ -156,6 +156,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>1.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.5</version>
@@ -267,7 +273,6 @@
       <version>3.1.0</version>
       <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>org.mapdb</groupId>
       <artifactId>mapdb</artifactId>
@@ -291,6 +296,26 @@
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext-rtf</artifactId>
+      <version>${itext-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>${itext-version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>5.5.9</version>
       <scope>compile</scope>
     </dependency>
 

@@ -22,4 +22,6 @@ public interface ContentManager<R, M, I> {
   List<I> create(final List<M> pMutableList);
 
   boolean exists(final I pId);
+
+  int count(final List<M> pMutableList);
 }

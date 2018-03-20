@@ -15,9 +15,10 @@
     <!-- Adapt this to a version found on http://repo.maven.apache.org/maven2/org/eclipse/jetty/jetty-maven-plugin/ -->
     <jetty.maven.plugin.version>9.2.6.v20141205</jetty.maven.plugin.version>
     <logback.version>1.1.7</logback.version>
+    <logstash.logback.version>4.6</logstash.logback.version>
     <jcloverslf4j.version>1.7.6</jcloverslf4j.version>
     <github.global.server>github</github.global.server>
-    <slf4j.version>1.6.4</slf4j.version>
+    <slf4j.version>1.7.0</slf4j.version>
     <aopalliance.version>1.0</aopalliance.version>
     <apache-shiro-version>1.2.4</apache-shiro-version>
     <pentaho-version>5.0.1</pentaho-version>
@@ -333,6 +334,13 @@
     </dependency>
 
     <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logstash.logback.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
@@ -569,6 +577,12 @@
           <groupId>com.google.guava</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

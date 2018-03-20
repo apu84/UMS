@@ -1,18 +1,5 @@
 package org.ums.resource.helper;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +11,33 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.manager.*;
+import org.ums.manager.BinaryContentManager;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.StudentManager;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
-import org.ums.usermanagement.user.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.StudentResource;
 import org.ums.usermanagement.role.RoleManager;
+import org.ums.usermanagement.user.MutableUser;
+import org.ums.usermanagement.user.PersistentUser;
+import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("StudentResourceHelper")
@@ -129,7 +130,8 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     String deptId = employee.getDepartment().getId();
     List<Student> students = getContentManager().getActiveStudents().stream()
         .sorted(Comparator.comparing(Student::getId))
-        .filter(s -> s.getDepartmentId().equals(deptId)).collect(Collectors.toList());
+        .filter(s -> s.getDepartmentId().equals(deptId) && s.getCurrentEnrolledSemesterId() != null)
+        .collect(Collectors.toList());
 
     return studentJsonCreator(students, pUriInfo);
   }

@@ -41,13 +41,6 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
-  public Optional<Employee> getByEmail(String pEmailAddress) {
-    String query = SELECT_ALL + " WHERE EMAIL_ADDRESS = ? ";
-    List<Employee> employees = mJdbcTemplate.query(query, new Object[] {pEmailAddress}, new EmployeeRowMapper());
-    return employees.size() == 1 ? Optional.of(employees.get(0)) : Optional.empty();
-  }
-
-  @Override
   public List<Employee> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new EmployeeRowMapper());

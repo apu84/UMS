@@ -1,4 +1,5 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/AccountingLib.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-route.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.validate.d.ts'/>
@@ -103,6 +104,7 @@
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
 /// <reference path='components/definitions/account/account.service.ts'/>
+/// <reference path='components/definitions/account/account.balance.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>
 /// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
@@ -118,8 +120,18 @@
 /// <reference path='components/definitions/narration/narration.controller.ts'/>
 /// <reference path='components/definitions/narration/narration.service.ts'/>
 
+/// <reference path='components/common/receipt/receipt.service.ts'/>
+
+
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/payment-voucher/payment.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/payment-voucher/payment.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/contra-voucher/contra.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.controller.ts'/>
+/// <reference path='components/general-ledger/transactions/receipt-voucher/receipt.voucher.service.ts'/>
+/// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
 
 
 /// <reference path="components/directives/balance.type.directive.ts"/>

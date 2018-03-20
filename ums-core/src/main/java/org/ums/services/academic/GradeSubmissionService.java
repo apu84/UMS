@@ -222,8 +222,16 @@ public class GradeSubmissionService {
         || partInfo.getCourse().getCourseType() == CourseType.THESIS_PROJECT) {
       hasError = validateSessionalTotal(hasError, gradeDTO);
     }
-
-    return validateGradeLetter(hasError, gradeDTO);
+    hasError = validateGradeLetter(hasError, gradeDTO);
+    if(hasError) {
+      mLogger.info("User: {}, Student Id: {}, Course Id:{}, Semester Id: {}, Quiz: {}, RegType:{}, "
+          + "Class Performance:{}, Part-A: {}, Part-B:{}, Part-A Total:{}, Part-B Total:{}, Total:{}, Course Type:{}",
+          SecurityUtils.getSubject().getPrincipal().toString(), gradeDTO.getStudentId(), partInfo.getCourseId(),
+          partInfo.getSemesterId(), gradeDTO.getQuiz(), gradeDTO.getRegType().getLabel(),
+          gradeDTO.getClassPerformance(), gradeDTO.getPartA(), gradeDTO.getPartB(), partInfo.getPartATotal(),
+          partInfo.getPartBTotal(), gradeDTO.getTotal(), partInfo.getCourse().getCourseType().getLabel());
+    }
+    return hasError;
   }
 
   private Boolean validateQuiz(Boolean error, Double quiz, CourseRegType regType) {

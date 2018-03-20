@@ -17,6 +17,10 @@ public interface AccountManager extends ContentManager<Account, MutableAccount, 
 
   List<Account> getAccounts(String pAccountName);
 
+  List<Account> getExcludingGroups(List<String> groupCodeList);
+
+  List<Account> getIncludingGroups(List<String> groupCodeList);
+
   /**
    * @param pGroupFlag
    * @return will return accounts based on group flag.

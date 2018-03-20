@@ -8,5 +8,5 @@ public interface MutableDesignation extends Editable<Integer>, Designation, Muta
     MutableIdentifier<Integer> {
   void setDesignationName(final String pDesignationName);
 
-  void setEmployeeType(final String pEmployeeType);
+  void setEmployeeType(final int pEmployeeType);
 }

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.ums.employee.personal.PersonalInformation;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.usermanagement.user.UserDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
@@ -16,10 +18,13 @@ public class UserPropertyResolver extends UserDaoDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(UserPropertyResolver.class);
 
   private EmployeeManager mEmployeeManager;
+  private PersonalInformationManager mPersonalInformationManager;
   private StudentManager mStudentManager;
 
-  public UserPropertyResolver(EmployeeManager pEmployeeManager, StudentManager pStudentManager) {
+  public UserPropertyResolver(EmployeeManager pEmployeeManager, PersonalInformationManager pPersonalInformationManager,
+      StudentManager pStudentManager) {
     mEmployeeManager = pEmployeeManager;
+    mPersonalInformationManager = pPersonalInformationManager;
     mStudentManager = pStudentManager;
   }
 
@@ -45,9 +50,9 @@ public class UserPropertyResolver extends UserDaoDecorator {
     if(student.isPresent()) {
       return Optional.of(transform(getManager().get(student.get().getId())));
     }
-    Optional<Employee> employee = mEmployeeManager.getByEmail(pEmail);
-    if(employee.isPresent()) {
-      return Optional.of(transform(getManager().getByEmployeeId(employee.get().getId())));
+    Optional<PersonalInformation> personalInformation = mPersonalInformationManager.getByEmail(pEmail);
+    if(personalInformation.isPresent()) {
+      return Optional.of(transform(getManager().getByEmployeeId(personalInformation.get().getId())));
     }
     return Optional.empty();
   }

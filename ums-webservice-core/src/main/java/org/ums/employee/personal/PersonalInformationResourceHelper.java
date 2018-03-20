@@ -1,6 +1,9 @@
 package org.ums.employee.personal;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.similarity.*;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +14,8 @@ import org.ums.resource.ResourceHelper;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonalInformationResourceHelper extends
@@ -31,6 +36,25 @@ public class PersonalInformationResourceHelper extends
     } catch(EmptyResultDataAccessException e) {
     }
     return buildJson(personalInformation, pUriInfo, localCache);
+  }
+
+  public JsonObject getSimilarUsers(final String pFirstName, final String pLastName, UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    Map<PersonalInformation, Double> similarUsers = new HashMap<>();
+    String fullName = (pFirstName.trim().concat(" " + pLastName.trim())).toLowerCase();
+    List<PersonalInformation> personalInformationList = mManager.getAll();
+    for(PersonalInformation personalInformation : personalInformationList) {
+      JaccardDistance jaccardDistance = new JaccardDistance();
+      Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName().toLowerCase());
+      if(score > 0.70) {
+        similarUsers.put(personalInformation, score);
+      }
+    }
+    Map sortedSimilarUsersMap = similarUsers.entrySet().stream()
+            .sorted(Map.Entry.<PersonalInformation, Double>comparingByValue().reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    return buildJson(sortedSimilarUsersMap, pUriInfo);
   }
 
   public Response updatePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -73,6 +97,22 @@ public class PersonalInformationResourceHelper extends
     jsonObject.add("entries", children);
     localCache.invalidate();
     return jsonObject.build();
+  }
+
+  private JsonObject buildJson(Map<PersonalInformation, Double> similarUsers, UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Map.Entry<PersonalInformation, Double> entry : similarUsers.entrySet()) {
+      JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+      mBuilder.build(jsonObjectBuilder, entry.getKey(), pUriInfo, localCache);
+      jsonObjectBuilder.add("score", Math.round(entry.getValue() * 100));
+      children.add(jsonObjectBuilder.build());
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
   }
 
   @Override

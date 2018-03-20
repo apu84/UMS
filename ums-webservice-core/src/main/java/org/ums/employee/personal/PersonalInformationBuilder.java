@@ -221,8 +221,8 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   public void build(MutablePersonalInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     pMutable.setId(pJsonObject.getString("employeeId"));
-    pMutable.setFirstName(pJsonObject.getString("firstName"));
-    pMutable.setLastName(pJsonObject.getString("lastName"));
+    pMutable.setFirstName(pJsonObject.getString("firstName").trim());
+    pMutable.setLastName(pJsonObject.getString("lastName").trim());
     pMutable.setFatherName(pJsonObject.getString("fatherName"));
     pMutable.setMotherName(pJsonObject.getString("motherName"));
     pMutable.setGender(pJsonObject.getJsonObject("gender").getString("id"));

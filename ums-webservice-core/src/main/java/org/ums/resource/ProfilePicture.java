@@ -9,15 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import org.ums.context.AppContext;
 import org.ums.integration.FileWriterGateway;
 import org.ums.manager.BinaryContentManager;
 import org.ums.usermanagement.user.User;
@@ -88,8 +85,8 @@ public class ProfilePicture extends Resource {
       ObjectMapper mapper = new ObjectMapper();
 
     } catch(Exception fl) {
-      fl.printStackTrace();
-      mLogger.error(fl.getMessage());
+      // fl.printStackTrace();
+      mLogger.error(userId + ".jpg image not found");
       // return Response.status(Response.Status.NOT_FOUND).build();
       try {
 
@@ -126,7 +123,7 @@ public class ProfilePicture extends Resource {
   @Path("/upload")
   @Consumes({MediaType.MULTIPART_FORM_DATA})
   public Response uploadFile(@FormDataParam("files") File pInputStream, @FormDataParam("id") String id,
-      @FormDataParam("name") String name) throws IOException {
+                             @FormDataParam("name") String name) throws IOException {
 
     File newFile = new File(pInputStream.getParent(), id + ".jpg");
     Files.move(pInputStream.toPath(), newFile.toPath());
@@ -141,13 +138,11 @@ public class ProfilePicture extends Resource {
         session.mkdir("files/");
         return session.mkdir("files/user-photo/");
       });
-    template.send(messageA);
-    }
-    catch (Exception e){
+      template.send(messageA);
+    } catch (Exception e) {
       mLogger.error(e.getMessage());
       e.printStackTrace();
-    }
-    finally {
+    } finally {
       pInputStream.deleteOnExit();
       newFile.delete();
     }

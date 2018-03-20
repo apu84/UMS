@@ -12,7 +12,6 @@ import org.ums.usermanagement.user.User;
 import com.google.common.collect.Lists;
 
 public class AdminUserRealm extends UserRealm {
-  private static final String LOGIN_AS_SEPARATOR = ">";
   @Autowired
   UMSConfiguration mUMSConfiguration;
 

@@ -36,6 +36,7 @@ public class PersistentGroup implements MutableGroup {
   private String mStatusUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
+  private String mLastModified;
   @JsonIgnore
   private PersistentGroup mMainGroupObject;
   @JsonIgnore
@@ -248,11 +249,11 @@ public class PersistentGroup implements MutableGroup {
 
   @Override
   public String getLastModified() {
-    return null;
+    return mLastModified;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
-
+    mLastModified = pLastModified;
   }
 }

@@ -230,22 +230,25 @@
                 <table class="table table-bordered table-striped table-condensed cf">
                     <thead class="cf">
                     <tr>
-                        <th width="70%">Results</th>
-                        <th width="30%">Available</th>
+                        <th width="4%">#</th>
+                        <th width="75%">Results</th>
+                        <th width="22%">Available</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr dir-paginate="rec in recordList | itemsPerPage: data.itemPerPage"
                         current-page="pagination.currentPage" total-items="data.totalRecord"
                         pagination-id="mainRecordPaginator">
+                        <td><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}. </span></td>
                         <td>
                             <ul class="list-unstyled">
-                                <li><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.  </span><a
+                                <li><a
                                         style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
                                         data-ng-click="recordDetails($index)"
                                         href="javascript:void()" class="title">{{rec.title}}</a></li>
+                                <li>[{{rec.materialTypeName}}] &nbsp; [{{rec.callNo}}]</li>
                                 <!--<li>by <span data-ng-repreat="con in rec.contributorList">{{con}}</span></li>-->
-                                <li> Material type: {{rec.materialTypeName}}</li>
+
                                 <!--<li>Publisher: {{rec.imprint}}<span class="results_summary">Salt Lake City : Project Gutenberg Literary Archive Foundation, 2005</span>-->
                                 <!--</li>-->
                             </ul>
@@ -438,10 +441,10 @@
     }
 
     $("#searchBox").focus();
-    $('#squareRadio input').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue'
-    });
+    // $('#squareRadio input').iCheck({
+    //     checkboxClass: 'icheckbox_square-blue',
+    //     radioClass: 'iradio_square-blue'
+    // });
 
     $('.selectpicker').selectpicker({
         iconBase: 'fa',

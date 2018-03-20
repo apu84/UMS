@@ -17,7 +17,7 @@ public class PersistentDesignation implements MutableDesignation {
 
   private int mId;
   private String mDesignationName;
-  private String mEmployeeType;
+  private int mEmployeeType;
   private String mLastModified;
 
   public PersistentDesignation() {
@@ -76,7 +76,7 @@ public class PersistentDesignation implements MutableDesignation {
   }
 
   @Override
-  public void setEmployeeType(String pEmployeeType) {
+  public void setEmployeeType(int pEmployeeType) {
     mEmployeeType = pEmployeeType;
   }
 
@@ -86,7 +86,7 @@ public class PersistentDesignation implements MutableDesignation {
   }
 
   @Override
-  public String getEmployeeType() {
+  public int getEmployeeType() {
     return mEmployeeType;
   }
 }

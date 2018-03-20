@@ -561,6 +561,22 @@ module ums {
                     {id: 4, name: "Waiting for Head's Approval"},
                     {id: 5, name: "Forwarded by Head"}
                 ],
+                employeeTypes: [
+                    {id: 1, name: "Teacher"},
+                    {id: 2, name: "Officer"},
+                    {id: 3, name: "Staff"},
+                    {id: 9, name: "Top Management"}
+                ],
+                academicEmployeeTypes: [
+                    {id: 1, name: "Teacher"},
+                    {id: 2, name: "Officer"},
+                    {id: 3, name: "Staff"}
+                ],
+                officialEmployeeTypes: [
+                    {id: 2, name: "Officer"},
+                    {id: 3, name: "Staff"},
+                    {id: 9, name: "Top Management"}
+                ],
                 MARKS_SUBMISSION_STATUS: {
                     NOT_SUBMITTED: 0,
                     WAITING_FOR_SCRUTINY: 1,
@@ -688,8 +704,8 @@ module ums {
                 ],
                 materialTypes: [
                     {id: 101101, name: 'Select Material Type'},
-                    {id: 1, name: 'Books'},
-                    {id: 2, name: 'Journals'},
+                    {id: 1, name: 'Book'},
+                    {id: 2, name: 'Journal'},
                     {id: 3, name: 'Thesis/Project'}
                 ], /*
                  materialTypes: [

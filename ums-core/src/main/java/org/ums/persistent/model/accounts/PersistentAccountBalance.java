@@ -56,6 +56,7 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   private String mStatUpFlag;
   private Date mModifiedDate;
   private String mModifiedBy;
+  private String mLastModified;
 
   public PersistentAccountBalance() {}
 
@@ -439,11 +440,11 @@ public class PersistentAccountBalance implements MutableAccountBalance {
 
   @Override
   public String getLastModified() {
-    return null;
+    return mLastModified;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
-
+    mLastModified = pLastModified;
   }
 }

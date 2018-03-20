@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
-import org.ums.domain.model.immutable.Course;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
 import org.ums.util.CacheUtil;
@@ -192,7 +191,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
       }
       long afterTime = System.currentTimeMillis();
       if(mLogger.isDebugEnabled()) {
-        mLogger.debug("Time taken to build cached list: " + (afterTime - currentTime) + " ms");
+        mLogger.debug("Time taken to build cached list: {} ms", (afterTime - currentTime));
       }
       return entities;
 

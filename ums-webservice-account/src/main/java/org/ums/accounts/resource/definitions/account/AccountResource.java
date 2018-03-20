@@ -5,6 +5,7 @@ import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -50,6 +51,37 @@ public class AccountResource extends MutableAccountResource {
   @Path("/group-flag/{group-flag}")
   public JsonObject getAccountsByGroupFlag(@PathParam("group-flag") String pGroupFlag, final @Context Request pRequest) {
     return mHelper.getAccounts(GroupFlag.get(pGroupFlag), mUriInfo);
+  }
+
+  @GET
+  @Path("/bank-cost-type-accounts")
+  public JsonObject getBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
+    return mHelper.getBankAndCostTypeAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/excluding-bank-cost-type-accounts")
+  public JsonObject getExcludingBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
+    return mHelper.getExcludingBankAndCostTypeAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/customer-vendor-accounts")
+  public JsonObject getCustomerAndVendorAccounts(final @Context HttpServletRequest pHttpServletRequest)
+      throws Exception {
+    return mHelper.getCustomerAndVendorAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/vendor-accounts")
+  public JsonObject getVendorAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getVendorAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/customer-accounts")
+  public JsonObject getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getCustomerAccounts(mUriInfo);
   }
 
 }

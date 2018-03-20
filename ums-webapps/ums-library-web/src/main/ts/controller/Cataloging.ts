@@ -16,6 +16,7 @@ module ums {
         setMaterialTypeName: Function;
         record: IRecord;
         item: IItem;
+        items: Array<IItem>;
         supplier: ISupplier;
         saveRecord: Function;
         saveItem: Function;
@@ -51,16 +52,29 @@ module ums {
         resetItemForm: Function;
         enableEdit: Function;
         makeCallNo: Function;
+        deleteRecord: Function;
+        validateRecordBeforeDelete: Function;
+        deleteItem: Function;
+        confirmation: Function;
+        itemId: string;
+        canRecordDelete: boolean;
+        canItemDelete: boolean;
+        state: any;
+        showContributorLoader: boolean;
+        showPublisherLoader: boolean;
+        showSupplierLoader: boolean;
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any) {
 
+
+            $scope.state = $state;
 
             $scope.addNewRow = this.addNewRow.bind(this);
             $scope.deleteRow = this.deleteRow.bind(this);
@@ -76,6 +90,10 @@ module ums {
             $scope.reloadPublishers = this.reloadPublishers.bind(this);
             $scope.reloadContributors = this.reloadContributors.bind(this);
             $scope.makeCallNo = this.makeCallNo.bind(this);
+            $scope.deleteRecord = this.deleteRecord.bind(this);
+            $scope.validateRecordBeforeDelete = this.validateRecordBeforeDelete.bind(this);
+            $scope.deleteItem = this.deleteItem.bind(this);
+            $scope.confirmation = this.confirmation.bind(this);
 
             $scope.goNext = this.goNext.bind(this);
             $scope.goPrevious = this.goPrevious.bind(this);
@@ -88,11 +106,14 @@ module ums {
             $scope.publisherService = publisherService;
             $scope.contributorService = contributorService;
             $scope.notifyService = notify;
+            $scope.showContributorLoader = false;
+            $scope.showPublisherLoader = false;
+            $scope.showSupplierLoader = false;
 
             this.$scope.showRecordInfo = true;
             this.$scope.showItemInfo = false;
 
-
+            $scope.items = Array<IItem>();
             $scope.contributors = Array<IContributor>();
             $scope.bulkItemList = Array<IItem>();
             $scope.recordList = Array<IRecord>();
@@ -340,7 +361,7 @@ module ums {
                         id: this.$scope.item.supplier.id,
                         text: this.$scope.item.supplier.name
                     });
-                }, 500);
+                }, 4000);
 
 
                 // $("#headerTitle").html("Record : "+this.$scope.record.title);
@@ -348,7 +369,6 @@ module ums {
                 this.notify.error(response);
             });
         }
-
 
         private goPrevious() {
 
@@ -685,43 +705,51 @@ module ums {
         }
 
         private reloadSuppliers(): void {
+            this.$scope.showSupplierLoader = true;
             let data = $("#supplier").select2("data");
             if (data == null || data == undefined) {
                 this.getAllSuppliers();
+                this.$scope.showSupplierLoader = false;
             }
             else {
                 let searchTerm = data.text;
-                this.$scope.showSupplierSelect2 = false;
                 this.getAllSuppliers();
+                /*this.$scope.showSupplierSelect2 = false;*/
                 setTimeout(() => {
-                    this.$scope.showSupplierSelect2 = true;
+                    console.log("In set Timeout 1");
                     setTimeout(() => {
                         Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
-                    }, 600);
-                }, 800);
+                    }, 4000);
+                    this.$scope.showSupplierLoader = false;
+                    /*this.$scope.showSupplierSelect2 = true;*/
+                }, 6000);
             }
         }
 
 
         private reloadPublishers(): void {
+            this.$scope.showPublisherLoader = true;
             let data = $("#publisher").select2("data");
             if (data == null || data == undefined) {
                 this.getAllPublishers();
+                this.$scope.showPublisherLoader = false;
             }
             else {
                 let searchTerm = data.text;
-                this.$scope.showPublisherSelect2 = false;
                 this.getAllPublishers();
+               /* this.$scope.showPublisherSelect2 = false;*/
                 setTimeout(() => {
-                    this.$scope.showPublisherSelect2 = true;
                     setTimeout(() => {
                         Utils.setSelect2Value("recordPublisherDiv", "publisher", searchTerm);
-                    }, 600);
-                }, 800)
+                    }, 4000);
+                    this.$scope.showPublisherLoader = false;
+                   /* this.$scope.showPublisherSelect2 = true;*/
+                }, 6000)
             }
         }
 
         private reloadContributors(): void {
+            this.$scope.showContributorLoader = true;
             var text: string[] = new Array(this.$scope.record.contributorList.length);
 
             for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
@@ -734,19 +762,19 @@ module ums {
                 }
             }
 
-            this.$scope.showContributorSelect2 = false;
             this.getAllContributors();
+           /* this.$scope.showContributorSelect2 = false;*/
             setTimeout(() => {
-                this.$scope.showContributorSelect2 = true;
                 setTimeout(() => {
                     for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
                         if (text[i] != "") {
                             Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
                         }
                     }
-
-                }, 600);
-            }, 800);
+                }, 4000);
+                this.$scope.showContributorLoader = false;
+                /*this.$scope.showContributorSelect2 = true;*/
+            }, 6000);
         }
 
         private loadCountries(): void {
@@ -838,6 +866,48 @@ module ums {
             this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
+        }
+
+        public deleteItem(itemId: string): void {
+            this.$scope.canItemDelete = true;
+            this.$scope.itemId = itemId;
+            this.catalogingService.fetchItem(itemId).then((data: any) => {
+                if(data.circulationStatus != 0){
+                    this.$scope.canItemDelete = false;
+                }
+            });
+        }
+
+        public confirmation(): void{
+            this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
+            });
+        }
+
+
+        public deleteRecord(): void {
+            this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then((response: any) => {
+                if(response == "Success") {
+                    setTimeout(() => {
+                        this.$scope.state.go("cataloging.search", {1: 'new'});
+                    }, 1000)
+                }
+            });
+        }
+
+        public validateRecordBeforeDelete(): void {
+            this.$scope.canRecordDelete = true;
+            this.$scope.items = Array<IItem>();
+            this.catalogingService.fetchItems(this.$scope.record.mfnNo).then((results: any) => {
+                this.$scope.items = results;
+                if(this.$scope.items.length > 0){
+                    for(var i = 0; i < this.$scope.items.length; i++){
+                        if(this.$scope.items[i].circulationStatus != 0){
+                            this.$scope.canRecordDelete = false;
+                            break;
+                        }
+                    }
+                }
+            });
         }
     }
 

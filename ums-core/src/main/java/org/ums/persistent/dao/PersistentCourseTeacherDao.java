@@ -99,6 +99,13 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   }
 
   @Override
+  public CourseTeacher getAssignedCourse(Integer pSemesterId, String pTeacherId, String pCourseId, String pSectionId) {
+    String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND TEACHER_ID = ? and Course_Id=? and Section=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pTeacherId, pCourseId, pSectionId},
+        getRowMapper());
+  }
+
+  @Override
   public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND TEACHER_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pTeacherId}, getRowMapper());

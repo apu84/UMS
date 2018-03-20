@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.manager.ContentManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements ContentManager<R, M, I> {
@@ -87,5 +86,10 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   @Override
   public boolean exists(I pId) {
     return getManager().exists(pId);
+  }
+
+  @Override
+  public int count(List<M> pMutableList) {
+    return getManager().count(pMutableList);
   }
 }

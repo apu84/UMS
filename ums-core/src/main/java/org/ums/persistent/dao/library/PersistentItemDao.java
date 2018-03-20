@@ -45,6 +45,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
           + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
+  static String DELETE_ONE = "DELETE FROM ITEMS ";
+
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
 
@@ -87,6 +89,26 @@ public class PersistentItemDao extends ItemDaoDecorator {
         pItem.getStatus().getId(), "insert", "update", 0);
 
     return id;
+  }
+
+  @Override
+  public int delete(final MutableItem pItem) {
+    String query = DELETE_ONE + " WHERE ID = ? AND ACCESSION_NUMBER = ?";
+    return mJdbcTemplate.update(query, pItem.getId(), pItem.getAccessionNumber());
+  }
+
+  @Override
+  public int delete(final List<MutableItem> pItemList) {
+    String query = DELETE_ONE + " WHERE ID = ? AND ACCESSION_NUMBER = ?";
+    return mJdbcTemplate.batchUpdate(query, getParams(pItemList)).length;
+  }
+
+  private List<Object[]> getParams(List<MutableItem> pMutableItem) {
+    List<Object[]> params = new ArrayList<>();
+    for(Item item : pMutableItem) {
+      params.add(new Object[] {item.getId(), item.getAccessionNumber()});
+    }
+    return params;
   }
 
   @Override

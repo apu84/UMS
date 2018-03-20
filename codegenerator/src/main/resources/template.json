@@ -1,7 +1,7 @@
 {
   "model": {
-    "name": "MonthBalance",
-    "package": "org.ums.domain.model.immutable.account",
+    "name": "CreditorLedger",
+    "package": "org.ums.domain.model.immutable",
     "fields": [
       {
         "id": {
@@ -10,46 +10,97 @@
         }
       },
       {
-        "AccountBalance": {
+        "Company": {
           "type": "Ref",
           "reference": {
-            "name": "AccountBalance",
+            "name": "Company",
             "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "Long"
+              "type": "String"
             },
             "manager": {
-              "name": "AccountBalanceManager",
+              "name": "CompanyManager",
               "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "Month": {
+        "divisionCode": "String"
+      },
+      {
+        "supplierCode": "String"
+      },
+      {
+        "AccountTransaction": {
           "type": "Ref",
           "reference": {
-            "name": "Month",
+            "name": "AccountTransaction",
             "package": "org.ums.domain.model.immutable",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "MonthManager",
+              "name": "AccountTransactionManager",
               "package": "org.ums.manager"
             }
           }
         }
       },
       {
-        "totalMonthDebitBalance": "BigDecimal"
+        "voucherNo": "String"
       },
       {
-        "totalMonthCreditBalance": "BigDecimal"
+        "voucherDate": "Date"
       },
-
-
+      {
+        "serialNo": "Integer"
+      },
+      {
+        "billNo": "String"
+      },
+      {
+        "billDate": "Date"
+      },
+      {
+        "amount": "BigDecimal"
+      },
+      {
+        "paidAmount": "BigDecimal"
+      },
+      {
+        "dueDate": "Date"
+      },
+      {
+        "balanceType": "BalanceType"
+      },
+      {
+        "billClosingFlag": "String"
+      },
+      {
+        "currencyCode": "String"
+      },
+      {
+        "vatNo": "String"
+      },
+      {
+        "contCode": "String"
+      },
+      {
+        "orderNo": "String"
+      },
+      {
+        "statFlag": "String"
+      },
+      {
+        "statUpFlag": "String"
+      },
+      {
+        "modificationDate": "Date"
+      },
+      {
+        "modifiedBy": "String"
+      }
     ]
   }
 }
-

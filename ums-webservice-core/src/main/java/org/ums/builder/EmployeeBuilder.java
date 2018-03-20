@@ -52,9 +52,9 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     dept.setId(pJsonObject.getJsonObject("department").getString("id"));
     pMutable.setDepartment(dept);
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
-    pMutable.setStatus(Integer.parseInt(pJsonObject.getString("status")));
+    pMutable.setStatus(1);
     pMutable.setShortName(pJsonObject.getString("shortName"));
-    pMutable.setEmployeeType(Integer.parseInt(pJsonObject.getString("employeeType")));
+    pMutable.setEmployeeType(pJsonObject.getJsonObject("employeeType").getInt("id"));
   }
 
   public void customBuilderForEmployee(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,

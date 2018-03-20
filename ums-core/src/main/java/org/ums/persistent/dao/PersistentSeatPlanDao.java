@@ -193,9 +193,10 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   @Override
   public List<SeatPlan> getForStudentAndCCIExam(String pStudentId, Integer pSemesterid, String pExamDate) {
     String query =
-        "select  s.ID,s.ROOM_ID,s.SEMESTER_ID,s.GROUP_NO,s.STUDENT_ID,s.ROW_NO,s.COL_NO,s.EXAM_TYPE,s.LAST_MODIFIED from seat_plan s,SP_PUBLISH sp "
-            + "         where s.student_id=? and s.exam_type=2 and s.semester_id=? and sp.SEMESTER_ID=s.SEMESTER_ID and s.exam_date=to_date(?,'DD-MM-YYYY') and s.EXAM_DATE=sp.EXAM_DATE and sp.PUBLISHED=1 "
-            + "         order by row_no,col_no";
+        "SELECT s.* FROM seat_plan s, EXAM_ROUTINE e "
+            + "WHERE s.student_id = ? AND s.exam_type = 2 AND s.semester_id = ? "
+            + "AND e.EXAM_DATE = TO_DATE (?, 'dd-mm-yyyy') AND e.SEMESTER = s.SEMESTER_ID "
+            + "AND e.COURSE_ID = s.COURSE_ID ORDER BY row_no, col_no";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterid, pExamDate}, new SeatPlanRowMapper());
   }
 

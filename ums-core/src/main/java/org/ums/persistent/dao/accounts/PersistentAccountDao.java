@@ -14,7 +14,9 @@ import org.ums.persistent.model.accounts.PersistentAccount;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Monjur-E-Morshed on 28-Dec-17.
@@ -29,6 +31,22 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<Account> getExcludingGroups(List<String> groupCodeList) {
+    String query = "select * from mst_account where acc_group_code not in (:groupCodeList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("groupCodeList", groupCodeList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public List<Account> getIncludingGroups(List<String> groupCodeList) {
+    String query = "select * from mst_account where acc_group_code  in (:groupCodeList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("groupCodeList", groupCodeList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
   }
 
   @Override
@@ -139,6 +157,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setStatUpFlag(rs.getString("stat_up_flag"));
       account.setModifiedDate(rs.getDate("modified_date"));
       account.setModifiedBy("modified_by");
+      account.setLastModified("last_modified");
       return account;
     }
   }

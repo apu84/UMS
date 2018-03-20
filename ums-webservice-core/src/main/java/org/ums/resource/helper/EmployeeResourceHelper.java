@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -13,12 +14,15 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.domain.model.immutable.DesignationRoleMap;
 import org.ums.employee.personal.MutablePersonalInformation;
 import org.ums.employee.personal.PersistentPersonalInformation;
 import org.ums.employee.personal.PersonalInformation;
@@ -27,20 +31,19 @@ import org.ums.employee.service.*;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.DepartmentManager;
-import org.ums.manager.DesignationManager;
-import org.ums.manager.EmploymentTypeManager;
+import org.ums.manager.*;
 import org.ums.resource.EmployeeResource;
 import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.services.email.NewIUMSAccountInfoEmailService;
+import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.PersistentUser;
 import org.ums.usermanagement.user.User;
 import org.ums.domain.model.mutable.MutableEmployee;
-import org.ums.manager.EmployeeManager;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.persistent.model.PersistentEmployee;
 import org.ums.resource.ResourceHelper;
@@ -83,9 +86,24 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   EmploymentTypeManager mEmploymentTypeManager;
 
+  @Autowired
+  DesignationRoleMapManager mDesignationRoleMapManager;
+
+  @Autowired
+  RoleManager mRoleManager;
+
+  @Autowired
+  private NewIUMSAccountInfoEmailService mNewIUMSAccountInfoEmailService;
+
+  @Autowired
+  private PasswordService mPasswordService;
+
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
+
+    String tempPassword = "";
+
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject.getJsonObject("entries"), localCache);
@@ -105,9 +123,21 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
         && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
+
+      tempPassword = RandomStringUtils.random(6, true, true);
       MutableUser mutableUser = new PersistentUser();
       prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
+      DesignationRoleMap designationRoleMap =
+          mDesignationRoleMapManager
+              .get(pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("id"));
+
+      mutableUser.setPrimaryRole(mRoleManager.get(designationRoleMap.getRoleId()));
+      mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
+
+      mNewIUMSAccountInfoEmailService.sendEmail(mutableUser.getEmployeeId(), mutablePersonalInformation.getFullName(),
+          mutableUser.getId(), tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS",
+          "AUST: IUMS Account Credentials");
     }
 
     URI contextURI =
@@ -273,15 +303,13 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   private void prepareUserInformation(MutableUser pMutableUser, JsonObject pJsonObject) {
+    String tempPassword = "12345";
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
-
     pMutableUser.setId(pJsonObject.getString("shortName"));
     pMutableUser.setEmployeeId(pJsonObject.getString("id"));
-    pMutableUser.setPrimaryRoleId(pJsonObject.getJsonObject("role").getInt("id"));
-    // pMutableUser.setPassword('A');
-    pMutableUser.setActive(true);
     pMutableUser.setPassword(null);
+    pMutableUser.setActive(true);
     pMutableUser.setCreatedOn(new Date());
     pMutableUser.setCreatedBy(user.getId());
   }
@@ -320,4 +348,5 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   public String getETag(Employee pReadonly) {
     return pReadonly.getLastModified();
   }
+
 }

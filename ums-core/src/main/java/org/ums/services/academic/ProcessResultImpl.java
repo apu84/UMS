@@ -17,6 +17,7 @@ import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.mutable.MutableTaskStatus;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.CourseType;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentTaskStatus;
@@ -105,12 +106,12 @@ public class ProcessResultImpl implements ProcessResult {
 
     try  {
 //      Temoporary code to find duplicate student record
-//      Set<String> allItems = new HashSet<>();
-//      Set<String> duplicates = studentRecords.stream()
-//          .map(StudentRecord::getStudentId)
-//          .filter(pStudentId -> !allItems.add(pStudentId))
-//          .collect(Collectors.toSet());
-//      System.out.println(duplicates);
+      Set<String> allItems = new HashSet<>();
+      Set<String> duplicates = studentRecords.stream()
+          .map(StudentRecord::getStudentId)
+          .filter(pStudentId -> !allItems.add(pStudentId))
+          .collect(Collectors.toSet());
+      System.out.println(duplicates);
 
       Map<String, StudentRecord> studentRecordMap =
           studentRecords.stream().collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
@@ -134,6 +135,11 @@ public class ProcessResultImpl implements ProcessResult {
               previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
           List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
               .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
+//          if(studentRecord.getStudentId().equals("150208015")) {
+//            for(UGRegistrationResult pr: courseResults) {
+//              System.out.print("'"+pr.getCourseId()+"',");
+//            }
+//          }
           StudentRecordParams cgpa = calculateCGPA(courseResults);
           boolean isPassed = isPassed(pSemesterId, courseResults);
           if(cgpa != null) {
@@ -196,8 +202,7 @@ public class ProcessResultImpl implements ProcessResult {
     }
     Double toBeTruncated = totalGPA / totalCrHr;
     toBeTruncated = Double.isNaN(toBeTruncated) ? 0D : toBeTruncated;
-    return new StudentRecordParams(BigDecimal.valueOf(toBeTruncated).setScale(6, RoundingMode.HALF_UP).doubleValue(),
-        totalCrHr, totalGPA);
+    return new StudentRecordParams(toBeTruncated, totalCrHr, totalGPA);
   }
 
   private Boolean isPassed(final int pSemesterId, List<UGRegistrationResult> pResults) {
@@ -208,7 +213,7 @@ public class ProcessResultImpl implements ProcessResult {
           return false;
         }
         totalFailedCourse++;
-        if(result.getSemesterId() == pSemesterId) {
+        if(result.getSemesterId() == pSemesterId && result.getType() != CourseRegType.CARRY) {
           failedInCurrentSemester++;
         }
       }

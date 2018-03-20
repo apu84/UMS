@@ -236,5 +236,27 @@ module ums {
                 url: "/logout",
                 controller: 'Logout'
             })
+            .state('searchLibrary', {
+                url: "/searchLibrary",
+                controller: 'SearchLibrary',
+                templateUrl: 'views/search-library.html',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-select/bootstrap-select.min.js',
+                                'vendors/bootstrap-select/bootstrap-select.css'
+                            ]
+                        });
+                    }]
+                }
+            })
+
+            .state('borrow', {
+                url: "/borrow",
+                controller: 'BorrowHistory',
+                templateUrl: 'views/borrow-history.html',
+                controllerAs: 'vm'
+            })
     });
 }

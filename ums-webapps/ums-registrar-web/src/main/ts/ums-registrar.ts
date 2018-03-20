@@ -157,7 +157,7 @@ module ums {
                     }],
                     roles: ['roleService', function (roleService) {
                         return roleService.getAll().then((data: any) => {
-                           return data.entries;
+                            return data.entries;
                         });
                     }]
                 }
@@ -203,7 +203,7 @@ module ums {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             files: [
-                              'vendors/ckeditor/ckeditor.js'
+                                'vendors/ckeditor/ckeditor.js'
                             ]
                         });
                     }]

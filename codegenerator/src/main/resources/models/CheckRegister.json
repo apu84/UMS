@@ -1,0 +1,70 @@
+{
+  "model": {
+    "name": "CheckRegister",
+    "package": "org.ums.domain.model.immutable",
+    "fields": [
+      {
+        "id": {
+          "type": "Long",
+          "idType": true
+        }
+      },
+      {
+        "Company": {
+          "type": "Ref",
+          "reference": {
+            "name": "Company",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "String"
+            },
+            "manager": {
+              "name": "CompanyManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "AccountTransaction": {
+          "type": "Ref",
+          "reference": {
+            "name": "AccountTransaction",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "AccountTransactionManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "checkNo": "String"
+      },
+      {
+        "chequeDate": "Date"
+      },
+      {
+        "status": "String"
+      },
+      {
+        "realizationDate": "Date"
+      },
+      {
+        "statFlag": "String"
+      },
+      {
+        "statUpFlag": "String"
+      },
+      {
+        "modificationDate": "Date"
+      },
+      {
+        "modifiedBy": "String"
+      }
+    ]
+  }
+}

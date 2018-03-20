@@ -1,10 +1,8 @@
 package org.ums.persistent.dao.accounts;
 
-import io.reactivex.Observable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.util.StringUtils;
 import org.ums.decorator.accounts.AccountBalanceDaoDecorator;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
@@ -12,12 +10,11 @@ import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,15 +26,61 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   private IdGenerator mIdGenerator;
 
   String INSERT_ONE =
-      "INSERT INTO MST_ACCOUNT_BALANCE(ID, FIN_START_DATE, FIN_END_DATE, YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, "
-          + "                                TOT_MONTH_DB_BAL_04, TOT_MONTH_CR_BAL_04, TOT_MONTH_DB_BAL_05, "
-          + "                                TOT_MONTH_CR_BAL_05, TOT_MONTH_DB_BAL_06, TOT_MONTH_CR_BAL_06, TOT_MONTH_DB_BAL_07, "
-          + "                                TOT_MONTH_CR_BAL_07, TOT_MONTH_DB_BAL_08, TOT_MONTH_CR_BAL_08, TOT_MONTH_DB_BAL_09, "
-          + "                                TOT_MONTH_CR_BAL_09, TOT_MONTH_DB_BAL_10, TOT_MONTH_CR_BAL_10, TOT_MONTH_DB_BAL_11, "
-          + "                                TOT_MONTH_CR_BAL_11, TOT_MONTH_DB_BAL_12, TOT_MONTH_CR_BAL_12, TOT_MONTH_DB_BAL_01, "
-          + "                                TOT_MONTH_CR_BAL_01, TOT_MONTH_DB_BAL_02, TOT_MONTH_CR_BAL_02, TOT_MONTH_DB_BAL_03, "
-          + "                                TOT_MONTH_CR_BAL_03, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE) "
-          + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO MST_ACCOUNT_BALANCE (ID, FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE, YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_MONTH_DB_BAL_04, TOT_MONTH_CR_BAL_04, TOT_MONTH_DB_BAL_05, TOT_MONTH_CR_BAL_05, TOT_MONTH_DB_BAL_06, TOT_MONTH_CR_BAL_06, TOT_MONTH_DB_BAL_07, TOT_MONTH_CR_BAL_07, TOT_MONTH_DB_BAL_08, TOT_MONTH_CR_BAL_08, TOT_MONTH_DB_BAL_09, TOT_MONTH_CR_BAL_09, TOT_MONTH_DB_BAL_10, TOT_MONTH_CR_BAL_10, TOT_MONTH_DB_BAL_11, TOT_MONTH_CR_BAL_11, TOT_MONTH_DB_BAL_12, TOT_MONTH_CR_BAL_12, TOT_MONTH_DB_BAL_01, TOT_MONTH_CR_BAL_01, TOT_MONTH_DB_BAL_02, TOT_MONTH_CR_BAL_02, TOT_MONTH_DB_BAL_03, TOT_MONTH_CR_BAL_03, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED) "
+          + "VALUES ( "
+          + "  :ID, "
+          + "  :FIN_START_DATE, "
+          + "  :FIN_END_DATE, "
+          + "  :ACCOUNT_CODE, "
+          + "  :YEAR_OPEN_BALANCE, "
+          + "  :YEAR_OPEN_BALANCE_TYPE, "
+          + "  :TOT_MONTH_DB_BAL_04, "
+          + "  :TOT_MONTH_CR_BAL_04, "
+          + "  :TOT_MONTH_DB_BAL_05, "
+          + "  :TOT_MONTH_CR_BAL_05, "
+          + "  :TOT_MONTH_DB_BAL_06, "
+          + "  :TOT_MONTH_CR_BAL_06, "
+          + "  :TOT_MONTH_DB_BAL_07, "
+          + "  :TOT_MONTH_CR_BAL_07, "
+          + "  :TOT_MONTH_DB_BAL_08, "
+          + "  :TOT_MONTH_CR_BAL_08, "
+          + "  :TOT_MONTH_DB_BAL_09, "
+          + "  :TOT_MONTH_CR_BAL_09, "
+          + "  :TOT_MONTH_DB_BAL_10, "
+          + "  :TOT_MONTH_CR_BAL_10, "
+          + "  :TOT_MONTH_DB_BAL_11, "
+          + "  :TOT_MONTH_CR_BAL_11, "
+          + "  :TOT_MONTH_DB_BAL_12, "
+          + "  :TOT_MONTH_CR_BAL_12, "
+          + "  :TOT_MONTH_DB_BAL_01, "
+          + "  :TOT_MONTH_CR_BAL_01, "
+          + "  :TOT_MONTH_DB_BAL_02, "
+          + "  :TOT_MONTH_CR_BAL_02, "
+          + "  :TOT_MONTH_DB_BAL_03, "
+          + "  :TOT_MONTH_CR_BAL_03, "
+          + "  :TOT_DEBIT_TRANS, "
+          + "  :TOT_CREDIT_TRANS, "
+          + "  :STAT_FLAG, " + "  :STAT_UP_FLAG, " + "  :MODIFIED_DATE, " + "  :MODIFIED_BY, " + "  :LAST_MODIFIED)";
+
+  String UPDATE_ONE = "UPDATE DB_IUMS_ACCOUNT.MST_ACCOUNT_BALANCE " + "SET FIN_START_DATE = :FIN_START_DATE, "
+      + "  FIN_END_DATE        = :FIN_END_DATE, "
+      + "  YEAR_OPEN_BALANCE   = :YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE = :YEAR_OPEN_BALANCE_TYPE , "
+      + "  TOT_MONTH_DB_BAL_01 = :TOT_MONTH_DB_BAL_01, " + "  TOT_MONTH_DB_BAL_02 = :TOT_MONTH_DB_BAL_02, "
+      + "  TOT_MONTH_DB_BAL_03 = :TOT_MONTH_DB_BAL_03, " + "  TOT_MONTH_DB_BAL_04 = :TOT_MONTH_DB_BAL_04, "
+      + "  TOT_MONTH_DB_BAL_05 = :TOT_MONTH_DB_BAL_05, " + "  TOT_MONTH_DB_BAL_06 = :TOT_MONTH_DB_BAL_06, "
+      + "  TOT_MONTH_DB_BAL_07 = :TOT_MONTH_DB_BAL_07, " + "  TOT_MONTH_DB_BAL_08 = :TOT_MONTH_DB_BAL_08, "
+      + "  TOT_MONTH_DB_BAL_09 = :TOT_MONTH_DB_BAL_09, " + "  TOT_MONTH_DB_BAL_10 = :TOT_MONTH_DB_BAL_10, "
+      + "  TOT_MONTH_DB_BAL_11 = :TOT_MONTH_DB_BAL_11, " + "  TOT_MONTH_DB_BAL_12 = :TOT_MONTH_DB_BAL_12, "
+      + "  TOT_MONTH_CR_BAL_01 = :TOT_MONTH_CR_BAL_01, " + "  TOT_MONTH_CR_BAL_02 = :TOT_MONTH_CR_BAL_02, "
+      + "  TOT_MONTH_CR_BAL_03 = :TOT_MONTH_CR_BAL_03, " + "  TOT_MONTH_CR_BAL_04 = :TOT_MONTH_CR_BAL_04, "
+      + "  TOT_MONTH_CR_BAL_05 = :TOT_MONTH_CR_BAL_05, " + "  TOT_MONTH_CR_BAL_06 = :TOT_MONTH_CR_BAL_06, "
+      + "  TOT_MONTH_CR_BAL_07=  :TOT_MONTH_CR_BAL_07, " + "  TOT_MONTH_CR_BAL_08 = :TOT_MONTH_CR_BAL_08,  "
+      + "  TOT_MONTH_CR_BAL_09 = :TOT_MONTH_CR_BAL_09, " + "  TOT_MONTH_CR_BAL_10 = :TOT_MONTH_CR_BAL_10, "
+      + "  TOT_MONTH_CR_BAL_11 = :TOT_MONTH_CR_BAL_11, " + "  TOT_MONTH_CR_BAL_12 = :TOT_MONTH_CR_BAL_12, "
+      + "  TOT_DEBIT_TRANS = :TOT_DEBIT_TRANS, TOT_CREDIT_TRANS = :TOT_CREDIT_TRANS, "
+      + "  STAT_FLAG           = :STAT_FLAG, STAT_UP_FLAG = :STAT_UP_FLAG, "
+      + "  MODIFIED_DATE       = :MODIFIED_DATE, MODIFIED_BY = :MODIFIED_BY, "
+      + "  LAST_MODIFIED       = :LAST_MODIFIED WHERE ID=:ID";
 
   public PersistentAccountBalanceDao(JdbcTemplate pJdbcTemplate,
       NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
@@ -48,45 +91,86 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
 
   @Override
   public AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount) {
-    return super.getAccountBalance(pFinancialStartDate, pFinancialEndDate, pAccount);
+    String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFinancialStartDate, pFinancialEndDate, pAccount.getId()},
+        new AccountBalanceRowMapper());
   }
 
   @Override
   public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, List<Account> pAccounts) {
    List<Long> accountCode= new ArrayList<>();
    accountCode = pAccounts.stream().map(a->a.getId()).collect(Collectors.toList());
-    String query="select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE in (" + org.apache.commons.lang.StringUtils.join(accountCode,",") +
-        ")";
-    return mJdbcTemplate.query(query, new Object[]{pFinancialStartDate, pFinancialEndDate}, new AccountBalanceRowMapper());
+    String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=:finStartDate and FIN_END_DATE=:finEndDate and ACCOUNT_CODE in (:accountCodeList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("finStartDate", pFinancialStartDate);
+    parameterMap.put("finEndDate", pFinancialEndDate);
+    parameterMap.put("accountCodeList", accountCode);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new AccountBalanceRowMapper());
   }
 
   @Override
   public Long insertFromAccount(MutableAccountBalance pAccountBalance) {
-    String query =
-        "INSERT INTO MST_ACCOUNT_BALANCE (ID,FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE,YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, MODIFIED_DATE, MODIFIED_BY) "
-            + " VALUES(?,?,?,?,?,?,?,?,?,?)";
-
-    mJdbcTemplate.update(query, pAccountBalance.getId(), pAccountBalance.getFinStartDate(),
-        pAccountBalance.getFinEndDate(), pAccountBalance.getAccountCode(), pAccountBalance.getYearOpenBalance(),
-        pAccountBalance.getYearOpenBalanceType().getValue(), pAccountBalance.getTotDebitTrans(),
-        pAccountBalance.getTotCreditTrans(), pAccountBalance.getModifiedDate(), pAccountBalance.getModifiedBy());
+    String query = INSERT_ONE;
+    Map parameterMap = getInsertOrUpdateParameters(pAccountBalance);
+    mNamedParameterJdbcTemplate.update(query, parameterMap);
     return pAccountBalance.getId();
   }
 
   @Override
   public int update(List<MutableAccountBalance> pMutableList) {
-    String query =
-        "UPDATE MST_ACCOUNT_BALANCE SET TOT_DEBIT_TRANS=?, TOT_CREDIT_TRANS=?, MODIFIED_DATE=?, MODIFIED_BY=? WHERE ID=?";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
+    String query = UPDATE_ONE;
+    Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
+    return mNamedParameterJdbcTemplate.batchUpdate(query, parameterObjects).length;
   }
 
-  private List<Object[]> getUpdateParamList(List<MutableAccountBalance> pAccountBalanceList) {
-    List<Object[]> params = new ArrayList<>();
-    for(AccountBalance accountBalance : pAccountBalanceList) {
-      params.add(new Object[] {accountBalance.getTotDebitTrans(), accountBalance.getTotCreditTrans(),
-          accountBalance.getModifiedDate(), accountBalance.getModifiedBy(), accountBalance.getId()});
+  private Map<String, Object>[] getParameterObjects(List<MutableAccountBalance> pMutableAccountBalances) {
+    Map<String, Object>[] parameterMaps = new HashMap[pMutableAccountBalances.size()];
+    for(int i = 0; i < pMutableAccountBalances.size(); i++) {
+      parameterMaps[i] = getInsertOrUpdateParameters(pMutableAccountBalances.get(i));
     }
-    return params;
+    return parameterMaps;
+  }
+
+  private Map getInsertOrUpdateParameters(MutableAccountBalance pMutableAccountBalance) {
+    Map parameter = new HashMap();
+    parameter.put("ID", pMutableAccountBalance.getId());
+    parameter.put("FIN_START_DATE", pMutableAccountBalance.getFinStartDate());
+    parameter.put("FIN_END_DATE", pMutableAccountBalance.getFinEndDate());
+    parameter.put("ACCOUNT_CODE", pMutableAccountBalance.getAccountCode());
+    parameter.put("YEAR_OPEN_BALANCE", pMutableAccountBalance.getYearOpenBalance());
+    parameter.put("YEAR_OPEN_BALANCE_TYPE", pMutableAccountBalance.getYearOpenBalanceType().getValue());
+    parameter.put("TOT_MONTH_DB_BAL_01", pMutableAccountBalance.getTotMonthDbBal01());
+    parameter.put("TOT_MONTH_DB_BAL_02", pMutableAccountBalance.getTotMonthDbBal02());
+    parameter.put("TOT_MONTH_DB_BAL_03", pMutableAccountBalance.getTotMonthDbBal03());
+    parameter.put("TOT_MONTH_DB_BAL_04", pMutableAccountBalance.getTotMonthDbBal04());
+    parameter.put("TOT_MONTH_DB_BAL_05", pMutableAccountBalance.getTotMonthDbBal05());
+    parameter.put("TOT_MONTH_DB_BAL_06", pMutableAccountBalance.getTotMonthDbBal06());
+    parameter.put("TOT_MONTH_DB_BAL_07", pMutableAccountBalance.getTotMonthDbBal07());
+    parameter.put("TOT_MONTH_DB_BAL_08", pMutableAccountBalance.getTotMonthDbBal08());
+    parameter.put("TOT_MONTH_DB_BAL_09", pMutableAccountBalance.getTotMonthDbBal09());
+    parameter.put("TOT_MONTH_DB_BAL_10", pMutableAccountBalance.getTotMonthDbBal10());
+    parameter.put("TOT_MONTH_DB_BAL_11", pMutableAccountBalance.getTotMonthDbBal11());
+    parameter.put("TOT_MONTH_DB_BAL_12", pMutableAccountBalance.getTotMonthDbBal12());
+    parameter.put("TOT_MONTH_CR_BAL_01", pMutableAccountBalance.getTotMonthCrBal01());
+    parameter.put("TOT_MONTH_CR_BAL_02", pMutableAccountBalance.getTotMonthCrBal02());
+    parameter.put("TOT_MONTH_CR_BAL_03", pMutableAccountBalance.getTotMonthCrBal03());
+    parameter.put("TOT_MONTH_CR_BAL_04", pMutableAccountBalance.getTotMonthCrBal04());
+    parameter.put("TOT_MONTH_CR_BAL_05", pMutableAccountBalance.getTotMonthCrBal05());
+    parameter.put("TOT_MONTH_CR_BAL_06", pMutableAccountBalance.getTotMonthCrBal06());
+    parameter.put("TOT_MONTH_CR_BAL_07", pMutableAccountBalance.getTotMonthCrBal07());
+    parameter.put("TOT_MONTH_CR_BAL_08", pMutableAccountBalance.getTotMonthCrBal08());
+    parameter.put("TOT_MONTH_CR_BAL_09", pMutableAccountBalance.getTotMonthCrBal09());
+    parameter.put("TOT_MONTH_CR_BAL_10", pMutableAccountBalance.getTotMonthCrBal10());
+    parameter.put("TOT_MONTH_CR_BAL_11", pMutableAccountBalance.getTotMonthCrBal11());
+    parameter.put("TOT_MONTH_CR_BAL_12", pMutableAccountBalance.getTotMonthCrBal12());
+    parameter.put("TOT_DEBIT_TRANS", pMutableAccountBalance.getTotDebitTrans());
+    parameter.put("TOT_CREDIT_TRANS", pMutableAccountBalance.getTotCreditTrans());
+    parameter.put("STAT_FLAG", pMutableAccountBalance.getStatFlag());
+    parameter.put("STAT_UP_FLAG", pMutableAccountBalance.getStatUpFlag());
+    parameter.put("MODIFIED_DATE", pMutableAccountBalance.getModifiedDate());
+    parameter.put("MODIFIED_BY", pMutableAccountBalance.getModifiedBy());
+    parameter.put("LAST_MODIFIED", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
+    return parameter;
   }
 
   private class AccountBalanceRowMapper implements RowMapper<MutableAccountBalance> {
@@ -129,6 +213,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       accountBalance.setStatUpFlag(rs.getString("stat_up_flag"));
       accountBalance.setModifiedDate(rs.getDate("modified_date"));
       accountBalance.setModifiedBy(rs.getString("modified_by"));
+      accountBalance.setLastModified(rs.getString("last_modified"));
       return accountBalance;
     }
   }

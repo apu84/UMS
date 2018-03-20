@@ -11,6 +11,7 @@ import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 public class UserRealm extends AuthorizingRealm {
+  protected static final String LOGIN_AS_SEPARATOR = ">";
   @Autowired
   private UserManager mUserManager;
   private String mSalt;

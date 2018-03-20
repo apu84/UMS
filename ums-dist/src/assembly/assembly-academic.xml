@@ -31,7 +31,7 @@
                 <include>org.glassfish.hk2:spring-bridge</include>
                 <include>org.glassfish.jersey.media:jersey-media-json-jackson</include>
                <include>com.fasterxml.jackson.core:jackson-databind</include>
-               <include>org.apache.shiro:shiro-core</include>
+              <include>org.apache.shiro:shiro-core</include>
                 <include>org.apache.shiro:shiro-web</include>
                 <include>org.apache.shiro:shiro-spring</include>
                 <include>org.apache.shiro:shiro-aspectj</include>
@@ -41,6 +41,7 @@
                 <include>org.glassfish.jersey.media:jersey-media-json-processing</include>
                 <include>ch.qos.logback:logback-classic</include>
                 <include>ch.qos.logback:logback-core</include>
+                <include>net.logstash.logback:logstash-logback-encoder</include>
                 <include>org.slf4j:slf4j-api</include>
                 <include>org.slf4j:slf4j-jdk14</include>
                 <include>commons-logging:commons-logging</include>
@@ -75,6 +76,7 @@
                 <include>io.jsonwebtoken:jjwt</include>
                 <include>org.mapdb:mapdb</include>
                 <include>com.fasterxml.jackson.core</include>
+                <include>org.apache.commons:commons-text</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
             <useTransitiveDependencies>true</useTransitiveDependencies>
