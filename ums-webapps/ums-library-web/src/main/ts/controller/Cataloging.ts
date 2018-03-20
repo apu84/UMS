@@ -705,50 +705,46 @@ module ums {
         }
 
         private reloadSuppliers(): void {
+            this.$scope.showSupplierSelect2 = false;
+            this.getAllSuppliers();
             this.$scope.showSupplierLoader = true;
             let data = $("#supplier").select2("data");
             if (data == null || data == undefined) {
-                this.getAllSuppliers();
-                this.$scope.showSupplierLoader = false;
             }
             else {
                 let searchTerm = data.text;
                 this.getAllSuppliers();
-                /*this.$scope.showSupplierSelect2 = false;*/
                 setTimeout(() => {
-                    console.log("In set Timeout 1");
                     setTimeout(() => {
                         Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
-                    }, 4000);
+                    }, 2000);
                     this.$scope.showSupplierLoader = false;
-                    /*this.$scope.showSupplierSelect2 = true;*/
-                }, 6000);
+                }, 3000);
             }
         }
 
 
         private reloadPublishers(): void {
+            this.$scope.showPublisherSelect2 = false;
+            this.getAllPublishers();
             this.$scope.showPublisherLoader = true;
             let data = $("#publisher").select2("data");
             if (data == null || data == undefined) {
-                this.getAllPublishers();
-                this.$scope.showPublisherLoader = false;
             }
             else {
                 let searchTerm = data.text;
-                this.getAllPublishers();
-               /* this.$scope.showPublisherSelect2 = false;*/
                 setTimeout(() => {
                     setTimeout(() => {
                         Utils.setSelect2Value("recordPublisherDiv", "publisher", searchTerm);
-                    }, 4000);
+                    }, 2000);
                     this.$scope.showPublisherLoader = false;
-                   /* this.$scope.showPublisherSelect2 = true;*/
-                }, 6000)
+                }, 3000)
             }
         }
 
         private reloadContributors(): void {
+            this.$scope.showContributorSelect2 = false;
+            this.getAllContributors();
             this.$scope.showContributorLoader = true;
             var text: string[] = new Array(this.$scope.record.contributorList.length);
 
@@ -761,9 +757,6 @@ module ums {
                     text[i] = data.text;
                 }
             }
-
-            this.getAllContributors();
-           /* this.$scope.showContributorSelect2 = false;*/
             setTimeout(() => {
                 setTimeout(() => {
                     for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
@@ -771,10 +764,9 @@ module ums {
                             Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
                         }
                     }
-                }, 4000);
+                }, 2000);
                 this.$scope.showContributorLoader = false;
-                /*this.$scope.showContributorSelect2 = true;*/
-            }, 6000);
+            }, 3000);
         }
 
         private loadCountries(): void {
