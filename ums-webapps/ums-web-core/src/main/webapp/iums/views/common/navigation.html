@@ -58,10 +58,10 @@
                data-ng-click="_menu.collapse(index)"
                index="{{index}}"
                data-ng-init="_menu.status[index]=true">
-                <i class="fa fa-circle" data-ng-if="roleWiseEntry.name=='Dept-Head'">
+                <i class="fa fa-male" data-ng-if="roleWiseEntry.name=='Teacher'">
                     <div class="icon-bg bg-blue"></div>
                 </i>
-                <i class="fa fa-circle" data-ng-if="roleWiseEntry.name=='Teacher'">
+                <i class="fa fa-street-view" data-ng-if="roleWiseEntry.name=='Dept-Head'">
                     <div class="icon-bg bg-blue"></div>
                 </i>
                 <span class="menu-title">{{roleWiseEntry.name}}</span>
