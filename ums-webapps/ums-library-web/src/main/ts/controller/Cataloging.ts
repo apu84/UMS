@@ -710,6 +710,9 @@ module ums {
             this.$scope.showSupplierLoader = true;
             let data = $("#supplier").select2("data");
             if (data == null || data == undefined) {
+                setTimeout(() => {
+                    this.$scope.showSupplierLoader = false;
+                }, 3000);
             }
             else {
                 let searchTerm = data.text;
@@ -730,6 +733,9 @@ module ums {
             this.$scope.showPublisherLoader = true;
             let data = $("#publisher").select2("data");
             if (data == null || data == undefined) {
+                setTimeout(() => {
+                    this.$scope.showPublisherLoader = false;
+                }, 3000);
             }
             else {
                 let searchTerm = data.text;
