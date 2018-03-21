@@ -75,7 +75,7 @@
                 <include>org.aspectj:aspectjweaver</include>
                 <include>io.jsonwebtoken:jjwt</include>
                 <include>org.mapdb:mapdb</include>
-                <include>com.fasterxml.jackson.core</include>
+                <include>com.fasterxml.jackson.core:jackson-databind</include>
                 <include>org.apache.commons:commons-text</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
