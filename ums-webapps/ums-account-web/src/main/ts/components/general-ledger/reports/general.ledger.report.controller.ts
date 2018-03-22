@@ -1,6 +1,6 @@
 module ums {
   class GeneralLedgerReportController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ReceiptVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'ReceiptService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', '$q', 'GeneralLedgerReportService'];
 
     private accounts: IAccount[];
     private selectedAccount: IAccount;
@@ -20,14 +20,7 @@ module ums {
                 private accountService: AccountService,
                 private groupService: GroupService,
                 private $timeout: ng.ITimeoutService,
-                private receiptVoucherService: ReceiptVoucherService,
-                private voucherService: VoucherService,
-                private currencyService: CurrencyService,
-                private currencyConversionService: CurrencyConversionService,
-                private accountBalanceService: AccountBalanceService,
-                private chequeRegisterService: ChequeRegisterService,
-                private $q: ng.IQService,
-                private receiptService: ReceiptService) {
+                private $q: ng.IQService, private generalLedgerReportService: GeneralLedgerReportService) {
       this.initialize();
     }
 
@@ -51,6 +44,7 @@ module ums {
 
     public runReport() {
 
+      this.generalLedgerReportService.generateReport(this.selectedAccount == null ? "null" : this.selectedAccount.id, this.selectedGroup == null ? "null" : this.selectedGroup.groupCode, this.fromDate, this.toDate);
     }
 
   }

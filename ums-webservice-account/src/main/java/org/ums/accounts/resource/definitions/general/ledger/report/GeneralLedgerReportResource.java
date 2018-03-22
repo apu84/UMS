@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * Created by Monjur-E-Morshed on 20-Mar-18.
  */
 @Component
-@Path("/account/general-ledger-report")
+@Path("/account/report/general-ledger-report")
 public class GeneralLedgerReportResource {
   private static final Logger mLogger = org.slf4j.LoggerFactory.getLogger(GeneralLedgerReportGenerator.class);
 
@@ -26,15 +26,18 @@ public class GeneralLedgerReportResource {
 
   @GET
   @Produces("application/pdf")
+  @Path("/accountId/{accountId}/groupCode/{groupCode}/fromDate/{fromDate}/toDate/{toDate}")
   public StreamingOutput createReport(final @Context HttpServletResponse pHttpServletResponse,
-      @QueryParam("accountId") String pAccountId, @QueryParam("groupCode") String pGroupCode,
-      @QueryParam("fromDate") String pFromDate, @QueryParam("toDate") String pToDate) throws Exception {
+      @PathParam("accountId") String pAccountId, @PathParam("groupCode") String pGroupCode,
+      @PathParam("fromDate") String pFromDate, @PathParam("toDate") String pToDate) throws Exception {
     mLogger.info("Should print general ledger report");
     return new StreamingOutput() {
       @Override
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          mGeneralLedgerReportGenerator.createReport(Long.parseLong(pAccountId), pGroupCode,
+          mGeneralLedgerReportGenerator.createReport(
+              pAccountId.equals("null") || pAccountId == null ? null : Long.parseLong(pAccountId),
+              pGroupCode.equals("null") || pGroupCode == null ? null : pGroupCode,
               UmsUtils.convertToDate(pFromDate, "dd-MM-yyyy"), UmsUtils.convertToDate(pToDate, "dd-MM-yyyy"), output);
         } catch(Exception e) {
           mLogger.info(e.getMessage());

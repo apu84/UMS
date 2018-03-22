@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 20-Mar-18.
  */
 public interface GeneralLedgerReportGenerator {
-  void createReport(Long pAccountId, String pGroupId, Date fromDate, Date toDate, OutputStream pOutputStream);
+  void createReport(Long pAccountId, String pGroupId, Date fromDate, Date toDate, OutputStream pOutputStream)
+      throws Exception;
 
 }
