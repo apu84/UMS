@@ -1,4 +1,9 @@
-<div class="panel-body" >
+<div class="panel-body">
+    <div align="right">
+        <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getReport()">
+            <span class="glyphicon glyphicon-download"></span> Download pdf
+        </button>
+    </div>
     <table class="table table-bordered">
         <thead>
         <th style="background-color: #FAFAFA; ">SL</th>
@@ -41,7 +46,7 @@
         <td></td>
         <td><strong style="font-size: 16px">{{vm.classObservationTotalSPoints+vm.nonClassObservationTotalSPoints}}</strong></td>
         <td><strong style="font-size: 16px">{{vm.classObservationTotalStudent+vm.nonClassObservationTotalStudent}}</strong></td>
-        <td><strong style="font-size: 16px">{{(vm.classObservationAverage+vm.nonClassObservationAverage)/2}}</strong></td>
+        <td><strong style="font-size: 16px">{{vm.finalScore}}</strong></td>
         </tbody>
     </table>
 </div>

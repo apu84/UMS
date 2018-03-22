@@ -3,12 +3,12 @@
     <span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span>
     <table class="table table-bordered">
         <thead>
-        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;width:20px;">SL</th>
         <th style="background-color: #e7f5fe;">Questions</th>
-        <th style="background-color: #e7f5fe;width:200px;">Point</th>
+        <th style="background-color: #e7f5fe;width:300px;">Point</th>
         </thead>
         <tbody>
-        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==1">
+        <tr data-ng-repeat="app in vm.questionListAndReviewReadOnly" data-ng-if="app.observationType==1">
             <td>{{$index+1}}</td>
             <td>{{app.questionDetails}}</td>
             <td>{{app.point}}</td>
@@ -18,27 +18,28 @@
     <span  style="font-size: 14px" class="label label-success badge-success">Non ClassRoom Observation</span>
     <table class="table table-bordered">
         <thead>
-        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;width:20px;">SL</th>
         <th style="background-color: #e7f5fe;">Questions</th>
-        <th style="background-color: #e7f5fe;width:200px;">Point</th>
+        <th style="background-color: #e7f5fe;width:300px;">Point</th>
         </thead>
         <tbody>
-        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==2">
+        <tr data-ng-repeat="app in vm.questionListAndReviewReadOnly" data-ng-if="app.observationType==2">
             <td>{{$index+1}}</td>
             <td>{{app.questionDetails}}</td>
             <td>{{app.point}}</td>
         </tr>
         </tbody>
     </table>
+
     <span  style="font-size: 14px" class="label label-success badge-success">Non Teaching Observation</span>
     <table class="table table-bordered">
         <thead>
-        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;width:20px;">SL</th>
         <th style="background-color: #e7f5fe;">Questions</th>
-        <th style="background-color: #e7f5fe;width:200px; ">Comment</th>
+        <th style="background-color: #e7f5fe;width:300px;">Comment</th>
         </thead>
         <tbody>
-        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==3">
+        <tr data-ng-repeat="app in vm.questionListAndReviewReadOnly" data-ng-if="app.observationType==3">
             <td>{{$index+1}}</td>
             <td>{{app.questionDetails}}</td>
             <td>{{app.comment}}</td>

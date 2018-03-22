@@ -106,6 +106,28 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
+  public  JsonObject getAssignedReviewableCoursesList(final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
+        List<ApplicationTES> applications=getContentManager().getAssignedReviewableCoursesList(pTeacherId,pSemesterId);
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getAllSemesterNameList(final Request pRequest, final UriInfo pUriInfo){
+        List<ApplicationTES> applications=getContentManager().getAllSemesterNameList();
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
   public JsonObject getAllQuestions(final Request pRequest, final UriInfo pUriInfo){
         String studentId = SecurityUtils.getSubject().getPrincipal().toString();
         Student student = mStudentManager.get(studentId);
@@ -119,34 +141,36 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
-  public List<Report> getResult(final Request pRequest, final UriInfo pUriInfo){
+  public List<Report> getResult(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
       double cRoombservation=0,noncRoomObservation=0;
       Integer countercR=0,counterncR=0;
       DecimalFormat newFormat = new DecimalFormat("#.##");
       HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
       List<Report> reportList= new ArrayList<Report>();
       List<Report> reportListValue= new ArrayList<Report>();
-      Integer studentNo=getContentManager().getTotalStudentNumber("","",11);
-        List<ApplicationTES> getDetailedResult=getContentManager().getDetailedResult("","",11).
-                stream().
-                filter(a->a.getComment() !=null).collect(Collectors.toList());
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
+      Integer studentNo=getContentManager().getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
+        List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
 
         applications.forEach(a->{
-            double value=getContentManager().getAverageScore("","",a.getQuestionId(),11);
-            String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
             Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-            reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
-            mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+            if(observationType!=3){
+                double value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
+                String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
+                reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
+                mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+            }
+
         });
       for(Map.Entry m:mapForCalculateResult.entrySet()){
           Integer questionId=(Integer)m.getKey();
           if(getContentManager().getObservationType(questionId) ==1){
               countercR++;
            cRoombservation=cRoombservation+(double)m.getValue();
-          }else {
+          }else if(getContentManager().getObservationType(questionId) ==2){
               counterncR++;
               noncRoomObservation=noncRoomObservation+(double)m.getValue();
+          }else{
+
           }
       }
       cRoombservation=(cRoombservation/countercR);
@@ -154,30 +178,31 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       return reportList;
     }
 
-  public List<StudentComment> getComments(final Request pRequest, final UriInfo pUriInfo){
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(11012017);
+  public List<StudentComment> getComments(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
+        List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
       List<ApplicationTES> getDetailedResult=null;
       List<StudentComment> commentList= new ArrayList<StudentComment>();
 
         for(int i=0;i<applications.size();i++){
             Integer questionId=applications.get(i).getQuestionId();
             Integer observationType=getContentManager().getObservationType(questionId);
-            String questionDetails=getContentManager().getQuestionDetails(questionId);
-             getDetailedResult=getContentManager().getDetailedResult("","",11).
-                    stream().
-                    filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
-            int size=getDetailedResult.size();
+            if(observationType ==3){
+                String questionDetails=getContentManager().getQuestionDetails(questionId);
+                getDetailedResult=getContentManager().getDetailedResult(pTeacherId,pCourseId,pSemesterId).
+                        stream().
+                        filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+                int size=getDetailedResult.size();
 
-            if(getDetailedResult.size() !=0){
-                String comments[] =new String[size];
-                for(int j=0;j<size;j++){
-                    comments[j]=getDetailedResult.get(j).getComment();
+                if(getDetailedResult.size() !=0){
+                    String comments[] =new String[size];
+                    for(int j=0;j<size;j++){
+                        comments[j]=getDetailedResult.get(j).getComment();
+                    }
+                    commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
                 }
-                commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
             }
-        }
-
-        return commentList;
+            }
+      return commentList;
     }
 
   // getRecordsOfAssignedCoursesByHead

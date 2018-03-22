@@ -44,15 +44,17 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/getResult")
-  public List<Report> getResult(@Context Request pRequest) {
-    return mHelper.getResult(pRequest, mUriInfo);
+  @Path("/getResult/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
+  public List<Report> getResult(@Context Request pRequest, @PathParam("course-id") String pCourseId,
+      @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getResult(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
   }
 
   @GET
-  @Path("/getComment")
-  public List<StudentComment> getComment(@Context Request pRequest) {
-    return mHelper.getComments(pRequest, mUriInfo);
+  @Path("/getComment/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
+  public List<StudentComment> getComment(@Context Request pRequest, @PathParam("course-id") String pCourseId,
+      @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getComments(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
   }
 
   @GET
@@ -65,6 +67,19 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @Path("/getAllFacultyMembers")
   public JsonObject getFacultyMembers(@Context Request pRequest) {
     return mHelper.getAllFacultyMembers(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getAssignedCoursesForReview/teacherId/{teacher-id}/semesterId/{semester-id}")
+  public JsonObject getAssignedCoursesForReview(@Context Request pRequest, @PathParam("teacher-id") String pTeacherId,
+      @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getAssignedReviewableCoursesList(pTeacherId, pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getSemesterNameList")
+  public JsonObject getABC(@Context Request pRequest) {
+    return mHelper.getAllSemesterNameList(pRequest, mUriInfo);
   }
 
   @GET
@@ -96,8 +111,8 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @GET
   @Path("/getReport/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   @Produces("application/pdf")
-  public StreamingOutput createCertificateReport(@QueryParam("course-id") String pCourseId,
-      @QueryParam("teacher-id") String pTeacherId, @QueryParam("semester-id") Integer pSemesterId) {
+  public StreamingOutput createCertificateReport(@PathParam("course-id") String pCourseId,
+      @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream output) throws IOException, WebApplicationException {

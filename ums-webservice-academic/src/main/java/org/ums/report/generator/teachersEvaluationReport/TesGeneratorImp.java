@@ -37,12 +37,17 @@ public class TesGeneratorImp implements TesGenerator {
   DateFormat mDateFormat;
   @Autowired
   ApplicationTESManager mApplicationTESManager;
-  private String pCourseId;
+  private String courseId;
+  private String teacherId;
+  private Integer semesterId;
 
   @Override
   public void createTesReport(String pCourseId, String pTeacherId, Integer pSemesterId, OutputStream pOutputStream)
       throws IOException, DocumentException {
-    this.pCourseId=pCourseId;
+    this.courseId=pCourseId;
+    this.teacherId=pTeacherId;
+    this.semesterId=pSemesterId;
+
 
     mDateFormat = new DateFormat("dd MMM YYYY");
     Document document = new Document(PageSize.A4.rotate());
@@ -95,32 +100,37 @@ public class TesGeneratorImp implements TesGenerator {
       double cRoomObservation=0,noncRoomObservation=0;
       Integer countercR=0, counterncR=0;
       double totalPointsObtype1=0, totalStudentsObtype1=0, totalPointsObtype2=0, totalStudentsObtype2=0;
-      DecimalFormat newFormat = new DecimalFormat("#.##");
-      HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
-      java.util.List<Report> reportList= new ArrayList<Report>();
-      Integer studentNo=mApplicationTESManager.getTotalStudentNumber("","",11);
-      List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(11012017);
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
+    List<Report> reportList= new ArrayList<Report>();
+    List<Report> reportListValue= new ArrayList<Report>();
+    Integer studentNo=mApplicationTESManager.getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
+    List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(pSemesterId);
 
-      applications.forEach(a->{
-        double value=mApplicationTESManager.getAverageScore("","",a.getQuestionId(),11);
+    applications.forEach(a->{
+      Integer observationType=mApplicationTESManager.getObservationType(a.getQuestionId());
+      if(observationType!=3){
+        double value=mApplicationTESManager.getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
         String questionDetails=mApplicationTESManager.getQuestionDetails(a.getQuestionId());
-        Integer observationType=mApplicationTESManager.getObservationType(a.getQuestionId());
         reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
         mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
-      });
-
-      for(Map.Entry m:mapForCalculateResult.entrySet()){
-        Integer questionId=(Integer)m.getKey();
-        if(mApplicationTESManager.getObservationType(questionId) ==1){
-          countercR++;
-          cRoomObservation=cRoomObservation+(double)m.getValue();
-        }else {
-          counterncR++;
-          noncRoomObservation=noncRoomObservation+(double)m.getValue();
-        }
       }
-      cRoomObservation=Double.valueOf(newFormat.format((cRoomObservation/countercR)));
-      noncRoomObservation=Double.valueOf((newFormat.format(noncRoomObservation/counterncR)));
+
+    });
+    for(Map.Entry m:mapForCalculateResult.entrySet()){
+      Integer questionId=(Integer)m.getKey();
+      if(mApplicationTESManager.getObservationType(questionId) ==1){
+        countercR++;
+        cRoomObservation=cRoomObservation+(double)m.getValue();
+      }else if(mApplicationTESManager.getObservationType(questionId) ==2){
+        counterncR++;
+        noncRoomObservation=noncRoomObservation+(double)m.getValue();
+      }else{
+
+      }
+    }
+    cRoomObservation=Double.valueOf(newFormat.format(cRoomObservation/countercR));
+    noncRoomObservation=Double.valueOf(newFormat.format(noncRoomObservation/counterncR));
 
       for(int i=0;i<reportList.size();i++){
         if(reportList.get(i).getObservationType()==1){
@@ -257,7 +267,7 @@ public class TesGeneratorImp implements TesGenerator {
     tableGreen.addCell("");
     tableGreen.addCell(""+(totalPointsObtype1+totalPointsObtype2));
     tableGreen.addCell(""+(totalStudentsObtype1+totalStudentsObtype2));
-    tableGreen.addCell(""+(cRoomObservation+noncRoomObservation)/2);
+    tableGreen.addCell(""+Double.valueOf(newFormat.format((cRoomObservation+noncRoomObservation)/2)));
     try {
       document.add(tableGreen);
     } catch (DocumentException e) {
@@ -271,25 +281,27 @@ public class TesGeneratorImp implements TesGenerator {
     for(int i=0;i<applications.size();i++){
       Integer questionId=applications.get(i).getQuestionId();
       Integer observationType=mApplicationTESManager.getObservationType(questionId);
-      String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
-      getDetailedResult=mApplicationTESManager.getDetailedResult("","",11).
-              stream().
-              filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
-      int size=getDetailedResult.size();
+      if(observationType ==3){
+        String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
+        getDetailedResult=mApplicationTESManager.getDetailedResult(pTeacherId,pCourseId,pSemesterId).
+                stream().
+                filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+        int size=getDetailedResult.size();
 
-      if(getDetailedResult.size() !=0){
-        String comments[] =new String[size];
-        for(int j=0;j<size;j++){
-          comments[j]=getDetailedResult.get(j).getComment();
+        if(getDetailedResult.size() !=0){
+          String comments[] =new String[size];
+          for(int j=0;j<size;j++){
+            comments[j]=getDetailedResult.get(j).getComment();
+          }
+          commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
         }
-        commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
       }
     }
     //Itext Pdf Comment
     document.add(paragraph);
     Paragraph paragraph3 = null;
     Chunk chunk3 = null;
-    chunk3 = new Chunk("Student Comments");
+    chunk3 = new Chunk("Non Teaching Observation");
     paragraph3 = new Paragraph();
     paragraph3.setAlignment(Element.ALIGN_LEFT);
     paragraph3.setFont(fontTimes14Bold);

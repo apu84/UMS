@@ -182,12 +182,12 @@ module ums{
             this.checkComment=true;
             console.log("Submit");
             for (let i = 0; i < this.questionListAndReview.length; i++) {
-                if (this.questionListAndReview[i].point == 1 && this.questionListAndReview[i].comment == null) {
+                if (this.questionListAndReview[i].comment !=null && this.questionListAndReview[i].comment.length >100) {
                     this.checkComment = false;
                 }
             }
             if (!this.checkComment) {
-                this.notify.error("Write your reason between 5 to 100 words");
+                this.notify.error("Write your reason between 100 words");
             }
     }
 

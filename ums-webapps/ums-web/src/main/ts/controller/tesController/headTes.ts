@@ -44,17 +44,37 @@ module ums{
         comment:string[];
         observationType:number;
     }
+
+    interface ISemesterName{
+        semesterId:number;
+        semesterName:string;
+    }
+
+    interface IAssignedCoursesForReview{
+        teacherId:string;
+        semesterId:number;
+        courseName:string;
+        courseNo:string;
+        courseTitle:string;
+    }
     class HeadTES{
         public facultyList:Array<IFacultyList>;
+        public facultyListResultEvaluation:Array<IFacultyList>;
         public assignedCourses:Array<IAssignedCourses>;
         public setRivewedCoursesHistory:Array<ISetForReview>;
+        public assignedCoursesForReview:Array<IAssignedCoursesForReview>;
         public studentResult:Array<IReport>;
         public studentComments:Array<IComment>;
+        public semesterNameList:Array<ISemesterName>;
         public facultyName:string;
         public facultyId:string;
         public fName:string;
         public statusValue:number;
         public semesterName:string;
+        public selectedTeacherName:IFacultyList;
+        public selectedTeacherId:string;
+        public selectedSemesterName:ISemesterName;
+        public selectedSemesterId:number;
         public getTotalRecords:any;
         public itemPerPage:number;
         public currentPageNumber:number;
@@ -73,7 +93,12 @@ module ums{
         public innerCommentPgCurrentPage:number;
         public innerCommentPgItemsPerPage:number;
         public commentPgTotalRecords:number;
-
+        public finalScore:number;
+        public selectRow:number;
+        public selectedCourseId:string;
+        public selectedCourseNo:string;
+        public selectedCourseTitle:string;
+        public checkEvaluationResult:boolean;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -104,12 +129,47 @@ module ums{
         this.commentPgCurrentPage=1
         this.commentPgItemsPerPage=1;
         this.innerCommentPgCurrentPage=1;
-        this.innerCommentPgItemsPerPage=1;
+        this.innerCommentPgItemsPerPage=2;
         this.commentPgTotalRecords=0;
+        this.checkEvaluationResult=true;
+        }
+
+        private select2ini(selectBoxId, studentIds, placeHolderText) {
+            console.log("studentIds ---------------------------------------");
+            console.log(studentIds);
+            var data = studentIds;
+            $("#" + selectBoxId).select2({
+                minimumInputLength: 0,
+                query: function (options) {
+                    var pageSize = 100;
+                    var startIndex = (options.page - 1) * pageSize;
+                    var filteredData = data;
+                    if (options.term && options.term.length > 0) {
+                        if (!options.context) {
+                            var term = options.term.toLowerCase();
+                            options.context = data.filter(function (metric: any) {
+                                return ( metric.name.indexOf(term) !== -1 );
+                            });
+                        }
+                        filteredData = options.context;
+                    }
+                    options.callback({
+                        context: filteredData,
+                        results: filteredData.slice(startIndex, startIndex + pageSize),
+                        more: (startIndex + pageSize) < filteredData.length
+                    });
+                },
+                placeholder: placeHolderText
+            });
+        }
+        private teacherChanged(val:any){
+            console.log("Name: "+val.firstName+"\nId: "+val.teacherId);
+            this.selectedTeacherId=val.teacherId;
 
         }
-   private getAllFacultyMembers(){
+        private getAllFacultyMembers(){
             this.facultyList=[];
+       this.facultyListResultEvaluation=[];
        var appTES:Array<IFacultyList>=[];
        var defer = this.$q.defer();
        this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAllFacultyMembers', 'application/json',
@@ -117,6 +177,7 @@ module ums{
                appTES=json.entries;
                console.log("Faculty Members!!!!");
                this.facultyList=appTES;
+               this.facultyListResultEvaluation=appTES;
                this.getTotalRecords=json.totalRecords;
                console.log(this.getTotalRecords);
                console.log(this.facultyList);
@@ -168,25 +229,26 @@ module ums{
            (response: ng.IHttpPromiseCallbackArg<any>) => {
                console.error(response);
            });
-
-
        return defer.promise;
 
    }
 
+
    private getResults(){
-            this.studentComments=[];
        this.classObservationTotalSPoints=0;
        this.classObservationTotalStudent=0;
        this.classObservationAverage=0;
        this.nonClassObservationTotalSPoints=0;
        this.nonClassObservationTotalStudent=0;
        this.nonClassObservationAverage=0;
+       this.finalScore=0;
+       this.studentComments=[];
+       this.studentResult=[];
        var appTES:Array<IReport>=[];
        var defer = this.$q.defer();
        var counterObType1=0;
        var counterObType2=0;
-       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getResult', 'application/json',
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getResult/courseId/'+this.selectedCourseId+'/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
            (json: any, etag: string) => {
                 console.log(json);
                 appTES=json;
@@ -207,7 +269,9 @@ module ums{
                this.classObservationAverage=(this.classObservationAverage/counterObType1);
                this.classObservationAverage=Number(this.classObservationAverage.toFixed(2));
                this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2);
-               this.nonClassObservationAverage=Number(this.nonClassObservationAverage.toFixed(2))
+               this.nonClassObservationAverage=Number(this.nonClassObservationAverage.toFixed(2));
+               this.finalScore=(this.classObservationAverage+this.nonClassObservationAverage)/2;
+               this.finalScore=Number(this.finalScore.toFixed(2))
                this.getComment();
                defer.resolve(this.studentResult);
            },
@@ -217,9 +281,10 @@ module ums{
        return defer.promise;
    }
    private  getComment(){
+       this.studentComments=[];
        var appTES:Array<IComment>=[];
        var defer = this.$q.defer();
-       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComment', 'application/json',
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComment/courseId/'+this.selectedCourseId+'/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
            (json: any, etag: string) => {
            console.log("comment---------");
                appTES=json;
@@ -232,13 +297,90 @@ module ums{
                console.error(response);
            });
        return defer.promise;
-
    }
+       private getAssignedCoursesForReview(){
+           this.checkEvaluationResult=true;
+           this.assignedCoursesForReview=[];
+           this.studentComments=[];
+           this.selectRow=null;
+           console.log("eeeeeeeeeeee");
+           console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId);
+           var appTES:Array<IAssignedCoursesForReview>=[];
+           var defer = this.$q.defer();
+           this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAssignedCoursesForReview/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
+               (json: any, etag: string) => {
+                   console.log("List of Courses");
+                   appTES=json.entries;
+                   this.assignedCoursesForReview=appTES;
+                   console.log(this.assignedCoursesForReview);
+                   defer.resolve(json);
+               },
+               (response: ng.IHttpPromiseCallbackArg<any>) => {
+                   console.error(response);
+               });
+           return defer.promise;
+       }
+        private getInfo(pTeacherId:any,pCourseId:any,id:any,pSemesterId:number,pCourseNo:any,pCourseTitle:any){
+            this.selectRow=id;
+            this.selectedCourseId=pCourseId;
+            this.selectedTeacherId=pTeacherId;
+            this.selectedSemesterId=pSemesterId;
+            this.selectedCourseNo=pCourseNo;
+            this.selectedCourseTitle=pCourseTitle;
+            this.checkEvaluationResult=false;
+            this.getResults();
+
+
+        }
+        private semesterChanged(val:any){
+           console.log("Name: "+val.semesterName+"\nsemesterId: "+val.semesterId);
+            this.selectedSemesterId=val.semesterId;
+
+        }
+        private  getSemester(): ng.IPromise<any>{
+            this.assignedCoursesForReview=[];
+            this.studentComments=[];
+            this.studentResult=[];
+            this.selectedCourseNo="";
+            this.semesterNameList=[];
+            this.checkEvaluationResult=true;
+            this.selectedSemesterId=null;
+            this.selectedTeacherId=null;
+            this.selectedSemesterName=null;
+            this.selectedTeacherName=null;
+            var appTES:Array<ISemesterName>=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getSemesterNameList', 'application/json',
+                (json: any, etag: string) => {
+                console.log("Semester");
+                appTES=json.entries;
+                this.semesterNameList=appTES;
+                this.selectedSemesterName=this.semesterNameList[0];
+                this.selectedTeacherName=this.facultyListResultEvaluation[0];
+                console.log("------------Initialize");
+                console.log("Name: "+this.selectedTeacherName.firstName+"\nId: "+this.selectedTeacherName.teacherId+"\nSemester: "+
+                    this.selectedSemesterName.semesterName+"\nId: "+this.selectedSemesterName.semesterId);
+                this.selectedTeacherId=this.selectedTeacherName.teacherId;
+                this.selectedSemesterId=this.selectedSemesterName.semesterId;
+                    console.log("id-------");
+                console.log("F_Id: "+this.selectedTeacherId+"\nS_Id: "+this.selectedSemesterId);
+
+                defer.resolve(this.semesterNameList);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
+
    private  getReport(){
        let contentType: string = UmsUtil.getFileContentType("pdf");
        let fileName = "Evaluation Report";
+       console.log("QWERTYUIIOOOPPPPP");
+       console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId+"\n"+this.selectedCourseId);
        var defer = this.$q.defer();
-       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReport/courseId/'+'CSE4266'+'/teacherId/'+'0976'+'/semesterId/'+9, 'application/pdf',
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReport/courseId/'+this.selectedCourseId+'/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/pdf',
            (data: any, etag: string) => {
                console.log("pdf");
                UmsUtil.writeFileContent(data, contentType, fileName);

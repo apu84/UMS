@@ -13,6 +13,10 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getAllQuestions(final Integer pSemesterId);
 
+  List<ApplicationTES> getAllSemesterNameList();
+
+  List<ApplicationTES> getAssignedReviewableCoursesList(final String pTeacherId, final Integer pSemesterId);
+
   Integer getObservationType(final Integer pQuestionId);
 
   String getQuestionDetails(final Integer pQuestionId);

@@ -31,7 +31,7 @@ module ums{
         rowNum:number;
 
     }
-    interface ImodalTableCarryInfo{
+    interface IModalTableCarryInfo{
         courseNo:string;
         courseTitle:string;
         carryYear:number;
@@ -41,7 +41,7 @@ module ums{
 
     }
 
-    interface  ImodalApliedInfo{
+    interface  IModalAppliedInfo{
         courseId:string;
         courseTitle:string;
         statusName:string;
@@ -59,10 +59,10 @@ module ums{
         public pagination: any = {};
         applicationCCI: Array<AppCCI>;
         applicationCCIGetAll: Array<AppCCI>;
-        applicationModalTableinfo:Array<ImodalTableCarryInfo>;
-        applicationModalAppliedInfo:Array<ImodalApliedInfo>;
-        applicationModalAppliedInfoUpdated:Array<ImodalApliedInfo>;
-        responseResult:Array<ImodalApliedInfo>;
+        applicationModalTableinfo:Array<IModalTableCarryInfo>;
+        applicationModalAppliedInfo:Array<IModalAppliedInfo>;
+        applicationModalAppliedInfoUpdated:Array<IModalAppliedInfo>;
+        responseResult:Array<IModalAppliedInfo>;
         approvalStatus:String;
         modalAccept:string;
         modalReject:string;
@@ -186,7 +186,7 @@ module ums{
             var url = '/ums-webservice-academic/academic/applicationCCI/studentId/'+this.studentID+'/semesterId/'+this.semesterId;
             var defer = this.$q.defer();
 
-           var modalcarryoinfo:Array<ImodalTableCarryInfo>=[];
+           var modalcarryoinfo:Array<IModalTableCarryInfo>=[];
             this.httpClient.get(url, 'application/json',
                 (json: any, etag: string) => {
                     console.log("------------Rumi---------------------");
@@ -272,7 +272,7 @@ module ums{
              this.semesterId=semesteridTa;
              this.totalApplied=0;
              var defer = this.$q.defer();
-             var app: Array<ImodalApliedInfo> = [];
+             var app: Array<IModalAppliedInfo> = [];
              this.applicationModalAppliedInfo=[];
              this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/getAllcarryInfo/studentId/'+this.studentID+'/semesterId/'+this.semesterId, 'application/json',
                  (json: any, etag: string) => {
@@ -330,7 +330,7 @@ module ums{
         }
 
         private submitModal(submitStatus:string){
-            var appliedvalue:Array<ImodalApliedInfo>=[];
+            var appliedvalue:Array<IModalAppliedInfo>=[];
             this.applicationModalAppliedInfoUpdated=[];
 
 
@@ -383,7 +383,7 @@ module ums{
                  })
              }
         }
-        private convertToJson(result: Array<ImodalApliedInfo>): ng.IPromise<any> {
+        private convertToJson(result: Array<IModalAppliedInfo>): ng.IPromise<any> {
             let defer:ng.IDeferred<any> = this.$q.defer();
             var completeJson = {};
             console.log("result in converto Json");
@@ -456,7 +456,7 @@ module ums{
             this.seachByStudentId="";
 
         }
-        private checkMoreThanOneSelectionSubmit(result:ImodalApliedInfo) {
+        private checkMoreThanOneSelectionSubmit(result:IModalAppliedInfo) {
 
             if(result.apply){
                 this.checkBoxCounter++;
