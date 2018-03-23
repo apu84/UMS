@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -87,6 +88,15 @@ public class UmsUtils {
   public static String formatDate(Date date, String outputFormat) {
     Format formatter = new SimpleDateFormat(outputFormat);
     return formatter.format(date);
+  }
+
+  public static Date convertFromLocalDateToDate(LocalDate localDate) {
+    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  }
+
+  public static LocalDate convertFromDateToLocalDate(Date date) {
+    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    return localDate;
   }
 
   public static Date convertToDate(String dateStr, String dateFormat) throws Exception {

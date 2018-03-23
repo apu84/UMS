@@ -147,7 +147,7 @@ public class AccountTransactionCommonResourceHelper extends
       voucherNoListInNumber.add(Integer.parseInt(a.substring(4)));
     });
 
-    Integer nextVoucher = Collections.max(voucherNoListInNumber) + 1;
+    Integer nextVoucher = (voucherNoListInNumber.size()==0? 0: Collections.max(voucherNoListInNumber)) + 1;
     return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucher);
   }
 
@@ -338,7 +338,7 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
-
+    String voucherNo="";
     for(int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
@@ -349,7 +349,12 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setPostDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
-      transaction.setVoucherNo(company.getId() + transaction.getVoucherNo());
+      if(i == 0) {
+        voucherNo =
+                transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
+                        transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
+      }
+      transaction.setVoucherNo(company.getId() + voucherNo);
       if(transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);

@@ -43,8 +43,11 @@ module ums {
     }
 
     public runReport() {
-
-      this.generalLedgerReportService.generateReport(this.selectedAccount == null ? "null" : this.selectedAccount.id, this.selectedGroup == null ? "null" : this.selectedGroup.groupCode, this.fromDate, this.toDate);
+      console.log("selected account: "+this.selectedAccount);
+      console.log("selected Group: "+this.selectedGroup);
+      this.generalLedgerReportService.generateReport(this.selectedAccount == null || this.selectedAccount==undefined  ? "null" : this.selectedAccount.id,
+       this.selectedGroup == null || this.selectedGroup==undefined ? "null" : this.selectedGroup.groupCode,
+        this.fromDate, this.toDate);
     }
 
   }

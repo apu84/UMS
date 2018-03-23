@@ -1,5 +1,6 @@
 package org.ums.manager.accounts;
 
+import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
@@ -20,6 +21,8 @@ public interface AccountTransactionManager extends ContentManager<AccountTransac
   List<MutableAccountTransaction> getByVoucherNo(String pVoucherNo);
 
   Integer getVoucherNumber(Voucher pVoucher, Date pStartDate, Date pEndDate);
+
+  List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, Account pAccount);
 
   List<String> getVouchers(Voucher pVoucher, Date pStartDate, Date pEndDate);
 
