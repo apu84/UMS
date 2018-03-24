@@ -343,6 +343,13 @@ module ums {
         }
 
 
+        private fetchItems(mfn: string): void{
+            this.catalogingService.fetchItems(mfn).then((data: any) => {
+                this.$scope.itemList = data;
+            });
+        }
+
+
         private fetchItem(itemId: string, mode: string): void {
             this.catalogingService.fetchItem(itemId).then((response: any) => {
                 this.$scope.item = response;
@@ -392,6 +399,7 @@ module ums {
                     localStorage["lms_current_index"] = recordIdList.length - 1;
 
                     this.fetchRecord(recordIdList[recordIdList.length - 1]);
+                    this.fetchItems(recordIdList[recordIdList.length - 1]);
 
 
                 }, function errorCallback(response) {
@@ -402,6 +410,7 @@ module ums {
 
                 localStorage["lms_current_index"] = previousIndex;
                 this.fetchRecord(recordId);
+                this.fetchItems(recordId);
             }
             this.mangeRecordNavigator();
         }
@@ -429,6 +438,7 @@ module ums {
                     localStorage["lms_current_index"] = 0;
                     localStorage["lms_page"] = tPage;
                     this.fetchRecord(recordIdList[0]);
+                    this.fetchItems(recordIdList[0]);
 
                 }, function errorCallback(response) {
                     this.notify.error(response);
@@ -438,6 +448,7 @@ module ums {
                 var recordId: string = recordIdList[nextIndex];
                 localStorage["lms_current_index"] = nextIndex;
                 this.fetchRecord(recordId);
+                this.fetchItems(recordId);
 
             }
             this.mangeRecordNavigator();
