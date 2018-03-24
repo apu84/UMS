@@ -1,6 +1,7 @@
 package org.ums.services.academic;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.StudentRecord;
@@ -12,6 +13,9 @@ public class RemarksBuilderImpl implements RemarksBuilder {
   @Override
   public String getGradeSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord.Status pStatus,
       Integer pSemesterId) {
+    if(isWithHeldResult(pResults, pSemesterId)) {
+      return "Result Incomplete";
+    }
     String passFailStatus = null, carryOverText = null;
     if(pStatus == StudentRecord.Status.FAILED) {
       passFailStatus = "Failed";
@@ -28,6 +32,9 @@ public class RemarksBuilderImpl implements RemarksBuilder {
   @Override
   public String getTabulationSheetRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord,
       Integer pSemesterId) {
+    if(isWithHeldResult(pResults, pSemesterId)) {
+      return "Result Incomplete";
+    }
     String promotionStatus = null, carryOverText = null;
     if(pStudentRecord.getStatus() == StudentRecord.Status.FAILED) {
       promotionStatus = "Failed ";
@@ -111,5 +118,12 @@ public class RemarksBuilderImpl implements RemarksBuilder {
     return String.format("Promoted to %s Year %s Semester",
         year[pStudentRecord.getYear() + ((pStudentRecord.getAcademicSemester() + 1) % 2)],
         academicSemester[(pStudentRecord.getAcademicSemester() + 1) % 2]);
+  }
+
+  private boolean isWithHeldResult(final List<UGRegistrationResult> pResults, final int pSemesterId) {
+    return pResults.stream()
+        .filter((pResult -> pResult.getGradeLetter().equals("W") && pResult.getSemesterId() == pSemesterId))
+        .collect(Collectors.toList()).size() > 0;
+
   }
 }
