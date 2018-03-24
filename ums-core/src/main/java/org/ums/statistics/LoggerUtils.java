@@ -8,10 +8,11 @@ public class LoggerUtils {
   public static String buildQuery(String pQuery, final Object[] pQueryParams) {
     if(pQuery.contains("?") && pQueryParams.length > 0) {
       for(Object param : pQueryParams) {
-
-        pQuery =
-            pQuery.replaceFirst("\\?",
-                isString(param) ? "'" + escapeSpecialRegexChars(param.toString()) + "'" : param.toString());
+        if(param != null) {
+          pQuery =
+              pQuery.replaceFirst("\\?", isString(param) ? "'" + escapeSpecialRegexChars(param.toString()) + "'"
+                  : param.toString());
+        }
       }
     }
 

@@ -15,28 +15,29 @@ import org.springframework.util.StringUtils;
 import org.ums.token.JwtsToken;
 
 import io.jsonwebtoken.*;
+import org.ums.token.TokenBuilder;
 
 public class TokenFilter extends AuthenticatingFilter {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenFilter.class);
-  private String mSigningKey;
+  private TokenBuilder mTokenBuilder;
 
   @Override
   protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
     String jwt = FilterUtil.getAuthToken((HttpServletRequest) request);
-    return new JwtsToken(getUserName(jwt), jwt);
+    return new JwtsToken(mTokenBuilder.getUserName(jwt), jwt);
   }
 
   @Override
   protected boolean isAccessAllowed(ServletRequest pRequest, ServletResponse pResponse, Object mappedValue) {
     boolean accessAllowed = false;
     String jwt = FilterUtil.getAuthToken((HttpServletRequest) pRequest);
-    if(!isValidToken(jwt)) {
+    if(!mTokenBuilder.isValidToken(jwt)) {
       return false;
     }
     Subject subject = SecurityUtils.getSubject();
     if(subject != null) {
       String subjectName = (String) subject.getPrincipal();
-      if(getUserName(jwt).equals(subjectName)) {
+      if(mTokenBuilder.getUserName(jwt).equals(subjectName)) {
         accessAllowed = true;
       }
     }
@@ -45,7 +46,7 @@ public class TokenFilter extends AuthenticatingFilter {
 
   @Override
   protected boolean onAccessDenied(ServletRequest pRequest, ServletResponse pResponse) throws Exception {
-    if(isValidToken(FilterUtil.getAuthToken((HttpServletRequest) pRequest))) {
+    if(mTokenBuilder.isValidToken(FilterUtil.getAuthToken((HttpServletRequest) pRequest))) {
       return executeLogin(pRequest, pResponse);
     }
     return FilterUtil.sendUnauthorized(pResponse);
@@ -62,30 +63,7 @@ public class TokenFilter extends AuthenticatingFilter {
     return false;
   }
 
-  private String getUserName(final String jwt) throws ExpiredJwtException {
-    Jws<Claims> claims = Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(jwt);
-    return claims.getBody().getSubject();
-  }
-
-  private boolean isValidToken(final String jwt) {
-    return !StringUtils.isEmpty(jwt) && !isExpiredToken(jwt);
-  }
-
-  private boolean isExpiredToken(final String jwt) {
-    boolean isExpired = false;
-    try {
-      getUserName(jwt);
-    } catch(JwtException jwte) {
-      isExpired = true;
-    }
-    return isExpired;
-  }
-
-  private String getSigningKey() {
-    return mSigningKey;
-  }
-
-  public void setSigningKey(String pSigningKey) {
-    mSigningKey = pSigningKey;
+  public void setTokenBuilder(TokenBuilder pTokenBuilder) {
+    mTokenBuilder = pTokenBuilder;
   }
 }

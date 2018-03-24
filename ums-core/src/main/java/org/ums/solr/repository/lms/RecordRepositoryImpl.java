@@ -2,16 +2,13 @@ package org.ums.solr.repository.lms;
 
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
-import org.springframework.data.solr.core.query.TermsOptions;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
-import org.ums.solr.repository.document.EmployeeDocument;
 import org.ums.solr.repository.document.lms.RecordDocument;
 
 /**
@@ -49,21 +46,15 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
     return results.getContent();
   }
 
-  public Long getTotalCount(String searchTerm) {
-    // Criteria conditions = createSearchConditions("title");
-    // SimpleQuery search = new SimpleQuery(conditions);
-    // return this.getSolrOperations().count(search);
-
-    // SimpleQuery query =
-    // new
-    // SimpleQuery(String.format("{!parent which=\"type_s:Record\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
-    // "ifti", "Apu"));
-    SimpleQuery query = new SimpleQuery(searchTerm);
-    return this.getSolrOperations().count(query);
+  private Criteria createSearchConditions(String term) {
+    return new Criteria("type_s").is(RecordDocument.DOCUMENT_TYPE).and(new Criteria("title_txt").contains(term));
   }
 
-  private Criteria createSearchConditions(String term) {
-    return new Criteria("type_s").is("Record").and(new Criteria("title_txt").contains(term));
+  @Override
+  public long totalDocuments() {
+    SimpleQuery query = new SimpleQuery(new Criteria().is(RecordDocument.DOCUMENT_TYPE));
+    Page<RecordDocument> results = this.getSolrOperations().queryForPage(query, RecordDocument.class);
+    return results.getTotalElements();
   }
 
   private Sort sort(String pFiled) {

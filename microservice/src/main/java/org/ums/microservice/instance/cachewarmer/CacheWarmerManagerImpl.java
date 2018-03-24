@@ -9,11 +9,15 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.CacheWarmerManager;
 import org.ums.manager.ContentManager;
 import org.ums.microservice.AbstractService;
+import org.ums.microservice.configuration.ServiceConfiguration;
+import org.ums.microservice.configuration.ServiceContext;
 
 public class CacheWarmerManagerImpl extends AbstractService implements CacheWarmerManager {
   private static final Logger mLogger = LoggerFactory.getLogger(CacheWarmerManagerImpl.class);
 
   UMSConfiguration mUMSConfiguration;
+
+  ServiceConfiguration mServiceConfiguration;
 
   SecurityManager mSecurityManager;
 
@@ -21,7 +25,7 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
 
   @Override
   public void warm() {
-    if(login()) {
+    if(login(mServiceConfiguration.getCacheWarmerAppId(), mServiceConfiguration.getCacheWarmerAppToken())) {
       try {
         if(mContentManagers.length > 0) {
           // start warming up
@@ -38,10 +42,11 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
   }
 
   public CacheWarmerManagerImpl(SecurityManager pSecurityManager, UMSConfiguration pUMSConfiguration,
-      ContentManager... pContentManagers) {
+      ServiceConfiguration pServiceConfiguration, ContentManager... pContentManagers) {
     mSecurityManager = pSecurityManager;
     mContentManagers = pContentManagers;
     mUMSConfiguration = pUMSConfiguration;
+    mServiceConfiguration = pServiceConfiguration;
   }
 
   @Override

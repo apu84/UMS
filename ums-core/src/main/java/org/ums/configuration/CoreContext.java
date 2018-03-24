@@ -48,6 +48,9 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.twofa.*;
+import org.ums.usermanagement.application.ApplicationCache;
+import org.ums.usermanagement.application.ApplicationDao;
+import org.ums.usermanagement.application.ApplicationManager;
 import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
@@ -123,7 +126,7 @@ public class CoreContext {
   }
 
   @Bean
-  UserManager userManager() {
+  public UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
     userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
     UserPropertyResolver userPropertyResolver =
@@ -140,7 +143,7 @@ public class CoreContext {
   }
 
   @Bean
-  AdditionalRolePermissionsManager additionalRolePermissionsManager() {
+  public AdditionalRolePermissionsManager additionalRolePermissionsManager() {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory.getJdbcTemplate(),
@@ -159,7 +162,7 @@ public class CoreContext {
   }
 
   @Bean
-  BearerAccessTokenManager bearerAccessTokenManager() {
+  public BearerAccessTokenManager bearerAccessTokenManager() {
     BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
     bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
     return bearerAccessTokenCache;
@@ -205,7 +208,7 @@ public class CoreContext {
 
   @Bean
   @Lazy
-  PermissionManager permissionManager() {
+  public PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
     permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return permissionCache;
@@ -447,5 +450,18 @@ public class CoreContext {
   @Bean
   TwoFATokenGenerator twoFATokenGenerator() {
     return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager());
+  }
+
+  @Bean
+  public UserRolePermissions userRolePermissions() {
+    return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager(),
+        roleManager());
+  }
+
+  @Bean
+  ApplicationManager applicationManager() {
+    ApplicationCache applicationCache = new ApplicationCache(mCacheFactory.getCacheManager());
+    applicationCache.setManager(new ApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return applicationCache;
   }
 }

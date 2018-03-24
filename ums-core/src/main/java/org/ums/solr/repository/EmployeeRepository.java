@@ -7,7 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.ums.solr.repository.document.EmployeeDocument;
 
-public interface EmployeeRepository extends SolrCrudRepository<EmployeeDocument, String> {
+public interface EmployeeRepository extends CustomSolrCrudRepository<EmployeeDocument, String> {
   List<EmployeeDocument> findByCustomQuery(String searchTerm, Pageable pageable);
 
   List<EmployeeDocument> findByDepartment(String searchTerm, Pageable pageable);

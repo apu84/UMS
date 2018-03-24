@@ -27,7 +27,7 @@ import java.util.List;
  */
 @SolrDocument(solrCoreName = "ums")
 public class RecordDocument implements SearchDocument<String> {
-
+  public static final String DOCUMENT_TYPE = "Record";
   // @Autowired
   // PublisherManager mPublisherManager;
 
@@ -42,7 +42,7 @@ public class RecordDocument implements SearchDocument<String> {
   private String cTitle;
 
   @Field("type_s")
-  private String type = "Record";
+  private String type = DOCUMENT_TYPE;
 
   @Field("materialType_txt")
   private List<String> materialType;

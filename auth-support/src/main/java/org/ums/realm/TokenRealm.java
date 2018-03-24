@@ -19,24 +19,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
-import org.ums.manager.ContentManager;
 import org.ums.token.JwtsToken;
-import org.ums.usermanagement.permission.Permission;
-import org.ums.usermanagement.permission.PermissionManager;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.usermanagement.user.User;
-
-import com.google.common.collect.Sets;
+import org.ums.token.TokenBuilder;
+import org.ums.usermanagement.permission.UserRolePermissions;
+import org.ums.usermanagement.role.Role;
 
 public class TokenRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(TokenRealm.class);
-
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
   @Autowired
-  private PermissionManager mPermissionManager;
-  @Autowired
-  private ContentManager<User, MutableUser, String> mUserManager;
+  private UserRolePermissions mUserRolePermissions;
+
+  private TokenBuilder mTokenBuilder;
 
   @Override
   public boolean supports(AuthenticationToken token) {
@@ -73,19 +68,25 @@ public class TokenRealm extends AuthorizingRealm {
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     String userId = (String) getAvailablePrincipal(principals);
-    // BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
-    User user = mUserManager.get(userId);
-    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-    List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
-    Set<String> permissions = new HashSet<>();
-    for(Permission permission : rolePermissions) {
-      permissions.addAll(permission.getPermissions());
+    Set<String> roles = new HashSet<>();
+    for(Role role : mUserRolePermissions.getUserRoles(userId)) {
+      if(role != null) {
+        roles.add(role.getName());
+      }
     }
-    info.setStringPermissions(permissions);
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
+    Set<String> rolePermissions = mUserRolePermissions.getUserRolePermissions(userId);
+    rolePermissions.addAll(mUserRolePermissions.getUserAdditionalPermissions(userId));
+    info.setStringPermissions(rolePermissions);
     return info;
   }
 
   private boolean tokenIsInvalid(JwtsToken token, BearerAccessToken dbToken) {
-    return token == null || dbToken == null || !dbToken.getUserId().equals(token.getPrincipal());
+    return token == null || dbToken == null || !mTokenBuilder.isValidToken(token.getCredentials())
+        || !dbToken.getUserId().equals(token.getPrincipal());
+  }
+
+  public void setTokenBuilder(TokenBuilder pTokenBuilder) {
+    mTokenBuilder = pTokenBuilder;
   }
 }
