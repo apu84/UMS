@@ -96,7 +96,7 @@ module ums {
 
                 }, function errorCallback(response) {
                     console.error(response);
-                    defer.resolve({"responseType": "error", "message": "Failed to Create Supplier"});
+                    defer.resolve({"responseType": "error", "message": "Internal Server Error"});
                 });
             }
             return defer.promise;
@@ -111,7 +111,7 @@ module ums {
                 msg.message = "Data Saved Successfully";
                 defer.resolve(msg);
             }, function errorCallback(response) {
-                defer.resolve({"responseType": "error", "message": "Failed to Create Supplier"});
+                defer.resolve({"responseType": "error", "message": "Internal Server Error"});
             });
             return defer.promise;
         }

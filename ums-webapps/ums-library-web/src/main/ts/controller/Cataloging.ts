@@ -652,9 +652,41 @@ module ums {
          * Set common values for Bulk Items
          */
         private setBulkItemsValue(): void {
-            let bulkItemList = this.$scope.bulkItemList;
-            this.catalogingService.setBulkItemsValue(bulkItemList, this.$scope.bulk.config);
-            this.setSelect2ValuesForBulkItems();
+            if(this.validateBulkItemList() == "") {
+                let bulkItemList = this.$scope.bulkItemList;
+                this.catalogingService.setBulkItemsValue(bulkItemList, this.$scope.bulk.config);
+                this.setSelect2ValuesForBulkItems();
+            }
+            else{
+                this.notify.error(this.validateBulkItemList());
+            }
+
+        }
+
+
+        private validateBulkItemList(): string{
+            let errorMessage = "";
+            if(this.$scope.bulk.config.copyStartFrom == undefined || this.$scope.bulk.config.copyStartFrom == null)
+            {
+                errorMessage += "Copy number is empty\n";
+            }
+            if(this.$scope.bulk.config.firstAccession == undefined || this.$scope.bulk.config.firstAccession == null)
+            {
+                errorMessage += "First accession is empty\n";
+            }
+            if(this.$scope.bulk.config.incrementSegment == undefined || this.$scope.bulk.config.incrementSegment == null)
+            {
+                errorMessage += "Increment segment is empty\n";
+            }
+            if(this.$scope.bulk.config.status == undefined || this.$scope.bulk.config.status == null)
+            {
+                errorMessage += "Status is empty"
+            }
+            if(this.$scope.bulk.config.price == undefined || this.$scope.bulk.config.price == null){
+                this.$scope.bulk.config.price = "";
+            }
+
+            return errorMessage;
         }
 
 
