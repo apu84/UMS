@@ -46,8 +46,8 @@ public class ApplicationManagementResource extends Resource {
   @Path("/{id}/token")
   @RequiresPermissions("application:management")
   public Map<String, String> issueToken(final @PathParam("id") String pApplicationId) {
-    Token accessToken = mTokenBuilder.accessToken(pApplicationId, 3600);
-    Token refreshToken = mTokenBuilder.refreshToken(pApplicationId, 3600);
+    Token accessToken = mTokenBuilder.accessToken(pApplicationId, 30 * 24 * 60);
+    Token refreshToken = mTokenBuilder.refreshToken(pApplicationId, 30 * 24 * 60);
     persistToken(pApplicationId, accessToken, refreshToken);
     Map<String, String> tokenMap = new HashMap<>();
     tokenMap.put("accessToken", accessToken.getHash());
