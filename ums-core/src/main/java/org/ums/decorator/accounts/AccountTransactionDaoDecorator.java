@@ -67,4 +67,14 @@ public class AccountTransactionDaoDecorator extends
   public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, Account pAccount) {
     return getManager().getAccountTransactions(pFromDate, pToDate, pAccount);
   }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, List<Account> pAccounts) {
+    return getManager().getAccountTransactions(pFromDate, pToDate, pAccounts);
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate) {
+    return getManager().getAccountTransactions(pFromDate, pToDate);
+  }
 }
