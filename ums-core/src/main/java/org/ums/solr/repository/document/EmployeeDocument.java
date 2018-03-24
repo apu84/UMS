@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.Employee;
 import com.google.common.collect.Lists;
 
 public class EmployeeDocument implements SearchDocument<String> {
+  public static final String DOCUMENT_TYPE = "Employee";
   @Id
   @Field
   private String id;
@@ -18,7 +19,7 @@ public class EmployeeDocument implements SearchDocument<String> {
   private List<String> name;
 
   @Field("type_s")
-  private String type = "Employee";
+  private String type = DOCUMENT_TYPE;
 
   // @Field("dynamicMappedField_*")
   // private Map<String, String> dynamicMappedFieldValues;

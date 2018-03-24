@@ -9,7 +9,7 @@ set -e
 
 source "/opt/config/iums.conf"
 
-pid_file="$RUN_DIR/microservie-$PROJECT_VERSION.pid"
+pid_file="${RUN_DIR}/microservie-$PROJECT_VERSION.pid"
 out_log="${LOG_DIR}/microservie-$PROJECT_VERSION.out"
 
 restart_service_if_not_running() {
