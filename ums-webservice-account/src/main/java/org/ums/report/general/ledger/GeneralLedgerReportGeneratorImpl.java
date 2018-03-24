@@ -139,17 +139,6 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     LocalDate fromDateLocalDateFormat = fromDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate toDateLocalDateFormat = toDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     List<MutableAccountTransaction> accountTransactions = new ArrayList<>();
-    accountTransactions.sort((o1, o2) -> o1.getVoucherDate().compareTo(o2.getVoucherDate()));
-    Map<Long, List<AccountTransaction>> accountTransactionMapWithAccount = accountTransactions
-        .stream()
-        .collect(Collectors.groupingBy(t -> t.getAccount().getId()));
-    List<MutableChequeRegister> chequeRegisters = mChequeRegisterManager.getByTransactionIdList(accountTransactions.stream().map(t -> t.getId()).collect(Collectors.toList()));
-    Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionId = new HashMap<>();
-    chequeRegisterMapWithTransactionId = chequeRegisters.stream()
-        .collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
-
-    Date firstDateOfTheFromDateInstance = UmsUtils.convertToDate("01-"+fromDateLocalDateFormat.getMonthValue()+"-"+fromDateLocalDateFormat.getYear(), "dd-MM-yyyy");
-    Currency currency = mCurrencyManager.getAll().stream().filter(c->c.getCurrencyFlag().equals(CurrencyFlag.BASE_CURRENCY)).collect(Collectors.toList()).get(0);
 
     if (pAccountId != null) {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, mAccountManager.get(pAccountId));
@@ -159,6 +148,20 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     } else {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate);
     }
+
+      accountTransactions.sort((o1, o2) -> o1.getVoucherDate().compareTo(o2.getVoucherDate()));
+      Map<Long, List<AccountTransaction>> accountTransactionMapWithAccount = accountTransactions
+              .stream()
+              .collect(Collectors.groupingBy(t -> t.getAccount().getId()));
+      List<MutableChequeRegister> chequeRegisters = mChequeRegisterManager.getByTransactionIdList(accountTransactions.stream().map(t -> t.getId()).collect(Collectors.toList()));
+      Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionId = new HashMap<>();
+      chequeRegisterMapWithTransactionId = chequeRegisters.stream()
+              .collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
+
+      Date firstDateOfTheFromDateInstance = UmsUtils.convertToDate("01-"+fromDateLocalDateFormat.getMonthValue()+"-"+fromDateLocalDateFormat.getYear(), "dd-MM-yyyy");
+      Currency currency = mCurrencyManager.getAll().stream().filter(c->c.getCurrencyFlag().equals(CurrencyFlag.BASE_CURRENCY)).collect(Collectors.toList()).get(0);
+
+
     Set<Account> accountSet = accountTransactions
         .stream()
         .map(t -> t.getAccount())
@@ -166,24 +169,25 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     for (Account account : accountSet) {
       accountBalance =
           mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(),
-              currentFinancialAccountYear.getCurrentEndDate(), mAccountManager.get(pAccountId));
+              currentFinancialAccountYear.getCurrentEndDate(), account);
 
       paragraph = new Paragraph("Account Name: ", mBoldFont);
       paragraph.setAlignment(Element.ALIGN_CENTER);
       cell = new PdfPCell(paragraph);
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-      setNoBorderAndAddCell(table, cell);
+      setTopBorderAndAddCell(table, cell);
 
       cell = new PdfPCell(new Paragraph(account.getAccountName(), mLiteFont));
-      setNoBorderAndAddCell(table, cell);
+      cell.setColspan(2);
+      setTopBorderAndAddCell(table, cell);
       Phrase phrase = new Phrase();
       phrase.add(new Paragraph("Opening Balance as on ", mBoldFont));
       phrase.add(new Paragraph(UmsUtils.formatDate(fromDate, "dd-MM-yyyy"), mLiteFont));
       paragraph = new Paragraph(phrase);
       cell = new PdfPCell(paragraph);
-      cell.setColspan(5);
+      cell.setColspan(4);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-      setNoBorderAndAddCell(table, cell);
+      setTopBorderAndAddCell(table, cell);
       BigDecimal totalOpeningBalance=  mAccountBalanceService.getTillLastMonthBalance(account,
               mFinancialAccountYearManager.getOpenedFinancialAccountYear(), fromDate);
       totalOpeningBalance = totalOpeningBalance.add(accountTransactionService.getTotalBalance(
@@ -198,7 +202,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       String balanceStr = UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance);
       cell = new PdfPCell(new Paragraph(balanceStr, mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-      setNoBorderAndAddCell(table, cell);
+      setTopBorderAndAddCell(table, cell);
 
       List<AccountTransaction> accountReportBodyTransactions = accountTransactionMapWithAccount.get(account.getId()).stream()
           .filter(t -> t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(fromDateLocalDateFormat.minusDays(1))) && t.getVoucherDate().before(UmsUtils.convertFromLocalDateToDate(toDateLocalDateFormat.plusDays(1))))
@@ -282,6 +286,10 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     }
 
     document.add(table);
+
+    paragraph = new Paragraph("******* END OF REPORT *******", mLiteFont);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    document.add(paragraph);
     document.close();
     baos.writeTo(pOutputStream);
   }

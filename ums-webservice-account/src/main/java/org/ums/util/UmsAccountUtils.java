@@ -15,7 +15,8 @@ import java.util.List;
 public class UmsAccountUtils {
   public static String getBalanceInDebitOrCredit(BigDecimal pBalance) {
     String balanceType = pBalance.compareTo(new BigDecimal(0)) >= 0 ? " Dr" : " Cr";
-    String balanceFormat = NumberFormat.getCurrencyInstance().format(pBalance).substring(1);
+    String balanceFormat = NumberFormat.getCurrencyInstance().format(pBalance.abs());
+    balanceFormat = balanceFormat.substring(1);
     return balanceFormat + balanceType;
   }
 
