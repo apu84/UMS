@@ -23,21 +23,22 @@
         font-size: 20px;
         padding:5px 10px;
     }
+    .score {
+        color: deeppink;
+    }
+    .selected {
+        background-color:#FAFAFA;
+        color:deeppink;
+        font-weight:bold;
+    }
 
 </style>
 
 <div class="row" data-ng-init="vm.getAllFacultyMembers()">
-    <div class="panel">
-        <div class="panel-body shadowPanel" style="min-height: 590px;">
+    <div class="panel" >
+        <div data-ng-if="vm.evaluationResultStatus==true">
 
-            <div style="padding: 0px">
-
-                <div class="panel panel-info" >
-                    <div class="panel-heading" align="center">
-                        Teachers Evalution System
-                    </div>
-
-                    <div style="padding-top:20px;padding-bottom: 40px"  data-ng-hide="vm.carrylastDateDeadline" data-ng-include="'views/teachers-Evaluation-System/head-tes-selection.html'">
+                    <div style="padding-top:20px;padding-bottom: 40px"  data-ng-include="'views/teachers-Evaluation-System/head-tes-selection.html'">
 
                     </div>
                     <div class="panel-body" >
@@ -67,8 +68,36 @@
                         </table>
 
                     </div>
+        </div>
+        <div  data-ng-if="vm.evaluationResultStatus==false">
+            <div style="padding: 20px"
+                    data-ng-include="'views/teachers-Evaluation-System/search-box.html'">
+            </div>
 
+            <div class="modal-body" data-ng-hide="vm.checkEvaluationResult">
+
+                <div style="padding-left: 18px;">
+                    <p align="center" ><strong style="font-size: 18px">Evaluation Report<br>
+                        Ahsanullah University of Science and Technology</strong></p>
+                    <p>Session:<strong>{{" "+vm.staticSessionName}}</strong></p>
+                    <p>Course Title:<strong>{{" "+vm.selectedCourseTitle+"("+vm.selectedCourseNo+")"}}</strong></p>
+                    <p>Teacher Name:<strong>{{" "+vm.staticTeacherName}}</strong></p>
+                    <p>Department:<strong>{{" "+vm.departmentName}}</strong></p>
                 </div>
+
+                <div
+                        data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
+                </div>
+                <p align="left" ><strong style="font-size: 18px">Students Opinion</strong></p>
+                <div
+                        data-ng-include="'views/teachers-Evaluation-System/students-opinion.html'">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
                 <div class="modal fade" id="myModalNew" role="dialog" >
                     <!--   <div class="modal-backdrop"> -->
                     <div class="modal-dialog ">
@@ -81,7 +110,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="panel-body" >
-                                   <p>Teacher Name: <strong ><span style="font-size: 14px" class="label label-success badge-success">{{vm.fName}}</span></strong></p>
+                                    <p><strong style="font-size: 14px">Teacher Name:</strong> <span style="font-size: 12px" class="label label-success badge-success">{{vm.fName}}</span></p>
                                     <br>
                                     <table class="table table-bordered">
                                         <thead>
@@ -89,6 +118,7 @@
                                         <th style="background-color: #FAFAFA; ">Course No</th>
                                         <th style="background-color: #FAFAFA; ">Course Title</th>
                                         <th style="background-color: #FAFAFA; ">Section</th>
+                                        <th style="background-color: #FAFAFA; ">ProgramName</th>
                                         <th style="background-color: #FAFAFA; ">Evaluate</th>
                                         <th style="background-color: #FAFAFA; ">Status</th>
                                         </thead>
@@ -96,8 +126,9 @@
                                         <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
                                               <td>{{$index+1}}</td>
                                             <td>{{app.courseNo }}</td>
-                                            <td>{{app.courseTitle}}</td>
+                                            <td> {{app.courseTitle}}</td>
                                             <td>{{app.section}}</td>
+                                            <td><span  class="label label-warning badge-warning">{{app.programShortName}}</span></td>
                                             <td><input data-ng-hide="app.status==vm.statusValue ? true:false"
                                                        type="checkbox"
                                                        data-ng-model="app.apply"
@@ -108,7 +139,11 @@
                                         </tr>
                                         </tbody>
                                     </table>
-
+                                    <div align="center" >
+                                        <p>
+                                            <span style="font-size: 12px" class="label label-info badge-info">Course Assign date Form Spring'17 semester is 12-9-2017 to 12-3-2017</span>
+                                        </p>
+                                    </div>
 
                                 </div>
                             </div>
@@ -133,3 +168,12 @@
 
 
 
+<!-- <div class="panel-body shadowPanel" style="min-height: 590px;">
+
+           <div style="padding: 0px">
+
+               <div class="panel panel-info" >
+                   <div class="panel-heading" align="center">
+                       Teachers Evalution System
+                   </div>
+                             -->

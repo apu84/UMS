@@ -150,31 +150,36 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       List<Report> reportListValue= new ArrayList<Report>();
       Integer studentNo=getContentManager().getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
         List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
+        if(studentNo !=0){
+            applications.forEach(a->{
+                Integer observationType=getContentManager().getObservationType(a.getQuestionId());
+                if(observationType!=3){
+                    double value=0;
 
-        applications.forEach(a->{
-            Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-            if(observationType!=3){
-                double value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
-                String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
-                reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
-                mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+                    value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
+
+                    String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
+                    reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
+                    mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+                }
+
+            });
+            for(Map.Entry m:mapForCalculateResult.entrySet()){
+                Integer questionId=(Integer)m.getKey();
+                if(getContentManager().getObservationType(questionId) ==1){
+                    countercR++;
+                    cRoombservation=cRoombservation+(double)m.getValue();
+                }else if(getContentManager().getObservationType(questionId) ==2){
+                    counterncR++;
+                    noncRoomObservation=noncRoomObservation+(double)m.getValue();
+                }else{
+
+                }
             }
+            cRoombservation=(cRoombservation/countercR);
+            noncRoomObservation=(noncRoomObservation/counterncR);
+        }
 
-        });
-      for(Map.Entry m:mapForCalculateResult.entrySet()){
-          Integer questionId=(Integer)m.getKey();
-          if(getContentManager().getObservationType(questionId) ==1){
-              countercR++;
-           cRoombservation=cRoombservation+(double)m.getValue();
-          }else if(getContentManager().getObservationType(questionId) ==2){
-              counterncR++;
-              noncRoomObservation=noncRoomObservation+(double)m.getValue();
-          }else{
-
-          }
-      }
-      cRoombservation=(cRoombservation/countercR);
-      noncRoomObservation=(noncRoomObservation/counterncR);
       return reportList;
     }
 
@@ -241,6 +246,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             }else{
                 a.setStatus(0);
             }
+            String x=getContentManager().getCourseDepartmentMap(a.getReviewEligibleCourses(),11012017);
+            a.setProgramShortName(x);
                 children.add(toJson(a, pUriInfo, localCache));
         });
 

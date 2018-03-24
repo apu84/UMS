@@ -13,6 +13,11 @@ import java.util.List;
 public class ApplicationTESCache extends
     ContentCache<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements ApplicationTESManager {
   @Override
+  public String getCourseDepartmentMap(String pCourseId, Integer pSemesterId) {
+    return getManager().getCourseDepartmentMap(pCourseId, pSemesterId);
+  }
+
+  @Override
   public List<ApplicationTES> getAssignedReviewableCoursesList(String pTeacherId, Integer pSemesterId) {
     return getManager().getAssignedReviewableCoursesList(pTeacherId, pSemesterId);
   }

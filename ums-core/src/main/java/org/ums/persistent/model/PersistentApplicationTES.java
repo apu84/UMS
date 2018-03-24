@@ -42,6 +42,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mDesignation;
   private Integer mStatus;
   private String mAppliedDate;
+  private String mProgramShortName;
 
   public PersistentApplicationTES() {
 
@@ -70,6 +71,17 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mDesignation = persistentApplicationTES.getDesignation();
     mStatus = persistentApplicationTES.getStatus();
     mAppliedDate = persistentApplicationTES.getAppliedDate();
+    mProgramShortName = persistentApplicationTES.getProgramShortName();
+  }
+
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    this.mProgramShortName = pProgramShortName;
+  }
+
+  @Override
+  public String getProgramShortName() {
+    return mProgramShortName;
   }
 
   @Override

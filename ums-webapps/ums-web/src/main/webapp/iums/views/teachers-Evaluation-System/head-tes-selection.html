@@ -1,13 +1,3 @@
-<style>
-    .score {
-        color: deeppink;
-    }
-    .selected {
-        background-color:#FAFAFA;
-        color:deeppink;
-        font-weight:bold;
-    }
-</style>
 <div class="col-sm-4">
     <div class="form-group" align="right">
         <label class="col-md-8 control-label"><input type="text"
@@ -37,8 +27,6 @@
             <button type="button"
                     class="btn btn-success btn-sm"
                     data-ng-click="vm.getSemester()"
-                    data-toggle="modal"
-                    data-target="#myModalResult"
                     data-ng-model="kk">Evaluation Score
             </button>
         </div>
@@ -98,124 +86,4 @@
 </div>
 
 
-<div class="modal fade" id="myModalResult" role="dialog">
-    <!--   <div class="modal-backdrop"> -->
-    <div class="modal-dialog modal-lg ">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Courses Assigned For Evaluation</h4>
-            </div><br>
-            <!--<input type="text" id="semesternamelist" datas="vm.semesterNameList">-->
-            <table class="table table-bordered">
-                <thead>
-                <th >Search Box</th>
-                <th>Course List</th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td width="30%">
-
-                        <label><strong style="color: slategray;">Select Teacher</strong></label>
-                        <select
-                                class="form-control required"
-                                name="leaveType1"
-                                id="leaveType1"
-                                data-ng-options=" L.firstName for L in vm.facultyListResultEvaluation track by L.teacherId"
-                                data-ng-model="vm.selectedTeacherName"
-                                data-ng-change="vm.teacherChanged(vm.selectedTeacherName)"
-                        ></select><br>
-                        <label><strong style="color: slategray;">Select Semester</strong></label>
-                        <select
-                                class="form-control required"
-                                name="leaveType"
-                                id="leaveType"
-                                data-ng-options="L.semesterName for L in vm.semesterNameList track by L.semesterId"
-                                data-ng-model="vm.selectedSemesterName"
-                                data-ng-change="vm.semesterChanged(vm.selectedSemesterName)"
-                        ></select>
-                        <br><div align="right">
-                        <button type="button" class="btn btn-success" data-ng-click="vm.getAssignedCoursesForReview()">
-                            <span class="glyphicon glyphicon-search"></span> Search
-                        </button>
-                    </div>
-                    </td>
-                    <td>
-                        <table class="table table-bordered">
-                            <thead>
-                            <th style="background-color: #FAFAFA;width: 10px ">SL</th>
-                            <th style="background-color: #FAFAFA; ">Course No</th>
-                            <th style="background-color: #FAFAFA; ">Course Title</th>
-                            </thead>
-                            <tbody>
-                            <tr data-ng-repeat="app in vm.assignedCoursesForReview"  ng-class="{'selected':$index == vm.selectRow}"
-                                data-ng-click="vm.getInfo(app.teacherId,app.courseName,$index,app.semesterId,app.courseNo,app.courseTitle)">
-                                <td>{{$index+1}}</td>
-                                <td>{{app.courseNo}}</td>
-                                <td>{{app.courseTitle}}</td>
-                            </tr>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="modal-body" data-ng-hide="vm.checkEvaluationResult">
-
-                <div
-                     data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
-
-                </div>
-
-                <div class="panel-body">
-                    <pagination total-items="vm.commentPgTotalRecords" ng-model="vm.commentPgCurrentPage" max-size="7"
-                                class="pagination-sm" boundary-links="true" rotate="false"
-                                class="pagination-page"
-                                items-per-page="vm.commentPgItemsPerPage"></pagination>
-                    <table class="table table-bordered">
-                        <thead>
-                        <th style="background-color: #FAFAFA;width: 10px ">SL</th>
-                        <th style="background-color: #FAFAFA; ">Questions</th>
-                        </thead>
-                        <tbody>
-                        <tr data-ng-repeat="app in  (filterd = vm.studentComments | limitTo:vm.commentPgItemsPerPage:vm.commentPgItemsPerPage*(vm.commentPgCurrentPage - 1))">
-                            <td>{{(vm.commentPgCurrentPage - 1) * vm.commentPgItemsPerPage + $index + 1}}</td>
-                            <td><strong>{{app.questionDetails}}</strong> <br>
-                                <span style="font-size: 12px" class="label label-success badge-success">
-                                    {{'Non Teaching Observation'}}
-                                </span>
-                                <div align="left">
-                                    <pagination total-items="app.comments.length"
-                                                ng-model="vm.innerCommentPgCurrentPage" max-size="7"
-                                                class="pagination-sm" boundary-links="true" rotate="false"
-                                                class="pagination-page"
-                                                items-per-page="vm.innerCommentPgItemsPerPage"></pagination>
-                                </div>
-
-                                <table class="table table-bordered">
-                                    <tr data-ng-repeat="items in (filterd = app.comments | limitTo:vm.innerCommentPgItemsPerPage:vm.innerCommentPgItemsPerPage*(vm.innerCommentPgCurrentPage - 1))">
-                                        <td style="width: 10px">
-                                            {{(vm.innerCommentPgCurrentPage - 1) * vm.innerCommentPgItemsPerPage +
-                                            $index + 1}}
-                                        </td>
-                                        <td>{{items}}</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-
-            </div>
-        </div>
-    </div>
-</div>
 

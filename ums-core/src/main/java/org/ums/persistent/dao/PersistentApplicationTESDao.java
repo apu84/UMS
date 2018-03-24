@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationTESDaoDecorator;
@@ -44,7 +43,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "WHERE "
           + "  a.SEMESTER_ID = ? ANd a.STUDENT_ID= ? AND b.COURSE_TYPE= ? AND a.COURSE_ID=b.COURSE_ID  AND "
           + "  a.SEMESTER_ID=c.SEMESTER_ID AND a.COURSE_ID=c.COURSE_ID AND  a.SEMESTER_ID=c.SEMESTER_ID AND c.\"SECTION\"= ? AND "
-          + "  d.COURSE_ID=a.COURSE_ID AND (c.COURSE_ID=d.COURSE_ID and c.TEACHER_ID=d.TEACHER_ID AND c.\"SECTION\"=d.ASSIGNED_SECTION) AND "
+          + "  d.COURSE_ID=a.COURSE_ID AND (c.COURSE_ID=d.COURSE_ID and c.TEACHER_ID=d.TEACHER_ID AND c.\"SECTION\"=d.ASSIGNED_SECTION AND c.SEMESTER_ID=d.SEMESTER_ID) AND "
           + "  e.EMPLOYEE_ID=d.TEACHER_ID";
 
   String getSemesterName = "SELECT SEMESTER_NAME from MST_SEMESTER WHERE SEMESTER_ID=?";
@@ -104,7 +103,19 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getSemesterNameList = "SELECT SEMESTER_ID,SEMESTER_NAME from MST_SEMESTER ORDER BY START_DATE DESC";
 
   String getAssignedReviewableCoursesList =
-      "SELECT DISTINCT  a.TEACHER_ID,a.SEMESTER_ID, a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE from TES_COURSE_ASSIGN a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=b.COURSE_ID";
+      "SELECT DISTINCT  a.TEACHER_ID,a.SEMESTER_ID, a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.DEPT_ID from TES_COURSE_ASSIGN a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=b.COURSE_ID";
+
+  String getCourseDepartmentMap =
+      "select PROGRAM_SHORT_NAME from MST_PROGRAM where PROGRAM_ID=( "
+          + "select PROGRAM_ID from SEMESTER_SYLLABUS_MAP where SEMESTER_ID= ? and (SYLLABUS_ID, Year, semester) in ( "
+          + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= ? and "
+          + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID))";
+
+  @Override
+  public String getCourseDepartmentMap(String pCourseId, Integer pSemesterId) {
+    String query = getCourseDepartmentMap;
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pCourseId}, String.class);
+  }
 
   @Override
   public List<ApplicationTES> getAssignedReviewableCoursesList(String pTeacherId, Integer pSemesterId) {
@@ -140,8 +151,12 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   @Override
   public Double getAverageScore(String pTeacherId, String pCourseId, Integer pQuestionId, Integer pSemesterId) {
     String query = getAvgScore;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pQuestionId, pSemesterId},
-        Double.class);
+    return validateValue(mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pQuestionId,
+        pSemesterId}, Double.class));
+  }
+
+  private Double validateValue(final Double pVal) {
+    return pVal == null ? 1 : pVal;
   }
 
   @Override
@@ -299,6 +314,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
       application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
+      application.setDeptId(pResultSet.getString("DEPT_ID"));
       return application;
     }
   }

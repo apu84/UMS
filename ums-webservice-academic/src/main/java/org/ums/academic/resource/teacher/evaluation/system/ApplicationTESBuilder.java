@@ -1,10 +1,12 @@
 package org.ums.academic.resource.teacher.evaluation.system;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.mutable.MutableApplicationTES;
+import org.ums.manager.DepartmentManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -15,6 +17,9 @@ import javax.ws.rs.core.UriInfo;
  */
 @Component
 public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApplicationTES> {
+  @Autowired
+  DepartmentManager mDepartmentManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, ApplicationTES pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getApplicationDate() != null)
@@ -54,8 +59,13 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getSection() != null)
       pBuilder.add("section", pReadOnly.getSection());
 
-    if(pReadOnly.getDeptId() != null)
+    if(pReadOnly.getDeptId() != null) {
       pBuilder.add("deptId", pReadOnly.getDeptId());
+      pBuilder.add("deptName", mDepartmentManager.get(pReadOnly.getDeptId()).getLongName());
+    }
+
+    if(pReadOnly.getProgramShortName() !=null)
+      pBuilder.add("programShortName",pReadOnly.getProgramShortName());
 
     if(pReadOnly.getDeptShortName() != null)
       pBuilder.add("deptShortName", pReadOnly.getDeptShortName());

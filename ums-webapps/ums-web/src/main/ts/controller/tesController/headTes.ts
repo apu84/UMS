@@ -18,6 +18,7 @@ module ums{
         semesterId:number;
         apply:boolean;
         status:number;
+        programShortName:string;
     }
 
     interface IReport{
@@ -56,6 +57,7 @@ module ums{
         courseName:string;
         courseNo:string;
         courseTitle:string;
+        deptName:string;
     }
     class HeadTES{
         public facultyList:Array<IFacultyList>;
@@ -99,6 +101,10 @@ module ums{
         public selectedCourseNo:string;
         public selectedCourseTitle:string;
         public checkEvaluationResult:boolean;
+        public evaluationResultStatus:boolean;
+        public staticTeacherName:string;
+        public staticSessionName:string;
+        public departmentName:string;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -132,6 +138,7 @@ module ums{
         this.innerCommentPgItemsPerPage=2;
         this.commentPgTotalRecords=0;
         this.checkEvaluationResult=true;
+        this.evaluationResultStatus=true;
         }
 
         private select2ini(selectBoxId, studentIds, placeHolderText) {
@@ -276,7 +283,7 @@ module ums{
                defer.resolve(this.studentResult);
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {
-               console.error(response);
+               console.error("No Records Found");
            });
        return defer.promise;
    }
@@ -294,7 +301,7 @@ module ums{
                defer.resolve(json);
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {
-               console.error(response);
+               console.error("No Records Found");
            });
        return defer.promise;
    }
@@ -302,6 +309,8 @@ module ums{
            this.checkEvaluationResult=true;
            this.assignedCoursesForReview=[];
            this.studentComments=[];
+           this.staticTeacherName=this.selectedTeacherName.firstName;
+           this.staticSessionName=this.selectedSemesterName.semesterName;
            this.selectRow=null;
            console.log("eeeeeeeeeeee");
            console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId);
@@ -320,13 +329,14 @@ module ums{
                });
            return defer.promise;
        }
-        private getInfo(pTeacherId:any,pCourseId:any,id:any,pSemesterId:number,pCourseNo:any,pCourseTitle:any){
+        private getInfo(pTeacherId:any,pCourseId:any,id:any,pSemesterId:number,pCourseNo:any,pCourseTitle:any,pDeptName:string){
             this.selectRow=id;
             this.selectedCourseId=pCourseId;
             this.selectedTeacherId=pTeacherId;
             this.selectedSemesterId=pSemesterId;
             this.selectedCourseNo=pCourseNo;
             this.selectedCourseTitle=pCourseTitle;
+            this.departmentName=pDeptName;
             this.checkEvaluationResult=false;
             this.getResults();
 
@@ -337,7 +347,12 @@ module ums{
             this.selectedSemesterId=val.semesterId;
 
         }
+        private getBackToMainView(){
+            this.evaluationResultStatus=true;
+        }
         private  getSemester(): ng.IPromise<any>{
+            this.evaluationResultStatus=false;
+            console.log(""+this.evaluationResultStatus);
             this.assignedCoursesForReview=[];
             this.studentComments=[];
             this.studentResult=[];

@@ -103,44 +103,46 @@ public class TesGeneratorImp implements TesGenerator {
     DecimalFormat newFormat = new DecimalFormat("#.##");
     HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
     List<Report> reportList= new ArrayList<Report>();
-    List<Report> reportListValue= new ArrayList<Report>();
     Integer studentNo=mApplicationTESManager.getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
     List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(pSemesterId);
+     if(studentNo !=0){
+       applications.forEach(a->{
+         Integer observationType=mApplicationTESManager.getObservationType(a.getQuestionId());
+         if(observationType!=3){
+           double value=0;
+           value=mApplicationTESManager.getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
+           String questionDetails=mApplicationTESManager.getQuestionDetails(a.getQuestionId());
+           reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
+           mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
+         }
 
-    applications.forEach(a->{
-      Integer observationType=mApplicationTESManager.getObservationType(a.getQuestionId());
-      if(observationType!=3){
-        double value=mApplicationTESManager.getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
-        String questionDetails=mApplicationTESManager.getQuestionDetails(a.getQuestionId());
-        reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
-        mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
-      }
+       });
+       for(Map.Entry m:mapForCalculateResult.entrySet()){
+         Integer questionId=(Integer)m.getKey();
+         if(mApplicationTESManager.getObservationType(questionId) ==1){
+           countercR++;
+           cRoomObservation=cRoomObservation+(double)m.getValue();
+         }else if(mApplicationTESManager.getObservationType(questionId) ==2){
+           counterncR++;
+           noncRoomObservation=noncRoomObservation+(double)m.getValue();
+         }else{
 
-    });
-    for(Map.Entry m:mapForCalculateResult.entrySet()){
-      Integer questionId=(Integer)m.getKey();
-      if(mApplicationTESManager.getObservationType(questionId) ==1){
-        countercR++;
-        cRoomObservation=cRoomObservation+(double)m.getValue();
-      }else if(mApplicationTESManager.getObservationType(questionId) ==2){
-        counterncR++;
-        noncRoomObservation=noncRoomObservation+(double)m.getValue();
-      }else{
+         }
+       }
+       cRoomObservation=Double.valueOf(newFormat.format(cRoomObservation/countercR));
+       noncRoomObservation=Double.valueOf(newFormat.format(noncRoomObservation/counterncR));
 
-      }
-    }
-    cRoomObservation=Double.valueOf(newFormat.format(cRoomObservation/countercR));
-    noncRoomObservation=Double.valueOf(newFormat.format(noncRoomObservation/counterncR));
+       for(int i=0;i<reportList.size();i++){
+         if(reportList.get(i).getObservationType()==1){
+           totalPointsObtype1=totalPointsObtype1+reportList.get(i).getTotalScore();
+           totalStudentsObtype1=totalStudentsObtype1+reportList.get(i).getStudentNo();
+         }else{
+           totalPointsObtype2=totalPointsObtype2+reportList.get(i).getTotalScore();
+           totalStudentsObtype2=totalStudentsObtype2+reportList.get(i).getStudentNo();
+         }
+       }
+     }
 
-      for(int i=0;i<reportList.size();i++){
-        if(reportList.get(i).getObservationType()==1){
-          totalPointsObtype1=totalPointsObtype1+reportList.get(i).getTotalScore();
-          totalStudentsObtype1=totalStudentsObtype1+reportList.get(i).getStudentNo();
-        }else{
-          totalPointsObtype2=totalPointsObtype2+reportList.get(i).getTotalScore();
-          totalStudentsObtype2=totalStudentsObtype2+reportList.get(i).getStudentNo();
-        }
-      }
       //---
     Paragraph paragraph1 = null;
     Chunk chunk1 = null;

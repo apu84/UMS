@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 
@@ -20,6 +19,8 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   Integer getObservationType(final Integer pQuestionId);
 
   String getQuestionDetails(final Integer pQuestionId);
+
+  String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
 
   Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 
