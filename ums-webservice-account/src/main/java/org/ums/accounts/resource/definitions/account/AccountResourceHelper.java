@@ -20,6 +20,7 @@ import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
+import org.ums.service.AccountBalanceService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -61,6 +62,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private MonthBalanceManager mMonthBalanceManager;
   @Autowired
   private GroupManager mGroupManager;
+  @Autowired
+  private AccountBalanceService mAccountBalanceService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -94,6 +97,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
+      accountBalance = mAccountBalanceService.setMonthAccountBalance(accountBalance, account);
       mAccountBalanceManager.insertFromAccount(accountBalance);
     }
 
