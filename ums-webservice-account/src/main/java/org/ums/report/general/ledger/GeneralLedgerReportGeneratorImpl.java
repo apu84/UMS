@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.immutable.accounts.Currency;
+import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
@@ -76,7 +77,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     mToDate = toDate;
 
     Document document = new Document();
-    document.setMargins(5f, 5f, 1f, 1f);
+    document.setMargins(15f, 15f, 20f, 20f);
     document.addTitle("General Ledger Report");
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -166,10 +167,17 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         .stream()
         .map(t -> t.getAccount())
         .collect(Collectors.toSet());
+
+    List<Account> accountList = new ArrayList<>();
+    accountList.addAll(accountSet);
+
+    List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(),
+        currentFinancialAccountYear.getCurrentEndDate(), accountList);
+    Map<Account, MutableAccountBalance> accountBalanceMap = accountBalanceList
+        .stream()
+        .collect(Collectors.toMap(a -> mAccountManager.get(a.getAccountCode()), a -> a));
     for (Account account : accountSet) {
-      accountBalance =
-          mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(),
-              currentFinancialAccountYear.getCurrentEndDate(), account);
+      accountBalance = accountBalanceMap.get(account);
 
       paragraph = new Paragraph("Account Name: ", mBoldFont);
       paragraph.setAlignment(Element.ALIGN_CENTER);
@@ -189,7 +197,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       setTopBorderAndAddCell(table, cell);
       BigDecimal totalOpeningBalance=  mAccountBalanceService.getTillLastMonthBalance(account,
-              mFinancialAccountYearManager.getOpenedFinancialAccountYear(), fromDate);
+          mFinancialAccountYearManager.getOpenedFinancialAccountYear(), fromDate, accountBalance);
       totalOpeningBalance = totalOpeningBalance.add(accountTransactionService.getTotalBalance(
               accountTransactions.
                       stream()

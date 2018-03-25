@@ -36,9 +36,15 @@ module ums {
       this.selectedGroup = <IGroup>{};
       if (this.accountType === this.SPECIFIC) {
         this.accountService.getAllAccounts().then((accounts: IAccount[]) => this.accounts = accounts);
+        this.selectedGroup = null;
       }
-      if (this.accountType === this.GROUP) {
+      else if (this.accountType === this.GROUP) {
         this.groupService.getAllGroups().then((groups: IGroup[]) => this.groups = groups);
+        this.selectedAccount = null;
+      }
+      else {
+        this.selectedAccount = null;
+        this.selectedGroup = null;
       }
     }
 
