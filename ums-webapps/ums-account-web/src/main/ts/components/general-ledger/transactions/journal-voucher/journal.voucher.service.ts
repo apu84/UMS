@@ -51,6 +51,7 @@ module ums {
     invoiceNo: string;
     invoiceDate: string;
     paidAmount: number;
+    modifierName: string;
   }
 
   export class JournalVoucherService {
