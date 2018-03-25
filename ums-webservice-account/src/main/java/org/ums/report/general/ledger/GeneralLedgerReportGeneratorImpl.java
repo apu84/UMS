@@ -372,7 +372,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     @Override
     public void onEndPage(PdfWriter writer, Document pDocument) {
       PdfContentByte cb = writer.getDirectContent();
-      String text = String.format("Page %s of %s", writer.getCurrentPageNumber(), writer.getPageNumber());
+      String text = String.format("Page %s", writer.getCurrentPageNumber());
       Paragraph paragraph = new Paragraph(text, mBoldFont);
       ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(paragraph),
           (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() + 10, 0);
