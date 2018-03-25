@@ -640,6 +640,7 @@ module ums {
             this.$scope.item.mfnNo = this.$scope.record.mfnNo;
             this.catalogingService.saveItem(this.$scope.item).then((response: any) => {
                 this.notify.show(response);
+                this.fetchItems(this.$scope.record.mfnNo);
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
@@ -921,6 +922,7 @@ module ums {
 
         public confirmation(): void{
             this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
+                this.fetchItems(this.$scope.record.mfnNo);
             });
         }
 
