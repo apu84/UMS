@@ -1,0 +1,40 @@
+<div class="col-md-3"></div>
+<div class="col-md-6">
+    <div class="input-group">
+        <input type="text" ng-model="vm.searchVoucherNo" class="form-control"/><span class="input-group-btn">
+                <button type="button" ng-click="vm.searchVoucher()" class="btn btn-default"><i class="fa fa-search"></i></button></span>
+    </div>
+</div>
+<div class="col-md-3"></div>
+
+<div align="right">
+    <dir-pagination-controls boundary-links="true"
+                             pagination-id="existing-voucher"
+                             on-page-change="vm.pageChanged(vm.pageNumber)"
+                             template-url="views\general-ledger\transactions\generic\dirPagination.html"></dir-pagination-controls>
+</div>
+
+<table class="table table-bordered  table-hover table-striped ">
+    <thead>
+    <tr>
+        <th style="text-align: center;">Post Date</th>
+        <th style="text-align: center;">Voucher No</th>
+        <th style="text-align: center;">Last Modified By</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr dir-paginate="p in vm.existingVouchers | itemsPerPage: vm.itemsPerPage"
+        current-page="vm.pageNumber"
+        total-items="vm.totalVoucherNumber"
+        pagination-id="existing-voucher"
+        style="cursor: pointer;" ng-click="vm.fetchDetails(p)">
+        <td align="center">
+            <span class="label label-danger" ng-if="p.postDate==null"> Not Posted</span>
+            <span class="label label-info" ng-if="p.postDate!=null">{{ vm.changeDateFormat(p.postDate)}}</span>
+        </td>
+        <td align="center">{{p.voucherNo}}</td>
+        <td align="center">{{p.modifierName}}</td>
+    </tr>
+
+    </tbody>
+</table>

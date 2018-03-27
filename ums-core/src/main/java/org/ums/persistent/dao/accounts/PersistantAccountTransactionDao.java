@@ -60,7 +60,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   @Override
   public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, Account pAccount) {
     String query =
-        "select * from DT_TRANSACTION where VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate and ACCOUNT_ID=:accountId";
+        "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) and ACCOUNT_ID=:accountId";
     Map parameterMap = new HashMap();
     parameterMap.put("fromDate", pFromDate);
     parameterMap.put("toDate", pToDate);
@@ -73,7 +73,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     if (pAccounts.size() == 0) return null;
 
     String query =
-        "select * from DT_TRANSACTION where VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate and ACCOUNT_ID in(:accountIdList)";
+        "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) and ACCOUNT_ID in(:accountIdList)";
     Map parameterMap = new HashMap();
     parameterMap.put("fromDate", pFromDate);
     parameterMap.put("toDate", pToDate);
@@ -84,7 +84,7 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   @Override
   public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate) {
 
-    String query = "select * from DT_TRANSACTION where VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate ";
+    String query = "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) ";
     Map parameterMap = new HashMap();
     parameterMap.put("fromDate", pFromDate);
     parameterMap.put("toDate", pToDate);

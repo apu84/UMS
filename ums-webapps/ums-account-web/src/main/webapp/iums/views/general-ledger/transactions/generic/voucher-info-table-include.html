@@ -1,0 +1,38 @@
+<div class="col-md-12" align="center"><i ng-click="vm.addData()" data-ng-disabled="vm.postStatus" data-toggle="modal"
+                                         data-target="#addVoucher" class="fa fa-plus-circle"
+                                         style="font-size:26px; cursor: pointer"></i></div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>S.No</th>
+        <th>Account Name</th>
+        <th>Amount In Specific</th>
+        <th>Account In Base</th>
+        <th>Dr/Cr</th>
+        <th>Narration</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="v in vm.detailVouchers">
+        <td>{{v.serialNo}}</td>
+        <td>{{v.account.accountName}}</td>
+        <td>{{vm.formatCurrency( v.amount)}}</td>
+        <td>{{vm.formatBaseCurrency(v.amount)}}
+        </td>
+        <td>{{v.balanceType}}</td>
+        <td>{{v.narration}}</td>
+        <td>
+            <button class="btn btn-xs btn-default" ng-click="vm.edit(v)" data-toggle="modal"
+                    data-ng-disabled="vm.postStatus"
+                    data-target="#addVoucher"><i class="fa fa-edit"></i></button>
+        </td>
+        <td>
+            <button class="btn btn-xs btn-default" ng-click="vm.deleteVoucher(v)" data-toggle="modal"
+                    data-ng-disabled="vm.postStatus"
+            ><i class="fa fa-trash" aria-hidden="true"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

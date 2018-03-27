@@ -45,6 +45,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
   @Autowired
   private AccountManager mAccountManager;
   @Autowired
+  private GroupManager mGroupManager;
+  @Autowired
   private AccountBalanceManager mAccountBalanceManager;
   @Autowired
   private FinancialAccountYearManager mFinancialAccountYearManager;
@@ -144,7 +146,11 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     if (pAccountId != null) {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, mAccountManager.get(pAccountId));
     } else if (pGroupCode != null) {
-      List<Account> accountsOfTheGroup = mAccountManager.getIncludingGroups(Arrays.asList(pGroupCode));
+      List<Group> groupList = mGroupManager.getAll()
+          .stream()
+          .filter(g -> g.getGroupCode().substring(0, pGroupCode.length()).equals(pGroupCode))
+          .collect(Collectors.toList());
+      List<Account> accountsOfTheGroup = mAccountManager.getIncludingGroups(groupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()));
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, accountsOfTheGroup);
     } else {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate);

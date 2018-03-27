@@ -1,0 +1,167 @@
+<div id="addVoucher" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Voucher</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="addForm">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Serial No:</label>
+                        <div class="col-sm-6">
+                            <input type="text" ng-disabled="true" class="form-control" id="serialNo"
+                                   ng-model="vm.voucherOfAddModal.serialNo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
+                        <div class="col-sm-6">
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="vm.voucherOfAddModal.account" name="accountName"
+                            >
+                                <ui-select-match placeholder="Select Account">
+                                    {{vm.voucherOfAddModal.account.accountName}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="g in vm.accountListForAddModal|filter:$select.search"
+                                                   required>
+                                    <small ng-bind-html="g.accountName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <span ng-show="addForm.accountName.$touched && addForm.accountName.$invalid">Account is required</span>
+                    <div ng-if="vm.vendorAccountMapWithId[vm.voucherOfAddModal.account.id]">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="vendorAccount">Vendor Id:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="vendorAccount"
+                                       ng-model="vm.voucherOfAddModal.supplierCode" name="vendorId" required>
+                                <span ng-show="addForm.vendorId.$touched && addForm.vendorId.$invalid">Vendor Id is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Bill No:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="billNo"
+                                       ng-model="vm.voucherOfAddModal.billNo" name="billNo" required>
+                                <span ng-show="addForm.billNo.$touched && addForm.billNo.$invalid">Bill No is required</span>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Bill Date:</label>
+                            <div class="col-sm-6">
+                                <div date-picker date-model="vm.voucherOfAddModal.billDate"
+                                     date-format="DD-MM-YYYY" name="billDate" required></div>
+                                <span ng-show="addForm.billDate.$touched && addForm.billDate.$invalid">Bill date is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="vm.customerAccountMapWithId[vm.voucherOfAddModal.account.id]">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Customer Id:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="customerAccount" name="customerId"
+                                       ng-model="vm.voucherOfAddModal.customerCode" required>
+                                <span ng-show="addForm.customerId.$touched && addForm.customerId.$invalid">Customer Id is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Invoice No:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="invoiceNo"
+                                       ng-model="vm.voucherOfAddModal.invoiceNo" required name="invoiceNo">
+                                <span ng-show="addForm.invoiceNo.$touched && addForm.invoiceNo.$invalid">Invoice No is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="customerAccount">Invoice Date:</label>
+                            <div class="col-sm-6">
+                                <div date-picker date-model="vm.voucherOfAddModal.invoiceDate"
+                                     date-format="DD-MM-YYYY" requierd name="invoiceDate"></div>
+                                <span ng-show="addForm.invoiceDate.$touched && addForm.invoiceDate.$invalid">Invoice Date is required</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="amountInSpecific">Amount In Specific:</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="amountInSpecific"
+                                   ng-model="vm.voucherOfAddModal.amount" required name="amount">
+                            <span ng-show="addForm.amount.$touched && addForm.amount.$invalid">Amount is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-if="(vm.vendorAccountMapWithId[vm.voucherOfAddModal.account.id] || vm.customerAccountMapWithId[vm.voucherOfAddModal.account.id])">
+                        <label class="control-label col-sm-4" for="amountInSpecific">Paid Amount:</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="paidAmount"
+                                   ng-model="vm.voucherOfAddModal.paidAmount" required name="paidAmount">
+                            <span ng-show="addForm.paidAmount.$touched && addForm.paidAmount.$invalid">Paid amount is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="amountInBase">Amount In Base:</label>
+                        <div class="col-sm-6">
+                            <input type="number" ng-disabled="true" class="form-control" id="amountInBase"
+                                   value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.voucherOfAddModal.amount}}">
+                        </div>
+                    </div>
+                    <div ng-if="(vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID) && vm.BANK_GROUP_CODE==vm.mainVoucher.account.accGroupCode">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="narration">Cheque No:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="chequeNo"
+                                       ng-model="vm.voucherOfAddModal.chequeNo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="narration">Cheque Date:</label>
+                            <div class="col-sm-6">
+                                <div date-picker date-model="vm.voucherOfAddModal.chequeDate"
+                                     date-format="vm.dateFormat"
+                                     ng-disabled="!vm.enableEdit"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="debitOrCredit">Dr/Cr:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control required" name="debitOrCredit"
+                                    data-ng-model="vm.voucherOfAddModal.balanceType">
+                                <option value="Dr">Dr</option>
+                                <option value="Cr">Cr</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="narration">Narration:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="narration"
+                                   ng-model="vm.voucherOfAddModal.narration">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-ng-disabled="addForm.$invalid"
+                        ng-click="vm.addDataToVoucherTable()"
+                        data-dismiss="modal">
+                    Add
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+
+</div>
