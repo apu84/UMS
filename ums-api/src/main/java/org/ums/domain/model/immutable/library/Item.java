@@ -3,6 +3,7 @@ package org.ums.domain.model.immutable.library;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.ItemStatus;
 
@@ -42,5 +43,9 @@ public interface Item extends Serializable, EditType<MutableItem>, LastModifier,
   String getLastUpdatedOn();
 
   int getCirculationStatus();
+
+  Currency getCurrency();
+
+  Long getCurrencyId();
 
 }

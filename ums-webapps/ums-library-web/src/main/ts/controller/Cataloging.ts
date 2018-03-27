@@ -63,15 +63,21 @@ module ums {
         showContributorLoader: boolean;
         showPublisherLoader: boolean;
         showSupplierLoader: boolean;
+        currencies: Array<ICurrency>;
+    }
+
+    interface ICurrency {
+        id: string;
+        notation: string;
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams', 'HttpClient'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient) {
 
 
             $scope.state = $state;
@@ -169,6 +175,7 @@ module ums {
             $scope.item = <IItem> {};
             $scope.supplier = <ISupplier> {};
             $scope.item.status = 2;
+            $scope.item.currency = 1;
             $scope.bulk = {
                 config: {}
             };
@@ -192,6 +199,8 @@ module ums {
                 this.$scope.data.readOnlyMode = true;
             }
 
+            $scope.currencies = Array<ICurrency>();
+
             this.initNavButtonCallbacks();
 
             // this.addNewRow("");
@@ -205,7 +214,7 @@ module ums {
             this.getAllContributors();
             this.getAllPublishers();
             this.loadCountries();
-
+            this.getAllCurrencies();
             $scope.showSupplierSelect2 = false;
             $scope.showPublisherSelect2 = false;
             $scope.showContributorSelect2 = false;
@@ -343,7 +352,7 @@ module ums {
         }
 
 
-        private fetchItems(mfn: string): void{
+        private fetchItems(mfn: string): void {
             this.catalogingService.fetchItems(mfn).then((data: any) => {
                 this.$scope.itemList = data;
             });
@@ -664,37 +673,33 @@ module ums {
          * Set common values for Bulk Items
          */
         private setBulkItemsValue(): void {
-            if(this.validateBulkItemList() == "") {
+            if (this.validateBulkItemList() == "") {
                 let bulkItemList = this.$scope.bulkItemList;
                 this.catalogingService.setBulkItemsValue(bulkItemList, this.$scope.bulk.config);
                 this.setSelect2ValuesForBulkItems();
             }
-            else{
+            else {
                 this.notify.error(this.validateBulkItemList());
             }
 
         }
 
 
-        private validateBulkItemList(): string{
+        private validateBulkItemList(): string {
             let errorMessage = "";
-            if(this.$scope.bulk.config.copyStartFrom == undefined || this.$scope.bulk.config.copyStartFrom == null)
-            {
+            if (this.$scope.bulk.config.copyStartFrom == undefined || this.$scope.bulk.config.copyStartFrom == null) {
                 errorMessage += "Copy number is empty\n";
             }
-            if(this.$scope.bulk.config.firstAccession == undefined || this.$scope.bulk.config.firstAccession == null)
-            {
+            if (this.$scope.bulk.config.firstAccession == undefined || this.$scope.bulk.config.firstAccession == null) {
                 errorMessage += "First accession is empty\n";
             }
-            if(this.$scope.bulk.config.incrementSegment == undefined || this.$scope.bulk.config.incrementSegment == null)
-            {
+            if (this.$scope.bulk.config.incrementSegment == undefined || this.$scope.bulk.config.incrementSegment == null) {
                 errorMessage += "Increment segment is empty\n";
             }
-            if(this.$scope.bulk.config.status == undefined || this.$scope.bulk.config.status == null)
-            {
+            if (this.$scope.bulk.config.status == undefined || this.$scope.bulk.config.status == null) {
                 errorMessage += "Status is empty"
             }
-            if(this.$scope.bulk.config.price == undefined || this.$scope.bulk.config.price == null){
+            if (this.$scope.bulk.config.price == undefined || this.$scope.bulk.config.price == null) {
                 this.$scope.bulk.config.price = "";
             }
 
@@ -914,13 +919,13 @@ module ums {
             this.$scope.canItemDelete = true;
             this.$scope.itemId = itemId;
             this.catalogingService.fetchItem(itemId).then((data: any) => {
-                if(data.circulationStatus != 0){
+                if (data.circulationStatus != 0) {
                     this.$scope.canItemDelete = false;
                 }
             });
         }
 
-        public confirmation(): void{
+        public confirmation(): void {
             this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
                 this.fetchItems(this.$scope.record.mfnNo);
             });
@@ -929,7 +934,7 @@ module ums {
 
         public deleteRecord(): void {
             this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then((response: any) => {
-                if(response == "Success") {
+                if (response == "Success") {
                     setTimeout(() => {
                         this.$scope.state.go("cataloging.search", {1: 'new'});
                     }, 1000)
@@ -942,14 +947,23 @@ module ums {
             this.$scope.items = Array<IItem>();
             this.catalogingService.fetchItems(this.$scope.record.mfnNo).then((results: any) => {
                 this.$scope.items = results;
-                if(this.$scope.items.length > 0){
-                    for(var i = 0; i < this.$scope.items.length; i++){
-                        if(this.$scope.items[i].circulationStatus != 0){
+                if (this.$scope.items.length > 0) {
+                    for (var i = 0; i < this.$scope.items.length; i++) {
+                        if (this.$scope.items[i].circulationStatus != 0) {
                             this.$scope.canRecordDelete = false;
                             break;
                         }
                     }
                 }
+            });
+        }
+
+        private getAllCurrencies(): void {
+            this.httpClient.get("/ums-webservice-account/account/definition/currency/all", HttpClient.MIME_TYPE_JSON,
+                (response: any) => {
+                this.$scope.currencies = response;
+
+                console.log(this.$scope.currencies);
             });
         }
     }

@@ -31,6 +31,7 @@
                     <th style="text-align: center">Copy No</th>
                     <th class="numeric">Accession No</th>
                     <th class="numeric">Accession Date</th>
+                    <th class="numeric">Currency</th>
                     <th class="numeric" style="text-align: center">Purchase Price</th>
                     <th class="numeric">Supplier</th>
                     <th class="numeric" style="text-align: center">Status</th>
@@ -43,6 +44,7 @@
                     <td data-title="Copy No" style="text-align: center">{{item.copyNumber}}</td>
                     <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
                     <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
+                    <td data-title="Currency" class="numeric">{{item.currencyName}}</td>
                     <td data-title="Purchase Price" class="numeric" style="text-align: right">{{item.price}}</td>
                     <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
                     <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
@@ -116,6 +118,14 @@
             <div class="col-md-3">
                 <input type="text" class="form-control dottedInput" data-ng-model="item.barcode" id="barcode"
                        name="barcode" ng-readonly="data.itemReadOnlyMode"/>
+            </div>
+            <label class="col-md-1 control-label">Currency</label>
+            <div class="col-md-3">
+                <select style="width: 98%" class="required" data-ng-model="item.currency" id="currency"
+                        name="currency" ng-disabled="data.itemReadOnlyMode"
+                        ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
+                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}</option>
+                </select>
             </div>
             <label class="col-md-1 control-label">Price</label>
             <div class="col-md-3">

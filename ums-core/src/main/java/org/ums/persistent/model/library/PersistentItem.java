@@ -2,6 +2,7 @@ package org.ums.persistent.model.library;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.ItemStatus;
@@ -32,6 +33,8 @@ public class PersistentItem implements MutableItem {
   private String mLastUpdatedBy;
   private String mLastUpdatedOn;
   private int mCirculationStatus;
+  private Currency mCurrency;
+  private Long mCurrencyId;
   private String mLastModified;
 
   static {
@@ -54,6 +57,8 @@ public class PersistentItem implements MutableItem {
     mInternalNote = pPersistentItem.getInternalNote();
     mSupplierId = pPersistentItem.getSupplierId();
     mStatus = pPersistentItem.getStatus();
+    mCurrency = pPersistentItem.getCurrency();
+    mCurrencyId = pPersistentItem.getCurrencyId();
 
     mInsertedBy = pPersistentItem.getInsertedBy();
     mInsertedOn = pPersistentItem.getInsertedOn();
@@ -178,6 +183,16 @@ public class PersistentItem implements MutableItem {
   }
 
   @Override
+  public Currency getCurrency() {
+    return mCurrency;
+  }
+
+  @Override
+  public Long getCurrencyId() {
+    return mCurrencyId;
+  }
+
+  @Override
   public void setMfn(Long pMfn) {
     mMfn = pMfn;
   }
@@ -250,5 +265,15 @@ public class PersistentItem implements MutableItem {
   @Override
   public void setCirculationStatus(int pCirculationStatus) {
     mCirculationStatus = pCirculationStatus;
+  }
+
+  @Override
+  public void setCurrency(Currency pCurrency) {
+    mCurrency = pCurrency;
+  }
+
+  @Override
+  public void setCurrencyId(Long pCurrencyId) {
+    mCurrencyId = pCurrencyId;
   }
 }
