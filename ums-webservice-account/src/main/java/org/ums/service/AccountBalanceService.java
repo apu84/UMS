@@ -85,7 +85,7 @@ public class AccountBalanceService {
 
   public MutableAccountBalance setMonthAccountBalance(MutableAccountBalance pAccountBalance, Account pAccount) {
     LocalDate localDate = pAccountBalance.getModifiedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    Integer month = localDate.getMonthValue() + 1;
+    Integer month = localDate.getMonthValue();
     if(month.equals(MonthType.JANUARY.getValue())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal01(pAccountBalance.getTotMonthCrBal01() == null ? pAccountBalance

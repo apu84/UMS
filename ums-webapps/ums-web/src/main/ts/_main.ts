@@ -93,6 +93,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdditionalRolePermissions.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
@@ -222,7 +223,6 @@
 /// <reference path='model/master_data/Course.ts'/>
 /// <reference path='model/master_data/AdmissionTotalSeat.ts'/>
 /// <reference path='model/master_data/DepartmentSelectionDeadline.ts'/>
-/// <reference path='model/master_data/Employee.ts'/>
 /// <reference path='model/master_data/Parameter.ts'/>
 /// <reference path='model/master_data/Routine.ts'/>
 /// <reference path='model/master_data/Student.ts'/>

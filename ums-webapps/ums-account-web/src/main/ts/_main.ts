@@ -87,6 +87,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Company.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
