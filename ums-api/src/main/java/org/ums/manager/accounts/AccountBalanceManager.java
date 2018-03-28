@@ -15,6 +15,8 @@ public interface AccountBalanceManager extends ContentManager<AccountBalance, Mu
 
   AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount);
 
+  List<AccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate);
+
   List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate,
       List<Account> pAccounts);
 

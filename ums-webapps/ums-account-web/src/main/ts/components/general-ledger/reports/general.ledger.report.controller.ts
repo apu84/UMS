@@ -7,12 +7,17 @@ module ums {
     private groups: IGroup[];
     private selectedGroup: IGroup;
     private accountType: string;
+    private fetchType: string;
     private fromDate: string;
     private toDate: string;
 
     private ALL: string = "1";
     private SPECIFIC: string = "2";
     private GROUP: string = "3";
+
+    private FETCH_TYPE_ALL: string = "1";
+    private FETCH_TYPE_TRANSACTION_SPECIFIC = "2";
+
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -26,6 +31,7 @@ module ums {
 
     public initialize() {
       this.accountType = this.ALL;
+      this.fetchType = this.FETCH_TYPE_TRANSACTION_SPECIFIC;
       let day = new Date();
       this.fromDate = "01-01-" + day.getFullYear();
       this.toDate = moment(day).format("DD-MM-YYYY");
@@ -53,7 +59,7 @@ module ums {
       console.log("selected Group: "+this.selectedGroup);
       this.generalLedgerReportService.generateReport(this.selectedAccount == null || this.selectedAccount==undefined  ? "null" : this.selectedAccount.id,
        this.selectedGroup == null || this.selectedGroup==undefined ? "null" : this.selectedGroup.groupCode,
-        this.fromDate, this.toDate);
+          this.fromDate, this.toDate, this.fetchType);
     }
 
   }

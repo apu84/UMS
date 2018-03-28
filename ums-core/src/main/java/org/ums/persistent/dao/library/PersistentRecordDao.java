@@ -70,21 +70,23 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public int update(final MutableRecord pRecord) {
     String query = UPDATE_ONE + "   Where MFN= ? ";
-    return mJdbcTemplate.update(query, pRecord.getLanguage() == null ? null : pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord.getSubTitle(),
-        pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(), pRecord
-            .getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
-        pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
-            .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
-        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
-            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
-            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
-            .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(), pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType()
-            .getId(), pRecord.getAcquisitionType() == null ? null : pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord.getContributorJsonString(),
-        pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
-            .getTotalItems(), pRecord.getTotalAvailable(), pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(),
-        pRecord.getLastUpdatedBy(), pRecord.getMfn());
+    return mJdbcTemplate.update(query, pRecord.getLanguage() == null ? null : pRecord.getLanguage().getId(), pRecord
+        .getTitle(), pRecord.getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
+        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
+        .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
+        .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
+        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(),
+        pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord
+            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL
+            : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
+            .getImprint().getDateOfPublication(), pRecord.getImprint().getCopyRightDate(),
+        pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
+        pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(),
+        pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getId(), pRecord
+            .getAcquisitionType() == null ? null : pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
+            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
+        pRecord.getNoteJsonString(), pRecord.getTotalItems(), pRecord.getTotalAvailable(),
+        pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
   @Override

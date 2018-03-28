@@ -105,7 +105,7 @@ module ums {
 
     public add() {
       this.account.accGroupCode = this.selectedGroup.groupCode;
-      this.accountService.saveAccountPaginated(this.account, 10, 1).then((accounts: IAccount[]) => {
+      this.accountService.saveAccountPaginated(this.account, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in saving data");
         else {

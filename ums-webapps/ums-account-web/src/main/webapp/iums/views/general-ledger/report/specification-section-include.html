@@ -2,16 +2,27 @@
     <div class="panel-heading">Specifications</div>
     <div class="panel-body">
         <div class="row" align="center">
-            <div class="col-md-3"></div>
+            <div class="col-md-3" align="right"> From Date</div>
             <div align="center" class="col-md-6" date-picker date-model="vm.fromDate" date-format="DD-MM-YYYY"
             ></div>
             <div class="col-md-3"></div>
         </div>
         <br>
         <div class="row" align="center">
-            <div class="col-md-3"></div>
+            <div class="col-md-3" align="right"> To Date</div>
             <div align="center" class="col-md-6" date-picker date-model="vm.toDate" date-format="DD-MM-YYYY"
             ></div>
+            <div class="col-md-3"></div>
+        </div>
+        <br>
+        <div class="row" align="center">
+            <div class="col-md-3" align="right">Fetch Type</div>
+            <div class="col-md-6" align="left">
+                <select theme="bootstrap" class="form-control required" data-ng-model="vm.fetchType">
+                    <option value="1">All Accounts</option>
+                    <option value="2">Transaction Specific Accounts</option>
+                </select>
+            </div>
             <div class="col-md-3"></div>
         </div>
     </div>

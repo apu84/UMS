@@ -31,6 +31,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,7 +81,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(mIdGenerator.getNumericId());
+    account.setAccountCode(Math.abs(mIdGenerator.getNumericId()));
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
@@ -180,6 +181,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   public JsonObject getAccountsByAccountName(final String pAccountName, final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAccounts(pAccountName);
     return getJsonObject(pUriInfo, accounts);
+  }
+
+  private Integer generateSecureAccountId() {
+    SecureRandom secureRandom = new SecureRandom();
+    return secureRandom.nextInt(8);
   }
 
   @Override

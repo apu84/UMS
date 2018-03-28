@@ -13,6 +13,7 @@ import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
+import org.ums.enums.accounts.general.ledger.reports.FetchType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -72,7 +73,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
   Font mSmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 3f);
 
   @Override
-  public void createReport(Long pAccountId, String pGroupCode, Date fromDate, Date toDate, OutputStream pOutputStream)
+  public void createReport(Long pAccountId, String pGroupCode, Date fromDate, Date toDate, FetchType pFetchType, OutputStream pOutputStream)
       throws Exception {
 
     mFromDate = fromDate;
@@ -142,40 +143,64 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     LocalDate fromDateLocalDateFormat = fromDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate toDateLocalDateFormat = toDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     List<MutableAccountTransaction> accountTransactions = new ArrayList<>();
-
+    List<Account> accountsOfTheGroup = new ArrayList<>();
     if (pAccountId != null) {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, mAccountManager.get(pAccountId));
     } else if (pGroupCode != null) {
-      List<Group> groupList = mGroupManager.getAll()
-          .stream()
-          .filter(g -> g.getGroupCode().substring(0, pGroupCode.length()).equals(pGroupCode))
-          .collect(Collectors.toList());
-      List<Account> accountsOfTheGroup = mAccountManager.getIncludingGroups(groupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()));
+      List<Group> groupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(pGroupCode));
+      accountsOfTheGroup = mAccountManager.getIncludingGroups(groupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()));
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, accountsOfTheGroup);
     } else {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate);
     }
 
-      accountTransactions.sort((o1, o2) -> o1.getVoucherDate().compareTo(o2.getVoucherDate()));
-      Map<Long, List<AccountTransaction>> accountTransactionMapWithAccount = accountTransactions
-              .stream()
-              .collect(Collectors.groupingBy(t -> t.getAccount().getId()));
-      List<MutableChequeRegister> chequeRegisters = mChequeRegisterManager.getByTransactionIdList(accountTransactions.stream().map(t -> t.getId()).collect(Collectors.toList()));
-      Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionId = new HashMap<>();
-      chequeRegisterMapWithTransactionId = chequeRegisters.stream()
-              .collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
 
-      Date firstDateOfTheFromDateInstance = UmsUtils.convertToDate("01-"+fromDateLocalDateFormat.getMonthValue()+"-"+fromDateLocalDateFormat.getYear(), "dd-MM-yyyy");
-      Currency currency = mCurrencyManager.getAll().stream().filter(c->c.getCurrencyFlag().equals(CurrencyFlag.BASE_CURRENCY)).collect(Collectors.toList()).get(0);
-
-
-    Set<Account> accountSet = accountTransactions
-        .stream()
-        .map(t -> t.getAccount())
-        .collect(Collectors.toSet());
-
+    Map<Long, List<AccountTransaction>> accountTransactionMapWithAccount = new HashMap<>();
+    Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionId = new HashMap<>();
+    List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
+    Set<Account> accountSet = new HashSet<>();
     List<Account> accountList = new ArrayList<>();
-    accountList.addAll(accountSet);
+    Date firstDateOfTheFromDateInstance = UmsUtils.convertToDate("01-" + fromDateLocalDateFormat.getMonthValue() + "-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy");
+    Currency currency = mCurrencyManager.getAll().stream().filter(c -> c.getCurrencyFlag().equals(CurrencyFlag.BASE_CURRENCY)).collect(Collectors.toList()).get(0);
+
+    if (accountTransactions.size() > 0) {
+      accountTransactions.sort((o1, o2) -> o1.getVoucherDate().compareTo(o2.getVoucherDate()));
+      accountTransactionMapWithAccount = accountTransactions
+          .stream()
+          .collect(Collectors.groupingBy(t -> t.getAccount().getId()));
+      chequeRegisters = mChequeRegisterManager.getByTransactionIdList(accountTransactions.stream().map(t -> t.getId()).collect(Collectors.toList()));
+      chequeRegisterMapWithTransactionId = chequeRegisters.stream()
+          .collect(Collectors.toMap(c -> c.getAccountTransactionId(), c -> c));
+    }
+
+
+    if (pFetchType.equals(FetchType.TRANSACTION_SPECIFIC)) {
+
+      if (accountTransactions.size() == 0)
+        throw new Exception(new Throwable("No record found"));
+
+      accountSet = accountTransactions
+          .stream()
+          .map(t -> t.getAccount())
+          .collect(Collectors.toSet());
+      accountList.addAll(accountSet);
+
+    } else {
+      if (pAccountId != null)
+        accountList.add(mAccountManager.get(pAccountId));
+      else if (pGroupCode != null) {
+        accountList.addAll(accountsOfTheGroup);
+      } else {
+        accountList = mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(), currentFinancialAccountYear.getCurrentEndDate())
+            .stream()
+            .map(b -> mAccountManager.get(b.getAccountCode()))
+            .collect(Collectors.toList());
+      }
+
+      accountSet.addAll(accountList);
+    }
+
+
 
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(),
         currentFinancialAccountYear.getCurrentEndDate(), accountList);
@@ -218,7 +243,9 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
 
-      List<AccountTransaction> accountReportBodyTransactions = accountTransactionMapWithAccount.get(account.getId()).stream()
+      List<AccountTransaction> accountReportBodyTransactions = new ArrayList<>();
+      if (accountTransactionMapWithAccount.containsKey(account.getId()))
+        accountReportBodyTransactions = accountTransactionMapWithAccount.get(account.getId()).stream()
           .filter(t -> t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(fromDateLocalDateFormat.minusDays(1))) && t.getVoucherDate().before(UmsUtils.convertFromLocalDateToDate(toDateLocalDateFormat.plusDays(1))))
           .collect(Collectors.toList());
 
