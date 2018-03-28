@@ -2,6 +2,7 @@ package org.ums.report.general.ledger;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Company;
@@ -75,7 +76,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
   @Override
   public void createReport(Long pAccountId, String pGroupCode, Date fromDate, Date toDate, FetchType pFetchType, OutputStream pOutputStream)
       throws Exception {
-
+    toDate = DateUtils.addHours(toDate, 23);
+    toDate = DateUtils.addMinutes(toDate, 59);
     mFromDate = fromDate;
     mToDate = toDate;
 
