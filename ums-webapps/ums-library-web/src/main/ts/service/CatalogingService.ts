@@ -131,6 +131,7 @@ module ums {
                     item.internalNote = config.internalNote;
                 }
                 item.status = config.status;
+                item.currency = config.currency;
                 item.price = Number(config.price);
                 item.accessionDate = config.accessionDate;
                 item.barcode = config.barcode;

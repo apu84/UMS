@@ -180,6 +180,9 @@ module ums {
                 config: {}
             };
 
+            $scope.bulk.config.currency = 1;
+            $scope.bulk.config.status = 2;
+
 
             $scope.record.contributorList = Array<IContributor>();
             $scope.record.subjectList = Array<ISubjectEntry>();
@@ -223,6 +226,7 @@ module ums {
 
         private resetItemForm(): void {
             this.$scope.item = <IItem> {};
+            this.$scope.item.currency = 1;
             this.$scope.data.itemReadOnlyMode = false;
             $('#supplier').select2('enable');
             $('#supplier').select2('data', null)
@@ -595,6 +599,7 @@ module ums {
          */
         private showHideItemsTable(action: string) {
             if (action == "show") {
+                this.fetchItems(this.$scope.record.mfnNo);
                 this.$scope.data.collapsedItemTable = false;
                 $("#itemsDiv").show(400);
             }

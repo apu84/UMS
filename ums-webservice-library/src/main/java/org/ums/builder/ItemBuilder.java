@@ -61,7 +61,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     pBuilder.add("currency", pReadOnly.getCurrencyId().toString());
 
-    pBuilder.add("currencyName", pReadOnly.getCurrencyId() == 0 ? "" : mCurrencyManager.get(pReadOnly.getCurrencyId()).getNotation());
+    pBuilder.add("currencyName", pReadOnly.getCurrencyId() == 0 ? "" : mCurrencyManager.get(pReadOnly.getCurrencyId())
+        .getNotation());
 
   }
 
@@ -103,7 +104,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setCirculationStatus(pJsonObject.containsKey("circulationStatus") ? pJsonObject
         .getInt("circulationStatus") : 0);
 
-    pMutable.setCurrencyId(Long.parseLong(pJsonObject.getString("currency")));
+    pMutable.setCurrencyId(pJsonObject.get("currency").getValueType() ==  JsonValue.ValueType.NUMBER ? pJsonObject.getInt("currency") : Long.parseLong(pJsonObject.getString("currency")));
   }
 
 }
