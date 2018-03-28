@@ -5,11 +5,20 @@
         font-weight:bold;
     }
 </style>
+
 <div class="container-fluid" data-ng-init="vm.getAllQuestions()">
     <div  class="panel panel-green">
         <div class="panel-heading" align="center">
-            <h4 class="panel-title">Application For Teachers Evalution System</h4>
+            <h4 class="panel-title">Application For Teachers Evaluation System</h4>
         </div>
+        <div data-ng-if="vm.startingDeadline==true">
+
+            <p >
+            <h4 style="padding: 5px">Application will be open For <strong>{{vm.semesterNameCurrent}}</strong> semester On <strong>{{vm.startDate}}</strong></h4>
+            </p>
+
+        </div>
+        <div data-ng-if="vm.startingDeadline==false">
     <div style="padding-top:20px;padding-bottom: 40px"
          data-ng-include="'views/teachers-Evaluation-System/student-tes-with-status-selection.html'">
 
@@ -139,6 +148,8 @@
                             data-target="#myModal">Submit</button>
                 </div>
 
+        </div>
+
         <div data-ng-if="vm.checkComment==true">
             <div class="modal fade" id="myModal" role="dialog"  >
                 <!--   <div class="modal-backdrop"> -->
@@ -167,3 +178,5 @@
             </div>
     </div>
 </div>
+
+

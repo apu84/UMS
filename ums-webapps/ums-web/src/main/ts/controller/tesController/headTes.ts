@@ -7,6 +7,7 @@ module ums{
         deptId:number;
         deptShortName:string;
         designation:string;
+        fullName:string
     }
 
     interface IAssignedCourses{
@@ -19,6 +20,7 @@ module ums{
         apply:boolean;
         status:number;
         programShortName:string;
+        deadLineStatus:boolean;
     }
 
     interface IReport{
@@ -68,6 +70,8 @@ module ums{
         public studentResult:Array<IReport>;
         public studentComments:Array<IComment>;
         public semesterNameList:Array<ISemesterName>;
+        public semesters:Array<Semester>;
+        public semester:Semester;
         public facultyName:string;
         public facultyId:string;
         public fName:string;
@@ -105,6 +109,13 @@ module ums{
         public staticTeacherName:string;
         public staticSessionName:string;
         public departmentName:string;
+        public startDate:string;
+        public endDate:string;
+        public deadLine:boolean;
+        public designationStatus:string;
+        public studentSubmitDeadLine:boolean;
+        public studentSubmitEndDate:string;
+        public currentSemesterId:number;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -139,6 +150,23 @@ module ums{
         this.commentPgTotalRecords=0;
         this.checkEvaluationResult=true;
         this.evaluationResultStatus=true;
+        this.selectedSemesterId=11;
+        this.startDate="";
+        this.endDate="";
+        this.deadLine=false;
+            this.getStudentSubmitDeadLine();
+        }
+        private getSemesters():void{
+            this.semesterService.fetchSemesters(11,5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters:Array<Semester>)=>{
+                this.semesters=semesters;
+                console.log(this.semesters);
+                for(var i=0;i<semesters.length;i++){
+                    if(semesters[i].status==2){
+                        this.semester = semesters[i];
+                        break;
+                    }
+                }
+            });
         }
 
         private select2ini(selectBoxId, studentIds, placeHolderText) {
@@ -172,6 +200,7 @@ module ums{
         private teacherChanged(val:any){
             console.log("Name: "+val.firstName+"\nId: "+val.teacherId);
             this.selectedTeacherId=val.teacherId;
+            this.assignedCoursesForReview=[];
 
         }
         private getAllFacultyMembers(){
@@ -184,7 +213,8 @@ module ums{
                appTES=json.entries;
                console.log("Faculty Members!!!!");
                this.facultyList=appTES;
-               this.facultyListResultEvaluation=appTES;
+             //  this.facultyListResultEvaluation=appTES;
+              // this.getEligibleFacultyMembers();
                this.getTotalRecords=json.totalRecords;
                console.log(this.getTotalRecords);
                console.log(this.facultyList);
@@ -196,6 +226,31 @@ module ums{
            });
        return defer.promise;
    }
+
+        private getEligibleFacultyMembers(){
+            this.facultyListResultEvaluation=[];
+            this.selectedTeacherId=null;
+            var appTES:Array<IFacultyList>=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getEligibleFacultyMembers/semesterId/'+this.selectedSemesterId, 'application/json',
+                (json: any, etag: string) => {
+                    appTES=json.entries;
+                    console.log("Eligible Faculty Members!!!!");
+                    this.facultyListResultEvaluation=appTES;
+                    console.log(this.facultyListResultEvaluation);
+                    if(this.facultyListResultEvaluation.length>0) {
+                        this.selectedTeacherName = this.facultyListResultEvaluation[0];
+                        this.selectedTeacherId = this.selectedTeacherName.teacherId;
+                        console.log("id-------");
+                        console.log("F_Id: " + this.selectedTeacherId + "\nS_Id: " + this.selectedSemesterId);
+                    }
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
 
    private getRecordsOfAssignedCoursesByHead(){
      var  appTES:Array<ISetForReview>=[];
@@ -215,20 +270,28 @@ module ums{
        return defer.promise;
 
    }
-   private getAssignedCourses(teacher_id:string,firstname:string,lastName:string,deptId:string){
+   private getAssignedCourses(teacher_id:string,firstname:string,lastName:string,deptId:string,designation:string){
        this.checkBoxCounter=0;
        this.submit_Button_Disable=true;
-            this.facultyId=teacher_id;
-            this.fName=firstname+" "+lastName;
-            this.deptId=deptId;
-            console.log("Department Id"+this.deptId);
+       this.facultyId=teacher_id;
+       this.fName=firstname+" "+lastName;
+       this.deptId=deptId;
+       this.designationStatus=designation;
        this.assignedCourses=[];
+       this.startDate="";
+       this.endDate="";
+       this.deadLine=false;
        var appTES:Array<IAssignedCourses>=[];
        var defer = this.$q.defer();
        this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAssignedCourses/facultyId/'+this.facultyId, 'application/json',
            (json: any, etag: string) => {
                appTES=json.entries;
                console.log("Assigned Courses!!!!");
+               this.startDate=json.startDate;
+               this.endDate=json.endDate;
+               this.deadLine=json.deadLine;
+               this.semesterName=json.semesterName;
+               console.log(this.startDate+"\n"+this.endDate+"\n"+this.deadLine);
                this.assignedCourses=appTES;
                console.log(this.assignedCourses);
                defer.resolve(json.entries);
@@ -238,6 +301,22 @@ module ums{
            });
        return defer.promise;
 
+   }
+   private getStudentSubmitDeadLine(){
+       var defer = this.$q.defer();
+       this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getStudentSubmitDeadLineInfo', 'application/json',
+           (json: any, etag: string) => {
+               console.log("Assigned Courses!!!!");
+               this.studentSubmitDeadLine=json.studentSubmitDeadLine;
+               this.studentSubmitEndDate=json.endDate;
+               this.currentSemesterId=json.currentSemesterId;
+               console.log(this.studentSubmitDeadLine+"\n"+this.studentSubmitEndDate+"\n"+this.currentSemesterId);
+               defer.resolve(json.entries);
+           },
+           (response: ng.IHttpPromiseCallbackArg<any>) => {
+               console.error(response);
+           });
+       return defer.promise;
    }
 
 
@@ -306,86 +385,99 @@ module ums{
        return defer.promise;
    }
        private getAssignedCoursesForReview(){
-           this.checkEvaluationResult=true;
-           this.assignedCoursesForReview=[];
-           this.studentComments=[];
-           this.staticTeacherName=this.selectedTeacherName.firstName;
-           this.staticSessionName=this.selectedSemesterName.semesterName;
-           this.selectRow=null;
-           console.log("eeeeeeeeeeee");
-           console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId);
-           var appTES:Array<IAssignedCoursesForReview>=[];
-           var defer = this.$q.defer();
-           this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAssignedCoursesForReview/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
-               (json: any, etag: string) => {
-                   console.log("List of Courses");
-                   appTES=json.entries;
-                   this.assignedCoursesForReview=appTES;
-                   console.log(this.assignedCoursesForReview);
-                   defer.resolve(json);
-               },
-               (response: ng.IHttpPromiseCallbackArg<any>) => {
-                   console.error(response);
-               });
-           return defer.promise;
+
+            if(this.selectedTeacherId !=null){
+                this.checkEvaluationResult=true;
+                this.assignedCoursesForReview=[];
+                this.studentComments=[];
+                this.staticTeacherName=this.selectedTeacherName.firstName;
+                this.staticSessionName=this.semester.name;
+                this.selectRow=null;
+                console.log("eeeeeeeeeeee");
+                console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId);
+                var appTES:Array<IAssignedCoursesForReview>=[];
+                var defer = this.$q.defer();
+                this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAssignedCoursesForReview/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
+                    (json: any, etag: string) => {
+                        console.log("List of Courses");
+                        appTES=json.entries;
+                        this.assignedCoursesForReview=appTES;
+                        console.log(this.assignedCoursesForReview);
+                        defer.resolve(json);
+                    },
+                    (response: ng.IHttpPromiseCallbackArg<any>) => {
+                        console.error(response);
+                    });
+                return defer.promise;
+            }else{
+                this.notify.info("No teacher id Found");
+            }
+
        }
-        private getInfo(pTeacherId:any,pCourseId:any,id:any,pSemesterId:number,pCourseNo:any,pCourseTitle:any,pDeptName:string){
-            this.selectRow=id;
-            this.selectedCourseId=pCourseId;
-            this.selectedTeacherId=pTeacherId;
-            this.selectedSemesterId=pSemesterId;
-            this.selectedCourseNo=pCourseNo;
-            this.selectedCourseTitle=pCourseTitle;
-            this.departmentName=pDeptName;
-            this.checkEvaluationResult=false;
-            this.getResults();
+        private getInfo(pTeacherId:any,pCourseId:any,id:any,pSemesterId:number,pCourseNo:any,pCourseTitle:any,pDeptName:string) {
+            this.selectRow = id;
+            this.selectedCourseId = pCourseId;
+            this.selectedTeacherId = pTeacherId;
+            this.selectedSemesterId = pSemesterId;
+            this.selectedCourseNo = pCourseNo;
+            this.selectedCourseTitle = pCourseTitle;
+            this.departmentName = pDeptName;
+           if(this.currentSemesterId==pSemesterId){
+               if(this.studentSubmitDeadLine){
+                   this.checkEvaluationResult = false;
+                   this.getResults();
+               }else{
+                   this.notify.info("Result is under Process.You Can access the result of this Semester on "+this.studentSubmitEndDate);
+               }
+           }else{
+               this.checkEvaluationResult = false;
+               this.getResults();
+           }
+
 
 
         }
+
         private semesterChanged(val:any){
-           console.log("Name: "+val.semesterName+"\nsemesterId: "+val.semesterId);
-            this.selectedSemesterId=val.semesterId;
+           console.log("Name: "+val.name+"\nsemesterId: "+val.id);
+            this.selectedSemesterId=val.id;
+            this.assignedCoursesForReview=[];
+            this.getEligibleFacultyMembers();
+           // this.getStudentSubmitDeadLine();
 
         }
         private getBackToMainView(){
             this.evaluationResultStatus=true;
         }
-        private  getSemester(): ng.IPromise<any>{
+        private  getSemester(){
             this.evaluationResultStatus=false;
             console.log(""+this.evaluationResultStatus);
             this.assignedCoursesForReview=[];
             this.studentComments=[];
             this.studentResult=[];
             this.selectedCourseNo="";
-            this.semesterNameList=[];
             this.checkEvaluationResult=true;
             this.selectedSemesterId=null;
             this.selectedTeacherId=null;
             this.selectedSemesterName=null;
             this.selectedTeacherName=null;
             var appTES:Array<ISemesterName>=[];
-            var defer = this.$q.defer();
-            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getSemesterNameList', 'application/json',
-                (json: any, etag: string) => {
-                console.log("Semester");
-                appTES=json.entries;
-                this.semesterNameList=appTES;
-                this.selectedSemesterName=this.semesterNameList[0];
-                this.selectedTeacherName=this.facultyListResultEvaluation[0];
-                console.log("------------Initialize");
-                console.log("Name: "+this.selectedTeacherName.firstName+"\nId: "+this.selectedTeacherName.teacherId+"\nSemester: "+
-                    this.selectedSemesterName.semesterName+"\nId: "+this.selectedSemesterName.semesterId);
-                this.selectedTeacherId=this.selectedTeacherName.teacherId;
-                this.selectedSemesterId=this.selectedSemesterName.semesterId;
-                    console.log("id-------");
-                console.log("F_Id: "+this.selectedTeacherId+"\nS_Id: "+this.selectedSemesterId);
+            //----
+            this.semesterService.fetchSemesters(11,5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters:Array<Semester>)=>{
+                this.semesters=semesters;
+                console.log(this.semesters);
+                for(var i=0;i<semesters.length;i++){
+                    if(semesters[i].status==2){
+                        this.semester = semesters[i];
+                        break;
+                    }
+                }
+               this.selectedSemesterId=this.semester.id
+               console.log("I____Id: "+this.selectedSemesterId);
+                this.getEligibleFacultyMembers();
 
-                defer.resolve(this.semesterNameList);
-                },
-                (response: ng.IHttpPromiseCallbackArg<any>) => {
-                    console.error(response);
-                });
-            return defer.promise;
+            });
+
         }
 
 

@@ -70,15 +70,29 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getEligibleFacultyMembers/semesterId/{semester-id}")
+  public JsonObject getEligibleFacultyMembers(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getEligibleFacultyMembers(pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getAssignedCoursesForReview/teacherId/{teacher-id}/semesterId/{semester-id}")
   public JsonObject getAssignedCoursesForReview(@Context Request pRequest, @PathParam("teacher-id") String pTeacherId,
       @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getAssignedReviewableCoursesList(pTeacherId, pSemesterId, pRequest, mUriInfo);
   }
 
+  // getStudentSubmitDeadLine
+
+  @GET
+  @Path("/getStudentSubmitDeadLineInfo")
+  public JsonObject getStudentSubmitDateInfo(@Context Request pRequest) {
+    return mHelper.getStudentSubmitDateInfo(pRequest, mUriInfo);
+  }
+
   @GET
   @Path("/getSemesterNameList")
-  public JsonObject getABC(@Context Request pRequest) {
+  public JsonObject getAllSemesterNameList(@Context Request pRequest) {
     return mHelper.getAllSemesterNameList(pRequest, mUriInfo);
   }
 

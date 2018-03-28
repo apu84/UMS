@@ -22,16 +22,16 @@
                     class="form-control required"
                     name="leaveType"
                     id="leaveType"
-                    data-ng-options="L.semesterName for L in vm.semesterNameList track by L.semesterId"
-                    data-ng-model="vm.selectedSemesterName"
-                    data-ng-change="vm.semesterChanged(vm.selectedSemesterName)"
+                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                    data-ng-model="vm.semester"
+                    data-ng-change="vm.semesterChanged(vm.semester)"
             ></select>
             <br><div align="right">
             <button type="button" class="btn btn-info" data-ng-click="vm.getBackToMainView()">
                  Back
             </button>
             <button type="button" class="btn btn-success" data-ng-click="vm.getAssignedCoursesForReview()">
-                <span class="glyphicon glyphicon-search"></span> Search
+                Search
             </button>
         </div>
         </td>

@@ -53,4 +53,10 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
   void setAppliedDate(final String pAppliedDate);
 
   void setProgramShortName(final String pProgramShortName);
+
+  void setSemesterStartDate(final String pSemesterStartDate);
+
+  void setSemesterEndDate(final String setSemesterEndDate);
+
+  void setDeadLineStatus(final Boolean pDeadLineStatus);
 }

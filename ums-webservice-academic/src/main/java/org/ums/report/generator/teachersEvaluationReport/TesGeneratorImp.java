@@ -6,13 +6,16 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.ApplicationTESManager;
-import org.ums.manager.CourseManager;
+import org.ums.manager.*;
 
 import javax.swing.*;
 import javax.ws.rs.core.Request;
@@ -31,12 +34,24 @@ import static com.itextpdf.text.Rectangle.RIGHT;
 /**
  * Created by Rumi on 3/15/2018.
  */
-@Component
+@Service
 public class TesGeneratorImp implements TesGenerator {
+
   @Autowired
-  DateFormat mDateFormat;
+  private DateFormat mDateFormat;
   @Autowired
-  ApplicationTESManager mApplicationTESManager;
+  private ApplicationTESManager mApplicationTESManager;
+  @Autowired
+  private CourseManager mCourseManager;
+  @Autowired
+  private PersonalInformationManager mPersonalInformationManager;
+  @Autowired
+  private SemesterManager mSemesterManager;
+  @Autowired
+  private DepartmentManager mDepartmentManager;
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
   private String courseId;
   private String teacherId;
   private Integer semesterId;
@@ -47,6 +62,8 @@ public class TesGeneratorImp implements TesGenerator {
     this.courseId=pCourseId;
     this.teacherId=pTeacherId;
     this.semesterId=pSemesterId;
+
+
 
 
     mDateFormat = new DateFormat("dd MMM YYYY");
@@ -72,10 +89,11 @@ public class TesGeneratorImp implements TesGenerator {
     paragraph.add(chunk);
     emptyLine(paragraph, 1);
     document.add(paragraph);
+  //  String name=mEmployeeManagerManager.get(pTeacherId).getDepartment();
     //
-    chunk = new Chunk("Course No: CSE 2201\n" +
-            "Course Title: Numerical Methods\nTeacher Name: Mrs. Shanjida khatun\n" +
-            "Department: Computer Science and Engineering");
+    chunk = new Chunk("Session: "+mSemesterManager.get(semesterId).getName()+"\n"+"Course Title: "+mCourseManager.get(courseId).getTitle()+" ("+mCourseManager.get(pCourseId).getNo()+")\n"+
+    "Teacher Name: "+mPersonalInformationManager.get(teacherId).getFullName()+"\n"+
+    "Department: "+mEmployeeManager.get(teacherId).getDepartment().getLongName());
 
     paragraph = new Paragraph();
     paragraph.setAlignment(Element.ALIGN_LEFT);

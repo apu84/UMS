@@ -55,4 +55,10 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
 
   String getAppliedDate();
 
+  String getSemesterStartDate();
+
+  String getSemesterEndDate();
+
+  Boolean getDeadLineStatus();
+
 }

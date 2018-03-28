@@ -59,6 +59,14 @@ module ums{
         public checkCourseTeacher:boolean;
         public totalReviewEligibleCourseLength:number;
         public readOnlyViewCheck:boolean;
+        public startDate:string;
+        public endDate:string;
+        public deadLine:boolean;
+        public designationStatus:string;
+        public studentSubmitDeadLine:boolean;
+        public studentSubmitEndDate:string;
+        public currentSemesterId:number;
+        public startingDeadline:boolean;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -131,9 +139,14 @@ module ums{
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAllQuestions', 'application/json',
                 (json: any, etag: string) => {
                    appTES=json.entries;
-                    console.log("****Q1Q****");
-                    console.log("Applicatino TES--->Get Questions!!!!");
+                    console.log("****p1p****");
+                    console.log("Applicatino TES   get Questions!!!!");
                   this.questionListAndReview=appTES;
+                    this.startDate=json.startDate;
+                    this.endDate=json.endDate;
+                    this.deadLine=json.deadLine;
+                    this.startingDeadline=json.startingDeadline;
+                    console.log(""+this.startDate+"\n"+this.endDate+"\n"+this.deadLine+"\n"+this.startingDeadline);
                     console.log(this.questionListAndReview);
                     defer.resolve(json.entries);
                 },
@@ -192,6 +205,7 @@ module ums{
     }
 
         private submit() {
+            if(this.deadLine){
                 console.log(this.questionListAndReview);
                 this.convertToJson(this.questionListAndReview).then((app: any) => {
                     console.log("hello From Another Side!!!")
@@ -205,9 +219,13 @@ module ums{
                             this.getAllQuestions();
 
                         }).error((data) => {
-                            this.notify.error("Error in Saving Data");
+                        this.notify.error("Error in Saving Data");
                     });
                 })
+            }else{
+                this.notify.info("Date over!!!Your submit request can not be processed!!! ")
+            }
+
 
 
     }

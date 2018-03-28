@@ -43,6 +43,9 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private Integer mStatus;
   private String mAppliedDate;
   private String mProgramShortName;
+  private String mSemesterStartDate;
+  private String mSemesterEndDate;
+  private Boolean mDeadLineStatus;
 
   public PersistentApplicationTES() {
 
@@ -72,6 +75,39 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mStatus = persistentApplicationTES.getStatus();
     mAppliedDate = persistentApplicationTES.getAppliedDate();
     mProgramShortName = persistentApplicationTES.getProgramShortName();
+    mSemesterStartDate = persistentApplicationTES.getSemesterStartDate();
+    mSemesterEndDate = persistentApplicationTES.getSemesterEndDate();
+    mDeadLineStatus = persistentApplicationTES.getDeadLineStatus();
+  }
+
+  @Override
+  public void setDeadLineStatus(Boolean pDeadLineStatus) {
+    mDeadLineStatus = pDeadLineStatus;
+  }
+
+  @Override
+  public Boolean getDeadLineStatus() {
+    return mDeadLineStatus;
+  }
+
+  @Override
+  public void setSemesterStartDate(String pSemesterStartDate) {
+    mSemesterStartDate = pSemesterStartDate;
+  }
+
+  @Override
+  public void setSemesterEndDate(String pSemesterEndDate) {
+    mSemesterEndDate = pSemesterEndDate;
+  }
+
+  @Override
+  public String getSemesterStartDate() {
+    return mSemesterStartDate;
+  }
+
+  @Override
+  public String getSemesterEndDate() {
+    return mSemesterEndDate;
   }
 
   @Override

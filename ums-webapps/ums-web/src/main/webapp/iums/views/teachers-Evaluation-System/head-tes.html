@@ -56,7 +56,7 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in (filterd =  vm.facultyList | orderBy :'designation' | filter: vm.facultyName | limitTo:vm.itemPerPage:vm.itemPerPage*(vm.currentPageNumber - 1)) "
-                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId)"
+                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId,app.designation)"
                                 data-toggle="modal"
                                 data-target="#myModalNew">
                                 <td>{{(vm.currentPageNumber - 1) * vm.itemPerPage + $index + 1}}</td>
@@ -88,7 +88,7 @@
                 <div
                         data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
                 </div>
-                <p align="left" ><strong style="font-size: 18px">Students Opinion</strong></p>
+                <p align="left" ><strong style="font-size: 18px;padding-left: 18px;">Students Opinion</strong></p>
                 <div
                         data-ng-include="'views/teachers-Evaluation-System/students-opinion.html'">
                 </div>
@@ -100,7 +100,7 @@
 
                 <div class="modal fade" id="myModalNew" role="dialog" >
                     <!--   <div class="modal-backdrop"> -->
-                    <div class="modal-dialog ">
+                    <div class="modal-dialog modal-lg">
 
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -110,8 +110,20 @@
                             </div>
                             <div class="modal-body">
                                 <div class="panel-body" >
-                                    <p><strong style="font-size: 14px">Teacher Name:</strong> <span style="font-size: 12px" class="label label-success badge-success">{{vm.fName}}</span></p>
-                                    <br>
+                                    <table class="table table-borderless table-condensed table-hover">
+                                        <tr>
+                                            <td width="80%"><p>Teacher Name:  <strong style="font-size: 14px">{{vm.fName}}</strong></p>
+                                               Designation:  <strong style="font-size: 14px">{{vm.designationStatus}}</strong></td>
+                                            <td>
+                                                Session:    <strong>{{vm.semesterName}}</strong><br>
+                                                Start date: <strong>{{vm.startDate}}</strong><br>
+                                                End date:   <strong>{{vm.endDate}}</strong><br>
+                                                Deadline:   <span data-ng-if="vm.deadLine==true" class="label label-success badge-success">Available</span>
+                                                <span data-ng-if="vm.deadLine==false" class="label label-danger badge-danger">Not Allowed</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
                                     <table class="table table-bordered">
                                         <thead>
                                         <th style="background-color: #FAFAFA;width: 10px; ">SL</th>
@@ -129,7 +141,7 @@
                                             <td> {{app.courseTitle}}</td>
                                             <td>{{app.section}}</td>
                                             <td><span  class="label label-warning badge-warning">{{app.programShortName}}</span></td>
-                                            <td><input data-ng-hide="app.status==vm.statusValue ? true:false"
+                                            <td><input data-ng-show="(app.status==0 && app.deadLineStatus==true) ? true:false"
                                                        type="checkbox"
                                                        data-ng-model="app.apply"
                                                        data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
@@ -139,11 +151,6 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div align="center" >
-                                        <p>
-                                            <span style="font-size: 12px" class="label label-info badge-info">Course Assign date Form Spring'17 semester is 12-9-2017 to 12-3-2017</span>
-                                        </p>
-                                    </div>
 
                                 </div>
                             </div>

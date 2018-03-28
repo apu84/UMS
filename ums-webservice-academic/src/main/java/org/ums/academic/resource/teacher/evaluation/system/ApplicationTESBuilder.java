@@ -64,8 +64,8 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
       pBuilder.add("deptName", mDepartmentManager.get(pReadOnly.getDeptId()).getLongName());
     }
 
-    if(pReadOnly.getProgramShortName() !=null)
-      pBuilder.add("programShortName",pReadOnly.getProgramShortName());
+    if(pReadOnly.getProgramShortName() != null)
+      pBuilder.add("programShortName", pReadOnly.getProgramShortName());
 
     if(pReadOnly.getDeptShortName() != null)
       pBuilder.add("deptShortName", pReadOnly.getDeptShortName());
@@ -90,6 +90,15 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
 
     if(pReadOnly.getAppliedDate() != null)
       pBuilder.add("date", pReadOnly.getAppliedDate());
+
+    if(pReadOnly.getSemesterStartDate() != null)
+      pBuilder.add("startDate", pReadOnly.getSemesterStartDate());
+
+    if(pReadOnly.getSemesterEndDate() != null)
+      pBuilder.add("endDate", pReadOnly.getSemesterEndDate());
+
+    if(pReadOnly.getDeadLineStatus() != null)
+      pBuilder.add("deadLineStatus", pReadOnly.getDeadLineStatus());
   }
 
   @Override

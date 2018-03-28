@@ -16,11 +16,15 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getAssignedReviewableCoursesList(final String pTeacherId, final Integer pSemesterId);
 
+  List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
+
   Integer getObservationType(final Integer pQuestionId);
 
   String getQuestionDetails(final Integer pQuestionId);
 
   String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
+
+  List<ApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
 
   Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 

@@ -111,6 +111,34 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= ? and "
           + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID))";
 
+  String getEligibleFacultyMembers =
+      "select  DISTINCT a.EMPLOYEE_ID, "
+          + "          b.FIRST_NAME, "
+          + "          b.LAST_NAME, "
+          + "          MST_DEPT_OFFICE.SHORT_NAME, "
+          + "          a.DEPT_OFFICE, "
+          + "          c.DESIGNATION_NAME "
+          + "          from EMPLOYEES a,EMP_PERSONAL_INFO b,MST_DESIGNATION c,MST_DEPT_OFFICE,TES_COURSE_ASSIGN d WHERE a.DEPT_OFFICE=?  AND a.EMPLOYEE_TYPE=1 AND "
+          + "          a.EMPLOYEE_ID=b.EMPLOYEE_ID AND a.DESIGNATION=c.DESIGNATION_ID AND "
+          + "          MST_DEPT_OFFICE.DEPT_ID=a.DEPT_OFFICE AND d.TEACHER_ID=a.EMPLOYEE_ID AND d.SEMESTER_ID=?";
+
+  String getSemesterParameter =
+      "SELECT SEMESTER_ID,to_char(START_DATE,'DD-MM-YYYY') START_DATE,to_char(END_DATE,'DD-MM-YYYY') END_DATE from MST_PARAMETER_SETTING WHERE SEMESTER_ID=? and PARAMETER_ID=?";
+
+  @Override
+  public List<ApplicationTES> getDeadlines(String pParameterId, Integer pSemesterId) {
+    String query = getSemesterParameter;
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pParameterId,},
+        new ApplicationTESRowMapperForSemesterParameter());
+  }
+
+  @Override
+  public List<ApplicationTES> getEligibleFacultyMembers(String pDeptId, Integer pSemesterId) {
+    String query = getEligibleFacultyMembers;
+    return mJdbcTemplate.query(query, new Object[] {pDeptId, pSemesterId},
+        new ApplicationTESRowMapperForFacultyMembers());
+  }
+
   @Override
   public String getCourseDepartmentMap(String pCourseId, Integer pSemesterId) {
     String query = getCourseDepartmentMap;
@@ -315,6 +343,17 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
       application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setDeptId(pResultSet.getString("DEPT_ID"));
+      return application;
+    }
+  }
+
+  class ApplicationTESRowMapperForSemesterParameter implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setSemesterStartDate(pResultSet.getString("START_DATE"));
+      application.setSemesterEndDate(pResultSet.getString("END_DATE"));
       return application;
     }
   }
