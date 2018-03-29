@@ -16,7 +16,9 @@ module ums {
     'smart-table',
     'ui.grid',
     'ui.select',
-    'angularAccounting'
+    'angularAccounting',
+    'ngHandsontable'
+
   ]);
 
 
