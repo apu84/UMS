@@ -11,14 +11,14 @@
         <div class="panel-heading" align="center">
             <h4 class="panel-title">Application For Teachers Evaluation System</h4>
         </div>
-        <div data-ng-if="vm.startingDeadline==true">
+        <div data-ng-if="vm.startingDeadline==false">
 
             <p >
             <h4 style="padding: 5px">Application will be open For <strong>{{vm.semesterNameCurrent}}</strong> semester On <strong>{{vm.startDate}}</strong></h4>
             </p>
 
         </div>
-        <div data-ng-if="vm.startingDeadline==false">
+        <div data-ng-if="vm.startingDeadline==true">
     <div style="padding-top:20px;padding-bottom: 40px"
          data-ng-include="'views/teachers-Evaluation-System/student-tes-with-status-selection.html'">
 

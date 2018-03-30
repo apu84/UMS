@@ -56,7 +56,7 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="app in (filterd =  vm.facultyList | orderBy :'designation' | filter: vm.facultyName | limitTo:vm.itemPerPage:vm.itemPerPage*(vm.currentPageNumber - 1)) "
-                                data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId,app.designation)"
+                                style="cursor: pointer" data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId,app.designation)"
                                 data-toggle="modal"
                                 data-target="#myModalNew">
                                 <td>{{(vm.currentPageNumber - 1) * vm.itemPerPage + $index + 1}}</td>

@@ -237,6 +237,10 @@ module ums{
                     appTES=json.entries;
                     console.log("Eligible Faculty Members!!!!");
                     this.facultyListResultEvaluation=appTES;
+                    for(let i=0;i<this.facultyListResultEvaluation.length;i++){
+                        this.facultyListResultEvaluation[i].fullName=this.facultyListResultEvaluation[i].firstName+" "+
+                            this.facultyListResultEvaluation[i].lastName;
+                    }
                     console.log(this.facultyListResultEvaluation);
                     if(this.facultyListResultEvaluation.length>0) {
                         this.selectedTeacherName = this.facultyListResultEvaluation[0];
@@ -385,8 +389,8 @@ module ums{
        return defer.promise;
    }
        private getAssignedCoursesForReview(){
-
             if(this.selectedTeacherId !=null){
+                Utils.expandRightDiv();
                 this.checkEvaluationResult=true;
                 this.assignedCoursesForReview=[];
                 this.studentComments=[];
@@ -441,6 +445,7 @@ module ums{
         private semesterChanged(val:any){
            console.log("Name: "+val.name+"\nsemesterId: "+val.id);
             this.selectedSemesterId=val.id;
+            this.checkEvaluationResult=true;
             this.assignedCoursesForReview=[];
             this.getEligibleFacultyMembers();
            // this.getStudentSubmitDeadLine();

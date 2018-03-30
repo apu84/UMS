@@ -81,7 +81,7 @@ public class TesGeneratorImp implements TesGenerator {
     Chunk chunk = null;
 
 
-    chunk = new Chunk("Teachers Evaluation Report\nAhsanullah University Of Science and Technology");
+    chunk = new Chunk("Teachers Evaluation Report\nAhsanullah University of Science And Technology");
 
     paragraph = new Paragraph();
     paragraph.setAlignment(Element.ALIGN_CENTER);
