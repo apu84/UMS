@@ -87,6 +87,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Company.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
@@ -122,6 +123,8 @@
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
 
+/// <reference path='components/balance-sheet/balance.sheet.report.controller.ts'/>
+/// <reference path='components/balance-sheet/balance.sheet.report.service.ts'/>
 
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.service.ts'/>

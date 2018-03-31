@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable.library;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.MutableLastModifier;
@@ -41,4 +42,8 @@ public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, 
   void setLastUpdatedOn(String pLastUpdatedOn);
 
   void setCirculationStatus(int pCirculationStatus);
+
+  void setCurrency(Currency pCurrency);
+
+  void setCurrencyId(Long pCurrencyId);
 }

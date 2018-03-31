@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.MonthType;
+import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.CurrencyManager;
 
@@ -25,10 +27,8 @@ public class AccountBalanceService {
   private CurrencyManager currencyManager;
 
   public BigDecimal getTillLastMonthBalance(final Account pAccount, final FinancialAccountYear pFinancialAccountYear,
-      final Date pDate) {
-    AccountBalance accountBalance =
-        accountBalanceManager.getAccountBalance(pFinancialAccountYear.getCurrentStartDate(),
-            pFinancialAccountYear.getCurrentEndDate(), pAccount);
+      final Date pDate, final AccountBalance pAccountBalance) {
+    AccountBalance accountBalance = pAccountBalance;
     BigDecimal balance = accountBalance.getYearOpenBalance();
     LocalDate localDate = pDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     for(int i = 1; i <= localDate.getMonth().getValue(); i++) {
@@ -81,6 +81,109 @@ public class AccountBalanceService {
     }
 
     return pBalance;
+  }
+
+  public MutableAccountBalance setMonthAccountBalance(MutableAccountBalance pAccountBalance, Account pAccount) {
+    LocalDate localDate = pAccountBalance.getModifiedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    Integer month = localDate.getMonthValue();
+    if(month.equals(MonthType.JANUARY.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal01(pAccountBalance.getTotMonthCrBal01() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal01().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal01(pAccountBalance.getTotMonthDbBal01() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal01().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.FEBRUARY.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal02(pAccountBalance.getTotMonthCrBal02() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal02().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal02(pAccountBalance.getTotMonthDbBal02() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal02().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.MARCH.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal03(pAccountBalance.getTotMonthCrBal03() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal03().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal03(pAccountBalance.getTotMonthDbBal03() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal03().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.APRIL.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal04(pAccountBalance.getTotMonthCrBal04() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal04().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal04(pAccountBalance.getTotMonthDbBal04() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal04().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.MAY.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal05(pAccountBalance.getTotMonthCrBal05() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal05().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal05(pAccountBalance.getTotMonthDbBal05() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal05().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.JUNE.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal06(pAccountBalance.getTotMonthCrBal06() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal06().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal06(pAccountBalance.getTotMonthDbBal06() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal06().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.JULY.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal07(pAccountBalance.getTotMonthCrBal07() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal07().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal07(pAccountBalance.getTotMonthDbBal07() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal07().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.AUGUST.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal08(pAccountBalance.getTotMonthCrBal08() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal08().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal08(pAccountBalance.getTotMonthDbBal08() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal08().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.SEPTEMBER.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal09(pAccountBalance.getTotMonthCrBal09() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal09().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal09(pAccountBalance.getTotMonthDbBal09() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal09().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.OCTOBER.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal10(pAccountBalance.getTotMonthCrBal10() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal10().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal10(pAccountBalance.getTotMonthDbBal10() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal10().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.NOVEMBER.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal11(pAccountBalance.getTotMonthCrBal11() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal11().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal11(pAccountBalance.getTotMonthDbBal11() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal11().add(pAccountBalance.getYearOpenBalance()));
+    }
+    if(month.equals(MonthType.DECEMBER.getValue())) {
+      if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
+        pAccountBalance.setTotMonthCrBal12(pAccountBalance.getTotMonthCrBal12() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal12().add(pAccountBalance.getYearOpenBalance()));
+      else
+        pAccountBalance.setTotMonthDbBal12(pAccountBalance.getTotMonthDbBal12() == null ? pAccountBalance
+            .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal12().add(pAccountBalance.getYearOpenBalance()));
+    }
+
+    return pAccountBalance;
   }
 
 }

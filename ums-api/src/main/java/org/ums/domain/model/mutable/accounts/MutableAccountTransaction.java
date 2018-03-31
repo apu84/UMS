@@ -87,5 +87,7 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
 
   void setModifiedBy(String pModifiedBy);
 
+  void setModifierName(String pModifierName);
+
   void setMessage(String pMessage);
 }

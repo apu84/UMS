@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Specifications</div>
+    <div class="panel-body">
+        <div class="row" align="center">
+            <div class="col-md-3" align="right"> As on Date</div>
+            <div align="center" class="col-md-6" date-picker date-model="vm.asOnDate" date-format="DD-MM-YYYY"
+            ></div>
+            <div class="col-md-3"></div>
+        </div>
+        <br>
+        <div class="row" align="center">
+            <div class="col-md-3" align="right">Fetch Type</div>
+            <div class="col-md-6" align="left">
+                <select theme="bootstrap" class="form-control required" data-ng-model="vm.fetchType">
+                    <option value="1">Detailed</option>
+                    <option value="2">Summarized</option>
+                </select>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <br>
+        <div class="row" align="center" ng-if="vm.fetchType==vm.DETAILED">
+            <div class="col-md-3" align="right">Debtor Ledger</div>
+            <div class="col-md-6" align="left">
+                <select theme="bootstrap" class="form-control required" data-ng-model="vm.debtorLedgerFetchType">
+                    <option value="1">Detailed</option>
+                    <option value="2">Summarized</option>
+                </select>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+</div>

@@ -85,6 +85,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/filter/TrustAsHtml.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
@@ -97,7 +98,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
-/// <reference path='../../../../ums-web/src/main/ts/model/master_data/Employee.ts'/>
 
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 

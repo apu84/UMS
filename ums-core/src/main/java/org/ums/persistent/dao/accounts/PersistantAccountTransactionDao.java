@@ -60,11 +60,34 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   @Override
   public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, Account pAccount) {
     String query =
-        "select * from DT_TRANSACTION where VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate and ACCOUNT_ID=:accountId";
+        "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) and ACCOUNT_ID=:accountId";
     Map parameterMap = new HashMap();
     parameterMap.put("fromDate", pFromDate);
     parameterMap.put("toDate", pToDate);
     parameterMap.put("accountId", pAccount.getId());
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, List<Account> pAccounts) {
+    if (pAccounts.size() == 0) return null;
+
+    String query =
+        "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) and ACCOUNT_ID in(:accountIdList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("fromDate", pFromDate);
+    parameterMap.put("toDate", pToDate);
+    parameterMap.put("accountIdList", pAccounts.stream().map(a -> a.getId()).collect(Collectors.toList()));
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountTransactionRowMapper());
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate) {
+
+    String query = "select * from DT_TRANSACTION where (VOUCHER_DATE>=:fromDate and VOUCHER_DATE<=:toDate) ";
+    Map parameterMap = new HashMap();
+    parameterMap.put("fromDate", pFromDate);
+    parameterMap.put("toDate", pToDate);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountTransactionRowMapper());
   }
 

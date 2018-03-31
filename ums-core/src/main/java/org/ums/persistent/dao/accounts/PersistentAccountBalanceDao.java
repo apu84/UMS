@@ -12,6 +12,7 @@ import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.util.UmsUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -109,9 +110,18 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   }
 
   @Override
+  public List<AccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate) {
+    String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=:finStartDate and FIN_END_DATE=:finEndDate";
+    Map parameterMap = new HashMap();
+    parameterMap.put("finStartDate", pFinancialStartDate);
+    parameterMap.put("finEndDate", pFinancialEndDate);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new AccountBalanceRowMapper());
+  }
+
+  @Override
   public Long insertFromAccount(MutableAccountBalance pAccountBalance) {
     String query = INSERT_ONE;
-    Map parameterMap = getInsertOrUpdateParameters(pAccountBalance);
+    Map parameterMap = getInsertParameters(pAccountBalance);
     mNamedParameterJdbcTemplate.update(query, parameterMap);
     return pAccountBalance.getId();
   }
@@ -127,6 +137,14 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableAccountBalances.size()];
     for(int i = 0; i < pMutableAccountBalances.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableAccountBalances.get(i));
+    }
+    return parameterMaps;
+  }
+
+  private Map<String, Object>[] getInsertParameterObjects(List<MutableAccountBalance> pMutableAccountBalances) {
+    Map<String, Object>[] parameterMaps = new HashMap[pMutableAccountBalances.size()];
+    for(int i = 0; i < pMutableAccountBalances.size(); i++) {
+      parameterMaps[i] = getInsertParameters(pMutableAccountBalances.get(i));
     }
     return parameterMaps;
   }
@@ -163,6 +181,72 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     parameter.put("TOT_MONTH_CR_BAL_10", pMutableAccountBalance.getTotMonthCrBal10());
     parameter.put("TOT_MONTH_CR_BAL_11", pMutableAccountBalance.getTotMonthCrBal11());
     parameter.put("TOT_MONTH_CR_BAL_12", pMutableAccountBalance.getTotMonthCrBal12());
+    parameter.put("TOT_DEBIT_TRANS", pMutableAccountBalance.getTotDebitTrans());
+    parameter.put("TOT_CREDIT_TRANS", pMutableAccountBalance.getTotCreditTrans());
+    parameter.put("STAT_FLAG", pMutableAccountBalance.getStatFlag());
+    parameter.put("STAT_UP_FLAG", pMutableAccountBalance.getStatUpFlag());
+    parameter.put("MODIFIED_DATE", pMutableAccountBalance.getModifiedDate());
+    parameter.put("MODIFIED_BY", pMutableAccountBalance.getModifiedBy());
+    parameter.put("LAST_MODIFIED", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
+    return parameter;
+  }
+
+  private Map getInsertParameters(MutableAccountBalance pMutableAccountBalance) {
+    Map parameter = new HashMap();
+    parameter.put("ID", pMutableAccountBalance.getId());
+    parameter.put("FIN_START_DATE", pMutableAccountBalance.getFinStartDate());
+    parameter.put("FIN_END_DATE", pMutableAccountBalance.getFinEndDate());
+    parameter.put("ACCOUNT_CODE", pMutableAccountBalance.getAccountCode());
+    parameter.put("YEAR_OPEN_BALANCE", pMutableAccountBalance.getYearOpenBalance());
+    parameter.put("YEAR_OPEN_BALANCE_TYPE", pMutableAccountBalance.getYearOpenBalanceType().getValue());
+    parameter.put("TOT_MONTH_DB_BAL_01", pMutableAccountBalance.getTotMonthDbBal01() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal01());
+    parameter.put("TOT_MONTH_DB_BAL_02", pMutableAccountBalance.getTotMonthDbBal02() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal02());
+    parameter.put("TOT_MONTH_DB_BAL_03", pMutableAccountBalance.getTotMonthDbBal03() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal03());
+    parameter.put("TOT_MONTH_DB_BAL_04", pMutableAccountBalance.getTotMonthDbBal04() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal04());
+    parameter.put("TOT_MONTH_DB_BAL_05", pMutableAccountBalance.getTotMonthDbBal05() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal05());
+    parameter.put("TOT_MONTH_DB_BAL_06", pMutableAccountBalance.getTotMonthDbBal06() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal06());
+    parameter.put("TOT_MONTH_DB_BAL_07", pMutableAccountBalance.getTotMonthDbBal07() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal07());
+    parameter.put("TOT_MONTH_DB_BAL_08", pMutableAccountBalance.getTotMonthDbBal08() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal08());
+    parameter.put("TOT_MONTH_DB_BAL_09", pMutableAccountBalance.getTotMonthDbBal09() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal09());
+    parameter.put("TOT_MONTH_DB_BAL_10", pMutableAccountBalance.getTotMonthDbBal10() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal10());
+    parameter.put("TOT_MONTH_DB_BAL_11", pMutableAccountBalance.getTotMonthDbBal11() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal11());
+    parameter.put("TOT_MONTH_DB_BAL_12", pMutableAccountBalance.getTotMonthDbBal12() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthDbBal12());
+    parameter.put("TOT_MONTH_CR_BAL_01", pMutableAccountBalance.getTotMonthCrBal01() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal01());
+    parameter.put("TOT_MONTH_CR_BAL_02", pMutableAccountBalance.getTotMonthCrBal02() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal02());
+    parameter.put("TOT_MONTH_CR_BAL_03", pMutableAccountBalance.getTotMonthCrBal03() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal03());
+    parameter.put("TOT_MONTH_CR_BAL_04", pMutableAccountBalance.getTotMonthCrBal04() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal04());
+    parameter.put("TOT_MONTH_CR_BAL_05", pMutableAccountBalance.getTotMonthCrBal05() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal05());
+    parameter.put("TOT_MONTH_CR_BAL_06", pMutableAccountBalance.getTotMonthCrBal06() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal06());
+    parameter.put("TOT_MONTH_CR_BAL_07", pMutableAccountBalance.getTotMonthCrBal07() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal07());
+    parameter.put("TOT_MONTH_CR_BAL_08", pMutableAccountBalance.getTotMonthCrBal08() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal08());
+    parameter.put("TOT_MONTH_CR_BAL_09", pMutableAccountBalance.getTotMonthCrBal09() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal09());
+    parameter.put("TOT_MONTH_CR_BAL_10", pMutableAccountBalance.getTotMonthCrBal10() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal10());
+    parameter.put("TOT_MONTH_CR_BAL_11", pMutableAccountBalance.getTotMonthCrBal11() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal11());
+    parameter.put("TOT_MONTH_CR_BAL_12", pMutableAccountBalance.getTotMonthCrBal12() == null ? new BigDecimal(0)
+        : pMutableAccountBalance.getTotMonthCrBal12());
     parameter.put("TOT_DEBIT_TRANS", pMutableAccountBalance.getTotDebitTrans());
     parameter.put("TOT_CREDIT_TRANS", pMutableAccountBalance.getTotCreditTrans());
     parameter.put("STAT_FLAG", pMutableAccountBalance.getStatFlag());

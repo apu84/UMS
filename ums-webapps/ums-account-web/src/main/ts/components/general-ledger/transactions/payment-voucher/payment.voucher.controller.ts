@@ -25,13 +25,14 @@ module ums {
     private existingVouchers: IPaymentVoucher[];
     private paymentVoucherDetail: IPaymentVoucher;
     private detailVouchers: IPaymentVoucher[];
-    private paymentVoucherMain: IPaymentVoucher;
+    private mainVoucher: IPaymentVoucher;
     static PAYMENT_VOUCHER_GROUP_FLAG = GroupFlag.YES;
-    static PAYMENT_VOUCHER_ID = '6';
-    private paymentAccounts: IAccount[];
+    private PAYMENT_VOUCHER_ID: string = '6';
+    private BANK_GROUP_CODE: string = '1002006';
+    private mainAccounts: IAccount[];
     private selectedPaymentAccount: IAccount;
-    private selectedPaymentAccountCurrentBalance: number;
-    private paymentDetailAccounts: IAccount[];
+    private selectedMainAccountCurrentBalance: number;
+    private accountListForAddModal: IAccount[];
     private totalAmount: number;
     private voucherOfAddModal: IPaymentVoucher;
     private dateFormat: string;
@@ -88,22 +89,20 @@ module ums {
     }
 
     private getAccounts() {
-      this.accountService.getAccountsByGroupFlag(GroupFlag.YES).then((accounts: IAccount[]) => {
-        this.paymentAccounts = accounts;
-        console.log("Payment accounts");
-        console.log(accounts);
+      this.accountService.getBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
+        this.mainAccounts = accounts;
       });
-      this.accountService.getAccountsByGroupFlag(GroupFlag.NO).then((accounts: IAccount[]) => {
-        this.paymentDetailAccounts = accounts;
+      this.accountService.getExcludingBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
+        this.accountListForAddModal = accounts;
       });
     }
 
     public getAccountBalance() {
-      this.paymentVoucherMain.balanceType = BalanceType.Cr;
-      this.accountBalanceService.getAccountBalance(this.paymentVoucherMain.account.id).then((currentBalance: number) => {
-        this.selectedPaymentAccountCurrentBalance = currentBalance;
-        console.log(accounting.formatNumber(10000));
-        console.log(accounting.formatColumn([10000], "$ "));
+      this.mainVoucher.balanceType = BalanceType.Cr;
+      this.accountBalanceService.getAccountBalance(this.mainVoucher.account.id).then((currentBalance: number) => {
+        this.selectedMainAccountCurrentBalance = currentBalance;
+        console.log("Current Balance");
+        console.log(this.selectedMainAccountCurrentBalance);
       });
     }
 
@@ -149,7 +148,7 @@ module ums {
       this.voucherNo = "";
       let currDate: Date = new Date();
       this.paymentVouchers = [];
-      this.paymentVoucherMain = <IPaymentVoucher>{};
+      this.mainVoucher = <IPaymentVoucher>{};
       this.paymentVoucherDetail = <IPaymentVoucher>{};
       this.voucherDate = moment(currDate).format("DD-MM-YYYY");
       this.detailVouchers = [];
@@ -175,23 +174,23 @@ module ums {
     private addNecessaryAttributesToVoucher(voucher: IPaymentVoucher): IPaymentVoucher {
       voucher.accountId = voucher.account.id;
       voucher.voucherNo = this.voucherNo;
-      voucher.voucherId = PaymentVoucherController.PAYMENT_VOUCHER_ID;
+      voucher.voucherId = this.PAYMENT_VOUCHER_ID;
       voucher.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
-      voucher.foreignCurrency = voucher.amount != null ? voucher.amount * voucher.conversionFactor : this.selectedPaymentAccountCurrentBalance * voucher.conversionFactor;
+      voucher.foreignCurrency = voucher.amount != null ? voucher.amount * voucher.conversionFactor : this.selectedMainAccountCurrentBalance * voucher.conversionFactor;
       voucher.voucherDate = this.voucherDate;
       voucher.currencyId = this.selectedCurrency.id;
       return voucher;
     }
 
     public saveVoucher() {
-      if (this.paymentVoucherMain == null)
+      if (this.mainVoucher == null)
         this.notify.error("Account Name is not selected");
       else {
-        this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
+        this.mainVoucher = this.addNecessaryAttributesToVoucher(this.mainVoucher);
         console.log("payment voucher after adding necessary fields");
-        console.log(this.paymentVoucherMain);
-        //this.paymentVoucherMain.amount = this.selectedPaymentAccountCurrentBalance + this.totalAmount;
-        this.detailVouchers.push(this.paymentVoucherMain);
+        console.log(this.mainVoucher);
+        //this.mainVoucher.amount = this.selectedMainAccountCurrentBalance + this.totalAmount;
+        this.detailVouchers.push(this.mainVoucher);
         this.paymentVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
           this.configureVouchers(vouchers);
         });
@@ -199,14 +198,14 @@ module ums {
     }
 
     public postVoucher() {
-      if (this.paymentVoucherMain == null)
+      if (this.mainVoucher == null)
         this.notify.error("Account Name is not selected");
       else {
-        this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
-        this.paymentVoucherMain.amount = this.totalAmount;
+        this.mainVoucher = this.addNecessaryAttributesToVoucher(this.mainVoucher);
+        this.mainVoucher.amount = this.totalAmount;
         console.log("Payment voucher amount");
-        console.log(this.paymentVoucherMain.amount);
-        this.detailVouchers.push(this.paymentVoucherMain);
+        console.log(this.mainVoucher.amount);
+        this.detailVouchers.push(this.mainVoucher);
         this.paymentVoucherService.postVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
           this.configureVouchers(vouchers);
         });
@@ -224,6 +223,8 @@ module ums {
       });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
+        console.log("Detailed vouchers");
+        console.log(this.detailVouchers);
         this.assignChequeNumberToVouchers(vouchers);
       });
       this.voucherNo = vouchers[0].voucherNo;
@@ -233,8 +234,8 @@ module ums {
     public fetchDetails(paymentVoucher: IPaymentVoucher) {
       this.showAddSection = true;
       this.paymentVoucherService.getVouchersByVoucherNoAndDate(paymentVoucher.voucherNo, paymentVoucher.postDate == null ? paymentVoucher.modifiedDate : paymentVoucher.postDate).then((vouchers: IPaymentVoucher[]) => {
-        console.log("details fetched");
-        console.log(vouchers);
+        console.log("details fetched----------->");
+        console.log(this.detailVouchers);
         this.configureVouchers(vouchers);
       });
     }
@@ -243,10 +244,12 @@ module ums {
       let defer: ng.IDeferred<IPaymentVoucher[]> = this.$q.defer();
       this.detailVouchers = [];
       this.voucherMapWithId = {};
+      console.log("************");
+      console.log(vouchers);
       vouchers.forEach((v: IPaymentVoucher) => {
         this.voucherMapWithId[v.id] = v;
         if (v.balanceType == BalanceType.Cr) {
-          this.paymentVoucherMain = v;
+          this.mainVoucher = v;
           this.getAccountBalance();
         }
         else {

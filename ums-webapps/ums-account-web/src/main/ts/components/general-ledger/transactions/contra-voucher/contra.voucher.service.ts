@@ -36,6 +36,13 @@ module ums {
     modifiedBy: string;
     chequeNo: string;
     chequeDate: string;
+    message: string;
+    billNo: string;
+    billDate: string;
+    invoiceNo: string;
+    invoiceDate: string;
+    paidAmount: number;
+    modifierName: string;
   }
 
 

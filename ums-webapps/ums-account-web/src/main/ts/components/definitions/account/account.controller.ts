@@ -1,10 +1,11 @@
 module ums {
   export class AccountController {
 
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService'];
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
+    private employeeNames: string[];
     private totalAccountSize: number;
     private groupMapWithGroupid: any;
     private account: IAccount;
@@ -19,7 +20,8 @@ module ums {
                 private $modal: any,
                 private notify: Notify,
                 private accountService: AccountService,
-                private groupService: GroupService, private $timeout: ng.ITimeoutService) {
+                private groupService: GroupService,
+                private $timeout: ng.ITimeoutService, private employeeService: EmployeeService) {
 
       this.initialize();
 
@@ -66,6 +68,10 @@ module ums {
     public addModalClicked() {
       this.account = <IAccount>{};
       this.account.yearOpenBalanceType = BalanceType.Dr;
+      /* this.employeeService.getAll().then((employees: Employee[]) => {
+         this.employeeNames = [];
+         employees.forEach((e: Employee) => this.employeeNames.push(e.employeeName));
+       });*/
     }
 
     public showSearchSection() {
@@ -99,7 +105,7 @@ module ums {
 
     public add() {
       this.account.accGroupCode = this.selectedGroup.groupCode;
-      this.accountService.saveAccountPaginated(this.account, 10, 1).then((accounts: IAccount[]) => {
+      this.accountService.saveAccountPaginated(this.account, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in saving data");
         else {
