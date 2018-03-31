@@ -55,10 +55,10 @@ module ums {
     }
 
     public runReport() {
-      console.log("selected account: "+this.selectedAccount);
-      console.log("selected Group: "+this.selectedGroup);
-      this.generalLedgerReportService.generateReport(this.selectedAccount == null || this.selectedAccount==undefined  ? "null" : this.selectedAccount.id,
-       this.selectedGroup == null || this.selectedGroup==undefined ? "null" : this.selectedGroup.groupCode,
+      console.log("selected account: " + this.selectedAccount);
+      console.log("selected Group: " + this.selectedGroup);
+      this.generalLedgerReportService.generateReport(this.selectedAccount == null || this.selectedAccount == undefined ? "null" : this.selectedAccount.id,
+          this.selectedGroup == null || this.selectedGroup == undefined ? "null" : this.selectedGroup.groupCode,
           this.fromDate, this.toDate, this.fetchType);
     }
 

@@ -20,5 +20,4 @@
 
   <task:annotation-driven executor="asynExecutor"/>
   <task:executor id="asynExecutor" pool-size="25" />
-  <task:executor id="myExecutor" pool-size="10" />
 </beans>

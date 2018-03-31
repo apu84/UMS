@@ -133,7 +133,13 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="debitOrCredit">Dr/Cr:</label>
                         <div class="col-sm-6">
-                            <select class="form-control required" name="debitOrCredit"
+                            <select ng-if="vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID" class="form-control required"
+                                    name="debitOrCredit"
+                                    data-ng-model="vm.voucherOfAddModal.balanceType">
+                                <option value="Dr">Dr</option>
+                                <option value="Cr">Cr</option>
+                            </select>
+                            <select ng-if="vm.JOURNAL_VOUCHER_ID" class="form-control required" name="debitOrCredit"
                                     data-ng-model="vm.voucherOfAddModal.balanceType">
                                 <option value="Dr">Dr</option>
                                 <option value="Cr">Cr</option>

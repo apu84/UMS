@@ -1,4 +1,4 @@
-package org.ums.accounts.resource.definitions.general.ledger.report;
+package org.ums.accounts.resource.report.general.ledger;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

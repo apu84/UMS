@@ -91,8 +91,6 @@ module ums {
     private getAccounts() {
       this.accountService.getBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         this.mainAccounts = accounts;
-        console.log("Payment accounts");
-        console.log(accounts);
       });
       this.accountService.getExcludingBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         this.accountListForAddModal = accounts;
@@ -225,6 +223,8 @@ module ums {
       });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
+        console.log("Detailed vouchers");
+        console.log(this.detailVouchers);
         this.assignChequeNumberToVouchers(vouchers);
       });
       this.voucherNo = vouchers[0].voucherNo;
@@ -234,8 +234,8 @@ module ums {
     public fetchDetails(paymentVoucher: IPaymentVoucher) {
       this.showAddSection = true;
       this.paymentVoucherService.getVouchersByVoucherNoAndDate(paymentVoucher.voucherNo, paymentVoucher.postDate == null ? paymentVoucher.modifiedDate : paymentVoucher.postDate).then((vouchers: IPaymentVoucher[]) => {
-        console.log("details fetched");
-        console.log(vouchers);
+        console.log("details fetched----------->");
+        console.log(this.detailVouchers);
         this.configureVouchers(vouchers);
       });
     }
@@ -244,6 +244,8 @@ module ums {
       let defer: ng.IDeferred<IPaymentVoucher[]> = this.$q.defer();
       this.detailVouchers = [];
       this.voucherMapWithId = {};
+      console.log("************");
+      console.log(vouchers);
       vouchers.forEach((v: IPaymentVoucher) => {
         this.voucherMapWithId[v.id] = v;
         if (v.balanceType == BalanceType.Cr) {

@@ -162,6 +162,20 @@ module ums {
             }]
           }
         })
+        .state('balanceSheetReport', {
+          url: "/balanceSheetReport",
+          controller: 'BalanceSheetReportController',
+          controllerAs: 'vm',
+          templateUrl: 'views/balance-sheet/report/balance-sheet.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
         .state('contraVoucher', {
           url: "/contraVoucher",
           controller: 'ContraVoucherController',

@@ -123,6 +123,8 @@
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
 
+/// <reference path='components/balance-sheet/balance.sheet.report.controller.ts'/>
+/// <reference path='components/balance-sheet/balance.sheet.report.service.ts'/>
 
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.controller.ts'/>
 /// <reference path='components/general-ledger/transactions/journal-voucher/journal.voucher.service.ts'/>
