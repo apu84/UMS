@@ -62,13 +62,18 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
     List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId);
-    return processResult(resultList, pProgramId, pSemesterId);
+    String taskId = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
+    createTaskStatus(taskId);
+    return processResult(resultList, pSemesterId, taskId);
   }
 
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
     List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId, pYear, pSemester);
-    return processResult(resultList, pProgramId, pSemesterId);
+    String taskId =
+        mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, pYear, pSemester, ProcessResult.PROCESS_GRADES);
+    createTaskStatus(taskId);
+    return processResult(resultList, pSemesterId, taskId);
   }
 
   @Override
@@ -78,19 +83,20 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return processResult(semesterResult, pSemesterId);
   }
 
-  private List<UGRegistrationResult> processResult(List<UGRegistrationResult> resultList, Integer pProgramId,
-      Integer pSemesterId) {
-    String taskId = String.format("%s_%s%s", pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
-    createTaskStatus(taskId);
+  private List<UGRegistrationResult> processResult(final List<UGRegistrationResult> resultList,
+      final Integer pSemesterId, final String pTaskId) {
     Map<String, List<UGRegistrationResult>> studentCourseGradeMap =
         resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
-
     int totalStudentFound = studentCourseGradeMap.keySet().size();
     int i = 0;
-    mLogger.debug("Total student found for result process is: {}", totalStudentFound);
+    if(mLogger.isDebugEnabled()) {
+      mLogger.debug("Total student found for result process is: {}", totalStudentFound);
+    }
     Semester untilSemester = mSemesterManager.get(pSemesterId);
     for(String studentId : studentCourseGradeMap.keySet()) {
-      mLogger.debug("Processing grades for student: {}", studentId);
+      if(mLogger.isDebugEnabled()) {
+        mLogger.debug("Processing grades for student: {}", studentId);
+      }
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
       List<UGRegistrationResult> filteredResults =
           studentCourseGradeMap.get(studentId)
@@ -103,12 +109,12 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
       i++;
       if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudentFound)) {
-        updateTaskStatus(taskId, TaskStatus.Status.INPROGRESS, UmsUtils.getPercentageString(i, totalStudentFound));
+        updateTaskStatus(pTaskId, TaskStatus.Status.INPROGRESS, UmsUtils.getPercentageString(i, totalStudentFound));
       }
     }
     List<UGRegistrationResult> returnList =
         studentCourseGradeMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
-    updateTaskStatus(taskId, TaskStatus.Status.COMPLETED);
+    updateTaskStatus(pTaskId, TaskStatus.Status.COMPLETED, "100");
     return returnList;
   }
 
@@ -122,7 +128,9 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
     Map<String, TabulationCourseModel> tabulationCourseModelMap = new HashMap<>();
     for(String studentId : studentCourseGradeMap.keySet()) {
-      mLogger.debug("Processing grades for student: {}", studentId);
+      if(mLogger.isDebugEnabled()) {
+        mLogger.debug("Processing grades for student: {}", studentId);
+      }
       tabulationCourseModelMap.put(studentId,
           mStudentCarryCourseService.findCoursesForTabulation(studentCourseGradeMap.get(studentId), pSemesterId));
     }

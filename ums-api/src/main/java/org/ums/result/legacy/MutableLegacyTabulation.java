@@ -26,4 +26,6 @@ public interface MutableLegacyTabulation extends LegacyTabulation, Editable<Long
   void setStudent(Student pStudent);
 
   void setStudentId(String pStudentId);
+
+  void setCompletedCrHr(Double pCrHr);
 }

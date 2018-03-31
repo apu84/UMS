@@ -34,6 +34,8 @@ module ums {
     processResult: Function;
     publishResult: Function;
     resultPdf: Function;
+    year: string;
+    semester: string;
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
@@ -47,7 +49,9 @@ module ums {
       programId: '=',
       semesterId: '=',
       statusByYearSemester: '=',
-      render: '='
+      render: '=',
+      year: '@',
+      semester: '@'
     };
 
     public templateUrl = "./views/result/result-process-status.html";
@@ -85,25 +89,28 @@ module ums {
       this.updateStatus(this.programId, this.semesterId, this.statusByYearSemester);
     }
 
-    private getNotification(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus) {
-      this.httpClient.poll(this.getUpdateStatusUri(programId, semesterId),
+    private getNotification(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus,
+                            year?: string, semester?: string) {
+      this.httpClient.poll(this.getUpdateStatusUri(programId, semesterId, year, semester),
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse)=> {
             statusByYearSemester.taskStatus = response;
+            statusByYearSemester.taskStatus.year = year;
+            statusByYearSemester.taskStatus.semester = semester;
             this.$timeout(()=> {
-              this.resultProcessStatus(programId, semesterId, statusByYearSemester);
+              this.resultProcessStatus(programId, semesterId, statusByYearSemester, year, semester);
             });
 
             if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
-              if (this.intervalPromiseMap[`${programId}_${semesterId}`]) {
-                this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
-                delete this.intervalPromiseMap[`${programId}_${semesterId}`];
+              if (this.intervalPromiseMap[this.getIntervalId(programId, semesterId, year, semester)]) {
+                this.$interval.cancel(this.intervalPromiseMap[this.getIntervalId(programId, semesterId, year, semester)]);
+                delete this.intervalPromiseMap[this.getIntervalId(programId, semesterId, year, semester)];
               }
             }
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             if (response.status !== 200) {
-              this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
+              this.$interval.cancel(this.intervalPromiseMap[this.getIntervalId(programId, semesterId, year, semester)]);
             }
           });
     }
@@ -119,14 +126,16 @@ module ums {
 
     private resultProcessStatus(programId: string,
                                 semesterId: string,
-                                statusByYearSemester: ResultProcessStatus): void {
+                                statusByYearSemester: ResultProcessStatus,
+                                year?: string,
+                                semester?: string): void {
       if (statusByYearSemester.taskStatus && statusByYearSemester.taskStatus.response) {
         var resultProcessTask: boolean
-            = statusByYearSemester.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
+            = statusByYearSemester.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId, year, semester);
         var gradeProcessTask: boolean
-            = statusByYearSemester.taskStatus.response.id == this.getGradeProcessTaskName(programId, semesterId);
+            = statusByYearSemester.taskStatus.response.id == this.getGradeProcessTaskName(programId, semesterId, year, semester);
         var resultPublishTask: boolean
-            = statusByYearSemester.taskStatus.response.id == this.getResultPublishTaskName(programId, semesterId);
+            = statusByYearSemester.taskStatus.response.id == this.getResultPublishTaskName(programId, semesterId, year, semester);
         if (resultProcessTask || gradeProcessTask || resultPublishTask) {
           if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
             if (resultPublishTask) {
@@ -141,7 +150,7 @@ module ums {
                   ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id
                   : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
               statusByYearSemester.statusText = gradeProcessTask
-                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label+ '...'+ statusByYearSemester.taskStatus.response.progressDescription
+                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label + '...' + statusByYearSemester.taskStatus.response.progressDescription
                   : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
               return;
             }
@@ -151,13 +160,13 @@ module ums {
             if (resultPublishTask) {
               statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.id;
               statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.label
-                  + '...'+ statusByYearSemester.taskStatus.response.progressDescription;
+                  + '...' + statusByYearSemester.taskStatus.response.progressDescription;
               return;
             }
             else {
               statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
               statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
-                  + '...'+ statusByYearSemester.taskStatus.response.progressDescription;
+                  + '...' + statusByYearSemester.taskStatus.response.progressDescription;
               return;
             }
           }
@@ -185,43 +194,57 @@ module ums {
       }
     }
 
-    private getResultProcessTaskName(programId: string, semesterId: string): string {
-      return `${programId}_${semesterId}${this.PROCESS_GPA_CGPA_PROMOTION}`;
+    private getIntervalId(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `${programId}_${semesterId}` : `${programId}_${semesterId}_${year}_${semester}`;
     }
 
-    private getGradeProcessTaskName(programId: string, semesterId: string): string {
-      return `${programId}_${semesterId}${this.PROCESS_GRADES}`;
+    private getResultProcessTaskName(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `${programId}_${semesterId}${this.PROCESS_GPA_CGPA_PROMOTION}`
+          : `${programId}_${semesterId}_${year}_${semester}${this.PROCESS_GPA_CGPA_PROMOTION}`;
     }
 
-    private getResultPublishTaskName(programId: string, semesterId: string): string {
-      return `${programId}_${semesterId}${this.PUBLISH_RESULT}`;
+    private getGradeProcessTaskName(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `${programId}_${semesterId}${this.PROCESS_GRADES}`
+          : `${programId}_${semesterId}_${year}_${semester}${this.PROCESS_GRADES}`;
+    }
+
+    private getResultPublishTaskName(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `${programId}_${semesterId}${this.PUBLISH_RESULT}`
+          : `${programId}_${semesterId}_${year}_${semester}${this.PUBLISH_RESULT}`;
     }
 
 
-    private getUpdateStatusUri(programId: string, semesterId: string): string {
-      return `academic/processResult/status/program/${programId}/semester/${semesterId}`;
+    private getUpdateStatusUri(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `academic/processResult/status/program/${programId}/semester/${semesterId}`
+          : `academic/processResult/status/program/${programId}/semesterId/${semesterId}/year/${year}/semester/${semester}`;
     }
 
-    private getProcessResultUri(programId: string, semesterId: string): string {
-      return `academic/processResult/program/${programId}/semester/${semesterId}`;
+    private getProcessResultUri(programId: string, semesterId: string, year?: string, semester?: string): string {
+      return !year && !semester ? `academic/processResult/program/${programId}/semester/${semesterId}`
+          : `academic/processResult/program/${programId}/semesterId/${semesterId}/year/${year}/semester/${semester}`;
     }
 
     private getPublishResultUri(programId: string, semesterId: string): string {
       return `academic/publishResult/program/${programId}/semester/${semesterId}`;
     }
 
-    private processResult(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
-      this.httpClient.post(this.getProcessResultUri(programId, semesterId),
+    private processResult(programId: string,
+                          semesterId: string,
+                          statusByYearSemester: ResultProcessStatus,
+                          year?: string,
+                          semester?: string): void {
+      this.httpClient.post(this.getProcessResultUri(programId, semesterId, year, semester),
           {},
           HttpClient.MIME_TYPE_JSON);
-      this.startPolling(programId, semesterId, statusByYearSemester);
+      this.startPolling(programId, semesterId, statusByYearSemester, year, semester);
     }
 
-    private startPolling(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
-      var key: string = `${programId}_${semesterId}`;
+    private startPolling(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus,
+                         year?: string, semester?: string): void {
+      var key: string = this.getIntervalId(programId, semesterId, year, semester);
       if (!this.intervalPromiseMap[key]) {
         this.intervalPromiseMap[key] = this.$interval(()=> {
-          this.getNotification(programId, semesterId, statusByYearSemester);
+          this.getNotification(programId, semesterId, statusByYearSemester, year, semester);
         }, 2000, 0, true);
       }
     }

@@ -28,4 +28,6 @@ public interface LegacyTabulation extends Serializable, EditType<MutableLegacyTa
   Student getStudent();
 
   String getStudentId();
+
+  Double getCompletedCrHr();
 }

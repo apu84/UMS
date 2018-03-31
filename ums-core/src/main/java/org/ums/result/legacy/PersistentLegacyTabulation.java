@@ -23,6 +23,7 @@ public class PersistentLegacyTabulation implements MutableLegacyTabulation {
   private Student mStudent;
   private String mStudentId;
   private String mLastModified;
+  private Double mCompletedCrHr;
 
   @Override
   public Long getId() {
@@ -125,6 +126,16 @@ public class PersistentLegacyTabulation implements MutableLegacyTabulation {
   }
 
   @Override
+  public Double getCompletedCrHr() {
+    return mCompletedCrHr;
+  }
+
+  @Override
+  public void setCompletedCrHr(Double pCrHr) {
+    mCompletedCrHr = pCrHr;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -168,6 +179,7 @@ public class PersistentLegacyTabulation implements MutableLegacyTabulation {
     setStudent(pLegacyTabulation.getStudent());
     setStudentId(pLegacyTabulation.getStudentId());
     setLastModified(pLegacyTabulation.getLastModified());
+    setCompletedCrHr(pLegacyTabulation.getCompletedCrHr());
   }
 
   static {

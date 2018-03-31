@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class LegacyTabulationDao extends LegacyTabulationDaoDecorator {
-  String SELECT_ALL = "SELECT RL, GPA, CGPA, REM, SEMESTER_ID, YEAR, SEMESTER FROM DB_AUST_LEGACY.AUST_TABULATION";
+  String SELECT_ALL = "SELECT RL, GPA, CGPA, REM, SEMESTER_ID, YEAR, SEMESTER, PRESCR FROM DB_AUST_LEGACY.AUST_TABULATION";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -33,6 +33,7 @@ public class LegacyTabulationDao extends LegacyTabulationDaoDecorator {
       legacyTabulation.setGpa(rs.getDouble("GPA"));
       legacyTabulation.setCgpa(rs.getDouble("CGPA"));
       legacyTabulation.setComment(rs.getString("REM"));
+      legacyTabulation.setCompletedCrHr(rs.getDouble("PRESCR"));
       AtomicReference<LegacyTabulation> reference = new AtomicReference<>(legacyTabulation);
       return reference.get();
     }

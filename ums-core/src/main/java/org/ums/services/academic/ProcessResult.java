@@ -4,9 +4,9 @@ import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.response.type.GenericResponse;
 
 public interface ProcessResult {
-  String PROCESS_GRADES = "_process_grades";
+  String PROCESS_GRADES = "process_grades";
   String PROCESS_GRADES_TASK_NAME = "Processing student grades";
-  String PROCESS_GPA_CGPA_PROMOTION = "_process_gpa_cgpa_promotion";
+  String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
   String PROCESS_GPA_CGPA_PROMOTION_TASK_NAME = "Processing student GPA, CGPA and PASS/FAIL status";
   String PUBLISH_RESULT = "_publish_result";
   String PUBLISH_RESULT_TASK_NAME = "Publish result";
@@ -17,7 +17,7 @@ public interface ProcessResult {
 
   void process(final int pProgramId, final int pSemesterId, final int pYear, final int pSemester);
 
-  GenericResponse<TaskStatus> status(int pProgramId, final int pSemesterId);
+  GenericResponse<TaskStatus> status(Object... pKeys);
 
   void publishResult(final int pProgramId, final int pSemesterId);
 }
