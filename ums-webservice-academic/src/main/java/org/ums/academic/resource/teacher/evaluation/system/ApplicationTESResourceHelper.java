@@ -174,6 +174,22 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
+  public JsonObject getComparisonResult(final String pDeptId, final Integer pSemesterId, final Request pRequest,
+      final UriInfo pUriInfo) {
+    List<ApplicationTES> applications = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
+    List<ApplicationTES> parameters=null;
+    for(int i=0;i<applications.size();i++){
+        parameters=getContentManager().getParametersForReport(applications.get(i).getTeacherId(),pSemesterId);
+
+    }
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   public JsonObject getAllSemesterNameList(final Request pRequest, final UriInfo pUriInfo){
         List<ApplicationTES> applications=getContentManager().getAllSemesterNameList();
         JsonObjectBuilder object = Json.createObjectBuilder();
@@ -432,11 +448,17 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
-  public JsonObject getEligibleFacultyMembers(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-        String userId = SecurityUtils.getSubject().getPrincipal().toString();
-        User loggedUser = mUserManager.get(userId);
-        Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
-        String empDeptId=loggedEmployee.getDepartment().getId();
+  public JsonObject getEligibleFacultyMembers(final Integer pSemesterId,final String pDeptId,final Request pRequest, final UriInfo pUriInfo){
+      String empDeptId = null;
+      if(pDeptId.equals("none") || pDeptId.equals(null)){
+          String userId = SecurityUtils.getSubject().getPrincipal().toString();
+          User loggedUser = mUserManager.get(userId);
+          Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+          empDeptId=loggedEmployee.getDepartment().getId();
+      }else{
+          empDeptId=pDeptId;
+      }
+
         // Integer sem= mSemesterManager.getActiveSemester(11).getId();11022017
         List<ApplicationTES> applications=getContentManager().getEligibleFacultyMembers(empDeptId,pSemesterId);
         Integer getTotalRecords=getContentManager().getTotalRecords(empDeptId);

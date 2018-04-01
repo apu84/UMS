@@ -57,7 +57,7 @@ module ums {
                     {id: '22', name: 'Postgraduate'}
                 ],
                 deptShort: [
-                    {id: '', name: 'Select Dept./School'},
+                    {id: '',   name: 'Select Dept./School'},
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},
                     {id: '03', name: 'CE'},
@@ -535,6 +535,27 @@ module ums {
                 courseTypeTES: [
                     {id: 1, name: "Theory"},
                     {id: 2, name: "Lab"}
+                ],deptForTes: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'},
+                    {id: '08', name: 'All'},
+                    {id: '09', name: 'Max of All Dept'},
+                    {id: '10', name: 'Min of All Dept'}
+                ],deptShortName: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'}
                 ],
                 departmentOffice: [
                     {id: '01', name: 'Department of Architecture'},

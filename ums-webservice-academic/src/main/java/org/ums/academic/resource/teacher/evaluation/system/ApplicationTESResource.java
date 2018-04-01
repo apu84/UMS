@@ -70,9 +70,10 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/getEligibleFacultyMembers/semesterId/{semester-id}")
-  public JsonObject getEligibleFacultyMembers(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
-    return mHelper.getEligibleFacultyMembers(pSemesterId, pRequest, mUriInfo);
+  @Path("/getEligibleFacultyMembers/semesterId/{semester-id}/deptId/{dept-id}")
+  public JsonObject getEligibleFacultyMembers(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId,
+      @PathParam("dept-id") String pDeptId) {
+    return mHelper.getEligibleFacultyMembers(pSemesterId, pDeptId, pRequest, mUriInfo);
   }
 
   @GET
@@ -80,6 +81,13 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   public JsonObject getAssignedCoursesForReview(@Context Request pRequest, @PathParam("teacher-id") String pTeacherId,
       @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getAssignedReviewableCoursesList(pTeacherId, pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getComparisionResult/deptId/{dept-id}/semesterId/{semester-id}")
+  public JsonObject getAssignedCou(@Context Request pRequest, @PathParam("dept-id") String pDeptId,
+      @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getComparisonResult(pDeptId, pSemesterId, pRequest, mUriInfo);
   }
 
   // getStudentSubmitDeadLine

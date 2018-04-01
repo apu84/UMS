@@ -199,6 +199,7 @@ module ums{
         }
         private teacherChanged(val:any){
             console.log("Name: "+val.firstName+"\nId: "+val.teacherId);
+            this.checkEvaluationResult=true;
             this.selectedTeacherId=val.teacherId;
             this.assignedCoursesForReview=[];
 
@@ -228,11 +229,12 @@ module ums{
    }
 
         private getEligibleFacultyMembers(){
+            let staticDeptId='none';
             this.facultyListResultEvaluation=[];
             this.selectedTeacherId=null;
             var appTES:Array<IFacultyList>=[];
             var defer = this.$q.defer();
-            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getEligibleFacultyMembers/semesterId/'+this.selectedSemesterId, 'application/json',
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getEligibleFacultyMembers/semesterId/'+this.selectedSemesterId+'/deptId/'+staticDeptId, 'application/json',
                 (json: any, etag: string) => {
                     appTES=json.entries;
                     console.log("Eligible Faculty Members!!!!");

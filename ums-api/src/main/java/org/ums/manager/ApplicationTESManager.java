@@ -1,6 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.immutable.ApplicationTES;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
 
   Integer getObservationType(final Integer pQuestionId);
+
+  List<ApplicationTES> getFacultyListForReport(final String pDeptId, final Integer pSemesterId);
+
+  List<ApplicationTES> getParametersForReport(final String pTeacherId, final Integer pSemesterId);
 
   String getQuestionDetails(final Integer pQuestionId);
 

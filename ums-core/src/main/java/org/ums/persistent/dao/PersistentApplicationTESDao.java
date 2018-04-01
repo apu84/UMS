@@ -125,10 +125,39 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getSemesterParameter =
       "SELECT SEMESTER_ID,to_char(START_DATE,'DD-MM-YYYY') START_DATE,to_char(END_DATE,'DD-MM-YYYY') END_DATE from MST_PARAMETER_SETTING WHERE SEMESTER_ID=? and PARAMETER_ID=?";
 
+  String getFacultyListForReport =
+      "select DISTINCT COURSE_ID,TEACHER_ID from TES_COURSE_ASSIGN WHERE  DEPT_ID=? AND SEMESTER_ID=?";
+
+  String getAllFacultyListForReport = "select DISTINCT COURSE_ID,TEACHER_ID from TES_COURSE_ASSIGN WHERE SEMESTER_ID=?";
+
+  String getParameterForReport =
+      "SELECT DISTINCT COURSE_ID,TEACHER_ID,SEMESTER_ID,DEPT_ID from TES_COURSE_ASSIGN WHERE  TEACHER_ID=? AND SEMESTER_ID=?";
+
+  @Override
+  public List<ApplicationTES> getParametersForReport(String pTeacherId, Integer pSemesterId) {
+    String query = getParameterForReport;
+    return mJdbcTemplate.query(query, new Object[] {pTeacherId, pSemesterId},
+        new ApplicationTESRowMapperForReportParameter());
+  }
+
+  @Override
+  public List<ApplicationTES> getFacultyListForReport(String pDeptId, Integer pSemesterId) {
+    String query = "";
+    if(pDeptId.equals("08") || pDeptId.equals("09") || pDeptId.equals("10")) {
+      query = getAllFacultyListForReport;
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new ApplicationTESRowMapperForFacultyListReport());
+    }
+    else {
+      query = getFacultyListForReport;
+      return mJdbcTemplate.query(query, new Object[] {pDeptId, pSemesterId},
+          new ApplicationTESRowMapperForFacultyListReport());
+    }
+  }
+
   @Override
   public List<ApplicationTES> getDeadlines(String pParameterId, Integer pSemesterId) {
     String query = getSemesterParameter;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pParameterId,},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pParameterId},
         new ApplicationTESRowMapperForSemesterParameter());
   }
 
@@ -354,6 +383,26 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setSemesterStartDate(pResultSet.getString("START_DATE"));
       application.setSemesterEndDate(pResultSet.getString("END_DATE"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForFacultyListReport implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setTeacherId(pResultSet.getString("TEACHER_ID"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForReportParameter implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setTeacherId(pResultSet.getString("TEACHER_ID"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setDeptId(pResultSet.getString("DEPT_ID"));
       return application;
     }
   }

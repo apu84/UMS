@@ -1,0 +1,113 @@
+<div>
+    <style>
+
+        thead {
+            background-color: #efefef;
+        }
+
+        .grid {
+            width: 750px;
+            height: 500px;
+        }
+
+        tbody {
+            overflow-y: scroll;
+            height: 450px;
+        }
+
+        #header-fixed {
+            position: fixed;
+            top: 15px;
+        }
+
+        .sample-show-hide {
+            transition: all linear 0.5s;
+        }
+
+        .sample-show-hide.ng-hide {
+            opacity: 0;
+        }
+
+    </style>
+
+    <div class="row">
+        <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+            <i class="fa fa-angle-double-right fa-cx"></i></i>
+        </div>
+        <div class="panel panel-green" id="leftDiv">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select Parameters </h3>
+            </div>
+            <div class="panel-body pan">
+                <form class="form-horizontal">
+                    <div class="form-body pal">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Department</label>
+                            <div class="col-md-8">
+                                <select
+                                        class="form-control required"
+                                        name="leaveType"
+                                        id="leaveTypejj"
+                                        data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                        data-ng-model="vm.deptName"
+                                        data-ng-change="vm.deptChanged(vm.deptName)"
+                                ></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Semester</label>
+                            <div class="col-md-8">
+                                <select
+                                        class="form-control required"
+                                        name="leaveType"
+                                        id="leaveType"
+                                        data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                        data-ng-model="vm.semester"
+                                        data-ng-change="vm.semesterChanged(vm.semester)"
+                                ></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions text-right pal">
+
+                        <button type="button" class="btn btn-success" data-ng-click="vm.getComparisionResult()">
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="rightDiv">
+            <div class="panel">
+                <div class="panel-heading" align="center">Evaluation Report<br>
+                    Ahsanullah University of Science and Technology<span
+                        class="subtitle"></span></div>
+                <div class="panel-body shadowPanel" style="min-height: 200px;">
+                    <div class="row" style="padding: 10px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <th style="background-color: #FAFAFA;width: 10px ">SL</th>
+                            <th style="background-color: #FAFAFA; ">Teacher Name</th>
+                            <th style="background-color: #FAFAFA; ">Department</th>
+                            <th style="background-color: #FAFAFA; ">Course No</th>
+                            <th style="background-color: #FAFAFA; ">Course Title</th>
+                            <th style="background-color: #FAFAFA; ">Score</th>
+                            <th style="background-color: #FAFAFA; ">Reviewer</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in vm.assignedCoursesForReview">
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

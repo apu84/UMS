@@ -957,7 +957,43 @@ module ums {
                     });
                 }]
             }
-        }).state('tes', {
+        }).state('teacherEvaluationSystem', {
+        url: "/teacherEvaluationSystem",
+        controller: 'AdminVcTes',
+        controllerAs: 'vm',
+        templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    files: [
+                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                        'vendors/bootstrap-datepicker/css/datepicker.css',
+                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                    ]
+                });
+            }]
+        }
+    }).state('tesComparison', {
+        url: "/tesComparison",
+        controller: 'AdminVcTesComparison',
+        controllerAs: 'vm',
+        templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    files: [
+                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                        'vendors/bootstrap-datepicker/css/datepicker.css',
+                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                    ]
+                });
+            }]
+        }
+    }).state('tes', {
         url: "/tes",
         controller: 'HeadTES',
         controllerAs: 'vm',

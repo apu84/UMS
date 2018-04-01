@@ -91,7 +91,7 @@ public class TesGeneratorImp implements TesGenerator {
     document.add(paragraph);
   //  String name=mEmployeeManagerManager.get(pTeacherId).getDepartment();
     //
-    chunk = new Chunk("Session: "+mSemesterManager.get(semesterId).getName()+"\n"+"Course Title: "+mCourseManager.get(courseId).getTitle()+" ("+mCourseManager.get(pCourseId).getNo()+")\n"+
+    chunk = new Chunk("Semester: "+mSemesterManager.get(semesterId).getName()+"\n"+"Course Title: "+mCourseManager.get(courseId).getTitle()+" ("+mCourseManager.get(pCourseId).getNo()+")\n"+
     "Teacher Name: "+mPersonalInformationManager.get(teacherId).getFullName()+"\n"+
     "Department: "+mEmployeeManager.get(teacherId).getDepartment().getLongName());
 

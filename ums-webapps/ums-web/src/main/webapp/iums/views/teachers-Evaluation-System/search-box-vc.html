@@ -26,6 +26,14 @@
     .sample-show-hide.ng-hide {
         opacity: 0;
     }
+    .score {
+        color: deeppink;
+    }
+    .selected {
+        background-color:#FAFAFA;
+        color:deeppink;
+        font-weight:bold;
+    }
 
 </style>
 
@@ -40,6 +48,19 @@
         <div class="panel-body pan">
             <form class="form-horizontal">
                 <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Department</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType"
+                                    id="leaveTypejj"
+                                    data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                    data-ng-model="vm.deptName"
+                                    data-ng-change="vm.deptChanged(vm.deptName)"
+                            ></select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
@@ -68,9 +89,7 @@
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-info" data-ng-click="vm.getBackToMainView()">
-                        Back
-                    </button>
+
                     <button type="button" class="btn btn-success" data-ng-click="vm.getAssignedCoursesForReview()">
                         Search
                     </button>
@@ -83,7 +102,7 @@
         <div class="panel">
             <div class="panel-heading">Evaluation Eligible Course List</b><span
                     class="subtitle"></span></div>
-            <div class="panel-body shadowPanel" style="min-height: 205px;">
+            <div class="panel-body shadowPanel" style="min-height: 253px;">
                 <div class="row" style="padding: 10px;">
                     <table class="table table-bordered">
                         <thead>
