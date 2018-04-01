@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.enums.accounts.general.ledger.reports.BalanceSheetFetchType;
-import org.ums.enums.accounts.general.ledger.reports.FetchType;
 import org.ums.report.balance.sheet.BalanceSheetReportGenerator;
-import org.ums.report.general.ledger.GeneralLedgerReportGenerator;
 import org.ums.util.UmsUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +18,7 @@ import java.io.OutputStream;
  * Created by Monjur-E-Morshed on 31-Mar-18.
  */
 @Component
-@Path("/account/report/balance-sheet-report")
+@Path("/account/report/balance-sheet")
 public class BalanceSheetReportResource {
 
   private static final Logger mLogger = org.slf4j.LoggerFactory.getLogger(BalanceSheetReportGenerator.class);
@@ -32,8 +30,8 @@ public class BalanceSheetReportResource {
   @Produces("application/pdf")
   @Path("/asOnDate/{as-on-date}/fetchType/{fetch-type}/debtorLedgerFetchType/{debtor-ledger-fetch-type}")
   public StreamingOutput createReport(final @Context HttpServletResponse pHttpServletResponse,
-      @PathParam("as-on-date") String pAsOnDate, @PathParam("fetchType") String pFetchType,
-      @PathParam("debtorLedgerFetchType") String pDebtorLedgerFetchType) throws Exception {
+                                      @PathParam("as-on-date") String pAsOnDate, @PathParam("fetch-type") String pFetchType,
+                                      @PathParam("debtor-ledger-fetch-type") String pDebtorLedgerFetchType) throws Exception {
     mLogger.info("Should print balance sheet report");
     return new StreamingOutput() {
       @Override

@@ -1,8 +1,6 @@
 package org.ums.util;
 
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 
 /**
@@ -31,6 +29,10 @@ public class ReportUtils {
    */
   public static final String LR3S = "LR3S";
   public static final String LR1S = "LR1S";
+
+  Font mLiteFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+  Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+  Font mSmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 3f);
 
   public static Chunk getChunk(String content, Font font, String chunkType) {
     Chunk chunk = null;
@@ -69,4 +71,11 @@ public class ReportUtils {
     }
     return cell;
   }
+
+  public static PdfPCell getCell(Phrase pPhrase, Integer pAlignment) throws Exception {
+    Paragraph paragraph = new Paragraph(pPhrase);
+    paragraph.setAlignment(pAlignment);
+    return new PdfPCell(paragraph);
+  }
+
 }

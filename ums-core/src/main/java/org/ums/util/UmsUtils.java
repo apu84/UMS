@@ -148,6 +148,20 @@ public class UmsUtils {
     return a.length == 0 ? "" : a[0] + (a.length == 1 ? "" : s + join(s, Arrays.copyOfRange(a, 1, a.length)));
   }
 
+  public static Date incrementDate(Date pDate, int incrementDateNumber) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(pDate);
+    calendar.add(Calendar.DATE, incrementDateNumber);
+    return calendar.getTime();
+  }
+
+  public static Date decrementDate(Date pDate, int decrementDate) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(pDate);
+    calendar.add(Calendar.DATE, -decrementDate);
+    return calendar.getTime();
+  }
+
   public static String getWhereClause(String pFilter) {
     String where = "";
     try {
