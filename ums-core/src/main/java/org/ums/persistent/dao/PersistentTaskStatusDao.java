@@ -72,7 +72,7 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
         taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? "" : rs
             .getString("PROGRESS_DESC"));
         taskStatus.setTaskCompletionDate(rs.getObject("TASK_COMPLETION_DATE") == null ? null : rs
-            .getDate("TASK_COMPLETION_DATE"));
+            .getTimestamp("TASK_COMPLETION_DATE"));
         taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));
         AtomicReference<TaskStatus> atomicReference = new AtomicReference<>(taskStatus);
         return atomicReference.get();

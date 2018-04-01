@@ -231,8 +231,21 @@ public class CoreContext {
   }
 
   @Bean
-  DateFormat getGenericDateFormat() {
+  @Qualifier("genericDateFormat")
+  DateFormat genericDateFormat() {
     return new DateFormat(Constants.DATE_FORMAT);
+  }
+
+  @Bean
+  @Qualifier("genericDateFormat24")
+  DateFormat genericDateTimeFormat24() {
+    return new DateFormat(Constants.DATE_TIME_24H_FORMAT);
+  }
+
+  @Bean
+  @Qualifier("genericDateFormat12")
+  DateFormat genericDateTimeFormat12() {
+    return new DateFormat(Constants.DATE_TIME_12H_FORMAT);
   }
 
   @Bean

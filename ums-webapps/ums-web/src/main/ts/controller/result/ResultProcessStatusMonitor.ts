@@ -7,6 +7,7 @@ module ums {
     taskName: string,
     progressDescription: string,
     taskCompletionDate: string
+    taskCompletionDateString: string;
   }
 
   interface TaskStatusResponse {
@@ -141,7 +142,7 @@ module ums {
             if (resultPublishTask) {
               statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED.id;
               statusByYearSemester.statusText
-                  = `${this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
+                  = `${this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED.label} ${statusByYearSemester.taskStatus.response.taskCompletionDateString}`;
               return;
             }
             else {
@@ -151,7 +152,7 @@ module ums {
                   : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
               statusByYearSemester.statusText = gradeProcessTask
                   ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label + '...' + statusByYearSemester.taskStatus.response.progressDescription
-                  : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
+                  : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusByYearSemester.taskStatus.response.taskCompletionDateString}`;
               return;
             }
           }

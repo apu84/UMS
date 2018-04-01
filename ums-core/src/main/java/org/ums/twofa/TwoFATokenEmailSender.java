@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -24,6 +25,7 @@ import org.ums.util.Constants;
 public class TwoFATokenEmailSender {
 
   @Autowired
+  @Qualifier("genericDateFormat12")
   DateFormat mDateFormat;
   @Autowired
   private JavaMailSender mailSender;
@@ -44,7 +46,7 @@ public class TwoFATokenEmailSender {
           message.setFrom(new InternetAddress(fromEmail, "IUMS"));
           message.setSubject(subject);
 
-          OtpEmailDto model = new OtpEmailDto(otp, Constants.DATE_TIME_12H_FORMAT.format(expireDate));
+          OtpEmailDto model = new OtpEmailDto(otp, mDateFormat.format(expireDate));
           Map<String, Object> map = new HashMap<>();
           map.put("others", model);
 

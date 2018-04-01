@@ -18,6 +18,8 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
 
   Date getTaskCompletionDate();
 
+  String getTaskCompletionDateString();
+
   enum Status {
     INPROGRESS(1, "Inprogress"),
     COMPLETED(2, "Completed"),

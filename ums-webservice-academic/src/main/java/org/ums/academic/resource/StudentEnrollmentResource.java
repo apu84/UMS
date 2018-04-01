@@ -1,6 +1,7 @@
 package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.builder.EnrollmentFromToBuilder;
@@ -38,6 +39,7 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   EnrollmentFromToBuilder mBuilder;
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @GET

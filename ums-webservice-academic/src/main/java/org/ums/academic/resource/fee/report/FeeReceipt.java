@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.fee.accounts.PaymentAccountsMapping;
 import org.ums.fee.accounts.PaymentAccountsMappingManager;
@@ -26,6 +27,7 @@ public class FeeReceipt {
   @Autowired
   private PaymentAccountsMappingManager mPaymentAccountsMappingManager;
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   private Font universityNameFont, infoFont, tableFont, underLineFont;

@@ -5,6 +5,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -15,6 +16,7 @@ import org.ums.formatter.DateFormat;
 @Component
 public class MarksSubmissionStatusBuilder implements Builder<MarksSubmissionStatus, MutableMarksSubmissionStatus> {
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Override

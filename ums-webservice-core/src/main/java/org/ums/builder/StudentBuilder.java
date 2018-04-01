@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 @Qualifier("StudentBuilder")
 public class StudentBuilder implements Builder<Student, MutableStudent> {
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
   @Autowired
   @Qualifier("fileContentManager")

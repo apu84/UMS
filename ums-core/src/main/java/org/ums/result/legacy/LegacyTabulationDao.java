@@ -9,7 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class LegacyTabulationDao extends LegacyTabulationDaoDecorator {
-  String SELECT_ALL = "SELECT RL, GPA, CGPA, REM, SEMESTER_ID, YEAR, SEMESTER, PRESCR FROM DB_AUST_LEGACY.AUST_TABULATION";
+  String SELECT_ALL =
+      "SELECT RL, GPA, CGPA, REM, SEMESTER_ID, YEAR, SEMESTER, PRESCR FROM DB_AUST_LEGACY.AUST_TABULATION";
 
   private JdbcTemplate mJdbcTemplate;
 

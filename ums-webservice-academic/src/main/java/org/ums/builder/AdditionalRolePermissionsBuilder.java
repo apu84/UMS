@@ -2,6 +2,7 @@ package org.ums.builder;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
@@ -23,6 +24,7 @@ public class AdditionalRolePermissionsBuilder implements
   @Autowired
   NavigationManager mNavigationManager;
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Override

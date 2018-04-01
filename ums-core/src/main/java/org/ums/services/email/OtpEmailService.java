@@ -28,6 +28,7 @@ public class OtpEmailService {
   @Autowired
   private VelocityEngine velocityEngine;
   @Autowired
+  @Qualifier("genericDateFormat12")
   DateFormat mDateFormat;
 
   @Async
@@ -41,7 +42,7 @@ public class OtpEmailService {
           message.setFrom(new InternetAddress(fromEmail, "IUMS"));
           message.setSubject(subject);
 
-          OtpEmailDto model = new OtpEmailDto(otp, Constants.DATE_TIME_12H_FORMAT.format(new Date()));
+          OtpEmailDto model = new OtpEmailDto(otp, mDateFormat.format(new Date()));
           Map<String, Object> map = new HashMap<>();
           map.put("others", model);
 

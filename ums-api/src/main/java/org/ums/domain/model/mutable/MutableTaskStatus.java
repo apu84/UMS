@@ -12,4 +12,6 @@ public interface MutableTaskStatus extends TaskStatus, Editable<String>, Mutable
   void setProgressDescription(String pProgressDescription);
 
   void setTaskCompletionDate(Date pDate);
+
+  void setTaskCompletionDateString(String pCompleteDateString);
 }

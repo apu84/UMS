@@ -5,6 +5,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
@@ -16,6 +17,7 @@ import org.ums.formatter.DateFormat;
 @Component("PaymentStatusBuilder")
 public class PaymentStatusBuilder implements Builder<PaymentStatus, MutablePaymentStatus> {
   @Autowired
+  @Qualifier("genericDateFormat")
   protected DateFormat mDateFormat;
 
   @Override

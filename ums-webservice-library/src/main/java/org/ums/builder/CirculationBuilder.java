@@ -1,6 +1,7 @@
 package org.ums.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.library.Circulation;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class CirculationBuilder implements Builder<Circulation, MutableCirculation> {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Autowired

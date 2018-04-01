@@ -2,10 +2,10 @@
 <a href=""
    data-ng-click="vm.processResult(vm.programId, vm.semesterId, vm.statusByYearSemester,vm.year,vm.semester)"
    data-ng-if="vm.year && vm.semester">
-    <i class="fa fas fa-cog" aria-hidden="true" style="color: blue" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id"></i>
-    <i class="fa fas fa-cog" aria-hidden="true" style="color: red" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.UNPROCESSED.id"></i>
-    <i class="fa fas fa-cog" aria-hidden="true" style="color: green" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.PROCESSED_ON.id"></i>
-    <i class="fa fas fa-cog" aria-hidden="true" style="color: black" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.IN_PROGRESS.id"></i>
+    <i title="Process Result" class="fa fas fa-cog" aria-hidden="true" style="color: blue" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id"></i>
+    <i title="Result unprocessed" class="fa fas fa-cog" aria-hidden="true" style="color: red" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.UNPROCESSED.id"></i>
+    <i title="Result processed" class="fa fas fa-cog" aria-hidden="true" style="color: green" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.PROCESSED_ON.id"></i>
+    <i title="Result process in progress" class="fa fas fa-cog" aria-hidden="true" style="color: black" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.IN_PROGRESS.id"></i>
     <i class="fa fa-spinner fa-spin" data-ng-if="vm.year == vm.statusByYearSemester.taskStatus.year && vm.semester == vm.statusByYearSemester.taskStatus.semester && vm.statusByYearSemester.status == vm.resultProcessStatusConst.IN_PROGRESS.id"></i>
 </a>
 <div style="width: 42px;position: absolute;top: 0px;right: 0px;"  data-ng-if="!vm.year && !vm.semester">

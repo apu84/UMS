@@ -1,6 +1,7 @@
 package org.ums.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.manager.DepartmentManager;
@@ -23,6 +24,7 @@ public class UserViewBuilder implements Builder<UserView, MutableUserView> {
   DesignationManager mDesignationManager;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Override

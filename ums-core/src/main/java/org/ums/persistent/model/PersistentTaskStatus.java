@@ -1,19 +1,22 @@
 package org.ums.persistent.model;
 
+import java.util.Date;
+
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.mutable.MutableTaskStatus;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.TaskStatusManager;
-
-import java.util.Date;
 
 public class PersistentTaskStatus implements MutableTaskStatus {
   private static TaskStatusManager sTaskStatusManager;
+  private static DateFormat sDateFormat;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sTaskStatusManager = applicationContext.getBean("taskStatusManager", TaskStatusManager.class);
+    sDateFormat = applicationContext.getBean("genericDateTimeFormat12", DateFormat.class);
   }
 
   private String mId;
@@ -98,5 +101,13 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   @Override
   public Date getTaskCompletionDate() {
     return mTaskCompletionDate;
+  }
+
+  @Override
+  public void setTaskCompletionDateString(String pCompleteDateString) {}
+
+  @Override
+  public String getTaskCompletionDateString() {
+    return sDateFormat.format(mTaskCompletionDate);
   }
 }

@@ -30,6 +30,7 @@ public class NewIUMSAccountInfoEmailService {
   private VelocityEngine velocityEngine;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Autowired

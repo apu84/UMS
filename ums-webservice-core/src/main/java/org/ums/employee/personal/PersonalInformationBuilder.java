@@ -1,6 +1,7 @@
 package org.ums.employee.personal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.builder.NationalityBuilder;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 public class PersonalInformationBuilder implements Builder<PersonalInformation, MutablePersonalInformation> {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Autowired

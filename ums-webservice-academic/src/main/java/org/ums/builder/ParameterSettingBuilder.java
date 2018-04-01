@@ -3,6 +3,7 @@ package org.ums.builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ParameterSetting;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ParameterSettingBuilder implements Builder<ParameterSetting, MutableParameterSetting> {
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   Logger mLogger = LoggerFactory.getLogger(ParameterSettingBuilder.class);

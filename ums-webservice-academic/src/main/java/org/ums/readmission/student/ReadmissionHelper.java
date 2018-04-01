@@ -10,6 +10,7 @@ import javax.json.*;
 
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.*;
 import org.ums.enums.CourseType;
@@ -38,6 +39,7 @@ public class ReadmissionHelper {
   @Autowired
   private UGRegistrationResultManager mUgRegistrationResultManager;
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
   @Autowired
   private ParameterSettingManager mParameterSettingManager;

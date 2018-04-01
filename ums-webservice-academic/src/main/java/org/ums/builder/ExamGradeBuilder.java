@@ -1,6 +1,7 @@
 package org.ums.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
@@ -29,6 +30,7 @@ import java.util.*;
 public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Override
