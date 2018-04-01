@@ -1,105 +1,48 @@
 {
   "model": {
-    "name": "CreditorLedger",
-    "package": "org.ums.domain.model.immutable",
+    "name": "BranchUser",
+    "package": "org.ums.bank",
     "fields": [
       {
         "id": {
-          "type": "Long",
+          "type": "String",
           "idType": true
         }
       },
       {
-        "Company": {
+        "branch": {
           "type": "Ref",
           "reference": {
-            "name": "Company",
-            "package": "org.ums.domain.model.immutable",
+            "name": "Branch",
+            "package": "org.ums.bank",
             "id": {
               "type": "String"
             },
             "manager": {
-              "name": "CompanyManager",
-              "package": "org.ums.manager"
+              "name": "BranchManager",
+              "package": "org.ums.bank"
             }
           }
         }
       },
       {
-        "divisionCode": "String"
+        "name": "String"
       },
       {
-        "supplierCode": "String"
-      },
-      {
-        "AccountTransaction": {
+        "designation": {
           "type": "Ref",
           "reference": {
-            "name": "AccountTransaction",
-            "package": "org.ums.domain.model.immutable",
+            "name": "BankDesignation",
+            "package": "org.ums.bank",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "AccountTransactionManager",
-              "package": "org.ums.manager"
+              "name": "BankDesignationManager",
+              "package": "org.ums.bank"
             }
           }
         }
-      },
-      {
-        "voucherNo": "String"
-      },
-      {
-        "voucherDate": "Date"
-      },
-      {
-        "serialNo": "Integer"
-      },
-      {
-        "billNo": "String"
-      },
-      {
-        "billDate": "Date"
-      },
-      {
-        "amount": "BigDecimal"
-      },
-      {
-        "paidAmount": "BigDecimal"
-      },
-      {
-        "dueDate": "Date"
-      },
-      {
-        "balanceType": "BalanceType"
-      },
-      {
-        "billClosingFlag": "String"
-      },
-      {
-        "currencyCode": "String"
-      },
-      {
-        "vatNo": "String"
-      },
-      {
-        "contCode": "String"
-      },
-      {
-        "orderNo": "String"
-      },
-      {
-        "statFlag": "String"
-      },
-      {
-        "statUpFlag": "String"
-      },
-      {
-        "modificationDate": "Date"
-      },
-      {
-        "modifiedBy": "String"
       }
     ]
   }
