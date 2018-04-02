@@ -60,8 +60,7 @@ public class PersistentBank implements MutableBank {
     sBankManager.delete(this);
   }
 
-  public PersistentBank() {
-  }
+  public PersistentBank() {}
 
   public PersistentBank(MutableBank pBank) {
     setId(pBank.getId());
@@ -70,9 +69,7 @@ public class PersistentBank implements MutableBank {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sBankManager = applicationContext.getBean("bankManager",
-        BankManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sBankManager = applicationContext.getBean("bankManager", BankManager.class);
   }
 }

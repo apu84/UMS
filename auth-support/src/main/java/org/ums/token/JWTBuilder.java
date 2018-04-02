@@ -24,7 +24,7 @@ public class JWTBuilder implements TokenBuilder {
   @Override
   public Token accessToken(String pUserId, long pExpiration) {
     Calendar accessTokenExpiration = Calendar.getInstance();
-    accessTokenExpiration.add(Calendar.MINUTE, (int)pExpiration);
+    accessTokenExpiration.add(Calendar.MINUTE, (int) pExpiration);
     return new TokenImpl(Jwts.builder().setSubject(pUserId).setExpiration(accessTokenExpiration.getTime())
         .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), (pExpiration * 60) - 60);
   }
@@ -32,7 +32,7 @@ public class JWTBuilder implements TokenBuilder {
   @Override
   public Token refreshToken(String pUserId, long pExpiration) {
     Calendar refreshTokenExpiration = Calendar.getInstance();
-    refreshTokenExpiration.add(Calendar.HOUR, (int)pExpiration);
+    refreshTokenExpiration.add(Calendar.HOUR, (int) pExpiration);
     return new TokenImpl(Jwts.builder().setSubject(pUserId).setExpiration(refreshTokenExpiration.getTime())
         .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), pExpiration * 60 * 60);
   }

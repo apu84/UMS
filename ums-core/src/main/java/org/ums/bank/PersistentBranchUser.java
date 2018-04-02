@@ -35,8 +35,7 @@ public class PersistentBranchUser implements MutableBranchUser {
 
   @Override
   public Branch getBranch() {
-    return mBranch == null ? sBranchManager.get(mBranchId) : sBranchManager
-        .validate(mBranch);
+    return mBranch == null ? sBranchManager.get(mBranchId) : sBranchManager.validate(mBranch);
   }
 
   @Override
@@ -66,8 +65,7 @@ public class PersistentBranchUser implements MutableBranchUser {
 
   @Override
   public BankDesignation getBankDesignation() {
-    return mBankDesignation == null ? sBankDesignationManager
-        .get(mBankDesignationId) : sBankDesignationManager
+    return mBankDesignation == null ? sBankDesignationManager.get(mBankDesignationId) : sBankDesignationManager
         .validate(mBankDesignation);
   }
 
@@ -116,8 +114,7 @@ public class PersistentBranchUser implements MutableBranchUser {
     sBranchUserManager.delete(this);
   }
 
-  public PersistentBranchUser() {
-  }
+  public PersistentBranchUser() {}
 
   public PersistentBranchUser(MutableBranchUser pBranchUser) {
     setId(pBranchUser.getId());
@@ -130,13 +127,9 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sBranchManager = applicationContext.getBean("branchManager",
-        BranchManager.class);
-    sBankDesignationManager = applicationContext.getBean(
-        "bankDesignationManager", BankDesignationManager.class);
-    sBranchUserManager = applicationContext.getBean("branchUserManager",
-        BranchUserManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sBranchManager = applicationContext.getBean("branchManager", BranchManager.class);
+    sBankDesignationManager = applicationContext.getBean("bankDesignationManager", BankDesignationManager.class);
+    sBranchUserManager = applicationContext.getBean("branchUserManager", BranchUserManager.class);
   }
 }

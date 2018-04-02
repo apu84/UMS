@@ -191,7 +191,7 @@ public class BalanceSheetReportGenerator {
   }
 
   private void generateInitialHeaderInfo(Date pDate, Document pDocument) throws DocumentException {
-    float[] columnSize = new float[]{1, 6, 2};
+    float[] columnSize = new float[] {1, 6, 2};
     PdfPTable table = new PdfPTable(columnSize);
     PdfPCell cell = new PdfPCell(new Paragraph(""));
     cell.setBorder(Rectangle.NO_BORDER);

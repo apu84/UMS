@@ -30,8 +30,8 @@ public class BalanceSheetReportResource {
   @Produces("application/pdf")
   @Path("/asOnDate/{as-on-date}/fetchType/{fetch-type}/debtorLedgerFetchType/{debtor-ledger-fetch-type}")
   public StreamingOutput createReport(final @Context HttpServletResponse pHttpServletResponse,
-                                      @PathParam("as-on-date") String pAsOnDate, @PathParam("fetch-type") String pFetchType,
-                                      @PathParam("debtor-ledger-fetch-type") String pDebtorLedgerFetchType) throws Exception {
+      @PathParam("as-on-date") String pAsOnDate, @PathParam("fetch-type") String pFetchType,
+      @PathParam("debtor-ledger-fetch-type") String pDebtorLedgerFetchType) throws Exception {
     mLogger.info("Should print balance sheet report");
     return new StreamingOutput() {
       @Override
