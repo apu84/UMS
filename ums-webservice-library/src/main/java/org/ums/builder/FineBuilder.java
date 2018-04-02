@@ -21,7 +21,7 @@ import org.ums.usermanagement.user.UserManager;
 
 @Component
 public class FineBuilder implements Builder<Fine, MutableFine> {
-  @Autowired
+
   private DateFormat mDateFormat;
 
   @Autowired

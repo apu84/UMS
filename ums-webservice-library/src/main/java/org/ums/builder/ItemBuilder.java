@@ -104,7 +104,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setCirculationStatus(pJsonObject.containsKey("circulationStatus") ? pJsonObject
         .getInt("circulationStatus") : 0);
 
-    pMutable.setCurrencyId(pJsonObject.get("currency").getValueType() ==  JsonValue.ValueType.NUMBER ? pJsonObject.getInt("currency") : Long.parseLong(pJsonObject.getString("currency")));
+    pMutable.setCurrencyId(pJsonObject.get("currency").getValueType() == JsonValue.ValueType.NUMBER ? pJsonObject
+        .getInt("currency") : Long.parseLong(pJsonObject.getString("currency")));
   }
 
 }
