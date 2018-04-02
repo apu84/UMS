@@ -6,12 +6,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 
-public interface BranchUser
-    extends
-    Serializable,
-    EditType<MutableBranchUser>,
-    LastModifier,
-    Identifier<String> {
+public interface BranchUser extends Serializable, EditType<MutableBranchUser>, LastModifier, Identifier<String> {
 
   Branch getBranch();
 

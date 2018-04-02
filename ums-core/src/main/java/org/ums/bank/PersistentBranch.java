@@ -26,8 +26,7 @@ public class PersistentBranch implements MutableBranch {
 
   @Override
   public Bank getBank() {
-    return mBank == null ? sBankManager.get(mBankId) : sBankManager
-        .validate(mBank);
+    return mBank == null ? sBankManager.get(mBankId) : sBankManager.validate(mBank);
   }
 
   @Override
@@ -95,8 +94,7 @@ public class PersistentBranch implements MutableBranch {
     sBranchManager.delete(this);
   }
 
-  public PersistentBranch() {
-  }
+  public PersistentBranch() {}
 
   public PersistentBranch(MutableBranch pBranch) {
     setId(pBranch.getId());
@@ -108,11 +106,8 @@ public class PersistentBranch implements MutableBranch {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sBankManager = applicationContext.getBean("bankManager",
-        BankManager.class);
-    sBranchManager = applicationContext.getBean("branchManager",
-        BranchManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sBankManager = applicationContext.getBean("bankManager", BankManager.class);
+    sBranchManager = applicationContext.getBean("branchManager", BranchManager.class);
   }
 }

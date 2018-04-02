@@ -30,9 +30,10 @@ public class ReportUtils {
   public static final String LR3S = "LR3S";
   public static final String LR1S = "LR1S";
 
-  Font mLiteFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
-  Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
-  Font mSmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 3f);
+  public static Font mLiteFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+  public static Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+  public static Font mSmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 3f);
+  public static Font mBigBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 14f, Font.BOLD, BaseColor.BLACK);
 
   public static Chunk getChunk(String content, Font font, String chunkType) {
     Chunk chunk = null;

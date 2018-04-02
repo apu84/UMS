@@ -60,8 +60,7 @@ public class PersistentBankDesignation implements MutableBankDesignation {
     sBankDesignationManager.delete(this);
   }
 
-  public PersistentBankDesignation() {
-  }
+  public PersistentBankDesignation() {}
 
   public PersistentBankDesignation(MutableBankDesignation pBankDesignation) {
     setId(pBankDesignation.getId());
@@ -70,9 +69,7 @@ public class PersistentBankDesignation implements MutableBankDesignation {
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sBankDesignationManager = applicationContext.getBean(
-        "bankDesignationManager", BankDesignationManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sBankDesignationManager = applicationContext.getBean("bankDesignationManager", BankDesignationManager.class);
   }
 }

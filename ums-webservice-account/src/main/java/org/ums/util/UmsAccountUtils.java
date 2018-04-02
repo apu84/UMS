@@ -21,7 +21,13 @@ public class UmsAccountUtils {
   }
 
   public static String getFormattedBalance(BigDecimal pBalance) {
-    return NumberFormat.getCurrencyInstance().format(pBalance).substring(1);
+    String formattedCurrency = NumberFormat.getCurrencyInstance().format(pBalance);
+    if(formattedCurrency.contains("(") || formattedCurrency.contains(")")) {
+      formattedCurrency = formattedCurrency.replace("(", "");
+      formattedCurrency = formattedCurrency.replace(")", "");
+      formattedCurrency = "-" + formattedCurrency;
+    }
+    return formattedCurrency.replace("$", "");
   }
 
   public static BigDecimal countTotalAmount(List<AccountTransaction> pAccountTransactionList) {
