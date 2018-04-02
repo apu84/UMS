@@ -2,6 +2,7 @@ package org.ums.report.balance.sheet;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.accounts.Account;
@@ -15,6 +16,7 @@ import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.manager.accounts.GroupManager;
+import org.ums.util.ReportUtils;
 import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
 
@@ -83,6 +85,7 @@ public class BalanceSheetReportGenerator {
 
     float[] columnLengths = new float[]{4, 2, 4, 2};
     PdfPTable table = new PdfPTable(columnLengths);
+    table.setWidthPercentage(100);
     PdfPCell cell = new PdfPCell();
     Paragraph paragraph = new Paragraph("Particulars", mBoldFont);
     addTopAndBottomBorderedCell(document, table, cell, paragraph);
@@ -102,83 +105,145 @@ public class BalanceSheetReportGenerator {
     paragraph = new Paragraph("Amount (BDT)", mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     addTopAndBottomBorderedCell(document, table, cell, paragraph);
-    table.setHeaderRows(0);
+    table.setHeaderRows(1);
 
     float[] innerTableCellWidth = new float[]{7, 3};
     PdfPTable assetTable = new PdfPTable(innerTableCellWidth);
     List<Group> assetGroups = mGroupManager.getIncludingMainGroupList(Arrays.asList(GroupType.ASSETS.getValue()));
+    assetGroups = assetGroups
+        .stream()
+        .filter(a -> !a.getGroupCode().equals(GroupType.ASSETS.getValue()))
+        .collect(Collectors.toList());
 
     BigDecimal totalAssetBalance = new BigDecimal(0);
 
-    for (Group group : assetGroups) {
-      cell = new PdfPCell();
-      paragraph = new Paragraph(group.getGroupName(), mBoldFont);
-      cell.addElement(paragraph);
-      if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-        cell.setColspan(2);
-      assetTable.addCell(cell);
-      List<Account> groupAccountList = new ArrayList<>();
-      if (accountMapWithGroupCode.containsKey(group.getGroupCode()))
-        groupAccountList = accountMapWithGroupCode.get(group.getGroupCode());
+    cell = new PdfPCell();
+    paragraph = new Paragraph("Assets", ReportUtils.mBigBoldFont);
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    cell.addElement(paragraph);
+    cell.setColspan(2);
+    cell.setBorder(Rectangle.NO_BORDER);
+    assetTable.addCell(cell);
+    BigDecimal assetTotalBalance = new BigDecimal(0);
+    generateInternalGroupBody(pBalanceSheetFetchType, accountBalanceMapWithAccount, accountMapWithGroupCode, assetTable, assetGroups, assetTotalBalance);
 
-      if (groupAccountList.size() == 0) {
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
-        paragraph.setAlignment(Element.ALIGN_RIGHT);
-        cell.addElement(paragraph);
-        cell.setColspan(2);
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          cell = new PdfPCell();
-        table.addCell(cell);
-
-
-      } else {
-        BigDecimal totalAccountBalance = new BigDecimal(0);
-        BigDecimal groupTotalBalance = new BigDecimal(0);
-        for (Account account : groupAccountList) {
-          AccountBalance accountBalance = accountBalanceMapWithAccount.get(account);
-          BigDecimal accountTotalBalance = accountBalance.getTotCreditTrans().subtract(accountBalance.getTotDebitTrans());
-          totalAccountBalance.add(accountTotalBalance);
-          groupTotalBalance.add(accountTotalBalance);
-          if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
-            cell = new PdfPCell();
-            paragraph = new Paragraph(account.getAccountName(), mLiteFont);
-            cell.addElement(paragraph);
-            cell.setBorder(Rectangle.NO_BORDER);
-            assetTable.addCell(cell);
-
-            cell = new PdfPCell();
-            paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(accountTotalBalance), mLiteFont);
-            paragraph.setAlignment(Element.ALIGN_RIGHT);
-            cell.addElement(paragraph);
-            cell.setBorder(Rectangle.NO_BORDER);
-            assetTable.addCell(cell);
-          }
-        }
-
-        cell = new PdfPCell();
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
-        paragraph.setAlignment(Element.ALIGN_RIGHT);
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          cell.setColspan(2);
-        assetTable.addCell(cell);
-
-      }
-
-    }
+    addTotalAmountOfTheSection(assetTable, assetTotalBalance);
 
     cell = new PdfPCell();
     cell.addElement(assetTable);
     cell.setColspan(2);
+    cell.setBorder(Rectangle.NO_BORDER);
     table.addCell(cell);
 
 //    for test
     cell = new PdfPCell(new Paragraph(""));
     cell.setColspan(2);
+    cell.setBorder(Rectangle.NO_BORDER);
     table.addCell(cell);
+
 
     document.add(table);
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+  private void addTotalAmountOfTheSection(PdfPTable pAssetTable, BigDecimal pAssetTotalBalance) {
+    PdfPCell cell;
+    Paragraph paragraph;
+    cell = new PdfPCell();
+    cell.addElement(new Paragraph("Total ", mBoldFont));
+    cell.setBorder(Rectangle.TOP | Rectangle.BOTTOM);
+    pAssetTable.addCell(cell);
+
+    cell = new PdfPCell();
+    paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(pAssetTotalBalance), mBoldFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    cell.addElement(paragraph);
+    cell.setBorder(Rectangle.TOP | Rectangle.BOTTOM);
+    pAssetTable.addCell(cell);
+  }
+
+  @NotNull
+  private void generateInternalGroupBody(BalanceSheetFetchType pBalanceSheetFetchType,
+      Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
+      PdfPTable pAssetTable, List<Group> pAssetGroups, BigDecimal sectionTotalBalance) {
+    PdfPCell cell;
+    Paragraph paragraph;
+
+    for(Group group : pAssetGroups) {
+      cell = new PdfPCell();
+      paragraph = new Paragraph(group.getGroupName(), mBoldFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+        cell.setColspan(2);
+      cell.setBorder(Rectangle.NO_BORDER);
+      pAssetTable.addCell(cell);
+      List<Account> groupAccountList = new ArrayList<>();
+      if(pAccountMapWithGroupCode.containsKey(group.getGroupCode()))
+        groupAccountList = pAccountMapWithGroupCode.get(group.getGroupCode());
+
+      if(groupAccountList.size() == 0) {
+        cell = new PdfPCell();
+        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        cell.addElement(paragraph);
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
+          cell.setColspan(2);
+        }
+        sectionTotalBalance = sectionTotalBalance.add(new BigDecimal(0));
+        cell.setBorder(Rectangle.NO_BORDER);
+        pAssetTable.addCell(cell);
+
+      }
+      else {
+        BigDecimal totalAccountBalance = new BigDecimal(0);
+        BigDecimal groupTotalBalance = new BigDecimal(0);
+        groupTotalBalance =
+            generateGroupBasedAccountSection(pBalanceSheetFetchType, pAccountBalanceMapWithAccount, pAssetTable,
+                groupAccountList, totalAccountBalance, groupTotalBalance);
+
+        cell = new PdfPCell();
+        sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
+        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+          cell.setColspan(2);
+        cell.addElement(paragraph);
+        cell.setBorder(Rectangle.NO_BORDER);
+        pAssetTable.addCell(cell);
+
+      }
+    }
+
+  }
+
+  private BigDecimal generateGroupBasedAccountSection(BalanceSheetFetchType pBalanceSheetFetchType,
+      Map<Account, AccountBalance> pAccountBalanceMapWithAccount, PdfPTable pAssetTable,
+      List<Account> pGroupAccountList, BigDecimal pTotalAccountBalance, BigDecimal pGroupTotalBalance) {
+    PdfPCell cell;
+    Paragraph paragraph;
+    for(Account account : pGroupAccountList) {
+      AccountBalance accountBalance = pAccountBalanceMapWithAccount.get(account);
+      BigDecimal accountTotalBalance = accountBalance.getTotCreditTrans().subtract(accountBalance.getTotDebitTrans());
+      pTotalAccountBalance = pTotalAccountBalance.add(accountTotalBalance);
+      pGroupTotalBalance = pGroupTotalBalance.add(accountTotalBalance);
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
+        cell = new PdfPCell();
+        paragraph = new Paragraph(account.getAccountName(), mLiteFont);
+        cell.addElement(paragraph);
+        cell.setBorder(Rectangle.NO_BORDER);
+        pAssetTable.addCell(cell);
+
+        cell = new PdfPCell();
+        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(accountTotalBalance), mLiteFont);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        cell.addElement(paragraph);
+        cell.setBorder(Rectangle.NO_BORDER);
+        pAssetTable.addCell(cell);
+      }
+    }
+    return pGroupTotalBalance;
   }
 
   private void addTopAndBottomBorderedCell(Document pDocument, PdfPTable pTable, PdfPCell pCell, Paragraph pParagraph)

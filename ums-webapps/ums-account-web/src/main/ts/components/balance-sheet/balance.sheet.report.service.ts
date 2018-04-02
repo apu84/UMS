@@ -13,7 +13,7 @@ module ums {
       let defer: ng.IDeferred<string> = this.$q.defer();
       var contentType: string = UmsUtil.getFileContentType("pdf");
       this.httpClient.get(this.url + "/asOnDate/" + asOnDate + "/fetchType/" + fetchType + "/debtorLedgerFetchType/" + debtorLedgerFetchType, undefined, (data: any, etag: string) => {
-            UmsUtil.writeFileContent(data, contentType, 'general-ledger-report.pdf');
+            UmsUtil.writeFileContent(data, contentType, 'Balance Sheet Report.pdf');
           },
           (response: any) => {
             defer.resolve("success");
