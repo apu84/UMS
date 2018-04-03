@@ -289,6 +289,7 @@ module ums {
 
 
     public countTotalAmount() {
+      this.totalAmount = 0;
       this.detailVouchers.forEach((v: IPaymentVoucher) => {
         this.totalAmount = this.totalAmount + v.amount;
         console.log("total amount");

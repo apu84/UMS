@@ -135,7 +135,7 @@
                         <div class="col-sm-6">
                             <select ng-if="vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID" class="form-control required"
                                     name="debitOrCredit"
-                                    data-ng-model="vm.voucherOfAddModal.balanceType">
+                                    data-ng-model="vm.voucherOfAddModal.balanceType" ng-disabled="true">
                                 <option value="Dr">Dr</option>
                                 <option value="Cr">Cr</option>
                             </select>
