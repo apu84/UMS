@@ -7,6 +7,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
+import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -51,7 +53,8 @@ public class TesGeneratorImp implements TesGenerator {
   private DepartmentManager mDepartmentManager;
   @Autowired
   private EmployeeManager mEmployeeManager;
-
+  @Autowired
+  private ApplicationTESResourceHelper mApplicationTESResourceHelper;
   private String courseId;
   private String teacherId;
   private Integer semesterId;
@@ -406,4 +409,252 @@ public class TesGeneratorImp implements TesGenerator {
   void getObservationType(int obType) {
 
   }
+
+  @Override
+  public void createTesReportSuperAdmin(String pDeptId, Integer pSemesterId, OutputStream pOutputStream)
+      throws IOException, DocumentException {
+    //
+    mDateFormat = new DateFormat("dd MMM YYYY");
+    Document document = new Document(PageSize.A4.rotate());
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+    Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
+    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+    Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
+    document.open();
+
+
+    Paragraph paragraph = null;
+    Chunk chunk = null;
+
+
+    chunk = new Chunk("Teachers Evaluation Report\nAhsanullah University of Science And Technology");
+
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    paragraph.setFont(fontTimes14Bold);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 1);
+    document.add(paragraph);
+    paragraph=new Paragraph(" ");
+    document.add(paragraph);
+
+
+    //
+    String departmentName="";
+    if(pDeptId.equals("08")){
+      departmentName="All Department Teachers List";
+    }else if(pDeptId.equals("09")){
+      departmentName="Maximum Score Holders of All Departments";
+    }else if(pDeptId.equals("10")) {
+      departmentName="Minimum Score Holders of All Departments";
+    }else{
+      departmentName=mDepartmentManager.get(pDeptId).getLongName();
+    }
+    chunk = new Chunk("Semester: "+mSemesterManager.get(pSemesterId).getName()+"\n"+
+            "Department: "+departmentName);
+
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setFont(fontTimes11Bold);
+    paragraph.add(chunk);
+    document.add(paragraph);
+
+    chunk = new Chunk("Date: " + mDateFormat.format(new Date()));
+    chunk.setFont(fontTimes11Normal);
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    paragraph.setFont(fontTimes11Normal);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 2);
+    document.add(paragraph);
+    chunk = new Chunk(" ");
+    paragraph=new Paragraph(" ");
+    //
+
+
+
+    List<ApplicationTES> applications = mApplicationTESManager.getFacultyListForReport(pDeptId, pSemesterId);
+    List<ApplicationTES> parameters = null;
+    List<ApplicationTES> getDeptList = mApplicationTESManager.getDeptList();
+    List<ComparisonReport> report = new ArrayList<ComparisonReport>();
+    List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
+    List<ComparisonReport> pdfReport = new ArrayList<ComparisonReport>();
+    for(int i = 0; i < applications.size(); i++) {
+      parameters = mApplicationTESManager.getParametersForReport(applications.get(i).getTeacherId(), pSemesterId);
+      for(int j = 0; j < parameters.size(); j++) {
+        double score = 0;
+        Integer studentNo =
+                mApplicationTESManager.getTotalStudentNumber(parameters.get(j).getTeacherId(),
+                        parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+        List<ApplicationTES> app = mApplicationTESManager.getAllQuestions(pSemesterId);
+        if(studentNo != 0) {
+          score =mApplicationTESResourceHelper.
+                  getScore(parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), pSemesterId,
+                          studentNo, app);
+        }
+        String teacherName, deptName, courseNo, courseTitle, programName = "";
+        teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
+        deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
+        courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
+        courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
+        try {
+          programName =
+                  mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+        if(programName.equals(null) || programName.equals("")) {
+          programName = "Not Found";
+        }
+        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, 10, programName,
+                parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), parameters.get(j)
+                .getDeptId()));
+      }
+
+    }
+
+    if(pDeptId.equals("09")){
+      for(int k=0;k<getDeptList.size();k++){
+        double max=-1;
+        String dp=getDeptList.get(k).getDeptId();
+        List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
+        for(int l=0;l<list.size();l++){
+          if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
+            if(list.get(l).getTotalScore()> max){
+              max=list.get(l).getTotalScore();
+            }
+
+          }
+        }
+        double finalMax = max;
+        list=list.stream().filter(a->a.getTotalScore()== finalMax).collect(Collectors.toList());
+        for(int l=0;l<list.size();l++){
+          reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
+                  list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==-1? 0:max,
+                  10, list.get(l).getProgramName(),
+                  list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
+        }
+
+      }
+     pdfReport=reportMaxMin;
+    }else if(pDeptId.equals("10")){
+      for(int k=0;k<getDeptList.size();k++){
+        double min=10;
+        String dp=getDeptList.get(k).getDeptId();
+        List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
+        for(int l=0;l<list.size();l++){
+          if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
+            if(list.get(l).getTotalScore()< min){
+              min=list.get(l).getTotalScore();
+            }
+
+          }
+        }
+        double finalMin = min;
+        list=list.stream().filter(a->a.getTotalScore()== finalMin).collect(Collectors.toList());
+        for(int l=0;l<list.size();l++){
+          reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
+                  list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==10? 0:min,
+                  10, list.get(l).getProgramName(),
+                  list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
+        }
+
+      }
+    pdfReport=reportMaxMin;
+    }else{
+     pdfReport=report;
+    }
+
+    PdfPTable tableQuestions= new PdfPTable(8);
+    tableQuestions.setWidthPercentage(100);
+    tableQuestions.setWidths(new float[] { 1,5,2,2,6,2,2,2});
+    PdfPCell pdfWordCellColumn1 = new PdfPCell();
+    PdfPCell pdfWordCellColumn2 = new PdfPCell();
+    PdfPCell pdfWordCellColumn3 = new PdfPCell();
+    PdfPCell pdfWordCellColumn4 = new PdfPCell();
+    PdfPCell pdfWordCellColumn5 = new PdfPCell();
+    PdfPCell pdfWordCellColumn6 = new PdfPCell();
+    PdfPCell pdfWordCellColumn7 = new PdfPCell();
+    PdfPCell pdfWordCellColumn8 = new PdfPCell();
+
+    Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+    Font boldFont1 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+    pdfWordCellColumn1.addElement(new Phrase("SL",boldFont));
+    pdfWordCellColumn1.setPaddingLeft(5);
+    pdfWordCellColumn1.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn1);
+    pdfWordCellColumn2.addElement(new Phrase("Teacher Name",boldFont));
+    pdfWordCellColumn2.setPaddingLeft(5);
+    pdfWordCellColumn2.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn2);
+    pdfWordCellColumn3.addElement(new Phrase("Department",boldFont));
+    pdfWordCellColumn3.setPaddingLeft(5);
+    pdfWordCellColumn3.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn3);
+    pdfWordCellColumn4.addElement(new Phrase("Course No",boldFont));
+    pdfWordCellColumn4.setPaddingLeft(5);
+    pdfWordCellColumn4.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn4);
+    pdfWordCellColumn5.addElement(new Phrase("Course Name",boldFont));
+    pdfWordCellColumn5.setPaddingLeft(5);
+    pdfWordCellColumn5.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn5);
+    pdfWordCellColumn6.addElement(new Phrase("Program Name",boldFont));
+    pdfWordCellColumn6.setPaddingLeft(5);
+    pdfWordCellColumn6.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn6);
+    pdfWordCellColumn7.addElement(new Phrase("Score",boldFont));
+    pdfWordCellColumn7.setPaddingLeft(5);
+    pdfWordCellColumn7.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn7);
+    pdfWordCellColumn8.addElement(new Phrase("Reviewer",boldFont));
+    pdfWordCellColumn8.setPaddingLeft(5);
+    pdfWordCellColumn8.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn8);
+    PdfPCell pdfWordCellRow1 = new PdfPCell();
+    PdfPCell pdfWordCellRow2 = new PdfPCell();
+    PdfPCell pdfWordCellRow3 = new PdfPCell();
+    PdfPCell pdfWordCellRow4 = new PdfPCell();
+    PdfPCell pdfWordCellRow5 = new PdfPCell();
+    PdfPCell pdfWordCellRow6 = new PdfPCell();
+    PdfPCell pdfWordCellRow7 = new PdfPCell();
+    PdfPCell pdfWordCellRow8 = new PdfPCell();
+
+    int index=0;
+    for(int n=0;n<pdfReport.size();n++){
+      index++;
+     // Paragraph cellParagraph = new Paragraph(""+(index)+". ");
+      //cellParagraph.setAlignment(Element.ALIGN_RIGHT);
+      /*pdfWordCellRow1.addElement(cellParagraph);
+      pdfWordCellRow2.addElement(new Phrase(""+pdfReport.get(n).getTeacherName()));
+      pdfWordCellRow3.addElement(new Phrase(""+pdfReport.get(n).getDeptName()));
+      pdfWordCellRow4.addElement(new Phrase(""+pdfReport.get(n).getCourseNo()));
+      pdfWordCellRow5.addElement(new Phrase(""+pdfReport.get(n).getCourseTitle()));
+      pdfWordCellRow6.addElement(new Phrase(""+pdfReport.get(n).getProgramName()));
+      pdfWordCellRow7.addElement(new Phrase(""+pdfReport.get(n).getTotalScore()));
+      pdfWordCellRow8.addElement(new Phrase(""+pdfReport.get(n).getReviewPercentage()));*/
+      tableQuestions.addCell(new Phrase(""+index,boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getTeacherName(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getDeptName(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getCourseNo(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getCourseTitle(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getProgramName(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getTotalScore(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getReviewPercentage()+"%",boldFont1));
+    }
+
+    try {
+      document.add(tableQuestions);
+    } catch (DocumentException e) {
+      e.printStackTrace();
+    }
+    
+    document.close();
+    baos.writeTo(pOutputStream);
+
+  }
+  // /pdf generation
+
 }

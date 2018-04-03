@@ -11,4 +11,7 @@ import java.io.OutputStream;
 public interface TesGenerator {
   void createTesReport(String pCourseId, String pTeacherId, Integer pSemesterId, OutputStream pOutputStream)
       throws IOException, DocumentException;
+
+  void createTesReportSuperAdmin(String pDeptId, Integer pSemesterId, OutputStream pOutputStream) throws IOException,
+      DocumentException;
 }

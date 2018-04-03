@@ -84,8 +84,24 @@
                     Ahsanullah University of Science and Technology<span
                         class="subtitle"></span></div>
                 <div class="panel-body shadowPanel" style="min-height: 200px;">
-                    <div class="row" style="padding: 10px;">
+                    <div data-ng-hide="vm.pgHide">
+                        <p>Semester:  <strong>{{vm.staticSessionName}}</strong></p>
+                        <p>Department: <strong>{{vm.staticDepartmentName}}</strong></p>
+                    </div>
+                    <div align="left" data-ng-hide="vm.pgHide">
+                        <pagination total-items="vm.commentPgTotalRecords"
+                                    ng-model="vm.innerCommentPgCurrentPage" max-size="7"
+                                    class="pagination-sm" boundary-links="true" rotate="false"
+                                    class="pagination-page"
+                                    items-per-page="vm.innerCommentPgItemsPerPage"></pagination>
+                    </div>
 
+                    <div class="row" style="padding: 10px;">
+                        <div align="right" data-ng-hide="vm.pgHide">
+                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getReport()">
+                                <span class="glyphicon glyphicon-download"></span> Download pdf
+                            </button>
+                        </div>
                         <table class="table table-bordered">
                             <thead>
                             <th style="background-color: #FAFAFA;width: 10px ">SL</th>
@@ -93,12 +109,22 @@
                             <th style="background-color: #FAFAFA; ">Department</th>
                             <th style="background-color: #FAFAFA; ">Course No</th>
                             <th style="background-color: #FAFAFA; ">Course Title</th>
+                            <th style="background-color: #FAFAFA; ">Program Name</th>
                             <th style="background-color: #FAFAFA; ">Score</th>
                             <th style="background-color: #FAFAFA; ">Reviewer</th>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="app in vm.assignedCoursesForReview">
-
+                            <tr data-ng-repeat="app in (filterd = vm.assignedCoursesForReview | orderBy :'-totalScore' |
+                             limitTo:vm.innerCommentPgItemsPerPage:vm.innerCommentPgItemsPerPage*(vm.innerCommentPgCurrentPage - 1))">
+                               <td>{{(vm.innerCommentPgCurrentPage - 1) * vm.innerCommentPgItemsPerPage +
+                                   $index + 1}}</td>
+                                <td>{{app.teacherName}}</td>
+                                <td>{{app.deptName}}</td>
+                                <td>{{app.courseNo}}</td>
+                                <td>{{app.courseTitle}}</td>
+                                <td>{{app.programName}}</td>
+                                <td>{{app.totalScore}}</td>
+                                <td>{{"N"+"%"}}</td>
                             </tr>
                             </tbody>
                         </table>

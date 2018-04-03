@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -85,9 +86,10 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getComparisionResult/deptId/{dept-id}/semesterId/{semester-id}")
-  public JsonObject getAssignedCou(@Context Request pRequest, @PathParam("dept-id") String pDeptId,
+  public List<ComparisonReport> getAssignedCou(@Context Request pRequest, @PathParam("dept-id") String pDeptId,
       @PathParam("semester-id") Integer pSemesterId) {
-    return mHelper.getComparisonResult(pDeptId, pSemesterId, pRequest, mUriInfo);
+    List<ComparisonReport> report = mHelper.getComparisonResult(pDeptId, pSemesterId, pRequest, mUriInfo);
+    return report;
   }
 
   // getStudentSubmitDeadLine
@@ -133,7 +135,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @GET
   @Path("/getReport/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   @Produces("application/pdf")
-  public StreamingOutput createCertificateReport(@PathParam("course-id") String pCourseId,
+  public StreamingOutput createTesReport(@PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return new StreamingOutput() {
       @Override
@@ -147,4 +149,23 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
       }
     };
   }
+
+  @GET
+  @Path("/getReportSuperAdmin/deptId/{dept-id}/semesterId/{semester-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createTesReportSuperAdmin(@PathParam("dept-id") String pDeptId,
+      @PathParam("semester-id") Integer pSemesterId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mTesGeneratorManager.createTesReportSuperAdmin(pDeptId, pSemesterId, output);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
 }

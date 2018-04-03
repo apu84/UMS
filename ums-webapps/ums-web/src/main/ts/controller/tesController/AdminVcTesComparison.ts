@@ -12,11 +12,13 @@ module ums{
 
     interface IAssignedCoursesForReview{
         teacherId:string;
-        semesterId:number;
-        courseName:string;
+        deptName:string;
         courseNo:string;
         courseTitle:string;
-        deptName:string;
+        totalScore:number;
+        percentage:number;
+        programName:string;
+
     }
     class AdminVcTesComparison{
         public deptList: Array<IConstantsDept>;
@@ -68,6 +70,8 @@ module ums{
         public studentSubmitDeadLine:boolean;
         public studentSubmitEndDate:string;
         public currentSemesterId:number;
+        public pgHide:boolean;
+        public  staticDepartmentName:string;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -95,10 +99,8 @@ module ums{
             this.submit_Button_Disable=true;
             this.resultView=true;
             this.checkBoxCounter=0;
-            this.commentPgCurrentPage=1
-            this.commentPgItemsPerPage=1;
             this.innerCommentPgCurrentPage=1;
-            this.innerCommentPgItemsPerPage=2;
+            this.innerCommentPgItemsPerPage=5;
             this.commentPgTotalRecords=0;
             this.checkEvaluationResult=true;
             this.evaluationResultStatus=true;
@@ -110,6 +112,8 @@ module ums{
             this.deptList = this.appConstants.deptForTes;
             this.deptName=this.deptList[0];
             this.selectedDepartmentId=this.deptName.id;
+            this.staticDepartmentName=this.deptName.name;
+            this.pgHide=true;
             console.log("-----"+this.selectedDepartmentId);
             this.getStudentSubmitDeadLine();
             this.getSemesters();
@@ -117,6 +121,8 @@ module ums{
         private deptChanged(deptId:any){
             this.selectedDepartmentId=deptId.id;
             this.checkEvaluationResult=true;
+            this.staticDepartmentName=deptId.name;
+            this.pgHide=true;
             this.assignedCoursesForReview=[];
             console.log(this.selectedDepartmentId);
 
@@ -127,6 +133,8 @@ module ums{
             console.log("Name: "+val.name+"\nsemesterId: "+val.id);
             this.selectedSemesterId=val.id;
             this.checkEvaluationResult=true;
+            this.staticSessionName=val.name;
+            this.pgHide=true;
             this.assignedCoursesForReview=[];
             // this.getStudentSubmitDeadLine();
 
@@ -164,7 +172,6 @@ module ums{
         }
 
 
-
         private getComparisionResult(){
             if(this.currentSemesterId==this.selectedSemesterId){
                 if(this.studentSubmitDeadLine){
@@ -177,8 +184,8 @@ module ums{
                 //this.getResults();
             }
 
-
                 Utils.expandRightDiv();
+                this.innerCommentPgCurrentPage=1;
                 this.assignedCoursesForReview=[];
                 this.staticSessionName=this.semester.name;
                 console.log("Stat.....");
@@ -188,8 +195,10 @@ module ums{
                 this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComparisionResult/deptId/'+this.selectedDepartmentId+'/semesterId/'+this.selectedSemesterId, 'application/json',
                     (json: any, etag: string) => {
                         console.log("List of Courses");
-                        appTES=json.entries;
+                        appTES=json;
                         this.assignedCoursesForReview=appTES;
+                        this.commentPgTotalRecords=appTES.length;
+                        this.pgHide=false;
                         console.log(this.assignedCoursesForReview);
                         defer.resolve(json);
                     },
@@ -197,7 +206,6 @@ module ums{
                         console.error(response);
                     });
                 return defer.promise;
-
 
         }
 
@@ -209,7 +217,7 @@ module ums{
             console.log("QWERTYUIIOOOPPPPP");
             console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId+"\n"+this.selectedCourseId);
             var defer = this.$q.defer();
-            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReport/courseId/'+this.selectedCourseId+'/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/pdf',
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReportSuperAdmin/deptId/'+this.selectedDepartmentId+'/semesterId/'+this.selectedSemesterId, 'application/pdf',
                 (data: any, etag: string) => {
                     console.log("pdf");
                     UmsUtil.writeFileContent(data, contentType, fileName);
