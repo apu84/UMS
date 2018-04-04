@@ -137,9 +137,8 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
-      mNewIUMSAccountInfoEmailService.sendEmail(mutableUser.getEmployeeId(), mutablePersonalInformation.getFullName(),
-          mutableUser.getId(), tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS",
-          "AUST: IUMS Account Credentials");
+      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
+          tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 
     URI contextURI =

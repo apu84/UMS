@@ -6,17 +6,18 @@ import org.ums.context.AppContext;
 public class PersistentBank implements MutableBank {
 
   private static BankManager sBankManager;
-  private String mId;
+  private Long mId;
+  private String mCode;
   private String mName;
   private String mLastModified;
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     this.mId = pId;
   }
 
@@ -31,6 +32,16 @@ public class PersistentBank implements MutableBank {
   }
 
   @Override
+  public void setCode(String pCode) {
+    mCode = pCode;
+  }
+
+  @Override
+  public String getCode() {
+    return mCode;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -41,7 +52,7 @@ public class PersistentBank implements MutableBank {
   }
 
   @Override
-  public String create() {
+  public Long create() {
     return sBankManager.create(this);
   }
 
@@ -64,6 +75,7 @@ public class PersistentBank implements MutableBank {
 
   public PersistentBank(MutableBank pBank) {
     setId(pBank.getId());
+    setCode(pBank.getCode());
     setName(pBank.getName());
     setLastModified(pBank.getLastModified());
   }

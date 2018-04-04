@@ -1,36 +1,45 @@
-package org.ums.bank;
+package org.ums.bank.branch.user;
 
+import org.apache.commons.lang.Validate;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.bank.BranchUser;
-import org.ums.bank.MutableBranchUser;
-import org.ums.bank.BranchUserManager;
-import org.ums.bank.Branch;
-import org.ums.bank.BranchManager;
-import org.ums.bank.BankDesignation;
-import org.ums.bank.BankDesignationManager;
+import org.ums.bank.branch.Branch;
+import org.ums.bank.branch.BranchManager;
+import org.ums.bank.designation.BankDesignation;
+import org.ums.bank.designation.BankDesignationManager;
 
 public class PersistentBranchUser implements MutableBranchUser {
-
   private static BranchManager sBranchManager;
   private static BankDesignationManager sBankDesignationManager;
   private static BranchUserManager sBranchUserManager;
-  private String mId;
+  private Long mId;
+  private String mUserId;
   private Branch mBranch;
-  private String mBranchId;
+  private Long mBranchId;
   private String mName;
   private BankDesignation mBankDesignation;
   private Long mBankDesignationId;
+  private String mEmail;
   private String mLastModified;
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     this.mId = pId;
+  }
+
+  @Override
+  public void setUserId(String pUserId) {
+    mUserId = pUserId;
+  }
+
+  @Override
+  public String getUserId() {
+    return mUserId;
   }
 
   @Override
@@ -44,12 +53,12 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
-  public String getBranchId() {
+  public Long getBranchId() {
     return mBranchId;
   }
 
   @Override
-  public void setBranchId(String pBranchId) {
+  public void setBranchId(Long pBranchId) {
     this.mBranchId = pBranchId;
   }
 
@@ -85,6 +94,16 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
+  public void setEmail(String pEmail) {
+    mEmail = pEmail;
+  }
+
+  @Override
+  public String getEmail() {
+    return mEmail;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -95,7 +114,9 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
-  public String create() {
+  public Long create() {
+    Validate.notEmpty(mEmail);
+    Validate.notNull(mBranchId);
     return sBranchUserManager.create(this);
   }
 
@@ -118,6 +139,7 @@ public class PersistentBranchUser implements MutableBranchUser {
 
   public PersistentBranchUser(MutableBranchUser pBranchUser) {
     setId(pBranchUser.getId());
+    setUserId(pBranchUser.getUserId());
     setBranch(pBranchUser.getBranch());
     setBranchId(pBranchUser.getBranchId());
     setName(pBranchUser.getName());

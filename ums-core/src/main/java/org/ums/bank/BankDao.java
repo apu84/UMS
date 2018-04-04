@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BankDao extends BankDaoDecorator {
-  String SELECT_ALL = "SELECT ID, NAME, LAST_MODIFIED FROM BANK ";
-  String CREATE_ALL = "INSERT INTO BANK(ID, NAME, LAST_MODIFIED) VALUES (?, ?, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE BANK SET NAME = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL = "SELECT ID, CODE, NAME, LAST_MODIFIED FROM BANK ";
+  String CREATE_ALL = "INSERT INTO BANK(ID, CODE, NAME, LAST_MODIFIED) VALUES (?, ?, ?, " + getLastModifiedSql() + ") ";
+  String UPDATE_ALL = "UPDATE BANK SET NAME = ?, CODE = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM BANK ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -30,7 +30,7 @@ public class BankDao extends BankDaoDecorator {
   }
 
   @Override
-  public Bank get(String pId) {
+  public Bank get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new BankRowMapper());
   }
@@ -38,7 +38,7 @@ public class BankDao extends BankDaoDecorator {
   @Override
   public int update(MutableBank pMutable) {
     String query = UPDATE_ALL + "WEHRE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getName(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getName(), pMutable.getCode(), pMutable.getId());
   }
 
   @Override
@@ -48,17 +48,26 @@ public class BankDao extends BankDaoDecorator {
   }
 
   @Override
-  public String create(MutableBank pMutable) {
-    String id = StringUtils.isEmpty(pMutable.getId()) ? mIdGenerator.getAlphaNumericId("BN", 3) : pMutable.getId();
-    mJdbcTemplate.update(CREATE_ALL, pMutable.getName(), id);
+  public Long create(MutableBank pMutable) {
+    String code =
+        StringUtils.isEmpty(pMutable.getCode()) ? mIdGenerator.getAlphaNumericId("BN", 3) : pMutable.getCode();
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(CREATE_ALL, id, code, pMutable.getName());
     return id;
+  }
+
+  @Override
+  public Bank getByCode(String pCode) {
+    String query = SELECT_ALL + "WHERE CODE = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pCode}, new BankRowMapper());
   }
 
   class BankRowMapper implements RowMapper<Bank> {
     @Override
     public Bank mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableBank mutableBank = new PersistentBank();
-      mutableBank.setId(rs.getString("ID"));
+      mutableBank.setId(rs.getLong("ID"));
+      mutableBank.setCode(rs.getString("CODE"));
       mutableBank.setName(rs.getString("NAME"));
       mutableBank.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<Bank> atomicReference = new AtomicReference<>(mutableBank);

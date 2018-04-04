@@ -1,4 +1,4 @@
-package org.ums.bank;
+package org.ums.bank.designation;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
@@ -7,6 +7,7 @@ public class PersistentBankDesignation implements MutableBankDesignation {
 
   private static BankDesignationManager sBankDesignationManager;
   private Long mId;
+  private String mCode;
   private String mName;
   private String mLastModified;
 
@@ -18,6 +19,16 @@ public class PersistentBankDesignation implements MutableBankDesignation {
   @Override
   public void setId(Long pId) {
     this.mId = pId;
+  }
+
+  @Override
+  public void setCode(String pCode) {
+    mCode = pCode;
+  }
+
+  @Override
+  public String getCode() {
+    return mCode;
   }
 
   @Override
@@ -64,6 +75,7 @@ public class PersistentBankDesignation implements MutableBankDesignation {
 
   public PersistentBankDesignation(MutableBankDesignation pBankDesignation) {
     setId(pBankDesignation.getId());
+    setCode(pBankDesignation.getCode());
     setName(pBankDesignation.getName());
     setLastModified(pBankDesignation.getLastModified());
   }

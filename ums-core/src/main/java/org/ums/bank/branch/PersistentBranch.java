@@ -1,28 +1,41 @@
-package org.ums.bank;
+package org.ums.bank.branch;
 
 import org.springframework.context.ApplicationContext;
+import org.ums.bank.Bank;
+import org.ums.bank.BankManager;
 import org.ums.context.AppContext;
 
 public class PersistentBranch implements MutableBranch {
 
   private static BankManager sBankManager;
   private static BranchManager sBranchManager;
-  private String mId;
+  private Long mId;
+  private String mCode;
   private Bank mBank;
-  private String mBankId;
+  private Long mBankId;
   private String mName;
   private String mContactNo;
   private String mLastModified;
   private String mLocation;
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     this.mId = pId;
+  }
+
+  @Override
+  public void setCode(String pCode) {
+    mCode = pCode;
+  }
+
+  @Override
+  public String getCode() {
+    return mCode;
   }
 
   @Override
@@ -36,12 +49,12 @@ public class PersistentBranch implements MutableBranch {
   }
 
   @Override
-  public String getBankId() {
+  public Long getBankId() {
     return mBankId;
   }
 
   @Override
-  public void setBankId(String pBankId) {
+  public void setBankId(Long pBankId) {
     this.mBankId = pBankId;
   }
 
@@ -86,7 +99,7 @@ public class PersistentBranch implements MutableBranch {
   }
 
   @Override
-  public String create() {
+  public Long create() {
     return sBranchManager.create(this);
   }
 
@@ -109,6 +122,7 @@ public class PersistentBranch implements MutableBranch {
 
   public PersistentBranch(MutableBranch pBranch) {
     setId(pBranch.getId());
+    setCode(pBranch.getCode());
     setBank(pBranch.getBank());
     setBankId(pBranch.getBankId());
     setName(pBranch.getName());
