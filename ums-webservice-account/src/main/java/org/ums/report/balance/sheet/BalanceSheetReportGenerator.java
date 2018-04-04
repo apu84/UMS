@@ -265,7 +265,10 @@ public class BalanceSheetReportGenerator {
 
     for(Group group : ppGroups) {
       cell = new PdfPCell();
-      paragraph = new Paragraph(group.getGroupName(), mBoldFont);
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+        paragraph = new Paragraph(group.getGroupName(), mBoldFont);
+      else
+        paragraph = new Paragraph(group.getGroupName(), mLiteFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
@@ -278,7 +281,10 @@ public class BalanceSheetReportGenerator {
 
       if(groupAccountList.size() == 0) {
         cell = new PdfPCell();
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
+        else
+          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
@@ -298,7 +304,10 @@ public class BalanceSheetReportGenerator {
 
         cell = new PdfPCell();
         sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
+        else
+          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           cell.setColspan(2);
