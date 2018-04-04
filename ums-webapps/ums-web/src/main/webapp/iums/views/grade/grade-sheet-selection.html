@@ -1060,10 +1060,10 @@
                         <th>Date-Time</th>
                         <th>Actor Role</th>
                         <th>Name</th>
-                        <th>Quiz</th>
-                        <th>Class Perf.</th>
-                        <th>Part-A</th>
-                        <th>Part-B</th>
+                        <th data-ng-if="courseType=='THEORY'">Quiz</th>
+                        <th data-ng-if="courseType=='THEORY'">Class Perf.</th>
+                        <th data-ng-if="courseType=='THEORY'">Part-A</th>
+                        <th data-ng-if="courseType=='THEORY'">Part-B</th>
                         <th>Total</th>
                         <th>Grade Letter</th>
                     </tr>
@@ -1075,10 +1075,10 @@
                         <td>{{log.insertedOn}}</td>
                         <td>{{log.roleName}}</td>
                         <td>{{log.userName}}</td>
-                        <td>{{log.quiz}}</td>
-                        <td>{{log.classPerformance}}</td>
-                        <td>{{log.partA}}</td>
-                        <td>{{log.partB}}</td>
+                        <td data-ng-if="courseType=='THEORY'">{{log.quiz}}</td>
+                        <td data-ng-if="courseType=='THEORY'">{{log.classPerformance}}</td>
+                        <td data-ng-if="courseType=='THEORY'">{{log.partA}}</td>
+                        <td data-ng-if="courseType=='THEORY'">{{log.partB}}</td>
                         <td>{{log.total}}</td>
                         <td>{{log.gradeLetter}}</td>
                     </tr>

@@ -37,6 +37,7 @@ module ums {
         $scope.userHome = response.infoList;
         $scope.userRole = response.userRole;
         if(response.userRole!="Teacher") {
+          if(document.getElementById("empProfile"))
           document.getElementById("empProfile").style.display="none";
         }
       });

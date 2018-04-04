@@ -43,7 +43,7 @@
     '/courseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
     '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
     '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']},
-    '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
+    '/studentAdviser': {title: 'Students\' Advisor', 'breadcrumb': ['Students\' Advisor']},
     '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
     '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet'], 'navId': '2069'},

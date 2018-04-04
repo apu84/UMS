@@ -449,7 +449,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         mutable.setStatus(nextStatus);
 //        mutable.update();
         if(getContentManager().update(mutable)==0)
-          System.out.println("abcddd");
         mutable.invalidateCache();
         // throw new ValidationException("Failed to update makrs submission status..");
       } else  {
