@@ -87,7 +87,7 @@
                                                                                                      class="control-label col-md-6">{{vm.totalCredit}}</label><br><br>
                 </div>
 
-                <form class="form-horizontal" ng-if="vm.PAYMENT_VOUCHER_ID">
+                <form class="form-horizontal" ng-if="vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID">
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="serialNo">Account Name:</label>
                         <div class="col-sm-6">
@@ -103,7 +103,7 @@
                             </ui-select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="vm.PAYMENT_VOUCHER_ID">
                         <label class="control-label col-sm-4">Current Balance:</label>
                         <label class="control-label col-sm-6">{{vm.formatCurrency(vm.selectedMainAccountCurrentBalance)}}</label>
                     </div>

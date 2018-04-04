@@ -1,36 +1,42 @@
 module ums {
+  enum SubmissionType {
+    save = "Save",
+    post = "Post"
+  }
   export class ContraVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ContraVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q'];
-    private showAddSection: boolean;
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ContraVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService'];
+
+
     private voucherNo: string;
     private voucherDate: string;
     private currencies: ICurrency[];
     private selectedCurrency: ICurrency;
-    private baseCurrency: ICurrency;
     private currencyConversions: ICurrencyConversion[];
     private currencyConversionMapWithCurrency: any;
-    private voucherMapWithId: any;
-    private postStatus: boolean;
-    private totalCredit: number;
+    private showAddSection: boolean;
+    private type: AccountTransactionType;
+    private voucherOfAddModal: IContraVoucher;
+    private detailVouchers: IContraVoucher[];
+    private existingVouchers: IContraVoucher[];
+    private accountListForAddModal: IAccount[];
+    private customerAndVendorAccounts: IAccount[];
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
     private totalDebit: number;
+    private totalCredit: number;
     private pageNumber: number;
     private itemsPerPage: number;
     private totalVoucherNumber: number;
-    private contraVouchers: IContraVoucher[];
-    private existingVouchers: IContraVoucher[];
-    private contraVoucherDetail: IContraVoucher;
-    private detailVouchers: IContraVoucher[];
-    private paymentVoucherMain: IContraVoucher;
-    static PAYMENT_VOUCHER_GROUP_FLAG = GroupFlag.YES;
-    static CONTRA_VOUCHER_ID = '8';
-    private paymentAccounts: IAccount[];
-    private selectedPaymentAccount: IAccount;
-    private selectedPaymentAccountCurrentBalance: number;
-    private paymentDetailAccounts: IAccount[];
-    private totalAmount: number;
-    private voucherOfAddModal: IContraVoucher;
-    private dateFormat: string;
     private searchVoucherNo: string;
+    private postStatus: boolean;
+    private accounting: any;
+    static JOURNAL_VOUCHER_GROUP_FLAG = GroupFlag.NO;
+    private CONTRA_VOUCHER_ID: string = '8';
+    private baseCurrency: ICurrency;
+
+
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -41,65 +47,40 @@ module ums {
                 private contraVoucherService: ContraVoucherService,
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
-                private currencyConversionService: CurrencyConversionService,
-                private accountBalanceService: AccountBalanceService,
-                private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService) {
+                private currencyConversionService: CurrencyConversionService) {
       this.initialize();
     }
 
     public initialize() {
+      this.showAddSection = false;
       this.pageNumber = 1;
 
       this.itemsPerPage = 20;
-      this.dateFormat = "dd-mm-yyyy";
-      this.showAddSection = false;
-      this.postStatus=false;
+      this.type = AccountTransactionType.SELLING;
+      this.accountService.getBankAndCostTypeAccounts().then((accountListForAddModal: IAccount[]) => {
+        console.log("Accounts")
+        console.log(accountListForAddModal);
+        this.accountListForAddModal = accountListForAddModal;
+      });
       this.getCurrencyConversions();
-      this.getAccounts();
       this.getCurrencies();
-      this.getPaginatedVouchers();
+      this.getPaginatedJournalVouchers();
     }
 
-    public searchVoucher() {
-      console.log("In the search voucher");
-      console.log(this.searchVoucherNo)
-      this.searchVoucherNo=this.searchVoucherNo==''?undefined:this.searchVoucherNo;
-      if (this.searchVoucherNo != null) {
-        this.getPaginatedVouchers();
-      }
-      if(this.searchVoucherNo==undefined)
-        this.getPaginatedVouchers();
-    }
 
-    public showListView() {
-      this.initialize();
-    }
-
-    public getPaginatedVouchers() {
-      this.contraVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedPaymentVoucher) => {
+    public getPaginatedJournalVouchers() {
+      this.contraVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedContraVoucher) => {
         this.existingVouchers = paginatedVouchers.vouchers;
         this.totalVoucherNumber = paginatedVouchers.totalNumber;
       });
     }
 
-    private getAccounts() {
-      this.accountService.getAccountsByGroupFlag(GroupFlag.YES).then((accounts: IAccount[]) => {
-        this.paymentAccounts = accounts;
-        console.log("Payment accounts");
-        console.log(accounts);
-      });
-      this.accountService.getAccountsByGroupFlag(GroupFlag.NO).then((accounts: IAccount[]) => {
-        this.paymentDetailAccounts = accounts;
-      });
-    }
-
-    public getAccountBalance() {
-      this.paymentVoucherMain.balanceType = BalanceType.Dr;
-      this.accountBalanceService.getAccountBalance(this.paymentVoucherMain.account.id).then((currentBalance: number) => {
-        this.selectedPaymentAccountCurrentBalance = currentBalance;
-        console.log(accounting.formatNumber(10000));
-        console.log(accounting.formatColumn([10000], "$ "));
-      });
+    public searchVoucher() {
+      console.log("In the search voucher");
+      console.log(this.searchVoucherNo)
+      if (this.searchVoucherNo != null) {
+        this.getPaginatedJournalVouchers();
+      }
     }
 
     public formatCurrency(currency: number): any {
@@ -110,6 +91,160 @@ module ums {
       let baseCurrencyConversion = currency * (this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor);
 
       return accounting.formatMoney(baseCurrencyConversion, this.baseCurrency.notation + " ");
+    }
+
+    public pageChanged(pageNumber: number) {
+      this.pageNumber = pageNumber;
+      this.getPaginatedJournalVouchers();
+    }
+
+    public changeDateFormat(date: string) {
+      return Utils.convertFromJacksonDate(date);
+    }
+
+    public saveVoucher() {
+      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.save);
+    }
+
+    public checkVoucherBeforeSaveOrUpdate(submissionType: SubmissionType) {
+      if (this.detailVouchers.length == 0)
+        this.notify.warn("No journal voucher data");
+      else if (this.totalCredit != this.totalDebit)
+        this.notify.warn("Total debit and credit must be same");
+      else {
+        if (submissionType == SubmissionType.save) {
+          this.contraVoucherService.saveVoucher(this.detailVouchers).then((response) => {
+            this.configureAddVoucherSection(response);
+          });
+        } else {
+          this.contraVoucherService.postVoucher(this.detailVouchers).then((response) => {
+
+            this.configureAddVoucherSection(response);
+          });
+        }
+
+      }
+    }
+
+    public postVoucher() {
+      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.post);
+    }
+
+    public addData() {
+      this.voucherOfAddModal = <IContraVoucher>{};
+      this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
+      this.voucherOfAddModal.balanceType = BalanceType.Dr;
+      this.getVendorAndCustomerAccounts();
+    }
+
+    //todo use accounting library
+    public convertToCurrencyFormat(amount: number): any {
+      return null;
+    }
+
+    public addDataToVoucherTable() {
+      if (this.detailVouchers.filter((f: IContraVoucher) => f.serialNo === this.voucherOfAddModal.serialNo).length === 0) {
+        this.voucherOfAddModal.voucherNo = this.voucherNo;
+        this.voucherOfAddModal.currency = this.selectedCurrency;
+        this.voucherOfAddModal.currencyId = this.selectedCurrency.id.toString();
+        this.voucherOfAddModal.accountId = this.voucherOfAddModal.account.id;
+        this.voucherOfAddModal.voucherId = this.CONTRA_VOUCHER_ID;
+        this.voucherOfAddModal.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
+        this.voucherOfAddModal.accountTransactionType = this.type;
+        this.voucherOfAddModal.foreignCurrency = this.voucherOfAddModal.amount * this.voucherOfAddModal.conversionFactor;
+        this.voucherOfAddModal.accountTransactionType = this.type;
+        this.detailVouchers.push(this.voucherOfAddModal);
+      }
+
+      this.calculateTotalDebitAndCredit();
+    }
+
+    public calculateTotalDebitAndCredit() {
+      this.totalCredit = 0;
+      this.totalDebit = 0;
+      for (var i = 0; i < this.detailVouchers.length; i++) {
+        if (this.detailVouchers[i].balanceType === BalanceType.Dr)
+          this.totalDebit += this.detailVouchers[i].amount;
+        else
+          this.totalCredit += this.detailVouchers[i].amount;
+      }
+    }
+
+    public showListView() {
+      console.log("in the show list view");
+      this.showAddSection = false;
+      this.getPaginatedJournalVouchers();
+
+    }
+
+    public fetchDetails(journalVoucher: IContraVoucher) {
+      console.log("Selected currency");
+      console.log(this.selectedCurrency);
+      this.contraVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IContraVoucher[]) => {
+        console.log("Fetch vouchers");
+        console.log(vouchers);
+        this.configureAddVoucherSection(vouchers);
+      });
+    }
+
+    public deleteVoucher(journalVoucher: IContraVoucher) {
+      if (journalVoucher.id === null)
+        this.detailVouchers.splice(this.detailVouchers.indexOf(journalVoucher), 1);
+      else {
+        this.contraVoucherService.deleteVoucher(journalVoucher).then((response) => {
+          if (response != undefined) {
+            this.notify.success("Successfully Deleted");
+            this.detailVouchers.splice(this.detailVouchers.indexOf(journalVoucher), 1);
+          }
+        });
+      }
+    }
+
+    private configureAddVoucherSection(vouchers: IContraVoucher[]) {
+      console.log("In the configure add vocher section");
+      console.log(vouchers);
+      this.detailVouchers = vouchers;
+      this.showAddSection = true;
+      this.voucherNo = this.detailVouchers[0].voucherNo;
+      console.log(vouchers[0].voucherNo);
+      console.log("This voucher no: " + this.voucherNo);
+      this.voucherDate = vouchers[0].postDate == null ? moment(new Date()).format("DD-MM-YYYY") : vouchers[0].postDate;
+      this.postStatus = vouchers[0].postDate == null ? false : true;
+      this.selectedCurrency = vouchers[0].currency;
+      this.type = vouchers[0].accountTransactionType;
+      this.calculateTotalDebitAndCredit();
+    }
+
+    public edit(voucher: IContraVoucher) {
+      this.voucherOfAddModal = voucher;
+    }
+
+    public addButtonClicked() {
+      this.postStatus = false;
+      this.showAddSection = true;
+      this.totalCredit = 0;
+      this.totalDebit = 0;
+      this.type = AccountTransactionType.SELLING;
+      this.voucherNo = "";
+      let currDate: Date = new Date();
+      this.detailVouchers = [];
+      this.voucherDate = moment(currDate).format("DD-MM-YYYY");
+    }
+
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accountListForAddModal;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+
+      this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.customerAccounts = [];
+        this.customerAccountMapWithId = {};
+        this.customerAccounts = accountListForAddModal;
+        this.customerAccounts.forEach((v: IAccount) => this.customerAccountMapWithId[v.id] = v);
+      });
     }
 
     private getCurrencyConversions() {
@@ -123,167 +258,11 @@ module ums {
       });
     }
 
-
     private getCurrencies() {
       this.currencyService.getAllCurrencies().then((currencies: ICurrency[]) => {
         this.currencies = currencies;
-        console.log("Currencies");
-        console.log(currencies);
         this.selectedCurrency = currencies[0];
         this.baseCurrency = currencies.filter((c: ICurrency) => c.currencyFlag == CurrencyFlag.BASE)[0];
-      });
-    }
-
-    public addButtonClicked() {
-      this.postStatus = false;
-      this.showAddSection = true;
-      this.totalCredit = 0;
-      this.totalDebit = 0;
-      this.totalAmount = 0;
-      this.contraVoucherService.getVoucherNumber().then((voucherNo: string) => this.voucherNo = voucherNo);
-      let currDate: Date = new Date();
-      this.contraVouchers = [];
-      this.paymentVoucherMain = <IContraVoucher>{};
-      this.contraVoucherDetail = <IContraVoucher>{};
-      this.voucherDate = moment(currDate).format("DD-MM-YYYY");
-      this.detailVouchers = [];
-    }
-
-    public addData() {
-      this.voucherOfAddModal = <IContraVoucher>{};
-      this.voucherOfAddModal.serialNo = this.detailVouchers.length + 1;
-      this.voucherOfAddModal.balanceType = BalanceType.Cr;
-    }
-
-    public addDataToVoucherTable() {
-      if (this.voucherOfAddModal.id==undefined) {
-        this.voucherOfAddModal = this.addNecessaryAttributesToVoucher(this.voucherOfAddModal);
-        this.detailVouchers.push(this.voucherOfAddModal);
-      }
-      else{
-        this.voucherMapWithId[this.voucherOfAddModal.id]=this.voucherOfAddModal;
-      }
-      this.countTotalAmount();
-    }
-
-    private addNecessaryAttributesToVoucher(voucher: IContraVoucher): IContraVoucher {
-      voucher.accountId = voucher.account.id;
-      voucher.voucherNo = this.voucherNo;
-      voucher.voucherId = ContraVoucherController.CONTRA_VOUCHER_ID;
-      voucher.conversionFactor = this.currencyConversionMapWithCurrency[this.selectedCurrency.id].baseConversionFactor;
-      voucher.foreignCurrency = voucher.amount != null ? voucher.amount * voucher.conversionFactor : this.selectedPaymentAccountCurrentBalance * voucher.conversionFactor;
-      voucher.voucherDate = this.voucherDate;
-      voucher.currencyId = this.selectedCurrency.id;
-      return voucher;
-    }
-
-    public saveVoucher() {
-      if (this.paymentVoucherMain == null)
-        this.notify.error("Account Name is not selected");
-      else {
-        this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
-        console.log("payment voucher after adding necessary fields");
-        console.log(this.paymentVoucherMain);
-        //this.paymentVoucherMain.amount = this.selectedPaymentAccountCurrentBalance + this.totalAmount;
-        this.detailVouchers.push(this.paymentVoucherMain);
-        this.contraVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IContraVoucher[]) => {
-          this.configureVouchers(vouchers);
-        });
-      }
-    }
-
-    public postVoucher() {
-      if (this.paymentVoucherMain == null)
-        this.notify.error("Account Name is not selected");
-      else {
-        this.paymentVoucherMain = this.addNecessaryAttributesToVoucher(this.paymentVoucherMain);
-        this.paymentVoucherMain.amount = this.totalAmount;
-        console.log("Payment voucher amount");
-        console.log(this.paymentVoucherMain.amount);
-        this.detailVouchers.push(this.paymentVoucherMain);
-        this.contraVoucherService.postVoucher(this.detailVouchers).then((vouchers: IContraVoucher[]) => {
-          this.configureVouchers(vouchers);
-        });
-      }
-    }
-
-    private configureVouchers(vouchers: IContraVoucher[]) {
-      this.totalAmount = 0;
-      this.voucherMapWithId = {};
-      this.postStatus=vouchers[0].postDate!=null?true:false;
-      this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
-      vouchers.forEach((v: IContraVoucher) =>{
-        this.voucherMapWithId[v.id] = v;
-        v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
-      });
-      this.voucherDate = vouchers[0].voucherDate;
-      this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IContraVoucher[]) => {
-        this.assignChequeNumberToVouchers(vouchers);
-      });
-      this.voucherNo = vouchers[0].voucherNo;
-    }
-
-
-    public fetchDetails(paymentVoucher: IContraVoucher) {
-      this.showAddSection = true;
-      this.contraVoucherService.getVouchersByVoucherNoAndDate(paymentVoucher.voucherNo, paymentVoucher.postDate == null ? paymentVoucher.modifiedDate : paymentVoucher.postDate).then((vouchers: IContraVoucher[]) => {
-        console.log("details fetched");
-        console.log(vouchers);
-        this.configureVouchers(vouchers);
-      });
-    }
-
-    private extractMainAndDetailSectionFromVouchers(vouchers: IContraVoucher[]): ng.IPromise<IContraVoucher[]> {
-      let defer: ng.IDeferred<IContraVoucher[]> = this.$q.defer();
-      this.detailVouchers = [];
-      this.voucherMapWithId = {};
-      vouchers.forEach((v: IContraVoucher) => {
-        this.voucherMapWithId[v.id] = v;
-        if (v.serialNo == null) {
-          this.paymentVoucherMain = v;
-          this.getAccountBalance();
-        }
-        else {
-          this.detailVouchers.push(v);
-          this.countTotalAmount();
-        }
-      });
-      defer.resolve(vouchers);
-
-      return defer.promise;
-    }
-
-    public edit(voucher: IContraVoucher) {
-      this.voucherOfAddModal = voucher;
-    }
-
-    public changeDateFormat(date: string) {
-      return Utils.convertFromJacksonDate(date);
-    }
-    private assignChequeNumberToVouchers(vouchers: IContraVoucher[]) {
-      let transactionIdList: string[] = [];
-      vouchers.forEach((v: IContraVoucher) => transactionIdList.push(v.id));
-
-      this.chequeRegisterService.getChequeRegisterList(transactionIdList).then((chequeList: IChequeRegister[]) => {
-        console.log("cheque list");
-        console.log(chequeList);
-        chequeList.forEach((c: IChequeRegister) => {
-          let voucher: IContraVoucher = this.voucherMapWithId[c.accountTransactionId];
-          console.log("Cheque voucher");
-          console.log(voucher);
-          voucher.chequeNo = c.chequeNo;
-          voucher.chequeDate = Utils.convertFromJacksonDate(c.chequeDate);
-        });
-      });
-    }
-
-
-
-    public countTotalAmount() {
-      this.detailVouchers.forEach((v: IContraVoucher) => {
-        this.totalAmount = this.totalAmount + v.amount;
-        console.log("total amount");
-        console.log(this.totalAmount);
       });
     }
   }

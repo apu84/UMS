@@ -88,6 +88,14 @@ module ums {
       return defer.promise;
     }
 
+    public deleteVoucher(voucher: IContraVoucher): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.httpClient.put(this.url + "/delete", voucher.id, HttpClient.MIME_TYPE_JSON)
+          .success((response) => defer.resolve(response))
+          .error((response) => defer.resolve(response));
+      return defer.promise;
+    }
+
     public getVoucherNumber(): ng.IPromise<string> {
       let defer: ng.IDeferred<string> = this.$q.defer();
       this.httpClient.get(this.url + "/voucher-number", HttpClient.MIME_TYPE_JSON,
