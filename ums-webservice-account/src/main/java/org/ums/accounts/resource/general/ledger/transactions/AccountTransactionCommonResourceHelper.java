@@ -18,6 +18,7 @@ import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -82,6 +83,9 @@ public class AccountTransactionCommonResourceHelper extends
   @Autowired
   protected CreditorLedgerManager mCreditorLedgerManager;
 
+  /* Global */
+  private VoucherNumberControl mVoucherNumberControl;
+
   private enum DateCondition {
     Previous,
     Next
@@ -95,11 +99,11 @@ public class AccountTransactionCommonResourceHelper extends
     Company usersCompany = mCompanyManager.get("01");
     if(currentDay.after(getPreviousDate(openFinancialYear.getCurrentStartDate(), DateCondition.Previous))
         && currentDay.before(getPreviousDate(openFinancialYear.getCurrentEndDate(), DateCondition.Next))) {
-      VoucherNumberControl voucherNumberControl = mVoucherNumberControlManager.getByVoucher(voucher, usersCompany);
+      mVoucherNumberControl = mVoucherNumberControlManager.getByVoucher(voucher, usersCompany);
       Calendar calendar = Calendar.getInstance();
       Date currentDate = new Date();
       calendar.setTime(currentDate);
-      return createVoucherNumber(voucher, transactionResponse, voucherNumberControl, calendar, currentDate);
+      return createVoucherNumber(voucher, transactionResponse, mVoucherNumberControl, calendar, currentDate);
 
     }
     else {
@@ -145,7 +149,7 @@ public class AccountTransactionCommonResourceHelper extends
 
   private TransactionResponse getVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
       Date pFirstDate, Date pLastDate) {
-    List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, pLastDate);
+    List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, UmsUtils.incrementDate(pLastDate, 1));
     List<Integer> voucherNoListInNumber = new ArrayList<>();
     accountTransactions.forEach(a -> {
       voucherNoListInNumber.add(Integer.parseInt(a.substring(4)));
@@ -187,10 +191,24 @@ public class AccountTransactionCommonResourceHelper extends
   @Transactional
   public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
+    checkWithVoucherLimit(transactions);
     createOrUpdateCreditorLedger(transactions.stream().filter(t -> t.getSupplierCode() != null).collect(Collectors.toList()));
     createOrUpdateDebtorLedger(transactions.stream().filter(t -> t.getCustomerCode() != null).collect(Collectors.toList()));
     transactions.forEach(t -> t.setVoucherNo(t.getVoucherNo().substring(2)));
     return new ArrayList<>(transactions);
+  }
+
+  private void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
+    if(pTransactions.size() == 0)
+      return;
+
+    VoucherNumberControl voucherNumberControl =
+        mVoucherNumberControlManager.getByVoucher(pTransactions.get(0).getVoucher(), pTransactions.get(0).getCompany());
+    for(MutableAccountTransaction t : pTransactions) {
+      if(t.getAmount() != null && t.getAmount().compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
+        throw new ValidationException("Maximum limit exceeded");
+      }
+    }
   }
 
   @Transactional
@@ -373,6 +391,8 @@ public class AccountTransactionCommonResourceHelper extends
         chequeRegisters.add(chequeRegister);
       }
     }
+    checkWithVoucherLimit(newTransactions);
+    checkWithVoucherLimit(updateTransactions);
     if(newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
     if(updateTransactions.size() > 0)

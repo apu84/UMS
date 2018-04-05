@@ -1,20 +1,72 @@
-<table class=" table table-striped table-bordered ">
+<style>
+    table {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        height: 600px; /* this can vary */
+    }
+
+    table * {
+        box-sizing: inherit;
+        -moz-box-sizing: inherit;
+    }
+
+    thead {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        display: inline-block;
+    }
+
+    thead > tr, tbody > tr, tfoot > tr {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    thead, tfoot {
+        flex-shrink: 0;
+    }
+
+    th, tbody td {
+        width: 100%; /* this can vary */
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    tfoot {
+        display: inline-block;
+    }
+
+    tfoot td {
+        width: 100%;
+        display: inline-block;
+    }
+</style>
+<table st-table="displayed" class=" table table-striped ">
     <thead align="center">
     <tr class="header">
-        <th>Group Name</th>
-        <th>Under The Main Group Of</th>
-        <th>Sub Ledger</th>
-        <th></th>
+        <th st-ratio="40" st-sort="groupName">Group Name</th>
+        <th st-ratio="40" st-sort="mainGroup">Under The Main Group Of</th>
+        <th st-ration="10" align="center"><p align="center">Sub Ledger</p></th>
+        <th st-ration="10"></th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="g in vm.groups">
-        <td>{{g.groupName}}</td>
-        <td>{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
-        <td align="center">
+        <td st-ratio="40">{{g.groupName}}</td>
+        <td st-ratio="40">{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
+        <td st-ratio="10" align="center">
             <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
         </td>
-        <td>
+        <td st-ratio="10">
             <button data-ng-disabled="true" class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)"
                     data-toggle="modal"
                     data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
