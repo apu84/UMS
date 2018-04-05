@@ -60,9 +60,13 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<Long> saveAssignedCourses(final List<MutableApplicationTES> pMutableList);
 
+  List<Long> setQuestions(final List<MutableApplicationTES> pMutableList);
+
   Long addQuestions(final MutableApplicationTES pMutableList);
 
   List<MutableApplicationTES> getQuestions();
+
+  List<ApplicationTES> getQuestionSemesterMap(final Integer pSemesterId);
 
   List<ApplicationTES> getAssignedCoursesByHead(final String pFacultyId, final Integer pSemesterId);
 

@@ -13,6 +13,16 @@ import java.util.List;
 public class ApplicationTESCache extends
     ContentCache<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements ApplicationTESManager {
   @Override
+  public List<Long> setQuestions(List<MutableApplicationTES> pMutableList) {
+    return getManager().setQuestions(pMutableList);
+  }
+
+  @Override
+  public List<ApplicationTES> getQuestionSemesterMap(Integer pSemesterId) {
+    return getManager().getQuestionSemesterMap(pSemesterId);
+  }
+
+  @Override
   public List<MutableApplicationTES> getQuestions() {
     return getManager().getQuestions();
   }

@@ -28,8 +28,8 @@
                 <span ng-if="app.observationType==3" class="label label-warning badge-warning">Non Teaching Observation</span>
 
             </td>
-                <td><input
-                    type="checkbox"
+                <td><input data-ng-show="app.status==0  ? true:false"
+                           type="checkbox"
                            data-ng-model="app.apply"
                            data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
                 </td>
@@ -40,7 +40,7 @@
             </tbody>
         </table>
         <div align="right">
-            <button class="btn btn-success">Submit</button>
+            <button class="btn btn-success" data-ng-click="vm.submitSelectedQuestions()" data-ng-disabled="vm.submit_Button_Disable">Submit</button>
         </div>
     </div>
 </div>

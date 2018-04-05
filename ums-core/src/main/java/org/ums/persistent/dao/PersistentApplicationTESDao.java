@@ -29,6 +29,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getAllQuestions =
       "SELECT a.QUESTION_ID,a.QUESTION_DETAILS,a.OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS a,APPLICATION_TES_SET_QUESTIONS b WHERE  "
           + "a.QUESTION_ID=b.QUESTION_ID AND b.SEMESTER_ID=?";
+  String setQuestion =
+      "Insert  into  APPLICATION_TES_SET_QUESTIONS (ID,QUESTION_ID,SEMESTER_ID,STATUS,APPLIED_ON)  values  (?,?,?,?,systimestamp)";
   String addQuestion =
       "Insert  into  APPLICATION_TES_QUESTIONS (ID,QUESTION_ID,QUESTION_DETAILS,SEMESTER_ID,OBSERVATION_TYPE,APPLIED_ON)  values  (?,?,?,?,?,systimestamp)";
 
@@ -147,6 +149,14 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
 
   String getQuestions =
       "SELECT QUESTION_ID,QUESTION_DETAILS,SEMESTER_ID,OBSERVATION_TYPE FROM APPLICATION_TES_QUESTIONS";
+  String getQuestionSemesterMap =
+      "select QUESTION_ID,SEMESTER_ID,STATUS from APPLICATION_TES_SET_QUESTIONS WHERE SEMESTER_ID=?";
+
+  @Override
+  public List<ApplicationTES> getQuestionSemesterMap(Integer pSemesterId) {
+    String query = getQuestionSemesterMap;
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new ApplicationTESRowMapperForQuestionsMapping());
+  }
 
   @Override
   public List<MutableApplicationTES> getQuestions() {
@@ -311,6 +321,15 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
+  public List<Long> setQuestions(List<MutableApplicationTES> pMutableList) {
+    List<Object[]>  parameters  =  getInsertParamListForSetQuestions(pMutableList);
+    mJdbcTemplate.batchUpdate(setQuestion,  parameters);
+    return  parameters.stream()
+            .map(paramArray  ->  (Long)  paramArray[0])
+            .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  @Override
   public  List<Long>  create(List<MutableApplicationTES>  pMutableList)  {
     List<Object[]>  parameters  =  getInsertParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ONE,  parameters);
@@ -335,6 +354,15 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     for(ApplicationTES app : pMutableApplicationTES) {
       params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourses(), app.getTeacherId(),
           app.getSemester(), app.getSection(), app.getDeptId(), app.getStatus()});
+    }
+
+    return params;
+  }
+
+  private List<Object[]> getInsertParamListForSetQuestions(List<MutableApplicationTES> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(ApplicationTES app : pMutableApplicationTES) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getSemester(), app.getStatus()});
     }
 
     return params;
@@ -445,6 +473,16 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForQuestionsMapping implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
+      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setStatus(pResultSet.getInt("STATUS"));
       return application;
     }
   }

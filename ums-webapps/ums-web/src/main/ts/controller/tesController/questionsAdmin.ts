@@ -21,6 +21,8 @@ module ums{
         public selectedObTypeId:number;
         public questionDetails:string;
         public observationTypeName:string;
+        public submit_Button_Disable:boolean;
+        public checkBoxCounter:number;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -40,7 +42,7 @@ module ums{
                     private userService: UserService,
                     private commonservice: CommonService,
                     private attachmentService: AttachmentService){
-            this.setQuestionsForEvaluationStatus=true;
+            this.setQuestionsForEvaluationStatus=false;
             this.addNewQuestionStatus=false;
             this.migrateQuestionStatus=false;
             this.observationTypeList=[];
@@ -55,7 +57,9 @@ module ums{
             console.log("****selected-id****");
             console.log(this.selectedObTypeId);
             this.questionDetails="";
-            this.getQuestions();
+            this.submit_Button_Disable=true;
+            this.checkBoxCounter=0;
+           // this.getQuestions();
 
         }
         private addQuestionSubmit(){
@@ -99,6 +103,28 @@ module ums{
             this.migrateQuestionStatus=true;
             this.setQuestionsForEvaluationStatus=false;
             this.addNewQuestionStatus=false;
+
+        }
+
+        private submitSelectedQuestions(){
+            console.log(this.questionsList);
+            this.convertToJsonSetQuestion(this.questionsList).then((app: any) =>{
+                console.log("hello From Another Side!!!")
+                console.log(app);
+
+
+               this.httpClient.post('academic/applicationTES/setQuestion', app, 'application/json')
+                    .success((data, status, header, config) => {
+                        this.notify.success("Data saved successfully");
+                        this.checkBoxCounter=0;
+                        this.submit_Button_Disable=true;
+                        this.getQuestions();
+
+                    }).error((data) => {
+                    this.notify.error("Error in Saving Data");
+                });
+
+            });
 
         }
 
@@ -152,6 +178,58 @@ module ums{
             console.log(completeJson);
             defer.resolve(completeJson);
             return defer.promise;
+        }
+        private convertToJsonSetQuestion(result: Array<IQuestions>): ng.IPromise<any> {
+            let defer:ng.IDeferred<any> = this.$q.defer();
+            var completeJson = {};
+            console.log("result in convert to Json");
+            console.log(result);
+            console.log(result.length);
+            let selectedQuestionStatus=1;
+            var jsonObj = [];
+            for(var i=0;i<result.length;i++){
+                var item = {};
+                if(result[i].apply==true) {
+                    item["questionId"] = result[i].questionId;
+                    item["semesterid"] = result[i].semesterId;
+                    item["status"] = selectedQuestionStatus;
+                    console.log("Items");
+                    console.log(item);
+                    //this.notify.success("sending./.....");
+                    jsonObj.push(item);
+                }
+
+            }
+            completeJson["entries"] = jsonObj;
+            console.log("Complete json!!!!!!!!!!!!!!!")
+            console.log(completeJson);
+            defer.resolve(completeJson);
+            return defer.promise;
+
+        }
+
+        private checkMoreThanOneSelectionSubmit(result:IQuestions){
+            if(result.apply){
+                this.checkBoxCounter++;
+                this.enableOrDisableSubmitButton();
+            }
+            else{
+                this.checkBoxCounter--;
+                this.enableOrDisableSubmitButton();
+            }
+
+            console.log("value: "+this.submit_Button_Disable);
+        }
+        private enableOrDisableSubmitButton(): void{
+            if( this.checkBoxCounter > 0){
+                this.submit_Button_Disable=false;
+            }else{
+                this.submit_Button_Disable=true;
+            }
+        }
+        private close(){
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
         }
 
     }

@@ -125,6 +125,25 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
+  public Response setQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      getBuilder().build(application, jsonObject, localCache);
+      application.setSemester(mSemesterManager.getActiveSemester(11).getId());
+      applications.add(application);
+    }
+    getContentManager().setQuestions(applications);
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public Response addQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableApplicationTES applications = new PersistentApplicationTES();
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -203,8 +222,18 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   public  JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo){
         List<MutableApplicationTES> applications=getContentManager().getQuestions();
-        applications.forEach(a->
-        a.setStatus(0));
+        List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(11).getId());
+        for(int i=0;i<applications.size();i++){
+            Integer qId=applications.get(i).getQuestionId();
+            Integer size=0;
+            size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
+                if(size==1){
+                    applications.get(i).setStatus(1);
+                }else{
+                    applications.get(i).setStatus(0);
+                }
+
+        }
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
