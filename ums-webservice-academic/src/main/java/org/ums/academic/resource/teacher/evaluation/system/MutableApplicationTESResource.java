@@ -27,9 +27,17 @@ public class MutableApplicationTESResource extends Resource {
   }
 
   @POST
+  @Path("/addQuestion")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response addQuestion(final JsonObject pJsonObject) {
+    return mHelper.addQuestion(pJsonObject, mUriInfo);
+  }
+
+  @POST
   @Path("/saveAssignedCoursesByHead")
   @Produces({MediaType.APPLICATION_JSON})
   public Response saveAssignedCourses(final JsonObject pJsonObject) {
     return mHelper.saveAssignedCourses(pJsonObject, mUriInfo);
   }
+
 }

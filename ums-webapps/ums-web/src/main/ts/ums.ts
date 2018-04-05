@@ -993,6 +993,24 @@ module ums {
                 });
             }]
         }
+    }).state('assignQuestions', {
+        url: "/assignQuestions",
+        controller: 'QuestionsAdmin',
+        controllerAs: 'vm',
+        templateUrl: 'views/teachers-Evaluation-System/questions.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    files: [
+                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                        'vendors/bootstrap-datepicker/css/datepicker.css',
+                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                    ]
+                });
+            }]
+        }
     }).state('tes', {
         url: "/tes",
         controller: 'HeadTES',

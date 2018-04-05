@@ -45,6 +45,12 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getQuestions")
+  public JsonObject getQuestions(@Context Request pRequest) {
+    return mHelper.getQuestions(pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getResult/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   public List<Report> getResult(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {

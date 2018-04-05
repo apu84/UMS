@@ -133,15 +133,15 @@ module ums{
         }
 
         private getAllQuestions(){
-         var appTES:Array<IQuestions>=[];
+            var appTES:Array<IQuestions>=[];
 
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAllQuestions', 'application/json',
                 (json: any, etag: string) => {
-                   appTES=json.entries;
+                    appTES=json.entries;
                     console.log("****p1p****");
                     console.log("Applicatino TES   get Questions!!!!");
-                  this.questionListAndReview=appTES;
+                    this.questionListAndReview=appTES;
                     this.startDate=json.startDate;
                     this.endDate=json.endDate;
                     this.deadLine=json.deadLine;
@@ -239,7 +239,7 @@ module ums{
             var jsonObj = [];
             for(var i=0;i<result.length;i++){
                 var item = {};
-                item["questionId"]=result[i].questionId ;
+                item["questionId"]=result[i].questionId;
                 item["point"]=result[i].point;
                 item["comment"]=result[i].comment;
                 item["observationType"]=result[i].observationType;

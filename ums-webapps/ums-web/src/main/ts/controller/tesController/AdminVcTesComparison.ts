@@ -100,7 +100,7 @@ module ums{
             this.resultView=true;
             this.checkBoxCounter=0;
             this.innerCommentPgCurrentPage=1;
-            this.innerCommentPgItemsPerPage=5;
+            this.innerCommentPgItemsPerPage=20;
             this.commentPgTotalRecords=0;
             this.checkEvaluationResult=true;
             this.evaluationResultStatus=true;
@@ -213,7 +213,7 @@ module ums{
 
         private  getReport(){
             let contentType: string = UmsUtil.getFileContentType("pdf");
-            let fileName = "Evaluation Report";
+            let fileName = "Evaluation Report"+"_"+this.staticDepartmentName+"_"+this.staticSessionName;
             console.log("QWERTYUIIOOOPPPPP");
             console.log(""+this.selectedTeacherId+"\n"+this.selectedSemesterId+"\n"+this.selectedCourseId);
             var defer = this.$q.defer();

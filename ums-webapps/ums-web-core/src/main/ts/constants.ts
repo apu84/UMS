@@ -535,6 +535,10 @@ module ums {
                 courseTypeTES: [
                     {id: 1, name: "Theory"},
                     {id: 2, name: "Lab"}
+                ],observationTypeTes: [
+                    {id: 1, name: "Class Room Observation"},
+                    {id: 2, name: "Non-Class Room Observation"},
+                    {id: 3, name: "Non Teaching Observation"}
                 ],deptForTes: [
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},

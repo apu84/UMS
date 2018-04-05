@@ -125,6 +125,25 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
+  public Response addQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
+    MutableApplicationTES applications = new PersistentApplicationTES();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      getBuilder().build(application, jsonObject, localCache);
+      application.setSemester(mSemesterManager.getActiveSemester(11).getId());
+      applications = application;
+    }
+    getContentManager().addQuestions(applications);
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public Response saveAssignedCourses(JsonObject pJsonObject, UriInfo pUriInfo) {
     String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
     Boolean deadLineStatus = false, studentSubmitDeadline = false;
@@ -182,6 +201,19 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
+  public  JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo){
+        List<MutableApplicationTES> applications=getContentManager().getQuestions();
+        applications.forEach(a->
+        a.setStatus(0));
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
   public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId,
       final Request pRequest, final UriInfo pUriInfo) {
     List<ApplicationTES> applications = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
@@ -203,20 +235,23 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
                   studentNo, app);
         }
         String teacherName, deptName, courseNo, courseTitle, programName = "";
+        Integer registeredStudents=0;double percentage=0;
         teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
         courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
         courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
         try {
-          programName =
-              getContentManager().getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          programName = getContentManager().getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          registeredStudents=getContentManager().getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          int total=studentNo*registeredStudents;
+          percentage= (double)total/100;
         } catch(Exception e) {
           e.printStackTrace();
         }
         if(programName.equals(null) || programName.equals("")) {
           programName = "Not Found";
         }
-        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, 10, programName,
+        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, percentage, programName,
             parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), parameters.get(j)
                 .getDeptId()));
       }
@@ -241,7 +276,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             for(int l=0;l<list.size();l++){
                 reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
                         list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==-1? 0:max,
-                        10, list.get(l).getProgramName(),
+                        list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
                         list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
             }
 
@@ -265,7 +300,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             for(int l=0;l<list.size();l++){
                 reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
                         list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==10? 0:min,
-                        10, list.get(l).getProgramName(),
+                        list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
                         list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
             }
 

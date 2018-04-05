@@ -77,6 +77,7 @@ public class TesGeneratorImp implements TesGenerator {
     Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
     Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
     Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
+    Font tt = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
     document.open();
    // document.setPageSize(PageSize.A4.rotate());
 
@@ -180,7 +181,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable table= new PdfPTable(5);
     table.setWidthPercentage(100);
-    table.setWidths(new float[] { 1, 10,1,1,1 });
+    table.setWidths(new float[] { 1, 8,1,1,1 });
     table.addCell("SL");
     table.addCell("Questions");
     table.addCell("Total Points");
@@ -192,11 +193,11 @@ public class TesGeneratorImp implements TesGenerator {
     for(int i=0;i<reportList.size();i++){
       if(reportList.get(i).getObservationType()==1){
         index=index+1;
-        table.addCell(""+index);
-        table.addCell(""+reportList.get(i).getQuestionDetails());
-        table.addCell(""+reportList.get(i).getTotalScore());
-        table.addCell(""+reportList.get(i).getStudentNo());
-        table.addCell(""+reportList.get(i).getAverageScore());
+        table.addCell(new Phrase(""+index,tt));
+        table.addCell(new Phrase(""+reportList.get(i).getQuestionDetails(),tt));
+        table.addCell(new Phrase(""+reportList.get(i).getTotalScore(),tt));
+        table.addCell(new Phrase(""+reportList.get(i).getStudentNo(),tt));
+        table.addCell(new Phrase(""+reportList.get(i).getAverageScore(),tt));
       }
 
     }
@@ -208,7 +209,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable subset= new PdfPTable(5);
     subset.setWidthPercentage(100);
-    subset.setWidths(new float[] { 1, 10,1,1,1 });
+    subset.setWidths(new float[] { 1, 8,1,1,1 });
     subset.addCell("");
     subset.addCell("");
     subset.addCell(""+totalPointsObtype1);
@@ -238,7 +239,7 @@ public class TesGeneratorImp implements TesGenerator {
     //Non classRoom
     PdfPTable table1= new PdfPTable(5);
     table1.setWidthPercentage(100);
-    table1.setWidths(new float[] { 1, 10,1,1,1 });
+    table1.setWidths(new float[] { 1, 8,1,1,1 });
     table1.addCell("SL");
     table1.addCell("Questions");
     table1.addCell("Total Points");
@@ -249,11 +250,11 @@ public class TesGeneratorImp implements TesGenerator {
     for(int i=0;i<reportList.size();i++){
       if(reportList.get(i).getObservationType()==2){
         index=index+1;
-        table1.addCell(""+index);
-        table1.addCell(""+reportList.get(i).getQuestionDetails());
-        table1.addCell(""+reportList.get(i).getTotalScore());
-        table1.addCell(""+reportList.get(i).getStudentNo());
-        table1.addCell(""+reportList.get(i).getAverageScore());
+        table1.addCell(new Phrase(""+index,tt));
+        table1.addCell(new Phrase(""+reportList.get(i).getQuestionDetails(),tt));
+        table1.addCell(new Phrase(""+reportList.get(i).getTotalScore(),tt));
+        table1.addCell(new Phrase(""+reportList.get(i).getStudentNo(),tt));
+        table1.addCell(new Phrase(""+reportList.get(i).getAverageScore(),tt));
       }
 
     }
@@ -265,7 +266,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable subset1= new PdfPTable(5);
     subset1.setWidthPercentage(100);
-    subset1.setWidths(new float[] { 1, 10,1,1,1 });
+    subset1.setWidths(new float[] { 1, 8,1,1,1 });
     subset1.addCell("");
     subset1.addCell("");
     subset1.addCell(""+totalPointsObtype2);
@@ -280,7 +281,7 @@ public class TesGeneratorImp implements TesGenerator {
     document.add(paragraph);
     PdfPTable tableGreen= new PdfPTable(5);
     tableGreen.setWidthPercentage(100);
-    tableGreen.setWidths(new float[] { 1, 10,1,1,1 });
+    tableGreen.setWidths(new float[] { 1, 8,1,1,1 });
     PdfPCell cell=new PdfPCell(new Paragraph("   "));
     cell.setColspan(5);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -495,20 +496,23 @@ public class TesGeneratorImp implements TesGenerator {
                           studentNo, app);
         }
         String teacherName, deptName, courseNo, courseTitle, programName = "";
+        Integer registeredStudents=0;double percentage=0;
         teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
         courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
         courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
         try {
-          programName =
-                  mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          programName = mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          registeredStudents=mApplicationTESManager.getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          int total=studentNo*registeredStudents;
+          percentage= (double)total/100;
         } catch(Exception e) {
           e.printStackTrace();
         }
         if(programName.equals(null) || programName.equals("")) {
           programName = "Not Found";
         }
-        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, 10, programName,
+        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, percentage, programName,
                 parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), parameters.get(j)
                 .getDeptId()));
       }
@@ -533,7 +537,7 @@ public class TesGeneratorImp implements TesGenerator {
         for(int l=0;l<list.size();l++){
           reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
                   list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==-1? 0:max,
-                  10, list.get(l).getProgramName(),
+                  list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
                   list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
         }
 
@@ -557,7 +561,7 @@ public class TesGeneratorImp implements TesGenerator {
         for(int l=0;l<list.size();l++){
           reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
                   list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==10? 0:min,
-                  10, list.get(l).getProgramName(),
+                  list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
                   list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
         }
 
@@ -567,6 +571,7 @@ public class TesGeneratorImp implements TesGenerator {
      pdfReport=report;
     }
 
+    pdfReport.sort(Comparator.comparing((ComparisonReport::getTotalScore)).reversed());
     PdfPTable tableQuestions= new PdfPTable(8);
     tableQuestions.setWidthPercentage(100);
     tableQuestions.setWidths(new float[] { 1,5,2,2,6,2,2,2});
@@ -597,7 +602,7 @@ public class TesGeneratorImp implements TesGenerator {
     pdfWordCellColumn4.setPaddingLeft(5);
     pdfWordCellColumn4.setPaddingBottom(5);
     tableQuestions.addCell(pdfWordCellColumn4);
-    pdfWordCellColumn5.addElement(new Phrase("Course Name",boldFont));
+    pdfWordCellColumn5.addElement(new Phrase("Course Title",boldFont));
     pdfWordCellColumn5.setPaddingLeft(5);
     pdfWordCellColumn5.setPaddingBottom(5);
     tableQuestions.addCell(pdfWordCellColumn5);

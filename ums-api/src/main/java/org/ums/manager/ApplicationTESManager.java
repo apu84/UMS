@@ -31,6 +31,8 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
 
+  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final Integer pSemesterId);
+
   List<ApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
 
   Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
@@ -57,6 +59,10 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   List<MutableApplicationTES> getAssignedCourses(final String pFacultyId, final Integer pSemesterId);
 
   List<Long> saveAssignedCourses(final List<MutableApplicationTES> pMutableList);
+
+  Long addQuestions(final MutableApplicationTES pMutableList);
+
+  List<MutableApplicationTES> getQuestions();
 
   List<ApplicationTES> getAssignedCoursesByHead(final String pFacultyId, final Integer pSemesterId);
 

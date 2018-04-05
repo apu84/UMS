@@ -106,6 +106,9 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pJsonObject.containsKey("questionId"))
       pMutable.setQuestionId(pJsonObject.getInt("questionId"));
 
+    if(pJsonObject.containsKey("questionDetails"))
+      pMutable.setQuestionDetails(pJsonObject.getString("questionDetails"));
+
     if(pJsonObject.containsKey("point"))
       pMutable.setPoint(pJsonObject.getInt("point"));
 

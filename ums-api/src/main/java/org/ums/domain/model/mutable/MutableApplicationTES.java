@@ -59,4 +59,5 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
   void setSemesterEndDate(final String setSemesterEndDate);
 
   void setDeadLineStatus(final Boolean pDeadLineStatus);
+
 }
