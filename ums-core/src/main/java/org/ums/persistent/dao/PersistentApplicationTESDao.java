@@ -375,6 +375,13 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
+  public List<MutableApplicationTES> getMigrationQuestions(Integer pSemesterId) {
+    String query = getAllQuestions;
+    return mJdbcTemplate
+        .query(query, new Object[] {pSemesterId}, new ApplicationTESRowMapperForGetMigrationQuestions());
+  }
+
+  @Override
   public List<MutableApplicationTES> getReviewEligibleCourses(String pStudentId, Integer pSemesterId,
       String pCourseType, String pSection) {
     String query = getAllReviewEligibleCoures;
@@ -412,6 +419,17 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   class ApplicationTESRowMapperForGetAllQuestions implements RowMapper<ApplicationTES> {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
+      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
+      application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
+
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForGetMigrationQuestions implements RowMapper<MutableApplicationTES> {
+    @Override
+    public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
       application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
       application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));

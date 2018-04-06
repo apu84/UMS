@@ -50,6 +50,13 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
     return mHelper.getQuestions(pRequest, mUriInfo);
   }
 
+  // getMigrateQuestions/semesterId/'+this.selectedSemesterId
+  @GET
+  @Path("/getMigrateQuestions/semesterId/{semester-id}")
+  public JsonObject getMigrationQuestions(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getMigrationQuestions(pSemesterId, pRequest, mUriInfo);
+  }
+
   @GET
   @Path("/getResult/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   public List<Report> getResult(@Context Request pRequest, @PathParam("course-id") String pCourseId,

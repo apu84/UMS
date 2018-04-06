@@ -220,6 +220,29 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
+  public  JsonObject getMigrationQuestions(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
+        List<MutableApplicationTES> applications=getContentManager().getMigrationQuestions(pSemesterId);
+        List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(11).getId());
+        for(int i=0;i<applications.size();i++){
+            Integer qId=applications.get(i).getQuestionId();
+            Integer size=0;
+            size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
+            if(size==1){
+                applications.get(i).setStatus(1);
+            }else{
+                applications.get(i).setStatus(0);
+            }
+
+        }
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
   public  JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo){
         List<MutableApplicationTES> applications=getContentManager().getQuestions();
         List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(11).getId());

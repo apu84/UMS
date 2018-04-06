@@ -1,3 +1,66 @@
+<style>
+    .icon-success {
+        color: #5CB85C;
+    }
+    .icon-danger{
+        color: red;
+    }
+</style>
 <div>
-    Migrate Questions
+    <div class="panel">
+        <div class="panel-heading" align="center">Migrate Questions<span
+                    class="subtitle"></span></div>
+    </div>
+
+    <br>
+    <div>
+        <form class="form-horizontal"  name="myForm">
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Select Semester</label>
+                <div class="col-sm-4">
+                    <select
+                            class="form-control required"
+                            name="leaveType"
+                            id="inputName3"
+                            data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                            data-ng-model="vm.semester"
+                            data-ng-change="vm.semesterChanged(vm.semester)"
+                    ></select>
+                </div>
+            </div>
+        </form>
+        <div class="panel-body" >
+            <table class="table table-bordered">
+                <thead>
+                <th style="background-color: #FAFAFA;width: 10px ">SL</th>
+                <th style="background-color: #FAFAFA; width: 60% ">Question Details</th>
+                <th style="background-color: #FAFAFA; ">Observation Type</th>
+                <th style="background-color: #FAFAFA; ">Set Question</th>
+                <th style="background-color: #FAFAFA; ">Status</th>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="app in vm.questionsMigrationList | orderBy:'observationType'" >
+                    <td>{{$index+1}}</td>
+                    <td>{{app.questionDetails}}</td>
+                    <td> <span ng-if="app.observationType==1" class="label label-success badge-success" >Class Room Observation</span>
+                        <span ng-if="app.observationType==2" class="label label-info badge-info">Non Class Room Observation</span>
+                        <span ng-if="app.observationType==3" class="label label-warning badge-warning">Non Teaching Observation</span>
+
+                    </td>
+                    <td><input data-ng-show="app.status==0  ? true:false"
+                               type="checkbox"
+                               data-ng-model="app.apply"
+                               data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
+                    </td>
+                    <td>
+                        <span ng-if="app.status==1" class="glyphicon glyphicon-ok icon-success"></span>
+                        <span ng-if="app.status==0" class="glyphicon glyphicon-remove icon-danger"></span></td>
+                </tr>
+                </tbody>
+            </table>
+            <div align="right">
+                <button class="btn btn-success" data-ng-click="vm.submitSelectedMigrationQuestions()" data-ng-disabled="vm.submit_Button_Disable">Submit</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -15,6 +15,12 @@ module ums{
         public observationTypeList: Array<IConstantsObservationType>;
         public observationTypeStatus: IConstantsObservationType;
         public questionsList:Array<IQuestions>;
+        public questionsMigrationList:Array<IQuestions>;
+        public semesters:Array<Semester>;
+        public semester:Semester;
+        public semesterName:string;
+        public selectedSemesterName:string;
+        public selectedSemesterId:number;
         public addNewQuestionStatus:boolean;
         public setQuestionsForEvaluationStatus:boolean;
         public migrateQuestionStatus:boolean;
@@ -87,6 +93,8 @@ module ums{
             this.setQuestionsForEvaluationStatus=true;
             this.addNewQuestionStatus=false;
             this.migrateQuestionStatus=false;
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
             this.getQuestions();
 
 
@@ -103,29 +111,86 @@ module ums{
             this.migrateQuestionStatus=true;
             this.setQuestionsForEvaluationStatus=false;
             this.addNewQuestionStatus=false;
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
+            this.getSemesters();
 
+        }
+        private getSemesters():void{
+            this.semesterService.fetchSemesters(11,5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters:Array<Semester>)=>{
+                this.semesters=semesters;
+                console.log(this.semesters);
+                for(var i=0;i<semesters.length;i++){
+                    if(semesters[i].status==2){
+                        this.semester = semesters[i];
+                        break;
+                    }
+                }
+                this.selectedSemesterId=this.semester.id;
+                console.log("---->"+this.selectedSemesterId);
+                this.getMigrationQuestionList();
+            });
+        }
+        private semesterChanged(val:any){
+            console.log("Name: "+val.name+"\nsemesterId: "+val.id);
+            this.selectedSemesterId=val.id;
+            this.getMigrationQuestionList();
+
+            // this.getStudentSubmitDeadLine();
+
+        }
+        private getMigrationQuestionList(){
+            var app:Array<IQuestions>=[];
+            this.questionsMigrationList=[];
+            var defer = this.$q.defer();
+            console.log("Semester_Id:"+this.selectedSemesterId);
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getMigrateQuestions/semesterId/'+this.selectedSemesterId, 'application/json',
+                (json: any, etag: string) => {
+                    app=json.entries;
+                    console.log("Migration Questions!!!!");
+                    console.log(json.entries);
+                    this.questionsMigrationList=app;
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
         }
 
         private submitSelectedQuestions(){
-            console.log(this.questionsList);
-            this.convertToJsonSetQuestion(this.questionsList).then((app: any) =>{
+            let setQuestionStatus=1;
+            this.setQuestions(this.questionsList,setQuestionStatus);
+
+
+        }
+       private submitSelectedMigrationQuestions(){
+            let setMigrationQuestionStatus=2;
+            this.setQuestions(this.questionsMigrationList,setMigrationQuestionStatus);
+        }
+
+        private setQuestions(result:Array<any>,parameter:number){
+            console.log(result);
+            this.convertToJsonSetQuestion(result).then((app: any) =>{
                 console.log("hello From Another Side!!!")
                 console.log(app);
 
-
-               this.httpClient.post('academic/applicationTES/setQuestion', app, 'application/json')
+                this.httpClient.post('academic/applicationTES/setQuestion', app, 'application/json')
                     .success((data, status, header, config) => {
                         this.notify.success("Data saved successfully");
                         this.checkBoxCounter=0;
                         this.submit_Button_Disable=true;
-                        this.getQuestions();
+                        if(parameter==1){
+                            this.getQuestions();
+                        }else{
+                         this.getMigrationQuestionList();
+                        }
 
                     }).error((data) => {
                     this.notify.error("Error in Saving Data");
                 });
 
             });
-
         }
 
         private getQuestions(){
