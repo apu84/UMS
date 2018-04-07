@@ -50,6 +50,19 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
     return mHelper.getQuestions(pRequest, mUriInfo);
   }
 
+  @GET
+  @Path("/getDeleteEligibleQuestions")
+  public JsonObject getDeleteEligibleQuestions(@Context Request pRequest) {
+    return mHelper.getDeleteEligibleQuestions(pRequest, mUriInfo);
+  }
+
+  // getDeleteEligibleQuestions
+  @GET
+  @Path("/getInitialSemesterParameter")
+  public JsonObject getInitialSemesterParameter(@Context Request pRequest) {
+    return mHelper.getInitialSemesterParameter(pRequest, mUriInfo);
+  }
+
   // getMigrateQuestions/semesterId/'+this.selectedSemesterId
   @GET
   @Path("/getMigrateQuestions/semesterId/{semester-id}")
@@ -57,6 +70,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
     return mHelper.getMigrationQuestions(pSemesterId, pRequest, mUriInfo);
   }
 
+  // getInitialSemesterParameter
   @GET
   @Path("/getResult/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   public List<Report> getResult(@Context Request pRequest, @PathParam("course-id") String pCourseId,

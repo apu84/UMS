@@ -6,19 +6,25 @@ module ums{
     interface IQuestions{
         questionId:number;
         questionDetails:string;
-        semesterId:number;
         observationType:number;
         apply:boolean;
-        status:string;
+        status:boolean;
+    }
+    interface  IDeleteQuestions{
+        questionId:number;
+        questionDetails:string;
+        observationType:number;
+        apply:boolean;
     }
     class QuestionsAdmin{
         public observationTypeList: Array<IConstantsObservationType>;
         public observationTypeStatus: IConstantsObservationType;
         public questionsList:Array<IQuestions>;
         public questionsMigrationList:Array<IQuestions>;
+        public MigrationModalList:Array<IQuestions>;
+        public deleteQuestionList:Array<IDeleteQuestions>;
         public semesters:Array<Semester>;
         public semester:Semester;
-        public semesterName:string;
         public selectedSemesterName:string;
         public selectedSemesterId:number;
         public addNewQuestionStatus:boolean;
@@ -29,6 +35,14 @@ module ums{
         public observationTypeName:string;
         public submit_Button_Disable:boolean;
         public checkBoxCounter:number;
+        public semesterName:string;
+        public startDate:string;
+        public endDate:string;
+        public deadLine:boolean;
+        public initialStatus:boolean;
+        public deadLineStatus:string;
+        public setQuestionShowStatus:boolean;
+        public deleteQuestionStatus:boolean;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -48,9 +62,12 @@ module ums{
                     private userService: UserService,
                     private commonservice: CommonService,
                     private attachmentService: AttachmentService){
+            this.initialStatus=true;
+            this.setQuestionShowStatus=true;
             this.setQuestionsForEvaluationStatus=false;
             this.addNewQuestionStatus=false;
             this.migrateQuestionStatus=false;
+            this.deleteQuestionStatus=false;
             this.observationTypeList=[];
             this.observationTypeList = this.appConstants.observationTypeTes;
             console.log("***")
@@ -65,9 +82,58 @@ module ums{
             this.questionDetails="";
             this.submit_Button_Disable=true;
             this.checkBoxCounter=0;
-           // this.getQuestions();
+            this.startDate="";
+            this.endDate="";
+            this.deadLine=false;
+          this.getInitialSemesterParameter();
 
         }
+        private getInitialSemesterParameter(){
+            console.log("-------");
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getInitialSemesterParameter', 'application/json',
+                (json: any, etag: string) => {
+                    this.startDate=json.startDate;
+                    this.endDate=json.endDate;
+                    this.deadLine=json.deadLine;
+                    this.semesterName=json.semesterName;
+                    this.deadLineStatus=this.deadLine==true ?'Available':'Not Allowed';
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+
+        }
+        private getBack(){
+            this.deleteQuestionStatus=false;
+            this.setQuestionShowStatus=true;
+        }
+        private getDeleteEligibleQuestions(){
+            this.setQuestionShowStatus=false;
+            this.deleteQuestionStatus=true;
+            var app:Array<IDeleteQuestions>=[];
+            this.deleteQuestionList=[];
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getDeleteEligibleQuestions', 'application/json',
+                (json: any, etag: string) => {
+                    app=json.entries;
+                    console.log("Delete Questions!!!!");
+                    console.log(json.entries);
+                    this.deleteQuestionList=app;
+                    defer.resolve(json.entries);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+        private deleteQuestion(){
+            let setQuestionStatus=1;
+            this.delete(this.deleteQuestionList,setQuestionStatus);
+        }
+
         private addQuestionSubmit(){
             //this.questionDetails.length>0 && this.questionDetails.length<10
             if(this.questionDetails=="" || this.questionDetails==null){
@@ -82,6 +148,7 @@ module ums{
             }
 
         }
+      //  private getQuestion
       private changeObservationStatus(value:any){
           this.selectedObTypeId=value.id;
           this.observationTypeName=value.name;
@@ -93,6 +160,7 @@ module ums{
             this.setQuestionsForEvaluationStatus=true;
             this.addNewQuestionStatus=false;
             this.migrateQuestionStatus=false;
+            this.initialStatus=false;
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
             this.getQuestions();
@@ -104,6 +172,7 @@ module ums{
             this.addNewQuestionStatus=true;
             this.migrateQuestionStatus=false;
             this.setQuestionsForEvaluationStatus=false;
+            this.initialStatus=false;
 
         }
         private migrateQuestions(){
@@ -113,6 +182,7 @@ module ums{
             this.addNewQuestionStatus=false;
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
+            this.initialStatus=false;
             this.getSemesters();
 
         }
@@ -168,6 +238,31 @@ module ums{
             let setMigrationQuestionStatus=2;
             this.setQuestions(this.questionsMigrationList,setMigrationQuestionStatus);
         }
+        private delete(result:Array<any>,parameter:number){
+            console.log(result);
+            this.convertToJsonSetQuestion(result).then((app: any) =>{
+                console.log("Bye From Another Side!!!")
+                console.log(app);
+
+               this.httpClient.put('academic/applicationTES/deleteQuestion', app, 'application/json')
+                    .success((data, status, header, config) => {
+                        this.notify.success("Data deleted Successfully");
+                        this.checkBoxCounter=0;
+                        this.submit_Button_Disable=true;
+                        this.getDeleteEligibleQuestions();
+                        if(parameter==1){
+                            this.getQuestions();
+                        }else{
+                            this.getMigrationQuestionList();
+                        }
+
+                    }).error((data) => {
+                    this.notify.error("Error in Saving Data");
+                });
+
+            });
+        }
+
 
         private setQuestions(result:Array<any>,parameter:number){
             console.log(result);
@@ -256,7 +351,6 @@ module ums{
                 var item = {};
                 if(result[i].apply==true) {
                     item["questionId"] = result[i].questionId;
-                    item["semesterid"] = result[i].semesterId;
                     item["status"] = selectedQuestionStatus;
                     console.log("Items");
                     console.log(item);

@@ -144,6 +144,25 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
+  public Response deleteQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      getBuilder().build(application, jsonObject, localCache);
+      application.setSemester(mSemesterManager.getActiveSemester(11).getId());
+      applications.add(application);
+    }
+    mManager.delete(applications);
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   public Response addQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableApplicationTES applications = new PersistentApplicationTES();
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -234,6 +253,54 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             }
 
         }
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+        LocalCache localCache = new LocalCache();
+        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+        object.add("entries", children);
+        localCache.invalidate();
+        return object.build();
+    }
+
+  public JsonObject getInitialSemesterParameter(final Request pRequest, final UriInfo pUriInfo) {
+    String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
+    Boolean deadLineStatus = false, studentSubmitDeadline = false;
+    String semesterName = getContentManager().getSemesterName(mSemesterManager.getActiveSemester(11).getId());
+    List<ApplicationTES> semesterParameterHead =
+        getContentManager().getDeadlines("13", mSemesterManager.getActiveSemester(11).getId());
+    for(int i = 0; i < semesterParameterHead.size(); i++) {
+      startDate = semesterParameterHead.get(i).getSemesterStartDate();
+      endDate = semesterParameterHead.get(i).getSemesterEndDate();
+    }
+
+    try {
+      if(startDate != null && endDate != null) {
+        Date startDateConvert, lastApplyDate, currentDate;
+        currentDate = new Date();
+        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
+        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+          deadLineStatus = true;
+        }
+        else {
+          deadLineStatus = false;
+        }
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("startDate", startDate);
+    object.add("endDate", endDate);
+    object.add("deadLine", deadLineStatus);
+    object.add("semesterName", semesterName);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public  JsonObject getDeleteEligibleQuestions(final Request pRequest, final UriInfo pUriInfo){
+        List<MutableApplicationTES> applications=getContentManager().getMigrationQuestions(mSemesterManager.getActiveSemester(11).getId());
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();

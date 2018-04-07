@@ -15,18 +15,6 @@
             height: 450px;
         }
 
-        #header-fixed {
-            position: fixed;
-            top: 15px;
-        }
-
-        .sample-show-hide {
-            transition: all linear 0.5s;
-        }
-
-        .sample-show-hide.ng-hide {
-            opacity: 0;
-        }
 
     </style>
 
@@ -81,19 +69,37 @@
 
         <div id="rightDiv">
             <div class="panel">
-                <div class="panel-body shadowPanel" style="min-height: 205px;">
+                <div class="panel-heading" data-ng-if="vm.initialStatus==true">
+                    Question set up Parameters</div>
+
+                <div class="panel-heading" data-ng-if="vm.setQuestionsForEvaluationStatus==true">
+                    Set Question For Evaluation</div>
+                <div class="panel-heading" data-ng-if="vm.addNewQuestionStatus==true">
+                    Add New Question</div>
+                <div class="panel-heading" data-ng-if="vm.migrateQuestionStatus==true">
+                    Migration Of Questions</div>
+                <div class="panel-body shadowPanel" style="min-height: 200px;">
+                    <div data-ng-if="vm.initialStatus==true">
+                        <p>Semester:<strong>{{" "+vm.semesterName}}</strong></p>
+                        <p>Start Date:<strong>{{" "+vm.startDate}}</strong> </p>
+                        <p>End Date: <strong>{{" "+vm.endDate}}</strong></p>
+                        <p>DeadLine:
+                            <span data-ng-if="vm.deadLine==true" style="font-size: 12px" class="label label-success badge-success">{{" "+vm.deadLineStatus}}</span>
+                            <span data-ng-if="vm.deadLine==false" style="font-size: 12px" class="label label-danger badge-danger">{{" "+vm.deadLineStatus}}</span>
+                        </p>
+                    </div>
                     <div data-ng-if="vm.setQuestionsForEvaluationStatus==true">
-                        <div style="padding-top:10px;padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/set-questions-for-evaluation.html'">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/set-questions-for-evaluation.html'">
 
                         </div>
                     </div>
                     <div data-ng-if="vm.addNewQuestionStatus==true">
-                        <div style="padding-top:10px;padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/add-new-questions-for-evaluation.html'">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/add-new-questions-for-evaluation.html'">
 
                         </div>
                     </div>
                     <div data-ng-if="vm.migrateQuestionStatus==true">
-                        <div style="padding-top:10px;padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/migrate-questions.html'">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/migrate-questions.html'">
 
                         </div>
                     </div>

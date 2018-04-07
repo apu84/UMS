@@ -26,6 +26,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
+  String DELETE_ALL = "DELETE FROM APPLICATION_TES_SET_QUESTIONS";
   String getAllQuestions =
       "SELECT a.QUESTION_ID,a.QUESTION_DETAILS,a.OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS a,APPLICATION_TES_SET_QUESTIONS b WHERE  "
           + "a.QUESTION_ID=b.QUESTION_ID AND b.SEMESTER_ID=?";
@@ -337,6 +338,24 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
             .map(paramArray  ->  (Long)  paramArray[0])
             .collect(Collectors.toCollection(ArrayList::new));
   }
+
+  @Override
+  public int delete(List<MutableApplicationTES> pMutableList) {
+    String query = DELETE_ALL + " WHERE QUESTION_ID=? AND SEMESTER_ID=?";
+    List<Object[]> parameters = deleteParamList(pMutableList);
+    return mJdbcTemplate.batchUpdate(query, parameters).length;
+  }
+
+  private List<Object[]> deleteParamList(List<MutableApplicationTES> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(ApplicationTES app : pMutableApplicationTES) {
+      params.add(new Object[] {app.getQuestionId(), app.getSemester()});
+    }
+
+    return params;
+  }
+
+  // return mJdbcTemplate.update(query, pMutableList.getId());
 
   private List<Object[]> getInsertParamList(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
