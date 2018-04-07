@@ -131,5 +131,7 @@ public class UMSConfiguration {
     return mAccountJdbcPassword;
   }
 
-  public String getFcmServiceFile() {return mFcmServiceFile; }
+  public String getFcmServiceFile() {
+    return mFcmServiceFile;
+  }
 }

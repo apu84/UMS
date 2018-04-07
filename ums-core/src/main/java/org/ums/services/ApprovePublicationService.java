@@ -1,16 +1,22 @@
 package org.ums.services;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.Message;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.configuration.FirebaseConfig;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.manager.NotificationManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class ApprovePublicationService {
@@ -23,7 +29,22 @@ public class ApprovePublicationService {
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
-  public void setNotification(String userId, Employee sender) {
+  @Autowired
+  private FirebaseConfig mFirebaseConfig;
+
+  public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
+      InterruptedException {
+
+    mFirebaseConfig.init();
+
+    String registrationToken = FirebaseInstanceId.getInstance().toString();
+
+    Message message =
+        Message.builder().putData("score", "850").putData("time", "2:45").setToken(registrationToken).build();
+
+    String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+    System.out.println("Successfully sent message: " + response);
+
     Notifier notifier = new Notifier() {
 
       @Override
