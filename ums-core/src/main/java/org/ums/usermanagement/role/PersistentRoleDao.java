@@ -50,6 +50,12 @@ public class PersistentRoleDao extends RoleDaoDecorator {
     return pMutable.getId();
   }
 
+  @Override
+  public Role getByRoleRoleName(String pRoleName) {
+    String query = SELECT_ALL + "WHERE ROLE_NAME = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pRoleName}, new RoleRowMapper());
+  }
+
   class RoleRowMapper implements RowMapper<Role> {
     @Override
     public Role mapRow(ResultSet rs, int rowNum) throws SQLException {

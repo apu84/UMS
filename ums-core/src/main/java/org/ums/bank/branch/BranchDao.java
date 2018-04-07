@@ -13,12 +13,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class BranchDao extends BranchDaoDecorator {
-  String SELECT_ALL = "SELECT ID, CODE, BANK_ID, NAME, CONTACT_NO, LOCATION, LAST_MODIFIED FROM BRANCH ";
-  String CREATE_ALL = "INSERT INTO BRANCH(ID, CODE, BANK_ID, NAME, CONTACT_NO, LOCATION, LAST_MODIFIED) VALUES"
+  String SELECT_ALL = "SELECT ID, CODE, BANK_ID, NAME, CONTACT_NO, LOCATION, LAST_MODIFIED FROM BANK_BRANCH ";
+  String CREATE_ALL = "INSERT INTO BANK_BRANCH(ID, CODE, BANK_ID, NAME, CONTACT_NO, LOCATION, LAST_MODIFIED) VALUES"
       + "(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE BRANCH SET CODE = ?, BANK_ID = ?, NAME = ?, CONTACT_NO = ?, LOCATION = ?, "
+  String UPDATE_ALL = "UPDATE BANK_BRANCH SET CODE = ?, BANK_ID = ?, NAME = ?, CONTACT_NO = ?, LOCATION = ?, "
       + "LAST_MODIFIED =" + getLastModifiedSql() + " ";
-  String DELETE_ALL = "DELETE FROM BRANCH ";
+  String DELETE_ALL = "DELETE FROM BANK_BRANCH ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;

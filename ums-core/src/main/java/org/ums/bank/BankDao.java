@@ -37,13 +37,13 @@ public class BankDao extends BankDaoDecorator {
 
   @Override
   public int update(MutableBank pMutable) {
-    String query = UPDATE_ALL + "WEHRE ID = ?";
+    String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getName(), pMutable.getCode(), pMutable.getId());
   }
 
   @Override
   public int delete(MutableBank pMutable) {
-    String query = DELETE_ALL + "WEHRE ID = ?";
+    String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 

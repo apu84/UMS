@@ -80,6 +80,7 @@
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
         org.ums.payment,
+        org.ums.bank.admin,
         org.ums.logs
       </param-value>
     </init-param>

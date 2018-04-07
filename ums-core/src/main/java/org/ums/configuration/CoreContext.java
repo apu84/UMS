@@ -76,6 +76,7 @@ import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,7 +157,6 @@ public class CoreContext {
     UserPropertyDecorator userPropertyDecorator =
         new UserPropertyDecorator(personalInformationManager(), studentManager(), userPropertyResolvers);
     userPropertyDecorator.setManager(userCache);
-    branchUserPostTransaction().setUserManager(userPropertyDecorator);
     return userPropertyDecorator;
   }
 
@@ -525,18 +525,12 @@ public class CoreContext {
   }
 
   @Bean
+  @Qualifier("branchUserManager")
   BranchUserManager branchUserManager() {
     BranchUserDao branchDao = new BranchUserDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-    branchDao.setManager(branchUserPostTransaction());
+    branchDao.setManager(new BranchUserPostTransaction(mNewIUMSAccountInfoEmailService, roleManager()));
     BranchUserCache branchUserCache = new BranchUserCache(mCacheFactory.getCacheManager());
     branchUserCache.setManager(branchDao);
     return branchUserCache;
-  }
-
-  @Bean
-  BranchUserPostTransaction branchUserPostTransaction() {
-    BranchUserPostTransaction branchUserPostTransaction = new BranchUserPostTransaction();
-    branchUserPostTransaction.setNewIUMSAccountInfoEmailService(mNewIUMSAccountInfoEmailService);
-    return branchUserPostTransaction;
   }
 }

@@ -1,6 +1,7 @@
 package org.ums.bank.branch.user;
 
 import org.ums.manager.ContentManager;
+import org.ums.usermanagement.user.UserManager;
 
 import java.util.List;
 

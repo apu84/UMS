@@ -15,7 +15,6 @@ public class AdminUserResolver implements UserPropertyResolver {
     MutableUser mutableUser = pUser.edit();
     mutableUser.setDepartment(null);
     mutableUser.setName("Admin User");
-    mutableUser.setEmployeeId("-1");
     return mutableUser;
   }
 }

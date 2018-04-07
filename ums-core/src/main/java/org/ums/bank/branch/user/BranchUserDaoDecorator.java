@@ -1,11 +1,14 @@
 package org.ums.bank.branch.user;
 
-import org.ums.decorator.ContentDaoDecorator;
-
 import java.util.List;
+
+import org.ums.decorator.ContentDaoDecorator;
+import org.ums.usermanagement.user.UserManager;
 
 public class BranchUserDaoDecorator extends ContentDaoDecorator<BranchUser, MutableBranchUser, Long, BranchUserManager>
     implements BranchUserManager {
+  protected UserManager mUserManager;
+
   @Override
   public BranchUser getByUserId(String pUserId) {
     return getManager().getByUserId(pUserId);

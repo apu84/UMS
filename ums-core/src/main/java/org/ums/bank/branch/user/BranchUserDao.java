@@ -1,21 +1,23 @@
 package org.ums.bank.branch.user;
 
-import com.google.common.collect.Lists;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.StringUtils;
-import org.ums.generator.IdGenerator;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.ums.generator.IdGenerator;
+
+import com.google.common.collect.Lists;
+
 public class BranchUserDao extends BranchUserDaoDecorator {
   String SELECT_ALL = "SELECT ID, USER_ID, NAME, BRANCH_ID, DESIGNATION_ID, EMAIL, LAST_MODIFIED FROM BRANCH_USER ";
   String UPDATE_ALL =
-      "UPDATE BRANCH_USER SET USER_ID = ?, NAME = ?, BRANCH_ID = ?, DESIGNATION_ID = ?, EMAIL = ? LAST_MODIFIED = "
+      "UPDATE BRANCH_USER SET USER_ID = ?, NAME = ?, BRANCH_ID = ?, DESIGNATION_ID = ?, EMAIL = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String CREATE_ALL =
       "INSERT INTO BRANCH_USER(ID, USER_ID, NAME, BRANCH_ID, DESIGNATION_ID, EMAIL, LAST_MODIFIED) VALUES "
@@ -61,10 +63,14 @@ public class BranchUserDao extends BranchUserDaoDecorator {
   }
 
   @Override
+  @Transactional
   public List<Long> create(List<MutableBranchUser> pMutableList) {
     List<Object[]> insertParams = getInsertParams(pMutableList);
     List<Long> userIds = insertParams.stream().map(params -> (Long) params[0]).collect(Collectors.toList());
     mJdbcTemplate.batchUpdate(CREATE_ALL, insertParams);
+    for(int i = 0; i < pMutableList.size(); i++) {
+      pMutableList.get(i).setUserId(insertParams.get(i)[1].toString());
+    }
     return userIds;
   }
 
