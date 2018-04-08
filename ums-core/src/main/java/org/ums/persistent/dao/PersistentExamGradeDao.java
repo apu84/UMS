@@ -3,6 +3,8 @@ package org.ums.persistent.dao;
 import org.apache.commons.lang.WordUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.StringUtils;
 import org.ums.decorator.ExamGradeDaoDecorator;
 import org.ums.domain.model.dto.*;
@@ -373,13 +375,10 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   /**
-   * 
    * @param pSemesterId
    * @param pExamType
    * @param pExamDate
-   * @return
-   * 
-   *         At the first stage, there is no data of the specific semester. But, for showing the
+   * @return At the first stage, there is no data of the specific semester. But, for showing the
    *         client about the grade submission deadline, data needed to be shown. So, before
    *         showing, first, all the relevant data are inserted into the table by course_id and then
    *         is returned to the client.
@@ -967,6 +966,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     }
 
   }
+
   class MarksSubmissionStatusTableRowMapper implements RowMapper<MarksSubmissionStatusDto> {
     @Override
     public MarksSubmissionStatusDto mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -1015,6 +1015,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       return atomicReference.get();
     }
   }
+
   class RoleRowMapper implements RowMapper<String> {
     @Override
     public String mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -1274,7 +1275,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   public int transferUGGradesToPrivateDB(String pCourseId, int pSemesterId, int pExamType) {
 
     List<SqlParameter> parameters = Arrays.asList(
-        new SqlParameter(Types.VARCHAR),new SqlParameter(Types.INTEGER),new SqlParameter(Types.INTEGER),
+        new SqlParameter(Types.VARCHAR), new SqlParameter(Types.INTEGER), new SqlParameter(Types.INTEGER),
         new SqlOutParameter("oRespCode", Types.INTEGER), new SqlOutParameter("oRespMsg", Types.VARCHAR));
 
     Map<String, Object> t = mJdbcTemplate.call(new CallableStatementCreator() {
@@ -1292,14 +1293,14 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
     t.forEach((k, v) -> System.out.println((k + ":" + v)));
 
-    return (Integer)t.get("oRespCode");
+    return (Integer) t.get("oRespCode");
   }
 
-  public int transferUGGradesToPublicDB(String pCourseId, int pSemesterId,int pCourseType, int pExamType, String pStudents, String pCause, String pActor) {
+  public int transferUGGradesToPublicDB(String pCourseId, int pSemesterId, int pCourseType, int pExamType, String pStudents, String pCause, String pActor) {
 
     List<SqlParameter> parameters = Arrays.asList(
-        new SqlParameter(Types.VARCHAR),new SqlParameter(Types.INTEGER),new SqlParameter(Types.INTEGER),
-        new SqlParameter(Types.INTEGER),new SqlParameter(Types.VARCHAR),new SqlParameter(Types.VARCHAR),
+        new SqlParameter(Types.VARCHAR), new SqlParameter(Types.INTEGER), new SqlParameter(Types.INTEGER),
+        new SqlParameter(Types.INTEGER), new SqlParameter(Types.VARCHAR), new SqlParameter(Types.VARCHAR),
         new SqlParameter(Types.VARCHAR),
         new SqlOutParameter("oRespCode", Types.INTEGER), new SqlOutParameter("oRespMsg", Types.VARCHAR));
 
@@ -1322,7 +1323,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
     t.forEach((k, v) -> System.out.println((k + ":" + v)));
 
-    return (Integer)t.get("oRespCode");
+    return (Integer) t.get("oRespCode");
   }
 
   @Override
@@ -1373,5 +1374,20 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       return atomicReference.get();
 
     }
+  }
+
+  @Override
+  public Integer getOverriddenDeadline(int pSemesterId, String pCourseId, ExamType pExamType, Set<Integer> pStatusList) {
+    String sql =
+        "SELECT max(status) status FROM MARKS_SUBMISSION_SLOG_CURR  "
+            + "   Where semester_id=:pSemesterId and  Course_Id=:pCourseId  and exam_type=:pExamType "
+            + "   and status in (:pStatusList)  ";
+
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate =
+        new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+    return namedParameterJdbcTemplate.queryForObject(
+        sql,
+        new MapSqlParameterSource("pStatusList", pStatusList).addValue("pSemesterId", pSemesterId)
+            .addValue("pCourseId", pCourseId).addValue("pExamType", pExamType.getId()), Integer.class);
   }
 }

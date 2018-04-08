@@ -9,8 +9,10 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -84,4 +86,6 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
 
   int[] updateRegistrationResultLetterGrade(List<StudentGradeDto> pGradeList, int pSemesterId, String pCourseId,
       ExamType pExamType) throws Exception;
+
+  Integer getOverriddenDeadline(int pSemesterId, String pCourseId, ExamType pExamType, Set<Integer> pStatusList);
 }
