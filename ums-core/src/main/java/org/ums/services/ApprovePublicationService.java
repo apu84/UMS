@@ -35,8 +35,6 @@ public class ApprovePublicationService {
   public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
       InterruptedException {
 
-    mFirebaseConfig.init();
-
     String registrationToken = FirebaseInstanceId.getInstance().toString();
 
     Message message =
