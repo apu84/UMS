@@ -5,23 +5,16 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
 import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
-import org.ums.domain.model.immutable.CourseTeacher;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Employee;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 
-import javax.swing.*;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,9 +22,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.itextpdf.text.Rectangle.NO_BORDER;
-import static com.itextpdf.text.Rectangle.RIGHT;
 
 /**
  * Created by Rumi on 3/15/2018.
@@ -65,6 +55,40 @@ public class TesGeneratorImp implements TesGenerator {
     this.courseId=pCourseId;
     this.teacherId=pTeacherId;
     this.semesterId=pSemesterId;
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    Integer studentNo = mApplicationTESManager.getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
+
+    String selectedSectionForReview = "", sectionForReview = "";
+    Integer selectedRegisteredStudents = 0, registeredStudents = 0;
+    double percentage = 0;
+    List<ApplicationTES> getAllSectionForSelectedCourse =
+            mApplicationTESManager.getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
+    List<ApplicationTES> sectionList = mApplicationTESManager.getSectionList(pCourseId, pSemesterId, pTeacherId);
+    try {
+      for(int j = 0; j < getAllSectionForSelectedCourse.size(); j++) {
+        sectionForReview = sectionForReview + getAllSectionForSelectedCourse.get(j).getSection() + " ";
+        registeredStudents =
+                registeredStudents
+                        + mApplicationTESManager.getTotalRegisteredStudentForCourse(pCourseId,
+                        getAllSectionForSelectedCourse.get(j).getSection(), pSemesterId);
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
+      for(int k = 0; k < sectionList.size(); k++) {
+        selectedSectionForReview = selectedSectionForReview + sectionList.get(k).getSection() + " ";
+        selectedRegisteredStudents =
+                selectedRegisteredStudents
+                        + mApplicationTESManager.getTotalRegisteredStudentForCourse(pCourseId, sectionList.get(k).getSection(),
+                        pSemesterId);
+      }
+      double total = ((double) studentNo / (double) selectedRegisteredStudents);
+      percentage = Double.valueOf(newFormat.format((total * 100)));
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
 
 
 
@@ -97,6 +121,9 @@ public class TesGeneratorImp implements TesGenerator {
     //
     chunk = new Chunk("Semester: "+mSemesterManager.get(semesterId).getName()+"\n"+"Course Title: "+mCourseManager.get(courseId).getTitle()+" ("+mCourseManager.get(pCourseId).getNo()+")\n"+
     "Teacher Name: "+mPersonalInformationManager.get(teacherId).getFullName()+"\n"+
+            "Number of Student Registered For This Course: "+registeredStudents+"("+sectionForReview+")"+"\n"+
+            "Number of Student Eligible For Evaluation: "+selectedRegisteredStudents+"("+selectedSectionForReview+")"+"\n"+
+            "Student Reviewed: "+studentNo+" ("+percentage+"%)"+"\n"+
     "Department: "+mEmployeeManager.get(teacherId).getDepartment().getLongName());
 
     paragraph = new Paragraph();
@@ -122,10 +149,8 @@ public class TesGeneratorImp implements TesGenerator {
       double cRoomObservation=0,noncRoomObservation=0;
       Integer countercR=0, counterncR=0;
       double totalPointsObtype1=0, totalStudentsObtype1=0, totalPointsObtype2=0, totalStudentsObtype2=0;
-    DecimalFormat newFormat = new DecimalFormat("#.##");
     HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
     List<Report> reportList= new ArrayList<Report>();
-    Integer studentNo=mApplicationTESManager.getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
     List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(pSemesterId);
      if(studentNo !=0){
        applications.forEach(a->{
@@ -474,14 +499,13 @@ public class TesGeneratorImp implements TesGenerator {
     paragraph=new Paragraph(" ");
     //
 
-
-
     List<ApplicationTES> applications = mApplicationTESManager.getFacultyListForReport(pDeptId, pSemesterId);
     List<ApplicationTES> parameters = null;
     List<ApplicationTES> getDeptList = mApplicationTESManager.getDeptList();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
     List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
     List<ComparisonReport> pdfReport = new ArrayList<ComparisonReport>();
+    DecimalFormat newFormat = new DecimalFormat("#.##");
     for(int i = 0; i < applications.size(); i++) {
       parameters = mApplicationTESManager.getParametersForReport(applications.get(i).getTeacherId(), pSemesterId);
       for(int j = 0; j < parameters.size(); j++) {
@@ -501,11 +525,15 @@ public class TesGeneratorImp implements TesGenerator {
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
         courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
         courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
+        List<ApplicationTES> sectionList=mApplicationTESManager.getSectionList(parameters.get(j).getReviewEligibleCourses(), pSemesterId,parameters.get(j).getTeacherId());
         try {
           programName = mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-          registeredStudents=mApplicationTESManager.getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-          int total=studentNo*registeredStudents;
-          percentage= (double)total/100;
+          for(int k=0;k<sectionList.size();k++){
+            registeredStudents=registeredStudents+mApplicationTESManager.getTotalRegisteredStudentForCourse
+                    (parameters.get(j).getReviewEligibleCourses(),sectionList.get(k).getSection(), pSemesterId);
+          }
+          double total=((double)studentNo/(double)registeredStudents);
+          percentage=Double.valueOf(newFormat.format((total*100)));
         } catch(Exception e) {
           e.printStackTrace();
         }

@@ -1,7 +1,6 @@
 package org.ums.manager;
 
 import org.ums.domain.model.immutable.ApplicationTES;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 
 import java.util.List;
@@ -33,7 +32,12 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
 
-  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final Integer pSemesterId);
+  List<ApplicationTES> getSectionList(final String pCourseId, final Integer pSemesterId, String pTeacherId);
+
+  List<ApplicationTES> getAllSectionForSelectedCourse(final String pCourseId, String pTeacherId,
+      final Integer pSemesterId);
+
+  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final String pSection, final Integer pSemesterId);
 
   List<ApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
 

@@ -337,6 +337,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       final Request pRequest, final UriInfo pUriInfo) {
     List<ApplicationTES> applications = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
     List<ApplicationTES> parameters = null;
+    DecimalFormat newFormat = new DecimalFormat("#.##");
     List<ApplicationTES> getDeptList = getContentManager().getDeptList();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
       List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
@@ -359,11 +360,17 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
         courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
         courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
+          List<ApplicationTES> sectionList=getContentManager().getSectionList(parameters.get(j).getReviewEligibleCourses(), pSemesterId,parameters.get(j).getTeacherId());
         try {
           programName = getContentManager().getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-          registeredStudents=getContentManager().getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-          int total=studentNo*registeredStudents;
-          percentage= (double)total/100;
+            String x="";
+          for(int k=0;k<sectionList.size();k++){
+              x=x+sectionList.get(k).getSection()+" ";
+              registeredStudents=registeredStudents+getContentManager().getTotalRegisteredStudentForCourse
+                      (parameters.get(j).getReviewEligibleCourses(),sectionList.get(k).getSection(),pSemesterId);
+          }
+            double total=((double)studentNo/(double)registeredStudents);
+            percentage=Double.valueOf(newFormat.format((total*100)));
         } catch(Exception e) {
           e.printStackTrace();
         }
@@ -443,7 +450,6 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
                   value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
                   mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
               }
-
           });
           for(Map.Entry m:mapForCalculateResult.entrySet()){
               Integer questionId=(Integer)m.getKey();
@@ -521,6 +527,54 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         localCache.invalidate();
         return object.build();
     }
+
+  public JsonObject getReviewPercentage(final String pCourseId, final String pTeacherId, final Integer pSemesterId,
+      final Request pRequest, final UriInfo pUriInfo) {
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    Integer studentNo = getContentManager().getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
+
+    String selectedSectionForReview = "", sectionForReview = "";
+    Integer selectedRegisteredStudents = 0, registeredStudents = 0;
+    double percentage = 0;
+    List<ApplicationTES> getAllSectionForSelectedCourse =
+        getContentManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
+    List<ApplicationTES> sectionList = getContentManager().getSectionList(pCourseId, pSemesterId, pTeacherId);
+    try {
+      for(int j = 0; j < getAllSectionForSelectedCourse.size(); j++) {
+        sectionForReview = sectionForReview + getAllSectionForSelectedCourse.get(j).getSection() + " ";
+        registeredStudents =
+            registeredStudents
+                + getContentManager().getTotalRegisteredStudentForCourse(pCourseId,
+                    getAllSectionForSelectedCourse.get(j).getSection(), pSemesterId);
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
+      for(int k = 0; k < sectionList.size(); k++) {
+        selectedSectionForReview = selectedSectionForReview + sectionList.get(k).getSection() + " ";
+        selectedRegisteredStudents =
+            selectedRegisteredStudents
+                + getContentManager().getTotalRegisteredStudentForCourse(pCourseId, sectionList.get(k).getSection(),
+                    pSemesterId);
+      }
+      double total = ((double) studentNo / (double) selectedRegisteredStudents);
+      percentage = Double.valueOf(newFormat.format((total * 100)));
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("sectionForReview", sectionForReview);
+    object.add("registeredStudents", registeredStudents);
+    object.add("selectedSectionForReview", selectedSectionForReview);
+    object.add("selectedRegisteredStudents", selectedRegisteredStudents);
+    object.add("percentage", percentage);
+    object.add("studentReviewed", studentNo);
+    localCache.invalidate();
+    return object.build();
+  }
 
   public List<Report> getResult(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
       double cRoombservation=0,noncRoomObservation=0,score=0;

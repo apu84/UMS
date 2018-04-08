@@ -86,6 +86,13 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getReviewPercentage/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
+  public JsonObject getReviewPercentage(@Context Request pRequest, @PathParam("course-id") String pCourseId,
+      @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getReviewPercentage(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getRecordsOfAssignedCoursesByHead")
   public JsonObject getRecordsOfAssignedCoursesByHead(@Context Request pRequest) {
     return mHelper.getRecordsOfAssignedCoursesByHead(pRequest, mUriInfo);

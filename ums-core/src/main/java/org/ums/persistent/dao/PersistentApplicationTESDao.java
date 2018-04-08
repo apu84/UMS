@@ -142,7 +142,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getDeptList = "SELECT DEPT_ID from MST_DEPT_OFFICE WHERE TYPE=1 ORDER  BY DEPT_ID";
 
   String getTotalRegisteredStudentForCourse =
-      "SELECT  COUNT (a.STUDENT_ID) FROM UG_REGISTRATION_RESULT_CURR a,STUDENTS b WHERE  a.COURSE_ID=? AND a.SEMESTER_ID=? "
+      "SELECT  COUNT (a.STUDENT_ID) FROM UG_REGISTRATION_RESULT_CURR a,STUDENTS b WHERE  a.COURSE_ID=? AND b.THEORY_SECTION=? AND a.SEMESTER_ID=? "
           + "AND  a.STUDENT_ID=b.STUDENT_ID AND b.DEPT_ID=(select DEPT_ID from MST_PROGRAM where PROGRAM_ID=( "
           + "select PROGRAM_ID from SEMESTER_SYLLABUS_MAP where SEMESTER_ID=? and (SYLLABUS_ID, Year, semester) in ( "
           + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= ? and "
@@ -152,6 +152,24 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       "SELECT QUESTION_ID,QUESTION_DETAILS,SEMESTER_ID,OBSERVATION_TYPE FROM APPLICATION_TES_QUESTIONS";
   String getQuestionSemesterMap =
       "select QUESTION_ID,SEMESTER_ID,STATUS from APPLICATION_TES_SET_QUESTIONS WHERE SEMESTER_ID=?";
+  String getSectionList =
+      "SELECT COURSE_ID,ASSIGNED_SECTION from TES_COURSE_ASSIGN WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY ASSIGNED_SECTION";
+  String getAllSectionForSelectedCourse =
+      "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
+
+  @Override
+  public List<ApplicationTES> getSectionList(String pCourseId, Integer pSemesterId, String pTeacherId) {
+    String query = getSectionList;
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
+        new ApplicationTESRowMapperForSectionList());
+  }
+
+  @Override
+  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
+    String query = getAllSectionForSelectedCourse;
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
+        new ApplicationTESRowMapperForAllSection());
+  }
 
   @Override
   public List<ApplicationTES> getQuestionSemesterMap(Integer pSemesterId) {
@@ -166,9 +184,9 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
-  public Integer getTotalRegisteredStudentForCourse(String pCourseId, Integer pSemesterId) {
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, String pSection, Integer pSemesterId) {
     String query = getTotalRegisteredStudentForCourse;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pCourseId, pSemesterId, pSemesterId, pCourseId},
+    return mJdbcTemplate.queryForObject(query, new Object[] {pCourseId, pSection, pSemesterId, pSemesterId, pCourseId},
         Integer.class);
   }
 
@@ -510,6 +528,24 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForAllSection implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setSection(pResultSet.getString("SECTION"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForSectionList implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
       return application;
     }
   }

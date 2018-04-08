@@ -129,6 +129,12 @@ module ums{
         public studentSubmitDeadLine:boolean;
         public studentSubmitEndDate:string;
         public currentSemesterId:number;
+        public sectionForReview:string;
+        public registeredStudents:number;
+        public selectedSectionForReview:string;
+        public selectedRegisteredStudents:number;
+        public percentage:number;
+        public studentReviewed:number;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -312,6 +318,39 @@ module ums{
                     this.studentComments=appTES;
                     this.commentPgTotalRecords=this.studentComments.length;
                     console.log(this.studentComments);
+                    console.log("calling Method");
+                    this.getReviewPercentage();
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error("No Records Found");
+                });
+            return defer.promise;
+        }
+        private getReviewPercentage(){
+        this.sectionForReview="";
+        this.registeredStudents=0;
+        this.selectedSectionForReview="";
+        this.selectedRegisteredStudents=0;
+        this.percentage=0;
+        this.studentReviewed=0;
+            var defer = this.$q.defer();
+            this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReviewPercentage/courseId/'+this.selectedCourseId+'/teacherId/'+this.selectedTeacherId+'/semesterId/'+this.selectedSemesterId, 'application/json',
+                (json: any, etag: string) => {
+                    console.log("Review Statistics");
+                    console.log("-----------------");
+                    console.log("sectionForReview: "+json.sectionForReview+"\n"+
+                    "registeredStudents: "+json.registeredStudents+"\n"+
+                    "selectedSectionForReview:"+json.selectedSectionForReview+"\n" +
+                        "selectedRegisteredStudents: "+json.selectedRegisteredStudents+"\n"+
+                    "percentage: "+json.percentage+"\n"+
+                    "studentReviewed: "+json.studentReviewed);
+                    this.sectionForReview=json.sectionForReview;
+                    this.registeredStudents=json.registeredStudents;
+                    this.selectedSectionForReview=json.selectedSectionForReview;
+                    this.selectedRegisteredStudents=json.selectedRegisteredStudents;
+                    this.percentage=json.percentage;
+                    this.studentReviewed=json.studentReviewed;
                     defer.resolve(json);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

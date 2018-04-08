@@ -13,6 +13,16 @@ public class ApplicationTESDaoDecorator extends
     ContentDaoDecorator<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements
     ApplicationTESManager {
   @Override
+  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
+    return getManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationTES> getSectionList(String pCourseId, Integer pSemesterId, String pTeacherId) {
+    return getManager().getSectionList(pCourseId, pSemesterId, pTeacherId);
+  }
+
+  @Override
   public List<MutableApplicationTES> getMigrationQuestions(Integer pSemesterId) {
     return getManager().getMigrationQuestions(pSemesterId);
   }
@@ -38,8 +48,8 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public Integer getTotalRegisteredStudentForCourse(String pCourseId, Integer pSemesterId) {
-    return getManager().getTotalRegisteredStudentForCourse(pCourseId, pSemesterId);
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, String pSection, Integer pSemesterId) {
+    return getManager().getTotalRegisteredStudentForCourse(pCourseId, pSection, pSemesterId);
   }
 
   @Override
