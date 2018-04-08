@@ -1,6 +1,5 @@
 package org.ums.solr.repository.meeting;
 
-import javafx.beans.property.SimpleListProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.SolrTemplate;

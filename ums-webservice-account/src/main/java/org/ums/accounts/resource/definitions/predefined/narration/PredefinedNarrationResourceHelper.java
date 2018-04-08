@@ -47,22 +47,23 @@ public class PredefinedNarrationResourceHelper extends
     List<MutablePredefinedNarration> updatedList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
 
-    for (int i = 0; i < pJsonArray.size(); i++) {
+    for(int i = 0; i < pJsonArray.size(); i++) {
       MutablePredefinedNarration predefinedNarration = new PersistentPredefinedNarration();
       mPredefinedNarrationBuilder.build(predefinedNarration, pJsonArray.getJsonObject(i));
       predefinedNarration.setModifiedBy(user.getEmployeeId());
       predefinedNarration.setModifiedDate(new Date());
-      if (predefinedNarration.getId() == null) {
+      if(predefinedNarration.getId() == null) {
         predefinedNarration.setId(mIdGenerator.getNumericId());
         newList.add(predefinedNarration);
-      }else{
+      }
+      else {
         updatedList.add(predefinedNarration);
       }
     }
 
-    if(newList.size()>0)
+    if(newList.size() > 0)
       getContentManager().create(newList);
-    if(updatedList.size()>0)
+    if(updatedList.size() > 0)
       getContentManager().update(updatedList);
 
     return getContentManager().getAll();
