@@ -50,6 +50,7 @@ module ums {
       this.narrationService.save(this.narrations).then((narrations: INarration[]) => {
         this.narrations = [];
         this.narrations = narrations;
+        this.narration = this.narrations[0];
         this.disable = true;
       });
     }
