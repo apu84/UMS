@@ -22,7 +22,8 @@ public class FirebaseConfig {
     FirebaseOptions options =
         new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount))
             .setDatabaseUrl("https://push-notification-demo-6b41d.firebaseio.com/").build();
-    
+
     FirebaseApp.initializeApp(options);
+
   }
 }
