@@ -27,6 +27,7 @@ import org.ums.persistent.model.accounts.PersistentChequeRegister;
 import org.ums.persistent.model.accounts.PersistentCreditorLedger;
 import org.ums.persistent.model.accounts.PersistentDebtorLedger;
 import org.ums.resource.ResourceHelper;
+import org.ums.service.PredefinedNarrationService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
@@ -74,7 +75,10 @@ public class AccountTransactionCommonResourceHelper extends
   protected ChequeRegisterBuilder mChequeRegisterBuilder;
   @Autowired
   protected AccountBalanceResourceHelper mAccountBalanceResourceHelper;
-
+  @Autowired
+  protected PredefinedNarrationManager mPredefinedNarrationManager;
+  @Autowired
+  protected PredefinedNarrationService mNarrationService;
   @Autowired
   protected DebtorLedgerManager mDebtorLedgerManager;
   @Autowired
@@ -284,6 +288,7 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
+    Map<Voucher, String> predefinedNarrationMap = mNarrationService.getVoucherNarrationMap();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
     String voucherNo = "";
@@ -296,6 +301,8 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
+      transaction.setNarration(transaction.getNarration() == null || transaction.getNarration().equals("") ? predefinedNarrationMap.get(transaction
+          .getVoucher()) : transaction.getNarration());
       transaction.setCompanyId(company.getId());
       if(i == 0)
         voucherNo =
@@ -359,6 +366,7 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
+    Map<Voucher, String> voucherPredefinedNarrationMap = mNarrationService.getVoucherNarrationMap();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
     String voucherNo = "";
@@ -372,6 +380,11 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setPostDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
+      transaction.setNarration(
+          transaction.getNarration() == null || transaction.getNarration().equals("") ?
+              voucherPredefinedNarrationMap.get(transaction.getVoucher())
+              : transaction.getNarration()
+      );
       if (i == 0) {
         voucherNo =
             transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
