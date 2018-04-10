@@ -104,7 +104,6 @@ public class AccountTransactionCommonResourceHelper extends
       Date currentDate = new Date();
       calendar.setTime(currentDate);
       return createVoucherNumber(voucher, transactionResponse, mVoucherNumberControl, calendar, currentDate);
-
     }
     else {
       transactionResponse.setMessage("Current year is not opened");
@@ -119,7 +118,7 @@ public class AccountTransactionCommonResourceHelper extends
     if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
       Date firstDate = UmsUtils.convertToDate("01-01-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
       Date lastDate = UmsUtils.convertToDate("31-12-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.MONTHLY)) {
       Date firstDate =
@@ -128,7 +127,7 @@ public class AccountTransactionCommonResourceHelper extends
       Date lastDate =
           UmsUtils.convertToDate(pCalendar.get(Calendar.DAY_OF_MONTH) + "-" + pCalendar.get(Calendar.MONTH) + "-"
               + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.WEEKLY)) {
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek());
@@ -136,10 +135,10 @@ public class AccountTransactionCommonResourceHelper extends
       pCalendar.setTime(pCurrentDate);
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek() + 6);
       Date lastDate = pCalendar.getTime();
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.DAILY)) {
-      return getVoucherNumber(pVoucher, pTransactionResponse, pCurrentDate, pCurrentDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, pCurrentDate, pCurrentDate);
     }
     else {
       Integer nextVoucherNumber = mAccountTransactionManager.getTotalVoucherNumberBasedOnCurrentDay(pVoucher) + 1;
@@ -147,15 +146,15 @@ public class AccountTransactionCommonResourceHelper extends
     }
   }
 
-  private TransactionResponse getVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
-      Date pFirstDate, Date pLastDate) {
+  private TransactionResponse getVoucherNumber(Voucher pVoucher, VoucherNumberControl pVoucherNumberControl, TransactionResponse pTransactionResponse,
+                                               Date pFirstDate, Date pLastDate) {
     List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, UmsUtils.incrementDate(pLastDate, 1));
     List<Integer> voucherNoListInNumber = new ArrayList<>();
     accountTransactions.forEach(a -> {
       voucherNoListInNumber.add(Integer.parseInt(a.substring(4)));
     });
 
-    Integer nextVoucher = (voucherNoListInNumber.size()==0? 0: Collections.max(voucherNoListInNumber)) + 1;
+    Integer nextVoucher = (voucherNoListInNumber.size() == 0 ? pVoucherNumberControl.getStartVoucherNo() : Collections.max(voucherNoListInNumber) + 1);
     return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucher);
   }
 
@@ -362,8 +361,8 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
-    String voucherNo="";
-    for(int i = 0; i < pJsonValues.size(); i++) {
+    String voucherNo = "";
+    for (int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
       PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
@@ -373,29 +372,29 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setPostDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
-      if(i == 0) {
+      if (i == 0) {
         voucherNo =
-                transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
-                        transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
+            transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
+                transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
       }
       transaction.setVoucherNo(company.getId() + voucherNo);
-      if(transaction.getId() == null) {
+      if (transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
       } else {
         updateTransactions.add(transaction);
       }
       chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
-      if(chequeRegister.getChequeNo() != null) {
+      if (chequeRegister.getChequeNo() != null) {
         chequeRegister.setAccountTransactionId(transaction.getId());
         chequeRegisters.add(chequeRegister);
       }
     }
     checkWithVoucherLimit(newTransactions);
     checkWithVoucherLimit(updateTransactions);
-    if(newTransactions.size() > 0)
+    if (newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if(updateTransactions.size() > 0)
+    if (updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     updateOrSaveChequeRegister(chequeRegisters, newTransactions);
@@ -447,9 +446,9 @@ public class AccountTransactionCommonResourceHelper extends
         newList.add(debtorLedger);
       }
     });
-    if(updateList.size()>0)
+    if (updateList.size() > 0)
       mDebtorLedgerManager.update(updateList);
-    if(newList.size()>0)
+    if (newList.size() > 0)
       mDebtorLedgerManager.create(newList);
   }
 
