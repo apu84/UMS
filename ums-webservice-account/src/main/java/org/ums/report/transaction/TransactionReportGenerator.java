@@ -19,9 +19,6 @@ public class TransactionReportGenerator {
   @Autowired
   private CompanyManager mCompanyManager;
 
-  public TransactionReportGenerator() {
-  }
-
   public void createVoucherReport(String pVoucherNo, Date pVoucherDate, OutputStream pOutputStream) throws Exception {
 
   }

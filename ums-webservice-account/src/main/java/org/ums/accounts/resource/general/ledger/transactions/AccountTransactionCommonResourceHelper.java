@@ -301,8 +301,9 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
-      transaction.setNarration(transaction.getNarration() == null || transaction.getNarration().equals("") ? predefinedNarrationMap.get(transaction
-          .getVoucher()) : transaction.getNarration());
+      transaction
+          .setNarration(transaction.getNarration() == null || transaction.getNarration().equals("") ? predefinedNarrationMap
+              .get(transaction.getVoucher()) : transaction.getNarration());
       transaction.setCompanyId(company.getId());
       if(i == 0)
         voucherNo =
