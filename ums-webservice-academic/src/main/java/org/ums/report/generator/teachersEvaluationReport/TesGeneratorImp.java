@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
@@ -12,6 +13,7 @@ import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.enums.FacultyType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 
@@ -468,13 +470,21 @@ public class TesGeneratorImp implements TesGenerator {
 
 
     //
+    final String all="08",maximum = "09", minimum = "10", engineering = "11", businessAndSocial = "12", architecture = "13";
+    Integer facultyId = 0;
     String departmentName="";
-    if(pDeptId.equals("08")){
+    if(pDeptId.equals(all)){
       departmentName="All Department Teachers List";
-    }else if(pDeptId.equals("09")){
+    }else if(pDeptId.equals(maximum)){
       departmentName="Maximum Score Holders of All Departments";
-    }else if(pDeptId.equals("10")) {
+    }else if(pDeptId.equals(minimum)) {
       departmentName="Minimum Score Holders of All Departments";
+    }else if(pDeptId.equals(engineering)) {
+      departmentName=FacultyType.Engineering.getLabel();;
+    }else if(pDeptId.equals(businessAndSocial)) {
+      departmentName=FacultyType.Business.getLabel();
+    }else if(pDeptId.equals(architecture)) {
+      departmentName=FacultyType.Architecture.getLabel();
     }else{
       departmentName=mDepartmentManager.get(pDeptId).getLongName();
     }
@@ -499,11 +509,21 @@ public class TesGeneratorImp implements TesGenerator {
     paragraph=new Paragraph(" ");
     //
 
+    if(pDeptId.equals(engineering)) {
+      facultyId = FacultyType.Engineering.getId();
+    }
+    else if(pDeptId.equals(businessAndSocial)) {
+      facultyId = FacultyType.Business.getId();
+    }
+    else if(pDeptId.equals(architecture)) {
+      facultyId = FacultyType.Architecture.getId();
+    }
     List<ApplicationTES> applications = mApplicationTESManager.getFacultyListForReport(pDeptId, pSemesterId);
     List<ApplicationTES> parameters = null;
     List<ApplicationTES> getDeptList = mApplicationTESManager.getDeptList();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
     List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
+    List<ComparisonReport> reportFaculty = new ArrayList<ComparisonReport>();
     List<ComparisonReport> pdfReport = new ArrayList<ComparisonReport>();
     DecimalFormat newFormat = new DecimalFormat("#.##");
     for(int i = 0; i < applications.size(); i++) {
@@ -512,25 +532,25 @@ public class TesGeneratorImp implements TesGenerator {
         double score = 0;
         Integer studentNo =
                 mApplicationTESManager.getTotalStudentNumber(parameters.get(j).getTeacherId(),
-                        parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+                        parameters.get(j).getReviewEligibleCourseId(), pSemesterId);
         List<ApplicationTES> app = mApplicationTESManager.getAllQuestions(pSemesterId);
         if(studentNo != 0) {
           score =mApplicationTESResourceHelper.
-                  getScore(parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), pSemesterId,
+                  getScore(parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourseId(), pSemesterId,
                           studentNo, app);
         }
         String teacherName, deptName, courseNo, courseTitle, programName = "";
         Integer registeredStudents=0;double percentage=0;
         teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
-        courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
-        courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
-        List<ApplicationTES> sectionList=mApplicationTESManager.getSectionList(parameters.get(j).getReviewEligibleCourses(), pSemesterId,parameters.get(j).getTeacherId());
+        courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourseId()).getNo();
+        courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourseId()).getTitle();
+        List<ApplicationTES> sectionList=mApplicationTESManager.getSectionList(parameters.get(j).getReviewEligibleCourseId(), pSemesterId,parameters.get(j).getTeacherId());
         try {
-          programName = mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
+          programName = mApplicationTESManager.getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourseId(), pSemesterId);
           for(int k=0;k<sectionList.size();k++){
             registeredStudents=registeredStudents+mApplicationTESManager.getTotalRegisteredStudentForCourse
-                    (parameters.get(j).getReviewEligibleCourses(),sectionList.get(k).getSection(), pSemesterId);
+                    (parameters.get(j).getReviewEligibleCourseId(),sectionList.get(k).getSection(), pSemesterId);
           }
           double total=((double)studentNo/(double)registeredStudents);
           percentage=Double.valueOf(newFormat.format((total*100)));
@@ -541,13 +561,13 @@ public class TesGeneratorImp implements TesGenerator {
           programName = "Not Found";
         }
         report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, percentage, programName,
-                parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), parameters.get(j)
+                parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourseId(), parameters.get(j)
                 .getDeptId()));
       }
 
     }
 
-    if(pDeptId.equals("09")){
+    if(pDeptId.equals(maximum)){
       for(int k=0;k<getDeptList.size();k++){
         double max=-1;
         String dp=getDeptList.get(k).getDeptId();
@@ -571,7 +591,7 @@ public class TesGeneratorImp implements TesGenerator {
 
       }
      pdfReport=reportMaxMin;
-    }else if(pDeptId.equals("10")){
+    }else if(pDeptId.equals(minimum)){
       for(int k=0;k<getDeptList.size();k++){
         double min=10;
         String dp=getDeptList.get(k).getDeptId();
@@ -595,6 +615,17 @@ public class TesGeneratorImp implements TesGenerator {
 
       }
     pdfReport=reportMaxMin;
+    }else if(pDeptId.equals(engineering) || pDeptId.equals(businessAndSocial) || pDeptId.equals(architecture)) {
+      List<ApplicationTES> facultyWiseDeptList=mApplicationTESManager.getDeptListByFacultyId(facultyId);
+      List<ComparisonReport> tempList=null;
+      for(int i=0;i<facultyWiseDeptList.size();i++){
+        String departmentId=facultyWiseDeptList.get(i).getDeptId();
+        tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
+        //   reportFaculty= Stream.concat(reportFaculty.stream(),report.stream().filter(a->a.getDeptId().equals(departmentId))).collect(Collectors.toList());
+        reportFaculty= ListUtils.union(reportFaculty,tempList);
+        tempList= Collections.emptyList();
+      }
+      pdfReport=reportFaculty;
     }else{
      pdfReport=report;
     }

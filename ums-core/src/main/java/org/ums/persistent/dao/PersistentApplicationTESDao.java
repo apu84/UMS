@@ -156,6 +156,13 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       "SELECT COURSE_ID,ASSIGNED_SECTION from TES_COURSE_ASSIGN WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY ASSIGNED_SECTION";
   String getAllSectionForSelectedCourse =
       "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
+  String getDeptListByFacultyId = "SELECT DISTINCT  DEPT_ID FROM MST_PROGRAM WHERE CATEGORY_ID=?";
+
+  @Override
+  public List<ApplicationTES> getDeptListByFacultyId(Integer pFacultyId) {
+    String query = getDeptListByFacultyId;
+    return mJdbcTemplate.query(query, new Object[] {pFacultyId}, new ApplicationTESRowMapperForDeptList());
+  }
 
   @Override
   public List<ApplicationTES> getSectionList(String pCourseId, Integer pSemesterId, String pTeacherId) {
@@ -206,7 +213,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   @Override
   public List<ApplicationTES> getFacultyListForReport(String pDeptId, Integer pSemesterId) {
     String query = "";
-    if(pDeptId.equals("08") || pDeptId.equals("09") || pDeptId.equals("10")) {
+    if(pDeptId.equals("08") || pDeptId.equals("09") || pDeptId.equals("10") || pDeptId.equals("11")
+        || pDeptId.equals("12") || pDeptId.equals("13")) {
       query = getAllFacultyListForReport;
       return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new ApplicationTESRowMapperForFacultyListReport());
     }
@@ -379,7 +387,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
       params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getPoint(), app.getComment(),
-          app.getTeacherId(), app.getObservationType(), app.getReviewEligibleCourses(), app.getStudentId(),
+          app.getTeacherId(), app.getObservationType(), app.getReviewEligibleCourseId(), app.getStudentId(),
           app.getSemester()});
     }
 
@@ -389,7 +397,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   private List<Object[]> getInsertParamListForHeadTes(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourses(), app.getTeacherId(),
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourseId(), app.getTeacherId(),
           app.getSemester(), app.getSection(), app.getDeptId(), app.getStatus()});
     }
 

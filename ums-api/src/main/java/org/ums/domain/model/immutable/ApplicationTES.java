@@ -23,7 +23,7 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
 
   String getComment();
 
-  String getReviewEligibleCourses();
+  String getReviewEligibleCourseId();
 
   String getSemesterName();
 

@@ -550,7 +550,10 @@ module ums {
                     {id: '15', name: 'ARS'},
                     {id: '08', name: 'All'},
                     {id: '09', name: 'Max of All Dept'},
-                    {id: '10', name: 'Min of All Dept'}
+                    {id: '10', name: 'Min of All Dept'},
+                    {id: '11', name: 'Faculty of Engineering'},
+                    {id: '12', name: 'Faculty of Business and Social Science'},
+                    {id: '13', name: 'Faculty of Architecture'}
                 ],deptShortName: [
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},

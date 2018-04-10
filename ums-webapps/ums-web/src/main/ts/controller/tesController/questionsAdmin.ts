@@ -86,7 +86,6 @@ module ums{
             this.endDate="";
             this.deadLine=false;
           this.getInitialSemesterParameter();
-
         }
         private getInitialSemesterParameter(){
             console.log("-------");
@@ -158,9 +157,11 @@ module ums{
         private setQuestionsForEvaluation(){
             Utils.expandRightDiv();
             this.setQuestionsForEvaluationStatus=true;
+            this.setQuestionShowStatus=true;
             this.addNewQuestionStatus=false;
             this.migrateQuestionStatus=false;
             this.initialStatus=false;
+            this.deleteQuestionStatus=false;
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
             this.getQuestions();

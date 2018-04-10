@@ -40,8 +40,8 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getObservationType() != null)
       pBuilder.add("observationType", pReadOnly.getObservationType());
 
-    if(pReadOnly.getReviewEligibleCourses() != null)
-      pBuilder.add("courseName", pReadOnly.getReviewEligibleCourses());
+    if(pReadOnly.getReviewEligibleCourseId() != null)
+      pBuilder.add("courseName", pReadOnly.getReviewEligibleCourseId());
 
     if(pReadOnly.getSemesterName() != null) {
       pBuilder.add("semesterName", pReadOnly.getSemesterName());

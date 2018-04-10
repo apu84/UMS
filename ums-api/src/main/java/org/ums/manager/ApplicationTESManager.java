@@ -30,6 +30,8 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   String getQuestionDetails(final Integer pQuestionId);
 
+  List<ApplicationTES> getDeptListByFacultyId(final Integer pFacultyId);
+
   String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
 
   List<ApplicationTES> getSectionList(final String pCourseId, final Integer pSemesterId, String pTeacherId);

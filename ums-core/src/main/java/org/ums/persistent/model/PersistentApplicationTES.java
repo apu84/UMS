@@ -56,7 +56,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mApplicationDate = persistentApplicationTES.getApplicationDate();
     mQuestionID = persistentApplicationTES.getQuestionId();
     mQuestionDetails = persistentApplicationTES.getQuestionDetails();
-    mReviewEligibleCoures = persistentApplicationTES.getReviewEligibleCourses();
+    mReviewEligibleCoures = persistentApplicationTES.getReviewEligibleCourseId();
     mSemesterName = persistentApplicationTES.getSemesterName();
     mCourseTitle = persistentApplicationTES.getCourseTitle();
     mCourseNo = persistentApplicationTES.getCourseNo();
@@ -291,7 +291,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
 
   @Override
-  public String getReviewEligibleCourses() {
+  public String getReviewEligibleCourseId() {
     return mReviewEligibleCoures;
   }
 

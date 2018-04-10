@@ -147,7 +147,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/getReviewEligibleCourses/courseType/{course-type}")
+  @Path("/getReviewEligibleCourseId/courseType/{course-type}")
   public JsonObject getReviewEligibleCourses(@Context Request pRequest, @PathParam("course-type") String pCourseType) {
     return mHelper.getReviewEligibleCourses(pCourseType, pRequest, mUriInfo);
   }

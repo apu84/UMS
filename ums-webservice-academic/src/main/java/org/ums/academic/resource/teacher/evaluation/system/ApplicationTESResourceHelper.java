@@ -1,5 +1,6 @@
 package org.ums.academic.resource.teacher.evaluation.system;
 
+import org.apache.commons.collections.ListUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.enums.FacultyType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentApplicationTES;
@@ -32,6 +34,7 @@ import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
  * Created by Monjur-E-Morshed on 2/20/2018.
@@ -68,6 +71,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   @Autowired
   PersonalInformationManager mPersonalInformationManager;
+
+  @Autowired
+  ProgramManager mPogramManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -136,8 +142,10 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       application.setSemester(mSemesterManager.getActiveSemester(11).getId());
       applications.add(application);
     }
-    getContentManager().setQuestions(applications);
-
+    boolean deadline = getSemesterInfo();
+    if(deadline) {
+      getContentManager().setQuestions(applications);
+    }
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
@@ -155,8 +163,10 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       application.setSemester(mSemesterManager.getActiveSemester(11).getId());
       applications.add(application);
     }
-    mManager.delete(applications);
-
+    boolean deadline = getSemesterInfo();
+    if(deadline) {
+      mManager.delete(applications);
+    }
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
@@ -262,6 +272,36 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
+  private boolean getSemesterInfo() {
+    String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
+    Boolean deadLineStatus = false, studentSubmitDeadline = false;
+    String semesterName = getContentManager().getSemesterName(mSemesterManager.getActiveSemester(11).getId());
+    List<ApplicationTES> semesterParameterHead =
+        getContentManager().getDeadlines("13", mSemesterManager.getActiveSemester(11).getId());
+    for(int i = 0; i < semesterParameterHead.size(); i++) {
+      startDate = semesterParameterHead.get(i).getSemesterStartDate();
+      endDate = semesterParameterHead.get(i).getSemesterEndDate();
+    }
+
+    try {
+      if(startDate != null && endDate != null) {
+        Date startDateConvert, lastApplyDate, currentDate;
+        currentDate = new Date();
+        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
+        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+          deadLineStatus = true;// true
+        }
+        else {
+          deadLineStatus = false;
+        }
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    return deadLineStatus;
+  }
+
   public JsonObject getInitialSemesterParameter(final Request pRequest, final UriInfo pUriInfo) {
     String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
     Boolean deadLineStatus = false, studentSubmitDeadline = false;
@@ -280,7 +320,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
         lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
         if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-          deadLineStatus = true;
+          deadLineStatus = true;// true
         }
         else {
           deadLineStatus = false;
@@ -333,108 +373,189 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
-  public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId,
-      final Request pRequest, final UriInfo pUriInfo) {
-    List<ApplicationTES> applications = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
-    List<ApplicationTES> parameters = null;
+  public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    final String maximum = "09", minimum = "10", engineering = "11", businessAndSocial = "12", architecture = "13";
+    Integer facultyId = getFacultyType(pDeptId, engineering, businessAndSocial, architecture);
+    List<ApplicationTES> teacherList = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
+    List<ApplicationTES> teacherRelatedCourseList = null;
     DecimalFormat newFormat = new DecimalFormat("#.##");
     List<ApplicationTES> getDeptList = getContentManager().getDeptList();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
-      List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
-    for(int i = 0; i < applications.size(); i++) {
-      parameters = getContentManager().getParametersForReport(applications.get(i).getTeacherId(), pSemesterId);
-      for(int j = 0; j < parameters.size(); j++) {
-        double score = 0;
-        Integer studentNo =
-            getContentManager().getTotalStudentNumber(parameters.get(j).getTeacherId(),
-                parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-        List<ApplicationTES> app = getContentManager().getAllQuestions(pSemesterId);
-        if(studentNo != 0) {
-          score =
-              getScore(parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), pSemesterId,
-                  studentNo, app);
-        }
-        String teacherName, deptName, courseNo, courseTitle, programName = "";
-        Integer registeredStudents=0;double percentage=0;
-        teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
-        deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
-        courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getNo();
-        courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourses()).getTitle();
-          List<ApplicationTES> sectionList=getContentManager().getSectionList(parameters.get(j).getReviewEligibleCourses(), pSemesterId,parameters.get(j).getTeacherId());
-        try {
-          programName = getContentManager().getCourseDepartmentMap(parameters.get(j).getReviewEligibleCourses(), pSemesterId);
-            String x="";
-          for(int k=0;k<sectionList.size();k++){
-              x=x+sectionList.get(k).getSection()+" ";
-              registeredStudents=registeredStudents+getContentManager().getTotalRegisteredStudentForCourse
-                      (parameters.get(j).getReviewEligibleCourses(),sectionList.get(k).getSection(),pSemesterId);
-          }
-            double total=((double)studentNo/(double)registeredStudents);
-            percentage=Double.valueOf(newFormat.format((total*100)));
-        } catch(Exception e) {
-          e.printStackTrace();
-        }
-        if(programName.equals(null) || programName.equals("")) {
-          programName = "Not Found";
-        }
-        report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, percentage, programName,
-            parameters.get(j).getTeacherId(), parameters.get(j).getReviewEligibleCourses(), parameters.get(j)
-                .getDeptId()));
-      }
-
+    List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
+      List<ComparisonReport> reportFaculty = new ArrayList<ComparisonReport>();
+    for(int i = 0; i < teacherList.size(); i++) {
+      teacherRelatedCourseList =
+          getContentManager().getParametersForReport(teacherList.get(i).getTeacherId(), pSemesterId);
+      evaluateTeacherInfo(pSemesterId, teacherRelatedCourseList, newFormat, report);
     }
 
-    if(pDeptId.equals("09")){
-        for(int k=0;k<getDeptList.size();k++){
-            double max=-1;
-            String dp=getDeptList.get(k).getDeptId();
-            List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
-            for(int l=0;l<list.size();l++){
-                if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
-                    if(list.get(l).getTotalScore()> max){
-                        max=list.get(l).getTotalScore();
-                    }
+    if(pDeptId.equals(maximum)) {
+      return getMaximumScoreHolderList(getDeptList, report, reportMaxMin);
+    }
+    else if(pDeptId.equals(minimum)) {
+      return getMinimumScoreHolderList(getDeptList, report, reportMaxMin);
+    }
+    else if(pDeptId.equals(engineering) || pDeptId.equals(businessAndSocial) || pDeptId.equals(architecture)) {
+      return getFacultyReport(facultyId, report, reportFaculty);
+    }
+    else {
+      return report;
+    }
+  }
 
-                }
-            }
-            double finalMax = max;
-            list=list.stream().filter(a->a.getTotalScore()== finalMax).collect(Collectors.toList());
-            for(int l=0;l<list.size();l++){
-                reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
-                        list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==-1? 0:max,
-                        list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
-                        list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
-            }
+  private List<ComparisonReport> getFacultyReport(Integer facultyId, List<ComparisonReport> report, List<ComparisonReport> reportFaculty) {
+    List<ApplicationTES> facultyWiseDeptList=getContentManager().getDeptListByFacultyId(facultyId);
+    List<ComparisonReport> tempList=null;
+    for(int i=0;i<facultyWiseDeptList.size();i++){
+        String departmentId=facultyWiseDeptList.get(i).getDeptId();
+         tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
+     //   reportFaculty= Stream.concat(reportFaculty.stream(),report.stream().filter(a->a.getDeptId().equals(departmentId))).collect(Collectors.toList());
+        reportFaculty= ListUtils.union(reportFaculty,tempList);
+        tempList= Collections.emptyList();
+    }
+    return reportFaculty;
+  }
 
-        }
-        return  reportMaxMin;
-    }else if(pDeptId.equals("10")){
+  private void evaluateTeacherInfo(Integer pSemesterId, List<ApplicationTES> teacherRelatedCourseList,
+      DecimalFormat newFormat, List<ComparisonReport> report) {
+    for(int j = 0; j < teacherRelatedCourseList.size(); j++) {
+      double score = 0;
+      Integer studentNo =
+          getContentManager().getTotalStudentNumber(teacherRelatedCourseList.get(j).getTeacherId(),
+              teacherRelatedCourseList.get(j).getReviewEligibleCourseId(), pSemesterId);
+      List<ApplicationTES> app = getContentManager().getAllQuestions(pSemesterId);
+      if(studentNo != 0) {
+        score =
+            getScore(teacherRelatedCourseList.get(j).getTeacherId(), teacherRelatedCourseList.get(j)
+                .getReviewEligibleCourseId(), pSemesterId, studentNo, app);
+      }
+      String teacherName, deptName, courseNo, courseTitle, programName = "";
+      Integer registeredStudents = 0;
+      double percentage = 0;
+      teacherName = mPersonalInformationManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getFullName();
+      deptName = mEmployeeManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getDepartment().getShortName();
+      courseNo = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getNo();
+      courseTitle = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getTitle();
+      List<ApplicationTES> sectionList =
+          getContentManager().getSectionList(teacherRelatedCourseList.get(j).getReviewEligibleCourseId(), pSemesterId,
+              teacherRelatedCourseList.get(j).getTeacherId());
+      programName =
+          getContentManager().getCourseDepartmentMap(teacherRelatedCourseList.get(j).getReviewEligibleCourseId(),
+              pSemesterId);
+      percentage =
+          getPercentage(pSemesterId, teacherRelatedCourseList, newFormat, j, studentNo, registeredStudents, sectionList);
+
+      if(programName.equals(null) || programName.equals("")) {
+        programName = "Not Found";
+      }
+      report.add(new ComparisonReport(teacherName, deptName, courseNo, courseTitle, score, percentage, programName,
+          teacherRelatedCourseList.get(j).getTeacherId(), teacherRelatedCourseList.get(j).getReviewEligibleCourseId(),
+          teacherRelatedCourseList.get(j).getDeptId()));
+    }
+  }
+
+  private List<ComparisonReport> getMinimumScoreHolderList(List<ApplicationTES> getDeptList, List<ComparisonReport> report, List<ComparisonReport> reportMaxMin) {
         for(int k=0;k<getDeptList.size();k++){
             double min=10;
             String dp=getDeptList.get(k).getDeptId();
             List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
-            for(int l=0;l<list.size();l++){
-                if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
-                    if(list.get(l).getTotalScore()< min){
-                        min=list.get(l).getTotalScore();
-                    }
-
-                }
-            }
+            min = getMinimumScore(getDeptList, k, min, list);
             double finalMin = min;
             list=list.stream().filter(a->a.getTotalScore()== finalMin).collect(Collectors.toList());
-            for(int l=0;l<list.size();l++){
-                reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(),
-                        list.get(l).getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore()==10? 0:min,
-                        list.get(l).getReviewPercentage(), list.get(l).getProgramName(),
-                        list.get(l).getTeacherId(), list.get(l).getCourseId(), list.get(l).getDeptId()));
-            }
+            getMinimumScoreHolderInfo(reportMaxMin, min, list);
 
         }
         return  reportMaxMin;
-    }else{
-        return report;
     }
+
+  private void getMinimumScoreHolderInfo(List<ComparisonReport> reportMaxMin, double min, List<ComparisonReport> list) {
+    for(int l = 0; l < list.size(); l++) {
+      reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(), list.get(l)
+          .getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore() == 10 ? 0 : min, list.get(l)
+          .getReviewPercentage(), list.get(l).getProgramName(), list.get(l).getTeacherId(), list.get(l).getCourseId(),
+          list.get(l).getDeptId()));
+    }
+  }
+
+  private double getMinimumScore(List<ApplicationTES> getDeptList, int deptSequence, double min,
+      List<ComparisonReport> list) {
+    for(int l = 0; l < list.size(); l++) {
+      if(list.get(l).getDeptId().equals(getDeptList.get(deptSequence).getDeptId())) {
+        if(list.get(l).getTotalScore() < min) {
+          min = list.get(l).getTotalScore();
+        }
+
+      }
+    }
+    return min;
+  }
+
+  private List<ComparisonReport> getMaximumScoreHolderList(List<ApplicationTES> getDeptList, List<ComparisonReport> report, List<ComparisonReport> reportMaxMin) {
+        for(int k=0;k<getDeptList.size();k++){
+            double max=-1;
+            String dp=getDeptList.get(k).getDeptId();
+            List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
+            max = getMaximumScore(getDeptList, k, max, list);
+            double finalMax = max;
+            list=list.stream().filter(a->a.getTotalScore()== finalMax).collect(Collectors.toList());
+            getMaximumScoreHolderInfo(reportMaxMin, max, list);
+
+        }
+        return  reportMaxMin;
+    }
+
+  private void getMaximumScoreHolderInfo(List<ComparisonReport> reportMaxMin, double max, List<ComparisonReport> list) {
+    for(int l = 0; l < list.size(); l++) {
+      reportMaxMin.add(new ComparisonReport(list.get(l).getTeacherName(), list.get(l).getDeptName(), list.get(l)
+          .getCourseNo(), list.get(l).getCourseTitle(), list.get(l).getTotalScore() == -1 ? 0 : max, list.get(l)
+          .getReviewPercentage(), list.get(l).getProgramName(), list.get(l).getTeacherId(), list.get(l).getCourseId(),
+          list.get(l).getDeptId()));
+    }
+  }
+
+  private double getMaximumScore(List<ApplicationTES> getDeptList, int k, double max, List<ComparisonReport> list) {
+    for(int l = 0; l < list.size(); l++) {
+      if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())) {
+        if(list.get(l).getTotalScore() > max) {
+          max = list.get(l).getTotalScore();
+        }
+
+      }
+    }
+    return max;
+  }
+
+  private double getPercentage(Integer pSemesterId, List<ApplicationTES> parameters, DecimalFormat newFormat, int j,
+      double studentNo, Integer registeredStudents, List<ApplicationTES> sectionList) {
+    double percentage = 0;
+    try {
+      for(int k = 0; k < sectionList.size(); k++) {
+        registeredStudents =
+            registeredStudents
+                + getContentManager().getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourseId(),
+                    sectionList.get(k).getSection(), pSemesterId);
+      }
+      double total = (studentNo / (double) registeredStudents);
+      percentage = Double.valueOf(newFormat.format((total * 100)));
+    } catch(Exception e) {
+
+    }
+
+    return percentage;
+  }
+
+  private Integer getFacultyType(String pDeptId, String engineering, String businessAndSocial, String architecture) {
+    Integer facultyId = 0;
+    if(pDeptId.equals(engineering)) {
+      facultyId = FacultyType.Engineering.getId();
+    }
+    else if(pDeptId.equals(businessAndSocial)) {
+      facultyId = FacultyType.Business.getId();
+    }
+    else if(pDeptId.equals(architecture)) {
+      facultyId = FacultyType.Architecture.getId();
+    }
+    return facultyId;
   }
 
   public double getScore(String pTeacherId,String pCourseId,Integer pSemesterId,Integer studentNo,List<ApplicationTES> applications){
@@ -695,19 +816,19 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       List<ApplicationTES> assignedCoursesByHead=getContentManager().getAssignedCoursesByHead(pFacultyId,11012017);
       Map<String, ApplicationTES> assignedCourseMap = assignedCoursesByHead
               .stream()
-              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourses()+t.getSection()+t.getSemester(), t->t));
+              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourseId()+t.getSection()+t.getSemester(), t->t));
 
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
       Boolean finalDeadLineStatus = deadLineStatus;
       applications.forEach(a->{
-            if(assignedCourseMap.containsKey(a.getTeacherId()+a.getReviewEligibleCourses()+a.getSection()+a.getSemester())){
+            if(assignedCourseMap.containsKey(a.getTeacherId()+a.getReviewEligibleCourseId()+a.getSection()+a.getSemester())){
                 a.setStatus(1);
             }else{
                 a.setStatus(0);
             }
-            String programName=getContentManager().getCourseDepartmentMap(a.getReviewEligibleCourses(),11012017);//active semester
+            String programName=getContentManager().getCourseDepartmentMap(a.getReviewEligibleCourseId(),11012017);//active semester
             a.setProgramShortName(programName);
             a.setDeadLineStatus(finalDeadLineStatus);
                 children.add(toJson(a, pUriInfo, localCache));
@@ -810,7 +931,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
         Map<String, ApplicationTES> reviewedCourseMap = alreadyReviewedCourses
               .stream()
-              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourses()+t.getStudentId()+t.getSemester(), t->t));
+              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourseId()+t.getStudentId()+t.getSemester(), t->t));
 
 
       JsonObjectBuilder object = Json.createObjectBuilder();
@@ -818,7 +939,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       LocalCache localCache = new LocalCache();
 
       applications.forEach(a-> {
-            if(reviewedCourseMap.containsKey(a.getTeacherId() +a.getReviewEligibleCourses()+a.getStudentId()+a.getSemester())){
+            if(reviewedCourseMap.containsKey(a.getTeacherId() +a.getReviewEligibleCourseId()+a.getStudentId()+a.getSemester())){
                 a.setStatus(1);
             }else{
                 a.setStatus(0);
