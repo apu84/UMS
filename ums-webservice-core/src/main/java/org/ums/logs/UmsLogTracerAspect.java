@@ -49,7 +49,7 @@ public class UmsLogTracerAspect {
   private void printLog(HttpServletRequest httpServletRequest, String message, String requestBody) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     HttpServletRequest mapper = new ContentCachingRequestWrapper(httpServletRequest);
-    mLogger.info("[{}]: {} ", message);
+    mLogger.info("[{}]: {} ", userId, message);
     mLogger.info("[{}]: {} ", userId, mapper.getRequestURI());
 
     if (requestBody != null)
