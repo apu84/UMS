@@ -1,15 +1,3 @@
-
-<script>
-        if('serviceWorker' in navigator) {
-                navigator.serviceWorker
-                    .register('firebase-messaging-sw.js')
-                    .then(function() {
-                            console.log("Service Worker Registered");
-
-                        });
-            }
-    </script>
-
 <!DOCTYPE html>
 <html lang="en" ng-app="UMS">
 <head>
@@ -50,27 +38,6 @@
     <link rel="stylesheet" data-ng-href="css/custom.css"/>
     <!--link rel="stylesheet" href="css/angular-filemanager.min.css"/-->
     <link rel="stylesheet" data-ng-href="vendors/jquery-jqgrid-5.0.2/css/ui.jqgrid-bootstrap.css"/>
-
-    <!-- Firebase Library -->
-
-    <link rel="manifest" href="manifest/manifest.json">
-
-
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-messaging.js"></script>
-
-    <script>
-        var config = {
-            apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
-            authDomain: "push-notification-demo-6b41d.firebaseapp.com",
-            databaseURL: "https://push-notification-demo-6b41d.firebaseio.com",
-            projectId: "push-notification-demo-6b41d",
-            storageBucket: "push-notification-demo-6b41d.appspot.com",
-            messagingSenderId: "75416653943"
-        };
-        firebase.initializeApp(config);
-
-    </script>
 
     <!-- Loading library javascript-->
     <script src="vendors/jquery-1.10.2.min.js"></script>
@@ -217,25 +184,3 @@
 
 </body>
 </html>
-
-
-
-<script>
-
-    // Retrieve Firebase Messaging object.
-    const messaging = firebase.messaging();
-
-    console.log("in index.html after const messaging");
-    console.log(messaging);
-
-    messaging.requestPermission().then(function() {
-        console.log('Notification permission granted.');
-        return messaging.getToken();
-    }).then(function (token) {
-        console.log("the famous token in index.html of firebase");
-        console.log(token);
-    })
-        .catch(function(err) {
-            console.log('Unable to get permission to notify.', err);
-        })
-</script>
