@@ -1,3 +1,15 @@
+
+<script>
+        if('serviceWorker' in navigator) {
+                navigator.serviceWorker
+                    .register('firebase-messaging-sw.js')
+                    .then(function() {
+                            console.log("Service Worker Registered");
+
+                        });
+            }
+    </script>
+
 <!DOCTYPE html>
 <html lang="en" ng-app="UMS">
 <head>
