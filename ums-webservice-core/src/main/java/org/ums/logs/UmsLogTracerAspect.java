@@ -28,13 +28,13 @@ public class UmsLogTracerAspect {
    */
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray,
-                     UmsLogMessage log) {
+      UmsLogMessage log) {
     printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
   }
 
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject,
-                     UmsLogMessage log) {
+      UmsLogMessage log) {
     printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
   }
 
@@ -52,7 +52,7 @@ public class UmsLogTracerAspect {
     mLogger.info("[{}]: {} ", userId, message);
     mLogger.info("[{}]: {} ", userId, mapper.getRequestURI());
 
-    if (requestBody != null)
+    if(requestBody != null)
       mLogger.info("[{}]: {} ", userId, requestBody);
   }
 

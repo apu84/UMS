@@ -107,10 +107,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
     JsonObject responseObject = objectBuilder.build();
-    mLogger.debug("User: {}, Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}", SecurityUtils.getSubject()
+    mLogger.debug("[{}]: Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}", SecurityUtils.getSubject()
         .getPrincipal().toString(), currentActor, marksSubmissionStatusDto.getCourseTitle(),
         marksSubmissionStatusDto.getCourseNo(), marksSubmissionStatusDto.getSemesterName());
-    mLogger.debug("Returned Course List :{}", responseObject.toString());
+    mLogger.debug("[{}]: Returned grade list :{}",  SecurityUtils.getSubject()
+        .getPrincipal().toString(),responseObject.toString());
     return responseObject;
   }
 
@@ -237,6 +238,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(jsonObject);
     }
     object.add("entries", children);
+    mLogger.debug("[{}]: Returned course list :{}",  SecurityUtils.getSubject()
+        .getPrincipal().toString(),object.toString());
     return object.build();
   }
 
@@ -713,6 +716,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(jsonObject);
     }
     object.add("entries", children);
+    mLogger.debug("[{}]: Marks submission log for  {} :{}",  SecurityUtils.getSubject()
+        .getPrincipal().toString(), pStudentId, object.toString());
     return object.build();
   }
 
@@ -734,6 +739,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(object1);
     }
     object.add("entries", children);
+    mLogger.debug("[{}]: Marks submission statistics :{}",  SecurityUtils.getSubject()
+        .getPrincipal().toString(),object.toString());
 
     return object.build();
   }

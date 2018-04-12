@@ -5,7 +5,8 @@ public class ExceptionResponse {
   private String cause;
   private String message;
 
-  public ExceptionResponse() {}
+  public ExceptionResponse() {
+  }
 
   public ExceptionResponse(String cause, String message) {
     this.cause = cause;

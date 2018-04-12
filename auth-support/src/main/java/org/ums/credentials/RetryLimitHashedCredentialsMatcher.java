@@ -12,29 +12,34 @@ import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MapCache;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RetryLimitHashedCredentialsMatcher extends PasswordMatcher {
-
+  private static final Logger mLogger = LoggerFactory.getLogger(RetryLimitHashedCredentialsMatcher.class);
   private Map<String, AtomicInteger> passwordRetryCache = new HashMap<>();
 
   @Override
   public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
     String username = (String) token.getPrincipal();
-    // retry count + 1
     AtomicInteger retryCount = passwordRetryCache.get(username);
     if(retryCount == null) {
       retryCount = new AtomicInteger(0);
       passwordRetryCache.put(username, retryCount);
     }
     if(retryCount.incrementAndGet() > 10) {
-      // if retry count > 10 throw
+      mLogger.info("[{}]: Excessive wrong login attempt detected. Total attempt:{}", username, retryCount);
       throw new ExcessiveAttemptsException();
     }
 
     boolean matches = super.doCredentialsMatch(token, info);
     if(matches) {
-      // clear retry count
+      mLogger.info("[{}]: Successfully logged into the system", username);
       passwordRetryCache.remove(username);
+    }
+    else {
+      mLogger.info("[{}]: Login attempt with wrong password", username);
     }
     return matches;
   }
