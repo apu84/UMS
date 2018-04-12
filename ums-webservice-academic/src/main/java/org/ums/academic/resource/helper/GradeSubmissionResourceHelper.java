@@ -238,8 +238,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(jsonObject);
     }
     object.add("entries", children);
-    mLogger.debug("[{}]: Returned course list :{}",  SecurityUtils.getSubject()
-        .getPrincipal().toString(),object.toString());
     return object.build();
   }
 
