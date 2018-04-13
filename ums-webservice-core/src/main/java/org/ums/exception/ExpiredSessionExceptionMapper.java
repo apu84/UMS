@@ -15,8 +15,8 @@ public class ExpiredSessionExceptionMapper implements ExceptionMapper<ExpiredSes
 
   @Override
   public Response toResponse(ExpiredSessionException e) {
-    String errorMessage = "[{" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "}]:  ExpiredSession exception :" + e.getMessage();
+    String errorMessage = "[" + SecurityUtils.getSubject()
+        .getPrincipal().toString() + "]:  ExpiredSession exception:" + e.getMessage();
     mLogger.error(errorMessage, e);
     return Response.status(Response.Status.UNAUTHORIZED)
         .entity(new ExceptionResponse(e.getClass().toString(), e.getMessage())).build();

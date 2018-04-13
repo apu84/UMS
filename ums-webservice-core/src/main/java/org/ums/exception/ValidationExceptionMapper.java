@@ -15,8 +15,8 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
 
   @Override
   public Response toResponse(ValidationException e) {
-    String errorMessage = "[{" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "}]: Validation exception :" + e.getMessage();
+    String errorMessage = "[" + SecurityUtils.getSubject()
+        .getPrincipal().toString() + "]: Validation exception:" + e.getMessage();
     mLogger.error(errorMessage, e);
     return Response.status(Response.Status.BAD_REQUEST)
         .entity(new ExceptionResponse("ValidationException", e.getMessage())).build();
