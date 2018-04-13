@@ -96,6 +96,10 @@
 /// <reference path='fee/receive.payment.controller.ts'/>
 /// <reference path='fee/receive.payment.service.ts'/>
 /// <reference path='fee/payment.status.service.ts'/>
+/// <reference path='admin/bank.models.ts'/>
+/// <reference path='admin/bank.http.service.ts'/>
+/// <reference path='admin/bank.model.converters.ts'/>
+/// <reference path='admin/bank.resource.ts'/>
 
 
 
