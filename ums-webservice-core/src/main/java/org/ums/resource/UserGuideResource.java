@@ -1,6 +1,8 @@
 package org.ums.resource;
 
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,13 +19,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
 
-/**
- * Created by Ifti on 13-Dec-16.
- */
 @Component
 @Path("/userGuide")
 @Produces(Resource.MIME_TYPE_JSON)
 public class UserGuideResource extends Resource {
+
+  private static final Logger mLogger= LoggerFactory.getLogger(UserGuideResource.class);
+
   @Value("${userManual.storageRoot}")
   private String mManualStorageRoot;
 
@@ -52,6 +54,7 @@ public class UserGuideResource extends Resource {
       try {
         java.nio.file.Path path = toBeCopied.toPath();
         Files.copy(path, output);
+        mLogger.info("[{}]: User guide accessed for navigationId: {}", SecurityUtils.getSubject().getPrincipal(), pNavigationId);
         output.flush();
       } catch(Exception e) {
         throw new WebApplicationException(e);
