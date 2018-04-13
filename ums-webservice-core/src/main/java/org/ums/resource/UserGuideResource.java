@@ -2,6 +2,7 @@ package org.ums.resource;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.ums.resource.helper.UserGuideResourceHelper;
 
@@ -23,6 +24,8 @@ import java.nio.file.*;
 @Path("/userGuide")
 @Produces(Resource.MIME_TYPE_JSON)
 public class UserGuideResource extends Resource {
+  @Value("${userManual.storageRoot}")
+  private String mManualStorageRoot;
 
   @Autowired
   UserGuideResourceHelper mUserGuideResourceHelper;
@@ -45,7 +48,7 @@ public class UserGuideResource extends Resource {
       final @PathParam("navigationId") String pNavigationId) {
     // To Do: User wise manual access validation need to be done
     return output -> {
-      File toBeCopied = new File("F:\\IUMS-Manual\\" + pNavigationId + ".pdf");
+      File toBeCopied = new File(mManualStorageRoot + pNavigationId + ".pdf");
       try {
         java.nio.file.Path path = toBeCopied.toPath();
         Files.copy(path, output);

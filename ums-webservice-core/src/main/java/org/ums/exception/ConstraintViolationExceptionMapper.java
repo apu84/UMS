@@ -15,8 +15,9 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<SQLIn
 
   @Override
   public Response toResponse(SQLIntegrityConstraintViolationException e) {
-    String errorMessage = "[" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "]:  SQLIntegrityConstraintViolation exception:" + e.getMessage();
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]:  SQLIntegrityConstraintViolation exception:"
+            + e.getMessage();
     mLogger.error(errorMessage, e);
     return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
         .entity(new ExceptionResponse("Message", e.getMessage())).build();

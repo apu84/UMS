@@ -110,8 +110,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     mLogger.debug("[{}]: Actor: {}, Accessed Grade Sheet for {}({}), Semester - {}", SecurityUtils.getSubject()
         .getPrincipal().toString(), currentActor, marksSubmissionStatusDto.getCourseTitle(),
         marksSubmissionStatusDto.getCourseNo(), marksSubmissionStatusDto.getSemesterName());
-    mLogger.debug("[{}]: Returned grade list :{}",  SecurityUtils.getSubject()
-        .getPrincipal().toString(),responseObject.toString());
+    mLogger.debug("[{}]: Returned grade list :{}", SecurityUtils.getSubject().getPrincipal().toString(),
+        responseObject.toString());
     return responseObject;
   }
 
@@ -714,8 +714,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(jsonObject);
     }
     object.add("entries", children);
-    mLogger.debug("[{}]: Marks submission log for  {} :{}",  SecurityUtils.getSubject()
-        .getPrincipal().toString(), pStudentId, object.toString());
+    mLogger.debug("[{}]: Marks submission log for  {} :{}", SecurityUtils.getSubject().getPrincipal().toString(),
+        pStudentId, object.toString());
     return object.build();
   }
 
@@ -737,8 +737,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       children.add(object1);
     }
     object.add("entries", children);
-    mLogger.debug("[{}]: Marks submission statistics :{}",  SecurityUtils.getSubject()
-        .getPrincipal().toString(),object.toString());
+    mLogger.debug("[{}]: Marks submission statistics :{}", SecurityUtils.getSubject().getPrincipal().toString(),
+        object.toString());
 
     return object.build();
   }

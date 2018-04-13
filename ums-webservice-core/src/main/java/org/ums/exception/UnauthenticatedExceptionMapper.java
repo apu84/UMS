@@ -15,8 +15,8 @@ public class UnauthenticatedExceptionMapper implements ExceptionMapper<Unauthent
 
   @Override
   public Response toResponse(UnauthenticatedException e) {
-    String errorMessage = "[" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "]:  Unauthenticated exception:" + e.getMessage();
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]:  Unauthenticated exception:" + e.getMessage();
     mLogger.error(errorMessage, e);
     return Response.status(Response.Status.UNAUTHORIZED).build();
   }

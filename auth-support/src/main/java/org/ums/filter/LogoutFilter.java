@@ -25,8 +25,7 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
     Subject subject = getSubject(request, response);
     String token = FilterUtil.getAuthToken((HttpServletRequest) request);
     try {
-      log.info("[{}]: Logged out from the system", SecurityUtils.getSubject()
-          .getPrincipal().toString());
+      log.info("[{}]: Logged out from the system", SecurityUtils.getSubject().getPrincipal().toString());
       subject.logout();
     } catch(SessionException ise) {
       log.debug("Encountered session exception during logout.  This can generally safely be ignored.", ise);

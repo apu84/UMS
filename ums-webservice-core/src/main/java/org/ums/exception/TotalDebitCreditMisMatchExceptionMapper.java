@@ -13,11 +13,11 @@ public class TotalDebitCreditMisMatchExceptionMapper implements ExceptionMapper<
 
   @Override
   public Response toResponse(MisMatchException e) {
-    String errorMessage = "[" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "]:  DebitCreditMisMatchException exception:" + e.getMessage();
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]:  DebitCreditMisMatchException exception:"
+            + e.getMessage();
     mLogger.error(errorMessage, e);
     return Response.status(Response.Status.NOT_ACCEPTABLE)
-        .entity(new ExceptionResponse(e.getClass().toString(), "Credit and Debit is not equal"))
-        .build();
+        .entity(new ExceptionResponse(e.getClass().toString(), "Credit and Debit is not equal")).build();
   }
 }

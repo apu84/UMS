@@ -18,8 +18,9 @@ public class EmptyResultDataAccessExceptionMapper implements ExceptionMapper<Emp
 
   @Override
   public Response toResponse(EmptyResultDataAccessException e) {
-    String errorMessage = "[" + SecurityUtils.getSubject()
-        .getPrincipal().toString() + "]:  EmptyResultDataAccess exception:" + e.getMessage();
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]:  EmptyResultDataAccess exception:"
+            + e.getMessage();
     mLogger.error(errorMessage, e);
     CustomReasonPhraseExceptionStatusType error =
         new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, "No Data Found");
