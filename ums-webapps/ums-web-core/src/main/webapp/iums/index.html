@@ -2,6 +2,7 @@
 <html lang="en" ng-app="UMS">
 <head>
     <title>IUMS</title>
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="../resources/images/branding.jpg" type="image/gif" sizes="16x16">
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -38,78 +39,6 @@
     <link rel="stylesheet" data-ng-href="css/custom.css"/>
     <!--link rel="stylesheet" href="css/angular-filemanager.min.css"/-->
     <link rel="stylesheet" data-ng-href="vendors/jquery-jqgrid-5.0.2/css/ui.jqgrid-bootstrap.css"/>
-
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-messaging.js"></script>
-
-    <script>
-        // Initialize Firebase
-        // TODO: Replace with your project's customized code snippet
-        var config = {
-            apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
-            authDomain: "push-notification-demo-6b41d.firebaseapp.com",
-            databaseURL: "https://push-notification-demo-6b41d.firebaseio.com",
-            projectId: "push-notification-demo-6b41d",
-            storageBucket: "push-notification-demo-6b41d.appspot.com",
-            messagingSenderId: "75416653943"
-        };
-        firebase.initializeApp(config);
-
-        const messaging = firebase.messaging();
-
-        console.log("----- in index.html after const messaging ---- ");
-        console.log(messaging);
-
-        // Add the public key generated from the console here.
-        // messaging.usePublicVapidKey("BOICqYMBGf6en4RpSkhLVNJw8rdokdgpglS4qiCo5cvCKqwTFYNDZEyuOnlGwk-nZu7S66m3HaRrl3xxb0hkwQA");
-
-        messaging.requestPermission().then(function () {
-            console.log('Notification permission granted.');
-            getDeviceRegistrationToken();
-        })
-            .catch(function (err) {
-                console.log('Unable to get permission to notify.', err);
-            });
-
-        // Get Instance ID token. Initially this makes a network call, once retrieved
-        // subsequent calls to getToken will return from cache.
-
-        function getDeviceRegistrationToken(argument) {
-            messaging.getToken().then(function (currentToken) {
-                if (currentToken) {
-                    console.log("the registration token is ----------");
-                    console.log(currentToken);
-                } else {
-                    // Show permission request.
-                    console.log('No Instance ID token available. Request permission to generate one.');
-                    // Show permission UI.
-                }
-            }).catch(function (err) {
-                console.log('An error occurred while retrieving token. ', err);
-            });
-        }
-
-        // Callback fired if Instance ID token is updated.
-        /*    messaging.onTokenRefresh(function() {
-                messaging.getToken().then(function(refreshedToken) {
-                    console.log('Token refreshed.');
-                    // Indicate that the new Instance ID token has not yet been sent to the
-                    // app server.
-                    setTokenSentToServer(false);
-                    // Send Instance ID token to app server.
-                    sendTokenToServer(refreshedToken);
-                    // ...
-                }).catch(function(err) {
-                    console.log('Unable to retrieve refreshed token ', err);
-                    showToken('Unable to retrieve refreshed token ', err);
-                });
-            });*/
-
-        messaging.onMessage(function (payload) {
-            console.log('Message received. ', payload);
-        });
-
-    </script>
 
     <!-- Loading library javascript-->
     <script src="vendors/jquery-1.10.2.min.js"></script>
@@ -253,6 +182,46 @@
     </div>
 </div>
 
+
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-messaging.js"></script>
+
+<script>
+    var config = {
+        apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
+        authDomain: "push-notification-demo-6b41d.firebaseapp.com",
+        databaseURL: "https://push-notification-demo-6b41d.firebaseio.com",
+        projectId: "push-notification-demo-6b41d",
+        storageBucket: "push-notification-demo-6b41d.appspot.com",
+        messagingSenderId: "75416653943"
+    };
+    firebase.initializeApp(config);
+
+    const messaging = firebase.messaging();
+
+    console.log("----- in index.html ------ ");
+
+    messaging.requestPermission().then(function () {
+        console.log('Notification permission granted.');
+        getDeviceRegistrationToken();
+    }).catch(function (err) {
+        console.log('Unable to get permission to notify.', err);
+    });
+
+    function getDeviceRegistrationToken(argument) {
+        messaging.getToken().then(function (currentToken) {
+            if (currentToken) {
+                console.log("the registration token is ----------");
+                console.log(currentToken);
+            } else {
+                console.log('No Instance ID token available. Request permission to generate one.');
+            }
+        }).catch(function (err) {
+            console.log('An error occurred while retrieving token. ', err);
+        });
+    }
+
+</script>
 
 </body>
 </html>
