@@ -13,6 +13,17 @@ public class ApplicationTESDaoDecorator extends
     ContentDaoDecorator<ApplicationTES, MutableApplicationTES, Long, ApplicationTESManager> implements
     ApplicationTESManager {
   @Override
+  public List<ApplicationTES> getCourseForQuestionWiseReport(String pDeptId, Integer pYear, Integer pSemester,
+      Integer pSemesterId) {
+    return getManager().getCourseForQuestionWiseReport(pDeptId, pYear, pSemester, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationTES> getTeacherListForQuestionWiseReport(String pCourseId, Integer pSemesterId) {
+    return getManager().getTeacherListForQuestionWiseReport(pCourseId, pSemesterId);
+  }
+
+  @Override
   public List<ApplicationTES> getDeptListByFacultyId(Integer pFacultyId) {
     return getManager().getDeptListByFacultyId(pFacultyId);
   }

@@ -82,4 +82,9 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   Integer getTotalRecords(final String pDeptId);
 
+  List<ApplicationTES> getCourseForQuestionWiseReport(final String pDeptId, final Integer pYear,
+      final Integer pSemester, final Integer pSemesterId);
+
+  List<ApplicationTES> getTeacherListForQuestionWiseReport(final String pCourseId, final Integer pSemesterId);
+
 }

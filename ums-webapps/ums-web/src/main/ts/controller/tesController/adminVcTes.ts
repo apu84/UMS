@@ -3,11 +3,6 @@ module ums{
         id: any;
         name: string;
     }
-    interface IConstantsDeptTes {
-        id: any;
-        name: string;
-    }
-
     interface IFacultyList{
         teacherId:string;
         firstName:string;
@@ -73,9 +68,6 @@ module ums{
         public deptList: Array<IConstantsDept>;
         public deptName: IConstantsDept;
         public selectedDepartmentId:string;
-        public deptTesList: Array<IConstantsDeptTes>;
-        public deptTesName: IConstantsDeptTes;
-        public selectedDepartmentTesId:string;
         public facultyList:Array<IFacultyList>;
         public facultyListResultEvaluation:Array<IFacultyList>;
         public assignedCourses:Array<IAssignedCourses>;

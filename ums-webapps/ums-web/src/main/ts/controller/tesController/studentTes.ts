@@ -31,7 +31,7 @@ module ums{
         lastName:string;
         status:number;
     }
-    interface  IteacherInfo{
+    interface  ITeacherInfo{
         teacherId:string;
         section:string;
         deptId:string;
@@ -48,9 +48,7 @@ module ums{
         public allReviewEligibleCourses:Array<IReviewEligibleCourses>;
         public courseType:string;
         public semesterNameCurrent:string;
-        public selectedCourseByStudent:string;
-        public getFacultyInfo:Array<IteacherInfo>;
-        public enrolledCourse: IReviewEligibleCourses;
+        public getFacultyInfo:Array<ITeacherInfo>;
         public selectedRow:any;
         public selectedFacultyid:string;
         public selectedCourseId:string;
@@ -97,21 +95,16 @@ module ums{
             this.checkComment=true;
             this.checkSelectTeacher=true;
             this.readOnlyViewCheck=true;
-           this.statusChanged(this.courseApprovalStatus);
+          this.statusChanged();
         }
 
-        private statusChanged(courseApplicationStatus: IConstants){
-            this.courseApprovalStatus= courseApplicationStatus;
-            console.log(this.courseApprovalStatus);
-            if(this.courseApprovalStatus.name.match("Lab")){
-           this.courseType="Lab";
-            }else{
+        private statusChanged(){
            this.courseType="Theory";
-            }
             this.selectedRow=null;
             this.checkSelectTeacher=true;
             this.readOnlyViewCheck=true;
             var appTES:Array<IReviewEligibleCourses>=[];
+            console.log("going");
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getReviewEligibleCourses/courseType/'+this.courseType, 'application/json',
                 (json: any, etag: string) => {
@@ -134,7 +127,6 @@ module ums{
 
         private getAllQuestions(){
             var appTES:Array<IQuestions>=[];
-
             var defer = this.$q.defer();
             this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getAllQuestions', 'application/json',
                 (json: any, etag: string) => {
@@ -215,7 +207,7 @@ module ums{
                             this.notify.success("Data saved successfully");
                             this.checkSelectTeacher = true;
                             this.selectedRow=null;
-                            this.statusChanged(this.courseApprovalStatus);
+                            this.statusChanged();
                             this.getAllQuestions();
 
                         }).error((data) => {

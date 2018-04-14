@@ -516,6 +516,17 @@ module ums {
                     {id: "41", name: "4-1"},
                     {id: "42", name: "4-2"}
                 ],
+                semester: [
+                    {id: 1, name: "1st Semester"},
+                    {id: 2, name: "2nd Semester"}
+                ],
+                year: [
+                    {id: 1, name: "1st Year"},
+                    {id: 2, name: "2nd Year"},
+                    {id: 3, name: "3rd Year"},
+                    {id: 4, name: "4th Year"},
+                    {id: 5, name: "5th Year"}
+                ],
                 leaveApprovalStatus: [
                     {id: 1, name: "Waiting for head's approval"},
                     {id: 2, name: "Waiting For Registrar's Approval"},
@@ -533,8 +544,7 @@ module ums {
                     {id: 4, name: "All"}
                 ],
                 courseTypeTES: [
-                    {id: 1, name: "Theory"},
-                    {id: 2, name: "Lab"}
+                    {id: 1, name: "Theory"}
                 ],observationTypeTes: [
                     {id: 1, name: "Class Room Observation"},
                     {id: 2, name: "Non-Class Room Observation"},
@@ -548,11 +558,11 @@ module ums {
                     {id: '06', name: 'TE'},
                     {id: '07', name: 'MPE'},
                     {id: '15', name: 'ARS'},
-                    {id: '08', name: 'All'},
-                    {id: '09', name: 'Max of All Dept'},
-                    {id: '10', name: 'Min of All Dept'},
+                    {id: '08', name: 'All Department Teacher Evaluation List'},
+                    {id: '09', name: 'Maximum Score Holder of All Dept'},
+                    {id: '10', name: 'Minimum Score Holder of All Dept'},
                     {id: '11', name: 'Faculty of Engineering'},
-                    {id: '12', name: 'Faculty of Business and Social Science'},
+                    {id: '12', name: 'Faculty of Business And Social Science'},
                     {id: '13', name: 'Faculty of Architecture'}
                 ],deptShortName: [
                     {id: '01', name: 'ARC'},

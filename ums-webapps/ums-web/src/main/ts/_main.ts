@@ -198,6 +198,7 @@
 /// <reference path='controller/tesController/adminVcTes.ts'/>
 /// <reference path='controller/tesController/adminVcTesComparison.ts'/>
 /// <reference path='controller/tesController/questionsAdmin.ts'/>
+/// <reference path='controller/tesController/individualQuestionTesReport.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>

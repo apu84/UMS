@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
+import org.ums.academic.resource.teacher.evaluation.system.helper.QuestionWiseReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -45,6 +46,12 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
+  @Path("/getSemesterWiseQuestions/semesterId/{semester-id}")
+  public JsonObject getSemesterWiseQuestions(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
+    return mHelper.getSemesterWiseQuestions(pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/getQuestions")
   public JsonObject getQuestions(@Context Request pRequest) {
     return mHelper.getQuestions(pRequest, mUriInfo);
@@ -68,6 +75,14 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @Path("/getMigrateQuestions/semesterId/{semester-id}")
   public JsonObject getMigrationQuestions(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getMigrationQuestions(pSemesterId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getQuestionWiseReport/deptId/{dept-id}/year/{year}/semester/{semester}/semesterId/{semester-id}/questionId/{question-id}")
+  public List<QuestionWiseReport> getQuestionWiseReport(@Context Request pRequest,
+      @PathParam("dept-id") String pDeptId, @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Integer pQuestionId) {
+    return mHelper.getQuestionWiseReport(pDeptId, pYear, pSemester, pSemesterId, pQuestionId, pRequest, mUriInfo);
   }
 
   // getInitialSemesterParameter
@@ -147,7 +162,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/getReviewEligibleCourseId/courseType/{course-type}")
+  @Path("/getReviewEligibleCourses/courseType/{course-type}")
   public JsonObject getReviewEligibleCourses(@Context Request pRequest, @PathParam("course-type") String pCourseType) {
     return mHelper.getReviewEligibleCourses(pCourseType, pRequest, mUriInfo);
   }
@@ -194,6 +209,25 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
           mTesGeneratorManager.createTesReportSuperAdmin(pDeptId, pSemesterId, output);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
+  @Path("/getQuestionWisePDFReport/deptId/{dept-id}/year/{year}/semester/{semester}/semesterId/{semester-id}/questionId/{question-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createTesQuestionReportSuperAdmin(@PathParam("dept-id") String pDeptId,
+      @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Integer pQuestionId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mTesGeneratorManager.getQuestionWiseReports(pDeptId, pYear, pSemester, pSemesterId, pQuestionId, output);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

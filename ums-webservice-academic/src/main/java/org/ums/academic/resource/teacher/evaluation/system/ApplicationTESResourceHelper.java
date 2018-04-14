@@ -2,9 +2,11 @@ package org.ums.academic.resource.teacher.evaluation.system;
 
 import org.apache.commons.collections.ListUtils;
 import org.apache.shiro.SecurityUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
+import org.ums.academic.resource.teacher.evaluation.system.helper.QuestionWiseReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.builder.Builder;
@@ -373,7 +375,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
-  public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+  public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId,
+      final Request pRequest, final UriInfo pUriInfo) {
     final String maximum = "09", minimum = "10", engineering = "11", businessAndSocial = "12", architecture = "13";
     Integer facultyId = getFacultyType(pDeptId, engineering, businessAndSocial, architecture);
     List<ApplicationTES> teacherList = getContentManager().getFacultyListForReport(pDeptId, pSemesterId);
@@ -382,7 +385,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     List<ApplicationTES> getDeptList = getContentManager().getDeptList();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
     List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
-      List<ComparisonReport> reportFaculty = new ArrayList<ComparisonReport>();
+    List<ComparisonReport> reportFaculty = new ArrayList<ComparisonReport>();
     for(int i = 0; i < teacherList.size(); i++) {
       teacherRelatedCourseList =
           getContentManager().getParametersForReport(teacherList.get(i).getTeacherId(), pSemesterId);
@@ -439,9 +442,13 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       List<ApplicationTES> sectionList =
           getContentManager().getSectionList(teacherRelatedCourseList.get(j).getReviewEligibleCourseId(), pSemesterId,
               teacherRelatedCourseList.get(j).getTeacherId());
-      programName =
-          getContentManager().getCourseDepartmentMap(teacherRelatedCourseList.get(j).getReviewEligibleCourseId(),
-              pSemesterId);
+      try {
+        programName =
+            getContentManager().getCourseDepartmentMap(teacherRelatedCourseList.get(j).getReviewEligibleCourseId(),
+                pSemesterId);
+      } catch(Exception e) {
+        e.printStackTrace();
+      }
       percentage =
           getPercentage(pSemesterId, teacherRelatedCourseList, newFormat, j, studentNo, registeredStudents, sectionList);
 
@@ -602,6 +609,17 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         return object.build();
     }
 
+  public JsonObject getSemesterWiseQuestions(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
+    List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   public JsonObject getAllQuestions(final Request pRequest, final UriInfo pUriInfo){
       String startDate="",endDate="",sStartDate="",sEndDate="";
       Boolean deadLineStatus = false,startingDeadline=false;
@@ -635,7 +653,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
         String studentId = SecurityUtils.getSubject().getPrincipal().toString();
         Student student = mStudentManager.get(studentId);
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(student.getCurrentEnrolledSemester().getId());
+        List<ApplicationTES> applications=getContentManager().getAllQuestions(student.getCurrentEnrolledSemester().getId());//mSemesterManager.getActiveSemester(11).getId()
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
@@ -697,47 +715,103 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return object.build();
   }
 
-  public List<Report> getResult(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-      double cRoombservation=0,noncRoomObservation=0,score=0;
-      Integer countercR=0,counterncR=0;
-      DecimalFormat newFormat = new DecimalFormat("#.##");
-      HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
-      List<Report> reportList= new ArrayList<Report>();
-      Integer studentNo=getContentManager().getTotalStudentNumber(pTeacherId,pCourseId,pSemesterId);
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
-        if(studentNo !=0){
-            applications.forEach(a->{
-                Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-                if(observationType!=3){
-                    double value=0;
+  public List<QuestionWiseReport> getQuestionWiseReport(final String pDeptId, final Integer pYear,
+      final Integer pSemester, final Integer pSemesterId, final Integer pQuestionId, final Request pRequest,
+      final UriInfo pUriInfo) {
 
-                    value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    List<QuestionWiseReport> reportList =
+        getQuestionWiseReports(pDeptId, pYear, pSemester, pSemesterId, pQuestionId, newFormat);
+    return reportList;
+  }
 
-                    String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
-                    reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
-                    mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
-                }
+  @NotNull
+  public List<QuestionWiseReport> getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester,
+      Integer pSemesterId, Integer pQuestionId, DecimalFormat newFormat) {
+    List<QuestionWiseReport> reportList = new ArrayList<QuestionWiseReport>();
+    List<ApplicationTES> getCourses =
+        getContentManager().getCourseForQuestionWiseReport(pDeptId, pYear, pSemester, pSemesterId);
+    List<ApplicationTES> getTeachers = null;
 
-            });
-            for(Map.Entry m:mapForCalculateResult.entrySet()){
-                Integer questionId=(Integer)m.getKey();
-                if(getContentManager().getObservationType(questionId) ==1){
-                    countercR++;
-                    cRoombservation=cRoombservation+(double)m.getValue();
-                }else if(getContentManager().getObservationType(questionId) ==2){
-                    counterncR++;
-                    noncRoomObservation=noncRoomObservation+(double)m.getValue();
-                }else{
+    for(int i = 0; i < getCourses.size(); i++) {
+      getTeachers =
+          getContentManager().getTeacherListForQuestionWiseReport(getCourses.get(i).getReviewEligibleCourseId(),
+              pSemesterId);
+      for(int j = 0; j < getTeachers.size(); j++) {
+        Integer studentNo =
+            getContentManager().getTotalStudentNumber(getTeachers.get(j).getTeacherId(),
+                getCourses.get(i).getReviewEligibleCourseId(), pSemesterId);
+        String teacherName = "", courseNo = "", courseTitle = "", programName = "";
+        double value = 0;
+        double percentage = 0;
+        teacherName = mPersonalInformationManager.get(getTeachers.get(j).getTeacherId()).getFullName();
+        courseNo = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getNo();
+        courseTitle = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getTitle();
+        if(studentNo != 0) {
+          value =
+              getContentManager().getAverageScore(getTeachers.get(j).getTeacherId(),
+                  getCourses.get(i).getReviewEligibleCourseId(), pQuestionId, pSemesterId);
 
-                }
+          value = (Double.valueOf(newFormat.format(value / studentNo)));
+
+          List<ApplicationTES> sectionList =
+              getContentManager().getSectionList(getCourses.get(i).getReviewEligibleCourseId(), pSemesterId,
+                  getTeachers.get(j).getTeacherId());
+          int selectedRegisteredStudents = 0;
+          try {
+            for(int k = 0; k < sectionList.size(); k++) {
+              selectedRegisteredStudents =
+                  selectedRegisteredStudents
+                      + getContentManager().getTotalRegisteredStudentForCourse(
+                          getCourses.get(i).getReviewEligibleCourseId(), sectionList.get(k).getSection(), pSemesterId);
             }
-            cRoombservation=Double.valueOf(newFormat.format((cRoombservation/countercR)));
-            noncRoomObservation=Double.valueOf(newFormat.format((noncRoomObservation/counterncR)));
-            score=Double.valueOf(newFormat.format((cRoombservation+noncRoomObservation)/2));
-        }
+            double total = ((double) studentNo / (double) selectedRegisteredStudents);
+            percentage = Double.valueOf(newFormat.format((total * 100)));
+          } catch(Exception e) {
+            e.printStackTrace();
+          }
 
-      return reportList;
+        }
+        try {
+          programName =
+              getContentManager().getCourseDepartmentMap(getCourses.get(i).getReviewEligibleCourseId(), pSemesterId);
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+        if(programName.equals(null) || programName.equals("")) {
+          programName = "Not Found";
+        }
+        reportList.add(new QuestionWiseReport(teacherName, courseNo, courseTitle, programName, value, percentage));
+
+      }
     }
+    return reportList;
+  }
+
+  public List<Report> getResult(final String pCourseId, final String pTeacherId, final Integer pSemesterId,
+      final Request pRequest, final UriInfo pUriInfo) {
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    HashMap<Integer, Double> mapForCalculateResult = new HashMap<Integer, Double>();
+    List<Report> reportList = new ArrayList<Report>();
+    Integer studentNo = getContentManager().getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
+    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
+    getEvaluationDetails(pCourseId, pTeacherId, pSemesterId, newFormat, reportList, studentNo, applications);
+    return reportList;
+  }
+
+  private void getEvaluationDetails(String pCourseId, String pTeacherId, Integer pSemesterId, DecimalFormat newFormat, List<Report> reportList, Integer studentNo, List<ApplicationTES> applications) {
+    if(studentNo !=0){
+        applications.forEach(a->{
+            Integer observationType=getContentManager().getObservationType(a.getQuestionId());
+            if(observationType!=3){
+                double value=0;
+                value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
+                String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
+                reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
+            }
+        });
+    }
+  }
 
   public List<StudentComment> getComments(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
         List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);

@@ -157,6 +157,26 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String getAllSectionForSelectedCourse =
       "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
   String getDeptListByFacultyId = "SELECT DISTINCT  DEPT_ID FROM MST_PROGRAM WHERE CATEGORY_ID=?";
+  String getCourseForQuestionWiseReport =
+      "SELECT DISTINCT a.COURSE_ID FROM MST_COURSE a,COURSE_TEACHER b WHERE a.COURSE_TYPE=1 AND a.OFFER_BY=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND b.SEMESTER_ID=? AND a.COURSE_ID=b.COURSE_ID";
+
+  String getTeacherListForQuestionWiseReport =
+      "SELECT DISTINCT TEACHER_ID FROM COURSE_TEACHER WHERE  COURSE_ID=? AND  SEMESTER_ID=?";
+
+  @Override
+  public List<ApplicationTES> getCourseForQuestionWiseReport(String pDeptId, Integer pYear, Integer pSemester,
+      Integer pSemesterId) {
+    String query = getCourseForQuestionWiseReport;
+    return mJdbcTemplate.query(query, new Object[] {pDeptId, pYear, pSemester, pSemesterId},
+        new ApplicationTESRowMapperForQuestionWiseReport());
+  }
+
+  @Override
+  public List<ApplicationTES> getTeacherListForQuestionWiseReport(String pCourseId, Integer pSemesterId) {
+    String query = getTeacherListForQuestionWiseReport;
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId},
+        new ApplicationTESRowMapperForFacultyListReport());
+  }
 
   @Override
   public List<ApplicationTES> getDeptListByFacultyId(Integer pFacultyId) {
@@ -243,6 +263,17 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   public String getCourseDepartmentMap(String pCourseId, Integer pSemesterId) {
     String query = getCourseDepartmentMap;
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pCourseId}, String.class);
+
+  }
+
+  private String checkNull(String value) {
+    if(value.equals("") || value.equals(null)) {
+      return "None";
+    }
+    else {
+      return value;
+    }
+
   }
 
   @Override
@@ -525,6 +556,14 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
       application.setTeacherId(pResultSet.getString("TEACHER_ID"));
+      return application;
+    }
+  }
+  class ApplicationTESRowMapperForQuestionWiseReport implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
       return application;
     }
   }

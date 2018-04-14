@@ -14,4 +14,7 @@ public interface TesGenerator {
 
   void createTesReportSuperAdmin(String pDeptId, Integer pSemesterId, OutputStream pOutputStream) throws IOException,
       DocumentException;
+
+  void getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester, Integer pSemesterId,
+      Integer pQuestionId, OutputStream pOutputStream) throws IOException, DocumentException;
 }

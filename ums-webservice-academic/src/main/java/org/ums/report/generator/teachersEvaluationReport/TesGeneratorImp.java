@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
 import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
+import org.ums.academic.resource.teacher.evaluation.system.helper.QuestionWiseReport;
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -621,7 +622,6 @@ public class TesGeneratorImp implements TesGenerator {
       for(int i=0;i<facultyWiseDeptList.size();i++){
         String departmentId=facultyWiseDeptList.get(i).getDeptId();
         tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
-        //   reportFaculty= Stream.concat(reportFaculty.stream(),report.stream().filter(a->a.getDeptId().equals(departmentId))).collect(Collectors.toList());
         reportFaculty= ListUtils.union(reportFaculty,tempList);
         tempList= Collections.emptyList();
       }
@@ -629,7 +629,6 @@ public class TesGeneratorImp implements TesGenerator {
     }else{
      pdfReport=report;
     }
-
     pdfReport.sort(Comparator.comparing((ComparisonReport::getTotalScore)).reversed());
     PdfPTable tableQuestions= new PdfPTable(8);
     tableQuestions.setWidthPercentage(100);
@@ -677,6 +676,7 @@ public class TesGeneratorImp implements TesGenerator {
     pdfWordCellColumn8.setPaddingLeft(5);
     pdfWordCellColumn8.setPaddingBottom(5);
     tableQuestions.addCell(pdfWordCellColumn8);
+    tableQuestions.setHeaderRows(1);
     PdfPCell pdfWordCellRow1 = new PdfPCell();
     PdfPCell pdfWordCellRow2 = new PdfPCell();
     PdfPCell pdfWordCellRow3 = new PdfPCell();
@@ -689,16 +689,6 @@ public class TesGeneratorImp implements TesGenerator {
     int index=0;
     for(int n=0;n<pdfReport.size();n++){
       index++;
-     // Paragraph cellParagraph = new Paragraph(""+(index)+". ");
-      //cellParagraph.setAlignment(Element.ALIGN_RIGHT);
-      /*pdfWordCellRow1.addElement(cellParagraph);
-      pdfWordCellRow2.addElement(new Phrase(""+pdfReport.get(n).getTeacherName()));
-      pdfWordCellRow3.addElement(new Phrase(""+pdfReport.get(n).getDeptName()));
-      pdfWordCellRow4.addElement(new Phrase(""+pdfReport.get(n).getCourseNo()));
-      pdfWordCellRow5.addElement(new Phrase(""+pdfReport.get(n).getCourseTitle()));
-      pdfWordCellRow6.addElement(new Phrase(""+pdfReport.get(n).getProgramName()));
-      pdfWordCellRow7.addElement(new Phrase(""+pdfReport.get(n).getTotalScore()));
-      pdfWordCellRow8.addElement(new Phrase(""+pdfReport.get(n).getReviewPercentage()));*/
       tableQuestions.addCell(new Phrase(""+index,boldFont1));
       tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getTeacherName(),boldFont1));
       tableQuestions.addCell(new Phrase(""+pdfReport.get(n).getDeptName(),boldFont1));
@@ -717,6 +707,123 @@ public class TesGeneratorImp implements TesGenerator {
     
     document.close();
     baos.writeTo(pOutputStream);
+
+  }
+
+  @Override
+  public void getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester, Integer pSemesterId, Integer pQuestionId,OutputStream pOutputStream) throws IOException, DocumentException {
+    mDateFormat = new DateFormat("dd MMM YYYY");
+    Document document = new Document(PageSize.A4.rotate());
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+    Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
+    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12);
+    Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
+    document.open();
+
+
+    Paragraph paragraph = null;
+    Chunk chunk = null;
+
+
+    chunk = new Chunk("Teachers Evaluation Report\nAhsanullah University of Science And Technology");
+
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    paragraph.setFont(fontTimes14Bold);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 1);
+    document.add(paragraph);
+    paragraph=new Paragraph(" ");
+    document.add(paragraph);
+    chunk = new Chunk("Semester: "+mSemesterManager.get(pSemesterId).getName()+"\n"+
+            "Year-Semester: "+pYear+"-"+pSemester+"\n"+
+            "Department: "+mDepartmentManager.get(pDeptId).getLongName()+"\n"+
+            "Question Details:  "+mApplicationTESManager.getQuestionDetails(pQuestionId));
+
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_LEFT);
+    paragraph.setFont(fontTimes11Bold);
+    paragraph.add(chunk);
+    document.add(paragraph);
+
+    chunk = new Chunk("Date: " + mDateFormat.format(new Date()));
+    chunk.setFont(fontTimes11Normal);
+    paragraph = new Paragraph();
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    paragraph.setFont(fontTimes11Normal);
+    paragraph.add(chunk);
+    emptyLine(paragraph, 2);
+    document.add(paragraph);
+    chunk = new Chunk(" ");
+    paragraph=new Paragraph(" ");
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    List<QuestionWiseReport> reportList = mApplicationTESResourceHelper.getQuestionWiseReports(pDeptId, pYear, pSemester, pSemesterId, pQuestionId, newFormat);
+    reportList.sort(Comparator.comparing((QuestionWiseReport::getScore)).reversed());
+    PdfPTable tableQuestions= new PdfPTable(7);
+    tableQuestions.setWidthPercentage(100);
+    tableQuestions.setWidths(new float[] { 1,7,3,7,4,3,3});
+    PdfPCell pdfWordCellColumn1 = new PdfPCell();
+    PdfPCell pdfWordCellColumn2 = new PdfPCell();
+    PdfPCell pdfWordCellColumn4 = new PdfPCell();
+    PdfPCell pdfWordCellColumn5 = new PdfPCell();
+    PdfPCell pdfWordCellColumn6 = new PdfPCell();
+    PdfPCell pdfWordCellColumn7 = new PdfPCell();
+    PdfPCell pdfWordCellColumn8 = new PdfPCell();
+
+    Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+    Font boldFont1 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+    pdfWordCellColumn1.addElement(new Phrase("SL",boldFont));
+    pdfWordCellColumn1.setPaddingLeft(5);
+    pdfWordCellColumn1.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn1);
+    pdfWordCellColumn2.addElement(new Phrase("Teacher Name",boldFont));
+    pdfWordCellColumn2.setPaddingLeft(5);
+    pdfWordCellColumn2.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn2);
+    pdfWordCellColumn4.addElement(new Phrase("Course No",boldFont));
+    pdfWordCellColumn4.setPaddingLeft(5);
+    pdfWordCellColumn4.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn4);
+    pdfWordCellColumn5.addElement(new Phrase("Course Title",boldFont));
+    pdfWordCellColumn5.setPaddingLeft(5);
+    pdfWordCellColumn5.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn5);
+    pdfWordCellColumn6.addElement(new Phrase("Program Name",boldFont));
+    pdfWordCellColumn6.setPaddingLeft(5);
+    pdfWordCellColumn6.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn6);
+    pdfWordCellColumn7.addElement(new Phrase("Score",boldFont));
+    pdfWordCellColumn7.setPaddingLeft(5);
+    pdfWordCellColumn7.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn7);
+    pdfWordCellColumn8.addElement(new Phrase("Reviewer",boldFont));
+    pdfWordCellColumn8.setPaddingLeft(5);
+    pdfWordCellColumn8.setPaddingBottom(5);
+    tableQuestions.addCell(pdfWordCellColumn8);
+    tableQuestions.setHeaderRows(1);
+    int index=0;
+    for(int n=0;n<reportList.size();n++){
+      index++;
+      tableQuestions.addCell(new Phrase(""+index,boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getTeacherName(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getCourseNo(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getCourseTitle(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getProgramName(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getScore(),boldFont1));
+      tableQuestions.addCell(new Phrase(""+reportList.get(n).getPercentage()+"%",boldFont1));
+    }
+
+    try {
+      document.add(tableQuestions);
+    } catch (DocumentException e) {
+      e.printStackTrace();
+    }
+
+    document.close();
+    baos.writeTo(pOutputStream);
+
 
   }
   // /pdf generation
