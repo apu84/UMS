@@ -42,7 +42,8 @@ public class SessionFilter extends PathMatchingFilter {
     }
     else if(diffMinutes > sessionTimeout) {
       continueFilterChain = FilterUtil.sendUnauthorized(response);
-      mLogger.debug("[{}]: Expired access token: {}", SecurityUtils.getSubject().getPrincipal().toString(), dbToken.getId());
+      mLogger.debug("[{}]: Expired access token: {}", SecurityUtils.getSubject().getPrincipal().toString(),
+          dbToken.getId());
     }
     return continueFilterChain;
   }

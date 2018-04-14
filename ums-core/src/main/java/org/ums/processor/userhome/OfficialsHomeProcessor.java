@@ -1,6 +1,8 @@
 package org.ums.processor.userhome;
 
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.manager.EmployeeManager;
 import org.ums.usermanagement.user.User;
 
 import java.util.ArrayList;
@@ -9,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
+  @Autowired
+  EmployeeManager employeeManager;
+
   @Override
   public UserInfo process(Subject pCurrentSubject) {
     String userId = pCurrentSubject.getPrincipal().toString();
@@ -26,6 +31,11 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
     department.put("key", "Department/ Office");
     department.put("value", user.getDepartment().getLongName());
     profileContent.add(department);
+
+    Map<String, String> designation = new HashMap<>();
+    designation.put("key", "Designation");
+    designation.put("value", employeeManager.getByShortName(user.getId()).getDesignation().getDesignationName());
+    profileContent.add(designation);
 
     userInfo.setInfoList(profileContent);
     userInfo.setUserRole(user.getPrimaryRole().getName());
