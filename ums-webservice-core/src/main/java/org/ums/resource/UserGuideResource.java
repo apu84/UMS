@@ -24,7 +24,7 @@ import java.nio.file.*;
 @Produces(Resource.MIME_TYPE_JSON)
 public class UserGuideResource extends Resource {
 
-  private static final Logger mLogger= LoggerFactory.getLogger(UserGuideResource.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(UserGuideResource.class);
 
   @Value("${userManual.storageRoot}")
   private String mManualStorageRoot;
