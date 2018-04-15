@@ -78,6 +78,7 @@ module ums{
         }
         private yearChanged(value:any){
             console.log(value.name);
+            console.log("---------");
             this.year=value.name;
             this.selectedYear=value.id;
         }
