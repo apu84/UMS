@@ -74,24 +74,16 @@ public class ProfilePicture extends Resource {
     else {
       userId = pImageId;
     }
-    InputStream imageData = null;
-    // mKafkaTemplate.send("ums_logger", "This is from profile picture");
+    InputStream imageData;
 
     try {
-
       imageData = mGateway.read("files/user-photo/" + (userId + ".jpg"));
-      Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-      ObjectMapper mapper = new ObjectMapper();
-
-    } catch(Exception fl) {
-      // fl.printStackTrace();
-      mLogger.error(userId + ".jpg image not found");
-      // return Response.status(Response.Status.NOT_FOUND).build();
+    } catch(Exception e) {
+      mLogger.error(userId + ".jpg image not found", e);
       try {
 
         imageData = mGateway.read("files/user.png");
-      } catch(Exception e) {
+      } catch(Exception e1) {
         return Response.status(Response.Status.NOT_FOUND).build();
       }
     }
