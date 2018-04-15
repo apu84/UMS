@@ -18,6 +18,8 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
   public UserInfo process(Subject pCurrentSubject) {
     String userId = pCurrentSubject.getPrincipal().toString();
     User user = mUserManager.get(userId);
+    String deptOffice;
+    String designationName;
 
     UserInfo userInfo = new UserInfo();
     List<Map<String, String>> profileContent = new ArrayList<>();
@@ -27,18 +29,26 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
     userName.put("value", user.getName());
     profileContent.add(userName);
 
-    Map<String, String> department = new HashMap<>();
-    department.put("key", "Department/ Office");
-    department.put("value", user.getDepartment().getLongName());
-    profileContent.add(department);
+    if(user.getName().equals("Admin User")) {
+      deptOffice = "ICT";
+      designationName = "System Admin";
+    }
+    else {
+      deptOffice = user.getDepartment().getLongName();
+      designationName = employeeManager.getByShortName(user.getId()).getDesignation().getDesignationName();
+    }
+      Map<String, String> department = new HashMap<>();
+      department.put("key", "Department/ Office");
+      department.put("value", deptOffice);
+      profileContent.add(department);
 
-    Map<String, String> designation = new HashMap<>();
-    designation.put("key", "Designation");
-    designation.put("value", employeeManager.getByShortName(user.getId()).getDesignation().getDesignationName());
-    profileContent.add(designation);
+      Map<String, String> designation = new HashMap<>();
+      designation.put("key", "Designation");
+      designation.put("value", designationName);
+      profileContent.add(designation);
 
-    userInfo.setInfoList(profileContent);
-    userInfo.setUserRole(user.getPrimaryRole().getName());
+      userInfo.setInfoList(profileContent);
+      userInfo.setUserRole(user.getPrimaryRole().getName());
 
     return userInfo;
   }
