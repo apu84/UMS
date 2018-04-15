@@ -573,6 +573,17 @@ module ums {
                     {id: '06', name: 'TE'},
                     {id: '07', name: 'MPE'},
                     {id: '15', name: 'ARS'}
+                ],facultyEngineering: [
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'}
+                ],facultyBusinessAndSocial: [
+                    {id: '02', name: 'BBA'},
+                    {id: '15', name: 'ARS'}
+                ],facultyArchitecture: [
+                    {id: '01', name: 'ARC'}
                 ],
                 departmentOffice: [
                     {id: '01', name: 'Department of Architecture'},

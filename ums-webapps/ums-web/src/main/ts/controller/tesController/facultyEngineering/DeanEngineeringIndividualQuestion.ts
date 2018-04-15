@@ -26,7 +26,7 @@ module ums{
         score:number;
         percentage:number;
     }
-    class IndividualQuestionTesReport{
+    class DeanEngineeringIndividualQuestion{
         public semesters:Array<Semester>;
         public semester:Semester;
         public deptList: Array<IConstantsDept>;
@@ -57,15 +57,16 @@ module ums{
                     private $sce: ng.ISCEService,
                     private $window: ng.IWindowService,
                     private semesterService: SemesterService,
-                   ){
+        ){
             this.searchResult=false;
             this.deptList = [];
-            this.deptList = this.appConstants.deptShortName;
+            this.deptList = this.appConstants.facultyEngineering;
             this.deptName=this.deptList[0];
             this.selectedDepartmentId=this.deptName.id;
             this.departmentName=this.deptName.name;
             this.yearList=[];
             this.yearList=this.appConstants.year;
+            this.yearList=this.yearList.filter(a=>a.id !=5);
             this.yearName=this.yearList[0];
             this.selectedYear=this.yearName.id;
             this.year=this.yearName.name;
@@ -74,7 +75,7 @@ module ums{
             this.academicSemesterName=this.academicSemesterList[0];
             this.selectedSemester=this.academicSemesterName.id;
             this.acaSemester=this.academicSemesterName.name;
-                    this.getSemesters();
+            this.getSemesters();
         }
         private yearChanged(value:any){
             console.log(value.name);
@@ -209,5 +210,5 @@ module ums{
 
 
     }
-    UMS.controller("IndividualQuestionTesReport",IndividualQuestionTesReport)
+    UMS.controller("DeanEngineeringIndividualQuestion",DeanEngineeringIndividualQuestion)
 }

@@ -199,6 +199,14 @@
 /// <reference path='controller/tesController/adminVcTesComparison.ts'/>
 /// <reference path='controller/tesController/questionsAdmin.ts'/>
 /// <reference path='controller/tesController/individualQuestionTesReport.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringTes.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringComparison.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialTes.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialComparison.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureTes.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureIndividualQuestion.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
