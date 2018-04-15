@@ -1,6 +1,8 @@
 package org.ums.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.scenario.effect.ImageData;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
@@ -29,9 +32,12 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.NoRouteToHostException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Component
 @Path("/profilePicture")
@@ -44,71 +50,72 @@ public class ProfilePicture extends Resource {
   @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
+  @Value("${user.default.image}")
+  private String mDefaultImage;
+
   @Autowired
   private FileWriterGateway mGateway;
 
   @Autowired
   private UserManager mUserManager;
 
-  // @Autowired
-  // MessageManipulator mMessageManipulator;
-
-  /*
-   * @Autowired private KafkaTemplate<String, String> mKafkaTemplate;
-   */
-
-  // @Autowired
   @Autowired
   private SessionFactory<FTPFile> ftpSessionFactory;
 
   @GET
   @Path("/{image-id}")
+  /**
+   * For each login attempt, we call this endpoint twice which is not good.
+   * We should try to make only one call. Two call mean two rest call with two ftp file read operation.
+   */
   public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
       final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
-    String userId = "";
+    String photoId = "";
+    String userId = null;
+    System.out.println(new Date());
     if(pImageId.equals("0")) {
-      Subject subject = SecurityUtils.getSubject();
-      User user = mUserManager.get(subject.getPrincipal().toString());
-      userId = user.getPrimaryRole().getId() == 11 ? user.getId() : user.getEmployeeId();
+      userId = SecurityUtils.getSubject().getPrincipal().toString();
+      User user = mUserManager.get(userId);
+      photoId =
+          user.getPrimaryRole().getId() == 11 || user.getId().equals("sadmin") ? user.getId() : user.getEmployeeId();
     }
     else {
-      userId = pImageId;
+      photoId = pImageId;
     }
     InputStream imageData;
 
     try {
-      imageData = mGateway.read("files/user-photo/" + (userId + ".jpg"));
+      imageData = mGateway.read("files/user-photo/" + (photoId + ".jpg"));
     } catch(Exception e) {
-      mLogger.error(userId + ".jpg image not found", e);
-      try {
-
-        imageData = mGateway.read("files/user.png");
-      } catch(Exception e1) {
-        return Response.status(Response.Status.NOT_FOUND).build();
+      if(e instanceof NoRouteToHostException || e.getCause().getMessage().equals("Read timed out")) {
+        mLogger.error("Failed to connect with ftp server", e);
+        imageData = getDefaultImage();
+        if(imageData == null)
+          return Response.status(Response.Status.NOT_FOUND).build();
+        mLogger.info("[" + userId + "]: Using default user photo.", e);
+      }
+      else {
+        try {
+          mLogger.error("[" + userId + "] :" + photoId + ".jpg image not found", e);
+          imageData = mGateway.read("files/user.png");
+          mLogger.info("[" + userId + "]: Using default user photo from ftp.", e);
+        } catch(Exception e1) {
+          imageData = getDefaultImage();
+          if(imageData == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
       }
     }
-
     return Response.ok(imageData).build();
   }
 
-  private String getClassName() {
-    String className = this.getClass().toString();
-    className.replaceAll("\\s", "");
-
-    return this.getClass().toString();
-  }
-
-  private String getUserId() {
-    return "userid:" + SecurityUtils.getSubject().getPrincipal().toString();
-  }
-
-  private String getUserRoles() {
-    return "userroles:" + SecurityUtils.getSubject().getPrincipal().toString();
-  }
-
-  private String getTimeStamp() {
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    return "timestamp:" + timestamp.getTime();
+  private InputStream getDefaultImage() {
+    try {
+      File initialFile = new File(mDefaultImage);
+      return FileUtils.openInputStream(initialFile);
+    } catch(Exception e2) {
+      return null;
+    }
   }
 
   @POST

@@ -37,18 +37,18 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
       deptOffice = user.getDepartment().getLongName();
       designationName = employeeManager.getByShortName(user.getId()).getDesignation().getDesignationName();
     }
-      Map<String, String> department = new HashMap<>();
-      department.put("key", "Department/ Office");
-      department.put("value", deptOffice);
-      profileContent.add(department);
+    Map<String, String> department = new HashMap<>();
+    department.put("key", "Department/ Office");
+    department.put("value", deptOffice);
+    profileContent.add(department);
 
-      Map<String, String> designation = new HashMap<>();
-      designation.put("key", "Designation");
-      designation.put("value", designationName);
-      profileContent.add(designation);
+    Map<String, String> designation = new HashMap<>();
+    designation.put("key", "Designation");
+    designation.put("value", designationName);
+    profileContent.add(designation);
 
-      userInfo.setInfoList(profileContent);
-      userInfo.setUserRole(user.getPrimaryRole().getName());
+    userInfo.setInfoList(profileContent);
+    userInfo.setUserRole(user.getPrimaryRole().getName());
 
     return userInfo;
   }
