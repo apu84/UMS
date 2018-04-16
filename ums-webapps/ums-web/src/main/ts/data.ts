@@ -32,9 +32,60 @@
       'navId': '2029'
     },
     '/applicationCCI': {
-      title: 'Appliction for Clearance/Improvement/Carry',
+      title: 'Application for Clearance/Improvement/Carry',
       'breadcrumb': ['Application for Clearance/Improvement/Carry']
     },
+      '/applicationTES': {
+          title: 'Application for Teacher Evaluation System',
+          'breadcrumb': ['Application for Teacher Evaluation System']
+      },
+      '/tes': {
+          title: 'Teacher Evaluation System',
+          'breadcrumb': ['Teacher Evaluation System']
+      },//
+      '/teacherEvaluationSystem': {
+          title: 'Individual Teacher Evaluation Report',
+          'breadcrumb': ['Individual Teacher Evaluation Report']
+      },///tesComparison
+      '/tesComparison': {
+          title: 'Comparison of Teacher Evaluation Report',
+          'breadcrumb': ['Comparison of Teacher Evaluation Report']
+      },
+      '/questionWiseReport': {
+          title: 'Question Wise Report of Teacher Evaluation Report',
+          'breadcrumb': ['Question Wise Report of Teacher Evaluation Report']
+      },
+      '/teacherEvaluationSystemEng': {
+          title: 'Individual Teacher Evaluation Report',
+          'breadcrumb': ['Individual Teacher Evaluation Report']
+      },'/tesComparisonEng': {
+          title: 'Comparison of Teacher Evaluation Report',
+          'breadcrumb': ['Comparison of Teacher Evaluation Report']
+      },
+      '/questionWiseReportEng': {
+          title: 'Question Wise Report of Teacher Evaluation Report',
+          'breadcrumb': ['Question Wise Report of Teacher Evaluation Report']
+      },
+      '/assignQuestions': {
+          title: 'Assign Question For Teacher Evaluation Report',
+          'breadcrumb': ['Assign Question For Teacher Evaluation Report']
+      },'/teacherEvaluationSystemBbaAndArs': {
+          title: 'Individual Teacher Evaluation Report',
+          'breadcrumb': ['Individual Teacher Evaluation Report']
+      },'/tesComparisonBbaAndArs': {
+          title: 'Comparison of Teacher Evaluation Report',
+          'breadcrumb': ['Comparison of Teacher Evaluation Report']
+      },
+      '/questionWiseReportBbaAndArs': {
+          title: 'Question Wise Report of Teacher Evaluation Report',
+          'breadcrumb': ['Question Wise Report of Teacher Evaluation Report']
+      },'/teacherEvaluationSystemArc': {
+          title: 'Individual Teacher Evaluation Report',
+          'breadcrumb': ['Individual Teacher Evaluation Report']
+      },'/questionWiseReportArc': {
+          title: 'Comparison of Teacher Evaluation Report',
+          'breadcrumb': ['Comparison of Teacher Evaluation Report']
+      },
     '/examSeatPlan': {title: 'Exam Seat Plan ', 'breadcrumb': ['Seat Plan ']},
     '/seatPlanRegular': {title: 'Exam Seat Plan - Regular ', 'breadcrumb': ['Seat Plan', 'Regular']},
     '/seatPlanCCI': {title: 'Exam Seat Plan - CCI ', 'breadcrumb': ['Seat Plan', 'CCI']},

@@ -34,7 +34,7 @@
 
 </style>
 
-<div class="row" data-ng-init="vm.getAllFacultyMembers()" data-ng-if="vm.evaluationResultStatus==true">
+<div class="row" data-ng-init="vm.getAllFacultyMembers()" data-ng-if="vm.evaluationResultStatus==true" style="padding: 10px">
     <div class="panel" >
         <div >
 
@@ -114,8 +114,8 @@
                         <th style="background-color: #FAFAFA; ">Course Title</th>
                         <th style="background-color: #FAFAFA; ">Section</th>
                         <th style="background-color: #FAFAFA; ">ProgramName</th>
-                        <th style="background-color: #FAFAFA; ">Evaluate</th>
                         <th style="background-color: #FAFAFA; ">Status</th>
+                        <th style="background-color: #FAFAFA;" data-ng-show="vm.deadLine">Evaluate</th>
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
@@ -124,13 +124,14 @@
                             <td> {{app.courseTitle}}</td>
                             <td>{{app.section}}</td>
                             <td><span  class="label label-warning badge-warning">{{app.programShortName}}</span></td>
-                            <td><input data-ng-show="(app.status==0 && app.deadLineStatus==true) ? true:false"
-                                       type="checkbox"
-                                       data-ng-model="app.apply"
-                                       data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
                             <td><span ng-if="app.status==vm.statusValue" class="label label-success badge-success">Set For Evaluation</span>
                                 <span ng-if="app.status!=vm.statusValue" class="label label-danger badge-danger">Not Assigned</span>
                             </td>
+                            <td data-ng-show="vm.deadLine"><input data-ng-show="(app.status==0 && vm.deadLine==true) ? true:false"
+                                       type="checkbox"
+                                       data-ng-model="app.apply"
+                                       data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
+
                         </tr>
                         </tbody>
                     </table>

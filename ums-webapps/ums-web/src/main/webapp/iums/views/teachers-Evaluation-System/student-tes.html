@@ -6,11 +6,9 @@
     }
 </style>
 
-<div class="container-fluid" data-ng-init="vm.getAllQuestions()">
-    <div  class="panel panel-green">
-        <div class="panel-heading" align="center">
-            <h4 class="panel-title">Application For Teachers Evaluation System</h4>
-        </div>
+<div  data-ng-init="vm.getAllQuestions()">
+    <div  class="panel">
+
         <div data-ng-if="vm.startingDeadline==false">
 
             <p >
@@ -26,7 +24,7 @@
 
         <div class="panel-body" style="padding-bottom: 10px" >
             <span  style="font-size: 14px" class="label label-success badge-success">Available Courses for Evaluation <span style="color: black" class="badge">{{vm.totalReviewEligibleCourseLength}}</span></span>
-            <table class="table table-bordered"  data-ng-hide="vm.checkCourseTeacher">
+            <table class="table table-bordered"  data-ng-hide="vm.checkCourseTeacher" style="cursor: pointer;">
                 <thead>
                 <th style="background-color: #e7f5fe;width:20px;">SL</th>
                 <th style="background-color: #e7f5fe; ">Course No</th>
@@ -71,7 +69,7 @@
                                 <td>
                                     <input type="radio"  ng-model="app.point" ng-value="1">
                                     <input type="radio"  ng-model="app.point" ng-value="2">
-                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=3">
+                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=0">
                                     <input type="radio"  ng-model="app.point" ng-value="4" >
                                     <input type="radio"  ng-model="app.point" ng-value="5">
                                     <span ng-if="app.point==1" class="label label-danger badge-danger">Poor</span>
@@ -98,7 +96,7 @@
                                 <td>
                                     <input type="radio"  ng-model="app.point" ng-value="1">
                                     <input type="radio"  ng-model="app.point" ng-value="2">
-                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=3">
+                                    <input type="radio"  ng-model="app.point" ng-value="3" ng-init="app.point=0">
                                     <input type="radio"  ng-model="app.point" ng-value="4" >
                                     <input type="radio"  ng-model="app.point" ng-value="5" >
                                     <span ng-if="app.point==1" class="label label-danger badge-danger">Poor</span>
@@ -150,7 +148,7 @@
 
         </div>
 
-        <div data-ng-if="vm.checkComment==true">
+        <div data-ng-if="vm.checkComment==true && vm.checkPoint==true">
             <div class="modal fade" id="myModal" role="dialog"  >
                 <!--   <div class="modal-backdrop"> -->
                 <div class="modal-dialog  modal-lg">

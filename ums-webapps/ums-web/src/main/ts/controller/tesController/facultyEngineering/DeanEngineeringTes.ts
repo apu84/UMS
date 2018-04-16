@@ -186,7 +186,7 @@ module ums{
         }
 
         private teacherChanged(val:any){
-            console.log("Name: "+val.firstName+"\nId: "+val.teacherId);
+          //  console.log("Name: "+val.firstName+"\nId: "+val.teacherId);
             this.checkEvaluationResult=true;
             this.selectedTeacherId=val.teacherId;
             this.assignedCoursesForReview=[];
@@ -275,12 +275,18 @@ module ums{
                             this.nonClassObservationAverage=(this.nonClassObservationAverage+this.studentResult[i].averageScore);
                         }
                     }
-                    this.classObservationAverage=(this.classObservationAverage/counterObType1);
-                    this.classObservationAverage=Number(this.classObservationAverage.toFixed(2));
-                    this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2);
-                    this.nonClassObservationAverage=Number(this.nonClassObservationAverage.toFixed(2));
-                    this.finalScore=(this.classObservationAverage+this.nonClassObservationAverage)/2;
-                    this.finalScore=Number(this.finalScore.toFixed(2))
+                    if(this.classObservationAverage!=0 && this.nonClassObservationAverage !=0){
+                        this.classObservationAverage=(this.classObservationAverage/counterObType1);
+                        this.classObservationAverage=Number(this.classObservationAverage.toFixed(2));
+                        this.nonClassObservationAverage=(this.nonClassObservationAverage/counterObType2);
+                        this.nonClassObservationAverage=Number(this.nonClassObservationAverage.toFixed(2));
+                        this.finalScore=(this.classObservationAverage+this.nonClassObservationAverage)/2;
+                        this.finalScore=Number(this.finalScore.toFixed(2));
+                    }else{
+                        this.classObservationAverage=0;
+                        this.nonClassObservationAverage =0;
+                        this.finalScore=0;
+                    }
                     this.getComment();
                     defer.resolve(this.studentResult);
                 },
@@ -346,7 +352,7 @@ module ums{
                 this.checkEvaluationResult=true;
                 this.assignedCoursesForReview=[];
                 this.studentComments=[];
-                this.staticTeacherName=this.selectedTeacherName.firstName;
+                this.staticTeacherName=this.selectedTeacherName.fullName;
                 this.staticSessionName=this.semester.name;
                 this.selectRow=null;
                 console.log("eeeeeeeeeeee");

@@ -54,6 +54,7 @@ module ums{
         public selectedCourseId:string;
         public checkSelectTeacher:boolean;
         public checkComment:boolean;
+        public checkPoint:boolean;
         public checkCourseTeacher:boolean;
         public totalReviewEligibleCourseLength:number;
         public readOnlyViewCheck:boolean;
@@ -184,8 +185,9 @@ module ums{
         }
 
         private checkNullComments(){
+            console.log("Checking Validation");
+            this.checkNullPoints();
             this.checkComment=true;
-            console.log("Submit");
             for (let i = 0; i < this.questionListAndReview.length; i++) {
                 if (this.questionListAndReview[i].comment !=null && this.questionListAndReview[i].comment.length >100) {
                     this.checkComment = false;
@@ -194,6 +196,18 @@ module ums{
             if (!this.checkComment) {
                 this.notify.error("Write your reason between 100 words");
             }
+    }
+    private checkNullPoints(){
+            this.checkPoint=true;
+        for (let i = 0; i < this.questionListAndReview.filter(a=>a.observationType !=3).length; i++) {
+            console.log(this.questionListAndReview[i].point);
+            if (this.questionListAndReview[i].point ==0) {
+                this.checkPoint = false;
+            }
+        }
+        if (!this.checkPoint) {
+            this.notify.error("You must rate all the questions to submit your review");
+        }
     }
 
         private submit() {

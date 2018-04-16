@@ -13,7 +13,8 @@
         <th style="background-color: #FAFAFA; ">Average</th>
         </thead>
         <tbody>
-        <tr><td></td><td><span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span></td></tr>
+        <tr>
+            <td colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span></td></tr>
         <tr data-ng-repeat="app in vm.studentResult" data-ng-if="app.observationType==1">
             <td>{{$index+1}}</td>
             <td>{{app.questionDetails}}</td>
@@ -22,13 +23,13 @@
             <td>{{app.averageScore}}</td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
+            <td colspan="2"></td>
             <td><strong class="score">{{vm.classObservationTotalSPoints}}</strong></td>
             <td><strong class="score">{{vm.classObservationTotalStudent}}</strong></td>
             <td><strong class="score">{{vm.classObservationAverage}}</strong></td>
         </tr>
-        <tr><td></td><td><span  style="font-size: 14px" class="label label-success badge-success">Non ClassRoom Observation</span></td></tr>
+        <tr>
+            <td  colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">Non ClassRoom Observation</span></td></tr>
         <tr data-ng-repeat="app in vm.studentResult" data-ng-if="app.observationType==2">
             <td>{{$index+1}}</td>
             <td>{{app.questionDetails}}</td>
@@ -36,14 +37,12 @@
             <td>{{app.studentNo}}</td>
             <td>{{app.averageScore}}</td>
         </tr>
-        <td></td>
-        <td></td>
+        <td colspan="2"></td>
         <td><strong class="score">{{vm.nonClassObservationTotalSPoints}}</strong></td>
         <td><strong class="score">{{vm.nonClassObservationTotalStudent}}</strong></td>
         <td><strong class="score">{{vm.nonClassObservationAverage}}</strong></td>
-        <tr><td></td><td><span  style="font-size: 14px" class="label label-success badge-success">Grand Result</span></td></tr>
-        <td></td>
-        <td></td>
+        <tr><td colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">Grand Result</span></td></tr>
+        <td colspan="2"></td>
         <td><strong style="font-size: 16px">{{vm.classObservationTotalSPoints+vm.nonClassObservationTotalSPoints}}</strong></td>
         <td><strong style="font-size: 16px">{{vm.classObservationTotalStudent+vm.nonClassObservationTotalStudent}}</strong></td>
         <td><strong style="font-size: 16px">{{vm.finalScore}}</strong></td>

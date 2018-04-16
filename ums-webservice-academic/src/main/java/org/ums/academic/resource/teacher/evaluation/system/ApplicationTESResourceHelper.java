@@ -77,6 +77,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   @Autowired
   ProgramManager mPogramManager;
 
+  ApplicationTesQuestionManager mApplicationTesQuestionManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;

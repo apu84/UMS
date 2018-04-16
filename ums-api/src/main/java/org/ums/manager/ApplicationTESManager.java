@@ -6,7 +6,7 @@ import org.ums.domain.model.mutable.MutableApplicationTES;
 import java.util.List;
 
 /**
- * Created by Monjur-E-Morshed on 2/20/2018.
+ * Created by Rumi on 2/20/2018.
  */
 public interface ApplicationTESManager extends ContentManager<ApplicationTES, MutableApplicationTES, Long> {
 
