@@ -85,33 +85,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public Response saveToTes(JsonObject pJsonObject, UriInfo pUriInfo) {
-    String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
-    Boolean deadLineStatus = false, studentSubmitDeadline = false;
-    String semesterName = getContentManager().getSemesterName(11012017);
-    List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines("12", 11012017);// 12=student
-                                                                                                  // TES
-                                                                                                  // mst_parameter_settings
-    for(int i = 0; i < semesterParameterHead.size(); i++) {
-      startDate = semesterParameterHead.get(i).getSemesterStartDate();
-      endDate = semesterParameterHead.get(i).getSemesterEndDate();
-    }
-
-    try {
-      if(startDate != null && endDate != null) {
-        Date startDateConvert, lastApplyDate, currentDate;
-        currentDate = new Date();
-        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-          deadLineStatus = true;
-        }
-        else {
-          deadLineStatus = false;
-        }
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    Boolean deadLineStatus = getSemesterParameter(11012017, "12");
     if(deadLineStatus) {
       String studentId = SecurityUtils.getSubject().getPrincipal().toString();
       Student student = mStudentManager.get(studentId);
@@ -135,17 +109,46 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
+  @NotNull
+  private Boolean getSemesterParameter(int i2, String s) {
+    String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
+    Boolean deadLineStatus = false, studentSubmitDeadline = false;
+    String semesterName = getContentManager().getSemesterName(i2);
+    List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines(s, i2);// 12=student
+    // TES
+    // mst_parameter_settings
+    for (int i = 0; i < semesterParameterHead.size(); i++) {
+      startDate = semesterParameterHead.get(i).getSemesterStartDate();
+      endDate = semesterParameterHead.get(i).getSemesterEndDate();
+    }
+
+    deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
+    return deadLineStatus;
+  }
+
+  private Boolean checkDateValidity(String startDate, String endDate, Boolean deadLineStatus) {
+    try {
+      if (startDate != null && endDate != null) {
+        Date startDateConvert, lastApplyDate, currentDate;
+        currentDate = new Date();
+        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
+        if (currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+          deadLineStatus = true;
+        } else {
+          deadLineStatus = false;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return deadLineStatus;
+  }
+
   public Response setQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
     List<MutableApplicationTES> applications = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
-    for(int i = 0; i < entries.size(); i++) {
-      LocalCache localCache = new LocalCache();
-      JsonObject jsonObject = entries.getJsonObject(i);
-      PersistentApplicationTES application = new PersistentApplicationTES();
-      getBuilder().build(application, jsonObject, localCache);
-      application.setSemester(mSemesterManager.getActiveSemester(11).getId());
-      applications.add(application);
-    }
+    deleteData(applications, entries);
     boolean deadline = getSemesterInfo();
     if(deadline) {
       getContentManager().setQuestions(applications);
@@ -156,9 +159,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
-  public Response deleteQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
-    List<MutableApplicationTES> applications = new ArrayList<>();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
+  private void deleteData(List<MutableApplicationTES> applications, JsonArray entries) {
     for(int i = 0; i < entries.size(); i++) {
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
@@ -167,6 +168,12 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       application.setSemester(mSemesterManager.getActiveSemester(11).getId());
       applications.add(application);
     }
+  }
+
+  public Response deleteQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    delete(applications, entries);
     boolean deadline = getSemesterInfo();
     if(deadline) {
       mManager.delete(applications);
@@ -175,6 +182,10 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  private void delete(List<MutableApplicationTES> applications, JsonArray entries) {
+    deleteData(applications, entries);
   }
 
   public Response addQuestion(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -206,22 +217,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       endDate = semesterParameterHead.get(i).getSemesterEndDate();
     }
 
-    try {
-      if(startDate != null && endDate != null) {
-        Date startDateConvert, lastApplyDate, currentDate;
-        currentDate = new Date();
-        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-          deadLineStatus = true;
-        }
-        else {
-          deadLineStatus = false;
-        }
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
 
     if(deadLineStatus) {
       List<MutableApplicationTES> applications = new ArrayList<>();
@@ -256,18 +252,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public  JsonObject getMigrationQuestions(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
         List<MutableApplicationTES> applications=getContentManager().getMigrationQuestions(pSemesterId);
         List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(11).getId());
-        for(int i=0;i<applications.size();i++){
-            Integer qId=applications.get(i).getQuestionId();
-            Integer size=0;
-            size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
-            if(size==1){
-                applications.get(i).setStatus(1);
-            }else{
-                applications.get(i).setStatus(0);
-            }
-
-        }
-        JsonObjectBuilder object = Json.createObjectBuilder();
+    checkMigrationValidity(applications, questionSemesterMap);
+    JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
         applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
@@ -275,6 +261,20 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         localCache.invalidate();
         return object.build();
     }
+
+  private void checkMigrationValidity(List<MutableApplicationTES> applications, List<ApplicationTES> questionSemesterMap) {
+    for(int i=0;i<applications.size();i++){
+        Integer qId=applications.get(i).getQuestionId();
+        Integer size=0;
+        size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
+        if(size==1){
+            applications.get(i).setStatus(1);
+        }else{
+            applications.get(i).setStatus(0);
+        }
+
+    }
+  }
 
   private boolean getSemesterInfo() {
     String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
@@ -287,22 +287,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       endDate = semesterParameterHead.get(i).getSemesterEndDate();
     }
 
-    try {
-      if(startDate != null && endDate != null) {
-        Date startDateConvert, lastApplyDate, currentDate;
-        currentDate = new Date();
-        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-          deadLineStatus = true;// true
-        }
-        else {
-          deadLineStatus = false;
-        }
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
     return deadLineStatus;
   }
 
@@ -317,22 +302,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       endDate = semesterParameterHead.get(i).getSemesterEndDate();
     }
 
-    try {
-      if(startDate != null && endDate != null) {
-        Date startDateConvert, lastApplyDate, currentDate;
-        currentDate = new Date();
-        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-        if(currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-          deadLineStatus = true;// true
-        }
-        else {
-          deadLineStatus = false;
-        }
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     LocalCache localCache = new LocalCache();
     object.add("startDate", startDate);
@@ -357,18 +327,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public  JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo){
         List<MutableApplicationTES> applications=getContentManager().getQuestions();
         List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(11).getId());
-        for(int i=0;i<applications.size();i++){
-            Integer qId=applications.get(i).getQuestionId();
-            Integer size=0;
-            size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
-                if(size==1){
-                    applications.get(i).setStatus(1);
-                }else{
-                    applications.get(i).setStatus(0);
-                }
-
-        }
-        JsonObjectBuilder object = Json.createObjectBuilder();
+      checkMigrationValidity(applications, questionSemesterMap);
+    JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
         applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
@@ -411,10 +371,15 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   private List<ComparisonReport> getFacultyReport(Integer facultyId, List<ComparisonReport> report, List<ComparisonReport> reportFaculty) {
     List<ApplicationTES> facultyWiseDeptList=getContentManager().getDeptListByFacultyId(facultyId);
     List<ComparisonReport> tempList=null;
-    for(int i=0;i<facultyWiseDeptList.size();i++){
+    reportFaculty = getComparisonReportFacultyMembers(report, reportFaculty, facultyWiseDeptList);
+    return reportFaculty;
+  }
+
+  private List<ComparisonReport> getComparisonReportFacultyMembers(List<ComparisonReport> report, List<ComparisonReport> reportFaculty, List<ApplicationTES> facultyWiseDeptList) {
+    List<ComparisonReport> tempList;
+    for(int i = 0; i<facultyWiseDeptList.size(); i++){
         String departmentId=facultyWiseDeptList.get(i).getDeptId();
          tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
-     //   reportFaculty= Stream.concat(reportFaculty.stream(),report.stream().filter(a->a.getDeptId().equals(departmentId))).collect(Collectors.toList());
         reportFaculty= ListUtils.union(reportFaculty,tempList);
         tempList= Collections.emptyList();
     }
@@ -553,7 +518,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return percentage;
   }
 
-  private Integer getFacultyType(String pDeptId, String engineering, String businessAndSocial, String architecture) {
+  public Integer getFacultyType(String pDeptId, String engineering, String businessAndSocial, String architecture) {
     Integer facultyId = 0;
     if(pDeptId.equals(engineering)) {
       facultyId = FacultyType.Engineering.getId();
@@ -830,17 +795,21 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
                         filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
                 int size=getDetailedResult.size();
 
-                if(getDetailedResult.size() !=0){
-                    String comments[] =new String[size];
-                    for(int j=0;j<size;j++){
-                        comments[j]=getDetailedResult.get(j).getComment();
-                    }
-                    commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
-                }
+              setCommentToList(getDetailedResult, commentList, questionId, observationType, questionDetails, size);
             }
             }
       return commentList;
     }
+
+  public void setCommentToList(List<ApplicationTES> getDetailedResult, List<StudentComment> commentList, Integer questionId, Integer observationType, String questionDetails, int size) {
+    if(getDetailedResult.size() !=0){
+        String comments[] =new String[size];
+        for(int j=0;j<size;j++){
+            comments[j]=getDetailedResult.get(j).getComment();
+        }
+        commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
+    }
+  }
 
   // getRecordsOfAssignedCoursesByHead
   public JsonObject getRecordsOfAssignedCoursesByHead(final Request pRequest, final UriInfo pUriInfo){
@@ -872,23 +841,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
          endDate=semesterParameterHead.get(i).getSemesterEndDate();
      }
 
-      try{
-          if(startDate != null && endDate != null) {
-              Date startDateConvert, lastApplyDate, currentDate;
-              currentDate = new Date();
-              startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-              lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-              if (currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-                  deadLineStatus=true;
-              }else{
-                  deadLineStatus=false;
-              }
-          }
-      }catch (Exception e){
-      e.printStackTrace();
-      }
+    deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
 
-      List<MutableApplicationTES> applications=getContentManager().getAssignedCourses(pFacultyId,11012017);
+    List<MutableApplicationTES> applications=getContentManager().getAssignedCourses(pFacultyId,11012017);
       List<ApplicationTES> assignedCoursesByHead=getContentManager().getAssignedCoursesByHead(pFacultyId,11012017);
       Map<String, ApplicationTES> assignedCourseMap = assignedCoursesByHead
               .stream()

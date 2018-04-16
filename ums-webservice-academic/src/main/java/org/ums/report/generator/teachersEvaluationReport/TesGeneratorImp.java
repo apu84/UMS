@@ -330,25 +330,7 @@ public class TesGeneratorImp implements TesGenerator {
     List<ApplicationTES> getDetailedResult=null;
     List<StudentComment> commentList= new ArrayList<StudentComment>();
 
-    for(int i=0;i<applications.size();i++){
-      Integer questionId=applications.get(i).getQuestionId();
-      Integer observationType=mApplicationTESManager.getObservationType(questionId);
-      if(observationType ==3){
-        String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
-        getDetailedResult=mApplicationTESManager.getDetailedResult(pTeacherId,pCourseId,pSemesterId).
-                stream().
-                filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
-        int size=getDetailedResult.size();
-
-        if(getDetailedResult.size() !=0){
-          String comments[] =new String[size];
-          for(int j=0;j<size;j++){
-            comments[j]=getDetailedResult.get(j).getComment();
-          }
-          commentList.add(new StudentComment(questionId,comments,observationType,questionDetails));
-        }
-      }
-    }
+    getComment(pCourseId, pTeacherId, pSemesterId, applications, commentList);
     //Itext Pdf Comment
     document.add(paragraph);
     Paragraph paragraph3 = null;
@@ -427,6 +409,23 @@ public class TesGeneratorImp implements TesGenerator {
     index=0;
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+  private void getComment(String pCourseId, String pTeacherId, Integer pSemesterId, List<ApplicationTES> applications, List<StudentComment> commentList) {
+    List<ApplicationTES> getDetailedResult;
+    for(int i = 0; i<applications.size(); i++){
+      Integer questionId=applications.get(i).getQuestionId();
+      Integer observationType=mApplicationTESManager.getObservationType(questionId);
+      if(observationType ==3){
+        String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
+        getDetailedResult=mApplicationTESManager.getDetailedResult(pTeacherId,pCourseId,pSemesterId).
+                stream().
+                filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+        int size=getDetailedResult.size();
+        mApplicationTESResourceHelper.setCommentToList(getDetailedResult,commentList,questionId,observationType,questionDetails,size);
+
+      }
+    }
   }
 
   void emptyLine(Paragraph p, int number) {
@@ -509,16 +508,8 @@ public class TesGeneratorImp implements TesGenerator {
     chunk = new Chunk(" ");
     paragraph=new Paragraph(" ");
     //
+    facultyId= mApplicationTESResourceHelper.getFacultyType(pDeptId,engineering,businessAndSocial,architecture);
 
-    if(pDeptId.equals(engineering)) {
-      facultyId = FacultyType.Engineering.getId();
-    }
-    else if(pDeptId.equals(businessAndSocial)) {
-      facultyId = FacultyType.Business.getId();
-    }
-    else if(pDeptId.equals(architecture)) {
-      facultyId = FacultyType.Architecture.getId();
-    }
     List<ApplicationTES> applications = mApplicationTESManager.getFacultyListForReport(pDeptId, pSemesterId);
     List<ApplicationTES> parameters = null;
     List<ApplicationTES> getDeptList = mApplicationTESManager.getDeptList();
