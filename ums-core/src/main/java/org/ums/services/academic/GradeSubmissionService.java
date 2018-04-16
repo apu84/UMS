@@ -128,7 +128,7 @@ public class GradeSubmissionService {
         overriddenDeadline =
             recheckStatus == null ? pLastDateForPreparer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
-        if(currentDate.after(overriddenDeadline)) {
+        if(overriddenDeadline !=null && currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
@@ -141,7 +141,7 @@ public class GradeSubmissionService {
         overriddenDeadline =
             recheckStatus == null ? pLastDateForScrutinizer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
-        if(currentDate.after(overriddenDeadline)) {
+        if(overriddenDeadline !=null && currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
@@ -149,12 +149,12 @@ public class GradeSubmissionService {
         if(pLastDateForHead == null) {
           return;
         }
-        statusList = new HashSet<>(Arrays.asList(4, 6));
+        statusList = new HashSet<>(Arrays.asList(6));
         recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
         overriddenDeadline =
             recheckStatus == null ? pLastDateForHead : getOverriddenDeadline(recheckStatus, pLastDateForScrutinizer,
                 pLastDateForHead, pLastDateForCoE);
-        if(currentDate.after(overriddenDeadline)) {
+        if(overriddenDeadline !=null  &&  currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
@@ -169,7 +169,7 @@ public class GradeSubmissionService {
         return pLastDateForScrutinizer;
       case 4:
         return pLastDateForHead;
-      case 5:
+      case 6:
         return pLastDateForCoE;
     }
     return null;

@@ -16,6 +16,7 @@ public class UncaughtExceptionMapper extends Throwable implements javax.ws.rs.ex
 
   @Override
   public Response toResponse(Throwable e) {
+    e.printStackTrace();
     String errorMessage =
         "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]: Uncaught exception:" + e.getMessage();
     mLogger.error(errorMessage, e);
