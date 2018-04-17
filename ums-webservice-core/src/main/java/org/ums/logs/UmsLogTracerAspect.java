@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component
+/**
+ * UMS resource logging aspect
+ */
 public class UmsLogTracerAspect {
 
   Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
@@ -49,11 +52,11 @@ public class UmsLogTracerAspect {
   private void printLog(HttpServletRequest httpServletRequest, String message, String requestBody) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     HttpServletRequest mapper = new ContentCachingRequestWrapper(httpServletRequest);
-    mLogger.info("[{}]: {} ", userId, message);
-    mLogger.info("[{}]: {} ", userId, mapper.getRequestURI());
-
+    //mLogger.info("[{}]: {} ", userId, message);
     if(requestBody != null)
-      mLogger.info("[{}]: {} ", userId, requestBody);
+      mLogger.info("[{}]: Resource: {}; URL: {}; Payload: {} ", userId,message, mapper.getRequestURI(), requestBody);
+    else
+      mLogger.info("[{}]: Resource: {}; URL:{} ", userId,message, mapper.getRequestURI());
   }
 
 }
