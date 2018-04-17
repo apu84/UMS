@@ -18,6 +18,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   PersonalInformationManager mPersonalInformationManager;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Autowired
@@ -135,9 +137,8 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
-      mNewIUMSAccountInfoEmailService.sendEmail(mutableUser.getEmployeeId(), mutablePersonalInformation.getFullName(),
-          mutableUser.getId(), tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS",
-          "AUST: IUMS Account Credentials");
+      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
+          tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 
     URI contextURI =

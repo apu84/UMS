@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -89,6 +90,15 @@ public class UmsUtils {
     return formatter.format(date);
   }
 
+  public static Date convertFromLocalDateToDate(LocalDate localDate) {
+    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  }
+
+  public static LocalDate convertFromDateToLocalDate(Date date) {
+    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    return localDate;
+  }
+
   public static Date convertToDate(String dateStr, String dateFormat) throws Exception {
     SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
     Date date = formatter.parse(dateStr);
@@ -136,6 +146,20 @@ public class UmsUtils {
 
   public static String join(String s, Object... a) {
     return a.length == 0 ? "" : a[0] + (a.length == 1 ? "" : s + join(s, Arrays.copyOfRange(a, 1, a.length)));
+  }
+
+  public static Date incrementDate(Date pDate, int incrementDateNumber) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(pDate);
+    calendar.add(Calendar.DATE, incrementDateNumber);
+    return calendar.getTime();
+  }
+
+  public static Date decrementDate(Date pDate, int decrementDate) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(pDate);
+    calendar.add(Calendar.DATE, -decrementDate);
+    return calendar.getTime();
   }
 
   public static String getWhereClause(String pFilter) {

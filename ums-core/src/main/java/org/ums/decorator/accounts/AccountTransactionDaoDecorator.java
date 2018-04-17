@@ -1,6 +1,7 @@
 package org.ums.decorator.accounts;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
@@ -60,5 +61,20 @@ public class AccountTransactionDaoDecorator extends
   @Override
   public Integer getTotalNumber(Voucher pVoucher, String voucherNo) {
     return getManager().getTotalNumber(pVoucher, voucherNo);
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, Account pAccount) {
+    return getManager().getAccountTransactions(pFromDate, pToDate, pAccount);
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate, List<Account> pAccounts) {
+    return getManager().getAccountTransactions(pFromDate, pToDate, pAccounts);
+  }
+
+  @Override
+  public List<MutableAccountTransaction> getAccountTransactions(Date pFromDate, Date pToDate) {
+    return getManager().getAccountTransactions(pFromDate, pToDate);
   }
 }

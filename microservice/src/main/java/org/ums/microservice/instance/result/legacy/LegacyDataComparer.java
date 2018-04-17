@@ -24,10 +24,8 @@ import com.itextpdf.text.pdf.*;
 
 public class LegacyDataComparer extends AbstractService {
   private static final Logger mLogger = LoggerFactory.getLogger(LegacyDataComparer.class);
-  final Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
   final Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8);
-  final Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f);
-  final Font pageNoFont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.ITALIC);
+  final Font infoFontBold = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
   private UMSConfiguration mUMSConfiguration;
   private SecurityManager mSecurityManager;
@@ -68,8 +66,8 @@ public class LegacyDataComparer extends AbstractService {
 
       document.open();
 
-      PdfPTable contentTable = new PdfPTable(12);
-      contentTable.setWidths(new float[] {2, 5, 5, 5, 5, 5, 5, 25, 25, 6, 6, 6});
+      PdfPTable contentTable = new PdfPTable(17);
+      contentTable.setWidths(new float[] {2, 5, 10, 5, 2, 6, 6, 5, 7, 7, 5, 10, 10, 6, 5, 5, 4});
       contentTable.setWidthPercentage(100);
 
       PdfPCell cell = new PdfPCell();
@@ -93,6 +91,15 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Student name", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
       paragraph = new Paragraph("SEMESTER", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
@@ -102,7 +109,7 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("A. GPA", infoFont);
+      paragraph = new Paragraph("Y/S", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       cell.setColspan(1);
@@ -111,7 +118,7 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("P. GPA", infoFont);
+      paragraph = new Paragraph("Tabulation GPA", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       cell.setColspan(1);
@@ -120,34 +127,7 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("A. CGPA", infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("P. CGPA", infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("A. COMMENT", infoFont);
-      paragraph.setAlignment(Element.ALIGN_LEFT);
-      cell.addElement(paragraph);
-      cell.setColspan(1);
-      contentTable.addCell(cell);
-
-      cell = new PdfPCell();
-      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-      cell.setVerticalAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("P. COMMENT", infoFont);
+      paragraph = new Paragraph("Processed GPA", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       cell.setColspan(1);
@@ -165,7 +145,43 @@ public class LegacyDataComparer extends AbstractService {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Tabulation CGPA", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Processed CGPA", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
       paragraph = new Paragraph("CGPA Match", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Tabulation COMMENT", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Processed COMMENT", infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       cell.setColspan(1);
@@ -179,6 +195,34 @@ public class LegacyDataComparer extends AbstractService {
       cell.addElement(paragraph);
       cell.setColspan(1);
       contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Tab. CrHr", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("Proc CrHr", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
+      cell = new PdfPCell();
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_CENTER);
+      paragraph = new Paragraph("CrHr Match", infoFont);
+      paragraph.setAlignment(Element.ALIGN_LEFT);
+      cell.addElement(paragraph);
+      cell.setColspan(1);
+      contentTable.addCell(cell);
+
       contentTable.setHeaderRows(1);
       int serial = 0;
       for(int i = 0; i < legacyTabulationList.size(); i++) {
@@ -212,18 +256,18 @@ public class LegacyDataComparer extends AbstractService {
                   actualCGPAString = actualCGPAString.substring(0, 6);
                 }
 
-                Paragraph gpaMatch = null, cgpaMatch = null, commentMatch = null;
+                Paragraph gpaMatch = null, cgpaMatch = null, commentMatch = null, crhrMatch = null;
 
                 if(!checkGpa(legacyTabulation.getGpa(), studentRecord.getGPA())) {
                   addToReport = true;
-                  gpaMatch = new Paragraph("No", infoFont);
+                  gpaMatch = new Paragraph("No", infoFontBold);
                 }
                 else {
                   gpaMatch = new Paragraph("Yes", infoFont);
                 }
 
                 if(!checkGpa(legacyTabulation.getCgpa(), studentRecord.getCGPA())) {
-                  cgpaMatch = new Paragraph("No", infoFont);
+                  cgpaMatch = new Paragraph("No", infoFontBold);
                   addToReport = true;
                 }
                 else {
@@ -231,11 +275,19 @@ public class LegacyDataComparer extends AbstractService {
                 }
 
                 if(!commentMatch(legacyTabulation.getComment(), studentRecord.getTabulationSheetRemarks())) {
-                  commentMatch = new Paragraph("No", infoFont);
+                  commentMatch = new Paragraph("No", infoFontBold);
                   addToReport = true;
                 }
                 else {
                   commentMatch = new Paragraph("Yes", infoFont);
+                }
+
+                if(legacyTabulation.getCompletedCrHr().doubleValue() != studentRecord.getCompletedCrHr().doubleValue()) {
+                  addToReport = true;
+                  crhrMatch = new Paragraph("No", infoFontBold);
+                }
+                else {
+                  crhrMatch = new Paragraph("Yes", infoFont);
                 }
 
                 if(addToReport) {
@@ -260,7 +312,25 @@ public class LegacyDataComparer extends AbstractService {
                   cell = new PdfPCell();
                   cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                   cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                  paragraph = new Paragraph(legacyTabulation.getStudent().getFullName(), infoFont);
+                  paragraph.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(paragraph);
+                  cell.setColspan(1);
+                  contentTable.addCell(cell);
+
+                  cell = new PdfPCell();
+                  cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  cell.setVerticalAlignment(Element.ALIGN_CENTER);
                   paragraph = new Paragraph(legacyTabulation.getSemester().getName(), infoFont);
+                  paragraph.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(paragraph);
+                  cell.setColspan(1);
+                  contentTable.addCell(cell);
+
+                  cell = new PdfPCell();
+                  cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                  paragraph = new Paragraph(legacyTabulation.getYear()+"-"+legacyTabulation.getAcademicSemester(), infoFont);
                   paragraph.setAlignment(Element.ALIGN_LEFT);
                   cell.addElement(paragraph);
                   cell.setColspan(1);
@@ -287,6 +357,14 @@ public class LegacyDataComparer extends AbstractService {
                   cell = new PdfPCell();
                   cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                   cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                  gpaMatch.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(gpaMatch);
+                  cell.setColspan(1);
+                  contentTable.addCell(cell);
+
+                  cell = new PdfPCell();
+                  cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  cell.setVerticalAlignment(Element.ALIGN_CENTER);
                   paragraph = new Paragraph(actualCGPAString, infoFont);
                   paragraph.setAlignment(Element.ALIGN_LEFT);
                   cell.addElement(paragraph);
@@ -299,6 +377,14 @@ public class LegacyDataComparer extends AbstractService {
                   paragraph = new Paragraph(processCGPAString, infoFont);
                   paragraph.setAlignment(Element.ALIGN_LEFT);
                   cell.addElement(paragraph);
+                  cell.setColspan(1);
+                  contentTable.addCell(cell);
+
+                  cell = new PdfPCell();
+                  cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                  cgpaMatch.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(cgpaMatch);
                   cell.setColspan(1);
                   contentTable.addCell(cell);
 
@@ -323,16 +409,26 @@ public class LegacyDataComparer extends AbstractService {
                   cell = new PdfPCell();
                   cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                   cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                  gpaMatch.setAlignment(Element.ALIGN_LEFT);
-                  cell.addElement(gpaMatch);
+                  commentMatch.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(commentMatch);
                   cell.setColspan(1);
                   contentTable.addCell(cell);
 
                   cell = new PdfPCell();
                   cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                   cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                  cgpaMatch.setAlignment(Element.ALIGN_LEFT);
-                  cell.addElement(cgpaMatch);
+                  paragraph = new Paragraph(legacyTabulation.getCompletedCrHr()+"", infoFont);
+                  paragraph.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(paragraph);
+                  cell.setColspan(1);
+                  contentTable.addCell(cell);
+
+                  cell = new PdfPCell();
+                  cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                  paragraph = new Paragraph(studentRecord.getCompletedCrHr()+"", infoFont);
+                  paragraph.setAlignment(Element.ALIGN_LEFT);
+                  cell.addElement(paragraph);
                   cell.setColspan(1);
                   contentTable.addCell(cell);
 
@@ -340,9 +436,10 @@ public class LegacyDataComparer extends AbstractService {
                   cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                   cell.setVerticalAlignment(Element.ALIGN_CENTER);
                   commentMatch.setAlignment(Element.ALIGN_LEFT);
-                  cell.addElement(commentMatch);
+                  cell.addElement(crhrMatch);
                   cell.setColspan(1);
                   contentTable.addCell(cell);
+
                   break;
                 }
               }
@@ -369,7 +466,25 @@ public class LegacyDataComparer extends AbstractService {
               cell = new PdfPCell();
               cell.setHorizontalAlignment(Element.ALIGN_LEFT);
               cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph(legacyTabulation.getStudent().getFullName(), infoFont);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
               paragraph = new Paragraph(legacyTabulation.getSemester().getName(), infoFont);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph(legacyTabulation.getYear()+"/ "+legacyTabulation.getAcademicSemester(), infoFont);
               paragraph.setAlignment(Element.ALIGN_LEFT);
               cell.addElement(paragraph);
               cell.setColspan(1);
@@ -392,6 +507,15 @@ public class LegacyDataComparer extends AbstractService {
               cell.setHorizontalAlignment(Element.ALIGN_LEFT);
               cell.setVerticalAlignment(Element.ALIGN_CENTER);
               paragraph = new Paragraph("---", infoFont);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph("No", infoFontBold);
               paragraph.setAlignment(Element.ALIGN_LEFT);
               cell.addElement(paragraph);
               cell.setColspan(1);
@@ -422,6 +546,15 @@ public class LegacyDataComparer extends AbstractService {
               cell = new PdfPCell();
               cell.setHorizontalAlignment(Element.ALIGN_LEFT);
               cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph("No", infoFontBold);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
               paragraph = new Paragraph(legacyTabulation.getComment(), infoFont);
               paragraph.setAlignment(Element.ALIGN_LEFT);
               cell.addElement(paragraph);
@@ -443,7 +576,34 @@ public class LegacyDataComparer extends AbstractService {
               paragraph = new Paragraph("No", infoFont);
               paragraph.setAlignment(Element.ALIGN_CENTER);
               cell.addElement(paragraph);
-              cell.setColspan(3);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph(legacyTabulation.getCompletedCrHr()+"", infoFont);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph("---", infoFont);
+              paragraph.setAlignment(Element.ALIGN_LEFT);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
+              contentTable.addCell(cell);
+
+              cell = new PdfPCell();
+              cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+              cell.setVerticalAlignment(Element.ALIGN_CENTER);
+              paragraph = new Paragraph("No", infoFont);
+              paragraph.setAlignment(Element.ALIGN_CENTER);
+              cell.addElement(paragraph);
+              cell.setColspan(1);
               contentTable.addCell(cell);
             }
           }

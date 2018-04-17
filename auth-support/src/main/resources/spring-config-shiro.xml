@@ -72,6 +72,7 @@
 
     <bean id="tokenRealm" class="org.ums.realm.TokenRealm">
         <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
+        <property name="tokenBuilder" ref="tokenBuilder"/>
     </bean>
 
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -104,7 +105,7 @@
     </bean>
 
     <bean id="tokenFilter" class="org.ums.filter.TokenFilter">
-        <property name="signingKey" value="${authentication.token.signing.key}"/>
+        <property name="tokenBuilder" ref="tokenBuilder"/>
     </bean>
 
     <bean id="sessionFilter" class="org.ums.filter.SessionFilter">

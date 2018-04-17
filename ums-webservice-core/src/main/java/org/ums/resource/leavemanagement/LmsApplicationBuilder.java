@@ -2,6 +2,7 @@ package org.ums.resource.leavemanagement;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -28,6 +29,7 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
   private UserManager mUserManager;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Override

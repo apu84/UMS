@@ -8,7 +8,7 @@ module ums {
     mainGroup: string;
     mainGroupObject: IGroup;
     flag: string;
-    flagBoolValue: boolean;
+    flagBoolValue: boolean;$
     taxLimit: number;
     tdsPercent: number;
     defaultComp: string;

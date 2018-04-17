@@ -30,6 +30,7 @@ public class NewIUMSAccountInfoEmailService {
   private VelocityEngine velocityEngine;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Autowired
@@ -37,8 +38,8 @@ public class NewIUMSAccountInfoEmailService {
   String mHost;
 
   @Async
-  public void sendEmail(final String id, final String name, final String userId, final String password,
-      final String toEmail, final String fromEmail, final String subject) {
+  public void sendEmail(final String name, final String userId, final String password, final String toEmail,
+      final String fromEmail, final String subject) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
       @Override
       public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -50,7 +51,7 @@ public class NewIUMSAccountInfoEmailService {
           messageHelper.setFrom(new InternetAddress(fromEmail, "IUMS"));
           messageHelper.setSubject(subject);
 
-          NewIUMSAccountDto model = new NewIUMSAccountDto(id, name, userId, password);
+          NewIUMSAccountDto model = new NewIUMSAccountDto(name, userId, password);
           Map<String, Object> map = new HashMap<>();
           map.put("others", model);
 

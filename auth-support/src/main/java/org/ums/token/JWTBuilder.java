@@ -3,9 +3,9 @@ package org.ums.token;
 import java.util.Calendar;
 
 import org.apache.shiro.SecurityUtils;
+import org.springframework.util.StringUtils;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 public class JWTBuilder implements TokenBuilder {
   private String mTokenSigningKey;
@@ -22,22 +22,29 @@ public class JWTBuilder implements TokenBuilder {
   }
 
   @Override
-  public Token accessToken() {
+  public Token accessToken(String pUserId, long pExpiration) {
     Calendar accessTokenExpiration = Calendar.getInstance();
-    accessTokenExpiration.add(Calendar.MINUTE, mAccessTokenExpiration);
-    return new TokenImpl(Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
-        .setExpiration(accessTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(),
-        (mAccessTokenExpiration * 60) - 60);
+    accessTokenExpiration.add(Calendar.MINUTE, (int) pExpiration);
+    return new TokenImpl(Jwts.builder().setSubject(pUserId).setExpiration(accessTokenExpiration.getTime())
+        .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), (pExpiration * 60) - 60);
+  }
+
+  @Override
+  public Token refreshToken(String pUserId, long pExpiration) {
+    Calendar refreshTokenExpiration = Calendar.getInstance();
+    refreshTokenExpiration.add(Calendar.HOUR, (int) pExpiration);
+    return new TokenImpl(Jwts.builder().setSubject(pUserId).setExpiration(refreshTokenExpiration.getTime())
+        .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), pExpiration * 60 * 60);
+  }
+
+  @Override
+  public Token accessToken() {
+    return accessToken(SecurityUtils.getSubject().getPrincipal().toString(), mAccessTokenExpiration);
   }
 
   @Override
   public Token refreshToken() {
-    Calendar refreshTokenExpiration = Calendar.getInstance();
-    refreshTokenExpiration.add(Calendar.HOUR, mRefreshTokenExpiration);
-    return new TokenImpl(
-        Jwts.builder().setSubject(SecurityUtils.getSubject().getPrincipal().toString())
-            .setExpiration(refreshTokenExpiration.getTime()).signWith(SignatureAlgorithm.HS256, mTokenSigningKey)
-            .compact(), mRefreshTokenExpiration * 60 * 60);
+    return refreshToken(SecurityUtils.getSubject().getPrincipal().toString(), mRefreshTokenExpiration);
   }
 
   @Override
@@ -46,5 +53,25 @@ public class JWTBuilder implements TokenBuilder {
     refreshTokenExpiration.add(Calendar.HOUR, mPasswordResetTokenExpiration);
     return new TokenImpl(Jwts.builder().setSubject(pUser).setExpiration(refreshTokenExpiration.getTime())
         .signWith(SignatureAlgorithm.HS256, mTokenSigningKey).compact(), mPasswordResetTokenExpiration * 60 * 60);
+  }
+
+  @Override
+  public boolean isValidToken(String pToken) {
+    return !StringUtils.isEmpty(pToken) && !isExpiredToken(pToken);
+  }
+
+  public String getUserName(final String jwt) throws ExpiredJwtException {
+    Jws<Claims> claims = Jwts.parser().setSigningKey(mTokenSigningKey).parseClaimsJws(jwt);
+    return claims.getBody().getSubject();
+  }
+
+  private boolean isExpiredToken(final String jwt) {
+    boolean isExpired = false;
+    try {
+      getUserName(jwt);
+    } catch(JwtException jwte) {
+      isExpired = true;
+    }
+    return isExpired;
   }
 }

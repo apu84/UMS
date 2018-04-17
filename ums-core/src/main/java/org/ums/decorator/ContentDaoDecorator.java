@@ -92,4 +92,9 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   public int count(List<M> pMutableList) {
     return getManager().count(pMutableList);
   }
+
+  @Override
+  public void invalidateCache(final M pMutable) {
+    getManager().invalidateCache(pMutable);
+  }
 }

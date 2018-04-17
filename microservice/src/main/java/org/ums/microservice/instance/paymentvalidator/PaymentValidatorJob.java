@@ -13,24 +13,27 @@ import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.microservice.AbstractService;
+import org.ums.microservice.configuration.ServiceConfiguration;
 
 public class PaymentValidatorJob extends AbstractService implements PaymentValidator {
   private static final Logger mLogger = LoggerFactory.getLogger(PaymentValidatorJob.class);
   private StudentPaymentManager mStudentPaymentManager;
   private SecurityManager mSecurityManager;
   private UMSConfiguration mUMSConfiguration;
+  private ServiceConfiguration mServiceConfiguration;
 
   public PaymentValidatorJob(StudentPaymentManager pStudentPaymentManager, SecurityManager pSecurityManager,
-      UMSConfiguration pUMSConfiguration) {
+      UMSConfiguration pUMSConfiguration, ServiceConfiguration pServiceConfiguration) {
     mStudentPaymentManager = pStudentPaymentManager;
     mSecurityManager = pSecurityManager;
     mUMSConfiguration = pUMSConfiguration;
+    mServiceConfiguration = pServiceConfiguration;
   }
 
   @Scheduled(fixedDelay = 120000, initialDelay = 0)
   @Transactional
   public void validatePayments() {
-    if(login()) {
+    if(login(mServiceConfiguration.getPaymentValidatorAppId(), mServiceConfiguration.getPaymentValidatorAppToken())) {
       List<StudentPayment> payments = mStudentPaymentManager.getToExpirePayments();
       if(mLogger.isDebugEnabled()) {
         mLogger.debug(String.format("Found total %d payments to expire", payments.size()));

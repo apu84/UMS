@@ -42,6 +42,8 @@ public class PersistentChequeRegisterDao extends ChequeRegisterDaoDecorator {
 
   @Override
   public List<MutableChequeRegister> getByTransactionIdList(List<Long> pTransactionIdList) {
+    if(pTransactionIdList.size() == 0)
+      return null;
     String query = SELECT_ALL + " WHERE TRANSACTION_ID in (:transactionIdList)";
     Map parameterMap = new HashMap();
     parameterMap.put("transactionIdList", pTransactionIdList);

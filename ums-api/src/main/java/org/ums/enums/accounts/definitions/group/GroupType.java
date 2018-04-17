@@ -8,6 +8,10 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 11-Mar-18.
  */
 public enum GroupType {
+  ASSETS("1"),
+  LIABILITIES("2"),
+  INCOME("3"),
+  EXPENSES("4"),
   BANK_ACCOUNTS("1002006"),
   CASH_IN_HAND("1002005"),
   SUNDRY_DEBTOR("1002001"),

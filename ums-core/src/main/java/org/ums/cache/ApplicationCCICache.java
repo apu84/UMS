@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-import javafx.application.Application;
 import org.springframework.context.ApplicationContextInitializer;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;

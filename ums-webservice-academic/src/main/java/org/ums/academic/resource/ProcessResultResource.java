@@ -28,6 +28,14 @@ public class ProcessResultResource extends Resource {
     return mProcessResult.status(pProgramId, pSemesterId);
   }
 
+  @GET
+  @Path("/processResult/status/program/{program-id}/semesterId/{semester-id}/year/{year}/semester/{semester}")
+  public GenericResponse<TaskStatus> getResultProcessStatus(final @Context Request pRequest,
+      final @PathParam("program-id") Integer pProgramId, final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) {
+    return mProcessResult.status(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
   @POST
   @Path("/processResult/program/{program-id}/semester/{semester-id}/")
   public Response processResult(final @PathParam("program-id") int pProgramId,

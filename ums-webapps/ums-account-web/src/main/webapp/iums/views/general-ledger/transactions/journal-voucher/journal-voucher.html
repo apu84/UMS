@@ -19,7 +19,7 @@
     }
 
     input.ng-valid {
-        background-color: lightgreen;
+        background-color: whitesmoke;
     }
 
 </style>
@@ -34,13 +34,15 @@
                     Journal Voucher
                 </div>
                 <div class="col-md-6" align="right"
-                     data-ng-include="'views/general-ledger/transactions/journal-voucher/menu.html'"></div>
+                     data-ng-include="'views/general-ledger/transactions/generic/menu.html'"></div>
             </div>
         </div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div ng-if="!vm.showAddSection" class="col-md-12"  ng-include="'views/general-ledger/transactions/journal-voucher/existing-journal-vouchers-include.html'"></div>
+            <div ng-if="!vm.showAddSection" class="col-md-12"
+                 ng-include="'views/general-ledger/transactions/generic/existing-vouchers-include.html'"></div>
             <div>
-                <div ng-if="vm.showAddSection"  ng-include="'views/general-ledger/transactions/journal-voucher/journal-voucher-form-include.html'"></div>
+                <div ng-if="vm.showAddSection"
+                     ng-include="'views/general-ledger/transactions/generic/voucher-form-include.html'"></div>
             </div>
 
         </div>

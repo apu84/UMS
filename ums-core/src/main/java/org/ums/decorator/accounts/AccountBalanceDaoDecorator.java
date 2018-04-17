@@ -27,6 +27,11 @@ public class AccountBalanceDaoDecorator extends
   }
 
   @Override
+  public List<AccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate) {
+    return getManager().getAccountBalance(pFinancialStartDate, pFinancialEndDate);
+  }
+
+  @Override
   public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate,
       List<Account> pAccounts) {
     return getManager().getAccountBalance(pFinancialStartDate, pFinancialEndDate, pAccounts);

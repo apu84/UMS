@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String> {
   List<Employee> getByDesignation(final String pDesignationId);
 
+  Employee getByShortName(final String pShortName);
+
   List<Employee> getActiveTeachersOfDept(String deptId);
 
   List<Employee> getEmployees(String pDeptId, String pPublicationStatus);

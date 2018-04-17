@@ -11,7 +11,9 @@ import java.util.Date;
 
 public interface Employee extends Serializable, LastModifier, EditType<MutableEmployee>, Identifier<String> {
 
-  int getDesignation();
+  int getDesignationId();
+
+  Designation getDesignation();
 
   String getEmploymentType();
 

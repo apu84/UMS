@@ -1,6 +1,7 @@
 package org.ums.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Autowired
@@ -27,8 +29,8 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("text", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getPersonalInformation().getFullName());
-    pBuilder.add("designation", pReadOnly.getDesignation());
-    pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignation()).getDesignationName());
+    pBuilder.add("designation", pReadOnly.getDesignationId());
+    pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignationId()).getDesignationName());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());
     pBuilder.add("deptOfficeId", pReadOnly.getDepartment().getId());
     pBuilder.add("deptOfficeName", pReadOnly.getDepartment().getType() == 1 ? pReadOnly.getDepartment().getShortName()
@@ -46,7 +48,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
   public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
-    pMutable.setDesignation(pJsonObject.getJsonObject("designation").getInt("id"));
+    pMutable.setDesignationId(pJsonObject.getJsonObject("designation").getInt("id"));
     pMutable.setEmploymentType(String.valueOf(pJsonObject.getJsonObject("employmentType").getInt("id")));
     PersistentDepartment dept = new PersistentDepartment();
     dept.setId(pJsonObject.getJsonObject("department").getString("id"));
@@ -63,7 +65,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     DesignationType designationType = null;
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getPersonalInformation().getFullName());
-    pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignation()).getLabel());
+    pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignationId()).getLabel());
     // if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
     // pBuilder.add("employmentType", "Permanent");
     // else if(pReadOnly.getEmploymentType().equals(EmploymentType.CONTRACTUAL.getLabel()))

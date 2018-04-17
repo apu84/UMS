@@ -43,12 +43,15 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
     String query =
-        "SELECT * "
+        "select * from MST_GROUP where GROUP_CODE in ( "
+            + "select DISTINCT group_code from "
+            + "(SELECT "
+            + "  GROUP_CODE, "
+            + "  MAIN_GROUP, "
+            + "  LEVEL "
             + "FROM MST_GROUP "
-            + "WHERE (GROUP_CODE not IN (:groupCodeList)) OR (GROUP_CODE not IN (SELECT GROUP_CODE "
-            + "                                                    FROM MST_GROUP "
-            + "                                                    START WITH MAIN_GROUP not in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
-            + "                                                                                                 MAIN_GROUP))";
+            + "  START WITH  MAIN_GROUP not in (:groupCodeList) "
+            + "CONNECT BY NOCYCLE PRIOR GROUP_CODE = MAIN_GROUP)modified_grouop_code) or GROUP_CODE not in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", pMainGroupCodeList);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
@@ -57,12 +60,15 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
     String query =
-        "SELECT * "
+        "select * from MST_GROUP where GROUP_CODE in ( "
+            + "select DISTINCT group_code from "
+            + "(SELECT "
+            + "  GROUP_CODE, "
+            + "  MAIN_GROUP, "
+            + "  LEVEL "
             + "FROM MST_GROUP "
-            + "WHERE (GROUP_CODE IN (:groupCodeList)) OR (GROUP_CODE IN (SELECT GROUP_CODE "
-            + "                                                    FROM MST_GROUP "
-            + "                                                    START WITH MAIN_GROUP in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
-            + "                                                                                                 MAIN_GROUP))";
+            + "  START WITH  MAIN_GROUP in (:groupCodeList) "
+            + "CONNECT BY NOCYCLE PRIOR GROUP_CODE = MAIN_GROUP)modified_grouop_code) or GROUP_CODE in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", pMainGroupCodeList);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());

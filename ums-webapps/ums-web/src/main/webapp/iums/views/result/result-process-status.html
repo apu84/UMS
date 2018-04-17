@@ -1,22 +1,31 @@
 <span data-ng-if="vm.render=='text' && vm.statusByYearSemester">{{vm.statusByYearSemester.statusText}}</span>
-<div style="width: 42px;position: absolute;top: 0px;right: 0px;">
-     <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id)"
-          src="images/process2.png"
-          class="process_tooltip"
-          data-ng-click="vm.processResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"
-          style="position: relative;cursor: pointer;margin-bottom: 10px;"/>
+<a href=""
+   data-ng-click="vm.processResult(vm.programId, vm.semesterId, vm.statusByYearSemester,vm.year,vm.semester)"
+   data-ng-if="vm.year && vm.semester">
+    <i title="Process Result" class="fa fas fa-cog" aria-hidden="true" style="color: blue" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id"></i>
+    <i title="Result unprocessed" class="fa fas fa-cog" aria-hidden="true" style="color: red" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.UNPROCESSED.id"></i>
+    <i title="Result processed" class="fa fas fa-cog" aria-hidden="true" style="color: green" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.PROCESSED_ON.id"></i>
+    <i title="Result process in progress" class="fa fas fa-cog" aria-hidden="true" style="color: black" data-ng-if="vm.statusByYearSemester.status == vm.resultProcessStatusConst.IN_PROGRESS.id"></i>
+    <i class="fa fa-spinner fa-spin" data-ng-if="vm.year == vm.statusByYearSemester.taskStatus.year && vm.semester == vm.statusByYearSemester.taskStatus.semester && vm.statusByYearSemester.status == vm.resultProcessStatusConst.IN_PROGRESS.id"></i>
+</a>
+<div style="width: 42px;position: absolute;top: 0px;right: 0px;"  data-ng-if="!vm.year && !vm.semester">
+    <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id)"
+         src="images/process2.png"
+         class="process_tooltip"
+         data-ng-click="vm.processResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"
+         style="position: relative;cursor: pointer;margin-bottom: 10px;"/>
 
-          <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISHED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISH_INPROGRESS.id)"
-          src="images/pdf_square.png"
-          class="download_tooltip"
-          style="position: relative;cursor: pointer;margin-bottom: 10px;"
-          data-ng-click="vm.resultPdf(vm.programId, vm.semesterId)"/>
+    <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISHED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISH_INPROGRESS.id)"
+         src="images/pdf_square.png"
+         class="download_tooltip"
+         style="position: relative;cursor: pointer;margin-bottom: 10px;"
+         data-ng-click="vm.resultPdf(vm.programId, vm.semesterId)"/>
 
-     <img data-ng-if="vm.render=='icon' && vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id"
-          src="images/publish.png"
-          class="publish_tooltip"
-          style="position: relative;cursor: pointer;margin-bottom: 10px;"
-          data-ng-click="vm.publishResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"/>
+    <img data-ng-if="vm.render=='icon' && vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id"
+         src="images/publish.png"
+         class="publish_tooltip"
+         style="position: relative;cursor: pointer;margin-bottom: 10px;"
+         data-ng-click="vm.publishResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"/>
 
 
 </div>

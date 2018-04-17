@@ -3,6 +3,7 @@ package org.ums.report.generator.testimonial;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
@@ -24,6 +25,7 @@ import java.util.List;
 public class TestimonialGeneratorImpl implements TestimonialGenerator {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Autowired

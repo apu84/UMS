@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,7 @@ public class CirculationResourceHelper extends ResourceHelper<Circulation, Mutab
   RecordManager mRecordManager;
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   @Autowired

@@ -53,24 +53,43 @@
                                 <li class="list-group-item"
                                     data-ng-if="::status.yearSemester[yearSemester].academicSemester == 1"
                                     data-ng-repeat="yearSemester in vm.sortedKeys(status.yearSemester)">
-                                    {{::yearSemester}}
-                                    <img src="images/check.png"
-                                         style="margin-left: 20px;"
-                                         width="12"
-                                         height="12"
-                                         data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
-                                    <a href="" style="padding-left: 10px"
-                                       data-ng-click="vm.tabulationReport(status.yearSemester[yearSemester].entries[0].programId,yearSemester.substr(0,1),'1')"
-                                       data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
-                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                    </a>
-
-                                    <img src="images/error.png"
-                                         style="margin-left: 20px;"
-                                         width="12"
-                                         height="12"
-                                         data-ng-if="!vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"
-                                         data-ng-click="vm.showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {{::yearSemester}}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <img src="images/check.png"
+                                                 style="margin-left: 20px;"
+                                                 width="12"
+                                                 height="12"
+                                                 data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
+                                            <img src="images/error.png"
+                                                 style="margin-left: 20px;"
+                                                 width="12"
+                                                 height="12"
+                                                 data-ng-if="!vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"
+                                                 data-ng-click="vm.showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a href="" style="padding-left: 10px"
+                                               data-ng-click="vm.tabulationReport(status.yearSemester[yearSemester].entries[0].programId,yearSemester.substr(0,1),'1')"
+                                               data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div
+                                                    data-result-process-status-monitor=""
+                                                    data-status-by-year-semester="status"
+                                                    data-semester-id="vm.semesterId"
+                                                    data-program-id="programId"
+                                                    data-render="'icon'"
+                                                    data-year="{{yearSemester.substr(0,1)}}"
+                                                    data-semester="1"
+                                                    data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -79,23 +98,41 @@
                                 <li class="list-group-item"
                                     data-ng-if="::status.yearSemester[yearSemester].academicSemester == 2"
                                     data-ng-repeat="yearSemester in vm.sortedKeys(status.yearSemester)">
-                                    {{::yearSemester}}
-                                    <img src="images/check.png"
-                                         style="margin-left: 20px;"
-                                         width="12"
-                                         height="12"
-                                         data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
-                                    <a href="" style="padding-left: 10px"
-                                       data-ng-click="vm.tabulationReport(status.yearSemester[yearSemester].entries[0].programId,yearSemester.substr(0,1),'2')"
-                                       data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
-                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                    </a>
-                                    <img src="images/error.png"
-                                         style="margin-left: 20px;"
-                                         width="12"
-                                         height="12"
-                                         data-ng-if="!vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"
-                                         data-ng-click="vm.showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {{::yearSemester}}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <img src="images/check.png"
+                                                 width="12"
+                                                 height="12"
+                                                 data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
+                                            <img src="images/error.png"
+                                                 width="12"
+                                                 height="12"
+                                                 data-ng-if="!vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)"
+                                                 data-ng-click="vm.showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a href=""
+                                               data-ng-click="vm.tabulationReport(status.yearSemester[yearSemester].entries[0].programId,yearSemester.substr(0,1),'2')"
+                                               data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div
+                                                    data-result-process-status-monitor=""
+                                                    data-status-by-year-semester="status"
+                                                    data-semester-id="vm.semesterId"
+                                                    data-program-id="programId"
+                                                    data-render="'icon'"
+                                                    data-year="{{yearSemester.substr(0,1)}}"
+                                                    data-semester="2"
+                                                    data-ng-if="vm.isReadyForResultProcess(status.yearSemester[yearSemester].status)">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>

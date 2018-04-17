@@ -20,6 +20,7 @@ import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
+import org.ums.service.AccountBalanceService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -30,6 +31,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +63,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private MonthBalanceManager mMonthBalanceManager;
   @Autowired
   private GroupManager mGroupManager;
+  @Autowired
+  private AccountBalanceService mAccountBalanceService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -77,7 +81,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(mIdGenerator.getNumericId());
+    account.setAccountCode(Math.abs(mIdGenerator.getNumericId()));
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
@@ -94,6 +98,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
+      accountBalance = mAccountBalanceService.setMonthAccountBalance(accountBalance, account);
       mAccountBalanceManager.insertFromAccount(accountBalance);
     }
 
@@ -176,6 +181,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   public JsonObject getAccountsByAccountName(final String pAccountName, final UriInfo pUriInfo) {
     List<Account> accounts = getContentManager().getAccounts(pAccountName);
     return getJsonObject(pUriInfo, accounts);
+  }
+
+  private Integer generateSecureAccountId() {
+    SecureRandom secureRandom = new SecureRandom();
+    return secureRandom.nextInt(8);
   }
 
   @Override

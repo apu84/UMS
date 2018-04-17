@@ -10,6 +10,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
@@ -29,6 +30,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private static VoucherManager sVoucherManager;
   private static CurrencyManager sCurrencyManager;
   private static ReceiptManager sReceiptManager;
+  private static PersonalInformationManager sPersonalInformationManager;
   private static AccountTransactionManager sTransactionManager;
 
   private Long id;
@@ -62,6 +64,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private AccountTransactionType accountTransactionType;
   private Date modifiedDate;
   private String modifiedBy;
+  private String modifierName;
   private String lastModified;
   private String message;
   private String supplierCode;
@@ -463,6 +466,18 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonProperty("modifierName")
+  public String getModifierName() {
+    return modifierName;
+  }
+
+  public void setModifierName(String pModifierName) {
+    modifierName =
+        pModifierName == null || pModifierName.equals("") ? sPersonalInformationManager.get(modifiedBy).getFirstName()
+            + " " + sPersonalInformationManager.get(modifiedBy).getLastName() : pModifierName;
+  }
+
+  @Override
   public void setModifiedBy(String pModifiedBy) {
     this.modifiedBy = pModifiedBy;
   }
@@ -575,6 +590,8 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
     sCurrencyManager = applicationContext.getBean("currencyManager", CurrencyManager.class);
     sReceiptManager = applicationContext.getBean("receiptManager", ReceiptManager.class);
+    sPersonalInformationManager =
+        applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
     sTransactionManager = applicationContext.getBean("accountTransactionManager", AccountTransactionManager.class);
   }
 }

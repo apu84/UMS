@@ -32,11 +32,7 @@ public class GradeSubmissionService {
   @Autowired
   private UserManager mUserManager;
   @Autowired
-  private MessageResource mMessageResource;
-
-  @Autowired
   private UtilsService mUtilsService;
-
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
@@ -114,17 +110,25 @@ public class GradeSubmissionService {
     }
   }
 
-  private void validateGradeSubmissionDeadline(String pRole, Date pLastDateForPreparer, Date pLastDateForScrutinizer,
-      Date pLastDateForHead) throws ValidationException {
+  private void validateGradeSubmissionDeadline(int pSemesterId, String pCourseId, ExamType pExamType, String pRole,
+      Date pLastDateForPreparer, Date pLastDateForScrutinizer, Date pLastDateForHead, Date pLastDateForCoE)
+      throws ValidationException {
     Date currentDate = new Date();
     currentDate = UmsUtils.modifyTimeToZeroSecondOfTheClock(currentDate);
-
+    Set<Integer> statusList;
+    Integer recheckStatus;
+    Date overriddenDeadline;
     switch(pRole) {
       case Constants.GRADE_PREPARER:
         if(pLastDateForPreparer == null) {
           return;
         }
-        if(currentDate.after(pLastDateForPreparer)) {
+        statusList = new HashSet<>(Arrays.asList(2, 4, 6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForPreparer : getOverriddenDeadline(recheckStatus,
+                pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline !=null && currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
@@ -132,7 +136,12 @@ public class GradeSubmissionService {
         if(pLastDateForScrutinizer == null) {
           return;
         }
-        if(currentDate.after(pLastDateForScrutinizer)) {
+        statusList = new HashSet<>(Arrays.asList(4, 6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForScrutinizer : getOverriddenDeadline(recheckStatus,
+                pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline !=null && currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
@@ -140,12 +149,30 @@ public class GradeSubmissionService {
         if(pLastDateForHead == null) {
           return;
         }
-        if(currentDate.after(pLastDateForHead)) {
+        statusList = new HashSet<>(Arrays.asList(6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForHead : getOverriddenDeadline(recheckStatus, pLastDateForScrutinizer,
+                pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline !=null  &&  currentDate.after(overriddenDeadline)) {
           throw new ValidationException("Grade Submission Deadline is Over.");
         }
         break;
     }
 
+  }
+
+  private Date getOverriddenDeadline(Integer courseMarksSubmissionStatus, Date pLastDateForScrutinizer,
+      Date pLastDateForHead, Date pLastDateForCoE) {
+    switch(courseMarksSubmissionStatus) {
+      case 2:
+        return pLastDateForScrutinizer;
+      case 4:
+        return pLastDateForHead;
+      case 6:
+        return pLastDateForCoE;
+    }
+    return null;
   }
 
   public void validateGradeSubmission(String actingRoleForCurrentUser, MarksSubmissionStatusDto requestedStatusDTO,
@@ -161,8 +188,10 @@ public class GradeSubmissionService {
     // Deadline && Part Info Validation
     if(operation.equals("submit")) {
       // actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED &&
-      validateGradeSubmissionDeadline(actualActingRole, actualStatus.getLastSubmissionDatePrep(),
-          actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead());
+      validateGradeSubmissionDeadline(actualStatus.getSemesterId(), actualStatus.getCourseId(),
+          actualStatus.getExamType(), actualActingRole, actualStatus.getLastSubmissionDatePrep(),
+          actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead(),
+          actualStatus.getLastSubmissionDateCoe());
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
         validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());
@@ -369,6 +398,7 @@ public class GradeSubmissionService {
   }
 
   public void sendNotification(String userId, String courseNumber) {
+    String producer = SecurityUtils.getSubject().getPrincipal().toString();
     Notifier notifier = new Notifier() {
       @Override
       public List<String> consumers() {
@@ -379,7 +409,8 @@ public class GradeSubmissionService {
 
       @Override
       public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
+        mLogger.info("Notification Producer for '{}' : {}", notificationType(), producer);
+        return producer;
       }
 
       @Override

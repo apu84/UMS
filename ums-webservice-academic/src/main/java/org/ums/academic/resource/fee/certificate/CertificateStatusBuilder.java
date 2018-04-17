@@ -2,6 +2,7 @@ package org.ums.academic.resource.fee.certificate;
 
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
@@ -24,6 +25,7 @@ import java.util.List;
 @Component
 public class CertificateStatusBuilder implements Builder<CertificateStatus, MutableCertificateStatus> {
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
   @Autowired
   StudentPaymentManager mStudentPaymentManager;

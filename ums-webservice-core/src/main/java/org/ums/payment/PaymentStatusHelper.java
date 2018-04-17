@@ -27,6 +27,7 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
   @Autowired
   protected PaymentStatusManager mPaymentStatusManager;
   @Autowired
+  @Qualifier("genericDateFormat")
   protected DateFormat mDateFormat;
   @Autowired
   @Qualifier("PaymentStatusBuilder")

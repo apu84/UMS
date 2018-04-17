@@ -105,6 +105,7 @@ module ums {
         supplier: ISupplier;
         status: number;
         statusName: string;
+        currency: number;
         circulationStatus: number;
     }
 

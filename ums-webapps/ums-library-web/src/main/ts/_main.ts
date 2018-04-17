@@ -80,6 +80,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridDecorator.ts'/>
@@ -93,6 +94,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
+
 
 /// <reference path='data.ts'/>
 

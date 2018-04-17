@@ -28,6 +28,7 @@ public class PasswordResetEmailService {
   @Autowired
   private VelocityEngine velocityEngine;
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
   @Autowired
   @Qualifier("host")

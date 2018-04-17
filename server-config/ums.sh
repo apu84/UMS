@@ -9,7 +9,7 @@ set -e
 
 source "/opt/config/iums.conf"
 
-pid_file="$RUN_DIR/microservie-$PROJECT_VERSION.pid"
+pid_file="${RUN_DIR}/microservie-$PROJECT_VERSION.pid"
 out_log="${LOG_DIR}/microservie-$PROJECT_VERSION.out"
 
 restart_service_if_not_running() {
@@ -46,19 +46,52 @@ build_src() {
 }
 
 deploy() {
+if [ -z $1 ]; then
+   deployAll
+else
+	 deployApp $1
+fi
+}
+
+declare -A APP_SERVER_MAP
+APP_SERVER_MAP[academic]='tomcat-instance-1'
+APP_SERVER_MAP[library]='tomcat-instance-2'
+APP_SERVER_MAP[registrar]='tomcat-instance-1'
+APP_SERVER_MAP[account]='tomcat-instance-1'
+
+deployAll() {
+echo "deploy All";
 cd $APP_SERVER_HOME
+
+#shutdown all instance
 for instance in $(echo $APP_SERVER_INSTANCES | sed "s/,/ /g")
 do
 		set_env $instance
 		echo "Shutting down $instance"
 		stop_tomcat $instance
-		
+		sleep 3
 		rm -rf $instance/webapps/*
 		rm -rf $instance/ums/lib/*.*
-		cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/lib/*.jar $instance/ums/lib/
-		cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/webapps/*.war $instance/webapps/
+done
+
+#deploy in the proper instance
+for i in "${!APP_SERVER_MAP[@]}"
+do
+  local application=
+	local instance=
+	application=$i
+	instance=${APP_SERVER_MAP[$i]}
+	echo "Deploying $application into $instance"
+	cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/lib/*.jar $instance/ums/lib/
+	cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/webapps/ums-webservice-$application.war $instance/webapps/
+done
+
+#start all instance
+for instance in $(echo $APP_SERVER_INSTANCES | sed "s/,/ /g")
+do
+		set_env $instance
 		let "port=port+1"
-        echo "Starting up $instance at port : $port"
+    echo "Starting up $instance at port : $port"
 		start_tomcat $instance $port
 done
 
@@ -66,6 +99,43 @@ yes | cp -R $UMS_SRC/ums-webapps/ums-web/target/ums-web-$PROJECT_VERSION/* /opt/
 yes | cp -R $UMS_SRC/ums-webapps/ums-registrar-web/target/ums-registrar-web-$PROJECT_VERSION/* /opt/ums-registrar-web
 yes | cp -R $UMS_SRC/ums-webapps/ums-library-web/target/ums-library-web-$PROJECT_VERSION/* /opt/ums-library-web
 yes | cp -R $UMS_SRC/ums-webapps/ums-account-web/target/ums-account-web-$PROJECT_VERSION/* /opt/ums-account-web
+}
+
+deployApp() {
+cd $APP_SERVER_HOME
+local instance=
+instance=${APP_SERVER_MAP[$1]}
+set_env $instance
+echo "Shutting down $instance"
+stop_tomcat $instance
+echo "Deploying $1 into $instance"
+rm -rf $instance/webapps/*
+rm -rf $instance/ums/lib/*.*
+cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/lib/*.jar $instance/ums/lib/
+cp -R $UMS_SRC/ums-dist/target/ums-dist-$PROJECT_VERSION/webapps/ums-webservice-$1.war $instance/webapps/
+#let "port=port+1"
+echo "Starting up $instance at port : $port"
+start_tomcat $instance
+
+if [ $1 == 'academic' ]; then
+  yes | cp -R $UMS_SRC/ums-webapps/ums-web/target/ums-web-$PROJECT_VERSION/* /opt/ums-web
+else
+	yes | cp -R $UMS_SRC/ums-webapps/ums-$1-web/target/ums-$1-web-$PROJECT_VERSION/* /opt/ums-$1-web
+fi
+}
+
+mservice() {
+  echo "Starting microservice"
+  ###ps aux | grep microservice-$PROJECT_VERSION.jar |grep -v grep| awk '{print $2}' | xargs -r kill
+  ##export PATH=$PATH:$MAVEN_HOME/bin:$UMS_CONFIG:$JAVA_HOME/bin
+  ##UMS_CONFIG=$UMS_CONFIG
+  ##export UMS_CONFIG
+  ###yes | cp -f /opt/config/jdbc.properties  /opt/ums-repo/UMS/microservice/target/jdbc.properties
+  ###cd /opt/ums-repo/UMS/microservice/target
+  ###jar uf $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar jdbc.properties
+  ###screen -S mservice  java -jar $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar
+  #mservice -dmS
+  echo "End of microservice call"
 }
 
 get_micro_service_pids() {
@@ -142,31 +212,32 @@ start_micro_service() {
   export PATH=$PATH:$MAVEN_HOME/bin:$UMS_CONFIG:$JAVA_HOME/bin
   UMS_CONFIG=$UMS_CONFIG
   export UMS_CONFIG
-  java -jar $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar &>> "${out_log}" & pid=$!
+  java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010 $UMS_SRC/microservice/target/microservice-$PROJECT_VERSION.jar &>> "${out_log}" & pid=$!
   echo "${pid}" > "${pid_file}"
   printf "%s" "Starting Microservice "
 
-  ## Wait for few seconds to check if micro-service has started properly
-  for i in {0..5}; do
+  ## Wait for few seconds to check if user-manager has started properly
+  for i in {0..5};
+  do
     echo -n "."
     sleep 1
     if [ "$(ps -p "${pid}" | wc -l)" -eq 1 ]; then
       rm "${pid_file}"
-      cat <<EOF
-
-Failed to start Microservice.
-Please check ${out_log} for further details.
-EOF
-       exit 1
+      #cat <<EOF
+      #	Failed to start Microservice.
+      #	Please check ${out_log} for further details.
+      #EOF
+      exit 1
     fi
-    done
-    echo ""
-    echo "Started Microservice with PID ${pid}"
+  done
+  echo ""
+  echo "Started Microservice with PID ${pid}"
 }
 
 restart_web_server() {
 	service solr restart -e schemaless
 	service nginx restart
+
 }
 
 restart_cache_server() {
@@ -220,12 +291,11 @@ stop_remote_debug() {
 }
 
 stop_tomcat() {
-        #Finds the tomcat process id
-        ps aux | grep $1 |grep -v grep | awk -F  " " '{print $2}' > tomcatProcessID
+  #Finds the tomcat process id
+  ps aux | grep $1 |grep -v grep | awk -F  " " '{print $2}' > tomcatProcessID
 
-        #Kills the process id returned from above mentioned command.
-        kill -9 `cat tomcatProcessID` && tput setaf 3 && echo "Tomcat $1 killed Successfully" ;rm -rf tomcatProcessID
-
+  #Kills the process id returned from above mentioned command.
+  kill -9 `cat tomcatProcessID` && tput setaf 3 && echo "Tomcat $1 killed Successfully" ;rm -rf tomcatProcessID
 
 	#sh $1/bin/shutdown.sh
 	if [ "$ENABLE_REMOTE_DEBUGGING" == "true" ]
@@ -253,7 +323,7 @@ usage() {
 	echo "-rb | --remote-branch name to checkout"
 	echo "-d  | --deploy Deploy in application and web server"
 	echo "-b  | --build Build distribution"
-    echo "-m  | --mservice Run microservice"
+        echo "-m  | --mservice Run microservice"
 	echo "-bd | --build-deploy Build distribution and deploy in application and web server"
 	echo "      --stop Stops a particular tomcat instance / microservice"
 	echo "      --start Start a particular tomcat instance/ microservice"
@@ -282,6 +352,7 @@ APP_LOG=""
 RESTART_APP_SERVERS=""
 RESTART_WEB_SERVER=""
 RESTART_CACHE_SERVER=""
+APPLICATION=""
 
 while [[ $# -gt 0 ]]
 do
@@ -299,32 +370,32 @@ case $key in
 
 		-d|--deploy)
 		DEPLOY="deploy"
-
+		APPLICATION=$2
     ;;
 		-m|--mservice)
 		MSERVICE="mservice"
     ;;
 
-    -bd|--build-deploy)
+                -bd|--build-deploy)
 		BUILD_DEPLOY="build_deploy"
     ;;
 
 		--stop)
-	if [ -z "$MSERVICE" ]; then
+		if [ -z "$MSERVICE" ]; then
       STOP="stop"
-	  TOMCAT_INSTANCE=$2
+			TOMCAT_INSTANCE=$2
     else
-	  stop_micro_service
-	fi
+			stop_micro_service
+		fi
     ;;
 
 		--start)
-	if [ -z "$MSERVICE" ]; then
-	  START="start"
+		if [ -z "$MSERVICE" ]; then
+			START="start"
       TOMCAT_INSTANCE=$2
     else
-	  start_micro_service
-	fi
+		  start_micro_service
+		fi
     ;;
 
 		--restart)
@@ -333,12 +404,12 @@ case $key in
     ;;
 
 		--status)
-	if [ -z "$MSERVICE" ]; then
+		if [ -z "$MSERVICE" ]; then
       STATUS="status"
-	  TOMCAT_INSTANCE=$2
+			TOMCAT_INSTANCE=$2
     else
-	  status_of_micro_service
-	fi
+			status_of_micro_service
+		fi
     ;;
 
 		--applog)
@@ -372,7 +443,7 @@ fi
 
 if [ ! -z "$DEPLOY" ]
 then
-	deploy
+	deploy $APPLICATION
 fi
 
 if [ ! -z "$BUILD_DEPLOY" ]

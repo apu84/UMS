@@ -1,10 +1,11 @@
 version: "2"
 services:
   oraclexe:
-    image: webdizz/oracle-xe-11g-sa:latest
-      ports:
-        - "15080:8080"
-        - "1521:1521"
+    image: sath89/oracle-xe-11g
+    ports:
+    - "15080:8080"
+    - "1522:1521"
     volumes:
-    - "F:/oradata:/u01/app/oracle"
+    - "/home/munna/Music/ums_src/UMS/ums-dist/src/main/resources/misc/database/oradata:/u01/app/oracle"
+    - "/home/munna/Pictures:/home"
 

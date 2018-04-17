@@ -87,6 +87,7 @@
 
 /// <reference path='model/ChangePasswordModel.ts'/>
 /// <reference path='model/Company.ts'/>
+/// <reference path='model/Employee.ts'/>
 /// <reference path='model/User.ts'/>
 /// <reference path='model/AdditionalRolePermissions.ts'/>
 /// <reference path='model/AdmissionStudent.ts'/>

@@ -16,7 +16,9 @@ module ums {
     'smart-table',
     'ui.grid',
     'ui.select',
-    'angularAccounting'
+    'angularAccounting',
+    'ngHandsontable'
+
   ]);
 
 
@@ -137,6 +139,34 @@ module ums {
           controller: 'JournalVoucherController',
           controllerAs: 'vm',
           templateUrl: 'views/general-ledger/transactions/journal-voucher/journal-voucher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
+        .state('generalLedgerReport', {
+          url: "/generalLedgerReport",
+          controller: 'GeneralLedgerReportController',
+          controllerAs: 'vm',
+          templateUrl: 'views/general-ledger/report/general-ledger-report.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
+        .state('balanceSheetReport', {
+          url: "/balanceSheetReport",
+          controller: 'BalanceSheetReportController',
+          controllerAs: 'vm',
+          templateUrl: 'views/balance-sheet/report/balance-sheet.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

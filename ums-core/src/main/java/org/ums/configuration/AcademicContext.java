@@ -24,6 +24,18 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
+import org.ums.punishment.PersistentPunishmentDao;
+import org.ums.punishment.PunishmentCache;
+import org.ums.punishment.PunishmentManager;
+import org.ums.punishment.authority.AuthorityCache;
+import org.ums.punishment.authority.AuthorityManager;
+import org.ums.punishment.authority.PersistentAuthorityDao;
+import org.ums.punishment.offence.OffenceCache;
+import org.ums.punishment.offence.OffenceManager;
+import org.ums.punishment.offence.PersistentOffenceDao;
+import org.ums.punishment.penalty.PenaltyCache;
+import org.ums.punishment.penalty.PenaltyManager;
+import org.ums.punishment.penalty.PersistentPenaltyDao;
 import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
 import org.ums.result.legacy.LegacyTabulationDao;
@@ -413,5 +425,33 @@ public class AcademicContext {
   @Bean
   LegacyTabulationManager legacyTabulationManager() {
     return new LegacyTabulationDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  OffenceManager offenceManager() {
+    OffenceCache offenceCache = new OffenceCache(mCacheFactory.getCacheManager());
+    offenceCache.setManager(new PersistentOffenceDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return offenceCache;
+  }
+
+  @Bean
+  PenaltyManager penaltyManager() {
+    PenaltyCache penaltyCache = new PenaltyCache(mCacheFactory.getCacheManager());
+    penaltyCache.setManager(new PersistentPenaltyDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return penaltyCache;
+  }
+
+  @Bean
+  AuthorityManager authorityManager() {
+    AuthorityCache authorityCache = new AuthorityCache(mCacheFactory.getCacheManager());
+    authorityCache.setManager(new PersistentAuthorityDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return authorityCache;
+  }
+
+  @Bean
+  PunishmentManager punishmentManager() {
+    PunishmentCache punishmentCache = new PunishmentCache(mCacheFactory.getCacheManager());
+    punishmentCache.setManager(new PersistentPunishmentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return punishmentCache;
   }
 }

@@ -2,6 +2,7 @@ package org.ums.employee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -21,6 +22,7 @@ public class ServiceInformationResource extends MutableServiceInformationResourc
 
   @GET
   @Path("/get/employeeId/{employee-id}")
+  @UmsLogMessage(message = "Get employee information (service data)")
   public JsonObject getEmployeeAcademicInformation(final @Context Request pRequest,
       final @PathParam("employee-id") String pEmployeeId, final UriInfo pUriInfo) {
     return mHelper.getServiceInformation(pEmployeeId, pUriInfo);

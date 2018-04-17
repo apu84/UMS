@@ -63,15 +63,21 @@ module ums {
         showContributorLoader: boolean;
         showPublisherLoader: boolean;
         showSupplierLoader: boolean;
+        currencies: Array<ICurrency>;
+    }
+
+    interface ICurrency {
+        id: string;
+        notation: string;
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams', 'HttpClient'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any) {
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient) {
 
 
             $scope.state = $state;
@@ -169,9 +175,13 @@ module ums {
             $scope.item = <IItem> {};
             $scope.supplier = <ISupplier> {};
             $scope.item.status = 2;
+            $scope.item.currency = 1;
             $scope.bulk = {
                 config: {}
             };
+
+            $scope.bulk.config.currency = 1;
+            $scope.bulk.config.status = 2;
 
 
             $scope.record.contributorList = Array<IContributor>();
@@ -192,6 +202,8 @@ module ums {
                 this.$scope.data.readOnlyMode = true;
             }
 
+            $scope.currencies = Array<ICurrency>();
+
             this.initNavButtonCallbacks();
 
             // this.addNewRow("");
@@ -205,7 +217,7 @@ module ums {
             this.getAllContributors();
             this.getAllPublishers();
             this.loadCountries();
-
+            this.getAllCurrencies();
             $scope.showSupplierSelect2 = false;
             $scope.showPublisherSelect2 = false;
             $scope.showContributorSelect2 = false;
@@ -214,6 +226,7 @@ module ums {
 
         private resetItemForm(): void {
             this.$scope.item = <IItem> {};
+            this.$scope.item.currency = 1;
             this.$scope.data.itemReadOnlyMode = false;
             $('#supplier').select2('enable');
             $('#supplier').select2('data', null)
@@ -343,6 +356,13 @@ module ums {
         }
 
 
+        private fetchItems(mfn: string): void {
+            this.catalogingService.fetchItems(mfn).then((data: any) => {
+                this.$scope.itemList = data;
+            });
+        }
+
+
         private fetchItem(itemId: string, mode: string): void {
             this.catalogingService.fetchItem(itemId).then((response: any) => {
                 this.$scope.item = response;
@@ -392,6 +412,7 @@ module ums {
                     localStorage["lms_current_index"] = recordIdList.length - 1;
 
                     this.fetchRecord(recordIdList[recordIdList.length - 1]);
+                    this.fetchItems(recordIdList[recordIdList.length - 1]);
 
 
                 }, function errorCallback(response) {
@@ -402,6 +423,7 @@ module ums {
 
                 localStorage["lms_current_index"] = previousIndex;
                 this.fetchRecord(recordId);
+                this.fetchItems(recordId);
             }
             this.mangeRecordNavigator();
         }
@@ -429,6 +451,7 @@ module ums {
                     localStorage["lms_current_index"] = 0;
                     localStorage["lms_page"] = tPage;
                     this.fetchRecord(recordIdList[0]);
+                    this.fetchItems(recordIdList[0]);
 
                 }, function errorCallback(response) {
                     this.notify.error(response);
@@ -438,6 +461,7 @@ module ums {
                 var recordId: string = recordIdList[nextIndex];
                 localStorage["lms_current_index"] = nextIndex;
                 this.fetchRecord(recordId);
+                this.fetchItems(recordId);
 
             }
             this.mangeRecordNavigator();
@@ -575,6 +599,7 @@ module ums {
          */
         private showHideItemsTable(action: string) {
             if (action == "show") {
+                this.fetchItems(this.$scope.record.mfnNo);
                 this.$scope.data.collapsedItemTable = false;
                 $("#itemsDiv").show(400);
             }
@@ -629,6 +654,7 @@ module ums {
             this.$scope.item.mfnNo = this.$scope.record.mfnNo;
             this.catalogingService.saveItem(this.$scope.item).then((response: any) => {
                 this.notify.show(response);
+                this.fetchItems(this.$scope.record.mfnNo);
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
@@ -652,9 +678,37 @@ module ums {
          * Set common values for Bulk Items
          */
         private setBulkItemsValue(): void {
-            let bulkItemList = this.$scope.bulkItemList;
-            this.catalogingService.setBulkItemsValue(bulkItemList, this.$scope.bulk.config);
-            this.setSelect2ValuesForBulkItems();
+            if (this.validateBulkItemList() == "") {
+                let bulkItemList = this.$scope.bulkItemList;
+                this.catalogingService.setBulkItemsValue(bulkItemList, this.$scope.bulk.config);
+                this.setSelect2ValuesForBulkItems();
+            }
+            else {
+                this.notify.error(this.validateBulkItemList());
+            }
+
+        }
+
+
+        private validateBulkItemList(): string {
+            let errorMessage = "";
+            if (this.$scope.bulk.config.copyStartFrom == undefined || this.$scope.bulk.config.copyStartFrom == null) {
+                errorMessage += "Copy number is empty\n";
+            }
+            if (this.$scope.bulk.config.firstAccession == undefined || this.$scope.bulk.config.firstAccession == null) {
+                errorMessage += "First accession is empty\n";
+            }
+            if (this.$scope.bulk.config.incrementSegment == undefined || this.$scope.bulk.config.incrementSegment == null) {
+                errorMessage += "Increment segment is empty\n";
+            }
+            if (this.$scope.bulk.config.status == undefined || this.$scope.bulk.config.status == null) {
+                errorMessage += "Status is empty"
+            }
+            if (this.$scope.bulk.config.price == undefined || this.$scope.bulk.config.price == null) {
+                this.$scope.bulk.config.price = "";
+            }
+
+            return errorMessage;
         }
 
 
@@ -705,50 +759,52 @@ module ums {
         }
 
         private reloadSuppliers(): void {
+            this.$scope.showSupplierSelect2 = false;
+            this.getAllSuppliers();
             this.$scope.showSupplierLoader = true;
             let data = $("#supplier").select2("data");
             if (data == null || data == undefined) {
-                this.getAllSuppliers();
-                this.$scope.showSupplierLoader = false;
+                setTimeout(() => {
+                    this.$scope.showSupplierLoader = false;
+                }, 3000);
             }
             else {
                 let searchTerm = data.text;
                 this.getAllSuppliers();
-                /*this.$scope.showSupplierSelect2 = false;*/
                 setTimeout(() => {
-                    console.log("In set Timeout 1");
                     setTimeout(() => {
                         Utils.setSelect2Value("supplierSelect2Div", "supplier", searchTerm);
-                    }, 4000);
+                    }, 2000);
                     this.$scope.showSupplierLoader = false;
-                    /*this.$scope.showSupplierSelect2 = true;*/
-                }, 6000);
+                }, 3000);
             }
         }
 
 
         private reloadPublishers(): void {
+            this.$scope.showPublisherSelect2 = false;
+            this.getAllPublishers();
             this.$scope.showPublisherLoader = true;
             let data = $("#publisher").select2("data");
             if (data == null || data == undefined) {
-                this.getAllPublishers();
-                this.$scope.showPublisherLoader = false;
+                setTimeout(() => {
+                    this.$scope.showPublisherLoader = false;
+                }, 3000);
             }
             else {
                 let searchTerm = data.text;
-                this.getAllPublishers();
-               /* this.$scope.showPublisherSelect2 = false;*/
                 setTimeout(() => {
                     setTimeout(() => {
                         Utils.setSelect2Value("recordPublisherDiv", "publisher", searchTerm);
-                    }, 4000);
+                    }, 2000);
                     this.$scope.showPublisherLoader = false;
-                   /* this.$scope.showPublisherSelect2 = true;*/
-                }, 6000)
+                }, 3000)
             }
         }
 
         private reloadContributors(): void {
+            this.$scope.showContributorSelect2 = false;
+            this.getAllContributors();
             this.$scope.showContributorLoader = true;
             var text: string[] = new Array(this.$scope.record.contributorList.length);
 
@@ -761,9 +817,6 @@ module ums {
                     text[i] = data.text;
                 }
             }
-
-            this.getAllContributors();
-           /* this.$scope.showContributorSelect2 = false;*/
             setTimeout(() => {
                 setTimeout(() => {
                     for (var i = 0; i < this.$scope.record.contributorList.length; i++) {
@@ -771,10 +824,9 @@ module ums {
                             Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
                         }
                     }
-                }, 4000);
+                }, 2000);
                 this.$scope.showContributorLoader = false;
-                /*this.$scope.showContributorSelect2 = true;*/
-            }, 6000);
+            }, 3000);
         }
 
         private loadCountries(): void {
@@ -872,21 +924,22 @@ module ums {
             this.$scope.canItemDelete = true;
             this.$scope.itemId = itemId;
             this.catalogingService.fetchItem(itemId).then((data: any) => {
-                if(data.circulationStatus != 0){
+                if (data.circulationStatus != 0) {
                     this.$scope.canItemDelete = false;
                 }
             });
         }
 
-        public confirmation(): void{
+        public confirmation(): void {
             this.catalogingService.deleteItem(this.$scope.itemId).then(() => {
+                this.fetchItems(this.$scope.record.mfnNo);
             });
         }
 
 
         public deleteRecord(): void {
             this.catalogingService.deleteRecord(this.$scope.record.mfnNo).then((response: any) => {
-                if(response == "Success") {
+                if (response == "Success") {
                     setTimeout(() => {
                         this.$scope.state.go("cataloging.search", {1: 'new'});
                     }, 1000)
@@ -899,14 +952,23 @@ module ums {
             this.$scope.items = Array<IItem>();
             this.catalogingService.fetchItems(this.$scope.record.mfnNo).then((results: any) => {
                 this.$scope.items = results;
-                if(this.$scope.items.length > 0){
-                    for(var i = 0; i < this.$scope.items.length; i++){
-                        if(this.$scope.items[i].circulationStatus != 0){
+                if (this.$scope.items.length > 0) {
+                    for (var i = 0; i < this.$scope.items.length; i++) {
+                        if (this.$scope.items[i].circulationStatus != 0) {
                             this.$scope.canRecordDelete = false;
                             break;
                         }
                     }
                 }
+            });
+        }
+
+        private getAllCurrencies(): void {
+            this.httpClient.get("/ums-webservice-account/account/definition/currency/all", HttpClient.MIME_TYPE_JSON,
+                (response: any) => {
+                this.$scope.currencies = response;
+
+                console.log(this.$scope.currencies);
             });
         }
     }

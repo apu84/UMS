@@ -36,6 +36,13 @@ module ums {
     modifiedBy: string;
     chequeNo: string;
     chequeDate: string;
+    message: string;
+    billNo: string;
+    billDate: string;
+    invoiceNo: string;
+    invoiceDate: string;
+    paidAmount: number;
+    modifierName: string;
   }
 
 
@@ -55,7 +62,7 @@ module ums {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/save", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
-            this.notify.success("Payment Voucher Saved Successfully")
+            this.notify.success("Contra Voucher Saved Successfully")
             defer.resolve(response);
           })
           .error((error) => {
@@ -70,7 +77,7 @@ module ums {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/post", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
-            this.notify.success("Payment Voucher Posted Successfully");
+            this.notify.success("Contra Voucher Posted Successfully");
             defer.resolve(response);
           })
           .error((error) => {
@@ -78,6 +85,14 @@ module ums {
             this.notify.error("Error in saving data");
             defer.resolve(undefined);
           });
+      return defer.promise;
+    }
+
+    public deleteVoucher(voucher: IContraVoucher): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.httpClient.put(this.url + "/delete", voucher.id, HttpClient.MIME_TYPE_JSON)
+          .success((response) => defer.resolve(response))
+          .error((response) => defer.resolve(response));
       return defer.promise;
     }
 

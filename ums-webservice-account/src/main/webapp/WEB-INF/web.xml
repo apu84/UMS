@@ -74,6 +74,7 @@
       <param-value>
         org.ums.login,
         org.ums.cachewarmer,
+        org.ums.employee,
         org.ums.navigation,
         org.ums.filter.cors,
         org.ums.resource,
@@ -83,6 +84,7 @@
         org.codehaus.jackson.jaxrs,
         org.ums.exception,
         org.ums.accounts,
+        org.ums.service,
         org.ums.logs
       </param-value>
     </init-param>

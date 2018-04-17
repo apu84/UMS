@@ -40,6 +40,13 @@ public class EmployeeRepositoryImpl extends SimpleSolrRepository<EmployeeDocumen
   }
 
   private Criteria createSearchConditions(String term) {
-    return new Criteria("type_s").is("Employee").and(new Criteria("name_txt").contains(term));
+    return new Criteria("type_s").is(EmployeeDocument.DOCUMENT_TYPE).and(new Criteria("name_txt").contains(term));
+  }
+
+  @Override
+  public long totalDocuments() {
+    SimpleQuery query = new SimpleQuery(new Criteria().is(EmployeeDocument.DOCUMENT_TYPE));
+    Page<EmployeeDocument> results = this.getSolrOperations().queryForPage(query, EmployeeDocument.class);
+    return results.getTotalElements();
   }
 }

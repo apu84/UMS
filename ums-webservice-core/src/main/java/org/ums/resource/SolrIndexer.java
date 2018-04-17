@@ -1,43 +1,47 @@
 package org.ums.resource;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.ums.solr.indexer.reindex.DocumentsTobeReIndexed;
+import org.ums.solr.indexer.reindex.ReIndexStatus;
+import org.ums.solr.indexer.reindex.ReIndexer;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.ums.usermanagement.user.User;
-import org.ums.usermanagement.user.UserManager;
-import org.ums.solr.repository.EmployeeRepository;
-import org.ums.solr.repository.converter.SimpleConverter;
-import org.ums.solr.repository.document.EmployeeDocument;
-import org.ums.solr.repository.lms.RecordRepository;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Path("/indexer")
 @Produces(Resource.MIME_TYPE_JSON)
 public class SolrIndexer extends Resource {
-
   @Autowired
-  EmployeeRepository mEmployeeRepository;
-
-  @Autowired
-  RecordRepository mRecordRepository;
-
-  @Autowired
-  UserManager mUserManager;
+  DocumentsTobeReIndexed mDocumentsTobeReIndexed;
 
   @GET
   @Path("/reindex")
+  @RequiresPermissions("search:index")
   public Response reindex() throws Exception {
-    indexDocuments();
+    asyncReindex();
     return Response.ok().build();
   }
 
-  private void indexDocuments() {
-    SimpleConverter<User, EmployeeDocument> converter = new SimpleConverter<>(User.class, EmployeeDocument.class);
-    mEmployeeRepository.deleteAll();
-    mEmployeeRepository.save(converter.convert(mUserManager.getAll()));
+  @GET
+  @Path("/reindex/status")
+  @RequiresPermissions("search:index")
+  public List<ReIndexStatus> getStatus() {
+    return Arrays.stream(mDocumentsTobeReIndexed.getReIndexers())
+        .map(ReIndexer::status)
+        .collect(Collectors.toList());
+  }
+
+  @Async
+  private void asyncReindex() {
+    Arrays.stream(mDocumentsTobeReIndexed.getReIndexers()).forEach(ReIndexer::reindex);
   }
 }

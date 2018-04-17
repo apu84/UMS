@@ -37,7 +37,8 @@ import org.ums.usermanagement.user.UserManager;
 @EnableScheduling
 @ComponentScan(basePackages = "org.ums")
 @Import({UMSContext.class})
-@ImportResource({"classpath*:services-context.xml", "classpath*:spring-config-shiro.xml"})
+@ImportResource({"classpath*:services-context.xml", "classpath*:spring-config-shiro.xml",
+    "classpath*:micro-service-context.xml"})
 public class ServiceContext {
   @Autowired
   private SecurityManager mSecurityManager;
@@ -113,23 +114,25 @@ public class ServiceContext {
   PersonalInformationManager mPersonalInformationManager;
   @Autowired
   LegacyTabulationManager mLegacyTabulationManager;
+  @Autowired
+  ServiceConfiguration mServiceConfiguration;
 
   @Bean
   PaymentValidator paymentValidator() {
-    return new PaymentValidatorJob(mStudentPaymentManager, mSecurityManager, mUMSConfiguration);
+    return new PaymentValidatorJob(mStudentPaymentManager, mSecurityManager, mUMSConfiguration, mServiceConfiguration);
   }
 
   @Bean
   ConsumeIndex consumeIndex() {
     return new ConsumeIndexJobImpl(mIndexManager, mIndexConsumerManager, mEntityResolverFactory, mLockManager,
-        mSecurityManager, mUMSConfiguration);
+        mSecurityManager, mUMSConfiguration, mServiceConfiguration);
   }
 
   @Bean
   CacheWarmerManager cacheWarmerManager() {
-    return new CacheWarmerManagerImpl(mSecurityManager, mUMSConfiguration, mDepartmentManager, mRoleManager,
-        mPermissionManager, mBearerAccessTokenManager, mAdditionalRolePermissionsManager, mNavigationManager,
-        mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
+    return new CacheWarmerManagerImpl(mSecurityManager, mUMSConfiguration, mServiceConfiguration, mDepartmentManager,
+        mRoleManager, mPermissionManager, mBearerAccessTokenManager, mAdditionalRolePermissionsManager,
+        mNavigationManager, mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
         mPersonalInformationManager, mUserManager, mContributorManager, mSupplierManager, mPublisherManager,

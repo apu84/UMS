@@ -1,5 +1,6 @@
 package org.ums.exception;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.exceptions.ValidationException;
@@ -14,7 +15,9 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
 
   @Override
   public Response toResponse(ValidationException e) {
-    mLogger.debug(e.getMessage());
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]: Validation exception:" + e.getMessage();
+    mLogger.error(errorMessage, e);
     return Response.status(Response.Status.BAD_REQUEST)
         .entity(new ExceptionResponse("ValidationException", e.getMessage())).build();
   }

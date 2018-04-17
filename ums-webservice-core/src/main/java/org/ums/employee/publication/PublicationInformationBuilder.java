@@ -1,6 +1,7 @@
 package org.ums.employee.publication;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -22,6 +23,7 @@ import java.util.Date;
 public class PublicationInformationBuilder implements Builder<PublicationInformation, MutablePublicationInformation> {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
   PublicationType mPublicationType;

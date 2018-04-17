@@ -6,6 +6,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +34,16 @@ public class SessionFilter extends PathMatchingFilter {
     Date currentDate = new Date();
     long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
     long diffMinutes = diff / (60 * 1000);
+    boolean notificationRequest = (((HttpServletRequest) request).getRequestURI().contains("notification/"));
 
-    if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
+    if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout && !notificationRequest) {
       MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
       mutableBearerAccessToken.update();
     }
     else if(diffMinutes > sessionTimeout) {
       continueFilterChain = FilterUtil.sendUnauthorized(response);
-      if(mLogger.isDebugEnabled()) {
-        mLogger.debug("Expired access token: " + dbToken.getId());
-      }
+      mLogger.debug("[{}]: Expired access token: {}", SecurityUtils.getSubject().getPrincipal().toString(),
+          dbToken.getId());
     }
     return continueFilterChain;
   }

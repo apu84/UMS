@@ -3,6 +3,7 @@ package org.ums.resource.holidays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -26,6 +27,7 @@ public class HolidaysBuilder implements Builder<Holidays, MutableHolidays> {
   private static final Logger mLogger = LoggerFactory.getLogger(HolidaysBuilder.class);
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Override

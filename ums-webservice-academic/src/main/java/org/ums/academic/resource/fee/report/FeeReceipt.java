@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Course;
@@ -30,11 +31,14 @@ public class FeeReceipt {
   @Autowired
   private PaymentAccountsMappingManager mPaymentAccountsMappingManager;
   @Autowired
+  @Qualifier("genericDateFormat")
+  DateFormat mDateFormat;
+    @Autowired
   private ApplicationCCIManager mApplicationCCIManager;
   @Autowired
   private CourseManager mCourseManager;
-  @Autowired
-  DateFormat mDateFormat;
+
+
 
   private Font universityNameFont, infoFont, tableFont, underLineFont;
   private java.util.List<StudentPayment> mPaymentList;
@@ -276,8 +280,7 @@ public class FeeReceipt {
       cell.setBorder(Rectangle.NO_BORDER);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-      paragraph = new Paragraph(payment.getFeeCategory().getName(), infoFont);// ------------------fee
-                                                                              // category
+      paragraph = new Paragraph(payment.getFeeCategory().getName(), infoFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
       paymentTable.addCell(cell);

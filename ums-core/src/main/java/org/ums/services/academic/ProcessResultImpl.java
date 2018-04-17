@@ -1,7 +1,5 @@
 package org.ums.services.academic;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -70,47 +68,48 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Async
   private void processResult(int pProgramId, int pSemesterId, int pYear, int pSemester) {
-    List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId, pYear, pSemester);
-
     MutableTaskStatus processResultStatus = new PersistentTaskStatus();
-    processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
+    String taskId
+        = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, pYear, pSemester, PROCESS_GPA_CGPA_PROMOTION);
+    processResultStatus.setId(taskId);
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
     processResultStatus.create();
 
+    List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId, pYear, pSemester);
     List<StudentRecord> studentRecords =
         mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId, pYear, pSemester);
 
-    processResult(pProgramId, pSemesterId,
-        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
+    processResult(pSemesterId,
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords, taskId);
   }
 
   @Async
   private void processResult(int pProgramId, int pSemesterId) {
     List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
 
+    String taskId = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     MutableTaskStatus processResultStatus = new PersistentTaskStatus();
-    processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
+    processResultStatus.setId(taskId);
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
     processResultStatus.create();
 
     List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
-    processResult(pProgramId, pSemesterId,
-        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords);
+    processResult(pSemesterId,
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)), studentRecords, taskId);
   }
 
-  private void processResult(int pProgramId, int pSemesterId,
-      Map<String, List<UGRegistrationResult>> studentCourseGradeMap, List<StudentRecord> studentRecords) {
-    String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
+  private void processResult(final int pSemesterId,
+      final Map<String, List<UGRegistrationResult>> studentCourseGradeMap,
+      final List<StudentRecord> studentRecords,
+      final String pTaskId) {
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
 
-    try  {
-//      Temoporary code to find duplicate student record
+    try {
+      // Temoporary code to find duplicate student record
       Set<String> allItems = new HashSet<>();
-      Set<String> duplicates = studentRecords.stream()
-          .map(StudentRecord::getStudentId)
-          .filter(pStudentId -> !allItems.add(pStudentId))
-          .collect(Collectors.toSet());
+      Set<String> duplicates = studentRecords.stream().map(StudentRecord::getStudentId)
+          .filter(pStudentId -> !allItems.add(pStudentId)).collect(Collectors.toSet());
       System.out.println(duplicates);
 
       Map<String, StudentRecord> studentRecordMap =
@@ -129,17 +128,12 @@ public class ProcessResultImpl implements ProcessResult {
           studentRecord.setCompletedGradePoints(studentRecordParams.getCompletedGradePoints());
         }
         if(!mUmsConfiguration.isProcessGPAOnly()) {
-          List<Semester> previousSemesters =
-              mSemesterManager.getPreviousSemesters(pSemesterId, studentRecord.getStudent().getProgram().getProgramTypeId());
+          List<Semester> previousSemesters = mSemesterManager.getPreviousSemesters(pSemesterId,
+              studentRecord.getStudent().getProgram().getProgramTypeId());
           List<Integer> previousSemesterIds =
               previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
           List<UGRegistrationResult> courseResults = studentCourseGradeMap.get(studentId).stream()
               .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
-//          if(studentRecord.getStudentId().equals("150208015")) {
-//            for(UGRegistrationResult pr: courseResults) {
-//              System.out.print("'"+pr.getCourseId()+"',");
-//            }
-//          }
           StudentRecordParams cgpa = calculateCGPA(courseResults);
           boolean isPassed = isPassed(pSemesterId, courseResults);
           if(cgpa != null) {
@@ -150,8 +144,8 @@ public class ProcessResultImpl implements ProcessResult {
           studentRecord.setStatus(isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED);
           studentRecord.setGradesheetRemarks(mRemarksBuilder.getGradeSheetRemarks(courseResults,
               isPassed ? StudentRecord.Status.PASSED : StudentRecord.Status.FAILED, pSemesterId));
-          studentRecord.setTabulationSheetRemarks(mRemarksBuilder
-              .getTabulationSheetRemarks(courseResults, studentRecord, pSemesterId));
+          studentRecord.setTabulationSheetRemarks(
+              mRemarksBuilder.getTabulationSheetRemarks(courseResults, studentRecord, pSemesterId));
         }
         updatedStudentRecords.add(studentRecord);
 
@@ -160,20 +154,19 @@ public class ProcessResultImpl implements ProcessResult {
         if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudents)) {
           mStudentRecordManager.update(updatedStudentRecords);
           updatedStudentRecords.clear();
-          TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+          TaskStatus taskStatus = mTaskStatusManager.get(pTaskId);
           MutableTaskStatus mutableTaskStatus = taskStatus.edit();
           mutableTaskStatus.setProgressDescription(UmsUtils.getPercentageString(i, totalStudents));
           mutableTaskStatus.update();
         }
       }
-      TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+      TaskStatus taskStatus = mTaskStatusManager.get(pTaskId);
       MutableTaskStatus mutableTaskStatus = taskStatus.edit();
       mutableTaskStatus.setProgressDescription("100");
       mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
       mutableTaskStatus.update();
-    }
-    catch(Exception e) {
-      TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
+    } catch(Exception e) {
+      TaskStatus taskStatus = mTaskStatusManager.get(pTaskId);
       MutableTaskStatus mutableTaskStatus = taskStatus.edit();
       mutableTaskStatus.setProgressDescription("0");
       mutableTaskStatus.setStatus(TaskStatus.Status.FAILED);
@@ -223,10 +216,10 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   @Override
-  public TaskStatusResponse status(int pProgramId, int pSemesterId) {
-    String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
-    String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
-    String processGrades = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GRADES);
+  public TaskStatusResponse status(Object... pKeys) {
+    String publishResult = mTaskStatusManager.buildTaskId(appendToArray(pKeys, PUBLISH_RESULT));
+    String processCGPA = mTaskStatusManager.buildTaskId(appendToArray(pKeys, PROCESS_GPA_CGPA_PROMOTION));
+    String processGrades = mTaskStatusManager.buildTaskId(appendToArray(pKeys, PROCESS_GRADES));
 
     if(mTaskStatusManager.exists(publishResult)) {
       TaskStatus status = mTaskStatusManager.get(publishResult);
@@ -255,6 +248,13 @@ public class ProcessResultImpl implements ProcessResult {
     return new TaskStatusResponse(taskStatus);
   }
 
+  private Object[] appendToArray(Object[] pObjects, Object append) {
+    Object[] objects = new Object[pObjects.length + 1];
+    System.arraycopy(pObjects, 0, objects, 0, objects.length - 1);
+    objects[objects.length - 1] = append;
+    return objects;
+  }
+
   @Transactional
   @Override
   public void publishResult(int pProgramId, int pSemesterId) {
@@ -278,21 +278,21 @@ public class ProcessResultImpl implements ProcessResult {
     private double completedCrHr;
     private double completedGradePoints;
 
-    public StudentRecordParams(double pGpa, double pCompletedCrHr, double pCompletedGradePoints) {
+    StudentRecordParams(double pGpa, double pCompletedCrHr, double pCompletedGradePoints) {
       gpa = pGpa;
       completedCrHr = pCompletedCrHr;
       completedGradePoints = pCompletedGradePoints;
     }
 
-    public double getGpa() {
+    double getGpa() {
       return gpa;
     }
 
-    public double getCompletedCrHr() {
+    double getCompletedCrHr() {
       return completedCrHr;
     }
 
-    public double getCompletedGradePoints() {
+    double getCompletedGradePoints() {
       return completedGradePoints;
     }
   }

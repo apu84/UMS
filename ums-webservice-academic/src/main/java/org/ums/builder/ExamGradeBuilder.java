@@ -1,6 +1,7 @@
 package org.ums.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
@@ -29,6 +30,7 @@ import java.util.*;
 public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
   @Override
@@ -65,17 +67,17 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pReadOnly.getLastSubmissionDatePrep() != null) {
-      pBuilder.add("lastSubmissionDatePrep", mDateFormat.format(pReadOnly.getLastSubmissionDatePrep()));
+      pBuilder.add("lastSubmissionDatePrep", UmsUtils.formatDate(pReadOnly.getLastSubmissionDatePrep(), "dd-MM-yyyy"));
     }
 
     if(pReadOnly.getLastSubmissionDateScr() != null)
-      pBuilder.add("lastSubmissionDateScr", mDateFormat.format(pReadOnly.getLastSubmissionDateScr()));
+      pBuilder.add("lastSubmissionDateScr", UmsUtils.formatDate(pReadOnly.getLastSubmissionDateScr(), "dd-MM-yyyy"));
 
     if(pReadOnly.getLastSubmissionDateHead() != null)
-      pBuilder.add("lastSubmissionDateHead", mDateFormat.format(pReadOnly.getLastSubmissionDateHead()));
+      pBuilder.add("lastSubmissionDateHead", UmsUtils.formatDate(pReadOnly.getLastSubmissionDateHead(), "dd-MM-yyyy"));
 
     if(pReadOnly.getLastSubmissionDateCoe() != null)
-      pBuilder.add("lastSubmissionDateCoe", mDateFormat.format(pReadOnly.getLastSubmissionDateCoe()));
+      pBuilder.add("lastSubmissionDateCoe", UmsUtils.formatDate(pReadOnly.getLastSubmissionDateCoe(), "dd-MM-yyyy"));
   }
 
   @Override

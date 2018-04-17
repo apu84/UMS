@@ -31,6 +31,7 @@
                     <th style="text-align: center">Copy No</th>
                     <th class="numeric">Accession No</th>
                     <th class="numeric">Accession Date</th>
+                    <th class="numeric">Currency</th>
                     <th class="numeric" style="text-align: center">Purchase Price</th>
                     <th class="numeric">Supplier</th>
                     <th class="numeric" style="text-align: center">Status</th>
@@ -43,6 +44,7 @@
                     <td data-title="Copy No" style="text-align: center">{{item.copyNumber}}</td>
                     <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
                     <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
+                    <td data-title="Currency" class="numeric">{{item.currencyName}}</td>
                     <td data-title="Purchase Price" class="numeric" style="text-align: right">{{item.price}}</td>
                     <td data-title="Supplier" class="numeric">{{item.supplier.name}}</td>
                     <td data-title="Status" class="numeric" style="text-align: center">{{item.statusName}}</td>
@@ -72,6 +74,12 @@
             <span ng-if="data.multipleItemAdd">Add Items</span>
         </p>
         <p class="alignRight" style="padding-right: 10px;">
+            <a href="javascript:;" class="btn btn-xs btn-default bookAnchor" data-ng-show="data.multipleItemAdd"
+               data-ng-click="data.multipleItemAdd=false;data.showItemMainButtonPanel=true;showHideItemsTable('show');"
+               style="background-color: white;">
+                <i data-toggle="tooltip" title="Back to Add Single Item" class="fa fa-arrow-left"
+                   aria-hidden="true"></i>
+            </a>
 
             <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
                data-ng-click="resetItemForm()" style="background-color: white;">
@@ -111,6 +119,15 @@
                 <input type="text" class="form-control dottedInput" data-ng-model="item.barcode" id="barcode"
                        name="barcode" ng-readonly="data.itemReadOnlyMode"/>
             </div>
+            <label class="col-md-1 control-label">Currency</label>
+            <div class="col-md-3">
+                <select style="width: 98%" class="required" data-ng-model="item.currency" id="currency"
+                        name="currency" ng-disabled="data.itemReadOnlyMode"
+                        ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
+                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    </option>
+                </select>
+            </div>
             <label class="col-md-1 control-label">Price</label>
             <div class="col-md-3">
                 <input type="text" class="form-control dottedInput" data-ng-model="item.price" id="price" name="price"
@@ -131,8 +148,9 @@
 
             <label class="col-md-1 control-label">Supplier
                 &nbsp;&nbsp;<span data-toggle="tooltip"
-                                  title="Create New Supplier"><i class="fa fa-wpforms  fa-md" aria-hidden="true" style="cursor: pointer"
-                                                                  data-toggle="modal" data-target="#modal-supplier"></i></span>
+                                  title="Create New Supplier"><i class="fa fa-wpforms  fa-md" aria-hidden="true"
+                                                                 style="cursor: pointer"
+                                                                 data-toggle="modal" data-target="#modal-supplier"></i></span>
                 &nbsp;&nbsp;<i class="fa fa-refresh" style="cursor: pointer" data-toggle="tooltip"
                                title="Refresh" aria-hidden="true" data-ng-click="reloadSuppliers()"></i>
 
@@ -190,6 +208,7 @@
                 <th align="center" width="10%" style="text-align: center;">Accession #</th>
                 <th align="center" width="10%" style="text-align: center;">Accession Date</th>
                 <th align="center" width="10%" style="text-align: center;">Barcode</th>
+                <th align="center" width="8%" style="text-align: center;">Currency</th>
                 <th align="center" width="8%" style="text-align: center;">Price</th>
                 <th align="center" width="15%" style="text-align: center;">Supplier</th>
                 <th align="center" width="8%" style="text-align: center;">Status</th>
@@ -201,7 +220,7 @@
                 <td align="center"><input type='text' style='width:40px;border: 1px solid grey;text-align: center;'
                                           data-ng-model="item.copyNumber"/></td>
                 <td align="center"><input type='text' style='width:150px;border: 1px solid grey;padding-left: 5px;'
-                                          data-ng-model="item.accessionNumber" class="required"
+                                          data-ng-model="item.accessionNumber"
                                           name="bulkAccessionNumber{{$index}}" id="bulkAccessionNumber{{$index}}"/></td>
                 <td align="center">
                     <input type='text' style='width:80px;border: 1px solid grey;text-align: center;'
@@ -209,6 +228,13 @@
                 </td>
                 <td align="center"><input type='text' style='width:150px;border: 1px solid grey;'
                                           data-ng-model="item.barcode" readonly="readonly"/></td>
+                <td align="center"><select style="width: 98%" class="required" data-ng-model="item.currency"
+                                           id="bulkCurrency{{$index}}"
+                                           name="bulkCurrency{{$index}}" ng-disabled="data.itemReadOnlyMode"
+                                           ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
+                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    </option>
+                </select></td>
                 <td align="center"><input type='text'
                                           style='width:80px;border: 1px solid grey;text-align: right; padding-right: 4px;'
                                           data-ng-model="item.price"/></td>
@@ -218,7 +244,7 @@
                            data-ng-model="item.supplier.id" datas="supplierList" placeholder="Select a Name"/>
                 </td>
                 <td align="center">
-                    <select style="width: 98%;height: 24px;padding: 0px;" class="required" data-ng-model="item.status"
+                    <select style="width: 98%;height: 24px;padding: 0px;" data-ng-model="item.status"
                             id="itemStatus1" name="itemStatus" data-convert-to-number>
                         <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
                     </select>
@@ -237,14 +263,17 @@
         </div>
     </form>
 </div>
+
+
 <fieldset id="add_multiple_copies_span" data-ng-if="!data.showItemMainButtonPanel">
     <label for="number_of_copies">Number of copies of this item to add: </label>
     <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2"
            style="text-align:center;border:1px solid grey;" ng-model="data.bulkAddCount">
     <input type="button" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add"
            ng-click="addNewItems()">
-    <a href="#" id="cancel_add_multiple" class="cancel"
+    <a id="cancel_add_multiple" class="cancel"
        ng-click="data.showItemMainButtonPanel=true;data.multipleItemAdd=false;showHideItemsTable('show');">Cancel</a>
+
     <div class="hint">
         <table>
             <tr>
@@ -259,36 +288,48 @@
                                        ng-model="bulk.config.incrementSegment"/></td>
             </tr>
             <tr>
-                <td style="height: 28px;">Accession Date :</td>
-                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                <td width="10%">Accession Date :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                            ng-model="bulk.config.accessionDate"/></td>
-                <td>Price :</td>
-                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                <td width="10%">Currency :</td>
+                <td width="23%"><select style="height: 24px;padding: 0px; width: 158px;" data-ng-model="bulk.config.currency" data-convert-to-number>
+                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">
+                        {{currency.notation}}
+                    </option></select></td>
+                <td width="10%">Price :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                            ng-model="bulk.config.price"/></td>
-                <td>Supplier :</td>
-                <td>
-                    <input type="text" class="form-control" data-select="select2" page="true"
+            </tr>
+            <tr>
+                <td width="10%">Supplier :</td>
+                <td width="23%">
+                    <input type="text" style="width: 65%" class="form-control" data-select="select2" page="true"
                            data-ng-model="bulk.config.supplier" datas="supplierList" placeholder="Select a Name"
                            id="configSupplierName" name="configSupplierName"/>
 
                 </td>
-            </tr>
-            <tr>
-                <td style="height: 28px;">Status :</td>
-                <td>
-                    <select style="height: 24px;padding: 0px; width: 171px;" class="required"
+                <td width="10%">Status :</td>
+                <td width="23%">
+                    <select style="height: 24px;padding: 0px; width: 158px;" class="required"
                             data-ng-model="bulk.config.status" data-convert-to-number>
                         <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
                     </select>
                 </td>
-                <td>Note :</td>
-                <td><input type="text" value="" style="text-align:center;border:1px solid grey;"
+                <td width="10%">Note :</td>
+                <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                            ng-model="bulk.config.internalNote"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td><input type="button" value="Set Values" ng-click="setBulkItemsValue()"></td>
             </tr>
         </table>
     </div>
+
 </fieldset>
 
 <div id="modal-confirm1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">

@@ -8,6 +8,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.ums.bank.BankCache;
+import org.ums.bank.BankDao;
+import org.ums.bank.BankManager;
+import org.ums.bank.branch.BranchCache;
+import org.ums.bank.branch.BranchDao;
+import org.ums.bank.branch.BranchManager;
+import org.ums.bank.branch.user.*;
+import org.ums.bank.designation.BankDesignationCache;
+import org.ums.bank.designation.BankDesignationDao;
+import org.ums.bank.designation.BankDesignationManager;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
 import org.ums.employee.academic.AcademicInformationManager;
@@ -42,17 +52,22 @@ import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.*;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
+import org.ums.services.email.NewIUMSAccountInfoEmailService;
 import org.ums.solr.repository.transaction.EmployeeTransaction;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.twofa.*;
+import org.ums.usermanagement.application.ApplicationCache;
+import org.ums.usermanagement.application.ApplicationDao;
+import org.ums.usermanagement.application.ApplicationManager;
 import org.ums.usermanagement.permission.*;
 import org.ums.usermanagement.role.PersistentRoleDao;
 import org.ums.usermanagement.role.RoleCache;
 import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.role.RolePermissionResolver;
+import org.ums.usermanagement.transformer.*;
 import org.ums.usermanagement.user.PersistentUserDao;
 import org.ums.usermanagement.user.UserCache;
 import org.ums.usermanagement.user.UserManager;
@@ -60,6 +75,10 @@ import org.ums.usermanagement.userView.PersistentUserViewDao;
 import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
+
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class CoreContext {
@@ -83,6 +102,10 @@ public class CoreContext {
   @Autowired
   @Qualifier("dummyEmail")
   String emailSender;
+
+  @Autowired
+  @Qualifier("newIUMSAccountInfoEmailService")
+  NewIUMSAccountInfoEmailService mNewIUMSAccountInfoEmailService;
 
   /*
    * @Bean(name = "ftpSessionFactory") public SessionFactory<FTPFile> ftpSessionFactory() {
@@ -123,13 +146,18 @@ public class CoreContext {
   }
 
   @Bean
-  UserManager userManager() {
+  public UserManager userManager() {
+    List<UserPropertyResolver> userPropertyResolvers = new ArrayList<>();
+    userPropertyResolvers.add(new AdminUserResolver());
+    userPropertyResolvers.add(new StudentUserResolver(studentManager()));
+    userPropertyResolvers.add(new BankUserResolver(branchUserManager()));
+    userPropertyResolvers.add(new EmployeeUserResolver(employeeManager()));
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
     userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
-    UserPropertyResolver userPropertyResolver =
-        new UserPropertyResolver(employeeManager(), personalInformationManager(), studentManager());
-    userPropertyResolver.setManager(userCache);
-    return userPropertyResolver;
+    UserPropertyDecorator userPropertyDecorator =
+        new UserPropertyDecorator(personalInformationManager(), studentManager(), userPropertyResolvers);
+    userPropertyDecorator.setManager(userCache);
+    return userPropertyDecorator;
   }
 
   @Bean
@@ -140,7 +168,7 @@ public class CoreContext {
   }
 
   @Bean
-  AdditionalRolePermissionsManager additionalRolePermissionsManager() {
+  public AdditionalRolePermissionsManager additionalRolePermissionsManager() {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory.getJdbcTemplate(),
@@ -159,7 +187,7 @@ public class CoreContext {
   }
 
   @Bean
-  BearerAccessTokenManager bearerAccessTokenManager() {
+  public BearerAccessTokenManager bearerAccessTokenManager() {
     BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mCacheFactory.getCacheManager());
     bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mTemplateFactory.getJdbcTemplate()));
     return bearerAccessTokenCache;
@@ -205,7 +233,7 @@ public class CoreContext {
 
   @Bean
   @Lazy
-  PermissionManager permissionManager() {
+  public PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
     permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return permissionCache;
@@ -228,8 +256,21 @@ public class CoreContext {
   }
 
   @Bean
-  DateFormat getGenericDateFormat() {
+  @Qualifier("genericDateFormat")
+  DateFormat genericDateFormat() {
     return new DateFormat(Constants.DATE_FORMAT);
+  }
+
+  @Bean
+  @Qualifier("genericDateFormat24")
+  DateFormat genericDateTimeFormat24() {
+    return new DateFormat(Constants.DATE_TIME_24H_FORMAT);
+  }
+
+  @Bean
+  @Qualifier("genericDateFormat12")
+  DateFormat genericDateTimeFormat12() {
+    return new DateFormat(Constants.DATE_TIME_12H_FORMAT);
   }
 
   @Bean
@@ -447,5 +488,49 @@ public class CoreContext {
   @Bean
   TwoFATokenGenerator twoFATokenGenerator() {
     return new TwoFATokenGeneratorImpl(twoFATokenManager(), twoFATokenEmailSender(), userManager());
+  }
+
+  @Bean
+  public UserRolePermissions userRolePermissions() {
+    return new UserRolePermissionsImpl(additionalRolePermissionsManager(), permissionManager(), userManager(),
+        roleManager());
+  }
+
+  @Bean
+  ApplicationManager applicationManager() {
+    ApplicationCache applicationCache = new ApplicationCache(mCacheFactory.getCacheManager());
+    applicationCache.setManager(new ApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return applicationCache;
+  }
+
+  @Bean
+  BankManager bankManager() {
+    BankCache bankCache = new BankCache(mCacheFactory.getCacheManager());
+    bankCache.setManager(new BankDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return bankCache;
+  }
+
+  @Bean
+  BankDesignationManager bankDesignationManager() {
+    BankDesignationCache bankDesignationCache = new BankDesignationCache(mCacheFactory.getCacheManager());
+    bankDesignationCache.setManager(new BankDesignationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return bankDesignationCache;
+  }
+
+  @Bean
+  BranchManager branchManager() {
+    BranchCache branchCache = new BranchCache(mCacheFactory.getCacheManager());
+    branchCache.setManager(new BranchDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return branchCache;
+  }
+
+  @Bean
+  @Qualifier("branchUserManager")
+  BranchUserManager branchUserManager() {
+    BranchUserDao branchDao = new BranchUserDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    branchDao.setManager(new BranchUserPostTransaction(mNewIUMSAccountInfoEmailService, roleManager()));
+    BranchUserCache branchUserCache = new BranchUserCache(mCacheFactory.getCacheManager());
+    branchUserCache.setManager(branchDao);
+    return branchUserCache;
   }
 }

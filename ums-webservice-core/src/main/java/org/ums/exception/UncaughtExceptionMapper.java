@@ -1,8 +1,8 @@
 package org.ums.exception;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ums.services.academic.SeatPlanServiceImpl;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -17,7 +17,9 @@ public class UncaughtExceptionMapper extends Throwable implements javax.ws.rs.ex
   @Override
   public Response toResponse(Throwable e) {
     e.printStackTrace();
-    mLogger.error(e.getMessage(), e);
+    String errorMessage =
+        "[" + SecurityUtils.getSubject().getPrincipal().toString() + "]: Uncaught exception:" + e.getMessage();
+    mLogger.error(errorMessage, e);
     CustomReasonPhraseExceptionStatusType error =
         new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, "Internal Server Error");
     JsonObjectBuilder errorObject = Json.createObjectBuilder();

@@ -55,4 +55,24 @@ public class AdditionalRolePermissionsCache extends
   public List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId) {
     return getManager().getAdditionalRole(pDepartmentId);
   }
+
+  @Override
+  public int removeExistingAdditionalRoles(String pUserId) {
+    return getManager().removeExistingAdditionalRoles(pUserId);
+  }
+
+  @Override
+  public int removeExistingAdditionalPermissions(String pUserId) {
+    return getManager().removeExistingAdditionalPermissions(pUserId);
+  }
+
+  @Override
+  public int addRole(String pUserId, Role pRole) {
+    return getManager().addRole(pUserId, pRole);
+  }
+
+  @Override
+  public int addPermissions(String pUserId, Set<String> pPermissions) {
+    return getManager().addPermissions(pUserId, pPermissions);
+  }
 }
