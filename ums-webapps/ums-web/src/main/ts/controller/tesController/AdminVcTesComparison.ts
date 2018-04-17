@@ -175,40 +175,47 @@ module ums{
         private getComparisionResult(){
             if(this.currentSemesterId==this.selectedSemesterId){
                 if(this.studentSubmitDeadLine){
-                    this.notify.info("result available")
+                    this.checkEvaluationResult = false
+                    this.getComparisonList();
+                    console.log("Current Semester");
                 }else{
                     this.notify.info("Result is under Process.You Can access the result of this Semester on "+this.studentSubmitEndDate);
                 }
             }else {
+                this.checkEvaluationResult = false
+                this.getComparisonList();
+                console.log("Not Current Semester");
                 //this.checkEvaluationResult = false;
                 //this.getResults();
             }
 
-                Utils.expandRightDiv();
-                this.innerCommentPgCurrentPage=1;
-                this.assignedCoursesForReview=[];
-                this.staticSessionName=this.semester.name;
-                console.log("Stat.....");
-                console.log("Dept: "+this.selectedDepartmentId+"\nSemesterId: "+this.selectedSemesterId);
-              var defer = this.$q.defer();
-                var appTES:Array<IAssignedCoursesForReview>=[];
-                this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComparisionResult/deptId/'+this.selectedDepartmentId+'/semesterId/'+this.selectedSemesterId, 'application/json',
-                    (json: any, etag: string) => {
-                        console.log("List of Courses");
-                        appTES=json;
-                        this.assignedCoursesForReview=appTES;
-                        this.commentPgTotalRecords=appTES.length;
-                        this.pgHide=false;
-                        console.log(this.assignedCoursesForReview);
-                        defer.resolve(json);
-                    },
-                    (response: ng.IHttpPromiseCallbackArg<any>) => {
-                        console.error(response);
-                    });
-                return defer.promise;
+
 
         }
-
+    private getComparisonList(){
+        Utils.expandRightDiv();
+        this.innerCommentPgCurrentPage=1;
+        this.assignedCoursesForReview=[];
+        this.staticSessionName=this.semester.name;
+        console.log("Stat.....");
+        console.log("Dept: "+this.selectedDepartmentId+"\nSemesterId: "+this.selectedSemesterId);
+        var defer = this.$q.defer();
+        var appTES:Array<IAssignedCoursesForReview>=[];
+        this.httpClient.get('/ums-webservice-academic/academic/applicationTES/getComparisionResult/deptId/'+this.selectedDepartmentId+'/semesterId/'+this.selectedSemesterId, 'application/json',
+            (json: any, etag: string) => {
+                console.log("List of Courses");
+                appTES=json;
+                this.assignedCoursesForReview=appTES;
+                this.commentPgTotalRecords=appTES.length;
+                this.pgHide=false;
+                console.log(this.assignedCoursesForReview);
+                defer.resolve(json);
+            },
+            (response: ng.IHttpPromiseCallbackArg<any>) => {
+                console.error(response);
+            });
+        return defer.promise;
+    }
 
 
         private  getReport(){

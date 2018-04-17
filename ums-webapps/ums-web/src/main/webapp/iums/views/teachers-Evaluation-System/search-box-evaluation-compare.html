@@ -83,7 +83,8 @@
                 <div class="panel-heading" align="center">Evaluation Report<br>
                     Ahsanullah University of Science and Technology<span
                         class="subtitle"></span></div>
-                <div class="panel-body shadowPanel" style="min-height: 200px;">
+                <div class="panel-body shadowPanel" style="min-height: 200px;" >
+                    <div data-ng-hide="vm.checkEvaluationResult">
                     <div data-ng-hide="vm.pgHide">
                         <p>Semester:  <strong>{{vm.staticSessionName}}</strong></p>
                         <p>Department: <strong>{{vm.staticDepartmentName}}</strong></p>
@@ -96,7 +97,6 @@
                                     items-per-page="vm.innerCommentPgItemsPerPage"></pagination>
                     </div>
 
-                    <div class="row" style="padding: 10px;">
                         <div align="right" data-ng-hide="vm.pgHide">
                             <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getReport()">
                                 <span class="glyphicon glyphicon-download"></span> Download pdf
@@ -130,6 +130,7 @@
                         </table>
 
                     </div>
+                </div>
                 </div>
             </div>
 

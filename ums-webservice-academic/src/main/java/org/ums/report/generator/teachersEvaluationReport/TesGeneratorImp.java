@@ -102,7 +102,7 @@ public class TesGeneratorImp implements TesGenerator {
     PdfWriter writer = PdfWriter.getInstance(document, baos);
 
     Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
-    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12);
     Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
     Font tt = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
     document.open();
@@ -277,12 +277,7 @@ public class TesGeneratorImp implements TesGenerator {
 
     for(int i=0;i<reportList.size();i++){
       if(reportList.get(i).getObservationType()==2){
-        index=index+1;
-        table1.addCell(new Phrase(""+index,tt));
-        table1.addCell(new Phrase(""+reportList.get(i).getQuestionDetails(),tt));
-        table1.addCell(new Phrase(""+reportList.get(i).getTotalScore(),tt));
-        table1.addCell(new Phrase(""+reportList.get(i).getStudentNo(),tt));
-        table1.addCell(new Phrase(""+reportList.get(i).getAverageScore(),tt));
+        index = setValueInCell(tt, reportList, index, table1, i);
       }
 
     }
@@ -411,6 +406,16 @@ public class TesGeneratorImp implements TesGenerator {
     baos.writeTo(pOutputStream);
   }
 
+  private int setValueInCell(Font tt, List<Report> reportList, int index, PdfPTable table1, int i) {
+    index=index+1;
+    table1.addCell(new Phrase(""+index,tt));
+    table1.addCell(new Phrase(""+reportList.get(i).getQuestionDetails(),tt));
+    table1.addCell(new Phrase(""+reportList.get(i).getTotalScore(),tt));
+    table1.addCell(new Phrase(""+reportList.get(i).getStudentNo(),tt));
+    table1.addCell(new Phrase(""+reportList.get(i).getAverageScore(),tt));
+    return index;
+  }
+
   private void getComment(String pCourseId, String pTeacherId, Integer pSemesterId, List<ApplicationTES> applications, List<StudentComment> commentList) {
     List<ApplicationTES> getDetailedResult;
     for(int i = 0; i<applications.size(); i++){
@@ -448,7 +453,7 @@ public class TesGeneratorImp implements TesGenerator {
     PdfWriter writer = PdfWriter.getInstance(document, baos);
 
     Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
-    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12);
     Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
     document.open();
 

@@ -175,15 +175,24 @@ module ums{
         private getComparisionResult(){
             if(this.currentSemesterId==this.selectedSemesterId){
                 if(this.studentSubmitDeadLine){
-                    this.notify.info("result available")
+                    this.checkEvaluationResult = false
+                    this.getComparisonList();
+                    console.log("Current Semester");
                 }else{
                     this.notify.info("Result is under Process.You Can access the result of this Semester on "+this.studentSubmitEndDate);
                 }
             }else {
+                this.checkEvaluationResult = false
+                this.getComparisonList();
+                console.log("Not Current Semester");
                 //this.checkEvaluationResult = false;
                 //this.getResults();
             }
 
+
+
+        }
+        private getComparisonList(){
             Utils.expandRightDiv();
             this.innerCommentPgCurrentPage=1;
             this.assignedCoursesForReview=[];
@@ -206,7 +215,6 @@ module ums{
                     console.error(response);
                 });
             return defer.promise;
-
         }
 
 
