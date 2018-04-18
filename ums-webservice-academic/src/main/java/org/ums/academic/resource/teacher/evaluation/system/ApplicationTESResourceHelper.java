@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  */
 @Component
 public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES, MutableApplicationTES, Long> {
-    private static final Logger mLogger = LoggerFactory.getLogger(ApplicationTESResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(ApplicationTESResourceHelper.class);
 
   @Autowired
   ApplicationTESManager mManager;
@@ -215,7 +215,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     String startDate = "", endDate = "", sStartDate = "", sEndDate = "";
     Boolean deadLineStatus = false, studentSubmitDeadline = false;
     String semesterName = getContentManager().getSemesterName(mSemesterManager.getActiveSemester(11).getId());
-    List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines("11", mSemesterManager.getActiveSemester(11).getId());
+    List<ApplicationTES> semesterParameterHead =
+        getContentManager().getDeadlines("11", mSemesterManager.getActiveSemester(11).getId());
     for(int i = 0; i < semesterParameterHead.size(); i++) {
       startDate = semesterParameterHead.get(i).getSemesterStartDate();
       endDate = semesterParameterHead.get(i).getSemesterEndDate();
@@ -886,7 +887,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     String sStartDate = "", sEndDate = "";
     Integer semesterId = 0;
     Boolean studentSubmitDeadline = false;
-    List<ApplicationTES> semesterParameterStudent = getContentManager().getDeadlines("12", mSemesterManager.getActiveSemester(11).getId());
+    List<ApplicationTES> semesterParameterStudent =
+        getContentManager().getDeadlines("12", mSemesterManager.getActiveSemester(11).getId());
     for(int j = 0; j < semesterParameterStudent.size(); j++) {
       semesterId = semesterParameterStudent.get(j).getSemester();
       sStartDate = semesterParameterStudent.get(j).getSemesterStartDate();

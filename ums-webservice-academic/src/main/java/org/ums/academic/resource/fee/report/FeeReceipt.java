@@ -33,12 +33,10 @@ public class FeeReceipt {
   @Autowired
   @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
-    @Autowired
+  @Autowired
   private ApplicationCCIManager mApplicationCCIManager;
   @Autowired
   private CourseManager mCourseManager;
-
-
 
   private Font universityNameFont, infoFont, tableFont, underLineFont;
   private java.util.List<StudentPayment> mPaymentList;
