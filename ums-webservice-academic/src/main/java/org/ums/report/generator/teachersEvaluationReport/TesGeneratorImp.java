@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.teacher.evaluation.system.ApplicationTESResourceHelper;
 import org.ums.academic.resource.teacher.evaluation.system.helper.ComparisonReport;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 public class TesGeneratorImp implements TesGenerator {
 
   @Autowired
+  @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
   @Autowired
   private ApplicationTESManager mApplicationTESManager;
@@ -407,12 +409,12 @@ public class TesGeneratorImp implements TesGenerator {
   }
 
   private int setValueInCell(Font tt, List<Report> reportList, int index, PdfPTable table1, int i) {
-    index=index+1;
-    table1.addCell(new Phrase(""+index,tt));
-    table1.addCell(new Phrase(""+reportList.get(i).getQuestionDetails(),tt));
-    table1.addCell(new Phrase(""+reportList.get(i).getTotalScore(),tt));
-    table1.addCell(new Phrase(""+reportList.get(i).getStudentNo(),tt));
-    table1.addCell(new Phrase(""+reportList.get(i).getAverageScore(),tt));
+    index = index + 1;
+    table1.addCell(new Phrase("" + index, tt));
+    table1.addCell(new Phrase("" + reportList.get(i).getQuestionDetails(), tt));
+    table1.addCell(new Phrase("" + reportList.get(i).getTotalScore(), tt));
+    table1.addCell(new Phrase("" + reportList.get(i).getStudentNo(), tt));
+    table1.addCell(new Phrase("" + reportList.get(i).getAverageScore(), tt));
     return index;
   }
 
