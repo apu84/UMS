@@ -40,12 +40,12 @@
     <link rel="stylesheet" data-ng-href="vendors/jquery-jqgrid-5.0.2/css/ui.jqgrid-bootstrap.css"/>
 
     <!-- Firebase Library-->
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-messaging.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"></script>
 
     <script>
         // Initialize Firebase
-        // TODO: Replace with your project's customized code snippet
         var config = {
             apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
             authDomain: "push-notification-demo-6b41d.firebaseapp.com",
@@ -67,16 +67,35 @@
                 console.log('Have Permission.');
                 return messaging.getToken()
             }).then(function (currentToken) {
-                console.log("current token is ---------");
-                console.log(currentToken);
-            }).catch(function(err) {
-                console.log('Unable to get permission to notify.', err);
-            })
+            console.log("current token is ---------");
+            console.log(currentToken);
+
+            console.log("Sending .....");
+            $.ajax({
+                crossDomain: true,
+                type: "POST",
+                async: true,
+                url: window.location.origin + '/ums-webservice-academic/fcmToken/save',
+                contentType: 'application/json',
+                data: '{"token":"' + currentToken + '","userId":"' + 'nab' + '"}',
+                success: function (response) {
+                    console.log("successfull in saving");
+                    console.log(response);
+                },
+                error: (function (error) {
+                    conosole.log("error in saving");
+                    console.log(error);
+                })
+            });
+        }).catch(function(err) {
+            console.log('Unable to get permission to notify.', err);
+        })
 
         messaging.onMessage(function(payload) {
             console.log('Message received. ', payload);
         });
     </script>
+
 
     <!-- Loading library javascript-->
     <script src="vendors/jquery-1.10.2.min.js"></script>

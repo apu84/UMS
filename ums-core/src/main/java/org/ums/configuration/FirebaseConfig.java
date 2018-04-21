@@ -36,11 +36,10 @@ public class FirebaseConfig {
   public void send() throws InterruptedException, ExecutionException {
 
     String registrationToken =
-        "f0_9crYJEzs:APA91bHaAXBw5mnIFOvAf0ywYMWdKzxhbajqOUUacdPyDanG2kbhn8bkuBhaYIRkXUunm38AkS3iTmFsrkCe4MxPg9uL8tv38ctt3V3ZTv4-_cZ3qfwrG5EWvpKah1gljFZmHestmSIw";
+        "cAqa_TX_czU:APA91bHAyy-aCIodDYXZvC8f5wpbBXUTBmGIW1UHPwu5XU88UfXwzOBKBOULVkwVW7U6BthkmHiiN4I7xszdrPHLq5BqU_6FZ8Zm_4RK1nN74MPOri2-kdpCwG19RV4YqvkLmiI14HEu";
 
     Message message =
-        Message.builder().putData("message", "hello firebase, this is from IUMS")
-            .setToken(registrationToken).build();
+        Message.builder().putData("message", "hello firebase, this is from IUMS").setToken(registrationToken).build();
 
     String response = FirebaseMessaging.getInstance().sendAsync(message).get();
     System.out.println("Sent message: " + response);

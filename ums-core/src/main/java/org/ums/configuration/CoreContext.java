@@ -539,4 +539,11 @@ public class CoreContext {
     branchUserPostTransaction.setNewIUMSAccountInfoEmailService(mNewIUMSAccountInfoEmailService);
     return branchUserPostTransaction;
   }
+
+  @Bean
+  FCMTokenManager fcmTokenManager() {
+    FCMTokenCache fcmTokenCache = new FCMTokenCache(mCacheFactory.getCacheManager());
+    fcmTokenCache.setManager(new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return fcmTokenCache;
+  }
 }
