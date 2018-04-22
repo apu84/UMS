@@ -89,7 +89,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @UmsLogMessage(message = "Get Questions Wise Report")
   public List<QuestionWiseReport> getQuestionWiseReport(@Context Request pRequest,
       @PathParam("dept-id") String pDeptId, @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
-      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Integer pQuestionId) {
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Long pQuestionId) {
     return mHelper.getQuestionWiseReport(pDeptId, pYear, pSemester, pSemesterId, pQuestionId, pRequest, mUriInfo);
   }
 
@@ -247,7 +247,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @UmsLogMessage(message = "Generate Question Wise Report PDF")
   public StreamingOutput createTesQuestionReportSuperAdmin(@PathParam("dept-id") String pDeptId,
       @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
-      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Integer pQuestionId) {
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Long pQuestionId) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream output) throws IOException, WebApplicationException {

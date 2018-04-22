@@ -4,6 +4,8 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.ApplicationTES;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Rumi on 2/20/2018.
  */
@@ -12,7 +14,7 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
 
   void setApplicationDate(final String pApplicationDate);
 
-  void setQuestionId(final Integer pQuestionId);
+  void setQuestionId(final Long pQuestionId);
 
   void setQuestionDetails(final String pQuestionDetails);
 

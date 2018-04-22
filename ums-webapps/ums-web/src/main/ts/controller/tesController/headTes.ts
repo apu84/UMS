@@ -215,7 +215,6 @@ module ums{
                console.log(this.getTotalRecords);
                console.log(this.facultyList);
                defer.resolve(json.entries);
-
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {
                console.error(response);

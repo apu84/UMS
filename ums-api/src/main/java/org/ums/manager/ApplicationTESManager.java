@@ -20,7 +20,7 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
 
-  Integer getObservationType(final Integer pQuestionId);
+  Integer getObservationType(final Long pQuestionId);
 
   List<ApplicationTES> getDeptList();
 
@@ -28,7 +28,7 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getParametersForReport(final String pTeacherId, final Integer pSemesterId);
 
-  String getQuestionDetails(final Integer pQuestionId);
+  String getQuestionDetails(final Long pQuestionId);
 
   List<ApplicationTES> getDeptListByFacultyId(final Integer pFacultyId);
 
@@ -45,7 +45,7 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 
-  Double getAverageScore(final String pTeacherId, final String pCourseId, final Integer pQuestionId,
+  Double getAverageScore(final String pTeacherId, final String pCourseId, final Long pQuestionId,
       final Integer pSemesterId);
 
   List<ApplicationTES> getDetailedResult(final String pTeacherId, final String pCourseId, final Integer pSemesterId);

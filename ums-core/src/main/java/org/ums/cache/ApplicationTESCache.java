@@ -109,12 +109,12 @@ public class ApplicationTESCache extends
   }
 
   @Override
-  public String getQuestionDetails(Integer pQuestionId) {
+  public String getQuestionDetails(Long pQuestionId) {
     return getManager().getQuestionDetails(pQuestionId);
   }
 
   @Override
-  public Integer getObservationType(Integer pQuestionId) {
+  public Integer getObservationType(Long pQuestionId) {
     return getManager().getObservationType(pQuestionId);
   }
 
@@ -124,7 +124,7 @@ public class ApplicationTESCache extends
   }
 
   @Override
-  public Double getAverageScore(String pTeacherId, String pCourseId, Integer pQuestionId, Integer pSemesterId) {
+  public Double getAverageScore(String pTeacherId, String pCourseId, Long pQuestionId, Integer pSemesterId) {
     return getManager().getAverageScore(pTeacherId, pCourseId, pQuestionId, pSemesterId);
   }
 

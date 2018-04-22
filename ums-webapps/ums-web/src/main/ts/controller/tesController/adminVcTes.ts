@@ -27,7 +27,7 @@ module ums{
     }
 
     interface IReport{
-        questionId:number;
+        questionId: string;
         questionDetails:string;
         totalScore:number;
         studentNo:number;
@@ -45,7 +45,7 @@ module ums{
     }
 
     interface IComment{
-        questionId:number;
+        questionId:string;
         questionDetails:string;
         comment:string[];
         observationType:number;
@@ -135,17 +135,7 @@ module ums{
                     private $sce: ng.ISCEService,
                     private $window: ng.IWindowService,
                     private semesterService: SemesterService,
-                    private facultyService: FacultyService,
-                    private programService: ProgramService,
-                    private $timeout: ng.ITimeoutService,
-                    private leaveTypeService: LeaveTypeService,
-                    private leaveApplicationService: LeaveApplicationService,
-                    private leaveApplicationStatusService: LeaveApplicationStatusService,
-                    private employeeService: EmployeeService,
-                    private additionalRolePermissionsService: AdditionalRolePermissionsService,
-                    private userService: UserService,
-                    private commonservice: CommonService,
-                    private attachmentService: AttachmentService){
+                   ){
             this.facultyName="";
             this.facultyId="";
             this.statusValue=1;

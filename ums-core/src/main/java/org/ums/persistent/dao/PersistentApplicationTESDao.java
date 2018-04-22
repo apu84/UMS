@@ -26,27 +26,25 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
-  String DELETE_ALL = "DELETE FROM APPLICATION_TES_SET_QUESTIONS";
-  String getAllQuestions =
-      "SELECT a.QUESTION_ID,a.QUESTION_DETAILS,a.OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS a,APPLICATION_TES_SET_QUESTIONS b WHERE  "
-          + "a.QUESTION_ID=b.QUESTION_ID AND b.SEMESTER_ID=?";
-  String setQuestion =
-      "Insert  into  APPLICATION_TES_SET_QUESTIONS (ID,QUESTION_ID,SEMESTER_ID,STATUS,APPLIED_ON)  values  (?,?,?,?,systimestamp)";
+  String DELETE_ALL = "DELETE FROM TES_SET_QUESTIONS";
+  String getAllQuestions = "SELECT a.ID,a.QUESTION,a.OBSERVATION_TYPE from TES_QUESTIONS a,TES_SET_QUESTIONS b WHERE  "
+      + "a.ID=b.ID AND b.SEMESTER_ID=?";
+  String setQuestion = "Insert  into  TES_SET_QUESTIONS (ID,SEMESTER_ID,INSERTED_ON)  values  (?,?,sysdate)";
   String addQuestion =
-      "Insert  into  APPLICATION_TES_QUESTIONS (ID,QUESTION_ID,QUESTION_DETAILS,SEMESTER_ID,OBSERVATION_TYPE,APPLIED_ON)  values  (?,?,?,?,?,systimestamp)";
+      "Insert  into  TES_QUESTIONS (ID,QUESTION,OBSERVATION_TYPE,INSERTED_ON)  values  (?,?,?,sysdate)";
 
   String INSERT_ONE =
-      "Insert  into  APPLICATION_TES_QINFO  (ID,QUESTION_ID,POINT,STUDENT_COMMENT,FACULTY_ID,OBSERVATION_TYPE,COURSE_ID,STUDENT_ID,SEMESTER_ID,APPLIED_ON)  values  (?,?,?,?,?,?,?,?,?,systimestamp)";
+      "Insert  into  TES_SCORE  (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,TEACHER_ID,QUESTION_ID,RATINGS,COMMENTS,INSERTED_ON) values  (?,?,?,?,?,?,?,?,sysdate)";
   String INSERT_ASSIGNED_COURSES =
-      "Insert  into  TES_COURSE_ASSIGN  (ID,COURSE_ID,TEACHER_ID,SEMESTER_ID,ASSIGNED_SECTION,DEPT_ID,STATUS,APPLIED_ON)  values  (?,?,?,?,?,?,?,systimestamp)";
+      "Insert  into  TES_SELECTED_COURSES  (ID,COURSE_ID,SEMESTER_ID,TEACHER_ID,DEPT_ID,ASSIGNED_SECTION,INSERTED_ON)  values  (?,?,?,?,?,?,sysdate)";
   String ALREADY_REVIEWED =
-      "SELECT  DISTINCT  COURSE_ID,STUDENT_ID,SEMESTER_ID,FACULTY_ID from APPLICATION_TES_QINFO WHERE STUDENT_ID=? AND SEMESTER_ID=?";
+      "SELECT  DISTINCT  COURSE_ID,STUDENT_ID,SEMESTER_ID,TEACHER_ID from TES_SCORE WHERE STUDENT_ID=? AND SEMESTER_ID=?";
   String getCoursesForMapping =
-      "SELECT COURSE_ID,TEACHER_ID,SEMESTER_ID,ASSIGNED_SECTION,STATUS FROM TES_COURSE_ASSIGN WHERE TEACHER_ID=? and SEMESTER_ID=?";
+      "SELECT COURSE_ID,TEACHER_ID,SEMESTER_ID,ASSIGNED_SECTION FROM TES_SELECTED_COURSES WHERE TEACHER_ID=? and SEMESTER_ID=?";
 
   String getAllReviewEligibleCoures =
       "SELECT DISTINCT  a.STUDENT_ID, a.SEMESTER_ID,a.COURSE_ID, b.COURSE_NO,b.COURSE_TITLE,c.TEACHER_ID,d.ASSIGNED_SECTION,e.FIRST_NAME,e.LAST_NAME "
-          + "FROM UG_REGISTRATION_RESULT a,MST_COURSE b,COURSE_TEACHER c,TES_COURSE_ASSIGN d,EMP_PERSONAL_INFO e "
+          + "FROM UG_REGISTRATION_RESULT a,MST_COURSE b,COURSE_TEACHER c,TES_SELECTED_COURSES d,EMP_PERSONAL_INFO e "
           + "WHERE "
           + "  a.SEMESTER_ID = ? ANd a.STUDENT_ID= ? AND b.COURSE_TYPE= ? AND a.COURSE_ID=b.COURSE_ID  AND "
           + "  a.SEMESTER_ID=c.SEMESTER_ID AND a.COURSE_ID=c.COURSE_ID AND  a.SEMESTER_ID=c.SEMESTER_ID AND c.\"SECTION\"= ? AND "
@@ -62,7 +60,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "MST_DEPT_OFFICE.DEPT_ID=a.DEPT_OFFICE";
 
   String getRecords =
-      "SELECT c.FIRST_NAME,c.LAST_NAME,b.COURSE_NO,b.COURSE_TITLE,a.SEMESTER_ID,a.ASSIGNED_SECTION,to_char(a.applied_on,'DD-MM-YYYY') applied_on FROM TES_COURSE_ASSIGN a,MST_COURSE b,EMP_PERSONAL_INFO c "
+      "SELECT c.FIRST_NAME,c.LAST_NAME,b.COURSE_NO,b.COURSE_TITLE,a.SEMESTER_ID,a.ASSIGNED_SECTION,to_char(a.applied_on,'DD-MM-YYYY') applied_on FROM TES_SELECTED_COURSES a,MST_COURSE b,EMP_PERSONAL_INFO c "
           + "WHERE   a.SEMESTER_ID=? AND  a.COURSE_ID=b.COURSE_ID AND a.TEACHER_ID=c.EMPLOYEE_ID AND a.DEPT_ID=?";
 
   String getTeachersInfo =
@@ -94,23 +92,24 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + " AND a.COURSE_ID=b.COURSE_ID AND b.COURSE_TYPE=1";
 
   String getDataForReadOnly =
-      " SELECT  a.QUESTION_ID,b.QUESTION_DETAILS, a.POINT,a.STUDENT_COMMENT,a.OBSERVATION_TYPE from APPLICATION_TES_QINFO a,APPLICATION_TES_QUESTIONS b "
-          + " WHERE a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=? AND a.FACULTY_ID=? AND a.QUESTION_ID=b.QUESTION_ID";
+      " SELECT  a.QUESTION_ID,b.QUESTION,a.RATINGS,a.COMMENTS,b.OBSERVATION_TYPE from TES_SCORE a,TES_QUESTIONS b "
+          + " WHERE a.STUDENT_ID=? AND a.SEMESTER_ID=?  AND a.COURSE_ID=? AND a.TEACHER_ID=? AND a.QUESTION_ID=b.ID";
 
   String getTotalStudentNo =
-      "SELECT  COUNT (DISTINCT STUDENT_ID) as STUDENT_NO from APPLICATION_TES_QINFO WHERE  FACULTY_ID= ? AND COURSE_ID= ? AND SEMESTER_ID= ?  ORDER BY STUDENT_ID";
+      "SELECT  COUNT (DISTINCT STUDENT_ID) as STUDENT_NO from TES_SCORE WHERE  TEACHER_ID=? AND COURSE_ID= ? AND SEMESTER_ID= ?  ORDER BY STUDENT_ID";
   String getAvgScore =
-      "SELECT  sum(POINT) as average  from APPLICATION_TES_QINFO WHERE FACULTY_ID= ? AND COURSE_ID= ? AND QUESTION_ID= ?  and SEMESTER_ID= ? ORDER BY STUDENT_ID,QUESTION_ID";
+      "SELECT  sum(RATINGS) as average  from TES_SCORE WHERE TEACHER_ID=? AND COURSE_ID= ? AND QUESTION_ID= ?  and SEMESTER_ID= ? ORDER BY STUDENT_ID,QUESTION_ID";
   String getDetailedScore =
-      "SELECT  STUDENT_ID,QUESTION_ID,POINT,OBSERVATION_TYPE,STUDENT_COMMENT from APPLICATION_TES_QINFO WHERE FACULTY_ID= ? AND COURSE_ID= ? AND SEMESTER_ID= ? ORDER BY STUDENT_ID,QUESTION_ID";
-  String getObservationType = "SELECT OBSERVATION_TYPE from APPLICATION_TES_QUESTIONS WHERE QUESTION_ID=?";
+      "SELECT  a.STUDENT_ID,a.QUESTION_ID,a.RATINGS,b.OBSERVATION_TYPE,a.COMMENTS from TES_SCORE a,TES_QUESTIONS b WHERE a.TEACHER_ID=? AND a.COURSE_ID= ? AND a.SEMESTER_ID= ? "
+          + " AND a.QUESTION_ID=b.ID ORDER BY a.STUDENT_ID,a.QUESTION_ID";
+  String getObservationType = "SELECT OBSERVATION_TYPE from TES_QUESTIONS WHERE ID=?";
 
-  String getQuestionDetails = "SELECT QUESTION_DETAILS from APPLICATION_TES_QUESTIONS WHERE QUESTION_ID=?";
+  String getQuestionDetails = "SELECT QUESTION from TES_QUESTIONS WHERE ID=?";
 
   String getSemesterNameList = "SELECT SEMESTER_ID,SEMESTER_NAME from MST_SEMESTER ORDER BY START_DATE DESC";
 
   String getAssignedReviewableCoursesList =
-      "SELECT DISTINCT  a.TEACHER_ID,a.SEMESTER_ID, a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.DEPT_ID from TES_COURSE_ASSIGN a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=b.COURSE_ID";
+      "SELECT DISTINCT  a.TEACHER_ID,a.SEMESTER_ID, a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.DEPT_ID from TES_SELECTED_COURSES a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=b.COURSE_ID";
 
   String getCourseDepartmentMap =
       "select PROGRAM_SHORT_NAME from MST_PROGRAM where PROGRAM_ID=( "
@@ -125,7 +124,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "          MST_DEPT_OFFICE.SHORT_NAME, "
           + "          a.DEPT_OFFICE, "
           + "          c.DESIGNATION_NAME "
-          + "          from EMPLOYEES a,EMP_PERSONAL_INFO b,MST_DESIGNATION c,MST_DEPT_OFFICE,TES_COURSE_ASSIGN d WHERE a.DEPT_OFFICE=?  AND a.EMPLOYEE_TYPE=1 AND "
+          + "          from EMPLOYEES a,EMP_PERSONAL_INFO b,MST_DESIGNATION c,MST_DEPT_OFFICE,TES_SELECTED_COURSES d WHERE a.DEPT_OFFICE=?  AND a.EMPLOYEE_TYPE=1 AND "
           + "          a.EMPLOYEE_ID=b.EMPLOYEE_ID AND a.DESIGNATION=c.DESIGNATION_ID AND "
           + "          MST_DEPT_OFFICE.DEPT_ID=a.DEPT_OFFICE AND d.TEACHER_ID=a.EMPLOYEE_ID AND d.SEMESTER_ID=?";
 
@@ -133,12 +132,12 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       "SELECT SEMESTER_ID,to_char(START_DATE,'DD-MM-YYYY') START_DATE,to_char(END_DATE,'DD-MM-YYYY') END_DATE from MST_PARAMETER_SETTING WHERE SEMESTER_ID=? and PARAMETER_ID=?";
 
   String getFacultyListForReport =
-      "select DISTINCT TEACHER_ID from TES_COURSE_ASSIGN WHERE  DEPT_ID=? AND SEMESTER_ID=?";
+      "select DISTINCT TEACHER_ID from TES_SELECTED_COURSES WHERE  DEPT_ID=? AND SEMESTER_ID=?";
 
-  String getAllFacultyListForReport = "select DISTINCT TEACHER_ID from TES_COURSE_ASSIGN WHERE SEMESTER_ID=?";
+  String getAllFacultyListForReport = "select DISTINCT TEACHER_ID from TES_SELECTED_COURSES WHERE SEMESTER_ID=?";
 
   String getParameterForReport =
-      "SELECT DISTINCT COURSE_ID,TEACHER_ID,SEMESTER_ID,DEPT_ID from TES_COURSE_ASSIGN WHERE  TEACHER_ID=? AND SEMESTER_ID=?";
+      "SELECT DISTINCT COURSE_ID,TEACHER_ID,SEMESTER_ID,DEPT_ID from TES_SELECTED_COURSES WHERE  TEACHER_ID=? AND SEMESTER_ID=?";
   String getDeptList = "SELECT DEPT_ID from MST_DEPT_OFFICE WHERE TYPE=1 ORDER  BY DEPT_ID";
 
   String getTotalRegisteredStudentForCourse =
@@ -148,12 +147,10 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= ? and "
           + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID)))";
 
-  String getQuestions =
-      "SELECT QUESTION_ID,QUESTION_DETAILS,SEMESTER_ID,OBSERVATION_TYPE FROM APPLICATION_TES_QUESTIONS";
-  String getQuestionSemesterMap =
-      "select QUESTION_ID,SEMESTER_ID,STATUS from APPLICATION_TES_SET_QUESTIONS WHERE SEMESTER_ID=?";
+  String getQuestions = "SELECT ID,QUESTION,OBSERVATION_TYPE FROM TES_QUESTIONS";
+  String getQuestionSemesterMap = "select ID,SEMESTER_ID from TES_SET_QUESTIONS WHERE SEMESTER_ID=?";
   String getSectionList =
-      "SELECT COURSE_ID,ASSIGNED_SECTION from TES_COURSE_ASSIGN WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY ASSIGNED_SECTION";
+      "SELECT COURSE_ID,ASSIGNED_SECTION from TES_SELECTED_COURSES WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY ASSIGNED_SECTION";
   String getAllSectionForSelectedCourse =
       "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
   String getDeptListByFacultyId = "SELECT DISTINCT  DEPT_ID FROM MST_PROGRAM WHERE CATEGORY_ID=?";
@@ -290,13 +287,13 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
-  public String getQuestionDetails(Integer pQuestionId) {
+  public String getQuestionDetails(Long pQuestionId) {
     String query = getQuestionDetails;
     return mJdbcTemplate.queryForObject(query, new Object[] {pQuestionId}, String.class);
   }
 
   @Override
-  public Integer getObservationType(Integer pQuestionId) {
+  public Integer getObservationType(Long pQuestionId) {
     String query = getObservationType;
     return mJdbcTemplate.queryForObject(query, new Object[] {pQuestionId}, Integer.class);
   }
@@ -308,7 +305,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
-  public Double getAverageScore(String pTeacherId, String pCourseId, Integer pQuestionId, Integer pSemesterId) {
+  public Double getAverageScore(String pTeacherId, String pCourseId, Long pQuestionId, Integer pSemesterId) {
     String query = getAvgScore;
     return mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pQuestionId, pSemesterId},
         Double.class);
@@ -359,13 +356,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   @Override
   public Long addQuestions(MutableApplicationTES pMutableList) {
     String query = addQuestion;
-    String getMax = "SELECT max(QUESTION_ID) from APPLICATION_TES_QUESTIONS";
-    Integer questionId = mJdbcTemplate.queryForObject(getMax, Integer.class);
-    questionId = questionId + 1;
-
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(query, id, questionId, pMutableList.getQuestionDetails(), pMutableList.getSemester(),
-        pMutableList.getObservationType());
+    mJdbcTemplate.update(query, id, pMutableList.getQuestionDetails(), pMutableList.getObservationType());
     return id;
   }
 
@@ -398,7 +390,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
 
   @Override
   public int delete(List<MutableApplicationTES> pMutableList) {
-    String query = DELETE_ALL + " WHERE QUESTION_ID=? AND SEMESTER_ID=?";
+    String query = DELETE_ALL + " WHERE ID=? AND SEMESTER_ID=?";
     List<Object[]> parameters = deleteParamList(pMutableList);
     return mJdbcTemplate.batchUpdate(query, parameters).length;
   }
@@ -417,9 +409,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getPoint(), app.getComment(),
-          app.getTeacherId(), app.getObservationType(), app.getReviewEligibleCourseId(), app.getStudentId(),
-          app.getSemester()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemester(), app.getStudentId(),
+          app.getReviewEligibleCourseId(), app.getTeacherId(), app.getQuestionId(), app.getPoint(), app.getComment(),});
     }
 
     return params;
@@ -428,8 +419,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   private List<Object[]> getInsertParamListForHeadTes(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourseId(), app.getTeacherId(),
-          app.getSemester(), app.getSection(), app.getDeptId(), app.getStatus()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getReviewEligibleCourseId(), app.getSemester(),
+          app.getTeacherId(), app.getDeptId(), app.getSection()});
     }
 
     return params;
@@ -438,7 +429,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   private List<Object[]> getInsertParamListForSetQuestions(List<MutableApplicationTES> pMutableApplicationTES) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationTES app : pMutableApplicationTES) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getQuestionId(), app.getSemester(), app.getStatus()});
+      params.add(new Object[] {app.getQuestionId(), app.getSemester()});
     }
 
     return params;
@@ -496,21 +487,23 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
-      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
-      application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
+      getData(pResultSet, application);
 
       return application;
     }
   }
+
+  private void getData(ResultSet pResultSet, PersistentApplicationTES application) throws SQLException {
+    application.setQuestionId(pResultSet.getLong("ID"));
+    application.setQuestionDetails(pResultSet.getString("QUESTION"));
+    application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
+  }
+
   class ApplicationTESRowMapperForGetMigrationQuestions implements RowMapper<MutableApplicationTES> {
     @Override
     public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
-      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
-      application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
-
+      getData(pResultSet, application);
       return application;
     }
   }
@@ -518,11 +511,11 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
-      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
+      application.setQuestionId(pResultSet.getLong("Question_ID"));
+      application.setQuestionDetails(pResultSet.getString("QUESTION"));
       application.setObservationType((pResultSet.getInt("OBSERVATION_TYPE")));
-      application.setPoint(pResultSet.getInt("POINT"));
-      application.setComment(pResultSet.getString("STUDENT_COMMENT"));
+      application.setPoint(pResultSet.getInt("RATINGS"));
+      application.setComment(pResultSet.getString("COMMENTS"));
 
       return application;
     }
@@ -571,9 +564,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
-      application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
-      application.setSemester(pResultSet.getInt("SEMESTER_ID"));
+      application.setQuestionId(pResultSet.getLong("ID"));
+      application.setQuestionDetails(pResultSet.getString("QUESTION"));
       application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
       return application;
     }
@@ -600,9 +592,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
+      application.setQuestionId(pResultSet.getLong("ID"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
-      application.setStatus(pResultSet.getInt("STATUS"));
       return application;
     }
   }
@@ -641,10 +632,10 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
       application.setStudentId(pResultSet.getString("STUDENT_ID"));
-      application.setQuestionId(pResultSet.getInt("QUESTION_ID"));
-      application.setPoint(pResultSet.getInt("POINT"));
+      application.setQuestionId(pResultSet.getLong("QUESTION_ID"));
+      application.setPoint(pResultSet.getInt("RATINGS"));
       application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
-      application.setComment(pResultSet.getString("STUDENT_COMMENT"));
+      application.setComment(pResultSet.getString("COMMENTS"));
       return application;
     }
   }
@@ -687,7 +678,6 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setTeacherId(pResultSet.getString("TEACHER_ID"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
-      application.setStatus(pResultSet.getInt("STATUS"));
       return application;
     }
   }
@@ -726,7 +716,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
       application.setStudentId(pResultSet.getString("STUDENT_ID"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
-      application.setTeacherId(pResultSet.getString("FACULTY_ID"));
+      application.setTeacherId(pResultSet.getString("TEACHER_ID"));
       return application;
     }
   }

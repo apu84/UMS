@@ -154,7 +154,7 @@ public class TesGeneratorImp implements TesGenerator {
       double cRoomObservation=0,noncRoomObservation=0;
       Integer countercR=0, counterncR=0;
       double totalPointsObtype1=0, totalStudentsObtype1=0, totalPointsObtype2=0, totalStudentsObtype2=0;
-    HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
+    HashMap<Long,Double> mapForCalculateResult=new HashMap<Long,Double>();
     List<Report> reportList= new ArrayList<Report>();
     List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(pSemesterId);
      if(studentNo !=0){
@@ -170,7 +170,7 @@ public class TesGeneratorImp implements TesGenerator {
 
        });
        for(Map.Entry m:mapForCalculateResult.entrySet()){
-         Integer questionId=(Integer)m.getKey();
+         Long questionId=(Long)m.getKey();
          if(mApplicationTESManager.getObservationType(questionId) ==1){
            countercR++;
            cRoomObservation=cRoomObservation+(double)m.getValue();
@@ -211,7 +211,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable table= new PdfPTable(5);
     table.setWidthPercentage(100);
-    table.setWidths(new float[] { 1, 8,1,1,1 });
+    table.setWidths(new float[] { 1, 15,3,3,2 });
     table.addCell("SL");
     table.addCell("Questions");
     table.addCell("Total Points");
@@ -239,7 +239,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable subset= new PdfPTable(5);
     subset.setWidthPercentage(100);
-    subset.setWidths(new float[] { 1, 8,1,1,1 });
+    subset.setWidths(new float[] { 1, 15,3,3,2 });
     subset.addCell("");
     subset.addCell("");
     subset.addCell(""+totalPointsObtype1);
@@ -269,7 +269,7 @@ public class TesGeneratorImp implements TesGenerator {
     //Non classRoom
     PdfPTable table1= new PdfPTable(5);
     table1.setWidthPercentage(100);
-    table1.setWidths(new float[] { 1, 8,1,1,1 });
+    table1.setWidths(new float[] { 1, 15,3,3,2 });
     table1.addCell("SL");
     table1.addCell("Questions");
     table1.addCell("Total Points");
@@ -291,7 +291,7 @@ public class TesGeneratorImp implements TesGenerator {
     //
     PdfPTable subset1= new PdfPTable(5);
     subset1.setWidthPercentage(100);
-    subset1.setWidths(new float[] { 1, 8,1,1,1 });
+    subset1.setWidths(new float[] { 1, 15,3,3,2 });
     subset1.addCell("");
     subset1.addCell("");
     subset1.addCell(""+totalPointsObtype2);
@@ -306,7 +306,7 @@ public class TesGeneratorImp implements TesGenerator {
     document.add(paragraph);
     PdfPTable tableGreen= new PdfPTable(5);
     tableGreen.setWidthPercentage(100);
-    tableGreen.setWidths(new float[] { 1, 8,1,1,1 });
+    tableGreen.setWidths(new float[] { 1, 15,3,3,2 });
     PdfPCell cell=new PdfPCell(new Paragraph("   "));
     cell.setColspan(5);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -345,7 +345,7 @@ public class TesGeneratorImp implements TesGenerator {
 
     PdfPTable tableQuestions= new PdfPTable(2);
     tableQuestions.setWidthPercentage(100);
-    tableQuestions.setWidths(new float[] { 1, 10});
+    tableQuestions.setWidths(new float[] { 1, 20});
     PdfPCell pdfWordCellRow1 = new PdfPCell();
     PdfPCell pdfWordCellRow2 = new PdfPCell();
     PdfPCell pdfWordCellRow3,pdfWordCellRow4;
@@ -421,13 +421,13 @@ public class TesGeneratorImp implements TesGenerator {
   private void getComment(String pCourseId, String pTeacherId, Integer pSemesterId, List<ApplicationTES> applications, List<StudentComment> commentList) {
     List<ApplicationTES> getDetailedResult;
     for(int i = 0; i<applications.size(); i++){
-      Integer questionId=applications.get(i).getQuestionId();
+      Long questionId=applications.get(i).getQuestionId();
       Integer observationType=mApplicationTESManager.getObservationType(questionId);
       if(observationType ==3){
         String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
         getDetailedResult=mApplicationTESManager.getDetailedResult(pTeacherId,pCourseId,pSemesterId).
                 stream().
-                filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+                filter(a->a.getComment() !=null && a.getQuestionId().equals(questionId)).collect(Collectors.toList());
         int size=getDetailedResult.size();
         mApplicationTESResourceHelper.setCommentToList(getDetailedResult,commentList,questionId,observationType,questionDetails,size);
 
@@ -709,7 +709,7 @@ public class TesGeneratorImp implements TesGenerator {
   }
 
   @Override
-  public void getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester, Integer pSemesterId, Integer pQuestionId,OutputStream pOutputStream) throws IOException, DocumentException {
+  public void getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester, Integer pSemesterId, Long pQuestionId,OutputStream pOutputStream) throws IOException, DocumentException {
     mDateFormat = new DateFormat("dd MMM YYYY");
     Document document = new Document(PageSize.A4.rotate());
     ByteArrayOutputStream baos = new ByteArrayOutputStream();

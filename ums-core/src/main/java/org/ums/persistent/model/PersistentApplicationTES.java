@@ -5,6 +5,8 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 import org.ums.manager.*;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Rumi on 2/20/2018.
  */
@@ -22,7 +24,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
   private Long mId;
   private String mApplicationDate;
-  private Integer mQuestionID;
+  private Long mQuestionID;
   private String mQuestionDetails;
   private String mReviewEligibleCoures;
   private String mSemesterName;
@@ -301,7 +303,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
 
   @Override
-  public void setQuestionId(Integer pQuestionId) {
+  public void setQuestionId(Long pQuestionId) {
     mQuestionID = pQuestionId;
   }
 
@@ -311,7 +313,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
 
   @Override
-  public Integer getQuestionId() {
+  public Long getQuestionId() {
     return mQuestionID;
   }
 

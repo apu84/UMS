@@ -4,7 +4,7 @@ package org.ums.academic.resource.teacher.evaluation.system.helper;
  * Created by Monjur-E-Morshed on 3/14/2018.
  */
 public class StudentComment {
-  private Integer questionId;
+  private Long questionId;
   private String questionDetails;
   private String[] comments;
   private Integer observationType;
@@ -13,7 +13,7 @@ public class StudentComment {
 
   }
 
-  public StudentComment(Integer questionId, String[] comments, Integer observationType, String questionDetails) {
+  public StudentComment(Long questionId, String[] comments, Integer observationType, String questionDetails) {
     this.questionId = questionId;
     this.comments = comments;
     this.observationType = observationType;
@@ -28,11 +28,11 @@ public class StudentComment {
     this.questionDetails = questionDetails;
   }
 
-  public Integer getQuestionId() {
+  public Long getQuestionId() {
     return questionId;
   }
 
-  public void setQuestionId(Integer questionId) {
+  public void setQuestionId(Long questionId) {
     this.questionId = questionId;
   }
 

@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableApplicationTES;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Created by Md Golam Muktadir on 2/20/2018.
@@ -13,7 +14,7 @@ import java.io.Serializable;
 public interface ApplicationTES extends Serializable, LastModifier, EditType<MutableApplicationTES>, Identifier<Long> {
   String getApplicationDate();
 
-  Integer getQuestionId();
+  Long getQuestionId();
 
   String getQuestionDetails();
 

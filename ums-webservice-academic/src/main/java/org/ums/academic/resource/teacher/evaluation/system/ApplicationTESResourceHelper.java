@@ -269,9 +269,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   private void checkMigrationValidity(List<MutableApplicationTES> applications, List<ApplicationTES> questionSemesterMap) {
     for(int i=0;i<applications.size();i++){
-        Integer qId=applications.get(i).getQuestionId();
+        Long qId=applications.get(i).getQuestionId();
         Integer size=0;
-        size=questionSemesterMap.stream().filter(a->a.getQuestionId()==qId).collect(Collectors.toList()).size();
+        size=questionSemesterMap.stream().filter(a->a.getQuestionId().equals(qId)).collect(Collectors.toList()).size();
         if(size==1){
             applications.get(i).setStatus(1);
         }else{
@@ -542,7 +542,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       double cRoombservation=0,noncRoomObservation=0,score=0;
       Integer countercR=0,counterncR=0;
       DecimalFormat newFormat = new DecimalFormat("#.##");
-      HashMap<Integer,Double> mapForCalculateResult=new HashMap<Integer,Double>();
+      HashMap<Long,Double> mapForCalculateResult=new HashMap<Long,Double>();
       if(studentNo !=0){
           applications.forEach(a->{
               Integer observationType=getContentManager().getObservationType(a.getQuestionId());
@@ -553,7 +553,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
               }
           });
           for(Map.Entry m:mapForCalculateResult.entrySet()){
-              Integer questionId=(Integer)m.getKey();
+              Long questionId=(Long)m.getKey();
               if(getContentManager().getObservationType(questionId) ==1){
                   countercR++;
                   cRoombservation=cRoombservation+(double)m.getValue();
@@ -689,7 +689,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public List<QuestionWiseReport> getQuestionWiseReport(final String pDeptId, final Integer pYear,
-      final Integer pSemester, final Integer pSemesterId, final Integer pQuestionId, final Request pRequest,
+      final Integer pSemester, final Integer pSemesterId, final Long pQuestionId, final Request pRequest,
       final UriInfo pUriInfo) {
 
     DecimalFormat newFormat = new DecimalFormat("#.##");
@@ -700,7 +700,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   @NotNull
   public List<QuestionWiseReport> getQuestionWiseReports(String pDeptId, Integer pYear, Integer pSemester,
-      Integer pSemesterId, Integer pQuestionId, DecimalFormat newFormat) {
+      Integer pSemesterId, Long pQuestionId, DecimalFormat newFormat) {
     List<QuestionWiseReport> reportList = new ArrayList<QuestionWiseReport>();
     List<ApplicationTES> getCourses =
         getContentManager().getCourseForQuestionWiseReport(pDeptId, pYear, pSemester, pSemesterId);
@@ -792,13 +792,14 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       List<StudentComment> commentList= new ArrayList<StudentComment>();
 
         for(int i=0;i<applications.size();i++){
-            Integer questionId=applications.get(i).getQuestionId();
+            Long questionId=applications.get(i).getQuestionId();
             Integer observationType=getContentManager().getObservationType(questionId);
             if(observationType ==3){
                 String questionDetails=getContentManager().getQuestionDetails(questionId);
+                getDetailedResult=getContentManager().getDetailedResult(pTeacherId,pCourseId,pSemesterId);
                 getDetailedResult=getContentManager().getDetailedResult(pTeacherId,pCourseId,pSemesterId).
                         stream().
-                        filter(a->a.getComment() !=null && a.getQuestionId()==questionId).collect(Collectors.toList());
+                        filter(a->a.getComment() !=null && a.getQuestionId().equals(questionId)).collect(Collectors.toList());
                 int size=getDetailedResult.size();
 
               setCommentToList(getDetailedResult, commentList, questionId, observationType, questionDetails, size);
@@ -808,7 +809,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     }
 
   public void setCommentToList(List<ApplicationTES> getDetailedResult, List<StudentComment> commentList,
-      Integer questionId, Integer observationType, String questionDetails, int size) {
+      Long questionId, Integer observationType, String questionDetails, int size) {
     if(getDetailedResult.size() != 0) {
       String comments[] = new String[size];
       for(int j = 0; j < size; j++) {

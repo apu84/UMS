@@ -26,7 +26,7 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
       pBuilder.add("applicationDate", pReadOnly.getApplicationDate());
 
     if(pReadOnly.getQuestionId() != null)
-      pBuilder.add("questionId", pReadOnly.getQuestionId());
+      pBuilder.add("questionId", (pReadOnly.getQuestionId().toString()));
 
     if(pReadOnly.getPoint() != null)
       pBuilder.add("point", pReadOnly.getPoint());
@@ -104,7 +104,7 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
   @Override
   public void build(MutableApplicationTES pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("questionId"))
-      pMutable.setQuestionId(pJsonObject.getInt("questionId"));
+      pMutable.setQuestionId(Long.parseLong(pJsonObject.getString("questionId")));
 
     if(pJsonObject.containsKey("questionDetails"))
       pMutable.setQuestionDetails(pJsonObject.getString("questionDetails"));
