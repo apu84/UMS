@@ -720,16 +720,18 @@ module ums {
          */
         private setSelect2ValuesForBulkItems(): void {
             let data = $("#configSupplierName").select2("data");
-            let searchTerm = data.text;
-            $('#bulkItemContainer').find('.select2-input').each(function (index) {
-                let inputElement: any = $(this)[0];
-                let inputElementId = inputElement.id;
+            if(data != null) {
+                let searchTerm = data.text;
+                $('#bulkItemContainer').find('.select2-input').each(function (index) {
+                    let inputElement: any = $(this)[0];
+                    let inputElementId = inputElement.id;
 
-                $("#bulkContributorName" + index).select2("search", searchTerm);
-                let e = jQuery.Event("keydown");
-                e.which = 13;
-                $("#" + inputElementId).trigger(e);
-            });
+                    $("#bulkContributorName" + index).select2("search", searchTerm);
+                    let e = jQuery.Event("keydown");
+                    e.which = 13;
+                    $("#" + inputElementId).trigger(e);
+                });
+            }
         }
 
 
