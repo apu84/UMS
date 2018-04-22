@@ -1,25 +1,15 @@
 package org.ums.persistent.dao.library;
 
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.library.ItemDaoDecorator;
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.StudentGradeDto;
-import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.library.Item;
-import org.ums.domain.model.immutable.library.Supplier;
-import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.mutable.library.MutableItem;
-import org.ums.domain.model.mutable.library.MutableSupplier;
+import org.ums.enums.library.AcquisitionType;
 import org.ums.enums.library.ItemStatus;
 import org.ums.generator.IdGenerator;
-import org.ums.persistent.dao.PersistentExamGradeDao;
-import org.ums.persistent.model.PersistentTeacher;
 import org.ums.persistent.model.library.PersistentItem;
-import org.ums.persistent.model.library.PersistentSupplier;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,19 +21,19 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentItemDao extends ItemDaoDecorator {
   static String SELECT_ALL =
-      "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, TO_CHAR(ACCESSION_DATE,'DD-MM-YYYY') ACCESSION_DATE, BARCODE, CURRENCY,"
+      "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, TO_CHAR(ACCESSION_DATE,'DD-MM-YYYY') ACCESSION_DATE, BARCODE, CURRENCY, ACQUISITION_TYPE, "
           + "PRICE, SUPPLIER, INTERNAL_NOTE,  STATUS, INSERTED_BY, INSERTED_ON, "
           + "   LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED FROM ITEMS ";
 
   static String UPDATE_ONE =
-      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, CURRENCY = ?, PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?, LAST_UPDATED_BY=?, "
+      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, CURRENCY = ?,  ACQUISITION_TYPE=?,  PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?, LAST_UPDATED_BY=?, "
           + "   LAST_UPDATED_ON=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
-      "INSERT INTO ITEMS(ID, MFN, COPY_NUMBER, ACCESSION_NUMBER, ACCESSION_DATE, BARCODE, CURRENCY, PRICE, SUPPLIER, INTERNAL_NOTE, "
+      "INSERT INTO ITEMS(ID, MFN, COPY_NUMBER, ACCESSION_NUMBER, ACCESSION_DATE, BARCODE, CURRENCY, ACQUISITION_TYPE, PRICE, SUPPLIER, INTERNAL_NOTE, "
           + "   STATUS, INSERTED_BY, INSERTED_ON, LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED)  " // 15
           // Fields
-          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
+          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
   static String DELETE_ONE = "DELETE FROM ITEMS ";
@@ -77,8 +67,9 @@ public class PersistentItemDao extends ItemDaoDecorator {
   public int update(final MutableItem pItem) {
     String query = UPDATE_ONE + "   Where ID= ? ";
     return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
-        pItem.getBarcode(), pItem.getCurrencyId(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(),
-        pItem.getStatus().getId(), pItem.getCirculationStatus(), "", "", pItem.getId());
+        pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType() == null ? null : pItem
+            .getAcquisitionType().getId(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(), pItem
+            .getStatus().getId(), pItem.getCirculationStatus(), "", "", pItem.getId());
   }
 
   @Override
@@ -86,8 +77,9 @@ public class PersistentItemDao extends ItemDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     pItem.setId(id);
     mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
-        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getCurrencyId(), pItem.getPrice(), pItem.getSupplierId(),
-        pItem.getInternalNote(), pItem.getStatus().getId(), "insert", "update", 0);
+        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType().getId(),
+        pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(), pItem.getStatus().getId(), "insert",
+        "update", 0);
 
     return id;
   }
@@ -172,6 +164,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
       item.setLastUpdatedBy(resultSet.getString("LAST_UPDATED_BY"));
       item.setLastUpdatedOn(resultSet.getString("LAST_UPDATED_ON"));
       item.setCirculationStatus(resultSet.getInt("CIRCULATION_STATUS"));
+      item.setAcquisitionType(AcquisitionType.get(resultSet.getInt("ACQUISITION_TYPE")));
       item.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
       AtomicReference<Item> atomicReference = new AtomicReference<>(item);

@@ -50,8 +50,6 @@ module ums {
         statusName: string;
         bindingType: number;
         bindingTypeName: string;
-        acqType: number;
-        acqTypeName: string;
         title: string;
         subTitle: string;
         gmd: string;
@@ -106,6 +104,8 @@ module ums {
         status: number;
         statusName: string;
         currency: number;
+        acqType: number;
+        acqTypeName: string;
         circulationStatus: number;
     }
 

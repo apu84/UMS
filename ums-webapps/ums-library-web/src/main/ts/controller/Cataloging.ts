@@ -170,9 +170,10 @@ module ums {
             this.setMaterialTypeName(1);
             $scope.record.status = 0;
             $scope.record.bindingType = Utils.NUMBER_SELECT;
-            $scope.record.acqType = Utils.NUMBER_SELECT;
+
 
             $scope.item = <IItem> {};
+            $scope.item.acqType = Utils.NUMBER_SELECT;
             $scope.supplier = <ISupplier> {};
             $scope.item.status = 2;
             $scope.item.currency = 1;
@@ -182,6 +183,7 @@ module ums {
 
             $scope.bulk.config.currency = 1;
             $scope.bulk.config.status = 2;
+            $scope.bulk.config.acqType = Utils.NUMBER_SELECT;
 
 
             $scope.record.contributorList = Array<IContributor>();
@@ -227,6 +229,7 @@ module ums {
         private resetItemForm(): void {
             this.$scope.item = <IItem> {};
             this.$scope.item.currency = 1;
+            this.$scope.item.acqType = Utils.NUMBER_SELECT;
             this.$scope.data.itemReadOnlyMode = false;
             $('#supplier').select2('enable');
             $('#supplier').select2('data', null)
@@ -849,7 +852,6 @@ module ums {
             this.$scope.record.language = 1;
             this.$scope.record.status = 0;
             this.$scope.record.bindingType = 1;
-            this.$scope.record.acqType = 1;
             this.$scope.record.language = 1;
             let offSet = (new Date).getMilliseconds();
             this.$scope.record.title = "Material Title " + offSet;
@@ -967,8 +969,6 @@ module ums {
             this.httpClient.get("/ums-webservice-account/account/definition/currency/all", HttpClient.MIME_TYPE_JSON,
                 (response: any) => {
                 this.$scope.currencies = response;
-
-                console.log(this.$scope.currencies);
             });
         }
     }
