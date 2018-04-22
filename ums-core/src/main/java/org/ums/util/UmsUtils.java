@@ -85,6 +85,11 @@ public class UmsUtils {
     return fDate;
   }
 
+  public static Date getDateWithoutTime(Date pDate) throws Exception {
+    String dateStr = formatDate(pDate, "dd-MM-yyyy");
+    return convertToDate(dateStr, "dd-MM-yyyy");
+  }
+
   public static String formatDate(Date date, String outputFormat) {
     Format formatter = new SimpleDateFormat(outputFormat);
     return formatter.format(date);
