@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.ums.cache.CacheFactory;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.configuration.UMSContext;
@@ -34,7 +36,9 @@ import org.ums.usermanagement.user.UserManager;
 
 @Configuration
 @EnableAsync
+@EnableWebSocketMessageBroker
 @EnableScheduling
+@EnableWebMvc
 @ComponentScan(basePackages = "org.ums")
 @Import({UMSContext.class})
 @ImportResource({"classpath*:services-context.xml", "classpath*:spring-config-shiro.xml",

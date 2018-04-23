@@ -12,6 +12,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/zabuto_calendar.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap-switch.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/uri.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/sock.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/stomp.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/ngStomp.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-cookies.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.jqGrid.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-ui-sortable.d.ts'/>

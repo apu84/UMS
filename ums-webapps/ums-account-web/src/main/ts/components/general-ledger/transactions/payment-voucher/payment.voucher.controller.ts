@@ -3,9 +3,8 @@ module ums {
 
 
   import IPaymentVoucher = ums.IPaymentVoucher;
-
   export class PaymentVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', '$stomp'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -52,7 +51,8 @@ module ums {
                 private currencyConversionService: CurrencyConversionService,
                 private accountBalanceService: AccountBalanceService,
                 private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService,
-                private voucherNumberControlService: VoucherNumberControlService) {
+                private voucherNumberControlService: VoucherNumberControlService,
+                private $stomp: ngStomp) {
       this.initialize();
     }
 
@@ -71,6 +71,19 @@ module ums {
       this.getAccounts();
       this.getCurrencies();
       this.getPaginatedVouchers();
+      this.initializeWebSocketConnection();
+    }
+
+    public initializeWebSocketConnection() {
+      console.log("In the initialization of web socket connection");
+      let ws = new SockJS("chat");
+      let stompClient: any;
+      stompClient.subscribe("/topic/message", (message) => {
+        console.log("message");
+        console.log(message);
+      });
+      
+
     }
 
 
@@ -87,7 +100,6 @@ module ums {
       defer.resolve(allow);
       return defer.promise;
     }
-
 
 
     public searchVoucher() {

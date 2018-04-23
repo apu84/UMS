@@ -63,7 +63,8 @@ public class MatchTwoFA extends Resource {
         mTwoFATokenManager.updateWrongTryCount(Long.valueOf(state));
         TwoFAToken token = mTwoFATokenManager.get(Long.valueOf(state));
         if(token.getTryCount() > mUMSConfiguration.getTwoFATokenAllowableWrongTry()) {
-          mLogger.debug("[{}]: Excessive wrong attempt detected for OTP", SecurityUtils.getSubject().getPrincipal().toString());
+          mLogger.debug("[{}]: Excessive wrong attempt detected for OTP", SecurityUtils.getSubject().getPrincipal()
+              .toString());
           throw new ExcessiveAttemptsException();
         }
         mLogger.info("[{}]: Provided wrong OTP", SecurityUtils.getSubject().getPrincipal().toString());

@@ -10,6 +10,9 @@
 /// <reference path='lib/bootstrap.selectpicker.d.ts'/>
 /// <reference path='lib/zabuto_calendar.d.ts'/>
 /// <reference path='lib/bootstrap-switch.d.ts'/>
+/// <reference path='lib/sock.d.ts'/>
+/// <reference path='lib/stomp.d.ts'/>
+/// <reference path='lib/ngStomp.d.ts'/>
 /// <reference path='lib/uri.d.ts'/>
 /// <reference path='lib/angular-cookies.d.ts'/>
 /// <reference path='lib/jquery.jqGrid.d.ts'/>

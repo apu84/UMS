@@ -17,8 +17,8 @@ module ums {
     'ui.grid',
     'ui.select',
     'angularAccounting',
-    'ngHandsontable'
-
+    'ngHandsontable',
+    'ngStomp'
   ]);
 
 

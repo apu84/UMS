@@ -71,6 +71,9 @@
         <include>org.springframework.integration:spring-integration-ftp</include>
         <include>org.springframework.integration:spring-integration-file</include>
         <include>org.springframework.kafka:spring-kafka</include>
+        <include>org.springframework:spring-websocket</include>
+        <include>org.springframework:spring-webmvc</include>
+        <include>org.springframework:spring-messaging</include>
         <include>org.aspectj:aspectjrt</include>
         <include>org.aspectj:aspectjweaver</include>
         <include>io.reactivex.rxjava2:rxjava</include>

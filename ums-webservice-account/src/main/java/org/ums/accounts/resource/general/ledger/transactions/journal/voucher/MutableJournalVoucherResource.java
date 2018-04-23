@@ -1,8 +1,10 @@
 package org.ums.accounts.resource.general.ledger.transactions.journal.voucher;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.ums.domain.model.dto.notification.NotificationMessage;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
-import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.logs.UmsLogMessage;
 import org.ums.manager.accounts.AccountTransactionManager;
 
@@ -26,7 +28,14 @@ public class MutableJournalVoucherResource {
   @POST
   @Path("/save")
   public List<AccountTransaction> save(JsonArray pJsonArray) throws Exception {
+    send(new NotificationMessage("Journal Voucher", "Data is saved"));
     return mJournalVoucherResourceHelper.save(pJsonArray);
+  }
+
+  @MessageMapping("/chat")
+  @SendTo("/topic/messages")
+  public NotificationMessage send(NotificationMessage pNotificationMessage) throws Exception {
+    return pNotificationMessage;
   }
 
   @PUT
