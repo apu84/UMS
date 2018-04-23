@@ -66,18 +66,26 @@
                         <tbody>
                         <tr data-ng-repeat="h in vm.holidays">
                             <td>{{h.holidayTypeName}}</td>
-                            <td>
+                            <td ng-if="vm.enableEdit">
                                 <div date-picker date-model="h.fromDate" date-format="dd/MM/yyyy"
-                                     disable="!vm.enableEdit" date-changed="vm.dateChanged()"></div>
-                            </td>
-                            <td>
-                                <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy" disable="!vm.enableEdit"
                                      date-changed="vm.dateChanged()"></div>
+                            </td>
+                            <td ng-if="!vm.enableEdit">
+                                <p><b>{{h.fromDate}}</b></p>
+                            </td>
+                            <td ng-if="vm.enableEdit">
+                                <div date-picker date-model="h.toDate" date-format="dd/MM/yyyy"
+                                     date-changed="vm.dateChanged()"></div>
+                            </td>
+                            <td ng-if="!vm.enableEdit">
+                                <p><b>{{h.toDate}}</b></p>
                             </td>
                             <td>{{h.duration}}</td>
                             <td data-ng-if="vm.enableEdit">
                                 <div class="checkbox" align="center"><input type="checkbox"
-                                                                            data-ng-model="h.enable"></div>
+                                                                            data-ng-model="h.enable"
+                                                                            data-ng-change="vm.enableOptionClicked()">
+                                </div>
                             </td>
                         </tr>
                         </tbody>
