@@ -197,36 +197,27 @@
 
 </div>
 <div id="bbcd">
-    <div class="row" style="clear: both;margin-top: 40px;">
-        <div class="col-md-8">
+    <div style="clear: both;margin-top: 40px;">
+        <div class="row">
+            <div class="col-md-6">
 
-            <div style="background-color:#E6F0F2;border: 1px solid #B9D8D9;border-radius: 5px 5px 0 0;color: black;font-size: 100%;padding: .4em 0 .4em 1em;min-height: 50px;">
-                <strong> Total {{data.totalRecord}} records found.
-                    <!--26 result(s) found for 'kw,wrdl: work'.--></strong>
+                <div style="background-color:#E6F0F2;border: 1px solid #B9D8D9;border-radius: 5px 5px 0 0;color: black;font-size: 100%;padding: .4em 0 .4em 1em;min-height: 50px;">
+                    <strong> Total {{data.totalRecord}} records found.
+                        <!--26 result(s) found for 'kw,wrdl: work'.--></strong>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="text-right">
-                <!--
-                <ul class="pagination mtm mbm">
-                    <li><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li class="active"><a href="#">5</a></li>
-                    <li class="disabled"><a href="#">&raquo;</a></li>
-                </ul>
-                -->
-                <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
-                                         on-page-change="pageChanged(newPageNumber)"
-                                         template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
+                                             on-page-change="pageChanged(newPageNumber)"
+                                             template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div style="margin-top: 0px;">
+            <div style="margin-top: -20px;margin-bottom: -35px;">
                 <table class="table table-bordered table-striped table-condensed cf">
                     <thead class="cf">
                     <tr>
@@ -239,36 +230,39 @@
                     <tr dir-paginate="rec in recordList | itemsPerPage: data.itemPerPage"
                         current-page="pagination.currentPage" total-items="data.totalRecord"
                         pagination-id="mainRecordPaginator">
-                        <td><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}. </span></td>
+                        <td><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}. </span>
+                        </td>
                         <td>
 
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
                                        data-ng-click="recordDetails($index)"
-                                            href="javascript:void()" class="title">{{rec.title}}</a>
-                                </div>
-                                <div class="col-md-3">
-                                    <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
-                                       href="javascript:void()">
-                                        <img src="https://cdn3.iconfinder.com/data/icons/outline-location-icon-set/64/Library_1-128.png"
-                                             height="20" width="20"/>
-                                    </a>
-                                    | <a href=""
-                                         data-ng-click="navigateRecord('view', rec.mfnNo, pagination.currentPage, $index)">View
-                                    record</a>
-                                    | <a href=""
-                                         data-ng-click="navigateRecord('edit', rec.mfnNo, pagination.currentPage, $index)">Edit
-                                    record</a>
-                                    <!--| <a href=""
-                                                     data-ng-click="navigateRecord(rec.mfnNo, pagination.currentPage, $index)">Add/Edit
-                                    item(s)</a>-->
+                                       href="javascript:void()" class="title">[{{rec.materialTypeName}}] &nbsp;{{rec.title}}</a>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
-                                    [{{rec.materialTypeName}}] &nbsp; [{{rec.callNo}}]
+                                <div class="col-md-6">
+                                    [{{rec.callNo}}]
+                                </div>
+                                <div class="col-md-6">
+                                    <div align="right">
+                                        <a style="cursor: pointer" data-toggle="modal" data-target="#bookPreview"
+                                           href="javascript:void()">
+                                            <img src="https://cdn3.iconfinder.com/data/icons/outline-location-icon-set/64/Library_1-128.png"
+                                                 height="20" width="20"/>
+                                        </a>
+                                        | <a href=""
+                                             data-ng-click="navigateRecord('view', rec.mfnNo, pagination.currentPage, $index)">View
+                                        record</a>
+                                        | <a href=""
+                                             data-ng-click="navigateRecord('edit', rec.mfnNo, pagination.currentPage, $index)">Edit
+                                        record</a>
+                                        <!--| <a href=""
+                                                         data-ng-click="navigateRecord(rec.mfnNo, pagination.currentPage, $index)">Add/Edit
+                                        item(s)</a>-->
+                                    </div>
                                 </div>
                             </div>
                             <!--<ul class="list-unstyled">
@@ -300,28 +294,28 @@
 -->
                         </td>
                         <td style="text-align: right;padding-right: 20px;">
-                          <!--  <ul class="list-unstyled">
-                                <li><span style="font-size: 100%;width: 50%;">Total : </span> <span
-                                        style="font-size: 90%;width: 50%;">{{rec.totalItems}} Copies</span></li>
-                                <li><span style="font-size: 100%;width: 50%;">Available : </span> <span
-                                        style="font-size: 90%;width: 50%;">{{rec.totalAvailable}} Copies</span></li>
-                                <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span
-                                        style="font-size: 90%;width: 50%;">{{rec.totalCheckedOut}} Copies</span></li>
-                                <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span
-                                        style="font-size: 90%;width: 50%;">{{rec.totalOnHold}} Copies</span></li>
-                            </ul>-->
+                            <!--  <ul class="list-unstyled">
+                                  <li><span style="font-size: 100%;width: 50%;">Total : </span> <span
+                                          style="font-size: 90%;width: 50%;">{{rec.totalItems}} Copies</span></li>
+                                  <li><span style="font-size: 100%;width: 50%;">Available : </span> <span
+                                          style="font-size: 90%;width: 50%;">{{rec.totalAvailable}} Copies</span></li>
+                                  <li><span style="font-size: 100%;width: 50%;">Issued : </span> <span
+                                          style="font-size: 90%;width: 50%;">{{rec.totalCheckedOut}} Copies</span></li>
+                                  <li><span style="font-size: 100%;width: 50%;">On Hold : </span> <span
+                                          style="font-size: 90%;width: 50%;">{{rec.totalOnHold}} Copies</span></li>
+                              </ul>-->
 
-                       <!--   <span class="badge">  T:</span>{{rec.totalItems}}
-                           <span class="badge"> A:</span>{{rec.totalAvailable}}
-                            <span class="badge">I:</span>{{rec.totalCheckedOut}}
-                            <span class="badge">H:</span>{{rec.totalOnHold}}-->
+                            <!--   <span class="badge">  T:</span>{{rec.totalItems}}
+                                <span class="badge"> A:</span>{{rec.totalAvailable}}
+                                 <span class="badge">I:</span>{{rec.totalCheckedOut}}
+                                 <span class="badge">H:</span>{{rec.totalOnHold}}-->
 
                             <span data-toggle="tooltip"
                                   title="Total Items" class="label label-success">T:&nbsp;{{rec.totalItems}}</span>
                             <span data-toggle="tooltip"
                                   title="Available" class="label label-info">A:&nbsp;{{rec.totalAvailable}}</span>
-                            <span  data-toggle="tooltip"
-                                   title="Issued" class="label label-danger">I:&nbsp;{{rec.totalCheckedOut}}</span>
+                            <span data-toggle="tooltip"
+                                  title="Issued" class="label label-danger">I:&nbsp;{{rec.totalCheckedOut}}</span>
                             <span data-toggle="tooltip"
                                   title="On Hold" class="label label-warning">H:&nbsp;{{rec.totalOnHold}}</span>
                         </td>
@@ -420,6 +414,28 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                <!--
+                <ul class="pagination mtm mbm">
+                    <li><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li class="active"><a href="#">5</a></li>
+                    <li class="disabled"><a href="#">&raquo;</a></li>
+                </ul>
+                -->
+                <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
+                                         on-page-change="pageChanged(newPageNumber)"
+                                         template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
+            </div>
+    </div>
 </div>
 
 <div id="bookPreview" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
@@ -430,16 +446,22 @@
                 <button type="button" data-dismiss="modal" aria-hidden="true"
                         class="close" style="opacity: 1;margin-top: 0px;">&times;
                 </button>
-                <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number : {{record.callNo}}</h4></div>
+                <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number :
+                    {{record.callNo}}</h4></div>
             <div class="modal-body">
                 <ul class="list-unstyled desc">
-                    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a></li>
-                    <li>by &nbsp;<span data-ng-repeat="con in record.contributorList">{{con.name}}[{{con.roleName}}]</span></li>
+                    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=3" class="title">{{record.title}}</a>
+                    </li>
+                    <li>by &nbsp;<span
+                            data-ng-repeat="con in record.contributorList">{{con.name}}[{{con.roleName}}]</span></li>
                     <li><b>Material type:</b>{{record.materialTypeName}}</li>
                     <li><b>Edition:</b> {{record.edition}}</li>
                     <li><b>ISBN:</b> {{record.isbn}}</li>
-                    <li><b>Imprint:</b> {{record.imprint.publisherName}}, &nbsp; {{record.imprint.yearDateOfPublication}}, &nbsp;{{record.imprint.placeOfPublication}}</li>
-                    <li><b>Subject:</b> <span data-ng-repeat="sub in record.subjectList">{{sub.subject}}, &nbsp;</span></li>
+                    <li><b>Imprint:</b> {{record.imprint.publisherName}}, &nbsp;
+                        {{record.imprint.yearDateOfPublication}}, &nbsp;{{record.imprint.placeOfPublication}}
+                    </li>
+                    <li><b>Subject:</b> <span data-ng-repeat="sub in record.subjectList">{{sub.subject}}, &nbsp;</span>
+                    </li>
                     <li><b>keywords:</b> {{record.keywords}}</li>
                     <li><b>Notes:</b><span data-ng-repeat="note in record.noteList">{{note.note}}</span></li>
                     <li><b>Physical Description:</b>Pagination: {{record.physicalDescription.pagination}},
