@@ -18,7 +18,8 @@ module ums {
     'ui.select',
     'angularAccounting',
     'ngHandsontable',
-    'ngStomp'
+    'ngStomp',
+    'ngWebSocket'
   ]);
 
 

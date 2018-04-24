@@ -4,7 +4,7 @@ module ums {
 
   import IPaymentVoucher = ums.IPaymentVoucher;
   export class PaymentVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', '$stomp'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', '$stomp', '$websocket', 'BaseUri', '$window'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -52,7 +52,8 @@ module ums {
                 private accountBalanceService: AccountBalanceService,
                 private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService,
                 private voucherNumberControlService: VoucherNumberControlService,
-                private $stomp: ngStomp) {
+                private $stomp: ngStomp, private $websocket: any, private baseURI: BaseUri,
+                private $window: ng.IWindowService) {
       this.initialize();
     }
 
@@ -76,14 +77,28 @@ module ums {
 
     public initializeWebSocketConnection() {
       console.log("In the initialization of web socket connection");
-      let ws = new SockJS("chat");
-      let stompClient: any;
-      stompClient.subscribe("/topic/message", (message) => {
-        console.log("message");
-        console.log(message);
-      });
-      
+      // let ws = new SockJS("chat");
+      // let stompClient: any;
+      // stompClient.subscribe("/topic/message", (message) => {
+      //   console.log("message");
+      //   console.log(message);
+      // });
+      //
+      /* this.$stomp
+           .connect("account/general-ledger/transaction/journal-voucher/chat/topic/messages")
+           .then((frame) => {
+             console.log("Frame");
+             console.log(frame);
+           });*/
+      let url = this.baseURI.toAbsolute("account/general-ledger/transaction/journal-voucher/chat");
+      let dataStream = this.$websocket("wss://https://localhost:8080/account/general-ledger/transaction/journal-voucher/chat");
+      console.log("Data stream");
+      console.log(dataStream);
 
+      /*dataStream.onMessage((message) => {
+        console.log("Push notification message");
+        console.log(message);
+      });*/
     }
 
 

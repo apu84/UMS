@@ -15,5 +15,9 @@
   },
   "engines": {
     "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "@types/angular-websocket": "^2.0.7",
+    "angular-websocket": "^2.0.1"
   }
 }

@@ -35,6 +35,7 @@ public class MutableJournalVoucherResource {
   @MessageMapping("/chat")
   @SendTo("/topic/messages")
   public NotificationMessage send(NotificationMessage pNotificationMessage) throws Exception {
+    System.out.println("Chat message");
     return pNotificationMessage;
   }
 

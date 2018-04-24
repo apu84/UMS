@@ -14,6 +14,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/uri.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/sock.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/stomp.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-websocket.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/ngStomp.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/angular-cookies.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.jqGrid.d.ts'/>
