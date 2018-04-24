@@ -13,7 +13,7 @@ public class PersistentFCMToken implements MutableFCMToken {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sFCMTokenManager = applicationContext.getBean("FCMTokenManager", FCMTokenManager.class);
+    sFCMTokenManager = applicationContext.getBean("fcmTokenManager", FCMTokenManager.class);
   }
 
   private Long mId;

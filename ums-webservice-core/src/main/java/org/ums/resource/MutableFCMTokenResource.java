@@ -21,8 +21,6 @@ public class MutableFCMTokenResource extends Resource {
   @POST
   @Path("/save")
   public Response save(final JsonObject pJsonObject) throws Exception {
-    /*return mHelper.post(pJsonObject, mUriInfo);*/
-    System.out.println("In Mutable FCM TOken Resource -------------- .........");
-    return null;
+    return mHelper.post(pJsonObject, mUriInfo);
   }
 }

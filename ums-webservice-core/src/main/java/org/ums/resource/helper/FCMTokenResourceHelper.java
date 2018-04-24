@@ -12,10 +12,7 @@ import org.ums.manager.ContentManager;
 import org.ums.manager.FCMTokenManager;
 import org.ums.persistent.model.PersistentFCMToken;
 import org.ums.resource.ResourceHelper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -55,7 +52,7 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     LocalCache localCache = new LocalCache();
-    JsonObject jsonObject = pJsonObject.getJsonObject("data");
+    JsonObject jsonObject = (JsonObject) pJsonObject.getJsonObject("entries");
     mBuilder.build(mutableFCMToken, jsonObject, localCache);
     mManager.create(mutableFCMToken);
     localCache.invalidate();

@@ -1,8 +1,5 @@
 package org.ums.services;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.Message;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.ums.configuration.FirebaseConfig;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
+import org.ums.manager.FCMTokenManager;
 import org.ums.manager.NotificationManager;
 
 import java.io.IOException;
@@ -32,10 +30,14 @@ public class ApprovePublicationService {
   @Autowired
   private FirebaseConfig mFirebaseConfig;
 
+  @Autowired
+  private FCMTokenManager mFCMTokenManager;
+
   public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
       InterruptedException {
 
-    mFirebaseConfig.send();
+    mFirebaseConfig.send(mFCMTokenManager.getFCMToken("nab").getFCMToken(), "Approve Publication",
+        "You Publication Has Gone For approval");
 
     Notifier notifier = new Notifier() {
 

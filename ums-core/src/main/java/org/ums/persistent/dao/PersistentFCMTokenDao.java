@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-import org.apache.http.annotation.Obsolete;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.FCMTokenDaoDecorator;
@@ -8,7 +7,6 @@ import org.ums.domain.model.immutable.FCMToken;
 import org.ums.domain.model.mutable.MutableFCMToken;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentFCMToken;
-import org.ums.statistics.JdbcTemplateFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +52,7 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   @Override
   public Long create(MutableFCMToken pMutable) {
     String query = INSERT_ONE;
-    mJdbcTemplate.update(query, mIdGenerator.getAlphaNumericId(), pMutable.getUserId(), pMutable.getFCMToken(),
+    mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getUserId(), pMutable.getFCMToken(),
         pMutable.getTokenDeleteOn());
     return pMutable.getId();
   }

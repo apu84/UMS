@@ -28,8 +28,6 @@
     <link type="text/css" rel="stylesheet" href="vendors/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
     <link type="text/css" rel="stylesheet" href="vendors/calendar/zabuto_calendar.min.css"/>
     <link type="text/css" rel="stylesheet" href="vendors/angular-scrollable-table/scrollable-table.css"/>
-
-
     <!-- Loading template style-->
 
     <!--<link rel="stylesheet" data-ng-href="css/themes/style1/orange-blue.css"/>-->
@@ -40,61 +38,10 @@
     <link rel="stylesheet" data-ng-href="vendors/jquery-jqgrid-5.0.2/css/ui.jqgrid-bootstrap.css"/>
 
     <!-- Firebase Library-->
-
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"></script>
-
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
-            authDomain: "push-notification-demo-6b41d.firebaseapp.com",
-            databaseURL: "https://push-notification-demo-6b41d.firebaseio.com",
-            projectId: "push-notification-demo-6b41d",
-            storageBucket: "push-notification-demo-6b41d.appspot.com",
-            messagingSenderId: "75416653943"
-        };
-        firebase.initializeApp(config);
-
-        // Retrieve Firebase Messaging object.
-        const messaging = firebase.messaging();
-
-        console.log("in index.html after const messaging");
-        console.log(messaging);
-
-        messaging.requestPermission()
-            .then(function() {
-                console.log('Have Permission.');
-                return messaging.getToken()
-            }).then(function (currentToken) {
-            console.log("current token is ---------");
-            console.log(currentToken);
-
-            console.log("Sending .....");
-            $.ajax({
-                crossDomain: true,
-                type: "POST",
-                async: true,
-                url: window.location.origin + '/ums-webservice-academic/fcmToken/save',
-                contentType: 'application/json',
-                data: '{"token":"' + currentToken + '","userId":"' + 'nab' + '"}',
-                success: function (response) {
-                    console.log("successfull in saving");
-                    console.log(response);
-                },
-                error: (function (error) {
-                    conosole.log("error in saving");
-                    console.log(error);
-                })
-            });
-        }).catch(function(err) {
-            console.log('Unable to get permission to notify.', err);
-        })
-
-        messaging.onMessage(function(payload) {
-            console.log('Message received. ', payload);
-        });
-    </script>
+    <script src="../resources/js/fcm.js"></script>
 
 
     <!-- Loading library javascript-->
