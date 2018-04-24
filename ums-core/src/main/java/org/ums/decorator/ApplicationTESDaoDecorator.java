@@ -69,11 +69,6 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public List<ApplicationTES> getDeptList() {
-    return getManager().getDeptList();
-  }
-
-  @Override
   public List<ApplicationTES> getParametersForReport(String pTeacherId, Integer pSemesterId) {
     return getManager().getParametersForReport(pTeacherId, pSemesterId);
   }
@@ -89,7 +84,7 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public List<ApplicationTES> getEligibleFacultyMembers(String pDeptId, Integer pSemesterId) {
+  public List<MutableApplicationTES> getEligibleFacultyMembers(String pDeptId, Integer pSemesterId) {
     return getManager().getEligibleFacultyMembers(pDeptId, pSemesterId);
   }
 
@@ -101,11 +96,6 @@ public class ApplicationTESDaoDecorator extends
   @Override
   public List<ApplicationTES> getAssignedReviewableCoursesList(String pTeacherId, Integer pSemesterId) {
     return getManager().getAssignedReviewableCoursesList(pTeacherId, pSemesterId);
-  }
-
-  @Override
-  public List<ApplicationTES> getAllSemesterNameList() {
-    return getAllSemesterNameList();
   }
 
   @Override
@@ -134,9 +124,9 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public List<ApplicationTES> getRivewedCoursesForReadOnlyMode(String pCourseId, String pTeacherId, String pStudentId,
+  public List<ApplicationTES> getReviewedCoursesForReadOnlyMode(String pCourseId, String pTeacherId, String pStudentId,
       Integer pSemesterId) {
-    return getManager().getRivewedCoursesForReadOnlyMode(pCourseId, pTeacherId, pStudentId, pSemesterId);
+    return getManager().getReviewedCoursesForReadOnlyMode(pCourseId, pTeacherId, pStudentId, pSemesterId);
   }
 
   @Override
@@ -165,13 +155,13 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public List<ApplicationTES> getFacultyMembers(String pDeptId) {
+  public List<MutableApplicationTES> getFacultyMembers(String pDeptId) {
     return getManager().getFacultyMembers(pDeptId);
   }
 
   @Override
-  public List<ApplicationTES> getAlreadyReviewdCourses(String pStudentId, Integer pSemesterId) {
-    return getManager().getAlreadyReviewdCourses(pStudentId, pSemesterId);
+  public List<ApplicationTES> getAlreadyReviewedCourses(String pStudentId, Integer pSemesterId) {
+    return getManager().getAlreadyReviewedCourses(pStudentId, pSemesterId);
   }
 
   @Override
@@ -190,8 +180,4 @@ public class ApplicationTESDaoDecorator extends
     return getManager().getReviewEligibleCourses(pStudentId, pSemesterId, pCourseType, pSection);
   }
 
-  @Override
-  public String getSemesterName(Integer pCurrentSemester) {
-    return getManager().getSemesterName(pCurrentSemester);
-  }
 }

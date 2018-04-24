@@ -167,13 +167,6 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   }
 
   @GET
-  @Path("/getSemesterNameList")
-  @UmsLogMessage(message = "Get All Semester Name")
-  public JsonObject getAllSemesterNameList(@Context Request pRequest) {
-    return mHelper.getAllSemesterNameList(pRequest, mUriInfo);
-  }
-
-  @GET
   @Path("/getAssignedCourses/facultyId/{faculty-id}")
   @UmsLogMessage(message = "Get Assigned Courses For Specific Faculty")
   public JsonObject getAssignedCourses(@Context Request pRequest, @PathParam("faculty-id") String pFacultyId) {

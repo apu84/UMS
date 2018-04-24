@@ -14,6 +14,7 @@ import org.ums.academic.resource.teacher.evaluation.system.helper.QuestionWiseRe
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
+import org.ums.domain.model.immutable.Department;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.FacultyType;
 import org.ums.formatter.DateFormat;
@@ -519,7 +520,7 @@ public class TesGeneratorImp implements TesGenerator {
 
     List<ApplicationTES> applications = mApplicationTESManager.getFacultyListForReport(pDeptId, pSemesterId);
     List<ApplicationTES> parameters = null;
-    List<ApplicationTES> getDeptList = mApplicationTESManager.getDeptList();
+    List<Department> getDeptList = mDepartmentManager.getAll();
     List<ComparisonReport> report = new ArrayList<ComparisonReport>();
     List<ComparisonReport> reportMaxMin = new ArrayList<ComparisonReport>();
     List<ComparisonReport> reportFaculty = new ArrayList<ComparisonReport>();
@@ -569,10 +570,10 @@ public class TesGeneratorImp implements TesGenerator {
     if(pDeptId.equals(maximum)){
       for(int k=0;k<getDeptList.size();k++){
         double max=-1;
-        String dp=getDeptList.get(k).getDeptId();
+        String dp=getDeptList.get(k).getId();
         List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
         for(int l=0;l<list.size();l++){
-          if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
+          if(list.get(l).getDeptId().equals(getDeptList.get(k).getId())){
             if(list.get(l).getTotalScore()> max){
               max=list.get(l).getTotalScore();
             }
@@ -593,10 +594,10 @@ public class TesGeneratorImp implements TesGenerator {
     }else if(pDeptId.equals(minimum)){
       for(int k=0;k<getDeptList.size();k++){
         double min=10;
-        String dp=getDeptList.get(k).getDeptId();
+        String dp=getDeptList.get(k).getId();
         List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
         for(int l=0;l<list.size();l++){
-          if(list.get(l).getDeptId().equals(getDeptList.get(k).getDeptId())){
+          if(list.get(l).getDeptId().equals(getDeptList.get(k).getId())){
             if(list.get(l).getTotalScore()< min){
               min=list.get(l).getTotalScore();
             }
@@ -617,12 +618,7 @@ public class TesGeneratorImp implements TesGenerator {
     }else if(pDeptId.equals(engineering) || pDeptId.equals(businessAndSocial) || pDeptId.equals(architecture)) {
       List<ApplicationTES> facultyWiseDeptList=mApplicationTESManager.getDeptListByFacultyId(facultyId);
       List<ComparisonReport> tempList=null;
-      for(int i=0;i<facultyWiseDeptList.size();i++){
-        String departmentId=facultyWiseDeptList.get(i).getDeptId();
-        tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
-        reportFaculty= ListUtils.union(reportFaculty,tempList);
-        tempList= Collections.emptyList();
-      }
+      reportFaculty=mApplicationTESResourceHelper.mergeList(report, reportFaculty, facultyWiseDeptList);
       pdfReport=reportFaculty;
     }else{
      pdfReport=report;

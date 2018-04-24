@@ -14,15 +14,11 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<MutableApplicationTES> getMigrationQuestions(final Integer pSemesterId);
 
-  List<ApplicationTES> getAllSemesterNameList();
-
   List<ApplicationTES> getAssignedReviewableCoursesList(final String pTeacherId, final Integer pSemesterId);
 
   List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
 
   Integer getObservationType(final Long pQuestionId);
-
-  List<ApplicationTES> getDeptList();
 
   List<ApplicationTES> getFacultyListForReport(final String pDeptId, final Integer pSemesterId);
 
@@ -41,7 +37,7 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   Integer getTotalRegisteredStudentForCourse(final String pCourseId, final String pSection, final Integer pSemesterId);
 
-  List<ApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
+  List<MutableApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
 
   Integer getTotalStudentNumber(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 
@@ -50,7 +46,7 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getDetailedResult(final String pTeacherId, final String pCourseId, final Integer pSemesterId);
 
-  List<ApplicationTES> getRivewedCoursesForReadOnlyMode(final String pCourseId, final String pTeacherId,
+  List<ApplicationTES> getReviewedCoursesForReadOnlyMode(final String pCourseId, final String pTeacherId,
       final String pStudentId, final Integer pSemesterId);
 
   List<MutableApplicationTES> getReviewEligibleCourses(final String pStudentId, final Integer pSemesterId,
@@ -58,11 +54,9 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getTeachersInfo(final String pCourseId, final Integer pSemesterId, final String pSection);
 
-  String getSemesterName(final Integer pCurrentSemester);
+  List<ApplicationTES> getAlreadyReviewedCourses(final String pStudentId, final Integer pSemesterId);
 
-  List<ApplicationTES> getAlreadyReviewdCourses(final String pStudentId, final Integer pSemesterId);
-
-  List<ApplicationTES> getFacultyMembers(final String pDeptId);
+  List<MutableApplicationTES> getFacultyMembers(final String pDeptId);
 
   List<MutableApplicationTES> getAssignedCourses(final String pFacultyId, final Integer pSemesterId);
 
