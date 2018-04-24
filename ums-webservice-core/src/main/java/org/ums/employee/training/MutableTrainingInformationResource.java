@@ -1,6 +1,7 @@
 package org.ums.employee.training;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -15,6 +16,7 @@ public class MutableTrainingInformationResource extends Resource {
 
   @POST
   @Path("/save")
+  @UmsLogMessage(message = "Post employee information (training data)")
   public Response saveServiceInformation(final JsonObject pJsonObject) {
     return mTrainingInformationResourceHelper.saveTrainingInformation(pJsonObject, mUriInfo);
   }
