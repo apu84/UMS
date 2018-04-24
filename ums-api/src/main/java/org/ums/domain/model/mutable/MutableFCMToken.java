@@ -6,9 +6,7 @@ import org.ums.domain.model.immutable.FCMToken;
 
 import java.util.Date;
 
-public interface MutableFCMToken extends FCMToken, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
-
-  void setUserId(final String pUserId);
+public interface MutableFCMToken extends FCMToken, Editable<String>, MutableLastModifier, MutableIdentifier<String> {
 
   void setFCMToken(final String pFCMToken);
 

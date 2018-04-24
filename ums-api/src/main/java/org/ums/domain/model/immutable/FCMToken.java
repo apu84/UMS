@@ -8,9 +8,7 @@ import org.ums.domain.model.mutable.MutableFCMToken;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface FCMToken extends Serializable, LastModifier, EditType<MutableFCMToken>, Identifier<Long> {
-
-  String getUserId();
+public interface FCMToken extends Serializable, LastModifier, EditType<MutableFCMToken>, Identifier<String> {
 
   String getFCMToken();
 

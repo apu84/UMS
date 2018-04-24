@@ -14,11 +14,10 @@ import java.util.List;
 
 public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
 
-  static String SELECT_ONE = "SELECT ID, USER_ID, TOKEN, TOKEN_DELETED_ON, LAST_MODFIED FROM FCM_TOKEN";
+  static String SELECT_ONE = "SELECT ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED FROM FCM_TOKEN";
 
-  static String INSERT_ONE =
-      "INSERT INTO FCM_TOKEN (ID, USER_ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?, ?,"
-          + getLastModifiedSql() + " ) ";
+  static String INSERT_ONE = "INSERT INTO FCM_TOKEN (ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?,"
+      + getLastModifiedSql() + " ) ";
 
   static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_DELETED_ON = sysdate, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
@@ -26,9 +25,8 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentFCMTokenDao(final JdbcTemplate pJdbcTemplate, final IdGenerator pIdGenerator) {
+  public PersistentFCMTokenDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -38,29 +36,22 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   }
 
   @Override
-  public FCMToken get(Long pId) {
+  public FCMToken get(String pId) {
     String query = SELECT_ONE + " WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new FCMTokenRowMapper());
   }
 
   @Override
-  public FCMToken getFCMToken(String pUserId) {
-    String query = SELECT_ONE + " WHERE USER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pUserId}, new FCMTokenRowMapper());
-  }
-
-  @Override
-  public Long create(MutableFCMToken pMutable) {
+  public String create(MutableFCMToken pMutable) {
     String query = INSERT_ONE;
-    mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getUserId(), pMutable.getFCMToken(),
-        pMutable.getTokenDeleteOn());
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFCMToken(), pMutable.getTokenDeleteOn());
     return pMutable.getId();
   }
 
   @Override
   public int update(MutableFCMToken pMutable) {
-    String query = UPDATE_ONE + " WHERE ID = ? AND USER_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getId(), pMutable.getUserId());
+    String query = UPDATE_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getId());
   }
 
   class FCMTokenRowMapper implements RowMapper<FCMToken> {
@@ -68,8 +59,7 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
     @Override
     public FCMToken mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentFCMToken persistentFCMToken = new PersistentFCMToken();
-      persistentFCMToken.setId(resultSet.getLong("ID"));
-      persistentFCMToken.setUserId(resultSet.getString("USER_ID"));
+      persistentFCMToken.setId(resultSet.getString("ID"));
       persistentFCMToken.setFCMToken(resultSet.getString("TOKEN"));
       persistentFCMToken.setTokenDeletedOn(resultSet.getDate("TOKEN_DELETED_ON"));
       persistentFCMToken.setLastModified(resultSet.getString("LAST_MODIFIED"));

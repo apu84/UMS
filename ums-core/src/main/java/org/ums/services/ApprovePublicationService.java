@@ -36,7 +36,7 @@ public class ApprovePublicationService {
   public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
       InterruptedException {
 
-    mFirebaseConfig.send(mFCMTokenManager.getFCMToken("nab").getFCMToken(), "Approve Publication",
+    mFirebaseConfig.send(mFCMTokenManager.get("nab").getFCMToken(), "Approve Publication",
         "You Publication Has Gone For approval");
 
     Notifier notifier = new Notifier() {

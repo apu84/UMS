@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMToken, Long> {
+public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMToken, String> {
 
   @Autowired
   private FCMTokenManager mManager;
@@ -26,17 +26,17 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   @Autowired
   private FCMTokenBuilder mBuilder;
 
-  public JsonObject getToken(String pUserId, UriInfo mUriInfo) {
+  public JsonObject getToken(String pId, UriInfo mUriInfo) {
     LocalCache localCache = new LocalCache();
     FCMToken fcmToken = new PersistentFCMToken();
     try {
-      fcmToken = mManager.getFCMToken(pUserId);
+      fcmToken = mManager.get(pId);
     } catch(EmptyResultDataAccessException e) {
     }
     return toJson(fcmToken, mUriInfo, localCache);
   }
 
-  public Response updateFCMToken(JsonObject pJsonObject, UriInfo pUriInfo) {
+  public Response update(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     LocalCache localeCache = new LocalCache();
     JsonObject jsonObject = pJsonObject.getJsonObject("data");
@@ -62,7 +62,7 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   }
 
   @Override
-  protected ContentManager<FCMToken, MutableFCMToken, Long> getContentManager() {
+  protected ContentManager<FCMToken, MutableFCMToken, String> getContentManager() {
     return mManager;
   }
 

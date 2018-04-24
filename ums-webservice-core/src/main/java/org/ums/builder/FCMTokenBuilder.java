@@ -29,7 +29,6 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
   public void build(JsonObjectBuilder pBuilder, FCMToken pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("userId", pReadOnly.getUserId());
     pBuilder.add("token", pReadOnly.getFCMToken());
     pBuilder.add("tokenDeletedOn", mDateFormat.format(pReadOnly.getTokenDeleteOn()));
     pBuilder.add("lastModified", pReadOnly.getLastModified());
@@ -40,7 +39,7 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
 
-    pMutable.setUserId(pJsonObject.containsKey("userId") ? pJsonObject.getString("userId") : user.getId());
+    pMutable.setId(user.getId());
     pMutable.setFCMToken(pJsonObject.getString("fcmToken"));
     pMutable.setTokenDeletedOn(null);
   }

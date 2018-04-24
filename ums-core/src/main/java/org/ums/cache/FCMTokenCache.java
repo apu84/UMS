@@ -5,22 +5,17 @@ import org.ums.domain.model.mutable.MutableFCMToken;
 import org.ums.manager.CacheManager;
 import org.ums.manager.FCMTokenManager;
 
-public class FCMTokenCache extends ContentCache<FCMToken, MutableFCMToken, Long, FCMTokenManager> implements
+public class FCMTokenCache extends ContentCache<FCMToken, MutableFCMToken, String, FCMTokenManager> implements
     FCMTokenManager {
 
-  CacheManager<FCMToken, Long> mCacheManager;
+  CacheManager<FCMToken, String> mCacheManager;
 
-  public FCMTokenCache(CacheManager<FCMToken, Long> pCacheManager) {
+  public FCMTokenCache(CacheManager<FCMToken, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<FCMToken, Long> getCacheManager() {
+  protected CacheManager<FCMToken, String> getCacheManager() {
     return mCacheManager;
-  }
-
-  @Override
-  public FCMToken getFCMToken(String pUserId) {
-    return getManager().getFCMToken(pUserId);
   }
 }

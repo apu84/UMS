@@ -16,8 +16,7 @@ public class PersistentFCMToken implements MutableFCMToken {
     sFCMTokenManager = applicationContext.getBean("fcmTokenManager", FCMTokenManager.class);
   }
 
-  private Long mId;
-  private String mUserId;
+  private String mId;
   private String mFCMToken;
   private Date mTokenDeletedOn;
   private String mLastModified;
@@ -26,7 +25,6 @@ public class PersistentFCMToken implements MutableFCMToken {
 
   public PersistentFCMToken(PersistentFCMToken pPersistentFCMToken) {
     mId = pPersistentFCMToken.getId();
-    mUserId = pPersistentFCMToken.getUserId();
     mFCMToken = pPersistentFCMToken.getFCMToken();
     mTokenDeletedOn = pPersistentFCMToken.getTokenDeleteOn();
     mLastModified = pPersistentFCMToken.getLastModified();
@@ -38,7 +36,7 @@ public class PersistentFCMToken implements MutableFCMToken {
   }
 
   @Override
-  public Long create() {
+  public String create() {
     return sFCMTokenManager.create(this);
   }
 
@@ -53,7 +51,7 @@ public class PersistentFCMToken implements MutableFCMToken {
   }
 
   @Override
-  public Long getId() {
+  public String getId() {
     return mId;
   }
 
@@ -63,18 +61,13 @@ public class PersistentFCMToken implements MutableFCMToken {
   }
 
   @Override
-  public void setId(Long pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
-  }
-
-  @Override
-  public void setUserId(String pUserId) {
-    mUserId = pUserId;
   }
 
   @Override
@@ -85,11 +78,6 @@ public class PersistentFCMToken implements MutableFCMToken {
   @Override
   public void setTokenDeletedOn(Date pTokenDeletedOn) {
     mTokenDeletedOn = pTokenDeletedOn;
-  }
-
-  @Override
-  public String getUserId() {
-    return mUserId;
   }
 
   @Override

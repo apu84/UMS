@@ -14,7 +14,10 @@ import org.ums.bank.BankManager;
 import org.ums.bank.branch.BranchCache;
 import org.ums.bank.branch.BranchDao;
 import org.ums.bank.branch.BranchManager;
-import org.ums.bank.branch.user.*;
+import org.ums.bank.branch.user.BranchUserCache;
+import org.ums.bank.branch.user.BranchUserDao;
+import org.ums.bank.branch.user.BranchUserManager;
+import org.ums.bank.branch.user.BranchUserPostTransaction;
 import org.ums.bank.designation.BankDesignationCache;
 import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
@@ -543,7 +546,7 @@ public class CoreContext {
   @Bean
   FCMTokenManager fcmTokenManager() {
     FCMTokenCache fcmTokenCache = new FCMTokenCache(mCacheFactory.getCacheManager());
-    fcmTokenCache.setManager(new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    fcmTokenCache.setManager(new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate()));
     return fcmTokenCache;
   }
 }
