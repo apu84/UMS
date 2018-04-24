@@ -34,6 +34,8 @@ import org.ums.usermanagement.permission.PermissionManager;
 import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.ws.rs.ApplicationPath;
+
 @Configuration
 @EnableAsync
 @EnableWebSocketMessageBroker
@@ -41,6 +43,7 @@ import org.ums.usermanagement.user.UserManager;
 @EnableWebMvc
 @ComponentScan(basePackages = "org.ums")
 @Import({UMSContext.class})
+@ApplicationPath("/chat")
 @ImportResource({"classpath*:services-context.xml", "classpath*:spring-config-shiro.xml",
     "classpath*:micro-service-context.xml"})
 public class ServiceContext {

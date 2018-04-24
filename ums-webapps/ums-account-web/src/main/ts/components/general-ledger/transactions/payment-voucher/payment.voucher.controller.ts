@@ -91,7 +91,7 @@ module ums {
              console.log(frame);
            });*/
       let url = this.baseURI.toAbsolute("account/general-ledger/transaction/journal-voucher/chat");
-      let dataStream = this.$websocket("wss://https://localhost:8080/account/general-ledger/transaction/journal-voucher/chat");
+      let dataStream = this.$websocket("wss://" + url);
       console.log("Data stream");
       console.log(dataStream);
 
