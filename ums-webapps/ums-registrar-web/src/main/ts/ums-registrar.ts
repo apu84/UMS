@@ -11,7 +11,9 @@ module ums {
         'amChartsDirective',
         'ui.sortable',
         "angularUtils.directives.dirPagination"
-    ]);
+    ]).run(function(ExpireToken){
+
+    });
 
     UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
         baseUriProvider.setServicePath('/ums-webservice-registrar/');

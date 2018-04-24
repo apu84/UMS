@@ -100,6 +100,9 @@
 /// <reference path='admin/bank.http.service.ts'/>
 /// <reference path='admin/bank.model.converters.ts'/>
 /// <reference path='admin/bank.resource.ts'/>
+/// <reference path='admin/bank.service.ts'/>
+/// <reference path='admin/bank.controller.ts'/>
+
 
 
 

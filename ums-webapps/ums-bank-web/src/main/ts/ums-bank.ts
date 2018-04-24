@@ -10,7 +10,9 @@ module ums {
     'scrollable-table',
     'amChartsDirective',
     'ui.sortable'
-  ]);
+  ]).run(function(ExpireToken){
+
+  });
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-bank/');
@@ -65,6 +67,12 @@ module ums {
               });
             }]
           }
+        })
+        .state('banks', {
+          url: "/banks",
+          controller: 'BankController',
+          controllerAs: 'vm',
+          templateUrl: 'views/admin/bank.list.html'
         })
   });
 }

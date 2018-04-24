@@ -1,6 +1,6 @@
 module ums {
   export class BankHttpService {
-    public static $inject = ['$q', 'Http', 'notify'];
+    public static $inject = ['$q', 'HttpClient', 'notify'];
 
     constructor(private $q: ng.IQService,
                 private httpClient: HttpClient,
@@ -11,7 +11,7 @@ module ums {
     public getResource<T>(resource: BankResource<T>, conveter: Converter<T>): ng.IPromise<T> {
       let defer: ng.IDeferred<T> = this.$q.defer();
       this.httpClient.get(resource.getUri(), HttpClient.MIME_TYPE_JSON,
-          (response: PaymentFeeTypeGroupResponse) => defer.resolve(conveter.deserialize(response)));
+          (response: any) => defer.resolve(conveter.deserialize(response)));
       return defer.promise;
     }
 
@@ -39,7 +39,7 @@ module ums {
       return defer.promise;
     }
 
-    public deleteResource<T>(resource: BankResource<T>, converter: Converter<T>): ng.IPromise<boolean> {
+    public deleteResource<T>(resource: BankResource<T>): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
       this.httpClient.doDelete(resource.getUri())
           .success((response: any) => defer.resolve(true))
@@ -51,5 +51,5 @@ module ums {
     }
   }
 
-  UMS.service('bankHttpService', BankHttpService);
+  UMS.service('BankHttpService', BankHttpService);
 }

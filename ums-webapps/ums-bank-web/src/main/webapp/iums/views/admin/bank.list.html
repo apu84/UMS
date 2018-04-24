@@ -1,0 +1,24 @@
+<div class="panel">
+    <div class="panel-heading">Bank</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <th width="50%">Bank code</th>
+                <th width="50%">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="bank in vm.banks">
+                <td>
+                    {{::bank.code}}
+                </td>
+                <td>
+                    {{::bank.name}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -12,7 +12,9 @@ module ums {
         'ui.sortable',
         'ngHandsontable',
         "angularUtils.directives.dirPagination"
-    ]);
+    ]).run(function(ExpireToken){
+
+    });
 //https://localhost//ums-webservice-academic/academic/course/all/ipp/5/page/1
 
     UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
