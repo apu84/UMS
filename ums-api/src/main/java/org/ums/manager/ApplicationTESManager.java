@@ -18,13 +18,9 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
 
   List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
 
-  Integer getObservationType(final Long pQuestionId);
-
   List<ApplicationTES> getFacultyListForReport(final String pDeptId, final Integer pSemesterId);
 
   List<ApplicationTES> getParametersForReport(final String pTeacherId, final Integer pSemesterId);
-
-  String getQuestionDetails(final Long pQuestionId);
 
   List<ApplicationTES> getDeptListByFacultyId(final Integer pFacultyId);
 

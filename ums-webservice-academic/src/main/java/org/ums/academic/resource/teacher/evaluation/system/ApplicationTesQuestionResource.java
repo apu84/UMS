@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
  * Created by Monjur-E-Morshed on 4/16/2018.
  */
 @Component
+@Path("academic/applicationTES")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ApplicationTesQuestionResource extends MutableApplicationTesQuestionResource {

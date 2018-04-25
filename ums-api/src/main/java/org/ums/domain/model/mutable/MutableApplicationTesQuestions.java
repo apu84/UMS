@@ -11,12 +11,11 @@ public interface MutableApplicationTesQuestions extends ApplicationTesQuestions,
     MutableIdentifier<Long> {
   void setApplicationDate(final String pApplicationDate);
 
-  void setQuestionId(final Integer pQuestionId);
+  void setQuestionId(final Long pQuestionId);
 
   void setQuestionDetails(final String pQuestionDetails);
 
   void setObservationType(final Integer pObservationType);
 
-  void setSemester(final Integer pSemesterId);
-
+  void setInsertionDate(final String pInsertionDate);
 }

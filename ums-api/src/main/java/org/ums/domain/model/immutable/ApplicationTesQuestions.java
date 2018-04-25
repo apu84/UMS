@@ -14,11 +14,11 @@ public interface ApplicationTesQuestions extends Serializable, LastModifier, Edi
     Identifier<Long> {
   String getApplicationDate();
 
-  Integer getQuestionId();
+  Long getQuestionId();
 
   String getQuestionDetails();
 
   Integer getObservationType();
 
-  Integer getSemester();
+  String getInsertionDate();
 }

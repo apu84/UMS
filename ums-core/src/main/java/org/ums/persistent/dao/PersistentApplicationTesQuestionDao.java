@@ -23,24 +23,24 @@ public class PersistentApplicationTesQuestionDao extends ApplicationTesQuestionD
     mIdGenerator = pIdGenerator;
   }
 
-  String getQuestionInfo =
-      "select QUESTION_DETAILS,OBSERVATION_TYPE,SEMESTER_ID from APPLICATION_TES_QUESTIONS WHERE QUESTION_ID=?";
+  String QUESTION_INFO = "SELECT ID,QUESTION,OBSERVATION_TYPE,Inserted_On from TES_QUESTIONS WHERE ID=?";
 
   @Override
-  public List<ApplicationTesQuestions> getQuestionInfo(Integer pQuestionId) {
-    String query = getQuestionInfo;
-    return mJdbcTemplate.query(query, new Object[] {pQuestionId}, new ApplicationTESRowMapperForQuestionWiseReport());
+  public ApplicationTesQuestions get(Long pId) {
+
+    String query = QUESTION_INFO;
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new questionInfoRowMapper());
   }
-}
 
-
-class ApplicationTESRowMapperForQuestionWiseReport implements RowMapper<ApplicationTesQuestions> {
-  @Override
-  public ApplicationTesQuestions mapRow(ResultSet pResultSet, int pI) throws SQLException {
-    PersistentApplicationTesQuestion application = new PersistentApplicationTesQuestion();
-    application.setQuestionDetails(pResultSet.getString("QUESTION_DETAILS"));
-    application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
-    application.setSemester(pResultSet.getInt("SEMESTER_ID"));
-    return application;
+  class questionInfoRowMapper implements RowMapper<ApplicationTesQuestions> {
+    @Override
+    public ApplicationTesQuestions mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTesQuestion application = new PersistentApplicationTesQuestion();
+      application.setQuestionId(pResultSet.getLong("ID"));
+      application.setQuestionDetails(pResultSet.getString("QUESTION"));
+      application.setObservationType(pResultSet.getInt("OBSERVATION_TYPE"));
+      application.setInsertionDate(pResultSet.getString("Inserted_On"));
+      return application;
+    }
   }
 }

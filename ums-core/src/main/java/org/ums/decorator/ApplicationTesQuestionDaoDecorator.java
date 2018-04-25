@@ -12,8 +12,5 @@ import java.util.List;
 public class ApplicationTesQuestionDaoDecorator extends
     ContentDaoDecorator<ApplicationTesQuestions, MutableApplicationTesQuestions, Long, ApplicationTesQuestionManager>
     implements ApplicationTesQuestionManager {
-  @Override
-  public List<ApplicationTesQuestions> getQuestionInfo(Integer pQuestionId) {
-    return getManager().getQuestionInfo(pQuestionId);
-  }
+
 }

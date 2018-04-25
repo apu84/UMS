@@ -22,14 +22,14 @@ public class PersistentApplicationTesQuestion implements MutableApplicationTesQu
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sApplicationTesQuestionManager =
-        applicationContext.getBean("applicationTESQuestionManager", ApplicationTesQuestionManager.class);
+        applicationContext.getBean("applicationTesQuestionManager", ApplicationTesQuestionManager.class);
   }
   private Long mId;
   private String mApplicationDate;
-  private Integer mQuestionID;
+  private Long mQuestionID;
   private String mQuestionDetails;
   private Integer mObservationType;
-  private Integer mSemesterId;
+  private String mInsertionDate;
 
   public PersistentApplicationTesQuestion() {
 
@@ -41,11 +41,11 @@ public class PersistentApplicationTesQuestion implements MutableApplicationTesQu
     mQuestionID = persistentApplicationTesQuestion.getQuestionId();
     mQuestionDetails = persistentApplicationTesQuestion.getQuestionDetails();
     mObservationType = persistentApplicationTesQuestion.getObservationType();
-    mSemesterId = persistentApplicationTesQuestion.getSemester();
+    mInsertionDate = persistentApplicationTesQuestion.getInsertionDate();
   }
 
   @Override
-  public void setQuestionId(Integer pQuestionId) {
+  public void setQuestionId(Long pQuestionId) {
     mQuestionID = pQuestionId;
   }
 
@@ -60,12 +60,12 @@ public class PersistentApplicationTesQuestion implements MutableApplicationTesQu
   }
 
   @Override
-  public void setSemester(Integer pSemesterId) {
-    mSemesterId = pSemesterId;
+  public void setInsertionDate(String pInsertionDate) {
+    mInsertionDate = pInsertionDate;
   }
 
   @Override
-  public Integer getQuestionId() {
+  public Long getQuestionId() {
     return mQuestionID;
   }
 
@@ -80,8 +80,8 @@ public class PersistentApplicationTesQuestion implements MutableApplicationTesQu
   }
 
   @Override
-  public Integer getSemester() {
-    return mSemesterId;
+  public String getInsertionDate() {
+    return mInsertionDate;
   }
 
   @Override

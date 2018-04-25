@@ -23,11 +23,11 @@ public class ApplicationTesQuestionBuilder implements Builder<ApplicationTesQues
     if(pReadOnly.getQuestionDetails() != null)
       pBuilder.add("questionDetails", pReadOnly.getQuestionDetails());
     if(pReadOnly.getQuestionId() != null)
-      pBuilder.add("questionId", pReadOnly.getQuestionId());
-    if(pReadOnly.getSemester() != null)
-      pBuilder.add("semesterId", pReadOnly.getSemester());
+      pBuilder.add("questionId", (pReadOnly.getQuestionId().toString()));
     if(pReadOnly.getObservationType() != null)
       pBuilder.add("observationType", pReadOnly.getObservationType());
+    if(pReadOnly.getInsertionDate() != null)
+      pBuilder.add("insertionDate", pReadOnly.getInsertionDate());
   }
 
   @Override

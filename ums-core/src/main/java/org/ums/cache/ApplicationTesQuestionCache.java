@@ -25,8 +25,4 @@ public class ApplicationTesQuestionCache extends
     mCacheManager = pCacheManager;
   }
 
-  @Override
-  public List<ApplicationTesQuestions> getQuestionInfo(Integer pQuestionId) {
-    return getManager().getQuestionInfo(pQuestionId);
-  }
 }

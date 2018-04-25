@@ -10,6 +10,5 @@ import java.util.List;
  */
 public interface ApplicationTesQuestionManager extends
     ContentManager<ApplicationTesQuestions, MutableApplicationTesQuestions, Long> {
-  List<ApplicationTesQuestions> getQuestionInfo(final Integer pQuestionId);
 
 }

@@ -93,9 +93,6 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   String DETAILED_EVALUATION_RESULT =
       "SELECT  a.STUDENT_ID,a.QUESTION_ID,a.RATINGS,b.OBSERVATION_TYPE,a.COMMENTS from TES_SCORE a,TES_QUESTIONS b WHERE a.TEACHER_ID=? AND a.COURSE_ID= ? AND a.SEMESTER_ID= ? "
           + " AND a.QUESTION_ID=b.ID ORDER BY a.STUDENT_ID,a.QUESTION_ID";
-  String OBSERVATION_TYPE = "SELECT OBSERVATION_TYPE from TES_QUESTIONS WHERE ID=?";
-
-  String QUESTION_DETAILS = "SELECT QUESTION from TES_QUESTIONS WHERE ID=?";
 
   String ASSIGNED_BY_HEAD_FOR_REVIEW_COURSES =
       "SELECT DISTINCT  a.TEACHER_ID,a.SEMESTER_ID, a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.DEPT_ID from TES_SELECTED_COURSES a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=b.COURSE_ID";
@@ -247,18 +244,6 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   }
 
   @Override
-  public String getQuestionDetails(Long pQuestionId) {
-    String query = QUESTION_DETAILS;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pQuestionId}, String.class);
-  }
-
-  @Override
-  public Integer getObservationType(Long pQuestionId) {
-    String query = OBSERVATION_TYPE;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pQuestionId}, Integer.class);
-  }
-
-  @Override
   public Integer getTotalStudentNumber(String pTeacherId, String pCourseId, Integer pSemesterId) {
     String query = TOTAL_NUMBER_OF_STUDENT_REVIEWED;
     return mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pSemesterId}, Integer.class);
@@ -267,8 +252,10 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   @Override
   public Double getAverageScore(String pTeacherId, String pCourseId, Long pQuestionId, Integer pSemesterId) {
     String query = AVG_SCORE_OF_RATINGS;
-    return mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pQuestionId, pSemesterId},
-        Double.class);
+    double x =
+        mJdbcTemplate.queryForObject(query, new Object[] {pTeacherId, pCourseId, pQuestionId, pSemesterId},
+            Double.class);
+    return x;
   }
 
   @Override

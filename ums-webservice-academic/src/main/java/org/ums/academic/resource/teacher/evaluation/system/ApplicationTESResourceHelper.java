@@ -19,12 +19,12 @@ import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.mstParameter.ParameterType;
+import org.ums.enums.tes.ObservationType;
 import org.ums.enums.tes.TesStatus;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.resource.ResourceHelper;
-import org.ums.usermanagement.application.MutableApplication;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
@@ -86,6 +86,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   @Autowired
   DesignationManager mDesignationManager;
+
+  @Autowired
+  ApplicationTesQuestionManager mApplicationTesQuestionManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -248,40 +251,40 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return builder.build();
   }
 
-  public  JsonObject getAssignedReviewableCoursesList(final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-        List<ApplicationTES> applications=getContentManager().getAssignedReviewableCoursesList(pTeacherId,pSemesterId);
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        localCache.invalidate();
-        return object.build();
-    }
+  public JsonObject getAssignedReviewableCoursesList(final String pTeacherId, final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    List<ApplicationTES> applications = getContentManager().getAssignedReviewableCoursesList(pTeacherId, pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
 
-  public  JsonObject getMigrationQuestions(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-        List<MutableApplicationTES> applications=getContentManager().getMigrationQuestions(pSemesterId);
-        List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+  public JsonObject getMigrationQuestions(final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = getContentManager().getMigrationQuestions(pSemesterId);
+    List<ApplicationTES> questionSemesterMap = getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     checkMigrationValidity(applications, questionSemesterMap);
     JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        localCache.invalidate();
-        return object.build();
-    }
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
 
   private void checkMigrationValidity(List<MutableApplicationTES> applications, List<ApplicationTES> questionSemesterMap) {
-    for(int i=0;i<applications.size();i++){
-        Long qId=applications.get(i).getQuestionId();
-        Integer size=0;
-        size=questionSemesterMap.stream().filter(a->a.getQuestionId().equals(qId)).collect(Collectors.toList()).size();
-        if(size==1){
-            applications.get(i).setStatus(1);
-        }else{
-            applications.get(i).setStatus(0);
-        }
+    for (int i = 0; i < applications.size(); i++) {
+      Long qId = applications.get(i).getQuestionId();
+      Integer size = 0;
+      size = questionSemesterMap.stream().filter(a -> a.getQuestionId().equals(qId)).collect(Collectors.toList()).size();
+      if (size == 1) {
+        applications.get(i).setStatus(1);
+      } else {
+        applications.get(i).setStatus(0);
+      }
 
     }
   }
@@ -304,7 +307,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public JsonObject getInitialSemesterParameter(final Request pRequest, final UriInfo pUriInfo) {
     String startDate = "", endDate = "";
     Boolean deadLineStatus = false;
-    Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
     String semesterName = mSemesterManager.get(semesterId).getName();
     List<ApplicationTES> semesterParameterHead =
         getContentManager().getDeadlines(ParameterType.TES_QUESTION_SET_DATE.getValue(),
@@ -325,29 +328,29 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return object.build();
   }
 
-  public  JsonObject getDeleteEligibleQuestions(final Request pRequest, final UriInfo pUriInfo){
-        List<MutableApplicationTES> applications=getContentManager().getMigrationQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        localCache.invalidate();
-        return object.build();
-    }
-
-  public  JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo){
-        List<MutableApplicationTES> applications=getContentManager().getQuestions();
-        List<ApplicationTES> questionSemesterMap=getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-      checkMigrationValidity(applications, questionSemesterMap);
+  public JsonObject getDeleteEligibleQuestions(final Request pRequest, final UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = getContentManager().getMigrationQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        localCache.invalidate();
-        return object.build();
-    }
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo) {
+    List<MutableApplicationTES> applications = getContentManager().getQuestions();
+    List<ApplicationTES> questionSemesterMap = getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    checkMigrationValidity(applications, questionSemesterMap);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
 
   public List<ComparisonReport> getComparisonResult(final String pDeptId, final Integer pSemesterId,
       final Request pRequest, final UriInfo pUriInfo) {
@@ -371,7 +374,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     if(pDeptId.equals(TesStatus.MAXIMUM_SCORE_HOLDER.getValue())) {
       return getMaximumScoreHolderList(getDeptList, report, reportMaxMin);
     }
-    else if(pDeptId.equals(TesStatus.MAXIMUM_SCORE_HOLDER.getValue())) {
+    else if(pDeptId.equals(TesStatus.MINIMUM_SCORE_HOLDER.getValue())) {
       return getMinimumScoreHolderList(getDeptList, report, reportMaxMin);
     }
     else if(pDeptId.equals(TesStatus.FACULTY_OF_ENGINEERING.getValue())
@@ -398,15 +401,15 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public List<ComparisonReport> mergeList(List<ComparisonReport> report, List<ComparisonReport> reportFaculty, List<ApplicationTES> facultyWiseDeptList) {
-        List<ComparisonReport> tempList;
-        for(int i = 0; i<facultyWiseDeptList.size(); i++){
-            String departmentId=facultyWiseDeptList.get(i).getDeptId();
-             tempList=report.stream().filter(a->a.getDeptId().equals(departmentId)).collect(Collectors.toList());
-            reportFaculty= ListUtils.union(reportFaculty,tempList);
-            tempList= Collections.emptyList();
-        }
-        return reportFaculty;
+    List<ComparisonReport> tempList;
+    for (int i = 0; i < facultyWiseDeptList.size(); i++) {
+      String departmentId = facultyWiseDeptList.get(i).getDeptId();
+      tempList = report.stream().filter(a -> a.getDeptId().equals(departmentId)).collect(Collectors.toList());
+      reportFaculty = ListUtils.union(reportFaculty, tempList);
+      tempList = Collections.emptyList();
     }
+    return reportFaculty;
+  }
 
   private void evaluateTeacherInfo(Integer pSemesterId, List<ApplicationTES> teacherRelatedCourseList,
       DecimalFormat newFormat, List<ComparisonReport> report) {
@@ -451,18 +454,18 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   private List<ComparisonReport> getMinimumScoreHolderList(List<Department> getDeptList, List<ComparisonReport> report, List<ComparisonReport> reportMaxMin) {
-        for(int k=0;k<getDeptList.size();k++){
-            double min=10;
-            String dp=getDeptList.get(k).getId();
-            List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
-            min = getMinimumScore(getDeptList, k, min, list);
-            double finalMin = min;
-            list=list.stream().filter(a->a.getTotalScore()== finalMin).collect(Collectors.toList());
-            getMinimumScoreHolderInfo(reportMaxMin, min, list);
+    for (int k = 0; k < getDeptList.size(); k++) {
+      double INITIAL_MINIMUM_VALUE = 10;//
+      String dp = getDeptList.get(k).getId();
+      List<ComparisonReport> list = report.stream().filter(a -> a.getDeptId().equals(dp)).collect(Collectors.toList());
+      INITIAL_MINIMUM_VALUE = getMinimumScore(getDeptList, k, INITIAL_MINIMUM_VALUE, list);
+      double finalMin = INITIAL_MINIMUM_VALUE;
+      list = list.stream().filter(a -> a.getTotalScore() == finalMin).collect(Collectors.toList());
+      getMinimumScoreHolderInfo(reportMaxMin, INITIAL_MINIMUM_VALUE, list);
 
-        }
-        return  reportMaxMin;
     }
+    return reportMaxMin;
+  }
 
   private void getMinimumScoreHolderInfo(List<ComparisonReport> reportMaxMin, double min, List<ComparisonReport> list) {
     for(int l = 0; l < list.size(); l++) {
@@ -486,18 +489,18 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   private List<ComparisonReport> getMaximumScoreHolderList(List<Department> getDeptList, List<ComparisonReport> report, List<ComparisonReport> reportMaxMin) {
-        for(int k=0;k<getDeptList.size();k++){
-            double max=-1;
-            String dp=getDeptList.get(k).getId();
-            List<ComparisonReport> list=report.stream().filter(a->a.getDeptId().equals(dp)).collect(Collectors.toList());
-            max = getMaximumScore(getDeptList, k, max, list);
-            double finalMax = max;
-            list=list.stream().filter(a->a.getTotalScore()== finalMax).collect(Collectors.toList());
-            getMaximumScoreHolderInfo(reportMaxMin, max, list);
+    for (int k = 0; k < getDeptList.size(); k++) {
+      double INITIAL_MAXIMUM_VALUE = -1;
+      String dp = getDeptList.get(k).getId();
+      List<ComparisonReport> list = report.stream().filter(a -> a.getDeptId().equals(dp)).collect(Collectors.toList());
+      INITIAL_MAXIMUM_VALUE = getMaximumScore(getDeptList, k, INITIAL_MAXIMUM_VALUE, list);
+      double FINAL_MAX_VALUE = INITIAL_MAXIMUM_VALUE;
+      list = list.stream().filter(a -> a.getTotalScore() == FINAL_MAX_VALUE).collect(Collectors.toList());
+      getMaximumScoreHolderInfo(reportMaxMin, INITIAL_MAXIMUM_VALUE, list);
 
-        }
-        return  reportMaxMin;
     }
+    return reportMaxMin;
+  }
 
   private void getMaximumScoreHolderInfo(List<ComparisonReport> reportMaxMin, double max, List<ComparisonReport> list) {
     for(int l = 0; l < list.size(); l++) {
@@ -533,9 +536,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       double total = (studentNo / (double) registeredStudents);
       percentage = Double.valueOf(newFormat.format((total * 100)));
     } catch(Exception e) {
-
+      e.printStackTrace();
     }
-
     return percentage;
   }
 
@@ -553,93 +555,94 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return facultyId;
   }
 
-  public double getScore(String pTeacherId,String pCourseId,Integer pSemesterId,Integer studentNo,List<ApplicationTES> applications){
-      double classRoomObservation=0,nonClassRoomObservation=0,score=0;
-      Integer counterForClassRoomObservation =0, counterForNonClassRoomObservation =0;
-      DecimalFormat newFormat = new DecimalFormat("#.##");
-      HashMap<Long,Double> mapForCalculateResult=new HashMap<Long,Double>();
-      if(studentNo !=0){
-          applications.forEach(a->{
-              Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-              if(observationType!=3){
-                  double value=0;
-                  value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
-                  mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
-              }
-          });
-          for(Map.Entry m:mapForCalculateResult.entrySet()){
-              Long questionId=(Long)m.getKey();
-              if(getContentManager().getObservationType(questionId) ==1){
-                  counterForClassRoomObservation++;
-                  classRoomObservation=classRoomObservation+(double)m.getValue();
-              }else if(getContentManager().getObservationType(questionId) ==2){
-                  counterForNonClassRoomObservation++;
-                  nonClassRoomObservation=nonClassRoomObservation+(double)m.getValue();
-              }else{
-
-              }
-          }
-          classRoomObservation=Double.valueOf(newFormat.format((classRoomObservation/ counterForClassRoomObservation)));
-          nonClassRoomObservation=Double.valueOf(newFormat.format((nonClassRoomObservation/ counterForNonClassRoomObservation)));
-          score=Double.valueOf(newFormat.format((classRoomObservation+nonClassRoomObservation)/2));
+  public double getScore(String pTeacherId, String pCourseId, Integer pSemesterId, Integer studentNo, List<ApplicationTES> applications) {
+    double classRoomObservation = 0, nonClassRoomObservation = 0, score = 0;
+    Integer counterForClassRoomObservation = 0, counterForNonClassRoomObservation = 0;
+    DecimalFormat newFormat = new DecimalFormat("#.##");
+    HashMap<Long, Double> mapForCalculateResult = new HashMap<Long, Double>();
+    if (studentNo != 0) {
+      applications.forEach(a -> {
+        Integer observationType = mApplicationTesQuestionManager.get(a.getQuestionId()).getObservationType();
+        if (observationType != ObservationType.NON_TEACHING_OBSERVATION.getValue()) {
+          double value = 0;
+          value = getContentManager().getAverageScore(pTeacherId, pCourseId, a.getQuestionId(), pSemesterId);
+          mapForCalculateResult.put(a.getQuestionId(), (value / studentNo));
+        }
+      });
+      for(Map.Entry m:mapForCalculateResult.entrySet()){
+        Long questionId=(Long)m.getKey();
+        if(mApplicationTesQuestionManager.get(questionId).getObservationType() == ObservationType.CLASSROOM_OBSERVATION.getValue()){
+          counterForClassRoomObservation++;
+          classRoomObservation=classRoomObservation+(double)m.getValue();
+        }else if(mApplicationTesQuestionManager.get(questionId).getObservationType() ==ObservationType.NON_CLASSROOM_OBSERVATION.getValue()){
+          counterForNonClassRoomObservation++;
+          nonClassRoomObservation=nonClassRoomObservation+(double)m.getValue();
+        }else{
+           //ObservationType.NON_TEACHING_OBSERVATION.getValue()
+          //duplicate code will be removed
+        }
       }
-      return  score;
+      classRoomObservation = Double.valueOf(newFormat.format((classRoomObservation / counterForClassRoomObservation)));
+      nonClassRoomObservation = Double.valueOf(newFormat.format((nonClassRoomObservation / counterForNonClassRoomObservation)));
+      score = Double.valueOf(newFormat.format((classRoomObservation + nonClassRoomObservation) / 2));
+    }
+    return score;
   }
 
-  public JsonObject getSemesterWiseQuestions(final Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-    List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
+  public JsonObject getSemesterWiseQuestions(final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-  public JsonObject getAllQuestions(final Request pRequest, final UriInfo pUriInfo){
-      String startDate="",endDate="";
-      Boolean deadLineStatus = false,startingDeadline=false;
-      List<ApplicationTES> semesterParameterHead=getContentManager().getDeadlines(ParameterType.TES_STUDENT_EVALUATION_TIME_PERIOD.getValue(),mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//12=student TES mst_parameter_settings
-      for(int i=0;i<semesterParameterHead.size();i++){
-          startDate=semesterParameterHead.get(i).getSemesterStartDate();
-          endDate=semesterParameterHead.get(i).getSemesterEndDate();
-      }
-
-      try{
-          if(startDate != null && endDate != null) {
-              Date startDateConvert, lastApplyDate, currentDate;
-              currentDate = new Date();
-              startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
-              lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
-              if (currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
-                  deadLineStatus=true;
-              }else{
-                  deadLineStatus=false;
-              }
-              if (currentDate.compareTo(startDateConvert) >= 0){
-                  startingDeadline=true;
-              }else{
-                  startingDeadline=false;
-              }
-          }
-      }catch (Exception e){
-          e.printStackTrace();
-      }
-
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId()
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        object.add("startDate",startDate);
-        object.add("endDate",endDate);
-        object.add("deadLine",deadLineStatus);
-        object.add("startingDeadline",startingDeadline);
-        localCache.invalidate();
-        return object.build();
+  public JsonObject getAllQuestions(final Request pRequest, final UriInfo pUriInfo) {
+    String startDate = "", endDate = "";
+    Boolean deadLineStatus = false, startingDeadline = false;
+    List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines(ParameterType.TES_STUDENT_EVALUATION_TIME_PERIOD.getValue(), mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//12=student TES mst_parameter_settings
+    for (int i = 0; i < semesterParameterHead.size(); i++) {
+      startDate = semesterParameterHead.get(i).getSemesterStartDate();
+      endDate = semesterParameterHead.get(i).getSemesterEndDate();
     }
+
+    try {
+      if (startDate != null && endDate != null) {
+        Date startDateConvert, lastApplyDate, currentDate;
+        currentDate = new Date();
+        startDateConvert = UmsUtils.convertToDate(startDate, "dd-MM-yyyy");
+        lastApplyDate = UmsUtils.convertToDate(endDate, "dd-MM-yyyy");
+        if (currentDate.compareTo(startDateConvert) >= 0 && currentDate.compareTo(lastApplyDate) <= 0) {
+          deadLineStatus = true;
+        } else {
+          deadLineStatus = false;
+        }
+        if (currentDate.compareTo(startDateConvert) >= 0) {
+          startingDeadline = true;
+        } else {
+          startingDeadline = false;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    List<ApplicationTES> applications = getContentManager().getAllQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId()
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    object.add("startDate", startDate);
+    object.add("endDate", endDate);
+    object.add("deadLine", deadLineStatus);
+    object.add("startingDeadline", startingDeadline);
+    localCache.invalidate();
+    return object.build();
+  }
 
   public JsonObject getReviewPercentage(final String pCourseId, final String pTeacherId, final Integer pSemesterId,
       final Request pRequest, final UriInfo pUriInfo) {
@@ -773,39 +776,39 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   private void getEvaluationDetails(String pCourseId, String pTeacherId, Integer pSemesterId, DecimalFormat newFormat, List<Report> reportList, Integer studentNo, List<ApplicationTES> applications) {
-    if(studentNo !=0){
-        applications.forEach(a->{
-            Integer observationType=getContentManager().getObservationType(a.getQuestionId());
-            if(observationType!=3){
-                double value=0;
-                value=getContentManager().getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
-                String questionDetails=getContentManager().getQuestionDetails(a.getQuestionId());
-                reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
-            }
-        });
+    if (studentNo != 0) {
+      applications.forEach(a -> {
+        Integer observationType = mApplicationTesQuestionManager.get(a.getQuestionId()).getObservationType();
+        if (observationType != ObservationType.NON_TEACHING_OBSERVATION.getValue()) {
+          double value = 0;
+          value = getContentManager().getAverageScore(pTeacherId, pCourseId, a.getQuestionId(), pSemesterId);
+          String questionDetails = mApplicationTesQuestionManager.get(a.getQuestionId()).getQuestionDetails();
+          reportList.add(new Report(a.getQuestionId(), questionDetails, value, studentNo, (Double.valueOf(newFormat.format(value / studentNo))), observationType));
+        }
+      });
     }
   }
 
-  public List<StudentComment> getComments(final String pCourseId,final String pTeacherId,final  Integer pSemesterId,final Request pRequest, final UriInfo pUriInfo){
-        List<ApplicationTES> applications=getContentManager().getAllQuestions(pSemesterId);
-      List<ApplicationTES> getDetailedResult=null;
-      List<StudentComment> commentList= new ArrayList<StudentComment>();
+  public List<StudentComment> getComments(final String pCourseId, final String pTeacherId, final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
+    List<ApplicationTES> getDetailedResult = null;
+    List<StudentComment> commentList = new ArrayList<StudentComment>();
 
-        for(int i=0;i<applications.size();i++){
-            Long questionId=applications.get(i).getQuestionId();
-            Integer observationType=getContentManager().getObservationType(questionId);
-            if(observationType ==3){
-                String questionDetails=getContentManager().getQuestionDetails(questionId);
-                getDetailedResult=getContentManager().getDetailedResult(pTeacherId,pCourseId,pSemesterId).
-                        stream().
-                        filter(a->a.getComment() !=null && a.getQuestionId().equals(questionId)).collect(Collectors.toList());
-                int size=getDetailedResult.size();
+    for (int i = 0; i < applications.size(); i++) {
+      Long questionId = applications.get(i).getQuestionId();
+      Integer observationType = mApplicationTesQuestionManager.get(questionId).getObservationType();
+      if (observationType == ObservationType.NON_TEACHING_OBSERVATION.getValue()) {
+        String questionDetails = mApplicationTesQuestionManager.get(questionId).getQuestionDetails();
+        getDetailedResult = getContentManager().getDetailedResult(pTeacherId, pCourseId, pSemesterId).
+                stream().
+                filter(a -> a.getComment() != null && a.getQuestionId().equals(questionId)).collect(Collectors.toList());
+        int size = getDetailedResult.size();
 
-              setCommentToList(getDetailedResult, commentList, questionId, observationType, questionDetails, size);
-            }
-            }
-      return commentList;
+        setCommentToList(getDetailedResult, commentList, questionId, observationType, questionDetails, size);
+      }
     }
+    return commentList;
+  }
 
   public void setCommentToList(List<ApplicationTES> getDetailedResult, List<StudentComment> commentList,
       Long questionId, Integer observationType, String questionDetails, int size) {
@@ -819,68 +822,68 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   // getRecordsOfAssignedCoursesByHead
-  public JsonObject getRecordsOfAssignedCoursesByHead(final Request pRequest, final UriInfo pUriInfo){
-      String userId = SecurityUtils.getSubject().getPrincipal().toString();
-      User loggedUser = mUserManager.get(userId);
-      Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
-      String empDeptId=loggedEmployee.getDepartment().getId();
-        List<ApplicationTES> applications=getContentManager().getRecordsOfAssignedCoursesByHead(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),empDeptId);
-        Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
-        String semesterName = mSemesterManager.get(semesterId).getName();
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        object.add("semesterName",semesterName);
-        localCache.invalidate();
-        return object.build();
-    }
+  public JsonObject getRecordsOfAssignedCoursesByHead(final Request pRequest, final UriInfo pUriInfo) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User loggedUser = mUserManager.get(userId);
+    Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+    String empDeptId = loggedEmployee.getDepartment().getId();
+    List<ApplicationTES> applications = getContentManager().getRecordsOfAssignedCoursesByHead(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), empDeptId);
+    Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    String semesterName = mSemesterManager.get(semesterId).getName();
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    object.add("semesterName", semesterName);
+    localCache.invalidate();
+    return object.build();
+  }
 
-  public JsonObject getAssignedCourses(final String pFacultyId,final Request pRequest, final UriInfo pUriInfo){
-      String startDate="",endDate="";
-       Boolean deadLineStatus = false;
-       Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
-      String semesterName = mSemesterManager.get(semesterId).getName();
-      List<ApplicationTES> semesterParameterHead=getContentManager().getDeadlines(ParameterType.TES_HEAD_COURSE_ASSIGN_DATE.getValue(),mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-     for(int i=0;i<semesterParameterHead.size();i++){
-         startDate=semesterParameterHead.get(i).getSemesterStartDate();
-         endDate=semesterParameterHead.get(i).getSemesterEndDate();
-     }
+  public JsonObject getAssignedCourses(final String pFacultyId, final Request pRequest, final UriInfo pUriInfo) {
+    String startDate = "", endDate = "";
+    Boolean deadLineStatus = false;
+    Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    String semesterName = mSemesterManager.get(semesterId).getName();
+    List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines(ParameterType.TES_HEAD_COURSE_ASSIGN_DATE.getValue(), mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    for (int i = 0; i < semesterParameterHead.size(); i++) {
+      startDate = semesterParameterHead.get(i).getSemesterStartDate();
+      endDate = semesterParameterHead.get(i).getSemesterEndDate();
+    }
 
     deadLineStatus = checkDateValidity(startDate, endDate, deadLineStatus);
 
-    List<MutableApplicationTES> applications=getContentManager().getAssignedCourses(pFacultyId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-      List<ApplicationTES> assignedCoursesByHead=getContentManager().getAssignedCoursesByHead(pFacultyId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-      Map<String, ApplicationTES> assignedCourseMap = assignedCoursesByHead
-              .stream()
-              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourseId()+t.getSection()+t.getSemester(), t->t));
+    List<MutableApplicationTES> applications = getContentManager().getAssignedCourses(pFacultyId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    List<ApplicationTES> assignedCoursesByHead = getContentManager().getAssignedCoursesByHead(pFacultyId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    Map<String, ApplicationTES> assignedCourseMap = assignedCoursesByHead
+            .stream()
+            .collect(Collectors.toMap(t -> t.getTeacherId() + t.getReviewEligibleCourseId() + t.getSection() + t.getSemester(), t -> t));
 
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-      Boolean finalDeadLineStatus = deadLineStatus;
-      applications.forEach(a->{
-            if(assignedCourseMap.containsKey(a.getTeacherId()+a.getReviewEligibleCourseId()+a.getSection()+a.getSemester())){
-                a.setStatus(1);
-            }else{
-                a.setStatus(0);
-            }
-            String programName=getContentManager().getCourseDepartmentMap(a.getReviewEligibleCourseId(),mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//active semester
-            a.setProgramShortName(programName);
-            a.setDeadLineStatus(finalDeadLineStatus);
-                children.add(toJson(a, pUriInfo, localCache));
-        });
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    Boolean finalDeadLineStatus = deadLineStatus;
+    applications.forEach(a -> {
+      if (assignedCourseMap.containsKey(a.getTeacherId() + a.getReviewEligibleCourseId() + a.getSection() + a.getSemester())) {
+        a.setStatus(1);
+      } else {
+        a.setStatus(0);
+      }
+      String programName = getContentManager().getCourseDepartmentMap(a.getReviewEligibleCourseId(), mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//active semester
+      a.setProgramShortName(programName);
+      a.setDeadLineStatus(finalDeadLineStatus);
+      children.add(toJson(a, pUriInfo, localCache));
+    });
 
-        object.add("entries", children);
-        object.add("startDate",startDate);
-        object.add("endDate",endDate);
-        object.add("deadLine",deadLineStatus);
-        object.add("semesterName",semesterName);
-        localCache.invalidate();
-        return object.build();
+    object.add("entries", children);
+    object.add("startDate", startDate);
+    object.add("endDate", endDate);
+    object.add("deadLine", deadLineStatus);
+    object.add("semesterName", semesterName);
+    localCache.invalidate();
+    return object.build();
 
-    }
+  }
 
   public JsonObject getStudentSubmitDateInfo(final Request pRequest, final UriInfo pUriInfo) {
     String sStartDate = "", sEndDate = "";
@@ -919,46 +922,46 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   }
 
-  public JsonObject getAllFacultyMembers(final Request pRequest, final UriInfo pUriInfo){
-        String userId = SecurityUtils.getSubject().getPrincipal().toString();
-        User loggedUser = mUserManager.get(userId);
-        Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
-        String empDeptId=loggedEmployee.getDepartment().getId();
-        List<MutableApplicationTES> applications=getContentManager().getFacultyMembers(empDeptId);
-        getTeacherPersonalData(empDeptId, applications);
-        Integer getTotalRecords=getContentManager().getTotalRecords(empDeptId);
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-         object.add("totalRecords", getTotalRecords);
-        localCache.invalidate();
-        return object.build();
-    }
+  public JsonObject getAllFacultyMembers(final Request pRequest, final UriInfo pUriInfo) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User loggedUser = mUserManager.get(userId);
+    Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+    String empDeptId = loggedEmployee.getDepartment().getId();
+    List<MutableApplicationTES> applications = getContentManager().getFacultyMembers(empDeptId);
+    getTeacherPersonalData(empDeptId, applications);
+    Integer getTotalRecords = getContentManager().getTotalRecords(empDeptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    object.add("totalRecords", getTotalRecords);
+    localCache.invalidate();
+    return object.build();
+  }
 
-  public JsonObject getEligibleFacultyMembers(final Integer pSemesterId,final String pDeptId,final Request pRequest, final UriInfo pUriInfo){
-      String empDeptId = null;
-      if(pDeptId.equals("none") || pDeptId.equals(null)){
-          String userId = SecurityUtils.getSubject().getPrincipal().toString();
-          User loggedUser = mUserManager.get(userId);
-          Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
-          empDeptId=loggedEmployee.getDepartment().getId();
-      }else{
-          empDeptId=pDeptId;
-      }
-        List<MutableApplicationTES> applications=getContentManager().getEligibleFacultyMembers(empDeptId,pSemesterId);
-       getTeacherPersonalData(empDeptId, applications);
-       Integer getTotalRecords=getContentManager().getTotalRecords(empDeptId);
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
-        object.add("entries", children);
-        object.add("totalRecords", getTotalRecords);
-        localCache.invalidate();
-        return object.build();
+  public JsonObject getEligibleFacultyMembers(final Integer pSemesterId, final String pDeptId, final Request pRequest, final UriInfo pUriInfo) {
+    String empDeptId = null;
+    if (pDeptId.equals("none") || pDeptId.equals(null)) {
+      String userId = SecurityUtils.getSubject().getPrincipal().toString();
+      User loggedUser = mUserManager.get(userId);
+      Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
+      empDeptId = loggedEmployee.getDepartment().getId();
+    } else {
+      empDeptId = pDeptId;
     }
+    List<MutableApplicationTES> applications = getContentManager().getEligibleFacultyMembers(empDeptId, pSemesterId);
+    getTeacherPersonalData(empDeptId, applications);
+    Integer getTotalRecords = getContentManager().getTotalRecords(empDeptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    object.add("totalRecords", getTotalRecords);
+    localCache.invalidate();
+    return object.build();
+  }
 
   private void getTeacherPersonalData(String pDeptId, List<MutableApplicationTES> applications) {
     for(int i = 0; i < applications.size(); i++) {
@@ -974,64 +977,64 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     }
   }
 
-  public JsonObject getReviewEligibleCourses(final String pCourseType,final Request pRequest, final UriInfo pUriInfo){
-        String studentId = SecurityUtils.getSubject().getPrincipal().toString();
-        Student student = mStudentManager.get(studentId);
-        List<MutableApplicationTES> applications=getContentManager().
-                getReviewEligibleCourses(studentId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),pCourseType,student.getTheorySection());
-      Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
-      String semesterName = mSemesterManager.get(semesterId).getName();
-        List<ApplicationTES> alreadyReviewedCourses=getContentManager().getAlreadyReviewedCourses(studentId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+  public JsonObject getReviewEligibleCourses(final String pCourseType, final Request pRequest, final UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    List<MutableApplicationTES> applications = getContentManager().
+            getReviewEligibleCourses(studentId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), pCourseType, student.getTheorySection());
+    Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    String semesterName = mSemesterManager.get(semesterId).getName();
+    List<ApplicationTES> alreadyReviewedCourses = getContentManager().getAlreadyReviewedCourses(studentId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
 
-        Map<String, ApplicationTES> reviewedCourseMap = alreadyReviewedCourses
-              .stream()
-              .collect(Collectors.toMap(t->t.getTeacherId()+t.getReviewEligibleCourseId()+t.getStudentId()+t.getSemester(), t->t));
+    Map<String, ApplicationTES> reviewedCourseMap = alreadyReviewedCourses
+            .stream()
+            .collect(Collectors.toMap(t -> t.getTeacherId() + t.getReviewEligibleCourseId() + t.getStudentId() + t.getSemester(), t -> t));
 
 
-      JsonObjectBuilder object = Json.createObjectBuilder();
-      JsonArrayBuilder children = Json.createArrayBuilder();
-      LocalCache localCache = new LocalCache();
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
 
-      applications.forEach(a-> {
-            if(reviewedCourseMap.containsKey(a.getTeacherId() +a.getReviewEligibleCourseId()+a.getStudentId()+a.getSemester())){
-                a.setStatus(1);
-            }else{
-                a.setStatus(0);
-            }
-            children.add(toJson(a, pUriInfo, localCache));
-        });
-        object.add("entries", children);
-        object.add("semesterName",semesterName);
-        localCache.invalidate();
-        return object.build();
-    }
+    applications.forEach(a -> {
+      if (reviewedCourseMap.containsKey(a.getTeacherId() + a.getReviewEligibleCourseId() + a.getStudentId() + a.getSemester())) {
+        a.setStatus(1);
+      } else {
+        a.setStatus(0);
+      }
+      children.add(toJson(a, pUriInfo, localCache));
+    });
+    object.add("entries", children);
+    object.add("semesterName", semesterName);
+    localCache.invalidate();
+    return object.build();
+  }
 
-  public JsonObject getFacultyInfo(final String courseId,final String courseType,final Request pRequest, final UriInfo pUriInfo){
-        String studentId = SecurityUtils.getSubject().getPrincipal().toString();
-        Student student = mStudentManager.get(studentId);
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        String section = courseType.equals("Theory") ? student.getTheorySection() : student.getSessionalSection();
-        List<ApplicationTES> facultyInfo=getContentManager().getTeachersInfo(courseId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),section);
-        facultyInfo.forEach( a-> children.add(toJson(a,pUriInfo,localCache)));
-            object.add("entries",children);
-        localCache.invalidate();
-        return object.build();
-    }
+  public JsonObject getFacultyInfo(final String courseId, final String courseType, final Request pRequest, final UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    String section = courseType.equals("Theory") ? student.getTheorySection() : student.getSessionalSection();
+    List<ApplicationTES> facultyInfo = getContentManager().getTeachersInfo(courseId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), section);
+    facultyInfo.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
 
-  public JsonObject getAlreadyReviewedCoursesInfo(final String pCourseId,final String pTeacherId,final Request pRequest, final UriInfo pUriInfo){
-        String studentId = SecurityUtils.getSubject().getPrincipal().toString();
-        Student student = mStudentManager.get(studentId);
-        JsonObjectBuilder object = Json.createObjectBuilder();
-        JsonArrayBuilder children = Json.createArrayBuilder();
-        LocalCache localCache = new LocalCache();
-        List<ApplicationTES> applications=getContentManager().getReviewedCoursesForReadOnlyMode(pCourseId,pTeacherId,studentId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-        applications.forEach( a-> children.add(toJson(a,pUriInfo,localCache)));
-        object.add("entries",children);
-        localCache.invalidate();
-        return object.build();
-    }
+  public JsonObject getAlreadyReviewedCoursesInfo(final String pCourseId, final String pTeacherId, final Request pRequest, final UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    List<ApplicationTES> applications = getContentManager().getReviewedCoursesForReadOnlyMode(pCourseId, pTeacherId, studentId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    applications.forEach(a -> children.add(toJson(a, pUriInfo, localCache)));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
 
   @Override
   protected ApplicationTESManager getContentManager() {
@@ -1047,4 +1050,5 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   protected String getETag(ApplicationTES pReadonly) {
     return pReadonly.getApplicationDate();
   }
+
 }

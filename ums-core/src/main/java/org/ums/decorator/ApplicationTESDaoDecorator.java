@@ -99,16 +99,6 @@ public class ApplicationTESDaoDecorator extends
   }
 
   @Override
-  public String getQuestionDetails(Long pQuestionId) {
-    return getManager().getQuestionDetails(pQuestionId);
-  }
-
-  @Override
-  public Integer getObservationType(Long pQuestionId) {
-    return getManager().getObservationType(pQuestionId);
-  }
-
-  @Override
   public Integer getTotalStudentNumber(String pTeacherId, String pCourseId, Integer pSemesterId) {
     return getManager().getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
   }

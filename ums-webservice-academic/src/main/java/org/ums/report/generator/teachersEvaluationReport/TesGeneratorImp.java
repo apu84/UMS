@@ -17,6 +17,7 @@ import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.Department;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.FacultyType;
+import org.ums.enums.tes.ObservationType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 
@@ -51,6 +52,8 @@ public class TesGeneratorImp implements TesGenerator {
   private EmployeeManager mEmployeeManager;
   @Autowired
   private ApplicationTESResourceHelper mApplicationTESResourceHelper;
+  @Autowired
+  ApplicationTesQuestionManager mApplicationTesQuestionManager;
   private String courseId;
   private String teacherId;
   private Integer semesterId;
@@ -152,19 +155,19 @@ public class TesGeneratorImp implements TesGenerator {
 
     //general report
 
-      double cRoomObservation=0,noncRoomObservation=0;
-      Integer countercR=0, counterncR=0;
+      double classRoomObservation=0,nonClassRoomObservation=0;
+      Integer counterForClassRoomObservation=0, counterForNonClassRoomObservation=0;
       double totalPointsObtype1=0, totalStudentsObtype1=0, totalPointsObtype2=0, totalStudentsObtype2=0;
     HashMap<Long,Double> mapForCalculateResult=new HashMap<Long,Double>();
     List<Report> reportList= new ArrayList<Report>();
     List<ApplicationTES> applications=mApplicationTESManager.getAllQuestions(pSemesterId);
      if(studentNo !=0){
        applications.forEach(a->{
-         Integer observationType=mApplicationTESManager.getObservationType(a.getQuestionId());
-         if(observationType!=3){
+         Integer observationType=mApplicationTesQuestionManager.get(a.getQuestionId()).getObservationType();
+         if(observationType!=ObservationType.NON_TEACHING_OBSERVATION.getValue()){
            double value=0;
            value=mApplicationTESManager.getAverageScore(pTeacherId,pCourseId,a.getQuestionId(),pSemesterId);
-           String questionDetails=mApplicationTESManager.getQuestionDetails(a.getQuestionId());
+           String questionDetails=mApplicationTesQuestionManager.get(a.getQuestionId()).getQuestionDetails();
            reportList.add(new Report(a.getQuestionId(),questionDetails,value,studentNo,(Double.valueOf(newFormat.format(value/studentNo))),observationType));
            mapForCalculateResult.put(a.getQuestionId(),(value/studentNo));
          }
@@ -172,18 +175,18 @@ public class TesGeneratorImp implements TesGenerator {
        });
        for(Map.Entry m:mapForCalculateResult.entrySet()){
          Long questionId=(Long)m.getKey();
-         if(mApplicationTESManager.getObservationType(questionId) ==1){
-           countercR++;
-           cRoomObservation=cRoomObservation+(double)m.getValue();
-         }else if(mApplicationTESManager.getObservationType(questionId) ==2){
-           counterncR++;
-           noncRoomObservation=noncRoomObservation+(double)m.getValue();
+         if(mApplicationTesQuestionManager.get(questionId).getObservationType() == ObservationType.CLASSROOM_OBSERVATION.getValue()){
+           counterForClassRoomObservation++;
+           classRoomObservation=classRoomObservation+(double)m.getValue();
+         }else if(mApplicationTesQuestionManager.get(questionId).getObservationType() ==ObservationType.NON_CLASSROOM_OBSERVATION.getValue()){
+           counterForNonClassRoomObservation++;
+           nonClassRoomObservation=nonClassRoomObservation+(double)m.getValue();
          }else{
 
          }
        }
-       cRoomObservation=Double.valueOf(newFormat.format(cRoomObservation/countercR));
-       noncRoomObservation=Double.valueOf(newFormat.format(noncRoomObservation/counterncR));
+       classRoomObservation=Double.valueOf(newFormat.format(classRoomObservation/counterForClassRoomObservation));
+       nonClassRoomObservation=Double.valueOf(newFormat.format(nonClassRoomObservation/counterForNonClassRoomObservation));
 
        for(int i=0;i<reportList.size();i++){
          if(reportList.get(i).getObservationType()==1){
@@ -245,7 +248,7 @@ public class TesGeneratorImp implements TesGenerator {
     subset.addCell("");
     subset.addCell(""+totalPointsObtype1);
     subset.addCell(""+totalStudentsObtype1);
-    subset.addCell(""+cRoomObservation);
+    subset.addCell(""+classRoomObservation);
     try {
       document.add(subset);
     } catch (DocumentException e) {
@@ -297,7 +300,7 @@ public class TesGeneratorImp implements TesGenerator {
     subset1.addCell("");
     subset1.addCell(""+totalPointsObtype2);
     subset1.addCell(""+totalStudentsObtype2);
-    subset1.addCell(""+noncRoomObservation);
+    subset1.addCell(""+nonClassRoomObservation);
     try {
       document.add(subset1);
     } catch (DocumentException e) {
@@ -317,7 +320,7 @@ public class TesGeneratorImp implements TesGenerator {
     tableGreen.addCell("");
     tableGreen.addCell(""+(totalPointsObtype1+totalPointsObtype2));
     tableGreen.addCell(""+(totalStudentsObtype1+totalStudentsObtype2));
-    tableGreen.addCell(""+Double.valueOf(newFormat.format((cRoomObservation+noncRoomObservation)/2)));
+    tableGreen.addCell(""+Double.valueOf(newFormat.format((classRoomObservation+nonClassRoomObservation)/2)));
     try {
       document.add(tableGreen);
     } catch (DocumentException e) {
@@ -423,9 +426,9 @@ public class TesGeneratorImp implements TesGenerator {
     List<ApplicationTES> getDetailedResult;
     for(int i = 0; i<applications.size(); i++){
       Long questionId=applications.get(i).getQuestionId();
-      Integer observationType=mApplicationTESManager.getObservationType(questionId);
-      if(observationType ==3){
-        String questionDetails=mApplicationTESManager.getQuestionDetails(questionId);
+      Integer observationType=mApplicationTesQuestionManager.get(questionId).getObservationType();
+      if(observationType ==ObservationType.NON_TEACHING_OBSERVATION.getValue()){
+        String questionDetails=mApplicationTesQuestionManager.get(questionId).getQuestionDetails();
         getDetailedResult=mApplicationTESManager.getDetailedResult(pTeacherId,pCourseId,pSemesterId).
                 stream().
                 filter(a->a.getComment() !=null && a.getQuestionId().equals(questionId)).collect(Collectors.toList());
@@ -734,7 +737,7 @@ public class TesGeneratorImp implements TesGenerator {
     chunk = new Chunk("Semester: "+mSemesterManager.get(pSemesterId).getName()+"\n"+
             "Year-Semester: "+pYear+"-"+pSemester+"\n"+
             "Department: "+mDepartmentManager.get(pDeptId).getLongName()+"\n"+
-            "Question Details:  "+mApplicationTESManager.getQuestionDetails(pQuestionId));
+            "Question Details:  "+ mApplicationTesQuestionManager.get(pQuestionId).getQuestionDetails());
 
     paragraph = new Paragraph();
     paragraph.setAlignment(Element.ALIGN_LEFT);
