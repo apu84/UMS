@@ -29,6 +29,7 @@ public class PersistentGroup implements MutableGroup {
   private String mMainGroup;
   private String mReservedFlag;
   private String mFlag;
+  private String mDisplayCode;
   private BigDecimal mTaxLimit;
   private BigDecimal mTdsPercent;
   private String mDefaultComp;
@@ -59,6 +60,17 @@ public class PersistentGroup implements MutableGroup {
     mStatusUpFlag = pPersistentGroup.getStatUpFlag();
     mModifiedDate = pPersistentGroup.getModifiedDate();
     mModifiedBy = pPersistentGroup.getModifiedBy();
+    mDisplayCode = pPersistentGroup.getDisplayCode();
+  }
+
+  @Override
+  public String getDisplayCode() {
+    return mDisplayCode;
+  }
+
+  @Override
+  public void setDisplayCode(String pDisplayCode) {
+    mDisplayCode = pDisplayCode;
   }
 
   public PersistentGroup getMainGroupObject() {

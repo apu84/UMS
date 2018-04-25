@@ -28,9 +28,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   private String INSERT_ONE =
       "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
-          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, last_modified)"
+          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, display_code, last_modified)"
           + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
-          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy,"
+          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :displayCode,"
           + getLastModifiedSql() + ")";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
@@ -163,6 +163,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
       group.setStatUpFlag(rs.getString("stat_up_flag"));
       group.setModifiedDate(rs.getDate("modified_date"));
       group.setModifiedBy(rs.getString("modified_by"));
+      group.setDisplayCode(rs.getString("display_code"));
       group.setLastModified(rs.getString("last_modified"));
       return group;
     }

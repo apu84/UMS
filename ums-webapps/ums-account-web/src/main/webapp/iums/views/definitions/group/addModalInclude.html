@@ -8,52 +8,107 @@
                 <h4 class="modal-title">Add Group</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered">
-                            <thead>
-                            <th>Group Name</th>
-                            <th>Main Group Of</th>
-                            <th>Sub Ledger</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="text" ng-model="vm.addedGroup.groupName"
-                                           class="form-control"/></td>
-                                <td>
-                                    <div class="form-group">
-                                        <ui-select theme="bootstrap"
-                                                   data-ng-model="vm.addedGroup.mainGroupObject"
+                <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                <!--<table class="table table-bordered">-->
+                <!--<thead>-->
+                <!--<th>Group Name</th>-->
+                <!--<th>Main Group Of</th>-->
+                <!--<th>Display Code</th>-->
+                <!--<th>Sub Ledger</th>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--<tr>-->
+                <!--<td>-->
+                <!--<input type="text" ng-model="vm.addedGroup.groupName"-->
+                <!--class="form-control" name="groupName" required/>-->
+                <!--<span ng-show="groupName.$touched && groupName.$invalid">Group name is required</span>-->
+                <!--</td>-->
+                <!--<td>-->
+                <!--<div class="form-group">-->
+                <!--<ui-select theme="bootstrap"-->
+                <!--data-ng-model="vm.addedGroup.mainGroupObject"-->
 
-                                        >
-                                            <ui-select-match placeholder="Select Main Group">
-                                                {{vm.addedGroup.mainGroupObject.groupName}}
-                                            </ui-select-match>
-                                            <ui-select-choices class="ui-select"
-                                                               repeat="g in vm.groups|filter:$select.search">
-                                                <small ng-bind-html="g.groupName | highlight:$select.search"></small>
-                                            </ui-select-choices>
-                                            <!-- <option ng-repeat="g in vm.groups"
-                                                     value="{{g.groupCode}}">{{g.groupName}}
-                                             </option>-->
-                                        </ui-select>
-                                    </div>
+                <!--&gt;-->
+                <!--<ui-select-match placeholder="Select Main Group" required name="mainGroup">-->
+                <!--{{vm.addedGroup.mainGroupObject.groupName}}-->
+                <!--</ui-select-match>-->
+                <!--<ui-select-choices class="ui-select"-->
+                <!--repeat="g in vm.groups|filter:$select.search">-->
+                <!--<small ng-bind-html="g.groupName | highlight:$select.search"></small>-->
+                <!--</ui-select-choices>-->
+                <!--&lt;!&ndash; <option ng-repeat="g in vm.groups"-->
+                <!--value="{{g.groupCode}}">{{g.groupName}}-->
+                <!--</option>&ndash;&gt;-->
+                <!--</ui-select>-->
+                <!--<span ng-show="mainGroup.$touched && groupName.$invalid">Main group is required</span>-->
+                <!--</div>-->
 
-                                </td>
-                                <td>
-                                    <label><input type="checkbox"
-                                                  ng-model="vm.addedGroup.flagBoolValue"></label>
-                                </td>
+                <!--</td>-->
+                <!--<td>-->
+                <!--<input type="text" ng-model="vm.addedGroup.displayCode"-->
+                <!--class="form-control" name="displayCode" required/>-->
+                <!--<span ng-show="displayCode.$touched && displayCode.$invalid">Display code is required</span>-->
+                <!--</td>-->
+                <!--<td>-->
+                <!--<label><input type="checkbox"-->
+                <!--ng-model="vm.addedGroup.flagBoolValue"></label>-->
+                <!--</td>-->
 
-                            </tr>
-                            </tbody>
-                        </table>
+                <!--</tr>-->
+                <!--</tbody>-->
+                <!--</table>-->
+                <!--</div>-->
+
+                <!--</div>-->
+                <form class="form-horizontal" name="addForm">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="groupName">Group Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" ng-model="vm.addedGroup.groupName"
+                                   class="form-control" name="groupName" required/>
+                            <span ng-show="addForm.groupName.$touched && addForm.groupName.$invalid">Group name is required</span>
+                        </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="mainGroup">Main Group</label>
+                        <div class="col-sm-6">
+                            <ui-select theme="bootstrap"
+                                       data-ng-model="vm.addedGroup.mainGroupObject"
 
-                </div>
+                            >
+                                <ui-select-match placeholder="Select Main Group" required name="mainGroup">
+                                    {{vm.addedGroup.mainGroupObject.groupName}}
+                                </ui-select-match>
+                                <ui-select-choices class="ui-select"
+                                                   repeat="g in vm.groups|filter:$select.search">
+                                    <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                                <!-- <option ng-repeat="g in vm.groups"
+                                         value="{{g.groupCode}}">{{g.groupName}}
+                                 </option>-->
+                            </ui-select>
+                            <span ng-show="addForm.mainGroup.$touched && addForm.groupName.$invalid">Main group is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="displayCode">Display Code</label>
+                        <div class="col-sm-6">
+                            <input type="text" ng-model="vm.addedGroup.displayCode"
+                                   class="form-control" name="displayCode" required/>
+                            <span ng-show="addForm.displayCode.$touched && addForm.displayCode.$invalid">Display code is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="subLedger">Sub ledger</label>
+                        <label class="control-label col-sm-6"><input type="checkbox"
+                                                                     ng-model="vm.addedGroup.flagBoolValue"></label>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" ng-click="vm.saveOne()" data-dismiss="modal">
+                <button type="button" class="btn btn-success" ng-click="vm.saveOne()" data-dismiss="modal"
+                        data-ng-disabled="addForm.$invalid">
                     Add
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

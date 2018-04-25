@@ -19,6 +19,8 @@ public interface MutableGroup extends Group, Editable<Long>, MutableLastModifier
 
   void setGroupCode(String pGroupCode);
 
+  void setDisplayCode(String pDisplayCode);
+
   void setGroupName(String pGroupName);
 
   void setMainGroup(String pMainGroup);

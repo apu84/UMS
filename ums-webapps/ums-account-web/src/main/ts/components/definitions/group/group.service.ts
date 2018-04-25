@@ -4,6 +4,7 @@ module ums {
     stringId: string;
     compCode: string;
     groupCode: string;
+    displayCode: string;
     groupName: string;
     mainGroup: string;
     mainGroupObject: IGroup;

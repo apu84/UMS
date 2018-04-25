@@ -77,9 +77,9 @@ public class PersistentItemDao extends ItemDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     pItem.setId(id);
     mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
-        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType() == null ? null : pItem.getAcquisitionType().getId(),
-        pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(), pItem.getStatus().getId(), "insert",
-        "update", 0);
+        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType() == null ? null
+            : pItem.getAcquisitionType().getId(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(),
+        pItem.getStatus().getId(), "insert", "update", 0);
 
     return id;
   }

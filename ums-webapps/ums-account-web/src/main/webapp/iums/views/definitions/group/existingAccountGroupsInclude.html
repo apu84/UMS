@@ -53,20 +53,22 @@
 <table st-table="displayed" class=" table table-striped ">
     <thead align="center">
     <tr class="header">
-        <th st-ratio="40" st-sort="groupName">Group Name</th>
-        <th st-ratio="40" st-sort="mainGroup">Under The Main Group Of</th>
-        <th st-ration="10" align="center"><p align="center">Sub Ledger</p></th>
-        <th st-ration="10"></th>
+        <th st-ratio="30" st-sort="groupName">Group Name</th>
+        <th st-ratio="30" st-sort="displayCode">Display Code</th>
+        <th st-ratio="30" st-sort="mainGroup">Under The Main Group Of</th>
+        <th st-ration="5" align="center"><p align="center">Sub Ledger</p></th>
+        <th st-ration="5"></th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="g in vm.groups">
-        <td st-ratio="40">{{g.groupName}}</td>
-        <td st-ratio="40">{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
-        <td st-ratio="10" align="center">
+        <td st-ratio="30">{{g.groupName}}</td>
+        <td st-ratio="30">{{g.displayCode}}</td>
+        <td st-ratio="30">{{vm.groupMapWithId[g.mainGroup].groupName}}</td>
+        <td st-ratio="5" align="center">
             <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
         </td>
-        <td st-ratio="10">
+        <td st-ratio="5">
             <button data-ng-disabled="true" class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)"
                     data-toggle="modal"
                     data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>

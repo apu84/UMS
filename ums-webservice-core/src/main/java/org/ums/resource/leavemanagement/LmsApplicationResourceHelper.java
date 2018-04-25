@@ -310,10 +310,11 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     int leavesTaken = 0;
     if(pApplicationMap.get(lmsType.getId()) != null)
       for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
-        if (UmsUtils.formatDate(application.getFromDate(), "dd-MM-yyyy").equals(
+        if(UmsUtils.formatDate(application.getFromDate(), "dd-MM-yyyy").equals(
             UmsUtils.formatDate(application.getToDate(), "dd-MM-yyyy"))) {
           leavesTaken += 1;
-        } else {
+        }
+        else {
           long diffInMillies =
               Math.abs(UmsUtils.getDateWithoutTime(application.getToDate()).getTime()
                   - UmsUtils.getDateWithoutTime(application.getFromDate()).getTime());

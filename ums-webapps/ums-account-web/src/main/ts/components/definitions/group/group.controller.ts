@@ -106,6 +106,7 @@ module ums {
       this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groupService.saveAGroup(this.addedGroup).then((groups) => {
+        console.log("Fetched groups");
         this.addedGroup = <IGroup>{};
         this.assignToGroupAndMap(groups);
 
