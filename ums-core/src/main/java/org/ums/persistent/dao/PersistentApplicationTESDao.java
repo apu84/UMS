@@ -60,7 +60,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "MST_DEPT_OFFICE.DEPT_ID=a.DEPT_OFFICE";
 
   String ASSIGNED_COURSE_INFO =
-      "SELECT c.FIRST_NAME,c.LAST_NAME,b.COURSE_NO,b.COURSE_TITLE,a.SEMESTER_ID,a.ASSIGNED_SECTION,to_char(a.applied_on,'DD-MM-YYYY') applied_on FROM TES_SELECTED_COURSES a,MST_COURSE b,EMP_PERSONAL_INFO c "
+      "SELECT c.FIRST_NAME,c.LAST_NAME,b.COURSE_NO,b.COURSE_TITLE,a.SEMESTER_ID,a.ASSIGNED_SECTION,to_char(a.INSERTED_ON,'DD-MM-YYYY') INSERTED_ON FROM TES_SELECTED_COURSES a,MST_COURSE b,EMP_PERSONAL_INFO c "
           + "WHERE   a.SEMESTER_ID=? AND  a.COURSE_ID=b.COURSE_ID AND a.TEACHER_ID=c.EMPLOYEE_ID AND a.DEPT_ID=?";
 
   String TEACHER_INFO =
@@ -76,7 +76,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "WHERE COURSE_TEACHER.TEACHER_ID=EMPLOYEES.EMPLOYEE_ID AND COURSE_TEACHER.TEACHER_ID=EMP_PERSONAL_INFO.EMPLOYEE_ID AND "
           + "MST_DEPT_OFFICE.DEPT_ID=EMPLOYEES.DEPT_OFFICE AND COURSE_TEACHER.SEMESTER_ID=? and COURSE_TEACHER.COURSE_ID=? and COURSE_TEACHER.\"SECTION\"=?";
 
-  String FACULTY_MEMBERS = "select EMPLOYEE_ID from EMPLOYEES  WHERE DEPT_OFFICE=?";
+  String TEACHERS_BY_DEPT = "select EMPLOYEE_ID from EMPLOYEES  WHERE DEPT_OFFICE=? AND EMPLOYEE_TYPE=1";
 
   String ASSIGNED_COURSES =
       "SELECT a.TEACHER_ID,a.COURSE_ID,b.COURSE_NO,b.COURSE_TITLE,a.\"SECTION\",a.SEMESTER_ID from COURSE_TEACHER a,MST_COURSE b WHERE a.TEACHER_ID=? and a.SEMESTER_ID=? "
@@ -107,7 +107,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
           + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID))";
 
   String ELIGIBLE_FACULTY_MEMBERS =
-      "Select DISTINCT TEACHER_ID  from TES_COURSE_ASSIGN WHERE DEPT_ID=? AND SEMESTER_ID=? ";
+      "Select DISTINCT TEACHER_ID  from TES_SELECTED_COURSES WHERE DEPT_ID=? AND SEMESTER_ID=? ";
 
   String SEMESTER_PARAMETER =
       "SELECT SEMESTER_ID,to_char(START_DATE,'DD-MM-YYYY') START_DATE,to_char(END_DATE,'DD-MM-YYYY') END_DATE from MST_PARAMETER_SETTING WHERE SEMESTER_ID=? and PARAMETER_ID=?";
@@ -230,8 +230,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
   @Override
   public List<MutableApplicationTES> getEligibleFacultyMembers(String pDeptId, Integer pSemesterId) {
     String query = ELIGIBLE_FACULTY_MEMBERS;
-    return mJdbcTemplate.query(query, new Object[] {pDeptId, pSemesterId},
-        new ApplicationTesRowMapperForFacultyMembers());
+    return mJdbcTemplate.query(query, new Object[] {pDeptId, pSemesterId}, new ApplicationTesRowMapperForTeachers());
   }
 
   @Override
@@ -303,8 +302,8 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
 
   @Override
   public List<MutableApplicationTES> getFacultyMembers(String pDeptId) {
-    String query = FACULTY_MEMBERS;
-    return mJdbcTemplate.query(query, new Object[] {pDeptId}, new ApplicationTesRowMapperForFacultyMembers());
+    String query = TEACHERS_BY_DEPT;
+    return mJdbcTemplate.query(query, new Object[] {pDeptId}, new ApplicationTesRowMapperForEmployeeMembers());
   }
 
   @Override
@@ -642,11 +641,19 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
       application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
-      application.setAppliedDate(pResultSet.getString("applied_on"));
+      application.setAppliedDate(pResultSet.getString("INSERTED_ON"));
       return application;
     }
   }
-  class ApplicationTesRowMapperForFacultyMembers implements RowMapper<MutableApplicationTES> {
+  class ApplicationTesRowMapperForEmployeeMembers implements RowMapper<MutableApplicationTES> {
+    @Override
+    public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setTeacherId(pResultSet.getString("EMPLOYEE_ID"));
+      return application;
+    }
+  }
+  class ApplicationTesRowMapperForTeachers implements RowMapper<MutableApplicationTES> {
     @Override
     public MutableApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();

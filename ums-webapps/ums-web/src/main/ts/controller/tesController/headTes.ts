@@ -122,6 +122,9 @@ module ums{
         public selectedRegisteredStudents:number;
         public percentage:number;
         public studentReviewed:number;
+        public assignedCourseForCurrentSemesterLength:number;
+        public pCurrentPage:number;
+        public pItemsPerPage:number;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -143,6 +146,8 @@ module ums{
         this.commentPgItemsPerPage=1;
         this.innerCommentPgCurrentPage=1;
         this.innerCommentPgItemsPerPage=2;
+        this.pCurrentPage=1;
+        this.pItemsPerPage=3;
         this.commentPgTotalRecords=0;
         this.checkEvaluationResult=true;
         this.evaluationResultStatus=true;
@@ -262,6 +267,8 @@ module ums{
                this.setRivewedCoursesHistory=appTES;
                console.log(this.setRivewedCoursesHistory);
                this.semesterName=json.semesterName;
+               this.assignedCourseForCurrentSemesterLength=this.setRivewedCoursesHistory.length;
+               console.log("Size: "+this.assignedCourseForCurrentSemesterLength);
                defer.resolve(json.entries);
            },
            (response: ng.IHttpPromiseCallbackArg<any>) => {

@@ -53,6 +53,12 @@
                                   id="search"
                                   placeholder='Search by Teacher Name'
                                   data-ng-model="assignedCourseSearch"/></label><br><br>
+
+                    <pagination total-items="vm.assignedCourseForCurrentSemesterLength"
+                                ng-model="vm.pCurrentPage" max-size="7"
+                                class="pagination-sm" boundary-links="true" rotate="false"
+                                class="pagination-page"
+                                items-per-page="vm.pItemsPerPage"></pagination>
                     <table class="table table-striped">
                         <thead>
                         <th style="background-color: #FAFAFA; ">SL</th>
@@ -63,8 +69,8 @@
                         <th style="background-color: #FAFAFA; ">Assigned Date</th>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="app in vm.setRivewedCoursesHistory | filter:assignedCourseSearch ">
-                            <td>{{$index+1}}</td>
+                        <tr data-ng-repeat="app in (filterd = vm.setRivewedCoursesHistory | filter:assignedCourseSearch | limitTo:vm.pItemsPerPage:vm.pItemsPerPage*(vm.pCurrentPage - 1))">
+                            <td>{{(vm.pCurrentPage - 1) * vm.pItemsPerPage + $index + 1}}</td>
                             <td>{{app.firstName+" "+app.lastName}}</td>
                             <td>{{app.courseNo}}</td>
                             <td>{{app.courseTitle}}</td>

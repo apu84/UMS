@@ -304,7 +304,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public JsonObject getInitialSemesterParameter(final Request pRequest, final UriInfo pUriInfo) {
     String startDate = "", endDate = "";
     Boolean deadLineStatus = false;
-    Semester semesterName = mSemesterManager.get(ProgramType.UG.getValue());
+    Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    String semesterName = mSemesterManager.get(semesterId).getName();
     List<ApplicationTES> semesterParameterHead =
         getContentManager().getDeadlines(ParameterType.TES_QUESTION_SET_DATE.getValue(),
             mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
@@ -319,7 +320,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     object.add("startDate", startDate);
     object.add("endDate", endDate);
     object.add("deadLine", deadLineStatus);
-    object.add("semesterName", semesterName.toString());
+    object.add("semesterName", semesterName);
     localCache.invalidate();
     return object.build();
   }
@@ -824,13 +825,14 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       Employee loggedEmployee = mEmployeeManager.get(loggedUser.getEmployeeId());
       String empDeptId=loggedEmployee.getDepartment().getId();
         List<ApplicationTES> applications=getContentManager().getRecordsOfAssignedCoursesByHead(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),empDeptId);
-        Semester semesterName = mSemesterManager.get(ProgramType.UG.getValue());
+        Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+        String semesterName = mSemesterManager.get(semesterId).getName();
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
         applications.forEach(a-> children.add(toJson(a, pUriInfo, localCache)));
         object.add("entries", children);
-        object.add("semesterName",semesterName.toString());
+        object.add("semesterName",semesterName);
         localCache.invalidate();
         return object.build();
     }
@@ -838,7 +840,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public JsonObject getAssignedCourses(final String pFacultyId,final Request pRequest, final UriInfo pUriInfo){
       String startDate="",endDate="";
        Boolean deadLineStatus = false;
-      Semester semesterName = mSemesterManager.get(ProgramType.UG.getValue());
+       Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+      String semesterName = mSemesterManager.get(semesterId).getName();
       List<ApplicationTES> semesterParameterHead=getContentManager().getDeadlines(ParameterType.TES_HEAD_COURSE_ASSIGN_DATE.getValue(),mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
      for(int i=0;i<semesterParameterHead.size();i++){
          startDate=semesterParameterHead.get(i).getSemesterStartDate();
@@ -873,7 +876,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         object.add("startDate",startDate);
         object.add("endDate",endDate);
         object.add("deadLine",deadLineStatus);
-        object.add("semesterName",semesterName.toString());
+        object.add("semesterName",semesterName);
         localCache.invalidate();
         return object.build();
 
@@ -945,8 +948,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
           empDeptId=pDeptId;
       }
         List<MutableApplicationTES> applications=getContentManager().getEligibleFacultyMembers(empDeptId,pSemesterId);
-      getTeacherPersonalData(pDeptId, applications);
-      Integer getTotalRecords=getContentManager().getTotalRecords(empDeptId);
+       getTeacherPersonalData(empDeptId, applications);
+       Integer getTotalRecords=getContentManager().getTotalRecords(empDeptId);
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
         LocalCache localCache = new LocalCache();
@@ -976,7 +979,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         Student student = mStudentManager.get(studentId);
         List<MutableApplicationTES> applications=getContentManager().
                 getReviewEligibleCourses(studentId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),pCourseType,student.getTheorySection());
-      Semester semesterName = mSemesterManager.get(ProgramType.UG.getValue());
+      Integer semesterId=mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+      String semesterName = mSemesterManager.get(semesterId).getName();
         List<ApplicationTES> alreadyReviewedCourses=getContentManager().getAlreadyReviewedCourses(studentId,mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
 
         Map<String, ApplicationTES> reviewedCourseMap = alreadyReviewedCourses
@@ -997,7 +1001,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
             children.add(toJson(a, pUriInfo, localCache));
         });
         object.add("entries", children);
-        object.add("semesterName",semesterName.toString());
+        object.add("semesterName",semesterName);
         localCache.invalidate();
         return object.build();
     }
