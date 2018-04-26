@@ -31,6 +31,7 @@ module ums {
 
     private removeButtonClicked(group: IGroup) {
       this.removedGroup = group;
+      this.removedGroup.mainGroupObject = this.groupMapWithId[this.removedGroup.mainGroup];
       console.log("Removed group");
       console.log(this.removedGroup);
     }
