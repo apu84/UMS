@@ -90,6 +90,12 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   @Autowired
   ApplicationTesQuestionManager mApplicationTesQuestionManager;
 
+  @Autowired
+  ApplicationTesSetQuestionManager mApplicationTesSetQuestionManager;
+
+  @Autowired
+  ApplicationTesSelectedCourseManager mApplicationTesSelectedCourseManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
@@ -265,6 +271,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   public JsonObject getMigrationQuestions(final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
     List<MutableApplicationTES> applications = getContentManager().getMigrationQuestions(pSemesterId);
     List<ApplicationTES> questionSemesterMap = getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    String x=mApplicationTesSelectedCourseManager.get(Long.parseLong("-1383167847042870825")).getCourseId();
     checkMigrationValidity(applications, questionSemesterMap);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
