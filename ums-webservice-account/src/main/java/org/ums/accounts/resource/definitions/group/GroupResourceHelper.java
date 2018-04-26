@@ -7,6 +7,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.GroupManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
@@ -34,6 +35,8 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
   private GroupBuilder mBuilder;
   @Autowired
   private UserManager mUserManager;
+  @Autowired
+  private IdGenerator mIdGenerator;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -62,7 +65,13 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
     pGroup.setCompCode("01");
     pGroup.setModifiedDate(new Date());
     pGroup.setModifiedBy(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
-    getContentManager().create(pGroup);
+    if(pGroup.getId() == null) {
+      pGroup.setId(mIdGenerator.getNumericId());
+      getContentManager().create(pGroup);
+    }
+    else {
+      getContentManager().update(pGroup);
+    }
     return getContentManager().getAll();
   }
 

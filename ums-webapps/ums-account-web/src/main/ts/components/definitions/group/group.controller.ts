@@ -1,5 +1,6 @@
 module ums {
 
+
   export class GroupController {
     public static $inject = ['$scope', '$modal', 'notify', 'GroupService'];
 
@@ -11,7 +12,7 @@ module ums {
     public gridOptions: any;
     public handsOnTableFeature: any;
 
-    constructor($scope: ng.IScope, private $modal: any, private notify: Notify, private groupService: GroupService) {
+    constructor(private $scope: ng.IScope, private $modal: any, private notify: Notify, private groupService: GroupService) {
 
       this.groupMapWithId = {};
       this.gridOptions = <GridOptions>{};
@@ -30,6 +31,7 @@ module ums {
 
     private removeButtonClicked(group: IGroup) {
       this.removedGroup = group;
+      this.removedGroup.mainGroupObject = this.groupMapWithId[this.removedGroup.mainGroup];
       console.log("Removed group");
       console.log(this.removedGroup);
     }
@@ -37,7 +39,6 @@ module ums {
     private initialize() {
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
         this.assignToGroupAndMap(groups);
-
       });
 
 
@@ -100,6 +101,14 @@ module ums {
       this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groups.push(this.addedGroup);
+    }
+
+    private editButtonClicked(groupForEdit: IGroup) {
+      this.addedGroup = <IGroup>{};
+      this.addedGroup = groupForEdit;
+      this.addedGroup.mainGroupObject = this.groupMapWithId[this.addedGroup.mainGroup];
+      console.log(this.addedGroup);
+
     }
 
     private saveOne() {

@@ -32,6 +32,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
           + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
           + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :displayCode,"
           + getLastModifiedSql() + ")";
+  private String UPDATE_ONE =
+      "update MST_GROUP set GROUP_CODE=:groupCode, GROUP_NAME=:groupName, MAIN_GROUP=:mainGroup, DISPLAY_CODE=:displayCode, LAST_MODIFIED="
+          + getLastModifiedSql() + " where id=:id";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -101,7 +104,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public int update(MutableGroup pMutable) {
-    return super.update(pMutable);
+    String query = UPDATE_ONE;
+    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
+    return this.mNamedParameterJdbcTemplate.update(query, namedParameters);
   }
 
   @Override
@@ -126,8 +131,6 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   public Long create(MutableGroup pMutable) {
     String query = INSERT_ONE;
     // Map<String, Object> namedParameters = convertObjectToParamMap(pMutable);
-    Long id = mIdGenerator.getNumericId();
-    pMutable.setStringId(id);
     SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
     return new Long(mNamedParameterJdbcTemplate.update(query, namedParameters));
   }
