@@ -22,6 +22,8 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_DELETED_ON = sysdate, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
 
+  static String EXISTS_ONE = "SELECT ID FROM FCM_TOKEN ";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
@@ -52,6 +54,12 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   public int update(MutableFCMToken pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getId());
+  }
+
+  @Override
+  public String hasDuplicate(String pFCMToken){
+    String query = EXISTS_ONE + " WHERE TOKEN = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFCMToken}, String.class);
   }
 
   class FCMTokenRowMapper implements RowMapper<FCMToken> {
