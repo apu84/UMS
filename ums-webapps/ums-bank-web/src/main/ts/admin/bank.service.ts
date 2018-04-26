@@ -17,6 +17,12 @@ module ums {
       return this.bankHttpService.putResource(bankResource, bankConverter);
     }
 
+    public getBank(bankId: string): ng.IPromise<Bank> {
+      const bankResource: BankResource<Bank> = new BankResource<Bank>(`bank/${bankId}`);
+      const bankConverter: IdentityConverter<Bank> = new IdentityConverter<Bank>();
+      return this.bankHttpService.getResource(bankResource, bankConverter);
+    }
+
     public getDesignations(): ng.IPromise<BankDesignation[]> {
       const designationResource: BankResource<BankDesignation[]>
           = new BankResource<BankDesignation[]>('bank/designation/all');
@@ -42,6 +48,13 @@ module ums {
           = new BankResource<BankBranch[]>(`bank/branch/${bankId}/all`);
       const branchConverter: IdentityConverter<BankBranch[]> = new IdentityConverter<BankBranch[]>();
       return this.bankHttpService.getResource(branchResource, branchConverter);
+    }
+
+    public createBranch(branch: BankBranch): ng.IPromise<BankBranch> {
+      const branchResource: BankResource<BankBranch>
+          = new BankResource<BankBranch>(`bank/branch`);
+      const branchConverter: IdentityConverter<BankBranch> = new IdentityConverter<BankBranch>();
+      return this.bankHttpService.postResource(branchResource, branchConverter);
     }
 
     public updateBranch(branch: BankBranch): ng.IPromise<BankBranch> {

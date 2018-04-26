@@ -11,7 +11,11 @@
             <tbody>
             <tr data-ng-repeat="bank in vm.banks">
                 <td>
-                    {{::bank.code}}
+                    <a href='javascript:void(0);'
+                       data-ui-sref="/branches/{{bank.id}}"
+                       ui-sref-opts="{reload: true, notify: true}">
+                        {{::bank.code}}
+                    </a>
                 </td>
                 <td>
                     {{::bank.name}}

@@ -74,5 +74,11 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/admin/bank.list.html'
         })
+        .state('branches', {
+          url: "/branches/:1",
+          controller: 'BranchController',
+          controllerAs: 'vm',
+          templateUrl: 'views/admin/branch.list.html'
+        })
   });
 }
