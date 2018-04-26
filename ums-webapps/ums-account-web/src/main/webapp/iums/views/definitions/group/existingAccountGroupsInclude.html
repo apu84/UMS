@@ -1,11 +1,11 @@
 <style>
-    /*   table {
+    table {
            box-sizing: border-box;
            -moz-box-sizing: border-box;
            display: flex;
            flex-direction: column;
            align-items: stretch;
-           height: 100%; !* this can vary *!
+        height: 700px; /* this can vary */
        }
 
        table * {
@@ -35,7 +35,7 @@
        }
 
        th, tbody td {
-           width: 100%; !* this can vary *!
+           width: 100%; /* this can vary */
            overflow-x: hidden;
            text-overflow: ellipsis;
            display: inline-block;
@@ -48,7 +48,7 @@
        tfoot td {
            width: 100%;
            display: inline-block;
-       }*/
+       }
 </style>
 <table st-table="displayed" class=" table table-striped ">
     <thead align="center">
@@ -57,7 +57,7 @@
         <th st-ratio="30" st-sort="displayCode">Display Code</th>
         <th st-ratio="30" st-sort="mainGroup">Under The Main Group Of</th>
         <th st-ration="5" align="center"><p align="center">Sub Ledger</p></th>
-        <th st-ration="5"></th>
+        <th st-ration="5">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -69,7 +69,10 @@
             <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
         </td>
         <td st-ratio="5">
-            <button data-ng-disabled="true" class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)"
+            <button class="btn btn-default btn-sm" ng-click="vm.editButtonClicked(g)"
+                    data-toggle="modal"
+                    data-target="#addModal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+            <button class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)"
                     data-toggle="modal"
                     data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         </td>
