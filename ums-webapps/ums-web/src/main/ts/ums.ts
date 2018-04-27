@@ -1077,8 +1077,16 @@ module ums {
           templateUrl: 'views/dummy/dummy.html'
         })
 
-        .state('profile', {
-            url: "/profile",
+        .state('twoFATest', {
+          url: "/twoFATest",
+          controller: 'TwoFATestController',
+          controllerAs: 'vm',
+          templateUrl: 'views/twofatest/two.fa.test.html'
+        })
+
+
+        .state('employeeProfile', {
+            url: "/employeeProfile",
             templateUrl: 'views/employee/employee-profile.html',
             controller: 'EmployeeProfile',
             controllerAs: 'vm',
@@ -1103,11 +1111,77 @@ module ums {
                 }]
             }
         })
-        .state('twoFATest', {
-          url: "/twoFATest",
-          controller: 'TwoFATestController',
-          controllerAs: 'vm',
-          templateUrl: 'views/twofatest/two.fa.test.html'
+        .state('employeeProfile.personal', {
+            url: "/personal",
+            params : {
+                'id1': null
+            },
+            templateUrl: 'views/employee/personal-information.html',
+            controller: 'PersonalInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.academic', {
+            url: "/academic",
+            params : {
+                'id2': null
+            },
+            templateUrl: 'views/employee/academic-information.html',
+            controller: 'EducationInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.publication', {
+            url: "/publication",
+            params : {
+                'id3': null
+            },
+            templateUrl: 'views/employee/publication-information.html',
+            controller: 'PublicationInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.training', {
+            url: "/training",
+            params : {
+                'id4': null
+            },
+            templateUrl: 'views/employee/training-information.html',
+            controller: 'TrainingInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.award', {
+            url: "/award",
+            params : {
+                'id5': null
+            },
+            templateUrl: 'views/employee/award-information.html',
+            controller: 'AwardInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.experience', {
+            url: "/experience",
+            params : {
+                'id6': null
+            },
+            templateUrl: 'views/employee/experience-information.html',
+            controller: 'ExperienceInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.additional', {
+            url: "/additional",
+            params : {
+                'id7': null
+            },
+            templateUrl: 'views/employee/additional-information.html',
+            controller: 'AdditionalInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.service', {
+            url: "/service",
+            params : {
+                'id8': null
+            },
+            templateUrl: 'views/employee/service-information.html',
+            controller: 'ServiceInformation',
+            controllerAs: 'vm'
         })
 
   });

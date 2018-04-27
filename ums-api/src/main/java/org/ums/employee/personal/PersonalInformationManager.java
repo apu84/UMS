@@ -8,14 +8,4 @@ import org.ums.usermanagement.user.UserEmail;
 
 public interface PersonalInformationManager extends
     ContentManager<PersonalInformation, MutablePersonalInformation, String>, UserEmail<PersonalInformation> {
-
-  /*
-   * int savePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
-   * 
-   * PersonalInformation getPersonalInformation(final String pEmployeeId);
-   * 
-   * int updatePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
-   * 
-   * int deletePersonalInformation(final MutablePersonalInformation pMutablePersonalInformation);
-   */
 }

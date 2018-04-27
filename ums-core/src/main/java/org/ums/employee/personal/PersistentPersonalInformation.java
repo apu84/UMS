@@ -12,11 +12,6 @@ import java.util.Date;
 public class PersistentPersonalInformation implements MutablePersonalInformation {
 
   private static PersonalInformationManager sPersonalInformationManager;
-  // private static BloodGroupManager sBloodGroupManager;
-  // private static NationalityManager sNationalityManager;
-  // private static ReligionManager sReligionManager;
-  // private static MaritalStatusManager sMaritalStatusManager;
-  // private static RelationTypeManager sRelationTypeManager;
   private static CountryManager sCountryManager;
   private static DivisionManager sDivisionManager;
   private static DistrictManager sDistrictManager;
@@ -26,15 +21,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sPersonalInformationManager =
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
-    // sBloodGroupManager = applicationContext.getBean("bloodGroupManager",
-    // BloodGroupManager.class);
-    // sNationalityManager = applicationContext.getBean("nationalityManager",
-    // NationalityManager.class);
-    // sReligionManager = applicationContext.getBean("religionManager", ReligionManager.class);
-    // sMaritalStatusManager = applicationContext.getBean("maritalStatusManager",
-    // MaritalStatusManager.class);
-    // sRelationTypeManager = applicationContext.getBean("relationTypeManager",
-    // RelationTypeManager.class);
     sCountryManager = applicationContext.getBean("countryManager", CountryManager.class);
     sDivisionManager = applicationContext.getBean("divisionManager", DivisionManager.class);
     sDistrictManager = applicationContext.getBean("districtManager", DistrictManager.class);
