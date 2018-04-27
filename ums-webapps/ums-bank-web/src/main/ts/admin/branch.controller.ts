@@ -31,6 +31,14 @@ module ums {
         }
       });
     }
+
+    public deleteBranch(branch?: BankBranch): void {
+      this.bankService.deleteBranch(branch).then((result: boolean) => {
+        if (result) {
+          this.populateBranches(this.bank.id);
+        }
+      });
+    }
   }
 
   UMS.controller('BranchController', BranchController);

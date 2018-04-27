@@ -23,10 +23,11 @@
         <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
             <thead>
             <tr>
-                <th width="20%">Branch code</th>
+                <th width="10%">Branch code</th>
                 <th width="25%">Name</th>
                 <th width="20%">Contact No.</th>
                 <th width="25%">Location</th>
+                <th width="10%"></th>
                 <th width="10%"></th>
             </tr>
             </thead>
@@ -52,6 +53,12 @@
                     <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.editBranch(branch)">
                         <i class="fa fa-plus-square-o"></i>
                         Edit
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.deleteBranch(branch)">
+                        <i class="fa fa-plus-square-o"></i>
+                        Delete
                     </button>
                 </td>
             </tr>
