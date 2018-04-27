@@ -30,9 +30,16 @@ module ums {
       return this.bankHttpService.getResource(designationResource, designationConverter);
     }
 
+    public createDesignation(bankDesignation: BankDesignation): ng.IPromise<BankDesignation> {
+      const designationResource: BankResource<BankDesignation>
+          = new BankResource<BankDesignation>(`bank/designation`, bankDesignation);
+      const designationConverter: IdentityConverter<BankDesignation> = new IdentityConverter<BankDesignation>();
+      return this.bankHttpService.postResource(designationResource, designationConverter);
+    }
+
     public updateDesignation(bankDesignation: BankDesignation): ng.IPromise<BankDesignation> {
       const designationResource: BankResource<BankDesignation>
-          = new BankResource<BankDesignation>(`bank/designation/${bankDesignation.id}`);
+          = new BankResource<BankDesignation>(`bank/designation/${bankDesignation.id}`, bankDesignation);
       const designationConverter: IdentityConverter<BankDesignation> = new IdentityConverter<BankDesignation>();
       return this.bankHttpService.putResource(designationResource, designationConverter);
     }
@@ -52,14 +59,14 @@ module ums {
 
     public createBranch(branch: BankBranch): ng.IPromise<BankBranch> {
       const branchResource: BankResource<BankBranch>
-          = new BankResource<BankBranch>(`bank/branch`);
+          = new BankResource<BankBranch>(`bank/branch`, branch);
       const branchConverter: IdentityConverter<BankBranch> = new IdentityConverter<BankBranch>();
       return this.bankHttpService.postResource(branchResource, branchConverter);
     }
 
     public updateBranch(branch: BankBranch): ng.IPromise<BankBranch> {
       const branchResource: BankResource<BankBranch>
-          = new BankResource<BankBranch>(`bank/branch/${branch.id}`);
+          = new BankResource<BankBranch>(`bank/branch/${branch.id}`, branch);
       const branchConverter: IdentityConverter<BankBranch> = new IdentityConverter<BankBranch>();
       return this.bankHttpService.putResource(branchResource, branchConverter);
     }
@@ -79,7 +86,7 @@ module ums {
 
     public updateUser(user: BranchUser): ng.IPromise<BranchUser> {
       const userResource: BankResource<BranchUser>
-          = new BankResource<BranchUser>(`bank/branch/user/${user.id}`);
+          = new BankResource<BranchUser>(`bank/branch/user/${user.id}`, user);
       const userConverter: IdentityConverter<BranchUser> = new IdentityConverter<BranchUser>();
       return this.bankHttpService.putResource(userResource, userConverter);
     }

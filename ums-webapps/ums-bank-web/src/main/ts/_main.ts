@@ -104,6 +104,8 @@
 /// <reference path='admin/bank.controller.ts'/>
 /// <reference path='admin/branch.controller.ts'/>
 /// <reference path='admin/edit.branch.ts'/>
+/// <reference path='admin/bank.designation.controller.ts'/>
+/// <reference path='admin/edit.bank.designation.ts'/>
 
 
 

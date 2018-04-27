@@ -22,7 +22,7 @@ module ums {
 
     public editBranch(branch?: BankBranch): void {
       this.$modal.open({
-        templateUrl: 'views/admin/editBranch.html',
+        templateUrl: 'views/admin/edit.branch.html',
         controller: EditBranch,
         resolve: {
           bank: () => this.bank,

@@ -80,5 +80,11 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/admin/branch.list.html'
         })
+        .state('designations', {
+          url: "/designations",
+          controller: 'BankDesignationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/admin/designation.list.html'
+        })
   });
 }
