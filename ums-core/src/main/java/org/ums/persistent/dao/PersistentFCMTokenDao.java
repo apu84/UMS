@@ -15,13 +15,16 @@ import java.util.List;
 
 public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
 
-  static String SELECT_ONE = "SELECT ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED FROM FCM_TOKEN";
+  static String SELECT_ONE =
+      "SELECT ID, TOKEN, TOKEN_LAST_REFRESHED_ON, TOKEN_DELETED_ON, LAST_MODIFIED FROM FCM_TOKEN";
 
-  static String INSERT_ONE = "INSERT INTO FCM_TOKEN (ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?,"
-      + getLastModifiedSql() + " ) ";
+  static String INSERT_ONE =
+      "INSERT INTO FCM_TOKEN (ID, TOKEN, TOKEN_LAST_REFRESHED_ON, TOKEN_DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?, ?,"
+          + getLastModifiedSql() + " ) ";
 
-  static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_DELETED_ON = ?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+  static String UPDATE_ONE =
+      "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_LAST_REFRESHED_ON = ?, TOKEN_DELETED_ON = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
 
   static String EXISTS_ONE = "SELECT COUNT(ID) FROM FCM_TOKEN ";
 
@@ -49,14 +52,16 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   @Override
   public String create(MutableFCMToken pMutable) {
     String query = INSERT_ONE;
-    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFCMToken(), pMutable.getTokenDeleteOn());
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFCMToken(), pMutable.getTokenLastRefreshedOn(),
+        pMutable.getTokenDeleteOn());
     return pMutable.getId();
   }
 
   @Override
   public int update(MutableFCMToken pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getTokenDeleteOn(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getTokenLastRefreshedOn(),
+        pMutable.getTokenDeleteOn(), pMutable.getId());
   }
 
   @Override
@@ -84,6 +89,7 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
       PersistentFCMToken persistentFCMToken = new PersistentFCMToken();
       persistentFCMToken.setId(resultSet.getString("ID"));
       persistentFCMToken.setFCMToken(resultSet.getString("TOKEN"));
+      persistentFCMToken.setTokenLastRefreshedOn(resultSet.getTimestamp("TOKEN_LAST_REFRESHED_ON"));
       persistentFCMToken.setTokenDeletedOn(resultSet.getDate("TOKEN_DELETED_ON"));
       persistentFCMToken.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return persistentFCMToken;

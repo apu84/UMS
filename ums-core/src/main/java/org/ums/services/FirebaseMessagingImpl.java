@@ -49,6 +49,7 @@ public class FirebaseMessagingImpl implements FirebaseMessaging {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     mutableFCMToken.setId(fcmToken.getId());
     mutableFCMToken.setFCMToken(null);
+    mutableFCMToken.setTokenLastRefreshedOn(new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
     mutableFCMToken.setTokenDeletedOn(new Date());
     mutableFCMToken.update();
   }
@@ -57,6 +58,7 @@ public class FirebaseMessagingImpl implements FirebaseMessaging {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     mutableFCMToken.setId(consumerId);
     mutableFCMToken.setFCMToken(null);
+    mutableFCMToken.setTokenLastRefreshedOn(new Date());
     mutableFCMToken.setTokenDeletedOn(new Date());
     mutableFCMToken.create();
   }

@@ -12,5 +12,7 @@ public interface FCMToken extends Serializable, LastModifier, EditType<MutableFC
 
   String getFCMToken();
 
+  Date getTokenLastRefreshedOn();
+
   Date getTokenDeleteOn();
 }

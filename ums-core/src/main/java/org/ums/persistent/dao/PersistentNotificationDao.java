@@ -93,7 +93,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public List<Notification> getNotifications(String consumerId, Date pProducedOn) {
-    String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND PRODUCED_ON >= ? ORDER BY PRODUCED_ON DESC";
+    String query =
+        SELECT_ALL + " WHERE CONSUMER_ID = ? AND PRODUCED_ON >= ? AND CONSUMED_ON IS NULL ORDER BY PRODUCED_ON DESC";
     return mJdbcTemplate.query(query, new Object[] {consumerId, pProducedOn}, new NotificationRowMapper());
   }
 

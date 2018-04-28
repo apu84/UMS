@@ -14,6 +14,7 @@ import org.ums.usermanagement.user.UserManager;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 
 @Component
 public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
@@ -27,6 +28,7 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
 
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("token", pReadOnly.getFCMToken());
+    pBuilder.add("tokenLastRefreshedOn", mDateFormat.format(pReadOnly.getTokenLastRefreshedOn()));
     pBuilder.add("tokenDeletedOn", mDateFormat.format(pReadOnly.getTokenDeleteOn()));
     pBuilder.add("lastModified", pReadOnly.getLastModified());
   }

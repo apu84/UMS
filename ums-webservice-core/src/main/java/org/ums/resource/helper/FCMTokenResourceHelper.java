@@ -2,6 +2,7 @@ package org.ums.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import org.ums.configuration.FirebaseConfig;
 import org.ums.domain.model.immutable.FCMToken;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableFCMToken;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.manager.FCMTokenManager;
 import org.ums.manager.NotificationManager;
@@ -47,6 +49,10 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   @Autowired
   private NotificationManager mNotificationManager;
 
+  @Autowired
+  @Qualifier("genericDateFormat")
+  private DateFormat mDateFormat;
+
   public JsonObject getToken(String pId, UriInfo mUriInfo) {
     LocalCache localCache = new LocalCache();
     FCMToken fcmToken = new PersistentFCMToken();
@@ -57,12 +63,13 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
     return toJson(fcmToken, mUriInfo, localCache);
   }
 
-  private void update(String id, String token, Date pDate, UriInfo pUriInfo) {
+  private void update(String id, String token, Date pTokenLastRefreshedOn, Date pTokenDeletedOn, UriInfo pUriInfo) {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     LocalCache localeCache = new LocalCache();
     mutableFCMToken.setId(id);
     mutableFCMToken.setFCMToken(token);
-    mutableFCMToken.setTokenDeletedOn(pDate);
+    mutableFCMToken.setTokenLastRefreshedOn(pTokenLastRefreshedOn);
+    mutableFCMToken.setTokenDeletedOn(pTokenDeletedOn);
     mManager.update(mutableFCMToken);
     localeCache.invalidate();
   }
@@ -79,15 +86,16 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
       FCMToken fcmToken = mManager.get(user.getId());
       if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
         FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
-        update(duplicateFcmToken.getId(), null, new Date(), pUriInfo);
-        update(user.getId(), jsonObject.getString("fcmToken"), null, pUriInfo);
+        update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
+            new Date(), pUriInfo);
+        update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
         sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
         Response.ResponseBuilder builder = Response.created(null);
         builder.status(Response.Status.CREATED);
         return builder.build();
       }
       else {
-        update(user.getId(), jsonObject.getString("fcmToken"), null, pUriInfo);
+        update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
         sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
         Response.ResponseBuilder builder = Response.created(null);
         builder.status(Response.Status.CREATED);
@@ -97,11 +105,12 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
     else {
       if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
         FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
-        update(duplicateFcmToken.getId(), null, new Date(), pUriInfo);
-        doPost(pJsonObject, user);
+        update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
+            new Date(), pUriInfo);
+        doPost(jsonObject, user);
       }
       else {
-        doPost(pJsonObject, user);
+        doPost(jsonObject, user);
       }
     }
     return null;
@@ -111,6 +120,7 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     LocalCache localCache = new LocalCache();
     mutableFCMToken.setId(user.getId());
+    mutableFCMToken.setTokenLastRefreshedOn(new Date());
     mutableFCMToken.setTokenDeletedOn(null);
     mBuilder.build(mutableFCMToken, jsonObject, localCache);
     mManager.create(mutableFCMToken);
