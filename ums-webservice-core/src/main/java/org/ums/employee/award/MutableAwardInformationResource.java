@@ -1,7 +1,7 @@
 package org.ums.employee.award;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.employee.award.AwardInformationResourceHelper;
+import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -16,6 +16,7 @@ public class MutableAwardInformationResource extends Resource {
 
   @POST
   @Path("/save")
+  @UmsLogMessage(message = "Post employee information (Award data)")
   public Response saveServiceInformation(final JsonObject pJsonObject) {
     return mAwardInformationResourceHelper.saveAwardInformation(pJsonObject, mUriInfo);
   }

@@ -39,7 +39,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
     pBuilder.add("courseCrHr", course.getCrHr());
     pBuilder.add("year", course.getYear());
     pBuilder.add("semester", course.getSemester());
-    pBuilder.add("syllabusId", course.getSyllabusId());
+//    pBuilder.add("syllabusId", course.getSyllabusId());
 
     if (!StringUtils.isEmpty(pReadOnly.getPreparerId())) {
       Teacher teacher = (Teacher) pLocalCache.cache(() -> pReadOnly.getPreparer(),
@@ -63,11 +63,8 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
     pBuilder.add("courseOfferedByDepartmentId", department.getId());
     pBuilder.add("courseOfferedByDepartmentName", department.getShortName());
 
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(),
-        course.getSyllabusId(), Syllabus.class);
-
-    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(),
-        syllabus.getProgramId(), Program.class);
+    Program program = (Program) pLocalCache.cache(() -> course.getOfferedToProgram(),
+        course.getOfferedDepartmentId(), Program.class);
 
     Department offeredToDepartment = (Department) pLocalCache.cache(() -> program.getDepartment(),
         program.getDepartmentId(), Department.class);

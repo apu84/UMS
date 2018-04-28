@@ -1,0 +1,21 @@
+package org.ums.domain.model.immutable.accounts;
+
+import org.ums.domain.model.common.EditType;
+import org.ums.domain.model.common.Identifier;
+import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
+import org.ums.enums.accounts.definitions.group.GroupType;
+
+import java.io.Serializable;
+
+/**
+ * Created by Monjur-E-Morshed on 26-Apr-18.
+ */
+public interface SystemGroupMap extends Serializable, EditType<MutableSystemGroupMap>, LastModifier, Identifier<String> {
+
+  GroupType getGroupType();
+
+  Group getGroup();
+
+  Long getGroupId();
+}

@@ -5,20 +5,19 @@ import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Syllabus;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
-import org.ums.manager.CourseGroupManager;
-import org.ums.manager.CourseManager;
-import org.ums.manager.DepartmentManager;
-import org.ums.manager.SyllabusManager;
+import org.ums.manager.*;
 
 public class PersistentCourse implements MutableCourse {
   private static SyllabusManager sSyllabusManager;
   private static CourseGroupManager sCourseGroupManager;
   private static DepartmentManager sDepartmentManager;
   private static CourseManager sCourseManager;
+  private static ProgramManager sProgramManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -26,6 +25,7 @@ public class PersistentCourse implements MutableCourse {
     sCourseGroupManager = applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
     sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
   }
 
   private String mId;
@@ -34,10 +34,11 @@ public class PersistentCourse implements MutableCourse {
   private float mCrHr;
   private Department mOfferedBy;
   private Department mOfferedTo;
+  private Integer mOfferedToProgramId;
+  private Program mOfferedToProgram;
   private CourseType mCourseType;
   private CourseCategory mCourseCategory;
   private CourseGroup mCourseGroup;
-  private Syllabus mSyllabus;
   private int mViewOrder;
   private int mYear;
   private int mSemester;
@@ -58,10 +59,10 @@ public class PersistentCourse implements MutableCourse {
     mTitle = pPersistentCourse.getTitle();
     mCrHr = pPersistentCourse.getCrHr();
     mOfferedBy = pPersistentCourse.getOfferedBy();
+    mOfferedToProgram = pPersistentCourse.getOfferedToProgram();
     mCourseType = pPersistentCourse.getCourseType();
     mCourseCategory = pPersistentCourse.getCourseCategory();
-    mSyllabus = pPersistentCourse.getSyllabus();
-    mCourseGroup = pPersistentCourse.getCourseGroup(mSyllabus.getId());
+    mCourseGroupId = pPersistentCourse.getCourseGroupId();
     mViewOrder = pPersistentCourse.getViewOrder();
     mYear = pPersistentCourse.getYear();
     mSemester = pPersistentCourse.getSemester();
@@ -114,9 +115,18 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public Department getOfferedTo() {
-    return mOfferedTo == null && !StringUtils.isEmpty(mSyllabusId) ? sSyllabusManager.get(mSyllabusId).getProgram()
-        .getDepartment() : mOfferedTo;
+  public Department getOfferedToDepartment() {
+    return sProgramManager.get(mOfferedToProgramId).getDepartment();
+  }
+
+  @Override
+  public Program getOfferedToProgram() {
+    return sProgramManager.get(mOfferedToProgramId);
+  }
+
+  @Override
+  public Integer getOfferedToProgramId() {
+    return mOfferedToProgramId;
   }
 
   @Override
@@ -125,59 +135,63 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public void setOfferedTo(Department pDepartment) {
+  public void setOfferedToDepartment(Department pDepartment) {
     mOfferedTo = pDepartment;
   }
 
   @Override
-  public int getYear() {
+  public void setOfferedToProgram(Program pProgram) {
+    mOfferedToProgram = pProgram;
+  }
+
+  @Override
+  public void setOfferedToProgramId(Integer pProgramId) {
+    mOfferedToProgramId = pProgramId;
+  }
+
+  @Override
+  public Integer getYear() {
     return mYear;
   }
 
   @Override
-  public void setYear(int pYear) {
+  public void setYear(Integer pYear) {
     mYear = pYear;
   }
 
   @Override
-  public int getSemester() {
+  public Integer getSemester() {
     return mSemester;
   }
 
   @Override
-  public void setSemester(int pSemester) {
+  public void setSemester(Integer pSemester) {
     mSemester = pSemester;
   }
 
   @Override
-  public int getViewOrder() {
+  public Integer getViewOrder() {
     return mViewOrder;
   }
 
   @Override
-  public void setViewOrder(int pViewOrder) {
+  public void setViewOrder(Integer pViewOrder) {
     mViewOrder = pViewOrder;
   }
 
   @Override
-  public CourseGroup getCourseGroup(final String pSyllabusId) {
-    return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(mCourseGroupId, pSyllabusId)
-        : sCourseGroupManager.validate(mCourseGroup);
+  public void setCourseGroupId(Integer pGroupId) {
+    mCourseGroupId = pGroupId;
+  }
+
+  @Override
+  public CourseGroup getCourseGroup(final Integer pGroupId) {
+    return sCourseGroupManager.get(pGroupId);
   }
 
   @Override
   public void setCourseGroup(CourseGroup pCourseGroup) {
     mCourseGroup = pCourseGroup;
-  }
-
-  @Override
-  public Syllabus getSyllabus() {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
-  }
-
-  @Override
-  public void setSyllabus(Syllabus pSyllabus) {
-    mSyllabus = pSyllabus;
   }
 
   @Override
@@ -220,21 +234,12 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public int getCourseGroupId() {
+  public Integer getCourseGroupId() {
     return mCourseGroupId;
   }
 
   public void setCourseGroupId(int pCourseGroupId) {
     mCourseGroupId = pCourseGroupId;
-  }
-
-  @Override
-  public String getSyllabusId() {
-    return mSyllabusId;
-  }
-
-  public void setSyllabusId(String pSyllabusId) {
-    mSyllabusId = pSyllabusId;
   }
 
   public String getPairCourseId() {
@@ -246,12 +251,12 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public int getTotalApplied() {
+  public Integer getTotalApplied() {
     return mTotalApplied;
   }
 
   @Override
-  public void setTotalApplied(int mTotalApplied) {
+  public void setTotalApplied(Integer mTotalApplied) {
     this.mTotalApplied = mTotalApplied;
   }
 

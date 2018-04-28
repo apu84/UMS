@@ -1,10 +1,5 @@
 package org.ums.cache;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -14,6 +9,11 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
 import org.ums.util.CacheUtil;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>>
     extends ContentDaoDecorator<R, M, I, C> {
@@ -196,9 +196,9 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
         entities.add(entity);
       }
       long afterTime = System.currentTimeMillis();
-      if(mLogger.isDebugEnabled()) {
-        mLogger.debug("Time taken to build cached list: {} ms", (afterTime - currentTime));
-      }
+      long diff = afterTime - currentTime;
+      if(diff > 100)
+        mLogger.debug("Time taken to build cached list: {} ms", diff);
       return entities;
 
     }

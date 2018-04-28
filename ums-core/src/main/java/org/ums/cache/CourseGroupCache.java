@@ -19,9 +19,4 @@ public class CourseGroupCache extends ContentCache<CourseGroup, MutableCourseGro
     return mCacheManager;
   }
 
-  @Override
-  public CourseGroup getBySyllabus(Integer pCourseGroupId, String pSyllabusId) {
-    return getManager().getBySyllabus(pCourseGroupId, pSyllabusId);
-  }
-
 }

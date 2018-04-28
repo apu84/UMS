@@ -7,7 +7,20 @@
 <form name="nPersonalForm" data-validate="" data-onvalidate="submitPersonalForm">
     <div class="panel-group">
         <div class="panel panel-default">
-            <div class="panel-heading" style="font-size: 15px;">General Information</div>
+            <div class="panel-heading" style="font-size: 15px;">
+                <div class="row" style="padding:0;">
+                    <div class="col-md-6">
+                        General Information
+                    </div>
+                    <div class="col-md-6">
+                        <div align="right">
+                            <button type="button" class="btn btn-blue btn-xs">
+                                <span class="glyphicon glyphicon-edit"></span> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -63,8 +76,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <label class="col-md-3 control-label" title="Employee's Father Name" for="iFatherName">Father's
-                                    Name<span data-ng-show="vm.showPersonalInputDiv" class="require">*</span></label>
+                                <label class="col-md-3 control-label" title="Employee's Father Name"
+                                       for="iFatherName">Father's
+                                    Name<span data-ng-show="vm.showPersonalInputDiv"
+                                              class="require">*</span></label>
                                 <div data-ng-show="vm.showPersonalInputDiv">
                                     <div class="col-md-9">
                                         <input type="text"
@@ -119,7 +134,7 @@
                              Picture</b></a>-->
                         <div data-ng-show="vm.isRegistrar">
                             <div data-ng-show="vm.showPersonalInputDiv">
-                                <div align="center"  data-ng-if="vm.test==true">
+                                <div align="center" data-ng-if="vm.test==true">
                                     <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
                                          style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
                                          src=""

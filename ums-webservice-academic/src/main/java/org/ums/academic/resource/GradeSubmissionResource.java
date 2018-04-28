@@ -23,7 +23,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/role/{role}")
-  @UmsLogMessage(message = "Grade Sheet")
+  @UmsLogMessage(message = "Get grade sheet")
   public JsonObject getExamGrade(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -34,7 +34,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/yearsemester/{year-semester}/role/{role}/status/{status}")
-  @UmsLogMessage(message = "Course List for Grade Submission")
+  @UmsLogMessage(message = "Get course list for grade submission")
   public JsonObject getGradeSubmissionStatus(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId,
@@ -93,7 +93,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examType/{exam-type}/studentid/{student-id}")
-  @UmsLogMessage(message = "Grade Log for Student")
+  @UmsLogMessage(message = "Get grade log of student")
   public JsonObject getMarksLogs(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
@@ -103,7 +103,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
   @GET
   @Path("/submissionstat/programtype/{program-type}/semester/{semester-id}/dept/{dept-id}/examtype/{exam-type}/status/{status}")
-  @UmsLogMessage(message = "Grade Submission Statistics")
+  @UmsLogMessage(message = "Grade submission statistics")
   public JsonObject getMarksSubmissionStat(@Context HttpServletRequest pHttpServletRequest,
       @HeaderParam("user-agent") String userAgent, final @Context Request pRequest,
       final @PathParam("program-type") Integer programType, final @PathParam("semester-id") Integer pSemesterId,

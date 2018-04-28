@@ -64,7 +64,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   public List<Employee> getByDesignation(String pDesignationId) {
     String query = SELECT_ALL + " WHERE DESIGNATION=?";
     return mJdbcTemplate.query(query, new Object[] {pDesignationId}, new EmployeeRowMapper());
+  }
 
+  @Override
+  public Employee getByShortName(String pShortName) {
+    String query = SELECT_ALL + " WHERE SHORT_NAME=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pShortName}, new EmployeeRowMapper());
   }
 
   @Override
@@ -114,7 +119,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
       PersistentEmployee persistentEmployee = new PersistentEmployee();
       persistentEmployee.setId(pResultSet.getString("EMPLOYEE_ID"));
       persistentEmployee.setShortName(pResultSet.getString("SHORT_NAME"));
-      persistentEmployee.setDesignation(pResultSet.getInt("DESIGNATION"));
+      persistentEmployee.setDesignationId(pResultSet.getInt("DESIGNATION"));
       persistentEmployee.setEmploymentType(pResultSet.getString("EMPLOYMENT_TYPE"));
       persistentEmployee.setDepartmentId(pResultSet.getString("DEPT_OFFICE"));
       persistentEmployee.setJoiningDate(pResultSet.getDate("JOINING_DATE"));

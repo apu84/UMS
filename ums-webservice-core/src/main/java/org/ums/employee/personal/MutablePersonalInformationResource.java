@@ -16,7 +16,7 @@ public class MutablePersonalInformationResource extends Resource {
 
   @POST
   @Path("/save")
-  public Response savePersonalInformation(final JsonObject pJsonObject) throws Exception {
+  public Response savePersonalInformation(final JsonObject pJsonObject) {
     return mHelper.savePersonalInformation(pJsonObject, mUriInfo);
   }
 

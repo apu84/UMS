@@ -84,6 +84,8 @@ module ums {
       this.getRemainingLeaves();
       this.getPendingApplications();
       this.getUsersInformation();
+
+      $("#leaveType").focus();
     }
 
 

@@ -18,6 +18,7 @@ import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -26,6 +27,7 @@ import org.ums.persistent.model.accounts.PersistentChequeRegister;
 import org.ums.persistent.model.accounts.PersistentCreditorLedger;
 import org.ums.persistent.model.accounts.PersistentDebtorLedger;
 import org.ums.resource.ResourceHelper;
+import org.ums.service.PredefinedNarrationService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
@@ -73,7 +75,10 @@ public class AccountTransactionCommonResourceHelper extends
   protected ChequeRegisterBuilder mChequeRegisterBuilder;
   @Autowired
   protected AccountBalanceResourceHelper mAccountBalanceResourceHelper;
-
+  @Autowired
+  protected PredefinedNarrationManager mPredefinedNarrationManager;
+  @Autowired
+  protected PredefinedNarrationService mNarrationService;
   @Autowired
   protected DebtorLedgerManager mDebtorLedgerManager;
   @Autowired
@@ -81,6 +86,9 @@ public class AccountTransactionCommonResourceHelper extends
 
   @Autowired
   protected CreditorLedgerManager mCreditorLedgerManager;
+
+  /* Global */
+  private VoucherNumberControl mVoucherNumberControl;
 
   private enum DateCondition {
     Previous,
@@ -95,12 +103,11 @@ public class AccountTransactionCommonResourceHelper extends
     Company usersCompany = mCompanyManager.get("01");
     if(currentDay.after(getPreviousDate(openFinancialYear.getCurrentStartDate(), DateCondition.Previous))
         && currentDay.before(getPreviousDate(openFinancialYear.getCurrentEndDate(), DateCondition.Next))) {
-      VoucherNumberControl voucherNumberControl = mVoucherNumberControlManager.getByVoucher(voucher, usersCompany);
+      mVoucherNumberControl = mVoucherNumberControlManager.getByVoucher(voucher, usersCompany);
       Calendar calendar = Calendar.getInstance();
       Date currentDate = new Date();
       calendar.setTime(currentDate);
-      return createVoucherNumber(voucher, transactionResponse, voucherNumberControl, calendar, currentDate);
-
+      return createVoucherNumber(voucher, transactionResponse, mVoucherNumberControl, calendar, currentDate);
     }
     else {
       transactionResponse.setMessage("Current year is not opened");
@@ -115,7 +122,7 @@ public class AccountTransactionCommonResourceHelper extends
     if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
       Date firstDate = UmsUtils.convertToDate("01-01-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
       Date lastDate = UmsUtils.convertToDate("31-12-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.MONTHLY)) {
       Date firstDate =
@@ -124,7 +131,7 @@ public class AccountTransactionCommonResourceHelper extends
       Date lastDate =
           UmsUtils.convertToDate(pCalendar.get(Calendar.DAY_OF_MONTH) + "-" + pCalendar.get(Calendar.MONTH) + "-"
               + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.WEEKLY)) {
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek());
@@ -132,10 +139,10 @@ public class AccountTransactionCommonResourceHelper extends
       pCalendar.setTime(pCurrentDate);
       pCalendar.set(Calendar.DAY_OF_WEEK, pCalendar.getFirstDayOfWeek() + 6);
       Date lastDate = pCalendar.getTime();
-      return getVoucherNumber(pVoucher, pTransactionResponse, firstDate, lastDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, firstDate, lastDate);
     }
     else if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.DAILY)) {
-      return getVoucherNumber(pVoucher, pTransactionResponse, pCurrentDate, pCurrentDate);
+      return getVoucherNumber(pVoucher, pVoucherNumberControl, pTransactionResponse, pCurrentDate, pCurrentDate);
     }
     else {
       Integer nextVoucherNumber = mAccountTransactionManager.getTotalVoucherNumberBasedOnCurrentDay(pVoucher) + 1;
@@ -143,15 +150,15 @@ public class AccountTransactionCommonResourceHelper extends
     }
   }
 
-  private TransactionResponse getVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
-      Date pFirstDate, Date pLastDate) {
-    List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, pLastDate);
+  private TransactionResponse getVoucherNumber(Voucher pVoucher, VoucherNumberControl pVoucherNumberControl, TransactionResponse pTransactionResponse,
+                                               Date pFirstDate, Date pLastDate) {
+    List<String> accountTransactions = mAccountTransactionManager.getVouchers(pVoucher, pFirstDate, UmsUtils.incrementDate(pLastDate, 1));
     List<Integer> voucherNoListInNumber = new ArrayList<>();
     accountTransactions.forEach(a -> {
       voucherNoListInNumber.add(Integer.parseInt(a.substring(4)));
     });
 
-    Integer nextVoucher = (voucherNoListInNumber.size()==0? 0: Collections.max(voucherNoListInNumber)) + 1;
+    Integer nextVoucher = (voucherNoListInNumber.size() == 0 ? pVoucherNumberControl.getStartVoucherNo() : Collections.max(voucherNoListInNumber) + 1);
     return getVoucherNumberGenerationResponse(pVoucher, pTransactionResponse, nextVoucher);
   }
 
@@ -187,10 +194,24 @@ public class AccountTransactionCommonResourceHelper extends
   @Transactional
   public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
     List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
+    checkWithVoucherLimit(transactions);
     createOrUpdateCreditorLedger(transactions.stream().filter(t -> t.getSupplierCode() != null).collect(Collectors.toList()));
     createOrUpdateDebtorLedger(transactions.stream().filter(t -> t.getCustomerCode() != null).collect(Collectors.toList()));
     transactions.forEach(t -> t.setVoucherNo(t.getVoucherNo().substring(2)));
     return new ArrayList<>(transactions);
+  }
+
+  private void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
+    if(pTransactions.size() == 0)
+      return;
+
+    VoucherNumberControl voucherNumberControl =
+        mVoucherNumberControlManager.getByVoucher(pTransactions.get(0).getVoucher(), pTransactions.get(0).getCompany());
+    for(MutableAccountTransaction t : pTransactions) {
+      if(t.getAmount() != null && t.getAmount().compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
+        throw new ValidationException("Maximum limit exceeded");
+      }
+    }
   }
 
   @Transactional
@@ -267,6 +288,7 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
+    Map<Voucher, String> predefinedNarrationMap = mNarrationService.getVoucherNarrationMap();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
     String voucherNo = "";
@@ -279,6 +301,9 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
+      transaction
+          .setNarration(transaction.getNarration() == null || transaction.getNarration().equals("") ? predefinedNarrationMap
+              .get(transaction.getVoucher()) : transaction.getNarration());
       transaction.setCompanyId(company.getId());
       if(i == 0)
         voucherNo =
@@ -342,10 +367,11 @@ public class AccountTransactionCommonResourceHelper extends
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
+    Map<Voucher, String> voucherPredefinedNarrationMap = mNarrationService.getVoucherNarrationMap();
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
-    String voucherNo="";
-    for(int i = 0; i < pJsonValues.size(); i++) {
+    String voucherNo = "";
+    for (int i = 0; i < pJsonValues.size(); i++) {
       PersistentAccountTransaction transaction = new PersistentAccountTransaction();
       mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
       PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
@@ -355,27 +381,34 @@ public class AccountTransactionCommonResourceHelper extends
       transaction.setPostDate(new Date());
       transaction.setCompanyId(company.getId());
       transaction.setVoucherDate(new Date());
-      if(i == 0) {
+      transaction.setNarration(
+          transaction.getNarration() == null || transaction.getNarration().equals("") ?
+              voucherPredefinedNarrationMap.get(transaction.getVoucher())
+              : transaction.getNarration()
+      );
+      if (i == 0) {
         voucherNo =
-                transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
-                        transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
+            transaction.getVoucherNo() == null || transaction.getVoucherNo().equals("") ? getVoucherNo(
+                transaction.getVoucher().getId()).getVoucherNo() : transaction.getVoucherNo();
       }
       transaction.setVoucherNo(company.getId() + voucherNo);
-      if(transaction.getId() == null) {
+      if (transaction.getId() == null) {
         transaction.setId(mIdGenerator.getNumericId());
         newTransactions.add(transaction);
       } else {
         updateTransactions.add(transaction);
       }
       chequeRegister = assignInfoToChequeRegisterFromTransaction(chequeRegister, transaction);
-      if(chequeRegister.getChequeNo() != null) {
+      if (chequeRegister.getChequeNo() != null) {
         chequeRegister.setAccountTransactionId(transaction.getId());
         chequeRegisters.add(chequeRegister);
       }
     }
-    if(newTransactions.size() > 0)
+    checkWithVoucherLimit(newTransactions);
+    checkWithVoucherLimit(updateTransactions);
+    if (newTransactions.size() > 0)
       mAccountTransactionManager.create(newTransactions);
-    if(updateTransactions.size() > 0)
+    if (updateTransactions.size() > 0)
       mAccountTransactionManager.update(updateTransactions);
     newTransactions.addAll(updateTransactions);
     updateOrSaveChequeRegister(chequeRegisters, newTransactions);
@@ -427,9 +460,9 @@ public class AccountTransactionCommonResourceHelper extends
         newList.add(debtorLedger);
       }
     });
-    if(updateList.size()>0)
+    if (updateList.size() > 0)
       mDebtorLedgerManager.update(updateList);
-    if(newList.size()>0)
+    if (newList.size() > 0)
       mDebtorLedgerManager.create(newList);
   }
 

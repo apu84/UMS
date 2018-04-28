@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.enums.library.AcquisitionType;
 import org.ums.enums.library.ItemStatus;
 
 /**
@@ -44,6 +45,8 @@ public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, 
   void setCirculationStatus(int pCirculationStatus);
 
   void setCurrency(Currency pCurrency);
+
+  void setAcquisitionType(AcquisitionType pAcquisitionType);
 
   void setCurrencyId(Long pCurrencyId);
 }

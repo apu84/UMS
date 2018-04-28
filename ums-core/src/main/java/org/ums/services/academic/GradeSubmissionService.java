@@ -110,38 +110,78 @@ public class GradeSubmissionService {
     }
   }
 
-  private void validateGradeSubmissionDeadline(String pRole, Date pLastDateForPreparer, Date pLastDateForScrutinizer,
-      Date pLastDateForHead) throws ValidationException {
+  private void validateGradeSubmissionDeadline(int pSemesterId, String pCourseId, ExamType pExamType, String pRole,
+      Date pLastDateForPreparer, Date pLastDateForScrutinizer, Date pLastDateForHead, Date pLastDateForCoE)
+      throws ValidationException {
     Date currentDate = new Date();
     currentDate = UmsUtils.modifyTimeToZeroSecondOfTheClock(currentDate);
-
+    Set<Integer> statusList;
+    Integer recheckStatus;
+    Date overriddenDeadline;
     switch(pRole) {
       case Constants.GRADE_PREPARER:
         if(pLastDateForPreparer == null) {
           return;
         }
-        if(currentDate.after(pLastDateForPreparer)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+        statusList = new HashSet<>(Arrays.asList(2, 4, 6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForPreparer : getOverriddenDeadline(recheckStatus,
+                pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.GRADE_SCRUTINIZER:
         if(pLastDateForScrutinizer == null) {
           return;
         }
-        if(currentDate.after(pLastDateForScrutinizer)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+        statusList = new HashSet<>(Arrays.asList(4, 6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForScrutinizer : getOverriddenDeadline(recheckStatus,
+                pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.HEAD:
         if(pLastDateForHead == null) {
           return;
         }
-        if(currentDate.after(pLastDateForHead)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+        statusList = new HashSet<>(Arrays.asList(6));
+        recheckStatus = mManager.getOverriddenDeadline(pSemesterId, pCourseId, pExamType, statusList);
+        overriddenDeadline =
+            recheckStatus == null ? pLastDateForHead : getOverriddenDeadline(recheckStatus, pLastDateForScrutinizer,
+                pLastDateForHead, pLastDateForCoE);
+        if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
     }
 
+  }
+
+  private Date getOverriddenDeadline(Integer courseMarksSubmissionStatus, Date pLastDateForScrutinizer,
+      Date pLastDateForHead, Date pLastDateForCoE) {
+    switch(courseMarksSubmissionStatus) {
+      case 2:
+        return pLastDateForScrutinizer;
+      case 4:
+        return pLastDateForHead;
+      case 6:
+        return pLastDateForCoE;
+    }
+    return null;
   }
 
   public void validateGradeSubmission(String actingRoleForCurrentUser, MarksSubmissionStatusDto requestedStatusDTO,
@@ -157,8 +197,10 @@ public class GradeSubmissionService {
     // Deadline && Part Info Validation
     if(operation.equals("submit")) {
       // actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED &&
-      validateGradeSubmissionDeadline(actualActingRole, actualStatus.getLastSubmissionDatePrep(),
-          actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead());
+      validateGradeSubmissionDeadline(actualStatus.getSemesterId(), actualStatus.getCourseId(),
+          actualStatus.getExamType(), actualActingRole, actualStatus.getLastSubmissionDatePrep(),
+          actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead(),
+          actualStatus.getLastSubmissionDateCoe());
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
         validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());

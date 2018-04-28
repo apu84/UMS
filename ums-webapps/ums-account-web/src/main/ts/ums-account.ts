@@ -1,4 +1,4 @@
-module ums {
+  module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute',
     'ngAnimate',
@@ -19,7 +19,9 @@ module ums {
     'angularAccounting',
     'ngHandsontable'
 
-  ]);
+  ]).run(function(ExpireToken){
+
+  });
 
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {

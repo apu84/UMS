@@ -27,15 +27,15 @@ module ums{
         id: string;
         firstName: string;
         lastName: string;
-        department: object;
-        designation: object;
-        employmentType: object;
+        department: any;
+        designation: any;
+        employmentType: any;
         joiningDate: string;
-        status: object;
+        status: any;
         shortName: string;
         email: string;
-        employeeType: object;
-        role: object;
+        employeeType: any;
+        role: any;
         endDate: string;
         IUMSAccount: boolean;
     }

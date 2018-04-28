@@ -3,11 +3,13 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Designation;
 import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.employee.service.ServiceInformation;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.DepartmentManager;
+import org.ums.manager.DesignationManager;
 import org.ums.manager.EmployeeManager;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ public class PersistentEmployee implements MutableEmployee {
   private static DepartmentManager sDepartmentManager;
   private static EmployeeManager sEmployeeManager;
   private static PersonalInformationManager sPersonalInformationManager;
+  private static DesignationManager sDesignationManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -25,10 +28,12 @@ public class PersistentEmployee implements MutableEmployee {
     sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
     sPersonalInformationManager =
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
+    sDesignationManager = applicationContext.getBean("designationManager", DesignationManager.class);
   }
 
   private String mId;
-  private int mDesignation;
+  private int mDesignationId;
+  private Designation mDesignation;
   private String mEmploymentType;
   private Department mDepartment;
   private String mDepartmentId;;
@@ -65,8 +70,13 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void setDesignation(int pDesignation) {
+  public void setDesignation(Designation pDesignation) {
     mDesignation = pDesignation;
+  }
+
+  @Override
+  public void setDesignationId(int pDesignationId) {
+    mDesignationId = pDesignationId;
   }
 
   @Override
@@ -90,8 +100,13 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public int getDesignation() {
-    return mDesignation;
+  public int getDesignationId() {
+    return mDesignationId;
+  }
+
+  @Override
+  public Designation getDesignation() {
+    return sDesignationManager.get(mDesignationId);
   }
 
   @Override

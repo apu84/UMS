@@ -28,10 +28,13 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   private String INSERT_ONE =
       "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
-          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, last_modified)"
+          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, display_code, last_modified)"
           + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
-          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy,"
+          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :displayCode,"
           + getLastModifiedSql() + ")";
+  private String UPDATE_ONE =
+      "update MST_GROUP set GROUP_CODE=:groupCode, GROUP_NAME=:groupName, MAIN_GROUP=:mainGroup, DISPLAY_CODE=:displayCode, LAST_MODIFIED="
+          + getLastModifiedSql() + " where id=:id";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -43,12 +46,15 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
     String query =
-        "SELECT * "
+        "select * from MST_GROUP where GROUP_CODE in ( "
+            + "select DISTINCT group_code from "
+            + "(SELECT "
+            + "  GROUP_CODE, "
+            + "  MAIN_GROUP, "
+            + "  LEVEL "
             + "FROM MST_GROUP "
-            + "WHERE (GROUP_CODE not IN (:groupCodeList)) OR (GROUP_CODE not IN (SELECT GROUP_CODE "
-            + "                                                    FROM MST_GROUP "
-            + "                                                    START WITH MAIN_GROUP not in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
-            + "                                                                                                 MAIN_GROUP))";
+            + "  START WITH  MAIN_GROUP not in (:groupCodeList) "
+            + "CONNECT BY NOCYCLE PRIOR GROUP_CODE = MAIN_GROUP)modified_grouop_code) or GROUP_CODE not in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", pMainGroupCodeList);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
@@ -57,12 +63,15 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
     String query =
-        "SELECT * "
+        "select * from MST_GROUP where GROUP_CODE in ( "
+            + "select DISTINCT group_code from "
+            + "(SELECT "
+            + "  GROUP_CODE, "
+            + "  MAIN_GROUP, "
+            + "  LEVEL "
             + "FROM MST_GROUP "
-            + "WHERE (GROUP_CODE IN (:groupCodeList)) OR (GROUP_CODE IN (SELECT GROUP_CODE "
-            + "                                                    FROM MST_GROUP "
-            + "                                                    START WITH MAIN_GROUP in(:groupCodeList) CONNECT BY PRIOR COMP_CODE = "
-            + "                                                                                                 MAIN_GROUP))";
+            + "  START WITH  MAIN_GROUP in (:groupCodeList) "
+            + "CONNECT BY NOCYCLE PRIOR GROUP_CODE = MAIN_GROUP)modified_grouop_code) or GROUP_CODE in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", pMainGroupCodeList);
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
@@ -95,7 +104,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public int update(MutableGroup pMutable) {
-    return super.update(pMutable);
+    String query = UPDATE_ONE;
+    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
+    return this.mNamedParameterJdbcTemplate.update(query, namedParameters);
   }
 
   @Override
@@ -120,8 +131,6 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   public Long create(MutableGroup pMutable) {
     String query = INSERT_ONE;
     // Map<String, Object> namedParameters = convertObjectToParamMap(pMutable);
-    Long id = mIdGenerator.getNumericId();
-    pMutable.setStringId(id);
     SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
     return new Long(mNamedParameterJdbcTemplate.update(query, namedParameters));
   }
@@ -157,6 +166,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
       group.setStatUpFlag(rs.getString("stat_up_flag"));
       group.setModifiedDate(rs.getDate("modified_date"));
       group.setModifiedBy(rs.getString("modified_by"));
+      group.setDisplayCode(rs.getString("display_code"));
       group.setLastModified(rs.getString("last_modified"));
       return group;
     }

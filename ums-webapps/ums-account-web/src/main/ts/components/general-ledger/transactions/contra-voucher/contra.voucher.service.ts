@@ -62,7 +62,7 @@ module ums {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/save", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
-            this.notify.success("Payment Voucher Saved Successfully")
+            this.notify.success("Contra Voucher Saved Successfully")
             defer.resolve(response);
           })
           .error((error) => {
@@ -77,7 +77,7 @@ module ums {
       let defer: ng.IDeferred<any> = this.$q.defer();
       this.httpClient.post(this.url + "/post", vouchers, HttpClient.MIME_TYPE_JSON)
           .success((response) => {
-            this.notify.success("Payment Voucher Posted Successfully");
+            this.notify.success("Contra Voucher Posted Successfully");
             defer.resolve(response);
           })
           .error((error) => {

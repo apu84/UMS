@@ -5,10 +5,10 @@
 <ol class="breadcrumb page-breadcrumb pull-right">
   <li data-ng-if="data.navId != null">
     <span style="font-size: 12px;">
-      <a data-ng-click="downloadUserGuide(data.navId,data.title,'html')"  style="cursor: pointer" data-toggle="modal" data-target="#modal-full-width" >
+      <a data-ng-click="downloadUserGuide(data.navId,data.manualName,'html')"  style="cursor: pointer;display: none;" data-toggle="modal" data-target="#modal-full-width" >
         <img height="22" width="22" src="images/manual_html.png" />&nbsp;
       </a>
-      <a data-ng-click="downloadUserGuide(data.navId,data.title,'pdf')" style="cursor: pointer">
+      <a data-ng-click="downloadUserGuide(data.navId,data.manualName,'pdf')" style="cursor: pointer" title="User Guide">
         <img height="22" width="22" src="images/manual_pdf.png" />&nbsp;
       </a>
   </span>

@@ -1,16 +1,19 @@
 package org.ums.twofa;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.mapper.Mapper;
 import org.ums.mapper.MapperEntry;
 import org.ums.resource.Resource;
+import org.ums.statistics.LoggerFactory;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -30,6 +33,8 @@ import java.util.Random;
 @Consumes(Resource.MIME_TYPE_JSON)
 @Produces(Resource.MIME_TYPE_JSON)
 public class MatchTwoFA extends Resource {
+  private static final Logger mLogger = org.slf4j.LoggerFactory.getLogger(MatchTwoFA.class);
+
   @Autowired
   Mapper<String, MapperEntry> mMapper;
   @Autowired
@@ -57,13 +62,17 @@ public class MatchTwoFA extends Resource {
       if(!userProvidedHashedToken.equals(dbToken.getOtp())) {
         mTwoFATokenManager.updateWrongTryCount(Long.valueOf(state));
         TwoFAToken token = mTwoFATokenManager.get(Long.valueOf(state));
-        if(token.getTryCount() > mUMSConfiguration.getTwoFATokenAllowableWrongTry())
+        if(token.getTryCount() > mUMSConfiguration.getTwoFATokenAllowableWrongTry()) {
+          mLogger.debug("[{}]: Excessive wrong attempt detected for OTP", SecurityUtils.getSubject().getPrincipal()
+              .toString());
           throw new ExcessiveAttemptsException();
+        }
+        mLogger.info("[{}]: Provided wrong OTP", SecurityUtils.getSubject().getPrincipal().toString());
         return Response.status(Response.Status.UNAUTHORIZED).build();
       }
       mTwoFATokenManager.updateRightTryCount(Long.valueOf(state));
-
       MapperEntry mapperEntry = mMapper.lookup(state);
+      mLogger.info("[{}]: Correct OTP Provided", SecurityUtils.getSubject().getPrincipal().toString());
       return mHttpClient
           .getClient()
           .target(UriBuilder.fromUri(mapperEntry.getUri()).scheme("https").build())
@@ -75,6 +84,7 @@ public class MatchTwoFA extends Resource {
               Entity.entity(mapperEntry.getEntity(), MediaType.valueOf(mapperEntry.getMediaType()))).invoke();
     }
     else {
+      mLogger.info("[{}]: Provided wrong OTP", SecurityUtils.getSubject().getPrincipal().toString());
       return Response.status(Response.Status.UNAUTHORIZED).build();
     }
   }
@@ -93,7 +103,6 @@ public class MatchTwoFA extends Resource {
     }
     if(existingToken == null) {
       newToken = new PersistentTwoFAToken();
-      SecureRandomNumberGenerator generator = new SecureRandomNumberGenerator();
       newToken.setUserId(token.getUserId());
       newToken.setType(token.getType());
 
@@ -118,6 +127,7 @@ public class MatchTwoFA extends Resource {
     json.put("state", String.valueOf(newToken != null ? newToken.getId() : existingToken.getId()));
     json.put("lifeTime", mUMSConfiguration.getTwoFATokenLifeTime());
     json.put("remainingTime", seconds);
+    mLogger.info("[{}]: Resending OTP", SecurityUtils.getSubject().getPrincipal().toString());
     return Response.status(200).entity(json).build();
   }
 }

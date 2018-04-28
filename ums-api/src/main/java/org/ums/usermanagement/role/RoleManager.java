@@ -9,4 +9,6 @@ import java.util.Set;
 
 public interface RoleManager extends ContentManager<Role, MutableRole, Integer> {
   List<Role> getRolesByPermission(Set<String> pPermissions);
+
+  Role getByRoleRoleName(String pRoleName);
 }

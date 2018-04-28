@@ -4,7 +4,7 @@ module ums {
     post = "Post"
   }
   export class ContraVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ContraVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService'];
+    public static $inject = ['$scope', '$q', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ContraVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'VoucherNumberControlService'];
 
 
     private voucherNo: string;
@@ -35,10 +35,11 @@ module ums {
     static JOURNAL_VOUCHER_GROUP_FLAG = GroupFlag.NO;
     private CONTRA_VOUCHER_ID: string = '8';
     private baseCurrency: ICurrency;
-
+    private maximumTransaferableAmount: number;
 
 
     constructor($scope: ng.IScope,
+                private $q: ng.IQService,
                 private $modal: any,
                 private notify: Notify,
                 private accountService: AccountService,
@@ -47,7 +48,8 @@ module ums {
                 private contraVoucherService: ContraVoucherService,
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
-                private currencyConversionService: CurrencyConversionService) {
+                private currencyConversionService: CurrencyConversionService,
+                private voucherNumberControlService: VoucherNumberControlService) {
       this.initialize();
     }
 
@@ -62,6 +64,10 @@ module ums {
         console.log(accountListForAddModal);
         this.accountListForAddModal = accountListForAddModal;
       });
+      this.voucherNumberControlService.getAllByCurrentFinancialYear().then((voucherNumberControl: IVoucherNumberControl[]) => {
+        this.maximumTransaferableAmount =
+            Number(voucherNumberControl.filter((v: IVoucherNumberControl) => v.voucherId == this.CONTRA_VOUCHER_ID)[0].voucherLimit);
+      });
       this.getCurrencyConversions();
       this.getCurrencies();
       this.getPaginatedJournalVouchers();
@@ -73,6 +79,20 @@ module ums {
         this.existingVouchers = paginatedVouchers.vouchers;
         this.totalVoucherNumber = paginatedVouchers.totalNumber;
       });
+    }
+
+    public checkWhetherAnyAmountExceedTotalLimit(): ng.IPromise<boolean> {
+      let defer: ng.IDeferred<boolean> = this.$q.defer();
+      let allow: boolean = true;
+      for (let i = 0; i < this.detailVouchers.length; i++) {
+        if (this.maximumTransaferableAmount != 0 && this.detailVouchers[i].amount > this.maximumTransaferableAmount) {
+          this.notify.error("Total Limit Exceeds at Voucher Serial No : " + this.detailVouchers[i].serialNo);
+          allow = false;
+          break;
+        }
+      }
+      defer.resolve(allow);
+      return defer.promise;
     }
 
     public searchVoucher() {
@@ -103,7 +123,10 @@ module ums {
     }
 
     public saveVoucher() {
-      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.save);
+      this.checkWhetherAnyAmountExceedTotalLimit().then((allow: boolean) => {
+        if (allow)
+          this.checkVoucherBeforeSaveOrUpdate(SubmissionType.save);
+      });
     }
 
     public checkVoucherBeforeSaveOrUpdate(submissionType: SubmissionType) {
@@ -127,7 +150,10 @@ module ums {
     }
 
     public postVoucher() {
-      this.checkVoucherBeforeSaveOrUpdate(SubmissionType.post);
+      this.checkWhetherAnyAmountExceedTotalLimit().then((allow: boolean) => {
+        if (allow)
+          this.checkVoucherBeforeSaveOrUpdate(SubmissionType.post);
+      });
     }
 
     public addData() {

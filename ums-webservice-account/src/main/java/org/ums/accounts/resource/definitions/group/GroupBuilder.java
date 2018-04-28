@@ -22,6 +22,7 @@ public class GroupBuilder implements Builder<Group, MutableGroup> {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("compCode", pReadOnly.getCompCode());
     pBuilder.add("groupCode", pReadOnly.getGroupCode());
+    pBuilder.add("displayCode", pReadOnly.getDisplayCode());
     pBuilder.add("groupName", pReadOnly.getGroupName());
     pBuilder.add("mainGroup", pReadOnly.getMainGroup());
     pBuilder.add("flag", pReadOnly.getFlag());

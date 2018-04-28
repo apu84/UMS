@@ -43,23 +43,27 @@ public class PredefinedNarrationResourceHelper extends
   }
 
   public List<PredefinedNarration> createOrUpdate(JsonArray pJsonArray) {
-    List<MutablePredefinedNarration> pMutablePredefinedNarrations = getObjectFromJson(pJsonArray);
     List<MutablePredefinedNarration> newList = new ArrayList<>();
     List<MutablePredefinedNarration> updatedList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    pMutablePredefinedNarrations.forEach(n->{
-      n.setModifiedBy(user.getEmployeeId());
-      n.setModifiedDate(new Date());
-      if(n.getId()==null){
-        n.setId(mIdGenerator.getNumericId());
-        newList.add(n);
-      }else{
-        updatedList.add(n);
+
+    for(int i = 0; i < pJsonArray.size(); i++) {
+      MutablePredefinedNarration predefinedNarration = new PersistentPredefinedNarration();
+      mPredefinedNarrationBuilder.build(predefinedNarration, pJsonArray.getJsonObject(i));
+      predefinedNarration.setModifiedBy(user.getEmployeeId());
+      predefinedNarration.setModifiedDate(new Date());
+      if(predefinedNarration.getId() == null) {
+        predefinedNarration.setId(mIdGenerator.getNumericId());
+        newList.add(predefinedNarration);
       }
-    });
-    if(newList.size()>0)
+      else {
+        updatedList.add(predefinedNarration);
+      }
+    }
+
+    if(newList.size() > 0)
       getContentManager().create(newList);
-    if(updatedList.size()>0)
+    if(updatedList.size() > 0)
       getContentManager().update(updatedList);
 
     return getContentManager().getAll();

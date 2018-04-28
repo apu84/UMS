@@ -9,7 +9,10 @@ import org.ums.domain.model.immutable.library.Note;
 import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.*;
+import org.ums.enums.library.BookBindingType;
+import org.ums.enums.library.JournalFrequency;
+import org.ums.enums.library.MaterialType;
+import org.ums.enums.library.RecordStatus;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
 
@@ -58,7 +61,6 @@ public class PersistentRecord implements MutableRecord {
   private MaterialType mMaterialType;
   private RecordStatus mRecordStatus;
   private BookBindingType mBookBindingType;
-  private AcquisitionType mAcquisitionType;
   private String mKeywords;
   private List<Subject> mSubjectList;
   private List<Note> mNoteList;
@@ -122,7 +124,6 @@ public class PersistentRecord implements MutableRecord {
     mMaterialType = pPersistentRecord.getMaterialType();
     mRecordStatus = pPersistentRecord.getRecordStatus();
     mBookBindingType = pPersistentRecord.getBookBindingType();
-    mAcquisitionType = pPersistentRecord.getAcquisitionType();
     mKeywords = pPersistentRecord.getKeyWords();
     mSubjectList = pPersistentRecord.getSubjectList();
     mNoteList = pPersistentRecord.getNoteList();
@@ -477,11 +478,6 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public AcquisitionType getAcquisitionType() {
-    return mAcquisitionType;
-  }
-
-  @Override
   public void setAuthorMark(String pAuthorMark) {
     mAuthorMark = pAuthorMark;
   }
@@ -529,11 +525,6 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setBookBindingType(BookBindingType pBookBindingType) {
     mBookBindingType = pBookBindingType;
-  }
-
-  @Override
-  public void setAcquisitionType(AcquisitionType pAcquisitionType) {
-    mAcquisitionType = pAcquisitionType;
   }
 
   @Override

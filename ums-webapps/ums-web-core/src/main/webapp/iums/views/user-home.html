@@ -14,7 +14,7 @@
               <table class="table table-striped table-hover">
                 <tbody>
                 <tr data-ng-repeat="property in userHome">
-                  <td width="50%"><b>{{property.key}}</b></td>
+                  <td width="30%"><b>{{property.key}}</b></td>
                   <td>{{property.value}}</td>
                 </tr>
                 </tbody>
@@ -22,7 +22,17 @@
             </div>
           </div>
         </div>
+        <div data-ng-if="userRole=='Teacher'">
+          <center><div id="empProfileDiv" style="clear:both;font-size:18px;font-weight:bold;">
+            <a href="#/employeeProfile" style="color:#0000FF">Click to update your profile information</a>
+          </div></center>
+          <script type="text/javascript">
+              $('#empProfileDiv').addClass('animated bounceInDown');
+          </script>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+

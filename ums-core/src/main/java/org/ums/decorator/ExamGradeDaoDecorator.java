@@ -10,8 +10,10 @@ import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, MutableExamGrade, Object, ExamGradeManager>
     implements ExamGradeManager {
@@ -168,5 +170,9 @@ public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, Mutabl
   public int[] updateRegistrationResultLetterGrade(List<StudentGradeDto> pGradeList, int pSemesterId, String pCourseId,
       ExamType pExamType) throws Exception {
     return getManager().updateRegistrationResultLetterGrade(pGradeList, pSemesterId, pCourseId, pExamType);
+  }
+
+  public Integer getOverriddenDeadline(int pSemesterId, String pCourseId, ExamType pExamType, Set<Integer> pStatusList) {
+    return getManager().getOverriddenDeadline(pSemesterId, pCourseId, pExamType, pStatusList);
   }
 }

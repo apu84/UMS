@@ -181,7 +181,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
   public JsonObject getOptionalCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
       final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
-    Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
+    Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
     List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear, pSemester);
 
     return buildCourse(courses, pUriInfo);

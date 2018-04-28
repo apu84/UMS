@@ -96,6 +96,17 @@
 /// <reference path='fee/receive.payment.controller.ts'/>
 /// <reference path='fee/receive.payment.service.ts'/>
 /// <reference path='fee/payment.status.service.ts'/>
+/// <reference path='admin/bank.models.ts'/>
+/// <reference path='admin/bank.http.service.ts'/>
+/// <reference path='admin/bank.model.converters.ts'/>
+/// <reference path='admin/bank.resource.ts'/>
+/// <reference path='admin/bank.service.ts'/>
+/// <reference path='admin/bank.controller.ts'/>
+/// <reference path='admin/branch.controller.ts'/>
+/// <reference path='admin/edit.branch.ts'/>
+/// <reference path='admin/bank.designation.controller.ts'/>
+/// <reference path='admin/edit.bank.designation.ts'/>
+
 
 
 

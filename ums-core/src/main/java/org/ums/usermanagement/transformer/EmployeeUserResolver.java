@@ -3,7 +3,6 @@ package org.ums.usermanagement.transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.domain.model.immutable.Employee;
-import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.MutableUser;
@@ -26,12 +25,7 @@ public class EmployeeUserResolver implements UserPropertyResolver {
   @Override
   public User resolve(User pUser) {
     MutableUser mutableUser = pUser.edit();
-    Employee employee = null;
-    try {
-      employee = mEmployeeManager.get(pUser.getEmployeeId());
-    } catch(Exception e) {
-      mLogger.error("User not found as employee, " + pUser.getId(), e);
-    }
+    Employee employee = mEmployeeManager.get(pUser.getEmployeeId());
     if(employee != null) {
       mutableUser.setDepartment(employee.getDepartment());
       mutableUser.setName(employee.getPersonalInformation().getFullName());

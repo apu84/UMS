@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public enum AcquisitionType {
   PURCHASE(1, "Purchase"),
-  DONATION(2, "Donation'");
+  DONATION(2, "Donation");
 
   private String label;
   private int id;

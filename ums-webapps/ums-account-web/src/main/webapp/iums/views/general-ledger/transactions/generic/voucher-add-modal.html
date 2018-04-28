@@ -139,7 +139,8 @@
                                 <option value="Dr">Dr</option>
                                 <option value="Cr">Cr</option>
                             </select>
-                            <select ng-if="vm.JOURNAL_VOUCHER_ID" class="form-control required" name="debitOrCredit"
+                            <select ng-if="vm.JOURNAL_VOUCHER_ID || vm.CONTRA_VOUCHER_ID" class="form-control required"
+                                    name="debitOrCredit"
                                     data-ng-model="vm.voucherOfAddModal.balanceType">
                                 <option value="Dr">Dr</option>
                                 <option value="Cr">Cr</option>

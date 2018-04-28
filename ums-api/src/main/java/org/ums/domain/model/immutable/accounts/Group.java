@@ -18,6 +18,8 @@ public interface Group extends Serializable, LastModifier, EditType<MutableGroup
 
   String getCompCode();
 
+  String getDisplayCode();
+
   String getGroupCode();
 
   String getGroupName();

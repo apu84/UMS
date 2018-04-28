@@ -56,7 +56,7 @@
     <repository>
       <id>pentaho-releases</id>
       <url>
-        https://public.nexus.pentaho.org/content/groups/omni/
+        http://nexus.pentaho.org/content/groups/omni
       </url>
     </repository>
     <repository>
@@ -280,7 +280,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>1.10.8</version>
+      <version>1.10.18</version>
       <scope>test</scope>
     </dependency>
     <dependency>

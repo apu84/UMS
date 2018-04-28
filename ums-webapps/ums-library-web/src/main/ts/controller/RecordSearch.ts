@@ -143,10 +143,10 @@ module ums {
             });
         }
 
-        private navigateRecord(operation: string, mrnNo: string, pageNumber: number, currentIndex: number): void {
+        private navigateRecord(operation: string, mfnNo: string, pageNumber: number, currentIndex: number): void {
             localStorage["lms_page"] = pageNumber;
             localStorage["lms_current_index"] = currentIndex;
-            window.location.href = "#/cataloging/" + operation + "/record/" + mrnNo;
+            window.location.href = "#/cataloging/" + operation + "/record/" + mfnNo;
         }
 
         private recordDetails(recordIndex: number) {

@@ -1,5 +1,9 @@
 package org.ums.bank.branch;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.bank.Bank;
 import org.ums.bank.BankManager;
@@ -19,6 +23,7 @@ public class PersistentBranch implements MutableBranch {
   private String mLocation;
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return mId;
   }
@@ -44,11 +49,13 @@ public class PersistentBranch implements MutableBranch {
   }
 
   @Override
+  @JsonIgnore
   public void setBank(Bank pBank) {
     this.mBank = pBank;
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getBankId() {
     return mBankId;
   }
