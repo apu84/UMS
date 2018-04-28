@@ -17,9 +17,20 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
-  String SELECT_ALL = "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, "
-      + "LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_SCR, TOTAL_PART, PART_A_TOTAL, "
-      + "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
+  String SELECT_ALL =
+      "SELECT MARKS_SUBMISSION_STATUS.ID, SEMESTER_SYLLABUS_MAP.SEMESTER_ID, MARKS_SUBMISSION_STATUS.COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP,  "
+          + "LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_SCR, TOTAL_PART, PART_A_TOTAL,  "
+          + "PART_B_TOTAL, MARKS_SUBMISSION_STATUS.YEAR, MARKS_SUBMISSION_STATUS.SEMESTER, MARKS_SUBMISSION_STATUS.LAST_MODIFIED  "
+          + "FROM MARKS_SUBMISSION_STATUS,MST_COURSE,COURSE_SYLLABUS_MAP ,SEMESTER_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM "
+          + "where SEMESTER_SYLLABUS_MAP.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_id "
+          + "And SEMESTER_SYLLABUS_MAP.SYLLABUS_ID = COURSE_SYLLABUS_MAP.SYLLABUS_ID  "
+          + "And COURSE_SYLLABUS_MAP.COURSE_ID = MST_COURSE.COURSE_ID "
+          + "And COURSE_SYLLABUS_MAP.COURSE_ID = MARKS_SUBMISSION_STATUS.COURSE_ID "
+          + "And SEMESTER_SYLLABUS_MAP.YEAR=MST_COURSE.YEAR  "
+          + "AND SEMESTER_SYLLABUS_MAP.SEMESTER=MST_COURSE.SEMESTER "
+          + "AND SEMESTER_SYLLABUS_MAP.SYLLABUS_ID=MST_SYLLABUS.SYLLABUS_ID "
+          + "AND MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID";
+
   String UPDATE_ALL =
       "UPDATE MARKS_SUBMISSION_STATUS_CURR SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
           + "LAST_SUBMISSION_DATE_PREP = ?, LAST_SUBMISSION_DATE_HEAD = ?, LAST_SUBMISSION_DATE_SCR = ?, LAST_SUBMISSION_DATE_COE=?, "
@@ -69,7 +80,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
 
   @Override
   public int delete(MutableMarksSubmissionStatus pMutable) {
-    String query = DELETE_ALL + "WHERE ID = ?";
+    String query = DELETE_ALL + "WHERE MARKS_SUBMISSION_STATUS.ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
@@ -85,14 +96,18 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
 
   @Override
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
-    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ?";
+    String query =
+        SELECT_ALL
+            + "WHERE MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? AND MARKS_SUBMISSION_STATUS.COURSE_ID = ? AND MARKS_SUBMISSION_STATUS.EXAM_TYPE = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pCourseId, pExamType.getId()},
         new MarksSubmissionStatusRowMapper());
   }
 
   @Override
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
-    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE DESC";
+    String query =
+        SELECT_ALL
+            + "WHERE MST_PROGRAM.PROGRAM_ID=? AND  MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? ORDER BY MARKS_SUBMISSION_STATUS.COURSE_ID, MARKS_SUBMISSION_STATUS.EXAM_TYPE DESC";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new MarksSubmissionStatusRowMapper());
   }
 

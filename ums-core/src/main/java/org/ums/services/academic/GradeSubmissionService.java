@@ -129,7 +129,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForPreparer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.GRADE_SCRUTINIZER:
@@ -142,7 +145,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForScrutinizer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.HEAD:
@@ -155,7 +161,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForHead : getOverriddenDeadline(recheckStatus, pLastDateForScrutinizer,
                 pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
     }

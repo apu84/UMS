@@ -19,8 +19,6 @@ public class PersistentCourseGroup implements MutableCourseGroup {
 
   private int mId;
   private String mName;
-  private Syllabus mSyllabus;
-  private String mSyllabusId;
   private String mLastModified;
 
   public PersistentCourseGroup() {
@@ -30,7 +28,6 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   public PersistentCourseGroup(final PersistentCourseGroup pPersistentCourseGroup) {
     this.mId = pPersistentCourseGroup.getId();
     this.mName = pPersistentCourseGroup.getName();
-    this.mSyllabus = pPersistentCourseGroup.getSyllabus();
   }
 
   @Override
@@ -51,25 +48,6 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   @Override
   public void setName(String pName) {
     mName = pName;
-  }
-
-  @Override
-  public Syllabus getSyllabus() {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
-  }
-
-  @Override
-  public void setSyllabus(Syllabus pSyllabus) {
-    mSyllabus = pSyllabus;
-  }
-
-  @Override
-  public String getSyllabusId() {
-    return mSyllabusId;
-  }
-
-  public void setSyllabusId(String pSyllabusId) {
-    mSyllabusId = pSyllabusId;
   }
 
   @Override

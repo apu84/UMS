@@ -20,22 +20,17 @@ public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGro
   ContentManager<Syllabus, MutableSyllabus, String> mSemesterManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, CourseGroup pReadOnly,
-                    UriInfo pUriInfo, final LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, CourseGroup pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> pReadOnly.getSyllabus(),
-        pReadOnly.getSyllabusId(), Syllabus.class);
-    pBuilder.add("syllabus", pUriInfo.getBaseUriBuilder().path("academic").path("syllabus")
-        .path(String.valueOf(syllabus.getId())).build().toString());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("courseGroup")
-        .path(String.valueOf(pReadOnly.getId())).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("courseGroup").path(String.valueOf(pReadOnly.getId()))
+            .build().toString());
   }
 
   @Override
   public void build(MutableCourseGroup pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setName(pJsonObject.getString("name"));
-    pMutable.setSyllabus(mSemesterManager.get(pJsonObject.getString("syllabus")));
   }
 }
