@@ -29,18 +29,8 @@ public class ApplicationTESCache extends
   }
 
   @Override
-  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
-    return getManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
-  }
-
-  @Override
   public List<ApplicationTES> getSectionList(String pCourseId, Integer pSemesterId, String pTeacherId) {
     return getManager().getSectionList(pCourseId, pSemesterId, pTeacherId);
-  }
-
-  @Override
-  public List<MutableApplicationTES> getMigrationQuestions(Integer pSemesterId) {
-    return getManager().getMigrationQuestions(pSemesterId);
   }
 
   @Override
@@ -54,18 +44,8 @@ public class ApplicationTESCache extends
   }
 
   @Override
-  public List<MutableApplicationTES> getQuestions() {
-    return getManager().getQuestions();
-  }
-
-  @Override
   public Long addQuestions(MutableApplicationTES pMutableList) {
     return getManager().addQuestions(pMutableList);
-  }
-
-  @Override
-  public Integer getTotalRegisteredStudentForCourse(String pCourseId, String pSection, Integer pSemesterId) {
-    return getManager().getTotalRegisteredStudentForCourse(pCourseId, pSection, pSemesterId);
   }
 
   @Override
@@ -159,11 +139,6 @@ public class ApplicationTESCache extends
   @Override
   public List<ApplicationTES> getTeachersInfo(String pCourseId, Integer pSemesterId, String pSection) {
     return getManager().getTeachersInfo(pCourseId, pSemesterId, pSection);
-  }
-
-  @Override
-  public List<ApplicationTES> getAllQuestions(Integer pSemesterId) {
-    return getManager().getAllQuestions(pSemesterId);
   }
 
   @Override

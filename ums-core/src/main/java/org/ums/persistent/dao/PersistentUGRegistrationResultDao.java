@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
@@ -90,10 +91,28 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
+  private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
 
-  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate,
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mNamedParameterJdbcTemplate = namedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, List<String> pSection, Integer pSemesterId) {
+    String query =
+        "SELECT  COUNT (a.STUDENT_ID) FROM UG_REGISTRATION_RESULT_CURR a,STUDENTS b WHERE  a.COURSE_ID=:courseId AND b.THEORY_SECTION IN(:sectionList) AND a.SEMESTER_ID=:semesterId "
+            + "AND  a.STUDENT_ID=b.STUDENT_ID AND b.DEPT_ID=(select DEPT_ID from MST_PROGRAM where PROGRAM_ID=( "
+            + "select PROGRAM_ID from SEMESTER_SYLLABUS_MAP where SEMESTER_ID=:semesterId and (SYLLABUS_ID, Year, semester) in ( "
+            + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= :courseId and "
+            + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID)))";
+    Map parameterMap = new HashMap();
+    parameterMap.put("sectionList", pSection);
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("courseId", pCourseId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class);
   }
 
   @Override

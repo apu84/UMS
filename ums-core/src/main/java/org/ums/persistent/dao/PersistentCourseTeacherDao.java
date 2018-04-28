@@ -7,10 +7,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CourseTeacherManager;
+import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
 public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long>
@@ -38,10 +40,19 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
       + "                    t2.semester) t3\n" + "       LEFT JOIN\n" + "          course_teacher t4\n"
       + "       ON t3.course_id = t4.course_id  and t3.semester_id = t4.semester_id " + "%s"
       + "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
+  String ALL_SECTIONS_FOR_A_COURSE =
+      "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
 
   public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
+    String query = ALL_SECTIONS_FOR_A_COURSE;
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
+        new CourseTeacherRowMapperForAllSection());
   }
 
   @Override
@@ -123,6 +134,15 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
       courseTeacher.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<CourseTeacher> atomicReference = new AtomicReference<>(courseTeacher);
       return atomicReference.get();
+    }
+  }
+  class CourseTeacherRowMapperForAllSection implements RowMapper<ApplicationTES> {
+    @Override
+    public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationTES application = new PersistentApplicationTES();
+      application.setReviewEligibleCourses(pResultSet.getString("COURSE_ID"));
+      application.setSection(pResultSet.getString("SECTION"));
+      return application;
     }
   }
 }

@@ -10,10 +10,6 @@ import java.util.List;
  */
 public interface ApplicationTESManager extends ContentManager<ApplicationTES, MutableApplicationTES, Long> {
 
-  List<ApplicationTES> getAllQuestions(final Integer pSemesterId);
-
-  List<MutableApplicationTES> getMigrationQuestions(final Integer pSemesterId);
-
   List<ApplicationTES> getAssignedReviewableCoursesList(final String pTeacherId, final Integer pSemesterId);
 
   List<ApplicationTES> getDeadlines(final String pParameterId, final Integer pSemesterId);
@@ -27,11 +23,6 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   String getCourseDepartmentMap(final String pCourseId, final Integer pSemesterId);
 
   List<ApplicationTES> getSectionList(final String pCourseId, final Integer pSemesterId, String pTeacherId);
-
-  List<ApplicationTES> getAllSectionForSelectedCourse(final String pCourseId, String pTeacherId,
-      final Integer pSemesterId);
-
-  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final String pSection, final Integer pSemesterId);
 
   List<MutableApplicationTES> getEligibleFacultyMembers(final String pDeptId, final Integer pSemesterId);
 
@@ -61,8 +52,6 @@ public interface ApplicationTESManager extends ContentManager<ApplicationTES, Mu
   List<Long> setQuestions(final List<MutableApplicationTES> pMutableList);
 
   Long addQuestions(final MutableApplicationTES pMutableList);
-
-  List<MutableApplicationTES> getQuestions();
 
   List<ApplicationTES> getQuestionSemesterMap(final Integer pSemesterId);
 

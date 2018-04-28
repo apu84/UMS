@@ -96,6 +96,11 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   @Autowired
   ApplicationTesSelectedCourseManager mApplicationTesSelectedCourseManager;
 
+  @Autowired
+  UGRegistrationResultManager mUgRegistrationResultManager;
+  @Autowired
+  CourseTeacherManager mCourseTeacherManager;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
@@ -128,7 +133,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   @NotNull
-  private Boolean getSemesterParameter(int i2, String s) {
+  public Boolean getSemesterParameter(int i2, String s) {
     String startDate = "", endDate = "";
     Boolean deadLineStatus = false;
     List<ApplicationTES> semesterParameterHead = getContentManager().getDeadlines(s, i2);// 12=student
@@ -143,7 +148,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     return deadLineStatus;
   }
 
-  private Boolean checkDateValidity(String startDate, String endDate, Boolean deadLineStatus) {
+  public Boolean checkDateValidity(String startDate, String endDate, Boolean deadLineStatus) {
     try {
       if(startDate != null && endDate != null) {
         Date startDateConvert, lastApplyDate, currentDate;
@@ -269,9 +274,10 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public JsonObject getMigrationQuestions(final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
-    List<MutableApplicationTES> applications = getContentManager().getMigrationQuestions(pSemesterId);
-    List<ApplicationTES> questionSemesterMap = getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
-    String x=mApplicationTesSelectedCourseManager.get(Long.parseLong("-1383167847042870825")).getCourseId();
+    List<MutableApplicationTES> applications = mApplicationTesQuestionManager.getMigrationQuestions(pSemesterId);
+    
+    List<ApplicationTES> questionSemesterMap = mApplicationTesSetQuestionManager.getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    
     checkMigrationValidity(applications, questionSemesterMap);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -336,7 +342,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public JsonObject getDeleteEligibleQuestions(final Request pRequest, final UriInfo pUriInfo) {
-    List<MutableApplicationTES> applications = getContentManager().getMigrationQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    List<MutableApplicationTES> applications = mApplicationTesQuestionManager.getMigrationQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -347,8 +353,9 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public JsonObject getQuestions(final Request pRequest, final UriInfo pUriInfo) {
-    List<MutableApplicationTES> applications = getContentManager().getQuestions();
-    List<ApplicationTES> questionSemesterMap = getContentManager().getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+    List<MutableApplicationTES> applications = mApplicationTesQuestionManager.getQuestions();
+
+    List<ApplicationTES> questionSemesterMap = mApplicationTesSetQuestionManager.getQuestionSemesterMap(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     checkMigrationValidity(applications, questionSemesterMap);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -425,7 +432,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       Integer studentNo =
           getContentManager().getTotalStudentNumber(teacherRelatedCourseList.get(j).getTeacherId(),
               teacherRelatedCourseList.get(j).getReviewEligibleCourseId(), pSemesterId);
-      List<ApplicationTES> app = getContentManager().getAllQuestions(pSemesterId);
+      List<ApplicationTES> app = mApplicationTesQuestionManager.getAllQuestions(pSemesterId);
+
       if(studentNo != 0) {
         score =
             getScore(teacherRelatedCourseList.get(j).getTeacherId(), teacherRelatedCourseList.get(j)
@@ -533,13 +541,14 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   private double getPercentage(Integer pSemesterId, List<ApplicationTES> parameters, DecimalFormat newFormat, int j,
       double studentNo, Integer registeredStudents, List<ApplicationTES> sectionList) {
     double percentage = 0;
+    List<String> addSection = new ArrayList<String>();
     try {
       for(int k = 0; k < sectionList.size(); k++) {
-        registeredStudents =
-            registeredStudents
-                + getContentManager().getTotalRegisteredStudentForCourse(parameters.get(j).getReviewEligibleCourseId(),
-                    sectionList.get(k).getSection(), pSemesterId);
+        addSection.add(sectionList.get(k).getSection());
       }
+      registeredStudents =
+          mUgRegistrationResultManager.getTotalRegisteredStudentForCourse(
+              parameters.get(j).getReviewEligibleCourseId(), addSection, pSemesterId);
       double total = (studentNo / (double) registeredStudents);
       percentage = Double.valueOf(newFormat.format((total * 100)));
     } catch(Exception e) {
@@ -597,7 +606,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public JsonObject getSemesterWiseQuestions(final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
-    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
+    List<ApplicationTES> applications = mApplicationTesQuestionManager.getAllQuestions(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -637,7 +646,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       e.printStackTrace();
     }
 
-    List<ApplicationTES> applications = getContentManager().getAllQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId()
+    List<ApplicationTES> applications = mApplicationTesQuestionManager.getAllQuestions(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());//mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId()
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -659,29 +668,23 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     String selectedSectionForReview = "", sectionForReview = "";
     Integer selectedRegisteredStudents = 0, registeredStudents = 0;
     double percentage = 0;
-    List<ApplicationTES> getAllSectionForSelectedCourse =
-        getContentManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
-    List<ApplicationTES> sectionList = getContentManager().getSectionList(pCourseId, pSemesterId, pTeacherId);
-    try {
-      for(int j = 0; j < getAllSectionForSelectedCourse.size(); j++) {
-        sectionForReview = sectionForReview + getAllSectionForSelectedCourse.get(j).getSection() + " ";
-        registeredStudents =
-            registeredStudents
-                + getContentManager().getTotalRegisteredStudentForCourse(pCourseId,
-                    getAllSectionForSelectedCourse.get(j).getSection(), pSemesterId);
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    List<String> addSection = new ArrayList<>();
+    List<ApplicationTES> allSectionList =
+        mCourseTeacherManager.getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
 
+    List<ApplicationTES> sectionList = getContentManager().getSectionList(pCourseId, pSemesterId, pTeacherId);
+    sectionForReview = getDataForSections(sectionForReview, addSection, allSectionList);
+    registeredStudents =
+        mUgRegistrationResultManager.getTotalRegisteredStudentForCourse(pCourseId, addSection, pSemesterId);
+    addSection.clear();
     try {
       for(int k = 0; k < sectionList.size(); k++) {
         selectedSectionForReview = selectedSectionForReview + sectionList.get(k).getSection() + " ";
-        selectedRegisteredStudents =
-            selectedRegisteredStudents
-                + getContentManager().getTotalRegisteredStudentForCourse(pCourseId, sectionList.get(k).getSection(),
-                    pSemesterId);
+        addSection.add(sectionList.get(k).getSection());
       }
+      selectedRegisteredStudents =
+          mUgRegistrationResultManager.getTotalRegisteredStudentForCourse(pCourseId, addSection, pSemesterId);
+      addSection.clear();
       double total = ((double) studentNo / (double) selectedRegisteredStudents);
       percentage = Double.valueOf(newFormat.format((total * 100)));
     } catch(Exception e) {
@@ -697,6 +700,18 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     object.add("studentReviewed", studentNo);
     localCache.invalidate();
     return object.build();
+  }
+
+  public String getDataForSections(String sectionForReview, List<String> addSection, List<ApplicationTES> allSectionList) {
+    try {
+      for(int j = 0; j < allSectionList.size(); j++) {
+        sectionForReview = sectionForReview + allSectionList.get(j).getSection() + " ";
+        addSection.add(allSectionList.get(j).getSection());
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    return sectionForReview;
   }
 
   public List<QuestionWiseReport> getQuestionWiseReport(final String pDeptId, final Integer pYear,
@@ -737,18 +752,18 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
                   getCourses.get(i).getReviewEligibleCourseId(), pQuestionId, pSemesterId);
 
           value = (Double.valueOf(newFormat.format(value / studentNo)));
-
+          List<String> addSection = new ArrayList<String>();
           List<ApplicationTES> sectionList =
               getContentManager().getSectionList(getCourses.get(i).getReviewEligibleCourseId(), pSemesterId,
                   getTeachers.get(j).getTeacherId());
           int selectedRegisteredStudents = 0;
           try {
             for(int k = 0; k < sectionList.size(); k++) {
-              selectedRegisteredStudents =
-                  selectedRegisteredStudents
-                      + getContentManager().getTotalRegisteredStudentForCourse(
-                          getCourses.get(i).getReviewEligibleCourseId(), sectionList.get(k).getSection(), pSemesterId);
+              addSection.add(sectionList.get(k).getSection());
             }
+            selectedRegisteredStudents =
+                mUgRegistrationResultManager.getTotalRegisteredStudentForCourse(getCourses.get(i)
+                    .getReviewEligibleCourseId(), addSection, pSemesterId);
             double total = ((double) studentNo / (double) selectedRegisteredStudents);
             percentage = Double.valueOf(newFormat.format((total * 100)));
           } catch(Exception e) {
@@ -777,7 +792,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
     DecimalFormat newFormat = new DecimalFormat("#.##");
     List<Report> reportList = new ArrayList<Report>();
     Integer studentNo = getContentManager().getTotalStudentNumber(pTeacherId, pCourseId, pSemesterId);
-    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
+    List<ApplicationTES> applications = mApplicationTesQuestionManager.getAllQuestions(pSemesterId);
     getEvaluationDetails(pCourseId, pTeacherId, pSemesterId, newFormat, reportList, studentNo, applications);
     return reportList;
   }
@@ -797,7 +812,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
   }
 
   public List<StudentComment> getComments(final String pCourseId, final String pTeacherId, final Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
-    List<ApplicationTES> applications = getContentManager().getAllQuestions(pSemesterId);
+    List<ApplicationTES> applications = mApplicationTesQuestionManager.getAllQuestions(pSemesterId);
     List<ApplicationTES> getDetailedResult = null;
     List<StudentComment> commentList = new ArrayList<StudentComment>();
 
