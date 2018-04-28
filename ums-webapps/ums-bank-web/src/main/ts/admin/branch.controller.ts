@@ -1,17 +1,25 @@
 module ums {
   export class BranchController {
-    public static $inject = ['$stateParams', '$modal', 'BankService'];
+    public static $inject = ['$scope', '$stateParams', '$modal', 'BankService'];
     private bank: Bank;
     private branches: BankBranch[];
     public reloadReference: ReloadRef = {reloadList: false};
 
-    constructor($stateParams: any,
+    constructor($scope: ng.IScope,
+                $stateParams: any,
                 private $modal: any,
                 private bankService: BankService) {
-      this.bankService.getBank($stateParams["1"]).then((bank: Bank) => {
+      this.bankService.getBank($stateParams["id"]).then((bank: Bank) => {
         this.bank = bank;
         this.populateBranches(this.bank.id);
       });
+
+      $scope.$watch(() => this.reloadReference, (newVal: ReloadRef) => {
+        if (newVal.reloadList) {
+          this.populateBranches(this.bank.id);
+          this.reloadReference.reloadList = false;
+        }
+      }, true);
     }
 
     private populateBranches(bankId: string): void {

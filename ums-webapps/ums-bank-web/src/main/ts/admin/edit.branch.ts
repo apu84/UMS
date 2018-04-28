@@ -2,7 +2,7 @@ module ums {
   interface BranchScope extends ng.IScope {
     branch: BankBranch;
     ok: Function;
-    addBranch: Function;
+    editBranch: Function;
     editMode: boolean
   }
 
@@ -18,7 +18,6 @@ module ums {
                 private notify: Notify,
                 private reload: ReloadRef) {
       if (branch) {
-        this.$scope.editMode = true;
         this.$scope.branch = branch;
       }
       else {
@@ -31,9 +30,9 @@ module ums {
           name: undefined
         };
       }
-
+      this.$scope.editMode = true;
       this.$scope.ok = this.ok.bind(this);
-      this.$scope.addBranch = this.addBranch.bind(this);
+      this.$scope.editBranch = this.editBranch.bind(this);
     }
 
     private ok(): void {
@@ -41,8 +40,8 @@ module ums {
       this.$modalInstance.dismiss('cancel');
     }
 
-    public addBranch(): void {
-      if (this.$scope.editMode) {
+    public editBranch(): void {
+      if (this.$scope.branch.id) {
         this.updateBranch();
       }
       else {

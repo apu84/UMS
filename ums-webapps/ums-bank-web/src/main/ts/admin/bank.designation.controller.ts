@@ -1,12 +1,20 @@
 module ums {
   export class BankDesignationController {
-    public static $inject = ['BankService', '$modal'];
+    public static $inject = ['$scope', 'BankService', '$modal'];
     private designations: BankDesignation[];
     public reloadReference: ReloadRef = {reloadList: false};
 
-    constructor(private bankService: BankService,
+    constructor($scope: ng.IScope,
+                private bankService: BankService,
                 private $modal: any) {
       this.populateDesignationList();
+
+      $scope.$watch(() => this.reloadReference, (newVal: ReloadRef) => {
+        if (newVal.reloadList) {
+          this.populateDesignationList();
+          this.reloadReference.reloadList = false;
+        }
+      }, true);
     }
 
     private populateDesignationList() {
