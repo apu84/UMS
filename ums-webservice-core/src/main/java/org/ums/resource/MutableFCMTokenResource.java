@@ -13,10 +13,7 @@ import javax.ws.rs.core.Response;
 public class MutableFCMTokenResource extends Resource {
 
   @Autowired
-  ResourceHelper<FCMToken, MutableFCMToken, String> mHelper;
-
-  @Autowired
-  FCMTokenResourceHelper mResourceHelper;
+  private FCMTokenResourceHelper mResourceHelper;
 
   @POST
   public Response save(final JsonObject pJsonObject) throws Exception {

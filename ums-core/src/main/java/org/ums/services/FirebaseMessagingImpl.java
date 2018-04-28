@@ -42,7 +42,6 @@ public class FirebaseMessagingImpl implements FirebaseMessaging {
     else {
       createConsumer(consumerId);
     }
-
   }
 
   private void updateConsumer(FCMToken fcmToken) {
@@ -51,15 +50,15 @@ public class FirebaseMessagingImpl implements FirebaseMessaging {
     mutableFCMToken.setFCMToken(null);
     mutableFCMToken.setTokenLastRefreshedOn(new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
     mutableFCMToken.setTokenDeletedOn(new Date());
-    mutableFCMToken.update();
+    mFCMTokenManager.update(mutableFCMToken);
   }
 
   private void createConsumer(String consumerId) {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     mutableFCMToken.setId(consumerId);
     mutableFCMToken.setFCMToken(null);
-    mutableFCMToken.setTokenLastRefreshedOn(new Date());
+    mutableFCMToken.setTokenLastRefreshedOn(null);
     mutableFCMToken.setTokenDeletedOn(new Date());
-    mutableFCMToken.create();
+    mFCMTokenManager.create(mutableFCMToken);
   }
 }

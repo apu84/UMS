@@ -1,6 +1,9 @@
 package org.ums.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.FCMToken;
+import org.ums.domain.model.mutable.MutableFCMToken;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -13,17 +16,11 @@ import javax.ws.rs.core.Request;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class FCMTokenResource extends MutableFCMTokenResource {
 
+  @Autowired
+  private ResourceHelper<FCMToken, MutableFCMToken, String> mHelper;
+
   @GET
-  @Path("/all")
   public JsonObject getAll() throws Exception {
     return mHelper.getAll(mUriInfo);
   }
-
-  @GET
-  @Path("/userId/{user-id}")
-  public JsonObject getToken(final @Context Request pRequest, final @PathParam("user-id") String pUserId)
-      throws Exception {
-    return mResourceHelper.getToken(pUserId, mUriInfo);
-  }
-
 }

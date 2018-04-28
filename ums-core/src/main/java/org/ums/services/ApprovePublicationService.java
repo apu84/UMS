@@ -33,20 +33,18 @@ public class ApprovePublicationService {
   public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
       InterruptedException {
 
-    mFirebaseMessaging.send("sak", "Approve Publication", "You Publication Has Gone For approval");
-
     Notifier notifier = new Notifier() {
 
       @Override
       public List<String> consumers() {
         List<String> users = new ArrayList<>();
-        users.add("sak");
+        users.add(userId);
         return users;
       }
 
       @Override
       public String producer() {
-        return "arm";
+        return sender.getId();
       }
 
       @Override

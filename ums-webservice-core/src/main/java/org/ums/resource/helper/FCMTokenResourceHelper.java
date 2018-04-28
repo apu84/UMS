@@ -56,17 +56,20 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   public JsonObject getToken(String pId, UriInfo mUriInfo) {
     LocalCache localCache = new LocalCache();
     FCMToken fcmToken = new PersistentFCMToken();
-    try {
+    if(mManager.exists(pId)) {
       fcmToken = mManager.get(pId);
-    } catch(EmptyResultDataAccessException e) {
+      return toJson(fcmToken, mUriInfo, localCache);
     }
-    return toJson(fcmToken, mUriInfo, localCache);
+    else {
+      return null;
+    }
   }
 
-  private void update(String id, String token, Date pTokenLastRefreshedOn, Date pTokenDeletedOn, UriInfo pUriInfo) {
+  private void update(String consumerId, String token, Date pTokenLastRefreshedOn, Date pTokenDeletedOn,
+      UriInfo pUriInfo) {
     MutableFCMToken mutableFCMToken = new PersistentFCMToken();
     LocalCache localeCache = new LocalCache();
-    mutableFCMToken.setId(id);
+    mutableFCMToken.setId(consumerId);
     mutableFCMToken.setFCMToken(token);
     mutableFCMToken.setTokenLastRefreshedOn(pTokenLastRefreshedOn);
     mutableFCMToken.setTokenDeletedOn(pTokenDeletedOn);
@@ -84,46 +87,51 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
 
     if(mManager.exists(user.getId())) {
       FCMToken fcmToken = mManager.get(user.getId());
-      if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
-        FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
-        update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
-            new Date(), pUriInfo);
-        update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-        if(fcmToken.getTokenDeleteOn() == null) {
-          sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
-        }
-        else {
-          sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
-        }
-        Response.ResponseBuilder builder = Response.created(null);
-        builder.status(Response.Status.CREATED);
-        return builder.build();
-      }
-      else {
-        update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-        if(fcmToken.getTokenDeleteOn() == null) {
-          sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
-        }
-        else {
-          sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
-        }
-        Response.ResponseBuilder builder = Response.created(null);
-        builder.status(Response.Status.CREATED);
-        return builder.build();
-      }
+      return operationForExistingUser(pUriInfo, jsonObject, user, fcmToken);
     }
     else {
-      if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
-        FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
-        update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
-            new Date(), pUriInfo);
-        doPost(jsonObject, user);
-      }
-      else {
-        doPost(jsonObject, user);
-      }
+      operationForNonExistingUser(pUriInfo, jsonObject, user);
     }
     return null;
+  }
+
+  private void operationForNonExistingUser(UriInfo pUriInfo, JsonObject jsonObject, User user) {
+    if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
+      FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
+      update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
+          new Date(), pUriInfo);
+      doPost(jsonObject, user);
+    }
+    else {
+      doPost(jsonObject, user);
+    }
+  }
+
+  private Response operationForExistingUser(UriInfo pUriInfo, JsonObject jsonObject, User user, FCMToken fcmToken)
+      throws ExecutionException, InterruptedException {
+    if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
+      FCMToken duplicateFcmToken = mManager.getId(jsonObject.getString("fcmToken"));
+      update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
+          new Date(), pUriInfo);
+      update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
+      messageSendingProcess(fcmToken);
+    }
+    else {
+      update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
+      messageSendingProcess(fcmToken);
+    }
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  private void messageSendingProcess(FCMToken fcmToken) throws ExecutionException, InterruptedException {
+    if(fcmToken.getTokenDeleteOn() == null) {
+      sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
+    }
+    else {
+      sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
+    }
   }
 
   private Response doPost(JsonObject jsonObject, User user) {
@@ -143,7 +151,7 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   private void sendQueuedMessages(String sendTo, Date pQueuedFrom) throws ExecutionException, InterruptedException {
     List<Notification> notifications = mNotificationManager.getNotifications(sendTo, pQueuedFrom);
     for(Notification notification : notifications) {
-      mFirebaseMessaging.send(sendTo, "demo", notification.getPayload());
+      mFirebaseMessaging.send(sendTo, notification.getNotificationType(), notification.getPayload());
     }
   }
 

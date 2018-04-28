@@ -15,10 +15,6 @@ import java.util.concurrent.ExecutionException;
 public class FirebaseConfig {
 
   public FirebaseConfig() throws IOException {
-    initializeFirebaseApp();
-  }
-
-  private void initializeFirebaseApp() throws IOException {
     FileInputStream serviceAccount = new FileInputStream("D:\\IUMS-Source/service-account.json");
 
     FirebaseOptions options =
