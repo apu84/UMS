@@ -75,7 +75,7 @@ module ums {
           templateUrl: 'views/admin/bank.list.html'
         })
         .state('branches', {
-          url: "/branches/:1",
+          url: "/branches/:id",
           controller: 'BranchController',
           controllerAs: 'vm',
           templateUrl: 'views/admin/branch.list.html'

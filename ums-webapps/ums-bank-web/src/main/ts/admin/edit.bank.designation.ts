@@ -17,7 +17,6 @@ module ums {
                 private notify: Notify,
                 private reload: ReloadRef) {
       if (designation) {
-        this.$scope.editMode = true;
         this.$scope.designation = designation;
       }
       else {
@@ -27,7 +26,7 @@ module ums {
           id: undefined
         };
       }
-
+      this.$scope.editMode = true;
       this.$scope.ok = this.ok.bind(this);
       this.$scope.addDesignation = this.addDesignation.bind(this);
     }
@@ -38,7 +37,7 @@ module ums {
     }
 
     public addDesignation(): void {
-      if (this.$scope.editMode) {
+      if (this.$scope.designation.id) {
         this.updateDesignation();
       }
       else {
