@@ -69,7 +69,7 @@ public class OptionalCourseApplicationResourceHelper {
 
   public JsonObject getSemesterWiseCrHrInfo(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
 
-    Syllabus syllabus = mSemesterSyllabusManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
+    Syllabus syllabus = mSemesterSyllabusManager.getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
     SemesterWiseCrHrDto crHr = mSemesterWiseCrHrManager.getCrHrInfoByYearSemester(syllabus.getId(), pYear, pSemester);
 
     JsonObjectBuilder object = Json.createObjectBuilder();

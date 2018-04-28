@@ -24,16 +24,16 @@ public class MarksSubmissionStatusBuilder implements Builder<MarksSubmissionStat
       LocalCache pLocalCache) {
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(), pReadOnly.getCourseId(),
         Course.class);
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(), course.getSyllabusId(),
-        Syllabus.class);
-    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(), syllabus.getProgramId(),
-        Syllabus.class);
-    Department department = (Department) pLocalCache.cache(() -> program.getDepartment(), program.getDepartmentId(),
-        Department.class);
-    pBuilder.add("departmentId", department.getId());
-    pBuilder.add("departmentName", department.getShortName());
-    pBuilder.add("programName", program.getShortName());
-    pBuilder.add("programId", program.getId());
+//    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(), course.getSyllabusId(),
+//        Syllabus.class);
+//    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(), syllabus.getProgramId(),
+//        Syllabus.class);
+//    Department department = (Department) pLocalCache.cache(() -> program.getDepartment(), program.getDepartmentId(),
+//        Department.class);
+//    pBuilder.add("departmentId", department.getId());
+//    pBuilder.add("departmentName", department.getShortName());
+//    pBuilder.add("programName", program.getShortName());
+//    pBuilder.add("programId", program.getId());
     pBuilder.add("courseId", course.getId());
     pBuilder.add("courseNo", course.getNo());
     pBuilder.add("courseTitle", course.getTitle());

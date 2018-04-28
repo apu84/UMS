@@ -16,21 +16,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
   static String SELECT_ALL =
-      "SELECT MST_COURSE.COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY,"
+      "SELECT MST_COURSE.COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY,OFFERED_TO_PROGRAM,"
           + "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY,PAIR_COURSE_ID, LAST_MODIFIED,null as TOTAL_APPLIED FROM MST_COURSE,COURSE_SYLLABUS_MAP ";
-  static String UPDATE_ONE = "UPDATE MST_COURSE SET COURSE_NO = ?, COURSE_TITLE = ?, CRHR = ?, SYLLABUS_ID = ?, "
+  static String UPDATE_ONE = "UPDATE MST_COURSE SET COURSE_NO = ?, COURSE_TITLE = ?, CRHR = ?,  "
       + "OPT_GROUP_ID = ?, OFFER_BY = ?, VIEW_ORDER = ?, YEAR = ?, SEMESTER = ?, COURSE_TYPE = ?, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_COURSE ";
-  static String INSERT_ONE =
-      "INSERT INTO MST_COURSE(COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY,"
-          + "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  static String INSERT_ONE = "INSERT INTO MST_COURSE(COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, OPT_GROUP_ID, OFFER_BY,"
+      + "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED) "
+      + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String ORDER_BY = " ORDER BY YEAR, SEMESTER, COURSE_CATEGORY, VIEW_ORDER";
-
-  static String SELECT_ALL_BY_SEMESTER_PROGRAM =
-      "Select COURSE_ID,COURSE_NO,COURSE_TITLE,YEAR,SEMESTER From MST_COURSE Where Syllabus_Id In "
-          + "(Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Program_Id=? and Semester_Id=?) ";
 
   static String SELECT_OFFERED_COURSES = "Select MST_COURSE.*,TOTAL_APPLIED From OPT_COURSE_OFFER,MST_COURSE "
       + "Where OPT_COURSE_OFFER.COURSE_ID=MST_COURSE.COURSE_ID "
@@ -84,16 +79,9 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
   public int update(final MutableCourse pCourse) {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
-    return mJdbcTemplate.update(
-        query,
-        pCourse.getNo(),
-        pCourse.getTitle(),
-        pCourse.getCrHr(),
-        pCourse.getSyllabus().getId(),
-        pCourse.getCourseGroup(pCourse.getSyllabus().getId()).getId() > 0 ? pCourse.getCourseGroup(
-            pCourse.getSyllabus().getId()).getId() : null, pCourse.getOfferedBy().getId(), pCourse.getViewOrder(),
-        pCourse.getYear(), pCourse.getSemester(), pCourse.getCourseType().ordinal(), pCourse.getCourseCategory()
-            .ordinal());
+    return mJdbcTemplate.update(query, pCourse.getNo(), pCourse.getTitle(), pCourse.getCrHr(),
+        pCourse.getCourseGroupId(), pCourse.getOfferedBy().getId(), pCourse.getViewOrder(), pCourse.getYear(),
+        pCourse.getSemester(), pCourse.getCourseType().ordinal(), pCourse.getCourseCategory().ordinal());
   }
 
   public int delete(final MutableCourse pCourse) {
@@ -102,10 +90,9 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   public String create(final MutableCourse pCourse) {
-    mJdbcTemplate.update(INSERT_ONE, pCourse.getId(), pCourse.getNo(), pCourse.getTitle(), pCourse.getCrHr(), pCourse
-        .getSyllabusId(), pCourse.getCourseGroupId() > 0 ? pCourse.getCourseGroup(pCourse.getSyllabus().getId())
-        .getId() : null, pCourse.getOfferedBy().getId(), pCourse.getViewOrder(), pCourse.getYear(), pCourse
-        .getSemester(), pCourse.getCourseType().ordinal(), pCourse.getCourseCategory().ordinal());
+    mJdbcTemplate.update(INSERT_ONE, pCourse.getId(), pCourse.getNo(), pCourse.getTitle(), pCourse.getCrHr(),
+        pCourse.getCourseGroupId(), pCourse.getOfferedBy().getId(), pCourse.getViewOrder(), pCourse.getYear(),
+        pCourse.getSemester(), pCourse.getCourseType().ordinal(), pCourse.getCourseCategory().ordinal());
     return pCourse.getId();
   }
 
@@ -151,7 +138,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   @Override
   public List<Course> getOptionalCourseList(String pSyllabusId, Integer pYear, Integer pSemester) {
     String query =
-        SELECT_ALL + "Where Syllabus_Id=? And Course_Category=" + CourseCategory.OPTIONAL.getValue()
+        SELECT_ALL + "Where Syllabus_Id=? And MST_COURSE.course_id=COURSE_SYLLABUS_MAP.course_id And Course_Category=" + CourseCategory.OPTIONAL.getValue()
             + " And Year=? and Semester=? " + " Order By OPT_GROUP_ID,Course_No ";
     return mJdbcTemplate.query(query, new Object[] {pSyllabusId, pYear, pSemester}, new CourseRowMapper());
   }
@@ -260,7 +247,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       course.setNo(resultSet.getString("COURSE_NO"));
       course.setTitle(resultSet.getString("COURSE_TITLE"));
       course.setCrHr(resultSet.getFloat("CRHR"));
-      course.setSyllabusId(resultSet.getString("SYLLABUS_ID"));
+      course.setOfferedToProgramId(resultSet.getInt("OFFERED_TO_PROGRAM"));
       course.setCourseGroupId(resultSet.getInt("OPT_GROUP_ID"));
       if(resultSet.getObject("OFFER_BY") != null) {
         course.setOfferedDepartmentId(resultSet.getString("OFFER_BY"));

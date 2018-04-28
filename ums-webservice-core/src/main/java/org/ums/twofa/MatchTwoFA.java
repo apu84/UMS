@@ -103,7 +103,6 @@ public class MatchTwoFA extends Resource {
     }
     if(existingToken == null) {
       newToken = new PersistentTwoFAToken();
-      SecureRandomNumberGenerator generator = new SecureRandomNumberGenerator();
       newToken.setUserId(token.getUserId());
       newToken.setType(token.getType());
 

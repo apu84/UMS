@@ -41,7 +41,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     pBuilder.add("courseCrHr", course.getCrHr());
     pBuilder.add("year", course.getYear());
     pBuilder.add("semester", course.getSemester());
-    pBuilder.add("syllabusId", course.getSyllabusId());
+    //pBuilder.add("syllabusId", course.getSyllabusId());
 
 
     if (!StringUtils.isEmpty(pReadOnly.getTeacherId())) {
@@ -58,11 +58,8 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     Department department = (Department) pLocalCache.cache(() -> course.getOfferedBy(),
         course.getOfferedDepartmentId(), Department.class);
 
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(),
-        course.getSyllabusId(), Syllabus.class);
-
-    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(),
-        syllabus.getProgramId(), Program.class);
+    Program program = (Program) pLocalCache.cache(() -> course.getOfferedToProgram(),
+        course.getOfferedDepartmentId(), Program.class);
 
     pBuilder.add("programName", program.getShortName());
 

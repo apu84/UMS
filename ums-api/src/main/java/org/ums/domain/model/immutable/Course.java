@@ -21,21 +21,21 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   Department getOfferedBy();
 
-  Department getOfferedTo();
+  Department getOfferedToDepartment();
 
-  int getYear();
+  Program getOfferedToProgram();
 
-  int getSemester();
+  Integer getOfferedToProgramId();
 
-  int getViewOrder();
+  Integer getYear();
 
-  int getCourseGroupId();
+  Integer getSemester();
 
-  CourseGroup getCourseGroup(final String pSyllabusId);
+  Integer getViewOrder();
 
-  String getSyllabusId();
+  Integer getCourseGroupId();
 
-  Syllabus getSyllabus();
+  CourseGroup getCourseGroup(final Integer pId);
 
   CourseType getCourseType();
 
@@ -43,5 +43,5 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   String getPairCourseId();
 
-  int getTotalApplied();
+  Integer getTotalApplied();
 }

@@ -8,8 +8,4 @@ import org.ums.domain.model.immutable.Syllabus;
 public interface MutableCourseGroup extends CourseGroup, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
   void setName(final String pName);
-
-  void setSyllabus(final Syllabus pSyllabus);
-
-  void setSyllabusId(final String pSyllabusId);
 }
