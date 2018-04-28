@@ -89,14 +89,24 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
         update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getTokenLastRefreshedOn().getTime()),
             new Date(), pUriInfo);
         update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-        sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
+        if(fcmToken.getTokenDeleteOn() == null) {
+          sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
+        }
+        else {
+          sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
+        }
         Response.ResponseBuilder builder = Response.created(null);
         builder.status(Response.Status.CREATED);
         return builder.build();
       }
       else {
         update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-        sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
+        if(fcmToken.getTokenDeleteOn() == null) {
+          sendQueuedMessages(fcmToken.getId(), fcmToken.getTokenDeleteOn());
+        }
+        else {
+          sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getTokenLastRefreshedOn().getTime()));
+        }
         Response.ResponseBuilder builder = Response.created(null);
         builder.status(Response.Status.CREATED);
         return builder.build();

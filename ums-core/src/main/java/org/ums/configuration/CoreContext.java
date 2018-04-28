@@ -545,8 +545,7 @@ public class CoreContext {
 
   @Bean
   FCMTokenManager fcmTokenManager() {
-    FCMTokenCache fcmTokenCache = new FCMTokenCache(mCacheFactory.getCacheManager());
-    fcmTokenCache.setManager(new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate()));
-    return fcmTokenCache;
+    return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
+
   }
 }
