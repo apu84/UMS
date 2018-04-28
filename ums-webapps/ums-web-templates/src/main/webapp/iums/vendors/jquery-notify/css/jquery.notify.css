@@ -2,7 +2,7 @@
     position: fixed;
     margin: 5px;
     /*z-index: 1050; comment by ifti for working with fixed header also*/
-    z-index: 99999;
+    z-index: 99999 !important;
 }
 
 .notifyjs-corner .notifyjs-wrapper,

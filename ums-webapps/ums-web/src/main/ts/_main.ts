@@ -286,3 +286,11 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ApprovePublicationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/PagerService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PersonalInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EducationInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PublicationInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AwardInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/TrainingInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>

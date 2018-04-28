@@ -31,7 +31,6 @@
 /// <reference path='constants.ts'/>
 /// <reference path='Utils.ts'/>
 
-
 /// <reference path='service/BaseUri.ts'/>
 /// <reference path='service/Notify.ts'/>
 /// <reference path='service/HttpClient.ts'/>
@@ -106,7 +105,6 @@
 /// <reference path='util/UmsUtil.ts'/>
 /// <reference path='util/UriUtil.ts'/>
 
-
 /// <reference path='employee/EmployeeProfile.ts'/>
 /// <reference path='employee/ApprovePublicationService.ts'/>
 /// <reference path='employee/EmployeeInformation.ts'/>
@@ -115,3 +113,11 @@
 /// <reference path='employee/EmployeePublication.ts'/>
 /// <reference path='employee/PagerService.ts'/>
 /// <reference path='employee/CRUDDetectionService.ts'/>
+/// <reference path='employee/PersonalInformation.ts'/>
+/// <reference path='employee/EducationInformation.ts'/>
+/// <reference path='employee/PublicationInformation.ts'/>
+/// <reference path='employee/TrainingInformation.ts'/>
+/// <reference path='employee/AwardInformation.ts'/>
+/// <reference path='employee/ExperienceInformation.ts'/>
+/// <reference path='employee/AdditionalInformation.ts'/>
+/// <reference path='employee/ServiceInformation.ts'/>
