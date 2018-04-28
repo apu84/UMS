@@ -5,8 +5,10 @@ import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 public class MutableTrainingInformationResource extends Resource {
@@ -17,7 +19,7 @@ public class MutableTrainingInformationResource extends Resource {
   @POST
   @Path("/save")
   @UmsLogMessage(message = "Post employee information (training data)")
-  public Response saveServiceInformation(final JsonObject pJsonObject) {
+  public Response saveServiceInformation(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mTrainingInformationResourceHelper.saveTrainingInformation(pJsonObject, mUriInfo);
   }
 }
