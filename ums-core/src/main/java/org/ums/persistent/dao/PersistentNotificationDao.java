@@ -3,6 +3,7 @@ package org.ums.persistent.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -88,6 +89,12 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   public Notification get(Long pId) {
     String query = SELECT_ALL + " WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new NotificationRowMapper());
+  }
+
+  @Override
+  public List<Notification> getNotifications(String consumerId, Date pProducedOn) {
+    String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND PRODUCED_ON >= ? ORDER BY PRODUCED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {consumerId, pProducedOn}, new NotificationRowMapper());
   }
 
   @Override

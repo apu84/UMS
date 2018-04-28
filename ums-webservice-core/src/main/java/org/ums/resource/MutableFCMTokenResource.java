@@ -20,11 +20,6 @@ public class MutableFCMTokenResource extends Resource {
 
   @POST
   public Response save(final JsonObject pJsonObject) throws Exception {
-    return mHelper.post(pJsonObject, mUriInfo);
-  }
-
-  @PUT
-  public int update(final JsonObject pJsonObject) throws Exception {
-    return 0;
+    return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 }

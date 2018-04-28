@@ -26,13 +26,4 @@ public class FirebaseConfig {
 
     FirebaseApp.initializeApp(options);
   }
-
-  public void send(String registrationToken, String messageKey, String messageValue) throws InterruptedException,
-      ExecutionException {
-
-    Message message = Message.builder().putData(messageKey, messageValue).setToken(registrationToken).build();
-
-    String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-    System.out.println("Sent message: " + response);
-  }
 }

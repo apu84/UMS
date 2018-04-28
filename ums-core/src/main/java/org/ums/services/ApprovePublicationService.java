@@ -28,16 +28,12 @@ public class ApprovePublicationService {
   private NotificationGenerator mNotificationGenerator;
 
   @Autowired
-  private FirebaseConfig mFirebaseConfig;
-
-  @Autowired
-  private FCMTokenManager mFCMTokenManager;
+  private FirebaseMessagingImpl mFirebaseMessaging;
 
   public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
       InterruptedException {
 
-    mFirebaseConfig.send(mFCMTokenManager.get("nab").getFCMToken(), "Approve Publication",
-        "You Publication Has Gone For approval");
+    mFirebaseMessaging.send("nab", "Approve Publication", "You Publication Has Gone For approval");
 
     Notifier notifier = new Notifier() {
 

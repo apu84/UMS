@@ -22,9 +22,6 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
   @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
-  @Autowired
-  private UserManager mUserManager;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, FCMToken pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
@@ -36,11 +33,6 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
 
   @Override
   public void build(MutableFCMToken pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
-
-    pMutable.setId(user.getId());
     pMutable.setFCMToken(pJsonObject.getString("fcmToken"));
-    pMutable.setTokenDeletedOn(null);
   }
 }

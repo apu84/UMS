@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.FCMTokenDaoDecorator;
@@ -19,10 +20,12 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   static String INSERT_ONE = "INSERT INTO FCM_TOKEN (ID, TOKEN, TOKEN_DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?,"
       + getLastModifiedSql() + " ) ";
 
-  static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_DELETED_ON = sysdate, LAST_MODIFIED = "
+  static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, TOKEN_DELETED_ON = ?, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
 
-  static String EXISTS_ONE = "SELECT ID FROM FCM_TOKEN ";
+  static String EXISTS_ONE = "SELECT COUNT(ID) FROM FCM_TOKEN ";
+
+  static String GET_ID = "SELECT ID FROM FCM_TOKEN ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -53,13 +56,25 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   @Override
   public int update(MutableFCMToken pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getFCMToken(), pMutable.getTokenDeleteOn(), pMutable.getId());
   }
 
   @Override
-  public String hasDuplicate(String pFCMToken){
+  public boolean exists(String pId) {
+    String query = EXISTS_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, Boolean.class);
+  }
+
+  @Override
+  public boolean hasDuplicate(String pFCMToken) {
     String query = EXISTS_ONE + " WHERE TOKEN = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pFCMToken}, String.class);
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFCMToken}, Boolean.class);
+  }
+
+  @Override
+  public FCMToken getId(String pFCMToken) {
+    String query = SELECT_ONE + " WHERE TOKEN = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFCMToken}, new PersistentFCMTokenDao.FCMTokenRowMapper());
   }
 
   class FCMTokenRowMapper implements RowMapper<FCMToken> {

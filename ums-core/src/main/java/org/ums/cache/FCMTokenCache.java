@@ -18,4 +18,14 @@ public class FCMTokenCache extends ContentCache<FCMToken, MutableFCMToken, Strin
   protected CacheManager<FCMToken, String> getCacheManager() {
     return mCacheManager;
   }
+
+  @Override
+  public boolean hasDuplicate(String pFCMToken) {
+    return getManager().hasDuplicate(pFCMToken);
+  }
+
+  @Override
+  public FCMToken getId(String pFCMToken) {
+    return getManager().getId(pFCMToken);
+  }
 }

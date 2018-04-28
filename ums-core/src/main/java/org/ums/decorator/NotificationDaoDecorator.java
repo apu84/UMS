@@ -4,6 +4,7 @@ import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.manager.NotificationManager;
 
+import java.util.Date;
 import java.util.List;
 
 public class NotificationDaoDecorator extends
@@ -16,5 +17,10 @@ public class NotificationDaoDecorator extends
   @Override
   public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
     return getManager().getNotifications(pConsumerId, pNumOfLatestNotification);
+  }
+
+  @Override
+  public List<Notification> getNotifications(String consumerId, Date pProducedOn) {
+    return getManager().getNotifications(consumerId, pProducedOn);
   }
 }

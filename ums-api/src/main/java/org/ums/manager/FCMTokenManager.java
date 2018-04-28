@@ -5,5 +5,7 @@ import org.ums.domain.model.mutable.MutableFCMToken;
 
 public interface FCMTokenManager extends ContentManager<FCMToken, MutableFCMToken, String> {
 
-    String hasDuplicate(String pFCMToken);
+  boolean hasDuplicate(String pFCMToken);
+
+  FCMToken getId(String pFCMToken);
 }

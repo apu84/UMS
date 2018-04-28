@@ -9,12 +9,17 @@ var config = {
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
-messaging.requestPermission()
-    .then(function() {
-        console.log('Have Permission.');
-        retrieveCurrentRegistrationToken();
+requestPermission();
+
+messaging.onTokenRefresh(function() {
+    messaging.getToken().then(function(refreshedToken) {
+        console.log('Token refreshed.');
+        setTokenSentToServer(false);
+        sendTokenToServer(refreshedToken);
     }).catch(function(err) {
-    console.log('Unable to get permission to notify.', err);
+        console.log('Unable to retrieve refreshed token ', err);
+        showToken('Unable to retrieve refreshed token ', err);
+    });
 });
 
 messaging.onMessage(function(payload) {
@@ -22,14 +27,13 @@ messaging.onMessage(function(payload) {
 });
 
 
-function retrieveCurrentRegistrationToken() {
+function generateToken() {
     messaging.getToken().then(function(currentToken) {
         if (currentToken) {
+            console.log(currentToken);
             sendTokenToServer(currentToken);
-            //updateUIForPushEnabled(currentToken);
         } else {
             console.log('No Instance ID token available. Request permission to generate one.');
-            //updateUIForPushPermissionRequired();
             setTokenSentToServer(false);
         }
     }).catch(function(err) {
@@ -46,39 +50,58 @@ function isTokenSentToServer() {
     return window.localStorage.getItem('sentToServer') === 1;
 }
 
-function sendTokenToServer(fcmToken) {
-    console.log("In sendTokenToServerMehtod()");
-    $.ajax({
-        crossDomain: true,
-        type: "POST",
-        async: true,
-        url: window.location.origin + '/ums-webservice-academic/fcmToken/save',
-        contentType: 'application/json',
-        data: '{"entries" : { "fcmToken":"' + fcmToken + '" } }',
-        headers: {
-            "Authorization": JSON.parse(sessionStorage.getItem("ums.token"))["access_token"],
-            "Accept": "application/json"
-        },
-        success: function (response) {
-            console.log("successfull in saving");
-            console.log(response);
-        },
-        error: (function (error) {
-            console.log("error in saving");
-            console.log(error);
-        })
+function sendTokenToServer(currentToken) {
+    if (!isTokenSentToServer()) {
+        console.log('Sending token to server...');
+        $.ajax({
+            crossDomain: true,
+            type: "POST",
+            async: true,
+            url: window.location.origin + '/ums-webservice-academic/fcmToken',
+            contentType: 'application/json',
+            data: '{"entries" : { "fcmToken":"' + currentToken + '" } }',
+            headers: {
+                "Authorization": JSON.parse(sessionStorage.getItem("ums.token"))["access_token"],
+                "Accept": "application/json"
+            },
+            success: function (response) {
+                console.log("successfull in saving");
+                console.log(response);
+                setTokenSentToServer(true);
+            },
+            error: (function (error) {
+                console.log("error in saving");
+                console.log(error);
+            })
+        });
+    } else {
+        console.log('Token already sent to server so won\'t send it again ' +
+            'unless it changes');
+    }
+}
+
+
+function requestPermission() {
+    console.log('Requesting permission...');
+    messaging.requestPermission().then(function() {
+        console.log('Notification permission granted.');
+        generateToken();
+    }).catch(function(err) {
+        console.log('Unable to get permission to notify.', err);
     });
 }
 
 function deleteToken() {
-    messaging.getToken().then(function (currentToken) {
-        messaging.deleteToken(currentToken).then(function () {
+    messaging.getToken().then(function(currentToken) {
+        messaging.deleteToken(currentToken).then(function() {
             console.log('Token deleted.');
             setTokenSentToServer(false);
-        }).catch(function (err) {
+            generateToken();
+        }).catch(function(err) {
             console.log('Unable to delete token. ', err);
         });
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.log('Error retrieving Instance ID token. ', err);
     });
+
 }
