@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.SystemGroupMapDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
 import org.ums.enums.accounts.definitions.group.GroupType;
@@ -27,10 +28,11 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
 
   String SELECT_ALL = "SELECT * FROM SYSTEM_GROUP_MAP";
   String INSERT_ONE =
-      "INSERT INTO SYSTEM_GROUP_MAP(ID, GROUP_TYPE, GROUP_ID, LAST_MODIFIED) VALUES (:id, :groupType, :groupId, "
+      "INSERT INTO SYSTEM_GROUP_MAP(ID, GROUP_TYPE, GROUP_ID, COMPANY_ID, MODIFIED_BY, MODIFIED_ID, LAST_MODIFIED) VALUES (:id, :groupType, :groupId, :companyId, :modifiedBy, :modifiedDate, "
           + getLastModifiedSql() + " )";
-  String UPDATE_ONE = "UPDATE SYSTEM_GROUP_MAP SET GROUP_TYPE= :groupType, GROUP_ID=:groupId, LAST_MODIFIED="
-      + getLastModifiedSql() + " WHERE ID=:id";
+  String UPDATE_ONE =
+      "UPDATE SYSTEM_GROUP_MAP SET GROUP_TYPE= :groupType, GROUP_ID=:groupId,COMPANY_ID=:companyId, MODIFIED_BY=:modifiedBy, MODIFIED_DATE=:modifiedDate, LAST_MODIFIED="
+          + getLastModifiedSql() + " WHERE ID=:id";
   String DELETE_ONE = "DELETE FROM SYSTEM_GROUP_MAP WHERE ID=: id";
 
   public PersistentSystemGroupMapDao(JdbcTemplate pJdbcTemplate,
@@ -93,22 +95,39 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
 
   @Override
   public String create(MutableSystemGroupMap pMutable) {
-    return super.create(pMutable);
+    String query = INSERT_ONE;
+    mNamedParameterJdbcTemplate.update(query, getInsertOrUpdateParameters(pMutable));
+    return pMutable.getId();
   }
 
   @Override
   public List<String> create(List<MutableSystemGroupMap> pMutableList) {
-    return super.create(pMutableList);
+    String query = INSERT_ONE;
+    Map<String, Object>[] parameters = getParameterObjects(pMutableList);
+    mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+    return pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
   }
 
   @Override
   public boolean exists(String pId) {
-    return super.exists(pId);
+    return get(pId) == null ? false : true;
   }
 
   @Override
   public int count(List<MutableSystemGroupMap> pMutableList) {
-    return super.count(pMutableList);
+    if(pMutableList.size() == 0)
+      return 0;
+    String query = "select count(*) from system_group_map  where id in (:idList)";
+    Map parameterMap = new HashMap();
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class);
+  }
+
+  @Override
+  public List<SystemGroupMap> getAllByCompany(Company pCompany) {
+    String query = SELECT_ALL + " WHERE COMPANY_ID=:companyId";
+    Map parameterMap = new HashMap();
+    parameterMap.put("companyId", pCompany.getId());
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentSystemGroupMapRowMapper());
   }
 
   @Override
@@ -129,6 +148,9 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
     parameter.put("id", pMutableSystemGroupMap.getGroupType().getValue());
     parameter.put("groupType", pMutableSystemGroupMap.getGroupType().getValue());
     parameter.put("groupId", pMutableSystemGroupMap.getGroup().getId());
+    parameter.put("companyId", pMutableSystemGroupMap.getCompany().getId());
+    parameter.put("modifiedBy", pMutableSystemGroupMap.getModifiedBy());
+    parameter.put("modifiedDate", pMutableSystemGroupMap.getModifiedDate());
     return parameter;
   }
 
@@ -139,6 +161,9 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
       systemGroupMap.setId(rs.getString("id"));
       systemGroupMap.setGroupType(GroupType.get(rs.getString("group_type")));
       systemGroupMap.setGroupId(rs.getLong("group_id"));
+      systemGroupMap.setCompanyId(rs.getString("company_id"));
+      systemGroupMap.setModifiedBy(rs.getString("modified_by"));
+      systemGroupMap.setModifiedDate(rs.getDate("modified_date"));
       return systemGroupMap;
     }
   }

@@ -1,5 +1,6 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
@@ -14,6 +15,7 @@ import java.util.Date;
  */
 public class PersistentGroup implements MutableGroup {
 
+  @JsonIgnore
   private static GroupManager sGroupManager;
 
   static {
@@ -35,6 +37,7 @@ public class PersistentGroup implements MutableGroup {
   private String mDefaultComp;
   private String mStatusFlag;
   private String mStatusUpFlag;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;

@@ -1,5 +1,7 @@
 package org.ums.enums.accounts.definitions.group;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +36,7 @@ public enum GroupType {
     return Lookup.get(pTypeValue);
   }
 
+  @JsonValue
   public String getValue() {
     return this.typeValue;
   }

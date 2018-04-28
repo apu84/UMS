@@ -120,6 +120,8 @@
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>
 /// <reference path='components/definitions/narration/narration.controller.ts'/>
 /// <reference path='components/definitions/narration/narration.service.ts'/>
+/// <reference path='components/definitions/system.group.map/system.group.map.service.ts'/>
+/// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
 

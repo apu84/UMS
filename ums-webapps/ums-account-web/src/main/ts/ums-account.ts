@@ -77,6 +77,12 @@
           controllerAs: 'vm',
           templateUrl: 'views/definitions/group/account.group.html'
         })
+        .state('systemGroupMap', {
+          url: "/systemGroupMap",
+          controller: 'SystemGroupMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.group.map/system.group.map.html'
+        })
         .state('account', {
           url: "/account",
           controller: 'AccountController',
