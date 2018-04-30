@@ -99,7 +99,7 @@ module ums {
                     this.userId = user.employeeId;
                 }
                 else {
-                    this.userId = this.stateParams.id;
+                    this.userId = this.stateParams.id1;
                 }
                 this.countryService.getCountryList().then((countries: any) => {
                     this.countries = countries.entries;
