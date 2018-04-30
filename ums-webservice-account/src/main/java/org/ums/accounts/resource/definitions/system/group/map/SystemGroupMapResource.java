@@ -2,7 +2,7 @@ package org.ums.accounts.resource.definitions.system.group.map;
 
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
-import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
+import org.ums.persistent.model.accounts.PersistentSystemGroupMap;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.ResourceContext;
@@ -33,14 +33,14 @@ public class SystemGroupMapResource extends MutableSystemGroupResource {
 
   @PUT
   @Path("/update")
-  public SystemGroupMap update(MutableSystemGroupMap pMutableSystemGroupMap) {
+  public SystemGroupMap update(PersistentSystemGroupMap pMutableSystemGroupMap) {
     mHelper.update(pMutableSystemGroupMap);
     return mResourceContext.getResource(SystemGroupMapResource.class).get(pMutableSystemGroupMap.getId());
   }
 
   @POST
   @Path("/save")
-  public SystemGroupMap save(MutableSystemGroupMap pMutableSystemGroupMap) throws Exception {
+  public SystemGroupMap save(PersistentSystemGroupMap pMutableSystemGroupMap) throws Exception {
     mHelper.save(pMutableSystemGroupMap);
     return mResourceContext.getResource(SystemGroupMapResource.class).get(
         pMutableSystemGroupMap.getGroupType().getValue());

@@ -1,13 +1,16 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.GroupManager;
@@ -19,6 +22,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentSystemGroupMap implements MutableSystemGroupMap {
 
   @JsonIgnore
@@ -26,18 +30,43 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   @JsonIgnore
   private static CompanyManager sCompanyManager;
   @JsonIgnore
+  private static PersonalInformationManager sPersonalInformationManager;
+  @JsonIgnore
   private static SystemGroupMapManager sSystemGroupMapManager;
+  @JsonProperty("id")
   private String mId;
+  @JsonProperty("groupType")
   private GroupType mGroupType;
+  @JsonIgnore
+  @JsonProperty("mGroup")
   private Group mGroup;
+  @JsonProperty("groupId")
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mGroupId;
   @JsonIgnore
+  @JsonProperty("company")
   private Company mCompany;
+  @JsonProperty("companyId")
   private String mCompanyId;
+  @JsonProperty("modifiedBy")
   private String mModifiedBy;
+  @JsonProperty("modifierName")
+  private String mModifierName;
   @JsonSerialize(using = UmsDateSerializer.class)
+  @JsonProperty("modifiedDate")
   private Date mModifiedDate;
+  @JsonProperty("lastModified")
   private String mLastModified;
+
+  @Override
+  public String getModifierName() {
+    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getFullName() : mModifierName;
+  }
+
+  @Override
+  public void setModifierName(String pModifierName) {
+    mModifierName = pModifierName;
+  }
 
   @Override
   public String getModifiedBy() {
@@ -60,7 +89,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
-  @JsonValue
+  @JsonProperty("company")
   public Company getCompany() {
     return mCompany == null ? sCompanyManager.get(mCompanyId) : sCompanyManager.validate(mCompany);
   }
@@ -102,11 +131,13 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
+  @JsonProperty("group")
   public Group getGroup() {
     return mGroup == null ? sGroupManager.get(mGroupId) : sGroupManager.validate(mGroup);
   }
 
   @Override
+  @JsonIgnore
   public void setGroup(Group pGroup) {
     this.mGroup = pGroup;
   }
@@ -167,6 +198,8 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sGroupManager = applicationContext.getBean("groupManager", GroupManager.class);
     sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
+    sPersonalInformationManager =
+        applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
     sSystemGroupMapManager = applicationContext.getBean("systemGroupMapManager", SystemGroupMapManager.class);
   }
 }

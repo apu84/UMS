@@ -28,10 +28,10 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
 
   String SELECT_ALL = "SELECT * FROM SYSTEM_GROUP_MAP";
   String INSERT_ONE =
-      "INSERT INTO SYSTEM_GROUP_MAP(ID, GROUP_TYPE, GROUP_ID, COMPANY_ID, MODIFIED_BY, MODIFIED_ID, LAST_MODIFIED) VALUES (:id, :groupType, :groupId, :companyId, :modifiedBy, :modifiedDate, "
+      "INSERT INTO SYSTEM_GROUP_MAP(ID, GROUP_TYPE, GROUP_ID, COMP_ID, MODIFIED_BY, MODIFIED_DATE, LAST_MODIFIED) VALUES (:id, :groupType, :groupId, :companyId, :modifiedBy, :modifiedDate, "
           + getLastModifiedSql() + " )";
   String UPDATE_ONE =
-      "UPDATE SYSTEM_GROUP_MAP SET GROUP_TYPE= :groupType, GROUP_ID=:groupId,COMPANY_ID=:companyId, MODIFIED_BY=:modifiedBy, MODIFIED_DATE=:modifiedDate, LAST_MODIFIED="
+      "UPDATE SYSTEM_GROUP_MAP SET GROUP_TYPE= :groupType, GROUP_ID=:groupId,COMP_ID=:companyId, MODIFIED_BY=:modifiedBy, MODIFIED_DATE=:modifiedDate, LAST_MODIFIED="
           + getLastModifiedSql() + " WHERE ID=:id";
   String DELETE_ONE = "DELETE FROM SYSTEM_GROUP_MAP WHERE ID=: id";
 
@@ -124,7 +124,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
 
   @Override
   public List<SystemGroupMap> getAllByCompany(Company pCompany) {
-    String query = SELECT_ALL + " WHERE COMPANY_ID=:companyId";
+    String query = SELECT_ALL + " WHERE COMP_ID=:companyId";
     Map parameterMap = new HashMap();
     parameterMap.put("companyId", pCompany.getId());
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentSystemGroupMapRowMapper());
@@ -161,7 +161,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
       systemGroupMap.setId(rs.getString("id"));
       systemGroupMap.setGroupType(GroupType.get(rs.getString("group_type")));
       systemGroupMap.setGroupId(rs.getLong("group_id"));
-      systemGroupMap.setCompanyId(rs.getString("company_id"));
+      systemGroupMap.setCompanyId(rs.getString("comp_id"));
       systemGroupMap.setModifiedBy(rs.getString("modified_by"));
       systemGroupMap.setModifiedDate(rs.getDate("modified_date"));
       return systemGroupMap;

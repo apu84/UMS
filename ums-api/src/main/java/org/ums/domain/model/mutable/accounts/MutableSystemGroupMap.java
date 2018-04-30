@@ -28,5 +28,7 @@ public interface MutableSystemGroupMap extends SystemGroupMap, Editable<String>,
 
   void setModifiedBy(String pModifiedBy);
 
+  void setModifierName(String pModifierName);
+
   void setModifiedDate(Date pModifiedDate);
 }

@@ -8,6 +8,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.notify.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/select2.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/ui-grid.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.selectpicker.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/zabuto_calendar.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap-switch.d.ts'/>

@@ -27,5 +27,7 @@ public interface SystemGroupMap extends Serializable, EditType<MutableSystemGrou
 
   String getModifiedBy();
 
+  String getModifierName();
+
   Date getModifiedDate();
 }
