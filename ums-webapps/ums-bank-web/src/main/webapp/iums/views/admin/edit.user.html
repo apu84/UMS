@@ -1,0 +1,76 @@
+<div class="modal-header">
+    <button type="button" data-ng-click="ok()" aria-hidden="true"
+            class="close">&times;
+    </button>
+    <h4 class="modal-title">Add/ Edit User</h4>
+</div>
+<form action="" class="form-horizontal" data-validate=""
+      data-onvalidate="editUser">
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="code" class="control-label col-md-3">User Id</label>
+                <div class="col-md-9">
+                    <input id="code" type="text" class="form-control" data-ng-model="user.userId" ng-if="editMode">
+                    <span ng-if="!editMode">
+                        {{user.userId}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="control-label col-md-3">Name</label>
+                <div class="col-md-9">
+                    <input id="name" type="text" class="form-control required" data-ng-model="user.name"
+                           ng-if="editMode">
+                    <span ng-if="!editMode">
+                        {{user.name}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="designation" class="control-label col-md-3">Designation</label>
+                <div class="col-md-9">
+                    <select class="form-control required" id="designation" data-ng-model="user.bankDesignationId"
+                            ng-if="editMode">
+                        <option data-ng-repeat="designation in designations" value="{{designation.id}}">
+                            {{designation.name}}
+                        </option>
+                    </select>
+                    <span ng-if="!editMode">
+                        {{userDesignationName}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="branch" class="control-label col-md-3">Branch</label>
+                <div class="col-md-9">
+                    <select class="form-control required" id="branch" data-ng-model="user.branchId"
+                            ng-if="editMode">
+                        <option data-ng-repeat="branch in branches" value="{{branch.id}}">
+                            {{branch.name}}
+                        </option>
+                    </select>
+                    <span ng-if="!editMode">
+                        {{userBranchName}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="control-label col-md-3">Email</label>
+                <div class="col-md-9">
+                    <input id="email" type="text" class="form-control" data-ng-model="user.email"
+                           ng-if="editMode">
+                    <span ng-if="!editMode">
+                        {{user.email}}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-ng-if="editMode">
+            <i class="fa fa-save"></i>&nbsp;Save
+        </button>
+    </div>
+</form>

@@ -28,7 +28,7 @@ module ums {
     userId: string;
     branchId: string;
     name: string;
-    designationId: string;
+    bankDesignationId: string;
     email: string;
     id: string;
   }

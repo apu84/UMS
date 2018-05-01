@@ -1,5 +1,6 @@
 package org.ums.bank.branch.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang.Validate;
@@ -51,6 +52,7 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
+  @JsonIgnore
   public void setBranch(Branch pBranch) {
     this.mBranch = pBranch;
   }
@@ -83,11 +85,13 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
+  @JsonIgnore
   public void setBankDesignation(BankDesignation pBankDesignation) {
     this.mBankDesignation = pBankDesignation;
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getBankDesignationId() {
     return mBankDesignationId;
   }

@@ -86,5 +86,11 @@ module ums {
           controllerAs: 'vm',
           templateUrl: 'views/admin/designation.list.html'
         })
+        .state('users', {
+          url: "/users/:id",
+          controller: 'BranchUsersController',
+          controllerAs: 'vm',
+          templateUrl: 'views/admin/branch.user.list.html'
+        })
   });
 }

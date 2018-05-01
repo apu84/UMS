@@ -30,6 +30,13 @@ module ums {
       return this.bankHttpService.getResource(designationResource, designationConverter);
     }
 
+    public getDesignation(id: string): ng.IPromise<BankDesignation> {
+      const designationResource: BankResource<BankDesignation>
+          = new BankResource<BankDesignation>(`bank/designation/${id}`);
+      const designationConverter: IdentityConverter<BankDesignation> = new IdentityConverter<BankDesignation>();
+      return this.bankHttpService.getResource(designationResource, designationConverter);
+    }
+
     public createDesignation(bankDesignation: BankDesignation): ng.IPromise<BankDesignation> {
       const designationResource: BankResource<BankDesignation>
           = new BankResource<BankDesignation>(`bank/designation`, bankDesignation);
@@ -54,6 +61,13 @@ module ums {
       const branchResource: BankResource<BankBranch[]>
           = new BankResource<BankBranch[]>(`bank/branch/${bankId}/all`);
       const branchConverter: IdentityConverter<BankBranch[]> = new IdentityConverter<BankBranch[]>();
+      return this.bankHttpService.getResource(branchResource, branchConverter);
+    }
+
+    public getBranch(branchId: string): ng.IPromise<BankBranch> {
+      const branchResource: BankResource<BankBranch>
+          = new BankResource<BankBranch>(`bank/branch/${branchId}`);
+      const branchConverter: IdentityConverter<BankBranch> = new IdentityConverter<BankBranch>();
       return this.bankHttpService.getResource(branchResource, branchConverter);
     }
 
@@ -82,6 +96,13 @@ module ums {
           = new BankResource<BranchUser[]>(`bank/branch/user/${branchId}/all`);
       const userConverter: IdentityConverter<BranchUser[]> = new IdentityConverter<BranchUser[]>();
       return this.bankHttpService.getResource(userResource, userConverter);
+    }
+
+    public createUser(user: BranchUser): ng.IPromise<BranchUser> {
+      const userResource: BankResource<BranchUser>
+          = new BankResource<BranchUser>(`bank/branch/user`, user);
+      const userConverter: IdentityConverter<BranchUser> = new IdentityConverter<BranchUser>();
+      return this.bankHttpService.postResource(userResource, userConverter);
     }
 
     public updateUser(user: BranchUser): ng.IPromise<BranchUser> {
