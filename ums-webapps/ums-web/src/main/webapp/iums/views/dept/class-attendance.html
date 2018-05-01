@@ -230,6 +230,40 @@
     $("#class_date").datepicker({
         format: 'dd M, yy'
     });
-
 </script>
+
+
+
+<!--Modal for feature info-->
+<div id="modal-feature-info" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <h4 id="modal-feature-info-title" class="modal-title">Class Attendance (for test purpose only)</h4></div>
+            <div class="modal-body" id="modal-feature-info-body">Modal body goes here</div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /*Temporary Modal Setup */
+    var contents = "<ul class='b'> "+
+        "<li>Please <a data-ng-click=\"downloadUserGuide(2069,'UserGuide-ClassAttendance','pdf')\" style=\"cursor: pointer;color:blue;font-weight:bold;\"> Click Here " +
+        "        <img height=\"22\" width=\"22\" src=\"images/manual_pdf.png\">&nbsp;" +
+        "      </a> to download the user guide of this feature.</li>"+
+        "<li>Students list may not be accurate. Don't worry, at present this feature is available <font color='red'>only for test purpose</font>."+
+        "<li>You can inform us your valuable feedback by e-mail (<a style='color: blue;'>contact.iums@gmail.com)</a> or a phone call ( Ext.<b>724</b>).<br/>"+
+        "</ul>";
+
+    $("#").html("Class Attendance (For test purpose only)");
+    $("#modal-feature-info-body").html(contents);
+    $("#modal-feature-info").modal('show');
+</script>
+
 

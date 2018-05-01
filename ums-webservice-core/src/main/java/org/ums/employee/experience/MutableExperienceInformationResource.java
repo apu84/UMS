@@ -1,7 +1,7 @@
 package org.ums.employee.experience;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.PostLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,7 +18,7 @@ public class MutableExperienceInformationResource extends Resource {
 
   @POST
   @Path("/save")
-  @UmsLogMessage(message = "Post employee information (Experience data)")
+  @PostLog(message = "Post employee information (Experience data)")
   public Response saveExperienceInformation(@Context HttpServletRequest pHttpServletRequest,
       final JsonObject pJsonObject) {
     return mExperienceInformationResourceHelper.saveExperienceInformation(pJsonObject, mUriInfo);

@@ -230,8 +230,8 @@ public class ClassAttendanceResourceHelper {
     } catch(Exception ex) {
       mLogger
           .debug(
-              "Unauthorized access detected for class attendance. SemesterId: {}, TeacherId: {}, CourseId: {}, Section: {}",
-              pSemesterId, pTeacherId, pCourseId, pSectionId);
+              "[{}]: Unauthorized access detected for class attendance. SemesterId: {}, TeacherId: {}, CourseId: {}, Section: {}",
+              SecurityUtils.getSubject().getPrincipal().toString(), pSemesterId, pTeacherId, pCourseId, pSectionId);
       throw new ValidationException("Unauthorized access detected");
     }
   }

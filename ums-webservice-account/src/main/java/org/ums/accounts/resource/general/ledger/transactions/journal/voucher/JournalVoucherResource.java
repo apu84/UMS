@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,9 +12,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import java.util.List;
 
-/**
- * Created by Monjur-E-Morshed on 31-Jan-18.
- */
 @Component
 @Path("/account/general-ledger/transaction/journal-voucher")
 @Produces(Resource.MIME_TYPE_JSON)
@@ -23,7 +20,7 @@ public class JournalVoucherResource extends MutableJournalVoucherResource {
 
   @GET
   @Path("/voucher-number")
-  @UmsLogMessage(message = "Getting journal Voucher")
+  @GetLog(message = "Getting journal Voucher")
   public TransactionResponse getVoucherNumber(@Context HttpServletRequest pHttpServletRequest) throws Exception {
     TransactionResponse transactionResponse = mJournalVoucherResourceHelper.getJournalVoucherNo();
     return mJournalVoucherResourceHelper.getJournalVoucherNo();

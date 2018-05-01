@@ -1,7 +1,7 @@
 package org.ums.employee.academic;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.PostLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,7 +18,7 @@ public class MutableAcademicInformationResource extends Resource {
 
   @POST
   @Path("/save")
-  @UmsLogMessage(message = "Post employee information (academic data)")
+  @PostLog(message = "Post employee information (academic data)")
   public Response saveAcademicInformation(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mHelper.saveAcademicInformation(pJsonObject, mUriInfo);
   }

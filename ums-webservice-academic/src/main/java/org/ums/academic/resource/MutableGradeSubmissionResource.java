@@ -2,7 +2,7 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.helper.GradeSubmissionResourceHelper;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.PutLog;
 import org.ums.resource.Resource;
 import org.ums.twofa.TwoFA;
 
@@ -23,15 +23,16 @@ public class MutableGradeSubmissionResource extends Resource {
 
   @PUT
   @TwoFA(type = "marks_submission")
-  @UmsLogMessage(message = "Save/Submit Grade Sheet")
+  @PutLog(message = "Save/Submit Grade Sheet")
   public Response saveGradeSheet(@Context HttpServletRequest pHttpServletRequest, JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }
 
   @PUT
   @Path("/recheckApprove")
-  @UmsLogMessage(message = "Grade Sheet Recheck/Approval")
-  public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
+  @PutLog(message = "Grade Sheet Recheck/Approval")
+  public Response recheckApprove(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject)
+      throws Exception {
     return mResourceHelper.updateGradeStatus(pJsonObject);
   }
 
@@ -43,8 +44,9 @@ public class MutableGradeSubmissionResource extends Resource {
 
   @PUT
   @Path("/gradeSubmissionDeadLine")
-  @UmsLogMessage(message = "Grade Submission Deadline Update")
-  public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) {
+  @PutLog(message = "Grade Submission Deadline Update")
+  public Response updateGradeSubmissionDeadLine(@Context HttpServletRequest pHttpServletRequest,
+      final JsonObject pJsonObject) {
     return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject, mUriInfo);
   }
 
