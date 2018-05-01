@@ -1,7 +1,6 @@
 package org.ums.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.scenario.effect.ImageData;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;

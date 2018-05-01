@@ -34,10 +34,9 @@ module ums {
       this.groupTypeList.forEach((i: IConstant) => this.groupTypeMapWithId[i.id] = i);
       this.systemGroupMapService.getAll().then((systemGroupMapList: ISystemGroupMap[]) => {
         this.systemGroupMapList = [];
-        if (systemGroupMapList.length == 0)
-          this.assignGroupTypeListToSystemGroupMapList();
-        else
-          this.systemGroupMapList = systemGroupMapList;
+
+        this.assignGroupTypeListToSystemGroupMapList(systemGroupMapList);
+
       });
 
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
@@ -46,14 +45,23 @@ module ums {
       });
     }
 
-    public assignGroupTypeListToSystemGroupMapList() {
+    public assignGroupTypeListToSystemGroupMapList(systemGroupMapList: ISystemGroupMap[]) {
+      let systemGroupMapWithGroupTypeId:any={};
+      systemGroupMapList.forEach((s:ISystemGroupMap)=> systemGroupMapWithGroupTypeId[s.groupType]=s);
       this.systemGroupMapList = [];
       for (let i = 0; i < this.groupTypeList.length; i++) {
         let systemGroupMap: ISystemGroupMap = <ISystemGroupMap>{};
-        systemGroupMap.groupType = this.groupTypeList[i].id;
-        systemGroupMap.groupTypeName = this.groupTypeList[i].name;
-        this.systemGroupMapList.push(systemGroupMap);
+        if(systemGroupMapWithGroupTypeId[this.groupTypeList[i].id]!=null){
+          systemGroupMap = systemGroupMapWithGroupTypeId[this.groupTypeList[i].id];
+        }else{
+            systemGroupMap.groupType = this.groupTypeList[i].id;
+        }
+          systemGroupMap.groupTypeName = this.groupTypeList[i].name;
+          this.systemGroupMapList.push(systemGroupMap);
       }
+
+      console.log("System group map");
+      console.log(this.systemGroupMapList);
     }
 
     public edit(systemGroupMap: ISystemGroupMap) {
@@ -61,13 +69,30 @@ module ums {
       this.systemGroupMap = systemGroupMap;
     }
 
-    public save() {
-      this.systemGroupMap.groupId = this.systemGroupMap.group.stringId;
+    public save(systemGroupMap:ISystemGroupMap) {
+      console.log("Existing system group map");
+      console.log(systemGroupMap);
+      systemGroupMap.groupId = this.systemGroupMap.group.stringId;
       if (this.systemGroupMap.id == null) {
-        this.systemGroupMapService.post(this.systemGroupMap).then((systemGroupMap: ISystemGroupMap) => this.systemGroupMap = systemGroupMap);
+        this.systemGroupMapService.post(systemGroupMap).then((output: ISystemGroupMap) => {
+          this.map(output, systemGroupMap);
+        });
       } else {
-        this.systemGroupMapService.update(this.systemGroupMap).then((systemGroupMap: ISystemGroupMap) => this.systemGroupMap = systemGroupMap);
+        console.log("In the update section");
+        this.systemGroupMapService.update(systemGroupMap).then((output: ISystemGroupMap) => this.map(output, systemGroupMap));
       }
+    }
+
+    private map(source:ISystemGroupMap, destination: ISystemGroupMap){
+      destination.id=source.id;
+      destination.groupType = source.groupType;
+      destination.group = source.group;
+      destination.groupTypeName = this.groupTypeMapWithId[source.groupType].name;
+      destination.company = source.company;
+      destination.companyId = source.companyId;
+      destination.modifiedBy = source.modifiedBy;
+      destination.modifiedDate = source.modifiedDate;
+      destination.modifierName = source.modifierName;
     }
 
 
