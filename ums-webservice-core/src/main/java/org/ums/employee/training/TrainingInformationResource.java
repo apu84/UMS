@@ -2,7 +2,7 @@ package org.ums.employee.training;
 
 import org.springframework.stereotype.Component;
 import org.ums.employee.training.MutableTrainingInformationResource;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,7 +18,7 @@ import javax.ws.rs.core.Request;
 public class TrainingInformationResource extends MutableTrainingInformationResource {
   @GET
   @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (training data)")
+  @GetLog(message = "Get employee information (training data)")
   public JsonObject getTrainingInformation(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
     return mTrainingInformationResourceHelper.getTrainingInformation(pEmployeeId, mUriInfo);

@@ -229,12 +229,9 @@ public class AttendanceSheetGenerator {
                 aaa = cross;
             }
 
-
-
-
-//            FileInputStream input = new FileInputStream(abc);
+            // FileInputStream input = new FileInputStream(abc);
             final ClassLoader classloader = this.getClass().getClassLoader();
-            final URL imageURL = classloader.getResource("images/"+aaa);
+            final URL imageURL = classloader.getResource("images/" + aaa);
 
             headerCell = new PdfPCell(new Paragraph(imageURL.getPath(), tableFont));
             headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);

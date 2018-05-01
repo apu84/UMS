@@ -1,7 +1,7 @@
 package org.ums.employee.experience;
 
 import org.springframework.stereotype.Component;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,7 +18,7 @@ public class ExperienceInformationResource extends MutableExperienceInformationR
 
   @GET
   @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (experience data)")
+  @GetLog(message = "Get employee information (experience data)")
   public JsonObject getExperienceInformation(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
     return mExperienceInformationResourceHelper.getExperienceInformation(pEmployeeId, mUriInfo);

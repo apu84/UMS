@@ -1,7 +1,7 @@
 package org.ums.employee.additional;
 
 import org.springframework.stereotype.Component;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -18,7 +18,7 @@ public class AdditionalInformationResource extends MutableAdditionalInformationR
 
   @GET
   @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (additional data)")
+  @GetLog(message = "Get employee information (additional data)")
   public JsonObject getAdditionalInformation(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
     return mHelper.getAdditionalInformation(pEmployeeId, mUriInfo);

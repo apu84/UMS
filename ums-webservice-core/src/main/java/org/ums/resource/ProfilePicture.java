@@ -68,8 +68,7 @@ public class ProfilePicture extends Resource {
    * For each login attempt, we call this endpoint twice which is not good.
    * We should try to make only one call. Two call mean two rest call with two ftp file read operation.
    */
-  public Response get(@Context HttpServletRequest pHttpServletRequest, @HeaderParam("user-agent") String userAgent,
-      final @Context Request pRequest, final @PathParam("image-id") String pImageId) {
+  public Response get(@Context HttpServletRequest pHttpServletRequest, final @PathParam("image-id") String pImageId) {
     String photoId = "";
     String userId = null;
     System.out.println(new Date());

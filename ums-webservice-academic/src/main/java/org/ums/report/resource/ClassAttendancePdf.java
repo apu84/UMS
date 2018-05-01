@@ -5,18 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.helper.ClassAttendanceResourceHelper;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.OutputStream;
-
-/**
- * Created by Ifti on 09-Nov-16.
- */
 
 @Component
 @Path("/classAttendanceReport/pdf/")
@@ -32,9 +30,10 @@ public class ClassAttendancePdf extends Resource {
   @GET
   @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
   @Produces("application/pdf")
-  public StreamingOutput createAttendanceSheetReport(final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("course-id") String pCourseId, final @PathParam("section-id") String pSection,
-      final @PathParam("student-category") String pStudentCategory) {
+  @GetLog(message = "Downloaded class attendance report (PDF)")
+  public StreamingOutput createAttendanceSheetReport(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("course-id") String pCourseId,
+      final @PathParam("section-id") String pSection, final @PathParam("student-category") String pStudentCategory) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {

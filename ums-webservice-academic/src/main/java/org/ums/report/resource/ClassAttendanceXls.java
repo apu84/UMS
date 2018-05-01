@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import org.ums.academic.resource.helper.ClassAttendanceResourceHelper;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.generator.XlsGenerator;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -17,9 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-/**
- * Created by Ifti on 17-Jun-16.
- */
 @Component
 @Path("/classAttendanceReport/xls/")
 @Produces({"application/vnd.ms-excel"})
@@ -33,9 +32,10 @@ public class ClassAttendanceXls extends Resource {
 
   @GET
   @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
-  public StreamingOutput get(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId, final @PathParam("section-id") String pSection,
-      final @PathParam("student-category") String pStudentCategory) {
+  @GetLog(message = "Downloaded class attendance report (XLS)")
+  public StreamingOutput get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
+      final @PathParam("section-id") String pSection, final @PathParam("student-category") String pStudentCategory) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {

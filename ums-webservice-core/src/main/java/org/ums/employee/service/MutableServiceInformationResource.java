@@ -1,7 +1,8 @@
 package org.ums.employee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.PostLog;
+import org.ums.logs.PutLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -19,14 +20,14 @@ public class MutableServiceInformationResource extends Resource {
 
   @POST
   @Path("/save")
-  @UmsLogMessage(message = "Post employee information (service data)")
+  @PostLog(message = "Post employee information (service data)")
   public Response saveEmployeeInformation(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mHelper.saveOrUpdateServiceInformation(pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path("/update")
-  @UmsLogMessage(message = "Update employee information (service data)")
+  @PutLog(message = "Update employee information (service data)")
   public Response updateServiceInformation(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return null;
   }
