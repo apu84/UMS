@@ -5,6 +5,7 @@ import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -18,8 +19,8 @@ public class ExperienceInformationResource extends MutableExperienceInformationR
   @GET
   @Path("/get/employeeId/{employee-id}")
   @UmsLogMessage(message = "Get employee information (experience data)")
-  public JsonObject getExperienceInformation(final @PathParam("employee-id") String pEmployeeId,
-      final @Context Request pRequest) throws Exception {
+  public JsonObject getExperienceInformation(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
     return mExperienceInformationResourceHelper.getExperienceInformation(pEmployeeId, mUriInfo);
   }
 }

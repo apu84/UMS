@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ums.logs.UmsLogMessage;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,16 +18,16 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
   @GET
   @Path("/get/employeeId/{employee-id}")
   @UmsLogMessage(message = "Get employee information (personal data)")
-  public JsonObject getPersonalInformation(final @PathParam("employee-id") String pEmployeeId,
-      final @Context Request pRequest) {
+  public JsonObject getPersonalInformation(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) {
     return mHelper.getPersonalInformation(pEmployeeId, mUriInfo);
   }
 
   @GET
   @Path("/firstName/{first-name}/lastName/{last-name}")
   @UmsLogMessage(message = "Get employee information (get Similar Users)")
-  public JsonObject getSimilarUsers(final @Context Request pRequest, final @PathParam("first-name") String pFirstName,
-      final @PathParam("last-name") String pLastName) {
+  public JsonObject getSimilarUsers(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      final @PathParam("first-name") String pFirstName, final @PathParam("last-name") String pLastName) {
     return mHelper.getSimilarUsers(pFirstName, pLastName, mUriInfo);
   }
 }

@@ -1,0 +1,80 @@
+<style>
+    table {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        height: 700px; /* this can vary */
+    }
+
+    table * {
+        box-sizing: inherit;
+        -moz-box-sizing: inherit;
+    }
+
+    thead {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        display: inline-block;
+    }
+
+    thead > tr, tbody > tr, tfoot > tr {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    thead, tfoot {
+        flex-shrink: 0;
+    }
+
+    th, tbody td {
+        width: 100%; /* this can vary */
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    tfoot {
+        display: inline-block;
+    }
+
+    tfoot td {
+        width: 100%;
+        display: inline-block;
+    }
+</style>
+
+<table st-table="displayed" class="table table-stripped">
+    <thead align="center">
+    <tr class="header">
+        <th>Group Type</th>
+        <th>Group</th>
+        <th>Modified By</th>
+        <th>Last Modification Date</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="g in vm.systemGroupMapList">
+        <td>{{g.groupTypeName}}</td>
+        <td>{{g.group.groupName}}</td>
+        <td>{{g.modifierName}}</td>
+        <td>{{g.modifiedDate}}</td>
+        <th>
+            <button class="btn btn-success" ng-click="vm.edit(g)" data-toggle="modal" data-target="#editModal">Edit
+            </button>
+        </th>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="col-md-12"
+     data-ng-include="'views/definitions/system.group.map/edit-form.html'"></div>

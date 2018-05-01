@@ -638,6 +638,21 @@ module ums {
             }
         }
 
+        static AccountConstant():any{
+          return {
+            groupTypes:[
+              {id:"1", name:"Assets"},
+              {id:"2", name:"Liabilities"},
+              {id:"3", name:"Income"},
+              {id:"4", name:"Expenses"},
+              {id:"5", name:"Bank Accounts"},
+              {id:"6", name:"Cash in hand"},
+              {id:"7", name:"Sundry Debtor"},
+              {id:"8", name:"Sundry Creditor"}
+            ]
+          }
+        }
+
         static LibConstant(): any {
             return {
                 languages: [

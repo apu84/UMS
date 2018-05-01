@@ -8,22 +8,18 @@ import org.springframework.stereotype.Service;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.report.resource.UgGradeSheetXls;
 import org.ums.usermanagement.user.User;
 import org.ums.manager.*;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.Constants;
 import org.ums.util.ReportUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by My Pc on 05-Nov-16.
- */
 
 @Service
 public class AttendanceSheetGenerator {
@@ -46,8 +42,8 @@ public class AttendanceSheetGenerator {
       DocumentException {
     Employee employee = getEmployeeInfo();
     Course course = mCourseManager.get(pCourseId);
-    String check = "E://check11.png";
-    String cross = "E://cross11.png";
+    String check = "attendance_check.png";
+    String cross = "attendance_cross.png";
 
     List<ClassAttendanceDto> dates = mClassAttendanceManager.getDateList(pSemesterId, pCourseId, pSection);
     List<ClassAttendanceDto> studentList =
@@ -232,12 +228,20 @@ public class AttendanceSheetGenerator {
               else
                 aaa = cross;
             }
-            headerCell = new PdfPCell(new Paragraph(aaa, tableFont));
+
+
+
+
+//            FileInputStream input = new FileInputStream(abc);
+            final ClassLoader classloader = this.getClass().getClassLoader();
+            final URL imageURL = classloader.getResource("images/"+aaa);
+
+            headerCell = new PdfPCell(new Paragraph(imageURL.getPath(), tableFont));
             headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
             // table.addCell(headerCell);
-            table.addCell(createImageCell(aaa));
+            table.addCell(createImageCell(imageURL.getPath()));
           }
           else {
             headerCell = new PdfPCell();

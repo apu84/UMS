@@ -6,6 +6,7 @@ import org.ums.logs.UmsLogMessage;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -23,8 +24,8 @@ public class ServiceInformationResource extends MutableServiceInformationResourc
   @GET
   @Path("/get/employeeId/{employee-id}")
   @UmsLogMessage(message = "Get employee information (service data)")
-  public JsonObject getEmployeeAcademicInformation(final @Context Request pRequest,
-      final @PathParam("employee-id") String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getEmployeeAcademicInformation(@Context HttpServletRequest pHttpServletRequest,
+      final @Context Request pRequest, final @PathParam("employee-id") String pEmployeeId, final UriInfo pUriInfo) {
     return mHelper.getServiceInformation(pEmployeeId, pUriInfo);
   }
 }
