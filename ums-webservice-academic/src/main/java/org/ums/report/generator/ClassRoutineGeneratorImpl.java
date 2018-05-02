@@ -351,7 +351,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               int routineIterator=1;
               while(true){
                 if(routines.size()>1){
-                  if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i){
+                  if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i && routines.get(0).equals(routines.get(routineIterator))){
                     if(sectionList.contains(routines.get(routineIterator).getSection())==false)
                     {
                       sections = sections+"+"+routines.get(routineIterator).getSection();
