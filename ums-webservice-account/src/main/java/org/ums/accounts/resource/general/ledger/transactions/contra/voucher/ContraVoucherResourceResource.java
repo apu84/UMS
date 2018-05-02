@@ -16,7 +16,7 @@ import java.util.List;
 @Path("/account/general-ledger/transaction/contra-voucher")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class ContraVoucherResource extends MutableContraVoucher {
+public class ContraVoucherResourceResource extends MutableContraVoucherResource {
   @GET
   @Path("/voucher-number")
   public TransactionResponse getVoucherNo() throws Exception {

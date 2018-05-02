@@ -207,6 +207,8 @@ module ums {
     public fetchDetails(journalVoucher: IJournalVoucher) {
       console.log("Selected currency");
       console.log(this.selectedCurrency);
+      console.log("Fetch details journal voucher");
+      console.log(journalVoucher);
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
         console.log("Fetch vouchers");
         console.log(vouchers);

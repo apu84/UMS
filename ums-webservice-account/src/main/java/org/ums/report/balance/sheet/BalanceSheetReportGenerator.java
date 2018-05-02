@@ -12,10 +12,7 @@ import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.BalanceSheetFetchType;
 import org.ums.manager.CompanyManager;
-import org.ums.manager.accounts.AccountBalanceManager;
-import org.ums.manager.accounts.AccountManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
-import org.ums.manager.accounts.GroupManager;
+import org.ums.manager.accounts.*;
 import org.ums.report.balance.sheet.helper.CellAndTotalBalance;
 import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
@@ -50,6 +47,8 @@ public class BalanceSheetReportGenerator {
   private AccountManager mAccountManager;
   @Autowired
   private FinancialAccountYearManager mFinancialAccountYearManager;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
 
   public void createBalanceSheetReport(Date pDate, BalanceSheetFetchType pBalanceSheetFetchType,
                                        BalanceSheetFetchType pDebtorLedgerFetchType, OutputStream pOutputStream) throws Exception {
@@ -113,9 +112,9 @@ public class BalanceSheetReportGenerator {
     assetCell.setBorder(Rectangle.NO_BORDER);
     table.addCell(assetCell);*/
 
-    List<Group> assetGroups = mGroupManager.getIncludingMainGroupList(Arrays.asList(GroupType.ASSETS.getValue()))
+    List<Group> assetGroups = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.ASSETS.getValue()).getGroup().getGroupCode()))
         .stream()
-        .filter(a -> !a.getGroupCode().equals(GroupType.ASSETS.getValue()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.ASSETS.getValue()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
     CellAndTotalBalance assetCellAndTotalBalance = createGroupSection(
         pBalanceSheetFetchType,
@@ -134,9 +133,9 @@ public class BalanceSheetReportGenerator {
 
 
     PdfPCell rightSection = new PdfPCell();
-    List<Group> liabilitiesGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(GroupType.LIABILITIES.getValue()))
+    List<Group> liabilitiesGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.LIABILITIES.getValue()).getGroup().getGroupCode()))
         .stream()
-        .filter(a -> !a.getGroupCode().equals(GroupType.LIABILITIES.getValue()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.LIABILITIES.getValue()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
     CellAndTotalBalance liabilitiesCellAndTotalBalance = createGroupSection(
@@ -153,9 +152,9 @@ public class BalanceSheetReportGenerator {
     rightTable.addCell(liabilitiesCellAndTotalBalance.getCell());
     //rightSection.addElement(rightTable);
 
-    List<Group> incomeGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(GroupType.INCOME.getValue()))
+    List<Group> incomeGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.INCOME.getValue()).getGroup().getGroupCode()))
         .stream()
-        .filter(a -> !a.getGroupCode().equals(GroupType.INCOME.getValue()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.INCOME.getValue()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
     CellAndTotalBalance incomeCellAndTotalBalance = createGroupSection(
@@ -172,9 +171,9 @@ public class BalanceSheetReportGenerator {
     rightTable.addCell(incomeCellAndTotalBalance.getCell());
 
 
-    List<Group> expenseGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(GroupType.EXPENSES.getValue()))
+    List<Group> expenseGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.EXPENSES.getValue()).getGroup().getGroupCode()))
         .stream()
-        .filter(a -> !a.getGroupCode().equals(GroupType.EXPENSES.getValue()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.EXPENSES.getValue()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
     CellAndTotalBalance expenseCellAndTotalBalance = createGroupSection(

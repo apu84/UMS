@@ -138,8 +138,11 @@ module ums {
     public getVouchersByVoucherNoAndDate(voucherNo: string, date: string): ng.IPromise<IJournalVoucher[]> {
       let defer: ng.IDeferred<IJournalVoucher[]> = this.$q.defer();
       this.httpClient.get(this.url + "/voucher-no/" + voucherNo + "/date/" + date, HttpClient.MIME_TYPE_JSON,
-          (response: IJournalVoucher[]) => defer.resolve(response),
-          (error: any) => console.error(error));
+          (response: any) =>{
+              console.log("Response");
+              console.log(response);
+              defer.resolve(response)
+          });
       return defer.promise;
     }
   }

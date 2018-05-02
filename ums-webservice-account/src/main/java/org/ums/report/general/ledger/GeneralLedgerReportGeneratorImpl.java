@@ -62,6 +62,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
   private CurrencyManager mCurrencyManager;
   @Autowired
   private ChequeRegisterManager mChequeRegisterManager;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
 
   private Date mFromDate;
   private Date mToDate;
@@ -263,7 +265,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getAccount().getAccGroupCode().equals(GroupType.BANK_ACCOUNTS)) {
+        if (transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode())) {
           ChequeRegister chequeRegister = chequeRegisterMapWithTransactionId.get(transaction.getId());
 
           cell = new PdfPCell(new Paragraph(chequeRegister.getChequeNo(), mLiteFont));

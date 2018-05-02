@@ -37,8 +37,9 @@ public class JournalVoucherResource extends MutableJournalVoucherResource {
 
   @GET
   @Path("/voucher-no/{voucher-no}/date/{date}")
-  public List<AccountTransaction> getVouchers(@PathParam("voucher-no") String pVoucherNo,
-      @PathParam("date") String pDate) throws Exception {
+  @GetLog(message = "Fetching journal voucher details by voucher no and voucher date")
+  public List<AccountTransaction> getVouchers(@Context HttpServletRequest httpServletRequest,
+      @PathParam("voucher-no") String pVoucherNo, @PathParam("date") String pDate) throws Exception {
     return mJournalVoucherResourceHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
   }
 

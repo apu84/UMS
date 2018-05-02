@@ -1,10 +1,12 @@
 package org.ums.persistent.model.accounts;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+import com.fasterxml.jackson.databind.ser.std.NumberSerializer;
+import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -15,6 +17,8 @@ import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
+import org.ums.serializer.UmsDateDeSerializer;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,31 +27,43 @@ import java.util.Date;
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentAccountTransaction implements MutableAccountTransaction {
 
+  @JsonIgnore
   private static CompanyManager sCompanyManager;
+  @JsonIgnore
   private static AccountManager sAccountManager;
+  @JsonIgnore
   private static VoucherManager sVoucherManager;
+  @JsonIgnore
   private static CurrencyManager sCurrencyManager;
+  @JsonIgnore
   private static ReceiptManager sReceiptManager;
+  @JsonIgnore
   private static PersonalInformationManager sPersonalInformationManager;
+  @JsonIgnore
   private static AccountTransactionManager sTransactionManager;
 
   private Long id;
+  @JsonIgnore
   private Company company;
   private String companyId;
   private String divisionCode;
   private String voucherNo;
   private Date voucherDate;
   private Integer serialNo;
+  @JsonIgnore
   private Account account;
   private Long accountId;
+  @JsonIgnore
   private Voucher voucher;
   private Long voucherId;
   private BigDecimal amount;
   private BalanceType balanceType;
   private String narration;
   private BigDecimal foreignCurrency;
+  @JsonIgnore
   private Currency currency;
   private Long currencyId;
   private BigDecimal conversionFactory;
@@ -59,9 +75,9 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   @JsonProperty("receipt")
   private Receipt receipt;
   private Long receiptId;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   private Date postDate;
   private AccountTransactionType accountTransactionType;
+  @JsonIgnore
   private Date modifiedDate;
   private String modifiedBy;
   private String modifierName;
@@ -70,13 +86,34 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   private String supplierCode;
   private String customerCode;
   private String billNo;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   private Date billDate;
   private String invoiceNo;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
   private Date invoiceDate;
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private BigDecimal paidAmount;
+  private String chequeNo;
+  private Date chequeDate;
+
+  @Override
+  public String getChequeNo() {
+    return chequeNo;
+  }
+
+  @Override
+  public void setChequeNo(String chequeNo) {
+    this.chequeNo = chequeNo;
+  }
+
+  @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
+  public Date getChequeDate() {
+    return chequeDate;
+  }
+
+  @Override
+  @JsonDeserialize(using = UmsDateDeSerializer.class)
+  public void setChequeDate(Date chequeDate) {
+    this.chequeDate = chequeDate;
+  }
 
   @Override
   public AccountTransactionType getAccountTransactionType() {
@@ -99,11 +136,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getBillDate() {
     return billDate;
   }
 
   @Override
+  @JsonDeserialize(using = UmsDateDeSerializer.class)
   public void setBillDate(Date pBillDate) {
     billDate = pBillDate;
   }
@@ -119,11 +158,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getInvoiceDate() {
     return invoiceDate;
   }
 
   @Override
+  @JsonDeserialize(using = UmsDateDeSerializer.class)
   public void setInvoiceDate(Date pInvoiceDate) {
     invoiceDate = pInvoiceDate;
   }
@@ -134,6 +175,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonDeserialize(using = NumberDeserializers.NumberDeserializer.class)
   public void setPaidAmount(BigDecimal pPaidAmount) {
     paidAmount = pPaidAmount;
   }
@@ -172,11 +214,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonProperty
   public Company getCompany() {
     return company == null ? sCompanyManager.get(companyId) : sCompanyManager.validate(company);
   }
 
   @Override
+  @JsonIgnore
   public void setCompany(Company pCompany) {
     this.company = pCompany;
   }
@@ -235,13 +279,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getVoucherDate() {
     return voucherDate;
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-DD-YYYY")
+  @JsonDeserialize(using = UmsDateDeSerializer.class)
   public void setVoucherDate(Date pVoucherDate) {
     this.voucherDate = pVoucherDate;
   }
@@ -257,11 +301,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonProperty
   public Account getAccount() {
     return account == null ? sAccountManager.get(accountId) : sAccountManager.validate(account);
   }
 
   @Override
+  @JsonIgnore
   public void setAccount(Account pAccount) {
     this.account = pAccount;
   }
@@ -279,11 +325,13 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonProperty
   public Voucher getVoucher() {
     return voucher == null ? sVoucherManager.get(voucherId) : sVoucherManager.validate(voucher);
   }
 
   @Override
+  @JsonIgnore
   public void setVoucher(Voucher pVoucher) {
     this.voucher = pVoucher;
   }
@@ -306,6 +354,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonDeserialize(using = NumberDeserializers.BigDecimalDeserializer.class)
   public void setAmount(BigDecimal pAmount) {
     this.amount = pAmount;
   }
@@ -336,16 +385,19 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonDeserialize(using = NumberDeserializers.BigDecimalDeserializer.class)
   public void setForeignCurrency(BigDecimal pForeignCurrency) {
     this.foreignCurrency = pForeignCurrency;
   }
 
   @Override
+  @JsonProperty
   public Currency getCurrency() {
     return currency == null ? sCurrencyManager.get(currencyId) : sCurrencyManager.validate(currency);
   }
 
   @Override
+  @JsonIgnore
   public void setCurrency(Currency pCurrency) {
     this.currency = pCurrency;
   }
@@ -368,6 +420,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonDeserialize(using = NumberDeserializers.BigDecimalDeserializer.class)
   public void setConversionFactor(BigDecimal pConversionFactor) {
     this.conversionFactory = pConversionFactor;
   }
@@ -443,19 +496,19 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+  @JsonDeserialize(using = UmsDateDeSerializer.class)
   public void setPostDate(Date pPostDate) {
     this.postDate = pPostDate;
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return modifiedDate;
   }
 
   @Override
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "DD-MM-YYYY")
+  @JsonIgnore
   public void setModifiedDate(Date pModifiedDate) {
     this.modifiedDate = pModifiedDate;
   }
