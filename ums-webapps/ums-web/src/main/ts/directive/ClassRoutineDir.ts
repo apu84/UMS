@@ -13,8 +13,9 @@ module ums{
     routineTime:any;
     routineStore:Array<IRoutineStore>;
     currentDate:string;
-
+    currentSemester:Semester;
     showByDay:boolean;
+    routineMapWithDayAndTime:any;
     viewByDay:Function;
     viewByCompleteTable:Function;
     updateDate:Function;
@@ -31,12 +32,12 @@ module ums{
 
   class ClassRoutineDirController{
     private anchorPrefix=".btn.btn-xs.btn-default.";
-    public static $inject=['$scope','classRoomService','courseService','appConstants','$timeout'];
+    public static $inject=['$scope','classRoomService','courseService','appConstants','$timeout', 'semesterService', '$q'];
     constructor(private $scope:IClassRoutineDir,
                 private classRoomService:ClassRoomService,
                 private courseService:CourseService,
                 private  appConstants:any,
-                public $timeout:ng.ITimeoutService){
+                public $timeout:ng.ITimeoutService, private semesterService: SemesterService, private $q: ng.IQService){
       $scope.days = appConstants.weekDays;
       $scope.checker = appConstants.timeChecker;
       var times:string[]=['08:00 am'];
@@ -44,6 +45,7 @@ module ums{
       $scope.routineStore=[];
       $scope.weekday=appConstants.weekday;
       $scope.showByDay=false;
+      $scope.routineMapWithDayAndTime={};
       $scope.updateDate=this.updateDate.bind(this);
       $scope.viewByDay = this.viewByDay.bind(this);
       $scope.viewByCompleteTable = this.viewByCompleteTable.bind(this)
@@ -52,6 +54,19 @@ module ums{
       $scope.timeChecker="08.00 AM";
       $scope.colspan=1;
       this.getCurrentDate();
+      this.getCurrentSemester();
+    }
+
+    private getCurrentSemester(){
+      let underGraduateProgramType:number=11;
+      let active:number =1;
+      this.semesterService.fetchSemesters(underGraduateProgramType).then((semester:Semester[])=>{
+        this.$scope.currentSemester = semester.filter((s:Semester)=> s.status==active)[0];
+        console.log("semester list");
+        console.log(semester);
+        console.log("Current semester");
+        console.log(this.$scope.currentSemester);
+      });
     }
 
     private viewByDay():void{
@@ -81,59 +96,68 @@ module ums{
 
 
 
+    private createRoutineMap():ng.IPromise<any>{
+      this.$scope.routineMapWithDayAndTime={};
+      let defer:ng.IDeferred<any> = this.$q.defer();
+      let routineList:IRoutine[] = this.$scope.routines;
+      routineList.forEach((r:IRoutine)=>{
+        if(this.$scope.routineMapWithDayAndTime[r.day+r.startTime]==null){
+          this.$scope.routineMapWithDayAndTime[r.day+r.startTime]=r.section;
+        }else{
+          this.$scope.routineMapWithDayAndTime[r.day+r.startTime] = this.$scope.routineMapWithDayAndTime[r.day+r.startTime]+"+"+r.section;
+        }
+      });
+      defer.resolve(this.$scope.routineMapWithDayAndTime);
+      return defer.promise;
+    }
+
 
     private createRoutine(){
 
-      var routine:Array<IRoutine>=this.$scope.routines;
-      var routineStoreArr: IRoutineStore[] = [];
+      this.createRoutineMap().then((routineSectionMapWIthDateAndTime:any)=>{
+          var routine:Array<IRoutine>=this.$scope.routines;
+          console.log("All routines");
+          console.log(routine);
+          var routineStoreArr: IRoutineStore[] = [];
 
-      for(var d=0;d<this.$scope.days.length;d++){
+          for(var d=0;d<this.$scope.days.length;d++){
 
-        for(var i=0;i<12;i++){
-          var found:boolean = false;
-          var tmpRoutineStore:IRoutineStore=new IRoutineStore();
-          for(var routines=0;routines<routine.length; routines++){
+              for(var i=0;i<12;i++){
+                  var found:boolean = false;
+                  var tmpRoutineStore:IRoutineStore=new IRoutineStore();
+                  for(var routines=0;routines<routine.length; routines++){
+                      if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== Number(this.$scope.days[d].id)){
+                          var routineStore = new IRoutineStore();
+                          routineStore.day = "0"+routine[routines].day.toString();
+                          routineStore.colspan= routine[routines].duration.toString();   //routine[routines].courseId;
 
-            if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== Number(this.$scope.days[d].id)){
-              var routineStore = new IRoutineStore();
-              routineStore.day = "0"+routine[routines].day.toString();
-              routineStore.colspan= routine[routines].duration.toString();   //routine[routines].courseId;
+                          routineStore.courseId = this.$scope.courseMap[routine[routines].courseId].no;
 
-              routineStore.courseId = this.$scope.courseMap[routine[routines].courseId].no;
-
-              routineStore.roomNo = this.$scope.roomMap[routine[routines].roomId].roomNo;
-              routineStore.section="("+this.$scope.routines[routines].section+")";
-              //todo remove comments if there is a case, where a teacher takes more than section for a course on the same day and at the same time
-              /*if(tmpRoutineStore!=null){
-                if(tmpRoutineStore.courseId==routineStore.courseId && tmpRoutineStore.section!=routineStore.section){
-                  routineStore.section=tmpRoutineStore.section+"+"+routineStore.section;
-                }else{
-                  routineStore.section="("+this.$scope.routines[routines].section+")";
-
-                }
-              }else{
-                routineStore.section="("+this.$scope.routines[routines].section+")";
-
-              }*/
-              //routineStore.roomNo=this.$scope.roomMap[routine[routines].id].roomNo;
-              routineStoreArr.push(routineStore);
-              i=i+(routine[routines].duration-1);
-              found = true;
-              break;
-            }
+                          routineStore.roomNo = this.$scope.roomMap[routine[routines].roomId].roomNo;
+                          let tmpRoutine:IRoutine = routine[routines];
+                          routineStore.section="("+routineSectionMapWIthDateAndTime[tmpRoutine.day+tmpRoutine.startTime]+")";
+                          //routineStore.roomNo=this.$scope.roomMap[routine[routines].id].roomNo;
+                          routineStoreArr.push(routineStore);
+                          i=i+(routine[routines].duration-1);
+                          found = true;
+                          break;
+                      }
+                  }
+                  if(found==false){
+                      var routineStore = new IRoutineStore();
+                      routineStore.day="0"+(d+1).toString();
+                      routineStore.colspan="1";
+                      routineStore.courseId="";
+                      routineStore.roomNo="";
+                      routineStoreArr.push(routineStore);
+                  }
+              }
           }
-          if(found==false){
-            var routineStore = new IRoutineStore();
-            routineStore.day="0"+(d+1).toString();
-            routineStore.colspan="1";
-            routineStore.courseId="";
-            routineStore.roomNo="";
-            routineStoreArr.push(routineStore);
-          }
-        }
-      }
 
-      this.$scope.routineStore = routineStoreArr;
+          this.$scope.routineStore = routineStoreArr;
+      });
+
+
     }
 
     private getCurrentDate():void{
