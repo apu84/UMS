@@ -2,10 +2,12 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.ums.logs.GetLog;
 import org.ums.resource.helper.StudentResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -17,8 +19,8 @@ public class MutableStudentResource extends Resource {
   StudentResourceHelper mResourceHelper;
 
   @POST
+  @GetLog(message = "Created a student")
   public Response create(final JsonObject pJsonObject) throws Exception {
-
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
@@ -37,7 +39,8 @@ public class MutableStudentResource extends Resource {
 
   @PUT
   @Path("/adviser")
-  public Response updateStudentsAdviser(final JsonObject pJsonObject) {
+  @GetLog(message = "Updated student(s)  advisor information")
+  public Response updateStudentsAdviser(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }
 }
