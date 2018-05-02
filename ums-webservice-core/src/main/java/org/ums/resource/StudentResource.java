@@ -3,9 +3,11 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.logs.GetLog;
 import org.ums.manager.StudentManager;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -33,13 +35,16 @@ public class StudentResource extends MutableStudentResource {
 
   @GET
   @Path("/getStudentsByDept")
+  @GetLog(message = "Get students list by department")
   public JsonObject getActiveStudentsByDepartment() {
     return mResourceHelper.getActiveStudentsByDepartment(mUriInfo);
   }
 
   @GET
   @Path("/getStudents/adviser/{teacher-id}")
-  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId) {
+  @GetLog(message = "Get advising students")
+  public JsonObject getActiveStudentsByTeacher(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("teacher-id") String pTeacherId) {
     return mResourceHelper.getActiveStudentsByAdviser(pTeacherId, mUriInfo);
   }
 
