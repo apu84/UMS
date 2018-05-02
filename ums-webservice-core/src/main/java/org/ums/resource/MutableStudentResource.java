@@ -39,7 +39,7 @@ public class MutableStudentResource extends Resource {
 
   @PUT
   @Path("/adviser")
-  @GetLog(message = "Updated student(s)  advisor information")
+  @GetLog(message = "Updated student(s) advisor information")
   public Response updateStudentsAdviser(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }

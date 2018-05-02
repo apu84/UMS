@@ -3,10 +3,12 @@ package org.ums.academic.resource;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.logs.GetLog;
 import org.ums.manager.RoutineManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -33,20 +35,21 @@ public class RoutineResource extends MutableRoutineResource {
 
   @GET
   @Path("/routineForTeacher")
-  public JsonObject getRoutineForTeachers(final @Context Request pRequest) {
-
-    return mRoutineResourceHelper.getRoutineForTeacher(pRequest, mUriInfo);
+  @GetLog(message = "Accessed teacher's class routine")
+  public JsonObject getRoutineForTeachers(final @Context HttpServletRequest pHttpServletRequest) {
+    return mRoutineResourceHelper.getRoutineForTeacher(mUriInfo);
   }
 
   @GET
   @Path("/routineReportTeacher")
   @Produces("application/pdf")
-  public StreamingOutput createTeacherRoutineReport(final @Context Request pRequest) {
+  @GetLog(message = "Accessed teacher's class routine report (PDF)")
+  public StreamingOutput createTeacherRoutineReport(final @Context HttpServletRequest pHttpServletRequest) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
-          mRoutineResourceHelper.getRoutineReportForTeacher(pOutputStream, pRequest, mUriInfo);
+          mRoutineResourceHelper.getRoutineReportForTeacher(pOutputStream);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
@@ -58,13 +61,15 @@ public class RoutineResource extends MutableRoutineResource {
   @GET
   @Path("/roomBasedRoutine/semester/{semester-id}/room/{room-id}")
   @Produces("application/pdf")
-  public StreamingOutput createRoomBasedRoutineReport(final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("room-id") int pRoomId, final @Context Request pRequest) {
+  @GetLog(message = "Accessed room-based class routine report (PDF)")
+  public StreamingOutput createRoomBasedRoutineReport(final @Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("room-id") int pRoomId,
+      final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
-          mRoutineResourceHelper.getRoomBasedRoutineReport(pOutputStream, pSemesterId, pRoomId, pRequest, mUriInfo);
+          mRoutineResourceHelper.getRoomBasedRoutineReport(pOutputStream, pSemesterId, pRoomId);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
@@ -82,16 +87,18 @@ public class RoutineResource extends MutableRoutineResource {
 
   @GET
   @Path("/routineForEmployee/semester/{semesterId}/year/{year}/semester/{semester}/section/{section}")
-  public JsonObject getRoutineForEmployee(final @Context Request pRequest,
+  @GetLog(message = "Accessed class routine report for employee")
+  public JsonObject getRoutineForEmployee(final @Context HttpServletRequest pHttpServletRequest,
       final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
       final @PathParam("semester") String semester, final @PathParam("section") String section) {
     return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId), Integer.parseInt(year),
-        Integer.parseInt(semester), section, pRequest, mUriInfo);
+        Integer.parseInt(semester), section, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context HttpServletRequest pHttpServletRequest, @Context Request pRequest,
+      final @PathParam("object-id") String pObjectId) throws Exception {
     return mRoutineResourceHelper.get(Long.parseLong(pObjectId), pRequest, mUriInfo);
   }
 }

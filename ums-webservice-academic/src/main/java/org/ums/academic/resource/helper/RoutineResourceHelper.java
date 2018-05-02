@@ -159,7 +159,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final Request pRequest, final UriInfo pUriInfo) {
+  public JsonObject getRoutineForTeacher(final UriInfo pUriInfo) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -177,13 +177,12 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final int pRoomid,
-      final Request pRequest, final UriInfo pUriInfo) throws DocumentException, IOException {
-    mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomid);
+  public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final int pRoomId)
+      throws DocumentException, IOException {
+    mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomId);
   }
 
-  public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest,
-      final UriInfo pUriInfo) throws DocumentException, IOException {
+  public void getRoutineReportForTeacher(final OutputStream pOutputStream) throws DocumentException, IOException {
     mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
   }
 
@@ -216,7 +215,6 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
                                           final int academicYear,
                                           final int academicSemester,
                                           final String section,
-                                          final Request pRequest,
                                           final UriInfo pUriInfo) {
     List<Routine> routines = new ArrayList<>();
     String userId = SecurityUtils.getSubject().getPrincipal().toString();

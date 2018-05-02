@@ -62,10 +62,6 @@ module ums{
       let active:number =1;
       this.semesterService.fetchSemesters(underGraduateProgramType).then((semester:Semester[])=>{
         this.$scope.currentSemester = semester.filter((s:Semester)=> s.status==active)[0];
-        console.log("semester list");
-        console.log(semester);
-        console.log("Current semester");
-        console.log(this.$scope.currentSemester);
       });
     }
 

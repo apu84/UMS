@@ -10,10 +10,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by Ifti on 31-Jan-17.
- */
-
 @Component
 @Path("country")
 @Produces(Resource.MIME_TYPE_JSON)
