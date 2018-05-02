@@ -210,7 +210,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
             + "  CRHR, "
             + "  SYLLABUS_ID, "
             + "  OPT_GROUP_ID, "
-            + "  OFFER_BY, "
+            + "  OFFER_BY, OFFERED_TO_PROGRAM, "
             + "  VIEW_ORDER, "
             + "  YEAR, "
             + "  SEMESTER, "

@@ -345,7 +345,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               String courseId= routines.get(0).getCourseId();
               sectionList.add(routines.get(0).getSection());
               String sections= routines.get(0).getSection();
-              String roomNo = roomsMap.get(routines.get(0).getRoomId()).get(0).getRoomNo() ;
+              String roomNo = roomsMap.get(routines.get(0).getRoomId().longValue()).get(0).getRoomNo() ;
               int duration  = routines.get(0).getDuration();
 
               int routineIterator=1;

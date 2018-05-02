@@ -1,16 +1,16 @@
 
-<div class="row">
+<div class="row" style="border-bottom: 1px solid #e5e5e5 ;font-size: 18px;padding: 4px 7px;">
     <div class="col-md-10">
-
+        <b>Semester:</b> Spring, 2018
     </div>
-    <div class="col-md-2">
-        <a  href="javascript:;" class="btn btn-xs btn-default"
-            data-ng-click="viewByDay()" style="background-color: black;">
-            <i class="fa fa-tasks" style="color: white;" aria-hidden="true"></i>
-        </a>
-        <a  href="javascript:;" class="btn btn-xs btn-default"
+    <div class="col-md-2" style="float: right;text-align: right;">
+        <a  href="javascript:;" class="btn btn-xs btn-default detailView"
             data-ng-click="viewByCompleteTable()" style="background-color: black;">
             <i class="fa fa-table" style="color: white;" aria-hidden="true"></i>
+        </a>
+        <a  href="javascript:;" class="btn btn-xs btn-default listView"
+            data-ng-click="viewByDay()" style="background-color: white;">
+            <i class="fa fa-bars" style="color: black;" aria-hidden="true"></i>
         </a>
     </div>
 </div>
@@ -23,7 +23,7 @@
                     <a  data-toggle="tab" data-ng-click="updateDate(d.id)">{{d.name}}</a>
                 </li>
             </ul>
-            <div  class="tab-content">
+            <div  class="tab-content" style="min-height: 250px;">
                 <div  class="tab-pane fade in active">
                     <table class="table table-bordered">
                         <thead>
@@ -84,7 +84,7 @@
                     </tr>
 
                     <tr data-ng-repeat="day in days">
-                        <td><b><i>{{day.day}}</i></b></td>
+                        <td><b>{{day.day}}</b></td>
                         <td colspan={{stores.colspan}} data-ng-repeat="stores in routineStore | filter:{day:day.id}">
                             <p align="center"><b>{{stores.courseId}} {{stores.section}}<br>{{stores.roomNo}}</b></p>
                         </td>

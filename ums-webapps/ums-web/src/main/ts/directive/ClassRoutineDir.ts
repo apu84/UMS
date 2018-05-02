@@ -1,7 +1,3 @@
-/**
- * Created by My Pc on 22-Nov-16.
- */
-
 module ums{
   interface IClassRoutineDir extends ng.IScope{
     routines:Array<IRoutine>;
@@ -34,6 +30,7 @@ module ums{
   }
 
   class ClassRoutineDirController{
+    private anchorPrefix=".btn.btn-xs.btn-default.";
     public static $inject=['$scope','classRoomService','courseService','appConstants','$timeout'];
     constructor(private $scope:IClassRoutineDir,
                 private classRoomService:ClassRoomService,
@@ -51,36 +48,44 @@ module ums{
       $scope.viewByDay = this.viewByDay.bind(this);
       $scope.viewByCompleteTable = this.viewByCompleteTable.bind(this)
 
-
       $scope.times=["08:00 AM","08:50 AM","09:40 AM","10:30 AM","11:20 AM","12:10 PM","01:00 PM","01:50 PM","02:40 PM","03:30 PM","04:20 PM","05:10 PM"];
       $scope.timeChecker="08.00 AM";
       $scope.colspan=1;
-
       this.getCurrentDate();
-      /*$timeout(()=>{
-        this.viewByCompleteTable();
-      });*/
-
-
     }
 
     private viewByDay():void{
+      this.resetSelection();
+      $(this.anchorPrefix+"listView").css({"background-color":"black"});
+      $(".fa.fa-bars").css({"color":"white"});
+
       this.$scope.showByDay=true;
     }
 
     private viewByCompleteTable():void{
+      this.resetSelection();
+      $(this.anchorPrefix+"detailView").css({"background-color":"black"});
+      $(".fa.fa-table").css({"color":"white"});
+
       this.$scope.showByDay=false;
-      this.createStudentsRoutine();
+      this.createRoutine();
+    }
+
+
+    private resetSelection(){
+      $(this.anchorPrefix+"detailView").css({"background-color":"white"});
+      $(this.anchorPrefix+"listView").css({"background-color":"white"});
+      $(".fa.fa-table").css({"color":"black"});
+      $(".fa.fa-bars").css({"color":"black"});
     }
 
 
 
 
-    private createStudentsRoutine(){
+    private createRoutine(){
 
       var routine:Array<IRoutine>=this.$scope.routines;
       var routineStoreArr: IRoutineStore[] = [];
-
 
       for(var d=0;d<this.$scope.days.length;d++){
 
@@ -128,11 +133,7 @@ module ums{
         }
       }
 
-
       this.$scope.routineStore = routineStoreArr;
-
-
-
     }
 
     private getCurrentDate():void{
@@ -145,11 +146,8 @@ module ums{
       }else{
         date=date+2;
       }
-
-
       this.$scope.currentDate=String(date);
     }
-
 
     private updateDate(day:number):void{
       this.$scope.currentDate=String(day);
@@ -159,7 +157,6 @@ module ums{
 
   class ClassRoutineDir implements ng.IDirective{
     constructor(){
-
     }
 
     public restrict:string="A";
@@ -171,22 +168,16 @@ module ums{
 
     public controller=ClassRoutineDirController;
 
-
-
     public link = (scope:any, element:any, attributes:any)=>{
       for(var i=0;i<scope.routines.length;i++){
         scope.routines[i].day=String(scope.routines[i].day);
       }
-
-      console.log("scope");
-      console.log(scope);
       scope.$watch('routines',(newVal,oldVal)=>{
         if(newVal){
           scope.viewByCompleteTable();
         }
       });
     };
-
 
     public templateUrl:string="./views/directive/class-routine-dir.html";
   }
