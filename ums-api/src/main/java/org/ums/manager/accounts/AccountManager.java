@@ -1,5 +1,6 @@
 package org.ums.manager.accounts;
 
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
@@ -26,4 +27,6 @@ public interface AccountManager extends ContentManager<Account, MutableAccount, 
    * @return will return accounts based on group flag.
    */
   List<Account> getAccounts(GroupFlag pGroupFlag);
+
+  List<Account> getAccounts(Company pCompany);
 }

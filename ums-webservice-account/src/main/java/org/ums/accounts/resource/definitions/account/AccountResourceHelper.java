@@ -83,7 +83,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(Math.abs(mIdGenerator.getNumericId()));
+    account.setAccountCode(account.getAccountCode() == null ? Math.abs(mIdGenerator.getNumericId()) : account.getAccountCode());
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();

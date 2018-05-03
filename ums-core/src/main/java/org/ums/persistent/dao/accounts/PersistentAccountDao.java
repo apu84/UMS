@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.ums.decorator.accounts.AccountDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
@@ -38,6 +39,14 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     String query = "select * from mst_account where acc_group_code not in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
+  }
+
+  @Override
+  public List<Account> getAccounts(Company pCompany) {
+    String query = "select * from mst_account where comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("compCode", pCompany.getId());
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
   }
 
@@ -119,11 +128,11 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   @Override
   public Long create(MutableAccount pMutable) {
     String query =
-        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY) "
-            + "            VALUES (?,?,?,?,?,?)";
+        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
+            + "            VALUES (?,?,?,?,?,?, ?," + getLastModifiedSql() + " )";
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(query, id, pMutable.getAccountCode(), pMutable.getAccountName(), pMutable.getAccGroupCode(),
-        pMutable.getModifiedDate(), pMutable.getModifiedBy());
+        pMutable.getModifiedDate(), pMutable.getModifiedBy(), pMutable.getCompany().getId());
     return id;
   }
 
@@ -158,6 +167,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setModifiedDate(rs.getDate("modified_date"));
       account.setModifiedBy("modified_by");
       account.setLastModified("last_modified");
+      account.setCompanyId("comp_code");
       return account;
     }
   }

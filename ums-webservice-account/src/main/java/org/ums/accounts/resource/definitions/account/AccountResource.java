@@ -1,15 +1,22 @@
 package org.ums.accounts.resource.definitions.account;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.logs.GetLog;
+import org.ums.report.definition.ChartOfAccountsReportGenerator;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /*
  * Created by Monjur-E-Morshed on 28-Dec-17.
@@ -20,6 +27,9 @@ import javax.ws.rs.core.UriInfo;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AccountResource extends MutableAccountResource {
+
+  @Autowired
+  ChartOfAccountsReportGenerator mChartOfAccountsReportGenerator;
 
   @GET
   @Path("/total-size")
@@ -84,4 +94,21 @@ public class AccountResource extends MutableAccountResource {
     return mHelper.getCustomerAccounts(mUriInfo);
   }
 
+  @GET
+  @Produces("application/pdf")
+  @Path("/chart-of-accounts")
+  @GetLog(message = "Requested for chart of accounts report")
+  public StreamingOutput createChartOfAccountsReport(final @Context HttpServletResponse pHttpServletResponse)
+      throws Exception {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mChartOfAccountsReportGenerator.createChartsOfAccountsReport(output);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
 }

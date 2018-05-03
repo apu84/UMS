@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable.accounts;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
@@ -36,4 +37,9 @@ public interface MutableAccount extends Account, Editable<Long>, MutableLastModi
   void setModifiedDate(Date pModifiedDate);
 
   void setModifiedBy(String pModifiedBy);
+
+  void setCompany(Company pCompany);
+
+  void setCompanyId(String pCompanyId);
+
 }

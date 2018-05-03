@@ -128,6 +128,10 @@ module ums {
         }
       })
     }
+
+    public getChartOfAccountsReport() {
+      this.accountService.generateChartOfAccountsReport();
+    }
   }
 
   UMS.controller("AccountController", AccountController);

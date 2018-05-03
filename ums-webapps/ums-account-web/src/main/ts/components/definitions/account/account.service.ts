@@ -117,6 +117,20 @@ module ums{
           ((response: IAccountResponse) => defer.resolve(response.entries)));
       return defer.promise;
     }
+
+
+    public generateChartOfAccountsReport(): ng.IPromise<string> {
+      let defer: ng.IDeferred<string> = this.$q.defer();
+      var contentType: string = UmsUtil.getFileContentType("pdf");
+      this.httpClient.get(this.accountServiceURL + "/chart-of-accounts/", undefined, (data: any, etag: string) => {
+            UmsUtil.writeFileContent(data, contentType, 'Chart of Accounts Report.pdf');
+          },
+          (response: any) => {
+            defer.resolve("success");
+            console.error(response);
+          }, 'arraybuffer');
+      return defer.promise;
+    }
   }
 
   UMS.service("AccountService", AccountService);
